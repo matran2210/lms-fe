@@ -8,6 +8,7 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 import ErrorMessage from 'src/common/ErrorMessage'
 import { IconCalendar } from '@assets/icons'
+import SAPPLabel from '../Label/SAPPLabel'
 
 const { RangePicker } = DatePicker
 
@@ -49,11 +50,9 @@ const HookFormDateRange = ({
   disabledDate,
 }: IProps) => {
   return (
-    <div>
+    <>
       {label && (
-        <label className={labelClass}>
-          <span className={`${required ? 'required' : ''}`}>{label}</span>
-        </label>
+        <SAPPLabel required={required} title={label} className={labelClass} />
       )}
       <Controller
         name={name}
@@ -88,7 +87,7 @@ const HookFormDateRange = ({
                     dates?.length === 2
                       ? [dates[0]?.toISOString(), dates[1]?.toISOString()]
                       : []
-                  field.onChange(formattedDates) // ✅ Correct way to update form state
+                  field.onChange(formattedDates)
                 }}
                 disabledDate={disabledDate}
                 minDate={dayjs()}
@@ -102,7 +101,7 @@ const HookFormDateRange = ({
           )
         }}
       />
-    </div>
+    </>
   )
 }
 

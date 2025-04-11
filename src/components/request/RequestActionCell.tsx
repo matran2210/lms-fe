@@ -93,10 +93,7 @@ const RequestActionCell = ({ item }: Iprops) => {
         <div onClick={() => setIsOpenViewModal(true)}>View</div>
       </Link>
       {item.status === REQUEST_STATUS.PENDING && (
-        <Link
-          href={`${router.pathname}?id=${item.id}`}
-          onClick={() => setOpenAddModal(true)}
-        >
+        <Link href={`${router.pathname}?id=${item.id}`}>
           <div onClick={() => setOpenAddModal(true)}>Edit</div>
         </Link>
       )}

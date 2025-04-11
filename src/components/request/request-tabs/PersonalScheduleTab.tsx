@@ -48,7 +48,10 @@ const PersonalScheduleTab = () => {
     type: getValues('type'),
     status: getValues('status'),
     from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.endOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]
+      ?.add(1, 'day')
+      .startOf('day')
+      ?.toISOString(),
   })
 
   const getParams = () => ({
@@ -186,21 +189,21 @@ const PersonalScheduleTab = () => {
         setIsEdit={setOpenAddModal}
         setIsInspect={setIsOpenViewModal}
       />
-      {isOpenAddModal ? (
+      {isOpenAddModal && (
         <FormRequest
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
-      {isOpenViewModal ? (
+      )}
+      {isOpenViewModal && (
         <RequestDetail
           open={isOpenViewModal}
           setOpen={setIsOpenViewModal}
           setOpenEdit={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
+      )}
     </div>
   )
 }

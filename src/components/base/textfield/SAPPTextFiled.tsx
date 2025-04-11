@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import React, { useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
+import SAPPLabel from '../Label/SAPPLabel'
 
 interface IProps {
   inputRef?: React.LegacyRef<HTMLInputElement>
@@ -56,9 +57,7 @@ const SAPPTextFiled = ({
   return (
     <>
       {label && (
-        <label className={labelClass}>
-          <span className={`${required ? 'required' : ''}`}>{label}</span>
-        </label>
+        <SAPPLabel title={label} className={labelClass} required={required} />
       )}
       <div className={`${className ?? ''} relative flex w-full items-center`}>
         {placeholderIcon && (

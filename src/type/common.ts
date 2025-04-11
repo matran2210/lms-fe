@@ -46,8 +46,3 @@ export interface IQueryParams {
   page_size: number
   otherParams?: Record<string, any>
 }
-
-export interface IOption {
-  label: string
-  value: string
-}

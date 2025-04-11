@@ -116,7 +116,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
       await editFn()
     } catch (error) {
-      toast.error('An error occurred. Please try again.')
+      // Handled by axios interceptor
     } finally {
       toast.success(`${capitalizeFirstLetter(status)} request success!`)
       setLoading(false)
@@ -133,10 +133,9 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
         const { data } = await MyRequestAPI.getRequestDetail(params as string)
         if (data) {
           setRequestDetail(data)
-        } else {
-          toast.error('Request not found!')
         }
       } catch (error: any) {
+        // Handled by axios interceptor
       } finally {
         setLoading(false)
       }
@@ -206,9 +205,6 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               : handleChangeRequestStatus(RequestStatus.APPROVED)
           }}
           handleCancel={handleCancel}
-          onClickOutside={() => {
-            setOpen(false)
-          }}
         >
           <div className="mb-7">
             <div className="mb-4 text-xl font-medium text-gray-800">

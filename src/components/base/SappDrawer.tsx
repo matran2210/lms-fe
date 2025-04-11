@@ -23,8 +23,7 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
-  handleCancel?: any
-  onClickOutside?: () => void
+  handleCancel?: () => any
   showCancelButton?: boolean
   btnCancelTitle?: string
 }
@@ -44,8 +43,7 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
-  handleCancel,
-  onClickOutside,
+
   showCancelButton = true,
   btnCancelTitle = 'Cancel',
 }: IProps) => {
@@ -60,14 +58,8 @@ const SappDrawer = ({
   }
 
   const handleMaskClick = (e: any) => {
-    if (
-      isOpen &&
-      e?.target?.closest('.custom-drawer') === null &&
-      !handleCancel
-    ) {
+    if (isOpen && e?.target?.closest('.custom-drawer') === null) {
       handleOnClose()
-    } else {
-      handleCancel()
     }
   }
   const drawerRef = useRef<HTMLDivElement>(null)
