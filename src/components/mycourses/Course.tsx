@@ -211,7 +211,13 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
-    router.push(`/courses/my-course/${classInstance?.id}`)
+    if (determineButtonToShow == 'Review') {
+      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    } else {
+      router.push(`/courses/my-course/${classInstance?.id}`)
+    }
+
+    localStorage.setItem('courseName', course.name)
     localStorage.setItem(
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,

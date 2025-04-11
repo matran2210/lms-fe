@@ -81,6 +81,8 @@ module.exports = {
           7: '#EDEFF5',
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
+          11: '#252F4A',
+          12: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -126,6 +128,12 @@ module.exports = {
         },
         graded: {
           finish: '#4077E0',
+        },
+        green: {
+          1: '#37C78C',
+        },
+        red: {
+          1: '#FF524E',
         },
       },
       borderColor: {
