@@ -298,7 +298,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                     : 'Proposal Timeoff Date'
               }
             >
-              {requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value &&
+              {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
                     `${item.schedule.start_date} ${item.schedule.start_time}`,
@@ -306,6 +306,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   const endTime = dayjs(
                     `${item.schedule.end_date} ${item.schedule.end_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
+
                   return (
                     <div
                       key={index}
@@ -321,7 +322,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       />
                       <CollapseItem
                         title={`Description`}
-                        body={`${item.description}`}
+                        body={`${item.schedule.description}`}
                       />
                     </div>
                   )
