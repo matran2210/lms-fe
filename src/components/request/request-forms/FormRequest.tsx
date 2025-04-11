@@ -130,6 +130,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       })
     }
   }
+
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
 
@@ -381,6 +382,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 ),
                 value: REPEAT_TYPE.CHOSEN_PATTERN,
               })
+
               setValue(
                 'request_busy_schedule.0.recurring_schedule.type',
                 REPEAT_TYPE.CHOSEN_PATTERN,

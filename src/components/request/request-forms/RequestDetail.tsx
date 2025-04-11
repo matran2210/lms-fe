@@ -165,6 +165,20 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       }),
     )
   }
+  const handleSubmit = () => {
+    if (
+      requestDetail?.status.toLowerCase() == RequestStatus.PENDING.toLowerCase()
+    ) {
+      handleEdit()
+    } else if (
+      requestDetail?.status.toLowerCase() ==
+      RequestStatus.APPROVED.toLowerCase()
+    ) {
+      handleCancel()
+    } else {
+      handleChangeRequestStatus(RequestStatus.APPROVED)
+    }
+  }
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -180,31 +194,24 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
-              : ''
+              : 'Cancel Request'
           }
-          btnCancelTitle={
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.APPROVED.toLowerCase()
-              ? 'Cancel Request'
-              : 'Cancel'
-          }
+          btnCancelTitle={'Cancel'}
           showSubmitButton={
             requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
+              RequestStatus.PENDING.toLowerCase() ||
+            requestDetail?.status.toLowerCase() ==
+              RequestStatus.APPROVED.toLowerCase()
           }
           showCancelButton={
-            requestDetail?.status.toLowerCase() !==
-            RequestStatus.PENDING.toLowerCase()
+            ![
+              RequestStatus.PENDING.toLowerCase(),
+              RequestStatus.APPROVED.toLowerCase(),
+            ].includes(requestDetail?.status.toLowerCase() ?? '')
           }
           confirmOnClose
           footer={hasActionButton}
-          handleSubmit={() => {
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
-              ? handleEdit()
-              : handleChangeRequestStatus(RequestStatus.APPROVED)
-          }}
-          handleCancel={handleCancel}
+          handleSubmit={() => handleSubmit()}
         >
           <div className="mb-7">
             <div className="mb-4 text-xl font-medium text-gray-800">

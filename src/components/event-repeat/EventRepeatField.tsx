@@ -87,7 +87,6 @@ const EventRepeatField = ({
       end_on: initDate,
     }
   }, [defaultValue])
-
   const repeatTypeOptions = useMemo(() => {
     const weeklyText = initDate.toLocaleDateString('en-US', { weekday: 'long' })
     const monthlyText = initDate.toLocaleDateString('en-US', { day: '2-digit' })
