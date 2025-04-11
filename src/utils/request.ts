@@ -119,17 +119,17 @@ export const getCustomRepeat = (
     ),
     frequency:
       REPEAT_FREQUENCY_LABEL[
-        getValues('request_busy_schedule.0.recurring_schedule.frequency')
-          ?.toUpperCase()
-          ?.replace(/S$/, '') as REPEAT_FREQUENCY
+        getValues(
+          'request_busy_schedule.0.recurring_schedule.frequency',
+        )?.toUpperCase() as REPEAT_FREQUENCY
       ],
     type: REPEAT_TYPE.CUSTOM,
   }
 
   switch (
-    getValues('request_busy_schedule.0.recurring_schedule.frequency')
-      ?.toUpperCase()
-      ?.replace(/S$/, '')
+    getValues(
+      'request_busy_schedule.0.recurring_schedule.frequency',
+    )?.toUpperCase()
   ) {
     case REPEAT_FREQUENCY.WEEK:
       repeatCustom.day_of_week = getValues(
