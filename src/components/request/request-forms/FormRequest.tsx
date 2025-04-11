@@ -83,6 +83,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestTimeoff = watch('request_time_off')
   const repeat = watch('request_busy_schedule.0.repeat')
   const repeatType = watch('request_busy_schedule.0.recurring_schedule.type')
+
   const {
     fields: weeklyNormFields,
     append: appendNorm,
@@ -129,7 +130,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       })
     }
   }
-
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
 
@@ -144,6 +144,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         getValues,
         requestBusy?.[0]?.date_range?.[0] ?? new Date(),
       )
+
       validateRepeatData()
     } else if (
       requestType.toLowerCase() ===

@@ -154,7 +154,7 @@ export const getRecurringSchedule = (
   startDate: Date,
 ): IRecurringSchedule => {
   let result: any = {}
-  switch (getValues('request_busy_schedule.0.repeat-type')) {
+  switch (getValues('request_busy_schedule.0.recurring_schedule.type')) {
     case REPEAT_TYPE.DAILY:
       result = getRepeatDaily()
       break

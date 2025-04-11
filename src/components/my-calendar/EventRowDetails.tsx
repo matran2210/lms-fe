@@ -8,7 +8,6 @@ import {
 } from 'src/constants'
 
 const EventRowDetails = ({ event }: { event: IEvent }) => {
-  console.log({ event })
   const getEventTime = useMemo(() => {
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
