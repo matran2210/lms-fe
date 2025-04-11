@@ -102,7 +102,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
         )
       }
     } catch (error) {
-      toast.error('An error occurred. Please try again.')
+      // Handled by axios interceptor
     } finally {
       setLoading(false)
       setOpen(false)
@@ -118,10 +118,9 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
         const { data } = await MyRequestAPI.getRequestDetail(params as string)
         if (data) {
           setRequestDetail(data)
-        } else {
-          toast.error('Request not found!')
         }
       } catch (error: any) {
+        // Handled by axios interceptor
       } finally {
         setLoading(false)
       }
@@ -145,214 +144,189 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   }
 
   return (
-    <div>
-      <div className="card h-xl-100"></div>
-      <div>
-        <SappDrawer
-          isOpen={open}
-          title={`View Request`}
-          onClose={() => {
-            setOpen(false)
-          }}
-          message="Bạn có chắc chắn muốn hủy không"
-          btnSubmitTile={
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
-              ? 'Edit'
-              : ''
-          }
-          btnCancelTitle={
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.APPROVED.toLowerCase()
-              ? 'Cancel Request'
-              : 'Cancel'
-          }
-          showSubmitButton={
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
-          }
-          showCancelButton={
-            requestDetail?.status.toLowerCase() !==
-            RequestStatus.PENDING.toLowerCase()
-          }
-          confirmOnClose
-          footer={hasActionButton}
-          handleSubmit={() => {
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
-              ? handleEdit()
-              : handleChangeRequestStatus(RequestStatus.APPROVED)
-          }}
-          handleCancel={() => {
-            handleChangeRequestStatus(RequestStatus.CANCEL)
-          }}
-          onClickOutside={() => {
-            setOpen(false)
-          }}
-        >
-          <div className="mb-7">
-            <div className="mb-4 text-xl font-medium text-gray-800">
-              {requestDetail?.name}
-            </div>
-            <div className="mb-4 flex gap-x-3 text-sm">
-              <span className="font-medium text-bw-9 ">
-                Approval Deadline:{' '}
-              </span>
-              <span className="">
-                {requestDetail?.due_date} |{' '}
-                {dayjs(requestDetail?.created_at).format('hh:mm')}
-              </span>
-            </div>
-            <div className="mb-4 flex items-center gap-x-3 text-sm">
-              <span className="font-medium text-bw-9">Status:</span>
-              <div className="rounded bg-[#f897070d] px-[10px] py-1 font-inter text-xsm font-medium text-[#f89707]">
-                {displayStatus(requestDetail?.status ?? '')}
-                {/* Pending */}
-              </div>
-            </div>
+    <SappDrawer
+      isOpen={open}
+      title={`View Request`}
+      onClose={() => {
+        setOpen(false)
+      }}
+      message="Bạn có chắc chắn muốn hủy không"
+      btnSubmitTile={
+        requestDetail?.status.toLowerCase() ==
+        RequestStatus.PENDING.toLowerCase()
+          ? 'Edit'
+          : ''
+      }
+      showSubmitButton={
+        requestDetail?.status.toLowerCase() ==
+        RequestStatus.PENDING.toLowerCase()
+      }
+      showCancelButton={
+        requestDetail?.status.toLowerCase() !==
+        RequestStatus.PENDING.toLowerCase()
+      }
+      confirmOnClose
+      footer={hasActionButton}
+      handleSubmit={() => {
+        handleChangeRequestStatus(RequestStatus.APPROVED)
+      }}
+      handleCancel={() => {
+        handleChangeRequestStatus(RequestStatus.CANCEL)
+      }}
+      onClickOutside={() => {
+        setOpen(false)
+      }}
+    >
+      <div className="mb-7">
+        <div className="mb-4 text-xl font-medium text-gray-800">
+          {requestDetail?.name}
+        </div>
+        <div className="mb-4 flex gap-x-3 text-sm">
+          <span className="font-medium text-bw-9 ">Approval Deadline: </span>
+          <span className="">
+            {requestDetail?.due_date} |{' '}
+            {dayjs(requestDetail?.created_at).format('hh:mm')}
+          </span>
+        </div>
+        <div className="mb-4 flex items-center gap-x-3 text-sm">
+          <span className="font-medium text-bw-9">Status:</span>
+          <div className="rounded bg-[#f897070d] px-[10px] py-1 font-inter text-xsm font-medium text-[#f89707]">
+            {displayStatus(requestDetail?.status ?? '')}
+            {/* Pending */}
           </div>
-          <div className="mb-4">
-            <CollapseBox title=" Primary Information">
-              <div className="grid gap-y-4">
-                <CollapseItem
-                  title={'Request Name'}
-                  body={requestDetail?.name}
-                />
-
-                <CollapseItem
-                  title="Request Type"
-                  body={
-                    <span className="text-danger">
-                      {capitalizeFirstLetter(
-                        Object.values(REQUEST_TYPE).find(
-                          (item) => item.value == requestDetail?.type,
-                        )?.label,
-                      )}
-                    </span>
-                  }
-                />
-
-                <CollapseItem
-                  title="Creator"
-                  body={requestDetail?.user_request.detail.full_name}
-                />
-
-                <CollapseItem
-                  title="Approver"
-                  body={requestDetail?.staff_assignee?.detail?.full_name}
-                />
-
-                <CollapseItem
-                  title="Create Date"
-                  body={dayjs(requestDetail?.created_at).format(
-                    'DD/MM/YYYY | hh:mm',
-                  )}
-                />
-                {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
-                  <CollapseItem
-                    title="Note"
-                    body={requestDetail?.description}
-                  />
-                ) : (
-                  <CollapseItem
-                    title="Updated Date"
-                    body={dayjs(requestDetail?.updated_at).format(
-                      'DD/MM/YYYY | hh:mm',
-                    )}
-                  />
-                )}
-              </div>
-            </CollapseBox>
-          </div>
-
-          <div className="">
-            <CollapseBox
-              title={
-                requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value
-                  ? 'Proposal Date & Reason'
-                  : requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value
-                    ? 'Proposal Date & Quantity'
-                    : 'Proposal Timeoff Date'
-              }
-            >
-              {requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value &&
-                requestDetail?.teacher_schedules.map((item, index) => {
-                  const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-                  const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-                  return (
-                    <div
-                      key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
-                    >
-                      <CollapseItem
-                        title={`Start Date - End Date`}
-                        body={`${startTime} - ${endTime}`}
-                      />
-                      <CollapseItem
-                        title={`Repeat`}
-                        body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
-                      />
-                      <CollapseItem
-                        title={`Description`}
-                        body={`${item.description}`}
-                      />
-                    </div>
-                  )
-                })}
-
-              {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
-                requestDetail?.teacher_weekly_norms.map((item, index) => {
-                  const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
-                  const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
-                  return (
-                    <div
-                      key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
-                    >
-                      <CollapseItem
-                        title={`Start Date - End Date`}
-                        body={`${startTime} - ${endTime}`}
-                      />
-                      <CollapseItem title={`Quantity`} body={item.max_shift} />
-                    </div>
-                  )
-                })}
-
-              {(requestDetail?.type === REQUEST_TYPE.TIMEOFF.value ||
-                requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
-                requestDetail?.teacher_schedules.map((item, index) => {
-                  const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-                  const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-
-                  return (
-                    <div
-                      key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
-                    >
-                      <CollapseItem
-                        title={`Start Date - End Date`}
-                        body={`${startTime} - ${endTime}`}
-                      />
-                      <CollapseItem
-                        title={`Reason`}
-                        body={item.request_reason}
-                      />
-                    </div>
-                  )
-                })}
-            </CollapseBox>
-          </div>
-        </SappDrawer>
+        </div>
       </div>
-    </div>
+      <div className="mb-4">
+        <CollapseBox title=" Primary Information">
+          <div className="grid gap-y-4">
+            <CollapseItem title={'Request Name'} body={requestDetail?.name} />
+
+            <CollapseItem
+              title="Request Type"
+              body={
+                <span className="text-danger">
+                  {capitalizeFirstLetter(
+                    Object.values(REQUEST_TYPE).find(
+                      (item) => item.value == requestDetail?.type,
+                    )?.label,
+                  )}
+                </span>
+              }
+            />
+
+            <CollapseItem
+              title="Creator"
+              body={requestDetail?.user_request.detail.full_name}
+            />
+
+            <CollapseItem
+              title="Approver"
+              body={requestDetail?.staff_assignee?.detail?.full_name}
+            />
+
+            <CollapseItem
+              title="Create Date"
+              body={dayjs(requestDetail?.created_at).format(
+                'DD/MM/YYYY | hh:mm',
+              )}
+            />
+            {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
+              <CollapseItem title="Note" body={requestDetail?.description} />
+            ) : (
+              <CollapseItem
+                title="Updated Date"
+                body={dayjs(requestDetail?.updated_at).format(
+                  'DD/MM/YYYY | hh:mm',
+                )}
+              />
+            )}
+          </div>
+        </CollapseBox>
+      </div>
+
+      <div className="">
+        <CollapseBox
+          title={
+            requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value
+              ? 'Proposal Date & Reason'
+              : requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value
+                ? 'Proposal Date & Quantity'
+                : 'Proposal Timeoff Date'
+          }
+        >
+          {requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value &&
+            requestDetail?.teacher_schedules.map((item, index) => {
+              const startTime = dayjs(
+                `${item.schedule.start_date} ${item.schedule.start_time}`,
+              ).format('DD/MM/YYYY | HH:mm')
+              const endTime = dayjs(
+                `${item.schedule.end_date} ${item.schedule.end_time}`,
+              ).format('DD/MM/YYYY | HH:mm')
+              return (
+                <div
+                  key={index}
+                  className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                >
+                  <CollapseItem
+                    title={`Start Date - End Date`}
+                    body={`${startTime} - ${endTime}`}
+                  />
+                  <CollapseItem
+                    title={`Repeat`}
+                    body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
+                  />
+                  <CollapseItem
+                    title={`Description`}
+                    body={`${item.description}`}
+                  />
+                </div>
+              )
+            })}
+
+          {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
+            requestDetail?.teacher_weekly_norms.map((item, index) => {
+              const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
+              const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
+              return (
+                <div
+                  key={index}
+                  className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                >
+                  <CollapseItem
+                    title={`Start Date - End Date`}
+                    body={`${startTime} - ${endTime}`}
+                  />
+                  <CollapseItem title={`Quantity`} body={item.max_shift} />
+                </div>
+              )
+            })}
+
+          {(requestDetail?.type === REQUEST_TYPE.TIMEOFF.value ||
+            requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
+            requestDetail?.teacher_schedules.map((item, index) => {
+              const startTime = dayjs(
+                `${item.schedule.start_date} ${item.schedule.start_time}`,
+              ).format('DD/MM/YYYY | HH:mm')
+              const endTime = dayjs(
+                `${item.schedule.end_date} ${item.schedule.end_time}`,
+              ).format('DD/MM/YYYY | HH:mm')
+
+              return (
+                <div
+                  key={index}
+                  className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                >
+                  <CollapseItem
+                    title={`Start Date - End Date`}
+                    body={`${startTime} - ${endTime}`}
+                  />
+                  <CollapseItem title={`Reason`} body={item.request_reason} />
+                </div>
+              )
+            })}
+        </CollapseBox>
+      </div>
+    </SappDrawer>
   )
 }
 

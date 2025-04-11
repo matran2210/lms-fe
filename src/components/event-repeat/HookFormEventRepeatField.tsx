@@ -3,6 +3,7 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import { ISelect } from 'src/type/course'
 import { IEventRepeatFieldValues } from 'src/type/my-calendar'
 import EventRepeatField from './EventRepeatField'
+import { Skeleton } from 'antd'
 
 interface IProps {
   name: string
@@ -72,7 +73,7 @@ const HookFormEventRepeat = ({
               </>
             </div>
           ) : (
-            <div className="flex items-center">Loading...</div>
+            <Skeleton.Input active className={className} />
           )}
         </div>
       )}

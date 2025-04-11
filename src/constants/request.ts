@@ -1,4 +1,5 @@
-import { IOption } from 'src/type'
+import { ISelect } from 'src/type/course'
+
 export enum DRAWER_REQUEST_TYPE {
   PERSONAL_SCHEDULE = 'PERSONAL_SCHEDULE',
   TIMEOFF = 'TIMEOFF',
@@ -52,7 +53,7 @@ export const requestStatusToBadge = {
   },
 } as const
 
-export const OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE: IOption[] = [
+export const OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE: ISelect[] = [
   {
     label: 'Busy schedule',
     value: REQUEST_TYPE.TEACHER_SCHEDULE_BUSY,
@@ -63,7 +64,7 @@ export const OPTIONS_PERSONAL_SCHEDULE_REQUEST_TYPE: IOption[] = [
   },
 ]
 
-export const OPTIONS_TIME_OFF_REQUEST_TYPE: IOption[] = [
+export const OPTIONS_TIME_OFF_REQUEST_TYPE: ISelect[] = [
   {
     label: 'Timeoff',
     value: REQUEST_TYPE.TEACHER_SCHEDULE_TIME_OFF,
@@ -74,7 +75,7 @@ export const OPTIONS_TIME_OFF_REQUEST_TYPE: IOption[] = [
   },
 ]
 
-export const OPTIONS_REQUEST_STATUS: IOption[] = [
+export const OPTIONS_REQUEST_STATUS: ISelect[] = [
   {
     label: requestStatusToTitle[REQUEST_STATUS.PENDING],
     value: REQUEST_STATUS.PENDING,

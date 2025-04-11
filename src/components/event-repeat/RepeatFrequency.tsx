@@ -1,5 +1,6 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { InputNumber } from 'antd'
+import clsx from 'clsx'
 import { memo, useEffect, useMemo, useState } from 'react'
 import {
   FREQUENCY_OPTIONS,
@@ -62,7 +63,7 @@ const RepeatFrequency = ({
   }, [frequency])
 
   return (
-    <div className={`flex flex-row items-center ${className || ''}`}>
+    <div className={clsx('flex flex-row items-center', className)}>
       <InputNumber
         min={FREQUENCY_UNITS_LIMIT.MIN}
         max={FREQUENCY_UNITS_LIMIT.MAX[frequency.unit]}

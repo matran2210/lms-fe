@@ -46,7 +46,10 @@ const TimeOffTab = () => {
     type: getValues('type'),
     status: getValues('status'),
     from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.endOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]
+      ?.add(1, 'day')
+      .startOf('day')
+      ?.toISOString(),
   })
 
   const getParams = () => ({
@@ -185,21 +188,21 @@ const TimeOffTab = () => {
         pagination={pagination}
         setPagination={setPagination}
       />
-      {isOpenAddModal ? (
+      {isOpenAddModal && (
         <FormRequest
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
-      {isOpenViewModal ? (
+      )}
+      {isOpenViewModal && (
         <RequestDetail
           open={isOpenViewModal}
           setOpen={setIsOpenViewModal}
           setOpenEdit={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
+      )}
     </div>
   )
 }

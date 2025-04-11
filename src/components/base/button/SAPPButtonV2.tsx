@@ -15,7 +15,7 @@ interface SAPPButtonProps {
   color?: ButtonColor
   icon?: ReactNode
   iconPosition?: 'start' | 'end'
-  onClick?: any
+  onClick?: () => void
   loading?: boolean
   disabled?: boolean
 }

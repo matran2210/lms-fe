@@ -8,6 +8,7 @@ import {
 } from 'src/constants'
 
 const EventRowDetails = ({ event }: { event: IEvent }) => {
+  console.log({ event })
   const getEventTime = useMemo(() => {
     const options: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
@@ -23,105 +24,73 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
   const getEventTypeIcon = (type: string) => {
     switch (type) {
       case EVENT_TYPES.TEACHING:
-        return <SappIcon icon="book_open" className="" />
+        return <SappIcon icon="book_open" />
       case EVENT_TYPES.BUSY:
-        return <SappIcon icon="calendar_busy" className="" />
+        return <SappIcon icon="calendar_busy" />
       case EVENT_TYPES.HOLIDAY:
-        return <SappIcon icon="start_outline" className="" />
+        return <SappIcon icon="start_outline" />
       case EVENT_TYPES.OTHER:
-        return <SappIcon icon="calendar_check" className="" />
+        return <SappIcon icon="calendar_check" />
       default:
         return ''
     }
   }
 
+  const renderDetail = (label: string, value: React.ReactNode) => (
+    <div className="mb-2 flex flex-row justify-between last:mb-0">
+      <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
+        {label}
+      </div>
+      <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
+        {value}
+      </div>
+    </div>
+  )
+
   return (
     <div key={event.id}>
       {/* Event name */}
-      <div className="mb-2 flex	flex-row justify-between">
-        <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-          {POPUP_EVENT_DETAILS.TITLE}
-        </div>
-        <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-          {event.title}
-        </div>
-      </div>
+      {renderDetail(POPUP_EVENT_DETAILS.TITLE, event.title)}
 
       {/* Event time */}
-      <div className="mb-2 flex	flex-row justify-between">
-        <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-          {POPUP_EVENT_DETAILS.TIME}
-        </div>
-        <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-          {getEventTime}
-        </div>
-      </div>
+      {renderDetail(POPUP_EVENT_DETAILS.TIME, getEventTime)}
 
       {/* Event type */}
-      <div className="mb-2 flex	flex-row justify-between">
-        <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-          {POPUP_EVENT_DETAILS.TYPE}
-        </div>
-        <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-          <div className="flex flex-row content-center justify-start">
-            {getEventTypeIcon(event.type)}
-            <span className="ml-3">{EVENT_TYPES_LABEL[event.type]}</span>
-          </div>
-        </div>
-      </div>
+      {renderDetail(
+        POPUP_EVENT_DETAILS.TYPE,
+        <div className="flex flex-row content-center justify-start">
+          {getEventTypeIcon(event.type)}
+          <span className="ml-3">{EVENT_TYPES_LABEL[event.type]}</span>
+        </div>,
+      )}
 
       {/* Meeting link */}
-      {event.meetingLink && (
-        <div className="mb-2 flex	flex-row justify-between">
-          <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-            {POPUP_EVENT_DETAILS.MEETING_LINK}
-          </div>
-          <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-            <a
-              href={event.meetingLink}
-              target="_blank"
-              className="text-sm font-normal italic leading-[21px] tracking-normal text-blue-2"
-              rel="noreferrer"
-            >
-              {event.meetingLink}
-            </a>
-          </div>
-        </div>
-      )}
+      {event.meetingLink &&
+        renderDetail(
+          POPUP_EVENT_DETAILS.MEETING_LINK,
+          <a
+            href={event.meetingLink}
+            target="_blank"
+            className="text-sm font-normal italic leading-[21px] tracking-normal text-blue-2"
+            rel="noreferrer"
+          >
+            {event.meetingLink}
+          </a>,
+        )}
 
       {/* Classroom name */}
-      {event.classroomName && (
-        <div className="mb-2 flex	flex-row justify-between">
-          <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-            {POPUP_EVENT_DETAILS.CLASSROOM_NAME}
-          </div>
-          <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-            {event.classroomName}
-          </div>
-        </div>
-      )}
+      {event.classroomName &&
+        renderDetail(POPUP_EVENT_DETAILS.CLASSROOM_NAME, event.classroomName)}
 
       {/* Classroom address */}
-      {event.classroomAddress && (
-        <div className="mb-2 flex	flex-row justify-between">
-          <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-            {POPUP_EVENT_DETAILS.CLASSROOM_ADDRESS}
-          </div>
-          <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-            {event.classroomAddress}
-          </div>
-        </div>
-      )}
+      {event.classroomAddress &&
+        renderDetail(
+          POPUP_EVENT_DETAILS.CLASSROOM_ADDRESS,
+          event.classroomAddress,
+        )}
 
       {/* Event description */}
-      <div className="flex flex-row justify-between last:mb-0">
-        <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-gray-11">
-          {POPUP_EVENT_DETAILS.DESCRIPTION}
-        </div>
-        <div className="flex-1 text-sm leading-[21px] tracking-normal text-bw-11">
-          {event.description || ''}
-        </div>
-      </div>
+      {renderDetail(POPUP_EVENT_DETAILS.DESCRIPTION, event.description || '')}
     </div>
   )
 }

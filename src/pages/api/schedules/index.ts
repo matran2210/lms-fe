@@ -9,13 +9,13 @@ import {
 
 export class SchedulesAPI {
   static get(params: Object): Promise<IResponse<IResponseSchedule[]>> {
-    return fetcher(`${apiURL}/schedules/teachers`, { params: params })
+    return fetcher(`/schedules/teachers`, { params: params })
   }
 
   static create(
     data: ICreateSchedulePayload,
   ): Promise<IResponse<IResponseSchedule>> {
-    return fetcher(`${apiURL}/schedules/busy-schedule`, {
+    return fetcher(`/schedules/busy-schedule`, {
       method: 'POST',
       data: data,
     })
@@ -24,6 +24,6 @@ export class SchedulesAPI {
   static getWeeklyNorms(
     params: Record<string, any>,
   ): Promise<IResponse<IWeeklyNorm[]>> {
-    return fetcher(`${apiURL}/schedules/weekly-norms`, { params })
+    return fetcher(`/schedules/weekly-norms`, { params })
   }
 }

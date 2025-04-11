@@ -1,5 +1,5 @@
 import type { GetProps } from 'antd'
-import { DatePicker } from 'antd'
+import { DatePicker, Skeleton } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
@@ -102,7 +102,7 @@ const HookFormDateRange = ({
               </>
             </div>
           ) : (
-            <div className="flex items-center">Loading...</div>
+            <Skeleton.Input active className={inputClassName} />
           )}
         </div>
       )}

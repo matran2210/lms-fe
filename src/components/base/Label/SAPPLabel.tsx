@@ -9,7 +9,7 @@ interface SAPPLabelProps {
 const SAPPLabel = ({ title, required, className }: SAPPLabelProps) => {
   return (
     <label className={clsx('mb-2.5 block text-sm font-medium', className)}>
-      <span className={clsx(required && 'required')}>{title}</span>
+      <span className={clsx({ required })}>{title}</span>
     </label>
   )
 }
