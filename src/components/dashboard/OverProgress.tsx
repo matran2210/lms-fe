@@ -119,7 +119,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-4 3.5xl:px-8">
+    <div className="flex flex-col bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-4 3.5xl:px-8">
       <div className="text-lg-xl font-bold text-bw-11 4xl:text-xl">
         Over Progress
       </div>
