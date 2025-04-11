@@ -280,8 +280,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         toast.error('Something went wrong. Please try again.')
       }
     } catch (error) {
-      // Logging error for debugging purposes
-      toast.error('An error occurred. Please try again.')
+      // Handled by axios interceptor
     } finally {
       // setLoading(false)
     }
@@ -710,6 +709,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                         REQUEST_STATUS.PENDING.value.toLowerCase()
                     }
                     labelClass="text-sm font-medium"
+                    skeleton={loading}
                   />
                 </div>
                 <div className="mb-6">
@@ -770,6 +770,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                                 REQUEST_STATUS.PENDING.value.toLowerCase()
                             }
                             className="h-11.25"
+                            skeleton={loading}
                           />
                         </div>
                         <div>
@@ -822,40 +823,35 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               classCode &&
               timeOffFields.map((item, index) => {
                 return (
-                  <div key={index}>
+                  <div key={item.id}>
                     <div className="mb-6">
                       <div className="grid w-full grid-cols-2 gap-x-6">
-                        <div>
-                          <div className="mb-6">
-                            <SAPPSelect
-                              control={control}
-                              label="Lesson"
-                              required
-                              name={`request_time_off.${index}.lesson`}
-                              isSearchable
-                              onSearch={() => refetchLessons()}
-                              isLoading={isLoadingLessons}
-                              onMenuScrollToBottom={() =>
-                                hasNextPageLessons && fetchNextPageLessons()
-                              }
-                              onDropdownVisibleChange={(open) => {
-                                open && refetchLessons()
-                              }}
-                              onChange={(e) => {
-                                setValue(
-                                  `request_time_off.${index}.lessonId`,
-                                  e,
-                                )
-                              }}
-                              labelClass="text-sm font-medium"
-                              placeholder="Lesson"
-                              options={lessons.map((item) => ({
-                                value: item?.id,
-                                label: item?.name,
-                              }))}
-                              className="h-11.25 "
-                            />
-                          </div>
+                        <div className="mb-6">
+                          <SAPPSelect
+                            control={control}
+                            label="Lesson"
+                            required
+                            name={`request_time_off.${index}.lesson`}
+                            isSearchable
+                            onSearch={() => refetchLessons()}
+                            isLoading={isLoadingLessons}
+                            onMenuScrollToBottom={() =>
+                              hasNextPageLessons && fetchNextPageLessons()
+                            }
+                            onDropdownVisibleChange={(open) => {
+                              open && refetchLessons()
+                            }}
+                            onChange={(e) => {
+                              setValue(`request_time_off.${index}.lessonId`, e)
+                            }}
+                            labelClass="text-sm font-medium"
+                            placeholder="Lesson"
+                            options={lessons.map((item) => ({
+                              value: item?.id,
+                              label: item?.name,
+                            }))}
+                            className="h-11.25 "
+                          />
                         </div>
                         <div>
                           <SAPPInput

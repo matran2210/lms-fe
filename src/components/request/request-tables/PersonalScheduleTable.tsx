@@ -20,6 +20,7 @@ import {
   TableColumn,
 } from 'src/type'
 import RequestActionCell from '../RequestActionCell'
+import clsx from 'clsx'
 
 interface PersonalScheduleTableProps {
   loading: boolean
@@ -98,15 +99,14 @@ const columnsTitles: TableColumn<IRequest>[] = [
     render: (data: ITeacherSchedule[]) =>
       data?.length > 0 ? (
         <ul className="flex flex-col gap-1">
-          {data.map(({ schedule: { description } }, index) =>
-            description ? (
-              <li key={index}>{description}</li>
-            ) : (
-              <li key={index} className="text-accent-default">
-                _ _ _ _ _ _ _ _ _ _ _
-              </li>
-            ),
-          )}
+          {data.map(({ schedule: { description } }, index) => (
+            <li
+              key={index}
+              className={clsx({ 'text-accent-default': !description })}
+            >
+              {description || '_ _ _ _ _ _ _ _ _ _ _'}
+            </li>
+          ))}
         </ul>
       ) : (
         <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
@@ -118,15 +118,14 @@ const columnsTitles: TableColumn<IRequest>[] = [
     render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) =>
       teacher_weekly_norms?.length > 0 ? (
         <ul className="flex flex-col gap-1 text-center">
-          {teacher_weekly_norms.map(({ max_shift }, index) =>
-            max_shift ? (
-              <li key={index}>{max_shift}</li>
-            ) : (
-              <li key={index} className="text-accent-default">
-                _ _ _ _ _ _
-              </li>
-            ),
-          )}
+          {teacher_weekly_norms.map(({ max_shift }, index) => (
+            <li
+              key={index}
+              className={clsx({ 'text-accent-default': !max_shift })}
+            >
+              {max_shift || '_ _ _ _ _ _'}
+            </li>
+          ))}
         </ul>
       ) : (
         <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
@@ -158,7 +157,9 @@ const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: 'Note',
     dataIndex: 'note',
-    render: (value: string) => <div className="text-secondary">{value}</div>,
+    render: (value: string) => (
+      <div className="text-secondary">{value || '_ _ _ _ _ _'}</div>
+    ),
   },
   {
     title: '',

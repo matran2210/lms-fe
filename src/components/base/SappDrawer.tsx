@@ -23,7 +23,7 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
-  handleCancel?: any
+  handleCancel?: () => void
   onClickOutside?: () => void
   showCancelButton?: boolean
   btnCancelTitle?: string
@@ -76,7 +76,7 @@ const SappDrawer = ({
       ) {
         handleOnClose()
       } else {
-        handleCancel()
+        handleCancel?.()
       }
     }
   }

@@ -2,7 +2,7 @@ import { Dayjs } from 'dayjs'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
 import { IUser } from 'src/redux/types/User/urser'
 import { IMetaData } from '.'
-import { IOption } from './common'
+import { ISelect } from './course'
 
 export type RequestType = keyof typeof REQUEST_TYPE
 
@@ -69,8 +69,8 @@ export interface ITeacherWeeklyNorm {
 
 export interface IRequestFilterForm {
   request_name: string
-  type: IOption
-  status: IOption
+  type: ISelect
+  status: ISelect
   rangeDate: [Dayjs, Dayjs]
 }
 

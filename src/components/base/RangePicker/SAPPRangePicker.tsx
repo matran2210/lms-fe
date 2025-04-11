@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 
-interface SAPPRangePickerProps {
+export interface SAPPRangePickerProps {
   control: Control<any>
   name: string
   defaultValue?: any
