@@ -18,10 +18,10 @@ export enum REPEAT_TYPE {
   CHOSEN_PATTERN = 'CHOSEN_PATTERN',
 }
 export enum REPEAT_FREQUENCY {
-  DAY = 'DAY',
-  WEEK = 'WEEK',
-  MONTH = 'MONTH',
-  YEAR = 'YEAR',
+  DAY = 'DAYS',
+  WEEK = 'WEEKS',
+  MONTH = 'MONTHS',
+  YEAR = 'YEARS',
 }
 export const REPEAT_FREQUENCY_LABEL = {
   [REPEAT_FREQUENCY.DAY]: 'days',
