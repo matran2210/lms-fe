@@ -55,6 +55,7 @@ module.exports = {
           3: '#E5A600',
           4: '#f57c00',
           5: '#f57c000D',
+          6: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -81,6 +82,8 @@ module.exports = {
           7: '#EDEFF5',
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
+          11: '#252F4A',
+          12: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -113,6 +116,7 @@ module.exports = {
           2: '#091D37',
           3: '#025eff',
           4: '#025eff0D',
+          5: '#7086FD',
         },
         pinned: {
           1: '#18355D',
@@ -126,6 +130,12 @@ module.exports = {
         },
         graded: {
           finish: '#4077E0',
+        },
+        green: {
+          1: '#37C78C',
+        },
+        red: {
+          1: '#FF524E',
         },
       },
       borderColor: {
@@ -179,6 +189,8 @@ module.exports = {
         '78px': '78px',
         '132px': '132px',
         '165px': '165px',
+        42.5: '170px',
+        45: '180px',
         '190px': '190px',
         '400px': '400px',
       },
@@ -208,6 +220,7 @@ module.exports = {
         dl: '646px',
         '2dl': '950px',
         xxl: '1144px',
+        1729: '1729px',
         '8xl': '1920px',
       },
       lineHeight: {
@@ -245,6 +258,8 @@ module.exports = {
         '624px': '624px',
       },
       padding: {
+        1.25: '0.3125rem', // 5px
+        1.75: '0.4375rem', // 7px
         1.8: '0.47rem', // 7.5px
         2.75: '0.688rem', // 11px
         2.8: '0.71875rem', // 11.5px
@@ -256,6 +271,7 @@ module.exports = {
         6.5: '26.5px',
         7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px
+        13.75: '3.4375rem', // 55px
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px
         22: '5.375rem', //86px
@@ -278,6 +294,8 @@ module.exports = {
         16.75: '4.188rem',
         26: '6.5rem',
         30: '7.5rem', // 120px
+        42.5: '170px',
+        45: '180px',
       },
       opacity: {
         55: '0.55',
