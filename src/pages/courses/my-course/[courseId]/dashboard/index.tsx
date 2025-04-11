@@ -29,7 +29,7 @@ const Dashboard = () => {
         className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-bw-12 lg:px-5 3.5xl:px-[55px]"
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="mx-auto flex max-w-[1729px] grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
+        <div className="mx-auto flex max-w-[1729px] grow flex-col gap-4 bg-gray-4 xl:flex-row 3xl:gap-6">
           <div className="flex flex-col gap-4 2xl:w-[65%] 3xl:gap-6">
             <div className="grid min-h-[280px] grid-cols-1 gap-2 lg:grid-cols-9 3xl:gap-6">
               <OverProgress />

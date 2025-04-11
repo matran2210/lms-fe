@@ -102,7 +102,7 @@ const LearningResults = () => {
             <Image src={infoIcon} alt="" width={16} height={16} />
           </div>
         </Tooltip>
-        <div className="text-xsm text-gray-9 4xl:text-sm">
+        <div className="text-xsm text-gray-11 4xl:text-sm">
           {`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}
         </div>
       </div>
@@ -113,7 +113,7 @@ const LearningResults = () => {
             <EChart option={option} />
           </div>
           <div className="mt-5 flex items-center justify-center gap-2.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-blue-2"></span>
+            <span className="inline-block h-3 w-3 rounded-full bg-blue-5"></span>
             <span className="font-medium">Learning results</span>
           </div>
         </>

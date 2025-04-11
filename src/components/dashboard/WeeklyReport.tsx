@@ -112,7 +112,7 @@ const WeeklyReport = () => {
             {` ${dayjs().startOf('isoWeek').format('DD/MM/YY')} - ${dayjs().endOf('isoWeek').format('DD/MM/YY')}`}
           </span>
         </div>
-        <div className="text-xsm text-gray-9 4xl:text-sm">{`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}</div>
+        <div className="text-xsm text-gray-11 4xl:text-sm">{`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}</div>
       </div>
       <div className="mb-5 mt-3 h-[1px] w-full bg-gray-2"></div>
       <div className="flex flex-row items-center justify-between border border-dashed px-5 py-6">

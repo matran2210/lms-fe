@@ -55,6 +55,7 @@ module.exports = {
           3: '#E5A600',
           4: '#f57c00',
           5: '#f57c000D',
+          6: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -115,6 +116,7 @@ module.exports = {
           2: '#091D37',
           3: '#025eff',
           4: '#025eff0D',
+          5: '#7086FD',
         },
         pinned: {
           1: '#18355D',
