@@ -194,7 +194,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
   }, [])
 
   return (
-    <div className="grid w-full grid-cols-4 gap-6">
+    <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
       <div className="w-full shadow-box" data-aos={ANIMATION.DATA_AOS}>
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
