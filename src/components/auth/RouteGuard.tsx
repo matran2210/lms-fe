@@ -8,6 +8,7 @@ import {
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getMe, userReducer } from 'src/redux/slice/User/User'
+import { UserType } from 'src/redux/types/User/urser'
 
 interface IProps {
   children: JSX.Element
@@ -44,11 +45,11 @@ export const RouteGuard = ({ children }: IProps) => {
 
   // Redirect effect
   useEffect(() => {
-    if (router.pathname === '/' && userSlice.user.id) {
-      if (userSlice.user.type === 'STUDENT') {
+    if (router.pathname === PageLink.HOME && userSlice.user.id) {
+      if (userSlice.user.type === UserType.STUDENT) {
         router.replace(PageLink.COURSES)
-      } else if (userSlice.user.type === 'TEACHER') {
-        router.replace(PageLink.TEACHER)
+      } else if (userSlice.user.type === UserType.TEACHER) {
+        router.replace(PageLink.TEACHERS)
       }
     }
   }, [router.pathname, userSlice.user]) // Add proper dependencies

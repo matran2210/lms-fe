@@ -13,7 +13,7 @@ const ErrorPage = () => {
       return PageLink.COURSES
     }
     if (userSlice.user.type === 'TEACHER') {
-      return PageLink.TEACHER
+      return PageLink.TEACHERS
     }
     return '/'
   }

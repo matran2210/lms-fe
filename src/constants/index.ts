@@ -5,7 +5,7 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
-  TEACHER: '/teacher',
+  TEACHERS: '/teachers',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 // Define route patterns for different roles
 const roleRoutePatterns: Record<string, string[]> = {
-  teacher: ['/teacher'],
+  teacher: ['/teachers'],
 }
 
 // Define public routes that don't require authentication
