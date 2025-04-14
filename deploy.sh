@@ -26,4 +26,14 @@ EOL
 echo "🚀 Deploying to Vercel production..."
 vercel deploy --prod
 
+# Send notification to Discord
+DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/1361177434338361386/wB6p0irut7xbnBWlJz1bkoF8mec5cah5ZJ53-wChx5ty5BAf2G9JizaaaeRNiT-tcC4X"
+URL=https://dev-lms.sapp.edu.vn
+MESSAGE="Deployed sapp-lms-dev success to: $URL at $(date '+%Y-%m-%d %H:%M:%S')"
+
+curl -H "Content-Type: application/json" \
+  -X POST \
+  -d "{\"content\": \"$MESSAGE\"}" \
+  $DISCORD_WEBHOOK_URL
+
 echo "✅ Deployment complete!"
