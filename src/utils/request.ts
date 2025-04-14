@@ -13,6 +13,7 @@ import {
   REPEAT_TYPE,
   WEEK_DAY_LABELS,
 } from './constants/repeat'
+import { getDayIndex, reverseDaysOfWeek } from './common'
 
 export const WEEKDAYS = [
   'Monday',
@@ -73,8 +74,6 @@ export const formatRecurringSchedule = (
 
   return result
 }
-export const getDayIndex = (startDate: Date) =>
-  (Number(dayjs(startDate).format('d')) + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
 
 const getRepeatDaily = (): IRecurringSchedule => ({
   interval: 1,
@@ -103,12 +102,13 @@ const getRepeatAnnually = (startDate: Date): IRecurringSchedule => ({
   type: REPEAT_TYPE.ANNUALLY,
 })
 
-const getRepeatEveryWeekday = (): IRecurringSchedule => ({
+const getRepeatEveryWeekday = (startDate: Date): IRecurringSchedule => ({
   interval: 1,
   frequency: 'days',
-  day_of_week: [1, 2, 3, 4, 5],
+  day_of_week: reverseDaysOfWeek(startDate, [1, 2, 3, 4, 5]),
   type: REPEAT_TYPE.EVERY_WEEKDAY,
 })
+
 export const getCustomRepeat = (
   getValues: UseFormGetValues<any>,
   startDate: Date,
@@ -132,8 +132,9 @@ export const getCustomRepeat = (
     )?.toUpperCase()
   ) {
     case REPEAT_FREQUENCY.WEEK:
-      repeatCustom.day_of_week = getValues(
-        `request_busy_schedule.0.recurring_schedule.day_of_week`,
+      repeatCustom.day_of_week = reverseDaysOfWeek(
+        startDate,
+        getValues(`request_busy_schedule.0.recurring_schedule.day_of_week`),
       )
       break
     case REPEAT_FREQUENCY.MONTH:
@@ -169,7 +170,7 @@ export const getRecurringSchedule = (
       result = getRepeatAnnually(startDate)
       break
     case REPEAT_TYPE.EVERY_WEEKDAY:
-      result = getRepeatEveryWeekday()
+      result = getRepeatEveryWeekday(startDate)
       break
     case REPEAT_TYPE.CUSTOM:
       result = getCustomRepeat(getValues, startDate)
