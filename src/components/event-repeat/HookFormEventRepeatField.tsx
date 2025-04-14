@@ -19,6 +19,7 @@ interface IProps {
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
+  rangeDate?: [Date, Date]
 }
 
 const HookFormEventRepeat = ({
@@ -35,6 +36,7 @@ const HookFormEventRepeat = ({
   resetRepeat,
   setResetRepeat,
   disabled,
+  rangeDate,
 }: IProps) => {
   return (
     <Controller
@@ -62,6 +64,7 @@ const HookFormEventRepeat = ({
                 resetRepeat={resetRepeat}
                 setResetRepeat={setResetRepeat}
                 disabled={disabled}
+                rangeDate={rangeDate}
               />
 
               <>

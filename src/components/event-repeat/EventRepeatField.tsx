@@ -39,7 +39,7 @@ interface IEventRepeatFieldForm {
     | ISelect
   repeat_frequency: IRepeatFrequency
   repeat_on: (typeof REPEAT_ON)[number][]
-  end_on: Date
+  end_on?: Date
   type: string
 }
 
@@ -56,6 +56,7 @@ interface IProps {
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
+  rangeDate?: [Date, Date]
 }
 
 const EventRepeatField = ({
@@ -71,6 +72,7 @@ const EventRepeatField = ({
   resetRepeat,
   setResetRepeat,
   disabled,
+  rangeDate,
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
@@ -84,7 +86,6 @@ const EventRepeatField = ({
       repeat_type: repeatOption ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
-      end_on: initDate,
     }
   }, [defaultValue])
   const repeatTypeOptions = useMemo(() => {
@@ -126,7 +127,6 @@ const EventRepeatField = ({
       repeat_type: EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
-      end_on: initDate,
     },
   })
 
@@ -245,6 +245,12 @@ const EventRepeatField = ({
   }, [resetRepeat])
 
   useEffect(() => {
+    if (rangeDate?.[0] && rangeDate?.[1]) {
+      setFormValue('end_on', undefined)
+    }
+  }, [rangeDate])
+
+  useEffect(() => {
     setRepeatType(watch('repeat_type') as RecurringScheduleType)
   }, [watch('repeat_type')])
 
@@ -312,7 +318,7 @@ const EventRepeatField = ({
                   onChange={(newDate) => field.onChange(newDate)}
                   minDate={dayjs(initDate)}
                   maxDate={dayjs(initDate).add(2, 'year')}
-                  value={dayjs(field.value)}
+                  value={field?.value ? dayjs(field.value) : undefined}
                   className="h-11.25 w-full"
                   color="secondary"
                   suffixIcon={<SappIcon icon="input_calendar" />}
