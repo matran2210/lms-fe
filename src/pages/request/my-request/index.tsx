@@ -6,6 +6,7 @@ import { RequestProvider } from '@contexts/RequestContext'
 import { Tabs } from 'antd'
 import { useRouter } from 'next/router'
 import { TitleSidebar } from 'src/constants'
+import Progress from '@components/my-class/progress-table/Progress'
 
 const breadcrumbs = [
   {
@@ -33,6 +34,11 @@ const tabs = [
     key: '3',
     label: 'Schedule Request',
     children: <PersonalScheduleTab />,
+  },
+  {
+    key: '4',
+    label: 'Progress',
+    children: <Progress />,
   },
 ]
 

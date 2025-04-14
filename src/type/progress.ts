@@ -25,3 +25,14 @@ export interface IDefaultFormAddProgress {
   section?: string
   note: string
 }
+export interface IExplorerNode {
+  id: string
+  name: string
+  code: string
+  is_original: boolean
+  is_excepted: boolean
+  checked: boolean
+  parent_id?: string
+  process?: number
+  children?: IExplorerNode[]
+}
