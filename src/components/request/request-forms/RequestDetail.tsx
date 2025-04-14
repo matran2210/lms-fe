@@ -114,15 +114,20 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             formattedTimeoffData,
           ))
 
-      await editFn()
-    } catch (error) {
+      const res = await editFn()
+      if (res.success) {
+        toast.success(`${capitalizeFirstLetter(status)} request success!`)
+        setLoading(false)
+        setOpen(false)
+        reloadPage()
+        router.replace(router.pathname, undefined, { shallow: true })
+      }
+    } catch (error: any) {
       // Handled by axios interceptor
+      if (error.response.data.error.code == '400|50001') {
+        toast.error('All class schedules have already assigned!')
+      }
     } finally {
-      toast.success(`${capitalizeFirstLetter(status)} request success!`)
-      setLoading(false)
-      setOpen(false)
-      reloadPage()
-      router.replace(router.pathname, undefined, { shallow: true })
     }
   }
 
@@ -165,6 +170,20 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       }),
     )
   }
+  const handleSubmit = () => {
+    if (
+      requestDetail?.status.toLowerCase() == RequestStatus.PENDING.toLowerCase()
+    ) {
+      handleEdit()
+    } else if (
+      requestDetail?.status.toLowerCase() ==
+      RequestStatus.APPROVED.toLowerCase()
+    ) {
+      handleCancel()
+    } else {
+      handleChangeRequestStatus(RequestStatus.APPROVED)
+    }
+  }
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -180,31 +199,24 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
-              : ''
+              : 'Cancel Request'
           }
-          btnCancelTitle={
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.APPROVED.toLowerCase()
-              ? 'Cancel Request'
-              : 'Cancel'
-          }
+          btnCancelTitle={'Cancel'}
           showSubmitButton={
             requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
+              RequestStatus.PENDING.toLowerCase() ||
+            requestDetail?.status.toLowerCase() ==
+              RequestStatus.APPROVED.toLowerCase()
           }
           showCancelButton={
-            requestDetail?.status.toLowerCase() !==
-            RequestStatus.PENDING.toLowerCase()
+            ![
+              RequestStatus.PENDING.toLowerCase(),
+              RequestStatus.APPROVED.toLowerCase(),
+            ].includes(requestDetail?.status?.toLowerCase() ?? '')
           }
           confirmOnClose
           footer={hasActionButton}
-          handleSubmit={() => {
-            requestDetail?.status.toLowerCase() ==
-            RequestStatus.PENDING.toLowerCase()
-              ? handleEdit()
-              : handleChangeRequestStatus(RequestStatus.APPROVED)
-          }}
-          handleCancel={handleCancel}
+          handleSubmit={() => handleSubmit()}
         >
           <div className="mb-7">
             <div className="mb-4 text-xl font-medium text-gray-800">
@@ -291,7 +303,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                     : 'Proposal Timeoff Date'
               }
             >
-              {requestDetail?.type === REQUEST_TYPE.BUSY_SCHEDULE.value &&
+              {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
                     `${item.schedule.start_date} ${item.schedule.start_time}`,
@@ -299,6 +311,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   const endTime = dayjs(
                     `${item.schedule.end_date} ${item.schedule.end_time}`,
                   ).format('DD/MM/YYYY | HH:mm')
+
                   return (
                     <div
                       key={index}
@@ -314,7 +327,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       />
                       <CollapseItem
                         title={`Description`}
-                        body={`${item.description}`}
+                        body={`${item.schedule.description}`}
                       />
                     </div>
                   )

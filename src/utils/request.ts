@@ -115,25 +115,26 @@ export const getCustomRepeat = (
 ): IRecurringSchedule => {
   const repeatCustom: IRecurringSchedule = {
     interval: Number(
-      getValues('request_busy_schedule.0.drawer-repeat-interval'),
+      getValues('request_busy_schedule.0.recurring_schedule.interval'),
     ),
     frequency:
       REPEAT_FREQUENCY_LABEL[
         getValues(
-          'request_busy_schedule.0.drawer-repeat-frequency',
-        ) as REPEAT_FREQUENCY
+          'request_busy_schedule.0.recurring_schedule.frequency',
+        )?.toUpperCase() as REPEAT_FREQUENCY
       ],
     type: REPEAT_TYPE.CUSTOM,
   }
-  switch (getValues('request_busy_schedule.0.drawer-repeat-frequency')) {
+
+  switch (
+    getValues(
+      'request_busy_schedule.0.recurring_schedule.frequency',
+    )?.toUpperCase()
+  ) {
     case REPEAT_FREQUENCY.WEEK:
-      const selectedDaysOfWeek: number[] = []
-      WEEK_DAY_LABELS.forEach((dayLabel, index) => {
-        if (getValues(dayLabel as keyof IBusySchedule)) {
-          selectedDaysOfWeek.push(index + 1)
-        }
-      })
-      repeatCustom.day_of_week = selectedDaysOfWeek
+      repeatCustom.day_of_week = getValues(
+        `request_busy_schedule.0.recurring_schedule.day_of_week`,
+      )
       break
     case REPEAT_FREQUENCY.MONTH:
       repeatCustom.day_of_month = [Number(dayjs(startDate).format('D'))]
