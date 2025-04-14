@@ -1,5 +1,6 @@
 import { Plus } from '@assets/icons'
 
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
@@ -17,10 +18,9 @@ import {
   REQUEST_TYPE,
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
+import FormRequest from '../request-forms/FormRequest'
+import RequestDetail from '../request-forms/RequestDetail'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'
-import SAPPButton from '@components/base/button/SappButton'
-import FormRequest from '@components/my-request/FormRequest'
-import RequestDetail from '@components/my-request/RequestDetail'
 
 const PersonalScheduleTab = () => {
   const [isFirstLoad, setIsFirstLoad] = useState(true)
@@ -36,6 +36,8 @@ const PersonalScheduleTab = () => {
     isOpenAddModal,
     setIsOpenViewModal,
     isOpenViewModal,
+    isReFetch,
+    setIsReFetch,
   } = useRequestContext()
   const router = useRouter()
 
@@ -45,8 +47,11 @@ const PersonalScheduleTab = () => {
     request_name: getValues('request_name')?.trim(),
     type: getValues('type'),
     status: getValues('status'),
-    from_date: getValues('rangeDate')?.[0]?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.toISOString(),
+    from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]
+      ?.add(1, 'day')
+      .startOf('day')
+      ?.toISOString(),
   })
 
   const getParams = () => ({
@@ -101,7 +106,8 @@ const PersonalScheduleTab = () => {
     )
 
     isFirstLoad && setIsFirstLoad(false)
-  }, [pagination.current, pagination.pageSize])
+    isReFetch && setIsReFetch(false)
+  }, [pagination.current, pagination.pageSize, isReFetch])
 
   const handleChangeParams = (params: Record<string, any>) => {
     const queryString = new URLSearchParams(params).toString()
@@ -152,20 +158,20 @@ const PersonalScheduleTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButton
+            <SAPPButtonV2
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
               disabled={isLoading}
             />
-            <SAPPButton
+            <SAPPButtonV2
               title="Search"
               onClick={handleFilter}
               disabled={isLoading}
             />
           </div>
           <div>
-            <SAPPButton
+            <SAPPButtonV2
               title="Create Request"
               className="flex"
               icon={<Plus />}
@@ -183,21 +189,21 @@ const PersonalScheduleTab = () => {
         setIsEdit={setOpenAddModal}
         setIsInspect={setIsOpenViewModal}
       />
-      {isOpenAddModal ? (
+      {isOpenAddModal && (
         <FormRequest
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
-      {isOpenViewModal ? (
+      )}
+      {isOpenViewModal && (
         <RequestDetail
           open={isOpenViewModal}
           setOpen={setIsOpenViewModal}
           setOpenEdit={setOpenAddModal}
           reloadPage={handleFilter}
         />
-      ) : null}
+      )}
     </div>
   )
 }

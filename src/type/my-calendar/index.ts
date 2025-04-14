@@ -1,9 +1,11 @@
 import { IEvent } from 'sapp-common-package/dist/types'
 import {
+  EVENT_REPEAT_TYPES,
   FREQUENCY_UNITS,
   FREQUENCY_UNITS_OBJECT,
-  REPEAT_ON,
 } from 'src/constants'
+
+export type RecurringScheduleType = keyof typeof EVENT_REPEAT_TYPES
 
 export interface INewSchedule {
   event_name: string
@@ -35,6 +37,7 @@ export interface IRecurringSchedule {
   day_of_week?: number[]
   month_of_year?: number[]
   day_of_month?: number[]
+  type: string
 }
 
 export interface IEventRepeatFieldValues {

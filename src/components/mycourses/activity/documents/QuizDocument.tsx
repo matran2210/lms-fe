@@ -190,6 +190,39 @@ const QuizDocument = ({
     }
   }
 
+  /**
+   * Xử lý sự kiện khi người dùng hoàn thành một câu hỏi trong bài quiz.
+   *
+   * Chức năng này thực hiện các bước sau:
+   * 1. Tăng chỉ mục câu hỏi hiện tại (`activeQuestionIndex`) để chuyển sang câu tiếp theo.
+   * 2. Gọi `handleSaveAnswer()` để lưu câu trả lời của người dùng.
+   * 3. Kiểm tra xem câu hỏi tiếp theo có tồn tại không:
+   *    - Nếu có, gửi yêu cầu lấy dữ liệu câu hỏi tiếp theo từ API.
+   *    - Sau khi tải thành công, cập nhật `startWorkTime` để đánh dấu thời điểm bắt đầu trả lời câu hỏi mới.
+   *
+   * @returns Không có giá trị trả về.
+   */
+
+  const handleQuizFinish = async () => {
+    setActiveQuestionIndex(activeQuestionIndex + 1)
+    handleSaveAnswer()
+    // Load the next question if it hasn't been loaded yet
+    const nextQuestionId = questions[activeQuestionIndex + 1]?.id
+    if (nextQuestionId) {
+      try {
+        await dispatch(
+          fetchQuestionById({
+            activityId: activityId,
+            tabId: tabId,
+            quizId: quizId,
+            questionId: nextQuestionId || '',
+          }),
+        )
+        setStartWorkTime(Date.now())
+      } catch (error) {}
+    }
+  }
+
   const handlePrevQuestion = async () => {
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
@@ -618,8 +651,9 @@ const QuizDocument = ({
                       return
                     }
                     if (isLastQuestion) {
+                      handleQuizFinish()
+                      // handleSaveAnswer()
                       setRunHandleFinishQuiz((e) => e + 1)
-                      handleSaveAnswer()
                       trackGAEvent('Click Button Finish Quiz Activity')
                       return
                     } else {

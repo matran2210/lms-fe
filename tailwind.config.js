@@ -54,6 +54,8 @@ module.exports = {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
           3: '#E5A600',
+          4: '#f57c00',
+          5: '#f57c000D',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -62,6 +64,8 @@ module.exports = {
         danger: {
           DEFAULT: '#D35563',
           2: '#dd4339',
+          3: '#f01919',
+          4: '#0Df01919',
         },
         state: {
           info: '#3964EA',
@@ -90,10 +94,15 @@ module.exports = {
           6: '#D8D8E5',
           7: '#E3E3E3',
           8: '#F3F3F3',
+          9: '#374151',
           10: '#F2F4F7',
-          11: '#9CA3AF',
+          11: '#99A1B7',
           12: '#78829D',
           900: '#181C32',
+        },
+        green: {
+          1: '#07af17',
+          2: '#01711f0D',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -105,7 +114,9 @@ module.exports = {
         },
         blue: {
           1: '#0000EE',
-          2: '#025EFF',
+          2: '#091D37',
+          3: '#025eff',
+          4: '#025eff0D',
         },
         pinned: {
           1: '#18355D',
@@ -171,6 +182,7 @@ module.exports = {
         4: '16px',
         6: '24px',
         8: '30px',
+        120: '120px',
         small: '36px',
         default: '40px',
         medium: '48px',

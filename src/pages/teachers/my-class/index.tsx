@@ -1,13 +1,12 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import LayoutFilter from '@components/layout/Filter/index'
-import MyClassFilter from 'src/pages/teachers/my-class/components/MyClassFilter'
+import LayoutFilter from '@components/layout/TeacherFilter/index'
+import MyClassFilter from '@components/teacher/components/MyClassFilter'
 import { useForm } from 'react-hook-form'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
-import ItemClassesByStatus from '@pages/teachers/my-class/components/ItemClassesByStatus'
+import ItemClassesByStatus from '@components/teacher/components/ItemClassesByStatus'
 import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
@@ -46,10 +45,6 @@ const initialValues: FilterParams = {
   subject_id: undefined,
 }
 
-interface APIUniversityProgram {
-  id: string
-  name: string
-}
 const MyClass = () => {
   const router = useRouter()
   const [pageIndex, setPageIndex] = useState<number>(1)
@@ -58,7 +53,7 @@ const MyClass = () => {
 
   const { control, getValues, reset, setValue, watch } = useForm()
   const courseCategoryId = watch('course_category_id')
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [TeacherKey.MyClass, pageIndex, pageSize, params],
     queryFn: async () => {
       try {
@@ -91,22 +86,6 @@ const MyClass = () => {
     }
     setParams(searchParams)
   }
-
-  useEffect(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          page_index: pageIndex,
-          page_size: pageSize,
-          ...params,
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [pageIndex, pageSize, params])
 
   return (
     <LayoutTeacher title="My Class" breadcrumbs={breadcrumbs}>

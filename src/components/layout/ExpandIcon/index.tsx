@@ -2,6 +2,7 @@ import { File, NotificationIcon } from '@assets/icons'
 import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
+import TeacherLogoFull from '@components/layout/ExpandIcon/TeacherLogoFull'
 
 type ExpandIconPros = {
   isExpanded?: boolean
@@ -31,6 +32,7 @@ export default function ExpandIcon({
       )}
       {type === 'logo-default' && <LogoDefault />}
       {type === 'logo-full' && <LogoFull />}
+      {type === 'teacher-logo-full' && <TeacherLogoFull />}
       {type === 'stats-chart-sharp' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"

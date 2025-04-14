@@ -1,8 +1,16 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
+import { DAYS_IN_WEEK } from 'src/constants'
 
 export const formatDate = (
-  date: Date | string,
+  date: Dayjs | Date | string,
   formatStr: string = 'DD/MM/YYYY',
+) => {
+  return dayjs(date).format(formatStr)
+}
+
+export const formatTime = (
+  date: Dayjs | Date | string,
+  formatStr: string = 'HH:mm',
 ) => {
   return dayjs(date).format(formatStr)
 }
@@ -22,4 +30,13 @@ export const cleanParams = <T extends Record<string, any>>(
     }
   }
   return result
+}
+
+export const getDayIndex = (startDate: Date) =>
+  (Number(dayjs(startDate).format('d')) + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
+
+export const reverseDaysOfWeek = (startDate: Date, daysOfWeek: number[]) => {
+  const dayOfWeek = getDayIndex(startDate) + 1 // Day of week starts from 0 (Sunday)
+  const dayIndex = daysOfWeek.indexOf(dayOfWeek)
+  return [...daysOfWeek.slice(dayIndex), ...daysOfWeek.slice(0, dayIndex)]
 }

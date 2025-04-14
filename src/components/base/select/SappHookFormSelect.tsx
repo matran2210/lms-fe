@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, { ReactNode } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import Select from 'react-select'
@@ -24,8 +25,9 @@ interface IProps {
   isClearable?: boolean
   onMenuClose?: () => void
   onBlur?: () => void
-  onSearch?: () => void
   isLoading?: boolean
+  isSelectCustom?: boolean
+  onSearch?: (value?: string) => void
 }
 
 const SappHookFormSelect = ({
@@ -46,8 +48,9 @@ const SappHookFormSelect = ({
   isClearable,
   onMenuClose,
   onBlur,
-  onSearch,
   isLoading = false,
+  isSelectCustom = false,
+  onSearch,
 }: IProps) => {
   return (
     <>
@@ -67,16 +70,18 @@ const SappHookFormSelect = ({
                 {...field}
                 options={options}
                 // styles={customStyles}
-                className={`select-single ${className} `}
+                className={clsx(
+                  'select-single',
+                  isSelectCustom && 'select-single-custom',
+                  className,
+                )}
                 classNamePrefix="select"
                 instanceId="selectInstanceId"
                 placeholder={placeholder}
                 isDisabled={isDisabled}
                 isClearable={isClearable}
                 onChange={(selectedOption) => {
-                  // Gọi hàm onChange của field
                   field.onChange(selectedOption)
-                  // Gọi hàm onChange truyền từ props
                   onSelectChange && onSelectChange?.(selectedOption)
                 }}
                 onMenuOpen={() => onSearch?.()}
@@ -87,6 +92,7 @@ const SappHookFormSelect = ({
                 onFocus={onFocus}
                 onBlur={onBlur}
                 isLoading={isLoading}
+                onInputChange={onSearch}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

@@ -37,8 +37,13 @@ const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: 'Class code',
     dataIndex: 'teacher_schedules',
-    render: (teacherSchedules: ITeacherSchedule[]) =>
-      teacherSchedules?.[0]?.schedule?.class_schedule?.[0]?.class?.code,
+    render: (teacherSchedules: ITeacherSchedule[]) => (
+      <ul className="flex flex-col gap-1">
+        {teacherSchedules.map(({ schedule }, index) => (
+          <li key={index}>{schedule?.class_schedule?.class?.code ?? ''}</li>
+        ))}
+      </ul>
+    ),
   },
   {
     title: 'Status',
@@ -58,9 +63,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
       <ul className="flex flex-col gap-1">
         {teacherSchedules.map(({ schedule }, index) => (
           <li key={index}>
-            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z') +
-              ' - ' +
-              formatDate(schedule.end_date + 'T' + schedule.end_time + 'Z')}
+            {`${schedule.name} | ${formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z')}`}
           </li>
         ))}
       </ul>
@@ -112,7 +115,9 @@ const columnsTitles: TableColumn<IRequest>[] = [
   {
     title: '',
     dataIndex: 'method',
-    render: () => <RequestActionCell />,
+    render: (item: IRequest) => {
+      return <RequestActionCell item={item} />
+    },
     fixed: 'right',
   },
 ]
@@ -135,6 +140,7 @@ const TimeOffTable = ({
       ...item,
       index: index + 1,
       creator: item.staff_request || item.user_request,
+      method: item,
     }))
   }, [requests])
 

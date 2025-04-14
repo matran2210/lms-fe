@@ -1,34 +1,28 @@
 import { fetcher } from '@services/requestV2'
-import url from 'src/redux/services/Course/MyCourse/Test/url'
-import { apiURL } from 'src/redux/services/httpService'
-import { IResponse } from 'src/redux/types'
-import { IScoreDetails } from 'src/type'
-import { ICourseSubjectList } from 'src/type/classes'
-
 export class TeacherAPI {
   static getListClass(
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/teacher?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/teacher?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
     )
   }
   static getClassById(id: string): Promise<any> {
-    return fetcher(`${apiURL}/classes/${id}/teacher`)
+    return fetcher(`/classes/${id}/teacher`)
   }
   static getStudentById(
     id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/student?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/student?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -38,10 +32,10 @@ export class TeacherAPI {
     id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/class-quiz?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/class-quiz?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
@@ -52,10 +46,10 @@ export class TeacherAPI {
     chapter_test_id: string,
     page_index: number,
     page_size: number,
-    params: Object,
+    params?: Object,
   ): Promise<any> {
     return fetcher(
-      `${apiURL}/classes/${id}/teacher/class-quiz/${chapter_test_id}?page_index=${page_index}&page_size=${page_size}`,
+      `/classes/${id}/teacher/class-quiz/${chapter_test_id}?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },

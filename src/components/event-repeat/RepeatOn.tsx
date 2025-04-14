@@ -1,4 +1,5 @@
 import { Checkbox } from 'antd'
+import clsx from 'clsx'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { REPEAT_ON, REPEAT_ON_MAPPED } from 'src/constants'
 
@@ -6,9 +7,10 @@ interface IProps {
   className?: string
   date: Date
   onChange: (data: (typeof REPEAT_ON)[number][]) => void
+  disabled?: boolean
 }
 
-const RepeatOn = ({ className = '', date, onChange }: IProps) => {
+const RepeatOn = ({ className = '', date, onChange, disabled }: IProps) => {
   const [repeatOn, setRepeatOn] = useState<(typeof REPEAT_ON)[number][]>([])
 
   const isCurrentDate = useCallback(
@@ -42,11 +44,12 @@ const RepeatOn = ({ className = '', date, onChange }: IProps) => {
           <Checkbox
             key={day}
             value={day}
-            className={
-              'relative my-2 block h-6' + (isCurrentDate(day) ? ' current' : '')
-            }
+            className={clsx('relative my-2 block h-6', {
+              current: isCurrentDate(day),
+            })}
+            disabled={disabled}
           >
-            <span className="custom-checkbox flex h-6 w-6 items-center justify-center rounded-full font-inter text-ssm font-medium leading-[14px] tracking-normal">
+            <span className="custom-checkbox flex h-6 w-6 items-center justify-center rounded-full text-ssm font-medium leading-[14px] tracking-normal">
               {day}
             </span>
           </Checkbox>

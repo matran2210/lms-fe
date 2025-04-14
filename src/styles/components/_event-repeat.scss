@@ -21,6 +21,7 @@ $bw12Color: #374151;
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: 10000 !important;
     }
 
     .ant-checkbox + span {
@@ -46,10 +47,6 @@ $bw12Color: #374151;
 }
 
 .select-single {
-  &.h-10 .select__control {
-    height: 40px;
-  }
-
   &.rounded-0 .select__control {
     border-radius: 0px;
   }

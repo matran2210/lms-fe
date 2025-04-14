@@ -15,4 +15,10 @@ export class RequestAPI {
       },
     })
   }
+
+  static deleteRequest(id: string): Promise<IResponse<null>> {
+    return fetcher(`/request-schedules/${id}`, {
+      method: 'DELETE',
+    })
+  }
 }

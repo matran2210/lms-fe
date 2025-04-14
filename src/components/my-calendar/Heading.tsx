@@ -3,7 +3,7 @@ import { memo } from 'react'
 const Heading = ({ title }: { title: string }) => {
   return (
     <div className="flex content-center items-center justify-between">
-      <div className="">
+      <div>
         <p className="mb-2">
           <span className="font-sans text-base font-normal leading-6 tracking-normal text-gray-11">
             LMS{' '}

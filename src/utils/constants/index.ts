@@ -40,6 +40,7 @@ export const QUIZ_GRADING_METHOD = [
     value: 'AUTO',
   },
 ]
+export const FOUNDATION = 'Foundation'
 export const CLASS_TEACHER_STATUS = {
   NOT_STARTED: 'NOT_STARTED', // Chưa học
   IN_PROGRESS: 'IN_PROGRESS', // Đang học

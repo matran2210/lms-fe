@@ -4,9 +4,10 @@ export const PageLink = {
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
   CASE_STUDY: '/casestudy',
-  TEACHERS: '/teacher',
+  TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
+  TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -304,7 +305,7 @@ export const CALENDAR_SIDEBAR_EVENT_FORM = {
 export const EVENT_TYPES = {
   TEACHING: 'TEACHING',
   BUSY: 'BUSY',
-  TIME_OFF: 'TIME_OFF',
+  HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
 } as const
 
@@ -315,19 +316,12 @@ export const EVENT_TYPES_RESPONSE = {
   OTHER: 'OTHER',
 } as const
 
-export const EVENT_TYPES_RESPONSE_MAPPED = {
-  TEACHING_MODE: 'TEACHING',
-  TEACHER_SCHEDULE_BUSY: 'BUSY',
-  TEACHER_SCHEDULE_TIME_OFF: 'TIME_OFF',
-  TEACHER_OTHER: 'OTHER',
-} as const
-
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
 
 export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.TEACHING]: 'Teaching schedule',
   [EVENT_TYPES.BUSY]: 'Busy schedule',
-  [EVENT_TYPES.TIME_OFF]: 'Holiday schedule',
+  [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
 }
 
@@ -343,8 +337,8 @@ export const EVENT_REPEAT_TYPES = {
   ANNUALLY: 'ANNUALLY',
   EVERY_WEEKDAY: 'EVERY_WEEKDAY',
   CUSTOM: 'CUSTOM',
+  CHOSEN_PATTERN: 'CHOSEN_PATTERN',
 }
-
 export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.NO_REPEAT]: 'Does not repeat',
   [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
@@ -436,6 +430,7 @@ export const REPEAT_ON_MAPPED_PAYLOAD = {
 } as const
 
 export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'
+export const CONFIRM_DELETE = 'Are you sure you want to delete?'
 
 export const CALENDAR_SIDEBAR_SAVE_BUTTON = 'Save'
 export const CALENDAR_SIDEBAR_CANCEL_BUTTON = 'Cancel'
@@ -464,6 +459,16 @@ export enum TEST_ATTEMPT_TYPE {
 }
 
 export * from './common'
+export enum QUIZ_ATTEMPT_STATUS {
+  SUBMITTED = 'SUBMITTED',
+  UN_SUBMITTED = 'UN_SUBMITTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+}
+export enum DATE_FORMAT {
+  DATE_TIME = 'HH:mm | DD/MM/YYYY',
+  DATE = 'DD/MM/YYYY',
+}
+export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'

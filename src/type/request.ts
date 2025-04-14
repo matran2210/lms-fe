@@ -2,11 +2,11 @@ import { Dayjs } from 'dayjs'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
 import { IUser } from 'src/redux/types/User/urser'
 import { IMetaData } from '.'
-import { IOption } from './common'
+import { ISelect } from './course'
 
-type RequestType = keyof typeof REQUEST_TYPE
+export type RequestType = keyof typeof REQUEST_TYPE
 
-type RequestStatus = keyof typeof REQUEST_STATUS
+export type RequestStatus = keyof typeof REQUEST_STATUS
 
 export interface IRequestList {
   meta_data: IMetaData
@@ -24,8 +24,13 @@ export interface IRequest {
   staff_assignee?: string
   staff_request?: Partial<IUser>
   creator: Partial<IUser> // staff_request || user_request
+  time?: ITeacherSchedule[] | ITeacherWeeklyNorm[]
   created_at: string[]
-  updated_at?: string
+  updated_at: string
+  description: string
+  repeat: boolean
+  reason?: ITeacherSchedule[]
+  note?: string
 }
 
 export interface ITeacherSchedule {
@@ -41,7 +46,8 @@ export interface ISchedule {
   end_date: string
   start_time: string
   end_time: string
-  class_schedule: IClassSchedule[]
+  class_schedule: IClassSchedule
+  description: string
 }
 
 export interface IClassSchedule {
@@ -56,12 +62,26 @@ export interface IClass {
 
 export interface ITeacherWeeklyNorm {
   id: string
+  start_date: string
+  end_date: string
   max_shift: number
 }
 
 export interface IRequestFilterForm {
   request_name: string
-  type: IOption
-  status: IOption
+  type: ISelect
+  status: ISelect
   rangeDate: [Dayjs, Dayjs]
+}
+
+export function isTeacherSchedule(
+  item: ITeacherSchedule | ITeacherWeeklyNorm,
+): item is ITeacherSchedule {
+  return 'schedule' in item
+}
+
+export function isTeacherWeeklyNorm(
+  item: ITeacherSchedule | ITeacherWeeklyNorm,
+): item is ITeacherWeeklyNorm {
+  return 'max_shift' in item
 }

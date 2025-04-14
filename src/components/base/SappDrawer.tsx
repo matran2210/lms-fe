@@ -23,6 +23,9 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
+  handleCancel?: () => any
+  showCancelButton?: boolean
+  btnCancelTitle?: string
 }
 
 const SappDrawer = ({
@@ -40,6 +43,9 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
+
+  showCancelButton = true,
+  btnCancelTitle = 'Cancel',
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -81,12 +87,12 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="fixed left-0 top-0 z-[999999] h-full w-full bg-bw-5 bg-opacity-50"
+          className="fixed left-0 top-0 z-[30] h-full w-full bg-bw-5 bg-opacity-50"
           onClick={handleMaskClick}
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[999999] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[30] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -113,12 +119,14 @@ const SappDrawer = ({
         </div>
         {footer && (
           <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white">
-            <ButtonSecondary
-              title="Cancel"
-              className="me-[32px] rounded-md"
-              onClick={handleMaskClick}
-              size={sizeTextBtn}
-            />
+            {showCancelButton && (
+              <ButtonSecondary
+                title={btnCancelTitle}
+                className="me-[32px] rounded-md"
+                onClick={handleMaskClick}
+                size={sizeTextBtn}
+              />
+            )}
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}

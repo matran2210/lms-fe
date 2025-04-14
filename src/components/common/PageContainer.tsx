@@ -1,4 +1,5 @@
 import { Card } from 'antd'
+import Link from 'next/link'
 import React from 'react'
 import { IBreadcrumb } from 'src/type'
 
@@ -20,7 +21,7 @@ const PageContainer = ({
           {breadcrumbs.map((breadcrumb, index) => (
             <React.Fragment key={index}>
               <div className="text-base">
-                <a
+                <Link
                   key={index}
                   href={breadcrumb.link}
                   className={
@@ -30,7 +31,7 @@ const PageContainer = ({
                   }
                 >
                   {breadcrumb.title}
-                </a>
+                </Link>
               </div>
               {index !== breadcrumbs.length - 1 && <span>|</span>}
             </React.Fragment>

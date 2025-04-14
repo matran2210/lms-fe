@@ -13,6 +13,8 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             colorPrimary: '#ffb800',
             colorTextPlaceholder: '#9CA3AF',
             controlOutlineWidth: 0,
+            colorTextDisabled: '#99A1B7',
+            colorBgContainerDisabled: '#ffffff',
           },
           Select: {
             colorPrimaryHover: '#ffb800',
@@ -23,12 +25,16 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             optionSelectedColor: '#ffb800',
             controlItemBgHover: '#ffbb0012',
             colorPrimaryTextHover: '#ffb800',
+            colorTextDisabled: '#99A1B7',
+            colorBgContainerDisabled: '#ffffff',
           },
           DatePicker: {
             colorPrimaryHover: '#ffb800',
             colorPrimary: '#ffb800',
             colorTextPlaceholder: '#9CA3AF',
             controlOutlineWidth: 0,
+            colorTextDisabled: '#99A1B7',
+            colorBgContainerDisabled: '#ffffff',
           },
           Button: {
             controlOutlineWidth: 0,

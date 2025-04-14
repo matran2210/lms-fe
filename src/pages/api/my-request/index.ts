@@ -2,56 +2,62 @@ import { fetcher } from '@services/requestV2'
 import { IResponse } from 'src/redux/types'
 import {
   IBusyRequestDetailResponse,
-  IBusySchedule,
+  IRecurringSchedule,
   IWeeklyNorm,
 } from 'src/type/my-request'
 
 export class MyRequestAPI {
   static createBusySchedule({
-    request_name,
-    request_type,
-    time,
-    note,
+    event_name,
+    repeat,
+    range,
+    recurring_schedule,
+    description,
   }: {
-    request_name: string
-    request_type: string
-    time?: IBusySchedule[]
-    note?: string | null
+    event_name: string
+    repeat: boolean
+    range: { start_time: string | Date; end_time: string | Date }
+    recurring_schedule?: IRecurringSchedule | undefined
+    description: string
   }): Promise<any> {
-    return fetcher('/request-schedules/busy-schedule', {
+    return fetcher('/schedules/busy-schedule', {
       method: 'POST',
       data: {
-        request_name: request_name,
-        request_type: request_type,
-        time: time,
-        note: note,
+        event_name: event_name,
+        repeat: repeat,
+        range: range,
+        recurring_schedule: recurring_schedule,
+        description: description,
       },
     })
   }
   static editBusySchedule(
     id: string,
     {
-      request_name,
-      request_type,
+      event_name,
+      repeat,
+      range,
+      recurring_schedule,
+      description,
       status,
-      time,
-      note,
     }: {
-      request_name: string
-      request_type: string
+      event_name?: string
+      repeat?: boolean
+      range?: { start_time: string | Date; end_time: string | Date }
+      recurring_schedule?: IRecurringSchedule | undefined
+      description?: string
       status: string | undefined
-      time?: IBusySchedule[]
-      note?: string | null
     },
   ): Promise<any> {
     return fetcher(`/request-schedules/busy-schedules/${id}`, {
       method: 'PUT',
       data: {
-        request_name: request_name,
-        request_type: request_type,
+        event_name: event_name,
+        repeat: repeat,
+        range: range,
+        recurring_schedule: recurring_schedule,
+        description: description,
         status: status,
-        time: time,
-        note: note,
       },
     })
   }
@@ -85,8 +91,8 @@ export class MyRequestAPI {
       time,
       note,
     }: {
-      request_name: string
-      request_type: string
+      request_name?: string
+      request_type?: string
       status: string | undefined
       time?: IWeeklyNorm[]
       note?: string | null
@@ -106,18 +112,18 @@ export class MyRequestAPI {
   static createTimeoffRequest({
     request_name,
     teacher_id,
-    scheduleAdjusments,
+    scheduleAdjustments,
   }: {
     request_name: string
     teacher_id: string
-    scheduleAdjusments?: { id: string; reason: string }[]
+    scheduleAdjustments?: { id: string; reason: string }[]
   }): Promise<any> {
     return fetcher('/request-schedules/time-off', {
       method: 'POST',
       data: {
         request_name: request_name,
         teacher_id: teacher_id,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }
@@ -126,11 +132,11 @@ export class MyRequestAPI {
     {
       request_name,
       status,
-      scheduleAdjusments,
+      scheduleAdjustments,
     }: {
-      request_name: string
-      status: string
-      scheduleAdjusments?: { id: string; reason: string }[]
+      request_name?: string
+      status?: string
+      scheduleAdjustments?: { id: string; reason: string }[]
     },
   ): Promise<any> {
     return fetcher(`/request-schedules/time-off/${id}`, {
@@ -138,25 +144,25 @@ export class MyRequestAPI {
       data: {
         request_name: request_name,
         status: status,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }
   static createChangeTeachingModeRequest({
     request_name,
     teacher_id,
-    scheduleAdjusments,
+    scheduleAdjustments,
   }: {
     request_name: string
     teacher_id: string
-    scheduleAdjusments?: { id: string; reason: string }[]
+    scheduleAdjustments?: { id: string; reason: string }[]
   }): Promise<any> {
     return fetcher('/request-schedules/teaching-mode', {
       method: 'POST',
       data: {
         request_name: request_name,
         teacher_id: teacher_id,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }
@@ -165,11 +171,11 @@ export class MyRequestAPI {
     {
       request_name,
       status,
-      scheduleAdjusments,
+      scheduleAdjustments,
     }: {
       request_name: string
-      status: string
-      scheduleAdjusments?: { id: string; reason: string }[]
+      status?: string
+      scheduleAdjustments?: { id: string; reason: string }[]
     },
   ): Promise<any> {
     return fetcher(`/request-schedules/teaching-mode/${id}`, {
@@ -177,7 +183,7 @@ export class MyRequestAPI {
       data: {
         request_name: request_name,
         status: status,
-        scheduleAdjusments: scheduleAdjusments,
+        scheduleAdjustments: scheduleAdjustments,
       },
     })
   }
@@ -208,7 +214,7 @@ export class MyRequestAPI {
     teacher_id: string,
     class_id: string,
   ) {
-    return fetcher(`/schedules/teacher_schedules/class`, {
+    return fetcher(`/schedules/teacher-schedules/class`, {
       params: {
         page_index: page_index,
         page_size: page_size,

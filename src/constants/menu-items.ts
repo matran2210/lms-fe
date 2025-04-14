@@ -9,51 +9,11 @@ const MENU_OPTIONS: MenuOption[] = [
   //   type: 'level-1',
   // },
   {
-    name: `${TitleSidebar.MY_CALENDAR}`,
-    icon: 'my-calendar',
-    url: PageLink.MY_CALENDAR,
-    type: 'level-1',
-  },
-  {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
-    // subItems: [
-    //   {
-    //     name: `${TitleSidebar.COURSE_NEW}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSE_NEW}`,
-    //     type: 'level-2',
-    //   },
-    //   {
-    //     name: `${TitleSidebar.COURSE_LIST}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSES}`,
-    //     type: 'level-2',
-    //     subItems: [
-    //       {
-    //         name: `${TitleSidebar.TEACHER}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.TEACHER}`,
-    //         type: 'level-3',
-    //       },
-    //       {
-    //         name: `${TitleSidebar.COURSE_LIST}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.COURSES}`,
-    //         type: 'level-3',
-    //       },
-    //     ],
-    //   },
-    // ],
   },
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'stats-chart-sharp',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
@@ -70,6 +30,12 @@ const MENU_OPTIONS: MenuOption[] = [
     name: `${TitleSidebar.ENTRANCE_TEST}`,
     icon: 'entrance-test',
     url: `${PageLink.ENTRANCE_TEST}`,
+    type: 'level-1',
+  },
+  {
+    name: `${TitleSidebar.MY_CALENDAR}`,
+    icon: 'my-calendar',
+    url: PageLink.MY_CALENDAR,
     type: 'level-1',
   },
   {
@@ -112,12 +78,6 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: TitleSidebar.MY_REQUEST,
-    icon: 'my-request',
-    url: `${PageLink.REQUEST}${PageLink.MY_REQUEST}`,
-    type: 'level-1',
-  },
-  {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
     url: PageLink.RESULTS,
@@ -133,12 +93,6 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     name: `${TitleSidebar.CALCULATOR}`,
     icon: 'caculator',
     url: '#',
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.MY_CALENDAR}`,
-    icon: 'my-calendar',
-    url: PageLink.MY_CALENDAR,
     type: 'level-1',
   },
 ]

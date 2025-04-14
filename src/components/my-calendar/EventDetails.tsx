@@ -4,6 +4,7 @@ import { IEvent } from 'sapp-common-package/dist/types'
 import SappIcon from 'src/common/SappIcon'
 import { IPopupDetails } from 'src/type/my-calendar'
 import EventRowDetails from './EventRowDetails'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 interface IProps {
   details: IPopupDetails | null
@@ -28,9 +29,9 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
   const formattedDate = date.toLocaleDateString('en-US', options)
 
   return (
-    <div className="flex flex-row justify-between border-b border-gray-5 px-6 py-5">
+    <div className="flex flex-row justify-between border-b border-gray-5 pb-5">
       <div className="flex flex-row items-center">
-        <SappIcon icon="calendar" className="" />
+        <SappIcon icon="calendar" />
         <span className="ml-3 font-inter text-lg font-semibold leading-4.5 tracking-normal">
           {formattedDate}
         </span>
@@ -44,40 +45,36 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
 
 const ModalContent = ({ events }: IModalContentProps) => {
   return (
-    events &&
-    events.map((event, index) => (
-      <div key={event.id}>
-        <EventRowDetails event={event} />
-        {index + 1 < events.length && (
-          <hr className="my-4 border-dashed border-[#DBDFE9]" />
-        )}
-      </div>
-    ))
+    <div className="p-2">
+      {events?.map((event, index) => (
+        <div key={event.id} className="text-start">
+          <EventRowDetails event={event} />
+          {index + 1 < events.length && (
+            <hr className="my-4 border-dashed border-[#DBDFE9]" />
+          )}
+        </div>
+      ))}
+    </div>
   )
 }
 
 const EventDetails = ({ details, handleClose }: IProps) => {
   return (
-    <SappModal
+    <SappModalV3
       open={details != null}
       size="max-w-[630px]"
-      refClass="p-0 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all rounded-lg"
-      position="center"
-      overlayClass="bg-[#00000066;]"
-      customHeader={
-        details ? (
-          <ModalHeader date={details.date} handleClose={handleClose} />
-        ) : (
-          <></>
-        )
+      title={
+        details && <ModalHeader date={details.date} handleClose={handleClose} />
       }
-      parentChildClass="p-8"
       showFooter={false}
-      showCloseIcon={true}
       handleCancel={handleClose}
+      onOk={() => {}}
+      icon={null}
+      header=""
+      classNameModal="[&>div>div]:!px-6 [&>div>div]:!py-5"
     >
-      {details ? <ModalContent events={details.events} /> : <></>}
-    </SappModal>
+      {details && <ModalContent events={details.events} />}
+    </SappModalV3>
   )
 }
 

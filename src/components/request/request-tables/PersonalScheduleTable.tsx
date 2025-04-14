@@ -1,6 +1,7 @@
 import SAPPBadge from '@components/base/Badge/SAPPBadge'
-import { formatDate } from '@utils/common'
+import { formatDate, formatTime } from '@utils/common'
 import { Table, TablePaginationConfig } from 'antd'
+import dayjs from 'dayjs'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import {
   DATE_TIME_FORMAT,
@@ -12,11 +13,14 @@ import {
 import { IUser } from 'src/redux/types/User/urser'
 import {
   IRequest,
+  isTeacherSchedule,
+  isTeacherWeeklyNorm,
   ITeacherSchedule,
   ITeacherWeeklyNorm,
   TableColumn,
 } from 'src/type'
 import RequestActionCell from '../RequestActionCell'
+import clsx from 'clsx'
 
 interface PersonalScheduleTableProps {
   loading: boolean
@@ -54,40 +58,78 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Time',
-    dataIndex: 'teacher_schedules',
-    render: (teacherSchedules: ITeacherSchedule[]) => (
-      <ul className="flex flex-col gap-1">
-        {teacherSchedules.map(({ schedule }, index) => (
-          <li key={index}>
-            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z') +
-              ' - ' +
-              formatDate(schedule.end_date + 'T' + schedule.end_time + 'Z')}
-          </li>
-        ))}
-      </ul>
-    ),
+    dataIndex: 'time',
+    render: (data: ITeacherSchedule[] | ITeacherWeeklyNorm[]) => {
+      return (
+        <ul className="flex flex-col gap-1">
+          {data?.map((item, index) => {
+            if (isTeacherSchedule(item)) {
+              const startDate = dayjs(
+                item.schedule.start_date + 'T' + item.schedule.start_time + 'Z',
+              )
+              const endDate = dayjs(
+                item.schedule.end_date + 'T' + item.schedule.end_time + 'Z',
+              )
+              return (
+                <li key={index}>
+                  {startDate.isSame(endDate, 'day')
+                    ? `${formatDate(startDate)} ${formatTime(startDate)} - ${formatTime(endDate)}`
+                    : `${formatDate(startDate)} ${formatTime(startDate)} - ${formatDate(endDate)} ${formatTime(endDate)}`}
+                </li>
+              )
+            }
+
+            if (isTeacherWeeklyNorm(item)) {
+              return (
+                <li key={index}>
+                  {formatDate(item.start_date) +
+                    ' - ' +
+                    formatDate(item.end_date)}
+                </li>
+              )
+            }
+          })}
+        </ul>
+      )
+    },
   },
   {
     title: 'Reason',
-    dataIndex: 'teacher_schedules',
-    render: (teacherSchedules: ITeacherSchedule[]) => (
-      <ul className="flex flex-col gap-1">
-        {teacherSchedules.map(({ request_reason }, index) => (
-          <li key={index}>{request_reason}</li>
-        ))}
-      </ul>
-    ),
+    dataIndex: 'reason',
+    render: (data: ITeacherSchedule[]) =>
+      data?.length > 0 ? (
+        <ul className="flex flex-col gap-1">
+          {data.map(({ schedule: { description } }, index) => (
+            <li
+              key={index}
+              className={clsx({ 'text-accent-default': !description })}
+            >
+              {description || '_ _ _ _ _ _ _ _ _ _ _'}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+      ),
   },
   {
     title: 'Quantity',
     dataIndex: 'teacher_weekly_norms',
-    render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) => (
-      <ul className="flex flex-col gap-1 text-center">
-        {teacher_weekly_norms.map(({ max_shift }, index) => (
-          <li key={index}>{max_shift}</li>
-        ))}
-      </ul>
-    ),
+    render: (teacher_weekly_norms: ITeacherWeeklyNorm[]) =>
+      teacher_weekly_norms?.length > 0 ? (
+        <ul className="flex flex-col gap-1 text-center">
+          {teacher_weekly_norms.map(({ max_shift }, index) => (
+            <li
+              key={index}
+              className={clsx({ 'text-accent-default': !max_shift })}
+            >
+              {max_shift || '_ _ _ _ _ _'}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+      ),
   },
   {
     title: 'Approver',
@@ -113,10 +155,17 @@ const columnsTitles: TableColumn<IRequest>[] = [
     ),
   },
   {
+    title: 'Note',
+    dataIndex: 'note',
+    render: (value: string) => (
+      <div className="text-secondary">{value || '_ _ _ _ _ _'}</div>
+    ),
+  },
+  {
     title: '',
     dataIndex: 'method',
-    render: (value: string) => {
-      return <RequestActionCell id={value} />
+    render: (item: IRequest) => {
+      return <RequestActionCell item={item} />
     },
     fixed: 'right',
   },
@@ -143,7 +192,18 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
-      method: item.id,
+      time: item.teacher_schedules?.length
+        ? item.teacher_schedules
+        : item.teacher_weekly_norms?.length
+          ? item.teacher_weekly_norms
+          : [],
+      reason:
+        item.type === REQUEST_TYPE.TEACHER_SCHEDULE_BUSY
+          ? item.teacher_schedules
+          : [],
+      note:
+        item.type === REQUEST_TYPE.TEACHER_WEEKLY_NORMS ? item.description : '',
+      method: item,
     }))
   }, [requests, current, pageSize])
 

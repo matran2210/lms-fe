@@ -1,7 +1,9 @@
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
+import { ISelect } from 'src/type/course'
 import { IEventRepeatFieldValues } from 'src/type/my-calendar'
 import EventRepeatField from './EventRepeatField'
+import { Skeleton } from 'antd'
 
 interface IProps {
   name: string
@@ -13,6 +15,10 @@ interface IProps {
   defaultValue?: IEventRepeatFieldValues
   required?: boolean
   skeleton?: boolean
+  repeatOption?: ISelect
+  resetRepeat?: boolean
+  setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
+  disabled?: boolean
 }
 
 const HookFormEventRepeat = ({
@@ -25,6 +31,10 @@ const HookFormEventRepeat = ({
   defaultValue,
   required,
   skeleton,
+  repeatOption,
+  resetRepeat,
+  setResetRepeat,
+  disabled,
 }: IProps) => {
   return (
     <Controller
@@ -40,8 +50,18 @@ const HookFormEventRepeat = ({
                 labelClass={labelClass}
                 required={required}
                 defaultDate={defaultDate || new Date()}
-                onChange={(val) => field.onChange(val)}
+                onChange={(val) => {
+                  const current = field.value || {}
+                  field.onChange({
+                    ...current,
+                    ...val, // new or updated values overwrite the existing ones
+                  })
+                }}
                 className={className}
+                repeatOption={repeatOption}
+                resetRepeat={resetRepeat}
+                setResetRepeat={setResetRepeat}
+                disabled={disabled}
               />
 
               <>
@@ -53,7 +73,7 @@ const HookFormEventRepeat = ({
               </>
             </div>
           ) : (
-            <div className="flex items-center">Loading...</div>
+            <Skeleton.Input active className={className} />
           )}
         </div>
       )}

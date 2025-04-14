@@ -1,13 +1,14 @@
-import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { SchedulesAPI } from '@pages/api/schedules'
 import { handleDisableDate, handleDisableTime } from '@utils/calendar'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -20,7 +21,6 @@ import {
   CONFIRM_CANCEL,
   EVENT_TYPES,
 } from 'src/constants'
-import { SchedulesAPI } from 'src/pages/api/schedules'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
@@ -40,6 +40,8 @@ const NewEventSidebar = ({
   isOpenCreate,
   setIsOpenCreate,
 }: IProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isResetRepeat, setIsResetRepeat] = useState(false)
   const dispatch = useAppDispatch()
 
   const validationSchema = z.object({
@@ -86,10 +88,12 @@ const NewEventSidebar = ({
     const payload = {
       event_name: formValues.event_name,
       event_type: EVENT_TYPES.BUSY,
-      start_time: formValues.range[0].toISOString(),
-      end_time: formValues.range[1].toISOString(),
+      range: {
+        start_time: formValues.range[0].toISOString(),
+        end_time: formValues.range[1].toISOString(),
+      },
       description: formValues.description,
-      repeat: formValues.repeat?.recurring_schedule,
+      ...formValues.repeat,
     } as ICreateSchedulePayload
     const formattedPayload = Object.fromEntries(
       Object.entries(payload).filter(
@@ -97,6 +101,7 @@ const NewEventSidebar = ({
       ),
     ) as ICreateSchedulePayload
 
+    setIsLoading(true)
     try {
       const response = await SchedulesAPI.create(formattedPayload)
       if (response.success) {
@@ -107,12 +112,15 @@ const NewEventSidebar = ({
       }
     } catch (error) {
       // Handled by axios interceptor
+    } finally {
+      setIsLoading(false)
     }
   }
 
   const handleClose = () => {
-    setIsOpenCreate(false)
     reset()
+    setIsResetRepeat(true)
+    setIsOpenCreate(false)
   }
 
   const handleCancel = () => {
@@ -189,6 +197,8 @@ const NewEventSidebar = ({
                     name="repeat"
                     required
                     defaultDate={currentDate}
+                    resetRepeat={isResetRepeat}
+                    setResetRepeat={setIsResetRepeat}
                   />
                 </div>
 
@@ -207,15 +217,17 @@ const NewEventSidebar = ({
             )}
           </div>
           <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
-            <SAPPButton
+            <SAPPButtonV2
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
               onClick={handleCancel}
               className="mr-4"
               color="secondary"
             />
-            <SAPPButton
+            <SAPPButtonV2
               title={CALENDAR_SIDEBAR_SAVE_BUTTON}
               onClick={handleSubmit(onSubmit)}
+              loading={isLoading}
+              disabled={isLoading}
             />
           </div>
         </div>

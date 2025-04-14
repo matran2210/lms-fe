@@ -1,20 +1,30 @@
+import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { Dayjs } from 'dayjs'
 
+export type RecurringScheduleType = keyof Omit<
+  typeof REPEAT_TYPE,
+  'DOES_NOT_REPEAT' | 'FORMAT'
+>
 export interface IRequest {
   request_name: string
   request_type: { value: string; label: string }
   request_type_value: string
+  request_status_value: string
   request_teacher_id: string
+  request_create_date: string
+  request_creator: string
+  request_approver: string
   class: { value: string; label: string }
   class_code?: string
-  request_status?: string
+  request_status?: { value: string; label: string }
   request_busy_schedule?: IBusySchedule[]
   request_weekly_norm?: IWeeklyNorm[]
   request_time_off?: ITimeOff[]
   note?: string
 }
 export interface ITimeOff {
-  lesson: string
+  lesson: string | { value: string; label?: string }
+  lessonId: string
   reason: string
 }
 interface ISchedule {
@@ -26,9 +36,12 @@ interface ISchedule {
   end_date: string
   start_time: string
   end_time: string
+  name: string
   is_holiday: boolean
   description: string
   recurring_pattern_id: string | null
+  recurring_pattern_schedule: IRecurringSchedule
+  class_schedule: { id: string; class: { id: string; code: string } }
 }
 interface ITeacher {
   id: string
@@ -36,8 +49,18 @@ interface ITeacher {
     full_name: string
   }
 }
+export interface IRecurringSchedule {
+  interval?: number
+  frequency?: string
+  recurrence_end_date?: Date | string
+  day_of_week?: number[]
+  day_of_month?: number[]
+  month_of_year?: number[]
+  end_date?: string
+  type?: REPEAT_TYPE
+}
 
-interface ITeacherSchedules {
+export interface ITeacherSchedules {
   id: string
   created_at: string
   updated_at: string
@@ -50,9 +73,10 @@ interface ITeacherSchedules {
   before_active_id: string | null
   request_id: string
   user: ITeacher
+  request_reason: string
   schedule: ISchedule
 }
-interface IWeeklyNorms {
+export interface IWeeklyNorms {
   id: string
   created_at: string
   updated_at: string
@@ -83,6 +107,7 @@ export interface IBusyRequestDetailResponse {
   staff_request: { id: string; detail: { full_name: string } }
   staff_request_id: string
   staff_assignee_id: string
+  staff_assignee: { id: string; detail: { full_name: string } }
   description: string
   due_date: string | null
   name: string
@@ -90,17 +115,30 @@ export interface IBusyRequestDetailResponse {
   teacher_weekly_norms: IWeeklyNorms[] // Empty array in the example, but may contain data in other responses
 }
 export interface IBusySchedule {
-  date_range?: Date[] | string[]
+  date_range?: Date[]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  description: string
+  recurring_schedule: IRecurringSchedule
+  description?: string
+  repeat?: REPEAT_TYPE
+  'drawer-repeat-interval'?: string
+  'drawer-repeat-frequency'?: string
+  'drawer-repeat-day'?: string[]
+  'drawer-repeat-end-on'?: Date
+  T2?: string
+  T3?: string
+  T4?: string
+  T5?: string
+  T6?: string
+  T7?: string
+  CN?: string
 }
 
 export interface IWeeklyNorm {
   date_range?: Date[] | string[]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  quantity: number
+  quantity: number | undefined
 }
 export interface ITimeoffRequestDetailResponse {
   request_name: string

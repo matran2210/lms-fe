@@ -5,8 +5,9 @@ import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPLabel from '../Label/SAPPLabel'
+import GuidelineField from 'src/common/GuidelineField'
 
-interface SAPPInputProps {
+export interface SAPPInputProps {
   control: Control<any>
   name: string
   defaultValue?: any
@@ -16,6 +17,9 @@ interface SAPPInputProps {
   label?: string
   required?: boolean
   labelClass?: string
+  disabled?: boolean
+  onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  guideline?: string[]
 }
 
 const SAPPInput = ({
@@ -28,6 +32,9 @@ const SAPPInput = ({
   label,
   required,
   labelClass,
+  disabled = false,
+  onChange,
+  guideline,
 }: SAPPInputProps) => {
   return (
     <>
@@ -48,7 +55,13 @@ const SAPPInput = ({
                 placeholder={placeholder}
                 value={field?.value}
                 size={size}
+                disabled={disabled}
+                onChange={(value) => {
+                  field.onChange(value)
+                  onChange && onChange(value)
+                }}
               />
+              <GuidelineField guideline={guideline} />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </StyleProvider>
           )

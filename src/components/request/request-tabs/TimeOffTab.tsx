@@ -1,5 +1,5 @@
 import { Plus } from '@assets/icons'
-import SAPPButton from '@components/base/button/SAPPButton'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPRangePicker from '@components/base/RangePicker/SAPPRangePicker'
 import SAPPSelect from '@components/base/select/SAPPSelect'
@@ -12,11 +12,14 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
+  DRAWER_REQUEST_TYPE,
   OPTIONS_REQUEST_STATUS,
   OPTIONS_TIME_OFF_REQUEST_TYPE,
   REQUEST_TYPE,
 } from 'src/constants/request'
 import { IRequest, IRequestFilterForm } from 'src/type'
+import FormRequest from '../request-forms/FormRequest'
+import RequestDetail from '../request-forms/RequestDetail'
 import TimeOffTable from '../request-tables/TimeOffTable'
 
 const TimeOffTab = () => {
@@ -28,7 +31,12 @@ const TimeOffTab = () => {
     defaultPageSize: 10,
     showSizeChanger: true,
   })
-  const { setOpenAddModal } = useRequestContext()
+  const {
+    setOpenAddModal,
+    isOpenAddModal,
+    setIsOpenViewModal,
+    isOpenViewModal,
+  } = useRequestContext()
   const router = useRouter()
 
   const { control, getValues, reset } = useForm<IRequestFilterForm>()
@@ -37,8 +45,11 @@ const TimeOffTab = () => {
     request_name: getValues('request_name')?.trim(),
     type: getValues('type'),
     status: getValues('status'),
-    from_date: getValues('rangeDate')?.[0]?.toISOString(),
-    to_date: getValues('rangeDate')?.[1]?.toISOString(),
+    from_date: getValues('rangeDate')?.[0]?.startOf('day')?.toISOString(),
+    to_date: getValues('rangeDate')?.[1]
+      ?.add(1, 'day')
+      .startOf('day')
+      ?.toISOString(),
   })
 
   const getParams = () => ({
@@ -98,7 +109,7 @@ const TimeOffTab = () => {
   const handleChangeParams = (params: Record<string, any>) => {
     const queryString = new URLSearchParams(params).toString()
 
-    router.replace(`?${queryString}`)
+    router.replace(`?tab=timeoff&${queryString}`)
   }
 
   const handleFilter = () => {
@@ -109,7 +120,15 @@ const TimeOffTab = () => {
 
   const handleResetFilter = () => {
     reset()
-    router.push('')
+    const preservedQuery = { tab: router.query.tab } // ✅ preserve only needed query if needed
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: preservedQuery,
+      },
+      undefined,
+      { shallow: true },
+    )
     fetchRequests(1, 10)
   }
 
@@ -145,15 +164,15 @@ const TimeOffTab = () => {
         </FilterGrid>
         <div className="flex justify-between">
           <div className="flex gap-3">
-            <SAPPButton
+            <SAPPButtonV2
               title="Reset"
               color="secondary"
               onClick={handleResetFilter}
             />
-            <SAPPButton title="Search" onClick={handleFilter} />
+            <SAPPButtonV2 title="Search" onClick={handleFilter} />
           </div>
           <div>
-            <SAPPButton
+            <SAPPButtonV2
               title="Create Request"
               className="flex"
               icon={<Plus />}
@@ -169,6 +188,21 @@ const TimeOffTab = () => {
         pagination={pagination}
         setPagination={setPagination}
       />
+      {isOpenAddModal && (
+        <FormRequest
+          open={isOpenAddModal}
+          setOpen={setOpenAddModal}
+          reloadPage={handleFilter}
+        />
+      )}
+      {isOpenViewModal && (
+        <RequestDetail
+          open={isOpenViewModal}
+          setOpen={setIsOpenViewModal}
+          setOpenEdit={setOpenAddModal}
+          reloadPage={handleFilter}
+        />
+      )}
     </div>
   )
 }
