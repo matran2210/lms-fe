@@ -24,6 +24,7 @@ import {
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
@@ -83,7 +84,7 @@ const EventRepeatField = ({
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
     return {
-      repeat_type: repeatOption ?? EVENT_REPEAT_TYPES.NO_REPEAT,
+      repeat_type: repeatOption?.value ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
     }
@@ -284,7 +285,7 @@ const EventRepeatField = ({
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
-        {is_repeat && (
+        {is_repeat && repeatType != REPEAT_TYPE.CHOSEN_PATTERN && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
