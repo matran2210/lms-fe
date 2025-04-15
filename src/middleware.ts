@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { PageLink } from './constants'
 
 // Define route patterns for different roles
 const roleRoutePatterns: Record<string, string[]> = {
@@ -7,60 +8,60 @@ const roleRoutePatterns: Record<string, string[]> = {
 }
 
 // Define public routes that don't require authentication
-const publicRoutes = [
-  '/',
-  '/api/auth/login',
-  '/api/auth/callback',
-  '/api/auth/logout',
-  '/login',
-  '/about',
-  '/404',
-]
+const publicRoutes = ['/404', '/', '/firebase-messaging-sw.js']
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (publicRoutes.some((route) => pathname === route)) {
+  // Skip processing for /404 to avoid infinite redirect loop
+  if (pathname === '/404') {
+    return NextResponse.next()
+  }
+
+  // Allow requests that start with /certificates to pass through
+  if (pathname.startsWith('/certificates')) {
     return NextResponse.next()
   }
 
   try {
     const token = request.cookies.get('keycloak-token')
 
-    if (!token) {
-      const url = new URL('/api/auth/login', request.url)
-      url.searchParams.set('callbackUrl', pathname)
-      return NextResponse.redirect(url)
-    }
-
+    // Decode the token to get the user's role
     const decoded = JSON.parse(
       Buffer.from(token?.valueOf()?.split('.')[1] || '', 'base64').toString(),
     )
 
-    // Extract roles from the token
     const role: 'TEACHER' | 'STUDENT' = decoded.user_type
 
-    // For teachers, check specific routes
+    // If the user is already on the target route, avoid redirecting
+    if (pathname === '/' || publicRoutes.includes(pathname)) {
+      if (role === 'TEACHER' && pathname !== PageLink.TEACHERS) {
+        return NextResponse.redirect(new URL(PageLink.TEACHERS, request.url))
+      }
+      if (role === 'STUDENT' && pathname !== '/courses') {
+        return NextResponse.redirect(new URL('/courses', request.url))
+      }
+    }
+
+    // 🔐 Role-based access control for protected routes
     if (role === 'TEACHER') {
       const hasAccess = roleRoutePatterns.teacher.some(
         (pattern) => pathname === pattern || pathname.startsWith(`${pattern}/`),
       )
-
-      if (hasAccess) {
-        return NextResponse.next()
-      }
-      return NextResponse.redirect(new URL('/404', request.url))
-    }
-
-    // For students, block teacher routes and allow everything else
-    if (role === 'STUDENT') {
-      if (pathname.startsWith('/teacher')) {
+      if (!hasAccess) {
         return NextResponse.redirect(new URL('/404', request.url))
       }
       return NextResponse.next()
     }
 
-    // User is authenticated and has the required role
+    if (role === 'STUDENT') {
+      if (pathname.startsWith(PageLink.TEACHERS)) {
+        return NextResponse.redirect(new URL('/404', request.url))
+      }
+      return NextResponse.next()
+    }
+
+    // Default behavior
     return NextResponse.next()
   } catch (error) {
     return NextResponse.redirect(new URL('/404', request.url))

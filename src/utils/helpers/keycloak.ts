@@ -69,7 +69,8 @@ export class AuthenticationManager {
       if (authenticated) {
         // Kiểm tra lần login đầu tiên
         document.cookie = `keycloak-token=${this.keyCloak.token}; path=/`
-        if (!localStorage.getItem('hasLoggedInBefore')) {
+
+        if (localStorage.getItem('hasLoggedInBefore') === 'false') {
           isFirstLogin = true // Lần đầu tiên login
           localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
           const res = await EntranceTestAPI.getEntranceCount()
@@ -77,8 +78,6 @@ export class AuthenticationManager {
             localStorage.setItem('enstranceTest', 'true')
             if (res?.data?.count > 0) {
               window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
-            } else {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
             }
           }
         } else {

@@ -1,14 +1,9 @@
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import {
-  ENTRANCE_TEST_RESULT,
-  ENTRANCE_TEST_TABLE_RESULT,
-  PageLink,
-} from 'src/constants'
+import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getMe, userReducer } from 'src/redux/slice/User/User'
-import { UserType } from 'src/redux/types/User/urser'
 
 interface IProps {
   children: JSX.Element
@@ -42,17 +37,6 @@ export const RouteGuard = ({ children }: IProps) => {
       setAuthorized(true)
     } catch (error) {}
   }
-
-  // Redirect effect
-  useEffect(() => {
-    if (router.pathname === PageLink.HOME && userSlice.user.id) {
-      if (userSlice.user.type === UserType.STUDENT) {
-        router.replace(PageLink.COURSES)
-      } else if (userSlice.user.type === UserType.TEACHER) {
-        router.replace(PageLink.TEACHERS)
-      }
-    }
-  }, [router.pathname, userSlice.user]) // Add proper dependencies
 
   return authorized ? children : <></>
 }
