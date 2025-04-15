@@ -8,7 +8,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
+import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
 import { IAtempt } from 'src/type/results'
 import { IRequirement } from 'src/type/case-study'
 
@@ -166,6 +166,9 @@ const Explanation = () => {
                   : req.explanation,
               }),
             ),
+            ...(isUserViewAnswersDetailAndEssay && {
+              grading_method: GRADING_METHOD.MANUAL,
+            }),
           }}
           document_id={''}
           handleDownload={handleDownload}
