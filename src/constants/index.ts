@@ -21,6 +21,7 @@ export const PageLink = {
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
   RESULTS: '/courses/my-course/[courseId]/results',
+  COURSE_CONTENT: '/courses/my-course',
 }
 
 export const TitleSidebar = {
@@ -36,6 +37,7 @@ export const TitleSidebar = {
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
   EXAM_INFORMATION: 'Exam Information',
+  COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',

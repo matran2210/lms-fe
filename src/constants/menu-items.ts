@@ -49,6 +49,12 @@ const MENU_OPTIONS: MenuOption[] = [
   //   type: 'level-1',
   // },
   {
+    name: `${TitleSidebar.COURSE_CONTENT}`,
+    icon: 'course',
+    url: `${PageLink.COURSE_CONTENT}`,
+    type: 'level-2',
+  },
+  {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
     url: '#',
