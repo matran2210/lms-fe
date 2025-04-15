@@ -41,6 +41,9 @@ import { store, wrapper } from '../redux/store'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import { ErrorBoundary } from '@sentry/nextjs'
+import CustomErrorFallback from '@components/CustomErrorFallback'
+// import { ErrorBoundary } from '@components/ErrorBoundary'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -193,41 +196,43 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router])
 
   return (
-    <main>
-      <PinnedNotifyProvider>
-        <CourseProvider>
-          <QueryClientProvider client={queryClient}>
-            <SocketContext.Provider value={socket}>
-              <Toaster
-                toastOptions={{
-                  style: {
-                    maxWidth: '400px', // Tăng chiều rộng của toast
-                  },
-                }}
-              />
-              <SappConfirmDialogContainer />
-              <RouteGuard>
-                <>
-                  <div className="relative">
-                    <PinnedNotifications />
-                    <CtaTrial />
-                    <Component {...pageProps} />
-                  </div>
-                  {showHelp && (
-                    <>
-                      <BackToTop />
-                      <Help showHelp={showHelp} />
-                    </>
-                  )}
-                  <LearningNotesList />
-                  <PopupCompletedCourse />
-                </>
-              </RouteGuard>
-            </SocketContext.Provider>
-          </QueryClientProvider>
-        </CourseProvider>
-      </PinnedNotifyProvider>
-    </main>
+    <ErrorBoundary fallback={<CustomErrorFallback />}>
+      <main>
+        <PinnedNotifyProvider>
+          <CourseProvider>
+            <QueryClientProvider client={queryClient}>
+              <SocketContext.Provider value={socket}>
+                <Toaster
+                  toastOptions={{
+                    style: {
+                      maxWidth: '400px', // Tăng chiều rộng của toast
+                    },
+                  }}
+                />
+                <SappConfirmDialogContainer />
+                <RouteGuard>
+                  <>
+                    <div className="relative">
+                      <PinnedNotifications />
+                      <CtaTrial />
+                      <Component {...pageProps} />
+                    </div>
+                    {showHelp && (
+                      <>
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
+                      </>
+                    )}
+                    <LearningNotesList />
+                    <PopupCompletedCourse />
+                  </>
+                </RouteGuard>
+              </SocketContext.Provider>
+            </QueryClientProvider>
+          </CourseProvider>
+        </PinnedNotifyProvider>
+      </main>
+    </ErrorBoundary>
   )
 }
 

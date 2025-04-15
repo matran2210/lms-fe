@@ -127,6 +127,11 @@ request.interceptors.response.use(
     if (!toastExceptions.includes(errorCode)) {
       toast.error(errorMessage)
     }
+    if (
+      errorCode?.startsWith('403') // Forbidden các loại
+    ) {
+      Router.replace('/')
+    }
 
     return Promise.reject(error)
   },
