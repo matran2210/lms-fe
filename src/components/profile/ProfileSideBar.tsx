@@ -122,6 +122,21 @@ const ProfileSideBar = ({ page, children }: IProps) => {
     [key: string]: boolean
   }>({})
 
+  const handleSetStatusActiveChild = (childLabel: string) => {
+    // Set the child and the "Security" page to active
+    setChildActivationStates((prev) => ({
+      ...prev,
+      [childLabel]: true,
+      security: true,
+    }))
+
+    // Set the active state of other children to false
+    Object.keys(childActivationStates).forEach((key) => {
+      if (key !== childLabel && key !== 'security') {
+        setChildActivationStates((prev) => ({ ...prev, [key]: false }))
+      }
+    })
+  }
   const handleChildClick = (childLabel: string) => {
     // Check if the clicked label is "Security"
     if (childLabel.toLowerCase() === 'security') {
@@ -138,20 +153,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
       return // If the child is already active, do nothing
     }
 
-    // Set the child and the "Security" page to active
-    setChildActivationStates((prev) => ({
-      ...prev,
-      [childLabel]: true,
-      security: true,
-    }))
-
-    // Set the active state of other children to false
-    Object.keys(childActivationStates).forEach((key) => {
-      if (key !== childLabel && key !== 'security') {
-        setChildActivationStates((prev) => ({ ...prev, [key]: false }))
-      }
-    })
-
+    handleSetStatusActiveChild(childLabel)
     // Chuyển trang
     let formattedChildLabel = childLabel.toLowerCase()
 
@@ -193,8 +195,17 @@ const ProfileSideBar = ({ page, children }: IProps) => {
     handleChildClick(router.query.page as string)
   }, [])
 
+  useEffect(() => {
+    // Check if the clicked label is a child
+    if (childActivationStates[page]) {
+      return // If the child is already active, do nothing
+    } else {
+      handleSetStatusActiveChild(page)
+    }
+  }, [page])
+
   return (
-    <div className="grid w-full grid-cols-4 gap-6">
+    <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
       <div className="w-full shadow-box" data-aos={ANIMATION.DATA_AOS}>
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
