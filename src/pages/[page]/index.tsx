@@ -56,11 +56,11 @@ const ProfilePage = () => {
   }
   let breadcrumbs: ITabs[] = [
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Profile',
     },
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Details',
     },
   ]
@@ -151,7 +151,7 @@ const ProfilePage = () => {
   }, [])
 
   useEffect(() => {
-    setSelectPage(window.innerWidth > 1024)
+    setSelectPage(window.innerWidth >= 1024)
   }, [page])
 
   return (

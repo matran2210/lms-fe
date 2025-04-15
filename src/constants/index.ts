@@ -1,5 +1,4 @@
 export const PageLink = {
-  DASHBOARD: '/dashboard',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
@@ -27,6 +26,7 @@ export const PageLink = {
   MY_CALENDAR: '/my-calendar',
   REQUEST: '/request',
   MY_REQUEST: '/my-request',
+  DASHBOARD: '/courses/my-course/[courseId]/dashboard',
 }
 
 export const TitleSidebar = {
