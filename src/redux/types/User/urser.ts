@@ -62,7 +62,7 @@ export enum IUserType {
 export enum IUserStatus {
   ACTIVE = 'ACTIVE',
 }
-interface IUserDetail {
+export interface IUserDetail {
   id: string
   created_at: string
   updated_at: string

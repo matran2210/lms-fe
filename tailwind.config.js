@@ -37,6 +37,7 @@ module.exports = {
       // sans: ['Inter', 'sans-serif'],
       tech: 'techNology',
       inter: ['Inter', 'sans-serif'],
+      fira: ['Fira Sans', 'sans-serif'],
     },
     container: {
       center: true,
@@ -84,6 +85,8 @@ module.exports = {
           10: 'rgba(0, 0, 0, 0.80)',
           11: '#252F4A',
           12: '#374151',
+          13: '#1F2937',
+          14: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -97,6 +100,7 @@ module.exports = {
           9: '#374151',
           10: '#F2F4F7',
           11: '#99A1B7',
+          12: '#78829D',
           900: '#181C32',
         },
         green: {
@@ -131,6 +135,13 @@ module.exports = {
         graded: {
           finish: '#4077E0',
         },
+        accent: {
+          success: '#07AF17',
+          info: '#176CDD',
+          warning: '#F89707',
+          error: '#F01919',
+          default: '#99A1B7',
+        },
         green: {
           1: '#37C78C',
         },
@@ -148,6 +159,7 @@ module.exports = {
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
         'gray-4': '#F3F3F3',
+        'gray-5': '#F1F1F4',
         'pinned-1': '#18355D',
         active: '#FFB800',
         'graded-finish': '#4077E0',
@@ -220,6 +232,7 @@ module.exports = {
         dl: '646px',
         '2dl': '950px',
         xxl: '1144px',
+        '2xl': '1440px',
         1729: '1729px',
         '8xl': '1920px',
       },
@@ -244,6 +257,7 @@ module.exports = {
       },
       width: {
         5.5: '22px',
+        11.25: '45px',
         12.5: '50px',
         45: '180px',
         16.75: '4.188rem',
@@ -290,6 +304,7 @@ module.exports = {
         4.5: '1.125rem', // 18px
         5.5: '22px',
         8.5: '2.125rem',
+        11.25: '45px',
         12.5: '50px',
         16.75: '4.188rem',
         26: '6.5rem',
@@ -350,6 +365,12 @@ module.exports = {
       gridTemplateColumns: {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
         15: 'repeat(15, minmax(0, 1fr))',
+        'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
+      },
+      textColor: {
+        primary: '#1F2937',
+        secondary: '#9CA3AF',
+        heading: '#374151',
       },
     },
   },

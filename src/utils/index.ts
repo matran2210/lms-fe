@@ -5,14 +5,18 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import dayjs from 'dayjs'
+import weekday from 'dayjs/plugin/weekday'
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
-import dayjs from 'dayjs'
+export * from './common'
 import utc from 'dayjs/plugin/utc'
 import { DATE_FORMAT } from 'src/constants'
 
 dayjs.extend(utc)
+
+dayjs.extend(weekday)
 
 export const getLocalStorgeActToken = (): string => {
   return ''

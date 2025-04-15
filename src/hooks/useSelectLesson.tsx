@@ -1,0 +1,56 @@
+import { MyRequestAPI } from '@pages/api/my-request'
+import { useInfiniteQuery } from 'react-query' // Import useInfiniteQuery
+
+const useLesson = (
+  teacher_id: string,
+  class_id: string,
+  existedClass?: boolean,
+) => {
+  const fetchLesson = async (
+    page_index: number,
+    page_size: number,
+    teacher_id: string,
+    class_id: string,
+  ) => {
+    const res = await MyRequestAPI.getLesson(
+      page_index,
+      page_size,
+      teacher_id,
+      class_id,
+    )
+    return res
+  }
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isSuccess,
+    refetch,
+  } = useInfiniteQuery({
+    // Query key
+    queryFn: ({ pageParam = 1 }) => {
+      return fetchLesson(pageParam, 10, teacher_id, class_id) // Fetch with pageParam and a fixed page size
+    },
+    getNextPageParam: (lastPage: any) => {
+      return lastPage?.data.meta_data?.page_index <
+        lastPage?.data.meta_data?.total_pages
+        ? lastPage?.data.meta_data?.page_index + 1
+        : undefined
+    },
+    enabled: false,
+    refetchOnWindowFocus: false,
+  })
+  return {
+    lessons: data?.pages.flatMap((page) => page.data.schedules) ?? [], // Flatten subjects from all pages
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isSuccess,
+    refetch,
+  }
+}
+
+export default useLesson
