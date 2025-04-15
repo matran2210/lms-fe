@@ -27,8 +27,9 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { IFile } from 'src/type'
+
 import { IEssayAnswer } from 'src/type/answer'
+import { IFile } from 'src/type/course'
 import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 
