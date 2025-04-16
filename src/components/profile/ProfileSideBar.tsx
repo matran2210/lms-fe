@@ -282,8 +282,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
         trackGAEvent(`Click Button Security My Profile`)
         break
       default:
-        handleChildClick(childLabel)
         setChildActivationStates({ security: false, myprofile: false })
+        handleChildClick(childLabel)
         onClickExpand('')
         trackGAEvent(`Click Button ${childLabel} My Profile`)
         break
