@@ -178,7 +178,7 @@ const ProfilePage = () => {
               inputFileRef={inputFileRef}
             />
           </div>
-          <div className="mb-6 flex max-h-[630px] w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
+          <div className="mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
             {isSelectPage && (
               <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
             )}

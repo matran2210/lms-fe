@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
+import { LANG_SIGNIN } from 'src/constants/lang'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -29,18 +30,6 @@ export default function MenuItem({
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  // const isDetailCourse =
-  //   router.pathname.includes('/my-course') ||
-  //   router.pathname.includes('/section') ||
-  //   router.pathname.includes('/activity')
-
-  // const isProfile =
-  //   Icon === 'avatar' &&
-  //   (router.asPath === '/myprofile' ||
-  //     router.asPath === '/certificates' ||
-  //     router.asPath === '/settings' ||
-  //     router.asPath === '/login_history' ||
-  //     router.asPath === '/devices')
 
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
@@ -223,6 +212,7 @@ export default function MenuItem({
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM_INFORMATION ||
+            name === TitleSidebar.DASHBOARD ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'
@@ -232,7 +222,8 @@ export default function MenuItem({
           isInCourse &&
           (name === TitleSidebar.COURSES ||
             name === TitleSidebar.ENTRANCE_TEST ||
-            Icon === 'grid' ||
+            // hidden when not in course
+            name === LANG_SIGNIN.eventTest ||
             Icon === 'avatar')
             ? 'hidden'
             : ''
@@ -250,7 +241,9 @@ export default function MenuItem({
               href={
                 url === PageLink.RESULTS
                   ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
-                  : url
+                  : url === PageLink.DASHBOARD
+                    ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+                    : url
               }
               passHref
             >
