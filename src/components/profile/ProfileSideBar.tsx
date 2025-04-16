@@ -132,7 +132,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
     // Set the active state of other children to false
     Object.keys(childActivationStates).forEach((key) => {
-      if (key !== childLabel && key !== 'security') {
+      if (key !== childLabel) {
         setChildActivationStates((prev) => ({ ...prev, [key]: false }))
       }
     })
@@ -186,6 +186,25 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           isOpen: urlPage !== prev.urlPage ? true : !prev.isOpen,
         }))
         /**
+         * Nếu đang ở trang cá nhân hoặc trang bảo mật, thì không cần chuyển trang.
+         * Nếu không, chuyển đến trang con đầu tiên của trang hiện tại.
+         */
+        if (
+          MYPROFILE_TREE.includes(router.query.page as string) &&
+          urlPage === 'myprofile'
+        ) {
+          handleSetStatusActiveChild(router.query.page as string)
+          break
+        }
+        if (
+          SECURITY_TREE.includes(router.query.page as string) &&
+          urlPage === 'security'
+        ) {
+          handleSetStatusActiveChild(router.query.page as string)
+          break
+        }
+
+        /**
          * Lấy danh sách trang con của trang hiện tại.
          *
          * @param {string} parentKey - Khóa của trang hiện tại.
@@ -227,6 +246,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
          *
          * @param {string} formattedChildLabel - Nhãn định dạng.
          */
+        handleSetStatusActiveChild(formattedChildLabel)
         router.push(`/${formattedChildLabel}`)
         break
       default:
@@ -252,19 +272,19 @@ const ProfileSideBar = ({ page, children }: IProps) => {
   const hanldeClickMenu = (urlPage: string, childLabel: string) => {
     switch (urlPage) {
       case 'myprofile':
-        onClickExpand(urlPage)
         setChildActivationStates({ myprofile: true, security: false })
+        onClickExpand(urlPage)
         trackGAEvent(`Click Button Programs My Profile`)
         break
       case 'security':
-        onClickExpand(urlPage)
         setChildActivationStates({ security: true, myprofile: false })
+        onClickExpand(urlPage)
         trackGAEvent(`Click Button Security My Profile`)
         break
       default:
-        onClickExpand('')
         handleChildClick(childLabel)
         setChildActivationStates({ security: false, myprofile: false })
+        onClickExpand('')
         trackGAEvent(`Click Button ${childLabel} My Profile`)
         break
     }
