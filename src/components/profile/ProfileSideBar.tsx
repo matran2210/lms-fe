@@ -394,7 +394,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                               key={childLabel}
                               className={`${className} hover-transition-font-weight relative ms-4 cursor-pointer hover:bg-secondary ${
                                 childIsActive
-                                  ? 'bg-white font-medium text-primary'
+                                  ? 'bg-secondary font-medium text-primary'
                                   : 'font-normal '
                               }`}
                             >
