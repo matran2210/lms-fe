@@ -1,6 +1,7 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
@@ -1148,21 +1149,7 @@ const ActivityPage = () => {
                     className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
-                    {isPdfFile(e?.fileName) ? (
-                      <iframe
-                        src={e?.file}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                      />
-                    ) : (
-                      <iframe
-                        src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.file)}`}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                      />
-                    )}
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
                 </ModalResizeable>
               )
@@ -1201,21 +1188,10 @@ const ActivityPage = () => {
                       e?.files.map((e: any, index: number) => {
                         return (
                           <div key={index} className="h-full cursor-pointer">
-                            {isPdfFile(e?.resource?.name) ? (
-                              <iframe
-                                src={e?.resource?.url}
-                                width="100%"
-                                height="100%"
-                                style={{ border: 'none' }}
-                              />
-                            ) : (
-                              <iframe
-                                src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.resource?.url)}`}
-                                width="100%"
-                                height="100%"
-                                style={{ border: 'none' }}
-                              />
-                            )}
+                            <FileViewer
+                              fileName={e?.resource?.name}
+                              fileUrl={e?.resource?.url}
+                            />
                           </div>
                         )
                       })}

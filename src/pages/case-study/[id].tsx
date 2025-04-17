@@ -53,7 +53,7 @@ import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { isPdfFile } from '@utils/helpers'
-
+import FileViewer from '@components/base/fileViewer/FileViewer'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -1200,21 +1200,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                         exhibitsDes?.files?.map((e: any, index: number) => {
                           return (
                             <div key={index} className="overflow-auto bg-white">
-                              {isPdfFile(e?.resource?.name) ? (
-                                <iframe
-                                  src={e?.resource?.url}
-                                  width="100%"
-                                  height="100%"
-                                  style={{ border: 'none' }}
-                                />
-                              ) : (
-                                <iframe
-                                  src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.resource?.url)}`}
-                                  width="100%"
-                                  height="100%"
-                                  style={{ border: 'none' }}
-                                />
-                              )}
+                              <FileViewer
+                                fileName={e?.resource?.name}
+                                fileUrl={e?.resource?.url}
+                              />
                             </div>
                           )
                         })}
@@ -1235,21 +1224,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       className="overflow-auto bg-white p-4"
                       style={{ height: 'calc(100% - 40px' }}
                     >
-                      {isPdfFile(e?.fileName) ? (
-                        <iframe
-                          src={e?.file}
-                          width="100%"
-                          height="100%"
-                          style={{ border: 'none' }}
-                        />
-                      ) : (
-                        <iframe
-                          src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.file)}`}
-                          width="100%"
-                          height="100%"
-                          style={{ border: 'none' }}
-                        />
-                      )}
+                      <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                     </div>
                   </ModalResizeable>
                 )

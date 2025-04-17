@@ -10,6 +10,7 @@ import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
 import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -183,21 +184,10 @@ const TestScratchPads = ({
               exhibitsDes?.files?.map((e: any, index: number) => {
                 return (
                   <div key={index} className="h-full overflow-auto bg-white">
-                    {isPdfFile(e?.resource?.name) ? (
-                      <iframe
-                        src={e?.resource?.url}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                      />
-                    ) : (
-                      <iframe
-                        src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.resource?.url)}`}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none' }}
-                      />
-                    )}
+                    <FileViewer
+                      fileName={e?.resource?.name}
+                      fileUrl={e?.resource?.url}
+                    />
                   </div>
                 )
               })}
@@ -219,21 +209,7 @@ const TestScratchPads = ({
             style={{ height: 'calc(100% - 40px' }}
           >
             {/* <div className='flex flex-'> */}
-            {isPdfFile(e?.fileName) ? (
-              <iframe
-                src={e.file}
-                width="100%"
-                height="100%"
-                style={{ border: 'none' }}
-              />
-            ) : (
-              <iframe
-                src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.file)}`}
-                width="100%"
-                height="100%"
-                style={{ border: 'none' }}
-              />
-            )}
+            <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
           </div>
           {/* </div> */}
         </ModalResizeable>
