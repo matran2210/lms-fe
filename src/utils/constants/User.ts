@@ -28,10 +28,10 @@ export const PROFILE_PAGES = {
     label: 'Certificates',
     children: [] as { label: string }[],
   },
-  // EXAM_INFO: {
-  //   label: 'Exam Information',
-  //   children: [] as { label: string }[],
-  // },
+  EXAM_INFORMATION: {
+    label: 'Exam Information',
+    children: [] as { label: string }[],
+  },
   SETTINGS: {
     label: 'Settings',
     children: [] as { label: string }[],

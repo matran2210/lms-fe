@@ -9,6 +9,8 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { MY_COURSES } from 'src/constants/lang'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 10
 
@@ -49,7 +51,6 @@ const Results = () => {
   } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
-    enabled: router.isReady,
     refetchOnWindowFocus: true,
     retry: false,
   })
@@ -102,4 +103,4 @@ const Results = () => {
   )
 }
 
-export default Results
+export default withAuthorization([UserType.STUDENT])(Results)

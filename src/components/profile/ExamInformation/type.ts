@@ -9,7 +9,7 @@ export interface Data {
 
 export interface Data2 {
   metadata: Metadata
-  data: Daum[]
+  data: IExamInformation[]
 }
 
 export interface Metadata {
@@ -19,7 +19,7 @@ export interface Metadata {
   page_size: number
 }
 
-export interface Daum {
+export interface IExamInformation {
   id: string
   started_at: string
   finished_at: string
@@ -29,6 +29,7 @@ export interface Daum {
   defer_examination_reason: any
   class: Class
   examination_subject: ExaminationSubject
+  remaining_changes: number
 }
 
 export interface Class {

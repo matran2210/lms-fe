@@ -5,12 +5,17 @@ import SearchForm from '@components/mycourses/Search'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
+import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
+import SelectExamPopup from './popups/SelectExamPopup'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -50,22 +55,29 @@ const CourseDetail = () => {
   /**
    * @description sử dụng react-query để lấy data sau khi call API
    */
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
-    useInfiniteQuery({
-      queryKey: ['courseDetail'],
-      queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
-      getNextPageParam: (lastPage, allPages) => {
-        if (
-          params.user_section_learning_status ||
-          params.user_section_learning_status === undefined
-        ) {
-          return undefined // Prevent fetching more pages if params change
-        }
-        return lastPage?.data?.length ? allPages.length + 1 : undefined
-      },
-      enabled: router.query.courseId !== undefined,
-      retry: false,
-    })
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    refetch,
+    isSuccess,
+  } = useInfiniteQuery({
+    queryKey: ['courseDetail'],
+    queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    getNextPageParam: (lastPage, allPages) => {
+      if (
+        params.user_section_learning_status ||
+        params.user_section_learning_status === undefined
+      ) {
+        return undefined // Prevent fetching more pages if params change
+      }
+      return lastPage?.data?.length ? allPages.length + 1 : undefined
+    },
+    enabled: router.query.courseId !== undefined,
+    retry: false,
+  })
 
   /**
    * @description gọi lại API khi courseID khác undefined
@@ -118,13 +130,6 @@ const CourseDetail = () => {
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
 
-  /**
-   * @description biến này tìm kiếm bài Final Test
-   */
-  // const sectionFinalTest = courses?.find(
-  //   (section) => section?.course_section_type === 'FINAL_TEST',
-  // )?.quiz
-
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
@@ -167,8 +172,17 @@ const CourseDetail = () => {
           </>
         )}
       </div>
+      {isSuccess && data.pages[0].courseDetail.remind_choosing_exam && (
+        <SelectExamPopup courseData={data} />
+      )}
+
+      <PopupModalTest
+        class_code={data?.pages?.[0]?.courseDetail?.code}
+        program={data?.pages?.[0]?.courseDetail?.data?.program}
+        data={data?.pages?.[0]?.courseDetail}
+      />
     </Layout>
   )
 }
 
-export default CourseDetail
+export default withAuthorization([UserType.STUDENT])(CourseDetail)

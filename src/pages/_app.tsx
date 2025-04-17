@@ -1,6 +1,7 @@
 import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
+import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
@@ -17,7 +18,6 @@ import { pageview } from '@utils/index'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
@@ -57,7 +57,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 3000000, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+        staleTime: 3000000,
+        refetchOnWindowFocus: false,
+        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
       },
     },
   })
@@ -192,65 +194,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router])
 
   return (
-    <>
-      <Head>
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1"></meta>
-        <meta charSet="utf-8"></meta>
-        <meta
-          name="robots"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="analytics" content="G-HRLKW6S3X0" />
-        <meta
-          name="csrf-token"
-          content="Hl4U5KjkBFkHN2m2ptOE1L8QbTGV19yrEINaOrsd"
-        />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
-        <meta property="og:type" content="website" />
-        <meta name="author" content="SAPP Academy" />
-        <meta
-          property="og:title"
-          content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
-          key="title"
-        />
-        <meta
-          name="description"
-          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
-          key="desc"
-        />
-        <meta
-          name="og:description"
-          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
-          key="description"
-        />
-        <meta
-          property="og:image"
-          content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
-          key="image"
-        />
-        <meta name="og:url" content={'https://lms-pro.sapp.edu.vn'} />
-        <meta
-          name="keywords"
-          content="sapp, lms, acca, ACCA, CFA, Big4, 3P, SAPP Academy"
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Hệ thống Quản lý học và thi ACCA, CFA trực tuyến SAPP Academy"
-        />
-        <meta
-          name="twitter:description"
-          content="Hệ thống Nền tảng Học và Thi trực tuyến được SAPP Academy xây dựng nhằm mục đích cung cấp trải nghiệm học tập hiện đại, cá nhân hóa, giúp học viên tối ưu kết quả học tập ACCA, CFA"
-        />
-        <meta
-          name="twitter:image"
-          content="https://sapp-lms-fe-prod.vercel.app/thumbnail.webp"
-        />
-      </Head>
-      <main>
+    <main>
+      <AntConfigProvider>
         <PinnedNotifyProvider>
           <CourseProvider>
             <QueryClientProvider client={queryClient}>
@@ -270,23 +215,22 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    <LearningNotesList />
-                    <PopupCompletedCourse />
-
                     {showHelp && (
                       <>
                         <BackToTop />
                         <Help showHelp={showHelp} />
                       </>
                     )}
+                    <LearningNotesList />
+                    <PopupCompletedCourse />
                   </>
                 </RouteGuard>
               </SocketContext.Provider>
             </QueryClientProvider>
           </CourseProvider>
         </PinnedNotifyProvider>
-      </main>
-    </>
+      </AntConfigProvider>
+    </main>
   )
 }
 

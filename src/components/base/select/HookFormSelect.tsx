@@ -1,7 +1,7 @@
 import Icon from '@components/icons'
 import React, { ReactNode } from 'react'
 import Select, { type DropdownIndicatorProps, components } from 'react-select'
-import { ISelect } from 'src/type'
+import { ISelect } from 'src/type/course'
 
 interface IProps {
   defaultValue?: any
@@ -17,16 +17,19 @@ interface IProps {
   onMenuScrollToBottom?: any
   classParent?: string
   isClearable?: boolean
+  isSearchable?: boolean
   isResultSelect?: boolean
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
   maxMenuHeight?: number
   isLoading?: boolean
+  noOptionsMessage?: ((obj: { inputValue: string }) => ReactNode) | undefined
 }
 
 const HookFormSelect = ({
   className,
   defaultValue,
+  noOptionsMessage,
   required = false,
   options,
   isMulti = false,
@@ -37,6 +40,7 @@ const HookFormSelect = ({
   onMenuScrollToBottom,
   classParent = '',
   isClearable = false,
+  isSearchable = true,
   isResultSelect = false,
   onFocus,
   onBlur,
@@ -80,9 +84,11 @@ const HookFormSelect = ({
         isDisabled={isDisabled}
         onMenuScrollToBottom={onMenuScrollToBottom}
         isClearable={isClearable}
+        isSearchable={isSearchable}
         components={{ DropdownIndicator }}
         maxMenuHeight={maxMenuHeight}
         onMenuOpen={onMenuOpen}
+        noOptionsMessage={noOptionsMessage}
         onFocus={(e) => {
           onFocus && onFocus(e)
         }}

@@ -2,20 +2,23 @@ import { CheckCircleTwoTone } from '@ant-design/icons'
 import { EditIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
+import ExamEditDrawer from '@components/profile/ExamInformation/ExamEditDrawer'
 import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import NoData from 'src/common/NoData'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
-import ExamEditDrawer from './ExamEditDrawer'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const queryClient = useQueryClient()
 
   const { data, isSuccess, isLoading, isError, isFetching } = useQuery({
     queryKey: [ClassKey.ExamInfo],
@@ -23,7 +26,6 @@ const ExamInformation = () => {
       router.query.courseId
         ? ClassAPI.getExamInfo(router.query.courseId as string)
         : Promise.reject('courseId is undefined'),
-    enabled: router.isReady,
     refetchOnWindowFocus: false,
     retry: false,
   })
@@ -36,7 +38,7 @@ const ExamInformation = () => {
             <div className="main relative mx-auto my-0 max-w-xxl">
               <div className="flex w-full items-center justify-between pb-4 pt-6">
                 <BreadcrumbFilter
-                  name={data?.data.course.name}
+                  name={data?.data?.course?.name ?? ''}
                   subpath="Exam Information"
                   courseId={router.query.courseId}
                 />
@@ -84,24 +86,33 @@ const ExamInformation = () => {
                             <CheckCircleTwoTone twoToneColor={'#52c41a'} />
                           </SappTooltip>
                         ) : (
-                          <SappTooltip
-                            showTooltip={true}
-                            title={'Change Exam Date'}
-                          >
-                            <div
-                              className="cursor-pointer hover:text-primary"
-                              onClick={() => setIsOpen(true)}
+                          data?.data?.remaining_changes > 0 && (
+                            <SappTooltip
+                              showTooltip={true}
+                              title={'Change Exam Date'}
                             >
-                              <EditIcon />
-                            </div>
-                          </SappTooltip>
+                              <div
+                                className="cursor-pointer hover:text-primary"
+                                onClick={() => setIsOpen(true)}
+                              >
+                                <EditIcon />
+                              </div>
+                            </SappTooltip>
+                          )
                         )}
                       </div>
                     </div>
                     <ExamEditDrawer
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
-                      data={data}
+                      classId={router.query.courseId as string}
+                      onSuccess={() => {
+                        queryClient.invalidateQueries({
+                          queryKey: [ClassKey.ExamInfo],
+                        })
+                      }}
+                      remainingChanges={data?.data?.remaining_changes}
+                      currentValue={data?.data?.exam?.id}
                     />
                   </>
                 )
@@ -114,4 +125,4 @@ const ExamInformation = () => {
   )
 }
 
-export default ExamInformation
+export default withAuthorization([UserType.STUDENT])(ExamInformation)

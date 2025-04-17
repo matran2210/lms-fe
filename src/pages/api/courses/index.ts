@@ -257,6 +257,20 @@ export class CoursesAPI {
     })
   }
 
+  static getDiscussionStudentInfo(
+    course_section_id: string,
+    class_id: string,
+    user_id: string,
+  ): Promise<any> {
+    return fetcher(`${url.getDiscussionStudentInfo}`, {
+      params: {
+        course_section_id,
+        class_id,
+        user_id,
+      },
+    })
+  }
+
   CACHE_GET_COURSE_ACTIVITY_TAP_BY_ID = {}
 
   /**
@@ -389,6 +403,25 @@ export class CoursesAPI {
 
   static getQuizAttempt(id: string | string[] | undefined): Promise<any> {
     return fetcher(`/quiz-attempts/answers/${id}`)
+  }
+
+  static upgradeNowTrial(id: string | string[] | undefined): Promise<any> {
+    return fetcher(`courses/${id}/trial/upgrade-now`, {
+      method: 'POST',
+    })
+  }
+
+  static changeSurvey(
+    class_id: string | string[] | undefined,
+    data: {
+      is_disabled?: boolean
+      remind_late?: boolean
+    },
+  ): Promise<any> {
+    return fetcher(`/courses/${class_id}/change-survey-popup-status`, {
+      method: 'POST',
+      data: data,
+    })
   }
 }
 

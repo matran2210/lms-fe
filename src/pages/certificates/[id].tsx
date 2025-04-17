@@ -8,6 +8,8 @@ import { useQuery } from 'react-query'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from '../api/courses'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 export interface ICertificate {
   certificate_url: string
@@ -115,6 +117,6 @@ const Certificate = () => {
   )
 }
 
-export default Certificate
+export default withAuthorization([UserType.STUDENT])(Certificate)
 
 Certificate.layout = LAYOUT.SINGLE_PAGE_LAYOUT

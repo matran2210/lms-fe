@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
+import { LANG_SIGNIN } from 'src/constants/lang'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -211,6 +212,7 @@ export default function MenuItem({
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM_INFORMATION ||
+            name === TitleSidebar.DASHBOARD ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
             ? 'hidden'
@@ -220,7 +222,8 @@ export default function MenuItem({
           isInCourse &&
           (name === TitleSidebar.COURSES ||
             name === TitleSidebar.ENTRANCE_TEST ||
-            Icon === 'grid' ||
+            // hidden when not in course
+            name === LANG_SIGNIN.eventTest ||
             Icon === 'avatar')
             ? 'hidden'
             : ''
@@ -238,7 +241,9 @@ export default function MenuItem({
               href={
                 url === PageLink.RESULTS
                   ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
-                  : url
+                  : url === PageLink.DASHBOARD
+                    ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+                    : url
               }
               passHref
             >
