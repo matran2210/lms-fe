@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _, { uniqBy } from 'lodash'
 
 export function isMobile() {
   const toMatch = [
@@ -289,4 +289,22 @@ export const isSafari = () => {
 
 export const isMobileOrTablet = () => {
   return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent)
+}
+
+type Option = {
+  label?: string
+  value?: string
+  [key: string]: any
+}
+export const getSelectOptions = (
+  options?: Option[],
+  existedOption?: Option,
+  key: string = 'value',
+): Option[] => {
+  return uniqBy(
+    [...(existedOption ? [existedOption] : []), ...(options ?? [])].filter(
+      (item) => item[key],
+    ),
+    (e) => e[key],
+  )
 }
