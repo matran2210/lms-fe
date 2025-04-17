@@ -15,10 +15,12 @@ import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
+  PageLink,
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
+import { CloseIcon } from '@assets/icons'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
@@ -162,7 +164,7 @@ const TableQuestions = ({
     >
       <div className="flex items-center gap-x-3">
         <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
-          Score Details{' '}
+          Your Answer Details{' '}
           <span className="ml-5 bg-yellow-50 px-2 text-base text-primary">
             Awaiting Grading
           </span>
@@ -170,6 +172,14 @@ const TableQuestions = ({
         {router?.query?.attempt && (
           <div className="mb-6 text-base text-gray-1">{`attempt: ${router?.query?.attempt}`}</div>
         )}
+      </div>
+      <div
+        className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+        onClick={() => {
+          router.push(localStorage.getItem('previousUrl') ?? PageLink.COURSES)
+        }}
+      >
+        <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
       <div className="block pl-4">
         <SappTable
