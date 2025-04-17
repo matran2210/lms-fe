@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
+import { isPdfFile } from '@utils/helpers'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -182,7 +183,21 @@ const TestScratchPads = ({
               exhibitsDes?.files?.map((e: any, index: number) => {
                 return (
                   <div key={index} className="h-full overflow-auto bg-white">
-                    <PdfViewer file={e?.resource?.url} />
+                    {isPdfFile(e?.resource?.name) ? (
+                      <iframe
+                        src={e?.resource?.url}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none' }}
+                      />
+                    ) : (
+                      <iframe
+                        src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.resource?.url)}`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none' }}
+                      />
+                    )}
                   </div>
                 )
               })}
@@ -204,7 +219,21 @@ const TestScratchPads = ({
             style={{ height: 'calc(100% - 40px' }}
           >
             {/* <div className='flex flex-'> */}
-            <PdfViewer file={e?.file} />
+            {isPdfFile(e?.fileName) ? (
+              <iframe
+                src={e.file}
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+              />
+            ) : (
+              <iframe
+                src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(e.file)}`}
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+              />
+            )}
           </div>
           {/* </div> */}
         </ModalResizeable>

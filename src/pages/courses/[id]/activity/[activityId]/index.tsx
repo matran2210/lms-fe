@@ -16,6 +16,7 @@ import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { isPdfFile } from '@utils/helpers'
 import { truncateBySpace, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import { truncate, uniqueId } from 'lodash'
@@ -1147,7 +1148,21 @@ const ActivityPage = () => {
                     className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
-                    <PdfViewer file={e?.file} />
+                    {isPdfFile(e?.fileName) ? (
+                      <iframe
+                        src={e.file}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none' }}
+                      />
+                    ) : (
+                      <iframe
+                        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(e.file)}`}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none' }}
+                      />
+                    )}
                   </div>
                 </ModalResizeable>
               )
@@ -1186,7 +1201,21 @@ const ActivityPage = () => {
                       e?.files.map((e: any, index: number) => {
                         return (
                           <div key={index} className="h-full cursor-pointer">
-                            <PdfViewer file={e?.resource?.url} />
+                            {isPdfFile(e?.resource?.name) ? (
+                              <iframe
+                                src={e?.resource?.url}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 'none' }}
+                              />
+                            ) : (
+                              <iframe
+                                src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.resource?.url)}`}
+                                width="100%"
+                                height="100%"
+                                style={{ border: 'none' }}
+                              />
+                            )}
                           </div>
                         )
                       })}
