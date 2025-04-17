@@ -79,7 +79,7 @@ const EventRepeatField = ({
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
 
-  const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
+  const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
@@ -112,6 +112,9 @@ const EventRepeatField = ({
       {
         label: EVENT_REPEAT_LABEL.EVERY_WEEKDAY,
         value: EVENT_REPEAT_TYPES.EVERY_WEEKDAY,
+        disabled: ['Saturday', 'Sunday'].includes(
+          dayjs(initDate).format('dddd'),
+        ),
       },
       { label: EVENT_REPEAT_LABEL.CUSTOM, value: EVENT_REPEAT_TYPES.CUSTOM },
     ]
@@ -236,7 +239,7 @@ const EventRepeatField = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [watch])
+  }, [watch, initDate])
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {
