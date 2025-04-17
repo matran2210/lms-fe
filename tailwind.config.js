@@ -86,7 +86,6 @@ module.exports = {
           11: '#252F4A',
           12: '#374151',
           13: '#1F2937',
-          14: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -251,6 +250,7 @@ module.exports = {
       borderRadius: {
         none: '0px',
         full: '9999px',
+        2.5: '6px',
       },
       content: {
         empty: '""',

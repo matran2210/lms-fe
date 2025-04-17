@@ -43,8 +43,7 @@ import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import { ErrorBoundary } from '@sentry/nextjs'
-import CustomErrorFallback from '@components/CustomErrorFallback'
-// import { ErrorBoundary } from '@components/ErrorBoundary'
+import ErrorRedirectPage from './error-redirect'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -197,7 +196,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router])
 
   return (
-    <ErrorBoundary fallback={<CustomErrorFallback />}>
+    <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <main>
         <AntConfigProvider>
           <PinnedNotifyProvider>

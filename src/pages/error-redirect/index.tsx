@@ -1,37 +1,35 @@
 import SappButton from '@components/base/button/SappButton'
 import { LAYOUT } from '@utils/constants'
-import Link from 'next/link'
-import { PageLink } from 'src/constants'
+import SAPP_OOps from '@assets/images/Oops.svg'
+import Image from 'next/image'
 
 const ErrorRedirectPage = () => {
   return (
-    <div className="flex h-screen flex-col flex-nowrap items-center justify-center overflow-y-auto p-4 text-center">
-      <img
-        className="h-max"
-        src="/assets/images/image_500.jpg"
-        loading="lazy"
-        alt="Error"
-        width="320"
-        height="260"
+    <div className="flex h-screen flex-col flex-nowrap items-center justify-center gap-6 p-4 text-center">
+      <Image
+        src={SAPP_OOps}
+        alt="SAPP Oops"
+        width={321}
+        height={142}
+        priority
       />
-      <h1 className="mt-10 text-2xl font-bold text-bw-1 md:text-4xl">
-        SOMETHING WENT WRONG
+      <h1 className="text-center font-inter text-3xl font-semibold text-bw-11">
+        Oops!
       </h1>
-      <span className="mt-3 max-w-dl px-4 text-base text-gray-1">
-        An unexpected error occurred. Please try again or go back to the home
-        page.
-      </span>
-      <Link href={PageLink.DASHBOARD}>
-        <div className="mt-8">
-          <SappButton
-            title="Back to Home"
-            full={false}
-            className="px-8 md:px-22"
-            size="lager"
-            type="submit"
-          />
-        </div>
-      </Link>
+      <p className="text-center font-inter text-lg font-normal text-gray-9">
+        Something went wrong. Please try again.
+      </p>
+      <SappButton
+        title="Back to Home Page"
+        full={false}
+        className="rounded-2.5 !px-6 py-4 font-inter text-sm !leading-4"
+        size="lager"
+        onClick={() => {
+          if (typeof window !== 'undefined') {
+            window.location.href = '/'
+          }
+        }}
+      />
     </div>
   )
 }
