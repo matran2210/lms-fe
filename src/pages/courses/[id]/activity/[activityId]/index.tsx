@@ -1,6 +1,7 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
@@ -17,6 +18,7 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { isPdfFile } from '@utils/helpers'
 import { truncateBySpace, truncateString } from '@utils/index'
 import { Tooltip } from 'antd'
 import { uniqueId } from 'lodash'
@@ -1133,7 +1135,7 @@ const ActivityPage = () => {
                     className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
-                    <PdfViewer file={e?.file} />
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
                 </ModalResizeable>
               )
@@ -1172,7 +1174,10 @@ const ActivityPage = () => {
                       e?.files.map((e: any, index: number) => {
                         return (
                           <div key={index} className="h-full cursor-pointer">
-                            <PdfViewer file={e?.resource?.url} />
+                            <FileViewer
+                              fileName={e?.resource?.name}
+                              fileUrl={e?.resource?.url}
+                            />
                           </div>
                         )
                       })}
