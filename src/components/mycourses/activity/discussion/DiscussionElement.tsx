@@ -290,7 +290,7 @@ function DiscussionElement({
               content={contentPopover}
               placement="right"
               trigger="hover"
-              open={true}
+              open={isOpenUserInfo}
               overlayInnerStyle={{ maxWidth: 280 }}
               className="flex flex-row gap-3"
             >
