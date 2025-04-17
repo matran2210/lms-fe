@@ -680,7 +680,7 @@ const QuizDocument = ({
               {!isQuestionConfirmed &&
                 grading_preference === 'AFTER_EACH_QUESTION' && (
                   <SappButton
-                    title={'View Answer'}
+                    title={'Submit & View Answer'}
                     full={false}
                     size={'small'}
                     disabled={
