@@ -1150,14 +1150,14 @@ const ActivityPage = () => {
                     {/* <div className='flex flex-'> */}
                     {isPdfFile(e?.fileName) ? (
                       <iframe
-                        src={e.file}
+                        src={e?.file}
                         width="100%"
                         height="100%"
                         style={{ border: 'none' }}
                       />
                     ) : (
                       <iframe
-                        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(e.file)}`}
+                        src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(e?.file)}`}
                         width="100%"
                         height="100%"
                         style={{ border: 'none' }}
