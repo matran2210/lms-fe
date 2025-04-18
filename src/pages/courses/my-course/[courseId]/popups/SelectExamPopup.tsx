@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { useMutation } from 'react-query'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 interface ISelectExamPopup {
   courseData: any
@@ -109,4 +111,6 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   )
 }
 
-export default SelectExamPopup
+export default withAuthorization<ISelectExamPopup>([UserType.STUDENT])(
+  SelectExamPopup,
+)

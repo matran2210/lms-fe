@@ -5,6 +5,8 @@ import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
 import ExamDashboard from '@components/dashboard/ExamDashboard'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -37,4 +39,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuthorization([UserType.STUDENT])(Dashboard)

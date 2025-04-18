@@ -37,6 +37,7 @@ import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -50,6 +51,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -1192,4 +1194,4 @@ const ActivityPage = () => {
   )
 }
 
-export default ActivityPage
+export default withAuthorization([UserType.STUDENT])(ActivityPage)
