@@ -1,11 +1,9 @@
-import { Dispatch, FC, SetStateAction, useMemo } from 'react'
-import EntrancePopupContent from './EntrancePopupContent'
-import EntranceTestFillForm from './EntranceTestFillForm'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
-import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { useRouter } from 'next/router'
+import { Dispatch, FC, SetStateAction, useMemo } from 'react'
+import { useAppSelector } from 'src/redux/hook'
 import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
+import EntrancePopupContent from './EntrancePopupContent'
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
@@ -22,13 +20,12 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
   open,
   setOpen,
   entrancePopupContent,
-  openFillForn,
-  setOpenFillForm,
+  // openFillForn,
+  // setOpenFillForm,
   entranceTest,
 }) => {
   const handleOnClick = () => {
     setOpen && setOpen(false)
-    // setOpenFillForm(true)
   }
 
   const { count } = useAppSelector(entranceTestReducer)
@@ -92,12 +89,12 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
           }
         />
       </SappModalV2>
-      <EntranceTestFillForm
+      {/* <EntranceTestFillForm
         open={openFillForn}
         setOpen={setOpenFillForm}
         entrancePopupContent={entrancePopupContent}
         setOpenTestInfo={setOpen}
-      />
+      /> */}
     </>
   )
 }
