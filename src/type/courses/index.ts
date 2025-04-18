@@ -135,6 +135,11 @@ export interface IClasses {
   flexible_days: number
 }
 
+export interface ICategory {
+  id: string
+  name: string | null
+}
+
 export interface ICourse {
   certificate_id: string
   classes: IClasses[]
@@ -146,6 +151,7 @@ export interface ICourse {
   updated_at: Date
   name: string
   course_type: string
+  course_categories: ICategory[]
 }
 export interface ICourseAll {
   courses: ICourse[]
