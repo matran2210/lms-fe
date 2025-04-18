@@ -17,7 +17,7 @@ const LearningResults = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
-  const handleLearningResults = (data: any) => {
+  const handleLearningResults = (data: ILearningResult[]) => {
     if (data.length) {
       let total = 0
       const hasLearning = data.some((e: ILearningResult) => e.score)
