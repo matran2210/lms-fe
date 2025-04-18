@@ -23,7 +23,7 @@ const LearningResults = () => {
       const hasLearning = data.some((e: ILearningResult) => e.score)
       const indicator = data.map((e: ILearningResult, index: number) => {
         total += e.score
-        const name = `${e.short_name || e.name}\n${hasLearning ? e.score : e.mock_test_score}%`
+        const name = `${e.short_name || e.name}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
         if (index) return { name: name, max: 100 }
 
         return {
@@ -115,7 +115,7 @@ const LearningResults = () => {
               type: 'text',
               invisible: !isNormal,
               style: {
-                text: `${total / data.length}%`,
+                text: `${parseFloat((total / data.length).toFixed(2))}%`,
                 fontSize: 16,
                 fontWeight: 'bold',
                 fill: '#7086FD',
