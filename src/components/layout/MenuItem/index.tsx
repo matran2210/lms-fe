@@ -91,6 +91,10 @@ export default function MenuItem({
     router?.query?.activityId ||
     router?.query?.course_section_id
 
+  const checkIsHiddenDashboard = (info: any) => {
+    return name == TitleSidebar.DASHBOARD && !info
+  }
+
   const renderMenuContent = () => {
     return (
       <div className="flex items-center" onClick={handleActive}>
@@ -224,6 +228,9 @@ export default function MenuItem({
             name === TitleSidebar.ENTRANCE_TEST ||
             // hidden when not in course
             name === LANG_SIGNIN.eventTest ||
+            checkIsHiddenDashboard(
+              JSON.parse(localStorage.getItem('courseInfo') as any),
+            ) ||
             Icon === 'avatar')
             ? 'hidden'
             : ''

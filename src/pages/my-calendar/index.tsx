@@ -9,6 +9,8 @@ import toast from 'react-hot-toast'
 import 'sapp-common-package/dist/index.css'
 import { IEvent } from 'sapp-common-package/dist/types'
 import { DATE_TIME_FORMAT, TitleSidebar } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 import { IPopupDetails } from 'src/type/my-calendar'
 
 const breadcrumbs = [
@@ -72,4 +74,4 @@ const MyCalendar = () => {
   )
 }
 
-export default MyCalendar
+export default withAuthorization([UserType.STUDENT])(MyCalendar)

@@ -1,4 +1,5 @@
 export const PageLink = {
+  HOME: '/',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
@@ -6,7 +7,7 @@ export const PageLink = {
   TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
-  TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
+  TEACHER_CHAPTER_TEST: '/teacherss/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -80,6 +81,8 @@ export enum TEST_TYPE {
 
 export enum COURSE_TYPE {
   FOUNDATION_COURSE = 'FOUNDATION_COURSE',
+  NORMAL_COURSE = 'NORMAL_COURSE',
+  PRACTICE_COURSE = 'PRACTICE_COURSE',
 }
 
 export enum DISPLAY_TYPE {
@@ -457,6 +460,10 @@ export enum TEST_ATTEMPT_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
+
+export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'
+export const OFFICE_VIEWER_URL =
+  'https://view.officeapps.live.com/op/embed.aspx'
 
 export * from './common'
 export enum QUIZ_ATTEMPT_STATUS {

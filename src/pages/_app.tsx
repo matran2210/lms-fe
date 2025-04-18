@@ -3,6 +3,7 @@ import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
+import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
@@ -198,6 +199,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   return (
     <ErrorBoundary fallback={<ErrorRedirectPage />}>
       <main>
+        <Metadata />
         <AntConfigProvider>
           <PinnedNotifyProvider>
             <CourseProvider>

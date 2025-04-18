@@ -2,7 +2,6 @@ import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
-import { trackGAEvent } from '@utils/google-analytics'
 import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
@@ -17,6 +16,8 @@ import { CoursesAPI } from '../../../../api/courses/index'
 import { truncateBySpace } from '@utils/index'
 import SappTooltip from 'src/common/SappTooltip'
 import { useCourseContext } from '@contexts/index'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 interface IProps {
   course_section_type: string
@@ -576,4 +577,4 @@ const BreadCrumbPartDetail = ({
   )
 }
 
-export default CoursePartDetail
+export default withAuthorization([UserType.STUDENT])(CoursePartDetail)
