@@ -2,33 +2,25 @@ import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
-import SappDrawer from '@components/base/SappDrawer'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import SAPPSelect from '@components/base/select/SAPPSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { getSelectOptions } from '@utils/helpers'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { capitalizeFirstLetter } from '@utils/index'
 import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
-import { request } from 'http'
-import { isEmpty, update } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
-import {
-  ANT_THEME_CONFIG,
-  CALENDAR_SIDEBAR_TITLE,
-  CONFIRM_CANCEL,
-  DRAWER_REQUEST_TYPE,
-} from 'src/constants'
+import { ANT_THEME_CONFIG, CONFIRM_CANCEL } from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
@@ -669,10 +661,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   }}
                   onChange={(e) => handleChangeClassCode(e)}
                   placeholder="Class Code"
-                  options={classes.map((item) => ({
-                    value: item?.id,
-                    label: item?.code,
-                  }))}
+                  options={getSelectOptions(
+                    classes.map((item) => ({
+                      value: item?.id,
+                      label: item?.code,
+                    })),
+                  )}
                   className="h-11.25"
                   disabled={
                     isEdit &&
@@ -849,10 +843,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                             }}
                             labelClass="text-sm font-medium"
                             placeholder="Lesson"
-                            options={lessons.map((item) => ({
-                              value: item?.id,
-                              label: item?.name,
-                            }))}
+                            options={getSelectOptions(
+                              lessons.map((item) => ({
+                                value: item?.id,
+                                label: item?.name,
+                              })),
+                            )}
                             className="h-11.25 "
                           />
                         </div>
