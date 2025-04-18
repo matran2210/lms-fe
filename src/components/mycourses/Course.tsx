@@ -215,7 +215,11 @@ const Course = ({
       course?.course_type == 'NORMAL_COURSE' ||
       course?.course_type == 'PRACTICE_COURSE'
 
-    if (determineButtonToShow == 'Review' && isRedirectDashboard) {
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
       router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
     } else {
       router.push(`/courses/my-course/${classInstance?.id}`)
