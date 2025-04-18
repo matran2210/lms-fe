@@ -124,7 +124,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   const handleChildClick = (childLabel: string) => {
     // Check if the clicked label is "Security"
-    if (childLabel.toLowerCase() === 'security') {
+    if (childLabel?.toLowerCase() === 'security') {
       // Set both the "Security" page and the first child to active
       setChildActivationStates({
         security: true,
@@ -153,7 +153,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
     })
 
     // Chuyển trang
-    let formattedChildLabel = childLabel.toLowerCase()
+    let formattedChildLabel = childLabel?.toLowerCase()
 
     router.push(`/${formattedChildLabel}`)
   }

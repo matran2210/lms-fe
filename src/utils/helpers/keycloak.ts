@@ -42,64 +42,59 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
-    if (typeof window === 'undefined') {
-      return
-    }
-
+    if (typeof window === 'undefined') return
+  
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
-
-    // Kiểm tra trạng thái login lần đầu tiên
-    let isFirstLogin = false
-    if (
-      window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
-      window.location.pathname?.split('test-result/')?.[0] !==
-        '/entrance-test/' &&
-      window.location.pathname?.split('table-result/')?.[0] !==
-        '/entrance-test/'
-    ) {
-      this.keyCloak = new Keycloak(keycloakConfig)
-      const authenticated = await this.keyCloak.init({
-        onLoad: 'login-required',
-      })
-
-      if (authenticated) {
-        // Kiểm tra lần login đầu tiên
-        if (!localStorage.getItem('hasLoggedInBefore')) {
-          isFirstLogin = true // Lần đầu tiên login
-          localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
-          const res = await EntranceTestAPI.getEntranceCount()
-          if (isFirstLogin) {
-            localStorage.setItem('enstranceTest', 'true')
-            if (res?.data?.count > 0) {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
-            } else {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
-            }
-          }
+  
+    const existingToken = localStorage.getItem('keycloakToken')
+    const existingRefreshToken = localStorage.getItem('keycloakRefreshToken')
+  
+    this.keyCloak = new Keycloak(keycloakConfig)
+  
+    // Nếu đã có token => không init lại
+    if (existingToken && existingRefreshToken) {
+      this.keyCloak.token = existingToken
+      this.keyCloak.refreshToken = existingRefreshToken
+      return
+    }
+  
+    // Chưa có token => init Keycloak
+    const authenticated = await this.keyCloak.init({
+      onLoad: 'login-required',
+    })
+  
+    if (authenticated) {
+      const token = this.keyCloak.token
+      const refreshToken = this.keyCloak.refreshToken
+  
+      localStorage.setItem('keycloakToken', token ?? '')
+      localStorage.setItem('keycloakRefreshToken', refreshToken ?? '')
+  
+      // Xử lý lần đầu login
+      const hasLoggedInBefore = localStorage.getItem('hasLoggedInBefore')
+      if (!hasLoggedInBefore) {
+        localStorage.setItem('hasLoggedInBefore', 'true')
+  
+        const res = await EntranceTestAPI.getEntranceCount()
+  
+        localStorage.setItem('enstranceTest', 'true')
+        if (res?.data?.count > 0) {
+          window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
         } else {
-          isFirstLogin = false // Các lần login tiếp theo
+          window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
         }
-      } else {
       }
     }
-
-    await handleFirebaseToken()
   }
+  
+  
 
   getToken(): string {
     return this.keyCloak?.token ?? ''
-  }
-
-  async refreshToken() {
-    const response = await this.keyCloak?.updateToken(30)
-    if (!response) {
-      await this?.keyCloak?.login()
-    }
-    return this?.keyCloak?.token
   }
 
   async logout(redirectUri: string) {

@@ -13,6 +13,7 @@ import {
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
 } from 'src/constants'
+import { apiURL } from 'src/redux/services/httpService'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -69,6 +70,9 @@ request.interceptors.request.use(async (config: any) => {
 
   return config
 })
+// Variable to track whether the refresh token API has been called
+let isRefreshing = false
+let refreshSubscribers: ((token: string) => void)[] = []
 
 // Response Interceptor
 request.interceptors.response.use(
@@ -77,16 +81,54 @@ request.interceptors.response.use(
     const originalRequest = error.config
 
     // Handle token expiration (401 error)
-    if (error.response?.status === 401) {
-      const authenticationManager = new AuthenticationManager()
+    if (
+      error.response &&
+      error.response.status === 401
+    ) {
+      if (!isRefreshing) {
+        isRefreshing = true
 
-      try {
-        await authenticationManager.refreshToken()
-        originalRequest.headers.Authorization = `Bearer ${authenticationManager.getToken()}`
-        return axios(originalRequest)
-      } catch (refreshError) {
-        return Promise.reject(refreshError)
+        axios(`${apiURL}/auth/refresh-token`, {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('keycloakToken'),
+          },
+          data: {
+            refresh_token: localStorage.getItem('keycloakRefreshToken'),
+          }
+        })
+          .then((res: any) => {
+            const userInfo = res?.data
+            localStorage.setItem('keycloakToken', userInfo?.access_token)
+            localStorage.setItem('keycloakRefreshToken', userInfo?.refresh_token)
+
+            // update new token to axios
+            request.defaults.headers.common['Authorization'] =
+              `Bearer ${localStorage.getItem('keycloakToken') ?? ''}`
+
+            // Callback to unauth API calls
+            refreshSubscribers.forEach((callback) =>
+              callback(localStorage.getItem('keycloakToken') ?? ''),
+            )
+            refreshSubscribers = []
+            isRefreshing = false
+          })
+          .catch(() => {
+            // removeLocalStorageJwtToken()
+            // window.location.href = PageLink.AUTH_LOGIN
+          })
       }
+
+      // Return a Promise to wait for the initial API callback
+      const retryOriginalRequest = new Promise((resolve) => {
+        const subscribeTokenRefresh = (token: string) => {
+          originalRequest.headers['Authorization'] = `Bearer ${token}`
+          resolve(axios(originalRequest))
+        }
+        refreshSubscribers.push(subscribeTokenRefresh)
+      })
+
+      return retryOriginalRequest
     }
 
     // Handle other errors
