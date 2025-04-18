@@ -11,18 +11,17 @@ const withAuthorization =
         const router = useRouter()
         const userType = useAppSelector(userReducer).user.type
 
-        useEffect(() => {
-          // if (!userType) return
+        // useEffect(() => {
+        //   if (!userType) return
 
-          // if (router.pathname === '/') {
-          //   if (userType === UserType.TEACHER) router.push('/teachers')
-          //   else if (userType === UserType.STUDENT) router.push('/courses')
-          // } else if (!allowedRoles.includes(userType)) {
-          //   router.replace('/404')
-          // }
+        //   if (router.pathname === '/') {
+        //     if (userType === UserType.TEACHER) router.push('/teachers')
+        //     else if (userType === UserType.STUDENT) router.push('/courses')
+        //   } else if (!allowedRoles.includes(userType)) {
+        //     router.replace('/404')
+        //   }
 
-          router.push('/courses')
-        }, [router.pathname, userType])
+        // }, [router.pathname, userType])
 
         // if (!userType || !allowedRoles.includes(userType)) return null
 
