@@ -211,6 +211,9 @@ const TestDetail = () => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             solution={solution}
+            handleGetData={(data: DragDropAnswerItem) => {
+              setValue(`${currentTabID}_drag_drop_answer`, data)
+            }}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -443,7 +446,6 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
-
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
@@ -742,14 +744,12 @@ const TestDetail = () => {
                 answer_id: currentAnswer,
                 question_id: currentQuestion,
               }
-            } else if (objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP) {
+            } else if (
+              objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP &&
+              typeof answer !== 'string'
+            ) {
               let objAnswer: DragDropAnswerItem | undefined
-              const savedData =
-                answersSubmitted && answersSubmitted.length > 0
-                  ? answersSubmitted.find(
-                      (item: any) => item.questionId === objTab.id,
-                    )
-                  : undefined
+              const savedData = answer
               // Case: Tab has answer
               if (
                 objTab?.data?.answers &&
@@ -757,32 +757,33 @@ const TestDetail = () => {
                 objTab?.answer &&
                 objTab?.answer.length > 0
               ) {
-                const currentAnswer = (objTab?.answer ?? []).find((el: any) =>
-                  objTab?.data?.answers.some(
-                    (it: any) => it.id === el.idAnswer,
-                  ),
+                const hasCurrentAnswer = objTab?.data?.answers.some(
+                  (it: any) => it.id === answer.idAnswer,
                 )
-
-                if (currentAnswer) {
-                  objAnswer = currentAnswer
+                if (hasCurrentAnswer) {
+                  objAnswer = answer
+                } else {
+                  objAnswer = {
+                    id: answer?.id ?? '',
+                    idAnswer: undefined,
+                    value: '',
+                    position: index + 1,
+                  }
                 }
               }
 
               // Case: Tab no answer
               // & has savedData answer
-              else if (
-                savedData &&
-                savedData.answer &&
-                savedData.answer.length > 0
-              ) {
+              else if (savedData) {
                 const currentAnswer = (objTab?.data?.answers ?? []).find(
-                  (el: any) => el.id === savedData.answer[0].answer_id,
+                  (el: any) => el.id === savedData?.answer_id,
                 )
 
                 objAnswer = {
                   id: currentAnswer?.dropId,
-                  idAnswer: savedData.answer[0].answer_id,
+                  idAnswer: savedData?.answer_id,
                   value: currentAnswer?.answer,
+                  position: index + 1,
                 }
               }
 
@@ -795,38 +796,11 @@ const TestDetail = () => {
 
                 objAnswer = {
                   id: currentAnswer?.dropId,
-                  idAnswer: objTab?.data?.answers[0].id,
-                  value: currentAnswer?.answer,
+                  idAnswer: undefined,
+                  value: '',
+                  position: index + 1,
                 }
               }
-
-              // for (let i = 0; i < objTab?.data?.answers?.length; i++) {
-              //   const answerId = objTab?.data?.answers[i].id
-              //   if (currentAnswer) {
-              //     objAnswer = currentAnswer
-              //   } else {
-              //     if (
-              //       savedData.answer &&
-              //       savedData.answer.length > 0 &&
-              //       savedData.answer.find(
-              //         (el: any) => el.answer_id === answerId,
-              //       )
-              //     ) {
-              //       const currentAnswer = (objTab?.data?.answers ?? []).find(
-              //         (el: any) => el.id === answerId,
-              //       )
-
-              //       objAnswer = {
-              //         id: currentAnswer?.dropId,
-              //         idAnswer: answerId,
-              //         value: currentAnswer?.answer,
-              //       }
-              //     }
-
-              //     break
-              //   }
-              // }
-
               return objAnswer
             } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
               return currentAnswer
@@ -983,7 +957,8 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getAnswerDragNDrop()) {
+      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
+        getAnswerDragNDrop()) {
         if (e.idAnswer && e.idAnswer !== '') {
           return true
         }
@@ -1129,35 +1104,35 @@ const TestDetail = () => {
     ) {
       const answers = handleSaveAnswer(
         getValues(`${currentPage}_answer`),
-        currentPage,
+        currentContent,
         tabs,
       )
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
       const answers = handleSaveAnswer(
         getAnswerMatching(),
-        currentContent?.id,
+        currentContent,
         tabs,
       )
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       const answers = handleSaveAnswer(
-        getAnswerDragNDrop(),
-        currentContent?.id,
+        getValues(`${currentPage}_drag_drop_answer`) ?? getAnswerDragNDrop(),
+        currentContent,
         tabs,
       )
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       const answers = handleSaveAnswer(
         getValueSelectText(),
-        currentContent?.id,
+        currentContent,
         tabs,
       )
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
       const answers = handleSaveAnswer(
         getValues(`${currentPage}_fillword`),
-        currentPage,
+        currentContent,
         tabs,
       )
       return answers
@@ -1244,9 +1219,9 @@ const TestDetail = () => {
     setScratchPadValues(null)
   }
 
-  const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
+  const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
-      if (tabId === item?.id) {
+      if (tabContent.id === item?.id) {
         return {
           ...item,
           data: {
@@ -1592,7 +1567,7 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.DRAG_DROP) {
       return {
         ...baseAnswer,
-        answer: question.answer
+        answer: (question.answer ?? [])
           .filter((item: any) => item?.idAnswer)
           .map((item: any, index: number) => ({
             answer_id: item.idAnswer,
@@ -1658,11 +1633,6 @@ const TestDetail = () => {
           answers: e.data?.answers,
         })
       }
-      // setTabs(async () => {
-      //   // ref.setKey
-      //   // handleChangeTab(tabs[0].id)
-      //   return reformTabs
-      // })
       dispatch(disableUnsavedChange())
 
       const res = await CoursesAPI.submitAllQuestion(
@@ -2203,7 +2173,6 @@ const TestDetail = () => {
       )
     }
   }
-
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>

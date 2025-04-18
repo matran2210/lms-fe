@@ -111,10 +111,15 @@ export const getAnswerMatching = () => {
 export const getAnswerDragNDrop = () => {
   let value = [] as any
   const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-  for (let e of inputs) {
-    const idAnswer = e.querySelector('.answer-box')
-    value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-  }
+  inputs.forEach((e: HTMLElement, index: number) => {
+    const idAnswer = e.querySelector('.answer-box') as HTMLElement | null
+    value.push({
+      id: e?.id,
+      value: e?.innerText,
+      idAnswer: idAnswer?.id,
+      position: index,
+    })
+  })
   return value
 }
 
