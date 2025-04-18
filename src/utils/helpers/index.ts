@@ -290,3 +290,7 @@ export const isSafari = () => {
 export const isMobileOrTablet = () => {
   return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent)
 }
+
+export const isPdfFile = (fileName: string) => {
+  return fileName.toLowerCase().endsWith('.pdf')
+}

@@ -81,6 +81,8 @@ export enum TEST_TYPE {
 
 export enum COURSE_TYPE {
   FOUNDATION_COURSE = 'FOUNDATION_COURSE',
+  NORMAL_COURSE = 'NORMAL_COURSE',
+  PRACTICE_COURSE = 'PRACTICE_COURSE',
 }
 
 export enum DISPLAY_TYPE {
@@ -458,6 +460,10 @@ export enum TEST_ATTEMPT_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
+
+export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'
+export const OFFICE_VIEWER_URL =
+  'https://view.officeapps.live.com/op/embed.aspx'
 
 export * from './common'
 export enum QUIZ_ATTEMPT_STATUS {
