@@ -335,6 +335,9 @@ const Discussion = ({ class_id }: Props) => {
                 classId={class_id}
                 profile={user}
                 setLoading={setLoading}
+                isSappSupporterUserCurrent={
+                  selector?.userInDiscussion?.is_sapp_supporter
+                }
               />
               <div
                 className={`${
@@ -361,6 +364,9 @@ const Discussion = ({ class_id }: Props) => {
                             classId={class_id}
                             profile={user}
                             setLoading={setLoading}
+                            isSappSupporterUserCurrent={
+                              selector?.userInDiscussion?.is_sapp_supporter
+                            }
                           />
                         </div>
                       )

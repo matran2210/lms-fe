@@ -56,11 +56,11 @@ const ProfilePage = () => {
   }
   let breadcrumbs: ITabs[] = [
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Profile',
     },
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Details',
     },
   ]
@@ -103,15 +103,30 @@ const ProfilePage = () => {
       break
 
     case ProfilePages.CFA:
-      selectedContent = <ProgramDetail typeProgram="CFA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="CFA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.CMA:
-      selectedContent = <ProgramDetail typeProgram="CMA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="CMA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.ACCA:
-      selectedContent = <ProgramDetail typeProgram="ACCA" />
+      selectedContent = (
+        <ProgramDetail
+          typeProgram="ACCA"
+          onOpenTab={() => setSelectPage(true)}
+        />
+      )
       break
 
     case ProfilePages.ExamInformation:
@@ -136,7 +151,7 @@ const ProfilePage = () => {
   }, [])
 
   useEffect(() => {
-    setSelectPage(window.innerWidth > 1024)
+    setSelectPage(window.innerWidth >= 1024)
   }, [page])
 
   return (
@@ -163,7 +178,7 @@ const ProfilePage = () => {
               inputFileRef={inputFileRef}
             />
           </div>
-          <div className="mb-6 flex max-h-[630px] w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
+          <div className="mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
             {isSelectPage && (
               <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
             )}

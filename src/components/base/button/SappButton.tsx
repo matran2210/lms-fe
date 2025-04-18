@@ -1,4 +1,3 @@
-import React from 'react'
 import SappTooltip from 'src/common/SappTooltip'
 import { IButtonProps } from 'src/type'
 
