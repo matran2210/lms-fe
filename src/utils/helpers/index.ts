@@ -296,15 +296,16 @@ type Option = {
   value?: string
   [key: string]: any
 }
+
 export const getSelectOptions = (
   options?: Option[],
   existedOption?: Option,
   key: string = 'value',
 ): Option[] => {
-  return uniqBy(
-    [...(existedOption ? [existedOption] : []), ...(options ?? [])].filter(
-      (item) => item[key],
-    ),
-    (e) => e[key],
-  )
+  return _.chain([existedOption])
+    .compact() // loại bỏ undefined/null
+    .concat(options ?? []) // gộp với options
+    .filter((item) => item[key]) // lọc item có key
+    .uniqBy(key) // loại trùng theo key
+    .value()
 }
