@@ -277,6 +277,10 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
+export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'
+export const OFFICE_VIEWER_URL =
+  'https://view.officeapps.live.com/op/embed.aspx'
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'

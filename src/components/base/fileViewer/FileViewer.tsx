@@ -1,5 +1,6 @@
 import { isPdfFile } from '@utils/helpers'
 import React from 'react'
+import { OFFICE_VIEWER_URL } from 'src/constants'
 
 const FileViewer = ({
   fileName,
@@ -14,7 +15,7 @@ const FileViewer = ({
         <iframe src={fileUrl} className="h-full w-full border-none" />
       ) : (
         <iframe
-          src={`${process.env.NEXT_PUBLIC_OFFICE_VIEWER_URL}?src=${encodeURIComponent(fileUrl)}`}
+          src={`${OFFICE_VIEWER_URL}?src=${encodeURIComponent(fileUrl)}`}
           className="h-full w-full border-none"
         />
       )}
