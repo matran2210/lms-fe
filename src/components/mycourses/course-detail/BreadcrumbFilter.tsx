@@ -1,8 +1,8 @@
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import Link from 'next/link'
+import SappTooltip from 'src/common/SappTooltip'
 
 const BreadcrumbFilter = ({
   name,
@@ -39,9 +39,9 @@ const BreadcrumbFilter = ({
             scroll={false}
           >
             {(name as string)?.length > 80 ? (
-              <Tooltip title={name} color="#ffffff" placement="bottom">
+              <SappTooltip title={name} showTooltip>
                 <span>{truncateString(name, 80)}</span>
-              </Tooltip>
+              </SappTooltip>
             ) : (
               <div onClick={() => trackGAEvent(`Breadcrumb Course ${name}`)}>
                 <span> /&nbsp;</span>

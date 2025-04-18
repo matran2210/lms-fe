@@ -12,7 +12,7 @@ interface IProps {
 const Heading = ({ greeting, title, des }: IProps) => {
   return (
     <div className="grid w-full grid-cols-2 px-7.5 py-7.5 shadow-sidebar">
-      <div className="col-span-2 lg:col-span-1">
+      <div className="col-span-2">
         <h1 className="line-clamp-1 text-2xl font-light text-bw-1">
           {greeting}
           <span className="ml-1.5 font-medium">
