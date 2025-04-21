@@ -271,7 +271,7 @@ export default function TableContainer({ params }: IProps) {
       /**
        * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
        */
-      other?.refetch()
+      refetch()
     } catch (error) {
     } finally {
     }
