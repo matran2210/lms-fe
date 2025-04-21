@@ -5,8 +5,8 @@ import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
-import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
-import { GRADE_STATUS } from 'src/constants'
+import TableQuestions from 'src/pages/courses/test/your-answers-detail/TableQuestions'
+import SappLoading from 'src/common/SappLoading'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -76,18 +76,21 @@ const TestResultDetail = () => {
           />
         </div>
         <div className="px-5 xl:container md:px-10">
-          <TestResultPage
-            questions={questions}
-            type={questions?.course?.course_categories?.[0]?.name}
-            chartData={chartData}
-            subjectCode={questions?.course?.subject?.code ?? ''}
-            score={
-              questions?.quizAttempt?.grading_status ===
-              GRADE_STATUS.FINISHED_GRADING
-                ? questions?.quizAttempt?.score
-                : chartData?.multiple_choice_score
-            }
-          />
+          <>
+            {!!questions?.course?.course_categories?.[0]?.name ? (
+              <div>
+                <div className="flex max-h-full flex-col overflow-y-auto">
+                  <TableQuestions
+                    className={'relative'}
+                    type={questions?.course?.course_categories?.[0]?.name}
+                    gradingStatus={questions?.quizAttempt?.grading_status}
+                  />
+                </div>
+              </div>
+            ) : (
+              <SappLoading />
+            )}
+          </>
         </div>
       </div>
     </FullScreenLayout>

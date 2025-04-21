@@ -1,17 +1,18 @@
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { QUESTION_TYPES } from 'src/type/course/Question'
+import { IRequirment, QUESTION_TYPES } from 'src/type/course/Question'
 import { LAYOUT } from '@utils/constants'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
+import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
 import { IAtempt } from 'src/type/results'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { IRequirement } from 'src/type/case-study'
 
 const Explanation = () => {
   const router = useRouter()
@@ -112,34 +113,41 @@ const Explanation = () => {
     } catch (error) {}
   }
 
+  const isUserViewAnswers = router?.query?.title === 'Your Answers Detail'
+  const isUserViewAnswersDetailAndEssay =
+    isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
         <div
           className="absolute right-6 top-[14px] ml-auto cursor-pointer"
           onClick={() => {
-            if (attempt?.quiz.id) {
-              switch (attempt?.quiz.quiz_type) {
-                case TEST_ATTEMPT_TYPE.ENTRANCE_TEST:
-                  router.push(`/entrance-test/table-result/${attempt?.id}`)
-                  break
-                case TEST_ATTEMPT_TYPE.CHAPTER_TEST:
-                case TEST_ATTEMPT_TYPE.FINAL_TEST:
-                case TEST_ATTEMPT_TYPE.MID_TERM_TEST:
-                case TEST_ATTEMPT_TYPE.MOCK_TEST:
-                case TEST_ATTEMPT_TYPE.TOPIC_TEST:
-                  router.push(`/courses/test/test-result/${attempt?.id}`)
-                  break
-                default:
-                  router.push(
-                    localStorage.getItem('previousUrl') ??
-                      PageLink.ENTRANCE_TEST,
-                  )
-              }
+            if (isUserViewAnswers) {
+              router.push(`/courses/test/your-answers-detail/${attempt?.id}`)
             } else {
-              router.push(
-                localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
-              )
+              if (attempt?.quiz.id) {
+                switch (attempt?.quiz.quiz_type) {
+                  case TEST_ATTEMPT_TYPE.ENTRANCE_TEST:
+                    router.push(`/entrance-test/table-result/${attempt?.id}`)
+                    break
+                  case TEST_ATTEMPT_TYPE.CHAPTER_TEST:
+                  case TEST_ATTEMPT_TYPE.FINAL_TEST:
+                  case TEST_ATTEMPT_TYPE.MID_TERM_TEST:
+                  case TEST_ATTEMPT_TYPE.MOCK_TEST:
+                  case TEST_ATTEMPT_TYPE.TOPIC_TEST:
+                    router.push(`/courses/test/test-result/${attempt?.id}`)
+                    break
+                  default:
+                    router.push(
+                      localStorage.getItem('previousUrl') ??
+                        PageLink.ENTRANCE_TEST,
+                    )
+                }
+              } else {
+                router.push(
+                  localStorage.getItem('previousUrl') ?? PageLink.ENTRANCE_TEST,
+                )
+              }
             }
           }}
         >
@@ -147,7 +155,23 @@ const Explanation = () => {
         </div>
         <ExplanationPackage
           getActiveQuestion={getActiveQuestion}
-          activeQuestion={activeQuestion}
+          activeQuestion={{
+            ...activeQuestion,
+            solution: isUserViewAnswersDetailAndEssay
+              ? null
+              : activeQuestion?.solution,
+            requirements: activeQuestion?.requirements.map(
+              (req: IRequirement) => ({
+                ...req,
+                explanation: isUserViewAnswersDetailAndEssay
+                  ? null
+                  : req.explanation,
+              }),
+            ),
+            ...(isUserViewAnswersDetailAndEssay && {
+              grading_method: GRADING_METHOD.MANUAL,
+            }),
+          }}
           document_id={''}
           handleDownload={handleDownload}
         />
