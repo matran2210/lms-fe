@@ -10,6 +10,7 @@ const ButtonPrimary = ({
   disabled = false,
   loading = false,
   type,
+  icon,
 }: IButtonProps) => {
   let textSizeClass =
     size === 'small'
@@ -40,6 +41,7 @@ const ButtonPrimary = ({
       onClick={onClick}
       disabled={disabled || loading}
     >
+      {icon && <div className="mr-2">{icon}</div>}
       <span className={loading ? 'invisible' : ''}> {title}</span>
       {loading && (
         <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">

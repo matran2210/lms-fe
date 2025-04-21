@@ -12,6 +12,8 @@ import { MY_COURSES } from 'src/constants/lang'
 import { useEffect } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -79,4 +81,4 @@ const EntranceTest = () => {
   )
 }
 
-export default EntranceTest
+export default withAuthorization([UserType.STUDENT])(EntranceTest)

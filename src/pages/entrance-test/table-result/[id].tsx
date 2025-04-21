@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import { CoursesAPI } from '../../api/courses/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { PageLink } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -94,5 +96,5 @@ const TableEntranceResult = () => {
     </FullScreenLayout>
   )
 }
-export default TableEntranceResult
+export default withAuthorization([UserType.STUDENT])(TableEntranceResult)
 TableEntranceResult.layout = LAYOUT.FULLSCREEN_LAYOUT

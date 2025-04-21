@@ -15,10 +15,10 @@ export default function MenuItemsList({
 }: MenuItemsListProps) {
   return (
     <div className="menu-items-list">
-      {options.map((option) => (
+      {options.map((option, index) => (
         <MenuItem
           menuItem={option}
-          key={option.id}
+          key={option.id + index}
           setOpenResource={setOpenResource}
           closeSideBar={closeSideBar}
         />
