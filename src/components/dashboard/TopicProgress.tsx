@@ -11,8 +11,7 @@ const TopicProgress = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
-    const list = [...data].filter((e: ITopicProgress) => e.total_activities)
-    if (list.length) {
+    if (data.length) {
       const option: EChartsProps['option'] = {
         color: ['#FFAE4C'],
         responsive: true,
@@ -26,7 +25,7 @@ const TopicProgress = () => {
         },
         xAxis: {
           type: 'category',
-          data: list.map((e: ITopicProgress) => e.short_name || e.name),
+          data: data.map((e: ITopicProgress) => e.short_name || e.name),
           axisLabel: {
             rotate: 40,
             fontFamily: 'Roboto',
@@ -58,7 +57,7 @@ const TopicProgress = () => {
         },
         series: [
           {
-            data: list.map((e: ITopicProgress) => {
+            data: data.map((e: ITopicProgress) => {
               return e.total_activities
                 ? Math.round(
                     (e.completed_activities / e.total_activities) * 100,
@@ -83,6 +82,8 @@ const TopicProgress = () => {
       }
 
       setOption(option)
+    } else {
+      setOption(null)
     }
   }
 
@@ -92,7 +93,7 @@ const TopicProgress = () => {
 
       if (res && res.success) handleTopicProgress(res.data)
     } catch (error) {
-      return
+      setOption(null)
     } finally {
       setIsLoading(false)
     }

@@ -15,6 +15,8 @@ import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
 import { IProfilePages, ProfilePages } from 'src/type/Profile'
 
@@ -215,4 +217,4 @@ const ProfilePage = () => {
 //     props: { page: params?.page as IProfilePages },
 //   }
 // }
-export default ProfilePage
+export default withAuthorization([UserType.STUDENT])(ProfilePage)

@@ -170,7 +170,7 @@ const WeeklyReport = () => {
       </div>
       <div className="mt-6 flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 bg-green-1 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 bg-blue-6 bg-opacity-10 p-2">
             <Image src={timeIcon} alt="" width={32} height={32} />
           </div>
           <div>

@@ -211,13 +211,33 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
-    if (determineButtonToShow == 'Review') {
+    const isRedirectDashboard =
+      course?.course_type == 'NORMAL_COURSE' ||
+      course?.course_type == 'PRACTICE_COURSE'
+
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
       router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
     } else {
       router.push(`/courses/my-course/${classInstance?.id}`)
     }
 
-    localStorage.setItem('courseName', course.name)
+    if (isRedirectDashboard) {
+      localStorage.setItem(
+        'courseInfo',
+        JSON.stringify({
+          name: course.name,
+          courseType: course.course_type,
+          category: course.course_categories[0]?.name,
+        }),
+      )
+    } else {
+      localStorage.removeItem('courseInfo')
+    }
+
     localStorage.setItem(
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,

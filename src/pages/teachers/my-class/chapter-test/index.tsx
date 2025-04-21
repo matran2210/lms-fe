@@ -17,6 +17,8 @@ import DateActionCell from '@components/teacher/components/DateActionCell'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import StatusActionCell from '@components/teacher/components/StatusActionCell'
 import useSappPaging from 'src/hooks/useSappPaging'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 interface FilterParams {
   status?: string
@@ -169,4 +171,4 @@ const ChapterTest = () => {
   )
 }
 
-export default ChapterTest
+export default withAuthorization([UserType.TEACHER])(ChapterTest)

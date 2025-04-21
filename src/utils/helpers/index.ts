@@ -1,4 +1,5 @@
 import _, { uniqBy } from 'lodash'
+import { round } from 'lodash'
 
 export function isMobile() {
   const toMatch = [
@@ -190,7 +191,7 @@ export const calculatePercentage = (num: number, total: number): number => {
   if (total === 0) {
     return 0
   }
-  return _.round((num / total) * 100, 2)
+  return round((num / total) * 100, 2)
 }
 
 /**
@@ -308,4 +309,7 @@ export const getSelectOptions = (
     .filter((item) => item[key]) // lọc item có key
     .uniqBy(key) // loại trùng theo key
     .value()
+}
+export const isPdfFile = (fileName: string) => {
+  return fileName.toLowerCase().endsWith('.pdf')
 }
