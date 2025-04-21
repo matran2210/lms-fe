@@ -42,8 +42,6 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
-    if (typeof window === 'undefined') return
-
     const keycloakConfig: KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
@@ -61,76 +59,53 @@ export class AuthenticationManager {
       this.keyCloak.refreshToken = existingRefreshToken
       return
     }
+    if (
+      window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
+      window.location.pathname?.split('test-result/')?.[0] !==
+        '/entrance-test/' &&
+      window.location.pathname?.split('table-result/')?.[0] !==
+        '/entrance-test/'
+    ) {
+      // Chưa có token => init Keycloak
+      const authenticated = await this.keyCloak.init({
+        onLoad: 'login-required',
+      })
 
-    // Chưa có token => init Keycloak
-    const authenticated = await this.keyCloak.init({
-      onLoad: 'login-required',
-    })
+      if (authenticated) {
+        const token = this.keyCloak.token
+        const refreshToken = this.keyCloak.refreshToken
 
-    // Kiểm tra trạng thái login lần đầu tiên
-    let isFirstLogin = false
-
-    if (authenticated) {
-      const token = this.keyCloak.token
-      const refreshToken = this.keyCloak.refreshToken
-
-      localStorage.setItem('keycloakToken', token ?? '')
-      localStorage.setItem('keycloakRefreshToken', refreshToken ?? '')
-
-      // Xử lý lần đầu login
-      const hasLoggedInBefore = localStorage.getItem('hasLoggedInBefore')
-      if (hasLoggedInBefore !== 'true') {
-        isFirstLogin = true // Lần đầu tiên login
-        localStorage.setItem('hasLoggedInBefore', 'true')
-        const res = await EntranceTestAPI.getEntranceCount()
-
-        if (isFirstLogin) {
-          localStorage.setItem('enstranceTest', 'true')
-          if (res?.data?.count > 0) {
-            window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
-          } else {
-            window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
-          }
-        }
-      } else {
-        isFirstLogin = false // Các lần login tiếp theo
+        localStorage.setItem('keycloakToken', token ?? '')
+        localStorage.setItem('keycloakRefreshToken', refreshToken ?? '')
       }
-    } else {
     }
-
   }
 
   getToken(): string {
     return this.keyCloak?.token ?? ''
   }
 
-  async logout(redirectUri?: string) {
-    const finalRedirect = redirectUri || window.location.origin
-  
-    try {
-      // Luôn init lại nếu chưa được init hoặc không authenticated
-      if (!this.keyCloak || !this.keyCloak.authenticated) {
-        await this.keyCloak.init({
-          onLoad: 'check-sso',
-          silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-        })
+  async logout(redirectUri: string) {
+    if (!this.keyCloak) {
+      const keycloakConfig: KeycloakConfig = {
+        url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
+        realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
+        clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
       }
-  
-      // Clear localStorage
-      localStorage.removeItem('keycloakToken')
-      localStorage.removeItem('keycloakRefreshToken')
-      localStorage.removeItem('hasLoggedInBefore')
-      localStorage.removeItem('enstranceTest')
-  
-      // Gọi logout đến Keycloak
-      await this.keyCloak.logout({ redirectUri: finalRedirect })
-    } catch (error) {
-      console.error('❌ Error logging out:', error)
-      window.location.href = finalRedirect
+
+      this.keyCloak = new Keycloak(keycloakConfig)
+      await this.keyCloak.init({
+        onLoad: 'login-required',
+      })
     }
+
+    await this.keyCloak.logout({ redirectUri })
+
+    // Xoá token local sau khi logout
+    localStorage.removeItem('keycloakToken')
+    localStorage.removeItem('keycloakRefreshToken')
+    localStorage.removeItem('hasLoggedInBefore')
   }
-  
-  
 
   static instance: AuthenticationManager
 }
