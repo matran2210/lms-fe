@@ -1,12 +1,10 @@
 import { useAppDispatch } from 'src/redux/hook'
 import ButtonPrimary from './button/ButtonPrimary'
-import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { ReactNode, useEffect, useRef, useState } from 'react'
-import cross from '@assets/images/cross.svg'
-import Image from 'next/image'
 import ButtonSecondary from './button/ButtonSecondary'
 import { CloseIcon } from '@assets/icons'
+import { Spin } from 'antd'
 
 interface IProps {
   children: ReactNode
@@ -26,6 +24,8 @@ interface IProps {
   handleCancel?: () => any
   showCancelButton?: boolean
   btnCancelTitle?: string
+  footerClassName?: string
+  loading?: boolean
 }
 
 const SappDrawer = ({
@@ -41,11 +41,13 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
+  showCancelButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
 
-  showCancelButton = true,
   btnCancelTitle = 'Cancel',
+  footerClassName = '',
+  loading = false,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -92,7 +94,7 @@ const SappDrawer = ({
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[30] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[9999] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -115,7 +117,13 @@ const SappDrawer = ({
           className={`mt-6 overflow-y-auto px-8 ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
-          <div className="">{children}</div>
+          {loading ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <Spin tip="Loading" size="large" style={{ color: '#F89707' }} />
+            </div>
+          ) : (
+            <div className="">{children}</div>
+          )}
         </div>
         {footer && (
           <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white">
