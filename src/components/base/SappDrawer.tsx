@@ -25,8 +25,6 @@ interface IProps {
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
   handleCancel?: () => any
   showCancelButton?: boolean
-  handleCancel?: () => any
-  showCancelButton?: boolean
   footerClassName?: string
   headerClassName?: string
   cancelButtonClassName?: string
@@ -50,9 +48,6 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
-
-  showCancelButton = true,
-
   showCancelButton = true,
   footerClassName,
   headerClassName,
