@@ -7,6 +7,7 @@ export const PageLink = {
   TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
+  TEACHER_MY_REQUEST: '/teachers/my-request',
   TEACHER_CHAPTER_TEST: '/teacherss/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
@@ -97,6 +98,8 @@ export enum RESPONSE_OPTION {
 }
 export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024
 export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024
+export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_NUMBER = 1
 export const VALID_UPLOAD_EDITOR = [
   { type: 'image/*', size: MAX_UPLOAD_SIZE },
   { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },

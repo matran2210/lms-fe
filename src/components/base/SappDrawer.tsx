@@ -2,9 +2,8 @@ import { useAppDispatch } from 'src/redux/hook'
 import ButtonPrimary from './button/ButtonPrimary'
 import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { ReactNode, useEffect, useRef, useState } from 'react'
-import cross from '@assets/images/cross.svg'
-import Image from 'next/image'
+import { ReactNode, useEffect, useRef } from 'react'
+import clsx from 'clsx'
 import ButtonSecondary from './button/ButtonSecondary'
 import { CloseIcon } from '@assets/icons'
 
@@ -17,6 +16,7 @@ interface IProps {
   footer?: boolean
   widthDrawer?: string
   btnSubmitTile?: string
+  btnCancelTitle?: string
   handleSubmit?: any
   drawerSubId?: string
   confirmOnClose?: boolean
@@ -25,7 +25,11 @@ interface IProps {
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
   handleCancel?: () => any
   showCancelButton?: boolean
-  btnCancelTitle?: string
+  footerClassName?: string
+  headerClassName?: string
+  cancelButtonClassName?: string
+  submitButtonClassName?: string
+  handleClickCancelButton?: () => void
 }
 
 const SappDrawer = ({
@@ -37,6 +41,7 @@ const SappDrawer = ({
   footer = true,
   widthDrawer,
   btnSubmitTile = 'Next Lesson',
+  btnCancelTitle = 'Cancel',
   handleSubmit = () => {},
   drawerSubId = '',
   confirmOnClose = true,
@@ -45,7 +50,11 @@ const SappDrawer = ({
   sizeTextBtn = 'lager',
 
   showCancelButton = true,
-  btnCancelTitle = 'Cancel',
+  footerClassName,
+  headerClassName,
+  cancelButtonClassName,
+  submitButtonClassName,
+  handleClickCancelButton = () => {},
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -100,12 +109,14 @@ const SappDrawer = ({
         ease-in-out`}
       >
         <div className="flex flex-col justify-between">
-          <div className="w-100 relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white">
-            <span className="line-clamp-3 pr-4 text-heading ">{title}</span>
-            <div
-              className="shrink-0 cursor-pointer"
-              onClick={() => handleOnClose()}
-            >
+          <div
+            className={clsx(
+              'w-100 relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
+              headerClassName,
+            )}
+          >
+            <span className="line-clamp-3 pr-4 text-heading">{title}</span>
+            <div className="shrink-0 cursor-pointer" onClick={handleOnClose}>
               <CloseIcon />
             </div>
           </div>
@@ -118,19 +129,36 @@ const SappDrawer = ({
           <div className="">{children}</div>
         </div>
         {footer && (
-          <div className="absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white">
+          <div
+            className={clsx(
+              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white',
+              footerClassName,
+            )}
+          >
             {showCancelButton && (
               <ButtonSecondary
                 title={btnCancelTitle}
-                className="me-[32px] rounded-md"
-                onClick={handleMaskClick}
+                className={clsx('me-[32px] rounded-md', cancelButtonClassName)}
+                onClick={(e) => {
+                  handleMaskClick(e)
+                  handleClickCancelButton()
+                }}
                 size={sizeTextBtn}
               />
             )}
+            <ButtonText
+              title={btnCancelTitle}
+              className={clsx('ms-[4px]', cancelButtonClassName)}
+              onClick={(e) => {
+                handleMaskClick(e)
+                handleClickCancelButton()
+              }}
+              size={sizeTextBtn}
+            />
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
-                className="me-[32px] rounded-md"
+                className={clsx('me-[32px] rounded-md', submitButtonClassName)}
                 childClass="px-7"
                 onClick={handleSubmit}
                 size={sizeTextBtn}
