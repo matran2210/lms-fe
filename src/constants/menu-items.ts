@@ -50,7 +50,7 @@ const MENU_OPTIONS: MenuOption[] = [
   // },
   {
     name: `${TitleSidebar.COURSE_CONTENT}`,
-    icon: 'course',
+    icon: 'bookmark',
     url: `${PageLink.COURSE_CONTENT}`,
     type: 'level-2',
   },
