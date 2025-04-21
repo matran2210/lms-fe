@@ -2104,7 +2104,7 @@ const TestDetail = () => {
               !currentTabContent?.done &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     confirmAnswer(
@@ -2114,10 +2114,12 @@ const TestDetail = () => {
                       data?.isSelfReflection,
                       data?.requirements,
                     )
-                    trackGAEvent('Click Button View Answer Test')
+                    trackGAEvent('Click Button Submit & View Answer Test')
                   }}
                 >
-                  <div className="text-medium-sm font-medium">View Answer</div>
+                  <div className="text-medium-sm font-medium">
+                    Submit & View Answer
+                  </div>
                 </button>
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <

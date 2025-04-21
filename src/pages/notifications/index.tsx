@@ -12,6 +12,7 @@ import Router, { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   getCountUnRead,
@@ -23,6 +24,7 @@ import {
   updateStatus,
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
+import { UserType } from 'src/redux/types/User/urser'
 
 const Notifications = () => {
   const [openModel, setOpenModel] = useState<boolean>(false)
@@ -220,4 +222,4 @@ const Notifications = () => {
   )
 }
 
-export default Notifications
+export default withAuthorization([UserType.STUDENT])(Notifications)

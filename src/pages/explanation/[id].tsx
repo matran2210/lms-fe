@@ -10,6 +10,8 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
 import { IAtempt } from 'src/type/results'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 import { IRequirement } from 'src/type/case-study'
 
 const Explanation = () => {
@@ -177,5 +179,5 @@ const Explanation = () => {
     </SappLoadingGlobal>
   )
 }
-export default Explanation
+export default withAuthorization([UserType.STUDENT])(Explanation)
 Explanation.layout = LAYOUT.FULLSCREEN_LAYOUT
