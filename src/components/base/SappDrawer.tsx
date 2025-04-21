@@ -48,7 +48,6 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
-
   showCancelButton = true,
   footerClassName,
   headerClassName,
@@ -146,15 +145,7 @@ const SappDrawer = ({
                 size={sizeTextBtn}
               />
             )}
-            <ButtonText
-              title={btnCancelTitle}
-              className={clsx('ms-[4px]', cancelButtonClassName)}
-              onClick={(e) => {
-                handleMaskClick(e)
-                handleClickCancelButton()
-              }}
-              size={sizeTextBtn}
-            />
+
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
