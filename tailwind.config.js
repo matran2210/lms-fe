@@ -37,6 +37,7 @@ module.exports = {
       // sans: ['Inter', 'sans-serif'],
       tech: 'techNology',
       inter: ['Inter', 'sans-serif'],
+      fira: ['Fira Sans', 'sans-serif'],
     },
     container: {
       center: true,
@@ -55,6 +56,7 @@ module.exports = {
           3: '#E5A600',
           4: '#f57c00',
           5: '#f57c000D',
+          6: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
         },
         secondary: {
@@ -82,6 +84,10 @@ module.exports = {
           7: '#EDEFF5',
           9: '#C3C3C3',
           10: 'rgba(0, 0, 0, 0.80)',
+          11: '#252F4A',
+          12: '#374151',
+          13: '#1F2937',
+          14: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -96,6 +102,7 @@ module.exports = {
           10: '#F2F4F7',
           11: '#99A1B7',
           12: '#9CA3AF',
+          13: '#78829D',
           900: '#181C32',
         },
         green: {
@@ -115,6 +122,8 @@ module.exports = {
           2: '#091D37',
           3: '#025eff',
           4: '#025eff0D',
+          5: '#7086FD',
+          6: '#607FE9',
         },
         pinned: {
           1: '#18355D',
@@ -129,6 +138,19 @@ module.exports = {
         graded: {
           finish: '#4077E0',
         },
+        accent: {
+          success: '#07AF17',
+          info: '#176CDD',
+          warning: '#F89707',
+          error: '#F01919',
+          default: '#99A1B7',
+        },
+        green: {
+          1: '#37C78C',
+        },
+        red: {
+          1: '#FF524E',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -140,6 +162,7 @@ module.exports = {
         'gray-2': '#F1F1F1',
         'gray-3': '#F8F8F8',
         'gray-4': '#F3F3F3',
+        'gray-5': '#F1F1F4',
         'pinned-1': '#18355D',
         active: '#FFB800',
         'graded-finish': '#4077E0',
@@ -172,6 +195,7 @@ module.exports = {
         4: '16px',
         6: '24px',
         8: '30px',
+        120: '120px',
         small: '36px',
         default: '40px',
         medium: '48px',
@@ -180,8 +204,13 @@ module.exports = {
         '78px': '78px',
         '132px': '132px',
         '165px': '165px',
+        42.5: '170px',
+        45: '180px',
         '190px': '190px',
         '400px': '400px',
+        '20px': '20px',
+        '50px': '50px',
+        '150px': '150px',
       },
       minHeight: {
         4: '16px',
@@ -192,6 +221,7 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        '237px': '237px',
         352: '352px',
       },
       maxHeight: {
@@ -209,6 +239,8 @@ module.exports = {
         dl: '646px',
         '2dl': '950px',
         xxl: '1144px',
+        '2xl': '1440px',
+        1729: '1729px',
         '8xl': '1920px',
       },
       lineHeight: {
@@ -232,7 +264,9 @@ module.exports = {
       },
       width: {
         5.5: '22px',
+        11.25: '45px',
         12.5: '50px',
+        45: '180px',
         16.75: '4.188rem',
         18: '72px',
         30: '7.5rem',
@@ -245,6 +279,8 @@ module.exports = {
         '624px': '624px',
       },
       padding: {
+        1.25: '0.3125rem', // 5px
+        1.75: '0.4375rem', // 7px
         1.8: '0.47rem', // 7.5px
         2.75: '0.688rem', // 11px
         2.8: '0.71875rem', // 11.5px
@@ -256,6 +292,7 @@ module.exports = {
         6.5: '26.5px',
         7.5: '1.875rem', // 30px
         8.25: '2.0625rem', // 33px
+        13.75: '3.4375rem', // 55px
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px
         22: '5.375rem', //86px
@@ -274,10 +311,13 @@ module.exports = {
         4.5: '1.125rem', // 18px
         5.5: '22px',
         8.5: '2.125rem',
+        11.25: '45px',
         12.5: '50px',
         16.75: '4.188rem',
         26: '6.5rem',
         30: '7.5rem', // 120px
+        42.5: '170px',
+        45: '180px',
       },
       opacity: {
         55: '0.55',
@@ -332,6 +372,12 @@ module.exports = {
       gridTemplateColumns: {
         'test-result': 'minmax(0, 3fr) minmax(0, 1fr)',
         15: 'repeat(15, minmax(0, 1fr))',
+        'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
+      },
+      textColor: {
+        primary: '#1F2937',
+        secondary: '#9CA3AF',
+        heading: '#374151',
       },
     },
   },

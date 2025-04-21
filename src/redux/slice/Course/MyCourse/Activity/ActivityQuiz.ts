@@ -352,26 +352,29 @@ const quizSlice: Slice = createSlice({
         state[payload.activityId]?.[payload.tabId]?.[payload.quizId]?.questions
       let questionToUpdate: IActivityStateQuestion
       if (questions) {
-        questionToUpdate = questions.find(
-          (question: IActivityStateQuestion) =>
-            question.id === payload.question?.id,
-        )
+        questionToUpdate =
+          questions &&
+          questions?.find(
+            (question: IActivityStateQuestion) =>
+              question.id === payload.question?.id,
+          )
 
         if (questionToUpdate) {
           questionToUpdate.isDrafAnswer = true
           questionToUpdate.defaultValue = payload.myAnswers
           questionToUpdate.time_spent = payload.time_spent
 
-          questionToUpdate.quiz_position_mapping = [
-            ...(questionToUpdate?.quiz_position_mapping?.filter(
-              (q: { question_id: string | undefined }) =>
-                q.question_id !== payload.question.id,
-            ) || []),
-            {
-              question_id: payload.question.id,
-              answers: payload.question?.answers,
-            },
-          ]
+          questionToUpdate.quiz_position_mapping =
+            questionToUpdate?.quiz_position_mapping && [
+              ...(questionToUpdate?.quiz_position_mapping?.filter(
+                (q: { question_id: string | undefined }) =>
+                  q.question_id !== payload.question.id,
+              ) || []),
+              {
+                question_id: payload.question.id,
+                answers: payload.question?.answers,
+              },
+            ]
 
           switch (payload.question.qType as QUESTION_TYPES) {
             case QUESTION_TYPES.ONE_CHOICE:
@@ -578,17 +581,18 @@ const quizSlice: Slice = createSlice({
                   }),
                 )
 
-              questionToUpdate.quiz_position_mapping = [
-                ...(questionToUpdate?.quiz_position_mapping?.filter(
-                  (q: { question_id: string | undefined }) =>
-                    q.question_id !== payload.question.id,
-                ) || []),
-                {
-                  question_id: payload.question.id,
-                  answers: payload.question?.answers,
-                  time_spent: payload.time_spent,
-                },
-              ]
+              questionToUpdate.quiz_position_mapping =
+                questionToUpdate?.quiz_position_mapping && [
+                  ...(questionToUpdate?.quiz_position_mapping?.filter(
+                    (q: { question_id: string | undefined }) =>
+                      q.question_id !== payload.question.id,
+                  ) || []),
+                  {
+                    question_id: payload.question.id,
+                    answers: payload.question?.answers,
+                    time_spent: payload.time_spent,
+                  },
+                ]
 
               switch (payload.question.qType as QUESTION_TYPES) {
                 case QUESTION_TYPES.ONE_CHOICE:

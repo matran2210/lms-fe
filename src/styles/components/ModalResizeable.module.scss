@@ -1,0 +1,15 @@
+.modalResizeable {
+  :global {
+    .ant-modal-content {
+      @apply bg-transparent p-0 shadow-none;
+    }
+  }
+}
+
+.modalHeader {
+  @apply relative flex cursor-move items-center justify-between bg-gray-100;
+}
+
+.modalContent {
+  @apply h-[calc(100%-40px)] overflow-auto p-3;
+}

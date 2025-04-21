@@ -7,6 +7,8 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useGetDataQuery } from '@utils/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -50,4 +52,4 @@ const TestEntranceResult = () => {
   )
 }
 
-export default TestEntranceResult
+export default withAuthorization([UserType.STUDENT])(TestEntranceResult)

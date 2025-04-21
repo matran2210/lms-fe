@@ -9,7 +9,7 @@ interface IProps {
   control: Control<any>
   required?: boolean
   className?: string
-  options?: Array<{ label: string; value: string }>
+  options?: Array<{ label: string; value: string; isDisabled?: boolean }>
   isMulti?: boolean
   children?: ReactNode
   placeholder?: string
@@ -25,8 +25,9 @@ interface IProps {
   isClearable?: boolean
   onMenuClose?: () => void
   onBlur?: () => void
+  isLoading?: boolean
   isSelectCustom?: boolean
-  onSearch?: (value: string) => void
+  onSearch?: (value?: string) => void
 }
 
 const SappHookFormSelect = ({
@@ -37,7 +38,7 @@ const SappHookFormSelect = ({
   defaultValue,
   options,
   placeholder,
-  onChange,
+  onChange: onSelectChange,
   labelClass = 'text-base block font-medium mb-2',
   label,
   required,
@@ -47,6 +48,7 @@ const SappHookFormSelect = ({
   isClearable,
   onMenuClose,
   onBlur,
+  isLoading = false,
   isSelectCustom = false,
   onSearch,
 }: IProps) => {
@@ -62,18 +64,12 @@ const SappHookFormSelect = ({
         control={control}
         defaultValue={defaultValue}
         render={({ field, fieldState: { error } }) => {
-          const customStyles = {
-            control: (base: any) => ({
-              ...base,
-              borderColor: error && 'red !important',
-            }),
-          }
           return (
             <>
               <Select
                 {...field}
                 options={options}
-                styles={customStyles}
+                // styles={customStyles}
                 className={clsx(
                   'select-single',
                   isSelectCustom && 'select-single-custom',
@@ -85,17 +81,17 @@ const SappHookFormSelect = ({
                 isDisabled={isDisabled}
                 isClearable={isClearable}
                 onChange={(selectedOption) => {
-                  // Gọi hàm onChange truyền từ props
-                  onChange && onChange(selectedOption)
-                  // Gọi hàm onChange của field
                   field.onChange(selectedOption)
+                  onSelectChange && onSelectChange?.(selectedOption)
                 }}
+                onMenuOpen={() => onSearch?.()}
                 onMenuClose={onMenuClose}
                 isSearchable={isSearchable}
                 defaultValue={defaultValue}
                 onMenuScrollToBottom={onMenuScrollToBottom}
                 onFocus={onFocus}
                 onBlur={onBlur}
+                isLoading={isLoading}
                 onInputChange={onSearch}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>

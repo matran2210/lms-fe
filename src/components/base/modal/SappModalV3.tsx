@@ -5,7 +5,7 @@ import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import clsx from 'clsx'
 
 interface IProps {
-  title?: string | undefined
+  title?: React.ReactNode
   open: boolean | undefined
   handleCancel: () => void
   showFooter?: boolean

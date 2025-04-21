@@ -4,6 +4,7 @@ import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { ReactNode, useEffect, useRef } from 'react'
 import clsx from 'clsx'
+import ButtonSecondary from './button/ButtonSecondary'
 import { CloseIcon } from '@assets/icons'
 
 interface IProps {
@@ -22,6 +23,8 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
+  handleCancel?: () => any
+  showCancelButton?: boolean
   footerClassName?: string
   headerClassName?: string
   cancelButtonClassName?: string
@@ -45,6 +48,8 @@ const SappDrawer = ({
   showSubmitButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
+
+  showCancelButton = true,
   footerClassName,
   headerClassName,
   cancelButtonClassName,
@@ -91,14 +96,12 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className={
-            'fixed left-0 top-0 z-[999999] h-full w-full bg-bw-5 bg-opacity-50'
-          }
+          className="fixed left-0 top-0 z-[30] h-full w-full bg-bw-5 bg-opacity-50"
           onClick={handleMaskClick}
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[999999] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[30] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -108,11 +111,11 @@ const SappDrawer = ({
         <div className="flex flex-col justify-between">
           <div
             className={clsx(
-              'w-100 relative flex min-h-[80px] items-center justify-between bg-bw-1 px-8 py-2 text-2xl font-medium text-white',
+              'w-100 relative flex min-h-[80px] items-center justify-between border-b bg-transparent px-8 py-2 text-2xl font-medium text-white',
               headerClassName,
             )}
           >
-            <span className="line-clamp-3 pr-4">{title}</span>
+            <span className="line-clamp-3 pr-4 text-heading">{title}</span>
             <div className="shrink-0 cursor-pointer" onClick={handleOnClose}>
               <CloseIcon />
             </div>
@@ -128,10 +131,21 @@ const SappDrawer = ({
         {footer && (
           <div
             className={clsx(
-              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-between border-t border-default bg-white',
+              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white',
               footerClassName,
             )}
           >
+            {showCancelButton && (
+              <ButtonSecondary
+                title={btnCancelTitle}
+                className={clsx('me-[32px] rounded-md', cancelButtonClassName)}
+                onClick={(e) => {
+                  handleMaskClick(e)
+                  handleClickCancelButton()
+                }}
+                size={sizeTextBtn}
+              />
+            )}
             <ButtonText
               title={btnCancelTitle}
               className={clsx('ms-[4px]', cancelButtonClassName)}
@@ -144,7 +158,8 @@ const SappDrawer = ({
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
-                className={clsx('me-[32px]', submitButtonClassName)}
+                className={clsx('me-[32px] rounded-md', submitButtonClassName)}
+                childClass="px-7"
                 onClick={handleSubmit}
                 size={sizeTextBtn}
               />
