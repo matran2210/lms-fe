@@ -17,6 +17,8 @@ import { useQuery } from 'react-query'
 import { TeacherAPI } from '@pages/api/teacher'
 import clsx from 'clsx'
 import { sappFormatDate } from '@utils/index'
+import InfoItem from './InfoItem'
+import { isNull } from 'lodash'
 
 interface IProps {
   open: boolean
@@ -41,7 +43,11 @@ const DetailRequestModal = ({
   const requestId = selectedRequest.id
   const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
   const isCancel = selectedRequest?.status === StatusRequestSchedule.CANCEL
-  const isOverdue = dayjs(selectedRequest?.due_date).isBefore(dayjs())
+  const isReject = selectedRequest?.status === StatusRequestSchedule.REJECT
+  const isApproved = selectedRequest?.status === StatusRequestSchedule.APPROVED
+  const isOverdue = dayjs(selectedRequest?.due_date).isBefore(
+    dayjs(selectedRequest?.updated_at),
+  )
   const onClose = () => {
     setOpen(false)
   }
@@ -138,10 +144,10 @@ const DetailRequestModal = ({
       message="Bạn có chắc chán muốn hủy không?"
       onClose={onClose}
       title="View Request"
-      footer={!isCancel}
+      footer={isPending || isApproved}
       confirmOnClose={false}
       btnSubmitTile="Đồng ý"
-      btnCancelTitle={isPending ? 'Từ chối' : 'Cancel'}
+      btnCancelTitle={isPending ? 'Từ chối' : isApproved ? 'Cancel' : ''}
       footerClassName={clsx('flex !justify-end gap-4', {
         'px-8': !isPending,
       })}
@@ -157,10 +163,10 @@ const DetailRequestModal = ({
       <div className="px-8 py-6">
         <div className="mb-6 flex flex-col gap-4">
           <div>{selectedRequest?.class?.code}</div>
-          <div className="flex items-center gap-[10px]">
+          <div className="flex items-center gap-2">
             <div className="text-14 text-gray-12">Processing deadline:</div>
             <div
-              className={clsx('flex items-center gap-[10px]', {
+              className={clsx('flex items-center gap-2', {
                 'text-state-cancel': isOverdue,
               })}
             >
@@ -178,17 +184,22 @@ const DetailRequestModal = ({
               {sappFormatDate(selectedRequest?.due_date, 'HH:mm | DD/MM/YYYY')}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="text-14 text-gray-12">Status:</div>
-            <div
-              className={clsx(
-                'text-12 rounded-[4px] px-2 py-1 font-semibold',
-                `${selectedRequest && statusColor(selectedRequest)}`,
-              )}
-            >
-              {selectedRequest?.status}
-            </div>
-          </div>
+          <InfoItem
+            title="Status:"
+            value={selectedRequest?.status}
+            className={`${selectedRequest && statusColor(selectedRequest)}`}
+          />
+          {(isCancel || isReject) && (
+            <InfoItem
+              title="Reason:"
+              value={
+                isNull(data?.data?.description)
+                  ? undefined
+                  : data?.data?.description
+              }
+              isLoading={isLoading}
+            />
+          )}
         </div>
         <PrimaryInformation
           selectedRequest={selectedRequest}

@@ -159,7 +159,7 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Construction mode',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.type} />
+        <TableCell data={record?.mode} />
       ),
     },
     {
@@ -285,6 +285,7 @@ export default function TableContainer({ params }: IProps) {
         pagination={pagination}
         setPagination={setPagination}
         loading={isLoading}
+        emptyText="No matching records found"
       />
 
       {openDetail && selectedRequest && (

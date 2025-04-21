@@ -1,13 +1,17 @@
 import { Collapse, CollapseProps } from 'antd'
 import React from 'react'
 import {
+  ClassStandardScheduleItem,
   IScheduleRequestItem,
   ScheduleRequestDetail,
-  ScheduleTimeItem,
 } from 'src/type/teachers/request-schedule.interface'
-import { sappFormatDate } from '@utils/index'
+import { capitalizeFirstLetter, sappFormatDate } from '@utils/index'
 import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
-import InfoItem from 'src/components/teacher/my-request/schedule-request/InfoItem'
+import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
+import dayjs from 'dayjs'
+import 'dayjs/locale/vi' // Import locale tiếng Việt
+import { formatTimeOnlyHourMinute } from '@utils/helpers'
+dayjs.locale('vi') // Set ngôn ngữ mặc định là tiếng Việt
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
@@ -19,6 +23,15 @@ const PrimaryInformation = ({
   selectedRequest,
   isLoading,
 }: IProps) => {
+  const renderDayOfWeek = (dayOfWeek: number) => {
+    // dayOfWeek là số từ 1 đến 7, với 1 là thứ Hai và 7,0 là Chủ Nhật
+    if (dayOfWeek === 7) {
+      return 'Chủ Nhật'
+    } else {
+      return dayjs().day(dayOfWeek).format('dddd')
+    }
+  }
+
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -31,16 +44,22 @@ const PrimaryInformation = ({
       children: (
         <div className="flex flex-col gap-5 py-4">
           {/* Class Code */}
-          <InfoItem title="Class Code" value={selectedRequest?.class?.code} />
+          <PrimaryInfoItem
+            title="Class Code"
+            value={selectedRequest?.class?.code}
+          />
           {/* Program */}
-          <InfoItem
+          <PrimaryInfoItem
             title="Program"
             value={selectedRequest?.subject.course_category?.name}
           />
           {/* Subject */}
-          <InfoItem title="Subject" value={selectedRequest?.subject?.code} />
+          <PrimaryInfoItem
+            title="Subject"
+            value={selectedRequest?.subject?.code}
+          />
           {/* Construction Mode */}
-          <InfoItem
+          <PrimaryInfoItem
             title="Construction Mode"
             value={dataDetail?.class?.instruction_mode}
             isLoading={isLoading}
@@ -55,11 +74,11 @@ const PrimaryInformation = ({
                 <ScheduleSkeleton />
               ) : (
                 <div className="flex items-center gap-8">
-                  {(dataDetail?.schedules ?? []).map(
-                    (item: ScheduleTimeItem, index: number) => (
+                  {(dataDetail?.class?.class_standard_schedules ?? []).map(
+                    (item: ClassStandardScheduleItem, index: number) => (
                       <div
                         key={index}
-                      >{`${item.start_time} - ${item.end_time}`}</div>
+                      >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
                     ),
                   )}
                 </div>
@@ -67,14 +86,18 @@ const PrimaryInformation = ({
             </div>
           </div>
           {/* Address */}
-          <InfoItem title="Classroom Address" value={''} />
+          <PrimaryInfoItem
+            title="Classroom Address"
+            value={dataDetail?.room?.address}
+            isLoading={isLoading}
+          />
           {/* Start and end date */}
-          <InfoItem
+          <PrimaryInfoItem
             title="Start Date - End Date"
             value={`${sappFormatDate(selectedRequest?.schedule_time.start_date) ?? '-'} - ${sappFormatDate(selectedRequest?.schedule_time.end_date) ?? '-'}`}
           />
           {/* Sent Date */}
-          <InfoItem
+          <PrimaryInfoItem
             title="Sent Date"
             value={sappFormatDate(selectedRequest?.created_at) ?? '-'}
           />

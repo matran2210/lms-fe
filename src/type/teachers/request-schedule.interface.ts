@@ -32,6 +32,7 @@ export interface IScheduleRequestItem {
   status: StatusRequestSchedule
   description?: string
   due_date: string
+  mode: string
   name: string
   teacher_schedule_id: string
   class: ClassInfo
@@ -40,10 +41,22 @@ export interface IScheduleRequestItem {
   staff_detail: StaffDetail
 }
 
+export interface ClassStandardScheduleItem {
+  day_of_week: number
+  start_time: string
+  end_time: string
+}
 export interface ClassInfo {
   id: string
   code: string
   instruction_mode: string
+  class_standard_schedules: ClassStandardScheduleItem[]
+}
+export interface RoomInfo {
+  id: string
+  code: string
+  name: string
+  address: string
 }
 
 export interface SubjectInfo {
@@ -79,6 +92,7 @@ export interface ScheduleRequestDetail {
   due_date: string
   name: string
   teacher_schedule_id: string
+  room: RoomInfo
   class: ClassInfo
   subject: SubjectInfo
   schedules: ScheduleTimeItem[]
