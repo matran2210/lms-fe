@@ -206,6 +206,9 @@ module.exports = {
         45: '180px',
         '190px': '190px',
         '400px': '400px',
+        '20px': '20px',
+        '50px': '50px',
+        '150px': '150px',
       },
       minHeight: {
         4: '16px',
@@ -216,6 +219,7 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        '237px': '237px',
         352: '352px',
       },
       maxHeight: {

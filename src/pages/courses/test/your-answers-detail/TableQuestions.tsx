@@ -45,19 +45,19 @@ const TableQuestions = ({
   const headers = [
     {
       label: '#',
-      className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
+      className: clsx(commonHeaderClass, 'min-w-20px xl:min-w-50px'),
     },
     {
       label: 'Question',
-      className: clsx(commonHeaderClass, 'min-w-[180px]'),
+      className: clsx(commonHeaderClass, 'min-w-45'),
     },
     {
       label: 'Section',
-      className: clsx(commonHeaderClass, 'min-w-[180px]'),
+      className: clsx(commonHeaderClass, 'min-w-45'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+      className: clsx(commonHeaderClass, 'min-w-150px'),
     },
     {
       label: 'Result',
@@ -65,7 +65,7 @@ const TableQuestions = ({
     },
     {
       label: 'Time Spent',
-      className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-center'),
+      className: clsx(commonHeaderClass, ' min-w-20 !pr-0 text-center'),
     },
   ]
 
@@ -134,7 +134,7 @@ const TableQuestions = ({
   const renderBoxesAndLineClass = (type: string, data: IAnswer | undefined) => {
     if (type === 'Constructed') {
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
-        ? ' text-[#4077E0] border-pinned-1'
+        ? ' text-graded-finish border-pinned-1'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
             data?.active === COMMON_TEXT_ENUM.SUBMITED
           ? ' text-pinned-1 border-pinned-1'
@@ -158,7 +158,7 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit min-h-237px bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -174,7 +174,7 @@ const TableQuestions = ({
         )}
       </div>
       <div
-        className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+        className="absolute right-6 top-4 ml-auto cursor-pointer"
         onClick={() => {
           router.push(localStorage.getItem('previousUrl') ?? PageLink.COURSES)
         }}
