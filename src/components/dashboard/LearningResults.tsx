@@ -14,6 +14,7 @@ const LearningResults = () => {
   const router = useRouter()
   const [option, setOption] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [hasLearning, setHasLearning] = useState<boolean>(false)
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
@@ -130,6 +131,7 @@ const LearningResults = () => {
         },
       }
 
+      setHasLearning(hasLearning)
       setOption(option)
     } else {
       setOption(null)
@@ -189,14 +191,26 @@ const LearningResults = () => {
       </div>
       {option && (
         <div
-          className={`flex grow gap-5 ${isNormal ? 'flex-col' : 'flex-row'}`}
+          className={`flex grow gap-5 ${isNormal ? 'flex-col' : 'flex-row'} px-5 2xl:px-12`}
         >
           <div className="grow">
             <EChart option={option} />
           </div>
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-blue-5"></span>
-            <span className="font-medium">Learning results</span>
+          <div
+            className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
+          >
+            {!isNormal && (
+              <div className="flex items-center justify-center gap-2.5">
+                <span className="h-3 w-3 rounded-full bg-green-1"></span>
+                <span className="min-w-fit font-medium">Mock test results</span>
+              </div>
+            )}
+            {isNormal || hasLearning ? (
+              <div className="flex items-center justify-center gap-2.5">
+                <span className="h-3 w-3 rounded-full bg-blue-5"></span>
+                <span className="min-w-fit font-medium">Learning results</span>
+              </div>
+            ) : null}
           </div>
         </div>
       )}
