@@ -1,5 +1,5 @@
 export const PageLink = {
-  DASHBOARD: '/dashboard',
+  HOME: '/',
   COURSES: '/courses',
   COURSE_NEW: '/courses/new-courses',
   TOPICS: '/topics',
@@ -8,7 +8,7 @@ export const PageLink = {
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
   TEACHER_MY_REQUEST: '/teachers/my-request',
-  TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
+  TEACHER_CHAPTER_TEST: '/teacherss/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -25,6 +25,11 @@ export const PageLink = {
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
   RESULTS: '/courses/my-course/[courseId]/results',
+  MY_CALENDAR: '/my-calendar',
+  REQUEST: '/request',
+  MY_REQUEST: '/my-request',
+  DASHBOARD: '/courses/my-course/[courseId]/dashboard',
+  COURSE_CONTENT: '/courses/my-course',
 }
 
 export const TitleSidebar = {
@@ -40,10 +45,13 @@ export const TitleSidebar = {
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
   EXAM_INFORMATION: 'Exam Information',
+  COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
+  MY_CALENDAR: 'My Calendar',
+  MY_REQUEST: 'My Request',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -76,6 +84,8 @@ export enum TEST_TYPE {
 
 export enum COURSE_TYPE {
   FOUNDATION_COURSE = 'FOUNDATION_COURSE',
+  NORMAL_COURSE = 'NORMAL_COURSE',
+  PRACTICE_COURSE = 'PRACTICE_COURSE',
 }
 
 export enum DISPLAY_TYPE {
@@ -271,6 +281,168 @@ export const CERTIFICATE_DETAIL = '/certificates/[id]'
 export const ENTRANCE_TEST_RESULT = '/entrance-test/test-result/[id]'
 export const ENTRANCE_TEST_TABLE_RESULT = '/entrance-test/table-result/[id]'
 
+export const SEARCH_EVENT_PLACEHOLDER = 'Event name'
+
+export const PRIMARY_COLOR = '#FFB800'
+
+export const ANT_THEME_CONFIG = {
+  token: {
+    colorPrimary: PRIMARY_COLOR,
+  },
+}
+
+export const POPUP_EVENT_DETAILS = {
+  TITLE: 'Event name',
+  TIME: 'Time',
+  TYPE: 'Event type',
+  CLASSROOM_NAME: 'Classroom name',
+  CLASSROOM_ADDRESS: 'Classroom address',
+  MEETING_LINK: 'Meeting link',
+  DESCRIPTION: 'Description',
+}
+
+export const CALENDAR_SIDEBAR_TITLE = 'Add Busy Schedule'
+
+export const CALENDAR_SIDEBAR_EVENT_FORM = {
+  EVENT_NAME: 'Event name',
+  EVENT_TIME: 'Start Time - end time',
+  REPEAT: 'Repeat',
+  DESCRIPTION: 'Description',
+}
+
+export const EVENT_TYPES = {
+  TEACHING: 'TEACHING',
+  BUSY: 'BUSY',
+  HOLIDAY: 'HOLIDAY',
+  OTHER: 'OTHER',
+} as const
+
+export const EVENT_TYPES_RESPONSE = {
+  TEACHING: 'TEACHING',
+  BUSY: 'BUSY',
+  TIME_OFF: 'TIME_OFF',
+  OTHER: 'OTHER',
+} as const
+
+export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
+
+export const EVENT_TYPES_LABEL = {
+  [EVENT_TYPES.TEACHING]: 'Teaching schedule',
+  [EVENT_TYPES.BUSY]: 'Busy schedule',
+  [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
+  [EVENT_TYPES.OTHER]: 'Other calendar',
+}
+
+export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
+  ([key, value]) => ({ value: key, label: value }),
+)
+
+export const EVENT_REPEAT_TYPES = {
+  NO_REPEAT: 'NO_REPEAT',
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  ANNUALLY: 'ANNUALLY',
+  EVERY_WEEKDAY: 'EVERY_WEEKDAY',
+  CUSTOM: 'CUSTOM',
+  CHOSEN_PATTERN: 'CHOSEN_PATTERN',
+}
+export const EVENT_REPEAT_LABEL = {
+  [EVENT_REPEAT_TYPES.NO_REPEAT]: 'Does not repeat',
+  [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
+  [EVENT_REPEAT_TYPES.EVERY_WEEKDAY]: 'Every weekday (Monday to Friday)',
+  [EVENT_REPEAT_TYPES.CUSTOM]: 'Custom',
+}
+
+export enum FREQUENCY_UNITS {
+  DAY = 'days',
+  WEEK = 'weeks',
+  MONTH = 'months',
+  YEAR = 'years',
+}
+
+enum FREQUENCY_UNITS_LABEL {
+  days = 'Day',
+  weeks = 'Week',
+  months = 'Month',
+  years = 'Year',
+}
+
+enum FREQUENCY_UNITS_LABEL_PLURAL {
+  days = 'Days',
+  weeks = 'Weeks',
+  months = 'Months',
+  years = 'Years',
+}
+
+export const FREQUENCY_UNITS_OBJECT = {
+  [FREQUENCY_UNITS.DAY]: {
+    label: FREQUENCY_UNITS.DAY,
+    max: 365,
+  },
+  [FREQUENCY_UNITS.WEEK]: {
+    label: FREQUENCY_UNITS.WEEK,
+    max: 52,
+  },
+  [FREQUENCY_UNITS.MONTH]: {
+    label: FREQUENCY_UNITS.MONTH,
+    max: 12,
+  },
+  [FREQUENCY_UNITS.YEAR]: {
+    label: FREQUENCY_UNITS.YEAR,
+    max: 1,
+  },
+} as const
+
+export const FREQUENCY_OPTIONS = Object.entries(FREQUENCY_UNITS).map(
+  ([key, value]) => ({ value: value, label: FREQUENCY_UNITS_LABEL[value] }),
+)
+
+export const FREQUENCY_OPTIONS_PLURAL = Object.entries(FREQUENCY_UNITS).map(
+  ([key, value]) => ({
+    value: value,
+    label: FREQUENCY_UNITS_LABEL_PLURAL[value],
+  }),
+)
+
+export const FREQUENCY_UNITS_LIMIT = {
+  MIN: 1,
+  MAX: {
+    [FREQUENCY_UNITS.DAY]: 365,
+    [FREQUENCY_UNITS.WEEK]: 52,
+    [FREQUENCY_UNITS.MONTH]: 12,
+    [FREQUENCY_UNITS.YEAR]: 1,
+  },
+} as const
+
+export const REPEAT_ON = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'] as const
+
+export const REPEAT_ON_MAPPED = [
+  'CN',
+  'T2',
+  'T3',
+  'T4',
+  'T5',
+  'T6',
+  'T7',
+] as const
+
+export const REPEAT_ON_MAPPED_PAYLOAD = {
+  T2: 1,
+  T3: 2,
+  T4: 3,
+  T5: 4,
+  T6: 5,
+  T7: 6,
+  CN: 7,
+} as const
+
+export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'
+export const CONFIRM_DELETE = 'Are you sure you want to delete?'
+
+export const CALENDAR_SIDEBAR_SAVE_BUTTON = 'Save'
+export const CALENDAR_SIDEBAR_CANCEL_BUTTON = 'Cancel'
+
 export enum PROGRAM {
   ACCA = 'ACCA',
   CFA = 'CFA',
@@ -294,6 +466,11 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
+export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'
+export const OFFICE_VIEWER_URL =
+  'https://view.officeapps.live.com/op/embed.aspx'
+
+export * from './common'
 export enum QUIZ_ATTEMPT_STATUS {
   SUBMITTED = 'SUBMITTED',
   UN_SUBMITTED = 'UN_SUBMITTED',
@@ -305,4 +482,5 @@ export enum DATE_FORMAT {
 }
 export * from './socketEvents'
 export * from './localStorageKeys'
-export * from './form'
+export * from './request'
+export * from './socketEvents'

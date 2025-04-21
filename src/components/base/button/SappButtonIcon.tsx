@@ -26,7 +26,7 @@ const SappButtonIcon = ({
   link,
   loading,
   disabled,
-  classTitle,
+  classTitle = '',
   isBgPrimary = false,
   isTextPrimary = false,
   ishover = true,

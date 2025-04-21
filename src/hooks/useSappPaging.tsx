@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery, UseQueryResult } from 'react-query'
 import { TablePaginationConfig } from 'antd'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
@@ -9,19 +9,20 @@ interface UsePagingProps {
   params: Record<string, any>
 }
 
-interface UsePagingResult {
-  data: any
+interface UsePagingResultSapp<TData = any> {
+  data: TData
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   isLoading: boolean
   handleChangeParams: (currentPage: number, pageSize: number) => void
+  other?: Omit<UseQueryResult<TData, unknown>, 'data' | 'isLoading'>
 }
 
 const useSappPaging = ({
   uniqueKey,
   queryFn,
   params,
-}: UsePagingProps): UsePagingResult => {
+}: UsePagingProps): UsePagingResultSapp => {
   const router = useRouter()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number(router.query.page_index) || 1,
@@ -31,7 +32,7 @@ const useSappPaging = ({
     showQuickJumper: true, // Hiển thị tùy chọn chuyển nhanh trang
   })
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, ...other } = useQuery({
     queryKey: [uniqueKey, pagination.current, pagination.pageSize, params],
     queryFn,
     enabled: !!uniqueKey, // Chỉ chạy khi uniqueKey có giá trị hợp lệ
@@ -56,11 +57,12 @@ const useSappPaging = ({
   }, [data])
 
   return {
-    data,
-    pagination,
-    setPagination,
-    isLoading,
-    handleChangeParams,
+    data, // Dữ liệu trả về từ queryFn, thường là danh sách hoặc object chứa dữ liệu phân trang
+    pagination, // Cấu hình phân trang hiện tại: current page, page size, total, v.v.
+    setPagination, // Hàm cho phép cập nhật state phân trang thủ công nếu cần
+    isLoading, // Trạng thái loading từ react-query (đang fetch dữ liệu hay không)
+    handleChangeParams, // Hàm dùng để cập nhật current page và page size khi user thao tác với bảng
+    other, // Các thuộc tính khác còn lại từ useQuery như error, refetch, isError, isSuccess, etc.
   }
 }
 
