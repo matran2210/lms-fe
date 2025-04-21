@@ -212,7 +212,8 @@ export default function MenuItem({
         }
         ${
           !isInCourse &&
-          (name === TitleSidebar.NOTES_LIST ||
+          (name === TitleSidebar.COURSE_CONTENT ||
+            name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
             name === TitleSidebar.EXAM_INFORMATION ||
@@ -250,7 +251,9 @@ export default function MenuItem({
                   ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
                   : url === PageLink.DASHBOARD
                     ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
-                    : url
+                    : name === TitleSidebar.COURSE_CONTENT
+                      ? `${url}/${router?.query?.courseId || router?.query?.id}`
+                      : url
               }
               passHref
             >
