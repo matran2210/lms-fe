@@ -1,11 +1,11 @@
 import { useAppDispatch } from 'src/redux/hook'
 import ButtonPrimary from './button/ButtonPrimary'
-import ButtonText from './button/ButtonText'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { ReactNode, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import clsx from 'clsx'
 import ButtonSecondary from './button/ButtonSecondary'
 import { CloseIcon } from '@assets/icons'
+import { Spin } from 'antd'
 
 interface IProps {
   children: ReactNode
@@ -26,6 +26,7 @@ interface IProps {
   handleCancel?: () => any
   showCancelButton?: boolean
   footerClassName?: string
+  loading?: boolean
   headerClassName?: string
   cancelButtonClassName?: string
   submitButtonClassName?: string
@@ -47,10 +48,11 @@ const SappDrawer = ({
   drawerSubId = '',
   confirmOnClose = true,
   showSubmitButton = true,
+  showCancelButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
   sizeTextBtn = 'lager',
-  showCancelButton = true,
-  footerClassName,
+  footerClassName = '',
+  loading = false,
   headerClassName,
   cancelButtonClassName,
   submitButtonClassName,
@@ -102,7 +104,7 @@ const SappDrawer = ({
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[30] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[9999] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -127,7 +129,17 @@ const SappDrawer = ({
           className={`mt-6 overflow-y-auto px-8 ${heightBody}`}
           id={`sapp-drawer${drawerSubId}`}
         >
-          <div className="">{children}</div>
+          {loading ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <Spin
+                tip="Loading"
+                size="large"
+                className="!text-accent-warning"
+              />
+            </div>
+          ) : (
+            <div className="">{children}</div>
+          )}
         </div>
         {footer && (
           <div

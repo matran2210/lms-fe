@@ -5259,10 +5259,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.0.tgz#09c9e29cb79b0a6459a9b9db9efb418ac5bb8e51"
   integrity sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==
 
-entrance-test-result-package@^1.1.26:
-  version "1.1.26"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.1.26.tgz#811c7feab7d7738c0a92f4ce06acb274e0a5bd1d"
-  integrity sha512-HteOvVDWX04fLp/7xtOAxqyxDDJKNbG1Mx0FOMOBHXuRYLqxkex7t4uGMTrEG5ELQqNPTakDFGUR85nrX4DApA==
+entrance-test-result-package@^1.1.28:
+  version "1.1.28"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.1.28.tgz#b5fc4d23e0b854a6015cbba973b8ec43625d2285"
+  integrity sha512-URoO1Ek7hbGMmVcyQjVv6NbPPYlG8SUW8U4/EPPCQ9uf4WzotpsgtQWmUVdtNfDrnuCYn3qF5n/rr5PYctWlnQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"
@@ -9637,10 +9637,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.11.tgz#8062bfd0996bf04aa2bdd4ab293189d1f969044c"
-  integrity sha512-hzgcDveIrOH6x31dVAT40HOBkbRa5An+It1WrurntVhiRenVKQEroeGTAxxIWhhj9fGcskYLLJQGiVjbo0SrUg==
+sapp-common-package@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.14.tgz#41e9bf61998e1a6c96f4bd1a17aa3d05c5388dcb"
+  integrity sha512-zhspxNLe0vzDBC+61HAHtA1M6pyQ4mmAo509jsgNMdaL8DPaip6Qq08zm1SvSz7GpKZPTz6a5Q+NTb7rx7aNOQ==
   dependencies:
     antd "^5.22.3"
     clsx "^1.2.1"

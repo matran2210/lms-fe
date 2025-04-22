@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import NoData from 'src/common/NoData'
 import { COURSE_TYPE } from 'src/constants'
+import { IOverProgress, IExamPrediction } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 
 const OverProgress = () => {
@@ -13,16 +14,20 @@ const OverProgress = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
-  const handlePieChartOption = (data: any) => {
+  const handlePieChartOption = (
+    data: IOverProgress | IExamPrediction | any,
+  ) => {
     const color = isNormal ? '#37C78C' : '#7086FD'
     const centerText = isNormal
       ? `${data?.completed_activities}/${data?.total_activities}`
-      : `${data.exam_prediction}%`
+      : `${parseFloat(data.exam_prediction.toFixed(2))}%`
     const values = {
-      completed: isNormal ? data.completed_activities : data.exam_prediction,
+      completed: isNormal
+        ? data.completed_activities
+        : parseFloat(data.exam_prediction.toFixed(2)),
       uncompleted: isNormal
         ? data.uncompleted_activities
-        : 100 - data.exam_prediction,
+        : 100 - parseFloat(data.exam_prediction.toFixed(2)),
     }
 
     const option: EChartsProps['option'] = {
@@ -156,7 +161,7 @@ const OverProgress = () => {
             {isNormal && (
               <div className="flex min-w-45 flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-green-1"></span>
+                  <span className="h-3 w-3 rounded-full bg-green-3"></span>
                   <span className="font-medium">Activities completed</span>
                 </div>
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
