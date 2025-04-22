@@ -67,14 +67,16 @@ const TreeNodeItem = ({ node }: { node: TreeNode }) => {
       >
         {node.children.length > 0 && (
           <span className="text-lg">
-            {isOpen ? (
-              <SappIcon icon={'arrowDownFull'} />
-            ) : (
-              <SappIcon icon={'arrowRightFull'} />
-            )}
+            <SappIcon icon={isOpen ? 'arrowDownFull' : 'arrowRightFull'} />
           </span>
         )}
-        <span className="font-normal text-[#404041]">
+        <span
+          className={
+            node.children.length > 0
+              ? 'font-normal text-gray-14'
+              : "relative pl-5 text-gray-14 before:absolute before:left-0 before:top-0 before:text-xl before:text-gray-14 before:content-['•']"
+          }
+        >
           {node.course_section.name}
         </span>
       </div>

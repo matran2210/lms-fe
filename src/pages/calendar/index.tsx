@@ -143,8 +143,6 @@ const Page = () => {
                   }
                 }) ?? []
               }
-              onOpenDetail={() => {}}
-              onOpenCreate={() => {}}
               onEventDetail={(event) => {
                 setOpen({ isOpen: true, data: event })
               }}

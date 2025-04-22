@@ -2,12 +2,13 @@ import SappDrawer from '@components/base/SappDrawer'
 import CalendarApi from '@pages/api/calendar'
 import getConfig from 'next/config'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { IEvent } from 'sapp-common-package-test-final/dist/types'
+import { IEvent } from 'sapp-common-package/dist/types'
 import { ICalendarDetail } from 'src/type/calendar'
 import CourseTree from './CourseTree'
 import SappIcon from 'src/common/SappIcon'
 import dayjs from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
+import { useRouter } from 'next/router'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -17,6 +18,7 @@ interface IProps {
 }
 
 const DetailCalendar = ({ open, setOpen }: IProps) => {
+  const router = useRouter()
   const [data, setData] = useState<ICalendarDetail>()
   const [loading, setLoading] = useState<boolean>(false)
   const [collapse, setCollapse] = useState<{ top: boolean; bottom: boolean }>({
@@ -27,7 +29,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const getMode = () => {
     if (data?.schedule.is_holiday) {
       return (
-        <div className="max-w-fit bg-[#F897070D]/5 px-[19px] py-[4.5px] text-base font-normal text-[#F89707]">
+        <div className="max-w-fit bg-accent-warning/5 px-[19px] py-[4.5px] text-base font-normal text-accent-warning">
           Online
         </div>
       )
@@ -35,19 +37,19 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     switch (data?.mode) {
       case CALENDAR_FILTER_TYPE.OFFLINE:
         return (
-          <div className="max-w-fit bg-[#07AF17]/5 px-[19px] py-[4.5px] text-base font-normal text-[#07AF17]">
+          <div className="max-w-fit bg-accent-success/5 px-[19px] py-[4.5px] text-accent-success">
             Offline
           </div>
         )
       case CALENDAR_FILTER_TYPE.ONLINE:
         return (
-          <div className="max-w-fit bg-[#176CDD]/5  px-[19px] py-[4.5px] text-[#176CDD]">
+          <div className="max-w-fit bg-accent-info/5  px-[19px] py-[4.5px] text-accent-info">
             Online
           </div>
         )
       case CALENDAR_FILTER_TYPE.LIVE_ONLINE:
         return (
-          <div className="max-w-fit bg-[#8F6FEA]/5 px-[19px] py-[4.5px] text-[#8F6FEA]">
+          <div className="max-w-fit bg-purple-1/5 px-[19px] py-[4.5px] text-purple-1">
             Live Online
           </div>
         )
@@ -59,7 +61,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <div
           key={item.id}
-          className="max-w-[111px] bg-[#F9F9F9] px-[8px] py-[4px] text-sm text-[#404041]"
+          className="max-w-[111px] bg-gray-4 px-[8px] py-[4px] text-sm text-gray-14"
         >
           {item.name}
         </div>
@@ -81,7 +83,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     if (data?.schedule.is_holiday) {
       return (
         <>
-          <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
+          <div className="col-span-1 text-gray-1">Lesson Date</div>
           <div className="col-span-1">{start.format('MMM DD, YYYY')}</div>
         </>
       )
@@ -89,16 +91,16 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     if (data?.mode === 'ONLINE') {
       return (
         <>
-          <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
+          <div className="col-span-1 text-gray-1">Lesson Date</div>
           <div className="col-span-1">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
-          <div className="col-span-1 text-[#A1A1A1]">Deadline</div>
+          <div className="col-span-1 text-gray-1">Deadline</div>
           <div className="col-span-1">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
-        <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
+        <div className="col-span-1 text-gray-1">Lesson Date</div>
         <div className="col-span-1">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
@@ -146,113 +148,106 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             ? 'Continue'
             : 'Review'
       }
+      handleSubmit={() => {
+        if (data?.link_study) {
+          router.push(data?.link_study)
+        }
+      }}
+      submitButtonClassName="rounded-none"
       footerClassName="!justify-end w-full"
       loading={loading}
     >
       <div>
-        <div>
-          <div className="border border-solid border-[#F1F1F1] px-[28px] py-[16px]">
-            <div className="flex items-center justify-between border-b-[1px] pb-[16px] text-base  font-semibold text-[#404041]">
-              <div>Primary Information</div>
-              <div
-                className="hover:cursor-pointer"
-                onClick={() => togglePopup('top')}
-              >
-                {collapse.top ? (
-                  <SappIcon icon="arrowDown" />
-                ) : (
-                  <SappIcon icon="arrowUp" />
-                )}
-              </div>
+        <div className="border border-solid border-gray-2 px-[28px] py-[16px]">
+          <div className="flex items-center justify-between border-b-[1px] pb-[16px] text-base  font-semibold text-gray-14">
+            <div>Primary Information</div>
+            <div
+              className="hover:cursor-pointer"
+              onClick={() => togglePopup('top')}
+            >
+              {collapse.top ? (
+                <SappIcon icon="arrowDown" />
+              ) : (
+                <SappIcon icon="arrowUp" />
+              )}
             </div>
-            {collapse.top && (
-              <div className="grid grid-cols-2 gap-y-[21.5px] pt-[21.5px] text-sm">
-                <div className="col-span-1 text-[#A1A1A1]">
-                  {data?.schedule.is_holiday ? 'Event Name' : 'Class Code'}
-                </div>
-                <div className="col-span-1">
-                  {data?.schedule.is_holiday ? data?.name : data?.class?.code}
-                </div>
-                <div className="col-span-1 text-[#A1A1A1]">
-                  {data?.schedule.is_holiday ? 'Type' : 'Learning Mode'}
-                </div>
-                <div className="col-span-1 flex gap-x-2">
-                  <div>{getMode()}</div>
-                  {!data?.schedule.is_holiday &&
-                    dayjs(
-                      `${data?.schedule.end_date}T${data?.schedule.end_time}`,
-                    ).isBefore(new Date()) && (
-                      <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
-                        <SappIcon icon={'warningIcon'}></SappIcon>
-                        <div className="font-medium text-[#F01919]">
-                          Overdue
-                        </div>
+          </div>
+          {collapse.top && (
+            <div className="grid grid-cols-2 gap-y-[21.5px] pt-[21.5px] text-sm">
+              <div className="col-span-1 text-gray-1">
+                {data?.schedule.is_holiday ? 'Event Name' : 'Class Code'}
+              </div>
+              <div className="col-span-1">
+                {data?.schedule.is_holiday ? data?.name : data?.class?.code}
+              </div>
+              <div className="col-span-1 text-gray-1">
+                {data?.schedule.is_holiday ? 'Type' : 'Learning Mode'}
+              </div>
+              <div className="col-span-1 flex gap-x-2">
+                <div>{getMode()}</div>
+                {!data?.schedule.is_holiday &&
+                  dayjs(
+                    `${data?.schedule.end_date}T${data?.schedule.end_time}`,
+                  ).isBefore(new Date()) && (
+                    <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
+                      <SappIcon icon={'warningIcon'}></SappIcon>
+                      <div className="font-medium text-accent-error">
+                        Overdue
                       </div>
-                    )}
-                </div>
-                {renderTime}
-                {!data?.schedule.is_holiday && (
-                  <>
-                    <div className="col-span-1 text-[#A1A1A1]">
-                      Key Content Before
                     </div>
-                    <div className="col-span-1 flex flex-wrap gap-2">
-                      {getKeyContent()}
-                    </div>
-                  </>
-                )}
-                {data?.is_test && (
-                  <>
-                    <div className="col-span-1 text-[#A1A1A1]">Test Name</div>
-                    <div className="col-span-1 break-words">{data?.name}</div>
-                  </>
-                )}
-                {data?.mode === 'OFFLINE' && (
-                  <>
-                    <div className="col-span-1 text-[#A1A1A1]">Classroom</div>
-                    <div className="col-span-1 break-words">
-                      {data?.room?.name}
-                    </div>
-                    <div className="col-span-1 text-[#A1A1A1]">
-                      Classroom Address
-                    </div>
-                    <div className="col-span-1 break-words">
-                      {data?.room?.address}
-                    </div>
-                  </>
-                )}
-                {data?.mode &&
-                  ['ONLINE', 'LIVE_ONLIVE'].includes(data?.mode) && (
-                    <>
-                      <div className="col-span-1 text-[#A1A1A1]">
-                        Link meeting
-                      </div>
-                      <div className="col-span-1">
-                        {data?.class?.link_meeting}
-                      </div>
-                    </>
                   )}
               </div>
-            )}
-          </div>
+              {renderTime}
+              {!data?.schedule.is_holiday && (
+                <>
+                  <div className="col-span-1 text-gray-1">Key Content Of</div>
+                  <div className="col-span-1 flex flex-wrap gap-2">
+                    {getKeyContent()}
+                  </div>
+                </>
+              )}
+              {data?.is_test && (
+                <>
+                  <div className="text-gray-1] col-span-1">Test Name</div>
+                  <div className="col-span-1 break-words">{data?.name}</div>
+                </>
+              )}
+              {data?.mode === 'OFFLINE' && (
+                <>
+                  <div className="col-span-1 text-gray-1">Classroom</div>
+                  <div className="col-span-1 break-words">
+                    {data?.room?.name}
+                  </div>
+                  <div className="col-span-1 text-gray-1">
+                    Classroom Address
+                  </div>
+                  <div className="col-span-1 break-words">
+                    {data?.room?.address}
+                  </div>
+                </>
+              )}
+              {data?.mode && ['ONLINE', 'LIVE_ONLIVE'].includes(data?.mode) && (
+                <>
+                  <div className="col-span-1 text-gray-1">Link meeting</div>
+                  <div className="col-span-1">{data?.class?.link_meeting}</div>
+                </>
+              )}
+            </div>
+          )}
         </div>
         {!(
           data?.is_test ||
           data?.is_case_study ||
           data?.schedule?.is_holiday
         ) && (
-          <div className="mt-[16px] border border-solid border-[#F1F1F1] px-[28px] py-[16px]">
+          <div className="mt-[16px] border border-solid border-gray-2 px-[28px] py-[16px]">
             <div className="flex items-center justify-between border-b-[1px] pb-[16px] text-base font-semibold text-[#404041]">
               <div>Course Content</div>
               <div
                 className="hover:cursor-pointer"
                 onClick={() => togglePopup('bottom')}
               >
-                {collapse.bottom ? (
-                  <SappIcon icon="arrowDown" />
-                ) : (
-                  <SappIcon icon="arrowUp" />
-                )}
+                <SappIcon icon={collapse.bottom ? 'arrowDown' : 'arrowUp'} />
               </div>
             </div>
             {collapse.bottom && (

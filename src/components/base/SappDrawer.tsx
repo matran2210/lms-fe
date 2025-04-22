@@ -129,7 +129,11 @@ const SappDrawer = ({
         >
           {loading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spin tip="Loading" size="large" style={{ color: '#F89707' }} />
+              <Spin
+                tip="Loading"
+                size="large"
+                className="!text-accent-warning"
+              />
             </div>
           ) : (
             <div className="">{children}</div>

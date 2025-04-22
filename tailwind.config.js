@@ -103,6 +103,7 @@ module.exports = {
           11: '#99A1B7',
           12: '#9CA3AF',
           13: '#78829D',
+          14: '#404041',
           900: '#181C32',
         },
         green: {
@@ -150,6 +151,9 @@ module.exports = {
         },
         red: {
           1: '#FF524E',
+        },
+        purple: {
+          1: '#8F6FEA',
         },
       },
       borderColor: {
