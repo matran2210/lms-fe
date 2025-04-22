@@ -176,7 +176,9 @@ const TableQuestions = ({
       <div
         className="absolute right-6 top-4 ml-auto cursor-pointer"
         onClick={() => {
-          router.push(localStorage.getItem('previousUrl') ?? PageLink.COURSES)
+          router.push(
+            localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES,
+          )
         }}
       >
         <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />

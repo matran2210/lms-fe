@@ -183,6 +183,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     const handleRouteChange = () => {
       // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
       localStorage.setItem('previousUrl', router.asPath)
+      if (
+        router.asPath.includes('courses') &&
+        !router.asPath.includes('your-answers-detail')
+      ) {
+        localStorage.setItem('previousCourseUrl', router.asPath)
+      }
     }
 
     // Lắng nghe sự kiện chuyển route
