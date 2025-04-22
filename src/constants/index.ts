@@ -277,6 +277,8 @@ export enum TEST_ATTEMPT_TYPE {
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
 
+export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './form'
