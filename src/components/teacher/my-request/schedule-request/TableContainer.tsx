@@ -26,7 +26,7 @@ export const statusColor = (data: IScheduleRequestItem) => {
     case StatusRequestSchedule.PENDING:
       return 'bg-orange-1 text-accent-warning'
     case StatusRequestSchedule.APPROVED:
-      return 'bg-green-2 text-green-1'
+      return 'bg-green-5 text-green-1'
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
       return 'bg-danger-5 text-danger-3'
