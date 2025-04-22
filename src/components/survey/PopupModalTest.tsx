@@ -25,16 +25,16 @@ interface SurveyState {
 }
 
 const SURVEY_URLS = {
-  ACCA: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
-  CFA: 'https://survey.hsforms.com/1EmIZK95sTWqhk1G3ozRyIw120xb',
-  CMA: 'https://survey.hsforms.com/1jlTMbpPsTaai6oKwrjEv1g120xb',
+  ACCA: 'https://survey.hsforms.com/1qDp92jBgQceLUHWjcZ6fxg120xb',
+  CFA: 'https://survey.hsforms.com/11oHaCszKRTiIQSsnErE57g120xb',
+  CMA: 'https://survey.hsforms.com/1g3K5gl5hSFeJCtVFfFfc2g120xb',
   CERT_DIP: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
 }
 
 const SURVEY_URLS_COMPLETE = {
-  ACCA: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
-  CFA: 'https://survey.hsforms.com/13S3QNf3rSEScA7mlwjPzjw120xb',
-  CMA: 'https://survey.hsforms.com/1szRbvrk9S6SgcE9WsHpFZw120xb',
+  ACCA: 'https://survey.hsforms.com/19aFy9lTvSs6rISvymAngCw120xb',
+  CFA: 'https://survey.hsforms.com/1JUWK7CYAQc-_dkACNB-NnQ120xb',
+  CMA: 'https://survey.hsforms.com/1hqLZ4gS-Rh-5Vv1Nig3QJA120xb',
   CERT_DIP: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
 }
 
