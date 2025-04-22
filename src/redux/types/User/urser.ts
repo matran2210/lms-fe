@@ -9,7 +9,7 @@ export interface IUser {
   code: null | string
   username: string
   nick_name: null | string
-  type: IUserType
+  type: UserType
   status: IUserStatus
   ekyc_status: null | string
   approved_date: null | string
@@ -55,14 +55,14 @@ interface IUserContact {
   ward: string
 }
 
-export enum IUserType {
+export enum UserType {
   STUDENT = 'STUDENT',
   TEACHER = 'TEACHER',
 }
 export enum IUserStatus {
   ACTIVE = 'ACTIVE',
 }
-interface IUserDetail {
+export interface IUserDetail {
   id: string
   created_at: string
   updated_at: string

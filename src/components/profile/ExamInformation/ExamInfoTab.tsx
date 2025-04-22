@@ -34,12 +34,11 @@ const ExamInfoTab = ({ onBack }: IProp) => {
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  const queryClient = useQueryClient()
   /**
    * @description sử dụng react-query để lấy data
    */
   const { data, isLoading, isFetching, isSuccess, refetch } = useQuery({
-    queryKey: [UserKey.ExamList],
+    queryKey: [UserKey.ExamList, pageIndex, pageSize],
     queryFn: () => {
       return UserApi.getExamination(pageIndex || 1, pageSize)
     },
@@ -83,17 +82,14 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                 return (
                   <tr key={row.id ?? index}>
                     <td className={clsx(commonDataCellStyle)}>
-                      <Tooltip
-                        title={row.class.course.name ?? '-'}
-                        color="white"
-                      >
+                      <Tooltip title={row.class.course.name ?? '-'}>
                         <div className="ellipsis-text">
                           {row.class.course.name ?? '-'}
                         </div>
                       </Tooltip>
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
-                      <Tooltip title={row.class.code ?? '-'} color="white">
+                      <Tooltip title={row.class.code ?? '-'}>
                         <div className="ellipsis-text">
                           {row.class.code ?? '-'}
                         </div>
@@ -103,10 +99,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                       {row.class.course.course_categories[0].name ?? '-'}
                     </td>
                     <td className={clsx(commonDataCellStyle)}>
-                      <Tooltip
-                        title={row.class.course.subject.name ?? '-'}
-                        color="white"
-                      >
+                      <Tooltip title={row.class.course.subject.name ?? '-'}>
                         <div className="ellipsis-text ">
                           {row.class.course.subject.name ?? '-'}
                         </div>

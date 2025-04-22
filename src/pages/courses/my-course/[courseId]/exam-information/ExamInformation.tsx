@@ -12,6 +12,8 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import SappTooltip from 'src/common/SappTooltip'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
   const router = useRouter()
@@ -24,7 +26,6 @@ const ExamInformation = () => {
       router.query.courseId
         ? ClassAPI.getExamInfo(router.query.courseId as string)
         : Promise.reject('courseId is undefined'),
-    enabled: router.isReady,
     refetchOnWindowFocus: false,
     retry: false,
   })
@@ -124,4 +125,4 @@ const ExamInformation = () => {
   )
 }
 
-export default ExamInformation
+export default withAuthorization([UserType.STUDENT])(ExamInformation)

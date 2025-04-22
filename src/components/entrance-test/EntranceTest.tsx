@@ -117,7 +117,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               full={false}
               size={'small'}
               className="ml-auto"
-              onClick={() => setOpenFillForm(true)}
+              onClick={() => setOpen(true)}
             />
           )}
         </div>
