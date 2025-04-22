@@ -5259,10 +5259,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.0.tgz#09c9e29cb79b0a6459a9b9db9efb418ac5bb8e51"
   integrity sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==
 
-entrance-test-result-package@^1.1.26:
-  version "1.1.26"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.1.26.tgz#811c7feab7d7738c0a92f4ce06acb274e0a5bd1d"
-  integrity sha512-HteOvVDWX04fLp/7xtOAxqyxDDJKNbG1Mx0FOMOBHXuRYLqxkex7t4uGMTrEG5ELQqNPTakDFGUR85nrX4DApA==
+entrance-test-result-package@^1.1.28:
+  version "1.1.28"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.1.28.tgz#b5fc4d23e0b854a6015cbba973b8ec43625d2285"
+  integrity sha512-URoO1Ek7hbGMmVcyQjVv6NbPPYlG8SUW8U4/EPPCQ9uf4WzotpsgtQWmUVdtNfDrnuCYn3qF5n/rr5PYctWlnQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"
