@@ -107,9 +107,14 @@ const PrimaryInformation = ({
               <PrimaryInfoItem
                 title={'Link Meeting'}
                 value={
-                  <Link href={dataDetail?.class?.link_meeting}>
-                    {truncateString(dataDetail?.class?.link_meeting, 100)}
-                  </Link>
+                  <div className="w-full truncate overflow-ellipsis ">
+                    <Link
+                      className="text-wrap"
+                      href={dataDetail?.class?.link_meeting ?? ''}
+                    >
+                      {truncateString(dataDetail?.class?.link_meeting, 100)}
+                    </Link>
+                  </div>
                 }
                 isLoading={isLoading}
               />
