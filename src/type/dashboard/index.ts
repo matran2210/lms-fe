@@ -33,3 +33,11 @@ export interface ILearningResult {
 export interface IExamPrediction {
   exam_prediction: number
 }
+
+export interface IMockTestResult {
+  reports: ILearningResult[]
+  mock_tests: {
+    id: string
+    name: string
+  }[]
+}
