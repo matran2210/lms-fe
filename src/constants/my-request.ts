@@ -35,3 +35,8 @@ export const REQUEST_STATUS = {
     label: 'Cancelled',
   },
 }
+
+export enum CONSTRUCTION_MODE {
+  OFFLINE = 'OFFLINE',
+  ONLINE = 'ONLINE',
+}

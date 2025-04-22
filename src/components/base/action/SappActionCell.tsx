@@ -33,6 +33,7 @@ const SappActionCell = ({
           title={labelButtonView}
           onClick={handleClickView}
           isShow={isShowViewButton}
+          className="hover:bg-orange-2 hover:text-orange-3"
         />
         <ActionItem
           title={labelButtonEdit}

@@ -30,6 +30,7 @@ interface IProps {
   cancelButtonClassName?: string
   submitButtonClassName?: string
   handleClickCancelButton?: () => void
+  isSecondaryCancelButton?: boolean
 }
 
 const SappDrawer = ({
@@ -54,6 +55,7 @@ const SappDrawer = ({
   cancelButtonClassName,
   submitButtonClassName,
   handleClickCancelButton = () => {},
+  isSecondaryCancelButton = true,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -136,6 +138,7 @@ const SappDrawer = ({
           >
             {showCancelButton && (
               <ButtonSecondary
+                isSecondaryButton={isSecondaryCancelButton}
                 title={btnCancelTitle}
                 className={clsx('me-[32px] rounded-md', cancelButtonClassName)}
                 onClick={(e) => {
