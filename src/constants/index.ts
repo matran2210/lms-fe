@@ -317,13 +317,15 @@ export const EVENT_TYPES = {
   BUSY: 'BUSY',
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
   TEACHING: 'TEACHING',
   BUSY: 'BUSY',
-  TIME_OFF: 'TIME_OFF',
+  HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
@@ -333,6 +335,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.BUSY]: 'Busy schedule',
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
+  [EVENT_TYPES.LIVE_ONLINE]: '',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
