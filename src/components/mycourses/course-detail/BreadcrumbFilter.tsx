@@ -39,7 +39,7 @@ const BreadcrumbFilter = ({
             scroll={false}
           >
             {(name as string)?.length > 80 ? (
-              <Tooltip title={name} color="#ffffff" placement="bottom">
+              <Tooltip title={name} placement="bottom">
                 <span>{truncateString(name, 80)}</span>
               </Tooltip>
             ) : (

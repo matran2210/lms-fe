@@ -178,7 +178,6 @@ const LearningResults = () => {
                   : '%Results = Module test (40%) + Topic test (60%)'}
               </div>
             }
-            color="white"
             placement="top"
             mouseEnterDelay={0}
             mouseLeaveDelay={0}

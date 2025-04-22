@@ -198,7 +198,6 @@ const ScoreDetail = ({
                       {/* Question */}
                       <td className="sapp-border p-0 pr-4">
                         <Tooltip
-                          color="white"
                           title={
                             <div
                               dangerouslySetInnerHTML={{
@@ -238,7 +237,6 @@ const ScoreDetail = ({
                         }
                       >
                         <Tooltip
-                          color="white"
                           title={
                             answer?.question?.question_filter?.chapter?.name
                           }
