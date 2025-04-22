@@ -68,7 +68,9 @@ export class AuthenticationManager {
 
       if (authenticated) {
         // Kiểm tra lần login đầu tiên
-        if (!localStorage.getItem('hasLoggedInBefore')) {
+        document.cookie = `keycloak-token=${this.keyCloak.token}; path=/`
+
+        if (localStorage.getItem('hasLoggedInBefore') === 'false') {
           isFirstLogin = true // Lần đầu tiên login
           localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
           const res = await EntranceTestAPI.getEntranceCount()
@@ -76,8 +78,6 @@ export class AuthenticationManager {
             localStorage.setItem('enstranceTest', 'true')
             if (res?.data?.count > 0) {
               window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
-            } else {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
             }
           }
         } else {
@@ -94,12 +94,25 @@ export class AuthenticationManager {
     return this.keyCloak?.token ?? ''
   }
 
-  async refreshToken() {
-    const response = await this.keyCloak?.updateToken(30)
-    if (!response) {
-      await this?.keyCloak?.login()
+  /**
+   * Làm mới token nếu token còn dưới 30s
+   *
+   * @returns {Promise<string | null>} - Token mới, nếu không thể làm mới sẽ trả về null
+   */
+  async refreshToken(): Promise<string | null> {
+    try {
+      // Kiểm tra token còn dưới 30s, nếu có, làm mới token
+      if (this.keyCloak?.token) {
+        const refreshed = await this.keyCloak?.updateToken(30)
+        if (refreshed) {
+          return this.keyCloak.token
+        }
+      }
+    } catch (error) {
+      // Nếu xảy ra lỗi, thử lại bằng cách login
+      await this.keyCloak?.login()
     }
-    return this?.keyCloak?.token
+    return null
   }
 
   async logout(redirectUri: string) {

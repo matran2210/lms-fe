@@ -15,6 +15,8 @@ import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
 import { IProfilePages, ProfilePages } from 'src/type/Profile'
 
@@ -56,11 +58,11 @@ const ProfilePage = () => {
   }
   let breadcrumbs: ITabs[] = [
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Profile',
     },
     {
-      link: '/',
+      link: `/${ProfilePages.OVERVIEW}`,
       title: 'Details',
     },
   ]
@@ -151,7 +153,7 @@ const ProfilePage = () => {
   }, [])
 
   useEffect(() => {
-    setSelectPage(window.innerWidth > 1024)
+    setSelectPage(window.innerWidth >= 1024)
   }, [page])
 
   return (
@@ -215,4 +217,4 @@ const ProfilePage = () => {
 //     props: { page: params?.page as IProfilePages },
 //   }
 // }
-export default ProfilePage
+export default withAuthorization([UserType.STUDENT])(ProfilePage)

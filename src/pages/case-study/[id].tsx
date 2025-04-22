@@ -52,7 +52,8 @@ import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
-
+import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -1199,7 +1200,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                         exhibitsDes?.files?.map((e: any, index: number) => {
                           return (
                             <div key={index} className="overflow-auto bg-white">
-                              <PDFViewer file={e?.resource?.url} />
+                              <FileViewer
+                                fileName={e?.resource?.name}
+                                fileUrl={e?.resource?.url}
+                              />
                             </div>
                           )
                         })}
@@ -1220,7 +1224,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       className="overflow-auto bg-white p-4"
                       style={{ height: 'calc(100% - 40px' }}
                     >
-                      <PDFViewer file={e?.file} />
+                      <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                     </div>
                   </ModalResizeable>
                 )

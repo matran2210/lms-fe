@@ -15,6 +15,7 @@ interface BaseTableProps {
     title: string
     isShowTitle: boolean
   }
+  emptyText?: string
 }
 
 const SappTable = <T extends { id: React.Key }>({
@@ -25,6 +26,7 @@ const SappTable = <T extends { id: React.Key }>({
   loading,
   handleChangeParams,
   titleTable = { title: '', isShowTitle: false },
+  emptyText,
 }: BaseTableProps) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     if (setPagination) {
@@ -53,6 +55,7 @@ const SappTable = <T extends { id: React.Key }>({
         rowKey={(record) => record?.id || 'id'}
         scroll={{ x: 'max-content' }}
         className="sapp-table"
+        locale={{ emptyText: emptyText }} // ← Customize here
       />
     </>
   )

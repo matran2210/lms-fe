@@ -3,12 +3,16 @@
 @import 'variables.scss';
 @import 'fonts.scss';
 @import 'select.scss';
+@import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
+@import './components/_event-repeat.scss';
 @import './components/_select.scss';
+@import './components/_datepicker.scss';
+
 @import './components/_table.scss';
 @tailwind base;
 @tailwind components;
@@ -1274,6 +1278,21 @@ fieldset.form-columns-1 .hs-input {
 [type='number']:focus,
 select:focus {
   --tw-ring-color: #ffb800;
+}
+
+.ant-tabs-nav {
+  @apply px-8 pt-2;
+}
+
+.ant-tabs-tab > div {
+  @apply pb-1 font-semibold text-secondary;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active > div {
+  @apply text-heading !important;
+}
+.ant-select span.ant-select-selection-item {
+  @apply font-medium;
 }
 
 .pdf-viewer-container {

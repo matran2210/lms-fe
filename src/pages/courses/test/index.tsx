@@ -227,7 +227,14 @@ const TestModal = ({
     )
   }
 
+  const isManualGradingAndNotFinishedGrading =
+    data?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
+    data?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+
   const isShowDetail = () => {
+    if (isManualGradingAndNotFinishedGrading) {
+      return true
+    }
     if (data?.quiz?.grading_method == GRADING_METHOD.MANUAL) {
       return (
         data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
@@ -352,14 +359,23 @@ const TestModal = ({
               <div
                 className="ml-2 cursor-pointer text-state-info underline"
                 onClick={() => {
-                  router.push({
-                    pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                    query: { attempt: selectedResult?.label },
-                  })
+                  if (isManualGradingAndNotFinishedGrading) {
+                    router.push(
+                      `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                    )
+                  } else {
+                    router.push({
+                      pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                      query: { attempt: selectedResult?.label },
+                    })
+                  }
+
                   trackGAEvent('Click Button View Modal Result')
                 }}
               >
-                Detail
+                {isManualGradingAndNotFinishedGrading
+                  ? 'Your Answers'
+                  : 'Detail'}
               </div>
             )}
           </div>

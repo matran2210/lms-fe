@@ -16,6 +16,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
 import { MY_COURSES } from 'src/constants/lang'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -273,4 +275,4 @@ const MyCourse = () => {
   )
 }
 
-export default MyCourse
+export default withAuthorization([UserType.STUDENT])(MyCourse)

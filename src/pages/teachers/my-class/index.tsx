@@ -12,6 +12,8 @@ import { PageLink } from 'src/constants'
 import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
 import { TeacherKey } from '@pages/api/queryKey'
 import { IMyClass } from 'src/type/classes'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHERS, title: 'LMS' },
@@ -128,4 +130,4 @@ const MyClass = () => {
   )
 }
 
-export default MyClass
+export default withAuthorization([UserType.TEACHER])(MyClass)

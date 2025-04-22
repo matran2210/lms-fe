@@ -11,6 +11,8 @@ import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
 import { ICertificateData } from 'src/type/classes'
 import TeachingProgress from '@components/teacher/myClass/class-detail/TeachingProgress'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -127,4 +129,4 @@ const ClassDetail = () => {
   )
 }
 
-export default ClassDetail
+export default withAuthorization([UserType.TEACHER])(ClassDetail)
