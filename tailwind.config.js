@@ -108,6 +108,8 @@ module.exports = {
         green: {
           1: '#07af17',
           2: '#01711f0D',
+          3: '#37C78C',
+          4: '#6FD195',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -144,9 +146,6 @@ module.exports = {
           warning: '#F89707',
           error: '#F01919',
           default: '#99A1B7',
-        },
-        green: {
-          1: '#37C78C',
         },
         red: {
           1: '#FF524E',
