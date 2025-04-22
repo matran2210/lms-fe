@@ -53,7 +53,7 @@ export interface IResponseSchedule {
   is_schedule_recurring: boolean
   is_schedule_excepted: boolean
   room_type: string | null
-  event_type: 'TEACHING' | 'BUSY' | 'TIME_OFF' | 'OTHER'
+  event_type: 'TEACHING' | 'BUSY' | 'HOLIDAY' | 'OTHER' | 'LIVE_ONLINE'
   classroom_address: string | null
   classroom_name: string | null
   meeting_link: string | null

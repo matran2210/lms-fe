@@ -67,6 +67,7 @@ module.exports = {
           2: '#dd4339',
           3: '#f01919',
           4: '#0Df01919',
+          5: '#F019190D',
         },
         state: {
           info: '#3964EA',
@@ -103,6 +104,7 @@ module.exports = {
           11: '#99A1B7',
           12: '#9CA3AF',
           13: '#78829D',
+          14: '#404041',
           900: '#181C32',
         },
         green: {
@@ -110,6 +112,12 @@ module.exports = {
           2: '#01711f0D',
           3: '#37C78C',
           4: '#6FD195',
+          5: '#07AF170D',
+        },
+        orange: {
+          1: '#F897070D',
+          2: '#FFFDF6',
+          3: '#FFB800',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -149,6 +157,9 @@ module.exports = {
         },
         red: {
           1: '#FF524E',
+        },
+        purple: {
+          1: '#8F6FEA',
         },
       },
       borderColor: {

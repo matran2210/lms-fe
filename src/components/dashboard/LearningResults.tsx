@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import infoIcon from '@assets/images/info-icon.svg'
 import Image from 'next/image'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ILearningResult } from 'src/type/dashboard'
+import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import NoData from 'src/common/NoData'
 import dayjs from 'dayjs'
 import { Tooltip } from 'antd'
@@ -15,14 +15,22 @@ const LearningResults = () => {
   const [option, setOption] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [hasLearning, setHasLearning] = useState<boolean>(false)
+  const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
-  const handleLearningResults = (data: ILearningResult[]) => {
-    if (data.length) {
+  const handleLearningResults = (
+    data: ILearningResult[] | IMockTestResult | any,
+  ) => {
+    const results = isNormal ? data : data.reports
+
+    if (!isNormal && data.mock_tests?.length == 1)
+      setMockTestId(data.mock_tests[0].id)
+
+    if (results.length) {
       let total = 0
-      const hasLearning = data.some((e: ILearningResult) => e.score)
-      const indicator = data.map((e: ILearningResult, index: number) => {
+      const hasLearning = results.some((e: ILearningResult) => e.score)
+      const indicator = results.map((e: ILearningResult, index: number) => {
         total += e.score
         const name = `${e.short_name || e.name}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
         if (index) return { name: name, max: 100 }
@@ -61,7 +69,7 @@ const LearningResults = () => {
             type: 'radar',
             data: [
               {
-                value: data.map((e: ILearningResult) => e.score),
+                value: results.map((e: ILearningResult) => e.score),
                 name: 'Learning results',
                 lineStyle: {
                   color: '#7086FD',
@@ -74,7 +82,7 @@ const LearningResults = () => {
               {
                 value: isNormal
                   ? []
-                  : data.map((e: ILearningResult) => e.mock_test_score),
+                  : results.map((e: ILearningResult) => e.mock_test_score),
                 name: 'Learning results',
                 lineStyle: {
                   color: '#6FD195',
@@ -116,7 +124,7 @@ const LearningResults = () => {
               type: 'text',
               invisible: !isNormal,
               style: {
-                text: `${parseFloat((total / data.length).toFixed(2))}%`,
+                text: `${parseFloat((total / results.length).toFixed(2))}%`,
                 fontSize: 16,
                 fontWeight: 'bold',
                 fill: '#7086FD',
@@ -201,7 +209,18 @@ const LearningResults = () => {
             {!isNormal && (
               <div className="flex items-center justify-center gap-2.5">
                 <span className="h-3 w-3 rounded-full bg-green-4"></span>
-                <span className="min-w-fit font-medium">Mock test results</span>
+                <a
+                  href={
+                    mockTestId
+                      ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                      : ''
+                  }
+                  target="_blank"
+                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`}
+                  rel="noreferrer"
+                >
+                  Mock test results
+                </a>
               </div>
             )}
             {isNormal || hasLearning ? (

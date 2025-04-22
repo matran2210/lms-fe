@@ -74,6 +74,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: '#',
     type: 'level-1',
   },
+  {
+    name: TitleSidebar.CALENDAR,
+    icon: 'calendar',
+    url: PageLink.CALENDAR,
+    type: 'level-1',
+  },
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [

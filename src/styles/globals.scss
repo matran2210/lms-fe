@@ -12,6 +12,7 @@
 @import './components/_event-repeat.scss';
 @import './components/_select.scss';
 @import './components/_datepicker.scss';
+@import './components/_collapse.scss';
 
 @import './components/_table.scss';
 @tailwind base;
@@ -1302,4 +1303,8 @@ select:focus {
       @apply h-full;
     }
   }
+}
+
+.ant-spin .ant-spin-dot-item {
+  background-color: #ffb800 !important;
 }

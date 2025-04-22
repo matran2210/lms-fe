@@ -30,6 +30,7 @@ export const PageLink = {
   MY_REQUEST: '/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course',
+  CALENDAR: '/calendar',
 }
 
 export const TitleSidebar = {
@@ -52,6 +53,7 @@ export const TitleSidebar = {
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
+  CALENDAR: 'Calendar',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -315,13 +317,15 @@ export const EVENT_TYPES = {
   BUSY: 'BUSY',
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
   TEACHING: 'TEACHING',
   BUSY: 'BUSY',
-  TIME_OFF: 'TIME_OFF',
+  HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
@@ -331,6 +335,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.BUSY]: 'Busy schedule',
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
+  [EVENT_TYPES.LIVE_ONLINE]: '',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
@@ -464,6 +469,46 @@ export enum TEST_ATTEMPT_TYPE {
   TOPIC_TEST = 'TOPIC_TEST',
   CHAPTER_TEST = 'CHAPTER_TEST',
   ENTRANCE_TEST = 'ENTRANCE_TEST',
+}
+export enum CALENDAR_COLOR_TYPES {
+  BLUE_COLOR = 'TEACHING', // màu xanh dương
+  RED_COLOR = 'BUSY', // màu đỏ
+  YELLOW_COLOR = 'HOLIDAY', // màu vàng
+  GREEN_COLOR = 'OTHER', // màu xanh lá
+  PURPLE_COLOR = 'LIVE_ONLINE', // màu xanh lá
+}
+
+export enum CALENDAR_FILTER_TYPE {
+  HOLIDAY = 'HOLIDAY',
+  OVERDUE = 'OVERDUE',
+  ONLINE = 'ONLINE',
+  LIVE_ONLINE = 'LIVE_ONLINE',
+  OFFLINE = 'OFFLINE',
+  CASE_STUDY = 'CASE_STUDY',
+  KEY_BEFORE_CONTENT = 'KEY_BEFORE_CONTENT',
+  TEST = 'TEST',
+}
+
+export const CALENDAR_FILTER_TYPE_LABEL = {
+  [CALENDAR_FILTER_TYPE.HOLIDAY]: 'Holiday',
+  [CALENDAR_FILTER_TYPE.OVERDUE]: 'Overdue',
+  [CALENDAR_FILTER_TYPE.ONLINE]: 'Online',
+  [CALENDAR_FILTER_TYPE.LIVE_ONLINE]: 'Live Online',
+  [CALENDAR_FILTER_TYPE.OFFLINE]: 'Offline',
+  [CALENDAR_FILTER_TYPE.CASE_STUDY]: 'Case Study',
+  [CALENDAR_FILTER_TYPE.KEY_BEFORE_CONTENT]: 'Key Before Content',
+  [CALENDAR_FILTER_TYPE.TEST]: 'Test',
+}
+
+export const LEARNING_USER_STATUS = {
+  READY_TO_LEARN: 'READY_TO_LEARN', // Chưa học
+  IN_PROGRESS: 'IN_PROGRESS', // Đang học
+  COMPLETED: 'COMPLETED', // Đã học xong
+}
+
+export const CALENDAR_TYPE = {
+  LMS: 'LMS',
+  OPS: 'OPS',
 }
 
 export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'

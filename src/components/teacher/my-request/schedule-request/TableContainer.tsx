@@ -2,7 +2,7 @@ import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
-import { formatDateFromUTC } from 'src/utils/index'
+import { capitalizeFirstLetter, formatDateFromUTC } from 'src/utils/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
@@ -19,16 +19,17 @@ import {
 } from 'src/type/teachers/request-schedule.interface'
 import { StatusRequestSchedule } from '@utils/constants/Teacher'
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import StatusItem from './StatusItem'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
-      return 'bg-orange-100 text-orange-800'
+      return 'bg-orange-1 text-accent-warning'
     case StatusRequestSchedule.APPROVED:
-      return 'bg-green-100 text-green-800'
+      return 'bg-green-5 text-green-1'
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
-      return 'bg-red-100 text-red-800'
+      return 'bg-danger-5 text-danger-3'
     default:
       return ''
   }
@@ -207,11 +208,10 @@ export default function TableContainer({ params }: IProps) {
         return (
           <TableCell
             data={
-              <span
-                className={`text-12 rounded-[4px] px-2 py-1 font-semibold ${statusColor(record)}`}
-              >
-                {record?.status}
-              </span>
+              <StatusItem
+                status={record?.status?.toLowerCase()}
+                className={statusColor(record)}
+              />
             }
           />
         )

@@ -84,17 +84,6 @@ const ScheduleRequestTable = () => {
         listFilter={<ScheduleRequestFilter control={control} />}
         onReset={handleResetFilter}
         onSubmit={onSubmit}
-        layoutAction={
-          <ButtonIconSapp
-            className="rounded-md px-5 py-3"
-            title="Create Request"
-            variant="primary"
-            icon="plus"
-            iconColorProps="#fff"
-            position="start"
-            onClick={() => {}}
-          ></ButtonIconSapp>
-        }
       />
       <TableContainer params={params} />
     </div>
