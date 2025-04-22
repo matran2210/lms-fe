@@ -203,7 +203,6 @@ const TableQuestions = ({
                       {/* Question */}
                       <td className="sapp-border p-0 pr-4">
                         <Tooltip
-                          color="white"
                           title={
                             <div
                               dangerouslySetInnerHTML={{
@@ -239,7 +238,7 @@ const TableQuestions = ({
                         className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
                         title={rows[0]?.belong_to?.name ?? '--'}
                       >
-                        <Tooltip color="white" title={rows[0]?.belong_to?.name}>
+                        <Tooltip title={rows[0]?.belong_to?.name}>
                           {truncateString(rows[0]?.belong_to?.name ?? '--', 25)}
                         </Tooltip>
                       </td>

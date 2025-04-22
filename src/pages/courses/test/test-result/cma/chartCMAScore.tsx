@@ -100,7 +100,6 @@ const ChartCMAScore = ({
                 >
                   <div className="absolute bottom-full left-1/2 h-[250px] w-14 -translate-x-1/2">
                     <Tooltip
-                      color="white"
                       title={`${calculatePercentage(
                         item?.section_score,
                         item?.max_section_score,
