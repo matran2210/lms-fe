@@ -62,34 +62,21 @@ const Page = () => {
   const filterEvents = (event: ICalendar, filter?: IFilter) => {
     if (!filter) return true
     const { type, courseId } = filter
-    if (event.is_holiday && type?.includes(CALENDAR_FILTER_TYPE.HOLIDAY)) {
+    if (event.is_holiday && type?.includes(CALENDAR_FILTER_TYPE.HOLIDAY))
       return true
-    }
+    const isOverdue = dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(
+      dayjs(),
+    )
     if (
-      !type?.includes(CALENDAR_FILTER_TYPE.OVERDUE) &&
-      dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(dayjs())
+      (!type?.includes(CALENDAR_FILTER_TYPE.OVERDUE) && isOverdue) ||
+      (event.is_case_study &&
+        !type?.includes(CALENDAR_FILTER_TYPE.CASE_STUDY)) ||
+      (event.is_test && !type?.includes(CALENDAR_FILTER_TYPE.TEST)) ||
+      (event.is_key_before_content &&
+        !type?.includes(CALENDAR_FILTER_TYPE.KEY_BEFORE_CONTENT)) ||
+      (type?.length && !type.includes(event.mode)) ||
+      !courseId?.includes(event.course_id)
     ) {
-      return false
-    }
-    if (
-      event.is_case_study &&
-      !type?.includes(CALENDAR_FILTER_TYPE.CASE_STUDY)
-    ) {
-      return false
-    }
-    if (event.is_test && !type?.includes(CALENDAR_FILTER_TYPE.TEST)) {
-      return false
-    }
-    if (
-      event.is_key_before_content &&
-      !type?.includes(CALENDAR_FILTER_TYPE.KEY_BEFORE_CONTENT)
-    ) {
-      return false
-    }
-    if (type?.length && !type.includes(event.mode)) {
-      return false
-    }
-    if (!courseId?.includes(event.course_id)) {
       return false
     }
     return true
