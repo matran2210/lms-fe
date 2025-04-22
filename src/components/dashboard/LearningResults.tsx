@@ -201,7 +201,7 @@ const LearningResults = () => {
           >
             {!isNormal && (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-green-1"></span>
+                <span className="h-3 w-3 rounded-full bg-green-4"></span>
                 <span className="min-w-fit font-medium">Mock test results</span>
               </div>
             )}

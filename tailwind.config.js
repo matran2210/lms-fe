@@ -102,6 +102,8 @@ module.exports = {
         green: {
           1: '#07af17',
           2: '#01711f0D',
+          3: '#37C78C',
+          4: '#6FD195',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -131,9 +133,6 @@ module.exports = {
         },
         graded: {
           finish: '#4077E0',
-        },
-        green: {
-          1: '#37C78C',
         },
         red: {
           1: '#FF524E',
