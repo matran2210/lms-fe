@@ -50,6 +50,8 @@ export class AuthenticationManager {
 
     const existingToken = localStorage.getItem('keycloakToken')
     const existingRefreshToken = localStorage.getItem('keycloakRefreshToken')
+    // Kiểm tra trạng thái login lần đầu tiên
+    let isFirstLogin = false
 
     this.keyCloak = new Keycloak(keycloakConfig)
 
@@ -77,6 +79,23 @@ export class AuthenticationManager {
 
         localStorage.setItem('keycloakToken', token ?? '')
         localStorage.setItem('keycloakRefreshToken', refreshToken ?? '')
+
+        if (!localStorage.getItem('hasLoggedInBefore')) {
+          isFirstLogin = true // Lần đầu tiên login
+          localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
+          const res = await EntranceTestAPI.getEntranceCount()
+          if (isFirstLogin) {
+            localStorage.setItem('enstranceTest', 'true')
+            if (res?.data?.count > 0) {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
+            } else {
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
+            }
+          }
+        } else {
+          isFirstLogin = false // Các lần login tiếp theo
+        }
+        await handleFirebaseToken()
       }
     }
   }
