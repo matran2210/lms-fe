@@ -217,7 +217,8 @@ const LearningResults = () => {
                       : ''
                   }
                   target="_blank"
-                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`} rel="noreferrer"
+                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`}
+                  rel="noreferrer"
                 >
                   Mock test results
                 </a>

@@ -19,6 +19,7 @@ import clsx from 'clsx'
 import { sappFormatDate } from '@utils/index'
 import InfoItem from './InfoItem'
 import { isNull } from 'lodash'
+import StatusItem from './StatusItem'
 
 interface IProps {
   open: boolean
@@ -149,24 +150,27 @@ const DetailRequestModal = ({
       btnSubmitTile="Đồng ý"
       btnCancelTitle={isPending ? 'Từ chối' : isApproved ? 'Cancel' : ''}
       footerClassName={clsx('flex !justify-end gap-4', {
-        'px-8': !isPending,
+        'px-0': isApproved,
       })}
-      headerClassName="!bg-white !text-black border border-b-solid border-gray-3"
+      headerClassName="!bg-white !text-black border border-b-solid border-gray-5 px-8 py-5 text-xl"
       sizeTextBtn="medium"
       cancelButtonClassName={clsx('font-medium rounded-md no-underline', {
-        'bg-gray-4 hover:bg-gay-6 text-gray-12': isPending,
-        'bg-state-cancel text-white': !isPending,
+        '!bg-gray-4 hover:!bg-gray-6 !text-gray-13 !me-0': isPending,
+        '!bg-state-cancel !text-white hover:bg-state-cancel': isApproved,
       })}
       submitButtonClassName="rounded-md"
       showSubmitButton={isPending}
+      isSecondaryCancelButton={false}
     >
-      <div className="px-8 py-6">
+      <div>
         <div className="mb-6 flex flex-col gap-4">
-          <div>{selectedRequest?.class?.code}</div>
+          <div className="text-lg font-medium">
+            {selectedRequest?.class?.code}
+          </div>
           <div className="flex items-center gap-2">
-            <div className="text-14 text-gray-12">Processing deadline:</div>
+            <div className="text-sm text-gray-12">Processing deadline:</div>
             <div
-              className={clsx('flex items-center gap-2', {
+              className={clsx('flex items-center gap-2 text-sm', {
                 'text-state-cancel': isOverdue,
               })}
             >
@@ -186,20 +190,13 @@ const DetailRequestModal = ({
           </div>
           <InfoItem
             title="Status:"
-            value={selectedRequest?.status}
-            className={`${selectedRequest && statusColor(selectedRequest)}`}
+            value={
+              <StatusItem
+                status={selectedRequest?.status?.toLowerCase()}
+                className={statusColor(selectedRequest)}
+              />
+            }
           />
-          {(isCancel || isReject) && (
-            <InfoItem
-              title="Reason:"
-              value={
-                isNull(data?.data?.description)
-                  ? undefined
-                  : data?.data?.description
-              }
-              isLoading={isLoading}
-            />
-          )}
         </div>
         <PrimaryInformation
           selectedRequest={selectedRequest}

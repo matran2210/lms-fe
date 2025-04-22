@@ -171,7 +171,7 @@ const ScheduleRequestFilter: React.FC<ScheduleRequestFilterProps> = ({
       <HookFormDateRangePicker
         control={control}
         name="date_range"
-        className="sapp-daterange-picker w-full"
+        className="sapp-daterange-picker h-10 w-full"
       />
     </div>
   )

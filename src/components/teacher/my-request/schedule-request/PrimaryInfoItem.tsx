@@ -3,7 +3,7 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import React from 'react'
 interface IProps {
   title: string | undefined
-  value: string | undefined
+  value: React.ReactNode | undefined
   isLoading?: boolean
 }
 const PrimaryInfoItem = ({ title, value, isLoading = false }: IProps) => {

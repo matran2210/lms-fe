@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import React from 'react'
 interface IProps {
   title: string | undefined
-  value: string | undefined
+  value: React.ReactNode | undefined
   isLoading?: boolean
   className?: string
 }

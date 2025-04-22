@@ -51,6 +51,7 @@ export interface ClassInfo {
   code: string
   instruction_mode: string
   class_standard_schedules: ClassStandardScheduleItem[]
+  link_meeting: string
 }
 export interface RoomInfo {
   id: string
@@ -88,6 +89,7 @@ export interface ScheduleRequestDetail {
   updated_at: string
   type: string
   status: string
+  mode: string
   description: string | null
   due_date: string
   name: string
