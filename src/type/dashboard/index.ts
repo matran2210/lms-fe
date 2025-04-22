@@ -34,10 +34,12 @@ export interface IExamPrediction {
   exam_prediction: number
 }
 
+export interface IMockTest {
+  id: string
+  name: string
+}
+
 export interface IMockTestResult {
-  reports: ILearningResult[]
-  mock_tests: {
-    id: string
-    name: string
-  }[]
+  reports: ILearningResult[] | []
+  mock_tests: IMockTest[] | []
 }
