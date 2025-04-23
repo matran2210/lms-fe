@@ -243,6 +243,7 @@ module.exports = {
         '2xl': '1440px',
         1729: '1729px',
         '8xl': '1920px',
+        1570: '1570px',
       },
       lineHeight: {
         0: '0',
