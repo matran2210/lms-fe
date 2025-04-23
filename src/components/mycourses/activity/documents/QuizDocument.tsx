@@ -602,6 +602,10 @@ const QuizDocument = ({
     trackGAEvent('Click Button Confirm Quiz Activity')
   }
 
+  const handleCalcelModalResult = () => {
+    refreshTab()
+    setOpenGradedReport(false)
+  }
   return (
     <div>
       <ConFirmSubmit
@@ -773,11 +777,20 @@ const QuizDocument = ({
       />
       <SappModalV3
         open={openGradedReport}
-        okButtonCaption="Back"
-        handleCancel={() => {}}
+        okButtonCaption={
+          is_graded && grading_method === GRADING_METHOD.MANUAL
+            ? 'Review Answers'
+            : 'Back'
+        }
+        showCancelButton={is_graded && grading_method === GRADING_METHOD.MANUAL}
+        cancelButtonCaption={'Back'}
+        handleCancel={handleCalcelModalResult}
         onOk={() => {
-          refreshTab()
-          setOpenGradedReport(false)
+          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+            router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+          } else {
+            handleCalcelModalResult()
+          }
         }}
         isMaskClosable={false}
         fullWidthBtn={true}

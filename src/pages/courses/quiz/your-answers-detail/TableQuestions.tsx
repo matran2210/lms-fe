@@ -26,6 +26,7 @@ const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
 
 const DEFAULT_PAGESIZE = 20
+const DEFAULT_PAGEINDEX = 1
 
 interface ScoreDetailProps {
   className?: string
@@ -41,7 +42,7 @@ const TableQuestions = ({
   yourScoreDetailRef,
 }: ScoreDetailProps) => {
   const router = useRouter()
-  const [currentPage, setcurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGEINDEX)
   const headers = [
     {
       label: '#',
@@ -78,7 +79,7 @@ const TableQuestions = ({
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', router.query.id],
     queryFn: async ({ pageParam }) => {
-      setcurrentPage(pageParam)
+      setCurrentPage(Number(pageParam) || DEFAULT_PAGEINDEX)
       const res = await CoursesAPI.getQuizAttemptsTable(
         router.query.id as string,
         {
@@ -154,6 +155,7 @@ const TableQuestions = ({
 
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
+
   return (
     <div
       id="sapp-drawer-test-result-list"
