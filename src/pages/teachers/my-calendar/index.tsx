@@ -1,5 +1,3 @@
-import PageContainer from '@components/common/PageContainer'
-import Layout from '@components/layout'
 import Calendar from '@components/my-calendar/Calendar'
 import EventDetails from '@components/my-calendar/EventDetails'
 import NewEventSidebar from '@components/my-calendar/NewEventSidebar'
@@ -12,6 +10,7 @@ import { DATE_TIME_FORMAT, TitleSidebar } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { IPopupDetails } from 'src/type/my-calendar'
+import LayoutTeacher from '@components/layout/Teacher'
 
 const breadcrumbs = [
   {
@@ -54,23 +53,24 @@ const MyCalendar = () => {
   )
 
   return (
-    <Layout title={TitleSidebar.MY_CALENDAR}>
-      <PageContainer
-        titlePage={TitleSidebar.MY_CALENDAR}
-        breadcrumbs={breadcrumbs}
-      >
+    <LayoutTeacher
+      title={TitleSidebar.MY_CALENDAR}
+      breadcrumbs={breadcrumbs}
+      className="bg-gray-10 p-0"
+    >
+      <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
         <Calendar
           onOpenCreate={handleOpenCreate}
           onOpenDetail={handleOpenDetail}
         />
-        <EventDetails details={eventDetails} handleClose={handleCloseDetail} />
-        <NewEventSidebar
-          currentDate={selectedDate}
-          isOpenCreate={isOpenCreate}
-          setIsOpenCreate={setIsOpenCreate}
-        />
-      </PageContainer>
-    </Layout>
+      </div>
+      <EventDetails details={eventDetails} handleClose={handleCloseDetail} />
+      <NewEventSidebar
+        currentDate={selectedDate}
+        isOpenCreate={isOpenCreate}
+        setIsOpenCreate={setIsOpenCreate}
+      />
+    </LayoutTeacher>
   )
 }
 

@@ -1,6 +1,9 @@
 import LayoutTeacher from '@components/layout/Teacher'
+import PersonalScheduleTab from '@components/request/request-tabs/PersonalScheduleTab'
+import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import SappTabs from '@components/tabs/SappTabs'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
+import { RequestProvider } from '@contexts/RequestContext'
 import React, { useState } from 'react'
 import { ANIMATION, PageLink } from 'src/constants'
 import { ITabs } from 'src/type'
@@ -35,9 +38,9 @@ const MyRequestPage = () => {
   const renderClassDetail = (selected: number) => {
     switch (selected) {
       case 1:
-        return null
+        return <PersonalScheduleTab />
       case 2:
-        return null
+        return <TimeOffTab />
       case 3:
         return <ScheduleRequestTable />
       default:
@@ -45,23 +48,25 @@ const MyRequestPage = () => {
     }
   }
   return (
-    <LayoutTeacher
-      title="My Request"
-      breadcrumbs={breadcrumbs}
-      className="bg-gray-10 p-0"
-    >
-      <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
-        <SappTabs
-          tabs={tabs}
-          setSelected={setSelected}
-          selected={selected}
-          bordered
-        />
-        <div className="w-full rounded-xl bg-white">
-          {renderClassDetail(selected)}
+    <RequestProvider>
+      <LayoutTeacher
+        title="My Request"
+        breadcrumbs={breadcrumbs}
+        className="bg-gray-10 p-0"
+      >
+        <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
+          <SappTabs
+            tabs={tabs}
+            setSelected={setSelected}
+            selected={selected}
+            bordered
+          />
+          <div className="w-full rounded-xl bg-white">
+            {renderClassDetail(selected)}
+          </div>
         </div>
-      </div>
-    </LayoutTeacher>
+      </LayoutTeacher>
+    </RequestProvider>
   )
 }
 
