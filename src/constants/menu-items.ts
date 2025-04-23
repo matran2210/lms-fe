@@ -39,18 +39,6 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: `${TitleSidebar.MY_CALENDAR}`,
-    icon: 'my-calendar',
-    url: PageLink.MY_CALENDAR,
-    type: 'level-1',
-  },
-  {
-    name: TitleSidebar.MY_REQUEST,
-    icon: 'my-request',
-    url: `${PageLink.REQUEST}${PageLink.MY_REQUEST}`,
-    type: 'level-1',
-  },
-  {
     name: `${TitleSidebar.RESULTS}`,
     icon: 'result',
     url: PageLink.RESULTS,

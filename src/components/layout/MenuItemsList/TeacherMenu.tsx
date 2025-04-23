@@ -11,6 +11,7 @@ import {
   BellIcon,
   HelpMenuIcon,
   LogOutMenuIcon,
+  MyCalendarMenuIcon,
 } from 'src/assets/icons/index'
 
 import blankAvatar from '@assets/images/blank_avatar.webp'
@@ -64,10 +65,16 @@ export default function TeacherMenu() {
         active: router.pathname === PageLink.TEACHERS,
       },
       {
+        key: 'MyCalendar',
+        icon: <MyCalendarMenuIcon selected={selectedKey === 'MyCalendar'} />,
+        link: PageLink.MY_CALENDAR,
+        active: router.pathname === PageLink.MY_CALENDAR,
+      },
+      {
         key: 'File',
         icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-        link: PageLink.TEACHERS,
-        active: router.pathname === PageLink.TEACHERS,
+        link: PageLink.TEACHER_MY_REQUEST,
+        active: router.pathname === PageLink.TEACHER_MY_REQUEST,
       },
       {
         key: 'Bell',
