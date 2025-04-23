@@ -165,7 +165,7 @@ const TableQuestions = ({
       <div className="flex items-center gap-x-3">
         <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
           Your Answer Details{' '}
-          <span className="ml-5 bg-yellow-50 px-2 text-base text-primary">
+          <span className="ml-5 rounded-sm bg-blur-yellow px-1 py-1.5 text-base text-yellow-1">
             Awaiting Grading
           </span>
         </div>

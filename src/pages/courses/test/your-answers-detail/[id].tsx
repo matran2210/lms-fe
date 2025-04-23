@@ -60,18 +60,18 @@ const TestResultDetail = () => {
     },
     {
       link: '/',
-      title: 'Results',
+      title: 'Your Answer Details',
       disable: false,
     },
   ]
 
   return (
-    <FullScreenLayout title="Test Result" className="!bg-gray-3">
+    <FullScreenLayout title="Your Answer Details">
       <div className="mx-auto max-w-[1570px]">
         <div className="px-5 xl:container md:px-10">
           <Breadcrumb
             tabs={breadcrumbs}
-            currentPage={'Results'}
+            currentPage={'Your Answer Details'}
             className="2xl-max:py-4"
           />
         </div>
