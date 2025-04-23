@@ -1,4 +1,4 @@
-import { File, NotificationIcon } from '@assets/icons'
+import { NotificationIcon } from '@assets/icons'
 import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
