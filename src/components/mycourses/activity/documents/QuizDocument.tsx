@@ -580,7 +580,7 @@ const QuizDocument = ({
         return 'Your Answers'
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
-        return 'Results'
+        return 'Result'
       }
     }
     return 'Submit & View Answer'
