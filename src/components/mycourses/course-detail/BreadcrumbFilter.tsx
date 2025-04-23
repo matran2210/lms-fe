@@ -39,9 +39,12 @@ const BreadcrumbFilter = ({
             scroll={false}
           >
             {(name as string)?.length > 80 ? (
-              <SappTooltip title={name} showTooltip>
-                <span>{truncateString(name, 80)}</span>
-              </SappTooltip>
+              <>
+                <span> /&nbsp;</span>
+                <SappTooltip title={name} showTooltip>
+                  <span>{truncateString(name, 80)}</span>
+                </SappTooltip>
+              </>
             ) : (
               <div onClick={() => trackGAEvent(`Breadcrumb Course ${name}`)}>
                 <span> /&nbsp;</span>
