@@ -114,6 +114,7 @@ const Explanation = () => {
   }
 
   const isUserViewAnswers = router?.query?.title === 'Your Answers Detail'
+  const viewAnswersType = router?.query?.type
   const isUserViewAnswersDetailAndEssay =
     isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
   return (
@@ -123,7 +124,9 @@ const Explanation = () => {
           className="absolute right-6 top-[14px] ml-auto cursor-pointer"
           onClick={() => {
             if (isUserViewAnswers) {
-              router.push(`/courses/test/your-answers-detail/${attempt?.id}`)
+              router.push(
+                `/courses/${viewAnswersType}/your-answers-detail/${attempt?.id}`,
+              )
             } else {
               if (attempt?.quiz.id) {
                 switch (attempt?.quiz.quiz_type) {

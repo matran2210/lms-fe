@@ -792,6 +792,7 @@ const ActivityPage = () => {
                               grading_method={e?.quiz?.grading_method}
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
+                              attemptId={e?.quiz?.attempt?.id}
                             />
                           </div>
                         )

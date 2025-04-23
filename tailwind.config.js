@@ -135,6 +135,9 @@ module.exports = {
           5: '#7086FD',
           6: '#607FE9',
         },
+        yellow: {
+          1: '#FFB800',
+        },
         pinned: {
           1: '#18355D',
         },
@@ -252,6 +255,7 @@ module.exports = {
         '2xl': '1440px',
         1729: '1729px',
         '8xl': '1920px',
+        1570: '1570px',
       },
       lineHeight: {
         0: '0',
@@ -290,6 +294,7 @@ module.exports = {
       },
       padding: {
         1.25: '0.3125rem', // 5px
+        1.5: '0.375rem', // 6px
         1.75: '0.4375rem', // 7px
         1.8: '0.47rem', // 7.5px
         2.75: '0.688rem', // 11px

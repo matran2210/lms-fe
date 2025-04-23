@@ -38,6 +38,7 @@ import {
   IQuestionResultResponse,
 } from 'src/type/course/my-course/Activity'
 import { isNull } from 'lodash'
+import { useRouter } from 'next/router'
 
 type Props = {
   questions: IQuestion[]
@@ -56,6 +57,7 @@ type Props = {
   grading_method?: string
   refreshTab: () => void
   exhibitText: string
+  attemptId?: string
 }
 
 interface IAnswer {
@@ -98,9 +100,12 @@ const QuizDocument = ({
   grading_method,
   refreshTab,
   exhibitText,
+  attemptId,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
+  const router = useRouter()
+
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
   const questionRef = useRef<QuizComponentRef>(null)
 
@@ -113,7 +118,7 @@ const QuizDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [resultId, setResultId] = useState<string>('')
+  const [resultId, setResultId] = useState<string>(attemptId || '')
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
   const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
@@ -564,6 +569,43 @@ const QuizDocument = ({
     }
   }
 
+  /**
+   *
+   * @param status Trạng thái chấm điểm
+   * @returns label
+   */
+  const getButttonTitle = () => {
+    if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+      if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
+        return 'Your Answers'
+      }
+      if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        return 'Results'
+      }
+    }
+    return 'Submit & View Answer'
+  }
+
+  const handleSubmit = () => {
+    if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+      if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
+        router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+        return
+      }
+      if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        router.replace(`/courses/quiz/quiz-result/${resultId}`)
+        return
+      }
+    }
+
+    if (!loading) handleConfirmQuestion()
+    trackGAEvent('Click Button Confirm Quiz Activity')
+  }
+
+  const handleCalcelModalResult = () => {
+    refreshTab()
+    setOpenGradedReport(false)
+  }
   return (
     <div>
       <ConFirmSubmit
@@ -680,19 +722,12 @@ const QuizDocument = ({
               {!isQuestionConfirmed &&
                 grading_preference === 'AFTER_EACH_QUESTION' && (
                   <SappButton
-                    title={'Submit & View Answer'}
+                    title={getButttonTitle()}
                     full={false}
                     size={'small'}
-                    disabled={
-                      (grading_method === GRADING_METHOD.MANUAL &&
-                        !!gradeStatus) ||
-                      loading
-                    }
+                    disabled={loading}
                     onClick={() => {
-                      if (!loading) {
-                        handleConfirmQuestion()
-                      }
-                      trackGAEvent('Click Button Confirm Quiz Activity')
+                      handleSubmit()
                     }}
                     color="primary"
                     loading={loading}
@@ -742,11 +777,20 @@ const QuizDocument = ({
       />
       <SappModalV3
         open={openGradedReport}
-        okButtonCaption="Back"
-        handleCancel={() => {}}
+        okButtonCaption={
+          is_graded && grading_method === GRADING_METHOD.MANUAL
+            ? 'Review Answers'
+            : 'Back'
+        }
+        showCancelButton={is_graded && grading_method === GRADING_METHOD.MANUAL}
+        cancelButtonCaption={'Back'}
+        handleCancel={handleCalcelModalResult}
         onOk={() => {
-          refreshTab()
-          setOpenGradedReport(false)
+          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+            router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+          } else {
+            handleCalcelModalResult()
+          }
         }}
         isMaskClosable={false}
         fullWidthBtn={true}
