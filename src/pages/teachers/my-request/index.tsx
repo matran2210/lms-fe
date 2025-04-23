@@ -1,11 +1,10 @@
 import LayoutTeacher from '@components/layout/Teacher'
-import PersonalScheduleTab from '@components/request/request-tabs/PersonalScheduleTab'
-import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import SappTabs from '@components/tabs/SappTabs'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
-import { RequestProvider } from '@contexts/RequestContext'
 import React, { useState } from 'react'
-import { ANIMATION, PageLink } from 'src/constants'
+import { PageLink } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
 
 const breadcrumbs: ITabs[] = [
@@ -38,9 +37,9 @@ const MyRequestPage = () => {
   const renderClassDetail = (selected: number) => {
     switch (selected) {
       case 1:
-        return <PersonalScheduleTab />
+        return null
       case 2:
-        return <TimeOffTab />
+        return null
       case 3:
         return <ScheduleRequestTable />
       default:
@@ -48,26 +47,24 @@ const MyRequestPage = () => {
     }
   }
   return (
-    <RequestProvider>
-      <LayoutTeacher
-        title="My Request"
-        breadcrumbs={breadcrumbs}
-        className="bg-gray-10 p-0"
-      >
-        <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
-          <SappTabs
-            tabs={tabs}
-            setSelected={setSelected}
-            selected={selected}
-            bordered
-          />
-          <div className="w-full rounded-xl bg-white">
-            {renderClassDetail(selected)}
-          </div>
+    <LayoutTeacher
+      title="My Request"
+      breadcrumbs={breadcrumbs}
+      className="bg-gray-10 p-0"
+    >
+      <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
+        <SappTabs
+          tabs={tabs}
+          setSelected={setSelected}
+          selected={selected}
+          bordered
+        />
+        <div className="w-full rounded-xl bg-white">
+          {renderClassDetail(selected)}
         </div>
-      </LayoutTeacher>
-    </RequestProvider>
+      </div>
+    </LayoutTeacher>
   )
 }
 
-export default MyRequestPage
+export default withAuthorization([UserType.TEACHER])(MyRequestPage)
