@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import NoData from 'src/common/NoData'
-import { COURSE_TYPE } from 'src/constants'
+import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IOverProgress, IExamPrediction } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 
@@ -35,7 +35,7 @@ const OverProgress = () => {
         show: isNormal,
         trigger: 'item',
       },
-      color: [color, '#DCDDDD'],
+      color: [color, '#D1D5DB'],
       responsive: true,
       maintainAspectRatio: false,
       graphic: {
@@ -140,19 +140,21 @@ const OverProgress = () => {
 
   return (
     <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-bw-12 shadow-activity lg:col-span-4 3.5xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b pb-3">
+      <div className="mb-5 flex items-center justify-between border-b border-gray-15 pb-3">
         <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
           {isNormal ? 'Over Progress' : 'Your Exam Prediction'}
         </div>
         <div
           className={`${isNormal ? 'invisible' : 'text-xsm text-gray-11 4xl:text-sm'}`}
         >
-          {`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}
+          {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
       {option && (
         <>
-          <div className="flex flex-row justify-between gap-2 4xl:gap-8">
+          <div
+            className={`flex flex-row justify-between gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
+          >
             <div
               className={`m-auto ${isNormal ? 'h-42.5 min-w-42.5 3xl:h-45 3xl:min-w-45' : 'mb-2 h-40 w-40'}`}
             >
@@ -165,7 +167,7 @@ const OverProgress = () => {
                   <span className="font-medium">Activities completed</span>
                 </div>
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-gray-2"></span>
+                  <span className="h-3 w-3 rounded-full bg-gray-15"></span>
                   <span className="font-medium">Activities not completed</span>
                 </div>
               </div>

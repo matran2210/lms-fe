@@ -856,8 +856,11 @@ p a {
   z-index: 2000 !important;
 }
 
-.ant-tooltip .ant-tooltip-inner {
-  padding: 10px 12px !important;
+.ant-tooltip {
+  max-width: max-content;
+  .ant-tooltip-inner {
+    padding: 10px 12px !important;
+  }
 }
 
 #floating-button {

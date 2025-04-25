@@ -523,8 +523,12 @@ export enum QUIZ_ATTEMPT_STATUS {
 }
 export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
+  DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
+
+export const LABEL_MAX_LENGTH = 12
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
