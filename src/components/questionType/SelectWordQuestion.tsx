@@ -124,7 +124,6 @@ const SelectWord = forwardRef(
           <div class="tooltip-text ${!!answer && answer.length > 7 ? 'block' : 'hidden'}">${answer}</div>
         `
         tooltip.appendChild(selectElement)
-
         const defaultAnswerValue = defaultAnswer?.[index] || ''
         let optionClass = ''
 

@@ -26,7 +26,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
@@ -677,12 +677,10 @@ const TestDetail = () => {
 
   const getValueSelectText = () => {
     let value = [] as any
-    const inputs = document.querySelectorAll(
-      'select.sapp-select--selectword-preview',
-    ) as any
+    const inputs = document.querySelectorAll('div.sapp-select--question') as any
 
     for (let e of inputs) {
-      value.push(e?.value)
+      value.push(e?.dataset.value)
     }
     return value
   }
