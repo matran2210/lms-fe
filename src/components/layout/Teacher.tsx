@@ -4,6 +4,7 @@ import { Typography } from 'antd'
 import { ITabs } from 'src/type'
 import { memo } from 'react'
 import clsx from 'clsx'
+import Head from 'next/head'
 
 const { Title } = Typography
 type LayoutTeacherProps = {
@@ -20,22 +21,27 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   className = '',
 }: LayoutTeacherProps) => {
   return (
-    <div className="flex flex-nowrap">
-      <TeacherMenu />
-      <div className="min-h-screen w-full bg-gray-10">
-        <div className="px-56 py-6">
-          <SappBreadCrumbs breadcrumbs={breadcrumbs} />
-          <Title level={3} className="mt-1 pb-2 text-gray-700">
-            {title}
-          </Title>
-          <div
-            className={clsx('rounded-xl', className || 'bg-white px-8 py-6')}
-          >
-            {children}
+    <>
+      <Head>
+        <title>{title}</title>
+      </Head>
+      <div className="flex flex-nowrap">
+        <TeacherMenu />
+        <div className="min-h-screen w-full bg-gray-10">
+          <div className="px-56 py-6">
+            <SappBreadCrumbs breadcrumbs={breadcrumbs} />
+            <Title level={3} className="mt-1 pb-2 text-gray-700">
+              {title}
+            </Title>
+            <div
+              className={clsx('rounded-xl', className || 'bg-white px-8 py-6')}
+            >
+              {children}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 export default memo(LayoutTeacher)
