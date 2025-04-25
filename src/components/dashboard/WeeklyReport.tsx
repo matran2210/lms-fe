@@ -10,6 +10,7 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import { IWeeklyReport } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
+import { DATE_FORMAT } from 'src/constants'
 
 dayjs.extend(isoWeek)
 
@@ -109,14 +110,14 @@ const WeeklyReport = () => {
         <div className="text-bw-11">
           <span className="text-lg-xl font-bold 4xl:text-xl">This Week:</span>
           <span className="text-sm font-medium">
-            {` ${dayjs().startOf('isoWeek').format('DD/MM/YY')} - ${dayjs().endOf('isoWeek').format('DD/MM/YY')}`}
+            {` ${dayjs().startOf('isoWeek').format(DATE_FORMAT.DATE)} - ${dayjs().endOf('isoWeek').format(DATE_FORMAT.DATE)}`}
           </span>
         </div>
-        <div className="text-xsm text-gray-11 4xl:text-sm">{`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}</div>
+        <div className="text-xsm text-gray-11 4xl:text-sm">{`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}</div>
       </div>
       <div className="flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 bg-green-3 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 rounded-sm bg-green-3 bg-opacity-10 p-2">
             <Image src={bookOpenIcon} alt="" width={32} height={32} />
           </div>
           <div>
@@ -170,7 +171,7 @@ const WeeklyReport = () => {
       </div>
       <div className="mt-6 flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 bg-blue-6 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 rounded-sm bg-blue-6 bg-opacity-10 p-2">
             <Image src={timeIcon} alt="" width={32} height={32} />
           </div>
           <div>
