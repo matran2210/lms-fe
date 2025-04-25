@@ -5,14 +5,14 @@ interface IProps {
   listFilter: ReactNode
   onSubmit: () => void
   onReset: () => void
-  loading: boolean
+  loading?: boolean
   layoutAction?: ReactNode
   className?: string
 }
 
 const LayoutFilter = ({
   listFilter,
-  loading,
+  loading = false,
   onReset,
   onSubmit,
   layoutAction,

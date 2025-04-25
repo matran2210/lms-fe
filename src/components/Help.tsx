@@ -91,7 +91,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
           <Tooltip
             arrow
             title={<div className="text-support-1">Support Center</div>}
-            color="white"
             placement="left"
             mouseEnterDelay={0}
             mouseLeaveDelay={0}

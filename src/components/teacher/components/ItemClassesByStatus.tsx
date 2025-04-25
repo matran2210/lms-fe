@@ -239,7 +239,7 @@ const ItemClassesByStatus = ({
           <div className="progressbar h-1.5 bg-gray-3">
             <div
               className={`progress-percentage ${
-                enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                enableCourse ? 'bg-primary' : 'bg-gray-2'
               } h-1.5`}
               style={{ width: `${classes?.progress}%` }}
             ></div>
@@ -257,13 +257,13 @@ const ItemClassesByStatus = ({
               iconColorProps={isProgress ? '#ffb800' : '#374151'}
               className={
                 isProgress
-                  ? 'border border-primary text-primary'
+                  ? 'text- border border-primary text-orange-3'
                   : 'border border-gray-800'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />
           ) : (
-            <div className="action relative flex h-8 items-center justify-end"></div>
+            <div className="action relative flex h-8 items-center justify-end" />
           )}
         </div>
       </div>

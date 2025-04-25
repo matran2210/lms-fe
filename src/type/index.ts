@@ -1,3 +1,6 @@
+import { Dayjs } from 'dayjs'
+import { Control } from 'react-hook-form'
+
 export type IButtonColors =
   | 'primary'
   | 'info'
@@ -116,6 +119,19 @@ export enum EDateTime {
   backendFormat = 'yyyy-MM-dd',
   timepicker = 'HH:mm',
 }
+export interface IHookFormProps {
+  name: string
+  control: Control<any>
+  className?: string
+  disabled?: boolean
+  skeleton?: boolean
+  style?: React.CSSProperties
+}
+
+export interface IHookFormDateRangePicker extends IHookFormProps {
+  defaultValue?: [Dayjs, Dayjs]
+}
+
 export * from './common'
 export * from './courses'
 // export * from './exhibit'

@@ -137,7 +137,7 @@ const TimeOffTab = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 p-8 pt-1">
+    <div className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-4">
         <FilterGrid>
           <SAPPInput

@@ -36,6 +36,7 @@ interface IProps {
   content?: string | undefined
   children?: ReactNode
   isMaskClosable?: boolean
+  headerClassName?: string
 }
 
 const SappModalV3 = ({
@@ -67,6 +68,7 @@ const SappModalV3 = ({
   content,
   children,
   isMaskClosable = true,
+  headerClassName,
 }: IProps) => {
   return (
     <Modal
@@ -87,7 +89,10 @@ const SappModalV3 = ({
       )}
       {header && (
         <div
-          className={`mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`}
+          className={clsx(
+            `mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`,
+            headerClassName,
+          )}
         >
           {header}
         </div>

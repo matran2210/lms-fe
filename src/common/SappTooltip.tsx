@@ -18,7 +18,7 @@ const SappTooltip = ({
   return (
     <React.Fragment>
       {showTooltip ? (
-        <Tooltip title={title} placement={placement} color="white">
+        <Tooltip title={title} placement={placement}>
           {children}
         </Tooltip>
       ) : (

@@ -50,7 +50,7 @@ const CalendarHead = ({ onSearch, onOpenCreate, loading }: IProps) => {
   }, [])
 
   return (
-    <div className="flex flex-col p-8 pb-0">
+    <div className="flex flex-col">
       <div className="mb-6 flex flex-col gap-4">
         <FilterGrid>
           <SAPPInput

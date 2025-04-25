@@ -177,8 +177,8 @@ const MyClassFilter: React.FC<MyClassFilterProps> = ({
           value: subject.id,
         }))}
         onSearch={(text) => text && debouncedSearchSubject(text)}
-        onChange={(subjectId: { value: string }) => {
-          setValue('subject_id', subjectId ? subjectId.value : '')
+        onChange={(subject_id) => {
+          setValue('subject_id', subject_id)
         }}
         onMenuScrollToBottom={handleScrollSubject}
         isClearable
