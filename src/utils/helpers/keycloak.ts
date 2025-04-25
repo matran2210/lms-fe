@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
+import { isNull } from 'lodash'
 import { PageLink } from 'src/constants'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
 
@@ -104,26 +106,34 @@ export class AuthenticationManager {
     return this.keyCloak?.token ?? ''
   }
 
-  async logout(redirectUri: string) {
-    if (!this.keyCloak) {
-      const keycloakConfig: KeycloakConfig = {
-        url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
-        realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
-        clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
+    /**
+   * Làm mới token nếu token còn dưới 30s
+   *
+   * @returns {Promise<string | null>} - Token mới, nếu không thể làm mới sẽ trả về null
+   */
+    async refreshToken(): Promise<string | null> {
+      try {
+        // Kiểm tra token còn dưới 30s, nếu có, làm mới token
+        if (this.keyCloak?.token) {
+          const refreshed = await this.keyCloak?.updateToken(30)
+          if (refreshed) {
+            return this.keyCloak.token
+          }
+        }
+      } catch (error) {
+        // Nếu xảy ra lỗi, thử lại bằng cách login
+        await this.keyCloak?.login()
       }
-
-      this.keyCloak = new Keycloak(keycloakConfig)
-      await this.keyCloak.init({
-        onLoad: 'login-required',
-      })
+      return null
     }
 
-    await this.keyCloak.logout({ redirectUri })
-
-    // Xoá token local sau khi logout
-    localStorage.removeItem('keycloakToken')
-    localStorage.removeItem('keycloakRefreshToken')
-    localStorage.removeItem('hasLoggedInBefore')
+    
+  async logout() {
+    const res = await UserApi.logout(localStorage.getItem('keycloakRefreshToken') ?? '')
+    if(isNull(res?.user_id_init)) {
+      localStorage.clear()
+      window.location.href = '/'
+    }
   }
 
   static instance: AuthenticationManager

@@ -81,7 +81,7 @@ const ChangePasswordPage = () => {
   }
   const redirectLogin = async () => {
     const authenticationManager = new AuthenticationManager()
-    await authenticationManager.logout(window.location.origin)
+    await authenticationManager.logout()
   }
 
   return (

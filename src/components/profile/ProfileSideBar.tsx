@@ -113,7 +113,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
         }
       })
       const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
     } catch (error) {}
   }
 

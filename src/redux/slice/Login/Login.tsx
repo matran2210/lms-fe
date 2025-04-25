@@ -36,8 +36,7 @@ export const getLogoutUser = createAsyncThunk(
   async ({}, thunkAPI) => {
     try {
       const authenticationManager = new AuthenticationManager()
-      localStorage.clear()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
       return {}
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)
