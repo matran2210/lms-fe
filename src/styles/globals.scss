@@ -1310,5 +1310,5 @@ select:focus {
 }
 
 .dashboard_tooltip {
-  max-width: max-content !important;
+  @apply max-w-max;
 }
