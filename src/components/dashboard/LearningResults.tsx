@@ -203,6 +203,7 @@ const LearningResults = () => {
             mouseEnterDelay={0}
             mouseLeaveDelay={0}
             color="#fff"
+            rootClassName="dashboard_tooltip"
           >
             <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
               Your Learning Results

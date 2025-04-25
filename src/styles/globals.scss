@@ -856,11 +856,8 @@ p a {
   z-index: 2000 !important;
 }
 
-.ant-tooltip {
-  max-width: max-content;
-  .ant-tooltip-inner {
-    padding: 10px 12px !important;
-  }
+.ant-tooltip .ant-tooltip-inner {
+  padding: 10px 12px !important;
 }
 
 #floating-button {
@@ -1310,4 +1307,8 @@ select:focus {
 
 .ant-spin .ant-spin-dot-item {
   background-color: #ffb800 !important;
+}
+
+.dashboard_tooltip {
+  max-width: max-content !important;
 }
