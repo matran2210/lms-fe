@@ -99,12 +99,12 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="fixed left-0 top-0 z-[30] h-full w-full bg-bw-5 bg-opacity-50"
+          className="fixed left-0 top-0 z-[999999] h-full w-full bg-bw-5 bg-opacity-50"
           onClick={handleMaskClick}
         ></div>
       )}
       <div
-        className={`fixed right-0 top-0 z-[9999] h-full transform bg-white ${
+        className={`fixed right-0 top-0 z-[999999] h-full transform bg-white ${
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
