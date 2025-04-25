@@ -1,69 +1,151 @@
-import HookFormDateRange from '@components/base/datetime/HookFormDateRange'
-import SappDrawer from '@components/base/SappDrawer'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import SAPPInput from '@components/base/Input/SAPPInput'
+import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
+import HookformTimePicker from '@components/base/datetime/HookformTimePicker'
+import SAPPSelect from '@components/base/select/SAPPSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { getUserInformation, userReducer } from 'src/redux/slice/User/User'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { ProgressAPI } from '@pages/api/progress'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
+import { Drawer, Tree, TreeDataNode, TreeProps } from 'antd'
+import { useRouter } from 'next/router'
+import React, { useLayoutEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import SappIcon from 'src/common/SappIcon'
+import { CONFIRM_CANCEL } from 'src/constants'
+import { useAppDispatch } from 'src/redux/hook'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
+import {
+  IContentCompleted,
+  ICourseSections,
+  IDefaultFormAddProgress,
+  ILesson,
+  IRequestCreateProgress,
+} from 'src/type/progress'
 import { z } from 'zod'
-import { IDefaultFormAddProgress, IExplorerNode } from '../../../type/progress'
-import Accodian from '@components/my-class/progress-form/AccodianItem'
-import SAPPCheckbox from '@components/base/checkbox/SAPPCheckbox'
-import { TreeHelper } from 'src/helper/tree'
+import styles from './styles.module.scss'
 
 const defaultValues = {
-  lesson: '',
-  section: '',
+  lesson: null,
+  section: null,
   note: '',
-}
-
-interface ICourseSection {
-  checked: boolean
-  children: ICourseSection[]
-  code: string
-  id: string
-  is_original: boolean
-  name: string
-  is_excepted: boolean
+  time: '',
+  checkedNodes: [],
 }
 
 export interface IProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  reloadPage: () => void
+  refresh?: () => void
 }
 
-function FormAddProgress({ open, setOpen, reloadPage }: IProps) {
+const convertToTreeData = (
+  data: IContentCompleted[],
+  parentKey: string = '_',
+): TreeDataNode[] => {
+  return data.map((item) => {
+    const currentKey = `${parentKey}${item.class_schedule_id}`
+    const isMain = item.main
+    return {
+      title: (
+        <>
+          {item.schedule_name}
+          {isMain && (
+            <span className="badge ml-3 rounded-md bg-blue-100 px-2 px-4 py-1 text-sm font-medium text-blue-500">
+              Main
+            </span>
+          )}
+        </>
+      ),
+      key: currentKey,
+      children: item.course_sections?.map((child: ICourseSections) =>
+        convertChild(child, currentKey),
+      ),
+    }
+  })
+}
+
+const convertChild = (
+  item: ICourseSections,
+  parentKey: string = '',
+): TreeDataNode => {
+  const currentKey = `${parentKey}_${item.id}`
+  return {
+    title: item.name,
+    key: currentKey,
+    children: item.children?.map((child: ICourseSections) =>
+      convertChild(child, currentKey),
+    ),
+  }
+}
+
+const getAllKeys = (data: TreeDataNode[]): React.Key[] => {
+  let keys: React.Key[] = []
+  data.forEach((item) => {
+    keys.push(item.key!)
+    if (item.children) {
+      keys = keys.concat(getAllKeys(item.children))
+    }
+  })
+  return keys
+}
+
+function FormAddProgress({ open, setOpen, refresh }: IProps) {
   const router = useRouter()
   const params = router.query?.id
-  const isEdit = false
   const dispatch = useAppDispatch()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [initialStatus, setInitialStatus] = useState<string>()
-  const [existedTeacher, setExistedTeacher] = useState<boolean>(false)
-  const { user } = useAppSelector(userReducer)
-  const [checkedAll, setCheckedAll] = useState(true)
-  const [explorerData, setExplorerData] = useState<IExplorerNode[]>([])
+  const { id } = router.query
+  const [lesson, setLesson] = useState<ILesson[]>([])
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
+  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
+  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
+  const [sectionOption, setSectionOption] = useState<
+    { label: string; value: string }[]
+  >([])
+  const [treeData, setTreeData] = useState<TreeDataNode[]>([])
 
+  const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
+    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
+    // or, you can remove all expanded children keys.
+    setExpandedKeys(expandedKeysValue)
+    setAutoExpandParent(false)
+  }
+
+  const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
+    const newCheckedKeys = checkedKeysValue as string[]
+    setCheckedKeys(newCheckedKeys)
+    setValue('checkedNodes', newCheckedKeys, { shouldValidate: true })
+  }
   const validationSchema = z.object({
     lesson: z
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
-      .min(1, VALIDATE_REQUIRED),
-    soGio: z
-      .array(z.date(), { required_error: VALIDATE_REQUIRED })
-      .refine((val) => val.length === 2, {
+      .min(1, VALIDATE_REQUIRED)
+      .nullable()
+      .refine((val) => val !== null, {
         message: VALIDATE_REQUIRED,
       }),
+    time: z.preprocess(
+      (input) => {
+        if (!Array.isArray(input)) {
+          return []
+        }
+        return input.filter((t) => typeof t === 'string' && t.trim())
+      },
+      z
+        .array(z.string().min(1, { message: VALIDATE_REQUIRED }))
+        .min(1, { message: VALIDATE_REQUIRED }),
+    ),
     section: z
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
-      .min(1, VALIDATE_REQUIRED),
+      .min(1, VALIDATE_REQUIRED)
+      .nullable()
+      .refine((val) => val !== null, {
+        message: VALIDATE_REQUIRED,
+      }),
     note: z.string().optional(),
+    checkedNodes: z.array(z.string()).min(1, { message: VALIDATE_REQUIRED }),
   })
 
   const useFormProp = useForm<IDefaultFormAddProgress>({
@@ -78,331 +160,282 @@ function FormAddProgress({ open, setOpen, reloadPage }: IProps) {
     setValue,
     getValues,
     setError,
+    reset,
+    watch,
+    formState: { errors },
   } = useFormProp
 
-  const handleSubmit = handleSubmitForm(async (formData) => {})
+  const handleSubmit = handleSubmitForm(async (formData) => {
+    const payload: IRequestCreateProgress = {
+      current_class_schedule_id: '',
+      start_time: '',
+      end_time: '',
+    }
+    const currentCourse: {
+      class_schedule_id: string
+      course_section_ids: string[]
+    }[] = []
+    const compensatedCourse: {
+      class_schedule_id: string
+      course_section_ids: string[]
+    }[] = []
+    formData?.checkedNodes.forEach((item: string) => {
+      const box = item.split('_')
+      if (box[1] === watch('lesson')) {
+        // lớp học chính
+        if (!currentCourse[0]) {
+          currentCourse[0] = {
+            class_schedule_id: '',
+            course_section_ids: [],
+          }
+        }
+        currentCourse[0].class_schedule_id = watch('lesson')
+        if (box.length > 2) {
+          currentCourse[0].course_section_ids.push(box[box.length - 1])
+        }
+      } else {
+        // lớp học bù
+        const newData: {
+          class_schedule_id: string
+          course_section_ids: string[]
+        } = {
+          class_schedule_id: '',
+          course_section_ids: [],
+        }
+        if (
+          compensatedCourse[compensatedCourse.length - 1]?.class_schedule_id !==
+          box[1]
+        ) {
+          newData.class_schedule_id = box[1]
+          if (box.length > 2) {
+            newData.course_section_ids.push(box[box.length - 1])
+          }
+          compensatedCourse.push(newData)
+        } else {
+          const itemCurrent = compensatedCourse.find(
+            (item) => item.class_schedule_id === box[1],
+          )
+          itemCurrent?.course_section_ids.push(box[box.length - 1])
+        }
+      }
+    })
 
-  const loadData = async () => {}
+    payload.current_class_schedule_id = formData.lesson
+    payload.description = formData.note
+    payload.start_time = formData?.time[0]
+    payload.end_time = formData?.time[1]
+    if (currentCourse.length > 0) {
+      payload.current_course_sections = currentCourse
+    }
+
+    if (compensatedCourse.length > 0) {
+      payload.compensated_course_sections = compensatedCourse
+    }
+    try {
+      await ProgressAPI.createProgress(payload)
+      toast.success('Update successful')
+      setOpen(false)
+      refresh?.()
+      reset()
+      setTreeData([])
+    } catch (err) {
+    } finally {
+    }
+  })
 
   useLayoutEffect(() => {
-    loadData()
+    const fetchDataLesson = async () => {
+      if (id) {
+        try {
+          const res = await ProgressAPI.getListLesson(id as string)
+          if (res?.data && res?.data?.length > 0) {
+            const newData = res?.data?.map((item: ILesson) => ({
+              ...item,
+              label: item.schedule.lesson_name,
+              value: item.schedule.id,
+              key: item.schedule.id,
+              title: item.schedule.lesson_name,
+            }))
+            setLesson(newData)
+          }
+          //
+        } catch (error) {
+          // Handled by axios interceptors
+        } finally {
+        }
+      }
+    }
+    fetchDataLesson()
   }, [params])
 
-  useEffect(() => {
-    dispatch(getUserInformation())
-  }, [])
+  const handleChangeLesson = (value: string) => {
+    setValue('section', '')
+    setCheckedKeys([])
+    setTreeData([])
 
-  // form checkbox
-  const checkAll = (status: boolean) => {
-    setCheckedAll(status)
-    // let checkedAll = true
-    for (let e of explorerData) {
-      toggleChecked(explorerData, e.id, status)
-    }
-    return true
-  }
-
-  // A function that takes an array of data and an id of a node
-  function toggleChecked(data: IExplorerNode[], id: string, checked: boolean) {
-    // A helper function that recursively finds the node with the given id and returns it
-    function findNode(data: IExplorerNode[], id: string): IExplorerNode | null {
-      for (let node of data) {
-        if (node.id === id) {
-          return node
-        } else if (node.children && node.children.length > 0) {
-          let result = findNode(node.children, id)
-          if (result) {
-            return result
+    const fetchDataSection = async () => {
+      if (id && value) {
+        try {
+          const res = await ProgressAPI.getListSection(id as string, value)
+          if (res?.data && res?.data?.length > 0) {
+            const nameSection = res.data[0]?.course_sections?.filter(
+              (item: { type: string }) => item.type === 'PART',
+            )
+            setValue('section', nameSection[0]?.name)
+            setSectionOption([
+              {
+                label: res.data[0]?.course_sections[0]?.name,
+                value: res.data[0]?.course_sections[0]?.id,
+              },
+            ])
+            setTreeData(convertToTreeData(res.data))
           }
-        }
-      }
-      return null
-    }
-
-    // A helper function that recursively updates the checked status of the node and its children
-    function updateNode(node: IExplorerNode, checked: boolean) {
-      node.checked = checked
-      if (node.children && node.children.length > 0) {
-        for (let child of node.children) {
-          updateNode(child, checked)
+          //
+        } catch (error) {
+          // Handled by axios interceptors
+        } finally {
         }
       }
     }
-
-    // A helper function that recursively updates the checked status of the node and its ancestors
-    function updateAncestors(
-      nodes: IExplorerNode[],
-      node: IExplorerNode,
-    ): void {
-      if (node.parent_id) {
-        const parent = findNode(nodes, node.parent_id)
-        if (parent && parent.children) {
-          const oneChecked = parent.children.some((child) => child.checked)
-          parent.checked = oneChecked
-          updateAncestors(nodes, parent)
-        }
-      }
-    }
-
-    // Find the node with the given id
-    let node = findNode(data, id)
-    if (node) {
-      // Toggle the checked status of the node
-      //   let checked = !node.checked
-      // Update the node and its children
-      updateNode(node, checked)
-      // Update the node and its ancestors
-      updateAncestors(data, node)
-    }
-    return data
+    fetchDataSection()
   }
 
-  const handleChecked = (e: string, status: boolean) => {
-    setExplorerData((prev: IExplorerNode[]) => {
-      const oldData = [...prev]
-      const newData = toggleChecked(oldData, e, status)
-      return newData
-    })
+  const handleClose = () => {
+    setOpen(false)
+    reset()
   }
-
-  let resExcept: (ICourseSection & { checked: boolean })[]
-  useEffect(() => {
-    // if (id) {
-    async function fetchCourseList() {
-      // if (id) {
-      setLoading(true)
-      try {
-        const res = {
-          success: true,
-          data: [
-            {
-              id: '02c4db5c-f45d-40e7-9314-520492aa611e',
-              created_at: '2024-11-13T07:41:53.219Z',
-              name: 'Section 1',
-              short_name: null,
-              code: 'course normal acca f4 test supporter_S0',
-              is_public: true,
-              course_section_type: 'PART',
-              display_icon: null,
-              cta_status: 'BEGIN',
-              course_id: 'dad71325-d2b4-4f12-b0c2-d8c8f2d1fa12',
-              parent_id: null,
-              is_preview_locked: false,
-              is_showing_locked: false,
-              position: 1,
-              position_updated_at: '2024-11-13T07:41:53.219Z',
-              is_original: true,
-            },
-            {
-              id: '7901be10-feaa-45f5-9a82-f00da5a21c0e',
-              created_at: '2024-11-13T07:41:57.377Z',
-              name: 'Subsection 1',
-              short_name: null,
-              code: 'course normal acca f4 test supporter_S0_SS0',
-              is_public: true,
-              course_section_type: 'CHAPTER',
-              display_icon: null,
-              cta_status: 'BEGIN',
-              course_id: 'dad71325-d2b4-4f12-b0c2-d8c8f2d1fa12',
-              parent_id: '02c4db5c-f45d-40e7-9314-520492aa611e',
-              is_preview_locked: false,
-              is_showing_locked: false,
-              position: 1,
-              position_updated_at: '2024-11-13T07:41:57.377Z',
-              is_original: true,
-            },
-            {
-              id: '091079ad-0628-41ce-8e3e-eb52a14491a1',
-              created_at: '2024-11-13T07:42:03.184Z',
-              name: 'Unit 1',
-              short_name: null,
-              code: 'course normal acca f4 test supporter_S0_SS0_U0',
-              is_public: true,
-              course_section_type: 'UNIT',
-              display_icon: null,
-              cta_status: 'BEGIN',
-              course_id: 'dad71325-d2b4-4f12-b0c2-d8c8f2d1fa12',
-              parent_id: '7901be10-feaa-45f5-9a82-f00da5a21c0e',
-              is_preview_locked: false,
-              is_showing_locked: false,
-              position: 1,
-              position_updated_at: '2024-11-13T07:42:03.184Z',
-              is_original: true,
-            },
-            {
-              id: '6430ef50-8c3c-450f-a565-1ab9e0fcd577',
-              created_at: '2024-11-13T07:42:09.575Z',
-              name: 'Activity 1',
-              short_name: null,
-              code: 'course normal acca f4 test supporter_S0_SS0_U0_A0',
-              is_public: true,
-              course_section_type: 'ACTIVITY',
-              display_icon: 'TEXT',
-              cta_status: 'BEGIN',
-              course_id: 'dad71325-d2b4-4f12-b0c2-d8c8f2d1fa12',
-              parent_id: '091079ad-0628-41ce-8e3e-eb52a14491a1',
-              is_preview_locked: false,
-              is_showing_locked: false,
-              position: 1,
-              position_updated_at: '2024-11-13T07:42:09.575Z',
-              is_original: true,
-            },
-            {
-              id: '39ddc884-63be-4059-a341-c27d0588fca7',
-              created_at: '2024-11-13T07:43:21.809Z',
-              name: 'Midterm test 1',
-              short_name: null,
-              code: 'j2z4OneJ',
-              is_public: true,
-              course_section_type: 'MID_TERM_TEST',
-              display_icon: null,
-              cta_status: 'BEGIN',
-              course_id: 'dad71325-d2b4-4f12-b0c2-d8c8f2d1fa12',
-              parent_id: null,
-              is_preview_locked: false,
-              is_showing_locked: false,
-              position: 2,
-              position_updated_at: '2024-11-13T07:43:21.809Z',
-              is_original: true,
-            },
-          ],
-        }
-        const newData = res.data?.map((item: any) => {
-          return {
-            ...item,
-            checked: item.id === '39ddc884-63be-4059-a341-c27d0588fca7',
-          }
-        })
-
-        setExplorerData(
-          TreeHelper.convertFromArray(newData ?? [], {
-            convert_original: true,
-          }) as IExplorerNode[],
-        )
-      } catch (err) {
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    // }
-
-    // if (id) {
-    fetchCourseList()
-    // } else {
-    //   setExplorerData([])
-    // }
-  }, [])
-
-  useEffect(() => {
-    setCheckedAll(findNodeUnChecked(explorerData))
-  }, [explorerData])
-
-  function findNodeUnChecked(data: IExplorerNode[]): boolean {
-    for (let node of data) {
-      if (node.checked === false) {
-        return false
-      } else if (node.children && node.children.length > 0) {
-        let result = findNodeUnChecked(node.children)
-        if (!result) {
-          return result
-        }
-      }
-    }
-    return true
+  const handleCancel = () => {
+    dispatch(
+      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
+    )
   }
 
   return (
-    <SappDrawer
-      isOpen={open}
-      message="Bạn có chắc chán muốn hủy không?"
-      onClose={() => setOpen(false)}
-      title={`${router.query.id ? 'Edit' : 'Add'} Progress`}
+    <Drawer
+      open={open}
       footer={true}
-      btnSubmitTile="Save"
-      confirmOnClose={true}
-      sizeTextBtn="medium"
-      handleSubmit={handleSubmit}
-      heightBody={'h-[calc(100vh-146px)]'}
+      onClose={() => handleCancel()}
+      width={'50%'}
+      closeIcon={false}
     >
-      <div className="mb-6">
-        <div className="grid w-full grid-cols-2 gap-x-6">
-          <div>
-            <SappHookFormSelect
+      <div className="flex h-full w-full flex-col">
+        <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+          <span className="font-sans text-lg font-semibold">Add Progress</span>
+          <span className="cursor-pointer" onClick={handleCancel}>
+            <SappIcon icon="closeicon" />
+          </span>
+        </div>
+        <div className="flex-1 overflow-y-auto px-8 py-6">
+          <div className="mb-6">
+            <div className="grid w-full grid-cols-2 gap-x-6">
+              <div>
+                <SAPPSelect
+                  control={control}
+                  label="Lesson"
+                  name="lesson"
+                  onChange={(e) => handleChangeLesson(e)}
+                  placeholder="Please choose"
+                  required
+                  className="h-11.25 text-base font-medium"
+                  options={lesson}
+                />
+              </div>
+              <div>
+                <HookformTimePicker
+                  control={control}
+                  name="time"
+                  label="Time"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mb-6">
+            <SAPPSelect
               control={control}
-              label="Lesson"
-              name="lesson"
+              label="Section"
+              name="section"
               placeholder="Please choose"
               required
-              className="text-base font-medium"
-              options={[]}
+              disabled
+              className="h-11.25 text-base font-medium"
+              options={sectionOption}
             />
           </div>
-          <div>
-            <HookFormDateRange
+          <div className="mb-6">
+            <SAPPInput
+              label={'Note'}
+              className="h-11.25"
               control={control}
-              required
-              label="Số Giờ"
-              name="soGio"
-              placeholder
-              format="YYYY-MM-DD | HH:mm:ss"
-              showTime
-              className="text-sm"
-            />
+              name="note"
+              placeholder={'Please enter'}
+            ></SAPPInput>
           </div>
-        </div>
-      </div>
-      <div className="mb-6">
-        <SappHookFormSelect
-          control={control}
-          label="Section"
-          name="section"
-          placeholder="Please choose"
-          required
-          className="text-base font-medium"
-          options={[]}
-        />
-      </div>
-      <div className="mb-6">
-        <HookFormTextField
-          label={'Note'}
-          className="sapp-h-45px fs-6"
-          control={control}
-          name="note"
-          placeholder={'Please enter'}
-        ></HookFormTextField>
-      </div>
 
-      <label className="mb-2 block text-base font-medium">
-        <span className="required">{'Content completed'}</span>
-      </label>
-      <div className="mb-8 mt-5 flex items-center gap-3">
-        <SAPPCheckbox
-          checked={checkedAll}
-          onChange={() => {
-            checkAll(!checkedAll)
-          }}
-          state="primary"
-        />
-        <div className="sapp-text-truncate-1 sapp-text-primary fw-semibold fs-6">
-          Select All{' '}
-          {explorerData?.length > 0 ? `(${explorerData?.length})` : ''}
+          <label className="mb-2 block text-base font-medium">
+            <span className="required">{'Content completed'}</span>
+          </label>
+          {errors.checkedNodes && (
+            <div className="text-state-error">
+              {errors.checkedNodes.message as string}
+            </div>
+          )}
+          <Tree
+            checkable
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
+            autoExpandParent={autoExpandParent}
+            onCheck={onCheck}
+            checkedKeys={checkedKeys}
+            selectedKeys={selectedKeys}
+            treeData={treeData}
+            className={styles.lessonFormTree}
+            switcherIcon={({ expanded }) =>
+              expanded ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
+                    fill="#FFB800"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
+                    fill="#9CA3AF"
+                  />
+                </svg>
+              )
+            }
+          />
+        </div>
+        <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+          <SAPPButtonV2
+            title={'Cancel'}
+            onClick={handleCancel}
+            className="mr-4"
+            color="secondary"
+          />
+          <SAPPButtonV2 title={'Save'} onClick={handleSubmit} />
         </div>
       </div>
-      <div>
-        {explorerData &&
-          explorerData.map((item: IExplorerNode, index: number) => {
-            return (
-              <Accodian
-                explorer={item}
-                type={'process'}
-                action={handleChecked}
-                key={item.id}
-              />
-            )
-          })}
-      </div>
-    </SappDrawer>
+    </Drawer>
   )
 }
 

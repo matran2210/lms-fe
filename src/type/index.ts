@@ -114,6 +114,7 @@ export enum EDateTime {
   monthFormat = 'MM/YYYY',
   fullDate = 'DD/MM/YYYY HH:mm',
   backendFormat = 'yyyy-MM-dd',
+  timepicker = 'HH:mm',
 }
 export * from './common'
 export * from './courses'

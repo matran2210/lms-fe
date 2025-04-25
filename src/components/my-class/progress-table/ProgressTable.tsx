@@ -1,94 +1,136 @@
-import { Table, TablePaginationConfig } from 'antd'
-import { Dispatch, SetStateAction, useMemo } from 'react'
-import { IProgress } from '../../../type/progress'
-import { TableColumn } from '../../../type'
-import RequestActionCellProgress from '@components/my-class/progress-table/RequestActionCellProgress'
+import { TablePaginationConfig } from 'antd'
+import React, { Dispatch, SetStateAction } from 'react'
+import { calculateHoursDifference } from '@utils/date.ulti'
+import { formatDate } from '@utils/common'
+import SappTable from '@components/table/SappTable'
+import { IProgress, IProgressList } from 'src/type/progress'
+import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
 
 interface ProgressTableProps {
   loading: boolean
-  progress: IProgress[]
+  progress: IProgressList | undefined
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   setIsEdit: Dispatch<SetStateAction<boolean>>
   setIsInspect: Dispatch<SetStateAction<boolean>>
+  setIsView: Dispatch<SetStateAction<boolean>>
+  setIdProgress: Dispatch<SetStateAction<string | null>>
+  handleChangeParams?: (currentPage: number, pageSize: number) => void
 }
-
-const columnsTitles: TableColumn<IProgress>[] = [
-  {
-    title: '#',
-    dataIndex: 'index',
-  },
-  {
-    title: 'Lesson',
-    dataIndex: 'lesson',
-  },
-  {
-    title: 'Time',
-    dataIndex: 'time',
-  },
-  {
-    title: 'Section',
-    dataIndex: 'section',
-  },
-  {
-    title: 'Progress',
-    dataIndex: 'progress',
-  },
-  {
-    title: 'Creator',
-    dataIndex: 'creator',
-  },
-  {
-    title: 'Create date',
-    dataIndex: 'createDate',
-  },
-  {
-    title: 'Note',
-    dataIndex: 'note',
-  },
-  {
-    title: '',
-    dataIndex: 'method',
-    render: (value: string) => {
-      return <RequestActionCellProgress id={value} />
-    },
-    fixed: 'right',
-  },
-]
 
 const ProgressTable = ({
   loading,
   progress,
   pagination,
   setPagination,
+  handleChangeParams,
   setIsEdit,
   setIsInspect,
+  setIdProgress,
+  setIsView,
 }: ProgressTableProps) => {
-  const { current, pageSize } = pagination
-  const tableColumns = columnsTitles.map((item, index) => {
-    return {
-      ...item,
-      key: index,
-    }
-  })
-
-  const tableData = useMemo(() => {
-    return progress.map((item, index) => ({
-      ...item,
-      index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
-      method: item.id,
-    }))
-  }, [progress, current, pageSize])
+  const columnsTitles: any[] = [
+    {
+      title: '#',
+      dataIndex: 'index',
+      render: (value: IProgress, record: IProgress, index: number) => {
+        return (
+          index +
+          1 +
+          (Number(progress?.metadata?.page_index) - 1) *
+            Number(progress?.metadata?.page_size || 0)
+        )
+      },
+    },
+    {
+      title: 'Lesson',
+      dataIndex: 'lesson_name',
+    },
+    {
+      title: 'Time',
+      dataIndex: 'time',
+      render: (value: Date, record: IProgress, index: number) => {
+        return (
+          record?.start_time &&
+          record?.end_time &&
+          calculateHoursDifference(record.start_time, record.end_time) + ' hour'
+        )
+      },
+    },
+    {
+      title: 'Section',
+      dataIndex: 'section',
+    },
+    {
+      title: 'Progress',
+      dataIndex: 'progress',
+      render: (value: number, record: IProgress, index: number) => {
+        return (
+          <span
+            style={{ color: record?.progress >= 90 ? '#176CDD' : '#F01919' }}
+          >
+            {record?.progress || 0} %
+          </span>
+        )
+      },
+    },
+    {
+      title: 'Creator',
+      dataIndex: 'staff_creator',
+      render: (value: IProgress, record: IProgress) => {
+        return record.staff_creator.full_name
+      },
+    },
+    {
+      title: 'Create date',
+      dataIndex: 'created_at',
+      render: (value: Date) => {
+        return formatDate(value, 'DD/MM/YYYY | HH:mm')
+      },
+    },
+    {
+      title: 'Note',
+      dataIndex: 'description',
+    },
+    {
+      title: '',
+      dataIndex: 'method',
+      render: (value: string, record: IProgress) => {
+        return (
+          <SAPPDropdown>
+            <div
+              onClick={() => {
+                setIsView(true)
+                setIsEdit(true)
+                setIdProgress(record.id)
+              }}
+            >
+              View
+            </div>
+            <div
+              onClick={() => {
+                setIsView(false)
+                setIsInspect(true)
+                setIdProgress(record.id)
+              }}
+            >
+              Edit
+            </div>
+          </SAPPDropdown>
+        )
+      },
+      fixed: 'right',
+    },
+  ]
 
   return (
-    <Table
-      loading={loading}
-      rowKey={(record) => record.id}
-      columns={tableColumns}
-      dataSource={tableData}
-      scroll={{ x: 'max-content' }}
+    <SappTable
+      handleChangeParams={handleChangeParams}
+      columns={columnsTitles}
+      data={progress?.formattedClassTeachingProgresses || []}
       pagination={pagination}
-      onChange={setPagination}
+      setPagination={setPagination}
+      loading={loading}
     />
   )
 }
