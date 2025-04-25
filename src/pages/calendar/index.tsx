@@ -106,7 +106,7 @@ const Page = () => {
   return (
     <Layout title="Course Detail">
       <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
-        <div className="main relative">
+        <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="font-normal text-[#050505]">Calendar</div>
           </div>
@@ -127,6 +127,10 @@ const Page = () => {
                     isRepeat: false,
                     courseId: item.course_id,
                     source: CALENDAR_TYPE.LMS,
+                    isHoliday: item.is_holiday,
+                    isCaseStudy: item.is_case_study,
+                    isTest: item.is_test,
+                    isKeyBeforeContent: item.is_key_before_content,
                   }
                 }) ?? []
               }
