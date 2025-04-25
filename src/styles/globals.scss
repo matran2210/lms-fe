@@ -11,6 +11,9 @@
 @import './components/_calculator.scss';
 @import './components/_event-repeat.scss';
 @import './components/_select.scss';
+@import './components/_datepicker.scss';
+@import './components/_collapse.scss';
+
 @import './components/_table.scss';
 @tailwind base;
 @tailwind components;
@@ -652,7 +655,6 @@ textarea.is-invalid:focus {
 }
 
 .ant-tooltip-inner {
-  color: #404041 !important;
   max-width: 600px;
   width: max-content;
 }
@@ -1301,4 +1303,8 @@ select:focus {
       @apply h-full;
     }
   }
+}
+
+.ant-spin .ant-spin-dot-item {
+  background-color: #ffb800 !important;
 }

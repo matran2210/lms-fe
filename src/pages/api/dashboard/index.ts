@@ -6,6 +6,7 @@ import {
   ILearningResult,
   ITopicProgress,
   IExamPrediction,
+  IMockTestResult,
 } from 'src/type/dashboard'
 
 export class DashboardAPI {
@@ -25,7 +26,7 @@ export class DashboardAPI {
     return fetcher(`report/${id}/learning-result`)
   }
 
-  static getMockTestResults(id: string): Promise<IResponse<ILearningResult[]>> {
+  static getMockTestResults(id: string): Promise<IResponse<IMockTestResult>> {
     return fetcher(`report/${id}/mock-test-result`)
   }
 

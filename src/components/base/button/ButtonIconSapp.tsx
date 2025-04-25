@@ -1,4 +1,4 @@
-import { ArrowIcon } from '@assets/icons'
+import { ArrowIcon, PlusIcon } from '@assets/icons'
 import Link from 'next/link'
 import { useState } from 'react'
 import { IButtonIconProps, IButtonSize, IButtonVariant } from 'src/type'
@@ -43,7 +43,7 @@ const ButtonIconSapp = ({
     ${className}
   `
   const iconMap: Record<string, JSX.Element | null> = {
-    plus: null,
+    plus: <PlusIcon />,
     search: null,
     arrow: <ArrowIcon color={iconColor} />,
   }

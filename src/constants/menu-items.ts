@@ -15,6 +15,12 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
+    name: `${TitleSidebar.COURSE_CONTENT}`,
+    icon: 'bookmark',
+    url: `${PageLink.COURSE_CONTENT}`,
+    type: 'level-2',
+  },
+  {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
     url: '#',
@@ -30,18 +36,6 @@ const MENU_OPTIONS: MenuOption[] = [
     name: `${TitleSidebar.ENTRANCE_TEST}`,
     icon: 'entrance-test',
     url: `${PageLink.ENTRANCE_TEST}`,
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.MY_CALENDAR}`,
-    icon: 'my-calendar',
-    url: PageLink.MY_CALENDAR,
-    type: 'level-1',
-  },
-  {
-    name: TitleSidebar.MY_REQUEST,
-    icon: 'my-request',
-    url: `${PageLink.REQUEST}${PageLink.MY_REQUEST}`,
     type: 'level-1',
   },
   {
@@ -66,6 +60,12 @@ const MENU_OPTIONS: MenuOption[] = [
     name: `${TitleSidebar.CALCULATOR}`,
     icon: 'caculator',
     url: '#',
+    type: 'level-1',
+  },
+  {
+    name: TitleSidebar.CALENDAR,
+    icon: 'calendar',
+    url: PageLink.CALENDAR,
     type: 'level-1',
   },
 ]

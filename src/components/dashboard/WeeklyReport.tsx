@@ -116,7 +116,7 @@ const WeeklyReport = () => {
       </div>
       <div className="flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 bg-green-1 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 bg-green-3 bg-opacity-10 p-2">
             <Image src={bookOpenIcon} alt="" width={32} height={32} />
           </div>
           <div>
@@ -139,7 +139,7 @@ const WeeklyReport = () => {
           <div>
             {report?.activities?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-green-1 px-1.75 py-1.25"
+                className="flex min-w-8 rounded-sm bg-green-3 px-1.75 py-1.25"
                 style={{ backgroundColor: report?.activities?.color }}
               >
                 <Image
@@ -193,7 +193,7 @@ const WeeklyReport = () => {
           <div>
             {report?.times?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-green-1 px-1.75 py-1.25"
+                className="flex min-w-8 rounded-sm bg-green-3 px-1.75 py-1.25"
                 style={{ backgroundColor: report?.times?.color }}
               >
                 <Image src={report.times.icon} alt="" width={16} height={16} />

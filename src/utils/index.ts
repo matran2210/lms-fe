@@ -380,6 +380,15 @@ export const removeHtmlTags = (htmlString?: string) => {
 }
 
 /**
+ * @description Chuyển đổi một chuỗi ngày thành chuỗi ngày được định dạng.
+ * @param {string} date - Chuỗi ngày cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày trả về.
+ * @return {string} - Chuỗi ngày đã được định dạng.
+ */
+export const sappFormatDate = (date?: string, format = 'DD/MM/YYYY') =>
+  date ? dayjs(date).format(format) : undefined
+
+/**
  * @description Chuyển đổi một chuỗi ngày UTC thành chuỗi ngày địa phương được định dạng.
  * @param {string} date - Chuỗi ngày UTC cần chuyển đổi.
  * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.

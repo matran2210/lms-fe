@@ -246,7 +246,6 @@ const ResultsTable = () => {
               <td className={clsx(commonDataCellStyle)}>
                 <Tooltip
                   title={getNameTooltipContent(row, link)}
-                  color="white"
                   arrow={false}
                   placement="topLeft"
                 >

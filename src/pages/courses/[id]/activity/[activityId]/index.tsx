@@ -624,7 +624,7 @@ const ActivityPage = () => {
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
-            <Tooltip title={nameActivity?.name} color="white">
+            <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
@@ -695,7 +695,6 @@ const ActivityPage = () => {
                 <div className="text-2xl font-medium ">
                   <Tooltip
                     title={activity?.name?.length > 95 && activity?.name}
-                    color="white"
                   >
                     {activity?.name}
                   </Tooltip>
@@ -793,6 +792,7 @@ const ActivityPage = () => {
                               grading_method={e?.quiz?.grading_method}
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
+                              attemptId={e?.quiz?.attempt?.id}
                             />
                           </div>
                         )
