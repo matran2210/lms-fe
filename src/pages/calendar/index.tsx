@@ -125,12 +125,12 @@ const Page = () => {
                     type: getType(item),
                     description: item.description,
                     isRepeat: false,
-                    courseId: item.course_id,
+                    courseId: item?.course_id,
                     source: CALENDAR_TYPE.LMS,
-                    isHoliday: item.is_holiday,
-                    isCaseStudy: item.is_case_study,
-                    isTest: item.is_test,
-                    isKeyBeforeContent: item.is_key_before_content,
+                    isHoliday: item?.is_holiday,
+                    isCaseStudy: item?.is_case_study,
+                    isTest: item?.is_test,
+                    isKeyBeforeContent: item?.is_key_before_content,
                   }
                 }) ?? []
               }
