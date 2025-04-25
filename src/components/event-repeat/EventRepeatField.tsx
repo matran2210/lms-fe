@@ -24,6 +24,7 @@ import {
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
@@ -39,7 +40,7 @@ interface IEventRepeatFieldForm {
     | ISelect
   repeat_frequency: IRepeatFrequency
   repeat_on: (typeof REPEAT_ON)[number][]
-  end_on: Date
+  end_on?: Date
   type: string
 }
 
@@ -56,6 +57,7 @@ interface IProps {
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
+  rangeDate?: [Date, Date]
 }
 
 const EventRepeatField = ({
@@ -71,20 +73,20 @@ const EventRepeatField = ({
   resetRepeat,
   setResetRepeat,
   disabled,
+  rangeDate,
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
 
-  const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
+  const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
     return {
-      repeat_type: repeatOption ?? EVENT_REPEAT_TYPES.NO_REPEAT,
+      repeat_type: repeatOption?.value ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
-      end_on: initDate,
     }
   }, [defaultValue])
   const repeatTypeOptions = useMemo(() => {
@@ -110,6 +112,9 @@ const EventRepeatField = ({
       {
         label: EVENT_REPEAT_LABEL.EVERY_WEEKDAY,
         value: EVENT_REPEAT_TYPES.EVERY_WEEKDAY,
+        disabled: ['Saturday', 'Sunday'].includes(
+          dayjs(initDate).format('dddd'),
+        ),
       },
       { label: EVENT_REPEAT_LABEL.CUSTOM, value: EVENT_REPEAT_TYPES.CUSTOM },
     ]
@@ -126,7 +131,6 @@ const EventRepeatField = ({
       repeat_type: EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
-      end_on: initDate,
     },
   })
 
@@ -235,7 +239,7 @@ const EventRepeatField = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [watch])
+  }, [watch, initDate])
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {
@@ -243,6 +247,12 @@ const EventRepeatField = ({
       setResetRepeat(false)
     }
   }, [resetRepeat])
+
+  useEffect(() => {
+    if (rangeDate?.[0] && rangeDate?.[1]) {
+      setFormValue('end_on', undefined)
+    }
+  }, [rangeDate])
 
   useEffect(() => {
     setRepeatType(watch('repeat_type') as RecurringScheduleType)
@@ -278,7 +288,7 @@ const EventRepeatField = ({
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
-        {is_repeat && (
+        {is_repeat && repeatType != REPEAT_TYPE.CHOSEN_PATTERN && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
@@ -312,7 +322,7 @@ const EventRepeatField = ({
                   onChange={(newDate) => field.onChange(newDate)}
                   minDate={dayjs(initDate)}
                   maxDate={dayjs(initDate).add(2, 'year')}
-                  value={dayjs(field.value)}
+                  value={field?.value ? dayjs(field.value) : undefined}
                   className="h-11.25 w-full"
                   color="secondary"
                   suffixIcon={<SappIcon icon="input_calendar" />}

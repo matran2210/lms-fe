@@ -7,6 +7,8 @@ import { Tabs } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { DRAWER_REQUEST_TYPE, TitleSidebar } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const breadcrumbs = [
   {
@@ -78,4 +80,4 @@ const RequestPage = () => {
   )
 }
 
-export default RequestPage
+export default withAuthorization([UserType.STUDENT])(RequestPage)

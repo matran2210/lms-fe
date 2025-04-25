@@ -4,10 +4,15 @@ import { useCallback, useState } from 'react'
 import { useQuery } from 'react-query'
 import { SAPPCalendar } from 'sapp-common-package'
 import { IEvent } from 'sapp-common-package/dist/types'
-import { EVENT_TYPES_ARRAY, EVENT_TYPES_RESPONSE } from 'src/constants'
+import {
+  EVENT_TYPES,
+  EVENT_TYPES_ARRAY,
+  EVENT_TYPES_RESPONSE,
+} from 'src/constants'
 import { SchedulesAPI } from 'src/pages/api/schedules'
 import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
 import CalendarHead from './CalendarHead'
+import { pick } from 'lodash'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void
@@ -44,7 +49,14 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
    */
   const fetchData = async ({ params }: { params: Record<string, any> }) => {
     const [resSchedule, resWeeklyNorms] = await Promise.all([
-      SchedulesAPI.get(params),
+      SchedulesAPI.get(
+        params.event_type === EVENT_TYPES.HOLIDAY
+          ? {
+              ...pick(params, ['event_name', 'start_date', 'end_date']),
+              is_holiday: true,
+            }
+          : params,
+      ),
       SchedulesAPI.getWeeklyNorms({
         fromDate: params.start_date,
         toDate: params.end_date,
@@ -60,7 +72,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             endDate: new Date(`${item.end_date}T${item.end_time}Z`),
             type: item.is_holiday
               ? 'HOLIDAY'
-              : EVENT_TYPES_RESPONSE[item.teacher_type],
+              : EVENT_TYPES_RESPONSE[item.event_type],
             description: item.description,
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,

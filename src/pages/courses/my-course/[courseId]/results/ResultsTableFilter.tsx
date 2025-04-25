@@ -1,6 +1,7 @@
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { Dispatch, SetStateAction } from 'react'
-import { ISection, ISelect } from 'src/type'
+import { ISection } from 'src/type'
+import { ISelect } from 'src/type/course'
 
 interface IProps {
   setSelected: React.Dispatch<ISelect | null>

@@ -43,6 +43,8 @@ import {
 } from 'src/type/case-study'
 import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
+import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 
 const CaseStudyResult = () => {
   const router = useRouter()
@@ -829,7 +831,10 @@ const CaseStudyResult = () => {
                         exhibitsDes?.files?.map((e: IFile, index: number) => {
                           return (
                             <div key={index} className="overflow-auto bg-white">
-                              <PDFViewer file={e?.resource?.url} />
+                              <FileViewer
+                                fileName={e?.resource?.name ?? ''}
+                                fileUrl={e?.resource?.url ?? ''}
+                              />
                             </div>
                           )
                         })}
@@ -853,7 +858,10 @@ const CaseStudyResult = () => {
                       className="overflow-auto bg-white p-4"
                       style={{ height: 'calc(100% - 40px' }}
                     >
-                      <PDFViewer file={e?.file ?? ''} />
+                      <FileViewer
+                        fileName={e?.fileName ?? ''}
+                        fileUrl={e?.file ?? ''}
+                      />
                     </div>
                   </ModalResizeable>
                 )

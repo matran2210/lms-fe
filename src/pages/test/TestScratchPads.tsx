@@ -9,6 +9,8 @@ import { useForm } from 'react-hook-form'
 import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
+import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -182,7 +184,10 @@ const TestScratchPads = ({
               exhibitsDes?.files?.map((e: any, index: number) => {
                 return (
                   <div key={index} className="h-full overflow-auto bg-white">
-                    <PdfViewer file={e?.resource?.url} />
+                    <FileViewer
+                      fileName={e?.resource?.name}
+                      fileUrl={e?.resource?.url}
+                    />
                   </div>
                 )
               })}
@@ -204,7 +209,7 @@ const TestScratchPads = ({
             style={{ height: 'calc(100% - 40px' }}
           >
             {/* <div className='flex flex-'> */}
-            <PdfViewer file={e?.file} />
+            <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
           </div>
           {/* </div> */}
         </ModalResizeable>

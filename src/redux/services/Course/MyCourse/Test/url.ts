@@ -16,6 +16,7 @@ export const url = {
   createTopicAttempt: '/quiz/case-study/topic-attempt',
   getAnswer: 'quiz-attempts/answers',
   getTopicAttemptDetail: '/quiz-attempts/topic/',
+  getDiscussionStudentInfo: '/course-discussions/student-info',
 }
 
 export default url

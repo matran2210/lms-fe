@@ -7,13 +7,15 @@ import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
+import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
-import { CoursesAPI } from 'src/pages/api/courses'
 import SelectExamPopup from './popups/SelectExamPopup'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -183,4 +185,4 @@ const CourseDetail = () => {
   )
 }
 
-export default CourseDetail
+export default withAuthorization([UserType.STUDENT])(CourseDetail)

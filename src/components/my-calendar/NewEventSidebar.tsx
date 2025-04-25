@@ -42,6 +42,7 @@ const NewEventSidebar = ({
 }: IProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isResetRepeat, setIsResetRepeat] = useState(false)
+  const [isResetEndOn, setIsResetEndOn] = useState(false)
   const dispatch = useAppDispatch()
 
   const validationSchema = z.object({
@@ -199,6 +200,7 @@ const NewEventSidebar = ({
                     defaultDate={currentDate}
                     resetRepeat={isResetRepeat}
                     setResetRepeat={setIsResetRepeat}
+                    rangeDate={watch('range')}
                   />
                 </div>
 

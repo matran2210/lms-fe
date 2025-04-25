@@ -33,8 +33,6 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             colorPrimary: '#ffb800',
             colorTextPlaceholder: '#9CA3AF',
             controlOutlineWidth: 0,
-            colorTextDisabled: '#99A1B7',
-            colorBgContainerDisabled: '#ffffff',
           },
           Button: {
             controlOutlineWidth: 0,
