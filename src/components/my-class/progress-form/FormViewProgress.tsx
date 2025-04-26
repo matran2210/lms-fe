@@ -321,249 +321,251 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
             <SappIcon icon="closeicon" />
           </span>
         </div>
-        {isView ? (
-          <>
-            <div className="mb-4 mt-4 px-8">
-              <CollapseBox title=" Primary Information">
-                <div className="grid gap-y-4">
-                  <CollapseItem
-                    title={'Lesson'}
-                    body={detailProgress?.lesson.lesson_name}
-                  />
+        <div className="flex-1 overflow-y-auto px-8 py-6 pb-[80px]">
+          {isView ? (
+            <>
+              <div className="mb-4 mt-4">
+                <CollapseBox title=" Primary Information">
+                  <div className="grid gap-y-4">
+                    <CollapseItem
+                      title={'Lesson'}
+                      body={detailProgress?.lesson.lesson_name}
+                    />
 
-                  <CollapseItem
-                    title="Time"
-                    body={
-                      detailProgress?.start_time &&
-                      detailProgress?.end_time &&
-                      calculateHoursDifference(
-                        detailProgress.start_time,
-                        detailProgress.end_time,
-                      ) + ' hour'
-                    }
-                  />
+                    <CollapseItem
+                      title="Time"
+                      body={
+                        detailProgress?.start_time &&
+                        detailProgress?.end_time &&
+                        calculateHoursDifference(
+                          detailProgress.start_time,
+                          detailProgress.end_time,
+                        ) + ' hour'
+                      }
+                    />
 
-                  <CollapseItem
-                    title="Progress"
-                    body={
-                      <span
-                        style={{
-                          color:
-                            (detailProgress?.progress ?? 0) >= 90
-                              ? '#176CDD'
-                              : '#F01919',
-                        }}
-                      >
-                        {`${detailProgress?.progress ?? 0} %`}
-                      </span>
-                    }
-                  />
-
-                  <CollapseItem
-                    title="Catch up content"
-                    body={detailProgress?.catch_up_content.map(
-                      (item, index) => (
-                        <p
-                          key={index}
+                    <CollapseItem
+                      title="Progress"
+                      body={
+                        <span
                           style={{
-                            color: '#176CDD',
-                            textDecoration: 'underline',
+                            color:
+                              (detailProgress?.progress ?? 0) >= 90
+                                ? '#176CDD'
+                                : '#F01919',
                           }}
                         >
-                          {item.compensation_id &&
-                            `${item.compensated_progress + '%'}-${item.compensated_lesson_name}`}
-                        </p>
-                      ),
-                    )}
-                  />
+                          {`${detailProgress?.progress ?? 0} %`}
+                        </span>
+                      }
+                    />
 
-                  <CollapseItem
-                    title="Teacher"
-                    body={detailProgress?.teacher.full_name}
-                  />
-                  <CollapseItem
-                    title="Creator"
-                    body={detailProgress?.staff_creator.full_name}
-                  />
-                  <CollapseItem
-                    title="Create Date"
-                    body={
-                      detailProgress?.created_at
-                        ? formatDate(
-                            detailProgress.created_at,
-                            'DD/MM/YYYY | HH:mm',
-                          )
-                        : ''
-                    }
-                  />
-                  <CollapseItem
-                    title="Note"
-                    body={detailProgress?.description}
-                  />
-                </div>
-              </CollapseBox>
-            </div>
-            <div className="mb-4 mt-2 px-8">
-              <CollapseBox title="Content Completed">
-                <div className="grid gap-y-4">
-                  {!isView && errors.checkedNodes && (
-                    <div className="text-danger">
-                      {errors.checkedNodes.message as string}
-                    </div>
-                  )}
-                  <Tree
-                    checkable={!isView}
-                    onExpand={onExpand}
-                    expandedKeys={expandedKeys}
-                    autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
-                    treeData={treeData}
-                    className={styles.lessonFormTree}
-                    switcherIcon={({ expanded }) =>
-                      expanded ? (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
-                            fill="#FFB800"
-                          />
-                        </svg>
-                      ) : (
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
-                            fill="#9CA3AF"
-                          />
-                        </svg>
-                      )
-                    }
-                  />
-                </div>
-              </CollapseBox>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 overflow-y-auto px-8 py-6">
-            <div className="mb-6">
-              <div className="grid w-full grid-cols-2 gap-x-6">
-                <div>
-                  <SAPPSelect
-                    control={control}
-                    label="Lesson"
-                    name="lesson"
-                    placeholder="Please choose"
-                    required
-                    disabled
-                    className="h-11.25 text-base font-medium"
-                    options={[]}
-                  />
-                </div>
-                <div>
-                  <HookformTimePicker
-                    control={control}
-                    name="time"
-                    label="Time"
-                    disabled={isView}
-                    required
-                  />
+                    <CollapseItem
+                      title="Catch up content"
+                      body={detailProgress?.catch_up_content.map(
+                        (item, index) => (
+                          <p
+                            key={index}
+                            style={{
+                              color: '#176CDD',
+                              textDecoration: 'underline',
+                            }}
+                          >
+                            {item.compensation_id &&
+                              `${item.compensated_progress + '%'}-${item.compensated_lesson_name}`}
+                          </p>
+                        ),
+                      )}
+                    />
+
+                    <CollapseItem
+                      title="Teacher"
+                      body={detailProgress?.teacher.full_name}
+                    />
+                    <CollapseItem
+                      title="Creator"
+                      body={detailProgress?.staff_creator.full_name}
+                    />
+                    <CollapseItem
+                      title="Create Date"
+                      body={
+                        detailProgress?.created_at
+                          ? formatDate(
+                              detailProgress.created_at,
+                              'DD/MM/YYYY | HH:mm',
+                            )
+                          : ''
+                      }
+                    />
+                    <CollapseItem
+                      title="Note"
+                      body={detailProgress?.description}
+                    />
+                  </div>
+                </CollapseBox>
+              </div>
+              <div className="mb-4 mt-2">
+                <CollapseBox title="Content Completed">
+                  <div className="grid gap-y-4">
+                    {!isView && errors.checkedNodes && (
+                      <div className="text-danger">
+                        {errors.checkedNodes.message as string}
+                      </div>
+                    )}
+                    <Tree
+                      checkable={!isView}
+                      onExpand={onExpand}
+                      expandedKeys={expandedKeys}
+                      autoExpandParent={autoExpandParent}
+                      onCheck={onCheck}
+                      checkedKeys={checkedKeys}
+                      onSelect={onSelect}
+                      selectedKeys={selectedKeys}
+                      treeData={treeData}
+                      className={styles.lessonFormTree}
+                      switcherIcon={({ expanded }) =>
+                        expanded ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
+                              fill="#FFB800"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
+                              fill="#9CA3AF"
+                            />
+                          </svg>
+                        )
+                      }
+                    />
+                  </div>
+                </CollapseBox>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 overflow-y-auto px-8 py-6">
+              <div className="mb-6">
+                <div className="grid w-full grid-cols-2 gap-x-6">
+                  <div>
+                    <SAPPSelect
+                      control={control}
+                      label="Lesson"
+                      name="lesson"
+                      placeholder="Please choose"
+                      required
+                      disabled
+                      className="h-11.25 text-base font-medium"
+                      options={[]}
+                    />
+                  </div>
+                  <div>
+                    <HookformTimePicker
+                      control={control}
+                      name="time"
+                      label="Time"
+                      disabled={isView}
+                      required
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="mb-6">
-              <SAPPSelect
-                control={control}
-                label="Section"
-                name="section"
-                placeholder="Please choose"
-                required
-                disabled
-                className="h-11.25 text-base font-medium"
-                options={[]}
+              <div className="mb-6">
+                <SAPPSelect
+                  control={control}
+                  label="Section"
+                  name="section"
+                  placeholder="Please choose"
+                  required
+                  disabled
+                  className="h-11.25 text-base font-medium"
+                  options={[]}
+                />
+              </div>
+              <div className="mb-6">
+                <SAPPInput
+                  label={'Note'}
+                  className="h-11.25"
+                  control={control}
+                  name="note"
+                  disabled={isView}
+                  placeholder={'Please enter'}
+                ></SAPPInput>
+              </div>
+
+              <label className="mb-2 block text-base font-medium">
+                <span className="required">{'Content completed'}</span>
+              </label>
+              {errors.checkedNodes && (
+                <div className="text-state-error">
+                  {errors.checkedNodes.message as string}
+                </div>
+              )}
+              <Tree
+                checkable
+                onExpand={onExpand}
+                expandedKeys={expandedKeys}
+                autoExpandParent={autoExpandParent}
+                onCheck={onCheck}
+                checkedKeys={checkedKeys}
+                selectedKeys={selectedKeys}
+                treeData={treeData}
+                className={styles.lessonFormTree}
+                switcherIcon={({ expanded }) =>
+                  expanded ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
+                        fill="#FFB800"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
+                        fill="#9CA3AF"
+                      />
+                    </svg>
+                  )
+                }
               />
             </div>
-            <div className="mb-6">
-              <SAPPInput
-                label={'Note'}
-                className="h-11.25"
-                control={control}
-                name="note"
-                disabled={isView}
-                placeholder={'Please enter'}
-              ></SAPPInput>
-            </div>
-
-            <label className="mb-2 block text-base font-medium">
-              <span className="required">{'Content completed'}</span>
-            </label>
-            {errors.checkedNodes && (
-              <div className="text-state-error">
-                {errors.checkedNodes.message as string}
-              </div>
-            )}
-            <Tree
-              checkable
-              onExpand={onExpand}
-              expandedKeys={expandedKeys}
-              autoExpandParent={autoExpandParent}
-              onCheck={onCheck}
-              checkedKeys={checkedKeys}
-              selectedKeys={selectedKeys}
-              treeData={treeData}
-              className={styles.lessonFormTree}
-              switcherIcon={({ expanded }) =>
-                expanded ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
-                      fill="#FFB800"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
-                      fill="#9CA3AF"
-                    />
-                  </svg>
-                )
-              }
-            />
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-gray-5 bg-white px-8 py-5">
           <SAPPButtonV2
