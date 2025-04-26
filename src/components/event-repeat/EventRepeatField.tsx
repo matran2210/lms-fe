@@ -222,7 +222,7 @@ const EventRepeatField = ({
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')
-        : initDate
+        : undefined
 
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
@@ -230,7 +230,7 @@ const EventRepeatField = ({
           type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
-          recurrence_end_date: recurrence_end_date.toISOString(),
+          recurrence_end_date: recurrence_end_date?.toISOString(),
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
@@ -292,7 +292,9 @@ const EventRepeatField = ({
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <p className="required flex items-center pr-6">Repeat every</p>
+                <p className="flex items-center pr-6 font-medium">
+                  Repeat every
+                </p>
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -303,7 +305,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <p className="required flex items-center pr-6">Repeat on</p>
+                <p className="flex items-center pr-6 font-medium">Repeat on</p>
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -312,7 +314,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <p className="required flex items-center pr-6">End on</p>
+            <p className="flex items-center pr-6 font-medium">End on</p>
             <Controller
               control={control}
               name="end_on"

@@ -184,6 +184,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       handleChangeRequestStatus(RequestStatus.APPROVED)
     }
   }
+
+  const requestType = Object.values(REQUEST_TYPE).find(
+    (item) => item.value === requestDetail?.type,
+  )
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -228,7 +232,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               </span>
               <span className="">
                 {requestDetail?.due_date} |{' '}
-                {dayjs(requestDetail?.created_at).format('hh:mm')}
+                {dayjs(requestDetail?.created_at).format('HH:mm')}
               </span>
             </div>
             <div className="mb-4 flex items-center gap-x-3 text-sm">
@@ -250,12 +254,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Request Type"
                   body={
-                    <span className="text-danger">
-                      {capitalizeFirstLetter(
-                        Object.values(REQUEST_TYPE).find(
-                          (item) => item.value == requestDetail?.type,
-                        )?.label,
-                      )}
+                    <span className={`${requestType?.colorClass}`}>
+                      {requestType?.label}
                     </span>
                   }
                 />
