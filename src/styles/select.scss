@@ -146,7 +146,7 @@
 .select-options.repeat-unit {
   .select-single {
     .select__control {
-      @apply h-11.25;
+      @apply h-11.25 rounded-[4px];
     }
   }
 }

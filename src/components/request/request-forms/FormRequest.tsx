@@ -57,7 +57,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       request_name: '',
       request_teacher_id: '',
       request_busy_schedule: [
-        { repeat: REPEAT_TYPE.DOES_NOT_REPEAT, date_range: [] },
+        {
+          repeat: REPEAT_TYPE.DOES_NOT_REPEAT,
+          date_range: [new Date(), new Date()],
+        },
       ],
       request_weekly_norm: [{ quantity: undefined }],
       request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
@@ -74,8 +77,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestNorm = watch('request_weekly_norm')
   const requestTimeoff = watch('request_time_off')
   const repeat = watch('request_busy_schedule.0.repeat')
-  const repeatType = watch('request_busy_schedule.0.recurring_schedule.type')
-
+  const repeatType = watch(
+    'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
+  )
   const {
     fields: weeklyNormFields,
     append: appendNorm,
@@ -87,6 +91,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     append: appendTimeoff,
     remove: removeTimeoff,
   } = useFieldArray({ control, name: 'request_time_off' })
+
   const {
     classes,
     hasNextPage: hasNextPageClasses,
@@ -107,7 +112,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const validateRepeatData = () => {
     if (!getValues('request_busy_schedule.0.description')) {
-      return setError('request_busy_schedule.0.description', {
+      setError('request_busy_schedule.0.description', {
         message: VALIDATE_REQUIRED,
       })
     }
@@ -117,7 +122,17 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         REPEAT_TYPE.DOES_NOT_REPEAT &&
       !getValues('request_busy_schedule.0.drawer-repeat-end-on')
     ) {
-      return setError('request_busy_schedule.0.drawer-repeat-end-on', {
+      setError('request_busy_schedule.0.drawer-repeat-end-on', {
+        message: VALIDATE_REQUIRED,
+      })
+    }
+    if (
+      !getValues(
+        'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
+      ) &&
+      getValues('request_busy_schedule.0.repeat_schedule.repeat')
+    ) {
+      setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
       })
     }
@@ -125,11 +140,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
-
+    validateRepeatData()
+    if (Object.keys(control._formState.errors).length) return
     if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
-      typeof repeat !== 'string' &&
+      !!repeatType &&
       repeatType !== REPEAT_TYPE.DOES_NOT_REPEAT &&
       repeatType !== REPEAT_TYPE.CHOSEN_PATTERN
     ) {
@@ -137,13 +153,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         getValues,
         requestBusy?.[0]?.date_range?.[0] ?? new Date(),
       )
-
-      validateRepeatData()
     } else if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
       repeatType === REPEAT_TYPE.CHOSEN_PATTERN &&
-      typeof repeat !== 'string' &&
       detailSchedule &&
       !isEmpty(detailSchedule?.recurring_pattern_schedule)
     ) {
@@ -167,7 +180,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         month_of_year,
         type,
       }
-      validateRepeatData()
+    } else {
+      recurring_schedule = undefined
     }
     const formattedBusyScheduleData = {
       event_name: data.request_name,
@@ -182,8 +196,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             .format('YYYY-MM-DD[T]HH:mm:ss[Z]') ?? '',
       },
       repeat:
-        data.request_busy_schedule?.[0].recurring_schedule.type !==
-        REPEAT_TYPE.DOES_NOT_REPEAT,
+        data?.request_busy_schedule?.[0]?.repeat_schedule?.repeat ?? false,
       recurring_schedule,
       description: getValues('request_busy_schedule.0.description') ?? '',
       status: getValues('request_status')?.value,
@@ -376,7 +389,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               })
 
               setValue(
-                'request_busy_schedule.0.recurring_schedule.type',
+                'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
                 REPEAT_TYPE.CHOSEN_PATTERN,
               )
               setValue(
@@ -434,14 +447,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             )
           }
           setValue(
-            'request_creator',
-            data.staff_request.detail.full_name ??
-              data.user_request.detail.full_name,
-          )
-
-          setValue(
             'request_approver',
             data.staff_assignee.detail.full_name ?? '',
+          )
+          setValue(
+            'request_creator',
+            data?.staff_request?.detail?.full_name ??
+              data?.user_request?.detail?.full_name,
           )
         } else {
           toast.error('Something wrong!')
@@ -531,7 +543,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       >
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
-            <span className="font-sans text-lg font-semibold">
+            <span className="text-xl font-semibold text-primary">
               {router.query.id ? 'Edit' : 'Add More'} Request
             </span>
             <span className="cursor-pointer" onClick={handleCancel}>
@@ -696,7 +708,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     required
                     label="Start Date - End Date"
                     name={`request_busy_schedule.0.date_range`}
-                    format="YYYY-MM-DD | HH:mm:ss"
+                    format="YYYY-MM-DD | HH:mm"
                     showTime={true}
                     // disabledDate={disabledDate}
                     inputClassName="h-11.25 w-full rounded-md"
@@ -712,12 +724,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 <div className="mb-6">
                   <HookFormEventRepeat
                     control={control}
-                    name="request_busy_schedule.0"
-                    defaultDate={dayjs(
-                      requestBusy?.[0]?.['drawer-repeat-end-on']
-                        ? requestBusy?.[0]?.['drawer-repeat-end-on']
-                        : currentDate?.[1],
-                    ).toDate()}
+                    name="request_busy_schedule.0.repeat_schedule"
+                    rangeDate={currentDate ?? [new Date(), new Date()]}
                     repeatOption={otherOption}
                     disabled={
                       isEdit &&

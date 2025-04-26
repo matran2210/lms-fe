@@ -115,10 +115,13 @@ export interface IBusyRequestDetailResponse {
   teacher_weekly_norms: IWeeklyNorms[] // Empty array in the example, but may contain data in other responses
 }
 export interface IBusySchedule {
-  date_range?: Date[]
+  date_range?: [Date, Date]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  recurring_schedule: IRecurringSchedule
+  repeat_schedule: {
+    repeat: boolean
+    recurring_schedule: IRecurringSchedule
+  }
   description?: string
   repeat?: REPEAT_TYPE
   'drawer-repeat-interval'?: string
@@ -179,7 +182,7 @@ export interface ICreateWeeklyNormData
   request_type: string
 }
 export interface IEditWeeklyNormData extends IWeeklyNormBase {
-  status: string
+  status?: string
 }
 
 interface ITimeoffRequestBase {
