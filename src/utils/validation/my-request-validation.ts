@@ -3,6 +3,7 @@ import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { REQUEST_TYPE } from 'src/constants/my-request'
 import { isPast } from 'date-fns'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
+import dayjs from 'dayjs'
 
 // Function to check for overlapping schedules
 export const findLastOverlappingIndex = (
@@ -32,6 +33,8 @@ const sharedFields = z.object({
   request_type_value: z.string({ required_error: VALIDATE_REQUIRED }),
   note: z.string().optional(),
 })
+
+const maxRangeBusySchedule = 91
 
 const dateRangeSchema = z
   .array(z.date())
@@ -67,9 +70,8 @@ const dateRangeSchema = z
       })
     }
 
-    const diffInDays =
-      (toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24)
-    if (diffInDays >= 91) {
+    const diffInDays = dayjs(toDate).diff(fromDate, 'day', true)
+    if (diffInDays >= maxRangeBusySchedule) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'Date range cannot exceed 91 days',

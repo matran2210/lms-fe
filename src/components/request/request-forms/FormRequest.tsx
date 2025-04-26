@@ -126,12 +126,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         message: VALIDATE_REQUIRED,
       })
     }
-    if (
+
+    const isHaveEndOnValue =
       !getValues(
         'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
-      ) &&
-      getValues('request_busy_schedule.0.repeat_schedule.repeat')
-    ) {
+      ) && getValues('request_busy_schedule.0.repeat_schedule.repeat')
+    if (isHaveEndOnValue) {
       setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
       })
@@ -140,8 +140,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
+
     validateRepeatData()
     if (Object.keys(control._formState.errors).length) return
+
     if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
