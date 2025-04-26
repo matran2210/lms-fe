@@ -143,6 +143,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/case-study/[id]',
     '/certificates/[id]',
     '/case-study/result/[id]',
+    '/teachers',
   ]
 
   const showHelp = !excludedPathsHelp.some((path) =>
