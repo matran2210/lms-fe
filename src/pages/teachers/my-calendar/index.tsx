@@ -74,4 +74,4 @@ const MyCalendar = () => {
   )
 }
 
-export default withAuthorization([UserType.STUDENT])(MyCalendar)
+export default withAuthorization([UserType.TEACHER])(MyCalendar)
