@@ -27,6 +27,7 @@ import {
 } from 'src/type/progress'
 import { z } from 'zod'
 import styles from './styles.module.scss'
+import { SwitcherClosed, SwitcherExpanded } from '@assets/icons'
 
 export interface IProps {
   id: string | null
@@ -34,6 +35,7 @@ export interface IProps {
   isView: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   refresh?: () => void
+  allowSection?: boolean
 }
 const getCompletedKeys = (data: ICourseSections[]): string[] => {
   let result: string[] = []
@@ -113,7 +115,14 @@ const defaultValues = {
   checkedNodes: [],
 }
 
-function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
+function FormViewProgress({
+  open,
+  setOpen,
+  id,
+  isView,
+  refresh,
+  allowSection,
+}: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const dispatch = useAppDispatch()
@@ -140,7 +149,12 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
         .array(z.string().min(1, { message: VALIDATE_REQUIRED }))
         .min(1, { message: VALIDATE_REQUIRED }),
     ),
-    section: z.string().optional(),
+    section: allowSection
+      ? z
+          .string({ required_error: VALIDATE_REQUIRED })
+          .trim()
+          .min(1, VALIDATE_REQUIRED)
+      : z.string().optional(),
     note: z.string().optional(),
     checkedNodes: z.array(z.string()).min(1, { message: VALIDATE_REQUIRED }),
   })
@@ -310,7 +324,6 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
       onClose={() => handleCancel()}
       width={'50%'}
       closeIcon={false}
-      loading={loading}
     >
       <div className="border-b-none flex h-full w-full flex-col">
         <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
@@ -337,12 +350,15 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
                       body={
                         detailProgress?.start_time &&
                         detailProgress?.end_time &&
-                        calculateHoursDifference(
-                          detailProgress.start_time,
-                          detailProgress.end_time,
-                        ) + ' hour'
+                        `${detailProgress?.start_time?.replace(/:00$/, '')} - ${detailProgress?.end_time?.replace(/:00$/, '')}`
                       }
                     />
+                    {allowSection && (
+                      <CollapseItem
+                        title="Section"
+                        body={detailProgress?.section}
+                      />
+                    )}
 
                     <CollapseItem
                       title="Progress"
@@ -350,12 +366,12 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
                         <span
                           style={{
                             color:
-                              (detailProgress?.progress ?? 0) >= 90
+                              (detailProgress?.progress ?? 0) * 100 >= 90
                                 ? '#176CDD'
                                 : '#F01919',
                           }}
                         >
-                          {`${detailProgress?.progress ?? 0} %`}
+                          {`${detailProgress?.progress ? detailProgress?.progress * 100 : 0} %`}
                         </span>
                       }
                     />
@@ -488,18 +504,21 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
                   </div>
                 </div>
               </div>
-              <div className="mb-6">
-                <SAPPSelect
-                  control={control}
-                  label="Section"
-                  name="section"
-                  placeholder="Please choose"
-                  required
-                  disabled
-                  className="h-11.25 text-base font-medium"
-                  options={[]}
-                />
-              </div>
+              {allowSection && (
+                <div className="mb-6">
+                  <SAPPSelect
+                    control={control}
+                    label="Section"
+                    name="section"
+                    placeholder="Please choose"
+                    required
+                    disabled
+                    className="h-11.25 text-base font-medium"
+                    options={[]}
+                  />
+                </div>
+              )}
+
               <div className="mb-6">
                 <SAPPInput
                   label={'Note'}
@@ -530,37 +549,7 @@ function FormViewProgress({ open, setOpen, id, isView, refresh }: IProps) {
                 treeData={treeData}
                 className={styles.lessonFormTree}
                 switcherIcon={({ expanded }) =>
-                  expanded ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
-                        fill="#FFB800"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
-                        fill="#9CA3AF"
-                      />
-                    </svg>
-                  )
+                  expanded ? <SwitcherExpanded /> : <SwitcherClosed />
                 }
               />
             </div>

@@ -114,3 +114,27 @@ export interface IRequestCreateProgress {
     course_section_ids: string[]
   }[]
 }
+
+export interface IClassDetail {
+  capacity: number
+  code: string
+  course: ICourse
+  description: string
+  examination_subject?: string
+  facility?: string
+  finished_at?: string
+  flexible_days: number
+  id: string
+  instruction_mode: string
+  name: string
+  progress: number
+  started_at?: string
+  status: string
+  type: string
+}
+
+export interface ICourse {
+  id: string
+  name: string
+  course_categories: { id: string; name: string }[]
+}

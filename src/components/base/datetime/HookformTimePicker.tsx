@@ -56,14 +56,14 @@ const HookformTimePicker = ({
                 : null
             }
             onChange={(times) => {
-              if (times) {
-                onChange([
-                  times[0]?.format(EDateTime.timepicker),
-                  times[1]?.format(EDateTime.timepicker),
-                ])
-              } else {
-                onChange(null)
-              }
+              onChange(
+                times
+                  ? [
+                      times[0]?.format(EDateTime.timepicker),
+                      times[1]?.format(EDateTime.timepicker),
+                    ]
+                  : null,
+              )
             }}
             onBlur={onBlur}
             placeholder={placeholder}

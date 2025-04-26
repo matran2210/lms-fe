@@ -3,7 +3,7 @@ import { ArrowCollapseIcon } from 'src/assets/icons'
 import './Accodian.module.scss'
 import SAPPCheckbox from 'src/components/base/checkbox/SAPPCheckbox'
 import ProgressTooltip from '@components/my-class/progress-form/ProgressTooltip'
-import { IExplorerNode } from '../../../type/progress'
+import { IExplorerNode } from 'src/type/progress'
 
 interface AccodianProps {
   explorer: IExplorerNode

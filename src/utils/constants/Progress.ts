@@ -10,3 +10,15 @@ export const OPTIONS_PROGRESS_CLASS: DefaultOptionType[] = [
     value: 'lt_90',
   },
 ]
+
+export enum PROGRAM {
+  'ACCA' = 'ACCA',
+  'CMA' = 'CMA',
+  'CFA' = 'CFA',
+  'CD' = 'Cert/Dip',
+}
+export enum CONSTRUCTION {
+  'OFFLINE' = 'OFFLINE',
+  'BLENDED' = 'BLENDED',
+  'ONLINE' = 'ONLINE',
+}

@@ -23,6 +23,7 @@ import {
 } from 'src/type/progress'
 import { z } from 'zod'
 import styles from './styles.module.scss'
+import { SwitcherClosed, SwitcherExpanded } from '@assets/icons'
 
 const defaultValues = {
   lesson: null,
@@ -36,6 +37,7 @@ export interface IProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   refresh?: () => void
+  allowSection?: boolean
 }
 
 const convertToTreeData = (
@@ -89,7 +91,7 @@ const getAllKeys = (data: TreeDataNode[]): React.Key[] => {
   return keys
 }
 
-function FormAddProgress({ open, setOpen, refresh }: IProps) {
+function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const dispatch = useAppDispatch()
@@ -136,14 +138,16 @@ function FormAddProgress({ open, setOpen, refresh }: IProps) {
         .array(z.string().min(1, { message: VALIDATE_REQUIRED }))
         .min(1, { message: VALIDATE_REQUIRED }),
     ),
-    section: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED)
-      .nullable()
-      .refine((val) => val !== null, {
-        message: VALIDATE_REQUIRED,
-      }),
+    section: allowSection
+      ? z
+          .string({ required_error: VALIDATE_REQUIRED })
+          .trim()
+          .min(1, VALIDATE_REQUIRED)
+          .nullable()
+          .refine((val) => val !== null, {
+            message: VALIDATE_REQUIRED,
+          })
+      : z.string().optional(),
     note: z.string().optional(),
     checkedNodes: z.array(z.string()).min(1, { message: VALIDATE_REQUIRED }),
   })
@@ -278,9 +282,11 @@ function FormAddProgress({ open, setOpen, refresh }: IProps) {
         try {
           const res = await ProgressAPI.getListSection(id as string, value)
           if (res?.data && res?.data?.length > 0) {
-            const nameSection = res.data[0]?.course_sections?.filter(
-              (item: { type: string }) => item.type === 'PART',
-            )
+            const nameSection = res.data
+              ?.filter((item: { main: boolean }) => item.main)[0]
+              ?.course_sections.filter(
+                (item: { type: string }) => item.type === 'PART',
+              )
             setValue('section', nameSection[0]?.name)
             setSectionOption([
               {
@@ -350,18 +356,21 @@ function FormAddProgress({ open, setOpen, refresh }: IProps) {
               </div>
             </div>
           </div>
-          <div className="mb-6">
-            <SAPPSelect
-              control={control}
-              label="Section"
-              name="section"
-              placeholder="Please choose"
-              required
-              disabled
-              className="h-11.25 text-base font-medium"
-              options={sectionOption}
-            />
-          </div>
+          {allowSection && (
+            <div className="mb-6">
+              <SAPPSelect
+                control={control}
+                label="Section"
+                name="section"
+                placeholder="Please choose"
+                required
+                disabled
+                className="h-11.25 text-base font-medium"
+                options={sectionOption}
+              />
+            </div>
+          )}
+
           <div className="mb-6">
             <SAPPInput
               label={'Note'}
@@ -391,37 +400,7 @@ function FormAddProgress({ open, setOpen, refresh }: IProps) {
             treeData={treeData}
             className={styles.lessonFormTree}
             switcherIcon={({ expanded }) =>
-              expanded ? (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M12 16C11.6066 16 11.2361 15.8024 11 15.4667L7.25001 10.1333C6.96593 9.72931 6.92023 9.18876 7.13197 8.73705C7.34371 8.28534 7.77654 8 8.25001 8H15.75C16.2235 8 16.6563 8.28534 16.868 8.73705C17.0798 9.18876 17.0341 9.72931 16.75 10.1333L13 15.4667C12.7639 15.8024 12.3934 16 12 16Z"
-                    fill="#FFB800"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M8.73705 7.13197C9.18876 6.92023 9.72931 6.96593 10.1333 7.25001L15.4667 11C15.8024 11.2361 16 11.6066 16 12C16 12.3934 15.8024 12.7639 15.4667 13L10.1333 16.75C9.72931 17.0341 9.18876 17.0798 8.73705 16.868C8.28534 16.6563 8 16.2235 8 15.75V8.25001C8 7.77654 8.28534 7.34371 8.73705 7.13197Z"
-                    fill="#9CA3AF"
-                  />
-                </svg>
-              )
+              expanded ? <SwitcherExpanded /> : <SwitcherClosed />
             }
           />
         </div>

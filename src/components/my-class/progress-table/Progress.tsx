@@ -10,26 +10,33 @@ import ProgressTable from '@components/my-class/progress-table/ProgressTable'
 import { ProgressAPI } from '@pages/api/progress'
 import { ProgressKey } from '@pages/api/queryKey'
 import { cleanParams } from '@utils/common'
-import { OPTIONS_PROGRESS_CLASS } from '@utils/constants/Progress'
+import {
+  CONSTRUCTION,
+  OPTIONS_PROGRESS_CLASS,
+  PROGRAM,
+} from '@utils/constants/Progress'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { IProgressFilterForm } from 'src/type/progress'
+import { IClassDetail, IProgressFilterForm } from 'src/type/progress'
 import useSappPaging from '../../../hooks/useSappPaging'
+import SAPPInput from '@components/base/Input/SAPPInput'
 
 interface FilterParams {
   progress?: string
   fromDate?: string
   toDate?: string
+  section?: string
 }
 
 const initialValues: FilterParams = {
   progress: '',
+  section: '',
   fromDate: '',
   toDate: '',
 }
 
-const Progress = () => {
+const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
   const [isOpenAddModal, setOpenAddModal] = useState(false)
   const [isOpenViewModal, setIsOpenViewModal] = useState(false)
   const [idProgress, setIdProgress] = useState<string | null>(null)
@@ -38,7 +45,18 @@ const Progress = () => {
   const router = useRouter()
   const { id } = router.query
   const { control, getValues, reset } = useForm<IProgressFilterForm>()
-
+  const allowSection = !classDetail?.course?.course_categories.some(
+    (item) => item.name === PROGRAM.ACCA || item.name === PROGRAM.CD,
+  )
+  const allowCreateProgress =
+    classDetail?.course?.course_categories.some((item) =>
+      [PROGRAM.ACCA, PROGRAM.CMA, PROGRAM.CFA, PROGRAM.CD].includes(
+        item.name as PROGRAM,
+      ),
+    ) &&
+    [CONSTRUCTION.ONLINE, CONSTRUCTION.BLENDED, CONSTRUCTION.OFFLINE].includes(
+      classDetail.instruction_mode as CONSTRUCTION,
+    )
   const getValuesFilter = () => ({
     progress: getValues('progress'),
     fromDate: getValues('rangeDate')?.[0]?.toISOString(),
@@ -90,6 +108,13 @@ const Progress = () => {
             placeholder="Progress"
             options={OPTIONS_PROGRESS_CLASS}
           />
+          {allowSection && (
+            <SAPPInput
+              control={control}
+              name="section"
+              placeholder={'Section'}
+            ></SAPPInput>
+          )}
           <SAPPRangePicker name="rangeDate" control={control} />
         </FilterGrid>
         <div className="flex justify-between">
@@ -110,7 +135,7 @@ const Progress = () => {
               className="h-10 rounded-md"
             />
           </div>
-          <div>
+          {allowCreateProgress && (
             <ButtonPrimary
               title="Add Progress"
               icon={<Plus />}
@@ -118,7 +143,7 @@ const Progress = () => {
               size="small"
               className="flex h-10 items-center rounded-md"
             />
-          </div>
+          )}
         </div>
       </div>
 
@@ -132,12 +157,15 @@ const Progress = () => {
         setIsEdit={setIsOpenViewModal}
         setIsInspect={setIsOpenViewModal}
         handleChangeParams={handleChangeParams}
+        allowSection={allowSection}
+        allowCreateProgress={allowCreateProgress}
       />
       {isOpenAddModal ? (
         <FormAddProgress
           refresh={handleRefetchData}
           open={isOpenAddModal}
           setOpen={setOpenAddModal}
+          allowSection={allowSection}
         />
       ) : null}
       {isOpenViewModal ? (
@@ -147,6 +175,7 @@ const Progress = () => {
           open={isOpenViewModal}
           setOpen={setIsOpenViewModal}
           refresh={handleRefetchData}
+          allowSection={allowSection}
         />
       ) : null}
     </div>

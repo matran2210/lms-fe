@@ -16,6 +16,8 @@ interface ProgressTableProps {
   setIsView: Dispatch<SetStateAction<boolean>>
   setIdProgress: Dispatch<SetStateAction<string | null>>
   handleChangeParams?: (currentPage: number, pageSize: number) => void
+  allowSection?: boolean
+  allowCreateProgress?: boolean
 }
 
 const ProgressTable = ({
@@ -28,8 +30,10 @@ const ProgressTable = ({
   setIsInspect,
   setIdProgress,
   setIsView,
+  allowSection,
+  allowCreateProgress,
 }: ProgressTableProps) => {
-  const columnsTitles: any[] = [
+  let columnsTitles: any[] = [
     {
       title: '#',
       dataIndex: 'index',
@@ -67,9 +71,11 @@ const ProgressTable = ({
       render: (value: number, record: IProgress, index: number) => {
         return (
           <span
-            style={{ color: record?.progress >= 90 ? '#176CDD' : '#F01919' }}
+            style={{
+              color: record?.progress * 100 >= 90 ? '#176CDD' : '#F01919',
+            }}
           >
-            {record?.progress || 0} %
+            {record?.progress * 100 || 0} %
           </span>
         )
       },
@@ -97,32 +103,36 @@ const ProgressTable = ({
       dataIndex: 'method',
       render: (value: string, record: IProgress) => {
         return (
-          <SAPPDropdown>
-            <div
-              onClick={() => {
-                setIsView(true)
-                setIsEdit(true)
-                setIdProgress(record.id)
-              }}
-            >
-              View
-            </div>
-            <div
-              onClick={() => {
-                setIsView(false)
-                setIsInspect(true)
-                setIdProgress(record.id)
-              }}
-            >
-              Edit
-            </div>
-          </SAPPDropdown>
+          allowCreateProgress && (
+            <SAPPDropdown>
+              <div
+                onClick={() => {
+                  setIsView(true)
+                  setIsEdit(true)
+                  setIdProgress(record.id)
+                }}
+              >
+                View
+              </div>
+              <div
+                onClick={() => {
+                  setIsView(false)
+                  setIsInspect(true)
+                  setIdProgress(record.id)
+                }}
+              >
+                Edit
+              </div>
+            </SAPPDropdown>
+          )
         )
       },
       fixed: 'right',
     },
   ]
-
+  if (!allowSection) {
+    columnsTitles = columnsTitles.filter((item) => item.dataIndex !== 'section')
+  }
   return (
     <SappTable
       handleChangeParams={handleChangeParams}

@@ -96,7 +96,7 @@ const ClassDetail = () => {
       case 2:
         return <Students />
       case 3:
-        return <Progress />
+        return <Progress classDetail={data} />
       case 4:
         return <StudentsTestResult />
       default:
