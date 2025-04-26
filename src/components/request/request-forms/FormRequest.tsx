@@ -722,7 +722,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     defaultDate={dayjs(
                       requestBusy?.[0]?.['drawer-repeat-end-on']
                         ? requestBusy?.[0]?.['drawer-repeat-end-on']
-                        : currentDate?.[1],
+                        : currentDate?.[0],
                     ).toDate()}
                     repeatOption={otherOption}
                     disabled={
