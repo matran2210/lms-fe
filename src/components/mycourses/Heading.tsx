@@ -1,6 +1,6 @@
 import React from 'react'
 import { truncateString } from '@utils/index'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 
 interface IProps {
   greeting: string
@@ -15,12 +15,9 @@ const Heading = ({ greeting, title, des }: IProps) => {
         <h1 className="line-clamp-1 text-2xl font-light text-bw-1">
           {greeting}
           <span className="ml-1.5 font-medium">
-            <SappTooltip
-              title={title}
-              showTooltip={(title as string)?.length > 50}
-            >
+            <Tooltip title={title} showTooltip={(title as string)?.length > 50}>
               {truncateString(title, 80)}
-            </SappTooltip>
+            </Tooltip>
           </span>
         </h1>
       </div>

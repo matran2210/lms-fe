@@ -1,7 +1,7 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { removeHtmlTags, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
@@ -21,6 +21,7 @@ import {
 import { IAnswer, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
+import Tooltip from 'src/common/Tooltip'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
@@ -204,7 +205,6 @@ const TableQuestions = ({
                   {/* Question */}
                   <td className="sapp-border p-0 pr-4">
                     <Tooltip
-                      color="white"
                       title={
                         <div
                           dangerouslySetInnerHTML={{

@@ -4,7 +4,7 @@ import SappTable from '@components/base/SappTable'
 import LoadingRow from '@components/common/LoadingRow'
 import { UserKey } from '@pages/api/queryKey'
 import { UserApi } from '@pages/api/user'
-import { Tooltip } from 'antd'
+
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import React, { SetStateAction, useState } from 'react'
@@ -13,6 +13,7 @@ import TabLayout from '../TabLayout'
 import ExamEditDrawer from './ExamEditDrawer'
 import ExamInfoActionCell from './ExamInfoActionCell'
 import { IExamInformation } from './type'
+import Tooltip from 'src/common/Tooltip'
 
 const commonHeaderCellStyle =
   'text-left text-medium-sm text-gray-1 font-semibold pb-3'

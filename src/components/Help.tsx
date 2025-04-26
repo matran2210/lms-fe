@@ -92,8 +92,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             arrow
             title={<div className="text-support-1">Support Center</div>}
             placement="left"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
           >
             <div
               id="floating-button"
