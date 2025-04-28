@@ -16,7 +16,26 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   const handleButtonClick = () => {
     setVisible(!visible)
   }
+  /**
+   * Ẩn Hubspot Chat Widget nếu đã khởi tạo
+   */
+  const hideHubspotWidget = () => {
+    const hubspot = (window as any).HubSpotConversations
 
+    if (hubspot && hubspot.widget) {
+      if (typeof hubspot.widget.close === 'function') {
+        hubspot.widget.close()
+      }
+      if (typeof hubspot.widget.hide === 'function') {
+        hubspot.widget.hide()
+      }
+    }
+  }
+
+  /**
+   * Load Hubspot script nếu showHelp = true,
+   * Nếu showHelp = false thì ẩn widget chat
+   */
   useEffect(() => {
     // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
     if (showHelp) {
@@ -35,21 +54,30 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       return () => {
         document.head.removeChild(scriptElement)
       }
+    } else {
+      hideHubspotWidget()
+      const container = document.getElementById(
+        'hubspot-messages-iframe-container',
+      )
+      container?.classList.remove('visible-icon')
     }
-  })
+  }, [showHelp])
 
   useEffect(() => {
     const container = document.getElementById(
       'hubspot-messages-iframe-container',
     )
-    if (container && visible) {
-      container.classList.add('visible-icon')
-    } else {
-      if (container && !visible) {
+    if (container) {
+      if (visible) {
+        container.classList.add('visible-icon')
+      } else {
         container.classList.remove('visible-icon')
       }
     }
   }, [visible])
+
+  // Nếu không cần showHelp thì return null
+  if (!showHelp) return null
 
   return (
     <div className="cursor-pointer">

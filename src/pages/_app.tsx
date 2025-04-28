@@ -225,12 +225,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    {showHelp && (
-                      <>
-                        <BackToTop />
-                        <Help showHelp={showHelp} />
-                      </>
-                    )}
+                    <>
+                      <BackToTop />
+                      <Help showHelp={showHelp} />
+                    </>
                     <LearningNotesList />
                     <PopupCompletedCourse />
                   </>
