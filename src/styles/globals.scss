@@ -980,11 +980,12 @@ p a {
   z-index: 999 !important;
 }
 
+#hubspot-conversations-iframe.visible-icon,
 #hubspot-messages-iframe-container.visible-icon iframe,
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
-
+#hubspot-conversations-iframe.visible-icon,
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;

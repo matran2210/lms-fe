@@ -152,17 +152,19 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   )
 
   useEffect(() => {
-    const container = document.getElementById('hubspot-conversations-iframe')
-    const message = document.getElementById(
+    const message = document.getElementById('hubspot-conversations-iframe')
+    const container = document.getElementById(
       'hubspot-messages-iframe-container',
     ) as HTMLElement
     if (container) {
       if (!showHelp) {
-        container.classList.add('visible-icon')
-        message.classList.add('visible-icon')
+        container.style.display = 'none'
+        container.style.visibility = 'hidden'
+        container?.classList.add('visible-icon')
+        message?.classList.add('visible-icon')
       } else {
-        container.classList.remove('visible-icon')
-        message.classList.remove('visible-icon')
+        container?.classList.remove('visible-icon')
+        message?.classList.remove('visible-icon')
       }
     }
   }, [showHelp])

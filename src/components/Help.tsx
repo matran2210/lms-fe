@@ -3,25 +3,24 @@ import { Popover, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
 
+const HELP_WIDGET_SCRIPT_ID = 'hs-script-loader'
+
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
 
   const handleVisibleChange = (newVisible: boolean) => {
-    // Chỉ thay đổi trạng thái khi newVisible là true (mở Popover)
     if (newVisible) {
       setVisible(true)
     }
   }
 
   const handleButtonClick = () => {
-    setVisible(!visible)
+    setVisible((prev) => !prev)
   }
-  /**
-   * Ẩn Hubspot Chat Widget nếu đã khởi tạo
-   */
+
   const hideHubspotWidget = () => {
-    const hubspot = (window as any).HubSpotConversations
-    if (hubspot && hubspot.widget) {
+    const hubspot = (window as any)?.HubSpotConversations
+    if (hubspot?.widget) {
       if (typeof hubspot.widget.close === 'function') {
         hubspot.widget.close()
       }
@@ -31,39 +30,44 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     }
   }
 
-  /**
-   * Load Hubspot script nếu showHelp = true,
-   * Nếu showHelp = false thì ẩn widget chat
-   */
-  useEffect(() => {
-    // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-    // Kiểm tra xem script đã tồn tại chưa
-    const scriptExist = document.getElementById('hs-script-loader')
-
-    if (!scriptExist && showHelp) {
-      // Tạo một thẻ script mới
-      const scriptElement = document.createElement('script')
-      scriptElement.type = 'text/javascript'
-      scriptElement.id = 'hs-script-loader'
-      scriptElement.async = true
-      scriptElement.defer = true
-      scriptElement.src = `//js.hs-scripts.com/1774127.js`
-
-      // Thêm thẻ script vào trong thẻ head của trang
-      document.head.appendChild(scriptElement)
-
-      // Cleanup: Xóa script khi component unmount (nếu cần)
-      return () => {
-        document.head.removeChild(scriptElement)
-      }
+  const handleLoadHubspotScript = () => {
+    const existingScript = document.getElementById(HELP_WIDGET_SCRIPT_ID)
+    if (!existingScript) {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.id = HELP_WIDGET_SCRIPT_ID
+      script.async = true
+      script.defer = true
+      script.src = '//js.hs-scripts.com/1774127.js'
+      document.head.appendChild(script)
     }
-    if (!showHelp) {
-      hideHubspotWidget()
+  }
+
+  const handleRemoveHubspotScript = () => {
+    const script = document.getElementById(HELP_WIDGET_SCRIPT_ID)
+    if (script) {
+      script.remove()
+    }
+  }
+
+  useEffect(() => {
+    if (showHelp) {
+      handleLoadHubspotScript()
+    } else {
       const container = document.getElementById(
         'hubspot-messages-iframe-container',
       )
       if (container) {
-        container.classList.remove('visible-icon')
+        container.style.display = 'none'
+        container.style.visibility = 'hidden'
+        container?.classList.add('visible-icon')
+      }
+      hideHubspotWidget()
+    }
+
+    return () => {
+      if (showHelp) {
+        handleRemoveHubspotScript()
       }
     }
   }, [showHelp])
@@ -81,7 +85,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     }
   }, [visible])
 
-  // Nếu không cần showHelp thì return null
   if (!showHelp) return null
 
   return (
@@ -90,7 +93,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
         content={
           <PopupSupportCenter visible={visible} setVisible={setVisible} />
         }
-        title={undefined}
         trigger="click"
         open={visible}
         onOpenChange={handleVisibleChange}
@@ -121,13 +123,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             </div>
           </div>
         ) : (
-          <Tooltip
-            arrow
-            title={<div className="text-support-1">Support Center</div>}
-            placement="left"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
-          >
+          <Tooltip arrow title="Support Center" placement="left">
             <div
               id="floating-button"
               onClick={handleButtonClick}
