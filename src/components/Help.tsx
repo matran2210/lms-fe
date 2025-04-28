@@ -21,7 +21,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
    */
   const hideHubspotWidget = () => {
     const hubspot = (window as any).HubSpotConversations
-
     if (hubspot && hubspot.widget) {
       if (typeof hubspot.widget.close === 'function') {
         hubspot.widget.close()
@@ -38,7 +37,10 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
    */
   useEffect(() => {
     // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-    if (showHelp) {
+    // Kiểm tra xem script đã tồn tại chưa
+    const scriptExist = document.getElementById('hs-script-loader')
+
+    if (!scriptExist && showHelp) {
       // Tạo một thẻ script mới
       const scriptElement = document.createElement('script')
       scriptElement.type = 'text/javascript'
@@ -54,12 +56,15 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       return () => {
         document.head.removeChild(scriptElement)
       }
-    } else {
+    }
+    if (!showHelp) {
       hideHubspotWidget()
       const container = document.getElementById(
         'hubspot-messages-iframe-container',
       )
-      container?.classList.remove('visible-icon')
+      if (container) {
+        container.classList.remove('visible-icon')
+      }
     }
   }, [showHelp])
 
