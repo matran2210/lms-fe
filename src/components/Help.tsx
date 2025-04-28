@@ -58,9 +58,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
         'hubspot-messages-iframe-container',
       )
       if (container) {
-        container.style.display = 'none'
-        container.style.visibility = 'hidden'
-        container?.classList.add('visible-icon')
+        container.remove()
       }
       hideHubspotWidget()
     }

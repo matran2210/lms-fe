@@ -148,7 +148,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   const showHelp = useMemo(
     () => !excludedPathsHelp.some((path) => router.pathname.includes(path)),
-    [router],
+    [router.pathname],
   )
 
   useEffect(() => {
@@ -157,14 +157,11 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       'hubspot-messages-iframe-container',
     ) as HTMLElement
     if (container) {
-      if (!showHelp) {
-        container.style.display = 'none'
-        container.style.visibility = 'hidden'
-        container?.classList.add('visible-icon')
-        message?.classList.add('visible-icon')
-      } else {
+      if (showHelp) {
         container?.classList.remove('visible-icon')
         message?.classList.remove('visible-icon')
+      } else {
+        container.remove()
       }
     }
   }, [showHelp])
