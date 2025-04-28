@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { REQUEST_TYPE } from 'src/constants/my-request'
 import { isPast } from 'date-fns'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
+import dayjs from 'dayjs'
 
 // Function to check for overlapping schedules
 export const findLastOverlappingIndex = (
@@ -31,6 +33,59 @@ const sharedFields = z.object({
   request_type_value: z.string({ required_error: VALIDATE_REQUIRED }),
   note: z.string().optional(),
 })
+
+const maxRangeBusySchedule = 91
+
+const dateRangeSchema = z
+  .array(z.date())
+  .length(2, { message: VALIDATE_REQUIRED })
+  .superRefine((dates, ctx) => {
+    const [fromDate, toDate] = dates
+
+    if (!fromDate || isNaN(fromDate.getTime())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Start date must be a valid date',
+      })
+    } else if (fromDate <= new Date()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+
+        message: 'Start date must be greater than or equal to today',
+      })
+    }
+
+    if (!toDate || isNaN(toDate.getTime())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+
+        message: 'End date must be a valid date',
+      })
+    }
+
+    if (fromDate && toDate && fromDate >= toDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Start date must be earlier than end date',
+      })
+    }
+
+    const diffInDays = dayjs(toDate).diff(fromDate, 'day', true)
+    if (diffInDays >= maxRangeBusySchedule) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Date range cannot exceed 91 days',
+      })
+    }
+  })
+const busyScheduleItemSchema = z.object({
+  date_range: dateRangeSchema,
+  description: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+})
+
 // Request Validation Schema with overlapping schedule check
 const discriminated = z.discriminatedUnion('request_type_value', [
   z.object({
@@ -39,7 +94,8 @@ const discriminated = z.discriminatedUnion('request_type_value', [
       .trim()
       .min(1, VALIDATE_REQUIRED),
     request_type_value: z.literal(REQUEST_TYPE.BUSY_SCHEDULE.value),
-    note: z.string().optional(),
+
+    request_busy_schedule: z.array(busyScheduleItemSchema),
   }),
 
   z.object({
@@ -49,6 +105,7 @@ const discriminated = z.discriminatedUnion('request_type_value', [
       .min(1, VALIDATE_REQUIRED),
     request_type_value: z.literal(REQUEST_TYPE.WEEKLY_NORM.value),
     note: z.string().optional(),
+    description: z.string({ required_error: VALIDATE_REQUIRED }),
     request_weekly_norm: z
       .array(
         z

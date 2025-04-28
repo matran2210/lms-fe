@@ -1,5 +1,6 @@
 import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { Dayjs } from 'dayjs'
+import { REQUEST_STATUS } from 'src/constants'
 
 export type RecurringScheduleType = keyof Omit<
   typeof REPEAT_TYPE,
@@ -96,7 +97,7 @@ export interface IBusyRequestDetailResponse {
   updated_at: string
   deleted_at: string | null
   type: string
-  status: string
+  status: REQUEST_STATUS
   user_request: {
     id: string
     username: string
@@ -115,10 +116,13 @@ export interface IBusyRequestDetailResponse {
   teacher_weekly_norms: IWeeklyNorms[] // Empty array in the example, but may contain data in other responses
 }
 export interface IBusySchedule {
-  date_range?: Date[]
+  date_range?: [Date, Date]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  recurring_schedule: IRecurringSchedule
+  repeat_schedule: {
+    repeat: boolean
+    recurring_schedule: IRecurringSchedule
+  }
   description?: string
   repeat?: REPEAT_TYPE
   'drawer-repeat-interval'?: string
@@ -179,7 +183,7 @@ export interface ICreateWeeklyNormData
   request_type: string
 }
 export interface IEditWeeklyNormData extends IWeeklyNormBase {
-  status: string
+  status?: string
 }
 
 interface ITimeoffRequestBase {

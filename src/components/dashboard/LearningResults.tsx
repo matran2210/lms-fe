@@ -8,7 +8,7 @@ import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import NoData from 'src/common/NoData'
 import dayjs from 'dayjs'
 import { Tooltip } from 'antd'
-import { COURSE_TYPE } from 'src/constants'
+import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
 
 const LearningResults = () => {
   const router = useRouter()
@@ -18,6 +18,12 @@ const LearningResults = () => {
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
+
+  const shortName = (name: string) => {
+    return name.length < LABEL_MAX_LENGTH
+      ? name
+      : `${name.slice(0, LABEL_MAX_LENGTH)}...`
+  }
 
   const handleLearningResults = (
     data: ILearningResult[] | IMockTestResult | any,
@@ -32,7 +38,8 @@ const LearningResults = () => {
       const hasLearning = results.some((e: ILearningResult) => e.score)
       const indicator = results.map((e: ILearningResult, index: number) => {
         total += e.score
-        const name = `${e.short_name || e.name}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
+        let newName = e.short_name ? shortName(e.short_name) : shortName(e.name)
+        const name = `${newName}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
         if (index) return { name: name, max: 100 }
 
         return {
@@ -40,7 +47,6 @@ const LearningResults = () => {
           max: 100,
           axisLabel: {
             show: true,
-            align: '',
             fontSize: 10,
           },
         }
@@ -58,19 +64,34 @@ const LearningResults = () => {
           axisName: {
             fontSize: 12,
             color: '#374151',
-            lineHeight: 16,
+            lineHeight: 14,
             fontFamily: 'Roboto',
           },
           z: 1,
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function (params: any) {
+            const values = params.value
+            const indicators = results.map((e: ILearningResult) => e.name)
+            let tooltipText = `<strong>${params.name}</strong><br/>`
+            values.forEach((val: any, i: number) => {
+              tooltipText += `<span class='text-blue-5'>●</span> ${indicators[i]}: ${val}%<br/>`
+            })
+            return tooltipText
+          },
         },
         series: [
           {
             name: 'Learning Results',
             type: 'radar',
+            tooltip: {
+              show: isNormal,
+            },
             data: [
               {
                 value: results.map((e: ILearningResult) => e.score),
-                name: 'Learning results',
+                name: 'Your Learning results',
                 lineStyle: {
                   color: '#7086FD',
                 },
@@ -83,7 +104,7 @@ const LearningResults = () => {
                 value: isNormal
                   ? []
                   : results.map((e: ILearningResult) => e.mock_test_score),
-                name: 'Learning results',
+                name: 'Mock test results',
                 lineStyle: {
                   color: '#6FD195',
                 },
@@ -106,7 +127,7 @@ const LearningResults = () => {
               type: 'rect',
               invisible: !isNormal,
               shape: {
-                width: 60,
+                width: total ? 60 : 50,
                 height: 30,
               },
               style: {
@@ -116,7 +137,7 @@ const LearningResults = () => {
                 shadowColor: 'rgba(0, 0, 0, 0.1)',
                 shadowBlur: 10,
               },
-              x: -30,
+              x: total ? -30 : -25,
               y: -15,
               z: 3,
             },
@@ -127,7 +148,7 @@ const LearningResults = () => {
                 text: `${parseFloat((total / results.length).toFixed(2))}%`,
                 fontSize: 16,
                 fontWeight: 'bold',
-                fill: '#7086FD',
+                fill: !total ? '#252F4A' : '#7086FD',
                 align: 'center',
                 verticalAlign: 'middle',
               },
@@ -181,6 +202,8 @@ const LearningResults = () => {
             placement="top"
             mouseEnterDelay={0}
             mouseLeaveDelay={0}
+            color="#fff"
+            rootClassName="dashboard_tooltip"
           >
             <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
               Your Learning Results
@@ -193,12 +216,12 @@ const LearningResults = () => {
           </div>
         )}
         <div className="text-xsm text-gray-11 4xl:text-sm">
-          {`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}
+          {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
       {option && (
         <div
-          className={`flex grow gap-5 ${isNormal ? 'flex-col' : 'flex-row'} px-5 2xl:px-12`}
+          className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
         >
           <div className="grow">
             <EChart option={option} />
@@ -208,7 +231,7 @@ const LearningResults = () => {
           >
             {!isNormal && (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-green-4"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-green-4"></span>
                 <a
                   href={
                     mockTestId
@@ -225,7 +248,7 @@ const LearningResults = () => {
             )}
             {isNormal || hasLearning ? (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="h-3 w-3 rounded-full bg-blue-5"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-blue-5"></span>
                 <span className="min-w-fit font-medium">Learning results</span>
               </div>
             ) : null}
