@@ -54,9 +54,8 @@ const ProgressTable = ({
       title: 'Time',
       dataIndex: 'time',
       render: (value: Date, record: IProgress, index: number) => {
+        if (!record?.start_time || !record?.end_time) return null
         return (
-          record?.start_time &&
-          record?.end_time &&
           calculateHoursDifference(record.start_time, record.end_time) + ' hour'
         )
       },

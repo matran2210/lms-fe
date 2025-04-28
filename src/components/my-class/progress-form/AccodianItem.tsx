@@ -4,6 +4,7 @@ import './Accodian.module.scss'
 import SAPPCheckbox from 'src/components/base/checkbox/SAPPCheckbox'
 import ProgressTooltip from '@components/my-class/progress-form/ProgressTooltip'
 import { IExplorerNode } from 'src/type/progress'
+import clsx from 'clsx'
 
 interface AccodianProps {
   explorer: IExplorerNode
@@ -19,7 +20,10 @@ function Accodian({ explorer, type, action }: AccodianProps) {
       <div className="justify-content-between mb-8 flex items-center">
         <div className="flex items-center gap-3">
           <div
-            className={`sapp-collapse-wrapper flex items-center ${expand ? 'expanded' : ''}`}
+            className={clsx(
+              `sapp-collapse-wrapper flex items-center`,
+              expand && 'expanded',
+            )}
             onClick={() => setExpand((prev) => !prev)}
           >
             <ArrowCollapseIcon />

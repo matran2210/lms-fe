@@ -242,9 +242,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
       refresh?.()
       reset()
       setTreeData([])
-    } catch (err) {
-    } finally {
-    }
+    } catch (err) {}
   })
 
   useLayoutEffect(() => {
@@ -299,7 +297,6 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           //
         } catch (error) {
           // Handled by axios interceptors
-        } finally {
         }
       }
     }
