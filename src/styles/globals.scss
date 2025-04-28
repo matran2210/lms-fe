@@ -714,11 +714,17 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  border-radius: 0px !important;
+  border-radius: 0px;
 }
 
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
+}
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    padding: 32px;
+    border-radius: 8px;
+  }
 }
 
 .sapp-modal--math .ant-modal-content {

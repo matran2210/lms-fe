@@ -44,7 +44,7 @@ const PrimaryInformation = ({
   const items: CollapseProps['items'] = [
     {
       key: '1',
-      label: 'Thông tin chính',
+      label: 'Primary Information',
       classNames: {
         header:
           '!px-7 text-black bg-white !rounded-md font-bold !text-base flex flex-row-reverse items-center gap-2',
