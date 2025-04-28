@@ -20,7 +20,7 @@ import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -146,8 +146,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/teachers',
   ]
 
-  const showHelp = !excludedPathsHelp.some((path) =>
-    router.pathname.includes(path),
+  const showHelp = useMemo(
+    () => !excludedPathsHelp.some((path) => router.pathname.includes(path)),
+    [router],
   )
 
   useEffect(() => {
