@@ -1,5 +1,6 @@
 import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { Dayjs } from 'dayjs'
+import { REQUEST_STATUS } from 'src/constants'
 
 export type RecurringScheduleType = keyof Omit<
   typeof REPEAT_TYPE,
@@ -96,7 +97,7 @@ export interface IBusyRequestDetailResponse {
   updated_at: string
   deleted_at: string | null
   type: string
-  status: string
+  status: REQUEST_STATUS
   user_request: {
     id: string
     username: string
