@@ -140,9 +140,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
-
-    validateRepeatData()
-    if (Object.keys(control._formState.errors).length) return
+    if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
+      validateRepeatData()
+      if (Object.keys(control._formState.errors).length) return
+    }
 
     if (
       requestType.toLowerCase() ===
