@@ -45,13 +45,13 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
   const router = useRouter()
   const { id } = router.query
   const { control, getValues, reset } = useForm<IProgressFilterForm>()
-  const allowSection = !classDetail?.course?.course_categories.some(
-    (item) => item.name === PROGRAM.ACCA || item.name === PROGRAM.CD,
+  const allowSection = !classDetail?.course?.course_categories?.some(
+    (item) => item?.name === PROGRAM.ACCA || item?.name === PROGRAM.CD,
   )
   const allowCreateProgress =
-    classDetail?.course?.course_categories.some((item) =>
+    classDetail?.course?.course_categories?.some((item) =>
       [PROGRAM.ACCA, PROGRAM.CMA, PROGRAM.CFA, PROGRAM.CD].includes(
-        item.name as PROGRAM,
+        item?.name as PROGRAM,
       ),
     ) &&
     [CONSTRUCTION.ONLINE, CONSTRUCTION.BLENDED, CONSTRUCTION.OFFLINE].includes(

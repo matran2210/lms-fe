@@ -263,7 +263,6 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           //
         } catch (error) {
           // Handled by axios interceptors
-        } finally {
         }
       }
     }
