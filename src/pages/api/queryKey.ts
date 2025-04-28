@@ -27,3 +27,8 @@ export const StudentKey = {
   StudentsTestResult: 'studentsTestResult',
   ChapterTest: 'chapterTest',
 }
+
+export const ProgressKey = {
+  ProgressList: 'progressList',
+  ProgressDetail: 'progressDetail',
+}
