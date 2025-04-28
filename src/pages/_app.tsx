@@ -161,7 +161,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         container?.classList.remove('visible-icon')
         message?.classList.remove('visible-icon')
       } else {
-        container.remove()
+        // container.remove()
+        container?.classList.add('visible-icon')
       }
     }
   }, [showHelp])
