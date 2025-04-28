@@ -722,8 +722,8 @@ textarea.is-invalid:focus {
 }
 .sapp-custom-modal.success-modal {
   .ant-modal-content {
-    padding: 32px;
-    border-radius: 8px;
+    @apply p-8;
+    @apply rounded-lg;
   }
 }
 
