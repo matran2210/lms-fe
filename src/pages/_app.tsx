@@ -166,10 +166,26 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           // Hide HubSpot widget on teacher pages
           container.style.display = 'none'
           message.style.display = 'none'
+          if (container.classList.contains('show')) {
+            container.classList.remove('show')
+          }
+          container.classList.add('hide')
+          if (message.classList.contains('show')) {
+            message.classList.remove('show')
+          }
+          message.classList.add('hide')
         } else {
           container.style.display = ''
           message.style.display = ''
 
+          if (container.classList.contains('hide')) {
+            container.classList.remove('hide')
+          }
+          container.classList.add('show')
+          if (message.classList.contains('hide')) {
+            message.classList.remove('hide')
+          }
+          message.classList.add('show')
           // Apply CSS classes based on visibility
           if (container.classList.contains('visible-icon')) {
             container.classList.remove('visible-icon')

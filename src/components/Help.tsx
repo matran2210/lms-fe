@@ -34,7 +34,13 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       const container = document.getElementById(
         'hubspot-messages-iframe-container',
       )
-      if (container) container.style.display = 'none'
+      if (container) {
+        container.style.display = 'none'
+        if (container.classList.contains('show')) {
+          container.classList.remove('show')
+        }
+        container.classList.add('hide')
+      }
 
       const conversationsContainer = document.getElementById(
         'hubspot-conversations-iframe',
@@ -72,7 +78,13 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       const container = document.getElementById(
         'hubspot-messages-iframe-container',
       )
-      if (container) container.style.display = ''
+      if (container) {
+        container.style.display = ''
+        if (container.classList.contains('hide')) {
+          container.classList.remove('hide')
+        }
+        container.classList.add('show')
+      }
 
       const conversationsContainer = document.getElementById(
         'hubspot-conversations-iframe',
