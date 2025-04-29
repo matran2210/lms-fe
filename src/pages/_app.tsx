@@ -153,65 +153,103 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
     !isTeacherPage // Add condition to hide help on teacher pages
 
-  // Handle HubSpot widget visibility based on route
+  // Handle HubSpot widget visibility based on URL
   useEffect(() => {
-    // We need to ensure this runs on every route change
-    const handleHubspotVisibility = () => {
-      const container = document.getElementById('hubspot-conversations-iframe')
-      const message = document.getElementById(
+    const hideHubspotWidget = () => {
+      // Target specific elements from the DOM structure we observed
+      const container = document.getElementById(
         'hubspot-messages-iframe-container',
-      ) as HTMLElement
+      )
+      const chatFrame = document.getElementById('hubspot-messages-iframe')
+      const widgetContainer = document.querySelector('.hs-shadow-container')
 
-      if (container && message) {
-        if (!showHelp || isTeacherPage) {
-          // Hide HubSpot widget on teacher pages
+      if (isTeacherPage) {
+        // Hide HubSpot chat widget on teacher pages
+        if (container) {
+          container.classList.add('visible-icon')
+          // Add additional inline styles for redundancy
           container.style.display = 'none'
-          message.style.display = 'none'
-          if (container.classList.contains('show')) {
-            container.classList.remove('show')
-          }
-          container.classList.add('hide')
-          if (message.classList.contains('show')) {
-            message.classList.remove('show')
-          }
-          message.classList.add('hide')
-        } else {
-          container.style.display = ''
-          message.style.display = ''
+        }
 
-          if (container.classList.contains('hide')) {
-            container.classList.remove('hide')
+        if (chatFrame) {
+          chatFrame.style.display = 'none'
+        }
+
+        if (widgetContainer) {
+          widgetContainer.classList.add('visible-icon')
+        }
+
+        // Add CSS rule to ensure it stays hidden
+        const style = document.createElement('style')
+        style.id = 'hubspot-hide-style'
+        style.innerHTML = `
+          #hubspot-messages-iframe-container, 
+          #hubspot-messages-iframe,
+          .hs-shadow-container { 
+            display: none !important; 
+            visibility: hidden !important; 
           }
-          container.classList.add('show')
-          if (message.classList.contains('hide')) {
-            message.classList.remove('hide')
-          }
-          message.classList.add('show')
-          // Apply CSS classes based on visibility
-          if (container.classList.contains('visible-icon')) {
+        `
+        // Only add if it doesn't exist already
+        if (!document.getElementById('hubspot-hide-style')) {
+          document.head.appendChild(style)
+        }
+      } else {
+        // Remove the style tag if path doesn't contain '/teachers'
+        const styleTag = document.getElementById('hubspot-hide-style')
+        if (styleTag) {
+          document.head.removeChild(styleTag)
+        }
+
+        // Only show if not in excluded paths
+        if (showHelp) {
+          if (container) {
             container.classList.remove('visible-icon')
+            container.style.display = ''
           }
-          if (message.classList.contains('visible-icon')) {
-            message.classList.remove('visible-icon')
+
+          if (chatFrame) {
+            chatFrame.style.display = ''
+          }
+
+          if (widgetContainer) {
+            widgetContainer.classList.remove('visible-icon')
           }
         }
       }
     }
 
-    // Run immediately when component mounts
-    handleHubspotVisibility()
+    // Initial run
+    hideHubspotWidget()
 
-    // Also listen for route changes to update visibility
-    const handleRouteChangeComplete = () => {
-      handleHubspotVisibility()
+    // Set up an observer to handle dynamically loaded HubSpot elements
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          // If HubSpot elements are dynamically added, hide them if needed
+          hideHubspotWidget()
+        }
+      }
+    })
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+
+    // Also listen for route changes
+    const handleRouteChange = () => {
+      setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
     }
 
-    router.events.on('routeChangeComplete', handleRouteChangeComplete)
+    router.events.on('routeChangeComplete', handleRouteChange)
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChangeComplete)
+      observer.disconnect()
+      router.events.off('routeChangeComplete', handleRouteChange)
     }
-  }, [showHelp, isTeacherPage, router.asPath])
+  }, [isTeacherPage, router, showHelp])
 
   useEffect(() => {
     if (
@@ -271,7 +309,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    {showHelp && <BackToTop />}
+                    <BackToTop />
                     <Help showHelp={showHelp} />
                     <LearningNotesList />
                     <PopupCompletedCourse />

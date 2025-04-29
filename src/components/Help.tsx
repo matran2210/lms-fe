@@ -41,7 +41,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
         }
         container.classList.add('hide')
       }
-
       const conversationsContainer = document.getElementById(
         'hubspot-conversations-iframe',
       )
