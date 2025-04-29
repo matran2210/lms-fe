@@ -89,7 +89,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             </div>
           </div>
         ) : (
-          <Tooltip arrow title={'Support Center'} placement="left">
+          <Tooltip title={'Support Center'} placement="left">
             <div
               id="floating-button"
               onClick={handleButtonClick}
