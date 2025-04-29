@@ -29,7 +29,7 @@ const useSelectClassCode = (teacher_id?: string) => {
         ? lastPage?.data.meta_data?.page_index + 1
         : undefined
     },
-    enabled: false,
+    enabled: true,
     refetchOnWindowFocus: false,
   })
   return {
