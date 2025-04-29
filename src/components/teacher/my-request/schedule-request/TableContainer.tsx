@@ -23,6 +23,7 @@ import {
   formatDateFromUTC,
 } from 'src/utils/index'
 import StatusItem from './StatusItem'
+import { ColumnsType } from 'antd/es/table'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
@@ -119,14 +120,10 @@ export default function TableContainer({ params }: IProps) {
     setOpenDetail(true)
     setSelectedRequest(data)
   }
-  const columnsValue = [
+  const columnsValue: ColumnsType<IScheduleRequestItem> = [
     {
       title: '#',
-      render: (
-        _: IScheduleRequestItem,
-        record: IScheduleRequestItem,
-        index: number,
-      ) => (
+      render: (_, record: IScheduleRequestItem, index: number) => (
         <TableCell
           data={
             index +
@@ -140,13 +137,13 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Class code',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell data={record?.class?.code} className="!text-gray-400" />
       ),
     },
     {
       title: 'Program',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.subject?.course_category?.name}
           className="cursor-pointer hover:underline"
@@ -156,19 +153,19 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Subject',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell data={convertSlugToTitle(record?.subject?.code)} />
       ),
     },
     {
       title: 'Construction mode',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell data={convertSnakeCaseToHumanReadable(record?.mode)} />
       ),
     },
     {
       title: 'Start Date - End Date',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={`${record?.schedule_time.start_date ? formatDateFromUTC(record?.schedule_time.start_date) : '-'} - ${
             record?.schedule_time.end_date
@@ -180,7 +177,7 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Sent Date',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.created_at)}
           className="!text-gray-400"
@@ -189,7 +186,7 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'CX Admin',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
           className="!text-gray-400"
@@ -198,7 +195,7 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Update Date',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.updated_at)}
           className="!text-gray-400"
@@ -207,7 +204,7 @@ export default function TableContainer({ params }: IProps) {
     },
     {
       title: 'Status',
-      render: (record: IScheduleRequestItem) => {
+      render: (_, record: IScheduleRequestItem) => {
         return (
           <TableCell
             data={
@@ -223,7 +220,7 @@ export default function TableContainer({ params }: IProps) {
     {
       title: '',
       fixed: 'right',
-      render: (record: IScheduleRequestItem) => (
+      render: (_, record: IScheduleRequestItem) => (
         <ActionCell handleClickView={() => Action(record)} />
       ),
     },
