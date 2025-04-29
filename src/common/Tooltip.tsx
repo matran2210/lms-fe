@@ -21,12 +21,7 @@ const Tooltip: React.FC<ITooltip> = ({
   placement = 'top',
 }) => {
   if (!showTooltip) {
-    return (
-      <div>
-        {title}
-        {children}
-      </div>
-    )
+    return <div>{children}</div>
   }
 
   return (
