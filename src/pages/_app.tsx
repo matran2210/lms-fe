@@ -65,6 +65,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     },
   })
 
+  // Check if URL contains '/teachers'
+  const isTeacherPage = router.asPath.includes('/teachers')
+
   useEffect(() => {
     onMessageListener().then((data: any) => {
       dispatch(showNotification())
@@ -143,29 +146,47 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/case-study/[id]',
     '/certificates/[id]',
     '/case-study/result/[id]',
-    '/teachers',
   ]
 
-  const showHelp = useMemo(
-    () => !excludedPathsHelp.some((path) => router.pathname.includes(path)),
-    [router.pathname],
-  )
+  const showHelp =
+    !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
+    !isTeacherPage // Add condition to hide help on teacher pages
 
+  // Handle HubSpot widget visibility based on route
   useEffect(() => {
-    const message = document.getElementById('hubspot-conversations-iframe')
-    const container = document.getElementById(
-      'hubspot-messages-iframe-container',
-    ) as HTMLElement
-    if (container) {
-      if (showHelp) {
-        container?.classList.remove('visible-icon')
-        message?.classList.remove('visible-icon')
-      } else {
-        // container.remove()
-        container?.classList.add('visible-icon')
+    // We need to ensure this runs on every route change
+    const handleHubspotVisibility = () => {
+      const container = document.getElementById('hubspot-conversations-iframe')
+      const message = document.getElementById(
+        'hubspot-messages-iframe-container',
+      ) as HTMLElement
+
+      if (container && message) {
+        if (!showHelp || isTeacherPage) {
+          // Use the CSS classes found in global.scss
+          container.classList.add('visible-icon')
+          message.classList.add('visible-icon')
+        } else {
+          container.classList.remove('visible-icon')
+          message.classList.remove('visible-icon')
+        }
       }
     }
-  }, [showHelp])
+
+    // Run immediately when component mounts
+    handleHubspotVisibility()
+
+    // Also listen for route changes to update visibility
+    const handleRouteChangeComplete = () => {
+      handleHubspotVisibility()
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChangeComplete)
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChangeComplete)
+    }
+  }, [showHelp, isTeacherPage, router.asPath])
 
   useEffect(() => {
     if (
@@ -225,10 +246,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    <>
-                      <BackToTop />
-                      <Help showHelp={showHelp} />
-                    </>
+                    {showHelp && (
+                      <>
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
+                      </>
+                    )}
                     <LearningNotesList />
                     <PopupCompletedCourse />
                   </>

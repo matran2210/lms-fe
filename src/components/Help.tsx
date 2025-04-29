@@ -2,11 +2,18 @@ import { IconClose } from '@assets/icons'
 import { Popover, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
+import { useRouter } from 'next/router'
 
 const HELP_WIDGET_SCRIPT_ID = 'hs-script-loader'
 
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
+  const router = useRouter()
+
+  // Check if URL contains '/teachers'
+  const isTeacherPage = router.asPath.includes('/teachers')
+
+  // Hide help widget on teacher pages
 
   const handleVisibleChange = (newVisible: boolean) => {
     if (newVisible) {
@@ -15,75 +22,48 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }
 
   const handleButtonClick = () => {
-    setVisible((prev) => !prev)
-  }
-
-  const hideHubspotWidget = () => {
-    const hubspot = (window as any)?.HubSpotConversations
-    if (hubspot?.widget) {
-      if (typeof hubspot.widget.close === 'function') {
-        hubspot.widget.close()
-      }
-      if (typeof hubspot.widget.hide === 'function') {
-        hubspot.widget.hide()
-      }
-    }
-  }
-
-  const handleLoadHubspotScript = () => {
-    const existingScript = document.getElementById(HELP_WIDGET_SCRIPT_ID)
-    if (!existingScript) {
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.id = HELP_WIDGET_SCRIPT_ID
-      script.async = true
-      script.defer = true
-      script.src = '//js.hs-scripts.com/1774127.js'
-      document.head.appendChild(script)
-    }
-  }
-
-  const handleRemoveHubspotScript = () => {
-    const script = document.getElementById(HELP_WIDGET_SCRIPT_ID)
-    if (script) {
-      script.remove()
-    }
+    setVisible(!visible)
   }
 
   useEffect(() => {
-    if (showHelp) {
-      handleLoadHubspotScript()
-    } else {
-      const container = document.getElementById(
-        'hubspot-messages-iframe-container',
-      )
-      if (container) {
-        container?.classList.add('visible-icon')
-      }
-      hideHubspotWidget()
-    }
+    // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
+    if (showHelp && !isTeacherPage) {
+      // Tạo một thẻ script mới
+      const scriptElement = document.createElement('script')
+      scriptElement.type = 'text/javascript'
+      scriptElement.id = 'hs-script-loader'
+      scriptElement.async = true
+      scriptElement.defer = true
+      scriptElement.src = `//js.hs-scripts.com/1774127.js`
 
-    return () => {
-      if (showHelp) {
-        handleRemoveHubspotScript()
+      // Thêm thẻ script vào trong thẻ head của trang
+      document.head.appendChild(scriptElement)
+
+      // Cleanup: Xóa script khi component unmount (nếu cần)
+      return () => {
+        if (document.head.contains(scriptElement)) {
+          document.head.removeChild(scriptElement)
+        }
       }
     }
-  }, [showHelp])
+  }, [showHelp, isTeacherPage])
 
   useEffect(() => {
     const container = document.getElementById(
       'hubspot-messages-iframe-container',
     )
-    if (container) {
-      if (visible) {
-        container.classList.add('visible-icon')
-      } else {
+    if (container && visible) {
+      container.classList.add('visible-icon')
+    } else {
+      if (container && !visible) {
         container.classList.remove('visible-icon')
       }
     }
   }, [visible])
 
-  if (!showHelp) return null
+  if (isTeacherPage) {
+    return null
+  }
 
   return (
     <div className="cursor-pointer">
