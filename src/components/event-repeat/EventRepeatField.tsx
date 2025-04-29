@@ -1,5 +1,5 @@
 import SAPPLabel from '@components/base/Label/SAPPLabel'
-import SAPPSelect from '@components/base/select/SAPPSelect'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { reverseDaysOfWeek } from '@utils/common'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
@@ -265,12 +265,8 @@ const EventRepeatField = ({
 
   return (
     <>
-      {label && (
-        <SAPPLabel title={label} required={required} className={labelClass} />
-      )}
-
       <div className={`event-repeat ${className}`}>
-        <SAPPSelect
+        <SAPPSelectV2
           name="repeat_type"
           label="Repeat"
           control={control}
@@ -280,7 +276,6 @@ const EventRepeatField = ({
               : repeatTypeOptions
           }
           required
-          className="h-11.25"
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
