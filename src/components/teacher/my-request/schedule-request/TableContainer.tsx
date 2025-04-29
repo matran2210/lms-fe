@@ -2,7 +2,12 @@ import SappTable from '@components/table/SappTable'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { TablePaginationConfig } from 'antd'
-import { capitalizeFirstLetter, formatDateFromUTC } from 'src/utils/index'
+import {
+  capitalizeFirstLetter,
+  convertSlugToTitle,
+  convertSnakeCaseToHumanReadable,
+  formatDateFromUTC,
+} from 'src/utils/index'
 import { TeacherAPI } from '@pages/api/teacher'
 import { useQuery } from 'react-query'
 import dayjs from 'dayjs'
@@ -154,13 +159,13 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.subject?.code} />
+        <TableCell data={convertSlugToTitle(record?.subject?.code)} />
       ),
     },
     {
       title: 'Construction mode',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.mode} />
+        <TableCell data={convertSnakeCaseToHumanReadable(record?.mode)} />
       ),
     },
     {

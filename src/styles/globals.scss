@@ -15,6 +15,7 @@
 @import './components/_collapse.scss';
 
 @import './components/_table.scss';
+@import './components/_input.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -713,11 +714,17 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  border-radius: 0px !important;
+  @apply rounded-none;
 }
 
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
+}
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
 }
 
 .sapp-modal--math .ant-modal-content {

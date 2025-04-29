@@ -28,19 +28,19 @@ interface CourseCategoryResponse {
 
 const listStatus = [
   {
-    label: 'Chờ Duyệt',
+    label: 'Pending',
     value: StatusRequestSchedule.PENDING,
   },
   {
-    label: 'Đồng ý',
+    label: 'Approved',
     value: StatusRequestSchedule.APPROVED,
   },
   {
-    label: 'Từ chối',
+    label: 'Rejected',
     value: StatusRequestSchedule.REJECT,
   },
   {
-    label: 'Huỷ',
+    label: 'Cancel',
     value: StatusRequestSchedule.CANCEL,
   },
 ]
