@@ -1,6 +1,7 @@
 import { ActionIcon } from '@assets/icons'
-import { Dropdown, Tooltip } from 'antd'
+import { Dropdown } from 'antd'
 import { ReactNode } from 'react'
+import Tooltip from 'src/common/Tooltip'
 
 interface TableActionCellProps {
   children: ReactNode
