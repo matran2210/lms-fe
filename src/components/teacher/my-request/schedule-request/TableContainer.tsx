@@ -1,29 +1,27 @@
 import SappTable from '@components/table/SappTable'
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { TablePaginationConfig } from 'antd'
-import {
-  capitalizeFirstLetter,
-  convertSlugToTitle,
-  convertSnakeCaseToHumanReadable,
-  formatDateFromUTC,
-} from 'src/utils/index'
 import { TeacherAPI } from '@pages/api/teacher'
+import { StatusRequestSchedule } from '@utils/constants/Teacher'
+import { TablePaginationConfig } from 'antd'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import dayjs from 'dayjs'
-import TableCell from 'src/components/teacher/my-request/schedule-request/TableCell'
 import ActionCell from 'src/components/base/action/SappActionCell'
 import DetailRequestModal from 'src/components/teacher/my-request/schedule-request/DetailRequestModal'
 import ReasonModal from 'src/components/teacher/my-request/schedule-request/ReasonModal'
 import SuccessModal from 'src/components/teacher/my-request/schedule-request/SuccessModal'
+import TableCell from 'src/components/teacher/my-request/schedule-request/TableCell'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
 import {
   FilterRequestScheduleParams,
   IScheduleRequestItem,
   RequestScheduleParams,
   StatusRequestScheduleParams,
 } from 'src/type/teachers/request-schedule.interface'
-import { StatusRequestSchedule } from '@utils/constants/Teacher'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import {
+  convertSlugToTitle,
+  convertSnakeCaseToHumanReadable,
+  formatDateFromUTC,
+} from 'src/utils/index'
 import StatusItem from './StatusItem'
 
 export const statusColor = (data: IScheduleRequestItem) => {
