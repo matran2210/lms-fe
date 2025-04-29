@@ -163,12 +163,20 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
       if (container && message) {
         if (!showHelp || isTeacherPage) {
-          // Use the CSS classes found in global.scss
-          container.classList.add('visible-icon')
-          message.classList.add('visible-icon')
+          // Hide HubSpot widget on teacher pages
+          container.style.display = 'none'
+          message.style.display = 'none'
         } else {
-          container.classList.remove('visible-icon')
-          message.classList.remove('visible-icon')
+          container.style.display = ''
+          message.style.display = ''
+
+          // Apply CSS classes based on visibility
+          if (container.classList.contains('visible-icon')) {
+            container.classList.remove('visible-icon')
+          }
+          if (message.classList.contains('visible-icon')) {
+            message.classList.remove('visible-icon')
+          }
         }
       }
     }
@@ -246,12 +254,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    {showHelp && !isTeacherPage && (
-                      <>
-                        <BackToTop />
-                        <Help showHelp={showHelp} />
-                      </>
-                    )}
+                    {showHelp && <BackToTop />}
+                    <Help showHelp={showHelp} />
                     <LearningNotesList />
                     <PopupCompletedCourse />
                   </>
