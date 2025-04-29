@@ -63,7 +63,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         },
       ],
       request_weekly_norm: [{ quantity: undefined }],
-      request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
+      request_time_off: [{ lessonId: '', reason: '' }],
     },
   })
   const { handleSubmit, control, setValue, watch, getValues, reset, setError } =
@@ -186,6 +186,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     } else {
       recurring_schedule = undefined
     }
+
     const formattedBusyScheduleData = {
       event_name: data.request_name,
       range: {
@@ -430,12 +431,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               REQUEST_TYPE.TEACHING_MODE.value,
             ].includes(data.type)
           ) {
-            setValue('class', {
-              value:
-                data.teacher_schedules[0].schedule.class_schedule?.class.id,
-              label:
-                data.teacher_schedules[0].schedule.class_schedule?.class.code,
-            })
             setValue(
               'class_code',
               data.teacher_schedules[0].schedule.class_schedule?.class.id,
@@ -443,7 +438,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             setValue(
               'request_time_off',
               data.teacher_schedules.map((item) => ({
-                lesson: { value: item.schedule.id, label: item.schedule.name },
                 lessonId: item.schedule.id,
                 reason: item.request_reason,
               })),
@@ -493,9 +487,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
   const handleClose = () => {
-    router.replace({ pathname, query: { tab: query.tab ?? null } }, undefined, {
-      shallow: true,
-    })
+    router.back()
     setOpen(false)
     reset()
   }
@@ -524,7 +516,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       {
         ...currentValues,
         request_time_off: currentValues?.request_time_off?.map(() => ({
-          lesson: { value: '', label: '' },
+          lessonId: '',
           reason: '',
         })),
       },
@@ -571,6 +563,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   requestStatus?.toLowerCase() !==
                     REQUEST_STATUS.PENDING.value.toLowerCase()
                 }
+                autoFocus={true}
               ></SAPPInput>
             </div>
             <div className="mb-6">
@@ -664,7 +657,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   label="Class Code"
                   required
                   labelClass="text-sm font-medium"
-                  name="class"
+                  name="class_code"
                   isSearchable
                   onSearch={() => refetchClasses()}
                   isLoading={isLoadingClasses}
@@ -824,92 +817,92 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   </div>
                 )
               })}
-            {[
-              REQUEST_TYPE.TIMEOFF.value,
-              REQUEST_TYPE.TEACHING_MODE.value,
-            ].includes(requestType) &&
-              classCode &&
-              timeOffFields.map((item, index) => {
-                return (
-                  <div key={item.id}>
-                    <div className="mb-6">
-                      <div className="grid w-full grid-cols-2 gap-x-6">
-                        <div className="mb-6">
-                          <SAPPSelect
-                            control={control}
-                            label="Lesson"
-                            required
-                            name={`request_time_off.${index}.lesson`}
-                            isSearchable
-                            onSearch={() => refetchLessons()}
-                            isLoading={isLoadingLessons}
-                            onMenuScrollToBottom={() =>
-                              hasNextPageLessons && fetchNextPageLessons()
-                            }
-                            onDropdownVisibleChange={(open) => {
-                              open && refetchLessons()
-                            }}
-                            onChange={(e) => {
-                              setValue(`request_time_off.${index}.lessonId`, e)
-                            }}
-                            labelClass="text-sm font-medium"
-                            placeholder="Lesson"
-                            options={getSelectOptions(
-                              lessons.map((item) => ({
-                                value: item?.id,
-                                label: item?.name,
-                              })),
-                            )}
-                            className="h-11.25 "
-                          />
-                        </div>
-                        <div>
-                          <SAPPInput
-                            label={'Reason'}
-                            required
-                            control={control}
-                            name={`request_time_off.${index}.reason`}
-                            onChange={(e) =>
-                              setValue(
-                                `request_time_off.${index}.reason`,
-                                e.target.value,
-                              )
-                            }
-                            placeholder={'Reason'}
-                            labelClass="text-sm font-medium"
-                            className="h-11.25 "
-                          ></SAPPInput>
+            {classCode
+              ? timeOffFields.map((item, index) => {
+                  return (
+                    <div key={item.id}>
+                      <div className="mb-6">
+                        <div className="grid w-full grid-cols-2 gap-x-6">
+                          <div className="mb-6">
+                            <SAPPSelect
+                              control={control}
+                              label="Lesson"
+                              required
+                              name={`request_time_off.${index}.lessonId`}
+                              isSearchable
+                              onSearch={() => refetchLessons()}
+                              isLoading={isLoadingLessons}
+                              onMenuScrollToBottom={() =>
+                                hasNextPageLessons && fetchNextPageLessons()
+                              }
+                              onDropdownVisibleChange={(open) => {
+                                open && refetchLessons()
+                              }}
+                              onChange={(e) => {
+                                setValue(
+                                  `request_time_off.${index}.lessonId`,
+                                  e,
+                                )
+                              }}
+                              labelClass="text-sm font-medium"
+                              placeholder="Lesson"
+                              options={getSelectOptions(
+                                lessons.map((item) => ({
+                                  value: item?.id,
+                                  label: item?.name,
+                                })),
+                              )}
+                              className="h-11.25 "
+                            />
+                          </div>
+                          <div>
+                            <SAPPInput
+                              label={'Reason'}
+                              required
+                              control={control}
+                              name={`request_time_off.${index}.reason`}
+                              onChange={(e) =>
+                                setValue(
+                                  `request_time_off.${index}.reason`,
+                                  e.target.value,
+                                )
+                              }
+                              placeholder={'Reason'}
+                              labelClass="text-sm font-medium"
+                              className="h-11.25 "
+                            ></SAPPInput>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {requestTimeoff &&
-                      requestTimeoff?.length > 1 &&
-                      (!requestStatus ||
-                        requestStatus?.toLowerCase() ==
-                          REQUEST_STATUS.PENDING.value.toLowerCase()) && (
-                        <div
-                          className="mb-6 flex cursor-pointer items-center gap-x-3"
-                          onClick={() => removeTimeoff(index)}
-                        >
-                          <IconMinusSquared />
+                      {requestTimeoff &&
+                        requestTimeoff?.length > 1 &&
+                        (!requestStatus ||
+                          requestStatus?.toLowerCase() ==
+                            REQUEST_STATUS.PENDING.value.toLowerCase()) && (
+                          <div
+                            className="mb-6 flex cursor-pointer items-center gap-x-3"
+                            onClick={() => removeTimeoff(index)}
+                          >
+                            <IconMinusSquared />
 
-                          <span className="text-sm font-medium">
-                            Delete{' '}
-                            {capitalizeFirstLetter(
-                              Object.values(REQUEST_TYPE)
-                                .find(
-                                  (item) =>
-                                    item.value.toLowerCase() ==
-                                    requestType?.toLowerCase(),
-                                )
-                                ?.label?.replace('_', ' '),
-                            )}
-                          </span>
-                        </div>
-                      )}
-                  </div>
-                )
-              })}
+                            <span className="text-sm font-medium">
+                              Delete{' '}
+                              {capitalizeFirstLetter(
+                                Object.values(REQUEST_TYPE)
+                                  .find(
+                                    (item) =>
+                                      item.value.toLowerCase() ==
+                                      requestType?.toLowerCase(),
+                                  )
+                                  ?.label?.replace('_', ' '),
+                              )}
+                            </span>
+                          </div>
+                        )}
+                    </div>
+                  )
+                })
+              : null}
 
             {(!isEdit ||
               requestStatus?.toLowerCase() ==
@@ -950,7 +943,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
                   onClick={() =>
                     appendTimeoff({
-                      lesson: { value: '', label: '' },
                       lessonId: '',
                       reason: '',
                     })

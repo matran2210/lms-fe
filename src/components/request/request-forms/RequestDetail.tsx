@@ -207,6 +207,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           isOpen={open}
           title={`View Request`}
           onClose={() => {
+            router.back()
             setOpen(false)
           }}
           message="Bạn có chắc chắn muốn hủy không"
@@ -317,12 +318,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format('DD/MM/YYYY | HH:mm')
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format('DD/MM/YYYY | HH:mm')
                   return (
                     <div
                       key={index}
@@ -346,8 +350,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
               {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
                 requestDetail?.teacher_weekly_norms.map((item, index) => {
-                  const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
-                  const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
+                  const startTime = dayjs(item.start_date)
+                    .local()
+                    .format('DD/MM/YYYY')
+                  const endTime = dayjs(item.end_date)
+                    .local()
+                    .format('DD/MM/YYYY')
                   return (
                     <div
                       key={index}
@@ -366,11 +374,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format('DD/MM/YYYY | HH:mm')
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format('DD/MM/YYYY | HH:mm')
 
                   return (
                     <div
