@@ -212,6 +212,7 @@ module.exports = {
         large: '56px',
         '62px': '62px',
         '78px': '78px',
+        80: '80px',
         '132px': '132px',
         '165px': '165px',
         42.5: '170px',
