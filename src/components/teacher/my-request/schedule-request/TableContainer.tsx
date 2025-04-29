@@ -17,7 +17,11 @@ import {
   RequestScheduleParams,
   StatusRequestScheduleParams,
 } from 'src/type/teachers/request-schedule.interface'
-import { formatDateFromUTC } from 'src/utils/index'
+import {
+  convertSlugToTitle,
+  convertSnakeCaseToHumanReadable,
+  formatDateFromUTC,
+} from 'src/utils/index'
 import StatusItem from './StatusItem'
 
 export const statusColor = (data: IScheduleRequestItem) => {
@@ -153,13 +157,13 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.subject?.code} />
+        <TableCell data={convertSlugToTitle(record?.subject?.code)} />
       ),
     },
     {
       title: 'Construction mode',
       render: (record: IScheduleRequestItem) => (
-        <TableCell data={record?.mode} />
+        <TableCell data={convertSnakeCaseToHumanReadable(record?.mode)} />
       ),
     },
     {

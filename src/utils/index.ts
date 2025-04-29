@@ -449,3 +449,15 @@ export const clearStylesHtml = (htmlContent: string) => {
   }
   return ''
 }
+
+export function convertSlugToTitle(slug: string): string {
+  if (!slug) return ''
+
+  return slug
+    .replace(/-/g, ' ') // thay dấu - thành dấu cách
+    .replace(/\s+/g, ' ') // gộp các khoảng trắng thừa
+    .trim() // xoá khoảng trắng 2 đầu
+    .split(' ') // tách từ
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
+    .join(' ') // ghép lại
+}

@@ -1,0 +1,76 @@
+.float-label {
+  @apply relative;
+}
+
+.label {
+  font-weight: 400;
+  pointer-events: none;
+  left: 12px;
+  top: 11px;
+  transition: 0.2s ease all;
+  @apply absolute;
+}
+
+.as-label {
+  top: -8px;
+  margin-left: -4px;
+  @apply text-ssm;
+  @apply bg-white;
+  @apply px-1;
+  @apply py-0;
+}
+
+.float-label {
+  .ant-input-outlined:hover,
+  .ant-input-outlined:focus
+  // .ant-input-affix-wrapper:not(.ant-input-disabled):hover,
+  {
+    @apply border-active;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .ant-input-outlined:focus-within,
+  .ant-input-affix-wrapper:not(.ant-input-disabled):hover {
+    z-index: 0;
+  }
+}
+
+.ant-input-group-addon {
+  @apply min-w-11.25;
+}
+
+.sapp-h-45px .ant-input-wrapper .ant-input-group-addon,
+.sapp-h-45px .ant-input-wrapper .ant-input {
+  @apply h-11.25;
+}
+
+.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled) + .label {
+  color: var(--bs-text-input-danger);
+}
+
+.ant-input-affix-wrapper > input.ant-input {
+  color: var(--bs-text-input);
+  font-weight: 500;
+  @apply text-sm;
+}
+
+.ant-input::placeholder {
+  @apply text-gray-11;
+  @apply font-medium;
+  @apply text-sm;
+}
+
+/* Label khi chuyển sang trạng thái focus hoặc có giá trị */
+
+.float-label {
+  .label.as-label {
+    top: -8px;
+    z-index: 2;
+    @apply bg-white;
+    @apply px-1;
+    @apply py-0;
+    @apply text-ssm;
+    @apply text-bw-13;
+  }
+}
