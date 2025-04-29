@@ -11,6 +11,8 @@ interface ITooltip {
   children: ReactNode
   title: ReactNode
   placement?: TooltipPlacement
+  className?: string
+  arrow?: boolean
 }
 
 const Tooltip: React.FC<ITooltip> = ({
@@ -18,7 +20,9 @@ const Tooltip: React.FC<ITooltip> = ({
   children,
   color = DEFAULT_TOOLTIP_BG_COLOR,
   title,
+  className,
   placement = 'top',
+  arrow,
 }) => {
   if (!showTooltip) {
     return <div>{children}</div>
@@ -33,7 +37,13 @@ const Tooltip: React.FC<ITooltip> = ({
         },
       }}
     >
-      <AntdTooltip title={title} color={color} placement={placement}>
+      <AntdTooltip
+        title={title}
+        color={color}
+        placement={placement}
+        className={className}
+        arrow={arrow}
+      >
         {children}
       </AntdTooltip>
     </ConfigProvider>
