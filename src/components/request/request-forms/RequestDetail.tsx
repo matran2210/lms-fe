@@ -285,7 +285,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Create Date"
                   body={dayjs(requestDetail?.created_at).format(
-                    'DD/MM/YYYY | hh:mm',
+                    'DD/MM/YYYY | HH:mm',
                   )}
                 />
                 {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
@@ -297,7 +297,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
-                      'DD/MM/YYYY | hh:mm',
+                      'DD/MM/YYYY | HH:mm',
                     )}
                   />
                 )}
