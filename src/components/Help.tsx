@@ -1,11 +1,9 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { IconClose } from '@assets/icons'
 import { Popover, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
-
-const HELP_WIDGET_SCRIPT_ID = 'hs-script-loader'
-
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
   const router = useRouter()
@@ -13,8 +11,11 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   // Check if URL contains '/teachers'
   const isTeacherPage = router.asPath.includes('/teachers')
 
-  // Hide help widget on teacher pages
+  if (isTeacherPage) {
+    return null
+  }
 
+  // Hide help widget on teacher pages
   const handleVisibleChange = (newVisible: boolean) => {
     if (newVisible) {
       setVisible(true)
@@ -60,10 +61,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       }
     }
   }, [visible])
-
-  if (isTeacherPage) {
-    return null
-  }
 
   return (
     <div className="cursor-pointer">
