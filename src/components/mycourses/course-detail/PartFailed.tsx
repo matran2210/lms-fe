@@ -4,7 +4,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, TEST_TYPE } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
@@ -76,12 +76,12 @@ const PartFailed = ({
                 // trackGAEvent(`Click Title ${showTitleFinalTest}`)
               }}
             >
-              <SappTooltip
+              <Tooltip
                 title={coursePart?.name}
                 showTooltip={(coursePart?.name as string)?.length > 40}
               >
                 {truncateString(coursePart?.name, 40)}
-              </SappTooltip>
+              </Tooltip>
             </div>
             <div>
               <LockClosedIcon />
@@ -106,12 +106,12 @@ const PartFailed = ({
               trackGAEvent(`Click Title ${showTitleFinalTest}`)
             }}
           >
-            <SappTooltip
+            <Tooltip
               title={coursePart?.name}
               showTooltip={(coursePart?.name as string)?.length > 40}
             >
               {truncateString(coursePart?.name, 40)}
-            </SappTooltip>
+            </Tooltip>
           </div>
         )}
 

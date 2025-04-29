@@ -1,6 +1,7 @@
 import { IconClose } from '@assets/icons'
-import { Popover, Tooltip } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Popover } from 'antd'
+import { useEffect, useState } from 'react'
+import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
 
 const Help = ({ showHelp }: { showHelp: boolean }) => {
@@ -88,13 +89,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             </div>
           </div>
         ) : (
-          <Tooltip
-            arrow
-            title={<div className="text-support-1">Support Center</div>}
-            placement="left"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
-          >
+          <Tooltip arrow title={'Support Center'} placement="left">
             <div
               id="floating-button"
               onClick={handleButtonClick}

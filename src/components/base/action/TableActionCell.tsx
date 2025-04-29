@@ -26,7 +26,7 @@ const TableActionCell: React.FC<TableActionCellProps> = ({
         </div>
       )}
     >
-      <Tooltip title="Action" placement="top">
+      <Tooltip title="Action">
         <span className="h-[${height}] flex w-9 cursor-pointer items-center justify-center rounded-full bg-transparent text-gray-500">
           <ActionIcon />
         </span>
