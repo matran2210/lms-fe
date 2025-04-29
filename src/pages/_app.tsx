@@ -246,7 +246,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                       <CtaTrial />
                       <Component {...pageProps} />
                     </div>
-                    {showHelp && (
+                    {showHelp && !isTeacherPage && (
                       <>
                         <BackToTop />
                         <Help showHelp={showHelp} />
