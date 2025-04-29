@@ -205,6 +205,7 @@ module.exports = {
         4: '16px',
         6: '24px',
         8: '30px',
+        11.25: '45px',
         120: '120px',
         small: '36px',
         default: '40px',

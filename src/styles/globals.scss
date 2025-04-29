@@ -715,7 +715,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  border-radius: 0px;
+  @apply rounded-none;
 }
 
 .sapp-modal .ant-modal-content {
