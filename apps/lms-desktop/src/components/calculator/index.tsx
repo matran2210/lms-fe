@@ -1,0 +1,67 @@
+import React, { useEffect, useState } from 'react'
+import { isNumber, calculate } from './logic/calculate'
+
+import Display from './display'
+import Warning from './warning'
+import ButtonsContainer from './ButtonsContainer'
+
+const Calculator = () => {
+  const [calc, setCalc] = useState({
+    total: null,
+    next: null,
+    operation: null,
+  })
+
+  const [badDivision, setBadDivision] = useState(false)
+  useEffect(() => {
+    if (badDivision) {
+      setTimeout(() => {
+        setBadDivision(false)
+      }, 3000)
+    }
+  }, [badDivision])
+
+  const maxLength = 20
+
+  const updateState = (obj: any, key: any) => {
+    if (obj.next !== null && obj.next.length >= maxLength && isNumber(key)) {
+      return
+    }
+
+    const newObj = calculate(obj, key)
+
+    if (newObj.total === 'Undefined') {
+      setBadDivision(true)
+      setCalc({ total: null, next: null, operation: null })
+    } else {
+      setCalc((preObj: any) => ({ ...preObj, ...newObj }))
+    }
+  }
+
+  const handleClick = (obj: any, e: any) => {
+    updateState(obj, e.target.dataset.name)
+  }
+
+  const handleKeyDown = (e: any) => {
+    e.preventDefault()
+  }
+
+  const { total, next, operation } = calc
+
+  return (
+    <div className="calc">
+      <Display
+        total={total ?? ''}
+        next={next ?? ''}
+        operation={operation ?? ''}
+      />
+      <ButtonsContainer
+        click={(e) => handleClick(calc, e)}
+        keyDown={handleKeyDown}
+      />
+      <Warning warning={badDivision} />
+    </div>
+  )
+}
+
+export default Calculator

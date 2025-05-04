@@ -1,5 +1,5 @@
 {
-  "name": "lms-monorepo",
+  "name": "lms-fe",
   "private": true,
   "scripts": {
     "build": "turbo run build",

@@ -1,0 +1,27 @@
+export const LANG_SIGNIN = {
+  signIn: 'Sign In',
+  SAPPAcademy: 'SAPP Academy Operations',
+  signInGoogle: 'Sign in with Google',
+  signInApple: 'Sign in with Apple',
+  orWithEmail: 'Or with email',
+  email: 'Email',
+  password: 'Password',
+  forgotPassword: 'Forgot password ?',
+  notMember: 'Not a Member yet?',
+  signUp: 'Sign up',
+  english: 'English',
+  japanese: 'Japanese',
+  german: 'German',
+  spanish: 'Spanish',
+  french: 'French',
+  terms: 'Terms',
+  plans: 'Plans',
+  contactUs: 'Contact Us',
+  eventTest: 'Futurewards',
+}
+
+export const MY_COURSES = {
+  explanations: 'Explanations',
+  hotline: '19002225',
+  placeholderSearch: 'Search for your course here',
+}
