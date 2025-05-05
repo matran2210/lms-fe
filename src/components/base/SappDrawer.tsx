@@ -23,7 +23,7 @@ interface IProps {
   showSubmitButton?: boolean
   heightBody?: string
   sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
-  handleCancel?: () => any
+  handleCancel?: () => void
   showCancelButton?: boolean
   footerClassName?: string
   loading?: boolean

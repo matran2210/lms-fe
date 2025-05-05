@@ -4,21 +4,14 @@ import { ISelect } from 'src/type/course'
 import { IEventRepeatFieldValues } from 'src/type/my-calendar'
 import EventRepeatField from './EventRepeatField'
 import { Skeleton } from 'antd'
+import { IBaseFormFieldProps } from 'src/type/common'
 
-interface IProps {
-  name: string
-  control: Control<any>
-  className?: string
-  label?: string
-  labelClass?: string
+interface IProps extends IBaseFormFieldProps {
   defaultDate?: Date
   defaultValue?: IEventRepeatFieldValues
-  required?: boolean
-  skeleton?: boolean
   repeatOption?: ISelect
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
-  disabled?: boolean
   rangeDate?: [Date, Date]
 }
 

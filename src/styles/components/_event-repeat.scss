@@ -1,58 +1,42 @@
-$primaryColor: #ffb800;
-$whiteColor: #ffffff;
-$gray1Color: #99a1b7;
-$gray2Color: #dadfe5;
-$gray4Color: #f9f9f9;
-$gray11Color: #9ca3af;
-$bw12Color: #374151;
-
 .event-repeat {
   .ant-input-number-input {
-    box-shadow: none;
-    height: 100%;
+    @apply h-full shadow-none;
   }
 
   .ant-checkbox-wrapper {
     span.ant-checkbox {
-      display: block;
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 10000 !important;
+      @apply absolute left-0 top-0 !z-[10000] block h-full w-full opacity-0;
     }
 
     .ant-checkbox + span {
-      display: block;
-      padding: 0;
+      @apply block p-0;
     }
 
     & .custom-checkbox {
-      color: $gray1Color;
-      background-color: $gray4Color;
+      @apply bg-gray-4 text-gray-11;
     }
 
     &.ant-checkbox-wrapper-checked .custom-checkbox {
-      color: $whiteColor;
-      background-color: $primaryColor;
+      @apply bg-white text-primary;
     }
 
     &.current .custom-checkbox {
-      color: $bw12Color;
-      background-color: $gray2Color;
+      @apply bg-gray-16;
+    }
+
+    &.current .custom-checkbox {
+      @apply text-bw-12;
     }
   }
 }
 
 .select-single {
   &.rounded-0 .select__control {
-    border-radius: 0px;
+    @apply rounded-none;
   }
 
   &.placeholder\:text-gray-11 .select__placeholder {
-    color: $gray11Color;
+    @apply text-gray-12;
   }
 }
 

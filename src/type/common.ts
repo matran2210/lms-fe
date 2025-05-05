@@ -1,4 +1,5 @@
 import { FixedType } from 'rc-table/lib/interface'
+import { Control } from 'react-hook-form'
 
 export interface ITabs {
   link: string
@@ -45,4 +46,17 @@ export interface IQueryParams {
   page_index: number
   page_size: number
   otherParams?: Record<string, any>
+}
+
+export interface IBaseFormFieldProps {
+  name: string
+  control: Control<any>
+  className?: string
+  label?: string
+  labelClass?: string
+  required?: boolean
+  disabled?: boolean
+  defaultValue?: any
+  skeleton?: boolean
+  // More common props can be added here
 }
