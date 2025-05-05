@@ -22,6 +22,8 @@
   // .ant-input-affix-wrapper:not(.ant-input-disabled):hover,
   {
     @apply border-active shadow-none outline-none;
+    box-shadow: none;
+    outline: none;
   }
 
   .ant-input-outlined:focus-within,
