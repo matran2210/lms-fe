@@ -2,12 +2,12 @@ import { PageLink, TitleSidebar } from './index'
 import { LANG_SIGNIN } from './lang'
 
 const MENU_OPTIONS: MenuOption[] = [
-  {
-    name: `${TitleSidebar.DASHBOARD}`,
-    icon: 'grid',
-    url: PageLink.DASHBOARD,
-    type: 'level-1',
-  },
+  // {
+  //   name: `${TitleSidebar.DASHBOARD}`,
+  //   icon: 'grid',
+  //   url: PageLink.DASHBOARD,
+  //   type: 'level-1',
+  // },
   {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
