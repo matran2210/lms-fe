@@ -5,7 +5,6 @@ import { DefaultOptionType } from 'antd/es/select'
 import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SAPPLabel from '../Label/SAPPLabel'
 
 interface SAPPSelectProps {
   control: Control<any>

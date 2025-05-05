@@ -1,6 +1,5 @@
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRangeV2 from '@components/base/date/HookFormDateRangeV2'
-import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import TeacherTextField from '@components/teacher/my-request/schedule-request/TeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'

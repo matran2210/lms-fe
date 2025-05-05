@@ -1,4 +1,3 @@
-import SAPPLabel from '@components/base/Label/SAPPLabel'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { reverseDaysOfWeek } from '@utils/common'
 import { DatePicker } from 'antd'
