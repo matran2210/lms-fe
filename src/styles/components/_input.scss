@@ -56,10 +56,6 @@
   /* Căn chỉnh giá trị trong ô input */
   .ant-input,
   .ant-input-affix-wrapper {
-    display: flex; /* Sử dụng flexbox */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    padding: 12px 12px; /* Điều chỉnh padding để giữ khoảng cách */
-    font-size: 14px; /* Kích thước chữ */
-    font-weight: 500;
+    @apply flex items-center px-3 py-3 text-sm font-medium;
   }
 }
