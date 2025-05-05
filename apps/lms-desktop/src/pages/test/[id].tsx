@@ -1,7 +1,7 @@
 import {
   removeHighlights,
   serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+} from '@funktechno/texthighlighter/lib/index';
 import {
   ArrowUpIcon,
   CalculatorIcon,

@@ -4,7 +4,7 @@ import {
   optionsImpl,
   removeHighlights,
   serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+} from '@funktechno/texthighlighter/lib/index';
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
