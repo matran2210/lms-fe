@@ -40,11 +40,6 @@
   @apply min-w-11.25;
 }
 
-.sapp-h-45px .ant-input-wrapper .ant-input-group-addon,
-.sapp-h-45px .ant-input-wrapper .ant-input {
-  @apply h-11.25;
-}
-
 .ant-input-outlined.ant-input-status-error:not(.ant-input-disabled)
   + .textfield-label {
   color: var(--bs-text-input-danger);
