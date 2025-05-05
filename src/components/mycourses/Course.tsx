@@ -214,15 +214,19 @@ const Course = ({
       course?.course_type == 'NORMAL_COURSE' ||
       course?.course_type == 'PRACTICE_COURSE'
 
-    if (
-      isRedirectDashboard &&
-      (determineButtonToShow == BUTTON_STATUS.Review ||
-        determineButtonToShow == BUTTON_STATUS.Resume)
-    ) {
-      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
-    } else {
-      router.push(`/courses/my-course/${classInstance?.id}`)
-    }
+    // Tạm ẩn redirect dashboard begin
+    // if (
+    //   isRedirectDashboard &&
+    //   (determineButtonToShow == BUTTON_STATUS.Review ||
+    //     determineButtonToShow == BUTTON_STATUS.Resume)
+    // ) {
+    //   router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    // } else {
+    //   router.push(`/courses/my-course/${classInstance?.id}`)
+    // }
+
+    router.push(`/courses/my-course/${classInstance?.id}`)
+    // Tạm ẩn redirect dashboard end
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -332,9 +336,9 @@ const Course = ({
               >
                 <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 50}
+                  showTooltip={(course?.name as string)?.length > 30}
                 >
-                  {truncateString(course?.name, 50)}
+                  {truncateString(course?.name, 30)}
                 </Tooltip>
               </div>
             </div>

@@ -37,14 +37,10 @@ const SappTeacherTextField = ({
   className = '',
   disabled,
   label,
-  labelClass,
   skeleton,
   required,
   maxLength,
-  textSize,
-  inputClassName,
   style,
-  placeholderIcon,
 }: IProps) => {
   return (
     <Controller
