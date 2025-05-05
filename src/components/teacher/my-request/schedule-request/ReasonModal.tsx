@@ -1,6 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import {
@@ -8,7 +8,6 @@ import {
   IOpenReasonModal,
   UpdateStatusParams,
 } from 'src/components/teacher/my-request/schedule-request/TableContainer'
-import ReasonTextField from './ReasonTextField'
 
 interface IProps {
   open: IOpenReasonModal
@@ -110,7 +109,7 @@ const ReasonModal = ({
       headerClassName="!text-sm !font-normal"
       classNameModal={`sapp-custom-modal success-modal`}
     >
-      <ReasonTextField
+      <SappTeacherTextField
         label="Reason"
         name={'request_reject_reason'}
         control={control}

@@ -90,7 +90,7 @@ const SAPPSelectV2 = ({
                   }}
                 />
                 {label && (
-                  <label className="label as-label">
+                  <label className="textfield-label as-label">
                     <span className={clsx({ required }, '')}>{label}</span>
                   </label>
                 )}

@@ -1,7 +1,7 @@
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRangeV2 from '@components/base/date/HookFormDateRangeV2'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
-import TeacherTextField from '@components/teacher/my-request/schedule-request/TeacherTextField'
+import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SchedulesAPI } from '@pages/api/schedules'
 import { handleDisableDate, handleDisableTime } from '@utils/calendar'
@@ -166,13 +166,13 @@ const NewEventSidebar = ({
               <form onSubmit={handleSubmit(onSubmit)}>
                 {/* Event name */}
                 <div className="mb-6">
-                  <TeacherTextField
+                  <SappTeacherTextField
                     label={CALENDAR_SIDEBAR_EVENT_FORM.EVENT_NAME}
                     name="event_name"
                     placeholder="Please enter event name"
                     control={control}
                     required
-                    className="h-11.25"
+                    className="rounded-md"
                   />
                 </div>
 
@@ -205,13 +205,13 @@ const NewEventSidebar = ({
 
                 {/* Description */}
                 <div className="mb-6">
-                  <TeacherTextField
+                  <SappTeacherTextField
                     label={CALENDAR_SIDEBAR_EVENT_FORM.DESCRIPTION}
                     name="description"
                     placeholder="Please enter description"
                     control={control}
                     required
-                    className="h-11.25"
+                    className="rounded-md"
                   />
                 </div>
               </form>

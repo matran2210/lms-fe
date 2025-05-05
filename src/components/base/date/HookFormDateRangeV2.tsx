@@ -86,7 +86,7 @@ const HookFormDateRangeV2 = ({
                 disabledTime={disabledTime}
               />
               {label && (
-                <label className="label as-label">
+                <label className="textfield-label as-label">
                   <span className={clsx({ required }, '')}>{label}</span>
                 </label>
               )}
