@@ -1,5 +1,5 @@
 import { FixedType } from 'rc-table/lib/interface'
-import { Control } from 'react-hook-form'
+import { Control, FieldValues } from 'react-hook-form'
 
 export interface ITabs {
   link: string
@@ -48,9 +48,9 @@ export interface IQueryParams {
   otherParams?: Record<string, any>
 }
 
-export interface IBaseFormFieldProps {
+export interface IBaseFormFieldProps<T extends FieldValues = any> {
   name: string
-  control: Control<any>
+  control: Control<T>
   className?: string
   label?: string
   labelClass?: string
