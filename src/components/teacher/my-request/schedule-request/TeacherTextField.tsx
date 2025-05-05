@@ -131,7 +131,7 @@ const TeacherTextField = ({
           onPaste={onPaste}
           disabled={disabled}
           maxLength={maxLength}
-          className={`${isListScreen ? 'sapp-h-40' : 'sapp-h-45px'} ${clsx(className, '')}`}
+          className={`${isListScreen ? 'h-10' : 'h-11.25'} ${clsx(className, '')}`}
           allowClear={false}
           placeholder={placeholder?.trim() || ''}
           {...props}
