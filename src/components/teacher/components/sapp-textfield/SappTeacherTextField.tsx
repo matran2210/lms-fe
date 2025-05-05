@@ -27,7 +27,7 @@ interface IProps {
   placeholderIcon?: React.ReactNode
 }
 
-const ReasonTextField = ({
+const SappTeacherTextField = ({
   name,
   control,
   defaultValue,
@@ -94,4 +94,4 @@ const ReasonTextField = ({
   )
 }
 
-export default ReasonTextField
+export default SappTeacherTextField
