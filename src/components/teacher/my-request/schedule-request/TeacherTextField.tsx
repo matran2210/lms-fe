@@ -136,7 +136,7 @@ const TeacherTextField = ({
           placeholder={placeholder?.trim() || ''}
           {...props}
         />
-        <label className="label as-label">
+        <label className="textfield-label as-label">
           {label || placeholder} {requiredMark}
         </label>
 

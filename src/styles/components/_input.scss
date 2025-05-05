@@ -2,7 +2,7 @@
   @apply relative;
 }
 
-.label {
+.textfield-label {
   font-weight: 400;
   pointer-events: none;
   left: 12px;
@@ -45,7 +45,8 @@
   @apply h-11.25;
 }
 
-.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled) + .label {
+.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled)
+  + .textfield-label {
   color: var(--bs-text-input-danger);
 }
 
@@ -64,7 +65,7 @@
 /* Label khi chuyển sang trạng thái focus hoặc có giá trị */
 
 .float-label {
-  .label.as-label {
+  .textfield-label.as-label {
     top: -8px;
     z-index: 2;
     @apply bg-white;
