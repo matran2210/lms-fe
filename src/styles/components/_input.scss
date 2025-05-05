@@ -3,12 +3,8 @@
 }
 
 .textfield-label {
-  font-weight: 400;
-  pointer-events: none;
-  left: 12px;
+  @apply pointer-events-none absolute left-3 font-normal transition-all ease-in-out;
   top: 11px;
-  transition: 0.2s ease all;
-  @apply absolute;
 }
 
 .as-label {
@@ -25,9 +21,7 @@
   .ant-input-outlined:focus
   // .ant-input-affix-wrapper:not(.ant-input-disabled):hover,
   {
-    @apply border-active;
-    box-shadow: none;
-    outline: none;
+    @apply border-active shadow-none outline-none;
   }
 
   .ant-input-outlined:focus-within,
