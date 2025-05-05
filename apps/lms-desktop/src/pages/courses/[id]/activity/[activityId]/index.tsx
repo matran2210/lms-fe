@@ -93,6 +93,7 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
+
   const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const quizDocumentRef = useRef<HTMLDivElement>(null)

@@ -7,9 +7,12 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "dev:lms": "npm --workspace apps/lms-fe run dev"
+    "dev:lms": "npm --workspace apps/lms-fe run dev",
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "turbo": "^2.5.1",
     "typescript": "5.8.2"
@@ -21,5 +24,12 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "lint-staged": {
+    "*.ts": "eslint --fix",
+    "*.tsx": "eslint --fix",
+    "*.js": "eslint --fix",
+    "*.json": "prettier --write",
+    "*.md": "prettier --write"
+  }
 }
