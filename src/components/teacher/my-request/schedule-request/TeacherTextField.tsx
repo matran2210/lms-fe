@@ -88,64 +88,58 @@ const TeacherTextField = ({
 
   return (
     <div className="float-label">
-      <div className="position-relative">
-        <Input
-          {...field}
-          type={type === 'password' && passwordVisible ? 'text' : type}
-          id={id}
-          autoFocus={autofocus}
-          value={value ?? ''}
-          onChange={onChange}
-          status={error ? 'error' : ''}
-          defaultValue={value ? defaultValue : undefined}
-          onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-            if (requiredZero && type === 'number') {
-              if (parseInt(e.currentTarget.value, 10) === 0) {
-                e.currentTarget.value = ''
-              } else {
-                e.currentTarget.value = e.currentTarget.value.replace(
-                  /[-eE]/g,
-                  '',
-                )
-              }
-            }
-            if (onInput) {
-              onInput(e)
-            }
-          }}
-          onKeyDown={(e: any) => {
-            // Lọc các ký tự "e", "E" hoặc số ấm trong number
-            if ((e.keyCode === 69 || e.keyCode === 189) && type === 'number') {
-              e.preventDefault()
+      <Input
+        {...field}
+        type={type === 'password' && passwordVisible ? 'text' : type}
+        id={id}
+        autoFocus={autofocus}
+        value={value ?? ''}
+        onChange={onChange}
+        status={error ? 'error' : ''}
+        defaultValue={value ? defaultValue : undefined}
+        onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
+          if (requiredZero && type === 'number') {
+            if (parseInt(e.currentTarget.value, 10) === 0) {
+              e.currentTarget.value = ''
+            } else {
               e.currentTarget.value = e.currentTarget.value.replace(
                 /[-eE]/g,
                 '',
               )
             }
-            if (onKeyDown) {
-              onKeyDown(e)
-            }
-          }}
-          min={`${minNumber}`}
-          max={`${maxNumber}`}
-          onPaste={onPaste}
-          disabled={disabled}
-          maxLength={maxLength}
-          className={`${isListScreen ? 'sapp-h-40' : 'sapp-h-45px'} ${clsx(className, '')}`}
-          allowClear={false}
-          placeholder={placeholder?.trim() || ''}
-          {...props}
-        />
-        <label className="label as-label">
-          {label || placeholder} {requiredMark}
-        </label>
+          }
+          if (onInput) {
+            onInput(e)
+          }
+        }}
+        onKeyDown={(e: any) => {
+          // Lọc các ký tự "e", "E" hoặc số ấm trong number
+          if ((e.keyCode === 69 || e.keyCode === 189) && type === 'number') {
+            e.preventDefault()
+            e.currentTarget.value = e.currentTarget.value.replace(/[-eE]/g, '')
+          }
+          if (onKeyDown) {
+            onKeyDown(e)
+          }
+        }}
+        min={`${minNumber}`}
+        max={`${maxNumber}`}
+        onPaste={onPaste}
+        disabled={disabled}
+        maxLength={maxLength}
+        className={`${isListScreen ? 'sapp-h-40' : 'sapp-h-45px'} ${clsx(className, '')}`}
+        allowClear={false}
+        placeholder={placeholder?.trim() || ''}
+        {...props}
+      />
+      <label className="label as-label">
+        {label || placeholder} {requiredMark}
+      </label>
 
-        {!isUndefined(addonAfter) && (
-          <span className="position-absolute addonAfter-field">
-            {addonAfter}
-          </span>
-        )}
-      </div>
+      {!isUndefined(addonAfter) && (
+        <span className="position-absolute addonAfter-field">{addonAfter}</span>
+      )}
+
       {showPassword && (
         <span
           className={`btn btn-sm btn-icon position-absolute translate-middle top-50 ${

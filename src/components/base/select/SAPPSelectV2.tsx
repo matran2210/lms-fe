@@ -62,7 +62,7 @@ const SAPPSelectV2 = ({
               <>
                 <Select
                   {...field}
-                  className={clsx('bor h-12 w-full font-normal', className)}
+                  className={clsx('h-12 w-full font-normal', className)}
                   placeholder={placeholder || ''}
                   value={field?.value}
                   options={options}
