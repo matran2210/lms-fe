@@ -1,13 +1,13 @@
-import type { Config } from 'tailwindcss'
-import sharedConfig from '@repo/config-tailwind'
+import type { Config } from "tailwindcss";
+import sharedConfig from "@repo/config-tailwind";
 
 const config: Config = {
   presets: [sharedConfig],
   content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx,scss,css}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/**/*.{js,ts,jsx,tsx,mdx,scss,css}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -15,6 +15,6 @@ const config: Config = {
     },
   },
   plugins: [...(sharedConfig.plugins || [])],
-}
+};
 
-export default config
+export default config;
