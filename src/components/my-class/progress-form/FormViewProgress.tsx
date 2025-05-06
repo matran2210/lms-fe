@@ -316,6 +316,26 @@ function FormViewProgress({
     )
   }
 
+  const handleClickCatchUpContent = (idProgress: string) => {
+    const loadDataProgress = async () => {
+      if (idProgress) {
+        setLoading(true)
+        try {
+          const res = await ProgressAPI.getProgressDetail(idProgress)
+          if (res?.data) {
+            setDetailProgress(res?.data)
+            updateDataForm(res.data)
+          }
+        } catch (error) {
+          // Handled by axios interceptors
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+    loadDataProgress()
+  }
+
   return (
     <Drawer
       open={open}
@@ -377,20 +397,24 @@ function FormViewProgress({
 
                     <CollapseItem
                       title="Catch up content"
-                      body={detailProgress?.catch_up_content.map(
-                        (item, index) => (
-                          <p
-                            key={index}
-                            style={{
-                              color: '#176CDD',
-                              textDecoration: 'underline',
-                            }}
-                          >
-                            {item.compensation_id &&
-                              `${item.compensated_progress + '%'}-${item.compensated_lesson_name}`}
-                          </p>
-                        ),
-                      )}
+                      body={detailProgress?.catch_up_content.map((item) => (
+                        <p
+                          key={item.class_teaching_progress_id}
+                          style={{
+                            color: '#176CDD',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() =>
+                            handleClickCatchUpContent(
+                              item.class_teaching_progress_id,
+                            )
+                          }
+                        >
+                          {item.class_teaching_progress_id &&
+                            `${item.compensated_progress * 100 + '%'}-${item.schedule_name}`}
+                        </p>
+                      ))}
                     />
 
                     <CollapseItem
