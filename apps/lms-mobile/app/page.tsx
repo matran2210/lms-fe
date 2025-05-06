@@ -11,7 +11,7 @@ export default function Home() {
               <div className="w-6 h-0.5 bg-gray-600 mb-1"></div>
               <div className="w-6 h-0.5 bg-gray-600"></div>
             </button>
-            <h1 className="text-xl font-bold text-gray-800">Dashboard</h1>
+            <h1 className="text-xl font-bold text-gray-800">Dashboard Mobile</h1>
           </div>
           <div className="flex items-center space-x-4">
             <button className="p-2">
