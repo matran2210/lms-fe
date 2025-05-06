@@ -375,7 +375,11 @@ function FormViewProgress({
                     {allowSection && (
                       <CollapseItem
                         title="Section"
-                        body={detailProgress?.section}
+                        body={
+                          detailProgress?.content_completed?.filter(
+                            (item) => item.main,
+                          )[0]?.course_sections[0]?.name || ''
+                        }
                       />
                     )}
 
