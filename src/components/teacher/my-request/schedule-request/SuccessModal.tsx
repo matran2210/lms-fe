@@ -27,6 +27,7 @@ const SuccessModal = ({ open, setOpen }: IProps) => {
         setOpen(false)
       }}
       headerClassName="!text-sm !font-normal"
+      classNameModal={`sapp-custom-modal success-modal`}
     ></SappModalV3>
   )
 }

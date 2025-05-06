@@ -12,14 +12,10 @@ import {
 } from '@utils/index'
 import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
 import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
-import dayjs from 'dayjs'
-import 'dayjs/locale/vi' // Import locale tiếng Việt
 import { formatTimeOnlyHourMinute } from '@utils/helpers'
 import { CONSTRUCTION_MODE } from 'src/constants/my-request'
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
-dayjs.locale('vi') // Set ngôn ngữ mặc định là tiếng Việt
-
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
   selectedRequest: IScheduleRequestItem
@@ -31,11 +27,24 @@ const PrimaryInformation = ({
   isLoading,
 }: IProps) => {
   const renderDayOfWeek = (dayOfWeek: number) => {
-    // dayOfWeek là số từ 1 đến 7, với 1 là thứ Hai và 7,0 là Chủ Nhật
-    if (dayOfWeek === 7) {
-      return 'Chủ Nhật'
-    } else {
-      return dayjs().day(dayOfWeek).format('dddd')
+    switch (dayOfWeek) {
+      case 0:
+      case 7:
+        return 'Chủ Nhật'
+      case 1:
+        return 'Thứ Hai'
+      case 2:
+        return 'Thứ Ba'
+      case 3:
+        return 'Thứ Tư'
+      case 4:
+        return 'Thứ Nam'
+      case 5:
+        return 'Thứ Sáu'
+      case 6:
+        return 'Thứ Bảy'
+      default:
+        return ''
     }
   }
 
@@ -44,7 +53,7 @@ const PrimaryInformation = ({
   const items: CollapseProps['items'] = [
     {
       key: '1',
-      label: 'Thông tin chính',
+      label: 'Primary Information',
       classNames: {
         header:
           '!px-7 text-black bg-white !rounded-md font-bold !text-base flex flex-row-reverse items-center gap-2',

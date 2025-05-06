@@ -87,6 +87,9 @@
 .ant-picker-range .ant-picker-active-bar {
   background: #ffb800;
 }
+.ant-picker-range .ant-picker-range-separator {
+  margin-left: -535px;
+}
 .ant-picker-focused.ant-picker {
   border-color: none;
   box-shadow: none;

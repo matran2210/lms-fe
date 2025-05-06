@@ -14,7 +14,7 @@ import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
 import { truncateBySpace } from '@utils/index'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { useCourseContext } from '@contexts/index'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
@@ -555,13 +555,13 @@ const BreadCrumbPartDetail = ({
           onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
         >
           <div className=" mx-0.5 inline-block w-full">
-            <SappTooltip
+            <Tooltip
               title={previewPart?.name}
               showTooltip={previewPart?.name?.length > 4}
               placement={'bottomLeft'}
             >
               {truncateBySpace(previewPart?.name, 2, true)}
-            </SappTooltip>
+            </Tooltip>
           </div>
         </div>
         <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
