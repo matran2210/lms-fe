@@ -13,7 +13,7 @@
       "@i18n/*": ["src/i18n/*"],
       "@pages/*": ["src/pages/*"]
     },
-    "target": "es5",
+    "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,8 +21,8 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -36,8 +36,7 @@
     "public/locales/vi/common.json",
     "src/components/base/checkbox/HookFormCheckBox.tsx_",
     "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
-    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_",
-    "prettier.config.js"
+    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_"
   ],
   "exclude": ["node_modules"]
 }
