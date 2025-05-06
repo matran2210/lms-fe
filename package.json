@@ -28,11 +28,11 @@
     "packages/*"
   ],
   "lint-staged": {
-    "*.ts": "eslint --fix",
-    "*.tsx": "eslint --fix",
-    "*.js": "eslint --fix",
-    "*.json": "prettier --write",
-    "*.md": "prettier --write"
+    "**/*.ts": "eslint --fix",
+    "**/*.tsx": "eslint --fix",
+    "**/*.js": "eslint --fix",
+    "**/*.json": "prettier --write",
+    "**/*.md": "prettier --write"
   },
   "dependencies": {
     "@eslint/js": "^9.26.0",
