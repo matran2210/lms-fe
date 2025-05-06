@@ -27,9 +27,11 @@ export interface IProgress {
   content_completed: IContentCompleted[]
 }
 export interface ICatchUpContent {
-  compensation_id: string
-  compensated_progress: string
-  compensated_lesson_name: string
+  class_teaching_progress_id: string
+  class_schedule_id: string
+  schedule_name: string
+  compensated_class_teaching_progress_id: string
+  compensated_progress: number
 }
 export interface IContentCompleted {
   class_schedule_id: string
