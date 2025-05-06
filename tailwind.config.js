@@ -393,7 +393,7 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
       textColor: {
-        primary: '#1F2937',
+        // primary: '#1F2937',
         secondary: '#9CA3AF',
         heading: '#374151',
       },
