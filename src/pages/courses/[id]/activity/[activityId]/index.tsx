@@ -20,7 +20,7 @@ import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { isPdfFile } from '@utils/helpers'
 import { truncateBySpace, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -35,7 +35,7 @@ import { useQuery } from 'react-query'
 import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
@@ -486,10 +486,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <SappTooltip
-                    title={e?.name}
-                    showTooltip={e?.name?.length > 45}
-                  >
+                  <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
                         ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
@@ -498,7 +495,7 @@ const ActivityPage = () => {
                     >
                       {truncateBySpace(e.name, 3) + '/'}
                     </li>
-                  </SappTooltip>
+                  </Tooltip>
                 </li>
               ) : null}
             </React.Fragment>
@@ -865,7 +862,7 @@ const ActivityPage = () => {
                                   <div className="mr-2 flex self-center">
                                     <LinkIcon />
                                   </div>
-                                  <SappTooltip
+                                  <Tooltip
                                     title={
                                       isPreviewFile
                                         ? 'Preview File'
@@ -895,7 +892,7 @@ const ActivityPage = () => {
                                     >
                                       {e?.resource?.name}
                                     </p>
-                                  </SappTooltip>
+                                  </Tooltip>
                                 </div>
                                 <a
                                   className="cursor-pointer"
@@ -1033,7 +1030,7 @@ const ActivityPage = () => {
                                 ?.display_icon,
                           isPreviousActivityLocked,
                         )}
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.previous_activity
                               ? activity?.previous_activity?.name
@@ -1056,7 +1053,7 @@ const ActivityPage = () => {
                                   80,
                                 )}
                           </span>
-                        </SappTooltip>
+                        </Tooltip>
                       </div>
                     </div>
                   )}
@@ -1078,7 +1075,7 @@ const ActivityPage = () => {
                         Next Activity
                       </div>
                       <div className="flex justify-end text-medium-sm text-gray-1">
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.next_activity
                               ? activity?.next_activity?.name
@@ -1097,7 +1094,7 @@ const ActivityPage = () => {
                                   80,
                                 )}
                           </div>
-                        </SappTooltip>
+                        </Tooltip>
                         {getCourseIcon(
                           activity?.next_activity
                             ? activity?.next_activity?.display_icon

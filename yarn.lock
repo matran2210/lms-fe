@@ -8585,10 +8585,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.56:
-  version "1.3.56"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.56.tgz#3ed5e98ef02ef977b33384943d29f8a8b93ee6d6"
-  integrity sha512-/hTT6adcMsfwmn+RSsKtUXx/STrvP/5HRTJqBVlNsEjAZbySkV1ro5DwIwCKztBSmjHtt9O6iWMtcjuNcvyUhA==
+preview-part@^1.3.60:
+  version "1.3.60"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.60.tgz#31a7a3bc34a3e84a7d588c0182a359158b09fe76"
+  integrity sha512-3YQmA1SMQO5GXaQAI4bWEZU78+Gr6W9c0Po4wcjiK152l2EK6V+US099O/mUXSq5ubXG9Y3H70DWVXUiium5VA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -9637,10 +9637,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.14.tgz#41e9bf61998e1a6c96f4bd1a17aa3d05c5388dcb"
-  integrity sha512-zhspxNLe0vzDBC+61HAHtA1M6pyQ4mmAo509jsgNMdaL8DPaip6Qq08zm1SvSz7GpKZPTz6a5Q+NTb7rx7aNOQ==
+sapp-common-package@^1.0.18:
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.18.tgz#07fa6173550a1b361ded877eebf07778639905b3"
+  integrity sha512-6oQYjyAJ3qV1Gv8U48AR1LdvdilAvQkPcFcbJ+oRWmOlKGS4QGbjh9yP9UC7TzVEthUv1U6Dpy9SOO8fHs10uA==
   dependencies:
     antd "^5.22.3"
     clsx "^1.2.1"

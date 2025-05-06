@@ -70,12 +70,13 @@ export default function TeacherMenu() {
         link: PageLink.MY_CALENDAR,
         active: router.pathname === PageLink.MY_CALENDAR,
       },
-      {
-        key: 'File',
-        icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-        link: PageLink.TEACHER_MY_REQUEST,
-        active: router.pathname === PageLink.TEACHER_MY_REQUEST,
-      },
+      // Tạm ẩn menu teacher - my request để lên product
+      // {
+      //   key: 'File',
+      //   icon: <FileMenuIcon selected={selectedKey === 'File'} />,
+      //   link: PageLink.TEACHER_MY_REQUEST,
+      //   active: router.pathname === PageLink.TEACHER_MY_REQUEST,
+      // },
       {
         key: 'Bell',
         icon: <BellIcon selected={selectedKey === 'Bell'} />,

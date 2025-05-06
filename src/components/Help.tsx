@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { IconClose } from '@assets/icons'
-import { Popover, Tooltip } from 'antd'
+import { Popover } from 'antd'
 import { useEffect, useRef, useState } from 'react'
+import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
@@ -158,7 +159,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             </div>
           </div>
         ) : (
-          <Tooltip arrow title="Support Center" placement="left">
+          <Tooltip title={'Support Center'} placement="left">
             <div
               id="floating-button"
               onClick={handleButtonClick}

@@ -1,4 +1,4 @@
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
@@ -101,11 +101,11 @@ const SappButton = ({
           ></div>
         </div>
       ) : (
-        <SappTooltip title={toolTipTitle} showTooltip={showTooltip}>
+        <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
           <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
             {title}
           </span>
-        </SappTooltip>
+        </Tooltip>
       )}
     </button>
   )

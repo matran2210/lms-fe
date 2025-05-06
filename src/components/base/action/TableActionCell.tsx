@@ -1,7 +1,6 @@
 import { ActionIcon } from '@assets/icons'
 import { Dropdown, Tooltip } from 'antd'
 import { ReactNode } from 'react'
-
 interface TableActionCellProps {
   children: ReactNode
   customWidth?: string
@@ -26,7 +25,7 @@ const TableActionCell: React.FC<TableActionCellProps> = ({
         </div>
       )}
     >
-      <Tooltip title="Action" placement="top">
+      <Tooltip title="Action" classNames={{ root: 'tooltip-action' }}>
         <span className="h-[${height}] flex w-9 cursor-pointer items-center justify-center rounded-full bg-transparent text-gray-500">
           <ActionIcon />
         </span>

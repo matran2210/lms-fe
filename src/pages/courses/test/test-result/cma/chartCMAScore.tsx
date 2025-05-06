@@ -1,9 +1,10 @@
 import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
 import { calculatePercentage, roundNumber } from '@utils/helpers'
-import { Tooltip } from 'antd'
+
 import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
+import Tooltip from 'src/common/Tooltip'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
