@@ -7,18 +7,11 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPLabel from '../Label/SAPPLabel'
 import GuidelineField from 'src/common/GuidelineField'
 import { useEffect, useRef } from 'react'
+import { IBaseFormFieldProps } from 'src/type/common'
 
-export interface SAPPInputProps {
-  control: Control<any>
-  name: string
-  defaultValue?: any
-  className?: string
+export interface SAPPInputProps extends IBaseFormFieldProps {
   placeholder?: string
   size?: ButtonSize
-  label?: string
-  required?: boolean
-  labelClass?: string
-  disabled?: boolean
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   guideline?: string[]
   autoFocus?: boolean

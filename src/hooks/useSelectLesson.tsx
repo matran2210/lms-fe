@@ -30,7 +30,7 @@ const useLesson = (teacher_id: string, class_id: string) => {
     queryFn: ({ pageParam = 1 }) => {
       return fetchLesson(pageParam, 10, teacher_id, class_id) // Fetch with pageParam and a fixed page size
     },
-    getNextPageParam: (lastPage: any) => {
+    getNextPageParam: (lastPage) => {
       return lastPage?.data.meta_data?.page_index <
         lastPage?.data.meta_data?.total_pages
         ? lastPage?.data.meta_data?.page_index + 1
