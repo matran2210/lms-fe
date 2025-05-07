@@ -1,0 +1,12 @@
+package.json
+package-lock.json
+tsconfig.json
+apps/lms-desktop/src/services/en.exceptions.json
+apps/lms-desktop/src/styles/*
+apps/lms-desktop/next-env.d.ts
+apps/lms-desktop/public/*
+apps/lms-desktop/src/assets/*
+apps/lms-desktop/src/pages/*.tsx
+apps/lms-desktop/next-seo.config.js
+apps/lms-desktop/src/i18n/locales/*
+postcss.config.js

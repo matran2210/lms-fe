@@ -1,9 +1,0 @@
-{
-  "extends": ["next/core-web-vitals", "next", "prettier"],
-  "plugins": ["import"],
-  "rules": {
-    "no-console": "error",
-    "@next/next/no-document-import-in-page": "off",
-    "@typescript-eslint/no-require-imports": "off"
-  }
-}
