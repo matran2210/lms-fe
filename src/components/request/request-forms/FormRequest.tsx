@@ -296,7 +296,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       // setLoading(false)
     }
   }
-
   const disabledDate = (current: Dayjs) => {
     if (!current) return false
 
@@ -487,7 +486,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
   const handleClose = () => {
-    router.back()
+    if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
+      router.push('/teachers/my-request', undefined, { shallow: true })
+    } else if (requestType == REQUEST_TYPE.TIMEOFF.value) {
+      router.push('/teachers/my-request?tab=timeoff', undefined, {
+        shallow: true,
+      })
+    }
     setOpen(false)
     reset()
   }
@@ -539,7 +544,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
             <span className="text-xl font-semibold text-primary">
-              {router.query.id ? 'Edit' : 'Add More'} Request
+              {router.query.id ? 'Edit' : 'Create'} Request
             </span>
             <span className="cursor-pointer" onClick={handleCancel}>
               <SappIcon icon="closeicon" />

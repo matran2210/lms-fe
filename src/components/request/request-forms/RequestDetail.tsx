@@ -215,7 +215,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
-              : 'Cancel Request'
+              : 'Cancel'
           }
           btnCancelTitle={'Cancel'}
           showSubmitButton={
