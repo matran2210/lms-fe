@@ -9,9 +9,11 @@ import { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import NoData from 'src/common/NoData'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
   const router = useRouter()
@@ -24,7 +26,6 @@ const ExamInformation = () => {
       router.query.courseId
         ? ClassAPI.getExamInfo(router.query.courseId as string)
         : Promise.reject('courseId is undefined'),
-    enabled: router.isReady,
     refetchOnWindowFocus: false,
     retry: false,
   })
@@ -76,17 +77,17 @@ const ExamInformation = () => {
                           {data.data?.exam?.examination?.name ?? '-'}
                         </p>
                         {data.data?.is_final_examination_subject === true ? (
-                          <SappTooltip
+                          <Tooltip
                             showTooltip={true}
                             title={
                               'This is your official exam date and can not be changed'
                             }
                           >
                             <CheckCircleTwoTone twoToneColor={'#52c41a'} />
-                          </SappTooltip>
+                          </Tooltip>
                         ) : (
                           data?.data?.remaining_changes > 0 && (
-                            <SappTooltip
+                            <Tooltip
                               showTooltip={true}
                               title={'Change Exam Date'}
                             >
@@ -96,7 +97,7 @@ const ExamInformation = () => {
                               >
                                 <EditIcon />
                               </div>
-                            </SappTooltip>
+                            </Tooltip>
                           )
                         )}
                       </div>
@@ -124,4 +125,4 @@ const ExamInformation = () => {
   )
 }
 
-export default ExamInformation
+export default withAuthorization([UserType.STUDENT])(ExamInformation)

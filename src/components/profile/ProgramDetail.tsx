@@ -6,12 +6,14 @@ import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { ISubjectItem } from 'src/redux/types/User/urser'
 import TabLayout from './TabLayout'
+import SappButton from '@components/base/button/SappButton'
 
 interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
+  onOpenTab?: () => void
 }
 
-const ProgramDetail = ({ typeProgram }: IProps) => {
+const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   const [subjects, setSubjects] = useState<ISubjectItem[]>()
   const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
@@ -46,7 +48,17 @@ const ProgramDetail = ({ typeProgram }: IProps) => {
       title={
         typeProgram === 'ACCA' ? 'ACCA' : typeProgram === 'CFA' ? 'CFA' : 'CMA'
       }
-      headerButtons
+      headerButtons={
+        <div className=" flex gap-x-2">
+          <SappButton
+            onClick={onOpenTab}
+            size="medium"
+            title={'Back'}
+            color="textUnderline"
+            className="block min-w-120 pr-0 text-base lg:hidden"
+          ></SappButton>
+        </div>
+      }
     >
       <div className="m-6">
         <div className="grid grid-cols-2">

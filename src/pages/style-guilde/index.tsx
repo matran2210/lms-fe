@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import styles from '@styles/components/Home.module.scss'
-import useTrans from '@i18n/index'
 import HookFormTextField from 'src/components/base/textfield/HookFormTextField'
 import { useForm } from 'react-hook-form'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
@@ -21,7 +20,6 @@ const StyleGuide: NextPage = () => {
     { value: 'Option 2', label: 'Option 2', description: 'description 2' },
     { value: 'Option 3', label: 'Option 3', description: 'description 3' },
   ]
-  const trans = useTrans()
   const { control } = useForm()
 
   // Pagination table
@@ -316,7 +314,7 @@ const StyleGuide: NextPage = () => {
           <br />
           <br />
           <div>
-            <ButtonText title="ButtonText lager" full={false} size={'lager'} />
+            <ButtonText title="ButtonText large" full={false} size={'lager'} />
             <span className="px-2"></span>
             <ButtonText
               title="ButtonText medium"

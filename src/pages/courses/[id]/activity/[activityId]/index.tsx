@@ -1,6 +1,8 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
+import FileViewer from '@components/base/fileViewer/FileViewer'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
@@ -16,8 +18,9 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { isPdfFile } from '@utils/helpers'
 import { truncateBySpace, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -32,8 +35,9 @@ import { useQuery } from 'react-query'
 import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -47,6 +51,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -481,10 +486,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <SappTooltip
-                    title={e?.name}
-                    showTooltip={e?.name?.length > 45}
-                  >
+                  <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
                         ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
@@ -493,7 +495,7 @@ const ActivityPage = () => {
                     >
                       {truncateBySpace(e.name, 3) + '/'}
                     </li>
-                  </SappTooltip>
+                  </Tooltip>
                 </li>
               ) : null}
             </React.Fragment>
@@ -619,7 +621,7 @@ const ActivityPage = () => {
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
-            <Tooltip title={nameActivity?.name} color="white">
+            <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
@@ -690,7 +692,6 @@ const ActivityPage = () => {
                 <div className="text-2xl font-medium ">
                   <Tooltip
                     title={activity?.name?.length > 95 && activity?.name}
-                    color="white"
                   >
                     {activity?.name}
                   </Tooltip>
@@ -788,6 +789,7 @@ const ActivityPage = () => {
                               grading_method={e?.quiz?.grading_method}
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
+                              attemptId={e?.quiz?.attempt?.id}
                             />
                           </div>
                         )
@@ -860,7 +862,7 @@ const ActivityPage = () => {
                                   <div className="mr-2 flex self-center">
                                     <LinkIcon />
                                   </div>
-                                  <SappTooltip
+                                  <Tooltip
                                     title={
                                       isPreviewFile
                                         ? 'Preview File'
@@ -890,7 +892,7 @@ const ActivityPage = () => {
                                     >
                                       {e?.resource?.name}
                                     </p>
-                                  </SappTooltip>
+                                  </Tooltip>
                                 </div>
                                 <a
                                   className="cursor-pointer"
@@ -1028,7 +1030,7 @@ const ActivityPage = () => {
                                 ?.display_icon,
                           isPreviousActivityLocked,
                         )}
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.previous_activity
                               ? activity?.previous_activity?.name
@@ -1051,7 +1053,7 @@ const ActivityPage = () => {
                                   80,
                                 )}
                           </span>
-                        </SappTooltip>
+                        </Tooltip>
                       </div>
                     </div>
                   )}
@@ -1073,7 +1075,7 @@ const ActivityPage = () => {
                         Next Activity
                       </div>
                       <div className="flex justify-end text-medium-sm text-gray-1">
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.next_activity
                               ? activity?.next_activity?.name
@@ -1092,7 +1094,7 @@ const ActivityPage = () => {
                                   80,
                                 )}
                           </div>
-                        </SappTooltip>
+                        </Tooltip>
                         {getCourseIcon(
                           activity?.next_activity
                             ? activity?.next_activity?.display_icon
@@ -1117,91 +1119,69 @@ const ActivityPage = () => {
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'file') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '595px',
-                    height: '842px',
-                    top: 'calc(50% - 421px)',
-                    left: 'calc(50% - 300px)',
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                  fixed
-                  // not_resizable
-                  // className='pointer-events-none'
+                <ModalResizeable
+                  title={e.fileName}
+                  width={650}
+                  height={850}
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center"
                 >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                      <div className="truncate text-sm font-normal">
-                        {e?.fileName}
-                      </div>
-                      {/* <CloseIcon */}
-                      <button onClick={() => handleCloseScratchPad(e)}>
-                        <CloseIcon />
-                      </button>
-                    </div>
-                    <div
-                      // className="overflow-auto p-4 bg-white"
-                      style={{ height: 'calc(100% - 40px' }}
-                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
-                    >
-                      {/* <div className='flex flex-'> */}
-                      <PdfViewer file={e?.file} />
-                    </div>
-                    {/* </div> */}
+                  <div
+                    // className="overflow-auto p-4 bg-white"
+                    style={{ height: 'calc(100% - 40px' }}
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                  >
+                    {/* <div className='flex flex-'> */}
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '600px',
-                    height: '400px',
-                    top: exhibitsPopupPosition.top,
-                    left: exhibitsPopupPosition.left,
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-white px-5">
-                      <div className="truncate">
-                        <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
-                          e?.index + 1
-                        }: `}</span>
-                        {e?.name}
+                <ModalResizeable
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="bottom left"
+                  header={
+                    <div className="relative">
+                      <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                        <div className="truncate">
+                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                            e?.index + 1
+                          }: `}</span>
+                          {e?.name}
+                        </div>
                       </div>
-                      <button onClick={() => handleCloseScratchPad(e)}>
+                      <button
+                        className="absolute right-3 top-2"
+                        onClick={() => handleCloseScratchPad(e)}
+                      >
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                      <EditorReader
-                        text_editor_content={e?.description}
-                        className=" w-full "
-                      />
-                      {e?.files?.length > 0 &&
-                        e?.files.map((e: any, index: number) => {
-                          return (
-                            <div key={index} className="h-full cursor-pointer">
-                              <PdfViewer file={e?.resource?.url} />
-                            </div>
-                          )
-                        })}
-                    </div>
+                  }
+                >
+                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                    <EditorReader
+                      text_editor_content={e?.description}
+                      className=" w-full "
+                    />
+                    {e?.files?.length > 0 &&
+                      e?.files.map((e: any, index: number) => {
+                        return (
+                          <div key={index} className="h-full cursor-pointer">
+                            <FileViewer
+                              fileName={e?.resource?.name}
+                              fileUrl={e?.resource?.url}
+                            />
+                          </div>
+                        )
+                      })}
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             }
           })}
@@ -1211,4 +1191,4 @@ const ActivityPage = () => {
   )
 }
 
-export default ActivityPage
+export default withAuthorization([UserType.STUDENT])(ActivityPage)

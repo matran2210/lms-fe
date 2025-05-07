@@ -13,41 +13,13 @@ const MENU_OPTIONS: MenuOption[] = [
     icon: 'course',
     url: `${PageLink.COURSES}`,
     type: 'level-1',
-    // subItems: [
-    //   {
-    //     name: `${TitleSidebar.COURSE_NEW}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSE_NEW}`,
-    //     type: 'level-2',
-    //   },
-    //   {
-    //     name: `${TitleSidebar.COURSE_LIST}`,
-    //     icon: 'document',
-    //     url: `${PageLink.COURSES}`,
-    //     type: 'level-2',
-    //     subItems: [
-    //       {
-    //         name: `${TitleSidebar.TEACHER}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.TEACHER}`,
-    //         type: 'level-3',
-    //       },
-    //       {
-    //         name: `${TitleSidebar.COURSE_LIST}`,
-    //         icon: 'dot',
-    //         url: `${PageLink.COURSES}`,
-    //         type: 'level-3',
-    //       },
-    //     ],
-    //   },
-    // ],
   },
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'stats-chart-sharp',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
+  {
+    name: `${TitleSidebar.COURSE_CONTENT}`,
+    icon: 'bookmark',
+    url: `${PageLink.COURSE_CONTENT}`,
+    type: 'level-2',
+  },
   {
     name: `${TitleSidebar.NOTES_LIST}`,
     icon: 'notes-list',
@@ -90,6 +62,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: '#',
     type: 'level-1',
   },
+  // {
+  //   name: TitleSidebar.CALENDAR,
+  //   icon: 'calendar',
+  //   url: PageLink.CALENDAR,
+  //   type: 'level-1',
+  // },
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [

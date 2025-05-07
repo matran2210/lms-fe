@@ -1,16 +1,16 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
+import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import {
   ANIMATION,
   BUTTON_STATUS,
@@ -18,13 +18,12 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
 } from 'src/constants'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useCourseContext } from '@contexts/index'
 
 const Course = ({
   course,
@@ -211,7 +210,37 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const isRedirectDashboard =
+      course?.course_type == 'NORMAL_COURSE' ||
+      course?.course_type == 'PRACTICE_COURSE'
+
+    // Tạm ẩn redirect dashboard begin
+    // if (
+    //   isRedirectDashboard &&
+    //   (determineButtonToShow == BUTTON_STATUS.Review ||
+    //     determineButtonToShow == BUTTON_STATUS.Resume)
+    // ) {
+    //   router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    // } else {
+    //   router.push(`/courses/my-course/${classInstance?.id}`)
+    // }
+
     router.push(`/courses/my-course/${classInstance?.id}`)
+    // Tạm ẩn redirect dashboard end
+
+    if (isRedirectDashboard) {
+      localStorage.setItem(
+        'courseInfo',
+        JSON.stringify({
+          name: course.name,
+          courseType: course.course_type,
+          category: course.course_categories[0]?.name,
+        }),
+      )
+    } else {
+      localStorage.removeItem('courseInfo')
+    }
+
     localStorage.setItem(
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,
@@ -257,9 +286,9 @@ const Course = ({
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
     [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
     [CLASS_USER_STATUS.CANCELED]: '',
-  } as any
+  } as const
 
-  const classUserStatus = student?.status
+  const classUserStatus = student?.status as keyof typeof statusMap
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
@@ -305,12 +334,12 @@ const Course = ({
                   trackGAEvent('Click Title Course Item')
                 }}
               >
-                <SappTooltip
+                <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 50}
+                  showTooltip={(course?.name as string)?.length > 30}
                 >
-                  {truncateString(course?.name, 50)}
-                </SappTooltip>
+                  {truncateString(course?.name, 30)}
+                </Tooltip>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -318,12 +347,12 @@ const Course = ({
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 font-medium text-bw-1">
-                    <SappTooltip
+                    <Tooltip
                       title={course?.classes?.[0]?.code}
                       showTooltip={course?.classes?.[0]?.code?.length > 15}
                     >
                       {truncateString(course?.classes?.[0]?.code, 15)}
-                    </SappTooltip>
+                    </Tooltip>
                   </span>
                 </div>
               ) : (
@@ -356,16 +385,15 @@ const Course = ({
                   title={
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: course?.description,
+                        __html: clearStylesHtml(course?.description),
                       }}
                     />
                   }
-                  color="#ffffff"
                   placement="bottom"
                 >
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: course?.description,
+                      __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
                       enableCourse ? 'text-bw-1' : 'text-gray-2 '
@@ -375,7 +403,7 @@ const Course = ({
               ) : (
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: course?.description,
+                    __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
                     enableCourse ? 'text-bw-1' : 'text-gray-2 '

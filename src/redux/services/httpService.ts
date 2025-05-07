@@ -7,14 +7,6 @@ import toast from 'react-hot-toast'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
-type ApiConfig<T = any> = {
-  uri: string
-  params?: Object
-  data?: Object
-  request?: any
-  token?: String
-}
-
 let store: any
 export const injectStore = (_store: any) => {
   store = _store

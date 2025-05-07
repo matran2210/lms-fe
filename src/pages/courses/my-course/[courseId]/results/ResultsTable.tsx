@@ -6,7 +6,7 @@ import {
   getTimeFromInput,
   truncateString,
 } from '@utils/index'
-import { Modal, Tooltip } from 'antd'
+import { Modal } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
@@ -22,6 +22,7 @@ import ResultsTableFilter from './ResultsTableFilter'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
+import Tooltip from 'src/common/Tooltip'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
@@ -246,7 +247,6 @@ const ResultsTable = () => {
               <td className={clsx(commonDataCellStyle)}>
                 <Tooltip
                   title={getNameTooltipContent(row, link)}
-                  color="white"
                   arrow={false}
                   placement="topLeft"
                 >
