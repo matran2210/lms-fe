@@ -21,8 +21,8 @@ const sharedFields = z
       return data.request_type_value && data.request_type_value.trim() !== ''
     },
     {
-      message: 'Request type value is required',
-      path: ['request_type_value'],
+      message: VALIDATE_REQUIRED,
+      path: ['request_type'],
     },
   )
 
