@@ -856,7 +856,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                               options={getSelectOptions(
                                 lessons.map((item) => ({
                                   value: item?.id,
-                                  label: item?.name,
+                                  label: `${item?.name} | ${item?.date ? dayjs(item.date).format('DD/MM/YYYY') : ''}`,
                                 })),
                               )}
                               className="h-11.25 "
