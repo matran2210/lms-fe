@@ -128,10 +128,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
 
     const isHaveEndOnValue =
-      !getValues(
+      (!!getValues(
         'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
-      ) && getValues('request_busy_schedule.0.repeat_schedule.repeat')
-    if (isHaveEndOnValue) {
+      ) ||
+        !!getValues('request_busy_schedule.0.drawer-repeat-end-on')) &&
+      getValues('request_busy_schedule.0.repeat_schedule.repeat')
+    if (!isHaveEndOnValue) {
       setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
       })

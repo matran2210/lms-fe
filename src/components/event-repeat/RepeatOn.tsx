@@ -31,13 +31,7 @@ const RepeatOn = ({ className = '', date, onChange, disabled }: IProps) => {
   useEffect(() => {
     setRepeatOn([REPEAT_ON_MAPPED[date.getDay()]])
     onChange([REPEAT_ON_MAPPED[date.getDay()]])
-  }, [])
-
-  useEffect(() => {
-    setRepeatOn([])
-    onChange([])
   }, [date])
-
   return (
     <div className={className}>
       <Checkbox.Group
