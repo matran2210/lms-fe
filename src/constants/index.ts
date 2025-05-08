@@ -357,6 +357,9 @@ export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
   [EVENT_REPEAT_TYPES.EVERY_WEEKDAY]: 'Every weekday (Monday to Friday)',
   [EVENT_REPEAT_TYPES.CUSTOM]: 'Custom',
+  [EVENT_REPEAT_TYPES.WEEKLY]: 'Weekly',
+  [EVENT_REPEAT_TYPES.MONTHLY]: 'Monthly',
+  [EVENT_REPEAT_TYPES.ANNUALLY]: 'Annually',
 }
 
 export enum FREQUENCY_UNITS {
