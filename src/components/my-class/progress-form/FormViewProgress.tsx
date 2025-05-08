@@ -9,7 +9,6 @@ import { ProgressAPI } from '@pages/api/progress'
 import { formatDate } from '@utils/common'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
-import { useRouter } from 'next/router'
 import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -196,6 +195,10 @@ function FormViewProgress({
 
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
+    }
+    if (!payload.current_course_sections) {
+      toast.error('Vui lòng chọn main content')
+      return
     }
     try {
       setLoading(true)
