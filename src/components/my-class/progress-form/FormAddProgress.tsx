@@ -5,7 +5,7 @@ import SAPPSelect from '@components/base/select/SAPPSelect'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ProgressAPI } from '@pages/api/progress'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { Drawer, Tree, TreeDataNode, TreeProps } from 'antd'
+import { Drawer } from 'antd'
 import { useRouter } from 'next/router'
 import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,14 +16,12 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   IContentCompleted,
-  ICourseSections,
   IDefaultFormAddProgress,
   ILesson,
   IRequestCreateProgress,
 } from 'src/type/progress'
 import { z } from 'zod'
-import styles from './styles.module.scss'
-import { SwitcherClosed, SwitcherExpanded } from '@assets/icons'
+import TreeProgress from './TreeProgress'
 
 const defaultValues = {
   lesson: null,
@@ -40,84 +38,20 @@ export interface IProps {
   allowSection?: boolean
 }
 
-const convertToTreeData = (
-  data: IContentCompleted[],
-  parentKey: string = '_',
-): TreeDataNode[] => {
-  return data.map((item) => {
-    const currentKey = `${parentKey}${item.class_schedule_id}`
-    const isMain = item.main
-    return {
-      title: (
-        <>
-          {item.schedule_name}
-          {isMain && (
-            <span className="badge ml-3 rounded-md bg-blue-100 px-2 px-4 py-1 text-sm font-medium text-blue-500">
-              Main
-            </span>
-          )}
-        </>
-      ),
-      key: currentKey,
-      children: item.course_sections?.map((child: ICourseSections) =>
-        convertChild(child, currentKey),
-      ),
-    }
-  })
-}
-
-const convertChild = (
-  item: ICourseSections,
-  parentKey: string = '',
-): TreeDataNode => {
-  const currentKey = `${parentKey}_${item.id}`
-  return {
-    title: item.name,
-    key: currentKey,
-    children: item.children?.map((child: ICourseSections) =>
-      convertChild(child, currentKey),
-    ),
-  }
-}
-
-const getAllKeys = (data: TreeDataNode[]): React.Key[] => {
-  let keys: React.Key[] = []
-  data.forEach((item) => {
-    keys.push(item.key!)
-    if (item.children) {
-      keys = keys.concat(getAllKeys(item.children))
-    }
-  })
-  return keys
-}
-
 function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
   const router = useRouter()
   const params = router.query?.id
   const dispatch = useAppDispatch()
   const { id } = router.query
   const [lesson, setLesson] = useState<ILesson[]>([])
-  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
-  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
-  const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [treeDataNotConvert, setTreeDataNotConvert] = useState<
+    IContentCompleted[]
+  >([])
   const [sectionOption, setSectionOption] = useState<
     { label: string; value: string }[]
   >([])
-  const [treeData, setTreeData] = useState<TreeDataNode[]>([])
 
-  const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    setExpandedKeys(expandedKeysValue)
-    setAutoExpandParent(false)
-  }
-
-  const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
-    const newCheckedKeys = checkedKeysValue as string[]
-    setCheckedKeys(newCheckedKeys)
-    setValue('checkedNodes', newCheckedKeys, { shouldValidate: true })
-  }
   const validationSchema = z.object({
     lesson: z
       .string({ required_error: VALIDATE_REQUIRED })
@@ -162,8 +96,6 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     handleSubmit: handleSubmitForm,
     control,
     setValue,
-    getValues,
-    setError,
     reset,
     watch,
     formState: { errors },
@@ -235,14 +167,17 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
     }
+    setLoading(true)
     try {
       await ProgressAPI.createProgress(payload)
       toast.success('Update successful')
       setOpen(false)
       refresh?.()
       reset()
-      setTreeData([])
-    } catch (err) {}
+    } catch (err) {
+    } finally {
+      setLoading(false)
+    }
   })
 
   useLayoutEffect(() => {
@@ -267,12 +202,15 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
       }
     }
     fetchDataLesson()
+    return () => {
+      reset()
+      setTreeDataNotConvert([])
+    }
   }, [params])
 
   const handleChangeLesson = (value: string) => {
     setValue('section', '')
-    setCheckedKeys([])
-    setTreeData([])
+    setTreeDataNotConvert([])
 
     const fetchDataSection = async () => {
       if (id && value) {
@@ -291,7 +229,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                 value: res.data[0]?.course_sections[0]?.id,
               },
             ])
-            setTreeData(convertToTreeData(res.data))
+            setTreeDataNotConvert(res.data)
           }
           //
         } catch (error) {
@@ -385,19 +323,9 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
               {errors.checkedNodes.message as string}
             </div>
           )}
-          <Tree
-            checkable
-            onExpand={onExpand}
-            expandedKeys={expandedKeys}
-            autoExpandParent={autoExpandParent}
-            onCheck={onCheck}
-            checkedKeys={checkedKeys}
-            selectedKeys={selectedKeys}
-            treeData={treeData}
-            className={styles.lessonFormTree}
-            switcherIcon={({ expanded }) =>
-              expanded ? <SwitcherExpanded /> : <SwitcherClosed />
-            }
+          <TreeProgress
+            dataTreeNotConvert={treeDataNotConvert}
+            setValue={setValue}
           />
         </div>
         <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
@@ -407,7 +335,11 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
             className="mr-4"
             color="secondary"
           />
-          <SAPPButtonV2 title={'Save'} onClick={handleSubmit} />
+          <SAPPButtonV2
+            loading={loading}
+            title={'Save'}
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </Drawer>
