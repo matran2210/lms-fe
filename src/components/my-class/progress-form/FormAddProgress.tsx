@@ -24,10 +24,10 @@ import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 
 const defaultValues = {
-  lesson: null,
-  section: null,
+  lesson: undefined,
+  section: undefined,
   note: '',
-  time: '',
+  time: [] as string[],
   checkedNodes: [],
 }
 
@@ -57,7 +57,6 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
       .string({ required_error: VALIDATE_REQUIRED })
       .trim()
       .min(1, VALIDATE_REQUIRED)
-      .nullable()
       .refine((val) => val !== null, {
         message: VALIDATE_REQUIRED,
       }),
@@ -77,7 +76,6 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           .string({ required_error: VALIDATE_REQUIRED })
           .trim()
           .min(1, VALIDATE_REQUIRED)
-          .nullable()
           .refine((val) => val !== null, {
             message: VALIDATE_REQUIRED,
           })

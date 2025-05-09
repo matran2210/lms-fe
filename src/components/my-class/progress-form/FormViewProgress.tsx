@@ -34,11 +34,11 @@ export interface IProps {
   allowSection?: boolean
 }
 
-const defaultValues = {
-  lesson: null,
-  section: null,
+const defaultValues: IDefaultFormAddProgress = {
+  lesson: '',
+  section: '',
   note: '',
-  time: '',
+  time: ['', ''],
   checkedNodes: [],
 }
 
