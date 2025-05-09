@@ -1,17 +1,14 @@
 @import 'src/styles/variables';
 .lessonFormTree {
-  width: 100%;
+  @apply w-full;
 }
 
 .lessonFormTree :global(.ant-tree-treenode) {
-  line-height: 40px;
-  padding: 4px 0;
+  @apply py-1 leading-[40px];
 }
 
 .lessonFormTree :global(.ant-tree-switcher) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @apply flex items-center justify-center;
 }
 
 .lessonFormTree :global(.ant-tree-switcher:hover) {
@@ -46,15 +43,15 @@
       ):hover
       .ant-tree-checkbox-inner
   ) {
-  background-color: transparent !important;
+  background-color: transparent;
   @apply border-primary  text-white;
 }
 
 .lessonFormTree
   :global(.ant-tree-checkbox-checked .ant-tree-checkbox-inner::after) {
-  top: 45% !important;
-  width: 8px !important;
-  height: 12px !important;
+  top: 45%;
+  width: 8px;
+  height: 12px;
 }
 
 .lessonFormTree
@@ -62,9 +59,9 @@
   @apply border-primary bg-primary text-white;
 }
 
-.lessonFormTree :global(.ant-tree-checkbox-inner) {
-  width: 24px !important;
-  height: 24px !important;
+.lessonFormTree :global(.ant-tree-list-holder-inner .ant-tree-checkbox-inner) {
+  width: 24px;
+  height: 24px;
 }
 
 /* Error message */

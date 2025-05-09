@@ -21,30 +21,24 @@ export class ProgressAPI {
     })
   }
 
-  static getProgressDetail(id: string): Promise<any> {
+  static getProgressDetail(id: string) {
     return fetcher(`class-teaching-progress/${id}`)
   }
 
-  static getListLesson(classId: string): Promise<IResponse<any>> {
+  static getListLesson(classId: string) {
     return fetcher(`class-teaching-progress/get-lesson/${classId}`)
   }
 
-  static getListSection(
-    classId: string,
-    scheduleId: string,
-  ): Promise<IResponse<any>> {
+  static getListSection(classId: string, scheduleId: string) {
     return fetcher(
       `class-teaching-progress/${classId}/get-course-section/${scheduleId}`,
     )
   }
-  static createProgress(data: IRequestCreateProgress): Promise<IResponse<any>> {
+  static createProgress(data: IRequestCreateProgress) {
     return fetcher(`class-teaching-progress`, { method: 'POST', data: data })
   }
 
-  static updateProgress(
-    id: string,
-    data: IRequestCreateProgress,
-  ): Promise<IResponse<any>> {
+  static updateProgress(id: string, data: IRequestCreateProgress) {
     return fetcher(`class-teaching-progress/${id}`, {
       method: 'PUT',
       data: data,
