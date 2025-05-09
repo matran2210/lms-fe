@@ -1,13 +1,14 @@
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import infoIcon from '@assets/images/info-icon.svg'
-import Image from 'next/image'
+import EChart, { EChartsProps } from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
-import NoData from 'src/common/NoData'
 import dayjs from 'dayjs'
-import { Tooltip } from 'antd'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import NoData from 'src/common/NoData'
+import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
+
+import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
 
 const LearningResults = () => {
@@ -191,7 +192,6 @@ const LearningResults = () => {
       <div className="mb-5 flex items-center justify-between border-b pb-3">
         {isNormal ? (
           <Tooltip
-            arrow
             title={
               <div className="text-support-1">
                 {courseInfo?.category == 'ACCA'
@@ -199,11 +199,7 @@ const LearningResults = () => {
                   : '%Results = Module test (40%) + Topic test (60%)'}
               </div>
             }
-            placement="top"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
-            color="#fff"
-            rootClassName="dashboard_tooltip"
+            className="dashboard_tooltip"
           >
             <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
               Your Learning Results

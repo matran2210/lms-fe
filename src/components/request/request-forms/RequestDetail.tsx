@@ -9,6 +9,9 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import {
+  DATE_FORMAT_DMY,
+  DATE_TIME_FORMAT_DMY,
+  EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   REQUEST_STATUS,
   requestStatusToBadge,
@@ -207,6 +210,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           isOpen={open}
           title={`View Request`}
           onClose={() => {
+            router.back()
             setOpen(false)
           }}
           message="Bạn có chắc chắn muốn hủy không"
@@ -214,7 +218,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
-              : 'Cancel Request'
+              : 'Cancel'
           }
           btnCancelTitle={'Cancel'}
           showSubmitButton={
@@ -284,7 +288,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Create Date"
                   body={dayjs(requestDetail?.created_at).format(
-                    'DD/MM/YYYY | hh:mm',
+                    DATE_TIME_FORMAT_DMY,
                   )}
                 />
                 {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
@@ -296,7 +300,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
-                      'DD/MM/YYYY | hh:mm',
+                      DATE_TIME_FORMAT_DMY,
                     )}
                   />
                 )}
@@ -317,12 +321,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -334,7 +341,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       />
                       <CollapseItem
                         title={`Repeat`}
-                        body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
+                        body={
+                          item.schedule?.recurring_pattern_schedule?.type
+                            ? EVENT_REPEAT_LABEL[
+                                item.schedule.recurring_pattern_schedule.type
+                              ]
+                            : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
+                        }
                       />
                       <CollapseItem
                         title={`Description`}
@@ -346,8 +359,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
               {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
                 requestDetail?.teacher_weekly_norms.map((item, index) => {
-                  const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
-                  const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
+                  const startTime = dayjs(item.start_date)
+                    .local()
+                    .format(DATE_FORMAT_DMY)
+                  const endTime = dayjs(item.end_date)
+                    .local()
+                    .format(DATE_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -366,11 +383,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
 
                   return (
                     <div

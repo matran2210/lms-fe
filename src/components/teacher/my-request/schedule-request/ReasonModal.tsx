@@ -1,6 +1,6 @@
 import { AlertIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import React, { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import {
@@ -102,18 +102,20 @@ const ReasonModal = ({
       cancelButtonCaption={'Cancel'}
       okButtonCaption={'Submit'}
       footerButtonClassName="flex flex-row-reverse justify-center gap-4"
-      okButtonClass="rounded-md"
-      cancelButtonClass="bg-gray-4 hover:bg-gay-6 text-[#9CA3AF] !no-underline rounded-md px-4 py-2"
+      okButtonClass="rounded-md !px-5 !py-3 text-sm  !font-normal bg-danger-3"
+      cancelButtonClass="bg-gray-4 hover:bg-gay-6 text-gray-11 !no-underline rounded-md !px-5 !py-3 text-sm !font-normal"
       buttonSize="medium"
       color="danger"
       headerClassName="!text-sm !font-normal"
+      classNameModal={`sapp-custom-modal success-modal`}
     >
-      <HookFormTextField
+      <SappTeacherTextField
         label="Reason"
         name={'request_reject_reason'}
         control={control}
         placeholder="Input Text"
         required
+        className="rounded-lg"
       />
     </SappModalV3>
   )

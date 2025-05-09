@@ -106,6 +106,7 @@ module.exports = {
           13: '#78829D',
           14: '#404041',
           15: '#D1D5DB',
+          16: '#DADFE5',
           900: '#181C32',
         },
         green: {
@@ -165,6 +166,10 @@ module.exports = {
         purple: {
           1: '#8F6FEA',
         },
+        txt: {
+          primary: '#1F2937',
+          secondary: '#9CA3AF',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -209,6 +214,7 @@ module.exports = {
         4: '16px',
         6: '24px',
         8: '30px',
+        11.25: '45px',
         120: '120px',
         small: '36px',
         default: '40px',
@@ -216,6 +222,7 @@ module.exports = {
         large: '56px',
         '62px': '62px',
         '78px': '78px',
+        80: '80px',
         '132px': '132px',
         '165px': '165px',
         42.5: '170px',
@@ -391,8 +398,6 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
       textColor: {
-        primary: '#1F2937',
-        secondary: '#9CA3AF',
         heading: '#374151',
       },
     },

@@ -24,7 +24,6 @@ export interface IRequest {
   note?: string
 }
 export interface ITimeOff {
-  lesson: string | { value: string; label?: string }
   lessonId: string
   reason: string
 }

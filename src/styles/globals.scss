@@ -16,6 +16,8 @@
 
 @import './components/_table.scss';
 @import 'progress.scss';
+@import './components/_input.scss';
+@import './components/_tooltip.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -655,11 +657,6 @@ textarea.is-invalid:focus {
   }
 }
 
-.ant-tooltip-inner {
-  max-width: 600px;
-  width: max-content;
-}
-
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
   padding: 12px 8px !important;
 }
@@ -714,11 +711,17 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  border-radius: 0px !important;
+  @apply rounded-none;
 }
 
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
+}
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
 }
 
 .sapp-modal--math .ant-modal-content {
@@ -855,10 +858,6 @@ p a {
 
 .ant-dropdown {
   z-index: 2000 !important;
-}
-
-.ant-tooltip .ant-tooltip-inner {
-  padding: 10px 12px !important;
 }
 
 #floating-button {
