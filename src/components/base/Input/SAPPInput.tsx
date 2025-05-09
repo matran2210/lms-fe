@@ -45,7 +45,7 @@ const SAPPInput = ({
     if (autoFocus && inputRef.current?.focus) {
       setTimeout(() => {
         inputRef.current?.focus()
-      }, 0) // important!
+      }, 0)
     }
   }, [autoFocus])
   return (
@@ -72,7 +72,7 @@ const SAPPInput = ({
                   field.onChange(value)
                   onChange && onChange(value)
                 }}
-                autoFocus={autoFocus}
+                autoFocus={true}
                 ref={(instance) => {
                   field.ref(instance)
                   if (instance) {
