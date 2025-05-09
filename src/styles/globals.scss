@@ -73,6 +73,7 @@ html {
 body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  @apply bg-gray-4;
 }
 
 a {
