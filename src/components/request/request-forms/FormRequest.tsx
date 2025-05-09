@@ -2,33 +2,25 @@ import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
-import SappDrawer from '@components/base/SappDrawer'
-import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import SAPPSelect from '@components/base/select/SAPPSelect'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
+import { getSelectOptions } from '@utils/helpers'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { capitalizeFirstLetter } from '@utils/index'
 import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
-import { request } from 'http'
-import { isEmpty, update } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
-import {
-  ANT_THEME_CONFIG,
-  CALENDAR_SIDEBAR_TITLE,
-  CONFIRM_CANCEL,
-  DRAWER_REQUEST_TYPE,
-} from 'src/constants'
+import { ANT_THEME_CONFIG, CONFIRM_CANCEL } from 'src/constants'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
 import useSelectClassCode from 'src/hooks/useSelectClassCode'
 import useLesson from 'src/hooks/useSelectLesson'
@@ -65,10 +57,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       request_name: '',
       request_teacher_id: '',
       request_busy_schedule: [
-        { repeat: REPEAT_TYPE.DOES_NOT_REPEAT, date_range: [] },
+        {
+          repeat: REPEAT_TYPE.DOES_NOT_REPEAT,
+          date_range: [new Date(), new Date()],
+        },
       ],
       request_weekly_norm: [{ quantity: undefined }],
-      request_time_off: [{ lesson: { value: '', label: '' }, reason: '' }],
+      request_time_off: [{ lessonId: '', reason: '' }],
     },
   })
   const { handleSubmit, control, setValue, watch, getValues, reset, setError } =
@@ -82,8 +77,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestNorm = watch('request_weekly_norm')
   const requestTimeoff = watch('request_time_off')
   const repeat = watch('request_busy_schedule.0.repeat')
-  const repeatType = watch('request_busy_schedule.0.recurring_schedule.type')
-
+  const repeatType = watch(
+    'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
+  )
   const {
     fields: weeklyNormFields,
     append: appendNorm,
@@ -95,6 +91,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     append: appendTimeoff,
     remove: removeTimeoff,
   } = useFieldArray({ control, name: 'request_time_off' })
+
   const {
     classes,
     hasNextPage: hasNextPageClasses,
@@ -115,7 +112,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const validateRepeatData = () => {
     if (!getValues('request_busy_schedule.0.description')) {
-      return setError('request_busy_schedule.0.description', {
+      setError('request_busy_schedule.0.description', {
         message: VALIDATE_REQUIRED,
       })
     }
@@ -125,7 +122,19 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         REPEAT_TYPE.DOES_NOT_REPEAT &&
       !getValues('request_busy_schedule.0.drawer-repeat-end-on')
     ) {
-      return setError('request_busy_schedule.0.drawer-repeat-end-on', {
+      setError('request_busy_schedule.0.drawer-repeat-end-on', {
+        message: VALIDATE_REQUIRED,
+      })
+    }
+
+    const isHaveEndOnValue =
+      (!!getValues(
+        'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
+      ) ||
+        !!getValues('request_busy_schedule.0.drawer-repeat-end-on')) &&
+      getValues('request_busy_schedule.0.repeat_schedule.repeat')
+    if (!isHaveEndOnValue) {
+      setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
       })
     }
@@ -133,11 +142,15 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
 
   const onSubmit = async (data: IRequest) => {
     let recurring_schedule: IRecurringSchedule | undefined = undefined
+    if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
+      validateRepeatData()
+      if (Object.keys(control._formState.errors).length) return
+    }
 
     if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
-      typeof repeat !== 'string' &&
+      !!repeatType &&
       repeatType !== REPEAT_TYPE.DOES_NOT_REPEAT &&
       repeatType !== REPEAT_TYPE.CHOSEN_PATTERN
     ) {
@@ -145,13 +158,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         getValues,
         requestBusy?.[0]?.date_range?.[0] ?? new Date(),
       )
-
-      validateRepeatData()
     } else if (
       requestType.toLowerCase() ===
         REQUEST_TYPE.BUSY_SCHEDULE.value.toLowerCase() &&
       repeatType === REPEAT_TYPE.CHOSEN_PATTERN &&
-      typeof repeat !== 'string' &&
       detailSchedule &&
       !isEmpty(detailSchedule?.recurring_pattern_schedule)
     ) {
@@ -175,8 +185,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         month_of_year,
         type,
       }
-      validateRepeatData()
+    } else {
+      recurring_schedule = undefined
     }
+
     const formattedBusyScheduleData = {
       event_name: data.request_name,
       range: {
@@ -190,8 +202,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             .format('YYYY-MM-DD[T]HH:mm:ss[Z]') ?? '',
       },
       repeat:
-        data.request_busy_schedule?.[0].recurring_schedule.type !==
-        REPEAT_TYPE.DOES_NOT_REPEAT,
+        data?.request_busy_schedule?.[0]?.repeat_schedule?.repeat ?? false,
       recurring_schedule,
       description: getValues('request_busy_schedule.0.description') ?? '',
       status: getValues('request_status')?.value,
@@ -287,7 +298,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       // setLoading(false)
     }
   }
-
   const disabledDate = (current: Dayjs) => {
     if (!current) return false
 
@@ -384,7 +394,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               })
 
               setValue(
-                'request_busy_schedule.0.recurring_schedule.type',
+                'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
                 REPEAT_TYPE.CHOSEN_PATTERN,
               )
               setValue(
@@ -422,12 +432,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               REQUEST_TYPE.TEACHING_MODE.value,
             ].includes(data.type)
           ) {
-            setValue('class', {
-              value:
-                data.teacher_schedules[0].schedule.class_schedule?.class.id,
-              label:
-                data.teacher_schedules[0].schedule.class_schedule?.class.code,
-            })
             setValue(
               'class_code',
               data.teacher_schedules[0].schedule.class_schedule?.class.id,
@@ -435,21 +439,19 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             setValue(
               'request_time_off',
               data.teacher_schedules.map((item) => ({
-                lesson: { value: item.schedule.id, label: item.schedule.name },
                 lessonId: item.schedule.id,
                 reason: item.request_reason,
               })),
             )
           }
           setValue(
-            'request_creator',
-            data.staff_request.detail.full_name ??
-              data.user_request.detail.full_name,
-          )
-
-          setValue(
             'request_approver',
             data.staff_assignee.detail.full_name ?? '',
+          )
+          setValue(
+            'request_creator',
+            data?.staff_request?.detail?.full_name ??
+              data?.user_request?.detail?.full_name,
           )
         } else {
           toast.error('Something wrong!')
@@ -486,9 +488,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     }
   }
   const handleClose = () => {
-    router.replace({ pathname, query: { tab: query.tab ?? null } }, undefined, {
-      shallow: true,
-    })
+    if (requestType == REQUEST_TYPE.BUSY_SCHEDULE.value) {
+      router.push('/teachers/my-request', undefined, { shallow: true })
+    } else if (requestType == REQUEST_TYPE.TIMEOFF.value) {
+      router.push('/teachers/my-request?tab=timeoff', undefined, {
+        shallow: true,
+      })
+    }
     setOpen(false)
     reset()
   }
@@ -517,7 +523,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       {
         ...currentValues,
         request_time_off: currentValues?.request_time_off?.map(() => ({
-          lesson: { value: '', label: '' },
+          lessonId: '',
           reason: '',
         })),
       },
@@ -539,8 +545,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       >
         <div className="flex h-full w-full flex-col">
           <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
-            <span className="font-sans text-lg font-semibold">
-              {router.query.id ? 'Edit' : 'Add More'} Request
+            <span className="text-xl font-semibold text-primary">
+              {router.query.id ? 'Edit' : 'Create'} Request
             </span>
             <span className="cursor-pointer" onClick={handleCancel}>
               <SappIcon icon="closeicon" />
@@ -564,6 +570,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   requestStatus?.toLowerCase() !==
                     REQUEST_STATUS.PENDING.value.toLowerCase()
                 }
+                autoFocus={true}
               ></SAPPInput>
             </div>
             <div className="mb-6">
@@ -657,7 +664,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   label="Class Code"
                   required
                   labelClass="text-sm font-medium"
-                  name="class"
+                  name="class_code"
                   isSearchable
                   onSearch={() => refetchClasses()}
                   isLoading={isLoadingClasses}
@@ -669,10 +676,12 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   }}
                   onChange={(e) => handleChangeClassCode(e)}
                   placeholder="Class Code"
-                  options={classes.map((item) => ({
-                    value: item?.id,
-                    label: item?.code,
-                  }))}
+                  options={getSelectOptions(
+                    classes.map((item) => ({
+                      value: item?.id,
+                      label: item?.code,
+                    })),
+                  )}
                   className="h-11.25"
                   disabled={
                     isEdit &&
@@ -702,7 +711,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     required
                     label="Start Date - End Date"
                     name={`request_busy_schedule.0.date_range`}
-                    format="YYYY-MM-DD | HH:mm:ss"
+                    format="YYYY-MM-DD | HH:mm"
                     showTime={true}
                     // disabledDate={disabledDate}
                     inputClassName="h-11.25 w-full rounded-md"
@@ -718,12 +727,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 <div className="mb-6">
                   <HookFormEventRepeat
                     control={control}
-                    name="request_busy_schedule.0"
-                    defaultDate={dayjs(
-                      requestBusy?.[0]?.['drawer-repeat-end-on']
-                        ? requestBusy?.[0]?.['drawer-repeat-end-on']
-                        : currentDate?.[1],
-                    ).toDate()}
+                    name="request_busy_schedule.0.repeat_schedule"
+                    rangeDate={currentDate ?? [new Date(), new Date()]}
                     repeatOption={otherOption}
                     disabled={
                       isEdit &&
@@ -819,90 +824,92 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   </div>
                 )
               })}
-            {[
-              REQUEST_TYPE.TIMEOFF.value,
-              REQUEST_TYPE.TEACHING_MODE.value,
-            ].includes(requestType) &&
-              classCode &&
-              timeOffFields.map((item, index) => {
-                return (
-                  <div key={item.id}>
-                    <div className="mb-6">
-                      <div className="grid w-full grid-cols-2 gap-x-6">
-                        <div className="mb-6">
-                          <SAPPSelect
-                            control={control}
-                            label="Lesson"
-                            required
-                            name={`request_time_off.${index}.lesson`}
-                            isSearchable
-                            onSearch={() => refetchLessons()}
-                            isLoading={isLoadingLessons}
-                            onMenuScrollToBottom={() =>
-                              hasNextPageLessons && fetchNextPageLessons()
-                            }
-                            onDropdownVisibleChange={(open) => {
-                              open && refetchLessons()
-                            }}
-                            onChange={(e) => {
-                              setValue(`request_time_off.${index}.lessonId`, e)
-                            }}
-                            labelClass="text-sm font-medium"
-                            placeholder="Lesson"
-                            options={lessons.map((item) => ({
-                              value: item?.id,
-                              label: item?.name,
-                            }))}
-                            className="h-11.25 "
-                          />
-                        </div>
-                        <div>
-                          <SAPPInput
-                            label={'Reason'}
-                            required
-                            control={control}
-                            name={`request_time_off.${index}.reason`}
-                            onChange={(e) =>
-                              setValue(
-                                `request_time_off.${index}.reason`,
-                                e.target.value,
-                              )
-                            }
-                            placeholder={'Reason'}
-                            labelClass="text-sm font-medium"
-                            className="h-11.25 "
-                          ></SAPPInput>
+            {classCode
+              ? timeOffFields.map((item, index) => {
+                  return (
+                    <div key={item.id}>
+                      <div className="mb-6">
+                        <div className="grid w-full grid-cols-2 gap-x-6">
+                          <div className="mb-6">
+                            <SAPPSelect
+                              control={control}
+                              label="Lesson"
+                              required
+                              name={`request_time_off.${index}.lessonId`}
+                              isSearchable
+                              onSearch={() => refetchLessons()}
+                              isLoading={isLoadingLessons}
+                              onMenuScrollToBottom={() =>
+                                hasNextPageLessons && fetchNextPageLessons()
+                              }
+                              onDropdownVisibleChange={(open) => {
+                                open && refetchLessons()
+                              }}
+                              onChange={(e) => {
+                                setValue(
+                                  `request_time_off.${index}.lessonId`,
+                                  e,
+                                )
+                              }}
+                              labelClass="text-sm font-medium"
+                              placeholder="Lesson"
+                              options={getSelectOptions(
+                                lessons.map((item) => ({
+                                  value: item?.id,
+                                  label: `${item?.name} | ${item?.date ? dayjs(item.date).format('DD/MM/YYYY') : ''}`,
+                                })),
+                              )}
+                              className="h-11.25 "
+                            />
+                          </div>
+                          <div>
+                            <SAPPInput
+                              label={'Reason'}
+                              required
+                              control={control}
+                              name={`request_time_off.${index}.reason`}
+                              onChange={(e) =>
+                                setValue(
+                                  `request_time_off.${index}.reason`,
+                                  e.target.value,
+                                )
+                              }
+                              placeholder={'Reason'}
+                              labelClass="text-sm font-medium"
+                              className="h-11.25 "
+                            ></SAPPInput>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {requestTimeoff &&
-                      requestTimeoff?.length > 1 &&
-                      (!requestStatus ||
-                        requestStatus?.toLowerCase() ==
-                          REQUEST_STATUS.PENDING.value.toLowerCase()) && (
-                        <div
-                          className="mb-6 flex cursor-pointer items-center gap-x-3"
-                          onClick={() => removeTimeoff(index)}
-                        >
-                          <IconMinusSquared />
+                      {requestTimeoff &&
+                        requestTimeoff?.length > 1 &&
+                        (!requestStatus ||
+                          requestStatus?.toLowerCase() ==
+                            REQUEST_STATUS.PENDING.value.toLowerCase()) && (
+                          <div
+                            className="mb-6 flex cursor-pointer items-center gap-x-3"
+                            onClick={() => removeTimeoff(index)}
+                          >
+                            <IconMinusSquared />
 
-                          <span className="text-sm font-medium">
-                            Delete{' '}
-                            {capitalizeFirstLetter(
-                              Object.values(REQUEST_TYPE)
-                                .find(
-                                  (item) =>
-                                    item.value.toLowerCase() ==
-                                    requestType?.toLowerCase(),
-                                )
-                                ?.label?.replace('_', ' '),
-                            )}
-                          </span>
-                        </div>
-                      )}
-                  </div>
-                )
-              })}
+                            <span className="text-sm font-medium">
+                              Delete{' '}
+                              {capitalizeFirstLetter(
+                                Object.values(REQUEST_TYPE)
+                                  .find(
+                                    (item) =>
+                                      item.value.toLowerCase() ==
+                                      requestType?.toLowerCase(),
+                                  )
+                                  ?.label?.replace('_', ' '),
+                              )}
+                            </span>
+                          </div>
+                        )}
+                    </div>
+                  )
+                })
+              : null}
 
             {(!isEdit ||
               requestStatus?.toLowerCase() ==
@@ -943,7 +950,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   className="mb-12 flex cursor-pointer items-center gap-x-3"
                   onClick={() =>
                     appendTimeoff({
-                      lesson: { value: '', label: '' },
                       lessonId: '',
                       reason: '',
                     })

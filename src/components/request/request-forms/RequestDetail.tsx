@@ -8,12 +8,21 @@ import { capitalizeFirstLetter } from '@utils/index'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
-import { EVENT_REPEAT_TYPES } from 'src/constants'
-import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants/my-request'
+import {
+  DATE_FORMAT_DMY,
+  DATE_TIME_FORMAT_DMY,
+  EVENT_REPEAT_LABEL,
+  EVENT_REPEAT_TYPES,
+  REQUEST_STATUS,
+  requestStatusToBadge,
+  requestStatusToTitle,
+} from 'src/constants'
+import { REQUEST_TYPE } from 'src/constants/my-request'
 import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
 import { RequestStatus } from 'src/type/my-request/enum'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { useAppDispatch } from 'src/redux/hook'
+import SAPPBadge from '@components/base/Badge/SAPPBadge'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -29,8 +38,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const dispatch = useAppDispatch()
   const [requestDetail, setRequestDetail] =
     useState<IBusyRequestDetailResponse>()
-  const displayStatus = (status: string) => {
-    return `${RequestStatus[status as keyof typeof RequestStatus] || 'Unknown'}`
+  const displayStatus = (status: REQUEST_STATUS) => {
+    return (
+      <SAPPBadge
+        label={requestStatusToBadge[status]?.label}
+        type={requestStatusToBadge[status]?.type}
+      />
+    )
   }
   const handleChangeRequestStatus = async (status: string) => {
     const schedule = requestDetail?.teacher_schedules?.[0]?.schedule
@@ -153,9 +167,9 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
   const hasActionButton = useMemo(
     () =>
       [
-        REQUEST_STATUS.APPROVED.value.toLowerCase(),
-        REQUEST_STATUS.PENDING.value.toLocaleLowerCase(),
-      ].includes(requestDetail?.status.toLocaleLowerCase() ?? ''),
+        requestStatusToTitle[REQUEST_STATUS.APPROVED].toLowerCase(),
+        requestStatusToTitle[REQUEST_STATUS.PENDING].toLowerCase(),
+      ].includes(requestDetail?.status.toLowerCase() ?? ''),
     [requestDetail?.status],
   )
   const handleEdit = () => {
@@ -184,6 +198,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
       handleChangeRequestStatus(RequestStatus.APPROVED)
     }
   }
+
+  const requestType = Object.values(REQUEST_TYPE).find(
+    (item) => item.value === requestDetail?.type,
+  )
   return (
     <div>
       <div className="card h-xl-100"></div>
@@ -192,6 +210,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           isOpen={open}
           title={`View Request`}
           onClose={() => {
+            router.back()
             setOpen(false)
           }}
           message="Bạn có chắc chắn muốn hủy không"
@@ -199,7 +218,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             requestDetail?.status.toLowerCase() ==
             RequestStatus.PENDING.toLowerCase()
               ? 'Edit'
-              : 'Cancel Request'
+              : 'Cancel'
           }
           btnCancelTitle={'Cancel'}
           showSubmitButton={
@@ -228,15 +247,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               </span>
               <span className="">
                 {requestDetail?.due_date} |{' '}
-                {dayjs(requestDetail?.created_at).format('hh:mm')}
+                {dayjs(requestDetail?.created_at).format('HH:mm')}
               </span>
             </div>
             <div className="mb-4 flex items-center gap-x-3 text-sm">
               <span className="font-medium text-bw-9">Status:</span>
-              <div className="rounded bg-[#f897070d] px-[10px] py-1 font-inter text-xsm font-medium text-[#f89707]">
-                {displayStatus(requestDetail?.status ?? '')}
-                {/* Pending */}
-              </div>
+
+              {displayStatus(
+                REQUEST_STATUS[`${requestDetail?.status as REQUEST_STATUS}`],
+              )}
             </div>
           </div>
           <div className="mb-4">
@@ -250,12 +269,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Request Type"
                   body={
-                    <span className="text-danger">
-                      {capitalizeFirstLetter(
-                        Object.values(REQUEST_TYPE).find(
-                          (item) => item.value == requestDetail?.type,
-                        )?.label,
-                      )}
+                    <span className={`${requestType?.colorClass}`}>
+                      {requestType?.label}
                     </span>
                   }
                 />
@@ -273,7 +288,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Create Date"
                   body={dayjs(requestDetail?.created_at).format(
-                    'DD/MM/YYYY | hh:mm',
+                    DATE_TIME_FORMAT_DMY,
                   )}
                 />
                 {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
@@ -285,7 +300,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
-                      'DD/MM/YYYY | hh:mm',
+                      DATE_TIME_FORMAT_DMY,
                     )}
                   />
                 )}
@@ -306,12 +321,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               {requestDetail?.type == REQUEST_TYPE.BUSY_SCHEDULE.value &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
-
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -323,7 +341,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       />
                       <CollapseItem
                         title={`Repeat`}
-                        body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
+                        body={
+                          item.schedule?.recurring_pattern_schedule?.type
+                            ? EVENT_REPEAT_LABEL[
+                                item.schedule.recurring_pattern_schedule.type
+                              ]
+                            : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
+                        }
                       />
                       <CollapseItem
                         title={`Description`}
@@ -335,8 +359,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
               {requestDetail?.type === REQUEST_TYPE.WEEKLY_NORM.value &&
                 requestDetail?.teacher_weekly_norms.map((item, index) => {
-                  const startTime = dayjs(item.start_date).format('DD/MM/YYYY')
-                  const endTime = dayjs(item.end_date).format('DD/MM/YYYY')
+                  const startTime = dayjs(item.start_date)
+                    .local()
+                    .format(DATE_FORMAT_DMY)
+                  const endTime = dayjs(item.end_date)
+                    .local()
+                    .format(DATE_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -355,11 +383,15 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 requestDetail?.type === REQUEST_TYPE.TEACHING_MODE.value) &&
                 requestDetail?.teacher_schedules.map((item, index) => {
                   const startTime = dayjs(
-                    `${item.schedule.start_date} ${item.schedule.start_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.start_date}T${item.schedule.start_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
-                    `${item.schedule.end_date} ${item.schedule.end_time}`,
-                  ).format('DD/MM/YYYY | HH:mm')
+                    `${item.schedule.end_date}T${item.schedule.end_time}Z`,
+                  )
+                    .local()
+                    .format(DATE_TIME_FORMAT_DMY)
 
                   return (
                     <div
