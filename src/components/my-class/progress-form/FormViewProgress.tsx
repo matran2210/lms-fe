@@ -13,7 +13,7 @@ import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
-import { CONFIRM_CANCEL } from 'src/constants'
+import { CONFIRM_CANCEL, DATE_TIME_FORMAT_DMY } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
@@ -341,7 +341,7 @@ function FormViewProgress({
                         detailProgress?.created_at
                           ? formatDate(
                               detailProgress.created_at,
-                              'DD/MM/YYYY | HH:mm',
+                              DATE_TIME_FORMAT_DMY,
                             )
                           : ''
                       }

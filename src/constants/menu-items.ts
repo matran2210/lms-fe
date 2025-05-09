@@ -77,24 +77,6 @@ const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
     url: PageLink.EVENT_TEST,
     type: 'level-1',
   },
-  {
-    name: `${TitleSidebar.RESULTS}`,
-    icon: 'result',
-    url: PageLink.RESULTS,
-    type: 'level-2',
-  },
-  {
-    name: `${TitleSidebar.NEW_NOTE}`,
-    icon: 'create-note',
-    url: '#',
-    type: 'level-1',
-  },
-  {
-    name: `${TitleSidebar.CALCULATOR}`,
-    icon: 'caculator',
-    url: '#',
-    type: 'level-1',
-  },
 ]
 
 const MENU_OPTIONS_BOTTOM: MenuOption[] = [

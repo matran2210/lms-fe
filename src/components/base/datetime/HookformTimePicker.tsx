@@ -3,19 +3,19 @@ import { TimePicker } from 'antd'
 import dayjs from 'dayjs'
 import ErrorMessage from 'src/common/ErrorMessage'
 import { EDateTime } from 'src/type'
+import SAPPLabel from '../Label/SAPPLabel'
 
 const { RangePicker } = TimePicker
 
 interface IProps {
   control: Control<any>
   name: string
-  defaultValue?: any
+  defaultValue?: string
   format?: string
   placeholder?: [string, string]
   needConfirm?: boolean
   required?: boolean
   disabled?: boolean
-  disabledTime?: any
   className?: string
   label?: string
 }
@@ -30,9 +30,7 @@ const HookformTimePicker = ({
   required,
   needConfirm = false,
   disabled = false,
-  disabledTime,
 }: IProps) => {
-  const requiredMark = required ? <span className="text-danger">*</span> : null
   return (
     <Controller
       name={name}
@@ -42,9 +40,13 @@ const HookformTimePicker = ({
         fieldState: { error },
       }) => (
         <div className="float-label">
-          <label className="mb-2.5 block text-sm font-medium">
-            {label || placeholder} {requiredMark}
-          </label>
+          {label && (
+            <SAPPLabel
+              title={label}
+              required={required}
+              className={'"mb-2.5 block text-sm font-medium'}
+            />
+          )}
           <RangePicker
             format={format}
             value={
@@ -72,7 +74,6 @@ const HookformTimePicker = ({
             style={{ width: '-webkit-fill-available' }}
             needConfirm={needConfirm}
             disabled={disabled}
-            disabledTime={disabledTime}
           />
           {error && <ErrorMessage>{error.message}</ErrorMessage>}
         </div>
