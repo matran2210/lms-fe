@@ -167,6 +167,10 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
     }
+    if (!payload.current_course_sections) {
+      toast.error('Vui lòng chọn main content')
+      return
+    }
     setLoading(true)
     try {
       await ProgressAPI.createProgress(payload)
