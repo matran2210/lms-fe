@@ -9,6 +9,8 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import {
+  DATE_FORMAT_DMY,
+  DATE_TIME_FORMAT_DMY,
   EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   REQUEST_STATUS,
@@ -286,7 +288,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Create Date"
                   body={dayjs(requestDetail?.created_at).format(
-                    'DD/MM/YYYY | HH:mm',
+                    DATE_TIME_FORMAT_DMY,
                   )}
                 />
                 {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
@@ -298,7 +300,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
-                      'DD/MM/YYYY | HH:mm',
+                      DATE_TIME_FORMAT_DMY,
                     )}
                   />
                 )}
@@ -322,12 +324,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                     `${item.schedule.start_date}T${item.schedule.start_time}Z`,
                   )
                     .local()
-                    .format('DD/MM/YYYY | HH:mm')
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
                     `${item.schedule.end_date}T${item.schedule.end_time}Z`,
                   )
                     .local()
-                    .format('DD/MM/YYYY | HH:mm')
+                    .format(DATE_TIME_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -359,10 +361,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 requestDetail?.teacher_weekly_norms.map((item, index) => {
                   const startTime = dayjs(item.start_date)
                     .local()
-                    .format('DD/MM/YYYY')
+                    .format(DATE_FORMAT_DMY)
                   const endTime = dayjs(item.end_date)
                     .local()
-                    .format('DD/MM/YYYY')
+                    .format(DATE_FORMAT_DMY)
                   return (
                     <div
                       key={index}
@@ -384,12 +386,12 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                     `${item.schedule.start_date}T${item.schedule.start_time}Z`,
                   )
                     .local()
-                    .format('DD/MM/YYYY | HH:mm')
+                    .format(DATE_TIME_FORMAT_DMY)
                   const endTime = dayjs(
                     `${item.schedule.end_date}T${item.schedule.end_time}Z`,
                   )
                     .local()
-                    .format('DD/MM/YYYY | HH:mm')
+                    .format(DATE_TIME_FORMAT_DMY)
 
                   return (
                     <div

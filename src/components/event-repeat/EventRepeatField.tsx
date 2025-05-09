@@ -24,6 +24,7 @@ import {
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
+import clsx from 'clsx'
 import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(weekday)
@@ -59,6 +60,19 @@ interface IProps {
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
   rangeDate?: [Date, Date]
+}
+
+interface BlockLabelTextProps {
+  text: React.ReactNode
+  className?: string
+}
+
+const BlockLabelText = ({ text, className }: BlockLabelTextProps) => {
+  return (
+    <p className={clsx('flex items-center pr-6 font-medium', className)}>
+      {text}
+    </p>
+  )
 }
 
 const EventRepeatField = ({
@@ -288,9 +302,7 @@ const EventRepeatField = ({
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <p className="flex items-center pr-6 font-medium">
-                  Repeat every
-                </p>
+                <BlockLabelText text="Repeat every" />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -301,7 +313,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <p className="flex items-center pr-6 font-medium">Repeat on</p>
+                <BlockLabelText text="Repeat on" />
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -310,7 +322,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <p className="flex items-center pr-6 font-medium">End on</p>
+            <BlockLabelText text="End on" />
             <Controller
               control={control}
               name="end_on"
