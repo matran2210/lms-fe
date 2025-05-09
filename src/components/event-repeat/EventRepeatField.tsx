@@ -25,9 +25,11 @@ import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
 import clsx from 'clsx'
+import utc from 'dayjs/plugin/utc'
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
+dayjs.extend(utc)
 
 interface IRepeatTypeOption {
   label: string
@@ -204,7 +206,7 @@ const EventRepeatField = ({
           )
 
         if (value?.repeat_type === EVENT_REPEAT_TYPES.WEEKLY)
-          return [dayjs(initDate).weekday()]
+          return [dayjs(initDate).utc().weekday()]
 
         return undefined
       }
@@ -218,7 +220,7 @@ const EventRepeatField = ({
             (value?.repeat_frequency?.unit === FREQUENCY_UNITS.MONTH ||
               value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR))
         )
-          return [dayjs(initDate).date()]
+          return [dayjs(initDate).utc().date()]
 
         return undefined
       }
@@ -228,7 +230,7 @@ const EventRepeatField = ({
           (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
             value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR)
         )
-          return [dayjs(initDate).month() + 1]
+          return [dayjs(initDate).utc().month() + 1]
 
         return undefined
       }

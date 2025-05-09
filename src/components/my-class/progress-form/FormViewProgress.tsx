@@ -8,8 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ProgressAPI } from '@pages/api/progress'
 import { formatDate } from '@utils/common'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { Drawer, Tree, TreeDataNode, TreeProps } from 'antd'
-import { useRouter } from 'next/router'
+import { Drawer } from 'antd'
 import React, { useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -19,14 +18,12 @@ import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import {
   IContentCompleted,
-  ICourseSections,
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
 } from 'src/type/progress'
 import { z } from 'zod'
-import styles from './styles.module.scss'
-import { SwitcherClosed, SwitcherExpanded } from '@assets/icons'
+import TreeProgress from './TreeProgress'
 
 export interface IProps {
   id: string | null
@@ -35,75 +32,6 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   refresh?: () => void
   allowSection?: boolean
-}
-const getCompletedKeys = (data: ICourseSections[]): string[] => {
-  let result: string[] = []
-
-  data.forEach((item) => {
-    if (item.is_completed) {
-      result.push(item.key as string)
-    }
-    if (item?.children?.length > 0) {
-      result = result.concat(getCompletedKeys(item.children))
-    }
-  })
-
-  return result
-}
-const convertToTreeData = (
-  data: IContentCompleted[],
-  parentKey: string = '_',
-) => {
-  return data.map((schedule) => {
-    // them id parent cho các id item không bị trùng
-    const currentKey = `${parentKey}${schedule.class_schedule_id}`
-    const isMain = schedule.main
-    return {
-      title: (
-        <>
-          {schedule.class_schedule_name}
-          {isMain && (
-            <span className="badge ml-3 rounded-md bg-blue-100 px-2 px-4 py-1 text-sm font-medium text-blue-500">
-              Main
-            </span>
-          )}
-        </>
-      ),
-      key: currentKey,
-      is_completed: schedule.is_completed,
-      children: schedule.course_sections.map((section: ICourseSections) =>
-        convertSection(section, currentKey),
-      ),
-    }
-  })
-}
-
-const convertSection: any = (
-  section: ICourseSections,
-  parentKey: string = '',
-) => {
-  const currentKey = `${parentKey}_${section.id}`
-  return {
-    title: section.name,
-    key: currentKey,
-    is_completed: section.is_completed,
-    children: section?.children?.map((child: ICourseSections) =>
-      convertSection(child, currentKey),
-    ),
-  }
-}
-
-const getAllKeys = (treeData: TreeDataNode[]): string[] => {
-  let keys: string[] = []
-
-  treeData.forEach((node) => {
-    keys.push(node.key as string)
-    if (node.children && node.children.length > 0) {
-      keys = keys.concat(getAllKeys(node.children))
-    }
-  })
-
-  return keys
 }
 
 const defaultValues = {
@@ -122,16 +50,12 @@ function FormViewProgress({
   refresh,
   allowSection,
 }: IProps) {
-  const router = useRouter()
-  const params = router.query?.id
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
   const [detailProgress, setDetailProgress] = useState<IProgress>()
-  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
-  const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
-  const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
-  const [treeData, setTreeData] = useState<TreeDataNode[]>([])
+  const [treeDataNotConvert, setTreeDataNotConvert] = useState<
+    IContentCompleted[]
+  >([])
   const validationSchema = z.object({
     lesson: z
       .string({ required_error: VALIDATE_REQUIRED })
@@ -171,22 +95,6 @@ function FormViewProgress({
     reset,
     formState: { errors },
   } = useFormProp
-  const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
-    // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-    // or, you can remove all expanded children keys.
-    setExpandedKeys(expandedKeysValue)
-    setAutoExpandParent(false)
-  }
-
-  const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
-    const newCheckedKeys = checkedKeysValue as string[]
-    setCheckedKeys(checkedKeysValue as React.Key[])
-    setValue('checkedNodes', newCheckedKeys, { shouldValidate: true })
-  }
-
-  const onSelect: TreeProps['onSelect'] = (selectedKeysValue, info) => {
-    setSelectedKeys(selectedKeysValue)
-  }
   const loadData = async () => {
     if (id) {
       setLoading(true)
@@ -212,14 +120,8 @@ function FormViewProgress({
       (item) => item.class_schedule_id === data.lesson.class_schedule_id,
     )
     setValue('section', currentLesson?.class_schedule_name || '')
-    const dataCVTree: any = convertToTreeData(data.content_completed)
-    setTreeData(dataCVTree)
+    setTreeDataNotConvert(data.content_completed)
     setValue('time', [data.start_time, data.end_time])
-    const completedKeys = getCompletedKeys(dataCVTree)
-    setCheckedKeys(completedKeys)
-    setValue('checkedNodes', completedKeys)
-
-    setExpandedKeys(getAllKeys(dataCVTree))
   }
 
   useLayoutEffect(() => {
@@ -293,6 +195,10 @@ function FormViewProgress({
 
     if (compensatedCourse.length > 0) {
       payload.compensated_course_sections = compensatedCourse
+    }
+    if (!payload.current_course_sections) {
+      toast.error('Vui lòng chọn main content')
+      return
     }
     try {
       setLoading(true)
@@ -455,20 +361,10 @@ function FormViewProgress({
                         {errors.checkedNodes.message as string}
                       </div>
                     )}
-                    <Tree
-                      checkable={!isView}
-                      onExpand={onExpand}
-                      expandedKeys={expandedKeys}
-                      autoExpandParent={autoExpandParent}
-                      onCheck={onCheck}
-                      checkedKeys={checkedKeys}
-                      onSelect={onSelect}
-                      selectedKeys={selectedKeys}
-                      treeData={treeData}
-                      className={styles.lessonFormTree}
-                      switcherIcon={({ expanded }) =>
-                        expanded ? <SwitcherExpanded /> : <SwitcherClosed />
-                      }
+                    <TreeProgress
+                      isView={isView}
+                      dataTreeNotConvert={treeDataNotConvert}
+                      setValue={setValue}
                     />
                   </div>
                 </CollapseBox>
@@ -535,19 +431,9 @@ function FormViewProgress({
                   {errors.checkedNodes.message as string}
                 </div>
               )}
-              <Tree
-                checkable
-                onExpand={onExpand}
-                expandedKeys={expandedKeys}
-                autoExpandParent={autoExpandParent}
-                onCheck={onCheck}
-                checkedKeys={checkedKeys}
-                selectedKeys={selectedKeys}
-                treeData={treeData}
-                className={styles.lessonFormTree}
-                switcherIcon={({ expanded }) =>
-                  expanded ? <SwitcherExpanded /> : <SwitcherClosed />
-                }
+              <TreeProgress
+                dataTreeNotConvert={treeDataNotConvert}
+                setValue={setValue}
               />
             </div>
           )}

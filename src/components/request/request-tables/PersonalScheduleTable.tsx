@@ -135,21 +135,21 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Approver',
     dataIndex: 'staff_assignee',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Creator',
     dataIndex: 'creator',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-secondary">
+      <div className="text-txt-secondary">
         {formatDate(value, DATE_TIME_FORMAT)}
       </div>
     ),
@@ -158,7 +158,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Note',
     dataIndex: 'note',
     render: (value: string) => (
-      <div className="text-secondary">{value || '_ _ _ _ _ _'}</div>
+      <div className="text-txt-secondary">{value || '_ _ _ _ _ _'}</div>
     ),
   },
   {

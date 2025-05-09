@@ -11,6 +11,7 @@ import toast from 'react-hot-toast'
 import {
   DATE_FORMAT_DMY,
   DATE_TIME_FORMAT_DMY,
+  EVENT_REPEAT_LABEL,
   EVENT_REPEAT_TYPES,
   REQUEST_STATUS,
   requestStatusToBadge,
@@ -340,7 +341,13 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       />
                       <CollapseItem
                         title={`Repeat`}
-                        body={`${item.schedule.recurring_pattern_schedule ? item.schedule.recurring_pattern_schedule.type : ''}`}
+                        body={
+                          item.schedule?.recurring_pattern_schedule?.type
+                            ? EVENT_REPEAT_LABEL[
+                                item.schedule.recurring_pattern_schedule.type
+                              ]
+                            : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
+                        }
                       />
                       <CollapseItem
                         title={`Description`}
