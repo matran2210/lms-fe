@@ -16,7 +16,6 @@
     "eslint-plugin-only-warn": "^1.1.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-turbo": "^1.12.0",
     "globals": "^13.24.0"
   }
 }
