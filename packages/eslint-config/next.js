@@ -28,7 +28,7 @@ export const nextJsConfig = [
   },
   {
     plugins: {
-      "@next/next": pluginNext,
+      "@next/next": pluginNext, //Nếu các app dùng các phiên bản next js khác nhau thì nên config riêng phần này
     },
     rules: {
       ...pluginNext.configs.recommended.rules,

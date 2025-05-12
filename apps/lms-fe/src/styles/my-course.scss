@@ -1,0 +1,127 @@
+.filter .select-single .select__control {
+  @apply h-[17px] min-h-[17px] items-baseline border-0 bg-transparent shadow-none;
+}
+
+.name-course a {
+  @apply block;
+}
+
+.filter .select-single.status-course .select__value-container {
+  @apply p-0 pr-2;
+
+  & > input {
+    @apply text-medium-sm font-normal text-gray-1;
+  }
+}
+
+.filter .select-single .select__indicator {
+  @apply p-0;
+}
+
+.filter .select-single .select__indicator svg {
+  @apply h-4 w-4;
+}
+
+.filter .select__input-container {
+  @apply m-0 p-0;
+}
+
+.filter {
+  .select__placeholder {
+    @apply text-gray-1;
+  }
+}
+
+.sapp-drawer .ant-drawer-wrapper-body .ant-drawer-body {
+  padding: 0;
+}
+
+.modal-body {
+  display: none;
+}
+
+.sapp-btn-close-modal {
+  display: none;
+}
+
+.download,
+.delete path {
+  stroke: #a1a1a1;
+  transition: stroke 0.3s ease;
+}
+
+/* Hover styling */
+.download:hover path {
+  stroke: #ffb800; /* Red color on hover */
+}
+
+.delete:hover path {
+  stroke: #d35563; /* Red color on hover */
+}
+
+.sapp-active-item-guide .item:first-child {
+  @apply z-50 bg-white;
+}
+
+.select__menu {
+  min-width: 150px !important;
+  right: 0px;
+}
+
+.group-resource:hover {
+  fill: #ffb800; /* Change to the desired hover fill color */
+  cursor: pointer; /* Optional: Change cursor to pointer on hover */
+}
+
+.notes-list-icon {
+  @apply text-gray-1;
+
+  &:hover {
+    @apply text-primary;
+  }
+
+  &.active {
+    @apply text-primary;
+  }
+}
+
+.select-single.status-course {
+  .select__input-container {
+    @apply text-medium-sm font-normal text-gray-1;
+  }
+}
+
+.default-content-editor {
+  thead,
+  tbody,
+  tfoot,
+  td,
+  th {
+    border-width: 1px;
+    border-style: inset;
+    @apply border-gray-1; /* Add this line to set the border color to gray-2 */
+  }
+
+  tr {
+    border-style: initial;
+    border-width: initial;
+  }
+
+  ol,
+  ul,
+  menu {
+    padding-inline-start: 40px !important;
+    list-style: auto;
+  }
+  ul {
+    list-style-type: disc;
+  }
+
+  hr {
+    @apply border-default;
+  }
+}
+
+.w-fill--available {
+  width: -webkit-fill-available;
+}

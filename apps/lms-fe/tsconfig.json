@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@adapters/*": ["src/adapters/*"],
+      "@components/*": ["src/components/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@services/*": ["src/services/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["src/assets/*"],
+      "@i18n/*": ["src/i18n/*"],
+      "@pages/*": ["src/pages/*"],
+      "@repo/config-tailwind": [
+        "../../packages/config-tailwind/tailwind.config.ts" // Thêm alias cho packages/config-tailwind
+      ]
+    },
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "downlevelIteration": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "public/locales/vi/common.json",
+    "src/components/base/checkbox/HookFormCheckBox.tsx_",
+    "src/components/base/radiobutton/HookFormRadioGroup.tsx_",
+    "src/components/base/radiobutton/HookFormRadioTextFieldGroup.tsx_"
+  ],
+  "exclude": ["node_modules"]
+}
