@@ -9,7 +9,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "lint-staged": "lint-staged",
     "create-network": "docker network create my_network",
     "run:dev": "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.dev.yml build --parallel && docker-compose -f docker-compose.dev.yml up",
     "run:prod": "COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.prod.yml build --parallel && docker-compose -f docker-compose.prod.yml up -d",
@@ -114,14 +113,6 @@
   },
   "resolutions": {
     "string-width": "4.1.0"
-  },
-  "lint-staged": {
-    "**/*.{js,ts,tsx,jsx}": [
-      "eslint --fix --color"
-    ],
-    "**/*.{js,ts,tsx,json,jsx,scss,css,md}": [
-      "prettier --write --ignore-unknown"
-    ]
   },
   "browserslist": [
     "chrome 64",
