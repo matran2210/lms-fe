@@ -432,15 +432,6 @@ const CoursePartDetail = () => {
     }
   })
 
-  // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
-  useEffect(() => {
-    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
-    window.sessionStorage.setItem(
-      'activityId',
-      JSON.stringify(transformedArray),
-    )
-  }, [loadingChapter])
-
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
   }, [courseChapterId])
