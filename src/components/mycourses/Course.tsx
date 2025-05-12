@@ -6,7 +6,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round } from 'lodash'
+import { round, set } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -24,6 +24,8 @@ import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import { ActiveIcon } from '@assets/icons'
 
 const Course = ({
   course,
@@ -254,9 +256,20 @@ const Course = ({
     }
   }
 
+  const [openContinue, setOpenContinue] = useState(false)
   const courseAction = () => {
-    if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
+    if (
+      classInstance?.type === 'LESSON' &&
+      student?.is_passed === false &&
+      course?.course_categories?.[0]?.name !== 'ACCA'
+    ) {
       setOpenLesson(true)
+    } else if (
+      classInstance?.type === 'LESSON' &&
+      student?.is_passed === false &&
+      course?.course_categories?.[0]?.name === 'ACCA'
+    ) {
+      setOpenContinue(true)
     } else if (determineButtonToShow === 'Active') {
       if (classInstance?.duration_type === 'FLEXIBLE') {
         setTimeActive(Number(classInstance?.flexible_days))
@@ -493,6 +506,19 @@ const Course = ({
         open={openClass}
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
+      />
+      <SappModalV3
+        open={openContinue}
+        handleCancel={() => setOpenContinue(false)}
+        onOk={() => {}}
+        icon={<ActiveIcon />}
+        header="Foundation Not Completed"
+        content="dsadsad"
+        okButtonCaption="Continue with Foundation Course"
+        cancelButtonCaption="Skip and start this course"
+        isMaskClosable={false}
+        fullWidthBtn={true}
+        buttonSize="extra"
       />
     </>
   )
