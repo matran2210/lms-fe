@@ -12,8 +12,10 @@ import {
   CERTIFICATE_DETAIL,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
+  PageLink,
 } from 'src/constants'
 import { apiURL } from 'src/redux/services/httpService'
+import { deleteCookie, getCookie, setCookie } from '@utils/index'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -81,10 +83,7 @@ request.interceptors.response.use(
     const originalRequest = error.config
 
     // Handle token expiration (401 error)
-    if (
-      error.response &&
-      error.response.status === 401
-    ) {
+    if (error.response && error.response.status === 401) {
       if (!isRefreshing) {
         isRefreshing = true
 
@@ -95,27 +94,35 @@ request.interceptors.response.use(
           },
           data: {
             refresh_token: localStorage.getItem('keycloakRefreshToken'),
-          }
+          },
         })
-          .then((res: any) => {
-            const userInfo = res?.data
-            localStorage.setItem('keycloakToken', userInfo?.access_token)
-            localStorage.setItem('keycloakRefreshToken', userInfo?.refresh_token)
+          .then(
+            (
+              res: AxiosResponse<{
+                access_token: string
+                refresh_token: string
+              }>,
+            ) => {
+              const userInfo = res?.data
+              setCookie('keycloakToken', userInfo?.access_token)
+              setCookie('keycloakRefreshToken', userInfo?.refresh_token)
 
-            // update new token to axios
-            request.defaults.headers.common['Authorization'] =
-              `Bearer ${localStorage.getItem('keycloakToken') ?? ''}`
+              // update new token to axios
+              request.defaults.headers.common['Authorization'] =
+                `Bearer ${getCookie('keycloakToken') ?? ''}`
 
-            // Callback to unauth API calls
-            refreshSubscribers.forEach((callback) =>
-              callback(localStorage.getItem('keycloakToken') ?? ''),
-            )
-            refreshSubscribers = []
-            isRefreshing = false
-          })
+              // Callback to unauth API calls
+              refreshSubscribers.forEach((callback) =>
+                callback(getCookie('keycloakToken') ?? ''),
+              )
+              refreshSubscribers = []
+              isRefreshing = false
+            },
+          )
           .catch(() => {
-            // removeLocalStorageJwtToken()
-            // window.location.href = PageLink.AUTH_LOGIN
+            deleteCookie('keycloakToken')
+            deleteCookie('keycloakRefreshToken')
+            window.location.href = PageLink.AUTH_LOGIN
           })
       }
 
