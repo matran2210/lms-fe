@@ -90,10 +90,10 @@ request.interceptors.response.use(
         axios(`${apiURL}/auth/refresh-token`, {
           method: 'POST',
           headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('keycloakToken'),
+            Authorization: 'Bearer ' + getCookie('keycloakToken'),
           },
           data: {
-            refresh_token: localStorage.getItem('keycloakRefreshToken'),
+            refresh_token: getCookie('keycloakRefreshToken'),
           },
         })
           .then(
