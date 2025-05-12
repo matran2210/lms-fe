@@ -8,7 +8,7 @@ import PreviewPartDetail from 'preview-part'
 import 'preview-part/dist/index.css'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
@@ -153,6 +153,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
+        router?.query?.id || undefined,
       )
       setLearningOutcome(res?.data)
     } catch (error) {
@@ -334,7 +335,7 @@ const CoursePartDetail = () => {
       course_section?.course_section_type === 'UNIT'
     ) {
       // Handle activity or unit section
-      lockSection
+      lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
             handleRouterActivity(course_section?.children?.[0]?.id, undefined),

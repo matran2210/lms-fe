@@ -302,8 +302,11 @@ export class CoursesAPI {
     return fetcher(`question/results?question_ids=${id}`)
   }
 
-  static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`course_learning_outcomes/${id}`)
+  static getCourseLearningOutcome(
+    id: string,
+    class_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`course_learning_outcomes/${id}/class/${class_id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {
