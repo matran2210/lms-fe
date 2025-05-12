@@ -55,7 +55,6 @@ const weeklyNormSchema = z.object({
     .min(1, VALIDATE_REQUIRED),
   request_type_value: z.literal(REQUEST_TYPE.WEEKLY_NORM.value), // Discriminant field
   note: z.string().optional(),
-  description: z.string({ required_error: VALIDATE_REQUIRED }),
 
   request_weekly_norm: z
     .array(
