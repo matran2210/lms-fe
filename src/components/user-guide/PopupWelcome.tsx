@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
-import SappModal from 'src/components/base/modal/SappModal'
-import Icon from 'src/components/icons'
+import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
+import { useRef } from 'react'
+import SappModal from 'src/components/base/modal/SappModal'
+import { HandShake } from 'src/components/icons'
 import { UserGuide } from 'src/constants'
-import { useAppDispatch } from 'src/redux/hook'
-import { increment } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from 'src/pages/api/courses'
+import { useAppDispatch } from 'src/redux/hook'
+import { increment, reset } from 'src/redux/slice/Course/UserGuide'
 
 type Props = {}
 
@@ -21,6 +22,18 @@ const PopupWelcome = ({}: Props) => {
       await CoursesAPI.userGuideActive()
     } catch (error) {}
   }
+  const confirmDialogRef = useRef<HTMLDivElement>(null)
+  const handleClose = () => {
+    dispatch(reset())
+
+    if (confirmDialogRef.current) {
+      confirmDialogRef.current.classList.add('animate-jump-out')
+      confirmDialogRef.current.classList.add('pointer-events-none')
+    }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
+  }
 
   return (
     <>
@@ -28,33 +41,32 @@ const PopupWelcome = ({}: Props) => {
         open={true}
         okButtonCaption={'Yes'}
         cancelButtonCaption={'No'}
-        size="max-w-dl"
+        size="max-w-[540px]"
         position="center"
         showHeader={false}
         showFooter={false}
-        childClass={'text-center py-12 px-14'}
+        childClass={'text-center p-'}
         overlayClass={'!hidden'}
         isContentFull={true}
         refClass={
-          'md:px-6 py-6.5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all'
+          ' animate-jump-in relative transform overflow-hidden shadow-xl transition-all rounded-xl'
         }
       >
-        <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
-          <Icon type="play-circle-sharp" className="text-primary" />
+        <div className="flex flex-col items-center p-10">
+          <HandShake />
+          <h2 className="mb-8 mt-10 text-3xl font-bold text-bw-1">
+            {UserGuide.TITLE_WELCOME}
+          </h2>
+          <span className="text-medium-s">{UserGuide.CONTENT_WELCOME}</span>
+          <SappButton
+            title={UserGuide.CONTENT_BUTTON}
+            full={true}
+            className="mt-10"
+            size="medium"
+            onClick={() => handleNextStep()}
+          />
+          <ButtonText title={'Skip'} className="mt-3" onClick={handleClose} />
         </div>
-        <h2 className="pt-6 text-4xl font-bold text-bw-1">
-          {UserGuide.TITLE_WELCOME}
-        </h2>
-        <span className="pt-4 text-medium-sm text-gray-1">
-          {UserGuide.CONTENT_WELCOME}
-        </span>
-        <SappButton
-          title={UserGuide.CONTENT_BUTTON}
-          full={true}
-          className="mt-16"
-          size="lager"
-          onClick={() => handleNextStep()}
-        />
       </SappModal>
     </>
   )

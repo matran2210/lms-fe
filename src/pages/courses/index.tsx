@@ -8,22 +8,23 @@ import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import stepOneImg from 'src/assets/images/tour-guide/step-1-search.png'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { CoursesAPI } from '../api/courses'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { active } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI } from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
 
 const MyCourse = () => {
-  const dispatch = useAppDispatch()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
+  const dispatch = useAppDispatch()
   const guideIsActive = useAppSelector(
     (state) => state.userGuideReducer?.isActive,
   )
@@ -36,27 +37,11 @@ const MyCourse = () => {
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
 
-  const nextStep = () => {
-    dispatch(increment())
-  }
-
-  const closeUserGuide = () => {
-    if (confirmDialogOverLayRef.current) {
-      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
-      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
-    }
-    // Remove hidden scroll when close user guide
-    document.body.style.removeProperty('padding-right')
-    document.body.classList.remove('overflow-hidden')
-    setTimeout(() => {
-      dispatch(reset())
-    }, 50)
-  }
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
     }
-  }, [userGuideLine])
+  }, [dispatch, guideIsActive, userGuideLine])
 
   /**
    * @description Gọi API My Course
@@ -161,22 +146,22 @@ const MyCourse = () => {
       <Layout title="My Course">
         <div className="header border-b border-default bg-white">
           <div
-            className={`relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 
+            className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 xl-max:mx-6 
           ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
-              // setPage={setPage}
+              disabled={guideIsActive}
             />
             {guideStatus && guideStep === 1 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_1}
                 className="left-0 top-full mt-3 w-full max-w-[365px]"
+                title={'Search box'}
                 index={1}
                 total={6}
-                handleNext={nextStep}
-                handleCancel={closeUserGuide}
+                imgSrc={stepOneImg}
               />
             )}
           </div>
@@ -195,16 +180,14 @@ const MyCourse = () => {
                   className="right-full top-full mt-3 w-screen max-w-365px"
                   index={6}
                   total={6}
-                  handleNext={closeUserGuide}
-                  showCancel={false}
-                  titleButtonNext="Done"
+                  titleButtonNext="Finish"
                 />
               )}
             </div>
           </div>
         </div>
         <div
-          className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
+          className={`heading relative mx-auto my-0 flex max-w-xxl rounded-xl bg-white xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
           data-aos={ANIMATION.DATA_AOS}
@@ -228,12 +211,7 @@ const MyCourse = () => {
               className="left-0 top-full mt-3 w-full max-w-365px"
               index={4}
               total={6}
-              handleNext={
-                Number(window.sessionStorage.getItem('totalCourse')) > 0
-                  ? nextStep
-                  : closeUserGuide
-              }
-              handleCancel={closeUserGuide}
+              isEnd={Number(window.sessionStorage.getItem('totalCourse')) <= 0}
             />
           )}
         </div>
@@ -251,8 +229,6 @@ const MyCourse = () => {
               className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
               index={5}
               total={6}
-              handleNext={nextStep}
-              handleCancel={closeUserGuide}
             />
           )}
           <CoursesList
@@ -268,7 +244,7 @@ const MyCourse = () => {
           <div
             ref={confirmDialogOverLayRef}
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
-          ></div>
+          />
         )}
       </Layout>
     </SappLoadingGlobal>
