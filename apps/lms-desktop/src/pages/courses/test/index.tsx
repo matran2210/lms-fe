@@ -38,7 +38,8 @@ const TestModal = ({
   is_passed_course,
 }: IProps) => {
   const router = useRouter()
-
+  const isSubmitted =
+    data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
       page_index: 1,
@@ -54,6 +55,7 @@ const TestModal = ({
     ratio_score?: string
     status: string
     grading_method?: string
+    number_of_attempt?: number
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
@@ -227,7 +229,16 @@ const TestModal = ({
     )
   }
 
+  const isManualGradingAndNotFinishedGrading =
+    data?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
+    data?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING &&
+    data?.quiz?.attempt &&
+    data?.quiz?.attempt?.status === 'SUBMITTED'
+
   const isShowDetail = () => {
+    if (isManualGradingAndNotFinishedGrading) {
+      return true
+    }
     if (data?.quiz?.grading_method == GRADING_METHOD.MANUAL) {
       return (
         data?.quiz?.attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
@@ -352,14 +363,23 @@ const TestModal = ({
               <div
                 className="ml-2 cursor-pointer text-state-info underline"
                 onClick={() => {
-                  router.push({
-                    pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                    query: { attempt: selectedResult?.label },
-                  })
+                  if (isManualGradingAndNotFinishedGrading) {
+                    router.push(
+                      `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                    )
+                  } else {
+                    router.push({
+                      pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                      query: { attempt: selectedResult?.label },
+                    })
+                  }
+
                   trackGAEvent('Click Button View Modal Result')
                 }}
               >
-                Detail
+                {isManualGradingAndNotFinishedGrading
+                  ? 'Your Answers'
+                  : 'Detail'}
               </div>
             )}
           </div>

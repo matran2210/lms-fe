@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 import sharedConfig from "@repo/config-tailwind";
 
 const config: Config = {
-  presets: [sharedConfig],
+  presets: [sharedConfig], //extend config chung từ packages/config-tailwind
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx,scss,css}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",

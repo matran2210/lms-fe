@@ -12,7 +12,7 @@
       "@i18n/*": ["src/i18n/*"],
       "@pages/*": ["src/pages/*"],
       "@repo/config-tailwind": [
-        "../../packages/config-tailwind/tailwind.config.ts"
+        "../../packages/config-tailwind/tailwind.config.ts" // Thêm alias cho packages/config-tailwind
       ]
     },
     "target": "es2020",

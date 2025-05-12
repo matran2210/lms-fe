@@ -5,7 +5,7 @@ import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
-import TestResultPage from './testResultPage'
+import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 import { GRADE_STATUS } from 'src/constants'
 
 const TestResultDetail = () => {
@@ -67,7 +67,7 @@ const TestResultDetail = () => {
 
   return (
     <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="mx-auto max-w-[1570px]">
+      <div className="mx-auto max-w-1570">
         <div className="px-5 xl:container md:px-10">
           <Breadcrumb
             tabs={breadcrumbs}
