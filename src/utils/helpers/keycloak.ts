@@ -8,7 +8,7 @@ import Keycloak, { KeycloakConfig } from 'keycloak-js'
 import { isNull } from 'lodash'
 import { PageLink } from 'src/constants'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
-import { getCookie, setCookie } from '..'
+import { deleteCookie, getCookie, setCookie } from '..'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -127,11 +127,11 @@ export class AuthenticationManager {
   }
 
   async logout() {
-    const res = await UserApi.logout(
-      localStorage.getItem('keycloakRefreshToken') ?? '',
-    )
+    const res = await UserApi.logout(getCookie('keycloakRefreshToken') ?? '')
     if (isNull(res?.user_id_init)) {
       localStorage.clear()
+      deleteCookie('keycloakToken')
+      deleteCookie('keycloakRefreshToken')
       window.location.href = '/'
     }
   }
