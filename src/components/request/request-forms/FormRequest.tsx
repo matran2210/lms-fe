@@ -133,7 +133,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       ) ||
         !!getValues('request_busy_schedule.0.drawer-repeat-end-on')) &&
       getValues('request_busy_schedule.0.repeat_schedule.repeat')
-    if (!isHaveEndOnValue) {
+
+    if (
+      !isHaveEndOnValue &&
+      (getValues('request_busy_schedule.0.repeat') !==
+        REPEAT_TYPE.DOES_NOT_REPEAT ||
+        getValues('request_busy_schedule.0.repeat_schedule.repeat'))
+    ) {
       setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
       })
