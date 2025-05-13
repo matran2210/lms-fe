@@ -1312,3 +1312,7 @@ select:focus {
 .dashboard_tooltip {
   @apply max-w-max;
 }
+
+[type='search']:focus {
+  --tw-ring-color: none;
+}
