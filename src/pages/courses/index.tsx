@@ -45,9 +45,9 @@ const MyCourse = () => {
   const observer = useRef<IntersectionObserver>()
 
   useEffect(() => {
-    // if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-    dispatch(active())
-    // }
+    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+      dispatch(active())
+    }
   }, [dispatch, guideIsActive, userGuideLine])
 
   /**

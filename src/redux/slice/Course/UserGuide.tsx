@@ -10,7 +10,7 @@ export interface GuideState {
 
 const initialState: GuideState = {
   status: false,
-  step: 6,
+  step: 0,
   isActive: false,
 }
 
