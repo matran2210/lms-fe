@@ -39,6 +39,5 @@ yarn-error.log*
 
 # .gitignore
 .vscode/
-.yarn/
 *.log
 *.tsbuildinfo
