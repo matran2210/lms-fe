@@ -52,13 +52,20 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} max-w-80`}
+        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-bw-13`}
       >
         <div>
           {imgSrc && (
-            <Image src={imgSrc} alt={`Tour guide step ${index} - ${title}`} />
+            <div className="mb-4 rounded-full">
+              <Image
+                src={imgSrc}
+                alt={`Tour guide step ${index} - ${title}`}
+                className="rounded-lg"
+                layout="responsive"
+              />
+            </div>
           )}
-          <h6 className="mb-3 mt-4 text-lg font-bold">{title}</h6>
+          <h6 className="mb-3 text-lg font-bold">{title}</h6>
           <span className="text-base font-normal">{content}</span>
           <div
             className={`mt-5 flex items-center ${index === 1 ? 'justify-end' : 'justify-between'}`}

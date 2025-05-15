@@ -49,12 +49,12 @@ const PopupWelcome = ({}: Props) => {
         overlayClass={'!hidden'}
         isContentFull={true}
         refClass={
-          ' animate-jump-in relative transform overflow-hidden shadow-xl transition-all rounded-xl'
+          'animate-jump-in relative transform overflow-hidden shadow-xl transition-all rounded-xl'
         }
       >
-        <div className="flex flex-col items-center p-10">
+        <div className="flex flex-col items-center p-10 text-bw-13">
           <HandShake />
-          <h2 className="mb-8 mt-10 text-3xl font-bold text-bw-1">
+          <h2 className="mb-8 mt-10 text-3xl font-bold ">
             {UserGuide.TITLE_WELCOME}
           </h2>
           <span className="text-medium-s">{UserGuide.CONTENT_WELCOME}</span>

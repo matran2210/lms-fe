@@ -2,7 +2,8 @@ import LearningResource from '@components/mycourses/LearningResource'
 import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
 import clsx from 'clsx'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { Dispatch, SetStateAction } from 'react'
+import stepTwoImg from 'src/assets/images/tour-guide/step-2-sidebar.png'
 import { UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
@@ -40,12 +41,6 @@ export default function Sidebar({
 
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
 
-  useEffect(() => {
-    if (isGuideActive) {
-      document.body.classList.add('no-hover')
-    }
-  }, [isGuideActive])
-
   return (
     <>
       <div
@@ -53,10 +48,11 @@ export default function Sidebar({
           className,
           isGuideActive ? 'z-50' : 'z-30',
           isOpened && 'w-[200px]',
+          'mx-2 my-2 rounded-xl',
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative pb-6 pt-5.25 ${
+          className={`max-h-[calc(100vh-145px) relative  rounded-t-xl pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
@@ -86,8 +82,10 @@ export default function Sidebar({
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
+              title="Sidebar"
+              imgSrc={stepTwoImg}
               content={UserGuide.CONTENT_STEP_2}
-              className="left-full top-full ml-3 mt-3 w-screen max-w-365px"
+              className="left-full top-1/2 ml-5"
               index={2}
               total={6}
             />
@@ -113,13 +111,13 @@ export default function Sidebar({
           )}
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
-          <div className="absolute inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity"></div>
+          <div className="absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-55 transition-opacity" />
         )}
       </div>
       <div
         onClick={toggleDrawer}
         className={`sidebar-overlay ${
-          isOpened || isGuideActive ? 'block md:hidden' : 'hidden'
+          isOpened ? 'block md:hidden' : 'hidden'
         } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-overlay-dark`}
       />
       <LearningResource open={openResource} setOpenResource={setOpenResource} />

@@ -157,7 +157,7 @@ const MyCourse = () => {
             {guideStatus && guideStep === 1 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3 w-full max-w-[365px]"
+                className="left-0 top-full mt-3"
                 title={'Search box'}
                 index={1}
                 total={6}
