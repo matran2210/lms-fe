@@ -1,3 +1,5 @@
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Layout from '@components/layout'
 import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
@@ -5,6 +7,7 @@ import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
+import { Col, Row } from 'antd'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
@@ -186,35 +189,66 @@ const MyCourse = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`heading relative mx-auto my-0 flex max-w-xxl rounded-xl bg-white xl-max:mx-6
+        <Row className="mx-auto my-0 flex max-w-xxl bg-white shadow-sidebar">
+          <Col span={16}>
+            <div
+              className={`heading relative rounded-md bg-white  xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading
-            greeting="Welcome to"
-            title="My Course"
-            des={
-              <div>
-                Here you can find all your courses, each packed with{' '}
-                <span className="font-medium">expert lessons</span>,{' '}
-                <span className="font-medium">study materials</span>, and{' '}
-                <span className="font-medium">interactive exercises</span>.
-                Select a course to start learning!
-              </div>
-            }
-          />
-          {guideStatus && guideStep === 4 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_4}
-              className="left-0 top-full mt-3 w-full max-w-365px"
-              index={4}
-              total={6}
-              isEnd={Number(window.sessionStorage.getItem('totalCourse')) <= 0}
-            />
-          )}
-        </div>
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <Heading
+                greeting="Welcome to"
+                title="My Course"
+                showShadow={false}
+                des={
+                  <div>
+                    Here you can find all your courses, each packed with{' '}
+                    <span className="font-medium">expert lessons</span>,{' '}
+                    <span className="font-medium">study materials</span>, and{' '}
+                    <span className="font-medium">interactive exercises</span>.
+                    Select a course to start learning!
+                  </div>
+                }
+              />
+              {guideStatus && guideStep === 4 && (
+                <PopupStep
+                  content={UserGuide.CONTENT_STEP_4}
+                  className="left-0 top-full mt-5"
+                  index={4}
+                  total={6}
+                  isEnd={
+                    Number(window.sessionStorage.getItem('totalCourse')) <= 0
+                  }
+                  title="Welcome"
+                />
+              )}
+            </div>
+          </Col>
+          <Col span={8}>
+            <div
+              className={`heading relative rounded-md xl-max:mx-6
+        ${guideStatus && guideStep === 10 ? 'z-50' : ''}
+      `}
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <ButtonSecondary title="adfsdf" />
+              <ButtonPrimary title="adfsdf" />
+              {guideStatus && guideStep === 10 && (
+                <PopupStep
+                  content={UserGuide.CONTENT_STEP_5}
+                  className="left-0 top-full mt-5"
+                  index={4}
+                  total={6}
+                  isEnd={
+                    Number(window.sessionStorage.getItem('totalCourse')) <= 0
+                  }
+                  title="Welcome"
+                />
+              )}
+            </div>
+          </Col>
+        </Row>
         <div
           // data-aos={ANIMATION.DATA_AOS}
           className={`relative mx-auto my-0 max-w-xxl pt-6 ${
