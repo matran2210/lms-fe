@@ -1,3 +1,4 @@
+import Icon from '@components/icons'
 import Layout from '@components/layout'
 import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
@@ -11,6 +12,7 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
+import { Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
@@ -19,6 +21,33 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
 import { IProfilePages, ProfilePages } from 'src/type/Profile'
+
+const items = [
+  {
+    key: 'my-profile',
+    label: `My profile`,
+    children: `Tab`,
+    icon: <Icon type="my-profile" />,
+  },
+  {
+    key: 'certificates',
+    label: `Certificates`,
+    children: `Tab`,
+    icon: <Icon type="certificates" />,
+  },
+  {
+    key: 'setting',
+    label: `Setting`,
+    children: `Tab`,
+    icon: <Icon type="setting" />,
+  },
+  {
+    key: 'sercurity',
+    label: `Sercurity`,
+    children: `Tab`,
+    icon: <Icon type="sercurity" />,
+  },
+]
 
 const ProfilePage = () => {
   const router = useRouter()
@@ -184,11 +213,8 @@ const ProfilePage = () => {
             {isSelectPage && (
               <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
             )}
-            {!isSelectPage && (
-              <div className="mb-6 block w-full grow bg-white lg:mb-0 lg:hidden lg:grow-0">
-                {selectedContent}
-              </div>
-            )}
+
+            <Tabs defaultActiveKey="my-profile" items={items} />
           </div>
         </div>
       </div>
