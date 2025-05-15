@@ -1,3 +1,4 @@
+import SAPPBadge from '@components/base/Badge/SAPPBadge'
 import { Skeleton } from 'antd'
 import { isEmpty } from 'lodash'
 import React from 'react'
@@ -10,6 +11,7 @@ interface CoursesProps {
   refetch: () => void
   isFetching: boolean
   isFetchingNextPage: boolean
+  guideIsActive?: boolean
 }
 
 const CoursesList: React.FC<CoursesProps> = ({
@@ -18,6 +20,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   refetch,
   isFetching,
   isFetchingNextPage,
+  guideIsActive,
 }) => {
   if (isFetching && !isFetchingNextPage) {
     return (
@@ -43,15 +46,39 @@ const CoursesList: React.FC<CoursesProps> = ({
     <>
       {!isEmpty(courses) && (
         <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
-          {courses?.map((course, index: number) => (
-            <Course
-              key={index}
-              course={course}
-              index={index}
-              lastElementRef={lastElementRef}
-              refetch={refetch}
-            />
-          ))}
+          {guideIsActive && (
+            <div className="flex flex-col rounded-xl bg-white p-8 shadow-sidebar">
+              <SAPPBadge label="ACCA" />
+
+              <div className="name-course mb-4 mt-3 text-2xl font-medium text-bw-1">
+                Certificate in International Financial Reporting
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="name-class text-medium-sm text-gray-1">
+                  Class:
+                  <span className="ml-1 font-medium text-bw-1">CMA342023</span>
+                </div>
+                <div className="time-class mt-1 text-medium-sm text-gray-2">
+                  <span>
+                    <span className="font-medium text-bw-1">{30}</span>
+                    {' days left'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!guideIsActive &&
+            courses?.map((course, index: number) => (
+              <Course
+                key={index}
+                course={course}
+                index={index}
+                lastElementRef={lastElementRef}
+                refetch={refetch}
+              />
+            ))}
         </div>
       )}
     </>

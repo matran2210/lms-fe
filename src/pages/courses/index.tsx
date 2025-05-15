@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import stepOneImg from 'src/assets/images/tour-guide/step-1-search.png'
 import stepFiveImg from 'src/assets/images/tour-guide/step-5-course-tab.png'
+import stepSixImg from 'src/assets/images/tour-guide/step-6-courses.png'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
@@ -44,9 +45,9 @@ const MyCourse = () => {
   const observer = useRef<IntersectionObserver>()
 
   useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-      dispatch(active())
-    }
+    // if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+    dispatch(active())
+    // }
   }, [dispatch, guideIsActive, userGuideLine])
 
   /**
@@ -87,6 +88,7 @@ const MyCourse = () => {
     isFetching,
     isLoading,
     refetch,
+    isSuccess,
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['myCourse'],
@@ -150,6 +152,7 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
+        <div></div>
         <div className="header border-b border-default bg-white">
           <div
             className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 xl-max:mx-6 
@@ -264,29 +267,32 @@ const MyCourse = () => {
             )}
           </Col>
         </Row>
+        <h1 className="mx-auto my-9 max-w-xxl ">My Courses</h1>
         <div
-          // data-aos={ANIMATION.DATA_AOS}
-          className={`relative mx-auto my-0 max-w-xxl pt-6 ${
+          className={`relative mx-auto my-0 max-w-xxl ${
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 6 ? 'sapp-active-item-guide' : ''}`}
+          } ${guideStatus && guideStep === 6 ? 'z-50' : ''}`}
         >
-          {guideStatus && guideStep === 6 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_6}
-              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
-              index={5}
-              total={6}
-            />
-          )}
           <CoursesList
             courses={courses}
             lastElementRef={lastElementRef}
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
+            guideIsActive
           />
+          {guideStatus && guideStep === 6 && (
+            <PopupStep
+              content={UserGuide.CONTENT_STEP_6}
+              className="top-[123px] mt-6 2xl:left-[33.5%]"
+              index={5}
+              total={6}
+              title="Courses"
+              imgSrc={stepSixImg}
+            />
+          )}
         </div>
         {guideStatus && guideStep == 0 && <PopupWelcome />}
         {guideStatus && (
