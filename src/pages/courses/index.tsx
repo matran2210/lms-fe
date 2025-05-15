@@ -1,5 +1,3 @@
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Layout from '@components/layout'
 import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
@@ -7,13 +5,14 @@ import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
-import { Col, Row } from 'antd'
+import { Button, Col, Row } from 'antd'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import stepOneImg from 'src/assets/images/tour-guide/step-1-search.png'
+import stepFiveImg from 'src/assets/images/tour-guide/step-5-course-tab.png'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
@@ -24,6 +23,8 @@ import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 
 const DEFAULT_PAGESIZE = 9
+const MASTER = 'Master Finance'
+const GENERAL = 'General Course'
 
 const MyCourse = () => {
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
@@ -36,6 +37,8 @@ const MyCourse = () => {
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
   )
+
+  const [courseType, setCourseType] = useState(MASTER)
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
@@ -173,11 +176,11 @@ const MyCourse = () => {
           <div className="flex justify-end xl-max:mx-6">
             <div
               className={`relative pb-4 pt-6 ${
-                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
+                guideStatus && guideStep === 7 ? 'z-50 -mr-4 bg-white px-4' : ''
               }`}
             >
               <Filter courses={data?.pages?.[0]?.category} />
-              {guideStatus && guideStep === 6 && (
+              {guideStatus && guideStep === 7 && (
                 <PopupStep
                   content={UserGuide.CONTENT_STEP_6}
                   className="right-full top-full mt-3 w-screen max-w-365px"
@@ -189,64 +192,76 @@ const MyCourse = () => {
             </div>
           </div>
         </div>
-        <Row className="mx-auto my-0 flex max-w-xxl bg-white shadow-sidebar">
-          <Col span={16}>
-            <div
-              className={`heading relative rounded-md bg-white  xl-max:mx-6
+        <Row className="mx-auto my-0 flex max-w-xxl rounded-md bg-white shadow-sidebar">
+          <Col
+            span={16}
+            className={`heading relative rounded-md bg-white xl-max:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
-              data-aos={ANIMATION.DATA_AOS}
-            >
-              <Heading
-                greeting="Welcome to"
-                title="My Course"
-                showShadow={false}
-                des={
-                  <div>
-                    Here you can find all your courses, each packed with{' '}
-                    <span className="font-medium">expert lessons</span>,{' '}
-                    <span className="font-medium">study materials</span>, and{' '}
-                    <span className="font-medium">interactive exercises</span>.
-                    Select a course to start learning!
-                  </div>
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <Heading
+              greeting="Welcome to"
+              title={courseType}
+              showShadow={false}
+              des={
+                <div>
+                  From here, you can access every topic, reading, and video
+                  lesson, as well as assignment questions.
+                </div>
+              }
+            />
+            {guideStatus && guideStep === 4 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_4}
+                className="left-0 top-full mt-5"
+                index={4}
+                total={6}
+                isEnd={
+                  Number(window.sessionStorage.getItem('totalCourse')) <= 0
                 }
+                title="Welcome"
               />
-              {guideStatus && guideStep === 4 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_4}
-                  className="left-0 top-full mt-5"
-                  index={4}
-                  total={6}
-                  isEnd={
-                    Number(window.sessionStorage.getItem('totalCourse')) <= 0
-                  }
-                  title="Welcome"
-                />
-              )}
-            </div>
+            )}
           </Col>
-          <Col span={8}>
-            <div
-              className={`heading relative rounded-md xl-max:mx-6
-        ${guideStatus && guideStep === 10 ? 'z-50' : ''}
+          <Col
+            span={8}
+            className={`grid place-items-center rounded-md bg-white
+        ${guideStatus && guideStep === 5 ? 'z-50' : ''}
       `}
-              data-aos={ANIMATION.DATA_AOS}
-            >
-              <ButtonSecondary title="adfsdf" />
-              <ButtonPrimary title="adfsdf" />
-              {guideStatus && guideStep === 10 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_5}
-                  className="left-0 top-full mt-5"
-                  index={4}
-                  total={6}
-                  isEnd={
-                    Number(window.sessionStorage.getItem('totalCourse')) <= 0
-                  }
-                  title="Welcome"
-                />
-              )}
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div className="flex gap-2 rounded-md bg-gray-4 p-1">
+              <Button
+                type={courseType === MASTER ? 'primary' : 'text'}
+                block
+                onClick={() => setCourseType(MASTER)}
+                className="h-10"
+              >
+                Master Finance
+              </Button>
+              <Button
+                type={courseType === GENERAL ? 'primary' : 'text'}
+                block
+                onClick={() => setCourseType(GENERAL)}
+                className="h-10"
+              >
+                General Course
+              </Button>
             </div>
+            {guideStatus && guideStep === 5 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_5}
+                className="left-0 top-full mt-5"
+                index={4}
+                total={6}
+                isEnd={
+                  Number(window.sessionStorage.getItem('totalCourse')) <= 0
+                }
+                imgSrc={stepFiveImg}
+                title="Course Tab"
+              />
+            )}
           </Col>
         </Row>
         <div
@@ -255,11 +270,11 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
+          } ${guideStatus && guideStep === 6 ? 'sapp-active-item-guide' : ''}`}
         >
-          {guideStatus && guideStep === 5 && (
+          {guideStatus && guideStep === 6 && (
             <PopupStep
-              content={UserGuide.CONTENT_STEP_5}
+              content={UserGuide.CONTENT_STEP_6}
               className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
               index={5}
               total={6}

@@ -6,6 +6,7 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
       theme={{
         token: {
           fontFamily: 'Roboto, sans-serif',
+          colorPrimary: '#FFB800',
         },
         components: {
           Input: {

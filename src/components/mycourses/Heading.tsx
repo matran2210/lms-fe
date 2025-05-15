@@ -13,12 +13,12 @@ interface IProps {
 const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
   return (
     <div
-      className={clsx('w-full px-7.5 py-7.5', {
+      className={clsx('w-full rounded-md px-8 py-6', {
         'shadow-sidebar': showShadow === true,
       })}
     >
       <div className="font-medium">
-        <h1 className="line-clamp-1 text-2xl text-bw-1">
+        <h1 className="text-[32px] leading-11 text-bw-1">
           {greeting}
           <span className="ml-1.5 text-primary">
             <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>
@@ -26,7 +26,7 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
         </h1>
       </div>
       {des && (
-        <div className="font- mt-4 flex w-full">
+        <div className="flex w-full">
           <div className="w-full text-medium-sm text-bw-1">{des}</div>
         </div>
       )}
