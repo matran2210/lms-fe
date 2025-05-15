@@ -155,7 +155,6 @@ export default function TeacherMenu() {
         theme="dark"
         mode="inline"
         selectedKeys={[selectedKey]}
-        onSelect={(item) => handleMenuClick(item)}
         className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
       >
         {menuItems.map((item) => (
@@ -165,7 +164,12 @@ export default function TeacherMenu() {
             overlayClassName="teacher-sidebar-tooltip"
             placement="right"
           >
-            <Menu.Item key={item.key} icon={item.icon} className="p-3" />
+            <Menu.Item
+              key={item.key}
+              icon={item.icon}
+              className="p-3"
+              onClick={() => handleMenuClick(item)}
+            />
           </Tooltip>
         ))}
       </Menu>
