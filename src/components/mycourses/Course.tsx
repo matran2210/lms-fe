@@ -38,6 +38,7 @@ const Course = ({
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
 }) => {
+  // console.log('course', course)
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
   const [openActive, setOpenActive] = useState<boolean>(false)
@@ -260,13 +261,13 @@ const Course = ({
   const courseAction = () => {
     if (
       classInstance?.type === 'LESSON' &&
-      student?.is_passed === false &&
+      !student?.is_passed &&
       course?.course_categories?.[0]?.name !== 'ACCA'
     ) {
       setOpenLesson(true)
     } else if (
       classInstance?.type === 'LESSON' &&
-      student?.is_passed === false &&
+      !student?.is_passed &&
       course?.course_categories?.[0]?.name === 'ACCA'
     ) {
       setOpenContinue(true)
@@ -322,6 +323,12 @@ const Course = ({
   const iconType = renderStatusIcon(classUserStatus ?? '')
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
+
+  const handleContinueFoundation = () => {
+    router.push(
+      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+    )
+  }
 
   return (
     <>
@@ -510,10 +517,10 @@ const Course = ({
       <SappModalV3
         open={openContinue}
         handleCancel={() => setOpenContinue(false)}
-        onOk={() => {}}
+        onOk={handleContinueFoundation}
         icon={<ActiveIcon />}
         header="Foundation Not Completed"
-        content="dsadsad"
+        content="It looks like you haven't finished the Foundation Course. Would you like to complete it first, or skip and start this course right away?"
         okButtonCaption="Continue with Foundation Course"
         cancelButtonCaption="Skip and start this course"
         isMaskClosable={false}
