@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction, useState } from 'react'
-import Sidebar from '../Sidebar'
-import { useAppSelector } from 'src/redux/hook'
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
-import { PageLink } from 'src/constants'
-import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { PageLink } from 'src/constants'
+import { useAppSelector } from 'src/redux/hook'
+import Sidebar from '../Sidebar'
+import clsx from 'clsx'
 
 type DashboardLayoutProps = {
   children: React.ReactNode
@@ -46,20 +47,32 @@ export default function DashboardLayout({
     paddingTop = 'pt-[54px]'
   }
 
+  const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+
   return (
-    <div className="flex flex-nowrap">
+    <div className="flex flex-nowrap rounded-xl">
       <Sidebar
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left max-w-screen fixed top-0 h-screen w-20 bg-white shadow-sidebar md:left-0 ${
-          openDrawer ? 'opacity-5' : ''
-        } ${guideStatus ? '' : 'overflow-hidden'} ${paddingTop}`}
+        className={clsx(
+          'menu-sidebar-left',
+          'fixed top-0 w-20 rounded-xl bg-white shadow-sidebar',
+          'md:left-0',
+          'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
+          {
+            'opacity-5': openDrawer,
+            'overflow-hidden': !guideStatus,
+            'menu-sidebar-left--hover':
+              guideStatus && (guideStep === 2 || guideStep === 3),
+          },
+          paddingTop,
+        )}
         setOpenResource={setOpenResource}
         openResource={openResource}
       />
       <div className="min-h-screen w-full">
         <div className={`${paddingTop} h-full bg-gray-4`}>
-          <div className="sapp-loading ml-0 ml-20 h-full">{children}</div>
+          <div className="sapp-loading h-full">{children}</div>
         </div>
       </div>
     </div>
