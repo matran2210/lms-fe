@@ -53,11 +53,10 @@ export default function DashboardLayout({
     <div className="flex flex-nowrap rounded-xl">
       <Sidebar
         isOpened={isOpened}
-        setOpen={setOpened}
         toggleDrawer={toggleDrawer}
         className={clsx(
           'menu-sidebar-left',
-          'fixed top-0 h-screen w-20 rounded-xl bg-white shadow-sidebar',
+          'fixed top-0 w-20 rounded-xl bg-white shadow-sidebar',
           'md:left-0',
           'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
           {

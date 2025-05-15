@@ -56,7 +56,7 @@ const PopupStep = ({
       >
         <div>
           {imgSrc && (
-            <div className="mb-4 rounded-full">
+            <div className="mb-4">
               <Image
                 src={imgSrc}
                 alt={`Tour guide step ${index} - ${title}`}

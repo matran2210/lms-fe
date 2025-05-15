@@ -4,6 +4,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import stepTwoImg from 'src/assets/images/tour-guide/step-2-sidebar.png'
+import stepThreeImg from 'src/assets/images/tour-guide/step-3-noti.png'
 import { UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
@@ -92,7 +93,7 @@ export default function Sidebar({
           )}
         </div>
         <div
-          className={`absolute bottom-0 w-full bg-white pb-6 
+          className={`absolute bottom-0 w-full rounded-bl-xl rounded-br-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
           <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
@@ -104,7 +105,9 @@ export default function Sidebar({
           {guideStatus && guideStep == 3 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_3}
-              className="bottom-full left-full mb-3 ml-3 w-screen max-w-365px"
+              className="bottom-0 left-full ml-5"
+              title="Notification & Profile"
+              imgSrc={stepThreeImg}
               index={3}
               total={6}
             />
