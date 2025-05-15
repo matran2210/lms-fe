@@ -423,6 +423,14 @@ export class CoursesAPI {
       data: data,
     })
   }
+
+  static skipFoundation(
+    class_id: string | undefined,
+  ): Promise<{ success: boolean }> {
+    return fetcher(`courses/${class_id}/skip-foundation`, {
+      method: 'PUT',
+    })
+  }
 }
 
 /**
