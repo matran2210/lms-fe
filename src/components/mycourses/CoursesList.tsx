@@ -1,7 +1,12 @@
 import SAPPBadge from '@components/base/Badge/SAPPBadge'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import Icon from '@components/icons'
 import { Skeleton } from 'antd'
 import { isEmpty } from 'lodash'
+import Image from 'next/image'
 import React from 'react'
+import Alarm from 'src/assets/images/alarm.svg'
+import AcademicCap from 'src/assets/images/square-academic-cap.svg'
 import { ICourse } from 'src/type/courses'
 import Course from './Course'
 
@@ -44,41 +49,76 @@ const CoursesList: React.FC<CoursesProps> = ({
 
   return (
     <>
-      {!isEmpty(courses) && (
+      {!isEmpty(courses) ? (
+        <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
+          {courses?.map((course, index: number) => (
+            <Course
+              key={index}
+              course={course}
+              index={index}
+              lastElementRef={lastElementRef}
+              refetch={refetch}
+            />
+          ))}
+        </div>
+      ) : (
         <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
           {guideIsActive && (
-            <div className="flex flex-col rounded-xl bg-white p-8 shadow-sidebar">
-              <SAPPBadge label="ACCA" />
+            <div className="flex flex-col rounded-xl bg-white p-8 text-bw-15 shadow-sidebar">
+              <SAPPBadge label="ACCA" type="info" className="font-bold" />
 
-              <div className="name-course mb-4 mt-3 text-2xl font-medium text-bw-1">
+              <div className="name-course mb-4 mt-3 text-2xl font-medium">
                 Certificate in International Financial Reporting
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="name-class text-medium-sm text-gray-1">
-                  Class:
-                  <span className="ml-1 font-medium text-bw-1">CMA342023</span>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={AcademicCap}
+                    alt="Square Academic Cap"
+                    width={21}
+                    height={21}
+                  />
+                  <span className="font-medium ">CMA342023</span>
                 </div>
-                <div className="time-class mt-1 text-medium-sm text-gray-2">
-                  <span>
-                    <span className="font-medium text-bw-1">{30}</span>
-                    {' days left'}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={Alarm}
+                    alt="Square Academic Cap"
+                    width={21}
+                    height={21}
+                  />
+                  <span className="font-medium">30 days left</span>
                 </div>
               </div>
+              <p className="py-8">
+                An introduction to ethics and its role in the investment
+                profession. We examine the CFA Institute Code of Ethics
+              </p>
+              <div className="progress mb-6 h-8 text-bw-15">
+                <div className="info mb-2 flex items-center justify-between">
+                  <div className="text flex items-center">
+                    <Icon type={'like'} className={` relative`} />
+                    <p className={`font-mediumml-px pl-2 text-medium-sm`}>
+                      {'Ready to learn'}
+                    </p>
+                  </div>
+                  <div className="number">
+                    <p className={`text-medium-sm font-medium `}>0 %</p>
+                  </div>
+                </div>
+                <div className="progressbar h-1.5 bg-gray-3">
+                  <div className={`progress-percentage h-1.5 w-0 bg-primary`} />
+                </div>
+              </div>
+              <ButtonSecondary
+                title={'Active'}
+                full={false}
+                size={'small'}
+                className="ml-auto"
+              />
             </div>
           )}
-
-          {!guideIsActive &&
-            courses?.map((course, index: number) => (
-              <Course
-                key={index}
-                course={course}
-                index={index}
-                lastElementRef={lastElementRef}
-                refetch={refetch}
-              />
-            ))}
         </div>
       )}
     </>

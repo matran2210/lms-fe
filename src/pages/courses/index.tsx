@@ -14,6 +14,7 @@ import { useInfiniteQuery } from 'react-query'
 import stepOneImg from 'src/assets/images/tour-guide/step-1-search.png'
 import stepFiveImg from 'src/assets/images/tour-guide/step-5-course-tab.png'
 import stepSixImg from 'src/assets/images/tour-guide/step-6-courses.png'
+import stepSevenImg from 'src/assets/images/tour-guide/step-7-filter.png'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
@@ -88,7 +89,6 @@ const MyCourse = () => {
     isFetching,
     isLoading,
     refetch,
-    isSuccess,
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['myCourse'],
@@ -175,26 +175,7 @@ const MyCourse = () => {
             )}
           </div>
         </div>
-        <div className="main mx-auto my-0 max-w-xxl">
-          <div className="flex justify-end xl-max:mx-6">
-            <div
-              className={`relative pb-4 pt-6 ${
-                guideStatus && guideStep === 7 ? 'z-50 -mr-4 bg-white px-4' : ''
-              }`}
-            >
-              <Filter courses={data?.pages?.[0]?.category} />
-              {guideStatus && guideStep === 7 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_6}
-                  className="right-full top-full mt-3 w-screen max-w-365px"
-                  index={6}
-                  total={6}
-                  titleButtonNext="Finish"
-                />
-              )}
-            </div>
-          </div>
-        </div>
+
         <Row className="mx-auto my-0 flex max-w-xxl rounded-md bg-white shadow-sidebar">
           <Col
             span={16}
@@ -267,7 +248,26 @@ const MyCourse = () => {
             )}
           </Col>
         </Row>
-        <h1 className="mx-auto my-9 max-w-xxl ">My Courses</h1>
+        <div className="mx-auto my-9 flex max-w-xxl justify-between">
+          <h1>My Courses</h1>
+          <div className={`relative`}>
+            <Filter
+              courses={data?.pages?.[0]?.category}
+              tourGuideActive={guideStatus && guideStep === 7}
+            />
+            {guideStatus && guideStep === 7 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_6}
+                className="right-1/2 top-full mt-5"
+                index={6}
+                total={6}
+                titleButtonNext="Finish"
+                title="Filter"
+                imgSrc={stepSevenImg}
+              />
+            )}
+          </div>
+        </div>
         <div
           className={`relative mx-auto my-0 max-w-xxl ${
             isEmpty(courses)
@@ -281,12 +281,12 @@ const MyCourse = () => {
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
-            guideIsActive
+            guideIsActive={guideStatus && guideStep === 6}
           />
           {guideStatus && guideStep === 6 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_6}
-              className="top-[123px] mt-6 2xl:left-[33.5%]"
+              className="top-[0px] mt-6 2xl:left-[33.5%]"
               index={5}
               total={6}
               title="Courses"
