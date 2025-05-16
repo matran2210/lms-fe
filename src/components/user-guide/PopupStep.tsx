@@ -77,7 +77,7 @@ const PopupStep = ({
                 size="small"
                 isPadding={false}
                 childClass="text-medium-sm"
-                onClick={previousStep}
+                onClick={handleClose}
               />
             ) : (
               <>
