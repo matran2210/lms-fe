@@ -6,7 +6,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round, set } from 'lodash'
+import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -24,8 +24,6 @@ import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import { ActiveIcon } from '@assets/icons'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
 
 const Course = ({
@@ -75,7 +73,7 @@ const Course = ({
         student?.learning_progress?.total_course_sections_completed ?? 0,
       ) /
         Number(student?.learning_progress?.total_course_sections ?? 0)) *
-      100,
+        100,
       2,
     ) || 0
 
@@ -190,7 +188,7 @@ const Course = ({
       // await fetchCourseList()
       refetch()
       toast.success('Active thành công!')
-    } catch (error) { }
+    } catch (error) {}
   }
   async function extendCourse() {
     try {
@@ -199,7 +197,7 @@ const Course = ({
         refetch()
         toast.success('Gia hạn hành công!')
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const { courseType } = useCourseContext()
@@ -258,19 +256,18 @@ const Course = ({
   }
 
   /**
- * @description Trạng thái điều khiển việc hiển thị modal hoặc giao diện tiếp tục học lớp nền tảng.
- *
- * @type {boolean}
- * @default false - Mặc định đóng modal.
- */
+   * @description Trạng thái điều khiển việc hiển thị modal hoặc giao diện tiếp tục học lớp nền tảng.
+   *
+   * @type {boolean}
+   * @default false - Mặc định đóng modal.
+   */
   const [openContinue, setOpenContinue] = useState(false)
 
   const courseAction = () => {
-    const isPendingLesson = classInstance?.type === 'LESSON' && !student?.is_passed
+    const isPendingLesson =
+      classInstance?.type === 'LESSON' && !student?.is_passed
 
-    if (
-      isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA'
-    ) {
+    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
       setOpenLesson(true)
     } else if (
       isPendingLesson &&
@@ -331,13 +328,13 @@ const Course = ({
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
   /**
- * @description Xử lý điều hướng người dùng đến lớp học nền tảng (foundation class) đầu tiên của khóa học.
- * URL sẽ được tạo từ `foundation_class_id` nằm trong kết nối lớp học thường.
- *
- * @remarks
- * - Hàm sử dụng `router.push` để điều hướng.
- * - Nếu không có `course` hoặc dữ liệu lớp học chưa sẵn sàng, đường dẫn có thể không chính xác.
- */
+   * @description Xử lý điều hướng người dùng đến lớp học nền tảng (foundation class) đầu tiên của khóa học.
+   * URL sẽ được tạo từ `foundation_class_id` nằm trong kết nối lớp học thường.
+   *
+   * @remarks
+   * - Hàm sử dụng `router.push` để điều hướng.
+   * - Nếu không có `course` hoặc dữ liệu lớp học chưa sẵn sàng, đường dẫn có thể không chính xác.
+   */
   const handleContinueFoundation = () => {
     router.push(
       `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
@@ -345,14 +342,14 @@ const Course = ({
   }
 
   /**
- * @description Gửi yêu cầu bỏ qua (skip) lớp học nền tảng hiện tại cho khóa học.
- * 
- * @remarks
- * - Gọi API `CoursesAPI.skipFoundation` với `classId` đầu tiên trong danh sách lớp học.
- * - Sau khi thao tác thành công, gọi lại `refetch()` để cập nhật lại dữ liệu giao diện.
- *
- * @returns {Promise<void>}
- */
+   * @description Gửi yêu cầu bỏ qua (skip) lớp học nền tảng hiện tại cho khóa học.
+   *
+   * @remarks
+   * - Gọi API `CoursesAPI.skipFoundation` với `classId` đầu tiên trong danh sách lớp học.
+   * - Sau khi thao tác thành công, gọi lại `refetch()` để cập nhật lại dữ liệu giao diện.
+   *
+   * @returns {Promise<void>}
+   */
   const handleSkipCourse = async () => {
     try {
       await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
@@ -373,8 +370,9 @@ const Course = ({
         >
           <div className={`flex min-h-352 flex-col`}>
             <div
-              className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${!enableCourse ? 'text-gray-2' : 'text-bw-1'
-                }`}
+              className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
+                !enableCourse ? 'text-gray-2' : 'text-bw-1'
+              }`}
             >
               <div
                 className="line-clamp-2 cursor-pointer text-ellipsis"
@@ -415,8 +413,9 @@ const Course = ({
                 {determineButtonToShow !== 'Active' && (
                   <span>
                     <span
-                      className={`font-medium ${enableCourse ? 'text-bw-1' : 'text-gray-1'
-                        }`}
+                      className={`font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-1'
+                      }`}
                     >
                       {daysDifference > 0
                         ? daysDifference
@@ -445,8 +444,9 @@ const Course = ({
                     dangerouslySetInnerHTML={{
                       __html: clearStylesHtml(course?.description),
                     }}
-                    className={`text-bas h-24 ${enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                      }`}
+                    className={`text-bas h-24 ${
+                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    }`}
                   />
                 </Tooltip>
               ) : (
@@ -454,8 +454,9 @@ const Course = ({
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(course?.description),
                   }}
-                  className={`text-bas h-24 ${enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                    }`}
+                  className={`text-bas h-24 ${
+                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                  }`}
                 />
               )}
             </div>
@@ -465,20 +466,23 @@ const Course = ({
                   <div className="text flex items-center">
                     <Icon
                       type={enableCourse ? iconType : 'expired'}
-                      className={`relative ${enableCourse ? 'text-bw-1' : 'text-gray-2'
-                        }`}
+                      className={`relative ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      }`}
                     />
                     <p
-                      className={`text-medium-sm font-medium ${enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                        } ml-px pl-2`}
+                      className={`text-medium-sm font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
                     </p>
                   </div>
                   <div className="number">
                     <p
-                      className={`text-medium-sm font-medium ${enableCourse ? 'text-bw-1' : 'text-gray-2 '
-                        }`}
+                      className={`text-medium-sm font-medium ${
+                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      }`}
                     >
                       {progressPart}%
                     </p>
@@ -486,8 +490,9 @@ const Course = ({
                 </div>
                 <div className="progressbar h-1.5 bg-gray-3">
                   <div
-                    className={`progress-percentage ${enableCourse ? 'bg-primary ' : 'bg-gray-2'
-                      } h-1.5`}
+                    className={`progress-percentage ${
+                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                    } h-1.5`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
                 </div>
@@ -538,7 +543,11 @@ const Course = ({
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
       />
-      <ModalFoundationCompleted openContinue={openContinue} handleSkipCourse={handleSkipCourse} handleContinueFoundation={handleContinueFoundation} />
+      <ModalFoundationCompleted
+        openContinue={openContinue}
+        handleSkipCourse={handleSkipCourse}
+        handleContinueFoundation={handleContinueFoundation}
+      />
     </>
   )
 }
