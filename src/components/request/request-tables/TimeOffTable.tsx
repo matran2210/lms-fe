@@ -63,7 +63,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
       <ul className="flex flex-col gap-1">
         {teacherSchedules.map(({ schedule }, index) => (
           <li key={index}>
-            {`${schedule.name} | ${formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z')}`}
+            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z')}
           </li>
         ))}
       </ul>
