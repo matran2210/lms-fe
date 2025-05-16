@@ -353,8 +353,10 @@ const Course = ({
  * @returns {Promise<void>}
  */
   const handleSkipCourse = async () => {
-    const res = await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
-    if (res?.success) {
+    try {
+      await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
+    } finally {
+      setOpenContinue(false)
       refetch()
     }
   }
