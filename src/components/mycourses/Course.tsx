@@ -26,6 +26,7 @@ import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ActiveIcon } from '@assets/icons'
+import ModalFoundationCompleted from './ModalFoundationCompleted'
 
 const Course = ({
   course,
@@ -537,25 +538,7 @@ const Course = ({
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
       />
-      <SappModalV3
-        open={openContinue}
-        handleCancel={handleSkipCourse}
-        onOk={handleContinueFoundation}
-        icon={<ActiveIcon />}
-        header="Foundation Not Completed"
-        okButtonCaption="Continue with Foundation Course"
-        cancelButtonCaption="Skip and start this course"
-        isMaskClosable={false}
-        fullWidthBtn={true}
-        buttonSize="extra"
-      >
-        <div className="mt-4 text-center text-medium-sm text-gray-1">
-          It looks like you haven't finished the Foundation Course.
-        </div>
-        <div className="mt-1 text-center text-medium-sm text-gray-1">
-          Would you like to complete it first, or skip and start this course right away?
-        </div>
-      </SappModalV3>
+      <ModalFoundationCompleted openContinue={openContinue} handleSkipCourse={handleSkipCourse} handleContinueFoundation={handleContinueFoundation} />
     </>
   )
 }
