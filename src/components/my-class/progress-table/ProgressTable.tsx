@@ -3,8 +3,9 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { calculateHoursDifference } from '@utils/date.ulti'
 import { formatDate } from '@utils/common'
 import SappTable from '@components/table/SappTable'
-import { IProgress, IProgressList } from 'src/type/progress'
+import { IProgress, IProgressList, IProgressUser } from 'src/type/progress'
 import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
+import { TableColumn } from 'src/type'
 
 interface ProgressTableProps {
   loading: boolean
@@ -33,7 +34,7 @@ const ProgressTable = ({
   allowSection,
   allowCreateProgress,
 }: ProgressTableProps) => {
-  let columnsTitles: any[] = [
+  let columnsTitles: TableColumn<IProgress>[] = [
     {
       title: '#',
       dataIndex: 'index',
@@ -52,7 +53,6 @@ const ProgressTable = ({
     },
     {
       title: 'Time',
-      dataIndex: 'time',
       render: (value: Date, record: IProgress, index: number) => {
         if (!record?.start_time || !record?.end_time) return null
         return (
@@ -78,6 +78,11 @@ const ProgressTable = ({
           </span>
         )
       },
+    },
+    {
+      title: 'Teacher',
+      dataIndex: 'teacher',
+      render: (teacher: IProgressUser) => teacher?.full_name,
     },
     {
       title: 'Creator',

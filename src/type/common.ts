@@ -35,10 +35,10 @@ export interface OtherColumn {
 
 export interface TableColumn<T, O = OtherColumn> {
   title: React.ReactNode
-  dataIndex: keyof T | keyof O
+  dataIndex?: keyof T | keyof O
   key?: string | number
   width?: number | string
-  render?: (value: any) => React.ReactNode
+  render?: (value: any, record: T, index: number) => React.ReactNode
   fixed?: FixedType
 }
 
