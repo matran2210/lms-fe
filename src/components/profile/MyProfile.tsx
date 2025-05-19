@@ -26,6 +26,8 @@ import {
 import { z } from 'zod'
 import TabLayout from './TabLayout'
 import ProfileCard from '@components/card/ProfileCard'
+import Icon from '@components/icons'
+import clsx from 'clsx'
 
 interface IProps {
   isEdit: boolean
@@ -140,65 +142,56 @@ const MyProfile = ({
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
-        <ProfileCard
-          title="Overview"
-          // extra={
-          //   <div className=" flex gap-x-2">
-          //     <SappButton
-          //       onClick={onOpenTab}
-          //       size="medium"
-          //       title={'Back'}
-          //       color="textUnderline"
-          //       className="block min-w-[120px] pr-0 text-base lg:hidden"
-          //       loading={loading && !isEdit}
-          //     ></SappButton>
-          //     {!isEdit ? (
-          //       <SappButton
-          //         onClick={handleChangeToEditForm}
-          //         size="medium"
-          //         title={'Edit'}
-          //         className="min-w-[120px] text-base"
-          //         loading={loading && !isEdit}
-          //       ></SappButton>
-          //     ) : (
-          //       <ButtonCancelSubmit
-          //         className="flex gap-12"
-          //         cancel={{
-          //           title: 'Cancel',
-          //           onClick: handleChangeToPreview,
-          //           size: 'medium',
-          //           isPaddingHorizontal: false,
-          //           disabled: loading || loadingEditName,
-          //           className: 'min-w-fit !px-0 text-base w-30',
-          //         }}
-          //         submit={{
-          //           title: 'Save',
-          //           size: 'medium',
-          //           className: 'min-w-fit px-0 text-sm w-30',
-          //           type: 'submit',
-          //           loading: loading || loadingEditName,
-          //         }}
-          //       ></ButtonCancelSubmit>
-          //     )}
-          //   </div>
-          // }
-        >
+        <ProfileCard title="Overview">
           <>
             <ul>
               <TextWrapper
                 title="Code"
                 value={user?.code?.toString() ?? user?.key?.toString()}
-                isEdit={isEdit}
                 loading={loading}
               />
-              <TextWrapper title="Full Name" isEdit={isEdit} loading={loading}>
+              <TextWrapper
+                title="Full Name"
+                showEditIcon
+                isEdit={isEdit}
+                loading={loading}
+                handleClickEdit={handleChangeToEditForm}
+              >
                 {isEdit ? (
-                  <HookFormTextField
-                    control={control}
-                    name="full_name"
-                    skeleton={loadingEditName}
-                    className="w-full flex-1"
-                  ></HookFormTextField>
+                  <div className="flex items-center gap-2">
+                    <HookFormTextField
+                      placeholder="Enter Text..."
+                      control={control}
+                      name="full_name"
+                      skeleton={loadingEditName}
+                      className="w-full flex-1 "
+                      inputClassName="rounded-lg !h-10"
+                      textSize="sm"
+                    ></HookFormTextField>
+                    <ButtonCancelSubmit
+                      className="flex gap-2"
+                      color="text"
+                      cancel={{
+                        title: 'Cancel',
+                        onClick: handleChangeToPreview,
+                        size: 'medium',
+                        isPaddingHorizontal: false,
+                        disabled: loading || loadingEditName,
+                        className:
+                          'min-w-fit text-sm w-30 rounded-lg py-2 px-4 !no-underline',
+                      }}
+                      submit={{
+                        title: 'Confirm',
+                        size: 'medium',
+                        className:
+                          'min-w-fit text-sm w-30 !text-white !bg-sapp-black-1 hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                        type: 'submit',
+                        loading: loading || loadingEditName,
+                        classNameLoading: 'text-white',
+                      }}
+                      revertFunction
+                    ></ButtonCancelSubmit>
+                  </div>
                 ) : (
                   <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                     <TextSkeleton loading={loading && !isEdit}>
@@ -210,13 +203,11 @@ const MyProfile = ({
               <TextWrapper
                 title="Username"
                 value={user?.username}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Role"
                 value={USER_TYPE[user?.type]?.label}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
@@ -224,58 +215,49 @@ const MyProfile = ({
                 value={
                   user?.detail?.dob ? formatDate(user?.detail?.dob, true) : ''
                 }
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Email"
                 value={user?.user_contacts?.[0]?.email}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Phone"
                 value={user?.user_contacts?.[0]?.phone}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="University"
                 value={user?.detail?.university?.name ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Major"
                 value={user?.detail?.major?.name}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Field of work"
                 value={user?.detail?.company_type ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Position"
                 value={user?.detail?.company_position ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Main Class"
                 value={user?.main_class?.join(',') ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Deferred/Retake class"
                 value={user?.reserve_retook_class?.join(', ') ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
-              <TextWrapper title="Status" isEdit={isEdit} loading={loading}>
+              <TextWrapper title="Status" loading={loading}>
                 <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
@@ -298,32 +280,52 @@ const MyProfile = ({
 
 const TextWrapper = ({
   title,
-  isEdit,
+  isEdit = false,
   value,
   loading,
   children,
+  handleClickEdit,
+  showEditIcon = false,
 }: {
   title: string
   children?: React.ReactNode
-  isEdit: boolean
+  isEdit?: boolean
   value?: string
   loading: boolean
+  handleClickEdit?: () => void
+  showEditIcon?: boolean
 }) => {
   return (
     <li
-      className={`block gap-[1.4rem] md:flex ${
-        !isEdit ? 'mb-4' : 'mb-8 transition-[margin]'
-      }`}
+      className={clsx('group block gap-[1.4rem] md:flex', {
+        'mb-4': !isEdit,
+        'mb-8 !block transition-[margin]': isEdit,
+      })}
     >
       <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
         {title}
       </div>
-      <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+      <div
+        className={clsx('max-w-[300px] flex-auto font-medium text-bw-1', {
+          '!max-w-full': isEdit,
+        })}
+      >
         {value && (
           <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
         )}
         {children}
       </div>
+      {!isEdit && showEditIcon && (
+        <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
+          <div
+            className="flex items-center justify-end gap-2"
+            onClick={handleClickEdit}
+          >
+            <div>Edit</div>
+            <Icon type="edit" />
+          </div>
+        </div>
+      )}
     </li>
   )
 }

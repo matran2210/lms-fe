@@ -169,6 +169,9 @@ module.exports = {
         purple: {
           1: '#8F6FEA',
         },
+        'sapp-black': {
+          1: '#29353C',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',

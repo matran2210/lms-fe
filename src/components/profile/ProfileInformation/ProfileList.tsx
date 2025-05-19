@@ -2,13 +2,23 @@ import React, { useState } from 'react'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import ProfileItem from './ProfileItem'
-import SappDrawer from '@components/base/SappDrawer'
 import { getMe, makeContactDefault } from 'src/redux/slice/User/User'
 import { useAppDispatch } from 'src/redux/hook'
 import ProfileCard from '@components/card/ProfileCard'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import Icon from '@components/icons'
-import { Divider, Switch } from 'antd'
+import { Divider, Select, Switch } from 'antd'
+import { IUserContact } from 'src/redux/types/User/urser'
+interface ProfileOptionItem {
+  label: string
+  value: string
+  email: string
+  phone: string
+  address: string
+  index: number
+  id: string
+  is_default: boolean
+}
 interface IProps {
   isEdit: boolean
 }
@@ -40,6 +50,11 @@ const ProfileList = ({ isEdit }: IProps) => {
       }
     } catch (error) {}
   }
+  const handleSetDefault = (checked: boolean) => {
+    if (checked) {
+      submitMakeDefault()
+    }
+  }
   /**
    * Sắp xếp mảng người dùng theo thời gian tạo và is_default.
    *
@@ -61,6 +76,20 @@ const ProfileList = ({ isEdit }: IProps) => {
 
     return sortedUsers
   }
+  const profileOptions: ProfileOptionItem[] = sortByCreatedAtAndDefault(
+    user?.user_contacts || [],
+  ).map((data: IUserContact, index) => {
+    return {
+      label: `Profile ${index + 1}`,
+      value: data?.id,
+      email: data?.email,
+      phone: data?.phone,
+      address: data?.address,
+      index: index + 1,
+      id: data?.id,
+      is_default: data?.is_default,
+    }
+  })
   return (
     <ProfileCard title="Profile">
       {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map((e, i) => {
@@ -78,8 +107,30 @@ const ProfileList = ({ isEdit }: IProps) => {
         <SappDrawerV2
           open={makeDefaultDrawer?.status || false}
           onClose={closeMakeDefault}
-          title={'Profile ' + makeDefaultDrawer?.index || ''}
+          title={
+            <Select
+              suffixIcon={<Icon type="arrow-select" />}
+              value={makeDefaultDrawer?.id}
+              onChange={(value, option) => {
+                if (!Array.isArray(option) && option) {
+                  setMakeDefaultDrawer({
+                    id: value,
+                    email: option.email,
+                    phone: option.phone,
+                    address: option.address,
+                    index: option.index,
+                    is_default: option.is_default,
+                    status: true,
+                  })
+                }
+              }}
+              variant="borderless"
+              className="profile-subject-select"
+              options={profileOptions}
+            />
+          }
           handleCancel={closeMakeDefault}
+          classNameHeader="bg-white !text-black"
         >
           <div className="flex flex-col gap-4">
             {makeDefaultDrawer?.phone && (
@@ -123,7 +174,12 @@ const ProfileList = ({ isEdit }: IProps) => {
               <span className="text-base font-semibold text-gray-14">
                 Set as default:
               </span>
-              <Switch className="sapp-profile-switch" />
+              <Switch
+                className="sapp-profile-switch"
+                checked={makeDefaultDrawer.is_default}
+                onChange={handleSetDefault}
+                disabled={makeDefaultDrawer.is_default}
+              />
             </div>
           </div>
         </SappDrawerV2>

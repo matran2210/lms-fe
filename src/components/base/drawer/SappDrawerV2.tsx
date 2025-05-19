@@ -1,5 +1,6 @@
 import Icon from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
+import clsx from 'clsx'
 import React, { ReactNode } from 'react'
 
 interface IProps extends DrawerProps {
@@ -8,6 +9,7 @@ interface IProps extends DrawerProps {
   width?: number
   title: ReactNode
   children: ReactNode
+  classNameHeader?: string
 }
 
 const SappDrawerV2 = ({
@@ -16,6 +18,7 @@ const SappDrawerV2 = ({
   width,
   title,
   children,
+  classNameHeader,
   ...props
 }: IProps) => {
   return (
@@ -28,13 +31,18 @@ const SappDrawerV2 = ({
       {...props}
     >
       <div className={`w-full bg-white`}>
-        <div className="relative bg-bw-1 px-8 py-6">
-          <div className="pr-10 text-2xl font-medium text-white">{title}</div>
+        <div
+          className={clsx(
+            'relative bg-bw-1 px-8 py-6 text-white',
+            classNameHeader,
+          )}
+        >
+          <div className="pr-10 text-2xl font-medium">{title}</div>
           <div
             className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer"
             onClick={handleCancel}
           >
-            <Icon type="cross" className="text-white" />
+            <Icon type="cross" />
           </div>
         </div>
         <div className={`px-8 py-6`}>{children}</div>

@@ -8,10 +8,14 @@ import { useAppDispatch } from 'src/redux/hook'
 import ProfileCard from '@components/card/ProfileCard'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import ProgramDetail from '../ProgramDetail'
+import { Select } from 'antd'
+import Icon from '@components/icons'
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'
   status: boolean
   title: string
+  value: 'CMA' | 'CFA' | 'ACCA'
+  label: string
 }
 interface IProps {
   isEdit: boolean
@@ -32,16 +36,22 @@ const SubjectList = ({ isEdit }: IProps) => {
       course_category_name: 'CMA',
       status: false,
       title: 'Certified Management Accountant',
+      value: 'CMA',
+      label: 'CMA',
     },
     {
       course_category_name: 'CFA',
       status: false,
       title: 'Chartered Financial Analyst',
+      value: 'CFA',
+      label: 'CFA',
     },
     {
       course_category_name: 'ACCA',
       status: false,
       title: 'Association of Chartered Certified Accountants',
+      value: 'ACCA',
+      label: 'ACCA',
     },
   ]
   return (
@@ -61,8 +71,23 @@ const SubjectList = ({ isEdit }: IProps) => {
         <SappDrawerV2
           open={makeDefaultDrawer?.status || false}
           onClose={closeMakeDefault}
-          title={makeDefaultDrawer?.course_category_name || ''}
+          title={
+            <Select
+              suffixIcon={<Icon type="arrow-select" />}
+              value={makeDefaultDrawer?.course_category_name}
+              onChange={(value) => {
+                setMakeDefaultDrawer({
+                  course_category_name: value,
+                  status: true,
+                })
+              }}
+              variant="borderless"
+              className="profile-subject-select"
+              options={subjectOptions}
+            />
+          }
           handleCancel={closeMakeDefault}
+          classNameHeader="bg-white !text-black"
         >
           <ProgramDetail
             typeProgram={makeDefaultDrawer?.course_category_name}
