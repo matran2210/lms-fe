@@ -12,45 +12,30 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import ProfileSideBar from '@components/profile/ProfileSideBar'
 import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
-import { Tabs } from 'antd'
+import TabHeaderItem from '@components/tab/TabHeaderItem'
+import { Button, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs } from 'src/type'
+import { ITabs, NOTIFICATION_STATUS } from 'src/type'
 import { IProfilePages, ProfilePages } from 'src/type/Profile'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 
-const items = [
-  {
-    key: 'my-profile',
-    label: `My profile`,
-    children: `Tab`,
-    icon: <Icon type="my-profile" />,
-  },
-  {
-    key: 'certificates',
-    label: `Certificates`,
-    children: `Tab`,
-    icon: <Icon type="certificates" />,
-  },
-  {
-    key: 'setting',
-    label: `Setting`,
-    children: `Tab`,
-    icon: <Icon type="setting" />,
-  },
-  {
-    key: 'sercurity',
-    label: `Sercurity`,
-    children: `Tab`,
-    icon: <Icon type="sercurity" />,
-  },
-]
+import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+
+import { useAppDispatch } from 'src/redux/hook'
+
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import MyProfile from '@components/profile/MyProfile'
+import ProfileList from '@components/profile/ProfileInformation/ProfileList'
+import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 
 const ProfilePage = () => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const page = router.query.page as IProfilePages
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
@@ -95,7 +80,56 @@ const ProfilePage = () => {
       title: 'Details',
     },
   ]
-
+  const items = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
+      ),
+      children: (
+        <>
+          <MyProfile
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            avatar={avatar}
+            handleSetAvatar={handleSetAvatar}
+            setReViewImageSrc={setReViewImageSrc}
+            onOpenTab={() => {}}
+          />
+          <SubjectList isEdit={isEdit} />
+          <ProfileList isEdit={isEdit} />
+        </>
+      ),
+    },
+    {
+      key: 'certificates',
+      label: (
+        <TabHeaderItem
+          icon={<Icon type="certificates" />}
+          title="Certificates"
+        />
+      ),
+      children: <Certificate onOpenTab={() => setSelectPage(true)} />,
+    },
+    {
+      key: 'setting',
+      label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
+      children: <Settings onBack={() => setSelectPage(true)} />,
+    },
+    {
+      key: 'sercurity',
+      label: (
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+      ),
+      children: (
+        <>
+          <ChangePassword onOpenTab={() => setSelectPage(true)} />
+          <Devices onOpenTab={() => setSelectPage(true)} />
+          <LoginHistory onOpenTab={() => setSelectPage(true)} />
+        </>
+      ),
+    },
+  ]
   let selectedContent: JSX.Element | null = null
 
   switch (page) {
@@ -175,7 +209,18 @@ const ProfilePage = () => {
       setSelectPage(true)
     }
   }
-
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser()).then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+        }
+      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
+    } catch (error) {}
+  }
   useEffect(() => {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -201,20 +246,29 @@ const ProfilePage = () => {
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-            <ProfileHeader
-              reViewImageSrc={reViewImageSrc}
-              setReViewImageSrc={setReViewImageSrc}
-              setAvatar={handleSetAvatar}
-              isEdit={isEdit}
-              inputFileRef={inputFileRef}
-            />
-          </div>
-          <div className="mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
-            {isSelectPage && (
-              <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
-            )}
-
-            <Tabs defaultActiveKey="my-profile" items={items} />
+            <div className="flex flex-col gap-16 bg-white px-10 py-8 shadow-box">
+              <ProfileHeader
+                reViewImageSrc={reViewImageSrc}
+                setReViewImageSrc={setReViewImageSrc}
+                setAvatar={handleSetAvatar}
+                isEdit={isEdit}
+                inputFileRef={inputFileRef}
+              />
+              <Tabs
+                tabBarExtraContent={
+                  <div
+                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-danger-6"
+                    onClick={handleLogout}
+                  >
+                    <Icon type="logout" className="font-normal" />
+                    <div>Logout</div>
+                  </div>
+                }
+                className="sapp-tabs-profile"
+                defaultActiveKey="my-profile"
+                items={items}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -222,25 +276,4 @@ const ProfilePage = () => {
   )
 }
 
-// export const getServerSideProps: GetServerSideProps<IProps> = async (
-//   context,
-// ) => {
-//   const params = context.query
-//   if (
-//     !params?.page ||
-//     typeof params?.page !== 'string'
-//     // ||
-//     // !PROFILE_PAGES[
-//     //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-//     // ]
-//   ) {
-//     return {
-//       notFound: true,
-//     }
-//   }
-
-//   return {
-//     props: { page: params?.page as IProfilePages },
-//   }
-// }
 export default withAuthorization([UserType.STUDENT])(ProfilePage)

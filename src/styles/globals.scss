@@ -6,6 +6,7 @@
 @import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'my-profile.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -1288,7 +1289,7 @@ select:focus {
 }
 
 .ant-tabs-tab.ant-tabs-tab-active > div {
-  @apply text-heading !important;
+  @apply text-heading;
 }
 .ant-select span.ant-select-selection-item {
   @apply font-medium;

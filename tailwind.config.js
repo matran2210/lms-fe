@@ -68,6 +68,7 @@ module.exports = {
           3: '#f01919',
           4: '#0Df01919',
           5: '#F019190D',
+          6: '#F80903',
         },
         state: {
           info: '#3964EA',
@@ -114,6 +115,8 @@ module.exports = {
           3: '#37C78C',
           4: '#6FD195',
           5: '#07AF170D',
+          6: '#E7FCF2',
+          7: '#10B367',
         },
         orange: {
           1: '#F897070D',
@@ -138,6 +141,7 @@ module.exports = {
         },
         yellow: {
           1: '#FFB800',
+          2: '#FFFBF2',
         },
         pinned: {
           1: '#18355D',

@@ -6,7 +6,7 @@ interface IProps extends DrawerProps {
   open: boolean
   handleCancel: () => void
   width?: number
-  title: string
+  title: ReactNode
   children: ReactNode
 }
 

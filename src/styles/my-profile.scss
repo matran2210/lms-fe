@@ -1,0 +1,59 @@
+.sapp-tabs-profile {
+  .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 64px;
+  }
+  .ant-tabs-tab {
+    &.ant-tabs-tab-active {
+      .ant-tabs-tab-btn {
+        @apply text-primary;
+        &:focus {
+          @apply text-primary;
+        }
+      }
+    }
+    .ant-tabs-tab-btn {
+      &:focus {
+        @apply text-primary;
+      }
+    }
+  }
+  .ant-tabs-ink-bar {
+    @apply bg-primary;
+  }
+}
+
+.ant-card.profile-card {
+  .ant-card-head {
+    @apply border-b-0;
+    .ant-card-head-wrapper {
+      .ant-card-head-title {
+        @apply text-xl font-bold text-gray-14;
+      }
+    }
+  }
+  // .ant-card-body {
+  //   @apply px-0;
+  // }
+}
+
+.sapp-profile-switch.ant-switch {
+  transition: background-color 0.3s;
+  &.ant-switch-checked {
+    background-color: $color-green;
+
+    &:hover:not(.ant-switch-disabled) {
+      background-color: $color-green;
+    }
+    .ant-switch-handle::before {
+      @apply bg-white;
+    }
+  }
+
+  // &:not(.ant-switch-checked) {
+  //   @apply bg-gray-300;
+
+  //   .ant-switch-handle::before {
+  //     @apply bg-gray-500;
+  //   }
+  // }
+}
