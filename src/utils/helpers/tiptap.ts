@@ -21,10 +21,17 @@ export function base64ToFile(
 //  // Chuyển base64 thành File để tải lên S3
 //  const convertedFile = base64ToFile(base64String as string, 'image.png')
 
-// Hàm xử lý tải ảnh lên và nhận URL từ API S3
+/**
+ * @param description Hàm xử lý tải ảnh lên và nhận URL từ API S3
+ * @param {File} convertedFile - File đã được chuyển đổi.
+ * @param {string} location - Vị trí lưu trữ file trên S3 (mặc định là 'library-editor').
+ * @param {function} getProgress - Hàm callback để cập nhật tiến trình tải lên (không bắt buộc).
+ * @param {AbortSignal} abortSignal - Signal để hủy tải lên (không bắt buộc).
+ * @returns {Promise<{ url: string } | undefined>} - Promise trả về URL của file sau khi tải lên hoặc undefined nếu tải lên thất bại.
+ */
 export const handleUploadFileToS3 = async (
   convertedFile: File,
-  location = 'sapp-editor',
+  location: string,
   getProgress?: (progress: number) => void,
   abortSignal?: AbortSignal,
 ): Promise<{ url: string } | undefined> => {

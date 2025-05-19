@@ -7,7 +7,7 @@ import {
 export const useSappEditorImageUpload = () => {
   const handleImageUpload = async (
     file: File,
-    location?: string,
+    location: string,
   ): Promise<string> => {
     try {
       // Đọc file dưới dạng base64

@@ -39,7 +39,7 @@ const Editor = ({
             content={valueText}
             onChange={onChange}
             handleImageUpload={(file) =>
-              handleImageUpload(file, 'lms-pro-editor')
+              handleImageUpload(file, 'lms/library-editor')
             }
             placeholder={placeholder}
             disabled={disabled}
