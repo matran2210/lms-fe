@@ -14,6 +14,7 @@ export interface IProgress {
   progress: number
   teacher: IProgressUser
   staff_creator: IProgressUser
+  user_creator: IProgressUser
   start_time: string
   end_time: string
   description: string

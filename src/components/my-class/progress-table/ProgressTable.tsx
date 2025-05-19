@@ -86,9 +86,10 @@ const ProgressTable = ({
     },
     {
       title: 'Creator',
-      dataIndex: 'staff_creator',
-      render: (value: IProgress, record: IProgress) => {
-        return record.staff_creator.full_name
+      render: (_, record: IProgress) => {
+        return (
+          record.staff_creator?.full_name || record?.user_creator?.full_name
+        )
       },
     },
     {
