@@ -314,13 +314,15 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   )
 
   const disabledDate = (current: Dayjs) => {
-    if (!current) return false
-    if (
+    const isDayModePicker =
       current.date() === 1 &&
       current.hour() === 0 &&
       current.minute() === 0 &&
       current.second() === 0
-    ) {
+
+    if (!current) return false
+
+    if (isDayModePicker) {
       return false
     }
 
