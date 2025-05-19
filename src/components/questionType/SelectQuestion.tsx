@@ -1,5 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import { runHighlight } from '@utils/index'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -46,13 +46,13 @@ interface ChangeEvent extends Event {
 }
 
 // Constants
+const baseBox = 'border border-gray-300 rounded'
+const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
-  container:
-    'sapp-select--question relative inline-block w-[200px] border border-gray-300 rounded cursor-pointer',
+  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
-  options:
-    'fixed z-50 min-w-[200px] max-w-[400px] bg-white border border-gray-300 rounded shadow-lg max-h-[300px] overflow-y-auto',
-  option: 'px-3 py-2 hover:bg-[#e5e7eb] cursor-pointer',
+  options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto`,
+  option: 'px-3 py-2 hover:bg-gray-200 cursor-pointer',
   icon: 'ml-2 text-gray-500',
 }
 
@@ -83,6 +83,9 @@ const SelectWord = forwardRef(
     const [key, setKey] = useState<string>(uniqueId('key'))
     const isSelfReflection = data?.is_self_reflection
     const str = data?.question_content
+    const [selectedValues, setSelectedValues] = useState<
+      Record<number, string>
+    >({})
 
     // Methods
     const formatAnswer = (data: any) => {
@@ -101,7 +104,6 @@ const SelectWord = forwardRef(
     }
 
     const answerObj = formatAnswer(data)
-
     const createDropdownHTML = (
       index: number,
       defaultAnswerValue: string,
@@ -111,34 +113,43 @@ const SelectWord = forwardRef(
         (e: any) => e?.value === defaultAnswerValue,
       )
 
-      const textClass = isCorrect ? 'text-state-success' : 'text-state-error'
-      const optionClass = isCorrect ? '!border-success' : '!border-danger'
+      const textClass = corrects?.length
+        ? `text-state-${isCorrect ? 'success' : 'error'}`
+        : ''
+
+      const disabledClass = !corrects?.length
+        ? ''
+        : 'opacity-50 cursor-not-allowed pointer-events-none'
       return `
-        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${textClass}">
+        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${textClass} ${disabledClass}">
           <span class="truncate">${selectedAnswer?.label || 'Choose'}</span>
           <svg class="${DROPDOWN_STYLES.icon}" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;">
-          ${answerObj?.[+index + 1]
-            ?.map((e: any) => {
-              if (e?.label?.length > 100) {
-                return `
+          ${
+            answerObj?.[+index + 1]?.length
+              ? answerObj?.[+index + 1]
+                  ?.map((e: any) => {
+                    if (e?.label?.length > 100) {
+                      return `
                 <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
                      data-value="${e?.value}">
                   ${e.label}
                 </div>
               `
-              }
-              return `
+                    }
+                    return `
               <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
                    data-value="${e?.value}">
                 ${e?.label}
               </div>
             `
-            })
-            .join('')}
+                  })
+                  .join('')
+              : `<div class="option ${DROPDOWN_STYLES.option}">No options available</div>`
+          }
         </div>
       `
     }
@@ -173,7 +184,7 @@ const SelectWord = forwardRef(
           )?.answer || ''
         if (sibling) {
           sibling.innerHTML = answer || ''
-          if (!!answer && answer.length > 7) {
+          if (!!answer && answer.length > 18) {
             sibling.classList.remove('hidden')
             sibling.classList.add('block')
           } else {
@@ -245,9 +256,15 @@ const SelectWord = forwardRef(
               !isNull(defaultAnswer?.[index]) &&
               answer?.id === defaultAnswer?.[index],
           )?.answer || ''
+        const selectedAnswer = selectedValues[index]
+          ? data.answers?.find(
+              (answer: { id: string; value: string }) =>
+                answer?.id === selectedValues[index],
+            )?.answer
+          : ''
         tooltip.innerHTML = `
-                  <div class="tooltip-text ${!!answer && answer.length > 7 ? 'block' : 'hidden'}">${answer}</div>
-                `
+  <div class="tooltip-text ${(!!answer && answer.length > 18) || (!!selectedAnswer && selectedAnswer.length > 18) ? 'block' : 'hidden'}">${selectedAnswer || answer}</div>
+`
         tooltip.appendChild(dropdownContainer)
 
         element.replaceWith(tooltip)
@@ -273,6 +290,71 @@ const SelectWord = forwardRef(
       }
       setQuestionContent(doc)
     }, [defaultAnswer, data])
+
+    useEffect(() => {
+      const updateTooltips = () => {
+        const dropdowns = document.querySelectorAll('.sapp-select--question')
+        dropdowns.forEach((dropdown) => {
+          const dropdownIndex = Array.from(
+            document.querySelectorAll('.sapp-select--question'),
+          ).indexOf(dropdown)
+          const tooltipContainer = dropdown.closest('.tooltip-container')
+          if (tooltipContainer) {
+            const tooltipText = tooltipContainer.querySelector('.tooltip-text')
+            if (tooltipText) {
+              const selectedValue = selectedValues[dropdownIndex]
+              if (selectedValue) {
+                const answer =
+                  data.answers?.find(
+                    (answer: { id: string; value: string }) =>
+                      answer?.id === selectedValue,
+                  )?.answer || ''
+
+                const isOpen = dropdown.getAttribute('data-open') === 'true'
+                if (!isOpen) {
+                  tooltipText.textContent = answer
+                  tooltipText.classList.toggle('block', answer.length > 18)
+                  tooltipText.classList.toggle('hidden', answer.length <= 18)
+                } else {
+                  tooltipText.classList.add('hidden')
+                  tooltipText.classList.remove('block')
+                }
+              }
+            }
+          }
+        })
+      }
+
+      // Tạo MutationObserver để theo dõi sự thay đổi của data-open
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === 'attributes' &&
+            mutation.attributeName === 'data-open'
+          ) {
+            const target = mutation.target as HTMLElement
+            updateTooltips()
+          }
+        })
+      })
+
+      // Theo dõi tất cả các dropdown
+      const dropdowns = document.querySelectorAll('.sapp-select--question')
+      dropdowns.forEach((dropdown) => {
+        observer.observe(dropdown, {
+          attributes: true,
+          attributeFilter: ['data-open'],
+        })
+      })
+
+      // Initial update
+      updateTooltips()
+
+      // Cleanup
+      return () => {
+        observer.disconnect()
+      }
+    }, [selectedValues, data.answers])
 
     useEffect(() => {
       const setupDropdownListeners = () => {
@@ -340,27 +422,47 @@ const SelectWord = forwardRef(
                 const value = option.getAttribute('data-value')
                 const label = option.textContent
                 if (value && label) {
-                  dropdown.setAttribute('data-value', value)
-                  dropdown.setAttribute('data-text', (label ?? '').trim())
-                  if (selectedText) {
-                    const displayText =
-                      label.length > 50 ? label.substring(0, 50) + '...' : label
-                    const textSpan = selectedText.querySelector('span')
-                    if (textSpan) {
-                      textSpan.textContent = displayText
-                    }
-                  }
-                  if (options) {
-                    options.style.display = 'none'
-                    options.querySelectorAll('.option').forEach((opt) => {
-                      if (opt.getAttribute('data-value') === value) {
-                        opt.classList.add('bg-[#e5e7eb]')
-                      } else {
-                        opt.classList.remove('bg-[#e5e7eb]')
-                      }
+                  // Lấy index từ dropdown container
+                  const dropdownContainer = dropdown.closest(
+                    '.sapp-select--question',
+                  )
+                  if (dropdownContainer) {
+                    const dropdownIndex = Array.from(
+                      document.querySelectorAll('.sapp-select--question'),
+                    ).indexOf(dropdownContainer)
+
+                    dropdown.setAttribute('data-value', value)
+                    dropdown.setAttribute('data-text', (label ?? '').trim())
+
+                    // Cập nhật selectedValues với index chính xác
+                    setSelectedValues((prev) => {
+                      const newValues = { ...prev }
+                      newValues[dropdownIndex] = value
+                      return newValues
                     })
+
+                    if (selectedText) {
+                      const displayText =
+                        label.length > 50
+                          ? label.substring(0, 50) + '...'
+                          : label
+                      const textSpan = selectedText.querySelector('span')
+                      if (textSpan) {
+                        textSpan.textContent = displayText
+                      }
+                    }
+                    if (options) {
+                      options.style.display = 'none'
+                      options.querySelectorAll('.option').forEach((opt) => {
+                        if (opt.getAttribute('data-value') === value) {
+                          opt.classList.add('bg-[#e5e7eb]')
+                        } else {
+                          opt.classList.remove('bg-[#e5e7eb]')
+                        }
+                      })
+                    }
+                    dropdown.setAttribute('data-open', 'false')
                   }
-                  dropdown.setAttribute('data-open', 'false')
                 }
               })
             })
