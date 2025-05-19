@@ -1,6 +1,8 @@
-import { apiURL } from '@components/mycourses/LearningResource'
 import { fetcher } from '@services/requestV2'
+import getConfig from 'next/config'
 
+const { publicRuntimeConfig } = getConfig()
+export const { apiURL } = publicRuntimeConfig
 export class NotificationAPI {
   static getCountUnRead(): Promise<any> {
     return fetcher(`${apiURL}/notifications/count-unread`)

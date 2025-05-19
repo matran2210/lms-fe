@@ -1,29 +1,49 @@
+import { UploadOutlined } from '@ant-design/icons'
+import { AlertTriagle, IconCongrats } from '@assets/icons'
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { pluralize } from '@utils/helpers/plurarize'
+import { Button, GetProp, Upload, UploadFile, UploadProps, message } from 'antd'
+import { RcFile } from 'antd/es/upload'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useMutation, useQueryClient } from 'react-query'
-import { zodMsg } from 'src/constants'
+import { useMutation } from 'react-query'
+import { zodMsg } from 'src/constants/form'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { ClassAPI } from 'src/pages/api/class'
-import { UserKey } from 'src/pages/api/queryKey'
 import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
 import { z } from 'zod'
 
 interface Iprops {
   isOpen: boolean
   setIsOpen: Dispatch<SetStateAction<boolean>>
-  data: any
+  classId: string
+  onSuccess?: () => void
+  remainingChanges?: number
+  currentValue?: string
 }
 
-const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
+const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
+
+const ExamEditDrawer = ({
+  isOpen,
+  setIsOpen,
+  classId,
+  onSuccess,
+  remainingChanges,
+  currentValue,
+}: Iprops) => {
+  const [openConfirmModal, setOpenConfirmModal] = useState(false)
   const validationSchema = z.object({
-    note: z.string().optional(),
+    note: z
+      .array(z.any(), { message: zodMsg.required })
+      .min(1, { message: zodMsg.required }),
     examination_subject_id: z.object(
       {
         label: z
@@ -42,130 +62,202 @@ const ExamEditDrawer = ({ isOpen, setIsOpen, data }: Iprops) => {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
-    defaultValues: {
-      examination_subject_id: {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
-      },
+  })
+
+  const fileList = watch('note')
+
+  const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
+    beforeUpload: (file) => {
+      const isValidType = allowedTypes.includes(file.type)
+
+      if (!isValidType) {
+        message.error(
+          `${file.name} is not a valid image file (only PNG, JPG, and JPEG allowed).`,
+        )
+        return Upload.LIST_IGNORE
+      }
+      onChange([file]) // Manually update form state
+      return false // Prevent default upload behavior
+    },
+    onRemove: () => {
+      setValue('note', [])
     },
   })
 
-  const queryClient = useQueryClient()
-
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(
-    data?.class?.id as string,
-  )
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
 
   const { mutate, isLoading: isChangingLoad } = useMutation({
-    mutationFn: (value: {
-      id: string
-      data: {
-        examination_subject_id: string
-        note: string
-      }
+    mutationFn: ({
+      examination_subject_id,
+      note,
+    }: {
+      examination_subject_id: string
+      note: UploadFile[]
     }) => {
-      return ClassAPI.changeExamDate(value?.id, value?.data)
+      const formData = new FormData()
+      formData.append('examination_subject_id', examination_subject_id)
+      note && formData.append('note', note[0] as FileType)
+
+      return ClassAPI.changeExamDate(classId, formData)
     },
     onSuccess: (res) => {
-      if (res.success) {
-        toast.success(res.data.message)
+      if (res.data.success) {
+        toast.success(res.data.data.message)
+        onSuccess && onSuccess()
         setIsOpen(false)
-        queryClient.invalidateQueries(UserKey.ExamList)
         reset()
       }
+      setOpenConfirmModal(false)
     },
   })
 
-  const options = exams?.data?.map((exam) => ({
-    label: exam.examination.name,
-    value: exam.id,
-  }))
+  const options = exams?.data
+    ?.map((exam) => ({
+      label: exam?.examination?.name,
+      value: exam?.id,
+    }))
+    .filter((item) => {
+      return item.value !== currentValue
+    })
 
-  const onSubmit: SubmitHandler<any> = (formData) => {
-    const output = {
-      examination_subject_id: formData.examination_subject_id?.value,
-      note: formData.note,
-    }
+  const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
     mutate({
-      id: data?.class?.id as string,
-      data: output,
+      examination_subject_id: data.examination_subject_id?.value,
+      note: data.note,
     })
   }
 
   useEffect(() => {
-    if (data) {
-      setValue('examination_subject_id', {
-        label: data?.examination_subject?.examination?.name,
-        value: data?.examination_subject?.examination?.id,
-      })
+    if (isOpen) {
+      reset({})
+      refetch()
     }
-  }, [data])
+  }, [isOpen, refetch, reset])
 
-  useEffect(() => {
-    isOpen && refetch()
-  }, [isOpen, refetch])
+  const closeModal = () => {
+    setIsOpen(false)
+    reset({})
+  }
 
   return (
     <SappDrawerV2
-      open={data?.examination_subject && isOpen}
+      open={isOpen}
       title="Change my exam date"
-      handleCancel={() => {
-        setIsOpen(false)
-        reset()
-      }}
+      handleCancel={closeModal}
     >
       <div className="flex flex-col gap-3">
         <Controller
           control={control}
           name="examination_subject_id"
-          render={({ field: { onChange, value } }) => (
-            <div>
-              <label className="mb-2 block text-base font-medium">
-                <span>{'New Exam Date'}</span>
-                <span className="ml-2 text-red-500">*</span>
-              </label>
-              {errors.examination_subject_id && (
-                <p className="mb-2 text-red-500">
-                  {errors.examination_subject_id?.message}
-                </p>
-              )}
-              <HookFormSelect
-                classParent="w-full md:max-w-full"
-                placeholder="Exam Date"
-                options={options}
-                required
-                onChange={(e) => {
-                  return onChange(e === undefined || null ? {} : e)
-                }}
-                value={value}
-                onMenuScrollToBottom={hasNextPage && fetchNextPage}
-              />
-            </div>
-          )}
+          render={({ field: { onChange, value } }) => {
+            return (
+              <div>
+                <label className="mb-2 block text-base font-medium">
+                  <span>{'New Exam Date'}</span>
+                  <span className="ml-2 text-red-500">*</span>
+                </label>
+                {errors.examination_subject_id && (
+                  <p className="mb-2 text-red-500">
+                    {errors.examination_subject_id?.message}
+                  </p>
+                )}
+                <HookFormSelect
+                  isClearable={true}
+                  classParent="w-full md:max-w-full"
+                  placeholder="Exam Date"
+                  options={options}
+                  required
+                  noOptionsMessage={() => 'No data'}
+                  onChange={(e) => {
+                    return onChange(e === undefined || null ? {} : e)
+                  }}
+                  value={value ?? null}
+                  onMenuScrollToBottom={hasNextPage && fetchNextPage}
+                />
+                <em className="mt-1 inline-block">
+                  You can only change the exam date up to two times.
+                </em>
+                <em className="block">
+                  {remainingChanges
+                    ? `Remaining ${pluralize('change', remainingChanges)}: ${remainingChanges}`
+                    : ''}
+                </em>
+              </div>
+            )
+          }}
         />
         <div>
           <label className="mb-2 block text-base font-medium">
             <span>{'Note'}</span>
+            <span className="ml-2 text-red-500">*</span>
           </label>
-          <HookFormTextArea control={control} name="note" />
+          {errors.note && (
+            <p className="mb-2 text-red-500">{errors.note.message}</p>
+          )}
+          <Controller
+            control={control}
+            name="note"
+            render={({ field: { onChange } }) => (
+              <Upload
+                {...getUploadProps(onChange)}
+                multiple={false}
+                maxCount={1}
+                fileList={fileList}
+              >
+                <Button
+                  icon={<UploadOutlined />}
+                  disabled={(options?.length ?? 0) <= 0}
+                >
+                  Please upload your exam registration evidence.
+                </Button>
+              </Upload>
+            )}
+          />
         </div>
       </div>
       <div className="absolute bottom-6 right-8">
-        <ButtonText
-          title="Cancel"
-          onClick={() => setIsOpen(false)}
-          size={'medium'}
-        />
+        <ButtonText title="Cancel" onClick={closeModal} size={'medium'} />
+
         <SappButton
-          onClick={handleSubmit(onSubmit)}
+          disabled={(options?.length ?? 0) <= 0}
           size="medium"
           title={'Save'}
           loading={isChangingLoad}
+          onClick={() => {
+            if (exams?.current_exam_name === '') {
+              handleSubmit(onSubmit)()
+            } else {
+              setOpenConfirmModal(true)
+            }
+          }}
         />
       </div>
+      <SappModalV3
+        open={openConfirmModal}
+        cancelButtonCaption="No"
+        okButtonCaption="Change Anyway"
+        handleCancel={() => setOpenConfirmModal(false)}
+        onOk={handleSubmit(onSubmit, (errors) => {
+          if (errors) {
+            setOpenConfirmModal(false)
+          }
+        })}
+        fullWidthBtn={true}
+        buttonSize="extra"
+        icon={<AlertTriagle />}
+        header="Are you sure?"
+        loading={isChangingLoad}
+      >
+        Your learning progress in the Revision class for the{' '}
+        <span className="text-sm font-medium text-bw-1">
+          {exams?.current_exam_name}
+        </span>{' '}
+        exam cannot be saved. Do you want to continue making changes?
+      </SappModalV3>
     </SappDrawerV2>
   )
 }

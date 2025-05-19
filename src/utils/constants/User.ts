@@ -28,10 +28,10 @@ export const PROFILE_PAGES = {
     label: 'Certificates',
     children: [] as { label: string }[],
   },
-  // EXAM_INFO: {
-  //   label: 'Exam Information',
-  //   children: [] as { label: string }[],
-  // },
+  EXAM_INFORMATION: {
+    label: 'Exam Information',
+    children: [] as { label: string }[],
+  },
   SETTINGS: {
     label: 'Settings',
     children: [] as { label: string }[],
@@ -76,7 +76,7 @@ export const MYCOURSE_PAGES = {
 export const USER_TYPE = {
   STUDENT: { key: 'STUDENT', label: 'Học viên' },
   TEACHER: { key: 'TEACHER', label: 'Giáo viên' },
-}
+} as const
 export const USER_STATUS = {
   ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-state-success' },
 }

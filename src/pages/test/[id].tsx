@@ -29,7 +29,14 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import {
+  cloneDeep,
+  debounce,
+  isEmpty,
+  isUndefined,
+  result,
+  uniqueId,
+} from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -86,6 +93,7 @@ import {
 } from '../../utils/helpers/quiz-test/helper'
 import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
+import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 
 declare global {
   interface Window {
@@ -413,7 +421,10 @@ const TestDetail = () => {
     [],
   )
   const [exhibitText, setExhibitText] = useState<string>('')
-  const [openReportModal, setOpenReportModal] = useState(false)
+  const [openReportModal, setOpenReportModal] = useState({
+    open: false,
+    resultId: '',
+  })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
@@ -1664,7 +1675,10 @@ const TestDetail = () => {
           }
 
           if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-            setOpenReportModal(true)
+            setOpenReportModal({
+              open: true,
+              resultId: res?.data?.id,
+            })
             return
           }
           if (type === 'entrance') {
@@ -2659,7 +2673,7 @@ const TestDetail = () => {
               !currentTabContent?.is_viewed_answer &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     handleSubmitAnswer('view-answer')
@@ -2670,10 +2684,12 @@ const TestDetail = () => {
                       data?.isSelfReflection,
                       data?.requirements,
                     )
-                    trackGAEvent('Click Button View Answer Test')
+                    trackGAEvent('Click Button Submit & View Answer Test')
                   }}
                 >
-                  <div className="text-medium-sm font-medium">View Answer</div>
+                  <div className="text-medium-sm font-medium">
+                    Submit & View Answer
+                  </div>
                 </button>
               ) : (
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
@@ -2817,16 +2833,25 @@ const TestDetail = () => {
               handleSaveFileEssay(e[0], openUpload?.requirementIndex)
             }
           />
-
-          <CompletingReportModal
-            open={openReportModal}
-            handleCancel={() => {}}
-            onOk={() => {
-              setOpenReportModal(false)
-              router.back()
-            }}
-            quizName={quizDetail?.name}
-          />
+          {openReportModal && openReportModal.open && (
+            <SuccessSubmittedConstructorModal
+              open={openReportModal.open}
+              setOpen={setOpenReportModal}
+              quizName={quizDetail?.name}
+              handleCancel={() => {
+                setOpenReportModal({
+                  open: false,
+                  resultId: '',
+                })
+                router.back()
+              }}
+              handleOk={() => {
+                router.replace(
+                  `/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                )
+              }}
+            />
+          )}
         </div>
       </CourseProvider>
     </FullScreenLayout>

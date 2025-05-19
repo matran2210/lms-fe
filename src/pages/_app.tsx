@@ -1,7 +1,11 @@
 import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
+import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
+import Metadata from '@components/common/Metadata'
+import PinnedNotifications from '@components/layout/PinnedNotifications'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -9,6 +13,7 @@ import { SocketContext } from '@contexts/SocketContext'
 import { CourseProvider } from '@contexts/index'
 import '@fortune-sheet/react/dist/index.css'
 import '@styles/globals.scss'
+import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
 import Aos from 'aos'
@@ -38,9 +43,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import { CERTIFICATE_DETAIL } from '@utils/constants'
-import PinnedNotifications from '@components/layout/PinnedNotifications'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -56,7 +58,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 3000000, // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
+        staleTime: 3000000,
+        refetchOnWindowFocus: false,
+        // Đặt thời gian stale tại đây, ví dụ: 30 giây (30000 miligiây)
       },
     },
   })
@@ -179,6 +183,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     const handleRouteChange = () => {
       // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
       localStorage.setItem('previousUrl', router.asPath)
+      if (
+        router.asPath.includes('courses') &&
+        !router.asPath.includes('your-answers-detail')
+      ) {
+        localStorage.setItem('previousCourseUrl', router.asPath)
+      }
     }
 
     // Lắng nghe sự kiện chuyển route
@@ -192,39 +202,42 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   return (
     <main>
-      <PinnedNotifyProvider>
-        <CourseProvider>
-          <QueryClientProvider client={queryClient}>
-            <SocketContext.Provider value={socket}>
-              <Toaster
-                toastOptions={{
-                  style: {
-                    maxWidth: '400px', // Tăng chiều rộng của toast
-                  },
-                }}
-              />
-              <SappConfirmDialogContainer />
-              <RouteGuard>
-                <>
-                  <div className="relative">
-                    <PinnedNotifications />
-                    <CtaTrial />
-                    <Component {...pageProps} />
-                  </div>
-                  {showHelp && (
-                    <>
-                      <BackToTop />
-                      <Help showHelp={showHelp} />
-                    </>
-                  )}
-                  <LearningNotesList />
-                  <PopupCompletedCourse />
-                </>
-              </RouteGuard>
-            </SocketContext.Provider>
-          </QueryClientProvider>
-        </CourseProvider>
-      </PinnedNotifyProvider>
+      <Metadata />
+      <AntConfigProvider>
+        <PinnedNotifyProvider>
+          <CourseProvider>
+            <QueryClientProvider client={queryClient}>
+              <SocketContext.Provider value={socket}>
+                <Toaster
+                  toastOptions={{
+                    style: {
+                      maxWidth: '400px', // Tăng chiều rộng của toast
+                    },
+                  }}
+                />
+                <SappConfirmDialogContainer />
+                <RouteGuard>
+                  <>
+                    <div className="relative">
+                      <PinnedNotifications />
+                      <CtaTrial />
+                      <Component {...pageProps} />
+                    </div>
+                    {showHelp && (
+                      <>
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
+                      </>
+                    )}
+                    <LearningNotesList />
+                    <PopupCompletedCourse />
+                  </>
+                </RouteGuard>
+              </SocketContext.Provider>
+            </QueryClientProvider>
+          </CourseProvider>
+        </PinnedNotifyProvider>
+      </AntConfigProvider>
     </main>
   )
 }

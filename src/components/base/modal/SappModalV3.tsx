@@ -2,9 +2,10 @@ import { Modal } from 'antd'
 import { ReactNode } from 'react'
 import { IButtonColors } from 'src/type'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
+import clsx from 'clsx'
 
 interface IProps {
-  title?: ReactNode
+  title?: React.ReactNode
   open: boolean | undefined
   handleCancel: () => void
   showFooter?: boolean
@@ -35,6 +36,7 @@ interface IProps {
   content?: string | undefined
   children?: ReactNode
   isMaskClosable?: boolean
+  headerClassName?: string
 }
 
 const SappModalV3 = ({
@@ -66,6 +68,7 @@ const SappModalV3 = ({
   content,
   children,
   isMaskClosable = true,
+  headerClassName,
 }: IProps) => {
   return (
     <Modal
@@ -85,19 +88,24 @@ const SappModalV3 = ({
         </div>
       )}
       {header && (
-        <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+        <div
+          className={clsx(
+            `mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`,
+            headerClassName,
+          )}
+        >
           {header}
         </div>
       )}
-      {content && (
-        <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
-          {content}
+
+      {(content || children) && (
+        <div className="mb-12 mt-4 text-center text-medium-sm text-gray-1">
+          {content ?? children}
         </div>
       )}
-      {children}
 
       {showFooter && (
-        <div className={`relative pt-5 md:pt-9`}>
+        <div className={`relative`}>
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}

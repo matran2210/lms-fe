@@ -1,9 +1,10 @@
 import Recommendation from '@components/test/Recommendation'
 import { formatNumber } from '@utils/formatNumber'
 import { calculatePercentage, roundNumber } from '@utils/helpers'
-import { Tooltip } from 'antd'
+
 import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
+import Tooltip from 'src/common/Tooltip'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
 
 interface IProps {
@@ -100,7 +101,6 @@ const ChartCMAScore = ({
                 >
                   <div className="absolute bottom-full left-1/2 h-[250px] w-14 -translate-x-1/2">
                     <Tooltip
-                      color="white"
                       title={`${calculatePercentage(
                         item?.section_score,
                         item?.max_section_score,

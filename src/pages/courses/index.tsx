@@ -16,6 +16,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
 import { MY_COURSES } from 'src/constants/lang'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -212,9 +214,11 @@ const MyCourse = () => {
             title="My Course"
             des={
               <div>
-                Here you can find all your courses, each packed with expert
-                lessons, study materials, and interactive exercises. Select a
-                course to start learning!
+                Here you can find all your courses, each packed with{' '}
+                <span className="font-medium">expert lessons</span>,{' '}
+                <span className="font-medium">study materials</span>, and{' '}
+                <span className="font-medium">interactive exercises</span>.
+                Select a course to start learning!
               </div>
             }
           />
@@ -271,4 +275,4 @@ const MyCourse = () => {
   )
 }
 
-export default MyCourse
+export default withAuthorization([UserType.STUDENT])(MyCourse)

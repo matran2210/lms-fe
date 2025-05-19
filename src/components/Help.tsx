@@ -1,8 +1,8 @@
 import { IconClose } from '@assets/icons'
-import { Popover, Tooltip } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Popover } from 'antd'
+import { useEffect, useState } from 'react'
+import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
-import { getLocalStorgeActToken } from '@utils/index'
 
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
@@ -89,14 +89,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             </div>
           </div>
         ) : (
-          <Tooltip
-            arrow
-            title={<div className="text-support-1">Support Center</div>}
-            color="white"
-            placement="left"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
-          >
+          <Tooltip title={'Support Center'} placement="left">
             <div
               id="floating-button"
               onClick={handleButtonClick}
