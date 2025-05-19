@@ -308,13 +308,28 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       // setLoading(false)
     }
   }
+
+  const [pickingDateType, setPickingDateType] = useState<string | undefined>(
+    undefined,
+  )
+
   const disabledDate = (current: Dayjs) => {
+    const isDayModePicker =
+      current.date() === 1 &&
+      current.hour() === 0 &&
+      current.minute() === 0 &&
+      current.second() === 0
+
     if (!current) return false
+
+    if (isDayModePicker) {
+      return false
+    }
 
     const isMonday = current.day() === 1 // Monday
     const isSunday = current.day() === 0 // Sunday
 
-    return !(isMonday || isSunday)
+    return !(isSunday || isMonday)
   }
 
   const loadData = async () => {
