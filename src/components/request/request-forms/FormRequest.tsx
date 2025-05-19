@@ -4,6 +4,7 @@ import HookFormDateRange from '@components/base/date/HookFormDateRange'
 import SAPPInput from '@components/base/Input/SAPPInput'
 import SAPPSelect from '@components/base/select/SAPPSelect'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
+import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
@@ -564,14 +565,13 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
           </div>
           <div className="flex-1 overflow-y-auto px-8 py-6">
             <div className="mb-6">
-              <SAPPInput
+              <SappTeacherTextField
                 label={'Request Name'}
                 required
                 control={control}
                 name="request_name"
                 placeholder={'Request name'}
                 labelClass="text-sm font-medium"
-                className="h-11.25"
                 guideline={[
                   '[Tên người tạo]_[Loại request]_[Tháng năm tạo request]. Ví dụ: Nguyễn Văn A_Busy schedule_0325',
                 ]}
@@ -580,8 +580,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   requestStatus?.toLowerCase() !==
                     REQUEST_STATUS.PENDING.value.toLowerCase()
                 }
-                autoFocus={true}
-              ></SAPPInput>
+              />
             </div>
             <div className="mb-6">
               <SAPPSelect
