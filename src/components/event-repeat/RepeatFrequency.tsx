@@ -70,7 +70,7 @@ const RepeatFrequency = ({
         defaultValue={FREQUENCY_UNITS_LIMIT.MIN}
         value={frequency.interval}
         onChange={onNumberChange}
-        className="mr-5 flex h-11.25 min-w-[50px] max-w-[55px]"
+        className="repeat mr-5 flex h-11.25 min-w-[50px] max-w-[55px]"
         name="repeat_every"
         disabled={disabled}
       />
