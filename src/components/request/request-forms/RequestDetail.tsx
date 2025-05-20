@@ -278,8 +278,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 <CollapseItem
                   title="Creator"
                   body={
-                    requestDetail?.staff_request.detail.full_name ??
-                    requestDetail?.user_request.detail.full_name
+                    requestDetail?.staff_request?.detail?.full_name ??
+                    requestDetail?.user_request?.detail?.full_name
                   }
                 />
 
@@ -289,17 +289,19 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 />
 
                 <CollapseItem
-                  title="Create Date"
+                  title="Created Date"
                   body={dayjs(requestDetail?.created_at).format(
                     DATE_TIME_FORMAT_DMY,
                   )}
                 />
-                {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
+                {requestDetail?.type == REQUEST_TYPE.WEEKLY_NORM.value && (
                   <CollapseItem
                     title="Note"
                     body={requestDetail?.description}
                   />
-                ) : (
+                )}
+                {(requestDetail?.type == REQUEST_TYPE.TIMEOFF.value ||
+                  requestDetail?.type == REQUEST_TYPE.TEACHING_MODE.value) && (
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
@@ -352,6 +354,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                             : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
                         }
                       />
+
                       <CollapseItem
                         title={`Description`}
                         body={`${item.schedule.description}`}
