@@ -4,24 +4,19 @@ import SearchForm from '@components/mycourses/Search'
 import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
-import Devices from '@components/profile/Devices'
-import ExamInfoTab from '@components/profile/ExamInformation/ExamInfoTab'
-import LoginHistory from '@components/profile/LoginHistory'
-import ProfileContent from '@components/profile/ProfileContent'
+import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
 import ProfileHeader from '@components/profile/ProfileHeader'
-import ProfileSideBar from '@components/profile/ProfileSideBar'
-import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
-import { Button, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
 import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'
-import { IProfilePages, ProfilePages } from 'src/type/Profile'
+import { ProfilePages } from 'src/type/Profile'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
@@ -30,17 +25,17 @@ import { useAppDispatch } from 'src/redux/hook'
 
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import MyProfile from '@components/profile/MyProfile'
-import ProfileList from '@components/profile/ProfileInformation/ProfileList'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
+import MyPasword from '@components/profile/Security/MyPasword'
+import DeviceList from '@components/profile/DeviceInformation/DeviceList'
+import ProfileList from '@components/profile/ProfileInformation/ProfileList'
 
 const ProfilePage = () => {
-  const router = useRouter()
   const dispatch = useAppDispatch()
-  const page = router.query.page as IProfilePages
   const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
-  const [isSelectPage, setSelectPage] = useState<boolean>(false)
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
@@ -64,12 +59,7 @@ const ProfilePage = () => {
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
-  const handleSetIsEdit = (isEdit: boolean) => {
-    if (!isEdit && inputFileRef.current) {
-      inputFileRef.current.value = ''
-    }
-    setIsEdit(isEdit)
-  }
+
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -94,7 +84,6 @@ const ProfilePage = () => {
             avatar={avatar}
             handleSetAvatar={handleSetAvatar}
             setReViewImageSrc={setReViewImageSrc}
-            onOpenTab={() => {}}
           />
           <SubjectList isEdit={isEdit} />
           <ProfileList isEdit={isEdit} />
@@ -114,7 +103,7 @@ const ProfilePage = () => {
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
-      children: <Settings onBack={() => setSelectPage(true)} />,
+      children: <Settings onBack={() => {}} />,
     },
     {
       key: 'sercurity',
@@ -123,92 +112,20 @@ const ProfilePage = () => {
       ),
       children: (
         <>
-          <ChangePassword onOpenTab={() => setSelectPage(true)} />
-          <Devices onOpenTab={() => setSelectPage(true)} />
-          <LoginHistory onOpenTab={() => setSelectPage(true)} />
+          {isChangePassword ? (
+            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+          ) : (
+            <div className="flex flex-col gap-10">
+              <MyPasword setIsChangePassword={setIsChangePassword} />
+              <DeviceList />
+              <LoginHistoryList />
+            </div>
+          )}
         </>
       ),
     },
   ]
-  let selectedContent: JSX.Element | null = null
 
-  switch (page) {
-    case ProfilePages.Certificates:
-      selectedContent = <Certificate />
-      break
-
-    case ProfilePages.Devices:
-      selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.LoginHistory:
-      selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.ChangePassword:
-      selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.Settings:
-      selectedContent = <Settings onBack={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.OVERVIEW:
-      selectedContent = (
-        <ProfileContent
-          setReViewImageSrc={setReViewImageSrc}
-          isEdit={isEdit}
-          setIsEdit={handleSetIsEdit}
-          page={page}
-          avatar={avatar}
-          handleSetAvatar={handleSetAvatar}
-          onOpenTab={() => setSelectPage(true)}
-        />
-      )
-      break
-
-    case ProfilePages.CFA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="CFA"
-          onOpenTab={() => setSelectPage(true)}
-        />
-      )
-      break
-
-    case ProfilePages.CMA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="CMA"
-          onOpenTab={() => setSelectPage(true)}
-        />
-      )
-      break
-
-    case ProfilePages.ACCA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="ACCA"
-          onOpenTab={() => setSelectPage(true)}
-        />
-      )
-      break
-
-    case ProfilePages.ExamInformation:
-      selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
-      break
-
-    default:
-      selectedContent = <NotFound />
-      break
-  }
-  const handleResize = () => {
-    if (window.innerWidth < 1024) {
-      setSelectPage(false)
-    } else {
-      setSelectPage(true)
-    }
-  }
   const handleLogout = async () => {
     try {
       await dispatch(getLogoutUser()).then(() => {
@@ -221,14 +138,6 @@ const ProfilePage = () => {
       await authenticationManager.logout(window.location.origin)
     } catch (error) {}
   }
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    setSelectPage(window.innerWidth >= 1024)
-  }, [page])
 
   return (
     <Layout title="My Profile">

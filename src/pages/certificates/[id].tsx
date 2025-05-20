@@ -1,18 +1,13 @@
-import { IconDownload, ShareLinkIcon } from '@assets/icons'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SinglePageLayout from '@components/layout/SinglePage'
 import { LAYOUT } from '@utils/constants'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from '../api/courses'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import useDownloadImage from 'src/hooks/useDownloadImage'
 import CertificateVertical from '@components/profile/CertificateDetail/VerticalCertificate'
-import HorizontalCertificate from '@components/profile/CertificateDetail/HorizontalCertificate'
 
 export interface ICertificate {
   certificate_url: string
@@ -23,22 +18,6 @@ export interface ICertificate {
 }
 
 const Certificate = () => {
-  const mockData: ICertificate = {
-    id: '1',
-    certificate_url:
-      'https://blog.sapp.edu.vn/hs-fs/hubfs/hoc-chung-chi-acca-Jul-02-2020-09-12-41-59-AM.jpg?width=600&name=hoc-chung-chi-acca-Jul-02-2020-09-12-41-59-AM.jpg',
-    course: {
-      name: 'Frontend Development',
-    },
-  }
-  const mockData2: ICertificate = {
-    id: '2',
-    certificate_url:
-      'https://www.upliftprofessionals.in/images/site/commit-certificate.jpg',
-    course: {
-      name: 'Frontend Development Advanced',
-    },
-  }
   const router = useRouter()
   const { downloadImage } = useDownloadImage()
 
@@ -66,21 +45,18 @@ const Certificate = () => {
    * @description function download certificate từ url
    */
   const download = async () => {
-    const originalImage = mockData?.certificate_url
+    const originalImage = certificate?.certificate_url
     downloadImage(originalImage)
   }
 
   return (
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
-        {/* <CertificateVertical
-          certificate={mockData}
-          onDownload={download}
-        /> */}
-        <HorizontalCertificate
+        <CertificateVertical certificate={certificate} onDownload={download} />
+        {/* <HorizontalCertificate
           certificate={certificate}
           onDownload={download}
-        />
+        /> */}
       </SinglePageLayout>
     </SappLoadingGlobal>
   )

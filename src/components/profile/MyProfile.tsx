@@ -37,7 +37,6 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
-  onOpenTab?: () => void
 }
 
 const schema = z.object({
@@ -53,7 +52,6 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
-  onOpenTab,
 }: IProps) => {
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)

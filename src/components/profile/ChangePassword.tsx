@@ -1,5 +1,4 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_PASSWORD } from '@utils/constants/ValidateRegex'
@@ -15,7 +14,6 @@ import { AuthAPI } from 'src/pages/api/profile'
 import { z } from 'zod'
 import exceptions from '../../services/en.exceptions.json'
 import PasswordProfile from './PasswordProfile'
-import TabLayout from './TabLayout'
 
 export interface IChangePassword {
   password: string
@@ -24,10 +22,10 @@ export interface IChangePassword {
 }
 
 interface IProp {
-  onOpenTab?: () => void
+  handleCancel?: () => void
 }
 
-const ChangePassword = ({ onOpenTab }: IProp) => {
+const ChangePassword = ({ handleCancel }: IProp) => {
   const [loading, setLoading] = useState(false)
 
   /**
@@ -103,82 +101,71 @@ const ChangePassword = ({ onOpenTab }: IProp) => {
 
   return (
     <React.Fragment>
-      <div className="">
+      <div className="mt-10">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
-          <TabLayout
-            title="Change Password"
-            headerButtons={
-              <div className="flex items-center">
-                <SappButton
-                  onClick={onOpenTab}
-                  size="medium"
-                  title={'Back'}
-                  color="textUnderline"
-                  className="block min-w-[120px] pr-0 text-base lg:hidden"
-                />
-                <ButtonCancelSubmit
-                  className="flex"
-                  cancel={{
-                    title: '',
-                    onClick: () => {},
-                    size: 'medium',
-                  }}
-                  submit={{
-                    title: 'Save',
-                    size: 'medium',
-                    className: 'min-w-fit px-0 text-sm w-30',
-                    type: 'submit',
-                    disabled:
-                      loading ||
-                      isEmpty(watch('confirmPassword')) ||
-                      isEmpty(watch('newPassword')) ||
-                      isEmpty(watch('password')),
-                  }}
-                />
-              </div>
-            }
-          >
-            <div className="px-6">
-              <div className="mt-6 grid grid-cols-2">
-                <div className="flex items-center text-base text-gray-1">
-                  Current Password
-                </div>
-                <div>
-                  <HookFormTextField
-                    control={control}
-                    name="password"
-                    type="password"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-2">
-                <div className="flex items-center text-base text-gray-1">
-                  New Password
-                </div>
-                <div>
-                  <HookFormTextField
-                    control={control}
-                    name="newPassword"
-                    type="password"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-2">
-                <div className="flex items-center text-base text-gray-1">
-                  Confirm New Password
-                </div>
-                <div>
-                  <HookFormTextField
-                    control={control}
-                    name="confirmPassword"
-                    type="password"
-                  />
-                </div>
-              </div>
+          <div className="mb-6 flex flex-col gap-6">
+            <div className="relative">
+              <HookFormTextField
+                label="Current Password"
+                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                inputClassName="rounded-lg"
+                control={control}
+                name="password"
+                type="password"
+                required
+              />
             </div>
-          </TabLayout>
+
+            <div className="relative">
+              <HookFormTextField
+                label="New Password"
+                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                inputClassName="rounded-lg"
+                required
+                control={control}
+                name="newPassword"
+                type="password"
+              />
+            </div>
+
+            <div className="relative">
+              <HookFormTextField
+                label="Confirm New Password"
+                labelClass="textfield-label as-label z-10 text-ssm font-normal"
+                inputClassName="rounded-lg"
+                required
+                control={control}
+                name="confirmPassword"
+                type="password"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <ButtonCancelSubmit
+              className="flex gap-2"
+              color="text"
+              cancel={{
+                title: 'Cancel',
+                onClick: handleCancel,
+                size: 'medium',
+                isPaddingHorizontal: false,
+                disabled: loading,
+                className: 'min-w-fit text-sm w-30 rounded-lg py-2 px-4',
+              }}
+              submit={{
+                title: 'Confirm',
+                size: 'medium',
+                className:
+                  'min-w-fit text-sm w-30 !text-white !bg-sapp-black-1 hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                type: 'submit',
+                disabled:
+                  loading ||
+                  isEmpty(watch('confirmPassword')) ||
+                  isEmpty(watch('newPassword')) ||
+                  isEmpty(watch('password')),
+              }}
+            ></ButtonCancelSubmit>
+          </div>
         </form>
       </div>
       <PasswordProfile

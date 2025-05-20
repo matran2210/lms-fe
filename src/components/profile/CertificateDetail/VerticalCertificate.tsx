@@ -18,13 +18,13 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   onDownload,
 }) => {
   return (
-    <CertificateCard bodyClassName="px-93.25 py-34.5">
-      <div className="flex h-full items-center justify-between gap-20">
-        <div className="flex h-full max-w-45% items-center justify-center">
+    <CertificateCard bodyClassName="xl:px-93.25 py-34.5 px-17.5">
+      <div className="flex h-full items-center justify-between gap-12 xl:gap-20">
+        <div className="flex h-full w-45% items-center justify-center">
           {certificate?.certificate_url && (
             <Image
-              src={certificate.certificate_url}
-              alt={certificate.course.name}
+              src={certificate?.certificate_url || ''}
+              alt={certificate?.course.name}
               className="max-h-full max-w-full"
               width={573}
               height={805}

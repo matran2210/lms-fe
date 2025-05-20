@@ -10,6 +10,8 @@ interface IProps extends DrawerProps {
   title: ReactNode
   children: ReactNode
   classNameHeader?: string
+  classNameBody?: string
+  className?: string
 }
 
 const SappDrawerV2 = ({
@@ -19,6 +21,8 @@ const SappDrawerV2 = ({
   title,
   children,
   classNameHeader,
+  classNameBody,
+  className,
   ...props
 }: IProps) => {
   return (
@@ -30,7 +34,7 @@ const SappDrawerV2 = ({
       closeIcon={false}
       {...props}
     >
-      <div className={`w-full bg-white`}>
+      <div className={clsx(`w-full bg-white`, className)}>
         <div
           className={clsx(
             'relative bg-bw-1 px-8 py-6 text-white',
@@ -45,7 +49,7 @@ const SappDrawerV2 = ({
             <Icon type="cross" />
           </div>
         </div>
-        <div className={`px-8 py-6`}>{children}</div>
+        <div className={clsx(`px-8 py-6`, classNameBody)}>{children}</div>
       </div>
     </Drawer>
   )

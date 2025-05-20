@@ -42,7 +42,9 @@ const ProfileItem = ({
         <div className="flex items-center">
           <div>
             <div>
-              <span className="text-gray-14">Profile {index + 1}</span>
+              <span className="text-base font-bold text-gray-14">
+                Profile {index + 1}
+              </span>
               {e?.is_default && (
                 <span className="ml-[10px] inline-block select-none bg-green-6 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-green-7">
                   Default

@@ -1,4 +1,7 @@
 .sapp-tabs-profile {
+  .ant-tabs-nav {
+    @apply px-0;
+  }
   .ant-tabs-tab + .ant-tabs-tab {
     margin-left: 64px;
   }
@@ -31,9 +34,9 @@
       }
     }
   }
-  // .ant-card-body {
-  //   @apply px-0;
-  // }
+  .ant-card-body {
+    @apply py-0;
+  }
 }
 
 .sapp-profile-switch.ant-switch {
