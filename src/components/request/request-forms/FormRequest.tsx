@@ -76,7 +76,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestBusy = watch('request_busy_schedule')
   const requestNorm = watch('request_weekly_norm')
   const requestTimeoff = watch('request_time_off')
-  const repeat = watch('request_busy_schedule.0.repeat')
+
   const repeatType = watch(
     'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
   )
@@ -558,6 +558,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       },
     )
   }
+
+  useEffect(() => {
+    setValue('request_busy_schedule.0.drawer-repeat-end-on', undefined)
+  }, [currentDate])
 
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
