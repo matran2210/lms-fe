@@ -1,8 +1,7 @@
 import { IconMinusSquared, IconPlusSquared } from '@assets/icons'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
-import HookFormDateRange from '@components/base/date/HookFormDateRange'
-import SAPPInput from '@components/base/Input/SAPPInput'
-import SAPPSelect from '@components/base/select/SAPPSelect'
+import HookFormDateRangeV2 from '@components/base/date/HookFormDateRangeV2'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import HookFormEventRepeat from '@components/event-repeat/HookFormEventRepeatField'
 import SappTeacherTextField from '@components/teacher/components/sapp-textfield/SappTeacherTextField'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -571,7 +570,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 control={control}
                 name="request_name"
                 placeholder={'Request name'}
-                labelClass="text-sm font-medium"
                 guideline={[
                   '[Tên người tạo]_[Loại request]_[Tháng năm tạo request]. Ví dụ: Nguyễn Văn A_Busy schedule_0325',
                 ]}
@@ -580,27 +578,26 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   requestStatus?.toLowerCase() !==
                     REQUEST_STATUS.PENDING.value.toLowerCase()
                 }
+                className="rounded-md"
               />
             </div>
             <div className="mb-6">
-              <SAPPSelect
+              <SAPPSelectV2
                 control={control}
                 label="Request Type"
                 name="request_type"
                 placeholder="Type"
                 required
                 onChange={(e) => setValue('request_type_value', e)}
-                className="h-11.25 text-base font-semibold"
                 options={requestTypeOption ?? []}
                 disabled={isEdit}
-                labelClass="text-sm font-medium"
               />
             </div>
 
             {isEdit ? (
               <>
                 <div className="mb-6">
-                  <SAPPSelect
+                  <SAPPSelectV2
                     control={control}
                     label="Status"
                     name="request_status"
@@ -610,69 +607,62 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.APPROVED.value.toLowerCase()
                     }
-                    className="h-11.25"
-                    labelClass="text-sm font-medium"
                   />
                 </div>
                 <div className="mb-6">
-                  <SAPPInput
+                  <SappTeacherTextField
                     label={'Creator'}
                     control={control}
                     name="request_creator"
                     placeholder={'Creator name'}
                     disabled={isEdit}
-                    className="h-11.25"
-                    labelClass="text-sm font-medium"
-                  ></SAPPInput>
+                    className="rounded-md"
+                  />
                 </div>
                 <div className="mb-6">
-                  <SAPPInput
+                  <SappTeacherTextField
                     control={control}
                     label="Create Date"
                     name={`request_create_date`}
                     placeholder="Create date"
                     disabled={isEdit}
-                    className="h-11.25"
-                    labelClass="text-sm font-medium"
+                    className="rounded-md"
                   />
                 </div>
                 <div className="mb-6">
-                  <SAPPInput
+                  <SappTeacherTextField
                     label={'Approver'}
                     control={control}
                     name="request_approver"
                     placeholder={'Approver'}
                     disabled={isEdit}
-                    labelClass="text-sm font-medium"
-                    className="h-11.25"
-                  ></SAPPInput>
+                    className="rounded-md"
+                  />
                 </div>
               </>
             ) : null}
             <div className="mb-8">
               {requestType == REQUEST_TYPE.WEEKLY_NORM.value ? (
-                <SAPPInput
+                <SappTeacherTextField
                   label={'Note'}
                   control={control}
                   name="note"
                   placeholder={'Note'}
-                  labelClass="text-sm font-medium"
                   disabled={
                     isEdit &&
                     requestStatus?.toLowerCase() !==
                       REQUEST_STATUS.PENDING.value.toLowerCase()
                   }
-                  className="h-11.25"
-                ></SAPPInput>
+                  className="rounded-md"
+                />
               ) : [
                   REQUEST_TYPE.TEACHING_MODE.value,
                   REQUEST_TYPE.TIMEOFF.value,
                 ].includes(requestType) ? (
-                <SAPPSelect
+                <SAPPSelectV2
                   control={control}
                   label="Class Code"
                   required
-                  labelClass="text-sm font-medium"
                   name="class_code"
                   isSearchable
                   onSearch={() => refetchClasses()}
@@ -691,7 +681,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       label: item?.code,
                     })),
                   )}
-                  className="h-11.25"
                   disabled={
                     isEdit &&
                     requestStatus?.toLowerCase() !==
@@ -715,21 +704,18 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
             {requestType == REQUEST_TYPE.BUSY_SCHEDULE.value && (
               <>
                 <div className="mb-6">
-                  <HookFormDateRange
-                    control={control}
-                    required
-                    label="Start Date - End Date"
+                  <HookFormDateRangeV2
                     name={`request_busy_schedule.0.date_range`}
+                    label="Start Date - End Date"
                     format="YYYY-MM-DD | HH:mm"
+                    control={control}
                     showTime={true}
-                    // disabledDate={disabledDate}
-                    inputClassName="h-11.25 w-full rounded-md"
+                    required
                     disabled={
                       isEdit &&
                       requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.PENDING.value.toLowerCase()
                     }
-                    labelClass="text-sm font-medium"
                     skeleton={loading}
                   />
                 </div>
@@ -747,20 +733,19 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   />
                 </div>
                 <div className="mb-6">
-                  <SAPPInput
+                  <SappTeacherTextField
                     label={'Description'}
                     required
                     control={control}
                     name={`request_busy_schedule.0.description`}
                     placeholder={'Description'}
-                    labelClass="text-sm font-medium"
                     disabled={
                       isEdit &&
                       requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.PENDING.value.toLowerCase()
                     }
-                    className="h-11.25 "
-                  ></SAPPInput>
+                    className="rounded-md"
+                  />
                 </div>
               </>
             )}
@@ -771,33 +756,29 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                     <div className="mb-6">
                       <div className="grid w-full grid-cols-2 gap-x-6">
                         <div>
-                          <HookFormDateRange
+                          <HookFormDateRangeV2
                             control={control}
                             required
                             label="Start Date - End Date"
                             name={`request_weekly_norm.${index}.date_range`}
                             format="YYYY-MM-DD"
                             showTime={false}
-                            inputClassName="h-11.25 w-full rounded-md"
                             disabledDate={disabledDate}
-                            labelClass="text-sm font-medium"
                             disabled={
                               isEdit &&
                               requestStatus?.toLowerCase() !==
                                 REQUEST_STATUS.PENDING.value.toLowerCase()
                             }
-                            className="h-11.25"
                             skeleton={loading}
                           />
                         </div>
                         <div>
-                          <SAPPInput
+                          <SappTeacherTextField
                             label={'Quantity'}
                             required
                             control={control}
                             name={`request_weekly_norm.${index}.quantity`}
                             placeholder={'Input text'}
-                            labelClass="text-sm font-medium"
                             disabled={
                               isEdit &&
                               requestStatus?.toLowerCase() !==
@@ -809,9 +790,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                                 Number(e.target.value),
                               )
                             }
-                            className="h-11.25"
-                            // type='number'
-                          ></SAPPInput>
+                            className="rounded-md"
+                          />
                         </div>
                       </div>
                     </div>
@@ -840,7 +820,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       <div className="mb-6">
                         <div className="grid w-full grid-cols-2 gap-x-6">
                           <div className="mb-6">
-                            <SAPPSelect
+                            <SAPPSelectV2
                               control={control}
                               label="Lesson"
                               required
@@ -860,7 +840,6 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                                   e,
                                 )
                               }}
-                              labelClass="text-sm font-medium"
                               placeholder="Lesson"
                               options={getSelectOptions(
                                 lessons.map((item) => ({
@@ -868,11 +847,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                                   label: `${item?.date ? dayjs(item.date).format('DD/MM/YYYY') : ''}`,
                                 })),
                               )}
-                              className="h-11.25 "
                             />
                           </div>
                           <div>
-                            <SAPPInput
+                            <SappTeacherTextField
                               label={'Reason'}
                               required
                               control={control}
@@ -884,9 +862,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                                 )
                               }
                               placeholder={'Reason'}
-                              labelClass="text-sm font-medium"
-                              className="h-11.25 "
-                            ></SAPPInput>
+                              className="rounded-md"
+                            />
                           </div>
                         </div>
                       </div>
