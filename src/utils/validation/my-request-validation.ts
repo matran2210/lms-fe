@@ -52,7 +52,7 @@ const busySheduleSchema = z.object({
                 (1000 * 60 * 60 * 24)
               return diffDays <= MAX_RANGE_DAYS
             },
-            { message: 'Date range must be less than or equal to 91 days' },
+            { message: VALIDATE_REQUIRED },
           ),
         description: z
           .string({ required_error: VALIDATE_REQUIRED })
