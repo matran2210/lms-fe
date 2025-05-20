@@ -32,11 +32,12 @@ export const cleanParams = <T extends Record<string, any>>(
   return result
 }
 
-export const getDayIndex = (startDate: Date) =>
-  (Number(dayjs(startDate).format('d')) + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
+export const getDayIndex = (startDate: Date) => {
+  return (dayjs(startDate).utc().day() + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
+}
 
 export const reverseDaysOfWeek = (startDate: Date, daysOfWeek: number[]) => {
-  const dayOfWeek = getDayIndex(startDate) + 1 // Day of week starts from 0 (Sunday)
+  const dayOfWeek = getDayIndex(startDate) + 1 // Convert start day of week from 0 to 1
   const dayIndex = daysOfWeek.indexOf(dayOfWeek)
   return [...daysOfWeek.slice(dayIndex), ...daysOfWeek.slice(0, dayIndex)]
 }

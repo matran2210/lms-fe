@@ -1,30 +1,30 @@
-body:not(.no-hover) {
-  .menu-sidebar-left {
-    &:hover {
-      @apply w-[230px];
+@layer utilities {
+  .menu-sidebar-left--hover {
+    @apply w-[230px];
 
-      .group-logos {
-        @apply pb-5;
-      }
+    .group-logos {
+      @apply pb-5;
+    }
 
-      .logo-full {
-        @apply visible opacity-100;
-      }
+    .logo-full {
+      @apply visible opacity-100;
+    }
 
-      .sidebar-item .label {
-        display: -webkit-box;
-        @apply visible opacity-100;
+    .sidebar-item .label {
+      display: -webkit-box;
+      @apply visible opacity-100;
 
-        &.avatar {
-          display: block;
-        }
+      &.avatar {
+        display: block;
       }
     }
   }
 }
 
 .menu-sidebar-left {
+  height: calc(100% - 16px);
   transition: width 0.2s linear;
+  transform: translateZ(0) scale(1, 1);
   -webkit-transform: translateZ(0) scale(1, 1);
 }
 

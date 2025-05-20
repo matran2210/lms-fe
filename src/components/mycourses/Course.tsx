@@ -17,6 +17,8 @@ import {
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  COURSE_TYPE,
+  PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
@@ -210,9 +212,13 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const category = course?.course_categories[0]?.name || ''
     const isRedirectDashboard =
-      course?.course_type == 'NORMAL_COURSE' ||
-      course?.course_type == 'PRACTICE_COURSE'
+      (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
+        course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
+      (category == PROGRAM.ACCA ||
+        category == PROGRAM.CFA ||
+        category == PROGRAM.CMA)
 
     // Tạm ẩn redirect dashboard begin
     // if (
@@ -234,7 +240,7 @@ const Course = ({
         JSON.stringify({
           name: course.name,
           courseType: course.course_type,
-          category: course.course_categories[0]?.name,
+          category: category,
         }),
       )
     } else {
@@ -315,7 +321,7 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+          className={`item flex flex-col rounded-xl bg-white p-7.5 shadow-sidebar`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >

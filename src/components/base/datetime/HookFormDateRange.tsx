@@ -4,6 +4,7 @@ import { Calendar, DatePicker } from 'antd'
 import { Controller, Control } from 'react-hook-form'
 import dayjs, { Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { IBaseFormFieldProps } from 'src/type/common'
 
 dayjs.extend(utc)
 import ErrorMessage from 'src/common/ErrorMessage'
@@ -12,23 +13,15 @@ import SAPPLabel from '../Label/SAPPLabel'
 
 const { RangePicker } = DatePicker
 
-interface IProps {
-  control: Control<any>
-  name: string
-  defaultValue?: any
+interface IProps extends IBaseFormFieldProps {
   placeholder?: boolean
-  label?: string
-  className?: string
   guideline?: string[]
   onChange?: (data: Date | null) => void
-  required?: boolean
-  disabled?: boolean
   format?: string
   showTime?: any
   showNow?: boolean
   picker?: 'date' | 'week' | 'month' | 'quarter' | 'year'
   needConfirm?: boolean
-  labelClass?: string
   disabledDate?: (current: Dayjs) => boolean
 }
 

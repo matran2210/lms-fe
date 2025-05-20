@@ -91,6 +91,7 @@ module.exports = {
           12: '#374151',
           13: '#1F2937',
           14: '#374151',
+          15: '#1C274C',
         },
         gray: {
           1: '#A1A1A1',
@@ -170,6 +171,10 @@ module.exports = {
         },
         purple: {
           1: '#8F6FEA',
+        },
+        txt: {
+          primary: '#1F2937',
+          secondary: '#9CA3AF',
         },
         'sapp-black': {
           1: '#29353C',
@@ -407,8 +412,6 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
       textColor: {
-        // primary: '#1F2937',
-        secondary: '#9CA3AF',
         heading: '#374151',
       },
     },

@@ -3672,10 +3672,10 @@
     global "~4.4.0"
     is-function "^1.0.1"
 
-"@wiris/mathtype-html-integration-devkit@1.17.6":
-  version "1.17.6"
-  resolved "https://registry.yarnpkg.com/@wiris/mathtype-html-integration-devkit/-/mathtype-html-integration-devkit-1.17.6.tgz#21a1f2bf93fd5841eb0b835ffe7ef9e14aa4026c"
-  integrity sha512-DKZotcIwXygs6O5fzVsXz+PpNUqKqxlguSf0KKAdsgYCHIxr6gdqIW9ptOS0+ihsRG7BHx3MBvmjOYzC54fV9w==
+"@wiris/mathtype-html-integration-devkit@1.17.8":
+  version "1.17.8"
+  resolved "https://registry.yarnpkg.com/@wiris/mathtype-html-integration-devkit/-/mathtype-html-integration-devkit-1.17.8.tgz#08b4172474391621cbf255a9f9a8cdaf7827cd72"
+  integrity sha512-2JfnUbukybnGdD4waDuXfjqZFQOGVbJKY0QwYHBwxdF2rNPG6d3R0Skh9rjv7UERRyyrCQv3FVbsAeP8J5YcsQ==
   dependencies:
     dompurify "^3.0.10"
     uuid "^8.3.2"
@@ -3685,7 +3685,7 @@
   resolved "https://registry.yarnpkg.com/@wiris/mathtype-tinymce6/-/mathtype-tinymce6-8.12.0.tgz#05b6494eaf44530d6b4f247dae613a142e4f38a0"
   integrity sha512-YEXnPbvqJ+P1zCiISV86BSseb7AQHOIm4WsvWGSF4Z+m2HJKjaqPkSRzkst/Y0u3+2Bja39twKObkNtDN87Gww==
   dependencies:
-    "@wiris/mathtype-html-integration-devkit" "1.17.6"
+    "@wiris/mathtype-html-integration-devkit" "1.17.8"
 
 "@xmldom/xmldom@^0.8.3":
   version "0.8.10"
@@ -9637,10 +9637,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.0.18:
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.18.tgz#07fa6173550a1b361ded877eebf07778639905b3"
-  integrity sha512-6oQYjyAJ3qV1Gv8U48AR1LdvdilAvQkPcFcbJ+oRWmOlKGS4QGbjh9yP9UC7TzVEthUv1U6Dpy9SOO8fHs10uA==
+sapp-common-package@1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.19.tgz#d6dc96eb1bba8e140b5789d5865098bb15392e11"
+  integrity sha512-e0m1wMt7pgsYlGEuyptTEYklVezf/jclD5l+BJ/ScIFu7PzG0b5FY7W2Hl7uYE2m6qc6nnr/JgqddtoJ7UNrJQ==
   dependencies:
     antd "^5.22.3"
     clsx "^1.2.1"
@@ -10106,7 +10106,6 @@ string_decoder@~1.1.1:
     safe-buffer "~5.1.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
-  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -10916,7 +10915,6 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
-  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

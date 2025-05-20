@@ -16,6 +16,7 @@
 @import './components/_collapse.scss';
 
 @import './components/_table.scss';
+@import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @tailwind base;
@@ -1321,4 +1322,8 @@ select:focus {
 
 .dashboard_tooltip {
   @apply max-w-max;
+}
+
+[type='search']:focus {
+  --tw-ring-color: none;
 }
