@@ -287,6 +287,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                   control={control}
                   name="time"
                   label="Time"
+                  needConfirm
                   required
                 />
               </div>

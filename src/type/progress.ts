@@ -12,8 +12,9 @@ export interface IProgress {
   lesson_start_date: string
   section?: string
   progress: number
-  teacher: { id: string; full_name: string }
-  staff_creator: { id: string; full_name: string }
+  teacher: IProgressUser
+  staff_creator: IProgressUser
+  user_creator: IProgressUser
   start_time: string
   end_time: string
   description: string
@@ -25,6 +26,10 @@ export interface IProgress {
   }
   catch_up_content: ICatchUpContent[]
   content_completed: IContentCompleted[]
+}
+export interface IProgressUser {
+  id: string
+  full_name: string
 }
 export interface ICatchUpContent {
   class_teaching_progress_id: string
@@ -56,6 +61,7 @@ export interface ICourseSections {
 export interface IProgressFilterForm {
   progress: string
   rangeDate: [Dayjs, Dayjs]
+  section: string
 }
 export interface IDefaultFormAddProgress {
   lesson: string

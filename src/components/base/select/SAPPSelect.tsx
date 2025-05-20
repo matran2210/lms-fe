@@ -19,6 +19,7 @@ interface SAPPSelectProps extends IBaseFormFieldProps {
   onMenuScrollToBottom?: () => void
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
+  allowClear?: boolean
 }
 
 const SAPPSelect = ({
@@ -41,6 +42,7 @@ const SAPPSelect = ({
   onMenuScrollToBottom,
   onChange: onSelectChange,
   onDropdownVisibleChange,
+  allowClear,
 }: SAPPSelectProps) => {
   return (
     <>
@@ -84,6 +86,7 @@ const SAPPSelect = ({
                     }
                   }
                 }}
+                allowClear={allowClear}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>
