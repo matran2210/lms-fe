@@ -27,6 +27,9 @@ import { REPEAT_TYPE } from '@utils/constants/repeat'
 import clsx from 'clsx'
 import utc from 'dayjs/plugin/utc'
 
+const DEFAULT_END_DATE_HOUR_OFFSET = 1
+const MAX_END_DATE_YEAR_RANGE = 2
+
 dayjs.extend(weekday)
 dayjs.extend(localeData)
 dayjs.extend(utc)
@@ -95,6 +98,13 @@ const EventRepeatField = ({
   )
 
   const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
+
+  const endOnMinDate = useMemo(
+    () =>
+      rangeDate?.[1] ||
+      dayjs().add(DEFAULT_END_DATE_HOUR_OFFSET, 'hour').toDate(),
+    [rangeDate],
+  )
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
@@ -330,8 +340,11 @@ const EventRepeatField = ({
                 <DatePicker
                   format="DD/MM/YYYY"
                   onChange={(newDate) => field.onChange(newDate)}
-                  minDate={dayjs(initDate)}
-                  maxDate={dayjs(initDate).add(2, 'year')}
+                  minDate={dayjs(endOnMinDate)}
+                  maxDate={dayjs(endOnMinDate).add(
+                    MAX_END_DATE_YEAR_RANGE,
+                    'year',
+                  )}
                   value={field?.value ? dayjs(field.value) : undefined}
                   className="h-11.25 w-full"
                   color="secondary"
