@@ -109,7 +109,7 @@ const ProfilePage = () => {
           title="Certificates"
         />
       ),
-      children: <Certificate onOpenTab={() => setSelectPage(true)} />,
+      children: <Certificate />,
     },
     {
       key: 'setting',
@@ -134,7 +134,7 @@ const ProfilePage = () => {
 
   switch (page) {
     case ProfilePages.Certificates:
-      selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
+      selectedContent = <Certificate />
       break
 
     case ProfilePages.Devices:
