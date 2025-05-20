@@ -277,7 +277,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
                 <CollapseItem
                   title="Creator"
-                  body={requestDetail?.user_request.detail.full_name}
+                  body={
+                    requestDetail?.staff_request.detail.full_name ??
+                    requestDetail?.user_request.detail.full_name
+                  }
                 />
 
                 <CollapseItem
