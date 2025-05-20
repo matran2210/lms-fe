@@ -40,7 +40,20 @@ const busySheduleSchema = z.object({
   request_busy_schedule: z
     .array(
       z.object({
-        date_range: z.array(z.date()).length(2, { message: VALIDATE_REQUIRED }),
+        date_range: z
+          .array(z.union([z.string(), z.date()]))
+          .min(2, 'Date range must have exactly 2 dates')
+          .refine(
+            ([start, end]) => {
+              const startDate = new Date(start)
+              const endDate = new Date(end)
+              const diffDays =
+                (endDate.getTime() - startDate.getTime()) /
+                (1000 * 60 * 60 * 24)
+              return diffDays <= MAX_RANGE_DAYS
+            },
+            { message: 'Date range must be less than or equal to 91 days' },
+          ),
         description: z
           .string({ required_error: VALIDATE_REQUIRED })
           .trim()
