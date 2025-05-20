@@ -1,5 +1,3 @@
-import SappButton from '@components/base/button/SappButton'
-import HistoryItem from '@components/base/historyItem/HistoryItem'
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -7,13 +5,10 @@ import {
   loadMoreLoginHistory,
   userReducer,
 } from 'src/redux/slice/User/User'
-import TabLayout from './TabLayout'
+import ProfileCard from '@components/card/ProfileCard'
+import HistoryItem from './HistoryItem'
 
-interface IProp {
-  onOpenTab: () => void
-}
-
-const LoginHistory = ({ onOpenTab }: IProp) => {
+const LoginHistoryList = () => {
   const dispatch = useAppDispatch()
   const { loginHistory, loadHistory } = useAppSelector(userReducer)
   const [pageIndex, setPageIndex] = useState(1)
@@ -38,17 +33,16 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
     }
   }
   return (
-    <TabLayout
-      title={`Login History (${loginHistory?.meta?.total_records || 0})`}
-      headerButtons={
-        <SappButton
-          onClick={onOpenTab}
-          size="medium"
-          title={'Back'}
-          color="textUnderline"
-          className="-mr-8 block min-w-[120px] text-base lg:hidden"
-        />
+    <ProfileCard
+      title={
+        <div>
+          Login History{' '}
+          <span className="text-base font-normal text-gray-16">
+            ({loginHistory?.meta?.total_records || 0})
+          </span>
+        </div>
       }
+      subtitle="These are IP adresses that logged on"
       onScroll={(e) => {
         const { target } = e
         if (
@@ -58,6 +52,7 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
           handleLoadMoreHistory()
         }
       }}
+      bodyClassName="h-[calc(604px-70px)] overflow-y-auto"
     >
       {loginHistory?.userActivities?.map((e: any) => {
         return (
@@ -66,7 +61,7 @@ const LoginHistory = ({ onOpenTab }: IProp) => {
           </div>
         )
       })}
-    </TabLayout>
+    </ProfileCard>
   )
 }
-export default LoginHistory
+export default LoginHistoryList

@@ -6,6 +6,7 @@
 @import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'my-profile.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -710,10 +711,20 @@ textarea.is-invalid:focus {
   }
 }
 
-.ant-modal .ant-modal-content {
-  @apply rounded-none;
+// .ant-modal .ant-modal-content {
+//   @apply rounded-none;
+// }
+.sapp-profile-modal {
+  .ant-modal-content {
+    @apply rounded-2xl p-10;
+  }
 }
-
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
+}
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
 }
@@ -1289,7 +1300,7 @@ select:focus {
 }
 
 .ant-tabs-tab.ant-tabs-tab-active > div {
-  @apply text-heading !important;
+  @apply text-heading;
 }
 .ant-select span.ant-select-selection-item {
   @apply font-medium;

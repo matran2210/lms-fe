@@ -68,6 +68,8 @@ module.exports = {
           3: '#f01919',
           4: '#0Df01919',
           5: '#F019190D',
+          6: '#F80903',
+          7: '#FEEDED',
         },
         state: {
           info: '#3964EA',
@@ -107,7 +109,7 @@ module.exports = {
           13: '#78829D',
           14: '#404041',
           15: '#D1D5DB',
-          16: '#DADFE5',
+          16: '#7B7B7C',
           900: '#181C32',
         },
         green: {
@@ -116,6 +118,8 @@ module.exports = {
           3: '#37C78C',
           4: '#6FD195',
           5: '#07AF170D',
+          6: '#E7FCF2',
+          7: '#10B367',
         },
         orange: {
           1: '#F897070D',
@@ -140,6 +144,7 @@ module.exports = {
         },
         yellow: {
           1: '#FFB800',
+          2: '#FFFBF2',
         },
         pinned: {
           1: '#18355D',
@@ -170,6 +175,9 @@ module.exports = {
         txt: {
           primary: '#1F2937',
           secondary: '#9CA3AF',
+        },
+        'sapp-black': {
+          1: '#29353C',
         },
       },
       borderColor: {
@@ -265,6 +273,7 @@ module.exports = {
         1729: '1729px',
         '8xl': '1920px',
         1570: '1570px',
+        '45%': '45%',
       },
       lineHeight: {
         0: '0',
@@ -299,6 +308,7 @@ module.exports = {
         18: '18%',
         3.6: '36%',
         17: '17%',
+        '45%': '45%',
         '624px': '624px',
       },
       padding: {
@@ -321,6 +331,9 @@ module.exports = {
         19: '4.75rem', // 76px
         22: '5.375rem', //86px
         29.2: '7.3rem',
+        34.5: '8.625rem', // 138px
+        93.25: '23.3125rem', // 373px
+        149: '37.25rem', // 596px
       },
       margin: {
         4.5: '1.125rem', // 18px
