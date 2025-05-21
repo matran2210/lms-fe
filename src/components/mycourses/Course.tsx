@@ -220,6 +220,7 @@ const Course = ({
         category == PROGRAM.CFA ||
         category == PROGRAM.CMA)
 
+    // Redirect to dashboard if the course type is practice, normal
     if (
       isRedirectDashboard &&
       (determineButtonToShow == BUTTON_STATUS.Review ||
@@ -231,7 +232,6 @@ const Course = ({
     }
 
     router.push(`/courses/my-course/${classInstance?.id}`)
-    // Tạm ẩn redirect dashboard end
 
     if (isRedirectDashboard) {
       localStorage.setItem(
