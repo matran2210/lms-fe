@@ -1675,7 +1675,7 @@ const TestDetail = () => {
           setSubmitEventTest={setSubmitEventTest}
           type={type}
           footer={
-            <div className=" flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" flex items-center justify-between px-8 py-4">
               <div className="flex h-full items-center">
                 {/* <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -1822,8 +1822,8 @@ const TestDetail = () => {
                 </div>
               )}
               {/** End Tabs */}
-              <div className="flex h-full items-center gap-3 pe-6">
-                {currentTabContent?.data?.response_option === null &&
+              <div>
+                {/* {currentTabContent?.data?.response_option === null &&
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
@@ -1873,9 +1873,9 @@ const TestDetail = () => {
                         <ExcelIcon />
                       </button>
                     </div>
-                  )}
+                  )} */}
                 <button
-                  className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
+                  className="flex items-center justify-center gap-3 px-3 py-2 text-base font-semibold text-bw-13 underline 3xl:w-[150px]"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
@@ -1952,45 +1952,6 @@ const TestDetail = () => {
               setCurrentLeftWidth(leftWidth)
             }}
           >
-            {/** Header */}
-            <div>
-              {/* <HeaderTest
-                quizDetail={quizDetail}
-                openLimit={openLimit}
-                handleSubmitQuestion={handleSubmitQuestion}
-                timeRef={timeRef}
-                quizAttempId={quizAttempId}
-                setUnSubmitAnswer={setUnSubmitAnswer}
-                checkUnSubmitAnswer={checkUnSubmitAnswer}
-                setOpenQuit={setOpenQuit}
-                setSubmitEventTest={setSubmitEventTest}
-                type={type}
-                submited={submited}
-                setOpenSubmit={setOpenSubmit}
-              /> */}
-
-              {/** Tabs */}
-              {/* {tabs?.length > 0 && (
-                <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
-                  <TabSlide
-                    data={filteredTabs}
-                    currentTab={currentPage}
-                    setCurrentTab={setCurrentPage}
-                    optionShowAll={<OptionShowAll />}
-                    handleChangeTab={async (id?: string) => {
-                      id && handleChangeTab(id)
-                    }}
-                    activeShowAll={activeShowAll}
-                    setActiveShowAll={setActiveShowAll}
-                    setValueFilter={setValueFilter}
-                    isScrollCenter={false}
-                  />
-                </div>
-              )} */}
-              {/** End Tabs */}
-            </div>
-            {/** End Header */}
-
             {/** Question Content */}
             {!isUndefined(currentTabContent) && (
               <>

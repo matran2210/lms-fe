@@ -10,7 +10,6 @@ import Icon from '@components/icons'
 import Countdown from '@pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
-import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 
 const { Header, Content, Footer } = Layout
@@ -61,7 +60,7 @@ const TestWrapper = ({
     <Layout>
       <Header
         className={clsx(
-          'sticky top-0 z-10 flex w-full items-center bg-white px-8 py-3 shadow-sm ',
+          'sticky top-0 z-10 flex w-full items-center bg-white px-8 py-3 shadow-sm',
           headerClass,
         )}
       >
@@ -112,8 +111,17 @@ const TestWrapper = ({
           </div>
         </div>
       </Header>
-      <Content className={clsx('p-0', contentClass)}>{children}</Content>
-      <Footer className={clsx('p-0', footerClass)}>{footer}</Footer>
+      <Content className={clsx('overflow-auto p-0', contentClass)}>
+        {children}
+      </Content>
+      <Footer
+        className={clsx(
+          'shadow-t-sm fixed bottom-0 z-10 w-full border-t border-gray-15 bg-white p-0',
+          footerClass,
+        )}
+      >
+        {footer}
+      </Footer>
     </Layout>
   )
 }
