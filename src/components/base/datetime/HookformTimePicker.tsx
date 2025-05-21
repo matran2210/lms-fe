@@ -52,8 +52,8 @@ const HookformTimePicker = ({
             value={
               value
                 ? [
-                    dayjs(value[0], EDateTime.timepicker),
-                    dayjs(value[1], EDateTime.timepicker),
+                    value[0] && dayjs(value[0], EDateTime.timepicker),
+                    value[1] && dayjs(value[1], EDateTime.timepicker),
                   ]
                 : null
             }

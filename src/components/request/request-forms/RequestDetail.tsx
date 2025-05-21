@@ -23,6 +23,7 @@ import { RequestStatus } from 'src/type/my-request/enum'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { useAppDispatch } from 'src/redux/hook'
 import SAPPBadge from '@components/base/Badge/SAPPBadge'
+import { formatRecurringSchedule } from '@utils/request'
 
 export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -259,7 +260,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
             </div>
           </div>
           <div className="mb-4">
-            <CollapseBox title=" Primary Information">
+            <CollapseBox title="Primary Information">
               <div className="grid gap-y-4">
                 <CollapseItem
                   title={'Request Name'}
@@ -277,7 +278,10 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
 
                 <CollapseItem
                   title="Creator"
-                  body={requestDetail?.user_request.detail.full_name}
+                  body={
+                    requestDetail?.staff_request?.detail?.full_name ??
+                    requestDetail?.user_request?.detail?.full_name
+                  }
                 />
 
                 <CollapseItem
@@ -286,17 +290,19 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                 />
 
                 <CollapseItem
-                  title="Create Date"
+                  title="Created Date"
                   body={dayjs(requestDetail?.created_at).format(
                     DATE_TIME_FORMAT_DMY,
                   )}
                 />
-                {requestDetail?.type !== REQUEST_TYPE.TIMEOFF.value ? (
+                {requestDetail?.type == REQUEST_TYPE.WEEKLY_NORM.value && (
                   <CollapseItem
                     title="Note"
                     body={requestDetail?.description}
                   />
-                ) : (
+                )}
+                {(requestDetail?.type == REQUEST_TYPE.TIMEOFF.value ||
+                  requestDetail?.type == REQUEST_TYPE.TEACHING_MODE.value) && (
                   <CollapseItem
                     title="Updated Date"
                     body={dayjs(requestDetail?.updated_at).format(
@@ -342,13 +348,14 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                       <CollapseItem
                         title={`Repeat`}
                         body={
-                          item.schedule?.recurring_pattern_schedule?.type
-                            ? EVENT_REPEAT_LABEL[
-                                item.schedule.recurring_pattern_schedule.type
-                              ]
+                          item.schedule?.recurring_pattern_schedule
+                            ? formatRecurringSchedule(
+                                item.schedule?.recurring_pattern_schedule,
+                              )
                             : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
                         }
                       />
+
                       <CollapseItem
                         title={`Description`}
                         body={`${item.schedule.description}`}

@@ -21,4 +21,5 @@ export enum CONSTRUCTION {
   'OFFLINE' = 'OFFLINE',
   'BLENDED' = 'BLENDED',
   'ONLINE' = 'ONLINE',
+  'LIVE_ONLINE' = 'LIVE_ONLINE',
 }

@@ -76,7 +76,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
   const requestBusy = watch('request_busy_schedule')
   const requestNorm = watch('request_weekly_norm')
   const requestTimeoff = watch('request_time_off')
-  const repeat = watch('request_busy_schedule.0.repeat')
+
   const repeatType = watch(
     'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
   )
@@ -308,13 +308,28 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       // setLoading(false)
     }
   }
+
+  const [pickingDateType, setPickingDateType] = useState<string | undefined>(
+    undefined,
+  )
+
   const disabledDate = (current: Dayjs) => {
+    const isDayModePicker =
+      current.date() === 1 &&
+      current.hour() === 0 &&
+      current.minute() === 0 &&
+      current.second() === 0
+
     if (!current) return false
+
+    if (isDayModePicker) {
+      return false
+    }
 
     const isMonday = current.day() === 1 // Monday
     const isSunday = current.day() === 0 // Sunday
 
-    return !(isMonday || isSunday)
+    return !(isSunday || isMonday)
   }
 
   const loadData = async () => {
@@ -543,6 +558,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       },
     )
   }
+
+  useEffect(() => {
+    setValue('request_busy_schedule.0.drawer-repeat-end-on', undefined)
+  }, [currentDate])
 
   return (
     <ConfigProvider theme={ANT_THEME_CONFIG}>
