@@ -1,8 +1,7 @@
-import React, { useState, useEffect, ReactNode } from 'react'
-import { Rnd } from 'react-rnd'
-import { Modal } from 'antd'
-import styles from '@styles/components/ModalResizeable.module.scss'
 import { CloseIcon } from '@assets/icons'
+import styles from '@styles/components/ModalResizeable.module.scss'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { Rnd } from 'react-rnd'
 
 interface ModalResizeableProps {
   title?: string | ReactNode
@@ -39,120 +38,95 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   position = 'center',
 }) => {
   const [size, setSize] = useState({ width, height })
-  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 })
 
-  useEffect(() => {
-    const calculatePosition = () => {
-      let x = 0
-      let y = 0
+  //Hàm tính vị trí của Modal
+  const calculatePosition = (
+    pos: string,
+    modalWidth: number,
+    modalHeight: number,
+  ) => {
+    const windowWidth = window.innerWidth
+    const windowHeight = window.innerHeight
 
-      // Get window width and height
-      const windowWidth = window.innerWidth
-      const windowHeight = window.innerHeight
-
-      // Calculate position based on input
-      switch (position) {
-        case 'top left':
-          x = 0
-          y = 0
-          break
-        case 'top middle':
-          x = (windowWidth - size.width) / 2
-          y = 0
-          break
-        case 'bottom left':
-          x = 0
-          y = windowHeight - size.height
-          break
-        case 'bottom middle':
-          x = (windowWidth - size.width) / 2
-          y = windowHeight - size.height
-          break
-        case 'bottom right':
-          x = windowWidth - size.width
-          y = windowHeight - size.height
-          break
-        case 'top right':
-          x = windowWidth - size.width
-          y = 0
-          break
-        case 'center left':
-          x = 0
-          y = (windowHeight - size.height) / 2
-          break
-        case 'center right':
-          x = windowWidth - size.width
-          y = (windowHeight - size.height) / 2
-          break
-        default: //center
-          x = (windowWidth - size.width) / 2
-          y = (windowHeight - size.height) / 2
-          break
-      }
-
-      setModalPosition({ x, y })
+    const positions = {
+      'top left': { x: 0, y: 0 },
+      'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
+      'bottom left': { x: 0, y: windowHeight - modalHeight },
+      'bottom middle': {
+        x: (windowWidth - modalWidth) / 2,
+        y: windowHeight - modalHeight,
+      },
+      'bottom right': {
+        x: windowWidth - modalWidth,
+        y: windowHeight - modalHeight,
+      },
+      'top right': { x: windowWidth - modalWidth, y: 0 },
+      'center left': { x: 0, y: (windowHeight - modalHeight) / 2 },
+      'center right': {
+        x: windowWidth - modalWidth,
+        y: (windowHeight - modalHeight) / 2,
+      },
+      center: {
+        x: (windowWidth - modalWidth) / 2,
+        y: (windowHeight - modalHeight) / 2,
+      },
     }
 
-    calculatePosition()
+    return positions[pos as keyof typeof positions] || positions.center
+  }
+
+  const [modalPosition, setModalPosition] = useState(() =>
+    calculatePosition(position, width, height),
+  )
+
+  useEffect(() => {
+    setModalPosition(calculatePosition(position, size.width, size.height))
   }, [])
 
   return (
-    <Modal
-      open={true}
-      footer={null}
-      maskClosable={true}
-      closable={false}
-      mask={false}
-      style={{ padding: 0 }}
+    <Rnd
+      size={{ width: size.width, height: size.height }}
+      position={modalPosition}
+      onDragStop={(e, d) => setModalPosition({ x: d.x, y: d.y })}
+      onResizeStop={(e, direction, ref, delta, newPos) => {
+        setSize({
+          width: parseInt(ref.style.width),
+          height: parseInt(ref.style.height),
+        })
+        setModalPosition(newPos)
+      }}
+      minWidth={minWidth}
+      minHeight={minHeight}
+      bounds="window"
+      style={{
+        background: 'white',
+        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+        border: '1px solid #DCDDDD',
+      }}
+      dragHandleClassName={
+        dragHandleClassName ? dragHandleClassName : 'modal-header'
+      }
       className={styles.modalResizeable}
-      width={'100%'}
-      height={'100%'}
-      centered
-      onCancel={handleCloseScratchPad}
     >
-      <Rnd
-        size={{ width: size.width, height: size.height }}
-        position={modalPosition}
-        onDragStop={(e, d) => setModalPosition({ x: d.x, y: d.y })}
-        onResizeStop={(e, direction, ref, delta, newPos) => {
-          setSize({
-            width: parseInt(ref.style.width),
-            height: parseInt(ref.style.height),
-          })
-          setModalPosition(newPos)
-        }}
-        minWidth={minWidth}
-        minHeight={minHeight}
-        bounds="window"
-        style={{
-          background: 'white',
-          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-          border: '1px solid #DCDDDD',
-        }}
-        dragHandleClassName={
-          dragHandleClassName ? dragHandleClassName : 'modal-header'
-        }
-      >
-        <div className="absolute left-0 top-0  h-full w-full">
-          {header ? (
-            header
-          ) : (
-            <div className={styles.modalHeader}>
-              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
-                <div className="truncate">{title}</div>
-              </div>
-              <button
-                className="absolute right-3 top-2"
-                onClick={handleCloseScratchPad}
-              >
-                <CloseIcon />
-              </button>
+      <div className="absolute left-0 top-0 h-full w-full">
+        {header ? (
+          header
+        ) : (
+          <div className={styles.modalHeader}>
+            <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
+              <div className="truncate">{title}</div>
             </div>
-          )}
-          <div className={styles.modalContent}>{children}</div>
-        </div>
-      </Rnd>
-    </Modal>
+            <button
+              className="absolute right-3 top-2"
+              onClick={handleCloseScratchPad}
+            >
+              <CloseIcon />
+            </button>
+          </div>
+        )}
+        <div className={styles.modalContent}>{children}</div>
+      </div>
+    </Rnd>
   )
 }
 
