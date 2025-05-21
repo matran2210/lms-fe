@@ -31,6 +31,7 @@ export interface IRequest {
   repeat: boolean
   reason?: ITeacherSchedule[]
   note?: string
+  customName?: React.ReactNode
 }
 
 export interface ITeacherSchedule {
