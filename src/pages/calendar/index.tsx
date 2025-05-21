@@ -4,7 +4,6 @@ import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendar } from 'sapp-common-package'
-import 'sapp-common-package/dist/index.css'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
   CALENDAR_COLOR_TYPES,
