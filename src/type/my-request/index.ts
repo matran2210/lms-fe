@@ -1,5 +1,6 @@
 import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { Dayjs } from 'dayjs'
+import { REQUEST_STATUS } from 'src/constants'
 
 export type RecurringScheduleType = keyof Omit<
   typeof REPEAT_TYPE,
@@ -23,7 +24,6 @@ export interface IRequest {
   note?: string
 }
 export interface ITimeOff {
-  lesson: string | { value: string; label?: string }
   lessonId: string
   reason: string
 }
@@ -96,7 +96,7 @@ export interface IBusyRequestDetailResponse {
   updated_at: string
   deleted_at: string | null
   type: string
-  status: string
+  status: REQUEST_STATUS
   user_request: {
     id: string
     username: string
@@ -115,10 +115,13 @@ export interface IBusyRequestDetailResponse {
   teacher_weekly_norms: IWeeklyNorms[] // Empty array in the example, but may contain data in other responses
 }
 export interface IBusySchedule {
-  date_range?: Date[]
+  date_range?: [Date, Date]
   start_time?: Dayjs | string
   end_time?: Dayjs | string
-  recurring_schedule: IRecurringSchedule
+  repeat_schedule: {
+    repeat: boolean
+    recurring_schedule: IRecurringSchedule
+  }
   description?: string
   repeat?: REPEAT_TYPE
   'drawer-repeat-interval'?: string
@@ -148,4 +151,82 @@ export interface ITimeoffRequestDetailResponse {
   description: string
   courses: any[]
   class_code: string
+}
+
+export interface IBusyScheduleBase {
+  event_name: string
+  repeat: boolean
+  range: {
+    start_time: string | Date
+    end_time: string | Date
+  }
+  recurring_schedule?: IRecurringSchedule
+  description: string
+}
+
+export interface ICreateBusyScheduleData extends IBusyScheduleBase {}
+
+export interface IEditBusyScheduleData extends Partial<IBusyScheduleBase> {
+  status?: string
+}
+
+export interface IWeeklyNormBase {
+  request_name?: string
+  request_type?: string
+  time?: IWeeklyNorm[]
+  note?: string | null
+}
+export interface ICreateWeeklyNormData
+  extends Omit<IWeeklyNormBase, 'request_name' | 'request_type'> {
+  request_name: string
+  request_type: string
+}
+export interface IEditWeeklyNormData extends IWeeklyNormBase {
+  status?: string
+}
+
+interface ITimeoffRequestBase {
+  request_name?: string
+  status?: string
+  scheduleAdjustments?: { id: string; reason: string }[]
+}
+
+export interface ICreateTimeoffRequestData
+  extends Omit<ITimeoffRequestBase, 'request_name'> {
+  request_name: string
+  teacher_id: string
+}
+
+export interface IEditTimeoffRequestData extends ITimeoffRequestBase {}
+
+interface IStaffAssignee {
+  id: string
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+  key: string
+  username: string
+  password: string
+  nick_name: string | null
+  status: string
+  detail_id: string
+  department_id: string | null
+  course_category_id: string
+}
+
+export interface ICreateEditWeeklyNorm {
+  type: string
+  status: string
+  user_request_id: string
+  name: string
+  staff_assignee: IStaffAssignee
+  staff_request_id: string | null
+  description: string
+  due_date: string
+  staff_assignee_id: string
+  deleted_at: string | null
+  user_assignee_id: string | null
+  id: string
+  created_at: string
+  updated_at: string
 }

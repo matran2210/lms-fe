@@ -21,6 +21,9 @@ import {
 } from 'src/type'
 import RequestActionCell from '../RequestActionCell'
 import clsx from 'clsx'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useRequestContext } from '@contexts/RequestContext'
 
 interface PersonalScheduleTableProps {
   loading: boolean
@@ -135,21 +138,21 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Approver',
     dataIndex: 'staff_assignee',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Creator',
     dataIndex: 'creator',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-secondary">
+      <div className="text-txt-secondary">
         {formatDate(value, DATE_TIME_FORMAT)}
       </div>
     ),
@@ -158,7 +161,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Note',
     dataIndex: 'note',
     render: (value: string) => (
-      <div className="text-secondary">{value || '_ _ _ _ _ _'}</div>
+      <div className="text-txt-secondary">{value || '_ _ _ _ _ _'}</div>
     ),
   },
   {
@@ -180,6 +183,8 @@ const PersonalScheduleTable = ({
   setIsInspect,
 }: PersonalScheduleTableProps) => {
   const { current, pageSize } = pagination
+  const router = useRouter()
+  const { setIsOpenViewModal } = useRequestContext()
   const tableColumns = columnsTitles.map((item, index) => {
     return {
       ...item,
@@ -192,6 +197,16 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
+      name: (
+        <Link href={`${router.pathname}?id=${item.id}`}>
+          <div
+            onClick={() => setIsOpenViewModal(true)}
+            className="cursor-pointer"
+          >
+            {item.name}
+          </div>
+        </Link>
+      ),
       time: item.teacher_schedules?.length
         ? item.teacher_schedules
         : item.teacher_weekly_norms?.length

@@ -17,6 +17,8 @@ import {
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  COURSE_TYPE,
+  PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
@@ -210,9 +212,13 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const category = course?.course_categories[0]?.name || ''
     const isRedirectDashboard =
-      course?.course_type == 'NORMAL_COURSE' ||
-      course?.course_type == 'PRACTICE_COURSE'
+      (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
+        course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
+      (category == PROGRAM.ACCA ||
+        category == PROGRAM.CFA ||
+        category == PROGRAM.CMA)
 
     // Tạm ẩn redirect dashboard begin
     // if (
@@ -234,7 +240,7 @@ const Course = ({
         JSON.stringify({
           name: course.name,
           courseType: course.course_type,
-          category: course.course_categories[0]?.name,
+          category: category,
         }),
       )
     } else {
@@ -336,9 +342,9 @@ const Course = ({
               >
                 <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 30}
+                  showTooltip={(course?.name as string)?.length > 60}
                 >
-                  {truncateString(course?.name, 30)}
+                  {truncateString(course?.name, 60)}
                 </Tooltip>
               </div>
             </div>
@@ -349,9 +355,9 @@ const Course = ({
                   <span className="ml-1 font-medium text-bw-1">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                      showTooltip={course?.classes?.[0]?.code?.length > 20}
                     >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
+                      {truncateString(course?.classes?.[0]?.code, 20)}
                     </Tooltip>
                   </span>
                 </div>

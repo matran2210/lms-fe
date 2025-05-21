@@ -10,9 +10,9 @@ import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
 import { ICertificateData } from 'src/type/classes'
-import TeachingProgress from '@components/teacher/myClass/class-detail/TeachingProgress'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import Progress from '@components/my-class/progress-table/Progress'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -96,7 +96,7 @@ const ClassDetail = () => {
       case 2:
         return <Students />
       case 3:
-        return <TeachingProgress />
+        return <Progress classDetail={data} />
       case 4:
         return <StudentsTestResult />
       default:

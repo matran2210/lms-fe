@@ -48,10 +48,17 @@ const useSappPaging = ({
   }
 
   useEffect(() => {
-    if (data?.meta?.total_records || data?.metadata?.total_records) {
+    if (
+      data?.meta?.total_records ||
+      data?.metadata?.total_records ||
+      data?.data?.metadata?.total_records
+    ) {
       setPagination((prev) => ({
         ...prev,
-        total: data?.meta?.total_records || data?.metadata?.total_records,
+        total:
+          data?.meta?.total_records ||
+          data?.metadata?.total_records ||
+          data?.data?.metadata?.total_records,
       }))
     }
   }, [data])

@@ -24,6 +24,7 @@ const MultiChoiceQuestion = ({
   allowHighLight,
   solution,
   allowUnHighLight,
+  defaultValues,
   setOpenFile,
   isHideExhibit = true,
   getValue,
@@ -158,7 +159,7 @@ const MultiChoiceQuestion = ({
           name={name || 'multiples'}
           multiple
           corrects={corrects}
-          // defaultValue={defaultValues || ''}
+          defaultValue={defaultValues || ''}
           // justify='start'
           positionCheckBox="start"
         />
