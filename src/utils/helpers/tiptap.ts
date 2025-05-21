@@ -43,7 +43,7 @@ export const handleUploadFileToS3 = async (
   })
 
   try {
-    await UploadAPI.startUpload({
+    const response = await UploadAPI.startUpload({
       content_type: convertedFile.type,
       blob: convertedFile,
       size: convertedFile.size.toString(),
@@ -52,8 +52,11 @@ export const handleUploadFileToS3 = async (
       getProgress: getProgress ? getProgress : () => {},
       location: location,
     })
+
+    const uploadUrlRes = await UploadAPI.getUrlFile(response.data.file_key)
+
     return {
-      url: 'https://images.pexels.com/photos/31333122/pexels-photo-31333122.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+      url: uploadUrlRes.data?.url,
     }
   } catch (uploadError) {
     if (axios.isCancel(uploadError)) {
