@@ -5,13 +5,18 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import dayjs from 'dayjs'
+import weekday from 'dayjs/plugin/weekday'
 import DOMPurify from 'dompurify'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { useQuery } from 'react-query'
-import dayjs from 'dayjs'
+export * from './common'
 import utc from 'dayjs/plugin/utc'
+import { DATE_FORMAT } from 'src/constants'
 
 dayjs.extend(utc)
+
+dayjs.extend(weekday)
 
 export const getLocalStorgeActToken = (): string => {
   return ''
@@ -374,6 +379,44 @@ export const removeHtmlTags = (htmlString?: string) => {
   return htmlString.replace(/<[^>]*>/g, '') // Xóa tất cả thẻ HTML
 }
 
+/**
+ * @description Chuyển đổi một chuỗi ngày thành chuỗi ngày được định dạng.
+ * @param {string} date - Chuỗi ngày cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày trả về.
+ * @return {string} - Chuỗi ngày đã được định dạng.
+ */
+export const sappFormatDate = (date?: string, format = 'DD/MM/YYYY') =>
+  date ? dayjs(date).format(format) : undefined
+
+/**
+ * @description Chuyển đổi một chuỗi ngày UTC thành chuỗi ngày địa phương được định dạng.
+ * @param {string} date - Chuỗi ngày UTC cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.
+ * @return {string} - Chuỗi ngày địa phương đã được định dạng.
+ */
+export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
+  if (date && dayjs.utc(date).isValid()) {
+    return dayjs.utc(date).local().format(format)
+  }
+  return '-'
+}
+
+/**
+ * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
+ * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
+ * @return {string} - Chuỗi mô tả loại bài kiểm tra dễ đọc.
+ */
+export const convertQuizType = (quizType: string) => {
+  return quizType
+    .split('_')
+    .map((word, index) =>
+      index === 0
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase(),
+    )
+    .join(' ')
+}
+
 export * from './formatNumber'
 
 export const containsKeyword = (input: unknown, keyword?: string): boolean => {
@@ -386,12 +429,35 @@ export const containsKeyword = (input: unknown, keyword?: string): boolean => {
  * @param {string} input - Chuỗi HTML đầu vào.
  * @return {string} - Chuỗi HTML đã được định dạng lại với ngày tháng hiển thị theo định dạng DD/MM/YYYY.
  */
+
 export const formatNotificationHTML = (input: string): string => {
   return input.replace(
     /<strong\s+data-time\s*=\s*["']([^"']+)["']\s*><\/strong>/g,
     (match, dateTime) => {
-      const formattedDate = dayjs.utc(dateTime).local().format('DD/MM/YYYY')
+      const formattedDate = dayjs.utc(dateTime).local().format(DATE_FORMAT.DATE)
       return `<strong>${formattedDate}</strong>`
     },
   )
+}
+
+export const clearStylesHtml = (htmlContent: string) => {
+  if (htmlContent) {
+    // Loại bỏ các thẻ <style> và thuộc tính style inline
+    return htmlContent
+      .replace(/<style.*?>.*?<\/style>/gi, '') // Xóa các thẻ style
+      .replace(/\sstyle=".*?"/gi, '') // Xóa các thuộc tính inline style
+  }
+  return ''
+}
+
+export function convertSlugToTitle(slug: string): string {
+  if (!slug) return ''
+
+  return slug
+    .replace(/-/g, ' ') // thay dấu - thành dấu cách
+    .replace(/\s+/g, ' ') // gộp các khoảng trắng thừa
+    .trim() // xoá khoảng trắng 2 đầu
+    .split(' ') // tách từ
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
+    .join(' ') // ghép lại
 }

@@ -1,5 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import PdfViewer from '@components/base/pdf/pdf-viewer'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -8,7 +9,8 @@ import { useForm } from 'react-hook-form'
 import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
-
+import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -96,7 +98,7 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0  h-full w-full border">
+          <div className="absolute left-0 top-0 h-full w-full border">
             <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
               <div className="text-sm font-normal">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
@@ -124,7 +126,7 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0  h-full w-full border">
+          <div className="absolute left-0 top-0 h-full w-full border">
             <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
               <div className="text-sm font-normal">Scratch Pad</div>
               {/* <CloseIcon */}
@@ -149,87 +151,68 @@ const TestScratchPads = ({
       const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
       const exhibitsDes = exhibitData?.find((exhibit) => exhibit?.id === e?.id)
       return (
-        <MovableWindow
-          position={{
-            width: '600px',
-            height: '400px',
-            top: 'calc(75% - 250px)',
-            left: 'calc(0%)',
-          }}
+        <ModalResizeable
           key={e.id}
-          onClick={() => {
-            setOnFocusingPad(e?.id)
-          }}
-          zIndex={
-            onFocusingPad === e?.id
-              ? openScratchPad?.length + 500 + 2
-              : index + 500
-          }
-        >
-          <div className="absolute left-0 top-0  h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-white px-5">
-              <div className="truncate">
-                <span className="text-base font-semibold">{`${exhibitText} ${
-                  (i ?? 0) + 1
-                }: `}</span>
-                {exhibitsDes?.name}
+          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          position="bottom left"
+          header={
+            <div className="relative">
+              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                <div className="truncate">
+                  <span className="text-base font-semibold">{`${exhibitText} ${
+                    (i ?? 0) + 1
+                  }: `}</span>
+                  {exhibitsDes?.name}
+                </div>
               </div>
-              <button onClick={() => handleCloseScratchPad(e)}>
+              <button
+                className="absolute right-3 top-2"
+                onClick={() => handleCloseScratchPad(e)}
+              >
                 <CloseIcon />
               </button>
             </div>
-            <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-              <EditorReader
-                text_editor_content={exhibitsDes?.description}
-                className=" w-full"
-              />
-              {exhibitsDes &&
-                exhibitsDes?.files?.length > 0 &&
-                exhibitsDes?.files?.map((e: any, index: number) => {
-                  return (
-                    <div key={index} className="h-full overflow-auto bg-white">
-                      <PdfViewer file={e?.resource?.url} />
-                    </div>
-                  )
-                })}
-            </div>
+          }
+        >
+          <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+            <EditorReader
+              text_editor_content={exhibitsDes?.description}
+              className="w-full"
+            />
+            {exhibitsDes &&
+              exhibitsDes?.files?.length > 0 &&
+              exhibitsDes?.files?.map((e: any, index: number) => {
+                return (
+                  <div key={index} className="h-full overflow-auto bg-white">
+                    <FileViewer
+                      fileName={e?.resource?.name}
+                      fileUrl={e?.resource?.url}
+                    />
+                  </div>
+                )
+              })}
           </div>
-        </MovableWindow>
+        </ModalResizeable>
       )
     } else if (e.type === 'file') {
       return (
-        <MovableWindow
-          className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
-          position={{
-            width: '595px',
-            height: '650px',
-            top: 'calc(50%)',
-            left: 'calc(50%)',
-          }}
+        <ModalResizeable
+          title={e.fileName}
+          width={650}
+          height={850}
           key={e.id}
-          onClick={() => setOnFocusingPad(e.id)}
-          zIndex={
-            onFocusingPad === e.id ? openScratchPad?.length + 500 : index + 500
-          }
+          handleCloseScratchPad={() => handleCloseScratchPad(e)}
+          position="center"
         >
-          <div className="absolute left-0 top-0  h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="truncate text-sm font-normal">{e.fileName}</div>
-              {/* <CloseIcon */}
-              <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
-              </button>
-            </div>
-            <div
-              className="overflow-auto bg-white p-4"
-              style={{ height: 'calc(100% - 40px' }}
-            >
-              {/* <div className='flex flex-'> */}
-              <PdfViewer file={e?.file} />
-            </div>
-            {/* </div> */}
+          <div
+            className="overflow-auto bg-white p-4"
+            style={{ height: 'calc(100% - 40px' }}
+          >
+            {/* <div className='flex flex-'> */}
+            <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
           </div>
-        </MovableWindow>
+          {/* </div> */}
+        </ModalResizeable>
       )
     }
   })

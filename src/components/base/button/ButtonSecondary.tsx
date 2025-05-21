@@ -2,6 +2,9 @@ import React from 'react'
 import { IButtonProps } from 'src/type'
 import SpinIcon from './SpinIcon'
 
+interface IButtonSecondaryProps extends IButtonProps {
+  isSecondaryButton?: boolean
+}
 const ButtonSecondary = ({
   title,
   onClick,
@@ -11,7 +14,8 @@ const ButtonSecondary = ({
   full = false,
   loading = false,
   disabled = false,
-}: IButtonProps) => {
+  isSecondaryButton = true,
+}: IButtonSecondaryProps) => {
   let textSizeClass =
     size === 'small'
       ? 'text-[0.875rem] leading-4'
@@ -23,9 +27,9 @@ const ButtonSecondary = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-medium bg-gray-3 ${
+  let componentClass = `text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-medium bg-gray-3 ${
     disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
-  }`
+  } ${className}`
 
   if (link)
     return (
@@ -36,7 +40,7 @@ const ButtonSecondary = ({
 
   return (
     <button
-      className={`${componentClass} secondary`}
+      className={`${isSecondaryButton ? 'secondary' : ''} ${componentClass}`}
       onClick={onClick}
       disabled={disabled || loading}
     >

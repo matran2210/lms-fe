@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import { LockClosedIcon } from '@assets/icons'
@@ -104,12 +104,12 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         course?.course_section_link_parents?.[0]?.is_showing_locked ? (
           <div className="flex justify-between">
             <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-              <SappTooltip
+              <Tooltip
                 title={course?.name}
                 showTooltip={(course?.name as string)?.length > 40}
               >
                 {truncateBySpace(course?.name, 40) ?? ''}
-              </SappTooltip>
+              </Tooltip>
             </div>
             <div>
               <LockClosedIcon />
@@ -117,18 +117,18 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           </div>
         ) : (
           <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-            <SappTooltip
+            <Tooltip
               title={course?.name}
               showTooltip={(course?.name as string)?.length > 40}
             >
               {truncateBySpace(course?.name, 40) ?? ''}
-            </SappTooltip>
+            </Tooltip>
           </div>
         )}
       </div>
       <div className="des mb-15 mt-6">
         <div className="h-[120px]">
-          <SappTooltip
+          <Tooltip
             title={
               <p
                 dangerouslySetInnerHTML={{
@@ -144,7 +144,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               }}
               className="h-[120px] text-base text-bw-1"
             />
-          </SappTooltip>
+          </Tooltip>
         </div>
       </div>
       <div className="mt-auto">
