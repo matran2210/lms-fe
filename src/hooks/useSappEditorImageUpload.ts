@@ -13,7 +13,10 @@ export const useSappEditorImageUpload = () => {
       // Đọc file dưới dạng base64
       const base64String = (await fileToBase64(file)) as string
       // Chuyển base64 thành File để tải lên S3
-      const convertedFile = base64ToFile(base64String as string, 'image.png')
+      const convertedFile = base64ToFile(
+        base64String as string,
+        file.name || 'image.png',
+      )
       const response = await handleUploadFileToS3(convertedFile, location)
 
       if (!response?.url) {

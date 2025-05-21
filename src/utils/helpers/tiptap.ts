@@ -1,6 +1,7 @@
 import { UploadAPI } from '@pages/api/upload'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { convertHumanReadableToSnakeCase } from 'src/utils/index'
 // Hàm chuyển base64 thành File
 export function base64ToFile(
   base64String: string,
@@ -48,7 +49,7 @@ export const handleUploadFileToS3 = async (
       blob: convertedFile,
       size: convertedFile.size.toString(),
       description: '',
-      name: convertedFile.name,
+      name: convertHumanReadableToSnakeCase(convertedFile.name),
       getProgress: getProgress ? getProgress : () => {},
       location: location,
     })
