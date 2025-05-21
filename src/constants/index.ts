@@ -56,6 +56,14 @@ export const TitleSidebar = {
   CALENDAR: 'Calendar',
 }
 
+export const TitleTeacherSidebar = {
+  DASHBOARD: 'Dashboard',
+  MYCLASS: 'My Class',
+  MYCALENDAR: 'My Calendar',
+  MYREQUEST: 'My Request',
+  NOTIFICATIONS: 'Notifications',
+}
+
 export const GUIDELINE_PASSWORD = [
   'Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số',
 ]
