@@ -41,7 +41,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Request name',
-    dataIndex: 'name',
+    dataIndex: 'customName',
   },
   {
     title: 'Request type',
@@ -197,7 +197,7 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
-      name: (
+      customName: (
         <Link href={`${router.pathname}?id=${item.id}`}>
           <div
             onClick={() => setIsOpenViewModal(true)}
