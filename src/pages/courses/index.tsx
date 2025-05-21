@@ -11,16 +11,16 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import stepOneImg from 'src/assets/images/tour-guide/step-1-search.png'
 import stepFiveImg from 'src/assets/images/tour-guide/step-5-course-tab.png'
 import stepSixImg from 'src/assets/images/tour-guide/step-6-courses.png'
 import stepSevenImg from 'src/assets/images/tour-guide/step-7-filter.png'
+import TourGuideWelcome from 'src/assets/lotties/tour-guide-welcome.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active } from 'src/redux/slice/Course/UserGuide'
+import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 
@@ -29,12 +29,13 @@ const MASTER = 'Master Finance'
 const GENERAL = 'General Course'
 
 const MyCourse = () => {
-  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
+  const {
+    status: guideStatus,
+    isActive: guideIsActive,
+    step: guideStep,
+  } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
-  const guideIsActive = useAppSelector(
-    (state) => state.userGuideReducer?.isActive,
-  )
-  const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+
   const router = useRouter()
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
@@ -44,6 +45,19 @@ const MyCourse = () => {
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
+
+  const closeUserGuide = () => {
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
+    }
+    // Remove hidden scroll when close user guide
+    document.body.style.removeProperty('padding-right')
+    document.body.classList.remove('overflow-hidden')
+    setTimeout(() => {
+      dispatch(clearGuideState())
+    }, 50)
+  }
 
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
@@ -131,7 +145,7 @@ const MyCourse = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params.name, params.status, params.type])
+  }, [params.name, params.status, params.type, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component
@@ -152,11 +166,10 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div></div>
-        <div className="header border-b border-default bg-white">
+        <div className="header mb-6 border-b border-default bg-white">
           <div
             className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 xl-max:mx-6 
-          ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
+              ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
@@ -170,7 +183,8 @@ const MyCourse = () => {
                 title={'Search box'}
                 index={1}
                 total={6}
-                imgSrc={stepOneImg}
+                imgType="animation"
+                imgSrc={TourGuideWelcome}
               />
             )}
           </div>
@@ -263,6 +277,7 @@ const MyCourse = () => {
                 total={6}
                 titleButtonNext="Finish"
                 title="Filter"
+                handleCancel={closeUserGuide}
                 imgSrc={stepSevenImg}
               />
             )}
@@ -273,7 +288,7 @@ const MyCourse = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 6 ? 'z-50' : ''}`}
+          } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
         >
           <CoursesList
             courses={courses}
@@ -281,12 +296,12 @@ const MyCourse = () => {
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
-            guideIsActive={guideStatus && guideStep === 6}
+            guideIsActive={guideStatus === true}
           />
           {guideStatus && guideStep === 6 && (
             <PopupStep
               content={UserGuide.CONTENT_STEP_6}
-              className="top-[0px] mt-6 2xl:left-[33.5%]"
+              className="top-[20px] mt-6 2xl:left-[33.5%]"
               index={5}
               total={6}
               title="Courses"
@@ -294,7 +309,9 @@ const MyCourse = () => {
             />
           )}
         </div>
-        {guideStatus && guideStep == 0 && <PopupWelcome />}
+        {guideStatus && guideStep == 0 && (
+          <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
+        )}
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
