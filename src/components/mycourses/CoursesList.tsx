@@ -49,7 +49,7 @@ const CoursesList: React.FC<CoursesProps> = ({
 
   return (
     <>
-      {!isEmpty(courses) ? (
+      {!isEmpty(courses) && !guideIsActive ? (
         <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
           {courses?.map((course, index: number) => (
             <Course
@@ -62,9 +62,9 @@ const CoursesList: React.FC<CoursesProps> = ({
           ))}
         </div>
       ) : (
-        <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
+        <div className=" mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
           {guideIsActive && (
-            <div className="flex flex-col rounded-xl bg-white p-8 text-bw-15 shadow-sidebar">
+            <div className="item flex flex-col rounded-xl bg-white p-8 text-bw-15 shadow-sidebar">
               <SAPPBadge label="ACCA" type="info" className="font-bold" />
 
               <div className="name-course mb-4 mt-3 text-2xl font-medium">

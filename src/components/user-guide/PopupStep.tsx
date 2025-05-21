@@ -1,8 +1,9 @@
 import SappButton from '@components/base/button/SappButton'
+import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
-import { decrement, increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { decrement, increment } from 'src/redux/slice/Course/UserGuide'
 
 type Props = {
   content: string
@@ -11,7 +12,9 @@ type Props = {
   className?: string
   titleButtonNext?: string
   title?: string
-  imgSrc?: StaticImageData
+  handleCancel?: () => void
+  imgSrc?: StaticImageData | object
+  imgType?: 'static' | 'animation'
   isEnd?: boolean
 }
 
@@ -21,9 +24,11 @@ const PopupStep = ({
   total,
   className = 'top-0 left-0',
   titleButtonNext,
+  handleCancel,
   title,
   imgSrc,
   isEnd,
+  imgType = 'static',
 }: Props) => {
   const dispatch = useAppDispatch()
 
@@ -35,10 +40,7 @@ const PopupStep = ({
     dispatch(decrement())
   }
   const confirmDialogRef = useRef<HTMLDivElement>(null)
-
   const handleClose = () => {
-    dispatch(reset())
-
     if (confirmDialogRef.current) {
       confirmDialogRef.current.classList.add('animate-jump-out')
       confirmDialogRef.current.classList.add('pointer-events-none')
@@ -46,6 +48,9 @@ const PopupStep = ({
     // Remove hidden scroll when close user guide
     document.body.style.removeProperty('padding-right')
     document.body.classList.remove('overflow-hidden')
+    setTimeout(() => {
+      handleCancel && handleCancel()
+    }, 50)
   }
 
   return (
@@ -55,16 +60,24 @@ const PopupStep = ({
         className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-bw-13`}
       >
         <div>
-          {imgSrc && (
-            <div className="mb-4">
+          <div className="mb-4">
+            {(imgType === 'static' && typeof imgSrc === 'string') ||
+            (typeof imgSrc === 'object' &&
+              imgSrc !== null &&
+              'src' in imgSrc) ? (
               <Image
-                src={imgSrc}
+                src={imgSrc as StaticImageData}
                 alt={`Tour guide step ${index} - ${title}`}
                 className="rounded-lg"
                 layout="responsive"
               />
-            </div>
-          )}
+            ) : null}
+
+            {imgType === 'animation' && imgSrc && (
+              <Lottie animationData={imgSrc} loop={true} />
+            )}
+          </div>
+
           <h6 className="mb-3 text-lg font-bold">{title}</h6>
           <span className="text-base font-normal">{content}</span>
           <div

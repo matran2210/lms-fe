@@ -1,16 +1,18 @@
 import ButtonText from '@components/base/button/ButtonText'
 import SappButton from '@components/base/button/SappButton'
-import { useRef } from 'react'
+import { RefObject } from 'react'
 import SappModal from 'src/components/base/modal/SappModal'
 import { HandShake } from 'src/components/icons'
 import { UserGuide } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
-import { increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { clearGuideState, increment } from 'src/redux/slice/Course/UserGuide'
 
-type Props = {}
+type Props = {
+  confirmDialogOverLayRef: RefObject<HTMLDivElement>
+}
 
-const PopupWelcome = ({}: Props) => {
+const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
   const dispatch = useAppDispatch()
   const handleNextStep = async () => {
     dispatch(increment())
@@ -22,17 +24,17 @@ const PopupWelcome = ({}: Props) => {
       await CoursesAPI.userGuideActive()
     } catch (error) {}
   }
-  const confirmDialogRef = useRef<HTMLDivElement>(null)
-  const handleClose = () => {
-    dispatch(reset())
-
-    if (confirmDialogRef.current) {
-      confirmDialogRef.current.classList.add('animate-jump-out')
-      confirmDialogRef.current.classList.add('pointer-events-none')
+  const closeUserGuide = () => {
+    if (confirmDialogOverLayRef.current) {
+      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
+      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
     }
     // Remove hidden scroll when close user guide
     document.body.style.removeProperty('padding-right')
     document.body.classList.remove('overflow-hidden')
+    setTimeout(() => {
+      dispatch(clearGuideState())
+    }, 50)
   }
 
   return (
@@ -65,7 +67,11 @@ const PopupWelcome = ({}: Props) => {
             size="medium"
             onClick={() => handleNextStep()}
           />
-          <ButtonText title={'Skip'} className="mt-3" onClick={handleClose} />
+          <ButtonText
+            title={'Skip'}
+            className="mt-3"
+            onClick={closeUserGuide}
+          />
         </div>
       </SappModal>
     </>
