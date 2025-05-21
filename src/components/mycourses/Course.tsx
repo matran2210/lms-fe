@@ -342,9 +342,9 @@ const Course = ({
               >
                 <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 30}
+                  showTooltip={(course?.name as string)?.length > 60}
                 >
-                  {truncateString(course?.name, 30)}
+                  {truncateString(course?.name, 60)}
                 </Tooltip>
               </div>
             </div>
@@ -355,9 +355,9 @@ const Course = ({
                   <span className="ml-1 font-medium text-bw-1">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                      showTooltip={course?.classes?.[0]?.code?.length > 20}
                     >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
+                      {truncateString(course?.classes?.[0]?.code, 20)}
                     </Tooltip>
                   </span>
                 </div>
