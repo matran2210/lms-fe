@@ -60,6 +60,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         {
           repeat: REPEAT_TYPE.DOES_NOT_REPEAT,
           date_range: [new Date(), new Date()],
+          repeat_schedule: {
+            recurring_schedule: {
+              recurrence_end_date: undefined,
+            },
+          },
         },
       ],
       request_weekly_norm: [{ quantity: undefined }],
@@ -183,7 +188,11 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         interval,
         frequency,
         recurrence_end_date: dayjs
-          .utc(getValues('request_busy_schedule.0.drawer-repeat-end-on'))
+          .utc(
+            getValues(
+              'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
+            ),
+          )
           .endOf('day')
           .format('YYYY-MM-DD[T]HH:mm:ss[Z]'),
         day_of_week,
@@ -351,6 +360,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                   : data.status,
             ) ?? '',
           )
+
           setValue(
             'request_status',
             Object.values(REQUEST_STATUS).find((item) =>
@@ -424,6 +434,20 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               )
               setValue(
                 'request_busy_schedule.0.drawer-repeat-end-on',
+                dayjs(
+                  data.teacher_schedules[0].schedule.recurring_pattern_schedule
+                    .end_date,
+                ).toDate(),
+              )
+              setValue(
+                'request_busy_schedule.0.drawer-repeat-end-on',
+                dayjs(
+                  data.teacher_schedules[0].schedule.recurring_pattern_schedule
+                    .end_date,
+                ).toDate(),
+              )
+              setValue(
+                'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
                 dayjs(
                   data.teacher_schedules[0].schedule.recurring_pattern_schedule
                     .end_date,
@@ -764,6 +788,9 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                       requestStatus?.toLowerCase() !==
                         REQUEST_STATUS.PENDING.value.toLowerCase()
                     }
+                    defaultEndOn={getValues(
+                      'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
+                    )}
                   />
                 </div>
                 <div className="mb-6">

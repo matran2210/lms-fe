@@ -45,7 +45,7 @@ interface IEventRepeatFieldForm {
     | ISelect
   repeat_frequency: IRepeatFrequency
   repeat_on: (typeof REPEAT_ON)[number][]
-  end_on?: Date
+  end_on?: Date | string
   type: string
 }
 
@@ -63,16 +63,26 @@ interface IProps {
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
   rangeDate?: [Date, Date]
+  defaultEndOn?: Date | string
 }
 
 interface BlockLabelTextProps {
   text: React.ReactNode
   className?: string
+  required?: boolean
 }
 
-const BlockLabelText = ({ text, className }: BlockLabelTextProps) => {
+const BlockLabelText = ({ text, className, required }: BlockLabelTextProps) => {
   return (
-    <p className={clsx('flex items-center pr-6 font-medium', className)}>
+    <p
+      className={clsx(
+        'flex items-center pr-6 font-medium',
+        {
+          required,
+        },
+        className,
+      )}
+    >
       {text}
     </p>
   )
@@ -92,12 +102,14 @@ const EventRepeatField = ({
   setResetRepeat,
   disabled,
   rangeDate,
+  defaultEndOn,
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
 
   const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
+  const initEndonDate = useMemo(() => defaultEndOn || undefined, [defaultEndOn])
 
   const endOnMinDate = useMemo(
     () =>
@@ -112,6 +124,7 @@ const EventRepeatField = ({
       repeat_type: repeatOption?.value ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
+      end_on: defaultEndOn,
     }
   }, [defaultValue])
   const repeatTypeOptions = useMemo(() => {
@@ -247,15 +260,14 @@ const EventRepeatField = ({
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')
-        : undefined
-
+        : initEndonDate
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
         recurring_schedule: cleanObject({
           type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
-          recurrence_end_date: recurrence_end_date?.toISOString(),
+          recurrence_end_date: recurrence_end_date,
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
@@ -264,7 +276,7 @@ const EventRepeatField = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [watch, initDate])
+  }, [watch, initDate, initEndonDate])
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {
@@ -308,11 +320,11 @@ const EventRepeatField = ({
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
-        {is_repeat && repeatType != REPEAT_TYPE.CHOSEN_PATTERN && (
+        {is_repeat && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <BlockLabelText text="Repeat every" />
+                <BlockLabelText text="Repeat every" required />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -323,7 +335,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <BlockLabelText text="Repeat on" />
+                <BlockLabelText text="Repeat on" required />
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -332,7 +344,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <BlockLabelText text="End on" />
+            <BlockLabelText text="End on" required />
             <Controller
               control={control}
               name="end_on"
