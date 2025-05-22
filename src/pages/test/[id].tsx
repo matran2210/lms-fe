@@ -11,6 +11,7 @@ import {
   ExhibitsIcon,
   FlagIcon,
   HighlightIcon,
+  ResizeIcon,
   ScratchPadIcon,
   ScratchPadIconV2,
   TextSquareIcon,
@@ -2036,12 +2037,16 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-gray-12"
                       onMouseDown={() => {
                         setStartResize(true)
                       }}
                       onMouseUp={() => setStartResize(false)}
-                    ></div>
+                    >
+                      <div className="z-10 h-8 w-8 bg-white">
+                        <ResizeIcon />
+                      </div>
+                    </div>
                     <div
                       className="h-full overflow-auto bg-white py-6 "
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
