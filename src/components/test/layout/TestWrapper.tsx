@@ -78,8 +78,10 @@ const TestWrapper = ({
             <Icon type="close" />
           </div>
 
-          <div>
-            <div className=" truncate text-base">{quizDetail?.name}</div>
+          <div className="max-w-md">
+            <div className="truncate text-center text-base">
+              {quizDetail?.name}
+            </div>
             {quizDetail?.quiz_timed && (
               <Countdown
                 remainTime={quizDetail?.quiz_timed}
