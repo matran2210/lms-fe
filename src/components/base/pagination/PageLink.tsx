@@ -1,3 +1,4 @@
+import { FlagIcon } from '@assets/icons'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface Props {
@@ -71,8 +72,8 @@ const PageLink = ({
       className={`${
         type === 'table'
           ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
-          : 'min-h-default min-w-default border text-sm font-normal leading-8.5'
-      } relative flex cursor-pointer items-center justify-center p-0.5
+          : 'min-h-default min-w-default border text-sm font-normal'
+      } relative flex cursor-pointer items-center justify-center rounded p-2
       ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
         active
           ? 'border-active bg-primary text-white'
@@ -93,7 +94,9 @@ const PageLink = ({
         {children}
       </span>
       {isFlagedProp && (
-        <i className="absolute right-1 top-1 h-2 w-2 rounded-full bg-gray-1"></i>
+        <div className="absolute -right-1 -top-1.5">
+          <FlagIcon width={'16'} height={'16'} />
+        </div>
       )}
     </li>
   )

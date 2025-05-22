@@ -1874,18 +1874,16 @@ const TestDetail = () => {
                       </button>
                     </div>
                   )} */}
-                <button
-                  className="flex items-center justify-center gap-3 px-3 py-2 text-base font-semibold text-bw-13 underline 3xl:w-[150px]"
+                <div
+                  className="flex cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline 3xl:w-[150px]"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
                   }}
                 >
                   <FlagIcon />
-                  <div className="hidden text-medium-sm font-medium lg:block">
-                    Flag to Review
-                  </div>
-                </button>
+                  <div>Flag to Review</div>
+                </div>
                 {/* <button
                   disabled={currentTabContent?.done}
                   className={`flex items-center gap-3 border border-solid ${
