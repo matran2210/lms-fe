@@ -308,11 +308,11 @@ const EventRepeatField = ({
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
-        {is_repeat && repeatType != REPEAT_TYPE.CHOSEN_PATTERN && (
+        {is_repeat && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <BlockLabelText text="Repeat every" />
+                <BlockLabelText text="Repeat every" className="required" />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -323,7 +323,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <BlockLabelText text="Repeat on" />
+                <BlockLabelText text="Repeat on" className="required" />
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -332,7 +332,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <BlockLabelText text="End on" />
+            <BlockLabelText text="End on" className="required" />
             <Controller
               control={control}
               name="end_on"
