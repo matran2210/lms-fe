@@ -45,7 +45,7 @@ interface IEventRepeatFieldForm {
     | ISelect
   repeat_frequency: IRepeatFrequency
   repeat_on: (typeof REPEAT_ON)[number][]
-  end_on?: Date
+  end_on?: Date | string
   type: string
 }
 
@@ -63,6 +63,7 @@ interface IProps {
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   disabled?: boolean
   rangeDate?: [Date, Date]
+  defaultEndOn?: Date | string
 }
 
 interface BlockLabelTextProps {
@@ -92,12 +93,14 @@ const EventRepeatField = ({
   setResetRepeat,
   disabled,
   rangeDate,
+  defaultEndOn,
 }: IProps) => {
   const [repeatType, setRepeatType] = useState<RecurringScheduleType>(
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
 
   const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
+  const initEndonDate = useMemo(() => defaultEndOn || undefined, [defaultEndOn])
 
   const endOnMinDate = useMemo(
     () =>
@@ -112,6 +115,7 @@ const EventRepeatField = ({
       repeat_type: repeatOption?.value ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
+      end_on: defaultEndOn,
     }
   }, [defaultValue])
   const repeatTypeOptions = useMemo(() => {
@@ -247,15 +251,14 @@ const EventRepeatField = ({
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')
-        : undefined
-
+        : initEndonDate
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
         recurring_schedule: cleanObject({
           type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
-          recurrence_end_date: recurrence_end_date?.toISOString(),
+          recurrence_end_date: recurrence_end_date,
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
@@ -264,7 +267,7 @@ const EventRepeatField = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [watch, initDate])
+  }, [watch, initDate, initEndonDate])
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {

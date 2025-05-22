@@ -13,6 +13,7 @@ interface IProps extends IBaseFormFieldProps {
   resetRepeat?: boolean
   setResetRepeat?: React.Dispatch<React.SetStateAction<boolean>>
   rangeDate?: [Date, Date]
+  defaultEndOn?: Date | string
 }
 
 const HookFormEventRepeat = ({
@@ -30,6 +31,7 @@ const HookFormEventRepeat = ({
   setResetRepeat,
   disabled,
   rangeDate,
+  defaultEndOn,
 }: IProps) => {
   return (
     <Controller
@@ -58,6 +60,7 @@ const HookFormEventRepeat = ({
                 setResetRepeat={setResetRepeat}
                 disabled={disabled}
                 rangeDate={rangeDate}
+                defaultEndOn={defaultEndOn}
               />
 
               <>
