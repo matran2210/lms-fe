@@ -5,12 +5,14 @@ import {
 import {
   ArrowUpIcon,
   CalculatorIcon,
+  CalculatorIconV2,
   ConfirmIcon,
   ExcelIcon,
   ExhibitsIcon,
   FlagIcon,
   HighlightIcon,
   ScratchPadIcon,
+  ScratchPadIconV2,
   TextSquareIcon,
   UnHighLightIcon,
   WordIcon,
@@ -467,6 +469,10 @@ const TestDetail = () => {
       }
     }
     return -1
+  }, [openScratchPad])
+
+  const isScatchPadEnabled = useMemo(() => {
+    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
   }, [openScratchPad])
 
   const handleOpenScratchPad = (
@@ -1675,8 +1681,8 @@ const TestDetail = () => {
           setSubmitEventTest={setSubmitEventTest}
           type={type}
           footer={
-            <div className=" flex items-center justify-between px-8 py-4">
-              <div className="flex h-full items-center">
+            <div className="flex items-center justify-between px-8 py-4">
+              <div className="flex h-full items-center gap-1">
                 {/* <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
@@ -1698,17 +1704,22 @@ const TestDetail = () => {
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
                 <button
-                  className="h-full"
+                  className={`h-full rounded-lg ${
+                    isScatchPadEnabled && 'bg-primary'
+                  }`}
                   onClick={() => {
                     handleOpenScratchPad('scratch_pad')
                     trackGAEvent('Click Button ScratchPad Test')
                   }}
                 >
-                  <ButtonContent icon={<ScratchPadIcon />} content="" />
+                  <ButtonContent
+                    icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                    content=""
+                  />
                 </button>
                 <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
+                  className={`h-full rounded-lg ${
+                    checkCalExist > -1 && 'bg-primary'
                   }`}
                   onClick={() => {
                     handleOpenScratchPad('calculator')
@@ -1716,7 +1727,10 @@ const TestDetail = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <ButtonContent icon={<CalculatorIcon />} content="" />
+                  <ButtonContent
+                    icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                    content=""
+                  />
                 </button>
                 {exhibitData && exhibitData?.length > 0 && (
                   <button className="relative h-full" ref={dropUpRef}>
