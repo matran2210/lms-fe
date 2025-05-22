@@ -31,14 +31,16 @@ const TestTimeOutModal = ({
     <SappModalV3
       open={open}
       cancelButtonCaption="Quit"
-      okButtonCaption="Submit"
+      okButtonCaption="View Results"
+      showCancelButton={false}
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
       buttonSize="extra"
       icon={<TimeIcon />}
       header="Time Out"
-      content="You are running out of time to do your test"
+      content="The test has timed out and has been submitted automatically."
+      isMaskClosable={false}
     />
   )
 }

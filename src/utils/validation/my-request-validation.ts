@@ -2,171 +2,215 @@ import { z } from 'zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { REQUEST_TYPE } from 'src/constants/my-request'
 import { isPast } from 'date-fns'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
+import dayjs from 'dayjs'
 
-// Function to check for overlapping schedules
-export const findLastOverlappingIndex = (
-  schedules: { start_time: Date; end_time: Date }[],
-) => {
-  const sortedSchedules = schedules
-    .map((item, index) => ({ ...item, index })) // Store original index
-    .sort((a, b) => a.start_time?.getTime() - b.start_time?.getTime()) // Sort by start_time
+// Shared fields for all schemas
 
-  let lastOverlapIndex = -1
+const MAX_RANGE_DAYS = 91 // Maximum range in days
 
-  for (let i = sortedSchedules.length - 1; i > 0; i--) {
-    if (sortedSchedules[i - 1].end_time > sortedSchedules[i].start_time) {
-      lastOverlapIndex = sortedSchedules[i].index // Store original index
-      break
-    }
-  }
+const sharedFields = z
+  .object({
+    request_name: z
+      .string({ required_error: VALIDATE_REQUIRED })
+      .trim()
+      .min(1, VALIDATE_REQUIRED),
+    note: z.string().optional(),
+    request_type_value: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Ensure request_type_value exists if it's not provided
+      return data.request_type_value && data.request_type_value.trim() !== ''
+    },
+    {
+      message: VALIDATE_REQUIRED,
+      path: ['request_type'],
+    },
+  )
 
-  return lastOverlapIndex
-}
-
-const sharedFields = z.object({
+// Busy schedule schema
+const busySheduleSchema = z.object({
   request_name: z
     .string({ required_error: VALIDATE_REQUIRED })
     .trim()
     .min(1, VALIDATE_REQUIRED),
-  request_type_value: z.string({ required_error: VALIDATE_REQUIRED }),
-  note: z.string().optional(),
-})
-// Request Validation Schema with overlapping schedule check
-const discriminated = z.discriminatedUnion('request_type_value', [
-  z.object({
-    request_name: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_type_value: z.literal(REQUEST_TYPE.BUSY_SCHEDULE.value),
-    note: z.string().optional(),
-  }),
+  request_type_value: z.literal(REQUEST_TYPE.BUSY_SCHEDULE.value), // Discriminant field
 
-  z.object({
-    request_name: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_type_value: z.literal(REQUEST_TYPE.WEEKLY_NORM.value),
-    note: z.string().optional(),
-    request_weekly_norm: z
-      .array(
-        z
-          .object({
-            date_range: z
-              .array(z.union([z.string(), z.date()]))
-              .min(2, 'Date range must have exactly 2 dates'),
-            quantity: z
-              .number({ required_error: VALIDATE_REQUIRED })
-              .min(1, VALIDATE_REQUIRED)
-              .max(6, 'Maximum quantity per week is 6.'),
-          })
-          .transform((data) => {
-            return {
-              start_time: new Date(data.date_range[0]),
-              end_time: new Date(data.date_range[1]),
-              quantity: data.quantity,
-            }
-          })
-          .refine((data) => data.start_time < data.end_time, {
-            message: 'Start time must be before end time',
-            path: ['date_range'],
-          })
-          .refine((data) => !isPast(data.start_time), {
-            message: 'Start time must be greater or equal than today',
-            path: ['date_range'],
-          })
+  request_busy_schedule: z
+    .array(
+      z.object({
+        date_range: z
+          .array(z.union([z.string(), z.date()]))
+          .min(2, 'Date range must have exactly 2 dates')
           .refine(
-            (data) =>
-              (data.end_time?.getTime() - data.start_time?.getTime()) /
-                (1000 * 60 * 60 * 24) <
-              91,
-            {
-              message: `The duration must be less than 91 days`,
-              path: ['date_range'],
+            ([start, end]) => {
+              const startDate = new Date(start)
+              const endDate = new Date(end)
+              const diffDays =
+                (endDate.getTime() - startDate.getTime()) /
+                (1000 * 60 * 60 * 24)
+              return diffDays <= MAX_RANGE_DAYS
             },
-          )
-          .refine(
-            (data) =>
-              (data.end_time?.getTime() - data.start_time?.getTime()) /
-                (1000 * 60 * 60 * 24) >=
-              13,
-            {
-              message: `The duration must be greater than 14 days`,
-              path: ['date_range'],
-            },
+            { message: VALIDATE_REQUIRED },
           ),
-      )
-      .min(1, 'At least one Norm is required')
-      .superRefine((schedules, ctx) => {
-        // Check for overlapping schedules
-        const lastOverlapIndex = findLastOverlappingIndex(schedules)
-        if (lastOverlapIndex !== -1) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Duplicated time period. Please check again.',
-            path: [lastOverlapIndex, 'date_range'],
-          })
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Duplicated time period. Please check again.',
-            path: [lastOverlapIndex, 'date_range'],
-          })
-        }
-        // Maximum limit of 7 schedules
-        if (schedules.length > 7) {
-          schedules.forEach((_, index) => {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: 'Maximum number of Weekly Norms is 5',
-              path: [index, 'description'],
-            })
-          })
-        }
+        description: z
+          .string({ required_error: VALIDATE_REQUIRED })
+          .trim()
+          .min(1, VALIDATE_REQUIRED),
       }),
-  }),
-  z.object({
-    request_name: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_type_value: z.literal(REQUEST_TYPE.TIMEOFF.value),
+    )
+    .min(1, 'At least one schedule is required'),
+})
 
-    class_code: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_time_off: z
-      .array(
-        z.object({
-          lessonId: z.string({ required_error: VALIDATE_REQUIRED }),
-          reason: z.string({ required_error: VALIDATE_REQUIRED }),
-        }),
-      )
-      .min(1, 'At least one schedule is required')
-      .max(2, 'Maximum number of schedules is 2'),
-  }),
-  z.object({
-    request_name: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_type_value: z.literal(REQUEST_TYPE.TEACHING_MODE.value),
+// Weekly norm schema
+const weeklyNormSchema = z.object({
+  request_name: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+  request_type_value: z.literal(REQUEST_TYPE.WEEKLY_NORM.value), // Discriminant field
+  note: z.string().optional(),
 
-    class_code: z
-      .string({ required_error: VALIDATE_REQUIRED })
-      .trim()
-      .min(1, VALIDATE_REQUIRED),
-    request_time_off: z
-      .array(
-        z.object({
-          lessonId: z.string({ required_error: VALIDATE_REQUIRED }),
+  request_weekly_norm: z
+    .array(
+      z.object({
+        date_range: z
+          .array(z.union([z.string(), z.date()]))
+          .min(2, 'Date range must have exactly 2 dates')
+          .refine(
+            ([start, end]) => {
+              const startDate = new Date(start)
+              const endDate = new Date(end)
+              const diffDays =
+                (endDate.getTime() - startDate.getTime()) /
+                (1000 * 60 * 60 * 24)
+              return diffDays <= MAX_RANGE_DAYS
+            },
+            { message: 'Date range must be less than or equal to 91 days' },
+          ),
+        quantity: z
+          .number({ required_error: VALIDATE_REQUIRED })
+          .min(1, VALIDATE_REQUIRED)
+          .max(6, 'Maximum quantity per week is 6.'),
+      }),
+    )
+    .min(1, 'At least one Norm is required')
+    .superRefine((entries, ctx) => {
+      // Step 1: Validate each date_range duration
+      entries.forEach((entry, index) => {
+        const [start, end] = entry.date_range
+        const startDate = new Date(start)
+        const endDate = new Date(end)
 
-          reason: z.string({ required_error: VALIDATE_REQUIRED }),
-        }),
-      )
-      .min(1, 'At least one schedule is required')
-      .max(2, 'Maximum number of schedules is 2'),
-  }),
+        const diffDays =
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+
+        // Check that start is Monday
+        if (startDate.getDay() !== 1) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [index, 'date_range'],
+            message: 'Start date must be a Monday',
+          })
+        }
+
+        // Check that end is Sunday
+        if (endDate.getDay() !== 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [index, 'date_range'],
+            message: 'End date must be a Sunday',
+          })
+        }
+
+        if (diffDays < 13) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [index, 'date_range'],
+            message: 'The duration must be at least 14 days',
+          })
+        }
+      })
+
+      const sorted = entries
+        .map((entry, index) => ({
+          index,
+          start: new Date(entry.date_range[0]),
+          end: new Date(entry.date_range[1]),
+        }))
+        .sort((a, b) => a.start.getTime() - b.start.getTime())
+
+      for (let i = 1; i < sorted.length; i++) {
+        const prev = sorted[i - 1]
+        const current = sorted[i]
+        if (prev.end > current.start) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: [current.index, 'date_range'],
+            message: 'Duplicated time period. Please check again.',
+          })
+        }
+      }
+    }),
+})
+
+// Time-off schema
+const timeOffSchema = z.object({
+  request_name: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+  request_type_value: z.literal(REQUEST_TYPE.TIMEOFF.value), // Discriminant field
+  class_code: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+  request_time_off: z
+    .array(
+      z.object({
+        lessonId: z
+          .string({ required_error: VALIDATE_REQUIRED })
+          .min(1, VALIDATE_REQUIRED),
+        reason: z
+          .string({ required_error: VALIDATE_REQUIRED })
+          .min(1, VALIDATE_REQUIRED),
+      }),
+    )
+    .min(1, 'At least one schedule is required')
+    .max(2, 'Maximum number of schedules is 2'),
+})
+
+// Teaching mode schema
+const teachingModeSchema = z.object({
+  request_name: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+  request_type_value: z.literal(REQUEST_TYPE.TEACHING_MODE.value), // Discriminant field
+
+  class_code: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .trim()
+    .min(1, VALIDATE_REQUIRED),
+
+  request_time_off: z
+    .array(
+      z.object({
+        lessonId: z.string({ required_error: VALIDATE_REQUIRED }),
+        reason: z.string({ required_error: VALIDATE_REQUIRED }),
+      }),
+    )
+    .min(1, 'At least one schedule is required')
+    .max(2, 'Maximum number of schedules is 2'),
+})
+
+// Discriminated union
+const discriminated = z.discriminatedUnion('request_type_value', [
+  busySheduleSchema,
+  weeklyNormSchema,
+  timeOffSchema,
+  teachingModeSchema,
 ])
+
 export const requestValidationSchema = sharedFields.and(discriminated)

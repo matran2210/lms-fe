@@ -9,9 +9,9 @@ import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION } from 'src/constants'
+import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -22,6 +22,7 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
+  const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -136,6 +137,20 @@ const CourseDetail = () => {
     setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
   })
 
+  useEffect(() => {
+    let timeout: NodeJS.Timeout
+
+    if (isSuccess && data?.pages?.[0]?.courseDetail?.remind_choosing_exam) {
+      timeout = setTimeout(() => {
+        setShowSelectExamPopup(true)
+      }, DELAY_TIME_DISPLAY_POPUP)
+    }
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [isSuccess, data])
+
   return (
     <Layout title="Course Detail">
       <div className="border-b border-e-default bg-white">
@@ -172,9 +187,9 @@ const CourseDetail = () => {
           </>
         )}
       </div>
-      {isSuccess && data.pages[0].courseDetail.remind_choosing_exam && (
-        <SelectExamPopup courseData={data} />
-      )}
+      {isSuccess &&
+        data.pages[0].courseDetail.remind_choosing_exam &&
+        showSelectExamPopup && <SelectExamPopup courseData={data} />}
 
       <PopupModalTest
         class_code={data?.pages?.[0]?.courseDetail?.code}

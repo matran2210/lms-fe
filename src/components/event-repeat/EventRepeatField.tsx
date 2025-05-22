@@ -23,9 +23,16 @@ import {
 } from 'src/type/my-calendar'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
+import clsx from 'clsx'
+import utc from 'dayjs/plugin/utc'
+
+const DEFAULT_END_DATE_HOUR_OFFSET = 1
+const MAX_END_DATE_YEAR_RANGE = 2
 
 dayjs.extend(weekday)
 dayjs.extend(localeData)
+dayjs.extend(utc)
 
 interface IRepeatTypeOption {
   label: string
@@ -58,6 +65,19 @@ interface IProps {
   rangeDate?: [Date, Date]
 }
 
+interface BlockLabelTextProps {
+  text: React.ReactNode
+  className?: string
+}
+
+const BlockLabelText = ({ text, className }: BlockLabelTextProps) => {
+  return (
+    <p className={clsx('flex items-center pr-6 font-medium', className)}>
+      {text}
+    </p>
+  )
+}
+
 const EventRepeatField = ({
   className = '',
   label,
@@ -77,12 +97,19 @@ const EventRepeatField = ({
     EVENT_REPEAT_TYPES.NO_REPEAT as RecurringScheduleType,
   )
 
-  const initDate = useMemo(() => defaultDate || new Date(), [defaultDate])
+  const initDate = useMemo(() => rangeDate?.[0] || new Date(), [rangeDate])
+
+  const endOnMinDate = useMemo(
+    () =>
+      rangeDate?.[1] ||
+      dayjs().add(DEFAULT_END_DATE_HOUR_OFFSET, 'hour').toDate(),
+    [rangeDate],
+  )
 
   const formattedDefaultValue = useMemo(() => {
     // TODO: Add code to add default values
     return {
-      repeat_type: repeatOption ?? EVENT_REPEAT_TYPES.NO_REPEAT,
+      repeat_type: repeatOption?.value ?? EVENT_REPEAT_TYPES.NO_REPEAT,
       repeat_frequency: { interval: 1, unit: FREQUENCY_UNITS.WEEK },
       repeat_on: [],
     }
@@ -110,6 +137,9 @@ const EventRepeatField = ({
       {
         label: EVENT_REPEAT_LABEL.EVERY_WEEKDAY,
         value: EVENT_REPEAT_TYPES.EVERY_WEEKDAY,
+        disabled: ['Saturday', 'Sunday'].includes(
+          dayjs(initDate).format('dddd'),
+        ),
       },
       { label: EVENT_REPEAT_LABEL.CUSTOM, value: EVENT_REPEAT_TYPES.CUSTOM },
     ]
@@ -186,7 +216,7 @@ const EventRepeatField = ({
           )
 
         if (value?.repeat_type === EVENT_REPEAT_TYPES.WEEKLY)
-          return [dayjs(initDate).weekday()]
+          return [dayjs(initDate).utc().weekday()]
 
         return undefined
       }
@@ -200,7 +230,7 @@ const EventRepeatField = ({
             (value?.repeat_frequency?.unit === FREQUENCY_UNITS.MONTH ||
               value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR))
         )
-          return [dayjs(initDate).date()]
+          return [dayjs(initDate).utc().date()]
 
         return undefined
       }
@@ -210,14 +240,14 @@ const EventRepeatField = ({
           (value?.repeat_type === EVENT_REPEAT_TYPES.CUSTOM &&
             value?.repeat_frequency?.unit === FREQUENCY_UNITS.YEAR)
         )
-          return [dayjs(initDate).month() + 1]
+          return [dayjs(initDate).utc().month() + 1]
 
         return undefined
       }
 
       const recurrence_end_date = value?.end_on
         ? dayjs(value?.end_on).endOf('day')
-        : initDate
+        : undefined
 
       onChange({
         repeat: value?.repeat_type !== EVENT_REPEAT_TYPES.NO_REPEAT,
@@ -225,7 +255,7 @@ const EventRepeatField = ({
           type: value?.repeat_type,
           interval: getInterval(),
           frequency: getFrequency(),
-          recurrence_end_date: recurrence_end_date.toISOString(),
+          recurrence_end_date: recurrence_end_date?.toISOString(),
           day_of_week: getDayOfWeek(),
           day_of_month: getDayOfMonth(),
           month_of_year: getMonthOfYear(),
@@ -234,7 +264,7 @@ const EventRepeatField = ({
     })
 
     return () => subscription.unsubscribe()
-  }, [watch])
+  }, [watch, initDate])
 
   useEffect(() => {
     if (resetRepeat && setResetRepeat) {
@@ -278,11 +308,11 @@ const EventRepeatField = ({
           defaultValue={EVENT_REPEAT_TYPES.NO_REPEAT}
           disabled={disabled}
         />
-        {is_repeat && (
+        {is_repeat && repeatType != REPEAT_TYPE.CHOSEN_PATTERN && (
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <p className="required flex items-center pr-6">Repeat every</p>
+                <BlockLabelText text="Repeat every" />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -293,7 +323,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <p className="required flex items-center pr-6">Repeat on</p>
+                <BlockLabelText text="Repeat on" />
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -302,7 +332,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <p className="required flex items-center pr-6">End on</p>
+            <BlockLabelText text="End on" />
             <Controller
               control={control}
               name="end_on"
@@ -310,8 +340,11 @@ const EventRepeatField = ({
                 <DatePicker
                   format="DD/MM/YYYY"
                   onChange={(newDate) => field.onChange(newDate)}
-                  minDate={dayjs(initDate)}
-                  maxDate={dayjs(initDate).add(2, 'year')}
+                  minDate={dayjs(endOnMinDate)}
+                  maxDate={dayjs(endOnMinDate).add(
+                    MAX_END_DATE_YEAR_RANGE,
+                    'year',
+                  )}
                   value={field?.value ? dayjs(field.value) : undefined}
                   className="h-11.25 w-full"
                   color="secondary"
