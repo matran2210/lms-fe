@@ -1820,7 +1820,7 @@ const TestDetail = () => {
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
-                <div className="">
+                <div className="w-[1278px]">
                   <TabSlide
                     data={filteredTabs}
                     currentTab={currentPage}
@@ -1959,7 +1959,7 @@ const TestDetail = () => {
           }
         >
           <div
-            className="relative flex h-screen flex-col overflow-hidden bg-white"
+            className="relative flex h-full flex-col overflow-hidden bg-white"
             onMouseUp={() => {
               setStartResize(false)
               setCurrentLeftWidth(leftWidth)

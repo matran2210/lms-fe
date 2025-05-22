@@ -4,6 +4,7 @@ import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
+import { ShowLessIcon, ShowMoreIcon } from '@assets/icons'
 
 interface IProps {
   data: Array<any>
@@ -30,7 +31,6 @@ const TabSlide = ({
 }: IProps) => {
   const elementRef = useRef(null) as any
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
-
   useEffect(() => {
     if (elementRef?.current && !activeShowAll && isScrollCenter) {
       elementRef.current.scrollTo(
@@ -175,9 +175,7 @@ const TabSlide = ({
       <div
         className={`${
           !activeShowAll
-            ? `relative ${
-                hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
-              } mx-7`
+            ? `relative ${hasScrollBar ? 'w-[calc(100%-132px)]' : 'w-full'} mx-7`
             : ' flex w-full items-center gap-6'
         }`}
       >
@@ -203,7 +201,7 @@ const TabSlide = ({
           </div>
         )}
         <div
-          className={'flex w-full select-none gap-2'}
+          className={'flex w-full select-none gap-2 overflow-x-hidden'}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -353,7 +351,7 @@ const TabSlide = ({
                 setActiveShowAll(!activeShowAll)
               }}
             >
-              {!activeShowAll ? 'Show All' : 'Show Less'}
+              {!activeShowAll ? <ShowMoreIcon /> : <ShowLessIcon />}
             </div>
           </div>
         )}

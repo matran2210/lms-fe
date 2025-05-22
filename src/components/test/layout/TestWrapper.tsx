@@ -57,7 +57,7 @@ const TestWrapper = ({
   const dispatch = useAppDispatch()
 
   return (
-    <Layout>
+    <Layout className="flex h-screen flex-col">
       <Header
         className={clsx(
           'sticky top-0 z-10 flex w-full items-center bg-white px-8 py-3 shadow-sm',
@@ -113,13 +113,14 @@ const TestWrapper = ({
           </div>
         </div>
       </Header>
-      <Content className={clsx('overflow-auto p-0', contentClass)}>
+      <Content className={clsx('flex-grow overflow-auto p-0', contentClass)}>
         {children}
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm fixed bottom-0 z-10 w-full border-t border-gray-15 bg-white p-0',
+          'shadow-t-sm w-full border-t border-gray-15 bg-white p-0',
           footerClass,
+          'h-auto',
         )}
       >
         {footer}
