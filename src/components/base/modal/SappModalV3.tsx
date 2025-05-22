@@ -84,7 +84,7 @@ const SappModalV3 = ({
     >
       {icon && (
         <div className="flex justify-center">
-          <div className="w-fit rounded-full bg-secondary p-8">{icon}</div>
+          <div className="w-fit rounded-full bg-secondary">{icon}</div>
         </div>
       )}
       {header && (
