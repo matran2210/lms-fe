@@ -69,11 +69,20 @@ interface IProps {
 interface BlockLabelTextProps {
   text: React.ReactNode
   className?: string
+  required?: boolean
 }
 
-const BlockLabelText = ({ text, className }: BlockLabelTextProps) => {
+const BlockLabelText = ({ text, className, required }: BlockLabelTextProps) => {
   return (
-    <p className={clsx('flex items-center pr-6 font-medium', className)}>
+    <p
+      className={clsx(
+        'flex items-center pr-6 font-medium',
+        {
+          required,
+        },
+        className,
+      )}
+    >
       {text}
     </p>
   )
@@ -315,7 +324,7 @@ const EventRepeatField = ({
           <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
-                <BlockLabelText text="Repeat every" className="required" />
+                <BlockLabelText text="Repeat every" required />
                 <RepeatFrequency
                   defaultValue={repeat_frequency}
                   onChange={(data) => setFormValue('repeat_frequency', data)}
@@ -326,7 +335,7 @@ const EventRepeatField = ({
 
             {repeat_on_visible && (
               <>
-                <BlockLabelText text="Repeat on" className="required" />
+                <BlockLabelText text="Repeat on" required />
                 <RepeatOn
                   date={initDate}
                   onChange={(data) => setFormValue('repeat_on', data)}
@@ -335,7 +344,7 @@ const EventRepeatField = ({
               </>
             )}
 
-            <BlockLabelText text="End on" className="required" />
+            <BlockLabelText text="End on" required />
             <Controller
               control={control}
               name="end_on"

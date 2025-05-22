@@ -2,6 +2,7 @@
 import router from 'next/router'
 import { FC, useEffect } from 'react'
 import SappModal from '../modal/SappModal'
+import { AlertCircleSharp } from '@assets/icons'
 
 // define the props for the confirm dialog component
 export type SappConfirmDialogProps = {
@@ -55,8 +56,8 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         setOpen={closeConfirmation}
         // refClass="md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
         footerButtonClassName="justify-center flex flex-row-reverse gap-4"
-        color="danger-2"
-        colorCancel="cancel"
+        color="okPopup"
+        colorCancel="cancelPopup"
         showHeader={false}
         zIndex="z-[9999999]"
         position="center"
@@ -67,18 +68,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         <div className="">
           <div className="flex items-center justify-center">
             <div className="flex h-[100px] w-[100px] items-center justify-center rounded-full bg-secondary">
-              <svg
-                width="68"
-                height="68"
-                viewBox="0 0 68 68"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M34 6.375C18.7677 6.375 6.375 18.7677 6.375 34C6.375 49.2323 18.7677 61.625 34 61.625C49.2323 61.625 61.625 49.2323 61.625 34C61.625 18.7677 49.2323 6.375 34 6.375ZM36.6562 48.863H31.3438V43.5505H36.6562V48.863ZM36.125 40.375H31.875L31.0781 19.125H36.9219L36.125 40.375Z"
-                  fill="#FFB800"
-                />
-              </svg>
+              <AlertCircleSharp />
             </div>
           </div>
           <div className="mb-3 mt-6">
