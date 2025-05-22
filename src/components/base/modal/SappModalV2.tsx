@@ -5,7 +5,7 @@ import { IButtonColors } from 'src/type'
 
 interface IProps {
   children: ReactNode
-  title: string | undefined
+  title: ReactNode
   open: boolean
   handleCancel: () => void
   showFooter?: boolean

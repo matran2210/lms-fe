@@ -56,6 +56,14 @@ export const TitleSidebar = {
   CALENDAR: 'Calendar',
 }
 
+export const TitleTeacherSidebar = {
+  DASHBOARD: 'Dashboard',
+  MYCLASS: 'My Class',
+  MYCALENDAR: 'My Calendar',
+  MYREQUEST: 'My Request',
+  NOTIFICATIONS: 'Notifications',
+}
+
 export const GUIDELINE_PASSWORD = [
   'Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số',
 ]
@@ -357,6 +365,9 @@ export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
   [EVENT_REPEAT_TYPES.EVERY_WEEKDAY]: 'Every weekday (Monday to Friday)',
   [EVENT_REPEAT_TYPES.CUSTOM]: 'Custom',
+  [EVENT_REPEAT_TYPES.WEEKLY]: 'Weekly',
+  [EVENT_REPEAT_TYPES.MONTHLY]: 'Monthly',
+  [EVENT_REPEAT_TYPES.ANNUALLY]: 'Annually',
 }
 
 export enum FREQUENCY_UNITS {
@@ -528,6 +539,8 @@ export enum DATE_FORMAT {
 }
 
 export const LABEL_MAX_LENGTH = 12
+
+export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
 
 export * from './socketEvents'
 export * from './localStorageKeys'

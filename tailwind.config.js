@@ -106,6 +106,7 @@ module.exports = {
           13: '#78829D',
           14: '#404041',
           15: '#D1D5DB',
+          16: '#DADFE5',
           99: '#E5E7EB',
           100: '#F6F6F6',
           900: '#181C32',
@@ -166,6 +167,10 @@ module.exports = {
         },
         purple: {
           1: '#8F6FEA',
+        },
+        txt: {
+          primary: '#1F2937',
+          secondary: '#9CA3AF',
         },
       },
       borderColor: {
@@ -397,8 +402,6 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
       textColor: {
-        // primary: '#1F2937',
-        secondary: '#9CA3AF',
         heading: '#374151',
       },
     },
