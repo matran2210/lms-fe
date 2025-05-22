@@ -58,7 +58,7 @@ const OverProgress = () => {
       },
       series: [
         {
-          name: 'Over Progress',
+          name: 'Overall Progress',
           type: 'pie',
           radius: ['50%', '100%'],
           label: { show: false },
@@ -80,7 +80,7 @@ const OverProgress = () => {
           ],
         },
         {
-          name: 'Over Progress',
+          name: 'Overall Progress',
           type: 'pie',
           radius: ['50%', '75%'],
           label: { show: false },
@@ -142,7 +142,7 @@ const OverProgress = () => {
     <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-bw-12 shadow-activity lg:col-span-4 3.5xl:px-8">
       <div className="mb-5 flex items-center justify-between border-b border-gray-15 pb-3">
         <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
-          {isNormal ? 'Over Progress' : 'Your Exam Prediction'}
+          {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
         <div
           className={`${isNormal ? 'invisible' : 'text-xsm text-gray-11 4xl:text-sm'}`}

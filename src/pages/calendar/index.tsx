@@ -4,7 +4,6 @@ import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendar } from 'sapp-common-package'
-import 'sapp-common-package/dist/index.css'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
   CALENDAR_COLOR_TYPES,
@@ -93,7 +92,7 @@ const Page = () => {
         end_date: currentTime.endDate.toISOString(),
       })
     }
-  }, [currentTime.endDate, currentTime.startDate])
+  }, [])
 
   const events = useMemo(() => {
     if (!data?.calendars) return []
@@ -105,7 +104,7 @@ const Page = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
+      <div className="mx-auto my-0 max-w-[1570px] pt-6 xl-max:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="font-normal text-[#050505]">Calendar</div>
@@ -130,7 +129,8 @@ const Page = () => {
                     isHoliday: item?.is_holiday,
                     isCaseStudy: item?.is_case_study,
                     isTest: item?.is_test,
-                    isKeyBeforeContent: item?.is_key_before_content,
+                    isKeyContentBefore: item?.is_key_before_content,
+                    isKeyContentAfter: item?.is_key_after_content,
                   }
                 }) ?? []
               }
