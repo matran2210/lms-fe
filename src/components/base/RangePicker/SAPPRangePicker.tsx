@@ -4,15 +4,10 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
+import { IBaseFormFieldProps } from 'src/type/common'
 
-export interface SAPPRangePickerProps {
-  control: Control<any>
-  name: string
-  defaultValue?: any
-  className?: string
-  required?: boolean
+export interface SAPPRangePickerProps extends IBaseFormFieldProps {
   allowClear?: boolean
-  disabled?: boolean
   placeholder?: [string, string]
   showTime?: boolean
   formatDate?: string

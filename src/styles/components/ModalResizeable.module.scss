@@ -1,9 +1,5 @@
 .modalResizeable {
-  :global {
-    .ant-modal-content {
-      @apply bg-transparent p-0 shadow-none;
-    }
-  }
+  @apply fixed left-0 top-0 z-[1000];
 }
 
 .modalHeader {

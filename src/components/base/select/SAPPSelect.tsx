@@ -6,26 +6,20 @@ import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPLabel from '../Label/SAPPLabel'
+import { IBaseFormFieldProps } from 'src/type/common'
 
-interface SAPPSelectProps {
-  control: Control<any>
-  name: string
-  defaultValue?: any
-  className?: string
+interface SAPPSelectProps extends IBaseFormFieldProps {
   placeholder?: string
   options: DefaultOptionType[]
   size?: ButtonSize
   suffixIcon?: React.ReactNode
-  label?: string
-  required?: boolean
-  labelClass?: string
-  disabled?: boolean
   isSearchable?: boolean
   onSearch?: (value: string) => Promise<void> | any
   isLoading?: boolean
   onMenuScrollToBottom?: () => void
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
+  allowClear?: boolean
 }
 
 const SAPPSelect = ({
@@ -48,6 +42,7 @@ const SAPPSelect = ({
   onMenuScrollToBottom,
   onChange: onSelectChange,
   onDropdownVisibleChange,
+  allowClear,
 }: SAPPSelectProps) => {
   return (
     <>
@@ -91,6 +86,7 @@ const SAPPSelect = ({
                     }
                   }
                 }}
+                allowClear={allowClear}
               />
               <ErrorMessage>{error?.message}</ErrorMessage>
             </>

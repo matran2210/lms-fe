@@ -98,7 +98,7 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0  h-full w-full border">
+          <div className="absolute left-0 top-0 h-full w-full border">
             <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
               <div className="text-sm font-normal">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
@@ -126,7 +126,7 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0  h-full w-full border">
+          <div className="absolute left-0 top-0 h-full w-full border">
             <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
               <div className="text-sm font-normal">Scratch Pad</div>
               {/* <CloseIcon */}
@@ -177,7 +177,7 @@ const TestScratchPads = ({
           <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
             <EditorReader
               text_editor_content={exhibitsDes?.description}
-              className=" w-full"
+              className="w-full"
             />
             {exhibitsDes &&
               exhibitsDes?.files?.length > 0 &&
