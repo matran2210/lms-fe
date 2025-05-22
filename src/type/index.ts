@@ -15,6 +15,8 @@ export type IButtonColors =
   | 'text'
   | 'textUnderline'
   | 'quizActivity'
+  | 'danger-2'
+  | 'cancel'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void

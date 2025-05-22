@@ -55,36 +55,36 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
         setOpen={closeConfirmation}
         // refClass="md:p-8 p-5 flex flex-col animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8"
         footerButtonClassName="justify-center flex flex-row-reverse gap-4"
-        color="danger"
+        color="danger-2"
+        colorCancel="cancel"
         showHeader={false}
         zIndex="z-[9999999]"
         position="center"
+        className="rounded-lg !p-8"
+        okButtonClass="rounded-md h-[45px]"
+        cancelButtonClass="rounded-md h-[45px]"
       >
         <div className="">
-          <div className="mx-auto mb-7 flex h-fit w-fit flex-shrink-0 items-center justify-center rounded-full bg-red-100">
-            <svg
-              className="h-[100px] w-[100px] text-state-error"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-              />
-            </svg>
-          </div>
-          <div className="mt-3 text-center">
-            <h3
-              className="text-base font-semibold leading-6 text-gray-900"
-              id="modal-title"
-            ></h3>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">{message}</p>
+          <div className="flex items-center justify-center">
+            <div className="flex h-[100px] w-[100px] items-center justify-center rounded-full bg-secondary">
+              <svg
+                width="68"
+                height="68"
+                viewBox="0 0 68 68"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M34 6.375C18.7677 6.375 6.375 18.7677 6.375 34C6.375 49.2323 18.7677 61.625 34 61.625C49.2323 61.625 61.625 49.2323 61.625 34C61.625 18.7677 49.2323 6.375 34 6.375ZM36.6562 48.863H31.3438V43.5505H36.6562V48.863ZM36.125 40.375H31.875L31.0781 19.125H36.9219L36.125 40.375Z"
+                  fill="#FFB800"
+                />
+              </svg>
             </div>
+          </div>
+          <div className="mb-3 mt-6">
+            <p className="text-center text-sm font-medium text-bw-11">
+              {message}
+            </p>
           </div>
         </div>
       </SappModal>

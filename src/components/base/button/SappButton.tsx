@@ -25,6 +25,8 @@ const COLORS = {
   textUnderline:
     'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
   quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
+  'danger-2': 'bg-accent-error text-white',
+  cancel: 'bg-gray-4 text-accent-default',
 }
 
 const PADDINGS = {
@@ -49,6 +51,8 @@ const COLOR_LOADING = {
   text: 'bg-none',
   textUnderline: 'bg-none',
   quizActivity: 'bg-white',
+  'danger-2': 'danger-2',
+  cancel: 'cancel',
 }
 
 const SappButton = ({
