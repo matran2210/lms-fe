@@ -221,19 +221,18 @@ const Course = ({
         category == PROGRAM.CFA ||
         category == PROGRAM.CMA)
 
-    // Tạm ẩn redirect dashboard begin
-    // if (
-    //   isRedirectDashboard &&
-    //   (determineButtonToShow == BUTTON_STATUS.Review ||
-    //     determineButtonToShow == BUTTON_STATUS.Resume)
-    // ) {
-    //   router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
-    // } else {
-    //   router.push(`/courses/my-course/${classInstance?.id}`)
-    // }
+    // Redirect to dashboard if the course type is practice, normal
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
+      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    } else {
+      router.push(`/courses/my-course/${classInstance?.id}`)
+    }
 
     router.push(`/courses/my-course/${classInstance?.id}`)
-    // Tạm ẩn redirect dashboard end
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -451,7 +450,7 @@ const Course = ({
                       __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      enableCourse ? 'text-bw-1' : 'text-gray-2'
                     }`}
                   />
                 </Tooltip>
@@ -461,7 +460,7 @@ const Course = ({
                     __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    enableCourse ? 'text-bw-1' : 'text-gray-2'
                   }`}
                 />
               )}
@@ -478,7 +477,7 @@ const Course = ({
                     />
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -487,7 +486,7 @@ const Course = ({
                   <div className="number">
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     >
                       {progressPart}%
@@ -497,7 +496,7 @@ const Course = ({
                 <div className="progressbar h-1.5 bg-gray-3">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                      enableCourse ? 'bg-primary' : 'bg-gray-2'
                     } h-1.5`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
