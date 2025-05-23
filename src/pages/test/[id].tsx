@@ -98,6 +98,7 @@ import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestWrapper from '@components/test/layout/TestWrapper'
+import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 
 declare global {
   interface Window {
@@ -934,8 +935,8 @@ const TestDetail = () => {
   const OptionShowAll = () => {
     return (
       <div className="w-max">
-        <HookFormCheckBoxGroup
-          toggle
+        <HookFormRadioGroup
+          // toggle
           control={controlFilter}
           name={'filter'}
           options={[
@@ -2351,7 +2352,9 @@ const TestDetail = () => {
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
-                <div className="w-[1278px]">
+                <div
+                  className={`${activeShowAll ? 'w-[1443px]' : 'w-[1278px]'}`}
+                >
                   <TabSlide
                     data={filteredTabs}
                     currentTab={currentPage}

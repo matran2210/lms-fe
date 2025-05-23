@@ -202,7 +202,7 @@ const TabSlide = ({
           </div>
         )}
         <div
-          className={'flex w-full select-none gap-2 overflow-x-hidden'}
+          className={'flex w-full select-none  gap-2 overflow-hidden'}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
