@@ -15,6 +15,7 @@
 @import './components/_collapse.scss';
 
 @import './components/_table.scss';
+@import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @tailwind base;
@@ -73,6 +74,7 @@ html {
 body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  @apply bg-gray-4;
 }
 
 a {
@@ -1310,4 +1312,8 @@ select:focus {
 
 .dashboard_tooltip {
   @apply max-w-max;
+}
+
+[type='search']:focus {
+  --tw-ring-color: none;
 }

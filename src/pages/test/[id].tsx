@@ -5,12 +5,14 @@ import {
 import {
   ArrowUpIcon,
   CalculatorIcon,
-  ConfirmIcon,
+  CalculatorIconV2,
   ExcelIcon,
   ExhibitsIcon,
   FlagIcon,
   HighlightIcon,
+  ResizeIcon,
   ScratchPadIcon,
+  ScratchPadIconV2,
   TextSquareIcon,
   UnHighLightIcon,
   WordIcon,
@@ -30,18 +32,22 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { debounce, isEmpty, isUndefined, result, uniqueId } from 'lodash'
+import {
+  cloneDeep,
+  debounce,
+  isEmpty,
+  isUndefined,
+  result,
+  uniqueId,
+} from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   DISPLAY_TYPE,
-  ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
-  FINISHED_TEST_TITLE,
   GRADING_METHOD,
   PageLink,
   PROGRAM,
@@ -54,28 +60,42 @@ import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
 import { CoursesAPI } from '../api/courses'
-import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
-import SappModalV3 from '@components/base/modal/SappModalV3'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
+import HeaderTest from '@components/test/HeaderTest'
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
+  AnswerItem,
   AnswerList,
+  DragDropAnswerItem,
+  IDataQuestion,
   Requirement,
+  RequirementItem,
   ScratchPad,
   ScratchPadValue,
-  TabItem,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import { QuestionAPI } from '../api/question'
 import TestScratchPads from './TestScratchPads'
-import HeaderTest from '@components/test/HeaderTest'
+import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
+import {
+  checkTypeAndRenderTitle,
+  getAnswerDragNDrop,
+  getAnswerMatching,
+  getResult,
+  getValueFillText,
+  getValueSelectText,
+  isValuesEqual,
+} from '../../utils/helpers/quiz-test/helper'
+import CompletingReportModal from './modal/CompletingReportModal'
+import dayjs from 'dayjs'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestWrapper from '@components/test/layout/TestWrapper'
 
@@ -203,6 +223,9 @@ const TestDetail = () => {
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             solution={solution}
+            handleGetData={(data: DragDropAnswerItem) => {
+              setValue(`${currentTabID}_drag_drop_answer`, data)
+            }}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -243,9 +266,12 @@ const TestDetail = () => {
             solution={solution}
             name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={getValues(
-              `${currentTabID}_${essayData?.index}_answer`,
-            )}
+            defaultValue={
+              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text ||
+              currentTabContent?.answer
+            }
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -278,11 +304,22 @@ const TestDetail = () => {
     answers?.map((item: Answer, index: number) => {
       if (!item.attempted) {
         result.push(index + 1)
-      } else if (
-        !item.done &&
-        !validateAnswer({ answer: item.answer, answer_file: item?.answer_file })
-      ) {
-        result.push(index + 1)
+      } else {
+        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
+          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
+            result.push(index + 1)
+          }
+        } else {
+          if (
+            !item.done &&
+            !validateAnswer({
+              answer: item.answer,
+              answer_file: item?.answer_file,
+            })
+          ) {
+            result.push(index + 1)
+          }
+        }
       }
     })
     setUnSubmitAnswerData(result)
@@ -317,67 +354,24 @@ const TestDetail = () => {
     }
     return true
   }
+  // validate essay question with requirement
+  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
+    if (data?.requirements?.length > 0) {
+      return data?.requirements?.some(
+        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
+      )
+    } else {
+      return false
+    }
+  }
 
   const router = useRouter()
 
-  const useGetQuizDetail = () => {
-    const [quizDetail, setQuizDetail] = useState<any>(undefined)
-    const [loading, setLoading] = useState(true)
-    const router = useRouter()
+  const { quizDetail } = useGetQuizDetail(router.query.id as string)
+  const { questions } = useGetQuestionTabs(router.query.id as string)
 
-    useEffect(() => {
-      const fetchQuizDetail = async () => {
-        if (router.query.id) {
-          try {
-            setLoading(true)
-            const response = await CoursesAPI.getDetailQuizById(router.query.id)
-            setQuizDetail(response.data)
-          } catch (err) {
-          } finally {
-            setLoading(false)
-          }
-        }
-      }
-
-      fetchQuizDetail()
-    }, [router.query.id]) // Dependency on router.query.id
-
-    return { quizDetail, loading }
-  }
-
-  const useGetQuestionTabs = () => {
-    const [questions, setQuestionTabs] = useState<any>(undefined)
-    const [loading, setLoading] = useState(true)
-    const router = useRouter()
-
-    useEffect(() => {
-      const fetchQuestionTabs = async () => {
-        if (router.query.id) {
-          try {
-            setLoading(true)
-            const response = await CoursesAPI.getQuestionTabsById(
-              router.query.id,
-            )
-            setQuestionTabs(response.data)
-          } catch (err) {
-          } finally {
-            setLoading(false)
-          }
-        }
-      }
-
-      fetchQuestionTabs()
-    }, [router.query.id]) // Dependency on router.query.id
-
-    return { questions, loading }
-  }
-
-  const { quizDetail } = useGetQuizDetail()
-  const { questions } = useGetQuestionTabs()
   const type = router.query.type
-
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-
   const { control, getValues, setValue } = useForm()
   const {
     control: controlFilter,
@@ -406,11 +400,6 @@ const TestDetail = () => {
   })
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
-  const [quizAttempId, setQuizAttempId] = useState({
-    id: '',
-    number_of_attempts: 0,
-    is_limited: false,
-  })
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
   const timeRef = useRef(null) as any
@@ -440,9 +429,21 @@ const TestDetail = () => {
     open: false,
     resultId: '',
   })
+  const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
+  const [listSubmitError, setListSubmitError] = useState<
+    Array<{
+      question_id: string
+      total_attempt_time: number
+      scratch_pads: ScratchPad[]
+      [key: string]: any
+    }>
+  >([])
+  const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
+  const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
 
   useClickOutside({
     ref: dropUpRef,
@@ -456,9 +457,405 @@ const TestDetail = () => {
 
   const currentTabContent = useMemo(() => {
     if (tabs && tabs.length > 0) {
-      return tabs.find((e: any) => e.id === currentPage)
+      const answerSubmitted = answersSubmitted.find(
+        (e: any) => e.questionId === currentPage,
+      )
+      const objTab = tabs.find((e: any) => e.id === currentPage)
+      if (answerSubmitted) {
+        const getCorrectAndSolution = (
+          currentTabContent: any,
+          answerSubmitted: any,
+        ): {
+          corrects: any
+          solution: any
+          isSelfReflection: boolean
+          requirements: any[]
+        } => {
+          if (!answerSubmitted?.[0]) {
+            return {
+              corrects: {},
+              solution: '',
+              isSelfReflection: false,
+              requirements: [],
+            }
+          }
+
+          const {
+            answers,
+            question_matchings,
+            solution,
+            is_self_reflection,
+            requirements,
+          } = answerSubmitted[0]
+
+          // Handle different question types
+          if (
+            [
+              QUESTION_TYPES.ONE_CHOICE,
+              QUESTION_TYPES.TRUE_FALSE,
+              QUESTION_TYPES.MULTIPLE_CHOICE,
+            ].includes(currentTabContent.qType)
+          ) {
+            return {
+              corrects:
+                answers?.reduce(
+                  (acc: { [key: string]: boolean }, curr: any) => ({
+                    ...acc,
+                    [curr.id]: curr.is_correct,
+                  }),
+                  {},
+                ) || {},
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (
+            [QUESTION_TYPES.FILL_WORD, QUESTION_TYPES.SELECT_WORD].includes(
+              currentTabContent.qType,
+            )
+          ) {
+            return {
+              corrects: { corrects: answers || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+            return {
+              corrects: { corrects: question_matchings || [] },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+            return {
+              corrects: {
+                corrects: (answers || []).sort(
+                  (a: any, b: any) => a?.answer_position - b?.answer_position,
+                ),
+              },
+              solution,
+              isSelfReflection: is_self_reflection || false,
+              requirements: requirements || [],
+            }
+          }
+
+          return {
+            corrects: {},
+            solution: solution,
+            isSelfReflection: is_self_reflection,
+            requirements: requirements,
+          }
+        }
+
+        const dataCorrectAndSolution = getCorrectAndSolution(
+          objTab,
+          answerSubmitted?.results,
+        )
+
+        const updatedObjTab = answerSubmitted?.results
+          ? { ...objTab, ...dataCorrectAndSolution }
+          : { ...objTab }
+
+        if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
+          // Case: if objTab has data
+          if (essayData) {
+            if ((objTab?.data?.requirements ?? []).length > 0) {
+              const requirementAmswer = (objTab?.data?.requirements ?? []).find(
+                (req: Requirement) => req?.id === essayData?.req?.id,
+              )
+              if (
+                requirementAmswer &&
+                requirementAmswer?.answer_text &&
+                requirementAmswer?.answer_file
+              ) {
+                return {
+                  ...objTab,
+                  // ...requirementAmswer,
+                  // done: true,
+                  attempted: true,
+                }
+              } else {
+                return {
+                  ...objTab,
+                  data: {
+                    ...objTab?.data,
+                    requirements: (objTab?.data?.requirements ?? []).map(
+                      (req: any) => {
+                        const requirementData = (
+                          answerSubmitted?.answer ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        )
+
+                        return {
+                          ...req,
+                          answer_file:
+                            req?.answer_file !== undefined
+                              ? req?.answer_file
+                              : requirementData?.answer_file,
+                          short_answer:
+                            req?.short_answer !== undefined
+                              ? req?.short_answer
+                              : requirementData?.short_answer,
+                          answer_text:
+                            req?.answer_text !== undefined
+                              ? req?.answer_text
+                              : requirementData?.short_answer,
+                        }
+                      },
+                    ),
+                  },
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                }
+              }
+            } else {
+              // No requirement
+              return {
+                ...updatedObjTab,
+                // ...requirementAmswer,
+                // done: true,
+                answer:
+                  updatedObjTab?.answer !== undefined
+                    ? updatedObjTab?.answer
+                    : answerSubmitted?.short_answer,
+
+                answer_file:
+                  updatedObjTab?.answer_file !== undefined
+                    ? updatedObjTab?.answer_file
+                    : answerSubmitted?.answer_file,
+
+                attempted: true,
+              }
+            }
+          }
+          // Case: objTab no data
+          else {
+            if ((updatedObjTab?.data?.requirements ?? []).length > 0) {
+              // & answerSubmitted has data
+              if (answerSubmitted?.answer) {
+                return {
+                  ...updatedObjTab,
+                  data: {
+                    ...updatedObjTab?.data,
+                    requirements: (updatedObjTab?.data?.requirements ?? []).map(
+                      (req: Requirement) => {
+                        const requirementAmswer = (
+                          answerSubmitted?.answer ?? []
+                        ).find(
+                          (r: RequirementItem) => r.requirement_id === req?.id,
+                        )
+                        return {
+                          ...req,
+                          answer_file: requirementAmswer?.answer_file,
+                          short_answer: requirementAmswer?.short_answer,
+                          answer_text: requirementAmswer?.short_answer,
+                        }
+                      },
+                    ),
+                  },
+                  // done: true,
+
+                  attempted: true,
+                  answer: null,
+                }
+              }
+
+              // & answerSubmitted no data
+              else {
+                return {
+                  ...objTab,
+                  // done: true,
+                  attempted: true,
+                  answer: null,
+                }
+              }
+            } else {
+              return {
+                ...updatedObjTab,
+                // done: true,
+                attempted: true,
+                answer: answerSubmitted?.short_answer,
+                answer_file: answerSubmitted?.answer_file,
+              }
+            }
+          }
+        }
+
+        if (
+          objTab?.data?.qType === QUESTION_TYPES.ONE_CHOICE ||
+          objTab?.data?.qType === QUESTION_TYPES.TRUE_FALSE
+        ) {
+          // Case: if objTab has data
+          if (updatedObjTab?.question_answer_id) {
+            return {
+              ...updatedObjTab,
+              // done: true,
+              attempted: true,
+              answer: objTab?.question_answer_id,
+            }
+          } else if (objTab?.answer) {
+            return updatedObjTab
+          }
+          // Case: objTab no data and answerSubmitted has data
+          else if (answerSubmitted?.question_answer_id) {
+            return {
+              ...updatedObjTab,
+              // done: true,
+              attempted: true,
+              answer: answerSubmitted?.question_answer_id,
+            }
+          } else {
+            return updatedObjTab
+          }
+        }
+
+        const listAnswers =
+          objTab?.answer && objTab?.answer.length > 0
+            ? objTab?.answer
+            : answerSubmitted?.answer && answerSubmitted?.answer.length > 0
+              ? answerSubmitted?.answer
+              : []
+        const transformAnswerData = listAnswers.map(
+          (answer: AnswerItem | string, index: number) => {
+            let savedData: AnswerItem | undefined
+            let currentAnswer: string | undefined
+            let currentQuestion: string | undefined
+            if (typeof answer === 'string') {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) => item.question_id === objTab.id,
+                    )
+                  : undefined
+
+              currentAnswer = answer
+              currentQuestion = objTab.id
+            } else {
+              savedData =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.find(
+                      (item: AnswerItem) =>
+                        item.question_id === answer.question_id,
+                    )
+                  : undefined
+
+              currentAnswer = answer.answer_id ?? savedData?.answer_id
+              currentQuestion = answer.question_id ?? savedData?.question_id
+            }
+
+            if (objTab?.data?.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+              return currentAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.MATCHING) {
+              return {
+                answer_id: currentAnswer,
+                question_id: currentQuestion,
+              }
+            } else if (
+              objTab?.data?.qType === QUESTION_TYPES.DRAG_DROP &&
+              typeof answer !== 'string'
+            ) {
+              let objAnswer: DragDropAnswerItem | undefined
+              const savedData = answer
+              // Case: Tab has answer
+              if (
+                objTab?.data?.answers &&
+                objTab?.data?.answers.length > 0 &&
+                objTab?.answer &&
+                objTab?.answer.length > 0
+              ) {
+                const hasCurrentAnswer = objTab?.data?.answers.some(
+                  (it: any) => it.id === answer.idAnswer,
+                )
+                if (hasCurrentAnswer) {
+                  objAnswer = answer
+                } else {
+                  objAnswer = {
+                    id: answer?.id ?? '',
+                    idAnswer: undefined,
+                    value: '',
+                    position: index + 1,
+                  }
+                }
+              }
+
+              // Case: Tab no answer
+              // & has savedData answer
+              else if (savedData) {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === savedData?.answer_id,
+                )
+
+                objAnswer = {
+                  id: currentAnswer?.dropId,
+                  idAnswer: savedData?.answer_id,
+                  value: currentAnswer?.answer,
+                  position: index + 1,
+                }
+              }
+
+              // Case: Tab no answer
+              // & no savedData answer
+              else {
+                const currentAnswer = (objTab?.data?.answers ?? []).find(
+                  (el: any) => el.id === objTab?.data?.answers[0].id,
+                )
+
+                objAnswer = {
+                  id: currentAnswer?.dropId,
+                  idAnswer: undefined,
+                  value: '',
+                  position: index + 1,
+                }
+              }
+              return objAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
+              return currentAnswer
+            } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
+              const savedData: AnswerItem =
+                answersSubmitted.answer && answersSubmitted?.answer.length > 0
+                  ? answersSubmitted.answer.at(index)
+                  : undefined
+
+              currentAnswer =
+                typeof answer !== 'string'
+                  ? (answer.answer_text ?? savedData?.answer_text)
+                  : answer
+              return currentAnswer
+            }
+          },
+        )
+
+        if (transformAnswerData?.length > 0) {
+          return {
+            ...updatedObjTab,
+            answer: transformAnswerData,
+            // done: true,
+          }
+        } else {
+          return updatedObjTab
+        }
+      } else {
+        return objTab
+      }
     } else return undefined
-  }, [currentPage, tabs])
+  }, [currentPage, tabs, answersSubmitted, essayData])
+
+  useEffect(() => {
+    if (currentTabContent?.id) {
+      const oldCurrentTabData = cloneDeep(currentTabContent)
+      setOldCurrentTabData(oldCurrentTabData)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentTabContent?.id])
 
   const checkCalExist = useMemo(() => {
     for (let i in openScratchPad) {
@@ -467,6 +864,10 @@ const TestDetail = () => {
       }
     }
     return -1
+  }, [openScratchPad])
+
+  const isScatchPadEnabled = useMemo(() => {
+    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
   }, [openScratchPad])
 
   const handleOpenScratchPad = (
@@ -499,21 +900,11 @@ const TestDetail = () => {
     })
   }
 
-  const handleFlagQuestion = (tab: any) => {
-    setTabs((prev: any) => {
-      const newData = prev.map((item: any) => {
-        if (tab === item.id) {
-          if (!item.flaged) {
-            toast.success('The question has been marked!')
-          } else {
-            toast.success('The question has been unmaked!')
-          }
-          return { ...item, flaged: !item.flaged }
-        }
-        return item
-      })
-      return newData
-    })
+  interface Tab {
+    id: string
+    flag?: boolean
+    is_viewed_answer?: boolean
+    [key: string]: any
   }
 
   const handleCloseScratchPad = (pad: any) => {
@@ -585,7 +976,8 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getAnswerDragNDrop()) {
+      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
+        getAnswerDragNDrop()) {
         if (e.idAnswer && e.idAnswer !== '') {
           return true
         }
@@ -629,6 +1021,7 @@ const TestDetail = () => {
       const value = isSubmit
         ? getValues(`${currentContent?.id}_0_answer`)
         : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
@@ -678,81 +1071,6 @@ const TestDetail = () => {
   const refEditor = useRef(null) as any
 
   // TODO: Implement this
-  const getValueFillText = () => {}
-
-  const getValueSelectText = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll(
-      'select.sapp-select--selectword-preview',
-    ) as any
-
-    for (let e of inputs) {
-      value.push(e?.value)
-    }
-    return value
-  }
-
-  const getAnswerMatching = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
-      const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
-    }
-
-    return value
-  }
-
-  const getAnswerDragNDrop = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
-      const idAnswer = e.querySelector('.answer-box')
-      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-    }
-    return value
-  }
-
-  const getResult = async (currentTabContent: any) => {
-    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
-    let corrects = {} as any
-    if (
-      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-    ) {
-      corrects = res?.data?.[0].answers?.reduce(
-        (previousValue: any, currentValue: any) => {
-          return {
-            ...previousValue,
-            [currentValue.id]: currentValue.is_correct,
-          }
-        },
-        {} as { [key: string]: boolean },
-      )
-    } else if (
-      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
-      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
-    ) {
-      corrects = { corrects: [...res?.data?.[0]?.answers] }
-    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
-      corrects = { corrects: [...res?.data?.[0]?.question_matchings] }
-    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      corrects = {
-        corrects: [
-          ...res?.data?.[0]?.answers?.sort(
-            (a: any, b: any) => a?.answer_position - b?.answer_position,
-          ),
-        ],
-      }
-    }
-    return {
-      corrects: corrects,
-      solution: res?.data?.[0]?.solution,
-      isSelfReflection: res?.data?.[0]?.is_self_reflection,
-      requirements: res?.data?.[0]?.requirements,
-    }
-  }
 
   const confirmAnswer = async (
     corrects: any,
@@ -784,6 +1102,7 @@ const TestDetail = () => {
           attempted: true,
           corrects: corrects,
           solution: solution,
+          is_viewed_answer: true,
           timeSpent: item?.timeSpent
             ? Date.now() - startTime + item?.timeSpent
             : Date.now() - startTime,
@@ -797,57 +1116,49 @@ const TestDetail = () => {
   }
 
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
-    if (!currentContent?.done) {
-      if (
-        currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-        currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-        currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
-      ) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_answer`),
-          currentPage,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-        const answers = handleSaveAnswer(
-          getAnswerMatching(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-        const answers = handleSaveAnswer(
-          getAnswerDragNDrop(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
-        const answers = handleSaveAnswer(
-          getValueSelectText(),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_fillword`),
-          currentPage,
-          tabs,
-        )
-        return answers
-      } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
-        const answers = handleSaveAnswer(
-          getValues(`${currentPage}_${essayData?.index}_answer`),
-          currentContent?.id,
-          tabs,
-        )
-        return answers
-      } else return tabs
-    } else {
-      return tabs
-    }
+    if (
+      currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_answer`),
+        currentContent,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
+      const answers = handleSaveAnswer(
+        getAnswerMatching(),
+        currentContent,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_drag_drop_answer`) ?? getAnswerDragNDrop(),
+        currentContent,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
+      const answers = handleSaveAnswer(
+        getValueSelectText(),
+        currentContent,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.FILL_WORD) {
+      const answers = handleSaveAnswer(
+        getValues(`${currentPage}_fillword`),
+        currentContent,
+        tabs,
+      )
+      return answers
+    } else if (currentContent.qType === QUESTION_TYPES.ESSAY) {
+      const answers = handleSaveAnswerEssay(currentContent, tabs)
+      return answers
+    } else return tabs
   }
   async function getDetail(currentPage: string) {
     let topicDescription
@@ -927,12 +1238,32 @@ const TestDetail = () => {
     setScratchPadValues(null)
   }
 
-  const handleSaveAnswer = (data: any, tabId: any, tabs: any) => {
-    let newData = [] as any
-    for (let item of tabs) {
-      if (tabId === item?.id) {
-        var newItem = {
+  const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
+    const newData = (tabs ?? []).map((item: any) => {
+      if (tabContent.id === item?.id) {
+        return {
           ...item,
+          data: {
+            ...item?.data,
+            answers: (item?.data?.answers ?? []).map(
+              (answer: Answer, index: number) => {
+                if (typeof data === 'string') {
+                  return {
+                    ...answer,
+                    dropId: data,
+                  }
+                } else {
+                  const existAnswer = (data ?? []).find(
+                    (e: any) => e.idAnswer === answer.id,
+                  )
+                  return {
+                    ...answer,
+                    dropId: existAnswer?.id,
+                  }
+                }
+              },
+            ),
+          },
           answer: data,
           attempted: item?.attempted || checkAnswered(item),
           timeSpent: !item?.done
@@ -943,72 +1274,134 @@ const TestDetail = () => {
                 : Date.now() - startTime
             : item?.timeSpent,
         }
-
-        newData.push(newItem)
-      } else {
-        newData.push(item)
       }
-    }
+      return item
+    })
+    return newData
+  }
+
+  const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
+    const newData = tabs.map((item: any) => {
+      if (tabContent?.id === item?.id) {
+        if (
+          (tabContent?.data?.requirements ?? item?.data?.requirements ?? [])
+            .length > 0
+        ) {
+          return {
+            ...item,
+            data: {
+              ...item?.data,
+              requirements: (
+                tabContent?.data?.requirements ??
+                item?.data?.requirements ??
+                []
+              ).map((requirement: Requirement, reqIndex: number) => {
+                const editorContent = getValues(
+                  `${currentPage}_${reqIndex}_answer`,
+                )
+
+                return {
+                  ...requirement,
+                  answer_text: editorContent ?? requirement?.answer_text,
+                }
+              }),
+            },
+
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          }
+        } else {
+          const answer = getValues(
+            `${currentTabContent?.id}_${essayData?.index}_answer`,
+          )
+          return {
+            ...item,
+            answer: answer,
+
+            attempted: item?.attempted || checkAnswered(item),
+            timeSpent: !item?.done
+              ? item?.timeSpent
+                ? Date.now() - startTime + item?.timeSpent
+                : Date.now() - startTime <= 0
+                  ? 0
+                  : Date.now() - startTime
+              : item?.timeSpent,
+          }
+        }
+      } else {
+        return item
+      }
+    })
     return newData
   }
 
   const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
-    setTabs((prev: any) => {
-      let _tabs = [...prev]
-      let newData = [] as any
-      for (let item of _tabs) {
-        if (currentPage === item.id) {
-          let newItem = { ...item }
-          if (
-            requirementIndex !== null &&
-            item.data.requirements &&
-            essayData?.req !== undefined
-          ) {
-            newItem = {
-              ...item,
-              data: {
-                ...item.data,
-                requirements: (item?.data?.requirements || [])?.map(
-                  (req: any, idx: number) => {
-                    if (idx === requirementIndex) {
-                      return {
-                        ...req,
-                        answer_file: {
-                          file_key: file?.file_key,
-                          file_name: file?.name,
-                        },
-                      }
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
+          return {
+            ...tab,
+            data: {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
+                  if (idx === requirementIndex) {
+                    return {
+                      ...req,
+                      answer_file: {
+                        file_key: file?.file_key,
+                        file_name: file?.name,
+                      },
                     }
-                    return req
-                  },
-                ),
-              },
-            }
-          } else {
-            newItem = {
-              ...item,
-              answer_file: {
-                file_key: file?.file_key,
-                file_name: file?.name,
-              },
-            }
+                  }
+                  return req
+                },
+              ),
+            },
           }
-          newData.push(newItem)
-        } else {
-          newData.push(item)
+        }
+        // Case Essay has no requirement
+        return {
+          ...tab,
+          answer_file: {
+            file_key: file?.file_key,
+            file_name: file?.name,
+          },
         }
       }
-      return newData
+      return tab
     })
+    setTabs(newTabs)
   }
 
   const handleChangeTypeEssay = (value: number) => {
-    setTabs((prev: any) => {
-      const arr = [...prev]
-      const index = arr.findIndex((e) => e.id === currentPage)
-      arr[index] = { ...arr[index], response_type: value }
-      return arr
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        return {
+          ...tab,
+          data: {
+            ...tab?.data,
+            requirements: currentTabContent?.data?.requirements?.map(
+              (req: any, idx: number) => {
+                return {
+                  ...req,
+                  response_type: value,
+                }
+              },
+            ),
+          },
+        }
+      }
+      return tab
     })
+    setTabs(newTabs)
   }
 
   const answerListRef = useRef<AnswerList>({})
@@ -1021,230 +1414,325 @@ const TestDetail = () => {
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
     useCourseContext()
 
-  const handleSubmitQuestion = async (type_submit: 'timeout' | 'submit') => {
-    let allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let quiz_position_mapping = []
-    let answers: {
-      question_id: any
-      question_answer_id?: any
-      time_spent: number
-      answer?: any
-      short_answer?: any
-      requirement_id?: any
-      response_option?: any
-      active?: string
-      answer_file?: any
-    }[] = []
-    let reformTabs: any[] = []
-    setLoading(true)
-    setSubmited(true)
-    for (let e of allQuest) {
-      reformTabs.push({ ...e, done: true })
-      if (e.answer) {
-        if (
-          e.qType === QUESTION_TYPES.ONE_CHOICE ||
-          e.qType === QUESTION_TYPES.TRUE_FALSE
-        ) {
-          answers.push({
-            question_id: e.id,
-            question_answer_id: e.answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
-          let answer = []
-          for (let el of e.answer) {
-            answer.push({ answer_id: el })
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.MATCHING) {
-          answers.push({
-            question_id: e.id,
-            answer: e.answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e?.answer?.[i].idAnswer) {
-              answer.push({
-                answer_id: e?.answer?.[i]?.idAnswer,
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.SELECT_WORD) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
-              answer.push({
-                answer_id: e.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        } else if (e.qType === QUESTION_TYPES.FILL_WORD) {
-          let answer = []
-          for (let i in e.answer) {
-            if (e.answer[i] && e.answer[i] !== '') {
-              answer.push({
-                answer_text: e.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({
-            question_id: e.id,
-            answer,
-            time_spent: Math.ceil(e.timeSpent / 1000),
-          })
-        }
+  const handleSubmitAnswer = async (action?: string) => {
+    if (!currentTabContent) return
+    if (currentTabContent?.is_viewed_answer) return
+
+    // Early return for tab changes if question not answered
+    if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
+      if (!checkAnswered(currentTabContent)) return
+      if (action === 'change-tab' || action === 'finish') {
+        const isEqualValue = await isValuesEqual(
+          currentTabContent,
+          oldCurrentTabData,
+          getValues,
+        )
+        // Check if the current tab content is the same as the old tab content
+        if (isEqualValue) return
       }
-      if (e.qType === QUESTION_TYPES.ESSAY) {
-        if (checkAnswered(e, true)) {
-          const requirements = e?.data?.requirements?.length
-            ? e?.data?.requirements
-            : [null]
-          if (requirements?.length) {
-            requirements?.forEach((requirement: Requirement | null) => {
-              answers.push({
-                question_id: e.id,
-                short_answer:
-                  answerListRef?.current?.[requirement?.id || ''] ??
-                  (requirement?.id ? '' : e?.answer || ''),
-                requirement_id: requirement?.id || null,
-                response_option:
-                  e?.data?.response_option ??
-                  (e?.response_type === 0 ? 'WORD' : 'SHEET'),
-                time_spent: Math.ceil(e?.timeSpent / 1000),
-                active: 'SUBMITED',
-                answer_file: requirement?.answer_file || e?.answer_file || null,
-              })
-            })
-          } else {
-            answers.push({
-              question_id: e.id,
-              short_answer: e?.answer || '',
-              requirement_id: null,
-              response_option:
-                e?.data?.response_option ??
-                (e?.response_type === 0 ? ESSAY_TYPE.WORD : ESSAY_TYPE.SHEET),
-              time_spent: Math.ceil(e?.timeSpent / 1000),
-              active: 'SUBMITED',
-              answer_file: e?.answer_file || null,
-            })
-          }
-        }
-      }
-      quiz_position_mapping.push({
-        question_id: e.id,
-        answers: e.data?.answers,
-      })
     }
 
-    if (type_submit === 'submit') {
-      setTabs(async () => {
-        await handleChangeTab(tabs[0].id)
-        // ref.setKey
-        return reformTabs
-      })
-      dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
-        total_attempt_time:
-          quizDetail?.quiz_timed * 60 -
-          (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-        scratch_pads: scratchPads || [],
-      })
-      if (res) {
-        if (isCompletedCourse.status) {
-          setTimeout(() => {
-            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 2000)
-        }
+    // Get current answers and prepare submission data
+    const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+    const currentQuestion = allQuest.find(
+      (e: any) => e.id === currentTabContent?.id,
+    )
 
-        if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-          setOpenReportModal({
-            open: true,
-            resultId: res?.data?.id,
-          })
-          return
-        }
-        if (type === 'entrance') {
-          router.replace(`/entrance-test/test-result/${res?.data?.id}`)
-        } else if (type === 'event-test') {
-          router.replace(`/event-test`)
-          setSubmitEventTest(true)
-          localStorage.setItem(
-            'category',
-            JSON.stringify(res?.data?.course_category?.name),
-          )
-        } else {
-          if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
-            router.replace(`/courses/test/test-result/${res?.data?.id}`)
-          } else {
-            if (
-              courseType === 'FOUNDATION_COURSE' &&
-              quizDetail?.quiz_type == 'FINAL_TEST'
-            ) {
-              router.push(localStorage.getItem('courseDetail') || '')
-            } else {
-              router.replace(`/courses/test/test-result/${res?.data?.id}`)
-            }
-          }
+    // if (!currentQuestion?.answer) return
+    // Format answer based on question type
+    const answerItem = formatAnswerItem(currentQuestion)
+    // Prepare submission payload
+    const payload = {
+      question_id: currentTabContent?.id,
+      total_attempt_time:
+        quizDetail?.quiz_timed * 60 -
+        (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
+      scratch_pads: scratchPads || [],
+      flag: currentTabContent?.flag,
+      is_viewed_answer:
+        action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
+      ...answerItem,
+    }
+
+    // Disable unsaved changes tracking
+    dispatch(disableUnsavedChange())
+
+    try {
+      const res = await CoursesAPI.submitAnswer(
+        quizAttempt?.id as string,
+        payload,
+      )
+
+      if (res?.success) {
+        // Remove from error list on success
+        setListSubmitError((prev) =>
+          prev.filter((item) => item.question_id !== currentTabContent?.id),
+        )
+      } else {
+        // Add to error list on failure
+        handleSubmissionError(payload)
+      }
+    } catch (err) {
+      // Handle API errors
+      handleSubmissionError(payload)
+      return false
+    }
+  }
+
+  const handleFlagQuestion = async (question_id: string) => {
+    try {
+      const payload = {
+        question_id,
+        flag: !currentTabContent?.flag,
+      }
+      await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
+      setTabs((prevTabs: Tab[]) =>
+        prevTabs.map((tab) =>
+          tab.id === question_id ? { ...tab, flag: !tab.flag } : tab,
+        ),
+      )
+    } catch (error) {}
+  }
+
+  // Helper function to format answer based on question type
+  const formatAnswerItem = (question: any) => {
+    const baseAnswer = {
+      question_id: question.id,
+      time_spent: Math.ceil(question.timeSpent / 1000),
+    }
+    // Handle essay questions
+    if (question.qType === QUESTION_TYPES.ESSAY) {
+      if (!checkAnswered(question, true)) return null
+      const requirements =
+        question?.data?.requirements?.length > 0
+          ? question?.data?.requirements
+          : []
+
+      if (requirements?.length > 0) {
+        const requirementAnswers = requirements.map(
+          (requirement: Requirement | null) => ({
+            question_id: question.id,
+            short_answer: requirement?.answer_text ?? '',
+            requirement_id: requirement?.id || null,
+            response_option:
+              question?.data?.response_option ??
+              (question?.response_type === 0 ? 'WORD' : 'SHEET'),
+            time_spent: Math.ceil(question.timeSpent / 1000),
+            active: 'SUBMITED',
+            answer_file:
+              requirement?.answer_file || question?.answer_file || null,
+          }),
+        )
+
+        return {
+          question_id: question.id,
+          total_attempt_time:
+            quizDetail?.quiz_timed * 60 -
+            (quizDetail?.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+          scratch_pads: scratchPads || [],
+          answer: requirementAnswers,
         }
       }
-    } else {
-      setTabs(async () => {
-        // ref.setKey
-        handleChangeTab(tabs[0].id)
-        return reformTabs
-      })
-      dispatch(disableUnsavedChange())
-      const res = await CoursesAPI.submitQuestion(quizAttempId?.id as string, {
-        answers: answers,
-        quiz_position_mapping: quiz_position_mapping,
-        total_attempt_time:
-          quizDetail.quiz_timed * 60 -
-          (quizDetail.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      })
-      if (res) {
-        if (isCompletedCourse.status) {
-          setTimeout(() => {
-            dispatch(showPopupCompletedCourse(isCompletedCourse.content))
-          }, 2000)
+
+      return {
+        ...baseAnswer,
+        short_answer: question?.answer || '',
+        requirement_id: null,
+        response_option:
+          question?.data?.response_option ??
+          (question?.response_type === 0 ? 'WORD' : 'SHEET'),
+        active: 'SUBMITED',
+        answer_file: question?.answer_file || null,
+      }
+    }
+
+    // Handle single choice and true/false questions
+    if (
+      [QUESTION_TYPES.ONE_CHOICE, QUESTION_TYPES.TRUE_FALSE].includes(
+        question.qType,
+      )
+    ) {
+      if (question?.answer) {
+        return {
+          ...baseAnswer,
+          question_answer_id: question?.answer,
         }
-        setScoreFinalTest(res?.data?.score)
-        setQuizResultId(() => {
-          setOpenTimeOut(true)
-          return res?.data?.id
+      } else {
+        return baseAnswer
+      }
+    }
+
+    // Handle multiple choice questions
+    if (question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
+      return {
+        ...baseAnswer,
+        answer: (question?.answer || [])?.map((el: string) => ({
+          answer_id: el,
+        })),
+      }
+    }
+
+    // Handle matching questions
+    if (question.qType === QUESTION_TYPES.MATCHING) {
+      return {
+        ...baseAnswer,
+        answer: question.answer,
+      }
+    }
+
+    // Handle drag and drop questions
+    if (question.qType === QUESTION_TYPES.DRAG_DROP) {
+      return {
+        ...baseAnswer,
+        answer: (question.answer ?? [])
+          .filter((item: any) => item?.idAnswer)
+          .map((item: any, index: number) => ({
+            answer_id: item.idAnswer,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    // Handle select word questions
+    if (question.qType === QUESTION_TYPES.SELECT_WORD) {
+      return {
+        ...baseAnswer,
+        answer: question.answer
+          .filter((item: string) => item && item !== '')
+          .map((item: string, index: number) => ({
+            answer_id: item,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    // Handle fill word questions
+    if (question.qType === QUESTION_TYPES.FILL_WORD) {
+      return {
+        ...baseAnswer,
+        answer: question.answer
+          .filter((item: string) => item && item !== '')
+          .map((item: string, index: number) => ({
+            answer_text: item,
+            answer_position: index + 1,
+          })),
+      }
+    }
+
+    return null
+  }
+
+  // Helper function to handle submission errors
+  const handleSubmissionError = (payload: any) => {
+    setListSubmitError((prev) => {
+      const index = prev.findIndex(
+        (item) => item.question_id === payload.question_id,
+      )
+      if (index !== -1) {
+        const newList = [...prev]
+        newList[index] = payload
+        return newList
+      }
+      return [...prev, payload]
+    })
+  }
+
+  const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
+    if (currentTabContent) {
+      const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
+      let quiz_position_mapping = []
+      // let reformTabs: any[] = []
+      setLoading(true)
+      for (let e of allQuest) {
+        // reformTabs.push({ ...e, done: true })
+        quiz_position_mapping.push({
+          question_id: e.id,
+          answers: e.data?.answers,
         })
       }
-    }
+      dispatch(disableUnsavedChange())
 
-    // clearInterval(intervalRef.current)
-    setLoading(false)
-    return
+      const res = await CoursesAPI.submitAllQuestion(
+        quizAttempt?.id as string,
+        {
+          quiz_position_mapping: quiz_position_mapping,
+          scratch_pads: scratchPads || [],
+          total_attempt_time:
+            quizDetail.quiz_timed * 60 -
+            (quizDetail.quiz_timed
+              ? timeRef?.current?.handleGetTime() || 0
+              : 0),
+        },
+      )
+      if (res?.success) {
+        setSubmited(true)
+        localStorage.setItem(
+          'quizAttempt',
+          JSON.stringify({
+            ...quizAttempt,
+            is_submitted: true,
+          }),
+        )
+        if (typeSubmit === 'submit') {
+          if (isCompletedCourse.status) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+            }, 2000)
+          }
+
+          if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+            setOpenReportModal({
+              open: true,
+              resultId: res?.data?.id,
+            })
+            return
+          }
+          if (type === 'entrance') {
+            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+          } else if (type === 'event-test') {
+            router.replace(`/event-test`)
+            setSubmitEventTest(true)
+            localStorage.setItem(
+              'category',
+              JSON.stringify(res?.data?.course_category?.name),
+            )
+          } else {
+            if (type !== 'entrance' && quizDetail?.quiz_type !== 'FINAL_TEST') {
+              router.replace(`/courses/test/test-result/${res?.data?.id}`)
+            } else {
+              if (
+                courseType === 'FOUNDATION_COURSE' &&
+                quizDetail?.quiz_type == 'FINAL_TEST'
+              ) {
+                router.push(localStorage.getItem('courseDetail') || '')
+              } else {
+                router.replace(`/courses/test/test-result/${res?.data?.id}`)
+              }
+            }
+          }
+        } else {
+          if (isCompletedCourse.status) {
+            setTimeout(() => {
+              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+            }, 2000)
+          }
+          setScoreFinalTest(res?.data?.score)
+          setQuizResultId(() => {
+            setOpenTimeOut(true)
+            return res?.data?.id
+          })
+        }
+      }
+      setLoading(false)
+    }
   }
 
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
 
-    if (data && !currentTabContent.done) {
+    if (data && !currentTabContent.is_viewed_answer) {
       setTabs((prev: any) => {
         const arr = [...prev]
         const currentIndex = arr.findIndex((e) => e.id === data.id)
@@ -1299,18 +1787,32 @@ const TestDetail = () => {
   }
 
   const handleClearFile = (requirementIndex: number) => {
-    setTabs((prev: TabItem[]) => {
-      const newData = prev.map((item: TabItem) => {
-        if (currentPage === item.id) {
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        // Case Essay has requirement
+        if (currentTabContent?.data?.requirements?.length > 0) {
           return {
-            ...item,
-            answer_file: undefined,
+            ...tab,
             data: {
-              ...item.data,
-              requirements: item.data.requirements.map(
-                (req: Requirement, idx: number) => {
+              ...tab?.data,
+              requirements: currentTabContent?.data?.requirements?.map(
+                (req: any, idx: number) => {
                   if (idx === requirementIndex) {
-                    return { ...req, answer_file: undefined }
+                    const editorContent = getValues(
+                      `${currentPage}_${idx}_answer`,
+                    )
+                    return {
+                      ...req,
+                      answer_text:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.answer_text,
+                      short_answer:
+                        editorContent !== undefined
+                          ? editorContent
+                          : req?.short_answer,
+                      answer_file: null,
+                    }
                   }
                   return req
                 },
@@ -1318,12 +1820,16 @@ const TestDetail = () => {
             },
           }
         }
-        return item
-      })
-      return newData
+        // Case Essay has no requirement
+        return {
+          ...tab,
+          answer_file: null,
+        }
+      }
+      return tab
     })
+    setTabs(newTabs)
   }
-
   const handleSaveHighLight = (e: any) => {
     setTabs((prev: any) => {
       const newData = prev.map((item: any) => {
@@ -1365,28 +1871,6 @@ const TestDetail = () => {
       })
       return newData
     })
-  }
-
-  const checkTypeAndRenderTitle = (type: string) => {
-    let pageTitle = ''
-    switch (type) {
-      case TEST_TYPE.MID_TERM_TEST:
-        return (pageTitle = 'Midterm Test')
-      case TEST_TYPE.FINAL_TEST:
-        return (pageTitle = 'Final Test')
-      case TEST_TYPE.TOPIC_TEST:
-        return (pageTitle = 'Topic Test')
-      case TEST_TYPE.CHAPTER_TEST:
-        return (pageTitle = 'Chapter Test')
-      case TEST_TYPE.PART_TEST:
-        return (pageTitle = 'Part Test')
-      case TEST_TYPE.ENTRANCE_TEST:
-        return (pageTitle = 'Entrance Test')
-      case TEST_TYPE.ENTRANCE_TEST:
-        return (pageTitle = 'Event Test')
-      default:
-        return pageTitle
-    }
   }
 
   const handleOpenExhibit = (exhibitId?: string) => {
@@ -1445,7 +1929,7 @@ const TestDetail = () => {
         setFilterTabs(tabs.filter((e: any) => !e?.attempted && !e?.done))
         return
       } else if (filter === 'flag') {
-        setFilterTabs(tabs.filter((e: any) => e?.flaged === true))
+        setFilterTabs(tabs.filter((e: any) => e?.flag === true))
         return
       } else setFilterTabs(tabs)
     }
@@ -1515,53 +1999,70 @@ const TestDetail = () => {
   }, [watch('exhibits')])
 
   useEffect(() => {
-    async function createQuizAttempt() {
-      try {
-        const res = await CoursesAPI.createQuizAttempt(
-          router.query.id as string,
-          router.query.class_user_id as string,
-        )
-        setExhibitText(
-          res.data.program === PROGRAM.CMA
-            ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
-            : EXHIBIT_TEXT_REPLACE.EXHIBIT,
-        )
-        if (res?.data?.progress?.is_completed) {
-          setIsCompletedCourse({
-            status: res?.data?.progress?.is_completed,
-            content: res?.data?.progress?.content,
-          })
-        }
-        setQuizAttempId(res.data)
-        setIsQuizAttemptCreated(true) // Mark the attempt as created
-      } catch (err: any) {
-        if (err.response?.data?.error.code === '400|060710') {
-          dispatch(disableUnsavedChange())
-          setOpenLimit(true)
-        }
-        if (err.response?.data?.success === false) {
-          setRouteBack(true)
-          setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
-          switch (
-            quizDetail?.quiz_type ||
-            quizDetail?.quiz_type === undefined
-          ) {
-            case TEST_TYPE.MID_TERM_TEST:
-            case TEST_TYPE.FINAL_TEST:
-            case TEST_TYPE.TOPIC_TEST:
-            case TEST_TYPE.CHAPTER_TEST:
-            case TEST_TYPE.PART_TEST:
-              return router.push(PageLink.COURSES)
-            case TEST_TYPE.ENTRANCE_TEST:
-              return router.push(PageLink.ENTRANCE_TEST)
-            default:
-              return router.push(PageLink.COURSES)
-          }
+    if (quizAttempt?.id) {
+      const fetchAnswersSubmitted = async () => {
+        try {
+          setLoading(true)
+          const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          setIsQuizAttemptCreated(true) // Mark the attempt as created
+          setAnswersSubmitted(response.data)
+        } catch (err) {
+          // console.log(err)
+        } finally {
+          setLoading(false)
         }
       }
-    }
-    if (router.query.id) {
-      createQuizAttempt()
+
+      fetchAnswersSubmitted()
+    } else {
+      if (router.query.id) {
+        const createQuizAttempt = async () => {
+          try {
+            const res = await CoursesAPI.createQuizAttempt(
+              router.query.id as string,
+              router.query.class_user_id as string,
+            )
+            setExhibitText(
+              res.data.program === PROGRAM.CMA
+                ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+                : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+            )
+            if (res?.data?.progress?.is_completed) {
+              setIsCompletedCourse({
+                status: res?.data?.progress?.is_completed,
+                content: res?.data?.progress?.content,
+              })
+            }
+            localStorage.setItem('quizAttempt', JSON.stringify(res.data))
+            setIsQuizAttemptCreated(true) // Mark the attempt as created
+          } catch (err: any) {
+            if (err.response?.data?.error.code === '400|060710') {
+              dispatch(disableUnsavedChange())
+              setOpenLimit(true)
+            }
+            if (err.response?.data?.success === false) {
+              setRouteBack(true)
+              setIsQuizAttemptCreated(true) // Mark the attempt as created even on error
+              switch (
+                quizDetail?.quiz_type ||
+                quizDetail?.quiz_type === undefined
+              ) {
+                case TEST_TYPE.MID_TERM_TEST:
+                case TEST_TYPE.FINAL_TEST:
+                case TEST_TYPE.TOPIC_TEST:
+                case TEST_TYPE.CHAPTER_TEST:
+                case TEST_TYPE.PART_TEST:
+                  return router.push(PageLink.COURSES)
+                case TEST_TYPE.ENTRANCE_TEST:
+                  return router.push(PageLink.ENTRANCE_TEST)
+                default:
+                  return router.push(PageLink.COURSES)
+              }
+            }
+          }
+        }
+        createQuizAttempt()
+      }
     }
   }, [router.query.id])
 
@@ -1609,43 +2110,67 @@ const TestDetail = () => {
   }, [startResize])
 
   useEffect(() => {
-    if (currentTabContent?.data?.requirements) {
+    if (
+      tabs &&
+      tabs.length > 0 &&
+      currentTabContent &&
+      currentTabContent?.data?.requirements &&
+      !essayData
+    ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
         index: 0,
       })
     }
-  }, [currentTabContent?.id])
+  }, [currentTabContent?.id, tabs])
 
   useEffect(() => {
     async function fetchTabs() {
       if (questions?.length > 0) {
-        const arr = []
+        const answerMap = new Map(
+          answersSubmitted.map(
+            (answer: {
+              questionId: string
+              flag?: boolean
+              is_viewed_answer?: boolean
+            }) => [answer.questionId, answer],
+          ),
+        )
 
-        for (let i in questions) {
-          let baseData = {
-            ...questions[i],
-            viewed: +i === 0,
-            flaged: false,
-            done: false,
-            index: +i,
-            response_type: 0,
-          }
-          if (+i === 0) {
-            const { topicDescription, question } = await getDetail(
-              questions?.[0]?.id,
-            )
-            baseData = {
-              ...baseData,
-              viewed: question ? true : false,
-              ...(question && {
-                data: question,
-                topicDescription: topicDescription?.data,
-              }),
+        const arr = await Promise.all(
+          questions.map(async (question: any, index: any) => {
+            const hasAnswer = answerMap.has(question.id)
+            let baseData = {
+              ...question,
+              viewed: index === 0,
+              flag:
+                (answerMap.get(question.id) as { flag?: boolean } | undefined)
+                  ?.flag || false,
+              done: hasAnswer,
+              attempted: hasAnswer,
+              index,
+              response_type: 0,
+              is_viewed_answer:
+                (answerMap.get(question.id) as { is_viewed_answer?: boolean })
+                  ?.is_viewed_answer || false,
             }
-          }
-          arr.push(baseData)
-        }
+
+            if (index === 0) {
+              const { topicDescription, question: questionDetail } =
+                await getDetail(question.id)
+              baseData = {
+                ...baseData,
+                viewed: !!questionDetail,
+                ...(questionDetail && {
+                  data: questionDetail,
+                  topicDescription: topicDescription?.data,
+                }),
+              }
+            }
+            return baseData
+          }),
+        )
+
         setTabs(arr)
       } else {
         router.push(PageLink.PAGE_NOT_FOUND)
@@ -1655,8 +2180,21 @@ const TestDetail = () => {
     if (questions) {
       fetchTabs()
     }
-  }, [questions, router, quizDetail?.id])
+  }, [questions, router, quizDetail?.id, answersSubmitted])
 
+  const handleSubmitAnswerError = async (answerSubmitErr: any) => {
+    const res = await CoursesAPI.submitAnswer(
+      quizAttempt?.id as string,
+      answerSubmitErr,
+    )
+    if (res?.success) {
+      setListSubmitError((prev) =>
+        prev.filter(
+          (item) => item.question_id !== answerSubmitErr?.question_id,
+        ),
+      )
+    }
+  }
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -1667,7 +2205,7 @@ const TestDetail = () => {
           quizDetail={quizDetail}
           openLimit={openLimit}
           setOpenSubmit={setOpenSubmit}
-          handleSubmitQuestion={handleSubmitQuestion}
+          handleSubmitQuestion={handleSubmitQuestions}
           timeRef={timeRef}
           setUnSubmitAnswer={setUnSubmitAnswer}
           checkUnSubmitAnswer={checkUnSubmitAnswer}
@@ -1675,8 +2213,8 @@ const TestDetail = () => {
           setSubmitEventTest={setSubmitEventTest}
           type={type}
           footer={
-            <div className=" flex items-center justify-between px-8 py-4">
-              <div className="flex h-full items-center">
+            <div className="flex items-center justify-between px-8 py-4">
+              <div className="flex h-full items-center gap-1">
                 {/* <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
@@ -1698,17 +2236,22 @@ const TestDetail = () => {
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
                 <button
-                  className="h-full"
+                  className={`h-full rounded-lg ${
+                    isScatchPadEnabled && 'bg-primary'
+                  }`}
                   onClick={() => {
                     handleOpenScratchPad('scratch_pad')
                     trackGAEvent('Click Button ScratchPad Test')
                   }}
                 >
-                  <ButtonContent icon={<ScratchPadIcon />} content="" />
+                  <ButtonContent
+                    icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                    content=""
+                  />
                 </button>
                 <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
+                  className={`h-full rounded-lg ${
+                    checkCalExist > -1 && 'bg-primary'
                   }`}
                   onClick={() => {
                     handleOpenScratchPad('calculator')
@@ -1716,7 +2259,10 @@ const TestDetail = () => {
                   }}
                   disabled={checkCalExist > -1}
                 >
-                  <ButtonContent icon={<CalculatorIcon />} content="" />
+                  <ButtonContent
+                    icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                    content=""
+                  />
                 </button>
                 {exhibitData && exhibitData?.length > 0 && (
                   <button className="relative h-full" ref={dropUpRef}>
@@ -1805,7 +2351,7 @@ const TestDetail = () => {
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
-                <div className="">
+                <div className="w-[1278px]">
                   <TabSlide
                     data={filteredTabs}
                     currentTab={currentPage}
@@ -1885,9 +2431,9 @@ const TestDetail = () => {
                   <div>Flag to Review</div>
                 </div>
                 {/* <button
-                  disabled={currentTabContent?.done}
+                  disabled={currentTabContent?.is_viewed_answer}
                   className={`flex items-center gap-3 border border-solid ${
-                    !currentTabContent?.done
+                    !currentTabContent?.is_viewed_answer
                       ? 'border-gray-1 text-bw-1'
                       : 'border-default text-gray-2'
                   } w-[150px] justify-center p-1 py-2`}
@@ -1901,13 +2447,14 @@ const TestDetail = () => {
                   </div>
                 </button> */}
                 {/* {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-                !currentTabContent?.done &&
+                !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
                     className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
-                      confirmAnswer(
+                      handleSubmitAnswer('view-answer')
+                    confirmAnswer(
                         data?.corrects,
                         data?.solution,
                         currentTabContent,
@@ -1944,7 +2491,7 @@ const TestDetail = () => {
           }
         >
           <div
-            className="relative flex h-screen flex-col overflow-hidden bg-white"
+            className="relative flex h-full flex-col overflow-hidden bg-white"
             onMouseUp={() => {
               setStartResize(false)
               setCurrentLeftWidth(leftWidth)
@@ -2022,12 +2569,16 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-gray-12"
                       onMouseDown={() => {
                         setStartResize(true)
                       }}
                       onMouseUp={() => setStartResize(false)}
-                    ></div>
+                    >
+                      <div className="z-10 h-8 w-8 bg-white">
+                        <ResizeIcon />
+                      </div>
+                    </div>
                     <div
                       className="h-full overflow-auto bg-white py-6 "
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
@@ -2211,7 +2762,7 @@ const TestDetail = () => {
                 } else {
                   setOpenSubmit(false)
                 }
-                handleSubmitQuestion('submit')
+                handleSubmitQuestions('submit')
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2229,7 +2780,7 @@ const TestDetail = () => {
                 } else {
                   setUnSubmitAnswer(false)
                 }
-                handleSubmitQuestion('submit')
+                handleSubmitQuestions('submit')
               }}
               handleCancel={() => setUnSubmitAnswer(false)}
             />
