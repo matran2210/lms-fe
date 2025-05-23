@@ -221,7 +221,7 @@ const TabSlide = ({
           onMouseLeave={() => setIsDragging(false)}
         >
           {data.length > 0 ? (
-            !activeShowAll ? (
+            !activeShowAll || data?.length <= 25 ? (
               data.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
