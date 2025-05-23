@@ -172,6 +172,9 @@ module.exports = {
           primary: '#1F2937',
           secondary: '#9CA3AF',
         },
+        'sapp-black': {
+          1: '#29353C',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',

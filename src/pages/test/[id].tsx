@@ -98,6 +98,9 @@ import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestWrapper from '@components/test/layout/TestWrapper'
+import { GradingPreference } from '@utils/constants'
+import clsx from 'clsx'
+import Icon from '@components/icons'
 
 declare global {
   interface Window {
@@ -2195,27 +2198,81 @@ const TestDetail = () => {
       )
     }
   }
+  const isGradingAfterEachQuestion =
+    quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
+
   const groupAction = () => {
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
+          {[QUESTION_TYPES.TRUE_FALSE, QUESTION_TYPES.ONE_CHOICE].includes(
+            currentTabContent?.qType,
+          ) &&
+            !currentTabContent?.is_viewed_answer && (
+              <button
+                disabled={currentTabContent?.is_viewed_answer}
+                className={clsx(
+                  'rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14',
+                  {
+                    'cursor-not-allowed': currentTabContent?.is_viewed_answer,
+                  },
+                )}
+                onClick={() => {
+                  handleClearSelection(currentTabContent)
+                  trackGAEvent('Click Button Clear Selection Test')
+                }}
+              >
+                Clear Selection
+              </button>
+            )}
           <button
-            className="rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14"
-            onClick={() => {
-              handleSubmitQuestions('submit')
-              trackGAEvent('Click Button Submit Test')
+            className={clsx(
+              'rounded-lg bg-sapp-black-1 px-4 py-2 text-sm font-semibold text-white hover:bg-black',
+              {
+                'bg-transparent !text-bw-13 underline hover:!bg-transparent':
+                  currentTabContent?.is_viewed_answer,
+              },
+            )}
+            onClick={async () => {
+              if (isGradingAfterEachQuestion) {
+                if (currentTabContent?.is_viewed_answer) {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                } else {
+                  const data = await getResult(currentTabContent)
+                  handleSubmitAnswer('view-answer')
+                  confirmAnswer(
+                    data?.corrects,
+                    data?.solution,
+                    currentTabContent,
+                    data?.isSelfReflection,
+                    data?.requirements,
+                  )
+                }
+              } else {
+                const index = filteredTabs.findIndex(
+                  (e: any) => e.id === currentPage,
+                )
+                handleChangeTab(filteredTabs[index + 1].id)
+                handleSubmitAnswer('change-tab')
+              }
+
+              trackGAEvent('Click Button Confirm Answer')
             }}
           >
-            Clear Selection
-          </button>
-          <button
-            className="h-full rounded-lg bg-gray-3 px-4 py-2 text-sm font-semibold text-gray-1"
-            onClick={() => {
-              setOpenQuit(true)
-              trackGAEvent('Click Button Quit Test')
-            }}
-          >
-            Confirm
+            {isGradingAfterEachQuestion ? (
+              currentTabContent?.is_viewed_answer ? (
+                <div className="flex items-center gap-2">
+                  Next Question <Icon type="arrow-right" />
+                </div>
+              ) : (
+                'Confirm'
+              )
+            ) : (
+              'Confirm & Next'
+            )}
           </button>
         </div>
       </div>
@@ -2597,7 +2654,7 @@ const TestDetail = () => {
                         }}
                       >
                         <EditorReader
-                          className="mb-4"
+                          className="sapp-questions mb-6"
                           text_editor_content={
                             currentTabContent?.topicDescription?.description
                           }
