@@ -11,6 +11,7 @@ import Countdown from '@pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
+import dayjs from 'dayjs'
 
 const { Header, Content, Footer } = Layout
 
@@ -25,11 +26,17 @@ interface IProps {
     is_limited: boolean
     limit_count: string
   }
+  quizAttempt: {
+    id: string
+    number_of_attempts: number
+    is_limited: boolean
+    created_at?: string
+    quiz_timed?: number
+  }
   timeRef: ForwardedRef<any>
-  openLimit: boolean
-
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
-  handleSubmitQuestion: (type_submit: 'timeout' | 'submit') => Promise<void>
+  handleTimeoutSubmit: () => void
+  onSubmitAnswer: (action?: string) => void
   setOpenQuit: Dispatch<SetStateAction<boolean>>
   type: string | string[] | undefined
   setSubmitEventTest: Dispatch<SetStateAction<boolean>>
@@ -44,18 +51,28 @@ const TestWrapper = ({
   footerClass,
   quizDetail,
   timeRef,
-  openLimit,
   setOpenSubmit,
-  handleSubmitQuestion,
   setOpenQuit,
   type,
   setSubmitEventTest,
   setUnSubmitAnswer,
   checkUnSubmitAnswer,
   footer,
+  quizAttempt,
+  handleTimeoutSubmit,
+  onSubmitAnswer,
 }: PropsWithChildren<IProps>) => {
   const dispatch = useAppDispatch()
-
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? dayjs(
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds')
+    : null
+  const remainingTimeAttempt =
+    (remainingTimeinSeconds ?? 0) > 0 ? (remainingTimeinSeconds ?? 0) : 0
   return (
     <Layout className="flex h-screen flex-col">
       <Header
@@ -84,13 +101,8 @@ const TestWrapper = ({
             </div>
             {quizDetail?.quiz_timed && (
               <Countdown
-                remainTime={quizDetail?.quiz_timed}
-                onTimeOut={() => {
-                  if (!openLimit) {
-                    dispatch(disableUnsavedChange())
-                    handleSubmitQuestion('timeout')
-                  }
-                }}
+                remainTime={remainingTimeAttempt}
+                onTimeOut={handleTimeoutSubmit}
                 ref={timeRef}
               />
             )}
@@ -102,6 +114,7 @@ const TestWrapper = ({
               color="secondary"
               className="rounded-lg border border-bw-1 bg-white px-4 py-2 text-sm !text-black"
               onClick={() => {
+                onSubmitAnswer('finish')
                 if (checkUnSubmitAnswer()?.length > 0) {
                   setUnSubmitAnswer(true)
                 } else {

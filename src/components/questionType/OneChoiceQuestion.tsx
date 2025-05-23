@@ -80,7 +80,7 @@ const OneChoiceQuestion = ({
   }, [data])
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <div
         id="hightlight_area"
         onMouseUp={(e: any) => {
@@ -162,7 +162,7 @@ const OneChoiceQuestion = ({
           </>
         )}
       <div
-        className="sapp-answer-wrapper"
+        className="sapp-answer-wrapper pt-0"
         style={{
           flexDirection: 'column',
         }}
@@ -173,6 +173,8 @@ const OneChoiceQuestion = ({
           name={name || 'answer'}
           corrects={corrects}
           defaultValue={defaultValues}
+          labelClass="text-base font-normal text-bw-13"
+          optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>
       {solution && (
@@ -181,7 +183,7 @@ const OneChoiceQuestion = ({
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}
-    </>
+    </div>
   )
 }
 export default OneChoiceQuestion
