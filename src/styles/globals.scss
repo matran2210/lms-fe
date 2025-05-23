@@ -145,10 +145,14 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-questions {
-  @apply mb-4;
-
   p {
-    @apply mb-2 break-words;
+    @apply m-0 break-words text-xl font-semibold text-bw-13;
+  }
+  span {
+    background-color: transparent !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
   }
 }
 

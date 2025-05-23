@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 
 interface IProps {
@@ -8,6 +9,7 @@ interface IProps {
   checked: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
   className?: string
+  optionClassName?: string
   disabled?: boolean
   state?: 'default' | 'error' | 'success'
   size?: 'small' | 'medium' | 'lager'
@@ -36,6 +38,7 @@ const SAPPRadio = ({
   checked,
   onChange,
   className = '',
+  optionClassName = '',
   disabled = false,
   state = 'default',
   size = 'medium',
@@ -44,11 +47,16 @@ const SAPPRadio = ({
     <div className={`inline-block ${SIZES[size]} ${className}`}>
       <input
         name={name}
-        className={`${
-          STATE[state]
-        } block h-full w-full rounded-full border-0 border-transparent bg-radio-normal bg-center bg-no-repeat  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
-          disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
-        }`}
+        className={clsx(
+          `${
+            STATE[state]
+          } block h-full w-full rounded-full border-0 border-transparent bg-radio-normal bg-center bg-no-repeat  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0`,
+          optionClassName,
+          {
+            'cursor-not-allowed opacity-60': disabled,
+            'cursor-pointer': !disabled,
+          },
+        )}
         type="radio"
         data-kt-check={ktCheck}
         data-kt-check-target={checkTarget}

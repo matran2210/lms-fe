@@ -2196,6 +2196,32 @@ const TestDetail = () => {
       )
     }
   }
+  const groupAction = () => {
+    return (
+      <div>
+        <div className="flex items-center justify-end gap-2">
+          <button
+            className="rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14"
+            onClick={() => {
+              handleSubmitQuestions('submit')
+              trackGAEvent('Click Button Submit Test')
+            }}
+          >
+            Clear Selection
+          </button>
+          <button
+            className="h-full rounded-lg bg-gray-3 px-4 py-2 text-sm font-semibold text-gray-1"
+            onClick={() => {
+              setOpenQuit(true)
+              trackGAEvent('Click Button Quit Test')
+            }}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    )
+  }
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2204,15 +2230,48 @@ const TestDetail = () => {
         />
         <TestWrapper
           quizDetail={quizDetail}
-          openLimit={openLimit}
+          quizAttempt={quizAttempt}
           setOpenSubmit={setOpenSubmit}
-          handleSubmitQuestion={handleSubmitQuestions}
           timeRef={timeRef}
           setUnSubmitAnswer={setUnSubmitAnswer}
           checkUnSubmitAnswer={checkUnSubmitAnswer}
           setOpenQuit={setOpenQuit}
           setSubmitEventTest={setSubmitEventTest}
           type={type}
+          onSubmitAnswer={handleSubmitAnswer}
+          handleTimeoutSubmit={async () => {
+            if (!openLimit) {
+              if (!submited && !quizAttempt?.is_submitted) {
+                const remainingTimeinSeconds = quizDetail?.quiz_timed
+                  ? dayjs(
+                      dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                        quizDetail?.quiz_timed,
+                        'minutes',
+                      ),
+                    ).diff(dayjs(), 'seconds')
+                  : null
+
+                // No call when time out > 60s
+                if ((remainingTimeinSeconds ?? 0) > -60) {
+                  if (listSubmitError.length > 0) {
+                    for (const el of listSubmitError) {
+                      await handleSubmitAnswerError(el)
+                    }
+                  }
+                  await handleSubmitAnswer('timeout')
+                }
+                handleSubmitQuestions('timeout')
+                dispatch(disableUnsavedChange())
+                  .unwrap()
+                  .then(() => {
+                    trackGAEvent('Click Button Submit Time Out Test')
+                  })
+              } else {
+                setOpenTimeOut(true)
+                setQuizResultId(quizAttempt?.id)
+              }
+            }
+          }}
           footer={
             <div className="flex items-center justify-between px-8 py-4">
               <div className="flex h-full items-center gap-1">
@@ -2424,7 +2483,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
                 <div
-                  className="flex cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline 3xl:w-[150px]"
+                  className="flex w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
@@ -2587,7 +2646,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="min-w-[700px] px-6">
+                      <div className="mx-8 mt-8 flex min-w-400px flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2598,6 +2657,8 @@ const TestDetail = () => {
                           currentTabContent?.solution,
                           currentTabContent?.done,
                         )}
+
+                        {groupAction()}
                       </div>
                     </div>
                   </div>
@@ -2631,7 +2692,7 @@ const TestDetail = () => {
                           }
                         }
                       }}
-                      className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
+                      className="m-auto mb-3 w-full max-w-[950px]"
                     >
                       <EditorReader
                         className="mb-4"
@@ -2663,7 +2724,7 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="m-auto w-full max-w-[950px]">
+                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,
@@ -2674,6 +2735,7 @@ const TestDetail = () => {
                         currentTabContent?.solution,
                         currentTabContent?.done,
                       )}
+                      {groupAction()}
                     </div>
                   </div>
                 )}
