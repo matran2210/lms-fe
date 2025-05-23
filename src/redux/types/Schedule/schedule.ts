@@ -57,6 +57,7 @@ export interface IResponseSchedule {
   classroom_address: string | null
   classroom_name: string | null
   meeting_link: string | null
+  repeat?: string
 }
 
 export interface IWeeklyNorm {

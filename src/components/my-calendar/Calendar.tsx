@@ -77,6 +77,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
             meetingLink: item.meeting_link,
+            repeat: item.repeat,
           }) as IEvent,
       ) || []
     const norms =
