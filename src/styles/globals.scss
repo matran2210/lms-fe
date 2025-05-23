@@ -150,8 +150,20 @@ body *::-webkit-scrollbar-thumb:hover {
   }
   span {
     background-color: transparent !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     font-weight: 600 !important;
+    color: #1f2937 !important;
+  }
+}
+.sapp-explanation {
+  p {
+    @apply m-0 break-words text-xl font-semibold text-bw-13;
+  }
+  span {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: transparent !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
     color: #1f2937 !important;
   }
 }
