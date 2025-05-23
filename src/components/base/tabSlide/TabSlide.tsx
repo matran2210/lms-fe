@@ -5,6 +5,8 @@ import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 import { ShowLessIcon, ShowMoreIcon } from '@assets/icons'
+import clsx from 'clsx'
+import { ArrowIconV2 } from '../pagination/ArrowIconV2'
 
 interface IProps {
   data: Array<any>
@@ -17,21 +19,23 @@ interface IProps {
   setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
   answerSubmitted?: Array<any>
+  hasScrollBar: boolean
+  setHasScrollBar: any
 }
 
 const TabSlide = ({
   data,
   setCurrentTab,
-  optionShowAll,
   currentTab,
   handleChangeTab,
   activeShowAll,
   setActiveShowAll,
   setValueFilter,
   isScrollCenter = true,
+  hasScrollBar,
+  setHasScrollBar,
 }: IProps) => {
   const elementRef = useRef(null) as any
-  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   useEffect(() => {
     if (elementRef?.current && !activeShowAll && isScrollCenter) {
       elementRef.current.scrollTo(
@@ -62,6 +66,7 @@ const TabSlide = ({
     window.addEventListener('resize', updateState)
     return () => window.removeEventListener('resize', updateState)
   }, [hasScrollBar])
+
   useEffect(() => {
     if (elementRef?.current && data.length > 0) {
       const el = elementRef.current
@@ -170,20 +175,20 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'max-w-[1222px]' : 'max-w-[1142px]'}`}
       aria-label="Pagination"
     >
       <div
         className={`${
           !activeShowAll
-            ? `relative ${hasScrollBar ? 'w-[calc(100%-132px)]' : 'w-full'} mx-7`
-            : ' flex w-full items-center gap-6'
+            ? `relative mx-7 w-full`
+            : ' flex w-full items-center justify-center gap-4'
         }`}
       >
         {hasScrollBar && (
           <div
             className={`${
-              !activeShowAll && 'absolute -left-3 top-0.5 -translate-x-full'
+              !activeShowAll && 'absolute -left-3 top-1 -translate-x-full'
             }`}
           >
             <PageLink
@@ -197,12 +202,18 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIcon iconType={'teeny'}></ArrowIcon>
+              <ArrowIconV2></ArrowIconV2>
             </PageLink>
           </div>
         )}
         <div
-          className={'flex w-full select-none  gap-2 overflow-hidden'}
+          className={clsx(
+            'flex w-full select-none gap-2 overflow-hidden pt-1',
+            {
+              'justify-center': !hasScrollBar,
+              '!w-fit': activeShowAll,
+            },
+          )}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -320,7 +331,7 @@ const TabSlide = ({
         {hasScrollBar && (
           <div
             className={`${
-              !activeShowAll && 'absolute -right-3 top-0.5 translate-x-full'
+              !activeShowAll && 'absolute -right-3 top-1 translate-x-full'
             }`}
           >
             <PageLink
@@ -337,24 +348,8 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
+              <ArrowIconV2 right={true}></ArrowIconV2>
             </PageLink>
-          </div>
-        )}
-        {hasScrollBar && (
-          <div className="flex items-center">
-            {activeShowAll && optionShowAll}
-            <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
-                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2 '
-              }`}
-              onClick={() => {
-                // setPageNums(activeShowAll ? arrPage : getPagination)
-                setActiveShowAll(!activeShowAll)
-              }}
-            >
-              {!activeShowAll ? <ShowMoreIcon /> : <ShowLessIcon />}
-            </div>
           </div>
         )}
       </div>

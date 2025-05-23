@@ -85,7 +85,7 @@ const PageLink = ({
       {...otherProps}
     >
       <span
-        className="h-full w-full text-center"
+        className="h-5.5 w-4 text-center"
         // onClick={() => {
         //   setIsViewed(true)
         //   // setIsFlagged(!isFlagged)
