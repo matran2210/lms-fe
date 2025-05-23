@@ -63,7 +63,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
       <ul className="flex flex-col gap-1">
         {teacherSchedules.map(({ schedule }, index) => (
           <li key={index}>
-            {`${schedule.name} | ${formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z')}`}
+            {formatDate(schedule.start_date + 'T' + schedule.start_time + 'Z')}
           </li>
         ))}
       </ul>
@@ -84,14 +84,14 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Approver',
     dataIndex: 'staff_assignee',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Update date',
     dataIndex: 'updated_at',
     render: (value: string) => (
-      <div className="text-secondary">
+      <div className="text-txt-secondary">
         {formatDate(value, DATE_TIME_FORMAT)}
       </div>
     ),
@@ -100,14 +100,14 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Creator',
     dataIndex: 'creator',
     render: (value: Partial<IUser>) => (
-      <div className="text-secondary">{value?.detail?.full_name}</div>
+      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-secondary">
+      <div className="text-txt-secondary">
         {formatDate(value, DATE_TIME_FORMAT)}
       </div>
     ),

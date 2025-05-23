@@ -2,12 +2,12 @@ import { PageLink, TitleSidebar } from './index'
 import { LANG_SIGNIN } from './lang'
 
 const MENU_OPTIONS: MenuOption[] = [
-  // {
-  //   name: `${TitleSidebar.DASHBOARD}`,
-  //   icon: 'grid',
-  //   url: PageLink.DASHBOARD,
-  //   type: 'level-1',
-  // },
+  {
+    name: `${TitleSidebar.DASHBOARD}`,
+    icon: 'grid',
+    url: PageLink.DASHBOARD,
+    type: 'level-1',
+  },
   {
     name: `${TitleSidebar.COURSES}`,
     icon: 'course',
@@ -62,12 +62,12 @@ const MENU_OPTIONS: MenuOption[] = [
     url: '#',
     type: 'level-1',
   },
-  // {
-  //   name: TitleSidebar.CALENDAR,
-  //   icon: 'calendar',
-  //   url: PageLink.CALENDAR,
-  //   type: 'level-1',
-  // },
+  {
+    name: TitleSidebar.CALENDAR,
+    icon: 'calendar',
+    url: PageLink.CALENDAR,
+    type: 'level-1',
+  },
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [

@@ -109,6 +109,7 @@ const EssayQuestionPreview = ({
 
   useEffect(() => {
     if (
+      refSheet &&
       refSheet.current &&
       Number(index) <= question_data?.requirements?.length
     ) {
@@ -178,33 +179,7 @@ const EssayQuestionPreview = ({
     }
   }
   return (
-    <div
-      style={{ background: 'white' }}
-      // id="hightlight_area"
-      // onMouseUp={(e: any) => {
-      //   if (
-      //     e.target.tagName.charAt(0) !== 'm' &&
-      //     e.target.firstChild?.tagName !== 'math'
-      //   ) {
-      //     if (e) {
-      //       if (allowHighLight) {
-      //         runHighlight(
-      //           handleSaveHighLight,
-      //           allowHighLight || false,
-      //           'hightlight_area',
-      //         )
-      //       } else if (allowUnHighLight) {
-      //         runHighlight(
-      //           handleSaveHighLight,
-      //           allowUnHighLight || false,
-      //           'hightlight_area',
-      //           { color: 'white' },
-      //         )
-      //       }
-      //     }
-      //   }
-      // }}
-    >
+    <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -337,16 +312,14 @@ const EssayQuestionPreview = ({
                 >
                   {fileData.name}
                 </div>
-                {!fullData?.done &&
-                  !fullData?.confirmed &&
-                  !fullData.data.confirmed && (
-                    <button
-                      onClick={() => handleClearFile(index)}
-                      className="cursor-pointer"
-                    >
-                      <CloseIcon />
-                    </button>
-                  )}
+                {!fullData?.confirmed && !fullData.data.confirmed && (
+                  <button
+                    onClick={() => handleClearFile(index)}
+                    className="cursor-pointer"
+                  >
+                    <CloseIcon />
+                  </button>
+                )}
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
@@ -377,9 +350,9 @@ const EssayQuestionPreview = ({
                     className="title-btn-preview"
                     onClick={() =>
                       !(
-                        fullData?.done ||
                         fullData?.confirmed ||
-                        fullData?.data?.confirmed
+                        fullData?.data?.confirmed ||
+                        fullData?.is_viewed_answer
                       ) && openChooseFile(true)
                     }
                   >
@@ -415,16 +388,16 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={
-                fullData?.done ||
                 fullData?.confirmed ||
-                fullData?.data?.confirmed
+                fullData?.data?.confirmed ||
+                fullData?.is_viewed_answer
               }
               handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
@@ -454,7 +427,10 @@ const EssayQuestionPreview = ({
                       // row={2}
 
                       onChange={(e) => {
-                        if (!fullData?.done && !fullData?.confirmed) {
+                        if (
+                          !fullData?.is_viewed_answer &&
+                          !fullData?.confirmed
+                        ) {
                           const currentSheet = refSheet.current?.getSheet()
                           if (value && String(value).trim() !== '') {
                             let old = [...JSON.parse(value)]
@@ -510,7 +486,7 @@ const EssayQuestionPreview = ({
               placeholder="Your answer here"
               defaultValue={defaultValue}
               disabled={
-                fullData?.done ||
+                fullData?.is_viewed_answer ||
                 fullData?.confirmed ||
                 fullData?.data?.confirmed
               }
@@ -518,7 +494,7 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              className={`${fullData?.done || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
                 name={name}
