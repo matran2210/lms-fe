@@ -11,7 +11,6 @@ import { ArrowIconV2 } from '../pagination/ArrowIconV2'
 interface IProps {
   data: Array<any>
   setCurrentTab?: any
-  optionShowAll?: ReactNode
   currentTab: string
   handleChangeTab?: any
   activeShowAll: boolean
@@ -175,14 +174,14 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'max-w-[1222px]' : 'max-w-[1142px]'}`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'max-w-[1222px]' : 'h-[44px] max-w-[1142px]'}`}
       aria-label="Pagination"
     >
       <div
-        className={`${
+        className={`gap-4 ${
           !activeShowAll
             ? `relative mx-7 w-full`
-            : ' flex w-full items-center justify-center gap-4'
+            : ' flex w-full items-center justify-between'
         }`}
       >
         {hasScrollBar && (
@@ -208,10 +207,12 @@ const TabSlide = ({
         )}
         <div
           className={clsx(
-            'flex w-full select-none gap-2 overflow-hidden pt-1',
+            'flex w-full select-none gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
             {
               'justify-center': !hasScrollBar,
               '!w-fit': activeShowAll,
+              'h-[88px]': activeShowAll,
+              'h-[44px]': !activeShowAll,
             },
           )}
           ref={elementRef}
@@ -323,7 +324,7 @@ const TabSlide = ({
               })
             )
           ) : (
-            <div className="flex w-full justify-center">
+            <div className="flex w-full items-center justify-center">
               Your search did not match any questions
             </div>
           )}
