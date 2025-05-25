@@ -105,6 +105,7 @@ import { GradingPreference } from '@utils/constants'
 import clsx from 'clsx'
 import Icon from '@components/icons'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 
 declare global {
   interface Window {
@@ -183,7 +184,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizWrapper
             data={data}
             action={getAnswerMatching}
             ref={ref}
