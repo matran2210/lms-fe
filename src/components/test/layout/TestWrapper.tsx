@@ -131,7 +131,7 @@ const TestWrapper = ({
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm w-full border-t border-gray-15 bg-white p-0',
+          'shadow-t-sm relative w-full border-t border-gray-15 bg-white p-0',
           footerClass,
           'h-auto',
         )}

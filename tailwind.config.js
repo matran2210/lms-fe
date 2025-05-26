@@ -214,6 +214,7 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
       minWidth: {
         4: '16px',

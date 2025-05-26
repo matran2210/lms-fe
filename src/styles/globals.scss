@@ -1333,3 +1333,7 @@ select:focus {
 [type='search']:focus {
   --tw-ring-color: none;
 }
+
+.react-flow__panel {
+  display: none;
+}

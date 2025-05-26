@@ -13,6 +13,8 @@ import {
   ResizeIcon,
   ScratchPadIcon,
   ScratchPadIconV2,
+  ShowLessIcon,
+  ShowMoreIcon,
   TextSquareIcon,
   UnHighLightIcon,
   WordIcon,
@@ -98,9 +100,12 @@ import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestWrapper from '@components/test/layout/TestWrapper'
+import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { GradingPreference } from '@utils/constants'
 import clsx from 'clsx'
 import Icon from '@components/icons'
+import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 
 declare global {
   interface Window {
@@ -111,6 +116,7 @@ declare global {
 const warningText =
   'You have unsaved changes - are you sure you wish to leave this page?'
 const TestDetail = () => {
+  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const checkType = (
     data: any,
     type: string,
@@ -178,7 +184,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizWrapper
             data={data}
             action={getAnswerMatching}
             ref={ref}
@@ -937,8 +943,7 @@ const TestDetail = () => {
   const OptionShowAll = () => {
     return (
       <div className="w-max">
-        <HookFormCheckBoxGroup
-          toggle
+        <FilterRadioGroup
           control={controlFilter}
           name={'filter'}
           options={[
@@ -2329,8 +2334,13 @@ const TestDetail = () => {
             }
           }}
           footer={
-            <div className="flex items-center justify-between px-8 py-4">
-              <div className="flex h-full items-center gap-1">
+            <div
+              className={clsx(
+                'flex items-center justify-between overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents',
+                activeShowAll ? 'h-[124px]' : 'h-[80px]',
+              )}
+            >
+              <div className="flex h-full w-[100px] items-center gap-1">
                 {/* <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
@@ -2467,25 +2477,43 @@ const TestDetail = () => {
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
-                <div className="w-[1278px]">
+                <div
+                  className={`flex w-fit min-w-0 max-w-[68%] flex-1 justify-center`}
+                >
                   <TabSlide
                     data={filteredTabs}
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
-                    optionShowAll={<OptionShowAll />}
                     handleChangeTab={async (id?: string) => {
                       id && handleChangeTab(id)
                     }}
+                    hasScrollBar={hasScrollBar}
+                    setHasScrollBar={setHasScrollBar}
                     activeShowAll={activeShowAll}
                     setActiveShowAll={setActiveShowAll}
                     setValueFilter={setValueFilter}
                     isScrollCenter={false}
                   />
+                  {hasScrollBar && (
+                    <div className="ml-8 flex items-center">
+                      {activeShowAll && <OptionShowAll />}
+                      <div
+                        className={clsx(
+                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
+                        )}
+                        onClick={() => {
+                          // setPageNums(activeShowAll ? arrPage : getPagination)
+                          setActiveShowAll(!activeShowAll)
+                        }}
+                      >
+                        {!activeShowAll ? <ShowLessIcon /> : <ShowMoreIcon />}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
               {/** End Tabs */}
-              <div>
-                {/* {currentTabContent?.data?.response_option === null &&
+              {/* {currentTabContent?.data?.response_option === null &&
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
@@ -2536,17 +2564,17 @@ const TestDetail = () => {
                       </button>
                     </div>
                   )} */}
-                <div
-                  className="flex w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
-                  onClick={() => {
-                    handleFlagQuestion(currentPage)
-                    trackGAEvent('Click Button Flag To Review Test')
-                  }}
-                >
-                  <FlagIcon />
-                  <div>Flag to Review</div>
-                </div>
-                {/* <button
+              <div
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
+                onClick={() => {
+                  handleFlagQuestion(currentPage)
+                  trackGAEvent('Click Button Flag To Review Test')
+                }}
+              >
+                <FlagIcon />
+                <div>Flag to Review</div>
+              </div>
+              {/* <button
                   disabled={currentTabContent?.is_viewed_answer}
                   className={`flex items-center gap-3 border border-solid ${
                     !currentTabContent?.is_viewed_answer
@@ -2562,7 +2590,7 @@ const TestDetail = () => {
                     Clear Selection
                   </div>
                 </button> */}
-                {/* {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+              {/* {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
@@ -2602,7 +2630,6 @@ const TestDetail = () => {
                     </button>
                   )
                 )} */}
-              </div>
             </div>
           }
         >
@@ -2700,7 +2727,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-400px flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,

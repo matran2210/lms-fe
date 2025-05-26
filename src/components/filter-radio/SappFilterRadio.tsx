@@ -10,7 +10,7 @@ interface IProps {
   className?: string
 }
 
-const SAPPRadio = ({
+const SAPPFilterRadio = ({
   name,
   value,
   checked,
@@ -51,4 +51,4 @@ const SAPPRadio = ({
   )
 }
 
-export default SAPPRadio
+export default SAPPFilterRadio

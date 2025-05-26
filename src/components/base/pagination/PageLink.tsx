@@ -31,7 +31,7 @@ const PageLink = ({
   if (arrow && disabled) {
     return (
       <li
-        className={`flex cursor-not-allowed items-center justify-center p-0.5 ${
+        className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
             ? 'min-h-8 min-w-8 text-gray-6'
             : 'min-h-default text-gray-1'
@@ -45,7 +45,7 @@ const PageLink = ({
       <li
         className={`${
           type === 'table' ? 'min-h-8 min-w-8 text-gray-5' : 'min-h-default'
-        } flex cursor-pointer items-center justify-center p-0.5`}
+        } flex cursor-pointer items-center justify-center`}
         {...otherProps}
       >
         {children}
@@ -72,7 +72,7 @@ const PageLink = ({
       className={`${
         type === 'table'
           ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
-          : 'min-h-9.5 min-w-9.5 text-sm font-normal leading-5.5'
+          : 'min-h-9.5 max-h-10 min-w-9.5 text-sm font-normal leading-5.5'
       } relative flex cursor-pointer items-center justify-center rounded p-2
       ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
         active
@@ -85,7 +85,7 @@ const PageLink = ({
       {...otherProps}
     >
       <span
-        className="h-full w-full text-center"
+        className="h-5.5 w-4 text-center"
         // onClick={() => {
         //   setIsViewed(true)
         //   // setIsFlagged(!isFlagged)
