@@ -2202,7 +2202,7 @@ const TestDetail = () => {
         >
           {/** Header */}
           <div>
-            {currentTabContent && (
+            {currentTabContent && quizAttempt && (
               <HeaderTest
                 quizDetail={quizDetail}
                 handleSubmitQuestions={handleSubmitQuestions}
