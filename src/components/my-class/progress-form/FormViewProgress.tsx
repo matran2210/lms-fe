@@ -284,7 +284,9 @@ function FormViewProgress({
                         body={
                           detailProgress?.content_completed?.filter(
                             (item) => item.main,
-                          )[0]?.course_sections[0]?.name || ''
+                          )[0]?.course_sections[0]?.name ||
+                          detailProgress?.section_main ||
+                          ''
                         }
                       />
                     )}
