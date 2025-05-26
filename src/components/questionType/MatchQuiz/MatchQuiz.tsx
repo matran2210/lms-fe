@@ -1,29 +1,28 @@
-import React, {
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-  forwardRef,
-  ForwardedRef,
-} from 'react'
+import EditorReader from '@components/base/editor/EditorReader'
 import {
-  ReactFlowProvider,
+  ConnectionMode,
   ReactFlow,
+  ReactFlowProvider,
   addEdge,
+  useReactFlow,
   type Connection,
   type Edge,
   type Node,
-  useReactFlow,
-  ConnectionMode,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { CustomNode } from './CustomNode'
-import CustomEdge from './CustomEdge'
-import { MY_COURSES } from 'src/constants/lang'
+import React, {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import EditorReader from '@components/base/editor/EditorReader'
+import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
-import { Iprops } from 'src/redux/slice/EntranceTest/EntranceTest'
+import CustomEdge from './CustomEdge'
+import { CustomNode } from './CustomNode'
 
 interface IProps {
   data: any
@@ -67,6 +66,12 @@ interface TransformDataInput {
   nodeWidth?: number
 }
 
+export enum Color {
+  Default = '#000000',
+  Success = '#078A4D',
+  Error = '#F80903',
+}
+
 const MatchQuiz = forwardRef(
   (
     {
@@ -94,6 +99,10 @@ const MatchQuiz = forwardRef(
     const { setViewport } = useReactFlow()
     const flowRef = useRef<HTMLDivElement>(null)
     const [nodes, setNodes] = useState<MatchNode[]>([])
+    const [correctNodes, setCorrectNodes] = useState<Node[]>([])
+    const [correctEdges, setCorrectEdges] = useState<Edge[]>([])
+
+    console.log('corrects:', corrects)
 
     const transformDataToNodes = ({
       questions,
@@ -108,7 +117,7 @@ const MatchQuiz = forwardRef(
         nodes.push({
           id: q.id,
           type: 'custom',
-          position: { x: 0, y: 100 + index * 100 },
+          position: { x: 0, y: index * 100 },
           data: { label: q.label, role: 'question' },
         })
       })
@@ -118,7 +127,7 @@ const MatchQuiz = forwardRef(
         nodes.push({
           id: a.id,
           type: 'custom',
-          position: { x: containerWidth - nodeWidth, y: 100 + index * 100 },
+          position: { x: containerWidth - nodeWidth, y: index * 100 },
           data: { label: a.label, role: 'answer' },
         })
       })
@@ -132,12 +141,14 @@ const MatchQuiz = forwardRef(
         id: item.id,
         label: item.content,
         role: 'question' as Role,
+        color: Color.Default, // Mặc định màu đen, có thể thay đổi sau
       }))
 
       const answers: RawItem[] = data.question_matchings.map((item: any) => ({
         id: item.answer.id,
         label: item.answer.answer,
         role: 'answer' as Role,
+        color: Color.Default, // Mặc định màu đen, có thể thay đổi sau
       }))
 
       const transformed = transformDataToNodes({
@@ -154,6 +165,14 @@ const MatchQuiz = forwardRef(
     }
 
     const edgeTypes = {
+      custom: CustomEdge,
+    }
+
+    const nodeTypeCorrect = {
+      custom: CustomNode,
+    }
+
+    const edgeTypeCorrect = {
       custom: CustomEdge,
     }
 
@@ -184,11 +203,139 @@ const MatchQuiz = forwardRef(
       })
     }, [])
 
+    useEffect(() => {
+      if (!corrects) return
+
+      const correctMap = new Map(
+        corrects.map((item: any) => [item.id, item.answer.id]),
+      )
+
+      const connectedIds = new Set<string>()
+      const edgeColors = new Map<string, string>()
+
+      if (edges?.length > 0) {
+        const updatedEdges = edges.map((edge) => {
+          const isCorrect = correctMap.get(edge.source) === edge.target
+
+          connectedIds.add(edge.source)
+          connectedIds.add(edge.target)
+
+          edgeColors.set(edge.source, isCorrect ? Color.Success : Color.Error)
+          edgeColors.set(edge.target, isCorrect ? Color.Success : Color.Error)
+
+          return {
+            ...edge,
+            data: {
+              ...edge.data,
+              isCorrect,
+            },
+            style: {
+              stroke: isCorrect ? Color.Success : Color.Error,
+            },
+          }
+        })
+
+        setEdges(updatedEdges)
+      }
+
+      // Đánh dấu đỏ cho các node đúng nhưng chưa nối
+      for (const item of corrects) {
+        const questionId = item.id
+        const answerId = item.answer.id
+
+        if (!connectedIds.has(questionId)) {
+          edgeColors.set(questionId, Color.Error)
+        }
+        if (!connectedIds.has(answerId)) {
+          edgeColors.set(answerId, Color.Error)
+        }
+      }
+
+      setNodes((prevNodes) =>
+        prevNodes.map((node) => {
+          if (node.data?.role && edgeColors.has(node.id)) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                color: edgeColors.get(node.id) || 'black',
+                isDisabled: !!corrects,
+              },
+            }
+          }
+          return node
+        }),
+      )
+    }, [corrects])
+
+    const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
+      const nodeMap = new Map(allNodes.map((n) => [n.id, n]))
+      const correctEdges: Edge[] = []
+      const correctNodes = new Map<string, Node>()
+
+      for (const item of corrects) {
+        const sourceId = item.id
+        const targetId = item.answer.id
+
+        correctEdges.push({
+          id: `correct-${sourceId}-${targetId}`,
+          source: sourceId,
+          target: targetId,
+          data: { isCorrect: true },
+          style: { stroke: Color.Success }, // xanh
+        })
+
+        const sourceNode = nodeMap.get(sourceId)
+        const targetNode = nodeMap.get(targetId)
+
+        if (sourceNode) {
+          correctNodes.set(sourceId, {
+            ...sourceNode,
+            data: {
+              ...sourceNode.data,
+              color: Color.Success,
+              isDisabled: true,
+            },
+          })
+        }
+
+        if (targetNode) {
+          correctNodes.set(targetId, {
+            ...targetNode,
+            data: {
+              ...targetNode.data,
+              color: Color.Success,
+              isDisabled: true,
+            },
+          })
+        }
+      }
+
+      return {
+        nodes: Array.from(correctNodes.values()),
+        edges: correctEdges,
+      }
+    }
+
+    useEffect(() => {
+      if (!corrects || nodes.length === 0) return
+
+      const { nodes: correctNodes, edges: correctEdges } = generateCorrectFlow(
+        corrects,
+        nodes,
+      )
+      setCorrectNodes(correctNodes)
+      setCorrectEdges(correctEdges)
+    }, [corrects, nodes])
+
     return (
       <div className="flex h-full w-full flex-col">
         <div
-          className="relative h-[500px] w-full min-w-[700px] bg-gray-100"
+          className={`relative w-full min-w-[700px] bg-gray-100`}
           ref={flowRef}
+          style={{
+            height: `${(data?.question_matchings?.length || 1) * 100}px`,
+          }}
         >
           <ReactFlow
             nodes={nodes}
@@ -208,24 +355,23 @@ const MatchQuiz = forwardRef(
             edgeTypes={edgeTypes}
             connectionMode={ConnectionMode.Strict} // để bắt buộc kết nối đúng handle
           />
-          <svg>
-            <defs>
-              <marker
-                id="arrowhead"
-                markerWidth="10"
-                markerHeight="10"
-                refX="3"
-                refY="4"
-                orient="0"
-                markerUnits="strokeWidth"
-              >
-                <path
-                  d="M3.604 3.519C3.799 3.715 3.799 4.032 3.604 4.226L0.422 7.409C0.227 7.604 -0.0905 7.604 -0.2855 7.409C-0.481 7.213 -0.481 6.897 -0.2855 6.701L2.543 3.873L-0.2855 1.045C-0.481 0.849 -0.481 0.533 -0.2855 0.337C-0.0905 0.142 0.227 0.142 0.422 0.337L3.604 3.519Z"
-                  fill="currentColor"
-                />
-              </marker>
-            </defs>
-          </svg>
+          <div>Kết quả</div>
+          <ReactFlow
+            nodes={correctNodes}
+            edges={correctEdges}
+            nodeTypes={nodeTypeCorrect}
+            edgeTypes={edgeTypeCorrect}
+            fitView={false}
+            panOnDrag={false}
+            zoomOnScroll={false}
+            zoomOnPinch={false}
+            panOnScroll={false}
+            nodesDraggable={false}
+            edgesReconnectable={false}
+            minZoom={1}
+            maxZoom={1}
+            connectionMode={ConnectionMode.Strict}
+          />
         </div>
         {solution && (
           <div className="mt-6 bg-gray-4 p-6">
