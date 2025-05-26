@@ -2321,7 +2321,7 @@ export const SwitcherClosed = () => {
 export const ClockIcon = ({ color = 'black', size = 24 }: IProps) => {
   return (
     <svg
-      fill={color}
+      fill={'currentColor'}
       width={size}
       height={size}
       viewBox="0 0 256 256"

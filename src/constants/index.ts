@@ -346,9 +346,9 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.LIVE_ONLINE]: '',
 }
 
-export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
-  ([key, value]) => ({ value: key, label: value }),
-)
+export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
+  .filter(([key, label]) => key !== EVENT_TYPES.LIVE_ONLINE)
+  .map(([key, value]) => ({ value: key, label: value }))
 
 export const EVENT_REPEAT_TYPES = {
   NO_REPEAT: 'NO_REPEAT',

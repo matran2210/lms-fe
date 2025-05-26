@@ -1,10 +1,4 @@
-import { AlertIcon, ClockIcon } from '@assets/icons'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
-import SappModalV2 from '@components/base/modal/SappModalV2'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { formatTime } from '@components/common/timer'
 import { Radio, RadioChangeEvent } from 'antd'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
@@ -48,32 +42,43 @@ const PopupSelectRetakeOrContinueAttempt = ({
   return (
     <SappModalV3
       open={open}
-      okButtonCaption="Start"
+      okButtonCaption="Continue"
       cancelButtonCaption={'Cancel'}
       onOk={handleOK}
       handleCancel={() => {
         setOpen(false)
       }}
-      footerButtonClassName="flex justify-between item-center"
+      footerButtonClassName="flex justify-between item-center mt-6"
       buttonSize="medium"
       title={title}
       icon={undefined}
       header=""
+      classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
     >
       <div>
-        <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
+        <div className="mt-10 text-center text-base text-gray-1">
           Your last attempt was unexpectedly ended. Do you want to continue from
           where you left off in the previous one?
         </div>
-        <div className={`relative pt-5 md:pt-9`}>
+        <div className={`relative pt-5 md:pt-8`}>
           {/* Select Option */}
           <Radio.Group
-            className="sapp-group-radio-wrapper flex flex-col gap-5"
+            className="sapp-group-radio-wrapper flex flex-col gap-6"
             onChange={onChange}
             value={value}
             options={[
-              { value: 'continue', label: 'Continue the previous attempt' },
-              { value: 'retake', label: 'Start a new attempt' },
+              {
+                value: 'continue',
+                label: (
+                  <span className="text-base">
+                    Continue the previous attempt
+                  </span>
+                ),
+              },
+              {
+                value: 'retake',
+                label: <span className="text-base">Start a new attempt</span>,
+              },
             ]}
           />
         </div>

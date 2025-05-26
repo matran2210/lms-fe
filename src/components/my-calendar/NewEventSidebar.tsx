@@ -106,7 +106,8 @@ const NewEventSidebar = ({
     ) as ICreateSchedulePayload
 
     if (
-      formValues.repeat?.recurring_schedule?.type !==
+      formValues.repeat?.recurring_schedule &&
+      formValues.repeat.recurring_schedule.type !==
         EVENT_REPEAT_TYPES.NO_REPEAT &&
       !formValues.repeat.recurring_schedule.recurrence_end_date
     ) {

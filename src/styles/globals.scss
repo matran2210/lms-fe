@@ -743,6 +743,19 @@ textarea.is-invalid:focus {
   @apply bg-bw-10;
 }
 
+.sapp-modal__opt-continue-test {
+  .ant-modal-content {
+    @apply p-12 !important;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        border-color: #ffb800;
+      }
+    }
+  }
+}
+
 .lf-player-container {
   height: inherit;
   @apply flex items-center justify-center;

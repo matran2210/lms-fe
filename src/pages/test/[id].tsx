@@ -101,8 +101,7 @@ declare global {
   }
 }
 
-const warningText =
-  'You have unsaved changes - are you sure you wish to leave this page?'
+const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const checkType = (
     data: any,
@@ -1679,6 +1678,7 @@ const TestDetail = () => {
               open: true,
               resultId: res?.data?.id,
             })
+            setLoading(false)
             return
           }
           if (type === 'entrance') {
@@ -2187,6 +2187,7 @@ const TestDetail = () => {
       )
     }
   }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2202,7 +2203,7 @@ const TestDetail = () => {
         >
           {/** Header */}
           <div>
-            {currentTabContent && (
+            {currentTabContent && quizAttempt && (
               <HeaderTest
                 quizDetail={quizDetail}
                 handleSubmitQuestions={handleSubmitQuestions}
@@ -2700,7 +2701,10 @@ const TestDetail = () => {
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
-                      handleChangeTab(filteredTabs[index + 1].id)
+                      if (filteredTabs[index + 1].id) {
+                        handleChangeTab(filteredTabs[index + 1].id)
+                        handleSubmitAnswer('change-tab')
+                      }
                     }}
                   >
                     <div className="text-medium-sm font-medium">
@@ -2744,9 +2748,17 @@ const TestDetail = () => {
                       type !== 'entrance' &&
                       quizDetail?.quiz_type !== 'FINAL_TEST'
                     ) {
-                      router.replace(
-                        `/courses/test/test-result/${QuizResultId}`,
-                      )
+                      if (
+                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                      ) {
+                        router.replace(
+                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                        )
+                      } else {
+                        router.replace(
+                          `/courses/test/test-result/${QuizResultId}`,
+                        )
+                      }
                     } else {
                       router.back()
                       setScoreQuestion(scoreFinalTest)
