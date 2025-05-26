@@ -93,8 +93,7 @@ declare global {
   }
 }
 
-const warningText =
-  'You have unsaved changes - are you sure you wish to leave this page?'
+const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const checkType = (
     data: any,
@@ -2684,7 +2683,10 @@ const TestDetail = () => {
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
                       )
-                      handleChangeTab(filteredTabs[index + 1].id)
+                      if (filteredTabs[index + 1].id) {
+                        handleChangeTab(filteredTabs[index + 1].id)
+                        handleSubmitAnswer('change-tab')
+                      }
                     }}
                   >
                     <div className="text-medium-sm font-medium">
