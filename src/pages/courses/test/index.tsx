@@ -139,7 +139,9 @@ const TestModal = ({
             'quizAttempt',
             JSON.stringify({
               id: results?.[0]?.id,
-              number_of_attempts: data?.attempt?.number_of_attempts,
+              number_of_attempts:
+                data?.attempt?.number_of_attempts ||
+                data?.quiz?.attempt?.number_of_attempts,
               is_limited: data?.is_limited,
               quiz_timed: data?.quiz?.quiz_timed,
               created_at: results?.[0]?.created_at,
@@ -253,7 +255,7 @@ const TestModal = ({
       'quizAttempt',
       JSON.stringify({
         id: selectedResult?.value,
-        number_of_attempts: data?.attempt?.number_of_attempts,
+        number_of_attempts: data?.quiz?.attempt?.number_of_attempts,
         is_limited: data?.is_limited,
         quiz_timed: data?.quiz?.quiz_timed,
         created_at: selectedResult?.created_at,
@@ -522,23 +524,9 @@ const TestModal = ({
                   options={resultList.data.map((item, index) => ({
                     name: item.name,
                     value: item.id,
-                    label: `Attempt ${item.name} - ${
-                      item.status === 'IN_PROGRESS'
-                        ? 'Currently in progress - Resume from last checkpoint'
-                        : item.status === 'FINISHED'
-                          ? `Completed with score ${item.ratio_score}% - Full review available`
-                          : 'Not started - Begin new attempt'
-                    } | ${
-                      item.quiz?.grading_method === 'MANUAL'
-                        ? 'Awaiting instructor review'
-                        : 'Automated scoring completed'
-                    }`,
+                    label: item.name,
                     status: item.status,
-                    ratio_score: `${item.ratio_score}% - ${
-                      Number(item.ratio_score) >= 75
-                        ? 'Exceeds requirements'
-                        : 'Below passing threshold'
-                    }`,
+                    ratio_score: item.ratio_score,
                     number_of_attempt: 3 - index,
                   }))}
                   onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
