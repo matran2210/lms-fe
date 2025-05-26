@@ -60,9 +60,9 @@ const MyCourse = () => {
   }
 
   useEffect(() => {
-    // if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-    dispatch(active())
-    // }
+    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+      dispatch(active())
+    }
   }, [dispatch, guideIsActive, userGuideLine])
 
   /**
