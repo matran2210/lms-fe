@@ -1,7 +1,7 @@
-import { IProfilePages } from 'src/type/Profile'
-import MyProfile from './MyProfile'
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
+import { IProfilePages } from 'src/type/Profile'
+import MyProfile from './MyProfile'
 
 interface IProps {
   page: IProfilePages
@@ -21,7 +21,6 @@ const ProfileContent = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
-  onOpenTab,
 }: IProps) => {
   return (
     page === 'overview' && (
@@ -31,7 +30,6 @@ const ProfileContent = ({
         avatar={avatar}
         handleSetAvatar={handleSetAvatar}
         setReViewImageSrc={setReViewImageSrc}
-        onOpenTab={onOpenTab}
       />
     )
   )
