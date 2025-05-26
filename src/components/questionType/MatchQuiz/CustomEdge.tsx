@@ -10,12 +10,15 @@ const CustomEdge: React.FC<EdgeProps> = ({
   sourcePosition,
   targetPosition,
   style,
+  style,
 }) => {
+  // Điều chỉnh điểm target nếu cần
   // Điều chỉnh điểm target nếu cần
   let adjustedTargetX = targetX
   let adjustedTargetY = targetY
 
   if (targetPosition === 'left') {
+    adjustedTargetX = targetX + 3
     adjustedTargetX = targetX + 3
   }
 
