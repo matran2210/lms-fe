@@ -6,6 +6,12 @@ export interface IProgressList {
   formattedClassTeachingProgresses: IProgress[]
 }
 
+export enum LearningMode {
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE',
+  LIVE_ONLINE = 'LIVE_ONLINE',
+}
+
 export interface IProgress {
   id: string
   lesson_name: string
@@ -26,6 +32,8 @@ export interface IProgress {
   }
   catch_up_content: ICatchUpContent[]
   content_completed: IContentCompleted[]
+  section_main?: string
+  mode: LearningMode
 }
 export interface IProgressUser {
   id: string
