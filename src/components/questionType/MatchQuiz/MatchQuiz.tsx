@@ -23,6 +23,8 @@ import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import CustomEdge from './CustomEdge'
 import { CustomNode } from './CustomNode'
+import UserFlow from './UserFlow'
+import { Divider } from 'antd'
 
 interface IProps {
   data: any
@@ -96,7 +98,6 @@ const MatchQuiz = forwardRef(
     ref: ForwardedRef<any>,
   ) => {
     const [edges, setEdges] = useState<Edge[]>([])
-    const { setViewport } = useReactFlow()
     const flowRef = useRef<HTMLDivElement>(null)
     const [nodes, setNodes] = useState<MatchNode[]>([])
     const [correctNodes, setCorrectNodes] = useState<Node[]>([])
@@ -168,14 +169,6 @@ const MatchQuiz = forwardRef(
       custom: CustomEdge,
     }
 
-    const nodeTypeCorrect = {
-      custom: CustomNode,
-    }
-
-    const edgeTypeCorrect = {
-      custom: CustomEdge,
-    }
-
     const fixedViewport = { x: 0, y: 0, zoom: 1 }
 
     const onMove = useCallback((event: any, viewport: any) => {
@@ -184,11 +177,8 @@ const MatchQuiz = forwardRef(
         viewport.y !== fixedViewport.y ||
         viewport.zoom !== fixedViewport.zoom
       ) {
-        setViewport(fixedViewport) // reset lại viewport ngay lập tức
       }
     }, [])
-
-    useReactFlow().setViewport(fixedViewport)
 
     const onConnect = useCallback((connection: Connection) => {
       setEdges((prev) => {
@@ -271,48 +261,60 @@ const MatchQuiz = forwardRef(
     const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
       const nodeMap = new Map(allNodes.map((n) => [n.id, n]))
       const correctEdges: Edge[] = []
-      const correctNodes = new Map<string, Node>()
+      const correctNodes: Node[] = []
 
       for (const item of corrects) {
         const sourceId = item.id
         const targetId = item.answer.id
 
-        correctEdges.push({
-          id: `correct-${sourceId}-${targetId}`,
-          source: sourceId,
-          target: targetId,
-          data: { isCorrect: true },
-          style: { stroke: Color.Success }, // xanh
-        })
-
         const sourceNode = nodeMap.get(sourceId)
         const targetNode = nodeMap.get(targetId)
 
-        if (sourceNode) {
-          correctNodes.set(sourceId, {
+        if (sourceNode && targetNode) {
+          const offsetY = 120 // khoảng cách xuống dưới
+
+          const newSourceNode: Node = {
             ...sourceNode,
+            id: `correct-${sourceId}`,
+            position: {
+              x: sourceNode.position.x,
+              y: sourceNode.position.y + offsetY,
+            },
             data: {
               ...sourceNode.data,
-              color: Color.Success,
               isDisabled: true,
+              color: Color.Success,
             },
-          })
-        }
+          }
 
-        if (targetNode) {
-          correctNodes.set(targetId, {
+          const newTargetNode: Node = {
             ...targetNode,
+            id: `correct-${targetId}`,
+            position: {
+              x: targetNode.position.x,
+              y: targetNode.position.y + offsetY,
+            },
             data: {
               ...targetNode.data,
-              color: Color.Success,
               isDisabled: true,
+              color: Color.Success,
             },
+          }
+
+          correctNodes.push(newSourceNode, newTargetNode)
+
+          correctEdges.push({
+            id: `correct-${sourceId}-${targetId}`,
+            source: newSourceNode.id,
+            target: newTargetNode.id,
+            data: { isCorrect: true },
+            style: { stroke: Color.Success },
           })
         }
       }
 
       return {
-        nodes: Array.from(correctNodes.values()),
+        nodes: correctNodes,
         edges: correctEdges,
       }
     }
@@ -320,66 +322,54 @@ const MatchQuiz = forwardRef(
     useEffect(() => {
       if (!corrects || nodes.length === 0) return
 
-      const { nodes: correctNodes, edges: correctEdges } = generateCorrectFlow(
-        corrects,
-        nodes,
-      )
-      setCorrectNodes(correctNodes)
-      setCorrectEdges(correctEdges)
-    }, [corrects, nodes])
+      const { nodes: correctAddNodes, edges: correctAddEdges } =
+        generateCorrectFlow(corrects, nodes)
+
+      setCorrectEdges(correctAddEdges)
+      setCorrectNodes(correctAddNodes)
+    }, [corrects])
 
     return (
+      <>
       <div className="flex h-full w-full flex-col">
         <div
           className={`relative w-full min-w-[700px] bg-gray-100`}
           ref={flowRef}
           style={{
-            height: `${(data?.question_matchings?.length || 1) * 100}px`,
+            height: `${(nodes?.length/2 + correctNodes?.length/2 || 1) * 100}px`,
           }}
         >
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onMove={onMove}
-            onConnect={onConnect}
-            fitView={false} // không auto-fit khi render
-            panOnDrag={false} // không cho kéo canvas
-            zoomOnScroll={false} // không cho zoom bằng cuộn chuột
-            zoomOnPinch={false} // không zoom bằng pinch
-            panOnScroll={false} // không pan bằng scroll
-            nodesDraggable={false} // không cho kéo node
-            edgesReconnectable={false} // không cho kéo lại edge
-            minZoom={1} // khoá mức zoom
-            maxZoom={1}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            connectionMode={ConnectionMode.Strict} // để bắt buộc kết nối đúng handle
-          />
+          <ReactFlowProvider>
+            <UserFlow
+              nodes={nodes}
+              edges={edges}
+              onConnect={onConnect}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              />
+          </ReactFlowProvider>
+              <Divider/>
           <div>Kết quả</div>
-          <ReactFlow
-            nodes={correctNodes}
-            edges={correctEdges}
-            nodeTypes={nodeTypeCorrect}
-            edgeTypes={edgeTypeCorrect}
-            fitView={false}
-            panOnDrag={false}
-            zoomOnScroll={false}
-            zoomOnPinch={false}
-            panOnScroll={false}
-            nodesDraggable={false}
-            edgesReconnectable={false}
-            minZoom={1}
-            maxZoom={1}
-            connectionMode={ConnectionMode.Strict}
-          />
+          <ReactFlowProvider>
+            <UserFlow
+              nodes={correctNodes}
+              edges={correctEdges}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              onConnect={onConnect}
+          
+            />
+          </ReactFlowProvider>
         </div>
+      </div>
+
         {solution && (
           <div className="mt-6 bg-gray-4 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
         )}
-      </div>
+      </>
     )
   },
 )
@@ -387,11 +377,7 @@ const MatchQuiz = forwardRef(
 MatchQuiz.displayName = 'MatchQuiz'
 
 const MatchQuizWrapper = forwardRef((props: IProps, ref) => {
-  return (
-    <ReactFlowProvider>
-      <MatchQuiz {...props} ref={ref} />
-    </ReactFlowProvider>
-  )
+  return <MatchQuiz {...props} ref={ref} />
 })
 
 MatchQuizWrapper.displayName = 'MatchQuizWrapper'

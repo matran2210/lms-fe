@@ -10,15 +10,12 @@ const CustomEdge: React.FC<EdgeProps> = ({
   sourcePosition,
   targetPosition,
   style,
-  style,
 }) => {
-  // Điều chỉnh điểm target nếu cần
   // Điều chỉnh điểm target nếu cần
   let adjustedTargetX = targetX
   let adjustedTargetY = targetY
 
   if (targetPosition === 'left') {
-    adjustedTargetX = targetX + 3
     adjustedTargetX = targetX + 3
   }
 
@@ -34,7 +31,7 @@ const CustomEdge: React.FC<EdgeProps> = ({
     curvature,
   })
 
-  const markerId = `arrowhead-${id}`
+  const markerId = `arrowhead`
   const strokeColor = style?.stroke || 'black'
 
   return (
@@ -60,7 +57,7 @@ const CustomEdge: React.FC<EdgeProps> = ({
       <BaseEdge
         id={id}
         path={edgePath}
-        markerEnd={`url(#${markerId})`}
+        markerEnd={`url(#arrowhead)`}
         style={{
           stroke: style?.stroke || 'black',
           strokeWidth: 2,
