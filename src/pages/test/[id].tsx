@@ -1679,6 +1679,7 @@ const TestDetail = () => {
               open: true,
               resultId: res?.data?.id,
             })
+            setLoading(false)
             return
           }
           if (type === 'entrance') {
@@ -2187,6 +2188,7 @@ const TestDetail = () => {
       )
     }
   }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2744,9 +2746,17 @@ const TestDetail = () => {
                       type !== 'entrance' &&
                       quizDetail?.quiz_type !== 'FINAL_TEST'
                     ) {
-                      router.replace(
-                        `/courses/test/test-result/${QuizResultId}`,
-                      )
+                      if (
+                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                      ) {
+                        router.replace(
+                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                        )
+                      } else {
+                        router.replace(
+                          `/courses/test/test-result/${QuizResultId}`,
+                        )
+                      }
                     } else {
                       router.back()
                       setScoreQuestion(scoreFinalTest)

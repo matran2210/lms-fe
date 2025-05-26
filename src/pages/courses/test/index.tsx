@@ -81,7 +81,7 @@ const TestModal = ({
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
   const [openLastAttempt, setOpenLastAttempt] = useState(false)
-  const [remainingTime, setRemainingTime] = useState(0)
+  const [remainingTime, setRemainingTime] = useState<number>()
   let remainingTimeLastAttempt = useRef<number>(0)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
@@ -480,6 +480,7 @@ const TestModal = ({
           open={open}
           handleCancel={() => {
             setOpen(false)
+            setSelectedResult(undefined)
             trackGAEvent('Click Button Cancel Modal Test')
           }}
           showOkButton={renderShowOkButton()}
@@ -706,6 +707,7 @@ const TestModal = ({
             <div className="flex items-center justify-between gap-2">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
               {remainingTimeLastAttempt.current >= 0 &&
+                remainingTime &&
                 !!data?.quiz?.quiz_timed && (
                   <div
                     className={clsx(`item-center flex gap-2 font-normal`, {
