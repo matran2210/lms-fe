@@ -273,10 +273,10 @@ const PartFailed = ({
               {isShowButtonAction() && (
                 <SappButton
                   title={renderOkButtonCaption()}
-                  color="primary"
                   full={false}
                   size="small"
-                  className="ml-auto max-h-8"
+                  color="quizActivity"
+                  className="ml-auto max-h-8 !bg-gray-2  !text-black"
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]
