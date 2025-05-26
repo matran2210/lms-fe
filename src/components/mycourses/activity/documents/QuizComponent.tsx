@@ -487,7 +487,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.MATCHING:
           return (
-            <MatchingQuestion
+            <MatchQuizWrapper
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
