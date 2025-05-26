@@ -11,10 +11,10 @@ import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import stepFiveImg from 'src/assets/images/tour-guide/step-5-course-tab.png'
-import stepSixImg from 'src/assets/images/tour-guide/step-6-courses.png'
-import stepSevenImg from 'src/assets/images/tour-guide/step-7-filter.png'
-import TourGuideWelcome from 'src/assets/lotties/tour-guide-welcome.json'
+import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
+import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
+import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
+import TourGuideStart from 'src/assets/lotties/tour-guide-start.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
@@ -60,9 +60,9 @@ const MyCourse = () => {
   }
 
   useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-      dispatch(active())
-    }
+    // if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
+    dispatch(active())
+    // }
   }, [dispatch, guideIsActive, userGuideLine])
 
   /**
@@ -182,9 +182,8 @@ const MyCourse = () => {
                 className="left-0 top-full mt-3"
                 title={'Search box'}
                 index={1}
-                total={6}
-                imgType="animation"
-                imgSrc={TourGuideWelcome}
+                total={7}
+                imgSrc={TourGuideStart}
               />
             )}
           </div>
@@ -214,7 +213,7 @@ const MyCourse = () => {
                 content={UserGuide.CONTENT_STEP_4}
                 className="left-0 top-full mt-5"
                 index={4}
-                total={6}
+                total={7}
                 isEnd={
                   Number(window.sessionStorage.getItem('totalCourse')) <= 0
                 }
@@ -251,19 +250,19 @@ const MyCourse = () => {
               <PopupStep
                 content={UserGuide.CONTENT_STEP_5}
                 className="left-0 top-full mt-5"
-                index={4}
-                total={6}
+                index={5}
+                total={7}
                 isEnd={
                   Number(window.sessionStorage.getItem('totalCourse')) <= 0
                 }
-                imgSrc={stepFiveImg}
+                imgSrc={TourGuideCourseTab}
                 title="Course Tab"
               />
             )}
           </Col>
         </Row>
-        <div className="mx-auto my-9 flex max-w-xxl justify-between">
-          <h1>My Courses</h1>
+        <div className="mx-auto mb-6 mt-8 flex max-w-xxl items-center justify-between">
+          <h1 className="text-2xl font-semibold">My Courses</h1>
           <div className={`relative`}>
             <Filter
               courses={data?.pages?.[0]?.category}
@@ -271,14 +270,14 @@ const MyCourse = () => {
             />
             {guideStatus && guideStep === 7 && (
               <PopupStep
-                content={UserGuide.CONTENT_STEP_6}
+                content={UserGuide.CONTENT_STEP_7}
                 className="right-1/2 top-full mt-5"
-                index={6}
-                total={6}
+                index={7}
+                total={7}
                 titleButtonNext="Finish"
                 title="Filter"
                 handleCancel={closeUserGuide}
-                imgSrc={stepSevenImg}
+                imgSrc={TourGuideFilter}
               />
             )}
           </div>
@@ -302,10 +301,10 @@ const MyCourse = () => {
             <PopupStep
               content={UserGuide.CONTENT_STEP_6}
               className="top-[20px] mt-6 2xl:left-[33.5%]"
-              index={5}
-              total={6}
+              index={6}
+              total={7}
               title="Courses"
-              imgSrc={stepSixImg}
+              imgSrc={TourGuideCourses}
             />
           )}
         </div>
