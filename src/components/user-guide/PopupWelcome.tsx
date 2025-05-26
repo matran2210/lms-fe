@@ -43,7 +43,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
         open={true}
         okButtonCaption={'Yes'}
         cancelButtonCaption={'No'}
-        size="max-w-[540px]"
+        size="max-w-[560px]"
         position="center"
         showHeader={false}
         showFooter={false}
@@ -69,7 +69,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
           />
           <ButtonText
             title={'Skip'}
-            className="mt-3"
+            className="mt-3 pb-0"
             onClick={closeUserGuide}
           />
         </div>
