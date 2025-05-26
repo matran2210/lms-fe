@@ -3,8 +3,8 @@ import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
-import stepTwoImg from 'src/assets/images/tour-guide/step-2-sidebar.png'
-import stepThreeImg from 'src/assets/images/tour-guide/step-3-noti.png'
+import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
+import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
 import { UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
@@ -53,7 +53,7 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative  rounded-t-xl pb-6 pt-5.25 ${
+          className={`max-h-[calc(100vh-145px) relative  rounded-xl pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
@@ -84,16 +84,16 @@ export default function Sidebar({
           {guideStatus && guideStep == 2 && (
             <PopupStep
               title="Sidebar"
-              imgSrc={stepTwoImg}
               content={UserGuide.CONTENT_STEP_2}
               className="left-full top-1/2 ml-5"
               index={2}
-              total={6}
+              total={7}
+              imgSrc={TourGuideSidebar}
             />
           )}
         </div>
         <div
-          className={`absolute bottom-0 w-full rounded-bl-xl rounded-br-xl bg-white pb-6
+          className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
           <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
@@ -107,9 +107,9 @@ export default function Sidebar({
               content={UserGuide.CONTENT_STEP_3}
               className="bottom-0 left-full ml-5"
               title="Notification & Profile"
-              imgSrc={stepThreeImg}
+              imgSrc={TourGuideNoti}
               index={3}
-              total={6}
+              total={7}
             />
           )}
         </div>

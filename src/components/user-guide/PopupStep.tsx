@@ -28,7 +28,7 @@ const PopupStep = ({
   title,
   imgSrc,
   isEnd,
-  imgType = 'static',
+  imgType = 'animation',
 }: Props) => {
   const dispatch = useAppDispatch()
 
@@ -48,9 +48,7 @@ const PopupStep = ({
     // Remove hidden scroll when close user guide
     document.body.style.removeProperty('padding-right')
     document.body.classList.remove('overflow-hidden')
-    setTimeout(() => {
-      handleCancel && handleCancel()
-    }, 50)
+    handleCancel && handleCancel()
   }
 
   return (
@@ -81,7 +79,7 @@ const PopupStep = ({
           <h6 className="mb-3 text-lg font-bold">{title}</h6>
           <span className="text-base font-normal">{content}</span>
           <div
-            className={`mt-5 flex items-center ${index === 1 ? 'justify-end' : 'justify-between'}`}
+            className={`mt-3 flex items-center ${index === 1 ? 'justify-end' : 'justify-between'}`}
           >
             {isEnd === true ? (
               <SappButton
