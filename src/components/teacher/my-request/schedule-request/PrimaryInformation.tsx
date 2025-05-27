@@ -92,16 +92,8 @@ const PrimaryInformation = ({
               value={selectedRequest?.subject.course_category?.name}
             />
             {/* Subject */}
-
             <PrimaryInfoItem
               title="Subject"
-              // value={selectedRequest?.subject?.code}
-              // value={
-              //   <Tooltip
-              //     className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap"
-              //     title={`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
-              //   >{`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}</Tooltip>
-              // }
               value={
                 <span className="flex w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap">
                   <Tooltip
