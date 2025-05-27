@@ -6,7 +6,7 @@ import ScheduleRequestFilter from 'src/components/teacher/my-request/schedule-re
 import TableContainer from 'src/components/teacher/my-request/schedule-request/TableContainer'
 import { FilterRequestScheduleParams } from 'src/type/teachers/request-schedule.interface'
 
-const ScheduleRequestTable = ({ tabId }: { tabId: number }) => {
+const ScheduleRequestTable = () => {
   const initialValues: FilterRequestScheduleParams = {
     search: '',
     course_category_id: '',
@@ -14,7 +14,7 @@ const ScheduleRequestTable = ({ tabId }: { tabId: number }) => {
     fromDate: '',
     toDate: '',
     dateField: '',
-    tabId: tabId,
+    tab: 'schedulerequest',
   }
   const { control, getValues, reset } = useForm()
   const [params, setParams] =

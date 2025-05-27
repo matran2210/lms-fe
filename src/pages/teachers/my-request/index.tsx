@@ -25,23 +25,28 @@ const tabs = [
   {
     id: 1,
     title: 'Personal Schedule Request',
+    urlTitle: 'personalschedule',
   },
   {
     id: 2,
     title: 'Timeoff Request',
+    urlTitle: 'timeoff',
   },
   {
     id: 3,
     title: 'Schedule Request',
+    urlTitle: 'schedulerequest',
   },
 ]
 const MyRequestPage = () => {
   const router = useRouter()
   const { query } = router
 
-  const [selected, setSelected] = useState<number>(
-    Number(query.tabId || tabs[0].id),
-  )
+  const selectedTab = query.tab
+    ? (tabs.find((item) => item.urlTitle == query.tab)?.id ?? tabs[0].id)
+    : tabs[0].id
+
+  const [selected, setSelected] = useState<number>(selectedTab)
 
   const renderClassDetail = (selected: number) => {
     switch (selected) {
@@ -50,7 +55,7 @@ const MyRequestPage = () => {
       case 2:
         return <TimeOffTab />
       case 3:
-        return <ScheduleRequestTable tabId={selected} />
+        return <ScheduleRequestTable />
       default:
         return null
     }

@@ -5,6 +5,7 @@ import SappTeacherTextField from '@components/teacher/components/sapp-textfield/
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SchedulesAPI } from '@pages/api/schedules'
 import { handleDisableDate, handleDisableTime } from '@utils/calendar'
+import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'
@@ -19,6 +20,7 @@ import {
   CALENDAR_SIDEBAR_SAVE_BUTTON,
   CALENDAR_SIDEBAR_TITLE,
   CONFIRM_CANCEL,
+  EVENT_REPEAT_TYPES,
   EVENT_TYPES,
 } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
@@ -79,6 +81,7 @@ const NewEventSidebar = ({
     setValue: setFormValue,
     getValues,
     reset,
+    setError,
   } = useForm<ICreateScheduleForm>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
@@ -101,6 +104,17 @@ const NewEventSidebar = ({
         ([_, value]) => value !== null && value !== '' && value !== undefined,
       ),
     ) as ICreateSchedulePayload
+
+    if (
+      formValues.repeat?.recurring_schedule &&
+      formValues.repeat.recurring_schedule.type !==
+        EVENT_REPEAT_TYPES.NO_REPEAT &&
+      !formValues.repeat.recurring_schedule.recurrence_end_date
+    ) {
+      return setError('repeat', {
+        message: 'End on is required',
+      })
+    }
 
     setIsLoading(true)
     try {

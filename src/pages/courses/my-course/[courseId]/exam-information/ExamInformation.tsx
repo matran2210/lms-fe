@@ -10,9 +10,10 @@ import { useQuery, useQueryClient } from 'react-query'
 import NoData from 'src/common/NoData'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
+import { COURSE_TYPE } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
@@ -86,7 +87,9 @@ const ExamInformation = () => {
                             <CheckCircleTwoTone twoToneColor={'#52c41a'} />
                           </Tooltip>
                         ) : (
-                          data?.data?.remaining_changes > 0 && (
+                          data?.data?.remaining_changes > 0 &&
+                          data?.data.course.course_type ===
+                            COURSE_TYPE.NORMAL_COURSE && (
                             <Tooltip
                               showTooltip={true}
                               title={'Change Exam Date'}

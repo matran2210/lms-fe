@@ -22,7 +22,7 @@ export interface FilterRequestScheduleParams {
   search?: string
   course_category_id?: string
   status?: string
-  tabId?: number
+  tab?: string
 }
 
 export interface ICourseSection {

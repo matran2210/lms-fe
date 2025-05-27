@@ -1,5 +1,4 @@
 import { AlertIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 
 interface IProps {
