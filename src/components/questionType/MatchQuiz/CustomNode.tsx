@@ -8,13 +8,13 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
     width: '10px',
     height: '10px',
     background: '#fff',
-    border: `2px solid ${data?.color || Color.Default}`,
+    border: `2px solid ${data?.edgeColor || Color?.ArrowDefault}`,
     borderRadius: '50%',
   }
 
   return (
     <div
-      style={{ color: (data?.color || Color?.Default) as string }}
+      style={{ color: (data?.color || Color?.TextDefault) as string }}
       className={`relative min-h-10 w-[295px] break-words rounded-lg bg-white p-4 text-start text-base shadow-matchingquiz`}
     >
       {data.label as any}

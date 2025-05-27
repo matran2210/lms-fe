@@ -4,12 +4,11 @@ import {
   type Edge,
   type Node,
   type OnConnect,
-  type OnMove,
   type NodeTypes,
   type EdgeTypes,
   ConnectionMode,
 } from '@xyflow/react'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 // Định nghĩa kiểu dữ liệu cho các props của CustomFlow
 interface CustomFlowProps {
@@ -28,6 +27,7 @@ const CustomFlow = ({
   edgeTypes,
 }: CustomFlowProps) => {
   const { setViewport } = useReactFlow()
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
   const fixedViewport = { x: 0, y: 0, zoom: 1 }
 
@@ -37,7 +37,7 @@ const CustomFlow = ({
       viewport.y !== fixedViewport.y ||
       viewport.zoom !== fixedViewport.zoom
     ) {
-      setViewport(fixedViewport) // reset lại viewport ngay lập tức
+      setViewport(fixedViewport)
     }
   }, [])
 
@@ -45,25 +45,45 @@ const CustomFlow = ({
     setViewport(fixedViewport)
   }, [setViewport])
 
+  useEffect(() => {
+    const wrapper = wrapperRef.current
+    if (!wrapper) return
+  
+    const canvas = wrapper.querySelector('.react-flow__viewport') as HTMLElement | null
+    if (!canvas) return
+  
+    const wheelHandler = (e: Event) => {
+      e.stopPropagation()
+    }
+  
+    canvas.addEventListener('wheel', wheelHandler, { passive: true })
+  
+    return () => {
+      canvas.removeEventListener('wheel', wheelHandler)
+    }
+  }, [])
+  
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onMove={onMove}
-      onConnect={onConnect}
-      fitView={false}
-      panOnDrag={false}
-      zoomOnScroll={false}
-      zoomOnPinch={false}
-      panOnScroll={false}
-      nodesDraggable={false}
-      edgesReconnectable={false}
-      minZoom={1}
-      maxZoom={1}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      connectionMode={ConnectionMode.Strict}
-    />
+    <div ref={wrapperRef} style={{ height: '100%', width: '100%' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onMove={onMove}
+        onConnect={onConnect}
+        fitView={false}
+        panOnDrag={false}
+        zoomOnScroll={false}
+        zoomOnPinch={false}
+        panOnScroll={false}
+        nodesDraggable={false}
+        edgesReconnectable={false}
+        minZoom={1}
+        maxZoom={1}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        connectionMode={ConnectionMode.Strict}
+      />
+    </div>
   )
 }
 

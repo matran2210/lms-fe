@@ -186,7 +186,6 @@ const TestDetail = () => {
         return (
           <MatchQuizWrapper
             data={data}
-            action={getAnswerMatching}
             ref={ref}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
@@ -977,7 +976,7 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      for (let e of getAnswerMatching()) {
+      for (let e of getAnswerMatching(ref)) {
         if (e.answer_id && e.answer_id !== '') {
           return true
         }
@@ -1137,7 +1136,7 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
       const answers = handleSaveAnswer(
-        getAnswerMatching(),
+        getAnswerMatching(ref),
         currentContent,
         tabs,
       )
@@ -1389,6 +1388,8 @@ const TestDetail = () => {
     setTabs(newTabs)
   }
 
+  console.log('currentTabContent', currentTabContent)
+
   const handleChangeTypeEssay = (value: number) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -1434,7 +1435,10 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
+          ref,
         )
+        console.log(
+          'isEqualValue', isEqualValue)
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
       }
