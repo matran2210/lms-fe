@@ -54,11 +54,14 @@ const PopupSelectRetakeOrContinueAttempt = ({
       icon={undefined}
       header=""
       classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
+      cancelButtonClass={'!px-0'}
     >
       <div>
         <div className="mt-10 text-center text-base text-gray-1">
-          Your last attempt was unexpectedly ended. Do you want to continue from
-          where you left off in the previous one?
+          <div>Your last attempt was unexpectedly ended. </div>
+          <div>
+            Do you want to continue from where you left off in the previous one?
+          </div>
         </div>
         <div className={`relative pt-5 md:pt-8`}>
           {/* Select Option */}
