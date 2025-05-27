@@ -31,7 +31,7 @@ const CustomEdge: React.FC<EdgeProps> = ({
     curvature,
   })
 
-  const markerId = `arrowhead`
+  const markerId = `arrowhead-${id}`
   const strokeColor = style?.stroke || 'black'
 
   return (
@@ -57,7 +57,7 @@ const CustomEdge: React.FC<EdgeProps> = ({
       <BaseEdge
         id={id}
         path={edgePath}
-        markerEnd={`url(#arrowhead)`}
+        markerEnd={`url(#${markerId})`}
         style={{
           stroke: style?.stroke || 'black',
           strokeWidth: 2,

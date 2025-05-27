@@ -23,7 +23,7 @@ import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import CustomEdge from './CustomEdge'
 import { CustomNode } from './CustomNode'
-import UserFlow from './UserFlow'
+import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
 
 interface IProps {
@@ -103,8 +103,6 @@ const MatchQuiz = forwardRef(
     const [correctNodes, setCorrectNodes] = useState<Node[]>([])
     const [correctEdges, setCorrectEdges] = useState<Edge[]>([])
 
-    console.log('corrects:', corrects)
-
     const transformDataToNodes = ({
       questions,
       answers,
@@ -168,17 +166,6 @@ const MatchQuiz = forwardRef(
     const edgeTypes = {
       custom: CustomEdge,
     }
-
-    const fixedViewport = { x: 0, y: 0, zoom: 1 }
-
-    const onMove = useCallback((event: any, viewport: any) => {
-      if (
-        viewport.x !== fixedViewport.x ||
-        viewport.y !== fixedViewport.y ||
-        viewport.zoom !== fixedViewport.zoom
-      ) {
-      }
-    }, [])
 
     const onConnect = useCallback((connection: Connection) => {
       setEdges((prev) => {
@@ -271,14 +258,12 @@ const MatchQuiz = forwardRef(
         const targetNode = nodeMap.get(targetId)
 
         if (sourceNode && targetNode) {
-          const offsetY = 120 // khoảng cách xuống dưới
-
           const newSourceNode: Node = {
             ...sourceNode,
             id: `correct-${sourceId}`,
             position: {
               x: sourceNode.position.x,
-              y: sourceNode.position.y + offsetY,
+              y: sourceNode.position.y,
             },
             data: {
               ...sourceNode.data,
@@ -292,7 +277,7 @@ const MatchQuiz = forwardRef(
             id: `correct-${targetId}`,
             position: {
               x: targetNode.position.x,
-              y: targetNode.position.y + offsetY,
+              y: targetNode.position.y,
             },
             data: {
               ...targetNode.data,
@@ -309,6 +294,7 @@ const MatchQuiz = forwardRef(
             target: newTargetNode.id,
             data: { isCorrect: true },
             style: { stroke: Color.Success },
+            type: 'custom',
           })
         }
       }
@@ -331,37 +317,48 @@ const MatchQuiz = forwardRef(
 
     return (
       <>
-      <div className="flex h-full w-full flex-col">
-        <div
-          className={`relative w-full min-w-[700px] bg-gray-100`}
-          ref={flowRef}
-          style={{
-            height: `${(nodes?.length/2 + correctNodes?.length/2 || 1) * 100}px`,
-          }}
-        >
-          <ReactFlowProvider>
-            <UserFlow
-              nodes={nodes}
-              edges={edges}
-              onConnect={onConnect}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
+        <div className="flex h-full w-full flex-col bg-gray-100">
+          <div
+            className={`relative w-full min-w-[700px]`}
+            ref={flowRef}
+            style={{
+              height: `${(nodes?.length / 2 || 1) * 100}px`,
+            }}
+          >
+            <ReactFlowProvider>
+              <CustomFlow
+                nodes={nodes}
+                edges={edges}
+                onConnect={onConnect}
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
               />
-          </ReactFlowProvider>
-              <Divider/>
-          <div>Kết quả</div>
-          <ReactFlowProvider>
-            <UserFlow
-              nodes={correctNodes}
-              edges={correctEdges}
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              onConnect={onConnect}
-          
-            />
-          </ReactFlowProvider>
+            </ReactFlowProvider>
+          </div>
+          {!!corrects && (
+            <>
+              <Divider className='bg-gray-15'/>
+              <div className='text-base font-bold text-bw-15 mb-4'>Correct Answer:</div>
+              <div
+                className={`relative w-full min-w-[700px]`}
+                ref={flowRef}
+                style={{
+                   height: `${(correctNodes?.length / 2 || 1) * 100}px`,
+                }}
+              >
+                <ReactFlowProvider>
+                  <CustomFlow
+                    nodes={correctNodes}
+                    edges={correctEdges}
+                    nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
+                    onConnect={onConnect}
+                  />
+                </ReactFlowProvider>
+              </div>
+            </>
+          )}
         </div>
-      </div>
 
         {solution && (
           <div className="mt-6 bg-gray-4 p-6">

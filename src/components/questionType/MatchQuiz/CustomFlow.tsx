@@ -11,8 +11,8 @@ import {
 } from "@xyflow/react";
 import { useCallback, useEffect } from "react";
 
-// Định nghĩa kiểu dữ liệu cho các props của UserFlow
-interface UserFlowProps {
+// Định nghĩa kiểu dữ liệu cho các props của CustomFlow
+interface CustomFlowProps {
   nodes: Node[];
   edges: Edge[];
   onConnect: OnConnect;
@@ -20,7 +20,7 @@ interface UserFlowProps {
   edgeTypes: EdgeTypes;
 }
 
-const UserFlow = ({ nodes, edges, onConnect, nodeTypes, edgeTypes }: UserFlowProps) => {
+const CustomFlow = ({ nodes, edges, onConnect, nodeTypes, edgeTypes }: CustomFlowProps) => {
   const { setViewport } = useReactFlow();
 
       const fixedViewport = { x: 0, y: 0, zoom: 1 }
@@ -62,4 +62,4 @@ const UserFlow = ({ nodes, edges, onConnect, nodeTypes, edgeTypes }: UserFlowPro
   );
 };
 
-export default UserFlow;
+export default CustomFlow;
