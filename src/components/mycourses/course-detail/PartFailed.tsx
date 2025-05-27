@@ -276,7 +276,7 @@ const PartFailed = ({
                   full={false}
                   size="small"
                   color="quizActivity"
-                  className="ml-auto max-h-8 !bg-gray-2  !text-black"
+                  className="ml-auto max-h-8 !bg-gray-2 !text-black"
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

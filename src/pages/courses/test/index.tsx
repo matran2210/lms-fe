@@ -13,7 +13,7 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
-import PopupSelectRetakeOrContinueAttempt from '@components/mycourses/PopupSelectRetakeOrContinueAttempt'
+import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRetakeOrContinueAttempt'
 import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
@@ -106,10 +106,7 @@ const TestModal = ({
         setResultList((prev: IQuizResultList) => {
           return {
             metadata: response.data.metadata,
-            data: [...prev.data, ...results]?.filter(
-              (item, index, self) =>
-                index === self?.findIndex((t) => t.id === item.id),
-            ),
+            data: results,
           }
         })
 
@@ -608,7 +605,7 @@ const TestModal = ({
                     )}
                   </div>
                   <div className="flex flex-row items-center">
-                    <div className={` pr-0.5 font-medium`}>
+                    <div className={`pr-0.5 font-medium`}>
                       {getResultOfTest()}
                     </div>
                     {isShowDetail() && (

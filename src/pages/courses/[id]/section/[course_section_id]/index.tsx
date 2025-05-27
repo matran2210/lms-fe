@@ -554,7 +554,7 @@ const BreadCrumbPartDetail = ({
           className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
           onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
         >
-          <div className=" mx-0.5 inline-block w-full">
+          <div className="mx-0.5 inline-block w-full">
             <Tooltip
               title={previewPart?.name}
               showTooltip={previewPart?.name?.length > 4}
