@@ -22,8 +22,14 @@ export interface FilterRequestScheduleParams {
   search?: string
   course_category_id?: string
   status?: string
+  tabId?: number
 }
 
+export interface ICourseSection {
+  id: string
+  name: string
+  short_name: string
+}
 export interface IScheduleRequestItem {
   id: string
   created_at: string
@@ -39,6 +45,7 @@ export interface IScheduleRequestItem {
   subject: SubjectInfo
   schedule_time: ScheduleTime
   staff_detail: StaffDetail
+  course_section: ICourseSection
 }
 
 export interface ClassStandardScheduleItem {
