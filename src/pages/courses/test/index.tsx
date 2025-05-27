@@ -697,9 +697,8 @@ const TestModal = ({
           title={
             <div className="flex items-center justify-between gap-2">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {remainingTimeLastAttempt.current >= 0 &&
-                !!data?.quiz?.quiz_timed &&
-                (remainingTime ? (
+              {!!data?.quiz?.quiz_timed &&
+                (remainingTime !== undefined && remainingTime >= 0 ? (
                   <div
                     className={clsx(`item-center flex gap-2 font-normal`, {
                       'text-state-info': remainingTimeLastAttempt.current > 0,

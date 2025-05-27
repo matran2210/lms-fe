@@ -2732,6 +2732,11 @@ const TestDetail = () => {
           {/** End Scratchpads */}
 
           <TestTimeOutModal
+            okButtonCaption={
+              quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                ? 'Review Answers'
+                : 'View Results'
+            }
             open={openTimeOut}
             setOpen={setOpenTimeOut}
             handleSubmit={() => {
