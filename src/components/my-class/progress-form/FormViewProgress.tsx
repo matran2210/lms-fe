@@ -333,7 +333,10 @@ function FormViewProgress({
                     />
                     <CollapseItem
                       title="Creator"
-                      body={detailProgress?.staff_creator.full_name}
+                      body={
+                        detailProgress?.staff_creator?.full_name ||
+                        detailProgress?.user_creator?.full_name
+                      }
                     />
                     <CollapseItem
                       title="Create Date"

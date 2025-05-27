@@ -61,6 +61,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
     progress: getValues('progress'),
     fromDate: getValues('rangeDate')?.[0]?.toISOString(),
     toDate: getValues('rangeDate')?.[1]?.toISOString(),
+    section: getValues('section'),
   })
   const cleanedParams = cleanParams(getValuesFilter())
   const {
@@ -107,6 +108,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
             control={control}
             placeholder="Progress"
             options={OPTIONS_PROGRESS_CLASS}
+            allowClear
           />
           {allowSection && (
             <SAPPInput

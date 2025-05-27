@@ -22,6 +22,7 @@ interface IHookFormRadioGroupProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   labelClass?: string
   labelClassChecked?: string
+  optionClassName?: string
   disabled?: boolean
   corrects?: { [key: string]: boolean }
 }
@@ -38,6 +39,7 @@ const HookFormRadioGroup = ({
   justify = 'between',
   labelClass = '',
   labelClassChecked = '',
+  optionClassName = '',
   disabled,
   corrects,
 }: IHookFormRadioGroupProps) => {
@@ -118,6 +120,7 @@ const HookFormRadioGroup = ({
                           className="mt-[3px] flex-none"
                           size="small"
                           state={state}
+                          optionClassName={optionClassName}
                         />
                         <span className="flex-1">
                           <div

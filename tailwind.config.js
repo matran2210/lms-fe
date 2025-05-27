@@ -61,6 +61,7 @@ module.exports = {
         },
         secondary: {
           DEFAULT: '#FFFAF0',
+          800: '#1A1A1A',
         },
         danger: {
           DEFAULT: '#D35563',
@@ -110,6 +111,9 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#7B7B7C',
+          17: '#DADFE5',
+          99: '#E5E7EB',
+          100: '#F6F6F6',
           900: '#181C32',
         },
         green: {
@@ -218,11 +222,13 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
       minWidth: {
         4: '16px',
         6: '24px',
         8: '30px',
+        9.5: '38px',
         11.25: '45px',
         120: '120px',
         small: '36px',
@@ -281,6 +287,7 @@ module.exports = {
         4.8: '18px',
         4.9: '19.2px',
         5.2: '20.962px',
+        5.5: '22px',
         6.2: '25px',
         6.5: '27px',
         7.5: '30px',
@@ -360,6 +367,7 @@ module.exports = {
         55: '0.55',
       },
       backgroundImage: {
+        'radio-primary-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB700' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-normal': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-default-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23141414' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-success-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23008000' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,

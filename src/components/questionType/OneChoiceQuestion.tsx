@@ -1,6 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
+import { Divider } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
@@ -80,7 +81,7 @@ const OneChoiceQuestion = ({
   }, [data])
 
   return (
-    <>
+    <div>
       <div
         id="hightlight_area"
         onMouseUp={(e: any) => {
@@ -110,7 +111,7 @@ const OneChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions"
+          className={'sapp-questions mb-6'}
           highlighted={highlighted}
         />
       </div>
@@ -162,7 +163,7 @@ const OneChoiceQuestion = ({
           </>
         )}
       <div
-        className="sapp-answer-wrapper"
+        className="sapp-answer-wrapper pt-0"
         style={{
           flexDirection: 'column',
         }}
@@ -173,15 +174,21 @@ const OneChoiceQuestion = ({
           name={name || 'answer'}
           corrects={corrects}
           defaultValue={defaultValues}
+          labelClass={'text-base font-normal text-bw-13'}
+          optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>
       {solution && (
-        <div className="mt-6 bg-gray-4 p-6">
-          <SappTitleSolution title={MY_COURSES.explanations} />
-          <EditorReader className="mt-4" text_editor_content={solution} />
+        <div className=" ">
+          <Divider className="my-8" />
+          <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
+          <EditorReader
+            className="sapp-explanation mt-4"
+            text_editor_content={solution}
+          />
         </div>
       )}
-    </>
+    </div>
   )
 }
 export default OneChoiceQuestion

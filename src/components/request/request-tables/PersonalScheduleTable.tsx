@@ -21,6 +21,9 @@ import {
 } from 'src/type'
 import RequestActionCell from '../RequestActionCell'
 import clsx from 'clsx'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useRequestContext } from '@contexts/RequestContext'
 
 interface PersonalScheduleTableProps {
   loading: boolean
@@ -38,7 +41,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
   },
   {
     title: 'Request name',
-    dataIndex: 'name',
+    dataIndex: 'customName',
   },
   {
     title: 'Request type',
@@ -180,6 +183,8 @@ const PersonalScheduleTable = ({
   setIsInspect,
 }: PersonalScheduleTableProps) => {
   const { current, pageSize } = pagination
+  const router = useRouter()
+  const { setIsOpenViewModal } = useRequestContext()
   const tableColumns = columnsTitles.map((item, index) => {
     return {
       ...item,
@@ -192,6 +197,16 @@ const PersonalScheduleTable = ({
       ...item,
       index: ((current || 1) - 1) * (pageSize || 10) + index + 1,
       creator: item.staff_request || item.user_request,
+      customName: (
+        <Link href={`${router.pathname}?id=${item.id}`}>
+          <div
+            onClick={() => setIsOpenViewModal(true)}
+            className="cursor-pointer"
+          >
+            {item.name}
+          </div>
+        </Link>
+      ),
       time: item.teacher_schedules?.length
         ? item.teacher_schedules
         : item.teacher_weekly_norms?.length

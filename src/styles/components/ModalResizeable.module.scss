@@ -1,15 +1,24 @@
 .modalResizeable {
-  :global {
-    .ant-modal-content {
-      @apply bg-transparent p-0 shadow-none;
+  * {
+    &::-webkit-scrollbar {
+      @apply w-1.5 border bg-bw-3;
+    }
+
+    &::-webkit-scrollbar-track {
+      @apply border;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      @apply border bg-primary;
     }
   }
+  @apply fixed left-0 top-0 z-[1000] mb-4;
 }
 
 .modalHeader {
-  @apply relative flex cursor-move items-center justify-between bg-gray-100;
+  @apply relative flex cursor-move items-center justify-between bg-gray-100 px-6;
 }
 
 .modalContent {
-  @apply h-[calc(100%-40px)] overflow-auto p-3;
+  @apply h-[calc(100%-80px)] overflow-auto;
 }

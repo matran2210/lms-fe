@@ -175,7 +175,7 @@ const WeeklyReport = () => {
             <Image src={timeIcon} alt="" width={32} height={32} />
           </div>
           <div>
-            <div className="text-lg font-medium">Learning Times</div>
+            <div className="text-lg font-medium">Learning Time</div>
             <div
               className="mt-1 text-medium-sm tracking-tight 3xl:tracking-normal"
               style={{ color: report?.times?.color }}
