@@ -6,12 +6,14 @@ interface IProps {
   setOpen: any
   handleSubmit: any
   handleQuit: any
+  okButtonCaption?: string
 }
 const TestTimeOutModal = ({
   open,
   setOpen,
   handleSubmit,
   handleQuit,
+  okButtonCaption = 'View Results',
 }: IProps) => {
   // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
@@ -31,7 +33,7 @@ const TestTimeOutModal = ({
     <SappModalV3
       open={open}
       cancelButtonCaption="Quit"
-      okButtonCaption="Review Answers"
+      okButtonCaption={okButtonCaption}
       showCancelButton={false}
       handleCancel={onCancel}
       onOk={onSubmit}
