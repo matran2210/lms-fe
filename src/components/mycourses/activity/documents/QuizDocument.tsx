@@ -16,7 +16,9 @@ import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import { isNull } from 'lodash'
+import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
 import {
@@ -29,16 +31,14 @@ import {
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
-import { IQuestion } from 'src/type/course/Question'
-import { CoursesAPI } from '../../../../pages/api/courses/index'
-import ModalExplanationPackage from '../ModalExplanationPackage'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'src/type/course/my-course/Activity'
-import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
+import { IQuestion } from 'src/type/course/Question'
+import { CoursesAPI } from '../../../../pages/api/courses/index'
+import ModalExplanationPackage from '../ModalExplanationPackage'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -79,10 +79,6 @@ interface IAnswer {
   }
 }
 
-interface IAnswers {
-  answers: IAnswer[]
-}
-
 const QuizDocument = ({
   questions,
   activityId,
@@ -96,7 +92,6 @@ const QuizDocument = ({
   quizSetting,
   gradeStatus,
   quizName,
-  reload,
   grading_method,
   refreshTab,
   exhibitText,

@@ -59,7 +59,6 @@ const HeaderTest = ({
 }: IProps) => {
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
-  // console.log(remainingTime)
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? dayjs(
         dayjs(new Date(quizAttempt.created_at ?? '')).add(

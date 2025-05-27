@@ -4,29 +4,20 @@ import {
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
   ArrowUpIcon,
-  CalculatorIcon,
   CalculatorIconV2,
-  ExcelIcon,
-  ExhibitsIcon,
   FlagIcon,
-  HighlightIcon,
   ResizeIcon,
-  ScratchPadIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
   TextSquareIcon,
-  UnHighLightIcon,
-  WordIcon,
 } from '@assets/icons'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
@@ -34,14 +25,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import {
-  cloneDeep,
-  debounce,
-  isEmpty,
-  isUndefined,
-  result,
-  uniqueId,
-} from 'lodash'
+import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -58,7 +42,6 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
 import { CoursesAPI } from '../api/courses'
@@ -67,9 +50,17 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
+import Popover from '@components/Popover'
+import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
+import Icon from '@components/icons'
+import { NotesOutline } from '@components/icons/Notes'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import HeaderTest from '@components/test/HeaderTest'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import TestWrapper from '@components/test/layout/TestWrapper'
+import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -83,10 +74,6 @@ import {
   ScratchPadValue,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
-import { QuestionAPI } from '../api/question'
-import TestScratchPads from './TestScratchPads'
-import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import {
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
@@ -96,16 +83,12 @@ import {
   getValueSelectText,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
-import CompletingReportModal from './modal/CompletingReportModal'
-import dayjs from 'dayjs'
+import { QuestionAPI } from '../api/question'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
-import TestWrapper from '@components/test/layout/TestWrapper'
-import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
-import { GradingPreference } from '@utils/constants'
-import clsx from 'clsx'
-import Icon from '@components/icons'
-import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
-import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import TestScratchPads from './TestScratchPads'
+import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
+import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
 
 declare global {
   interface Window {
@@ -395,7 +378,6 @@ const TestDetail = () => {
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [tabs, setTabs] = useState<any>([])
-  const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
@@ -406,7 +388,6 @@ const TestDetail = () => {
     status: false,
     content: '',
   })
-  const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
@@ -441,7 +422,6 @@ const TestDetail = () => {
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
-  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
     Array<{
       question_id: string
@@ -452,11 +432,7 @@ const TestDetail = () => {
   >([])
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
-
-  useClickOutside({
-    ref: dropUpRef,
-    callback: () => setShowListExhibits(false),
-  })
+  const [showWarning, setShowWarning] = useState(true)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -2106,17 +2082,11 @@ const TestDetail = () => {
 
   useEffect(() => {
     if (startResize) {
-      document.body.style.webkitUserSelect = 'none'
-
       document.body.style.userSelect = 'none'
     } else {
-      document.body.style.webkitUserSelect = 'unset'
-
       document.body.style.userSelect = 'unset'
     }
     return () => {
-      document.body.style.webkitUserSelect = 'unset'
-
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
@@ -2394,47 +2364,7 @@ const TestDetail = () => {
                     content=""
                   />
                 </button>
-                {exhibitData && exhibitData?.length > 0 && (
-                  <button className="relative h-full" ref={dropUpRef}>
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowListExhibits(!showListExhibits)
-                      }}
-                    >
-                      <ExhibitsIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden xl:inline-block 3xl:me-1">
-                            {`${exhibitText}s (${exhibitData?.length || 0})`}
-                          </span>
-                        </div>
-                        <ArrowUpIcon />
-                      </div>
-                    </div>
-                    {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
-                        {exhibits?.map(
-                          (
-                            e: { label: string; value: string },
-                            index: number,
-                          ) => {
-                            return (
-                              <button
-                                key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
-                                  !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
-                                }`}
-                                onClick={() => handleOpenExhibit(e?.value)}
-                              >{`${exhibitText} ${index + 1}`}</button>
-                            )
-                          },
-                        )}
-                      </div>
-                    )}
-                  </button>
-                )}
+
                 {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                   <button className="relative h-full" ref={dropUpRequire}>
                     <div
@@ -2973,6 +2903,46 @@ const TestDetail = () => {
           </div>
         </TestWrapper>
       </CourseProvider>
+      {exhibitData && exhibitData?.length > 0 && (
+        <Popover
+          placement="leftTop"
+          trigger="click"
+          content={
+            <div className="flex flex-col gap-2">
+              {exhibits?.map(
+                (e: { label: string; value: string }, index: number) => {
+                  return (
+                    <div
+                      key={e?.value}
+                      className={clsx(
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
+                      )}
+                      onClick={() => {
+                        handleOpenExhibit(e?.value)
+                        setShowWarning(false)
+                      }}
+                    >{`${exhibitText} ${index + 1}`}</div>
+                  )
+                },
+              )}
+            </div>
+          }
+        >
+          <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
+            <NotesOutline className="h-8 w-8" />
+            <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+            {showWarning && (
+              <PulsingExclamation
+                className="absolute -right-3 -top-4"
+                style={{
+                  animation: 'pulseAnim 1.2s infinite ease-in-out',
+                  transformOrigin: 'center',
+                }}
+              />
+            )}
+          </div>
+        </Popover>
+      )}
     </FullScreenLayout>
   )
 }

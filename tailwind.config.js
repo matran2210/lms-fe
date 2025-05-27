@@ -61,6 +61,7 @@ module.exports = {
         },
         secondary: {
           DEFAULT: '#FFFAF0',
+          800: '#1A1A1A',
         },
         danger: {
           DEFAULT: '#D35563',
