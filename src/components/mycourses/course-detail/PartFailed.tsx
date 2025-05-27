@@ -196,7 +196,10 @@ const PartFailed = ({
                 <p className="text-base font-medium text-bw-1">
                   {isManualGradingAndAwaitGrading
                     ? '--'
-                    : `${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
+                    : coursePart?.quiz?.attempt?.score !== undefined &&
+                        coursePart?.quiz?.attempt?.score !== null
+                      ? `${coursePart?.quiz?.attempt?.score}%`
+                      : '--'}
                 </p>
               </div>
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
