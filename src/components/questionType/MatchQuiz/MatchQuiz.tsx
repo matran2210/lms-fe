@@ -15,6 +15,8 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -102,6 +104,38 @@ const MatchQuiz = forwardRef(
     const [nodes, setNodes] = useState<MatchNode[]>([])
     const [correctNodes, setCorrectNodes] = useState<Node[]>([])
     const [correctEdges, setCorrectEdges] = useState<Edge[]>([])
+    const [key, setKey] = useState(1)
+
+    const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
+      const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+
+      return edges
+        .map((edge) => {
+          const sourceNode = nodeMap.get(edge.source)
+          const targetNode = nodeMap.get(edge.target)
+
+          if (!sourceNode || !targetNode) return null
+
+          // Đảm bảo phân biệt đúng role giữa question và answer
+          const isSourceQuestion = sourceNode.data.role === 'question'
+
+          return {
+            questionId: isSourceQuestion ? sourceNode.id : targetNode.id,
+            answerId: isSourceQuestion ? targetNode.id : sourceNode.id,
+          }
+        })
+        .filter(Boolean)
+    }
+
+    useImperativeHandle(ref, () => ({
+      handleReset() {
+        setKey((prev) => {
+          const newKey = prev + 1
+          return newKey
+        })
+      },
+      getMatchedPairs: () => getMatchedPairs(edges, nodes),
+    }))
 
     const transformDataToNodes = ({
       questions,
@@ -181,70 +215,117 @@ const MatchQuiz = forwardRef(
     }, [])
 
     useEffect(() => {
-      if (!corrects) return
+      if (!defaultAnswer || defaultAnswer.length === 0) return
 
+      const hasCorrects = corrects && corrects.length > 0
+
+      const newEdges: Edge[] = defaultAnswer.map((pair: any) => {
+        const oldEdge = edges.find(
+          (e) => e.source === pair.questionId && e.target === pair.answerId,
+        )
+
+        // Nếu có corrects thì đổi màu theo đúng/sai, không thì mặc định màu đen
+        const isCorrect = hasCorrects
+          ? corrects.some(
+              (c: any) =>
+                String(c?.id) === String(pair.questionId) &&
+                String(c?.answer?.id) === String(pair.answerId),
+            )
+          : false
+
+        return {
+          id: `edge-${pair.questionId}-${pair.answerId}`,
+          source: pair.questionId,
+          target: pair.answerId,
+          type: 'custom',
+          data: {
+            ...(oldEdge ? oldEdge.data : {}),
+            color: hasCorrects
+              ? isCorrect
+                ? Color.Success
+                : Color.Error
+              : 'black', // màu đen khi chưa có corrects
+          },
+          style: {
+            stroke: hasCorrects
+              ? isCorrect
+                ? Color.Success
+                : Color.Error
+              : 'black', // màu viền edge
+          },
+        }
+      })
+
+      setEdges(newEdges)
+    }, [defaultAnswer, corrects])
+
+    useEffect(() => {
+      if (!nodes.length) return
+
+      const hasCorrects = corrects && corrects.length > 0
+      if (!hasCorrects) {
+        // Khi chưa có corrects: tất cả node về màu đen, isDisabled false
+        setNodes((prevNodes) =>
+          prevNodes.map((node) => ({
+            ...node,
+            data: {
+              ...node.data,
+              color: 'black',
+              isDisabled: false,
+            },
+          })),
+        )
+        return
+      }
+
+      // Khi có corrects, đổi màu node theo đúng/sai như logic cũ
       const correctMap = new Map(
         corrects.map((item: any) => [item.id, item.answer.id]),
       )
 
       const connectedIds = new Set<string>()
-      const edgeColors = new Map<string, string>()
+      const nodeColors = new Map<string, string>()
 
-      if (edges?.length > 0) {
-        const updatedEdges = edges.map((edge) => {
-          const isCorrect = correctMap.get(edge.source) === edge.target
+      edges.forEach((edge) => {
+        const isCorrect = correctMap.get(edge.source) === edge.target
+        connectedIds.add(edge.source)
+        connectedIds.add(edge.target)
 
-          connectedIds.add(edge.source)
-          connectedIds.add(edge.target)
+        nodeColors.set(edge.source, isCorrect ? Color.Success : Color.Error)
+        nodeColors.set(edge.target, isCorrect ? Color.Success : Color.Error)
+      })
 
-          edgeColors.set(edge.source, isCorrect ? Color.Success : Color.Error)
-          edgeColors.set(edge.target, isCorrect ? Color.Success : Color.Error)
-
-          return {
-            ...edge,
-            data: {
-              ...edge.data,
-              isCorrect,
-            },
-            style: {
-              stroke: isCorrect ? Color.Success : Color.Error,
-            },
-          }
-        })
-
-        setEdges(updatedEdges)
-      }
-
-      // Đánh dấu đỏ cho các node đúng nhưng chưa nối
+      // Đánh dấu đỏ các node đúng nhưng chưa nối
       for (const item of corrects) {
         const questionId = item.id
         const answerId = item.answer.id
 
         if (!connectedIds.has(questionId)) {
-          edgeColors.set(questionId, Color.Error)
+          nodeColors.set(questionId, Color.Error)
         }
         if (!connectedIds.has(answerId)) {
-          edgeColors.set(answerId, Color.Error)
+          nodeColors.set(answerId, Color.Error)
         }
       }
 
       setNodes((prevNodes) =>
         prevNodes.map((node) => {
-          if (node.data?.role && edgeColors.has(node.id)) {
+          if (node.data?.role && nodeColors.has(node.id)) {
             return {
               ...node,
               data: {
                 ...node.data,
-                color: edgeColors.get(node.id) || 'black',
-                isDisabled: !!corrects,
+                color: nodeColors.get(node.id) || 'black',
+                isDisabled: true,
               },
             }
           }
           return node
         }),
       )
-    }, [corrects])
+    }, [corrects, edges, nodes.length])
 
+    // Tạo flow cho các câu trả lời đúng
     const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
       const nodeMap = new Map(allNodes.map((n) => [n.id, n]))
       const correctEdges: Edge[] = []
@@ -305,18 +386,29 @@ const MatchQuiz = forwardRef(
       }
     }
 
+    const correctFlow = useMemo(() => {
+      if (!corrects || nodes.length === 0) return { nodes: [], edges: [] }
+
+      const allAnswersCorrect = defaultAnswer.every((pair: any) =>
+        corrects.some(
+          (c: any) =>
+            String(c.id) === String(pair.questionId) &&
+            String(c.answer.id) === String(pair.answerId),
+        ),
+      )
+
+      if (allAnswersCorrect) return { nodes: [], edges: [] }
+
+      return generateCorrectFlow(corrects, nodes)
+    }, [corrects, nodes, defaultAnswer])
+
     useEffect(() => {
-      if (!corrects || nodes.length === 0) return
-
-      const { nodes: correctAddNodes, edges: correctAddEdges } =
-        generateCorrectFlow(corrects, nodes)
-
-      setCorrectEdges(correctAddEdges)
-      setCorrectNodes(correctAddNodes)
-    }, [corrects])
+      setCorrectEdges(correctFlow.edges)
+      setCorrectNodes(correctFlow.nodes)
+    }, [correctFlow])
 
     return (
-      <>
+      <div key={key} ref={extenalRef}>
         <div className="flex h-full w-full flex-col bg-gray-100">
           <div
             className={`relative w-full min-w-[700px]`}
@@ -327,6 +419,7 @@ const MatchQuiz = forwardRef(
           >
             <ReactFlowProvider>
               <CustomFlow
+                key={key}
                 nodes={nodes}
                 edges={edges}
                 onConnect={onConnect}
@@ -335,19 +428,22 @@ const MatchQuiz = forwardRef(
               />
             </ReactFlowProvider>
           </div>
-          {!!corrects && (
+          {!!corrects && !!correctNodes?.length && (
             <>
-              <Divider className='bg-gray-15'/>
-              <div className='text-base font-bold text-bw-15 mb-4'>Correct Answer:</div>
+              <Divider className="bg-gray-15" />
+              <div className="mb-4 text-base font-bold text-bw-15">
+                Correct Answer:
+              </div>
               <div
                 className={`relative w-full min-w-[700px]`}
                 ref={flowRef}
                 style={{
-                   height: `${(correctNodes?.length / 2 || 1) * 100}px`,
+                  height: `${(correctNodes?.length / 2 || 1) * 100}px`,
                 }}
               >
                 <ReactFlowProvider>
                   <CustomFlow
+                    key={`correct-${key}`}
                     nodes={correctNodes}
                     edges={correctEdges}
                     nodeTypes={nodeTypes}
@@ -366,7 +462,7 @@ const MatchQuiz = forwardRef(
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
         )}
-      </>
+      </div>
     )
   },
 )
