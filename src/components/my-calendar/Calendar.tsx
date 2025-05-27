@@ -97,11 +97,9 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['schedules', startTime, endTime, eventName, eventType],
     queryFn: () => {
-      const formatter = new Intl.DateTimeFormat('en-CA')
-
       let finalParams = {
-        start_date: params.start_date || formatter.format(startTime),
-        end_date: params.end_date || formatter.format(endTime),
+        start_date: params.start_date || dayjs(startTime).toISOString(),
+        end_date: params.end_date || dayjs(endTime).toISOString(),
       } as Object
 
       if (params.event_name || eventName) {

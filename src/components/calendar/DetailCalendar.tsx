@@ -9,6 +9,7 @@ import SappIcon from 'src/common/SappIcon'
 import dayjs from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
+import { TEST_TYPE_ENUM } from '@utils/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -57,17 +58,25 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const getKeyContent = () => {
-    return data?.key_before_contents.map((item) => {
+    return data?.key_before_contents?.map((item) => {
       return (
         <div
           key={item.id}
-          className="max-w-[111px] bg-gray-4 px-[8px] py-[4px] text-sm text-gray-14"
+          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
         >
           {item.name}
         </div>
       )
     })
   }
+
+  const isOnlyMidTermOrFinalTest =
+    data?.is_test &&
+    !data?.sections?.some((item) =>
+      [TEST_TYPE_ENUM?.FINAL_TEST, TEST_TYPE_ENUM?.MID_TERM_TEST].includes(
+        item?.course_section?.course_section_type as TEST_TYPE_ENUM,
+      ),
+    )
 
   const togglePopup = (position: 'top' | 'bottom') => {
     setCollapse((prev) => ({ ...prev, [position]: !prev[position] }))
@@ -158,8 +167,8 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       loading={loading}
     >
       <div>
-        <div className="border border-solid border-gray-2 px-[28px] py-[16px]">
-          <div className="flex items-center justify-between border-b-[1px] pb-[16px] text-base  font-semibold text-gray-14">
+        <div className="border border-solid border-gray-2 px-7 py-4">
+          <div className="flex items-center justify-between border-b pb-4 text-base  font-semibold text-gray-14">
             <div>Primary Information</div>
             <div
               className="hover:cursor-pointer"
@@ -206,9 +215,9 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   </div>
                 </>
               )}
-              {data?.is_test && (
+              {data?.is_test && isOnlyMidTermOrFinalTest && (
                 <>
-                  <div className="text-gray-1] col-span-1">Test Name</div>
+                  <div className="col-span-1 text-gray-1">Test Name</div>
                   <div className="col-span-1 break-words">{data?.name}</div>
                 </>
               )}
@@ -226,7 +235,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   </div>
                 </>
               )}
-              {data?.mode && ['ONLINE', 'LIVE_ONLIVE'].includes(data?.mode) && (
+              {data?.mode && ['LIVE_ONLIVE'].includes(data?.mode) && (
                 <>
                   <div className="col-span-1 text-gray-1">Link meeting</div>
                   <div className="col-span-1">{data?.class?.link_meeting}</div>
@@ -235,28 +244,25 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             </div>
           )}
         </div>
-        {!(
-          data?.is_test ||
-          data?.is_case_study ||
-          data?.schedule?.is_holiday
-        ) && (
-          <div className="mt-[16px] border border-solid border-gray-2 px-[28px] py-[16px]">
-            <div className="flex items-center justify-between border-b-[1px] pb-[16px] text-base font-semibold text-[#404041]">
-              <div>Course Content</div>
-              <div
-                className="hover:cursor-pointer"
-                onClick={() => togglePopup('bottom')}
-              >
-                <SappIcon icon={collapse.bottom ? 'arrowDown' : 'arrowUp'} />
+        {!(data?.is_case_study || data?.schedule?.is_holiday) &&
+          !isOnlyMidTermOrFinalTest && (
+            <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
+              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
+                <div>Course Content</div>
+                <div
+                  className="hover:cursor-pointer"
+                  onClick={() => togglePopup('bottom')}
+                >
+                  <SappIcon icon={collapse.bottom ? 'arrowDown' : 'arrowUp'} />
+                </div>
               </div>
+              {collapse.bottom && (
+                <div className="pt-4">
+                  <CourseTree data={data?.sections ?? []} />
+                </div>
+              )}
             </div>
-            {collapse.bottom && (
-              <div className="pt-[16px]">
-                <CourseTree data={data?.sections ?? []} />
-              </div>
-            )}
-          </div>
-        )}
+          )}
       </div>
     </SappDrawer>
   )

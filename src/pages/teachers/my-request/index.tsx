@@ -4,6 +4,7 @@ import TimeOffTab from '@components/request/request-tabs/TimeOffTab'
 import SappTabs from '@components/tabs/SappTabs'
 import ScheduleRequestTable from '@components/teacher/my-request/schedule-request'
 import { RequestProvider } from '@contexts/RequestContext'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import { PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -24,18 +25,28 @@ const tabs = [
   {
     id: 1,
     title: 'Personal Schedule Request',
+    urlTitle: 'personalschedule',
   },
   {
     id: 2,
     title: 'Timeoff Request',
+    urlTitle: 'timeoff',
   },
   {
     id: 3,
     title: 'Schedule Request',
+    urlTitle: 'schedulerequest',
   },
 ]
 const MyRequestPage = () => {
-  const [selected, setSelected] = useState<number>(tabs[0].id)
+  const router = useRouter()
+  const { query } = router
+
+  const selectedTab = query.tab
+    ? (tabs.find((item) => item.urlTitle == query.tab)?.id ?? tabs[0].id)
+    : tabs[0].id
+
+  const [selected, setSelected] = useState<number>(selectedTab)
 
   const renderClassDetail = (selected: number) => {
     switch (selected) {

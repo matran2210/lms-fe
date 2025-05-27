@@ -11,6 +11,7 @@ import caseStudyTestReducer from './slice/Course/MyCourse/Case-study/CaseStudy'
 import entranceTestReducer from './slice/EntranceTest/EntranceTest'
 import notesListReducer from './slice/Course/NotesList'
 import popupReducer from './slice/Popup/Result-test'
+
 export const store = configureStore({
   reducer: {
     loginReducer,

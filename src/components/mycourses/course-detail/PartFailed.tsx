@@ -11,12 +11,14 @@ import {
   GRADING_METHOD,
   TEST_TYPE,
 } from 'src/constants'
-import TestModal from 'src/pages/courses/test'
+import TestModal, { isQuizExpired } from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon, LockClosedIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
+import { isNull } from 'lodash'
+import SappButton from '@components/base/button/SappButton'
 
 const PartFailed = ({
   coursePart,
@@ -27,10 +29,21 @@ const PartFailed = ({
   class_user_id?: string
   is_passed_course: boolean
 }) => {
+  const isSubmitted =
+    coursePart?.quiz?.attempt &&
+    coursePart?.quiz?.attempt?.status === 'SUBMITTED'
+  const isUnsubmitted =
+    coursePart?.quiz?.attempt &&
+    coursePart?.quiz?.attempt?.status === 'UN_SUBMITTED'
+  const isContinue =
+    !coursePart?.quiz?.attempt ||
+    (coursePart?.quiz?.attempt &&
+      coursePart?.quiz?.attempt?.status === 'IN_PROGRESS')
   const quizAttempt = coursePart?.quiz
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const [openReport, setOpenReport] = useState<boolean>(false)
+  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const isManualGradingAndAwaitGrading =
     quizAttempt.grading_method === GRADING_METHOD.MANUAL &&
@@ -72,6 +85,58 @@ const PartFailed = ({
 
   const { setOpenPopupCTA } = useCourseContext()
 
+  const isShowButtonAction = () => {
+    // Case:  Unlimited time attempt
+    if (!coursePart?.quiz?.is_limited) return true
+
+    // Case: Limited time attempt
+    if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!coursePart?.quiz?.attempt) return true
+
+      // & Case: Last attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts ===
+          coursePart?.quiz?.limit_count &&
+        !isSubmitted
+      )
+        return true
+
+      // & Case: has more than 1 attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts <
+        coursePart?.quiz?.limit_count
+      )
+        return true
+    }
+    return false
+  }
+  const renderOkButtonCaption = () => {
+    // // Case: Unlimited time attempt and submitted
+    if (!coursePart?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
+      return 'Retake'
+    // Case: Unlimited time attempt and continue
+    if (!coursePart?.quiz?.is_limited && isContinue) return 'Continue'
+    // Case: Limited time attempt
+    if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!coursePart?.quiz?.attempt) return 'Retake'
+
+      // & Case: Last attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts ===
+        coursePart?.quiz?.limit_count
+      )
+        return 'Continue'
+      // & Case: has more than 1 attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts <
+        coursePart?.quiz?.limit_count
+      )
+        return 'Retake'
+    }
+    return ''
+  }
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
@@ -224,14 +289,14 @@ const PartFailed = ({
                   }}
                 />
               )}
-              {coursePart?.quiz?.is_limited &&
-              coursePart?.quiz?.attempt?.number_of_attempts ===
-                coursePart?.quiz?.limit_count ? null : (
+
+              {isShowButtonAction() && (
                 <ButtonSecondary
-                  title="Retake"
+                  title={renderOkButtonCaption()}
                   full={false}
                   size="small"
-                  className="ml-auto max-h-8"
+                  color="quizActivity"
+                  className="ml-auto max-h-8 "
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

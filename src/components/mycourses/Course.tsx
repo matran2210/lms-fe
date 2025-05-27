@@ -17,6 +17,8 @@ import {
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  COURSE_TYPE,
+  PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
@@ -24,6 +26,7 @@ import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
+import ModalFoundationCompleted from './ModalFoundationCompleted'
 
 const Course = ({
   course,
@@ -210,23 +213,26 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const category = course?.course_categories[0]?.name || ''
     const isRedirectDashboard =
-      course?.course_type == 'NORMAL_COURSE' ||
-      course?.course_type == 'PRACTICE_COURSE'
+      (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
+        course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
+      (category == PROGRAM.ACCA ||
+        category == PROGRAM.CFA ||
+        category == PROGRAM.CMA)
 
-    // Tạm ẩn redirect dashboard begin
-    // if (
-    //   isRedirectDashboard &&
-    //   (determineButtonToShow == BUTTON_STATUS.Review ||
-    //     determineButtonToShow == BUTTON_STATUS.Resume)
-    // ) {
-    //   router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
-    // } else {
-    //   router.push(`/courses/my-course/${classInstance?.id}`)
-    // }
+    // Redirect to dashboard if the course type is practice, normal
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
+      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    } else {
+      router.push(`/courses/my-course/${classInstance?.id}`)
+    }
 
     router.push(`/courses/my-course/${classInstance?.id}`)
-    // Tạm ẩn redirect dashboard end
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -234,7 +240,7 @@ const Course = ({
         JSON.stringify({
           name: course.name,
           courseType: course.course_type,
-          category: course.course_categories[0]?.name,
+          category: category,
         }),
       )
     } else {
@@ -254,9 +260,25 @@ const Course = ({
     }
   }
 
+  /**
+   * @description Trạng thái điều khiển việc hiển thị modal hoặc giao diện tiếp tục học lớp nền tảng.
+   *
+   * @type {boolean}
+   * @default false - Mặc định đóng modal.
+   */
+  const [openContinue, setOpenContinue] = useState(false)
+
   const courseAction = () => {
-    if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
+    const isPendingLesson =
+      classInstance?.type === 'LESSON' && !student?.is_passed
+
+    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
       setOpenLesson(true)
+    } else if (
+      isPendingLesson &&
+      course?.course_categories?.[0]?.name === 'ACCA'
+    ) {
+      setOpenContinue(true)
     } else if (determineButtonToShow === 'Active') {
       if (classInstance?.duration_type === 'FLEXIBLE') {
         setTimeActive(Number(classInstance?.flexible_days))
@@ -310,6 +332,38 @@ const Course = ({
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
+  /**
+   * @description Xử lý điều hướng người dùng đến lớp học nền tảng (foundation class) đầu tiên của khóa học.
+   * URL sẽ được tạo từ `foundation_class_id` nằm trong kết nối lớp học thường.
+   *
+   * @remarks
+   * - Hàm sử dụng `router.push` để điều hướng.
+   * - Nếu không có `course` hoặc dữ liệu lớp học chưa sẵn sàng, đường dẫn có thể không chính xác.
+   */
+  const handleContinueFoundation = () => {
+    router.push(
+      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+    )
+  }
+
+  /**
+   * @description Gửi yêu cầu bỏ qua (skip) lớp học nền tảng hiện tại cho khóa học.
+   *
+   * @remarks
+   * - Gọi API `CoursesAPI.skipFoundation` với `classId` đầu tiên trong danh sách lớp học.
+   * - Sau khi thao tác thành công, gọi lại `refetch()` để cập nhật lại dữ liệu giao diện.
+   *
+   * @returns {Promise<void>}
+   */
+  const handleSkipCourse = async () => {
+    try {
+      await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
+    } finally {
+      setOpenContinue(false)
+      refetch()
+    }
+  }
+
   return (
     <>
       {determineButtonToShow !== 'Hidden' && (
@@ -336,9 +390,9 @@ const Course = ({
               >
                 <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 30}
+                  showTooltip={(course?.name as string)?.length > 60}
                 >
-                  {truncateString(course?.name, 30)}
+                  {truncateString(course?.name, 60)}
                 </Tooltip>
               </div>
             </div>
@@ -349,9 +403,9 @@ const Course = ({
                   <span className="ml-1 font-medium text-bw-1">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                      showTooltip={course?.classes?.[0]?.code?.length > 20}
                     >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
+                      {truncateString(course?.classes?.[0]?.code, 20)}
                     </Tooltip>
                   </span>
                 </div>
@@ -396,7 +450,7 @@ const Course = ({
                       __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      enableCourse ? 'text-bw-1' : 'text-gray-2'
                     }`}
                   />
                 </Tooltip>
@@ -406,7 +460,7 @@ const Course = ({
                     __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    enableCourse ? 'text-bw-1' : 'text-gray-2'
                   }`}
                 />
               )}
@@ -423,7 +477,7 @@ const Course = ({
                     />
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -432,7 +486,7 @@ const Course = ({
                   <div className="number">
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     >
                       {progressPart}%
@@ -442,7 +496,7 @@ const Course = ({
                 <div className="progressbar h-1.5 bg-gray-3">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                      enableCourse ? 'bg-primary' : 'bg-gray-2'
                     } h-1.5`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
@@ -493,6 +547,11 @@ const Course = ({
         open={openClass}
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
+      />
+      <ModalFoundationCompleted
+        openContinue={openContinue}
+        handleSkipCourse={handleSkipCourse}
+        handleContinueFoundation={handleContinueFoundation}
       />
     </>
   )

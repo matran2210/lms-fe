@@ -6,7 +6,6 @@ function useCountdown(
 ): [string, Function, number] {
   const [time, setTime] = useState(minutes * 60 + seconds)
   const endTimeRef = useRef<number | null>(null)
-
   const resetTime = useCallback(
     (newMinutes: number, newSeconds: number = 0) => {
       const newTime = newMinutes * 60 + newSeconds
