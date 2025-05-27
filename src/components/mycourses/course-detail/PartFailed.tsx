@@ -5,7 +5,12 @@ import { roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import {
+  ANIMATION,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  TEST_TYPE,
+} from 'src/constants'
 import TestModal, { isQuizExpired } from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
@@ -40,6 +45,9 @@ const PartFailed = ({
   const [openReport, setOpenReport] = useState<boolean>(false)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
+  const isManualGradingAndAwaitGrading =
+    quizAttempt.grading_method === GRADING_METHOD.MANUAL &&
+    quizAttempt.attempt.grading_status === GRADE_STATUS.AWAITING_GRADING
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
@@ -186,17 +194,28 @@ const PartFailed = ({
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Latest Results:</p>
                 <p className="text-base font-medium text-bw-1">
-                  {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
+                  {isManualGradingAndAwaitGrading
+                    ? '--'
+                    : `${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
                 </p>
               </div>
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
                 <p className="text-base font-medium text-bw-1">
-                  {`${
-                    coursePart?.quiz?.quiz_timed
-                      ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
-                      : 'Unlimited'
-                  }`}
+                  {isManualGradingAndAwaitGrading
+                    ? `${
+                        coursePart?.quiz?.attempt?.total_attempt_time
+                          ? formatTime(
+                              coursePart?.quiz?.attempt?.total_attempt_time ||
+                                0 * 60,
+                            )
+                          : 'Unlimited'
+                      }`
+                    : `${
+                        coursePart?.quiz?.quiz_timed
+                          ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
+                          : 'Unlimited'
+                      }`}
                 </p>
               </div>
             </>
