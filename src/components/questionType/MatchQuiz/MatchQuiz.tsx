@@ -118,8 +118,8 @@ const MatchQuiz = forwardRef(
           const isSourceQuestion = sourceNode.data.role === 'question'
 
           return {
-            questionId: isSourceQuestion ? sourceNode.id : targetNode.id,
-            answerId: isSourceQuestion ? targetNode.id : sourceNode.id,
+            question_id: isSourceQuestion ? sourceNode.id : targetNode.id,
+            answer_id: isSourceQuestion ? targetNode.id : sourceNode.id,
           }
         })
         .filter(Boolean)
@@ -219,22 +219,22 @@ const MatchQuiz = forwardRef(
 
       const newEdges: Edge[] = defaultAnswer.map((pair: any) => {
         const oldEdge = edges.find(
-          (e) => e.source === pair.questionId && e.target === pair.answerId,
+          (e) => e.source === pair.question_id && e.target === pair.answer_id,
         )
 
         // Nếu có corrects thì đổi màu theo đúng/sai, không thì mặc định màu đen
         const isCorrect = hasCorrects
           ? corrects.some(
               (c: any) =>
-                String(c?.id) === String(pair.questionId) &&
-                String(c?.answer?.id) === String(pair.answerId),
+                String(c?.id) === String(pair.question_id) &&
+                String(c?.answer?.id) === String(pair.answer_id),
             )
           : false
 
         return {
-          id: `edge-${pair.questionId}-${pair.answerId}`,
-          source: pair.questionId,
-          target: pair.answerId,
+          id: `edge-${pair.question_id}-${pair.answer_id}`,
+          source: pair.question_id,
+          target: pair.answer_id,
           type: 'custom',
           data: {
             ...(oldEdge ? oldEdge.data : {}),
@@ -242,7 +242,7 @@ const MatchQuiz = forwardRef(
               ? isCorrect
                 ? Color.Success
                 : Color.Error
-              : Color?.ArrowDefault, 
+              : Color?.ArrowDefault,
           },
           style: {
             stroke: hasCorrects
@@ -293,14 +293,14 @@ const MatchQuiz = forwardRef(
 
       // Đánh dấu đỏ các node đúng nhưng chưa nối
       for (const item of corrects) {
-        const questionId = item.id
-        const answerId = item.answer.id
+        const question_id = item.id
+        const answer_id = item.answer.id
 
-        if (!connectedIds.has(questionId)) {
-          nodeColors.set(questionId, Color.Error)
+        if (!connectedIds.has(question_id)) {
+          nodeColors.set(question_id, Color.Error)
         }
-        if (!connectedIds.has(answerId)) {
-          nodeColors.set(answerId, Color.Error)
+        if (!connectedIds.has(answer_id)) {
+          nodeColors.set(answer_id, Color.Error)
         }
       }
 
@@ -391,8 +391,8 @@ const MatchQuiz = forwardRef(
       const allAnswersCorrect = defaultAnswer.every((pair: any) =>
         corrects.some(
           (c: any) =>
-            String(c.id) === String(pair.questionId) &&
-            String(c.answer.id) === String(pair.answerId),
+            String(c.id) === String(pair.question_id) &&
+            String(c.answer.id) === String(pair.answer_id),
         ),
       )
 
@@ -430,7 +430,7 @@ const MatchQuiz = forwardRef(
           {!!corrects && !!correctNodes?.length && (
             <>
               <Divider className="bg-gray-15" />
-              <div className="text-bw-15 mb-4 text-base font-bold">
+              <div className="mb-4 text-base font-bold text-bw-15">
                 Correct Answer:
               </div>
               <div

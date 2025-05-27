@@ -168,7 +168,7 @@ const TestDetail = () => {
         return (
           <MatchQuizWrapper
             data={data}
-            ref={ref}
+            ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -432,6 +432,7 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
+  const matchQuizRef = useRef<any>(null)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -951,7 +952,7 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answerMatching = getAnswerMatching(ref)
+      const answerMatching = getAnswerMatching(matchQuizRef)
       if (answerMatching && answerMatching.length > 0) {
         return true
       }
@@ -1110,7 +1111,7 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
       const answers = handleSaveAnswer(
-        getAnswerMatching(ref),
+        getAnswerMatching(matchQuizRef),
         currentContent,
         tabs,
       )
@@ -1407,7 +1408,7 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
-          ref,
+          matchQuizRef,
         )
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
