@@ -228,12 +228,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       status: getValues('request_status')?.value,
       time: data.request_weekly_norm?.map((item: IWeeklyNorm) => {
         return {
-          start_date: dayjs(item?.date_range?.[0]).format(
-            'YYYY-MM-DD[T]16:59:59[Z]',
-          ),
-          end_date: dayjs(item?.date_range?.[1]).format(
-            'YYYY-MM-DD[T]16:59:59[Z]',
-          ),
+          start_date: dayjs(item?.date_range?.[0]).startOf('day').toISOString(),
+          end_date: dayjs(item?.date_range?.[1]).endOf('day').toISOString(),
           quantity: item.quantity,
         }
       }),

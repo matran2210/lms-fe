@@ -9637,10 +9637,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@1.0.19:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.19.tgz#d6dc96eb1bba8e140b5789d5865098bb15392e11"
-  integrity sha512-e0m1wMt7pgsYlGEuyptTEYklVezf/jclD5l+BJ/ScIFu7PzG0b5FY7W2Hl7uYE2m6qc6nnr/JgqddtoJ7UNrJQ==
+sapp-common-package@^1.0.37-test:
+  version "1.0.37-test"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.0.37-test.tgz#ae00adf17a99eb858b1610148c3095bec323fc20"
+  integrity sha512-e6i7hQsZzAtBsohaYRX10NONJR2RB9mMmwQqv0uIoWFRvd0VssAt0531HqFEv5W9z3y6sji0DMpOh9Iv75VzBw==
   dependencies:
     antd "^5.22.3"
     clsx "^1.2.1"
