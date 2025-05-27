@@ -35,6 +35,7 @@ const tabs = [
   {
     id: 3,
     title: 'Schedule Request',
+    urlTitle: 'schedulerequest',
   },
 ]
 const MyRequestPage = () => {
