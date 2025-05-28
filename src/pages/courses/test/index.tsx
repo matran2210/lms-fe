@@ -17,6 +17,7 @@ import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRe
 import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
+import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -32,15 +33,6 @@ interface IProps {
   class_user_id?: string
   activeCourse?: any
   is_passed_course: boolean
-}
-
-const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
-  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
-}
-
-export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
-  const endTime = calculateEndTime(createdAt, quizTimed)
-  return dayjs().isAfter(endTime)
 }
 
 const TestModal = ({

@@ -1684,8 +1684,8 @@ const TestDetail = () => {
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
-            router.replace(`/event-test`)
             setSubmitEventTest(true)
+            router.replace(`/event-test`)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2132,9 +2132,11 @@ const TestDetail = () => {
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer =
-              answerMap.has(question.id) &&
-              !!(answerMap.get(question.id) as any)?.has_answer
+            // const hasAnswer =
+            //   answerMap.has(question.id) &&
+            //   !!(answerMap.get(question.id) as any)?.has_answer
+
+            const hasAnswer = answerMap.has(question.id)
 
             let baseData = {
               ...question,
@@ -2788,7 +2790,7 @@ const TestDetail = () => {
             handleQuit={() => {
               if (type === 'event-test') {
                 router.replace(`/event-test`)
-                setSubmitEventTest(true)
+                // setSubmitEventTest(true)
               } else {
                 router.back()
               }
@@ -2808,13 +2810,10 @@ const TestDetail = () => {
             open={openSubmit}
             setOpen={setOpenSubmit}
             handleSubmit={() => {
-              if (type === 'event-test') {
-                router.replace(`/event-test`)
-                setSubmitEventTest(true)
-              } else {
+              handleSubmitQuestions('submit')
+              if (type !== 'event-test') {
                 setOpenSubmit(false)
               }
-              handleSubmitQuestions('submit')
             }}
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2826,10 +2825,7 @@ const TestDetail = () => {
             setOpen={setUnSubmitAnswer}
             data={unSubmitAnswerData}
             handleSubmit={() => {
-              if (type === 'event-test') {
-                router.replace(`/event-test`)
-                setSubmitEventTest(true)
-              } else {
+              if (type !== 'event-test') {
                 setUnSubmitAnswer(false)
               }
               handleSubmitQuestions('submit')
