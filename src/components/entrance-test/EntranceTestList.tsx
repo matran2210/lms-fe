@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
@@ -11,6 +11,10 @@ interface EntranceTestListProps {
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
 }) => {
+  const [selectedEntranceTest, setSelectedEntranceTest] = useState<{
+    id: string
+  }>()
+
   return (
     <div
       className={`${

@@ -20,6 +20,7 @@ enum EAttemptStatus {
   UN_SUBMITTED = 'UN_SUBMITTED',
   SUBMITTED = 'SUBMITTED',
   UN_FINISHED = 'UN_FINISHED',
+  IN_PROGRESS = 'IN_PROGRESS',
 }
 
 const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
@@ -35,10 +36,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
-  const [remainingTime, setRemainingTime] = useState<number>()
   const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
     useState<boolean>(false)
-  let remainingTimeLastAttempt = useRef<number>(0)
+  const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
+    useState<number>(0)
 
   const isContinueAttempt = useMemo(() => {
     if (data) {
@@ -48,8 +49,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         isExpired = isQuizExpired(new Date(data?.created_at), data?.quiz_timed)
       }
 
-      const isContinueAttempt = data?.attempt_status === 'IN_PROGRESS'
-      if (isContinueAttempt && !isExpired) {
+      const isContinue = data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      if (isContinue && !isExpired) {
         localStorage.setItem(
           'quizAttempt',
           JSON.stringify({
@@ -70,23 +71,24 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   }, [data])
 
   useEffect(() => {
-    if (open && data) {
-      if (data?.quiz_timed && data?.attempt_status === 'IN_PROGRESS') {
+    if (data) {
+      if (
+        data?.quiz_timed &&
+        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      ) {
         const calcTime = dayjs(
           dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
         ).diff(dayjs(), 'seconds')
 
-        remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+        setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
         const remainingTimeInterval = setInterval(() => {
-          setRemainingTime(
-            remainingTimeLastAttempt?.current >= 0
-              ? remainingTimeLastAttempt?.current
-              : 0,
-          )
-          remainingTimeLastAttempt.current -= 1
-          if (remainingTimeLastAttempt.current <= 0) {
-            clearInterval(remainingTimeInterval)
-          }
+          setRemainingTimeLastAttempt((prev) => {
+            if (prev <= 0) {
+              clearInterval(remainingTimeInterval)
+              return 0
+            }
+            return prev - 1
+          })
         }, 1000)
 
         return () => {
@@ -111,16 +113,16 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   /**
    * @description Kiểm tra điều kiện có hiệu lực
    */
-  const isAttemptValid =
-    data.is_attempt &&
-    [
-      EAttemptStatus.SUBMITTED,
-      EAttemptStatus.UN_FINISHED,
-      EAttemptStatus.UN_SUBMITTED,
-    ].includes(data?.attempt_status)
+  // const isAttemptValid =
+  //   data.is_attempt &&
+  //   [
+  //     EAttemptStatus.SUBMITTED,
+  //     EAttemptStatus.UN_FINISHED,
+  //     EAttemptStatus.UN_SUBMITTED,
+  //   ].includes(data?.attempt_status)
 
   const onSubmit = async () => {
-    if (remainingTimeLastAttempt.current <= 0 && isContinueAttempt) {
+    if (remainingTimeLastAttempt <= 0 && isContinueAttempt) {
       // Call api finish test
       handleFinishTest()
     } else {
@@ -191,7 +193,24 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           </div>
         </div>
         <div className="action relative mt-10 flex items-center justify-between">
-          {isAttemptValid ? (
+          {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
+          {!data?.attempt_status ||
+          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+            <ButtonSecondary
+              title="Begin"
+              full={false}
+              size={'small'}
+              className="ml-auto"
+              onClick={() => {
+                if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+                  setIsOpenPopupLastAttempt(true)
+                } else {
+                  setOpen(true)
+                }
+              }}
+            />
+          ) : (
+            // đã làm bài xong
             <>
               <ButtonSecondary
                 title="Retake"
@@ -212,20 +231,6 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 size="small"
               />
             </>
-          ) : (
-            <ButtonSecondary
-              title="Begin"
-              full={false}
-              size={'small'}
-              className="ml-auto"
-              onClick={() => {
-                if (isContinueAttempt) {
-                  setIsOpenPopupLastAttempt(true)
-                } else {
-                  setOpen(true)
-                }
-              }}
-            />
           )}
         </div>
       </div>
@@ -234,34 +239,34 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         setOpenTest={setOpen}
       />
 
-      {isContinueAttempt ? (
+      {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
         <SappModalV3
           title={
             <div className="flex items-center justify-between gap-2">
               <div>Entrance Test</div>
-              {!!data?.quiz_timed && !!remainingTimeLastAttempt.current && (
-                <div
-                  className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
-                >
-                  <div className="m-auto">
-                    <ClockIcon
-                      color={
-                        remainingTimeLastAttempt.current > 0
-                          ? '#3964EA'
-                          : '#B90E0A'
-                      }
-                      size={24}
-                    />
+              {!!data?.quiz_timed &&
+                (!!remainingTimeLastAttempt ||
+                  remainingTimeLastAttempt === 0) && (
+                  <div
+                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                  >
+                    <div className="m-auto">
+                      <ClockIcon
+                        color={
+                          remainingTimeLastAttempt > 0 ? '#3964EA' : '#B90E0A'
+                        }
+                        size={24}
+                      />
+                    </div>
+                    <div className="text-[20px]">
+                      {formatTime(
+                        remainingTimeLastAttempt > 0
+                          ? remainingTimeLastAttempt
+                          : 0,
+                      )}
+                    </div>
                   </div>
-                  <div className="text-[20px]">
-                    {formatTime(
-                      remainingTimeLastAttempt.current > 0
-                        ? remainingTimeLastAttempt.current
-                        : 0,
-                    )}
-                  </div>
-                </div>
-              )}
+                )}
             </div>
           }
           open={isOpenPopupLastAttempt}
