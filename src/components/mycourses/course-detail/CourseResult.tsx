@@ -195,6 +195,7 @@ const ResultCourse = ({
           onBlur={(e) => {
             setIsFocus(false)
           }}
+          isSearchable={false}
         />
       </div>
     </div>

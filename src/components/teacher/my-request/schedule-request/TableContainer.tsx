@@ -24,6 +24,8 @@ import {
 } from 'src/utils/index'
 import StatusItem from './StatusItem'
 import { ColumnsType } from 'antd/es/table'
+import Tooltip from 'src/common/Tooltip'
+import TooltipParagraph from 'src/common/TooltipParagraph'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
@@ -154,7 +156,14 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell data={convertSlugToTitle(record?.subject?.code)} />
+        <TableCell
+          className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
+          data={
+            <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+              {`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
+            </TooltipParagraph>
+          }
+        />
       ),
     },
     {
