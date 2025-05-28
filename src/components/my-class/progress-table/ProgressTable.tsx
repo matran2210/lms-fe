@@ -11,6 +11,7 @@ import {
 } from 'src/type/progress'
 import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
 import { TableColumn } from 'src/type'
+import { round } from 'lodash'
 
 interface ProgressTableProps {
   loading: boolean
@@ -81,7 +82,7 @@ const ProgressTable = ({
               color: record?.progress * 100 >= 90 ? '#176CDD' : '#F01919',
             }}
           >
-            {record?.progress * 100 || 0} %
+            {round((record?.progress ?? 0) * 100, 2)} %
           </span>
         )
       },

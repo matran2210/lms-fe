@@ -24,6 +24,7 @@ import {
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { round } from 'lodash'
 
 export interface IProps {
   id: string | null
@@ -302,7 +303,7 @@ function FormViewProgress({
                                 : '#F01919',
                           }}
                         >
-                          {`${detailProgress?.progress ? detailProgress?.progress * 100 : 0} %`}
+                          {`${round((detailProgress?.progress ?? 0) * 100, 2) || 0} %`}
                         </span>
                       }
                     />
@@ -324,7 +325,7 @@ function FormViewProgress({
                           }
                         >
                           {item.class_teaching_progress_id &&
-                            `${item.compensated_progress * 100 + '%'}-${item.schedule_name}`}
+                            `${round((item.compensated_progress ?? 0) * 100, 2)}% - ${item.schedule_name}`}
                         </p>
                       ))}
                     />
