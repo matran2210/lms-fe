@@ -1590,8 +1590,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -2125,13 +2125,17 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer = answerMap.has(question.id)
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2245,7 +2249,6 @@ const TestDetail = () => {
                           trackGAEvent('Click Button Submit Time Out Test')
                         })
                     } else {
-                      setOpenTimeOut(true)
                       setQuizResultId(quizAttempt?.id)
                     }
                   }
