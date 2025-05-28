@@ -1,30 +1,32 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
+import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
-import { truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import {
   ANIMATION,
   BUTTON_STATUS,
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  COURSE_TYPE,
+  PROGRAM,
 } from 'src/constants'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useCourseContext } from '@contexts/index'
+import ModalFoundationCompleted from './ModalFoundationCompleted'
 
 const Course = ({
   course,
@@ -211,7 +213,40 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const category = course?.course_categories[0]?.name || ''
+    const isRedirectDashboard =
+      (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
+        course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
+      (category == PROGRAM.ACCA ||
+        category == PROGRAM.CFA ||
+        category == PROGRAM.CMA)
+
+    // Redirect to dashboard if the course type is practice, normal
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
+      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+    } else {
+      router.push(`/courses/my-course/${classInstance?.id}`)
+    }
+
     router.push(`/courses/my-course/${classInstance?.id}`)
+
+    if (isRedirectDashboard) {
+      localStorage.setItem(
+        'courseInfo',
+        JSON.stringify({
+          name: course.name,
+          courseType: course.course_type,
+          category: category,
+        }),
+      )
+    } else {
+      localStorage.removeItem('courseInfo')
+    }
+
     localStorage.setItem(
       'courseDetail',
       `/courses/my-course/${classInstance?.id}`,
@@ -225,9 +260,25 @@ const Course = ({
     }
   }
 
+  /**
+   * @description Trạng thái điều khiển việc hiển thị modal hoặc giao diện tiếp tục học lớp nền tảng.
+   *
+   * @type {boolean}
+   * @default false - Mặc định đóng modal.
+   */
+  const [openContinue, setOpenContinue] = useState(false)
+
   const courseAction = () => {
-    if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
+    const isPendingLesson =
+      classInstance?.type === 'LESSON' && !student?.is_passed
+
+    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
       setOpenLesson(true)
+    } else if (
+      isPendingLesson &&
+      course?.course_categories?.[0]?.name === 'ACCA'
+    ) {
+      setOpenContinue(true)
     } else if (determineButtonToShow === 'Active') {
       if (classInstance?.duration_type === 'FLEXIBLE') {
         setTimeActive(Number(classInstance?.flexible_days))
@@ -257,9 +308,9 @@ const Course = ({
     [CLASS_USER_STATUS.COMPLETED]: 'Completed',
     [CLASS_USER_STATUS.IN_PROGRESS]: 'In progress',
     [CLASS_USER_STATUS.CANCELED]: '',
-  } as any
+  } as const
 
-  const classUserStatus = student?.status
+  const classUserStatus = student?.status as keyof typeof statusMap
   const showStatus = statusMap[classUserStatus]
   const enableCourse =
     determineButtonToShow !== 'Disabled' && determineButtonToShow !== 'Extend'
@@ -280,6 +331,38 @@ const Course = ({
   const iconType = renderStatusIcon(classUserStatus ?? '')
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
+
+  /**
+   * @description Xử lý điều hướng người dùng đến lớp học nền tảng (foundation class) đầu tiên của khóa học.
+   * URL sẽ được tạo từ `foundation_class_id` nằm trong kết nối lớp học thường.
+   *
+   * @remarks
+   * - Hàm sử dụng `router.push` để điều hướng.
+   * - Nếu không có `course` hoặc dữ liệu lớp học chưa sẵn sàng, đường dẫn có thể không chính xác.
+   */
+  const handleContinueFoundation = () => {
+    router.push(
+      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+    )
+  }
+
+  /**
+   * @description Gửi yêu cầu bỏ qua (skip) lớp học nền tảng hiện tại cho khóa học.
+   *
+   * @remarks
+   * - Gọi API `CoursesAPI.skipFoundation` với `classId` đầu tiên trong danh sách lớp học.
+   * - Sau khi thao tác thành công, gọi lại `refetch()` để cập nhật lại dữ liệu giao diện.
+   *
+   * @returns {Promise<void>}
+   */
+  const handleSkipCourse = async () => {
+    try {
+      await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
+    } finally {
+      setOpenContinue(false)
+      refetch()
+    }
+  }
 
   return (
     <>
@@ -305,12 +388,12 @@ const Course = ({
                   trackGAEvent('Click Title Course Item')
                 }}
               >
-                <SappTooltip
+                <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 50}
+                  showTooltip={(course?.name as string)?.length > 60}
                 >
-                  {truncateString(course?.name, 50)}
-                </SappTooltip>
+                  {truncateString(course?.name, 60)}
+                </Tooltip>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -318,12 +401,12 @@ const Course = ({
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 font-medium text-bw-1">
-                    <SappTooltip
+                    <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                      showTooltip={course?.classes?.[0]?.code?.length > 20}
                     >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
-                    </SappTooltip>
+                      {truncateString(course?.classes?.[0]?.code, 20)}
+                    </Tooltip>
                   </span>
                 </div>
               ) : (
@@ -356,29 +439,28 @@ const Course = ({
                   title={
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: course?.description,
+                        __html: clearStylesHtml(course?.description),
                       }}
                     />
                   }
-                  color="#ffffff"
                   placement="bottom"
                 >
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: course?.description,
+                      __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      enableCourse ? 'text-bw-1' : 'text-gray-2'
                     }`}
                   />
                 </Tooltip>
               ) : (
                 <p
                   dangerouslySetInnerHTML={{
-                    __html: course?.description,
+                    __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    enableCourse ? 'text-bw-1' : 'text-gray-2'
                   }`}
                 />
               )}
@@ -395,7 +477,7 @@ const Course = ({
                     />
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -404,7 +486,7 @@ const Course = ({
                   <div className="number">
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     >
                       {progressPart}%
@@ -414,7 +496,7 @@ const Course = ({
                 <div className="progressbar h-1.5 bg-gray-3">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                      enableCourse ? 'bg-primary' : 'bg-gray-2'
                     } h-1.5`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
@@ -465,6 +547,11 @@ const Course = ({
         open={openClass}
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
+      />
+      <ModalFoundationCompleted
+        openContinue={openContinue}
+        handleSkipCourse={handleSkipCourse}
+        handleContinueFoundation={handleContinueFoundation}
       />
     </>
   )

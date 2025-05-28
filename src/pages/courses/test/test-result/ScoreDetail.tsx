@@ -1,11 +1,11 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
 import { removeHtmlTags, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
+
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
-import _ from 'lodash'
+import { groupBy } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -19,6 +19,7 @@ import {
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
+import Tooltip from 'src/common/Tooltip'
 
 const commonHeaderClass =
   'text-left p-0 text-medium-sm text-gray-1 font-semibold'
@@ -152,7 +153,7 @@ const ScoreDetail = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
-  const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
+  const groupedData = groupBy(allData, (item) => item?.belong_to.id)
   return (
     <div
       id="sapp-drawer-test-result-list"
@@ -198,7 +199,6 @@ const ScoreDetail = ({
                       {/* Question */}
                       <td className="sapp-border p-0 pr-4">
                         <Tooltip
-                          color="white"
                           title={
                             <div
                               dangerouslySetInnerHTML={{
@@ -238,7 +238,6 @@ const ScoreDetail = ({
                         }
                       >
                         <Tooltip
-                          color="white"
                           title={
                             answer?.question?.question_filter?.chapter?.name
                           }

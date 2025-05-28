@@ -5,7 +5,7 @@ import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import clsx from 'clsx'
 
 interface IProps {
-  title?: string | undefined
+  title?: React.ReactNode
   open: boolean | undefined
   handleCancel: () => void
   showFooter?: boolean
@@ -32,10 +32,11 @@ interface IProps {
   width?: number | undefined | string
   handleClose?: () => void
   icon: ReactNode
-  header: string
+  header?: ReactNode
   content?: string | undefined
   children?: ReactNode
   isMaskClosable?: boolean
+  headerClassName?: string
 }
 
 const SappModalV3 = ({
@@ -67,6 +68,7 @@ const SappModalV3 = ({
   content,
   children,
   isMaskClosable = true,
+  headerClassName,
 }: IProps) => {
   return (
     <Modal
@@ -82,12 +84,15 @@ const SappModalV3 = ({
     >
       {icon && (
         <div className="flex justify-center">
-          <div className="w-fit rounded-full bg-secondary p-8">{icon}</div>
+          <div className="w-fit rounded-full bg-secondary">{icon}</div>
         </div>
       )}
       {header && (
         <div
-          className={`mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`}
+          className={clsx(
+            `mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`,
+            headerClassName,
+          )}
         >
           {header}
         </div>

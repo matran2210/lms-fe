@@ -3,13 +3,21 @@
 @import 'variables.scss';
 @import 'fonts.scss';
 @import 'select.scss';
+@import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
+@import './components/_event-repeat.scss';
 @import './components/_select.scss';
+@import './components/_datepicker.scss';
+@import './components/_collapse.scss';
 
+@import './components/_table.scss';
+@import 'progress.scss';
+@import './components/_input.scss';
+@import './components/_tooltip.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -66,6 +74,7 @@ html {
 body {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  @apply bg-gray-4;
 }
 
 a {
@@ -649,12 +658,6 @@ textarea.is-invalid:focus {
   }
 }
 
-.ant-tooltip-inner {
-  color: #404041 !important;
-  max-width: 600px;
-  width: max-content;
-}
-
 .ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
   padding: 12px 8px !important;
 }
@@ -709,11 +712,17 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  border-radius: 0px !important;
+  @apply rounded-none;
 }
 
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
+}
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
 }
 
 .sapp-modal--math .ant-modal-content {
@@ -730,8 +739,21 @@ textarea.is-invalid:focus {
   @apply text-4xl font-semibold text-bw-1;
 }
 
-.ant-modal-root .ant-modal-wrap {
+.ant-modal-root .ant-modal-mask {
   @apply bg-bw-10;
+}
+
+.sapp-modal__opt-continue-test {
+  .ant-modal-content {
+    @apply p-12 !important;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        border-color: #ffb800;
+      }
+    }
+  }
 }
 
 .lf-player-container {
@@ -852,10 +874,6 @@ p a {
   z-index: 2000 !important;
 }
 
-.ant-tooltip .ant-tooltip-inner {
-  padding: 10px 12px !important;
-}
-
 #floating-button {
   @apply fixed h-[60px] w-[60px] cursor-pointer rounded-full bg-white;
   box-shadow:
@@ -974,13 +992,19 @@ p a {
 
 #lms-pro #hubspot-messages-iframe-container {
   z-index: 999 !important;
+  display: initial;
+  &.show {
+    display: block !important;
+  }
+  &.hide {
+    display: none !important;
+  }
 }
 
 #hubspot-messages-iframe-container.visible-icon iframe,
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
-
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
@@ -1140,7 +1164,21 @@ td.py-5.px-3.sapp-table-quiz {
 .pined-noti p {
   @apply mb-0;
 }
+.ant-menu {
+  @apply bg-blue-2;
+}
 
+.ant-menu-item-selected {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.ant-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ant-layout-sider-children {
+  @apply flex h-full flex-col;
+}
 td.sapp-border {
   @apply border-0;
 }
@@ -1260,4 +1298,41 @@ fieldset.form-columns-1 .hs-input {
 [type='number']:focus,
 select:focus {
   --tw-ring-color: #ffb800;
+}
+
+.ant-tabs-nav {
+  @apply px-8 pt-2;
+}
+
+.ant-tabs-tab > div {
+  @apply pb-1 font-semibold text-secondary;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active > div {
+  @apply text-heading !important;
+}
+.ant-select span.ant-select-selection-item {
+  @apply font-medium;
+}
+
+.pdf-viewer-container {
+  #proxy-renderer {
+    @apply h-full;
+
+    #msdoc-renderer {
+      @apply h-full;
+    }
+  }
+}
+
+.ant-spin .ant-spin-dot-item {
+  background-color: #ffb800 !important;
+}
+
+.dashboard_tooltip {
+  @apply max-w-max;
+}
+
+[type='search']:focus {
+  --tw-ring-color: none;
 }

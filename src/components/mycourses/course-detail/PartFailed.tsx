@@ -4,8 +4,13 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
-import SappTooltip from 'src/common/SappTooltip'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import Tooltip from 'src/common/Tooltip'
+import {
+  ANIMATION,
+  GRADE_STATUS,
+  GRADING_METHOD,
+  TEST_TYPE,
+} from 'src/constants'
 import TestModal from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
@@ -22,11 +27,24 @@ const PartFailed = ({
   class_user_id?: string
   is_passed_course: boolean
 }) => {
+  const isSubmitted =
+    coursePart?.quiz?.attempt &&
+    coursePart?.quiz?.attempt?.status === 'SUBMITTED'
+  const isUnsubmitted =
+    coursePart?.quiz?.attempt &&
+    coursePart?.quiz?.attempt?.status === 'UN_SUBMITTED'
+  const isContinue =
+    !coursePart?.quiz?.attempt ||
+    (coursePart?.quiz?.attempt &&
+      coursePart?.quiz?.attempt?.status === 'IN_PROGRESS')
   const quizAttempt = coursePart?.quiz
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const [openReport, setOpenReport] = useState<boolean>(false)
 
+  const isManualGradingAndAwaitGrading =
+    quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
+    quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
@@ -64,6 +82,58 @@ const PartFailed = ({
 
   const { setOpenPopupCTA } = useCourseContext()
 
+  const isShowButtonAction = () => {
+    // Case:  Unlimited time attempt
+    if (!coursePart?.quiz?.is_limited) return true
+
+    // Case: Limited time attempt
+    if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!coursePart?.quiz?.attempt) return true
+
+      // & Case: Last attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts ===
+          coursePart?.quiz?.limit_count &&
+        !isSubmitted
+      )
+        return true
+
+      // & Case: has more than 1 attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts <
+        coursePart?.quiz?.limit_count
+      )
+        return true
+    }
+    return false
+  }
+  const renderOkButtonCaption = () => {
+    // // Case: Unlimited time attempt and submitted
+    if (!coursePart?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
+      return 'Retake'
+    // Case: Unlimited time attempt and continue
+    if (!coursePart?.quiz?.is_limited && isContinue) return 'Continue'
+    // Case: Limited time attempt
+    if (coursePart?.quiz?.is_limited && !!coursePart?.quiz?.limit_count) {
+      // & Case: Not Attempt
+      if (!coursePart?.quiz?.attempt) return 'Retake'
+
+      // & Case: Last attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts ===
+        coursePart?.quiz?.limit_count
+      )
+        return 'Continue'
+      // & Case: has more than 1 attempt
+      if (
+        coursePart?.quiz?.attempt?.number_of_attempts <
+        coursePart?.quiz?.limit_count
+      )
+        return 'Retake'
+    }
+    return ''
+  }
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
@@ -76,12 +146,12 @@ const PartFailed = ({
                 // trackGAEvent(`Click Title ${showTitleFinalTest}`)
               }}
             >
-              <SappTooltip
+              <Tooltip
                 title={coursePart?.name}
                 showTooltip={(coursePart?.name as string)?.length > 40}
               >
                 {truncateString(coursePart?.name, 40)}
-              </SappTooltip>
+              </Tooltip>
             </div>
             <div>
               <LockClosedIcon />
@@ -106,12 +176,12 @@ const PartFailed = ({
               trackGAEvent(`Click Title ${showTitleFinalTest}`)
             }}
           >
-            <SappTooltip
+            <Tooltip
               title={coursePart?.name}
               showTooltip={(coursePart?.name as string)?.length > 40}
             >
               {truncateString(coursePart?.name, 40)}
-            </SappTooltip>
+            </Tooltip>
           </div>
         )}
 
@@ -121,17 +191,31 @@ const PartFailed = ({
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Latest Results:</p>
                 <p className="text-base font-medium text-bw-1">
-                  {`${countTimeSpent(coursePart?.quiz?.attempt?.ratio_score)}%`}
+                  {isManualGradingAndAwaitGrading
+                    ? '--'
+                    : coursePart?.quiz?.attempt?.score !== undefined &&
+                        coursePart?.quiz?.attempt?.score !== null
+                      ? `${coursePart?.quiz?.attempt?.score}%`
+                      : '--'}
                 </p>
               </div>
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
                 <p className="text-base font-medium text-bw-1">
-                  {`${
-                    coursePart?.quiz?.quiz_timed
-                      ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
-                      : 'Unlimited'
-                  }`}
+                  {isManualGradingAndAwaitGrading
+                    ? `${
+                        coursePart?.quiz?.attempt?.total_attempt_time
+                          ? formatTime(
+                              coursePart?.quiz?.attempt?.total_attempt_time ||
+                                0 * 60,
+                            )
+                          : 'Unlimited'
+                      }`
+                    : `${
+                        coursePart?.quiz?.quiz_timed
+                          ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
+                          : 'Unlimited'
+                      }`}
                 </p>
               </div>
             </>
@@ -205,14 +289,14 @@ const PartFailed = ({
                   }}
                 />
               )}
-              {coursePart?.quiz?.is_limited &&
-              coursePart?.quiz?.attempt?.number_of_attempts ===
-                coursePart?.quiz?.limit_count ? null : (
+
+              {isShowButtonAction() && (
                 <ButtonSecondary
-                  title="Retake"
+                  title={renderOkButtonCaption()}
                   full={false}
                   size="small"
-                  className="ml-auto max-h-8"
+                  color="quizActivity"
+                  className="ml-auto max-h-8 "
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

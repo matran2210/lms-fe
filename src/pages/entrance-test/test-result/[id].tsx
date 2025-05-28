@@ -7,6 +7,8 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { useGetDataQuery } from '@utils/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -24,7 +26,7 @@ const TestEntranceResult = () => {
       <FullScreenLayout title="Entrance Test Detail">
         <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
           <div
-            className="absolute right-6 top-[18px] z-10 ml-auto cursor-pointer"
+            className="absolute right-6 z-10 ml-auto cursor-pointer"
             onClick={() =>
               router
                 .push(PageLink.ENTRANCE_TEST)
@@ -50,4 +52,4 @@ const TestEntranceResult = () => {
   )
 }
 
-export default TestEntranceResult
+export default withAuthorization([UserType.STUDENT])(TestEntranceResult)

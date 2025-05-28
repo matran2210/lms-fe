@@ -207,7 +207,22 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
-  static submitQuestion(id: string, data: any): Promise<any> {
+  //get answer a question
+  static getAnswersSubmitted(id: string): Promise<any> {
+    return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
+  }
+
+  //submit a question
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST',
+    })
+  }
+
+  static submitAllQuestion(id: string, data: any): Promise<any> {
+    //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
@@ -253,6 +268,20 @@ export class CoursesAPI {
         page_size: 9999,
         class_id,
         course_section_id,
+      },
+    })
+  }
+
+  static getDiscussionStudentInfo(
+    course_section_id: string,
+    class_id: string,
+    user_id: string,
+  ): Promise<any> {
+    return fetcher(`${url.getDiscussionStudentInfo}`, {
+      params: {
+        course_section_id,
+        class_id,
+        user_id,
       },
     })
   }
@@ -407,6 +436,27 @@ export class CoursesAPI {
     return fetcher(`/courses/${class_id}/change-survey-popup-status`, {
       method: 'POST',
       data: data,
+    })
+  }
+
+  static skipFoundation(
+    class_id: string | undefined,
+  ): Promise<{ success: boolean }> {
+    return fetcher(`courses/${class_id}/skip-foundation`, {
+      method: 'PUT',
+    })
+  }
+
+  static updateFlagInQuestion(
+    quiz_attempt_id: string,
+    payload: {
+      question_id: string
+      flag: boolean
+    },
+  ) {
+    return fetcher(`quiz/${quiz_attempt_id}/flag`, {
+      data: payload,
+      method: 'PUT',
     })
   }
 }

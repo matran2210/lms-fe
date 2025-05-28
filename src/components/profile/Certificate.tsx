@@ -1,6 +1,6 @@
 import SappButton from '@components/base/button/SappButton'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
 import TabLayout from './TabLayout'

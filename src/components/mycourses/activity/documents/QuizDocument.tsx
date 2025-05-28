@@ -38,6 +38,7 @@ import {
   IQuestionResultResponse,
 } from 'src/type/course/my-course/Activity'
 import { isNull } from 'lodash'
+import { useRouter } from 'next/router'
 
 type Props = {
   questions: IQuestion[]
@@ -56,6 +57,7 @@ type Props = {
   grading_method?: string
   refreshTab: () => void
   exhibitText: string
+  attemptId?: string
 }
 
 interface IAnswer {
@@ -98,9 +100,12 @@ const QuizDocument = ({
   grading_method,
   refreshTab,
   exhibitText,
+  attemptId,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
+  const router = useRouter()
+
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
   const questionRef = useRef<QuizComponentRef>(null)
 
@@ -113,7 +118,7 @@ const QuizDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
-  const [resultId, setResultId] = useState<string>('')
+  const [resultId, setResultId] = useState<string>(attemptId || '')
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
   const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
@@ -188,6 +193,52 @@ const QuizDocument = ({
 
       questionRef?.current?.reset()
     }
+  }
+
+  /**
+   * Xử lý sự kiện khi người dùng hoàn thành một câu hỏi trong bài quiz.
+   *
+   * Chức năng này thực hiện các bước sau:
+   * 1. Tăng chỉ mục câu hỏi hiện tại (`activeQuestionIndex`) để chuyển sang câu tiếp theo.
+   * 2. Gọi `handleSaveAnswer()` để lưu câu trả lời của người dùng.
+   * 3. Kiểm tra xem câu hỏi tiếp theo có tồn tại không:
+   *    - Nếu có, gửi yêu cầu lấy dữ liệu câu hỏi tiếp theo từ API.
+   *    - Sau khi tải thành công, cập nhật `startWorkTime` để đánh dấu thời điểm bắt đầu trả lời câu hỏi mới.
+   *
+   * @returns Không có giá trị trả về.
+   */
+
+  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
+
+  const handleQuizFinish = async () => {
+    setActiveQuestionIndex(activeQuestionIndex + 1)
+    setIsFinishQuiz(true)
+    handleSaveAnswer()
+    // Load the next question if it hasn't been loaded yet
+    const nextQuestionId = questions[activeQuestionIndex + 1]?.id
+    if (nextQuestionId) {
+      try {
+        await dispatch(
+          fetchQuestionById({
+            activityId: activityId,
+            tabId: tabId,
+            quizId: quizId,
+            questionId: nextQuestionId || '',
+          }),
+        )
+        setStartWorkTime(Date.now())
+      } catch (error) {}
+    }
+  }
+
+  /**
+   * Hủy bỏ xác nhận nộp bài
+   */
+  const handleCancelConfirmSubmit = () => {
+    // Nếu chưa hoàn thành bài quiz, không thực hiện gì cả
+    if (!isFinishQuiz) return
+    // Trả lại chỉ mục câu hỏi hiện tại về trước 1 để người dùng có thể tiếp tục làm bài
+    setActiveQuestionIndex(activeQuestionIndex - 1)
   }
 
   const handlePrevQuestion = async () => {
@@ -518,13 +569,50 @@ const QuizDocument = ({
     }
   }
 
+  /**
+   *
+   * @param status Trạng thái chấm điểm
+   * @returns label
+   */
+  const getButttonTitle = () => {
+    if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+      if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
+        return 'Your Answers'
+      }
+      if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        return 'Result'
+      }
+    }
+    return 'Submit & View Answer'
+  }
+
+  const handleSubmit = () => {
+    if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+      if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
+        router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+        return
+      }
+      if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        router.replace(`/courses/quiz/quiz-result/${resultId}`)
+        return
+      }
+    }
+
+    if (!loading) handleConfirmQuestion()
+    trackGAEvent('Click Button Confirm Quiz Activity')
+  }
+
+  const handleCalcelModalResult = () => {
+    refreshTab()
+    setOpenGradedReport(false)
+  }
   return (
     <div>
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
-        handleCancel={() => {}}
+        handleCancel={handleCancelConfirmSubmit}
       />
 
       <div
@@ -618,10 +706,10 @@ const QuizDocument = ({
                       return
                     }
                     if (isLastQuestion) {
+                      handleQuizFinish()
+                      // handleSaveAnswer()
                       setRunHandleFinishQuiz((e) => e + 1)
-                      handleSaveAnswer()
                       trackGAEvent('Click Button Finish Quiz Activity')
-                      return
                     } else {
                       handleNextQuestion()
                       trackGAEvent('Click Button Next Quiz Activity')
@@ -634,19 +722,12 @@ const QuizDocument = ({
               {!isQuestionConfirmed &&
                 grading_preference === 'AFTER_EACH_QUESTION' && (
                   <SappButton
-                    title={'View Answer'}
+                    title={getButttonTitle()}
                     full={false}
                     size={'small'}
-                    disabled={
-                      (grading_method === GRADING_METHOD.MANUAL &&
-                        !!gradeStatus) ||
-                      loading
-                    }
+                    disabled={loading}
                     onClick={() => {
-                      if (!loading) {
-                        handleConfirmQuestion()
-                      }
-                      trackGAEvent('Click Button Confirm Quiz Activity')
+                      handleSubmit()
                     }}
                     color="primary"
                     loading={loading}
@@ -696,11 +777,20 @@ const QuizDocument = ({
       />
       <SappModalV3
         open={openGradedReport}
-        okButtonCaption="Back"
-        handleCancel={() => {}}
+        okButtonCaption={
+          is_graded && grading_method === GRADING_METHOD.MANUAL
+            ? 'Review Answers'
+            : 'Back'
+        }
+        showCancelButton={is_graded && grading_method === GRADING_METHOD.MANUAL}
+        cancelButtonCaption={'Back'}
+        handleCancel={handleCalcelModalResult}
         onOk={() => {
-          refreshTab()
-          setOpenGradedReport(false)
+          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+            router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+          } else {
+            handleCalcelModalResult()
+          }
         }}
         isMaskClosable={false}
         fullWidthBtn={true}

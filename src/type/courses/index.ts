@@ -133,6 +133,15 @@ export interface IClasses {
   class_user_instances: IClassUserInstances[]
   course_type: string
   flexible_days: number
+  normal_class_connections: {
+    foundation_class_id: string
+    id: string
+  }[]
+}
+
+export interface ICategory {
+  id: string
+  name: string | null
 }
 
 export interface ICourse {
@@ -146,6 +155,7 @@ export interface ICourse {
   updated_at: Date
   name: string
   course_type: string
+  course_categories: ICategory[]
 }
 export interface ICourseAll {
   courses: ICourse[]
@@ -219,6 +229,9 @@ export interface IMyCourseDetail {
       ratio_score: string
       total_attempt_time: number
       grading_status?: string
+      status?: string
+      created_at?: Date
+      score?: string | number
     }
     id: string
     is_graded: boolean

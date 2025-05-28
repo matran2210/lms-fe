@@ -1,3 +1,6 @@
+import { Dayjs } from 'dayjs'
+import { Control } from 'react-hook-form'
+
 export type IButtonColors =
   | 'primary'
   | 'info'
@@ -12,6 +15,8 @@ export type IButtonColors =
   | 'text'
   | 'textUnderline'
   | 'quizActivity'
+  | 'okPopup'
+  | 'cancelPopup'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -19,7 +24,7 @@ export interface IButtonProps {
   link?: string
   disabled?: boolean
   loading?: boolean
-  size?: 'small' | 'medium' | 'lager' | 'extra'
+  size?: IButtonSize
   full?: boolean
   name?: string
   type?: 'button' | 'reset' | 'submit'
@@ -31,14 +36,25 @@ export interface IButtonProps {
   classNameLoading?: string
   showTooltip?: boolean
   toolTipTitle?: string
+  icon?: React.ReactNode
 }
-
+export type IButtonSize = 'small' | 'medium' | 'lager' | 'extra'
+export type IButtonVariant = 'primary' | 'secondary' | 'custom'
+export interface IButtonIconProps extends IButtonProps {
+  variant?: IButtonVariant
+  icon?: 'plus' | 'search' | 'arrow'
+  position?: 'start' | 'end'
+  iconColorProps?: string
+}
 export interface ITabs {
   link: string
   title: string
   disable?: boolean
 }
-
+export interface ITabsTeacher {
+  id: number
+  title: string
+}
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps
   cancel: IButtonProps
@@ -47,7 +63,7 @@ export type IButtonCancelSubmitProps = {
   colorCancel?: IButtonColors
   showOkButton?: boolean
   showCancelButton?: boolean
-  size?: 'small' | 'medium' | 'lager' | 'extra'
+  size?: IButtonSize
   revertFunction?: boolean
 }
 declare global {
@@ -97,11 +113,32 @@ export interface ISVG {
   height?: number
   className?: string
 }
+export enum EDateTime {
+  dateFormat = 'DD/MM/YYYY',
+  weekFormat = 'MM/DD',
+  monthFormat = 'MM/YYYY',
+  fullDate = 'DD/MM/YYYY HH:mm',
+  backendFormat = 'yyyy-MM-dd',
+  timepicker = 'HH:mm',
+}
+export interface IHookFormProps {
+  name: string
+  control: Control<any>
+  className?: string
+  disabled?: boolean
+  skeleton?: boolean
+  style?: React.CSSProperties
+}
 
-export * from './course'
+export interface IHookFormDateRangePicker extends IHookFormProps {
+  defaultValue?: [Dayjs, Dayjs]
+}
+
+export * from './common'
 export * from './courses'
 // export * from './exhibit'
+export * from './Icon'
 export * from './notification'
 export * from './quiz'
-export * from './Icon'
+export * from './request'
 export * from './test'

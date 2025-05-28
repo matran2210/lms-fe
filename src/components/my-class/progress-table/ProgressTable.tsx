@@ -1,0 +1,162 @@
+import { TablePaginationConfig } from 'antd'
+import React, { Dispatch, SetStateAction } from 'react'
+import { calculateHoursDifference } from '@utils/date.ulti'
+import { formatDate } from '@utils/common'
+import SappTable from '@components/table/SappTable'
+import {
+  IProgress,
+  IProgressList,
+  IProgressUser,
+  LearningMode,
+} from 'src/type/progress'
+import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
+import { TableColumn } from 'src/type'
+
+interface ProgressTableProps {
+  loading: boolean
+  progress: IProgressList | undefined
+  pagination: TablePaginationConfig
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+  setIsEdit: Dispatch<SetStateAction<boolean>>
+  setIsInspect: Dispatch<SetStateAction<boolean>>
+  setIsView: Dispatch<SetStateAction<boolean>>
+  setIdProgress: Dispatch<SetStateAction<string | null>>
+  handleChangeParams?: (currentPage: number, pageSize: number) => void
+  allowSection?: boolean
+  allowCreateProgress?: boolean
+}
+
+const ProgressTable = ({
+  loading,
+  progress,
+  pagination,
+  setPagination,
+  handleChangeParams,
+  setIsEdit,
+  setIsInspect,
+  setIdProgress,
+  setIsView,
+  allowSection,
+  allowCreateProgress,
+}: ProgressTableProps) => {
+  let columnsTitles: TableColumn<IProgress>[] = [
+    {
+      title: '#',
+      dataIndex: 'index',
+      render: (value: IProgress, record: IProgress, index: number) => {
+        return (
+          index +
+          1 +
+          (Number(progress?.metadata?.page_index) - 1) *
+            Number(progress?.metadata?.page_size || 0)
+        )
+      },
+    },
+    {
+      title: 'Lesson',
+      dataIndex: 'lesson_name',
+    },
+    {
+      title: 'Time',
+      render: (value: Date, record: IProgress, index: number) => {
+        return record.mode !== LearningMode.ONLINE
+          ? record.start_time &&
+              record.end_time &&
+              calculateHoursDifference(record.start_time, record.end_time) +
+                ' hour'
+          : '--'
+      },
+    },
+    {
+      title: 'Section',
+      dataIndex: 'section',
+    },
+    {
+      title: 'Progress',
+      dataIndex: 'progress',
+      render: (value: number, record: IProgress, index: number) => {
+        return (
+          <span
+            style={{
+              color: record?.progress * 100 >= 90 ? '#176CDD' : '#F01919',
+            }}
+          >
+            {record?.progress * 100 || 0} %
+          </span>
+        )
+      },
+    },
+    {
+      title: 'Teacher',
+      dataIndex: 'teacher',
+      render: (teacher: IProgressUser, record: IProgress) => {
+        return record.mode !== LearningMode.ONLINE ? teacher?.full_name : '--'
+      },
+    },
+    {
+      title: 'Creator',
+      render: (_, record: IProgress) => {
+        return record.mode !== LearningMode.ONLINE
+          ? record?.staff_creator?.full_name || record?.user_creator?.full_name
+          : '--'
+      },
+    },
+    {
+      title: 'Create date',
+      dataIndex: 'created_at',
+      render: (value: Date) => {
+        return formatDate(value, 'DD/MM/YYYY | HH:mm')
+      },
+    },
+    {
+      title: 'Note',
+      dataIndex: 'description',
+    },
+    {
+      title: '',
+      dataIndex: 'method',
+      render: (value: string, record: IProgress) => {
+        return (
+          allowCreateProgress && (
+            <SAPPDropdown>
+              <div
+                onClick={() => {
+                  setIsView(true)
+                  setIsEdit(true)
+                  setIdProgress(record.id)
+                }}
+              >
+                View
+              </div>
+              <div
+                onClick={() => {
+                  setIsView(false)
+                  setIsInspect(true)
+                  setIdProgress(record.id)
+                }}
+              >
+                Edit
+              </div>
+            </SAPPDropdown>
+          )
+        )
+      },
+      fixed: 'right',
+    },
+  ]
+  if (!allowSection) {
+    columnsTitles = columnsTitles.filter((item) => item.dataIndex !== 'section')
+  }
+  return (
+    <SappTable
+      handleChangeParams={handleChangeParams}
+      columns={columnsTitles}
+      data={progress?.formattedClassTeachingProgresses || []}
+      pagination={pagination}
+      setPagination={setPagination}
+      loading={loading}
+    />
+  )
+}
+
+export default ProgressTable

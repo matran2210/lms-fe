@@ -10,6 +10,8 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EventTestAPI } from '../api/event-test'
 import { LANG_SIGNIN, MY_COURSES } from 'src/constants/lang'
 import { ANIMATION } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const EventTest = () => {
   const useGetData = (queryKey: string, params: Object) => {
@@ -66,4 +68,4 @@ const EventTest = () => {
   )
 }
 
-export default EventTest
+export default withAuthorization([UserType.STUDENT])(EventTest)

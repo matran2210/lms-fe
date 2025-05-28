@@ -6,12 +6,14 @@ interface IProps {
   setOpen: any
   handleSubmit: any
   handleQuit: any
+  okButtonCaption?: string
 }
 const TestTimeOutModal = ({
   open,
   setOpen,
   handleSubmit,
   handleQuit,
+  okButtonCaption = 'View Results',
 }: IProps) => {
   // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
@@ -31,14 +33,16 @@ const TestTimeOutModal = ({
     <SappModalV3
       open={open}
       cancelButtonCaption="Quit"
-      okButtonCaption="Submit"
+      okButtonCaption={okButtonCaption}
+      showCancelButton={false}
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
       buttonSize="extra"
       icon={<TimeIcon />}
       header="Time Out"
-      content="You are running out of time to do your test"
+      content="The test has timed out and has been submitted automatically."
+      isMaskClosable={false}
     />
   )
 }
