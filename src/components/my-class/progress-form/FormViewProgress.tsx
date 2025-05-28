@@ -21,6 +21,7 @@ import {
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
+  LearningMode,
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
@@ -274,6 +275,7 @@ function FormViewProgress({
                     <CollapseItem
                       title="Time"
                       body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
                         detailProgress?.start_time &&
                         detailProgress?.end_time &&
                         `${detailProgress?.start_time?.replace(/:00$/, '')} - ${detailProgress?.end_time?.replace(/:00$/, '')}`
@@ -332,13 +334,18 @@ function FormViewProgress({
 
                     <CollapseItem
                       title="Teacher"
-                      body={detailProgress?.teacher.full_name}
+                      body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.teacher?.full_name || '')
+                      }
                     />
                     <CollapseItem
                       title="Creator"
                       body={
-                        detailProgress?.staff_creator?.full_name ||
-                        detailProgress?.user_creator?.full_name
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.staff_creator?.full_name ||
+                          detailProgress?.user_creator?.full_name ||
+                          '')
                       }
                     />
                     <CollapseItem
@@ -392,15 +399,17 @@ function FormViewProgress({
                       options={[]}
                     />
                   </div>
-                  <div>
-                    <HookformTimePicker
-                      control={control}
-                      name="time"
-                      label="Time"
-                      disabled={isView}
-                      required
-                    />
-                  </div>
+                  {detailProgress?.mode !== LearningMode.ONLINE && (
+                    <div>
+                      <HookformTimePicker
+                        control={control}
+                        name="time"
+                        label="Time"
+                        disabled={isView}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               {allowSection && (
