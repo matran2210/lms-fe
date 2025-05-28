@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from 'react'
+import { ClockIcon } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import { formatTime } from '@components/common/timer'
-import EntrancePopup from './EntrancePopup'
-import { useRouter } from 'next/router'
 import SappButton from '@components/base/button/SappButton'
-import PopupExtend from './PopupExtend'
-import { trackGAEvent } from '@utils/google-analytics'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { useAppSelector } from 'src/redux/hook'
-import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
-import { userReducer } from 'src/redux/slice/User/User'
+import { trackGAEvent } from '@utils/google-analytics'
+import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import EntrancePopup from './EntrancePopup'
+import PopupExtend from './PopupExtend'
 
 interface EntranceTestProps {
   data: any
@@ -20,12 +20,83 @@ enum EAttemptStatus {
   UN_SUBMITTED = 'UN_SUBMITTED',
   SUBMITTED = 'SUBMITTED',
   UN_FINISHED = 'UN_FINISHED',
+  IN_PROGRESS = 'IN_PROGRESS',
+}
+
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
 }
 
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
+  const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
+    useState<boolean>(false)
+  const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
+    useState<number>(0)
+
+  const isContinueAttempt = useMemo(() => {
+    if (data) {
+      //check điều kiện xem có được tiếp tục làm bài hay không
+      let isExpired = false
+      if (data?.quiz_timed) {
+        isExpired = isQuizExpired(new Date(data?.created_at), data?.quiz_timed)
+      }
+
+      const isContinue = data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      if (isContinue && !isExpired) {
+        localStorage.setItem(
+          'quizAttempt',
+          JSON.stringify({
+            id: data?.quiz_attempt_id,
+            number_of_attempts: data?.attempt_times,
+            is_limited: data?.is_limited,
+            quiz_timed: data?.quiz_timed,
+            created_at: data?.created_at,
+          }),
+        )
+        return true
+      } else {
+        localStorage.removeItem('quizAttempt')
+        return false
+      }
+    }
+    return false
+  }, [data])
+
+  useEffect(() => {
+    if (data) {
+      if (
+        data?.quiz_timed &&
+        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      ) {
+        const calcTime = dayjs(
+          dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
+        ).diff(dayjs(), 'seconds')
+
+        setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
+        const remainingTimeInterval = setInterval(() => {
+          setRemainingTimeLastAttempt((prev) => {
+            if (prev <= 0) {
+              clearInterval(remainingTimeInterval)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+
+        return () => {
+          clearInterval(remainingTimeInterval)
+        }
+      }
+    }
+  }, [data])
 
   const timeTakenFormatted = data?.total_attempt_time
     ? formatTime(data?.total_attempt_time)
@@ -42,13 +113,49 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   /**
    * @description Kiểm tra điều kiện có hiệu lực
    */
-  const isAttemptValid =
-    data.is_attempt &&
-    [
-      EAttemptStatus.SUBMITTED,
-      EAttemptStatus.UN_FINISHED,
-      EAttemptStatus.UN_SUBMITTED,
-    ].includes(data?.attempt_status)
+  // const isAttemptValid =
+  //   data.is_attempt &&
+  //   [
+  //     EAttemptStatus.SUBMITTED,
+  //     EAttemptStatus.UN_FINISHED,
+  //     EAttemptStatus.UN_SUBMITTED,
+  //   ].includes(data?.attempt_status)
+
+  const onSubmit = async () => {
+    if (remainingTimeLastAttempt <= 0 && isContinueAttempt) {
+      // Call api finish test
+      handleFinishTest()
+    } else {
+      handleSubmit()
+    }
+  }
+
+  const handleSubmit = async () => {
+    //to do: start test
+    try {
+      router.push({
+        pathname: `/test/${data?.id}`,
+        query: {
+          type: 'entrance',
+        },
+      })
+      trackGAEvent('Click Button Continue Modal Test')
+    } catch (err) {}
+  }
+
+  const handleFinishTest = async () => {
+    localStorage.setItem(
+      'quizAttempt',
+      JSON.stringify({
+        id: data?.quiz_attempt_id,
+        number_of_attempts: data?.attempt_times,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz_timed,
+        created_at: data?.created_at,
+      }),
+    )
+    handleSubmit()
+  }
 
   return (
     <>
@@ -86,16 +193,31 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           </div>
         </div>
         <div className="action relative mt-10 flex items-center justify-between">
-          {isAttemptValid && (
+          {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
+          {!data?.attempt_status ||
+          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
             <ButtonSecondary
-              title="Retake"
-              size="small"
+              title="Begin"
               full={false}
-              onClick={() => setOpenExpired(true)}
+              size={'small'}
+              className="ml-auto"
+              onClick={() => {
+                if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+                  setIsOpenPopupLastAttempt(true)
+                } else {
+                  setOpen(true)
+                }
+              }}
             />
-          )}
-          {data.is_attempt ? (
-            data.attempt_status === 'SUBMITTED' || 'UN_FINISHED' ? (
+          ) : (
+            // đã làm bài xong
+            <>
+              <ButtonSecondary
+                title="Retake"
+                size="small"
+                full={false}
+                onClick={() => setOpenExpired(true)}
+              />
               <SappButton
                 title="Result"
                 onClick={() =>
@@ -108,17 +230,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 className="!p-0 font-medium underline"
                 size="small"
               />
-            ) : (
-              <></>
-            )
-          ) : (
-            <ButtonSecondary
-              title="Begin"
-              full={false}
-              size={'small'}
-              className="ml-auto"
-              onClick={() => setOpen(true)}
-            />
+            </>
           )}
         </div>
       </div>
@@ -126,14 +238,67 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         setOpenFillForm={setOpenFillForm}
         setOpenTest={setOpen}
       />
-      <EntrancePopup
-        open={open}
-        setOpen={setOpen}
-        entrancePopupContent={data}
-        openFillForn={openFillForn}
-        setOpenFillForm={setOpenFillForm}
-        entranceTest={test_id_default}
-      />
+
+      {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+        <SappModalV3
+          title={
+            <div className="flex items-center justify-between gap-2">
+              <div>Entrance Test</div>
+              {!!data?.quiz_timed &&
+                (!!remainingTimeLastAttempt ||
+                  remainingTimeLastAttempt === 0) && (
+                  <div
+                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                  >
+                    <div className="m-auto">
+                      <ClockIcon
+                        color={
+                          remainingTimeLastAttempt > 0 ? '#3964EA' : '#B90E0A'
+                        }
+                        size={24}
+                      />
+                    </div>
+                    <div className="text-[20px]">
+                      {formatTime(
+                        remainingTimeLastAttempt > 0
+                          ? remainingTimeLastAttempt
+                          : 0,
+                      )}
+                    </div>
+                  </div>
+                )}
+            </div>
+          }
+          open={isOpenPopupLastAttempt}
+          handleCancel={() => {
+            setIsOpenPopupLastAttempt(false)
+            trackGAEvent('Click Button Cancel Modal Test')
+          }}
+          onOk={onSubmit}
+          okButtonCaption={'Continue'}
+          footerButtonClassName="flex justify-between item-center"
+          cancelButtonCaption={'Cancel'}
+          cancelButtonClass={'!px-0'}
+          buttonSize="medium"
+          icon={undefined}
+        >
+          <div className="my-4 text-start text-medium-sm text-gray-1">
+            <div>
+              {`Your last attempt was unexpectedly ended. Please click 'Continue'
+              to proceed with the test.`}
+            </div>
+          </div>
+        </SappModalV3>
+      ) : (
+        <EntrancePopup
+          open={open}
+          setOpen={setOpen}
+          data={data}
+          openFillForn={openFillForn}
+          setOpenFillForm={setOpenFillForm}
+          entranceTest={test_id_default}
+        />
+      )}
       <PopupExtend open={openExpired} setOpen={setOpenExpired} />
     </>
   )
