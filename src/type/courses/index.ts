@@ -231,6 +231,7 @@ export interface IMyCourseDetail {
       grading_status?: string
       status?: string
       created_at?: Date
+      score?: string | number
     }
     id: string
     is_graded: boolean

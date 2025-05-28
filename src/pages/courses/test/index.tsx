@@ -495,12 +495,14 @@ const TestModal = ({
             renderOkButtonCaption() === 'Continue' &&
             data?.quiz?.attempt?.number_of_attempts ===
               data?.quiz?.limit_count && (
-              <div className="my-4 text-center text-medium-sm text-gray-1">
+              <div className="mt-8 text-center text-base !font-normal text-gray-1">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>
               </div>
             )
           }
+          classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
+          headerClassName="!m-0"
         >
           {!(
             renderShowOkButton() &&
@@ -600,6 +602,7 @@ const TestModal = ({
                           onBlur={(e) => {
                             setIsFocus(false)
                           }}
+                          isSearchable={false}
                         />
                       </div>
                     )}
@@ -691,9 +694,8 @@ const TestModal = ({
           title={
             <div className="flex items-center justify-between gap-2">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {remainingTimeLastAttempt.current >= 0 &&
-                remainingTime &&
-                !!data?.quiz?.quiz_timed && (
+              {!!data?.quiz?.quiz_timed &&
+                (remainingTime !== undefined && remainingTime >= 0 ? (
                   <div
                     className={clsx(`item-center flex gap-2 font-normal`, {
                       'text-state-info': remainingTimeLastAttempt.current > 0,
@@ -711,7 +713,7 @@ const TestModal = ({
                       )}
                     </div>
                   </div>
-                )}
+                ) : null)}
             </div>
           }
         />
