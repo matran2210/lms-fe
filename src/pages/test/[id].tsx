@@ -243,6 +243,39 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
+        const defaultValueEssay = () => {
+          if (!isUndefined(essayData?.req?.short_answer)) {
+            return essayData?.req?.short_answer
+          }
+          if (
+            !isUndefined(
+              getValues(`${currentTabID}_${essayData?.index}_answer`),
+            )
+          ) {
+            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.short_answer,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.short_answer
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.answer_text
+          }
+          if (!isUndefined(currentTabContent?.answer)) {
+            return currentTabContent?.answer
+          }
+        }
         return (
           <EssayQuestionPreview
             data={{
@@ -261,14 +294,7 @@ const TestDetail = () => {
             solution={solution}
             name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={
-              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.short_answer ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text ||
-              currentTabContent?.answer
-            }
+            defaultValue={defaultValueEssay()}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -2278,8 +2304,9 @@ const TestDetail = () => {
                   optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
                     if (id) {
-                      handleChangeTab(id)
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2717,8 +2744,9 @@ const TestDetail = () => {
                         (e: any) => e.id === currentPage,
                       )
                       if (filteredTabs[index + 1].id) {
-                        handleChangeTab(filteredTabs[index + 1].id)
                         handleSubmitAnswer('change-tab')
+                        setEssayData(undefined)
+                        handleChangeTab(filteredTabs[index + 1].id)
                       }
                     }}
                   >
