@@ -2273,8 +2273,9 @@ const TestDetail = () => {
                   optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
                     if (id) {
-                      handleChangeTab(id)
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2712,8 +2713,9 @@ const TestDetail = () => {
                         (e: any) => e.id === currentPage,
                       )
                       if (filteredTabs[index + 1].id) {
-                        handleChangeTab(filteredTabs[index + 1].id)
                         handleSubmitAnswer('change-tab')
+                        setEssayData(undefined)
+                        handleChangeTab(filteredTabs[index + 1].id)
                       }
                     }}
                   >
