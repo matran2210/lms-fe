@@ -2227,27 +2227,42 @@ const TestDetail = () => {
                   )
                 }
               } else {
-                const index = filteredTabs.findIndex(
-                  (e: any) => e.id === currentPage,
-                )
-                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
+                if (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ) {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                } else {
+                  handleSubmitAnswer('finish')
+                  if (checkUnSubmitAnswer()?.length > 0) {
+                    setUnSubmitAnswer(true)
+                  } else {
+                    setOpenSubmit(true)
+                  }
+                  dispatch(disableUnsavedChange())
+                }
               }
 
               trackGAEvent('Click Button Confirm Answer')
             }}
           >
-            {isGradingAfterEachQuestion ? (
-              currentTabContent?.is_viewed_answer ? (
-                <div className="flex items-center gap-2">
-                  Next Question <Icon type="arrow-right" />
-                </div>
-              ) : (
-                'Confirm'
-              )
-            ) : (
-              'Confirm & Next'
-            )}
+            {isGradingAfterEachQuestion
+              ? currentTabContent?.is_viewed_answer
+                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <div className="flex items-center gap-2">
+                      Next Question <Icon type="arrow-right" />
+                    </div>
+                  )
+                : 'Confirm'
+              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ? 'Confirm & Next'
+                : 'Confirm'}
           </button>
         </div>
       </div>
