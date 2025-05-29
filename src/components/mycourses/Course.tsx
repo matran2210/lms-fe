@@ -182,15 +182,19 @@ const Course = ({
   }
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
-  async function activeCourse() {
+  async function activeCourse(foundation_class_id?: string) {
     try {
       const params = {
-        classId: `${classInstance?.id}`,
+        classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       }
-      await CoursesAPI.activeCourse(params)
-      // await fetchCourseList()
-      refetch()
-      toast.success('Active thành công!')
+      const res = await CoursesAPI.activeCourse(params)
+      if (res?.success) {
+        router.push(`/courses/my-course/${foundation_class_id}`)
+        refetch()
+        if (course?.course_categories?.[0]?.name !== 'ACCA') {
+          toast.success('Active thành công!')
+        }
+      }
     } catch (error) {}
   }
   async function extendCourse() {
@@ -269,22 +273,24 @@ const Course = ({
    */
   const [openContinue, setOpenContinue] = useState(false)
 
-  const courseAction = () => {
-    const utcNow = dayjs().utc()
-    const isPendingLesson =
-      classInstance?.type === 'LESSON' && !student?.is_passed
-    const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
-    const isFixedDuration = classInstance?.duration_type === 'FIXED'
-    const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
-    const hasNotStarted = dayjs(utcNow).isBefore(
-      classInstance?.class_user_instances?.[0]?.started_at,
-    )
-    const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
-    const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
+  const utcNow = dayjs().utc()
+  const isPendingLesson =
+    classInstance?.type === 'LESSON' && !student?.is_passed
+  const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+  const isFixedDuration =
+    classInstance?.duration_type === 'FIXED' ||
+    classInstance?.duration_type === 'FLEXIBLE'
+  const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
+  const hasNotStarted = dayjs(utcNow).isBefore(
+    classInstance?.class_user_instances?.[0]?.started_at,
+  )
+  const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
+  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
 
+  const courseAction = () => {
     // Handle pending lesson cases
     if (isPendingLesson) {
-      if (isAccaCourse && isFixedDuration) {
+      if (isAccaCourse) {
         if (hasNotStarted) {
           setOpenClass(true)
           return
@@ -581,7 +587,15 @@ const Course = ({
       <ModalFoundationCompleted
         openContinue={openContinue}
         handleSkipCourse={handleSkipCourse}
-        handleContinueFoundation={handleContinueFoundation}
+        handleContinueFoundation={
+          classInstance?.duration_type === 'FLEXIBLE'
+            ? () =>
+                activeCourse(
+                  classInstance?.normal_class_connections?.[0]
+                    ?.foundation_class_id,
+                )
+            : handleContinueFoundation
+        }
       />
     </>
   )
