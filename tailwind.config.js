@@ -74,8 +74,8 @@ module.exports = {
         },
         state: {
           info: '#3964EA',
-          success: '#397839',
-          error: '#B90E0A',
+          success: '#078A4D',
+          error: '#F80903',
           cancel: '#D20306',
         },
         bw: {
@@ -93,6 +93,7 @@ module.exports = {
           13: '#1F2937',
           14: '#374151',
           15: '#1C274C',
+          16: '#3F3F3F',
         },
         gray: {
           1: '#A1A1A1',
@@ -145,6 +146,8 @@ module.exports = {
           4: '#025eff0D',
           5: '#7086FD',
           6: '#607FE9',
+          100: '#ECF0FD',
+          500: '#3964EA',
         },
         yellow: {
           1: '#FFB800',

@@ -2,10 +2,8 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import EditorReader from '@components/base/editor/EditorReader'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
-import { IPreviewProp } from './OneChoiceQuestion'
-import { MY_COURSES } from 'src/constants/lang'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-// import {IPreviewProp} from '../true-false-question'
+import { IPreviewProp } from './OneChoiceQuestion'
 
 interface IDataAnswer {
   data: {
@@ -98,7 +96,7 @@ const MultiChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions"
+          className="sapp-questions mb-6"
           highlighted={highlighted}
         />
         {data?.question_topic?.exhibits &&
@@ -158,15 +156,17 @@ const MultiChoiceQuestion = ({
           control={control}
           name={name || 'multiples'}
           multiple
+          className="mr-4 mt-0"
           corrects={corrects}
           defaultValue={defaultValues || ''}
-          // justify='start'
           positionCheckBox="start"
         />
       </div>
+
       {solution && (
-        <div className="mt-6 bg-gray-4 p-6">
-          <SappTitleSolution title={MY_COURSES.explanations} />
+        <div className="mt-8">
+          <hr />
+          <SappTitleSolution title={'Solution:'} className="mt-8" />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}

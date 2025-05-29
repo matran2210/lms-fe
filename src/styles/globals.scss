@@ -15,6 +15,7 @@
 @import './components/_datepicker.scss';
 @import './components/_collapse.scss';
 @import './components/_popover.scss';
+@import './components/_tabs.scss';
 
 @import './components/_table.scss';
 @import 'progress.scss';
@@ -135,7 +136,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-answer-wrapper {
-  @apply flex flex-wrap gap-y-6 pt-2;
+  @apply flex flex-wrap gap-y-6;
 
   .answer {
     @apply flex items-start gap-x-3 break-words;
@@ -148,7 +149,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-xl font-semibold text-bw-13;
+    @apply m-0 break-words text-lg-xl font-semibold text-bw-13;
   }
   span {
     background-color: transparent !important;
@@ -414,13 +415,13 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .answer-area {
-  @apply mt-4 flex flex-wrap gap-5;
+  @apply flex flex-wrap items-center gap-5 py-8;
 }
 
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
-  background: rgb(243, 243, 243);
-  @apply z-10 block p-2;
+  gap: 2px;
+  @apply z-10 flex h-fit items-center rounded-md border-gray-15 bg-white px-2 py-1 text-base;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
@@ -442,7 +443,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply m-1 inline-block min-w-[100px] border border-gray-500 bg-gray-4 p-1;
+  @apply m-1 inline-block h-fit w-fit rounded-lg border border-gray-15 bg-white px-2 py-1 text-base;
 
   &.corrects {
     @apply border-success text-state-success;
@@ -463,11 +464,11 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-seprate-line-preview {
-  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] bg-gray-3;
+  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] border-b border-t border-b-gray-3 border-t-gray-3;
 }
 
 .sapp-upload-file-preview {
-  @apply mb-4 flex items-center gap-3 px-0;
+  @apply mb-8 flex items-center justify-between gap-3 px-0;
 }
 
 .sapp-upload-button-preview {
@@ -771,6 +772,19 @@ textarea.is-invalid:focus {
   @apply bg-bw-10;
 }
 
+.sapp-modal__opt-continue-test {
+  .ant-modal-content {
+    @apply p-12 !important;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        border-color: #ffb800;
+      }
+    }
+  }
+}
+
 .lf-player-container {
   height: inherit;
   @apply flex items-center justify-center;
@@ -1003,13 +1017,19 @@ p a {
 
 #lms-pro #hubspot-messages-iframe-container {
   z-index: 999 !important;
+  display: initial;
+  &.show {
+    display: block !important;
+  }
+  &.hide {
+    display: none !important;
+  }
 }
 
 #hubspot-messages-iframe-container.visible-icon iframe,
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
-
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;
@@ -1309,13 +1329,14 @@ select:focus {
   @apply px-8 pt-2;
 }
 
-.ant-tabs-tab > div {
+.ant-tabs-tab {
   @apply pb-1 font-semibold text-secondary;
 }
 
-.ant-tabs-tab.ant-tabs-tab-active > div {
+.ant-tabs-tab.ant-tabs-tab-active {
   @apply text-heading;
 }
+
 .ant-select span.ant-select-selection-item {
   @apply font-medium;
 }

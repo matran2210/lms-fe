@@ -54,6 +54,7 @@ import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -122,10 +123,10 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizWrapper
             data={data}
             // action={getAnswerMatching}
-            // ref={ref}
+            ref={MatchQuizRef}
             handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
@@ -263,6 +264,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
+  const MatchQuizRef = useRef(null) as any
 
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
@@ -504,25 +506,11 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
     return value
   }
-  const getAnswerMatching = (index: number) => {
-    let value = [] as any
-    if (valueRef.current?.[index]) {
-      const inputs = valueRef?.current?.[index].querySelectorAll(
-        '.sapp-match-result',
-      ) as any
-      for (let e of inputs) {
-        const childId = e.querySelector('.sapp-notched-container')
-        value.push({ question_id: e?.id, answer_id: childId?.id || undefined })
-      }
-    } else {
-      value.push({
-        question_id: listFullQuestions?.[index]?.id,
-        answer_id: '',
-      })
-    }
-
-    return value
+  const getAnswerMatching = () => {
+    const value = MatchQuizRef?.current?.getMatchedPairs?.()
+    return value || []
   }
+
   const getAnswerDragNDrop = (index: number) => {
     let value = [] as any
     if (valueRef?.current?.[index]) {
@@ -560,7 +548,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.MATCHING) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getAnswerMatching(i),
+          answer: getAnswerMatching(),
           id: question?.id,
           answers: question?.answers,
         })

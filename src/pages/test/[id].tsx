@@ -3,14 +3,12 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
   CalculatorIconV2,
   FlagIcon,
   ResizeIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-  TextSquareIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -54,11 +52,13 @@ import Popover from '@components/Popover'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { TabsProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
@@ -84,11 +84,11 @@ import {
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
+import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
 
 declare global {
   interface Window {
@@ -96,8 +96,7 @@ declare global {
   }
 }
 
-const warningText =
-  'You have unsaved changes - are you sure you wish to leave this page?'
+const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const checkType = (
@@ -110,6 +109,59 @@ const TestDetail = () => {
     solution?: any,
     done?: boolean,
   ) => {
+    const handleEssayChange = (id: string) => {
+      setAnswerListValue(id as unknown as number)
+    }
+
+    const essayRequirementsItem: TabsProps['items'] =
+      currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+        return {
+          label: `Requirement ${index + 1}`,
+          key: index,
+          children: (
+            <EssayQuestionPreview
+              data={{
+                ...currentTabContent?.data?.requirements?.[essayData?.index],
+                ...essayData?.req,
+              }}
+              question_content={currentTabContent?.data?.question_content}
+              index={essayData?.index}
+              question_data={currentTabContent?.data}
+              control={control}
+              handleSaveHighLight={handleSaveHighLight}
+              highlighted={highlighted}
+              removeHighlight={removeHighlight}
+              allowHighLight={allowHighLight}
+              allowUnHighLight={allowUnHighLight}
+              solution={solution}
+              name={`${currentTabID}_${essayData?.index}_answer`}
+              setValue={setValue}
+              defaultValue={
+                getValues(`${currentTabID}_${essayData?.index}_answer`) ||
+                currentTabContent?.data?.requirements?.[essayData?.index]
+                  ?.answer_text ||
+                currentTabContent?.answer
+              }
+              response_option_custom={currentTabContent.response_type}
+              externalRef={refEditor}
+              fullData={currentTabContent}
+              openChooseFile={(e: any) =>
+                setOpenUpload({
+                  status: true,
+                  question_id: currentPage,
+                  requirementIndex: essayData?.index,
+                })
+              }
+              handleClearFile={handleClearFile}
+              setOpenPdf={handleOpenScratchPad}
+              handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+              showRequiment={showListRequirement}
+              handleChange={handleEssayChange}
+            />
+          ),
+        }
+      }) ?? []
+
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
         return (
@@ -169,8 +221,7 @@ const TestDetail = () => {
         return (
           <MatchQuizWrapper
             data={data}
-            action={getAnswerMatching}
-            ref={ref}
+            ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -237,50 +288,17 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
         return (
-          <EssayQuestionPreview
-            data={{
-              ...currentTabContent?.data?.requirements?.[essayData?.index],
-              ...essayData?.req,
-            }}
-            question_content={currentTabContent?.data?.question_content}
-            index={essayData?.index}
-            question_data={currentTabContent?.data}
-            control={control}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            name={`${currentTabID}_${essayData?.index}_answer`}
-            setValue={setValue}
-            defaultValue={
-              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text ||
-              currentTabContent?.answer
-            }
-            response_option_custom={currentTabContent.response_type}
-            externalRef={refEditor}
-            fullData={currentTabContent}
-            openChooseFile={(e: any) =>
-              setOpenUpload({
-                status: true,
-                question_id: currentPage,
-                requirementIndex: essayData?.index,
+          <RequirementsTab
+            items={essayRequirementsItem}
+            defaultActiveKey="1"
+            onChange={(key) => {
+              setEssayData({
+                req: currentTabContent?.data?.requirements?.[key],
+                index: key,
               })
-            }
-            handleClearFile={handleClearFile}
-            setOpenPdf={handleOpenScratchPad}
-            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-            showRequiment={showListRequirement}
-            handleChange={handleEssayChange}
+            }}
           />
-          // <Luckysheet/>
         )
       default:
         return <div></div>
@@ -434,6 +452,7 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
+  const matchQuizRef = useRef<any>(null)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -953,10 +972,9 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      for (let e of getAnswerMatching()) {
-        if (e.answer_id && e.answer_id !== '') {
-          return true
-        }
+      const answerMatching = getAnswerMatching(matchQuizRef)
+      if (answerMatching && answerMatching.length > 0) {
+        return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
@@ -1113,7 +1131,7 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
       const answers = handleSaveAnswer(
-        getAnswerMatching(),
+        getAnswerMatching(matchQuizRef),
         currentContent,
         tabs,
       )
@@ -1410,6 +1428,7 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
+          matchQuizRef,
         )
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
@@ -1671,6 +1690,7 @@ const TestDetail = () => {
               open: true,
               resultId: res?.data?.id,
             })
+            setLoading(false)
             return
           }
           if (type === 'entrance') {
@@ -1991,7 +2011,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }
@@ -2202,7 +2221,7 @@ const TestDetail = () => {
             )}
           <button
             className={clsx(
-              'rounded-lg bg-sapp-black-1 px-4 py-2 text-sm font-semibold text-white hover:bg-black',
+              'rounded-lg bg-sapp-black-1 text-sm font-semibold text-white hover:bg-black',
               {
                 'bg-transparent !text-bw-13 underline hover:!bg-transparent':
                   currentTabContent?.is_viewed_answer,
@@ -2227,32 +2246,48 @@ const TestDetail = () => {
                   )
                 }
               } else {
-                const index = filteredTabs.findIndex(
-                  (e: any) => e.id === currentPage,
-                )
-                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
+                if (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ) {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                } else {
+                  handleSubmitAnswer('finish')
+                  if (checkUnSubmitAnswer()?.length > 0) {
+                    setUnSubmitAnswer(true)
+                  } else {
+                    setOpenSubmit(true)
+                  }
+                  dispatch(disableUnsavedChange())
+                }
               }
 
               trackGAEvent('Click Button Confirm Answer')
             }}
           >
-            {isGradingAfterEachQuestion ? (
-              currentTabContent?.is_viewed_answer ? (
-                <div className="flex items-center gap-2">
-                  Next Question <Icon type="arrow-right" />
-                </div>
-              ) : (
-                'Confirm'
-              )
-            ) : (
-              'Confirm & Next'
-            )}
+            {isGradingAfterEachQuestion
+              ? currentTabContent?.is_viewed_answer
+                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <div className="flex items-center gap-2">
+                      Next Question <Icon type="arrow-right" />
+                    </div>
+                  )
+                : 'Confirm'
+              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ? 'Confirm & Next'
+                : 'Confirm'}
           </button>
         </div>
       </div>
     )
   }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2332,7 +2367,7 @@ const TestDetail = () => {
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     isScatchPadEnabled && 'bg-primary'
                   }`}
                   onClick={() => {
@@ -2346,7 +2381,7 @@ const TestDetail = () => {
                   />
                 </button>
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     checkCalExist > -1 && 'bg-primary'
                   }`}
                   onClick={() => {
@@ -2361,7 +2396,7 @@ const TestDetail = () => {
                   />
                 </button>
 
-                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                   <button className="relative h-full" ref={dropUpRequire}>
                     <div
                       className="flex items-center gap-3 border-l px-4 3xl:px-6"
@@ -2403,7 +2438,7 @@ const TestDetail = () => {
                       </div>
                     )}
                   </button>
-                )}
+                )} */}
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
@@ -2416,6 +2451,7 @@ const TestDetail = () => {
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
                       id && handleChangeTab(id)
+                      handleSubmitAnswer('change-tab')
                     }}
                     hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
@@ -2551,7 +2587,10 @@ const TestDetail = () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
                         )
-                        handleChangeTab(filteredTabs[index + 1].id)
+                      if (filteredTabs[index + 1].id) {
+                          handleChangeTab(filteredTabs[index + 1].id)
+                        handleSubmitAnswer('change-tab')
+                      }
                       }}
                     >
                       <div className="text-medium-sm font-medium">
@@ -2770,6 +2809,11 @@ const TestDetail = () => {
             {/** End Scratchpads */}
 
             <TestTimeOutModal
+              okButtonCaption={
+                quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                  ? 'Review Answers'
+                  : 'View Results'
+              }
               open={openTimeOut}
               setOpen={setOpenTimeOut}
               handleSubmit={() => {
@@ -2788,9 +2832,17 @@ const TestDetail = () => {
                         type !== 'entrance' &&
                         quizDetail?.quiz_type !== 'FINAL_TEST'
                       ) {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
-                        )
+                        if (
+                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                        ) {
+                          router.replace(
+                            `/courses/test/your-answers-detail/${QuizResultId}`,
+                          )
+                        } else {
+                          router.replace(
+                            `/courses/test/test-result/${QuizResultId}`,
+                          )
+                        }
                       } else {
                         router.back()
                         setScoreQuestion(scoreFinalTest)

@@ -264,6 +264,7 @@ const MatchingQuestion = forwardRef(
       setAnswers(arr)
       setDefaultValue(obj)
     }, [defaultAnswer, data?.question_matchings])
+
     return (
       <div key={key} ref={extenalRef} id={`${uuid}`}>
         <div
@@ -495,5 +496,5 @@ const MatchingQuestion = forwardRef(
     )
   },
 )
-MatchingQuestion.displayName = 'MatchingQuestion'
+MatchingQuestion.displayName = 'MatchingQuestion123'
 export default memo(MatchingQuestion)

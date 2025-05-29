@@ -1,5 +1,16 @@
+import clsx from 'clsx'
 import React from 'react'
 
-export const SappTitleSolution = ({ title }: { title: string }) => {
-  return <div className="text-base font-semibold text-bw-1 ">{title}</div>
+export const SappTitleSolution = ({
+  title,
+  className,
+}: {
+  title: string
+  className: string
+}) => {
+  return (
+    <div className={clsx('text-base font-semibold text-bw-1', className)}>
+      {title}
+    </div>
+  )
 }

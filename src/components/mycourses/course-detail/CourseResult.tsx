@@ -115,25 +115,41 @@ const ResultCourse = ({
   const isManualGradingAndNotFinishedGrading =
     coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
     coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
-  return resultList.data.length <= 1 ? (
-    <SappButton
-      title={isManualGradingAndNotFinishedGrading ? 'Your Answers' : 'Result'}
-      isUnderLine
-      color="text"
-      className="!p-0 font-medium underline"
-      onClick={() => {
-        if (isManualGradingAndNotFinishedGrading) {
-          // setOpenReport(true)
-          router.push(
-            `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
-          )
-        } else if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
-          router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
-        }
 
-        trackGA()
-      }}
-    />
+  return resultList.data.length <= 1 ? (
+    isManualGradingAndNotFinishedGrading ? (
+      <>
+        {coursePart?.quiz?.attempt?.grading_status ===
+        GRADE_STATUS.AWAITING_GRADING ? (
+          <SappButton
+            title={'Your Answers'}
+            isUnderLine
+            color="text"
+            className="!p-0 font-medium underline"
+            onClick={() => {
+              router.push(
+                `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
+              )
+              trackGA()
+            }}
+          />
+        ) : null}
+      </>
+    ) : (
+      <SappButton
+        title={'Result'}
+        isUnderLine
+        color="text"
+        className="!p-0 font-medium underline"
+        onClick={() => {
+          if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
+            router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+          }
+
+          trackGA()
+        }}
+      />
+    )
   ) : (
     <div className="flex h-8 items-center gap-2">
       <div
@@ -179,6 +195,7 @@ const ResultCourse = ({
           onBlur={(e) => {
             setIsFocus(false)
           }}
+          isSearchable={false}
         />
       </div>
     </div>

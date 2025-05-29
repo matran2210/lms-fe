@@ -1,8 +1,9 @@
+import clsx from 'clsx'
+import { uniqueId } from 'lodash'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SAPPRadio from './SAPPRadio'
 import YourAnswer from '../tags/YourAnswer'
-import { uniqueId } from 'lodash'
+import SAPPRadio from './SAPPRadio'
 // import './HookFormRadioGroup.scss'
 
 interface IHookFormRadioGroupProps {
@@ -118,9 +119,6 @@ const HookFormRadioGroup = ({
                           value={option.value.toString()}
                           checked={checked}
                           className="mt-[3px] flex-none"
-                          size="small"
-                          state={state}
-                          optionClassName={optionClassName}
                         />
                         <span className="flex-1">
                           <div
@@ -134,10 +132,14 @@ const HookFormRadioGroup = ({
                                   }`
                             } fw-bold flex-1 text-base`}
                           >
-                            {option.label}
-                            <YourAnswer
-                              show={checked && !!corrects}
-                            ></YourAnswer>
+                            <span
+                              className={clsx({
+                                'mr-3': checked && !!corrects,
+                              })}
+                            >
+                              {option.label}
+                            </span>
+                            <YourAnswer show={checked && !!corrects} />
                           </div>
                           {option.description && (
                             <div className="text-sm text-gray-500">
