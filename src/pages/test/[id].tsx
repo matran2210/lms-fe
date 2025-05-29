@@ -2202,7 +2202,7 @@ const TestDetail = () => {
             )}
           <button
             className={clsx(
-              'rounded-lg bg-sapp-black-1 px-4 py-2 text-sm font-semibold text-white hover:bg-black',
+              'rounded-lg bg-sapp-black-1 text-sm font-semibold text-white hover:bg-black',
               {
                 'bg-transparent !text-bw-13 underline hover:!bg-transparent':
                   currentTabContent?.is_viewed_answer,

@@ -96,7 +96,7 @@ const MultiChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions mb-4"
+          className="sapp-questions mb-6"
           highlighted={highlighted}
         />
         {data?.question_topic?.exhibits &&
@@ -146,7 +146,7 @@ const MultiChoiceQuestion = ({
           )}
       </div>
       <div
-        className="sapp-answer-wrapper mb-8"
+        className="sapp-answer-wrapper"
         style={{
           flexDirection: 'column',
         }}
@@ -159,13 +159,14 @@ const MultiChoiceQuestion = ({
           className="mr-4 mt-0"
           corrects={corrects}
           defaultValue={defaultValues || ''}
-          positionCheckBox="center"
+          positionCheckBox="start"
         />
       </div>
-      <hr />
+
       {solution && (
         <div className="mt-8">
-          <SappTitleSolution title={'Solution:'} />
+          <hr />
+          <SappTitleSolution title={'Solution:'} className="mt-8" />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}

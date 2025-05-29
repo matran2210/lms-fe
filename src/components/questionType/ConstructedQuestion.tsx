@@ -2,16 +2,16 @@ import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
-import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
-import { Workbook } from '@fortune-sheet/react'
-import { Controller } from 'react-hook-form'
-import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
-import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
+import EditorReader from '@components/base/editor/EditorReader'
+import { Workbook } from '@fortune-sheet/react'
+import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
+import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { Controller } from 'react-hook-form'
+import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import clsx from 'clsx'
 
 type SheetData = {
   name: string
@@ -179,7 +179,7 @@ const EssayQuestionPreview = ({
     }
   }
   return (
-    <div style={{ background: 'white' }}>
+    <div>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -549,15 +549,16 @@ const EssayQuestionPreview = ({
                     />
                   )
                 }}
-              ></Controller>
+              />
             </div>
           )}
           {(fullData?.confirmed ||
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className="mb-11 mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">Solution</div>
+              <div className="mt-8">
+                <hr />
+                <div className="mt-8 font-semibold">Solution:</div>
                 <EditorReader
                   text_editor_content={
                     data?.explanation ??
