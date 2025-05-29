@@ -60,15 +60,17 @@ const HeaderTest = ({
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
   const remainingTimeinSeconds = quizDetail?.quiz_timed
-    ? dayjs(
+    ? (dayjs(
         dayjs(new Date(quizAttempt.created_at ?? '')).add(
           quizDetail?.quiz_timed,
           'minutes',
         ),
-      ).diff(dayjs(), 'seconds')
+      ).diff(dayjs(), 'seconds') ?? 0)
     : null
+
   const remainingTimeAttempt =
     (remainingTimeinSeconds ?? 0) > 0 ? (remainingTimeinSeconds ?? 0) : 0
+
   return (
     <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
       <div className="w-2/6 truncate text-[18px] font-medium">

@@ -96,8 +96,7 @@ declare global {
   }
 }
 
-const warningText =
-  'You have unsaved changes - are you sure you wish to leave this page?'
+const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const checkType = (
@@ -222,8 +221,7 @@ const TestDetail = () => {
         return (
           <MatchQuizWrapper
             data={data}
-            action={getAnswerMatching}
-            ref={ref}
+            ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -454,6 +452,7 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
+  const matchQuizRef = useRef<any>(null)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -973,10 +972,9 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      for (let e of getAnswerMatching()) {
-        if (e.answer_id && e.answer_id !== '') {
-          return true
-        }
+      const answerMatching = getAnswerMatching(matchQuizRef)
+      if (answerMatching && answerMatching.length > 0) {
+        return true
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
@@ -1133,7 +1131,7 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
       const answers = handleSaveAnswer(
-        getAnswerMatching(),
+        getAnswerMatching(matchQuizRef),
         currentContent,
         tabs,
       )
@@ -1430,6 +1428,7 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
+          matchQuizRef,
         )
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
@@ -1691,6 +1690,7 @@ const TestDetail = () => {
               open: true,
               resultId: res?.data?.id,
             })
+            setLoading(false)
             return
           }
           if (type === 'entrance') {
@@ -2246,32 +2246,48 @@ const TestDetail = () => {
                   )
                 }
               } else {
-                const index = filteredTabs.findIndex(
-                  (e: any) => e.id === currentPage,
-                )
-                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
+                if (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ) {
+                  const index = filteredTabs.findIndex(
+                    (e: any) => e.id === currentPage,
+                  )
+                  handleChangeTab(filteredTabs[index + 1].id)
+                } else {
+                  handleSubmitAnswer('finish')
+                  if (checkUnSubmitAnswer()?.length > 0) {
+                    setUnSubmitAnswer(true)
+                  } else {
+                    setOpenSubmit(true)
+                  }
+                  dispatch(disableUnsavedChange())
+                }
               }
 
               trackGAEvent('Click Button Confirm Answer')
             }}
           >
-            {isGradingAfterEachQuestion ? (
-              currentTabContent?.is_viewed_answer ? (
-                <div className="flex items-center gap-2">
-                  Next Question <Icon type="arrow-right" />
-                </div>
-              ) : (
-                'Confirm'
-              )
-            ) : (
-              'Confirm & Next'
-            )}
+            {isGradingAfterEachQuestion
+              ? currentTabContent?.is_viewed_answer
+                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <div className="flex items-center gap-2">
+                      Next Question <Icon type="arrow-right" />
+                    </div>
+                  )
+                : 'Confirm'
+              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ? 'Confirm & Next'
+                : 'Confirm'}
           </button>
         </div>
       </div>
     )
   }
+
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
       <CourseProvider>
@@ -2351,7 +2367,7 @@ const TestDetail = () => {
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     isScatchPadEnabled && 'bg-primary'
                   }`}
                   onClick={() => {
@@ -2365,7 +2381,7 @@ const TestDetail = () => {
                   />
                 </button>
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     checkCalExist > -1 && 'bg-primary'
                   }`}
                   onClick={() => {
@@ -2435,6 +2451,7 @@ const TestDetail = () => {
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
                       id && handleChangeTab(id)
+                      handleSubmitAnswer('change-tab')
                     }}
                     hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
@@ -2570,7 +2587,10 @@ const TestDetail = () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
                         )
-                        handleChangeTab(filteredTabs[index + 1].id)
+                      if (filteredTabs[index + 1].id) {
+                          handleChangeTab(filteredTabs[index + 1].id)
+                        handleSubmitAnswer('change-tab')
+                      }
                       }}
                     >
                       <div className="text-medium-sm font-medium">
@@ -2789,6 +2809,11 @@ const TestDetail = () => {
             {/** End Scratchpads */}
 
             <TestTimeOutModal
+              okButtonCaption={
+                quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                  ? 'Review Answers'
+                  : 'View Results'
+              }
               open={openTimeOut}
               setOpen={setOpenTimeOut}
               handleSubmit={() => {
@@ -2807,9 +2832,17 @@ const TestDetail = () => {
                         type !== 'entrance' &&
                         quizDetail?.quiz_type !== 'FINAL_TEST'
                       ) {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
-                        )
+                        if (
+                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                        ) {
+                          router.replace(
+                            `/courses/test/your-answers-detail/${QuizResultId}`,
+                          )
+                        } else {
+                          router.replace(
+                            `/courses/test/test-result/${QuizResultId}`,
+                          )
+                        }
                       } else {
                         router.back()
                         setScoreQuestion(scoreFinalTest)

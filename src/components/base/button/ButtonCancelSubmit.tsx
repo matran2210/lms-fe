@@ -17,7 +17,6 @@ const ButtonCancelSubmit = ({
         <SappButton
           color={colorCancel}
           {...(!revertFunction ? { ...cancel } : { ...submit })}
-          isPadding={false}
         />
       )}
       {showOkButton && (

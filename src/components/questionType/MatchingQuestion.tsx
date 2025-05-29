@@ -67,6 +67,7 @@ const MatchingQuestion = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    console.log('render Lại')
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()
@@ -264,6 +265,7 @@ const MatchingQuestion = forwardRef(
       setAnswers(arr)
       setDefaultValue(obj)
     }, [defaultAnswer, data?.question_matchings])
+
     return (
       <div key={key} ref={extenalRef} id={`${uuid}`}>
         <div
@@ -495,5 +497,5 @@ const MatchingQuestion = forwardRef(
     )
   },
 )
-MatchingQuestion.displayName = 'MatchingQuestion'
+MatchingQuestion.displayName = 'MatchingQuestion123'
 export default memo(MatchingQuestion)

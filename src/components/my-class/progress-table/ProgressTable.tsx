@@ -3,7 +3,12 @@ import React, { Dispatch, SetStateAction } from 'react'
 import { calculateHoursDifference } from '@utils/date.ulti'
 import { formatDate } from '@utils/common'
 import SappTable from '@components/table/SappTable'
-import { IProgress, IProgressList, IProgressUser } from 'src/type/progress'
+import {
+  IProgress,
+  IProgressList,
+  IProgressUser,
+  LearningMode,
+} from 'src/type/progress'
 import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
 import { TableColumn } from 'src/type'
 
@@ -54,10 +59,12 @@ const ProgressTable = ({
     {
       title: 'Time',
       render: (value: Date, record: IProgress, index: number) => {
-        if (!record?.start_time || !record?.end_time) return null
-        return (
-          calculateHoursDifference(record.start_time, record.end_time) + ' hour'
-        )
+        return record.mode !== LearningMode.ONLINE
+          ? record.start_time &&
+              record.end_time &&
+              calculateHoursDifference(record.start_time, record.end_time) +
+                ' hour'
+          : '--'
       },
     },
     {
@@ -82,14 +89,16 @@ const ProgressTable = ({
     {
       title: 'Teacher',
       dataIndex: 'teacher',
-      render: (teacher: IProgressUser) => teacher?.full_name,
+      render: (teacher: IProgressUser, record: IProgress) => {
+        return record.mode !== LearningMode.ONLINE ? teacher?.full_name : '--'
+      },
     },
     {
       title: 'Creator',
       render: (_, record: IProgress) => {
-        return (
-          record.staff_creator?.full_name || record?.user_creator?.full_name
-        )
+        return record.mode !== LearningMode.ONLINE
+          ? record?.staff_creator?.full_name || record?.user_creator?.full_name
+          : '--'
       },
     },
     {
