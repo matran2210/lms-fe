@@ -27,6 +27,7 @@ import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
+import dayjs from 'dayjs'
 
 const Course = ({
   course,
@@ -269,18 +270,35 @@ const Course = ({
   const [openContinue, setOpenContinue] = useState(false)
 
   const courseAction = () => {
+    const utcNow = dayjs().utc()
     const isPendingLesson =
       classInstance?.type === 'LESSON' && !student?.is_passed
+    const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+    const isFixedDuration = classInstance?.duration_type === 'FIXED'
+    const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
+    const hasNotStarted = dayjs(utcNow).isBefore(
+      classInstance?.class_user_instances?.[0]?.started_at,
+    )
+    const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
+    const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
 
-    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
+    // Handle pending lesson cases
+    if (isPendingLesson) {
+      if (isAccaCourse && isFixedDuration) {
+        if (hasNotStarted) {
+          setOpenClass(true)
+          return
+        }
+        setOpenContinue(true)
+        return
+      }
       setOpenLesson(true)
-    } else if (
-      isPendingLesson &&
-      course?.course_categories?.[0]?.name === 'ACCA'
-    ) {
-      setOpenContinue(true)
-    } else if (determineButtonToShow === 'Active') {
-      if (classInstance?.duration_type === 'FLEXIBLE') {
+      return
+    }
+
+    // Handle active course case
+    if (determineButtonToShow === 'Active') {
+      if (isFlexibleDuration) {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
         const classFinishedAt = parseISO(
@@ -293,12 +311,24 @@ const Course = ({
         setTimeActive(Number(getDateActive + 1))
       }
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Extend') {
+      return
+    }
+
+    // Handle extend case
+    if (determineButtonToShow === 'Extend') {
       setOpenExtend(true)
-    } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
+      return
+    }
+
+    // Handle not opened case
+    if (isNotOpened) {
       setOpenClass(true)
-    } else {
-      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
+      return
+    }
+
+    // Handle default case
+    if (!isCanceled) {
+      handleCourseDetail()
     }
   }
 
