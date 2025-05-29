@@ -12,6 +12,8 @@ import {
 import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
 import { TableColumn } from 'src/type'
 import { round } from 'lodash'
+import { useSelector } from 'react-redux'
+import { userReducer } from 'src/redux/slice/User/User'
 
 interface ProgressTableProps {
   loading: boolean
@@ -40,6 +42,7 @@ const ProgressTable = ({
   allowSection,
   allowCreateProgress,
 }: ProgressTableProps) => {
+  const { user } = useSelector(userReducer)
   let columnsTitles: TableColumn<IProgress>[] = [
     {
       title: '#',
@@ -118,28 +121,29 @@ const ProgressTable = ({
       dataIndex: 'method',
       render: (value: string, record: IProgress) => {
         return (
-          allowCreateProgress && (
-            <SAPPDropdown>
-              <div
-                onClick={() => {
-                  setIsView(true)
-                  setIsEdit(true)
-                  setIdProgress(record.id)
-                }}
-              >
-                View
-              </div>
-              <div
-                onClick={() => {
-                  setIsView(false)
-                  setIsInspect(true)
-                  setIdProgress(record.id)
-                }}
-              >
-                Edit
-              </div>
-            </SAPPDropdown>
-          )
+          <SAPPDropdown>
+            <div
+              onClick={() => {
+                setIsView(true)
+                setIsEdit(true)
+                setIdProgress(record.id)
+              }}
+            >
+              View
+            </div>
+            {record.mode !== LearningMode.ONLINE &&
+              record.teacher?.id === user?.id && (
+                <div
+                  onClick={() => {
+                    setIsView(false)
+                    setIsInspect(true)
+                    setIdProgress(record.id)
+                  }}
+                >
+                  Edit
+                </div>
+              )}
+          </SAPPDropdown>
         )
       },
       fixed: 'right',
