@@ -264,6 +264,8 @@ const TestDetail = () => {
             defaultValue={
               getValues(`${currentTabID}_${essayData?.index}_answer`) ||
               currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.short_answer ||
+              currentTabContent?.data?.requirements?.[essayData?.index]
                 ?.answer_text ||
               currentTabContent?.answer
             }
@@ -584,7 +586,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -644,7 +646,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1509,7 +1511,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1534,7 +1542,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
