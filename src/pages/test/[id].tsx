@@ -2333,7 +2333,7 @@ const TestDetail = () => {
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     isScatchPadEnabled && 'bg-primary'
                   }`}
                   onClick={() => {
@@ -2347,7 +2347,7 @@ const TestDetail = () => {
                   />
                 </button>
                 <button
-                  className={`h-full rounded-lg ${
+                  className={`h-fit rounded-lg ${
                     checkCalExist > -1 && 'bg-primary'
                   }`}
                   onClick={() => {

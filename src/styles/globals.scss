@@ -413,13 +413,13 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .answer-area {
-  @apply mt-4 flex flex-wrap gap-5;
+  @apply flex flex-wrap items-center gap-5 py-8;
 }
 
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
-  background: rgb(243, 243, 243);
-  @apply z-10 block p-2;
+  gap: 2px;
+  @apply z-10 flex h-fit items-center rounded-md border-gray-15 bg-white px-2 py-1 text-base;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
@@ -441,7 +441,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply m-1 inline-block min-w-[100px] border border-gray-500 bg-gray-4 p-1;
+  @apply m-1 inline-block h-fit w-fit rounded-lg border border-gray-15 bg-white px-2 py-1 text-base;
 
   &.corrects {
     @apply border-success text-state-success;

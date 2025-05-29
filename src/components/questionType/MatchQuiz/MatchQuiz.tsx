@@ -6,7 +6,6 @@ import {
   type Edge,
   type Node,
 } from '@xyflow/react'
-import '@xyflow/react/dist/style.css'
 import React, {
   ForwardedRef,
   forwardRef,
@@ -168,19 +167,21 @@ const MatchQuiz = forwardRef(
 
     useEffect(() => {
       // Transform question_matchings into questions and answers
-      const questions: RawItem[] = data.question_matchings.map((item: any) => ({
-        id: item.id,
-        label: item.content,
-        role: 'question' as Role,
-        color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
-      }))
+      const questions: RawItem[] =
+        data?.question_matchings.map((item: any) => ({
+          id: item.id,
+          label: item.content,
+          role: 'question' as Role,
+          color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
+        })) || []
 
-      const answers: RawItem[] = data.question_matchings.map((item: any) => ({
-        id: item.answer.id,
-        label: item.answer.answer,
-        role: 'answer' as Role,
-        color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
-      }))
+      const answers: RawItem[] =
+        data?.question_matchings?.map((item: any) => ({
+          id: item.answer.id,
+          label: item.answer.answer,
+          role: 'answer' as Role,
+          color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
+        })) || []
 
       const transformed = transformDataToNodes({
         questions,
@@ -408,7 +409,7 @@ const MatchQuiz = forwardRef(
 
     return (
       <div key={key} ref={extenalRef}>
-        <div className="flex h-full w-full flex-col bg-gray-100">
+        <div className="flex h-full w-full flex-col">
           <div
             className={`relative w-full min-w-[700px]`}
             ref={flowRef}
