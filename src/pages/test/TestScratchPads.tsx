@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -97,11 +98,11 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+          <div className="absolute left-0 top-0 h-full w-full rounded-xl">
+            <div className="flex h-10 w-full items-center justify-between rounded-t-xl bg-gray-2 px-5">
               <div className="text-sm font-normal">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
+                <CloseModalIcon />
               </button>
             </div>
             <Calculator />
@@ -125,12 +126,12 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="text-sm font-normal">Scratch Pad</div>
+          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border">
+            <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+              <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
+                <CloseModalIcon />
               </button>
             </div>
             <ScratchPatch
