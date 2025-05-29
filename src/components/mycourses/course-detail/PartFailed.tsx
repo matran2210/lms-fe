@@ -11,14 +11,12 @@ import {
   GRADING_METHOD,
   TEST_TYPE,
 } from 'src/constants'
-import TestModal, { isQuizExpired } from 'src/pages/courses/test'
+import TestModal from 'src/pages/courses/test'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon, LockClosedIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
-import { isNull } from 'lodash'
-import SappButton from '@components/base/button/SappButton'
 
 const PartFailed = ({
   coursePart,
@@ -43,11 +41,10 @@ const PartFailed = ({
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const [openReport, setOpenReport] = useState<boolean>(false)
-  const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const isManualGradingAndAwaitGrading =
-    quizAttempt.grading_method === GRADING_METHOD.MANUAL &&
-    quizAttempt.attempt.grading_status === GRADE_STATUS.AWAITING_GRADING
+    quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
+    quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
   const formattedTime = coursePart?.quiz?.quiz_timed
     ? formatTime(coursePart?.quiz?.quiz_timed * 60)
     : 'Unlimited'
@@ -288,7 +285,7 @@ const PartFailed = ({
                   full={false}
                   size="small"
                   color="quizActivity"
-                  className="ml-auto max-h-8 "
+                  className="ml-auto max-h-8"
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

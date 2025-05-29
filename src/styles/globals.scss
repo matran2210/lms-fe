@@ -992,13 +992,19 @@ p a {
 
 #lms-pro #hubspot-messages-iframe-container {
   z-index: 999 !important;
+  display: initial;
+  &.show {
+    display: block !important;
+  }
+  &.hide {
+    display: none !important;
+  }
 }
 
 #hubspot-messages-iframe-container.visible-icon iframe,
 #hubspot-messages-iframe-container .visible-icon {
   display: none !important;
 }
-
 #hubspot-messages-iframe-container.visible-icon,
 #hubspot-messages-iframe-container .visible-icon {
   position: inherit !important;

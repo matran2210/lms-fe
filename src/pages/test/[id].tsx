@@ -1590,8 +1590,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -1684,8 +1684,8 @@ const TestDetail = () => {
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
-            router.replace(`/event-test`)
             setSubmitEventTest(true)
+            router.replace(`/event-test`)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2125,13 +2125,19 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
+            // const hasAnswer =
+            //   answerMap.has(question.id) &&
+            //   !!(answerMap.get(question.id) as any)?.has_answer
+
             const hasAnswer = answerMap.has(question.id)
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2245,7 +2251,6 @@ const TestDetail = () => {
                           trackGAEvent('Click Button Submit Time Out Test')
                         })
                     } else {
-                      setOpenTimeOut(true)
                       setQuizResultId(quizAttempt?.id)
                     }
                   }
@@ -2356,7 +2361,7 @@ const TestDetail = () => {
                     onMouseUp={() => setStartResize(false)}
                   ></div>
                   <div
-                    className="h-full overflow-auto bg-white py-6 "
+                    className="h-full overflow-auto bg-white py-6"
                     style={{ width: `calc(50% + ${leftWidth}px)` }}
                     ref={rightSideRef}
                   >
@@ -2455,7 +2460,7 @@ const TestDetail = () => {
           {/** End Question Content */}
 
           {/** Scratchpads */}
-          <div className=" z-10 flex h-[48px]  items-center justify-between bg-gray-3 shadow-question-footer">
+          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
             <div className="flex h-full items-center">
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -2529,9 +2534,9 @@ const TestDetail = () => {
                           return (
                             <button
                               key={e?.value}
-                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                 !watch('exhibits')?.includes(e?.value) &&
-                                'text-gray-1 '
+                                'text-gray-1'
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
                             >{`${exhibitText} ${index + 1}`}</button>
@@ -2594,7 +2599,7 @@ const TestDetail = () => {
                 currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                 !currentTabContent.done && (
                   <div className="flex gap-1">
-                    <div className="hidden 3.5xl:block ">
+                    <div className="hidden 3.5xl:block">
                       Choose response option:
                     </div>
                     <button
@@ -2642,7 +2647,7 @@ const TestDetail = () => {
                   </div>
                 )}
               <button
-                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px] "
+                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px]"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2674,7 +2679,7 @@ const TestDetail = () => {
               !currentTabContent?.is_viewed_answer &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     handleSubmitAnswer('view-answer')
@@ -2696,7 +2701,7 @@ const TestDetail = () => {
                 filteredTabs.findIndex((e: any) => e.id === currentPage) <
                   filteredTabs.length - 1 && (
                   <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                     onClick={async () => {
                       const index = filteredTabs.findIndex(
                         (e: any) => e.id === currentPage,
@@ -2785,7 +2790,7 @@ const TestDetail = () => {
             handleQuit={() => {
               if (type === 'event-test') {
                 router.replace(`/event-test`)
-                setSubmitEventTest(true)
+                // setSubmitEventTest(true)
               } else {
                 router.back()
               }
@@ -2805,13 +2810,10 @@ const TestDetail = () => {
             open={openSubmit}
             setOpen={setOpenSubmit}
             handleSubmit={() => {
-              if (type === 'event-test') {
-                router.replace(`/event-test`)
-                setSubmitEventTest(true)
-              } else {
+              handleSubmitQuestions('submit')
+              if (type !== 'event-test') {
                 setOpenSubmit(false)
               }
-              handleSubmitQuestions('submit')
             }}
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2823,10 +2825,7 @@ const TestDetail = () => {
             setOpen={setUnSubmitAnswer}
             data={unSubmitAnswerData}
             handleSubmit={() => {
-              if (type === 'event-test') {
-                router.replace(`/event-test`)
-                setSubmitEventTest(true)
-              } else {
+              if (type !== 'event-test') {
                 setUnSubmitAnswer(false)
               }
               handleSubmitQuestions('submit')

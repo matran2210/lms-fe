@@ -1,14 +1,21 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { IconClose } from '@assets/icons'
 import { Popover } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
-
+import { useRouter } from 'next/router'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
+  // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false)
+  const router = useRouter()
+  const scriptRef = useRef<HTMLScriptElement | null>(null)
 
+  // Check if URL contains '/teachers'
+  const isTeacherPage = router.asPath.includes('/teachers')
+
+  // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
-    // Chỉ thay đổi trạng thái khi newVisible là true (mở Popover)
     if (newVisible) {
       setVisible(true)
     }
@@ -18,27 +25,86 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     setVisible(!visible)
   }
 
+  // Effect for teacher pages cleanup
   useEffect(() => {
-    // Kiểm tra xem biến actToken có tồn tại trong localStorage hay không
-    if (showHelp) {
-      // Tạo một thẻ script mới
-      const scriptElement = document.createElement('script')
-      scriptElement.type = 'text/javascript'
-      scriptElement.id = 'hs-script-loader'
-      scriptElement.async = true
-      scriptElement.defer = true
-      scriptElement.src = `//js.hs-scripts.com/1774127.js`
+    if (isTeacherPage) {
+      const hsScript = document.getElementById('hs-script-loader')
+      if (hsScript) document.head.removeChild(hsScript)
 
-      // Thêm thẻ script vào trong thẻ head của trang
-      document.head.appendChild(scriptElement)
+      // Also clean up HubSpot containers if they exist
+      const container = document.getElementById(
+        'hubspot-messages-iframe-container',
+      )
+      if (container) {
+        container.style.display = 'none'
+        if (container.classList.contains('show')) {
+          container.classList.remove('show')
+        }
+        container.classList.add('hide')
+      }
+      const conversationsContainer = document.getElementById(
+        'hubspot-conversations-iframe',
+      )
+      if (conversationsContainer) conversationsContainer.style.display = 'none'
+    }
+  }, [isTeacherPage])
 
-      // Cleanup: Xóa script khi component unmount (nếu cần)
-      return () => {
-        document.head.removeChild(scriptElement)
+  // Effect for script creation
+  useEffect(() => {
+    // Create script only if not on teacher pages and showHelp is true
+    if (showHelp && !isTeacherPage) {
+      // Check if script already exists to avoid duplicates
+      let scriptElement = document.getElementById(
+        'hs-script-loader',
+      ) as HTMLScriptElement
+
+      if (!scriptElement) {
+        // Create new script only if it doesn't exist
+        scriptElement = document.createElement('script')
+        scriptElement.type = 'text/javascript'
+        scriptElement.id = 'hs-script-loader'
+        scriptElement.async = true
+        scriptElement.defer = true
+        scriptElement.src = `//js.hs-scripts.com/1774127.js`
+
+        // Save ref to the script element
+        scriptRef.current = scriptElement
+
+        // Add script to head
+        document.head.appendChild(scriptElement)
+      }
+
+      // Show HubSpot containers if they exist
+      const container = document.getElementById(
+        'hubspot-messages-iframe-container',
+      )
+      if (container) {
+        container.style.display = ''
+        if (container.classList.contains('hide')) {
+          container.classList.remove('hide')
+        }
+        container.classList.add('show')
+      }
+
+      const conversationsContainer = document.getElementById(
+        'hubspot-conversations-iframe',
+      )
+      if (conversationsContainer) conversationsContainer.style.display = ''
+    }
+
+    // Cleanup function
+    return () => {
+      // Don't remove the script on unmount unless navigating to teacher pages
+      if (isTeacherPage && scriptRef.current) {
+        if (document.head.contains(scriptRef.current)) {
+          document.head.removeChild(scriptRef.current)
+          scriptRef.current = null
+        }
       }
     }
-  })
+  }, [showHelp, isTeacherPage])
 
+  // Effect for container visibility
   useEffect(() => {
     const container = document.getElementById(
       'hubspot-messages-iframe-container',
@@ -52,13 +118,17 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     }
   }, [visible])
 
+  // Early return after all hooks are declared
+  if (isTeacherPage) {
+    return null
+  }
+
   return (
     <div className="cursor-pointer">
       <Popover
         content={
           <PopupSupportCenter visible={visible} setVisible={setVisible} />
         }
-        title={undefined}
         trigger="click"
         open={visible}
         onOpenChange={handleVisibleChange}
