@@ -72,8 +72,8 @@ module.exports = {
         },
         state: {
           info: '#3964EA',
-          success: '#397839',
-          error: '#B90E0A',
+          success: '#078A4D',
+          error: '#F80903',
           cancel: '#D20306',
         },
         bw: {
