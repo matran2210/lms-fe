@@ -243,6 +243,39 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
+        const defaultValueEssay = () => {
+          if (!isUndefined(essayData?.req?.short_answer)) {
+            return essayData?.req?.short_answer
+          }
+          if (
+            !isUndefined(
+              getValues(`${currentTabID}_${essayData?.index}_answer`),
+            )
+          ) {
+            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.short_answer,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.short_answer
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.answer_text
+          }
+          if (!isUndefined(currentTabContent?.answer)) {
+            return currentTabContent?.answer
+          }
+        }
         return (
           <EssayQuestionPreview
             data={{
@@ -261,12 +294,7 @@ const TestDetail = () => {
             solution={solution}
             name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={
-              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text ||
-              currentTabContent?.answer
-            }
+            defaultValue={defaultValueEssay()}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -584,7 +612,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -644,7 +672,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1509,7 +1537,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1534,7 +1568,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
@@ -2132,11 +2168,11 @@ const TestDetail = () => {
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            // const hasAnswer =
-            //   answerMap.has(question.id) &&
-            //   !!(answerMap.get(question.id) as any)?.has_answer
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
 
-            const hasAnswer = answerMap.has(question.id)
+            // const hasAnswer = answerMap.has(question.id)
 
             let baseData = {
               ...question,
@@ -2268,8 +2304,9 @@ const TestDetail = () => {
                   optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
                     if (id) {
-                      handleChangeTab(id)
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }
                   }}
                   activeShowAll={activeShowAll}
@@ -2707,8 +2744,9 @@ const TestDetail = () => {
                         (e: any) => e.id === currentPage,
                       )
                       if (filteredTabs[index + 1].id) {
-                        handleChangeTab(filteredTabs[index + 1].id)
                         handleSubmitAnswer('change-tab')
+                        setEssayData(undefined)
+                        handleChangeTab(filteredTabs[index + 1].id)
                       }
                     }}
                   >
