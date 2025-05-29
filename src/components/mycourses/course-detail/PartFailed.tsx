@@ -205,20 +205,9 @@ const PartFailed = ({
               <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
                 <p className="text-base text-gray-1">Time Spent:</p>
                 <p className="text-base font-medium text-bw-1">
-                  {isManualGradingAndAwaitGrading
-                    ? `${
-                        coursePart?.quiz?.attempt?.total_attempt_time
-                          ? formatTime(
-                              coursePart?.quiz?.attempt?.total_attempt_time ||
-                                0 * 60,
-                            )
-                          : 'Unlimited'
-                      }`
-                    : `${
-                        coursePart?.quiz?.quiz_timed
-                          ? formatTime(coursePart?.quiz?.quiz_timed || 0 * 60)
-                          : 'Unlimited'
-                      }`}
+                  {!!coursePart?.quiz?.attempt?.total_attempt_time
+                    ? formatTime(coursePart?.quiz?.attempt?.total_attempt_time)
+                    : '--'}
                 </p>
               </div>
             </>
