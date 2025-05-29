@@ -63,12 +63,9 @@ const EssayQuestionPreview = ({
   control,
   handleSaveHighLight = () => {},
   highlighted,
-  removeHighlight,
   allowHighLight,
   forCaseStudy = false,
-  solution,
   name,
-  setValue,
   defaultValue,
   response_option_custom,
   externalRef,
@@ -178,6 +175,7 @@ const EssayQuestionPreview = ({
       dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
+
   return (
     <div>
       {question_content && isShowContent && (
@@ -261,7 +259,7 @@ const EssayQuestionPreview = ({
             )}
 
             {data?.files?.length > 0 && (
-              <div className="mb-4">
+              <div>
                 {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
@@ -284,7 +282,11 @@ const EssayQuestionPreview = ({
             )}
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && <div className="sapp-seprate-line-preview"></div>}
+            !forCaseStudy && (
+              <div className="my-8">
+                <hr />
+              </div>
+            )}
         </>
       )}
       <>
@@ -323,7 +325,9 @@ const EssayQuestionPreview = ({
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
-                  <div className="sapp-seprate-line-preview"></div>
+                  <div className="mb-8">
+                    <hr />
+                  </div>
                 )}
             </React.Fragment>
           ) : (
@@ -333,7 +337,7 @@ const EssayQuestionPreview = ({
                   'sapp-upload-file-preview',
                   data
                     ? ''
-                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold',
+                    : 'justify- w-fit flex-col !items-start !pt-0 font-semibold',
                 )}
               >
                 <div
@@ -362,7 +366,11 @@ const EssayQuestionPreview = ({
               </div>
               {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
-                data && <div className="sapp-seprate-line-preview"></div>}
+                data && (
+                  <div className="mb-8">
+                    <hr />
+                  </div>
+                )}
             </React.Fragment>
           )
         ) : (
@@ -421,12 +429,8 @@ const EssayQuestionPreview = ({
                   }
                   return (
                     <Workbook
-                      // generateSheetId={() => name}
                       ref={refSheet}
-                      // column={2}
-                      // row={2}
-
-                      onChange={(e) => {
+                      onChange={(_) => {
                         if (
                           !fullData?.is_viewed_answer &&
                           !fullData?.confirmed
@@ -445,13 +449,10 @@ const EssayQuestionPreview = ({
                               old.splice(index, 1, currentSheet)
                             } else {
                               old.push(currentSheet)
-                              // setValue(name, JSON.stringify(old))
                             }
                             onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
                           } else {
                             onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
                       }}
@@ -461,13 +462,6 @@ const EssayQuestionPreview = ({
                           : [
                               {
                                 name: 'Sheet1',
-                                // config: {
-                                //   authority: {
-
-                                //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
-
-                                //   },
-                                // },
                               },
                             ]
                       }

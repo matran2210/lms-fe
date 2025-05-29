@@ -3,14 +3,12 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
   CalculatorIconV2,
   FlagIcon,
   ResizeIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-  TextSquareIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -54,11 +52,13 @@ import Popover from '@components/Popover'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { TabsProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
@@ -84,11 +84,11 @@ import {
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
+import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
 
 declare global {
   interface Window {
@@ -110,6 +110,59 @@ const TestDetail = () => {
     solution?: any,
     done?: boolean,
   ) => {
+    const handleEssayChange = (id: string) => {
+      setAnswerListValue(id as unknown as number)
+    }
+
+    const essayRequirementsItem: TabsProps['items'] =
+      currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+        return {
+          label: `Requirement ${index + 1}`,
+          key: index,
+          children: (
+            <EssayQuestionPreview
+              data={{
+                ...currentTabContent?.data?.requirements?.[essayData?.index],
+                ...essayData?.req,
+              }}
+              question_content={currentTabContent?.data?.question_content}
+              index={essayData?.index}
+              question_data={currentTabContent?.data}
+              control={control}
+              handleSaveHighLight={handleSaveHighLight}
+              highlighted={highlighted}
+              removeHighlight={removeHighlight}
+              allowHighLight={allowHighLight}
+              allowUnHighLight={allowUnHighLight}
+              solution={solution}
+              name={`${currentTabID}_${essayData?.index}_answer`}
+              setValue={setValue}
+              defaultValue={
+                getValues(`${currentTabID}_${essayData?.index}_answer`) ||
+                currentTabContent?.data?.requirements?.[essayData?.index]
+                  ?.answer_text ||
+                currentTabContent?.answer
+              }
+              response_option_custom={currentTabContent.response_type}
+              externalRef={refEditor}
+              fullData={currentTabContent}
+              openChooseFile={(e: any) =>
+                setOpenUpload({
+                  status: true,
+                  question_id: currentPage,
+                  requirementIndex: essayData?.index,
+                })
+              }
+              handleClearFile={handleClearFile}
+              setOpenPdf={handleOpenScratchPad}
+              handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+              showRequiment={showListRequirement}
+              handleChange={handleEssayChange}
+            />
+          ),
+        }
+      }) ?? []
+
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
         return (
@@ -237,50 +290,17 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
         return (
-          <EssayQuestionPreview
-            data={{
-              ...currentTabContent?.data?.requirements?.[essayData?.index],
-              ...essayData?.req,
-            }}
-            question_content={currentTabContent?.data?.question_content}
-            index={essayData?.index}
-            question_data={currentTabContent?.data}
-            control={control}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            name={`${currentTabID}_${essayData?.index}_answer`}
-            setValue={setValue}
-            defaultValue={
-              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text ||
-              currentTabContent?.answer
-            }
-            response_option_custom={currentTabContent.response_type}
-            externalRef={refEditor}
-            fullData={currentTabContent}
-            openChooseFile={(e: any) =>
-              setOpenUpload({
-                status: true,
-                question_id: currentPage,
-                requirementIndex: essayData?.index,
+          <RequirementsTab
+            items={essayRequirementsItem}
+            defaultActiveKey="1"
+            onChange={(key) => {
+              setEssayData({
+                req: currentTabContent?.data?.requirements?.[key],
+                index: key,
               })
-            }
-            handleClearFile={handleClearFile}
-            setOpenPdf={handleOpenScratchPad}
-            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-            showRequiment={showListRequirement}
-            handleChange={handleEssayChange}
+            }}
           />
-          // <Luckysheet/>
         )
       default:
         return <div></div>
@@ -1991,7 +2011,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }
@@ -2361,7 +2380,7 @@ const TestDetail = () => {
                   />
                 </button>
 
-                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                   <button className="relative h-full" ref={dropUpRequire}>
                     <div
                       className="flex items-center gap-3 border-l px-4 3xl:px-6"
@@ -2403,7 +2422,7 @@ const TestDetail = () => {
                       </div>
                     )}
                   </button>
-                )}
+                )} */}
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
