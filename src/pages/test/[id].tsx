@@ -2142,11 +2142,11 @@ const TestDetail = () => {
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            // const hasAnswer =
-            //   answerMap.has(question.id) &&
-            //   !!(answerMap.get(question.id) as any)?.has_answer
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
 
-            const hasAnswer = answerMap.has(question.id)
+            // const hasAnswer = answerMap.has(question.id)
 
             let baseData = {
               ...question,

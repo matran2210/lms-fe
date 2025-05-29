@@ -173,6 +173,8 @@ const confirmQuestion = createAsyncThunk(
  * Async thunk để xác nhận một câu hỏi trong bài kiểm tra.
  * @type {AsyncThunk}
  */
+
+//Hiện đang dùng để submit cho bài test trong activity
 const submitQuiz = createAsyncThunk(
   'quiz/submitQuiz',
   async (
