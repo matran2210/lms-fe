@@ -11,10 +11,6 @@ interface EntranceTestListProps {
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
 }) => {
-  const [selectedEntranceTest, setSelectedEntranceTest] = useState<{
-    id: string
-  }>()
-
   return (
     <div
       className={`${
