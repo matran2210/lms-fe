@@ -98,7 +98,10 @@ const TestModal = ({
         setResultList((prev: IQuizResultList) => {
           return {
             metadata: response.data.metadata,
-            data: results,
+            data: [...prev.data, ...results]?.filter(
+              (item, index, self) =>
+                index === self?.findIndex((t) => t.id === item.id),
+            ),
           }
         })
 

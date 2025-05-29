@@ -455,7 +455,6 @@ const CoursePartDetail = () => {
             partDetail={partDetail}
           />
         )}
-
         <PreviewPartDetail
           chapterMenu={partDetail}
           fetchChapterDetail={fetchChapterDetail}
@@ -477,7 +476,6 @@ const CoursePartDetail = () => {
           handleGetItem={handleActive}
           // handleShowToast={handleShowToast}
         />
-
         <SappDrawer
           isOpen={openLearningOutcome}
           onClose={handleCancel}
@@ -525,14 +523,16 @@ const CoursePartDetail = () => {
             ))}
           </TextSkeleton>
         </SappDrawer>
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          data={chapterData}
-          class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
-          is_passed_course={isPassedCourse}
-        />
+        {open && (
+          <TestModal
+            open={open}
+            setOpen={setOpen}
+            data={chapterData}
+            class_user_id={previewPart?.class_user_id}
+            activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
+          />
+        )}
       </div>
     </Layout>
   )
