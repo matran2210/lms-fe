@@ -1,8 +1,9 @@
+import { uniqueId } from 'lodash'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SAPPCheckbox from './SAPPCheckbox'
 import YourAnswer from '../tags/YourAnswer'
-import { uniqueId } from 'lodash'
+import SAPPCheckbox from './SAPPCheckbox'
+import clsx from 'clsx'
 
 interface IHookFormCheckBoxProps {
   name: string
@@ -41,13 +42,8 @@ const HookFormCheckBoxGroup = ({
   name,
   control,
   defaultValue,
-  // title,
   className = '',
   onChange,
-  // checked,
-  // isWrong,
-  // label,
-  // required,
   disabled,
   classNameTitle,
   options,
@@ -56,7 +52,6 @@ const HookFormCheckBoxGroup = ({
   justify,
   multiple = false,
   size = 'small',
-  // state,
   corrects,
   toggle = false,
   positionCheckBox = 'center',
@@ -134,9 +129,7 @@ const HookFormCheckBoxGroup = ({
                     key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
-                      className={`me-2 ${className} ${
-                        positionCheckBox === 'start' && 'mt-[2px]'
-                      }`}
+                      className={`me-2 ${className}}`}
                       checked={checked}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
@@ -178,14 +171,15 @@ const HookFormCheckBoxGroup = ({
                       size={size}
                     />
                     <span
-                      className={`${
-                        classNameTitle ?? ''
-                      } ${stateLabel}  form-check-label fw-semibold ${
-                        lowerOptions &&
-                        !checked &&
-                        checkHasChecked &&
-                        'text-gray-1'
-                      }`}
+                      className={clsx(
+                        'form-check-label fw-semibold text-base',
+                        classNameTitle,
+                        stateLabel,
+                        {
+                          'text-gray-1':
+                            lowerOptions && !checked && checkHasChecked,
+                        },
+                      )}
                     >
                       {option.label}
                       <YourAnswer show={checked && !!corrects}></YourAnswer>
