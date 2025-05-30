@@ -445,7 +445,9 @@ const TestDetail = () => {
     resultId: '',
   })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
-
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
@@ -476,9 +478,21 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
-      const tabScratchPad = scratchPadValues?.find(
-        (e: ScratchPadValue) => e.id === currentPage,
+
+      const index = scratchPadValues?.findIndex(
+        (item: ScratchPadValue) => item.id === currentPage,
       )
+
+      if (!index || index === -1) {
+        setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            id: currentPage,
+            value: '',
+          },
+        ])
+      }
+
       setScratchPads(answerSubmitted?.scratch_pad || '')
       if (answerSubmitted) {
         const getCorrectAndSolution = (
@@ -944,10 +958,6 @@ const TestDetail = () => {
       return newArr
     })
   }
-
-  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
-    [],
-  )
 
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
