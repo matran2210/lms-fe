@@ -1,4 +1,3 @@
-import DragDrogIcon from '@assets/icons/DragDrogIcon'
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
@@ -256,9 +255,9 @@ const DragNDropPreivew = forwardRef(
               element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
                 index + 1
               }">
-                <span class="answer-box" id="${
+                <span class="answer-box drag-icon" id="${
                   defaultAnswer?.[index]?.idAnswer
-                }">${(<DragDrogIcon />)} ${defaultAnswer?.[index]?.value}</span>
+                }">${defaultAnswer?.[index]?.value}</span>
                </span>
               `
             } else {
@@ -320,7 +319,10 @@ const DragNDropPreivew = forwardRef(
             )
           }
         }
-        if (domNode?.attribs && domNode?.attribs?.class === 'answer-box') {
+        if (
+          domNode?.attribs &&
+          domNode?.attribs?.class === 'answer-box drag-icon'
+        ) {
           return (
             <span
               id={domNode?.attribs?.id}
@@ -330,7 +332,6 @@ const DragNDropPreivew = forwardRef(
               draggable="true"
               {...{ indexBox: domNode?.attribs?.indexbox }}
             >
-              <DragDrogIcon />
               {domNode?.data}
             </span>
           )
@@ -450,14 +451,13 @@ const DragNDropPreivew = forwardRef(
                     }
                     return (
                       <span
-                        className={`answer-box`}
+                        className={`answer-box drag-icon`}
                         key={e?.id}
                         id={e?.id}
                         draggable="true"
                         onDragStart={drag}
                         onDrop={() => drop(event, data?.id, true)}
                       >
-                        <DragDrogIcon />
                         {e?.answer}
                       </span>
                     )

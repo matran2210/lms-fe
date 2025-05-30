@@ -118,9 +118,9 @@ const HeaderTest = ({
             onClick: () => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
-              if (type === 'event-test') {
-                setSubmitEventTest(true)
-              }
+              // if (type === 'event-test') {
+              //   setSubmitEventTest(true)
+              // }
             },
             loading: false,
             //   full: fullWidthBtn,

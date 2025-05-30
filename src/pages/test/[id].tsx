@@ -238,6 +238,39 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
+        const defaultValueEssay = () => {
+          if (!isUndefined(essayData?.req?.short_answer)) {
+            return essayData?.req?.short_answer
+          }
+          if (
+            !isUndefined(
+              getValues(`${currentTabID}_${essayData?.index}_answer`),
+            )
+          ) {
+            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.short_answer,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.short_answer
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.answer_text
+          }
+          if (!isUndefined(currentTabContent?.answer)) {
+            return currentTabContent?.answer
+          }
+        }
         return (
           <EssayQuestionPreview
             data={{
@@ -256,12 +289,7 @@ const TestDetail = () => {
             solution={solution}
             name={`${currentTabID}_${essayData?.index}_answer`}
             setValue={setValue}
-            defaultValue={
-              getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text ||
-              currentTabContent?.answer
-            }
+            defaultValue={defaultValueEssay()}
             response_option_custom={currentTabContent.response_type}
             externalRef={refEditor}
             fullData={currentTabContent}
@@ -573,7 +601,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -633,7 +661,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1501,7 +1529,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1526,7 +1560,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
@@ -1582,8 +1618,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -1676,8 +1712,8 @@ const TestDetail = () => {
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
-            router.replace(`/event-test`)
             setSubmitEventTest(true)
+            router.replace(`/event-test`)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2111,13 +2147,19 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer = answerMap.has(question.id)
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
+
+            // const hasAnswer = answerMap.has(question.id)
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2230,8 +2272,9 @@ const TestDetail = () => {
                 const index = filteredTabs.findIndex(
                   (e: any) => e.id === currentPage,
                 )
-                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
+                setEssayData(undefined)
+                handleChangeTab(filteredTabs[index + 1].id)
               }
 
               trackGAEvent('Click Button Confirm Answer')
@@ -2416,8 +2459,9 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
-                      id && handleChangeTab(id)
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }}
                     hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
@@ -2830,7 +2874,7 @@ const TestDetail = () => {
               handleQuit={() => {
                 if (type === 'event-test') {
                   router.replace(`/event-test`)
-                  setSubmitEventTest(true)
+                  // setSubmitEventTest(true)
                 } else {
                   router.back()
                 }
@@ -2850,13 +2894,10 @@ const TestDetail = () => {
               open={openSubmit}
               setOpen={setOpenSubmit}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                handleSubmitQuestions('submit')
+                if (type !== 'event-test') {
                   setOpenSubmit(false)
                 }
-                handleSubmitQuestions('submit')
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2868,10 +2909,19 @@ const TestDetail = () => {
               setOpen={setUnSubmitAnswer}
               data={unSubmitAnswerData}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                if (type !== 'event-test') {
+                  setUnSubmitAnswer(false)
+                }
+                handleSubmitQuestions('submit')
+              }}
+              handleCancel={() => setUnSubmitAnswer(false)}
+            />
+            <UnSubmitAnswerModal
+              open={openUnSubmitAnswer}
+              setOpen={setUnSubmitAnswer}
+              data={unSubmitAnswerData}
+              handleSubmit={() => {
+                if (type !== 'event-test') {
                   setUnSubmitAnswer(false)
                 }
                 handleSubmitQuestions('submit')
