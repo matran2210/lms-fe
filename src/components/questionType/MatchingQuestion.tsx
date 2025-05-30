@@ -67,7 +67,6 @@ const MatchingQuestion = forwardRef(
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
-    console.log('render Lại')
     const [defaultValue, setDefaultValue] = useState<any>()
     const [answers, setAnswers] = useState<any>()
     const [correctAnswer, setCorrectAnswer] = useState<any>()

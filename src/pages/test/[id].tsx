@@ -55,7 +55,7 @@ import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -166,7 +166,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchQuizWrapper
+          <MatchQuizComponent
             data={data}
             ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
