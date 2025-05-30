@@ -33,18 +33,16 @@ const Editor = ({
   return (
     <div>
       <Spin spinning={loading}>
-        <div className="sapp-editor-container">
-          <SAPPEditor
-            {...(key && { key: key })}
-            content={valueText}
-            onChange={onChange}
-            handleImageUpload={(file) =>
-              handleImageUpload(file, 'lms/library-editor')
-            }
-            placeholder={placeholder}
-            disabled={disabled}
-          />
-        </div>
+        <SAPPEditor
+          {...(key && { key: key })}
+          content={valueText}
+          onChange={onChange}
+          handleImageUpload={(file) =>
+            handleImageUpload(file, 'lms/library-editor')
+          }
+          placeholder={placeholder}
+          disabled={disabled}
+        />
       </Spin>
     </div>
   )
