@@ -33,6 +33,7 @@ import {
   cloneDeep,
   debounce,
   isEmpty,
+  isNull,
   isUndefined,
   result,
   uniqueId,
@@ -243,39 +244,37 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
+
         const defaultValueEssay = () => {
-          if (!isUndefined(essayData?.req?.short_answer)) {
-            return essayData?.req?.short_answer
-          }
-          if (
-            !isUndefined(
-              getValues(`${currentTabID}_${essayData?.index}_answer`),
-            )
-          ) {
+          if (!!getValues(`${currentTabID}_${essayData?.index}_answer`)) {
             return getValues(`${currentTabID}_${essayData?.index}_answer`)
           }
+          // if (
+          //   !isUndefined(essayData?.req?.short_answer) &&
+          //   !isNull(essayData?.req?.short_answer)
+          // ) {
+          //   return essayData?.req?.short_answer
+          // }
           if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.short_answer,
-            )
+            !!currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.short_answer
           ) {
             return currentTabContent?.data?.requirements?.[essayData?.index]
               ?.short_answer
           }
           if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text,
-            )
+            !!currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.answer_text
           ) {
             return currentTabContent?.data?.requirements?.[essayData?.index]
               ?.answer_text
           }
-          if (!isUndefined(currentTabContent?.answer)) {
+          if (!!currentTabContent?.answer) {
             return currentTabContent?.answer
           }
+          return ''
         }
+
         return (
           <EssayQuestionPreview
             data={{
