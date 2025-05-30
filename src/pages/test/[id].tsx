@@ -968,6 +968,7 @@ const TestDetail = () => {
   }
 
   const checkAnswered = (currentContent: any, isSubmit = false) => {
+    //check đã có câu trả lời
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
@@ -1299,6 +1300,14 @@ const TestDetail = () => {
     return newData
   }
 
+  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
+    if (Array.isArray(tabContent.data?.requirements)) {
+      const hasAnswer = (req: any) =>
+        req?.answer_file?.file_key || req?.short_answer || req?.answer_text
+      return tabContent.data.requirements.every(hasAnswer)
+    }
+  }
+
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1326,7 +1335,9 @@ const TestDetail = () => {
               }),
             },
 
-            attempted: item?.attempted || checkAnswered(item),
+            attempted:
+              item?.attempted ||
+              (checkAnswered(item) && handleCheckAllRequirementHasAnswer(item)),
             timeSpent: !item?.done
               ? item?.timeSpent
                 ? Date.now() - startTime + item?.timeSpent
@@ -2836,6 +2847,7 @@ const TestDetail = () => {
             handleCancel={() =>
               dispatch(loginSlice.actions.enableUnsavedChange())
             }
+            content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
           />
 
           <LimitQuizModal

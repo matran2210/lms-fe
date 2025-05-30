@@ -130,7 +130,11 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             {data?.is_attempt ? (
               <>
                 <p>Time taken:</p>
-                <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
+                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  <span>--</span>
+                ) : (
+                  <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
+                )}
               </>
             ) : (
               <>
@@ -143,9 +147,13 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             <p>Results:</p>
             {data?.is_attempt ? (
               <>
-                <p className="text-state-success">
-                  {data?.total_correct_answer + '/' + data?.total_question}
-                </p>
+                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  <span>--</span>
+                ) : (
+                  <p className="text-state-success">
+                    {data?.total_correct_answer + '/' + data?.total_question}
+                  </p>
+                )}
               </>
             ) : (
               <span>--</span>
