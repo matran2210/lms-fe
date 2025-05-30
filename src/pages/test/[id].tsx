@@ -29,15 +29,7 @@ import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import {
-  cloneDeep,
-  debounce,
-  isEmpty,
-  isNull,
-  isUndefined,
-  result,
-  uniqueId,
-} from 'lodash'
+import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -454,13 +446,13 @@ const TestDetail = () => {
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
     Array<{
       question_id: string
       total_attempt_time: number
-      scratch_pads: ScratchPad[]
+      scratch_pad: string
       [key: string]: any
     }>
   >([])
@@ -483,15 +475,21 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
+      const tabScratchPad = scratchPadValues?.find(
+        (e: ScratchPadValue) => e.id === currentPage,
+      )
+      setScratchPads(answerSubmitted?.scratch_pad || '')
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
           answerSubmitted: any,
+          scratchPad: string,
         ): {
           corrects: any
           solution: any
           isSelfReflection: boolean
           requirements: any[]
+          scratch_pad: string
         } => {
           if (!answerSubmitted?.[0]) {
             return {
@@ -499,6 +497,7 @@ const TestDetail = () => {
               solution: '',
               isSelfReflection: false,
               requirements: [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -530,6 +529,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -543,6 +543,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -552,6 +553,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -565,6 +567,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -573,17 +576,19 @@ const TestDetail = () => {
             solution: solution,
             isSelfReflection: is_self_reflection,
             requirements: requirements,
+            scratch_pad: scratchPad,
           }
         }
 
         const dataCorrectAndSolution = getCorrectAndSolution(
           objTab,
           answerSubmitted?.results,
+          answerSubmitted?.scratch_pad,
         )
 
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
-          : { ...objTab }
+          : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -939,9 +944,9 @@ const TestDetail = () => {
     })
   }
 
-  const [scratchPadValues, setScratchPadValues] = useState<
-    ScratchPadValue | null | undefined
-  >()
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
 
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
@@ -1253,7 +1258,6 @@ const TestDetail = () => {
       setTabs(savedAnswer)
     }
     setLoading(false)
-    setScratchPadValues(null)
   }
 
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
@@ -1465,7 +1469,7 @@ const TestDetail = () => {
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      scratch_pads: scratchPads || [],
+      scratch_pad: scratchPads || '',
       flag: currentTabContent?.flag,
       is_viewed_answer:
         action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
@@ -1555,7 +1559,7 @@ const TestDetail = () => {
             (quizDetail?.quiz_timed
               ? timeRef?.current?.handleGetTime() || 0
               : 0),
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           answer: requirementAnswers,
         }
       }
@@ -1684,7 +1688,7 @@ const TestDetail = () => {
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           total_attempt_time:
             quizDetail.quiz_timed * 60 -
             (quizDetail.quiz_timed
@@ -2298,6 +2302,7 @@ const TestDetail = () => {
                   optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
                     if (id) {
+                      setScratchPads('')
                       handleSubmitAnswer('change-tab')
                       setEssayData(undefined)
                       handleChangeTab(id)
@@ -2738,6 +2743,7 @@ const TestDetail = () => {
                         (e: any) => e.id === currentPage,
                       )
                       if (filteredTabs[index + 1].id) {
+                        setScratchPads('')
                         handleSubmitAnswer('change-tab')
                         setEssayData(undefined)
                         handleChangeTab(filteredTabs[index + 1].id)
@@ -2756,8 +2762,6 @@ const TestDetail = () => {
           <TestScratchPads
             currentPage={currentPage}
             exhibitData={exhibitData}
-            scratchPadValues={scratchPadValues}
-            setScratchPadValues={setScratchPadValues}
             scratchPads={scratchPads}
             setScratchPads={setScratchPads}
             onFocusingPad={onFocusingPad}
@@ -2765,6 +2769,8 @@ const TestDetail = () => {
             handleCloseScratchPad={handleCloseScratchPad}
             openScratchPad={openScratchPad}
             exhibitText={exhibitText}
+            scratchPadValues={scratchPadValues}
+            setScratchPadValues={setScratchPadValues}
           />
           {/** End Scratchpads */}
 
