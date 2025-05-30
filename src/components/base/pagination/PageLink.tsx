@@ -74,7 +74,7 @@ const PageLink = ({
           ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
           : 'min-h-9.5 max-h-10 min-w-9.5 text-sm font-normal leading-5.5'
       } relative flex cursor-pointer items-center justify-center rounded p-2
-      ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
+      ${isViewedProp && type !== 'row' ? 'bg-gray-12 text-white' : ''} ${
         active
           ? 'border-active bg-primary text-white'
           : !isViewedProp
