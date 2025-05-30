@@ -1300,14 +1300,6 @@ select:focus {
   --tw-ring-color: #ffb800;
 }
 
-.ant-tabs-nav {
-  @apply px-8 pt-2;
-}
-
-.ant-tabs-tab > div {
-  @apply pb-1 font-semibold text-secondary;
-}
-
 .ant-tabs-tab.ant-tabs-tab-active > div {
   @apply text-heading !important;
 }
