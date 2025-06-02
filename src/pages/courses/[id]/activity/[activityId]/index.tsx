@@ -1,4 +1,4 @@
-import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
+import { CloseIcon, DownloadIcon, HourglassIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -17,7 +17,11 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { truncateBySpace, truncateString } from '@utils/index'
+import {
+  convertMinutesToHourFormat,
+  truncateBySpace,
+  truncateString,
+} from '@utils/index'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
@@ -617,7 +621,7 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex overflow-x-auto py-6 pb-8 text-medium-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
@@ -677,50 +681,55 @@ const ActivityPage = () => {
             </>
           </>
           {/* Main Activity */}
-          <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+          <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col gap-6">
             {/* Header */}
-            <div className="bg-gray-3 px-6 ">
-              <div
-                className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
-                  activity?.course_outcomes?.length > 0
-                    ? 'borderColor-default border-b'
-                    : ''
-                }`}
-              >
-                <div className="text-2xl font-medium ">
-                  <Tooltip
-                    title={activity?.name?.length > 95 && activity?.name}
-                  >
-                    {activity?.name}
-                  </Tooltip>
-                </div>
-                <div className="whitespace-nowrap text-sm text-gray-1">
-                  {activity?.duration || 0}{' '}
-                  {activity?.duration > 1 ? 'mins' : 'min'} estimated
-                </div>
+            <div
+              className={`flex w-full select-none items-center justify-between gap-4`}
+            >
+              <div className="text-2xl font-medium text-bw-13">
+                <Tooltip title={activity?.name?.length > 95 && activity?.name}>
+                  {activity?.name}
+                </Tooltip>
               </div>
-
-              {activity?.course_outcomes?.length > 0 && (
-                <div className={`pb-4 pt-6`}>
-                  <div className="mb-2 select-none text-base font-semibold">
-                    Learning Outcome:
-                  </div>
-
-                  <ul className="ml-3 select-none list-disc text-base">
-                    {activity?.course_outcomes?.map((e: any) => {
-                      return (
-                        <li className="ml-4" key={e?.id}>
-                          <EditorReader
-                            className="editor-wrap mt-1.5"
-                            text_editor_content={e.description}
-                          />
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              )}
+              <div className="flex items-center gap-1 whitespace-nowrap text-sm text-bw-13">
+                <HourglassIcon />
+                <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
+              </div>
             </div>
+
+            {/* {activity?.course_outcomes?.length > 0 */}
+            {true && (
+              <div className={` bg-white p-6`}>
+                <div className="mb-2 select-none text-base font-semibold">
+                  Learning Outcome:
+                </div>
+
+                <ul className="ml-3 select-none list-disc text-base">
+                  {/* {activity?.course_outcomes?.map((e: any) => { */}
+                  {[
+                    {
+                      id: 1,
+                      description:
+                        'LO1: Define and apply conceptual framework, including threats to the fundamental principles and safeguards. | Nắm được các định nghĩa, bao gồm các nguy cơ ảnh hưởng đến các nguyên tắc đạo đức và biện pháp phòng tránh.',
+                    },
+                    {
+                      id: 2,
+                      description:
+                        'LO2: Identify threats and discuss the safeguards to offset the threats to the fundamental principles | Nhận diện các nguy cơ và thảo luận các biện pháp để phòng chống các nguy cơ ảnh hưởng đến các nguyên tắc đạo đức.',
+                    },
+                  ]?.map((e: any) => {
+                    return (
+                      <li className="ml-4" key={e?.id}>
+                        <EditorReader
+                          className="editor-wrap mt-1.5"
+                          text_editor_content={e.description}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
 
             {/* Tabs */}
             <div className="bg-gray-3">
