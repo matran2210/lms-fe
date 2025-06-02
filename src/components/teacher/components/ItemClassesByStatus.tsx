@@ -15,6 +15,7 @@ import {
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from 'src/type/classes'
 import { CLASS_TEACHER_STATUS } from '@utils/constants'
+import Tooltip from 'src/common/Tooltip'
 
 const statusMap = {
   [CLASS_TEACHER_STATUS.NOT_STARTED]: 'Not Started',
@@ -172,7 +173,12 @@ const ItemClassesByStatus = ({
           {enableCourse ? (
             <span className="flex items-center gap-2 text-sm text-gray-400">
               <BookInClassIcon />
-              {truncateString(classes?.code, 15)}
+              <Tooltip
+                title={classes?.code}
+                showTooltip={classes?.code?.length > 15}
+              >
+                {truncateString(classes?.code, 15)}
+              </Tooltip>
             </span>
           ) : (
             <div className="name-class text-medium-sm text-gray-400">

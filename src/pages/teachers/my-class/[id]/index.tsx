@@ -13,6 +13,7 @@ import { ICertificateData } from 'src/type/classes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import Progress from '@components/my-class/progress-table/Progress'
+import dayjs from 'dayjs'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -61,7 +62,9 @@ const getCertificateData = (data: any): ICertificateData[] => [
   { label: 'Capacity', value: data?.capacity ?? '-' },
   {
     label: 'Duration',
-    value: data?.flexible_days ?? '-',
+    value: `${data?.started_at ? dayjs(data.started_at).format('DD/MM/YYYY') : '-'} - ${
+      data?.finished_at ? dayjs(data.finished_at).format('DD/MM/YYYY') : '-'
+    }`,
   },
   { label: 'Course', value: data?.course?.name },
   {
