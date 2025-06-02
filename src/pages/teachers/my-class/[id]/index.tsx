@@ -36,20 +36,25 @@ const tabs = [
   {
     id: 1,
     title: 'Overview',
+    urlTitle: 'overview',
   },
   {
     id: 2,
     title: 'Students',
+    urlTitle: 'students',
   },
   {
     id: 3,
     title: 'Teaching Progress',
+    urlTitle: 'progress',
   },
   {
     id: 4,
     title: 'Students Test Result',
+    urlTitle: 'students-test-result',
   },
 ]
+
 const getStandardSchedule = (data: any) => {
   return (
     <>
@@ -78,6 +83,7 @@ const getStandardSchedule = (data: any) => {
     </>
   )
 }
+
 const getCertificateData = (data: any): ICertificateData[] => [
   { label: 'Name', value: data?.name },
   { label: 'Code', value: data?.code },
