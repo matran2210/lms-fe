@@ -8,9 +8,8 @@
 }
 
 .display_expression {
-  grid-area: 1/2;
-  opacity: 0.6;
-  @apply text-xl font-normal;
+  opacity: 0.4;
+  @apply min-h-[25px] text-xl font-normal;
 }
 
 .display__next {
@@ -23,7 +22,7 @@
 }
 
 .calc__btn {
-  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-gray-2 text-3xl text-white;
+  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-gray-15 text-2xl text-bw-13;
 }
 
 .btn--span-2 {
@@ -31,8 +30,7 @@
 }
 
 .btn--colored {
-  @apply bg-primary;
-  color: $color-display;
+  @apply bg-primary text-white;
 }
 
 .warning {

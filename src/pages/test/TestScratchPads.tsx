@@ -87,7 +87,7 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
+            width: '344px',
             height: 'fit-content',
             top: 'calc(25% - 150px)',
             left: 'calc(25% - 200px)',
@@ -99,7 +99,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-            <div className="flex h-10 w-[344px] items-center justify-between rounded-t-xl border border-b-0 border-gray-12 bg-gray-100 px-5">
+            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-12 bg-gray-100 px-4 py-3">
               <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseModalIcon />
@@ -113,8 +113,8 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
-            height: '300px',
+            width: '412px',
+            height: '312px',
             top: 'calc(50% - 150px)',
             left: 'calc(50% - 200px)',
           }}
@@ -127,7 +127,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border">
-            <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+            <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
               <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>

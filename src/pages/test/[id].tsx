@@ -89,6 +89,7 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { Tooltip } from 'antd'
 
 declare global {
   interface Window {
@@ -2473,17 +2474,36 @@ const TestDetail = () => {
                   {hasScrollBar && (
                     <div className="ml-8 flex items-center">
                       {activeShowAll && <OptionShowAll />}
-                      <div
-                        className={clsx(
-                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
-                        )}
-                        onClick={() => {
-                          // setPageNums(activeShowAll ? arrPage : getPagination)
-                          setActiveShowAll(!activeShowAll)
-                        }}
+                      <Tooltip
+                        className="tooltip-show-all"
+                        title={
+                          <div className="flex items-center gap-1">
+                            {activeShowAll ? (
+                              <ShowLessIcon size={16} color="white" />
+                            ) : (
+                              <ShowMoreIcon size={16} color="white" />
+                            )}
+                            <span>
+                              {activeShowAll ? 'Show Less' : 'Show All'}
+                            </span>
+                          </div>
+                        }
                       >
-                        {!activeShowAll ? <ShowLessIcon /> : <ShowMoreIcon />}
-                      </div>
+                        <div
+                          className={clsx(
+                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
+                          )}
+                          onClick={() => {
+                            setActiveShowAll(!activeShowAll)
+                          }}
+                        >
+                          {!activeShowAll ? (
+                            <ShowLessIcon size={24} />
+                          ) : (
+                            <ShowMoreIcon size={24} />
+                          )}
+                        </div>
+                      </Tooltip>
                     </div>
                   )}
                 </div>

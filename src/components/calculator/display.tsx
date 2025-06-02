@@ -1,6 +1,10 @@
 import React from 'react'
-import displayLogic from './logic/displayLogic'
+import displayLogic, {
+  formatExpression,
+  formatResult,
+} from './logic/displayLogic'
 import { isEmpty } from 'lodash'
+import { formatNumber } from '@utils/formatNumber'
 
 interface IProps {
   total?: string
@@ -22,8 +26,10 @@ const Display = (props: IProps) => {
 
   return (
     <div className="calc__display">
-      <div className={classExpression}>{expression || lastExpression}</div>
-      <div className={classResult}>{result}</div>
+      <div className={classExpression}>
+        {formatExpression(expression || lastExpression)}
+      </div>
+      <div className={classResult}>{formatResult(result)}</div>
     </div>
   )
 }

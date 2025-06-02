@@ -17,3 +17,10 @@
     margin-left: var(--tooltip-content-margin-left);
   }
 }
+
+//Tooltip show all btn
+.tooltip-show-all {
+  .ant-tooltip-arrow {
+    bottom: 1px !important;
+  }
+}

@@ -1,6 +1,5 @@
 import React from 'react'
 import CalcButton from './calcButton'
-import DeleteIcon from '@assets/icons/CalculatorIcons/DeleteIcon'
 
 interface IProps {
   click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
