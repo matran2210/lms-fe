@@ -58,6 +58,7 @@ import LimitQuizModal from './limitQuizModal'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import HeaderTest from '@components/test/HeaderTest'
 import { trackGAEvent } from '@utils/google-analytics'
+import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -67,14 +68,9 @@ import {
   IDataQuestion,
   Requirement,
   RequirementItem,
-  ScratchPad,
   ScratchPadValue,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
-import { QuestionAPI } from '../api/question'
-import TestScratchPads from './TestScratchPads'
-import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
@@ -85,9 +81,11 @@ import {
   getValueSelectText,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
-import CompletingReportModal from './modal/CompletingReportModal'
-import dayjs from 'dayjs'
+import { QuestionAPI } from '../api/question'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
+import TestScratchPads from './TestScratchPads'
+import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
+import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 
 declare global {
   interface Window {
@@ -239,33 +237,25 @@ const TestDetail = () => {
         }
 
         const defaultValueEssay = () => {
-          if (!!getValues(`${currentTabID}_${essayData?.index}_answer`)) {
-            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+          const key = `${currentTabID}_${essayData?.index}_answer`
+          const valueFromForm = getValues(key)
+
+          if (valueFromForm) {
+            return valueFromForm
           }
-          // if (
-          //   !isUndefined(essayData?.req?.short_answer) &&
-          //   !isNull(essayData?.req?.short_answer)
-          // ) {
-          //   return essayData?.req?.short_answer
-          // }
-          if (
-            !!currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.short_answer
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.short_answer
+
+          const requirement =
+            currentTabContent?.data?.requirements?.[essayData?.index]
+
+          if (requirement?.short_answer) {
+            return requirement.short_answer
           }
-          if (
-            !!currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.answer_text
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.answer_text
+
+          if (requirement?.answer_text) {
+            return requirement.answer_text
           }
-          if (!!currentTabContent?.answer) {
-            return currentTabContent?.answer
-          }
-          return ''
+
+          return currentTabContent.answer
         }
 
         return (
