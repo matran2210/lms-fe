@@ -1,7 +1,7 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import ClassCard from '@components/card/ClassCard'
-import { ITabs } from 'src/type'
+import { ITabs, NumberToDayOfWeekMap } from 'src/type'
 import { ANIMATION, PageLink } from 'src/constants'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
@@ -14,6 +14,8 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import Progress from '@components/my-class/progress-table/Progress'
 import dayjs from 'dayjs'
+import { Space } from 'antd'
+import { capitalize } from 'lodash'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -48,6 +50,34 @@ const tabs = [
     title: 'Students Test Result',
   },
 ]
+const getStandardSchedule = (data: any) => {
+  return (
+    <>
+      <Space>
+        {data?.class_standard_schedules?.map((item: any) => (
+          <div
+            className="badge badge-light-dark badge-lg"
+            style={{ fontWeight: 500 }}
+            key={item.day_of_week}
+          >
+            {item.day_of_week !== null
+              ? `${capitalize(NumberToDayOfWeekMap[item.day_of_week])} | `
+              : ''}
+            {dayjs
+              .utc(`${dayjs().format('YYYY-MM-DD')}T${item.start_time}`)
+              .local()
+              .format('HH:mm')}{' '}
+            -{' '}
+            {dayjs
+              .utc(`${dayjs().format('YYYY-MM-DD')}T${item.end_time}`)
+              .local()
+              .format('HH:mm')}
+          </div>
+        ))}
+      </Space>
+    </>
+  )
+}
 const getCertificateData = (data: any): ICertificateData[] => [
   { label: 'Name', value: data?.name },
   { label: 'Code', value: data?.code },
@@ -66,6 +96,7 @@ const getCertificateData = (data: any): ICertificateData[] => [
       data?.finished_at ? dayjs(data.finished_at).format('DD/MM/YYYY') : '-'
     }`,
   },
+  { label: 'Standard Schedule', value: getStandardSchedule(data) },
   { label: 'Course', value: data?.course?.name },
   {
     label: 'Exam',

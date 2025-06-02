@@ -119,6 +119,8 @@ export interface IMyClass {
   course_type?: string
   course: { name: string }
   classes: IClass[]
+  started_at: Date
+  finished_at: Date
 }
 
 export interface ICourseCategory {
