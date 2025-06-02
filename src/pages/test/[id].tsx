@@ -1342,6 +1342,16 @@ const TestDetail = () => {
                   `${currentPage}_${reqIndex}_answer`,
                 )
 
+                //nếu bài làm là sheet và không có giá trị thì lưu lên BE là null
+                if (tabContent?.data?.response_option === 'SHEET') {
+                  if (!checkSheetAnswered(editorContent)) {
+                    return {
+                      ...requirement,
+                      answer_text: null,
+                    }
+                  }
+                }
+
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -2679,7 +2689,13 @@ const TestDetail = () => {
                                 essayData?.index !== indexReq && 'text-gray-1'
                               }`}
                               onClick={() => {
-                                setEssayData({ req: e, index: indexReq })
+                                if (e?.id !== essayData?.req?.id) {
+                                  //chọn requirement khác thì mới set lại state
+                                  setEssayData({ req: e, index: indexReq })
+                                  if (refEditor?.current) {
+                                    refEditor.current.reset()
+                                  }
+                                }
                                 rightSideRef?.current &&
                                   rightSideRef.current.scrollTo({
                                     top: 0,
