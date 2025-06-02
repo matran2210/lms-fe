@@ -1513,9 +1513,16 @@ const TestDetail = () => {
 
   const handleFlagQuestion = async (question_id: string) => {
     try {
+      const hasRequiment = currentTabContent?.data?.requirements?.length > 0
       const payload = {
         question_id,
         flag: !currentTabContent?.flag,
+        ...(hasRequiment && {
+          answer: currentTabContent?.data?.requirements.map((e: any) => ({
+            requirement_id: e.id,
+            question_id: question_id,
+          })),
+        }),
       }
       await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
       setTabs((prevTabs: Tab[]) =>
