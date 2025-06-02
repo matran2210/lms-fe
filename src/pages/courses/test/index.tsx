@@ -318,10 +318,10 @@ const TestModal = ({
           ? StatusQuizAttempt.Failed
           : StatusQuizAttempt.Passed
       }
-      return '--'
+      return '_ _'
     }
     return (
-      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '--'
+      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '_ _'
     )
   }
 
@@ -441,14 +441,14 @@ const TestModal = ({
       data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
           title={
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-center">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
               {!!data?.quiz?.quiz_timed &&
                 !!remainingTimeLastAttempt.current &&
                 renderShowOkButton() &&
                 renderOkButtonCaption() === 'Continue' && (
                   <div
-                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                    className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
                   >
                     <div className="m-auto">
                       <ClockIcon
@@ -480,9 +480,10 @@ const TestModal = ({
           showOkButton={renderShowOkButton()}
           onOk={onSubmit}
           okButtonCaption={renderOkButtonCaption()}
-          footerButtonClassName="flex justify-between item-center"
+          okButtonClass="w-full rounded-lg"
+          footerButtonClassName="flex flex-col justify-center items-center gap-3"
           cancelButtonCaption={'Cancel'}
-          cancelButtonClass={'!px-0'}
+          cancelButtonClass={'p-0 underline'}
           buttonSize="medium"
           icon={undefined}
           header={
@@ -490,7 +491,7 @@ const TestModal = ({
             renderOkButtonCaption() === 'Continue' &&
             data?.quiz?.attempt?.number_of_attempts ===
               data?.quiz?.limit_count && (
-              <div className="mt-8 text-center text-base !font-normal text-gray-1">
+              <div className="mt-8 text-center text-base !font-normal text-gray-200">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>
               </div>
@@ -504,40 +505,40 @@ const TestModal = ({
             renderOkButtonCaption() === 'Continue' &&
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
-            <>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Name:</div>
+            <div className="flex flex-col gap-6">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">Name:</div>
                 <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
                   {data?.name}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Pass Point:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">Pass Point:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.is_graded ? (
-                    <>{data?.quiz?.required_percent_score ?? '- -'}</>
+                    <>{data?.quiz?.required_percent_score ?? '_ _'}</>
                   ) : (
-                    <>--</>
+                    <>_ _</>
                   )}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Time Allowed:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">Time Allowed:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.quiz_timed
                     ? formatTime(data?.quiz?.quiz_timed * 60)
                     : 'Unlimited'}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Grading Method:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">Grading Method:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {capitalizeFirstLetter(selectedResult?.grading_method) ??
                     capitalizeFirstLetter(data?.quiz?.grading_method)}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">No of Attempts:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">No of Attempts:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.attempt?.number_of_attempts || 0}/
                   {data?.quiz?.is_limited
@@ -546,10 +547,10 @@ const TestModal = ({
                 </div>
               </div>
               {data?.quiz && (
-                <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+                <div className="flex justify-between gap-8 text-base">
                   <div className="flex items-center gap-2 hover:text-primary">
                     <div
-                      className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}
+                      className={`forcus-group:text-primary text-gray-200 ${isFocus ? 'text-primary' : ''}`}
                     >
                       Result:
                     </div>
@@ -608,7 +609,7 @@ const TestModal = ({
                     </div>
                     {isShowDetail() && (
                       <div
-                        className="ml-2 cursor-pointer text-state-info underline"
+                        className="ml-2 cursor-pointer text-primary underline"
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
@@ -632,8 +633,8 @@ const TestModal = ({
                   </div>
                 </div>
               )}
-              <div className="flex justify-between gap-8 py-6 text-base">
-                <div className="text-gray-1">Status:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-gray-200">Status:</div>
                 {data?.quiz?.is_graded &&
                 data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
                   getGradedStatus(data?.quiz?.attempt?.grading_status)
@@ -645,7 +646,7 @@ const TestModal = ({
                   </div>
                 )}
               </div>
-            </>
+            </div>
           )}
 
           <PopupCanNotRetakeTest
@@ -687,12 +688,12 @@ const TestModal = ({
             trackGAEvent('Click Button Cancel Modal Test')
           }}
           title={
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-center">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
               {!!data?.quiz?.quiz_timed &&
                 (remainingTime !== undefined && remainingTime >= 0 ? (
                   <div
-                    className={clsx(`item-center flex gap-2 font-normal`, {
+                    className={clsx(`flex items-center gap-2 font-normal`, {
                       'text-state-info': remainingTimeLastAttempt.current > 0,
                       'text-state-error': remainingTimeLastAttempt.current <= 0,
                     })}

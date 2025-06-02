@@ -747,7 +747,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal .ant-modal-content {
-  @apply rounded-none;
+  @apply rounded-2xl;
 }
 
 .sapp-modal .ant-modal-content {
@@ -770,8 +770,12 @@ textarea.is-invalid:focus {
   width: fit-content !important;
 }
 
+.sapp-modal .ant-modal-content .ant-modal-header {
+  @apply mb-0;
+}
+
 .sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
-  @apply text-4xl font-semibold text-bw-1;
+  @apply text-3xl font-bold text-bw-13;
 }
 
 .ant-modal-root .ant-modal-mask {
@@ -780,7 +784,7 @@ textarea.is-invalid:focus {
 
 .sapp-modal__opt-continue-test {
   .ant-modal-content {
-    @apply p-12 !important;
+    @apply p-10 !important;
   }
   .ant-radio-wrapper {
     &:hover {

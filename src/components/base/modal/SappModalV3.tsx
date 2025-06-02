@@ -61,7 +61,7 @@ const SappModalV3 = ({
   cancelButtonCaption,
   cancelButtonClass,
   classNameModal,
-  width = 630,
+  width = 560,
   handleClose,
   header,
   icon,
@@ -99,7 +99,7 @@ const SappModalV3 = ({
       )}
 
       {(content || children) && (
-        <div className="mb-12 mt-4 text-center text-medium-sm text-gray-1">
+        <div className="my-10 text-center text-medium-sm text-gray-200">
           {content ?? children}
         </div>
       )}
