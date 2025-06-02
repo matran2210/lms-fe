@@ -1,7 +1,8 @@
+import DeleteIcon from '@assets/icons/CalculatorIcons/DeleteIcon'
 import React from 'react'
 
 interface IProps {
-  value?: string
+  value?: string | React.ReactNode
   colored?: boolean
   span?: number
 }
@@ -11,9 +12,15 @@ const CalcButton = (props: IProps) => {
   const classList = `calc__btn
       ${colored ? ' btn--colored' : ''} 
       ${span !== 1 ? ` btn--span-${span}` : ''}`
+
+  const convertValueToIcon = (val: any) => {
+    if (val === 'delete') return <DeleteIcon />
+    return val
+  }
+
   return (
     <button type="button" className={classList} data-name={value}>
-      {value}
+      {convertValueToIcon(value)}
     </button>
   )
 }

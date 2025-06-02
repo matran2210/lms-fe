@@ -98,9 +98,9 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full rounded-xl">
-            <div className="flex h-10 w-full items-center justify-between rounded-t-xl bg-gray-2 px-5">
-              <div className="text-sm font-normal">Calculator</div>
+          <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+            <div className="flex h-10 w-[344px] items-center justify-between rounded-t-xl border border-b-0 border-gray-12 bg-gray-100 px-5">
+              <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseModalIcon />
               </button>

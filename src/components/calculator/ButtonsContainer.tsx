@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import CalcButton from './calcButton'
+import DeleteIcon from '@assets/icons/CalculatorIcons/DeleteIcon'
 
 interface IProps {
   click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
@@ -36,8 +36,9 @@ const ButtonsContainer = (props: IProps) => {
       <CalcButton value="3" />
       <CalcButton value="+" colored />
 
-      <CalcButton value="0" span={2} />
       <CalcButton value="." />
+      <CalcButton value="0" />
+      <CalcButton value="delete" />
       <CalcButton value="=" colored />
     </div>
   )

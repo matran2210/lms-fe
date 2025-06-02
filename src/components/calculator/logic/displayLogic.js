@@ -1,24 +1,21 @@
 const displayLogic = (total, next, operation) => {
-  let display = 0
-  let holder = 0
-  let operationChar = 0
-  if (operation) {
-    operationChar = operation
+  let expression = ''
+  let result = '0'
+
+  if (total && operation && next) {
+    expression = `${total} ${operation} ${next}`
+    result = next
+  } else if (total && operation) {
+    expression = `${total} ${operation}`
+    result = total
+  } else if (next) {
+    expression = ''
+    result = next
+  } else if (total) {
+    result = total
   }
-  if (total) {
-    display = total
-  }
-  if (next) {
-    display = next
-  }
-  if (total && operation) {
-    display = ' '
-    holder = total
-    if (next) {
-      display = next
-    }
-  }
-  return { display, holder, operationChar }
+
+  return { expression, result }
 }
 
 export default displayLogic
