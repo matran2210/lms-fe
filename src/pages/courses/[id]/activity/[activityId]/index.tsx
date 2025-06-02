@@ -1,4 +1,12 @@
-import { CloseIcon, DownloadIcon, HourglassIcon, LinkIcon } from '@assets/icons'
+import {
+  CloseIcon,
+  CollapseArrowIcon,
+  DownloadIcon,
+  HourglassIcon,
+  IconDownArrow,
+  LinkIcon,
+  StarCircleIcon,
+} from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -22,6 +30,8 @@ import {
   truncateBySpace,
   truncateString,
 } from '@utils/index'
+import { Collapse } from 'antd'
+import clsx from 'clsx'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
@@ -615,7 +625,104 @@ const ActivityPage = () => {
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }
+  const getItemsLearningOutcome = [
+    {
+      key: 'learning_outcome',
+      label: (
+        <div className={'select-none text-lg font-medium text-bw-13'}>
+          Learning Outcome
+        </div>
+      ),
+      children: (
+        <>
+          {activity?.course_outcomes?.length > 0 && (
+            <div className="mt-6 select-none text-base">
+              {activity?.course_outcomes?.map((e: any, index: number) => {
+                return (
+                  <div
+                    className={clsx('flex items-start gap-2', {
+                      'mb-4': index < activity?.course_outcomes?.length - 1,
+                    })}
+                    key={e?.id}
+                  >
+                    <div className="text-primary">
+                      <StarCircleIcon />
+                    </div>
+                    <EditorReader
+                      className="learning-outcome-content"
+                      text_editor_content={e.description}
+                    />
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </>
+      ),
+    },
+  ]
+  const getItemsActivityResource = [
+    {
+      key: 'activity_resource',
+      label: (
+        <div className={'select-none text-lg font-medium text-bw-13'}>
+          Activity Resource
+        </div>
+      ),
+      children: (
+        <>
+          {activity?.files?.length > 0 && (
+            <div className="mt-4 select-none text-sm">
+              {activity?.files.map((e: any, index: number) => {
+                const isPreviewFile =
+                  e.resource.suffix_type !== SUFFIX_TYPE.GENERAL_FILE &&
+                  e.resource.name.slice(-4) !== '.csv'
 
+                return (
+                  <div
+                    className={clsx(`flex items-start gap-8`, {
+                      'mb-3': index < activity?.files?.length - 1,
+                    })}
+                    key={index}
+                  >
+                    <div className="">
+                      <p
+                        className="cursor-pointer text-blue-7 underline hover:text-primary"
+                        onClick={() => {
+                          isPreviewFile
+                            ? handleOpenScratchPad(
+                                {
+                                  type: 'file',
+                                },
+                                e?.resource?.url,
+                                e?.resource?.name,
+                              )
+                            : download(e?.resource?.name, e?.resource?.file_key)
+
+                          trackGAEvent('Click Open File Resource')
+                        }}
+                      >
+                        {e?.resource?.name}
+                      </p>
+                    </div>
+                    <div
+                      className="cursor-pointer text-dark-1"
+                      onClick={() => {
+                        download(e?.resource?.name, e?.resource?.file_key)
+                        trackGAEvent('Click Button Download Resource Activity')
+                      }}
+                    >
+                      <DownloadIcon color="currentColor" />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </>
+      ),
+    },
+  ]
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
@@ -697,39 +804,28 @@ const ActivityPage = () => {
               </div>
             </div>
 
-            {/* {activity?.course_outcomes?.length > 0 */}
-            {true && (
-              <div className={` bg-white p-6`}>
-                <div className="mb-2 select-none text-base font-semibold">
-                  Learning Outcome:
-                </div>
-
-                <ul className="ml-3 select-none list-disc text-base">
-                  {/* {activity?.course_outcomes?.map((e: any) => { */}
-                  {[
-                    {
-                      id: 1,
-                      description:
-                        'LO1: Define and apply conceptual framework, including threats to the fundamental principles and safeguards. | Nắm được các định nghĩa, bao gồm các nguy cơ ảnh hưởng đến các nguyên tắc đạo đức và biện pháp phòng tránh.',
-                    },
-                    {
-                      id: 2,
-                      description:
-                        'LO2: Identify threats and discuss the safeguards to offset the threats to the fundamental principles | Nhận diện các nguy cơ và thảo luận các biện pháp để phòng chống các nguy cơ ảnh hưởng đến các nguyên tắc đạo đức.',
-                    },
-                  ]?.map((e: any) => {
-                    return (
-                      <li className="ml-4" key={e?.id}>
-                        <EditorReader
-                          className="editor-wrap mt-1.5"
-                          text_editor_content={e.description}
-                        />
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
+            {/* Learning Outcome */}
+            <Collapse
+              bordered={false}
+              expandIconPosition="end"
+              defaultActiveKey={['learning_outcome']}
+              expandIcon={({ isActive }) => (
+                <CollapseArrowIcon selected={isActive} />
+              )}
+              items={getItemsLearningOutcome}
+              className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+            />
+            {/* Activity Resource */}
+            <Collapse
+              bordered={false}
+              expandIconPosition="end"
+              defaultActiveKey={['activity_resource']}
+              expandIcon={({ isActive }) => (
+                <CollapseArrowIcon selected={isActive} />
+              )}
+              items={getItemsActivityResource}
+              className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+            />
 
             {/* Tabs */}
             <div className="bg-gray-3">
@@ -841,88 +937,6 @@ const ActivityPage = () => {
                       return null
                     })}
                   </div>
-
-                  {activity?.files?.length > 0 && (
-                    <>
-                      <SAPPBorder />
-                      <div
-                        className={`pt-8 ${
-                          getPreviousTabId() ? 'pb-4' : 'pb-0'
-                        } `}
-                      >
-                        <div className="text-base font-semibold">Resource:</div>
-                        <ul className="list-disc text-base">
-                          {activity?.files.map((e: any, index: number) => {
-                            const isPreviewFile =
-                              e.resource.suffix_type !==
-                                SUFFIX_TYPE.GENERAL_FILE &&
-                              e.resource.name.slice(-4) !== '.csv'
-
-                            return (
-                              <div
-                                className={`flex justify-between ${
-                                  index === 0 ? 'mt-4' : 'mt-5'
-                                }`}
-                                key={index}
-                              >
-                                <div className="flex">
-                                  <div className="mr-2 flex self-center">
-                                    <LinkIcon />
-                                  </div>
-                                  <Tooltip
-                                    title={
-                                      isPreviewFile
-                                        ? 'Preview File'
-                                        : 'Download file'
-                                    }
-                                    showTooltip={true}
-                                    placement="right"
-                                  >
-                                    <p
-                                      className="cursor-pointer text-gray-1 hover:text-primary"
-                                      onClick={() => {
-                                        isPreviewFile
-                                          ? handleOpenScratchPad(
-                                              {
-                                                type: 'file',
-                                              },
-                                              e?.resource?.url,
-                                              e?.resource?.name,
-                                            )
-                                          : download(
-                                              e?.resource?.name,
-                                              e?.resource?.file_key,
-                                            )
-
-                                        trackGAEvent('Click Open File Resource')
-                                      }}
-                                    >
-                                      {e?.resource?.name}
-                                    </p>
-                                  </Tooltip>
-                                </div>
-                                <a
-                                  className="cursor-pointer"
-                                  onClick={() => {
-                                    download(
-                                      e?.resource?.name,
-                                      e?.resource?.file_key,
-                                    )
-                                    trackGAEvent(
-                                      'Click Button Download Resource Activity',
-                                    )
-                                  }}
-                                >
-                                  <DownloadIcon />
-                                </a>
-                              </div>
-                            )
-                          })}
-                        </ul>
-                      </div>
-                      {getPreviousTabId() && <SAPPBorder className="mt-4" />}
-                    </>
-                  )}
 
                   <div className="mt-8 flex flex-wrap justify-between gap-5">
                     {getPreviousTabId() && (

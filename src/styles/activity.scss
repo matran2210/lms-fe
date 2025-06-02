@@ -3,3 +3,19 @@
     text-rendering: optimizeLegibility;
   }
 }
+
+.learning-activity-collapse {
+  .ant-collapse-header {
+    @apply p-0;
+    padding: 0 !important;
+  }
+  .ant-collapse-content-box {
+    @apply p-0;
+    padding: 0 !important;
+  }
+  .learning-outcome-content {
+    p {
+      @apply mb-0;
+    }
+  }
+}
