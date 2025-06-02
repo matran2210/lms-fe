@@ -2477,11 +2477,15 @@ const TestDetail = () => {
                       <Tooltip
                         className="tooltip-show-all"
                         title={
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-2">
                             {activeShowAll ? (
-                              <ShowLessIcon size={16} color="white" />
+                              <div className="rounded-full bg-white">
+                                <ShowLessIcon size={16} color="#404041" />
+                              </div>
                             ) : (
-                              <ShowMoreIcon size={16} color="white" />
+                              <div className="rounded-full bg-white">
+                                <ShowMoreIcon size={16} color="#404041" />
+                              </div>
                             )}
                             <span>
                               {activeShowAll ? 'Show Less' : 'Show All'}
@@ -2491,7 +2495,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
+                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
