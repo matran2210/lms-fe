@@ -1,7 +1,6 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 import LayoutFilter from '@components/layout/TeacherFilter/index'
 import ChapterTestFilter from '@components/teacher/components/ChapterTestFilter'
 import { useForm } from 'react-hook-form'
@@ -9,8 +8,7 @@ import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { ITabs } from 'src/type'
 import { PageLink } from 'src/constants'
 import SappTable from '@components/table/SappTable'
-import { StudentKey, TeacherKey } from '@pages/api/queryKey'
-import { TablePaginationConfig } from 'antd'
+import { StudentKey } from '@pages/api/queryKey'
 import StudentCell from '@components/teacher/components/StudentCell'
 import { IStudentClassDetail } from 'src/type/classes'
 import DateActionCell from '@components/teacher/components/DateActionCell'
@@ -61,7 +59,7 @@ const ChapterTest = () => {
       title: 'Class Detail',
     },
     {
-      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}`,
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}?tabId=students-test-result`,
       title: 'Test/Quiz List',
     },
     { link: '', title: 'Chapter Test' },
