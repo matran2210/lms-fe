@@ -22,9 +22,10 @@ const ModalFoundationCompleted = ({
       header="Foundation Not Completed"
       okButtonCaption="Continue with Foundation Course"
       cancelButtonCaption="Skip and start this course"
-      isMaskClosable={false}
+      isMaskClosable={true}
       fullWidthBtn={true}
       buttonSize="extra"
+      isClosable
     >
       <div className="mt-4 text-center text-medium-sm text-gray-1">
         It looks like you haven&apos;t finished the Foundation Course.

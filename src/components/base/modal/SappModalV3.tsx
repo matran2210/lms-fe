@@ -37,6 +37,7 @@ interface IProps {
   children?: ReactNode
   isMaskClosable?: boolean
   headerClassName?: string
+  isClosable?: boolean
 }
 
 const SappModalV3 = ({
@@ -69,6 +70,7 @@ const SappModalV3 = ({
   children,
   isMaskClosable = true,
   headerClassName,
+  isClosable = false,
 }: IProps) => {
   return (
     <Modal
@@ -81,6 +83,7 @@ const SappModalV3 = ({
       onCancel={handleClose || handleCancel}
       width={width}
       maskClosable={isMaskClosable}
+      closable={isClosable}
     >
       {icon && (
         <div className="flex justify-center">
