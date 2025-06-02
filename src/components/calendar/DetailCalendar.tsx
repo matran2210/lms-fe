@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
 import { TEST_TYPE_ENUM } from '@utils/constants'
+import { LearningMode } from 'src/type/progress'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -97,7 +98,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         </>
       )
     }
-    if (data?.mode === 'ONLINE') {
+    if (data?.mode === LearningMode?.ONLINE) {
       return (
         <>
           <div className="col-span-1 text-gray-1">Lesson Date</div>
@@ -150,12 +151,12 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       }}
       title="Event Infomation"
       confirmOnClose={false}
-      footer={data?.mode === 'ONLINE'}
+      footer={data?.mode === LearningMode?.ONLINE}
       drawerSubId={'-notes-list'}
       heightBody={'h-[calc(100vh-112px)]'}
       showCancelButton={false}
       showSubmitButton={
-        data?.mode === 'ONLINE' && dateOpenSection.isBefore(dateNow)
+        data?.mode === LearningMode?.ONLINE && dateOpenSection.isBefore(dateNow)
       }
       btnSubmitTile={
         LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
@@ -204,9 +205,12 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                 {!data?.schedule.is_holiday &&
                   dayjs(
                     `${data?.schedule.end_date}T${data?.schedule.end_time}`,
-                  ).isBefore(new Date()) && (
+                  ).isBefore(new Date()) &&
+                  ![LearningMode.OFFLINE, LearningMode?.LIVE_ONLINE]?.includes(
+                    data?.mode as LearningMode,
+                  ) && (
                     <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
-                      <SappIcon icon={'warningIcon'}></SappIcon>
+                      <SappIcon icon={'warningIcon'} />
                       <div className="font-medium text-accent-error">
                         Overdue
                       </div>
@@ -228,7 +232,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   <div className="col-span-1 break-words">{data?.name}</div>
                 </>
               )}
-              {data?.mode === 'OFFLINE' && (
+              {data?.mode === LearningMode.OFFLINE && (
                 <>
                   <div className="col-span-1 text-gray-1">Classroom</div>
                   <div className="col-span-1 break-words">
@@ -242,12 +246,17 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   </div>
                 </>
               )}
-              {data?.mode && ['LIVE_ONLIVE'].includes(data?.mode) && (
-                <>
-                  <div className="col-span-1 text-gray-1">Link meeting</div>
-                  <div className="col-span-1">{data?.class?.link_meeting}</div>
-                </>
-              )}
+              {data?.mode &&
+                [LearningMode?.LIVE_ONLINE].includes(
+                  data?.mode as LearningMode,
+                ) && (
+                  <>
+                    <div className="col-span-1 text-gray-1">Link meeting</div>
+                    <div className="col-span-1">
+                      {data?.class?.link_meeting}
+                    </div>
+                  </>
+                )}
             </div>
           )}
         </div>
