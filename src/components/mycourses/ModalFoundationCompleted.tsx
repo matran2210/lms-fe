@@ -6,17 +6,20 @@ interface IModalFoundationCompletedProps {
   openContinue: boolean
   handleSkipCourse: () => void
   handleContinueFoundation: () => void
+  handleClose: () => void
 }
 
 const ModalFoundationCompleted = ({
   openContinue,
   handleContinueFoundation,
   handleSkipCourse,
+  handleClose,
 }: IModalFoundationCompletedProps) => {
   return (
     <SappModalV3
       open={openContinue}
       handleCancel={handleSkipCourse}
+      handleClose={handleClose}
       onOk={handleContinueFoundation}
       icon={<ActiveIcon />}
       header="Foundation Not Completed"
