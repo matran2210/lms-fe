@@ -9,13 +9,14 @@ import { useEffect, useState } from 'react'
 import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
-import { ICertificateData } from 'src/type/classes'
+import { ICertificateData, IMyClass } from 'src/type/classes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import Progress from '@components/my-class/progress-table/Progress'
 import dayjs from 'dayjs'
 import { Space } from 'antd'
 import { capitalize } from 'lodash'
+import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -55,30 +56,31 @@ const tabs = [
   },
 ]
 
-const getStandardSchedule = (data: any) => {
+const getStandardSchedule = (data: IMyClass) => {
   return (
     <>
       <Space>
-        {data?.class_standard_schedules?.map((item: any) => (
-          <div
-            className="badge badge-light-dark badge-lg"
-            style={{ fontWeight: 500 }}
-            key={item.day_of_week}
-          >
-            {item.day_of_week !== null
-              ? `${capitalize(NumberToDayOfWeekMap[item.day_of_week])} | `
-              : ''}
-            {dayjs
-              .utc(`${dayjs().format('YYYY-MM-DD')}T${item.start_time}`)
-              .local()
-              .format('HH:mm')}{' '}
-            -{' '}
-            {dayjs
-              .utc(`${dayjs().format('YYYY-MM-DD')}T${item.end_time}`)
-              .local()
-              .format('HH:mm')}
-          </div>
-        ))}
+        {data?.class_standard_schedules?.map(
+          (item: ClassStandardScheduleItem) => (
+            <div
+              className="rounded-md bg-gray-2 px-2 py-1"
+              key={item.day_of_week}
+            >
+              {item.day_of_week !== null
+                ? `${capitalize(NumberToDayOfWeekMap[item.day_of_week])} | `
+                : ''}
+              {dayjs
+                .utc(`${dayjs().format('YYYY-MM-DD')}T${item.start_time}`)
+                .local()
+                .format('HH:mm')}{' '}
+              -{' '}
+              {dayjs
+                .utc(`${dayjs().format('YYYY-MM-DD')}T${item.end_time}`)
+                .local()
+                .format('HH:mm')}
+            </div>
+          ),
+        )}
       </Space>
     </>
   )
