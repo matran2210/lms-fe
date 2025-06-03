@@ -3,8 +3,8 @@ import { trackGAEvent } from '@utils/google-analytics'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { PageLink, TitleSidebar } from 'src/constants'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { LOCAL_STORAGE_KEYS, PageLink, TitleSidebar } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
@@ -14,6 +14,17 @@ import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { LANG_SIGNIN } from 'src/constants/lang'
+import { isEmpty } from 'lodash'
+import {
+  getCountUnRead,
+  getNotification,
+  getNotificationDetail,
+  loadMoreNotification,
+  markAllNotifications,
+  updateStatusAll,
+} from 'src/redux/slice/Notification/Notification'
+import { NotificationAPI } from '@pages/api/notification'
+import { SappNotificationComponent } from 'sapp-notification-package'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -26,13 +37,40 @@ export default function MenuItem({
   setOpenResource,
   closeSideBar,
 }: MenuItemProps) {
+  const storedCount = localStorage.getItem(
+    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+  )
+  const [notificationUnread, setNotificationUnread] = useState(() => {
+    return parseInt(storedCount ?? '0', 10)
+  })
+
+  const tabs = [
+    {
+      id: 1,
+      title: 'All Notifications',
+    },
+    {
+      id: 2,
+      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
+    },
+  ]
+
+  const notifyLists = useAppSelector(
+    (state) => state.notificationReducer.list_notifications,
+  )
+  const notifyDetail = useAppSelector((state) => state.notificationReducer)
+  const [isViewDetail, setIsViewDetail] = useState(false)
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-
+  const [openNotification, setOpenNotification] = useState(false)
+  const [selectedTab, setSelectedTab] = useState<number>(tabs[0].id)
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const isFetching = useRef(false)
+  const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
   const onClick = () => {
     toggleExpanded((prev) => !prev)
@@ -73,8 +111,30 @@ export default function MenuItem({
       pathname: `/courses/my-course/${router.query.courseId || router.query.id}/exam-information`,
     })
   }
+  const refreshNotification = (isRefresh = false) => {
+    const getNotifications = async (params: Object) => {
+      try {
+        isRefresh && (await dispatch(getCountUnRead()))
+        await dispatch(getNotification(params))
+      } catch (error) {}
+    }
+
+    getNotifications({
+      page_index: 1,
+      page_size: 10,
+      ...(selectedTab === 2 && {
+        is_read: false,
+      }),
+    })
+  }
 
   const handleActive = () => {
+    if (isEmpty(url)) {
+      setOpenNotification(true)
+      if (isEmpty(notifyLists)) {
+        refreshNotification(false)
+      }
+    }
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
@@ -94,6 +154,135 @@ export default function MenuItem({
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info
   }
+  const countNotificationsUnRead = async () => {
+    try {
+      await dispatch(getCountUnRead())
+    } catch (error) {}
+  }
+  const markAllRead = async () => {
+    try {
+      await dispatch(markAllNotifications())
+      dispatch(updateStatusAll())
+      await countNotificationsUnRead()
+    } catch (error) {}
+  }
+
+  const handleMarkAll = () => {
+    setOpenNotification(false)
+    markAllRead()
+    trackGAEvent('Click Button Mark All As Read Notification')
+  }
+
+  const handleMarkById = async (ids: string[]) => {
+    try {
+      const res = await NotificationAPI.markById(ids, true)
+      if (!res?.data) {
+        return
+      }
+      refreshNotification(true)
+    } catch (error) {}
+  }
+
+  const handleUnMarkById = async (ids: string[]) => {
+    try {
+      const res = await NotificationAPI.markById(ids, false)
+      if (!res?.data) {
+        return
+      }
+      refreshNotification(true)
+    } catch (error) {}
+  }
+
+  const getApiNotificationDetail = async (
+    id: string,
+    redirect: string | null,
+    content: string,
+  ) => {
+    try {
+      if (id !== notifyDetail?.id) {
+        const res = await dispatch(getNotificationDetail(id))
+        if (res) {
+          await countNotificationsUnRead()
+        }
+      }
+      if (!isEmpty(redirect)) {
+        router.replace(`/${content}`)
+      }
+    } catch (error) {}
+  }
+
+  const handleViewDetail = async (
+    id: string,
+    redirect?: string,
+    content?: string,
+    tag?: string,
+  ) => {
+    await getApiNotificationDetail(id, redirect ?? null, content ?? '')
+    const regexTagA = /<a\b[^>]*>(.*?)<\/a>/
+    const containsAnchorTag = regexTagA.test(content ?? '')
+    if (containsAnchorTag && tag === 'STRONG') {
+      setIsViewDetail(false)
+    } else if (!isEmpty(redirect)) {
+      setOpenNotification(false)
+    } else if (isEmpty(redirect)) {
+      setIsViewDetail((prev) => !prev)
+    }
+  }
+
+  const handleBack = () => {
+    setIsViewDetail(false)
+    refreshNotification(true)
+  }
+
+  useEffect(() => {
+    if (openNotification) refreshNotification(false)
+  }, [selectedTab])
+
+  useEffect(() => {
+    const handleScroll = async () => {
+      const scrollEl = scrollRef.current
+      if (scrollEl) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollEl
+        if (scrollTop + clientHeight + 200 >= scrollHeight) {
+          const { page_index, page_size, total_pages } = pagination
+          // Kiểm tra đã load hết chưa
+          if (page_index >= total_pages || isFetching.current) return
+          try {
+            isFetching.current = true
+            await dispatch(
+              loadMoreNotification({
+                page_index: page_index + 1,
+                page_size,
+                ...(selectedTab === 2 && {
+                  is_read: false,
+                }),
+              }),
+            )
+            await countNotificationsUnRead()
+          } catch (err) {
+          } finally {
+            isFetching.current = false
+          }
+        }
+      }
+    }
+
+    const scrollEl = scrollRef.current
+    scrollEl?.addEventListener('scroll', handleScroll)
+
+    return () => {
+      scrollEl?.removeEventListener('scroll', handleScroll)
+    }
+  }, [pagination])
+
+  useEffect(() => {
+    window.addEventListener('storage', (e) => {
+      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
+      setNotificationUnread(parseInt(count ?? '0', 10))
+    })
+
+    return () => window.removeEventListener('storage', () => {})
+  }, [])
 
   const renderMenuContent = () => {
     return (
@@ -244,7 +433,7 @@ export default function MenuItem({
           }`}
           onClick={() => closeSideBar()}
         >
-          {url !== '#' ? (
+          {url !== '#' && !isEmpty(url) ? (
             <Link
               href={
                 url === PageLink.RESULTS
@@ -287,6 +476,26 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
+      {openNotification && (
+        <SappNotificationComponent
+          notifyDetail={notifyDetail}
+          tabs={tabs}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+          handleMarkAll={handleMarkAll}
+          handleMarkById={handleMarkById}
+          handleUnMarkById={handleUnMarkById}
+          handleBack={handleBack}
+          isViewDetail={isViewDetail}
+          setOpenNotification={setOpenNotification}
+          openNotification={openNotification}
+          handleViewDetail={handleViewDetail}
+          trackGAEvent={trackGAEvent}
+          notifyLists={notifyLists}
+          notificationUnread={notificationUnread}
+          scrollRef={scrollRef}
+        />
+      )}
     </>
   )
 }
