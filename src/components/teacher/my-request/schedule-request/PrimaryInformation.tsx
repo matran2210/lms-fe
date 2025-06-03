@@ -7,15 +7,22 @@ import {
 } from 'src/type/teachers/request-schedule.interface'
 import {
   capitalizeFirstLetter,
+  convertSlugToTitle,
   sappFormatDate,
   truncateString,
 } from '@utils/index'
 import ScheduleSkeleton from '@components/base/skeleton/ScheduleSkeleton'
 import PrimaryInfoItem from '@components/teacher/my-request/schedule-request/PrimaryInfoItem'
 import { formatTimeOnlyHourMinute } from '@utils/helpers'
-import { CONSTRUCTION_MODE } from 'src/constants/my-request'
+import {
+  CONSTRUCTION_MODE,
+  TYPE_TEACHING_REQUEST,
+} from 'src/constants/my-request'
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
+import Tooltip from 'src/common/Tooltip'
+import TooltipParagraph from 'src/common/TooltipParagraph'
+
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
   selectedRequest: IScheduleRequestItem
@@ -27,7 +34,7 @@ const PrimaryInformation = ({
   isLoading,
 }: IProps) => {
   const renderDayOfWeek = (dayOfWeek: number) => {
-    switch (dayOfWeek) {
+    switch (Number(dayOfWeek)) {
       case 0:
       case 7:
         return 'Chủ Nhật'
@@ -38,7 +45,7 @@ const PrimaryInformation = ({
       case 3:
         return 'Thứ Tư'
       case 4:
-        return 'Thứ Nam'
+        return 'Thứ Năm'
       case 5:
         return 'Thứ Sáu'
       case 6:
@@ -50,6 +57,19 @@ const PrimaryInformation = ({
 
   const isOffline = dataDetail?.mode === CONSTRUCTION_MODE.OFFLINE
   const isOnline = dataDetail?.mode === CONSTRUCTION_MODE.ONLINE
+
+  const renderStartEndDate = (data: ScheduleRequestDetail | undefined) => {
+    // case schedules.length === 0
+    if (data?.schedules?.length === 0 || !data?.schedules) {
+      return '-- - --'
+    }
+    // case schedules.length === 1
+    if (data?.schedules?.length === 1) {
+      return `${sappFormatDate(data?.schedules[0]?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedules[0]?.end_date ?? '') ?? '--'}`
+    }
+    // case schedules.length > 1
+    return `${sappFormatDate(data?.schedules[0]?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedules[data?.schedules.length - 1]?.end_date ?? '') ?? '--'}`
+  }
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -75,7 +95,18 @@ const PrimaryInformation = ({
             {/* Subject */}
             <PrimaryInfoItem
               title="Subject"
-              value={selectedRequest?.subject?.code}
+              value={
+                <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                  {`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                </TooltipParagraph>
+                // <span className="flex w-full cursor-pointer overflow-hidden whitespace-nowrap">
+                //   <Tooltip
+                //     placement="topLeft"
+                //     className="inline-block w-full overflow-hidden whitespace-nowrap"
+                //     title={`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                //   >{`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}</Tooltip>
+                // </span>
+              }
             />
             {/* Construction Mode */}
             <PrimaryInfoItem
@@ -84,26 +115,28 @@ const PrimaryInformation = ({
               isLoading={isLoading}
             />
             {/* Schedule */}
-            <div className="grid grid-cols-3 gap-4">
-              <div>
-                <span className="text-sm text-gray-12">Schedule</span>
+            {selectedRequest.type === TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <span className="text-sm text-gray-12">Schedule</span>
+                </div>
+                <div className="col-span-2">
+                  {isLoading ? (
+                    <ScheduleSkeleton />
+                  ) : (
+                    <div className="flex items-center gap-8">
+                      {(dataDetail?.class?.class_standard_schedules ?? []).map(
+                        (item: ClassStandardScheduleItem, index: number) => (
+                          <div
+                            key={index}
+                          >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="col-span-2">
-                {isLoading ? (
-                  <ScheduleSkeleton />
-                ) : (
-                  <div className="flex items-center gap-8">
-                    {(dataDetail?.class?.class_standard_schedules ?? []).map(
-                      (item: ClassStandardScheduleItem, index: number) => (
-                        <div
-                          key={index}
-                        >{`${capitalizeFirstLetter(renderDayOfWeek(item.day_of_week))} | ${formatTimeOnlyHourMinute(item.start_time)} - ${formatTimeOnlyHourMinute(item.end_time)}`}</div>
-                      ),
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            )}
             {/* Address */}
             {isOffline && (
               <PrimaryInfoItem
@@ -131,7 +164,8 @@ const PrimaryInformation = ({
             {/* Start and end date */}
             <PrimaryInfoItem
               title="Start Date - End Date"
-              value={`${sappFormatDate(selectedRequest?.schedule_time.start_date) ?? '-'} - ${sappFormatDate(selectedRequest?.schedule_time.end_date) ?? '-'}`}
+              value={renderStartEndDate(dataDetail)}
+              isLoading={isLoading}
             />
             {/* Sent Date */}
             <PrimaryInfoItem

@@ -455,7 +455,6 @@ const CoursePartDetail = () => {
             partDetail={partDetail}
           />
         )}
-
         <PreviewPartDetail
           chapterMenu={partDetail}
           fetchChapterDetail={fetchChapterDetail}
@@ -477,7 +476,6 @@ const CoursePartDetail = () => {
           handleGetItem={handleActive}
           // handleShowToast={handleShowToast}
         />
-
         <SappDrawer
           isOpen={openLearningOutcome}
           onClose={handleCancel}
@@ -525,14 +523,16 @@ const CoursePartDetail = () => {
             ))}
           </TextSkeleton>
         </SappDrawer>
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          data={chapterData}
-          class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
-          is_passed_course={isPassedCourse}
-        />
+        {open && (
+          <TestModal
+            open={open}
+            setOpen={setOpen}
+            data={chapterData}
+            class_user_id={previewPart?.class_user_id}
+            activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
+          />
+        )}
       </div>
     </Layout>
   )
@@ -554,7 +554,7 @@ const BreadCrumbPartDetail = ({
           className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
           onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
         >
-          <div className=" mx-0.5 inline-block w-full">
+          <div className="mx-0.5 inline-block w-full">
             <Tooltip
               title={previewPart?.name}
               showTooltip={previewPart?.name?.length > 4}

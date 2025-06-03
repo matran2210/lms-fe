@@ -1,19 +1,13 @@
 import dayjs from 'dayjs'
 import { UseFormGetValues } from 'react-hook-form'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
+import { IRecurringSchedule } from 'src/type/my-request'
+import { getDayIndex, reverseDaysOfWeek } from './common'
 import {
-  IBusySchedule,
-  IRecurringSchedule,
-  IRequest,
-} from 'src/type/my-request'
-import {
-  DAYS_IN_WEEK,
   REPEAT_FREQUENCY,
   REPEAT_FREQUENCY_LABEL,
   REPEAT_TYPE,
-  WEEK_DAY_LABELS,
 } from './constants/repeat'
-import { getDayIndex, reverseDaysOfWeek } from './common'
 
 export const WEEKDAYS = [
   'Monday',
@@ -115,12 +109,14 @@ export const getCustomRepeat = (
 ): IRecurringSchedule => {
   const repeatCustom: IRecurringSchedule = {
     interval: Number(
-      getValues('request_busy_schedule.0.recurring_schedule.interval'),
+      getValues(
+        'request_busy_schedule.0.repeat_schedule.recurring_schedule.interval',
+      ),
     ),
     frequency:
       REPEAT_FREQUENCY_LABEL[
         getValues(
-          'request_busy_schedule.0.recurring_schedule.frequency',
+          'request_busy_schedule.0.repeat_schedule.recurring_schedule.frequency',
         )?.toUpperCase() as REPEAT_FREQUENCY
       ],
     type: REPEAT_TYPE.CUSTOM,
@@ -128,13 +124,15 @@ export const getCustomRepeat = (
 
   switch (
     getValues(
-      'request_busy_schedule.0.recurring_schedule.frequency',
+      'request_busy_schedule.0.repeat_schedule.recurring_schedule.frequency',
     )?.toUpperCase()
   ) {
     case REPEAT_FREQUENCY.WEEK:
       repeatCustom.day_of_week = reverseDaysOfWeek(
         startDate,
-        getValues(`request_busy_schedule.0.recurring_schedule.day_of_week`),
+        getValues(
+          `request_busy_schedule.0.repeat_schedule.recurring_schedule.day_of_week`,
+        ),
       )
       break
     case REPEAT_FREQUENCY.MONTH:
@@ -156,7 +154,9 @@ export const getRecurringSchedule = (
   startDate: Date,
 ): IRecurringSchedule => {
   let result: any = {}
-  switch (getValues('request_busy_schedule.0.recurring_schedule.type')) {
+  switch (
+    getValues('request_busy_schedule.0.repeat_schedule.recurring_schedule.type')
+  ) {
     case REPEAT_TYPE.DAILY:
       result = getRepeatDaily()
       break
@@ -179,7 +179,7 @@ export const getRecurringSchedule = (
       result = getRepeatDaily()
   }
   const repeatEndOn = getValues(
-    'request_busy_schedule.0.recurring_schedule.recurrence_end_date',
+    'request_busy_schedule.0.repeat_schedule.recurring_schedule.recurrence_end_date',
   )
 
   return {

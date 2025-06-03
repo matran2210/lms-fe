@@ -125,3 +125,22 @@
 .w-fill--available {
   width: -webkit-fill-available;
 }
+
+.sapp-group-radio-wrapper {
+  .ant-radio {
+    .ant-radio-inner {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  .ant-radio-checked {
+    .ant-radio-inner {
+      &::after {
+        transform: scale(0.75);
+      }
+
+      border-color: #ffb800;
+      background-color: #ffb800;
+    }
+  }
+}
