@@ -19,3 +19,37 @@
     }
   }
 }
+
+.learning-activity-tabs {
+  .ant-tabs-tab {
+    @apply pt-0;
+    .ant-tabs-tab-btn {
+      &:focus {
+        @apply text-primary;
+      }
+    }
+    &:hover {
+      @apply text-primary;
+    }
+  }
+  .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 4rem !important;
+  }
+  .ant-tabs-nav {
+    margin: 0 !important;
+  }
+  .ant-tabs-tab-active {
+    .learning-act-tab-label {
+      @apply text-primary;
+    }
+  }
+  .ant-tabs-ink-bar {
+    @apply bg-primary;
+  }
+
+  .course-tab-text {
+    p {
+      @apply mb-0;
+    }
+  }
+}

@@ -444,7 +444,7 @@ const SAPPVideo = ({
   // updateProgress indicates how far through the video
   // the current playback is by updating the progress bar
   function updateProgress() {
-    let currentTime = Math.floor(streamRef?.current?.currentTime || 0)
+    let currentTime = Math.ceil(streamRef?.current?.currentTime || 0)
     if (seekRef?.current) {
       seekRef.current.value = String(currentTime)
     }
@@ -805,13 +805,13 @@ const SAPPVideo = ({
                 controlsList="nodownload"
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full px-4 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full rounded-b-lg px-5 py-3"
                 ref={videoControlsRef}
               >
-                <div className="flex-center w-full">
-                  <div className="left-controls flex items-center text-white">
+                <div className="flex-center flex w-full items-center gap-6">
+                  <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-overlay-play before:-right-4"
+                      className="btn-video flex h-8 w-8 items-center justify-center bg-overlay-play before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -819,7 +819,7 @@ const SAPPVideo = ({
                         animatePlayback()
                       }}
                     >
-                      <svg className="icon-svg playback-icons h-6 w-6">
+                      <svg className="icon-svgplay playback-icons h-6 w-6">
                         <path
                           className="play"
                           d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
@@ -831,12 +831,13 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center mr-4 gap-1 text-xsm font-normal leading-normal text-gray-7">
+                    <div className="time flex-center gap-1 text-xsm font-normal leading-normal text-gray-7">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
                     </div>
                   </div>
+
                   <div className="relative h-1.5 w-full text-justify">
                     <progress
                       className="pointer-events-none absolute top-0 h-1.5 w-full"
@@ -869,23 +870,26 @@ const SAPPVideo = ({
                         })}
                     </>
                   </div>
-                  <div className="right-controls flex-center">
-                    <div className="volume-controls relative flex h-8 w-8 items-center">
+
+                  <div className="right-controls flex-center flex items-center gap-4">
+                    <div className="volume-controls relative flex h-8 items-center">
                       <button
                         data-title="Mute"
                         className="btn-video volume-button"
                         ref={volumeButtonRef}
                         onClick={toggleMute}
                       >
-                        <svg className="icon-svg volume-mute ml-3 hidden h-5.5 w-5.5 scale-[0.8]">
+                        <svg className="icon-svg volume-mute hidden h-5.5 w-4.5 scale-[0.8]">
                           <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
                         </svg>
-                        <svg className="icon-svg volume-low ml-3 hidden h-6 w-5.5">
+                        <svg className="icon-svg volume-low hidden h-6 w-4.5">
                           <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                         </svg>
                         <Icon
                           type={'volume'}
-                          className={'icon-svg volume-high ml-4 text-white'}
+                          className={
+                            'icon-svg volume-high h-6 w-4.5 text-white'
+                          }
                         />
                       </button>
 
@@ -902,7 +906,7 @@ const SAPPVideo = ({
                       </div>
                     </div>
                     <div
-                      className={`settings-control icon-svg relative ml-4 text-white ${
+                      className={`settings-control icon-svg relative text-white ${
                         activeSettings ? 'active' : ''
                       }`}
                       ref={listSettingsRef}
@@ -1121,7 +1125,7 @@ const SAPPVideo = ({
                     >
                       <Icon
                         type={'fullscreen'}
-                        className={'icon-svg fullscreen ml-4 text-white'}
+                        className={'icon-svg fullscreen text-white'}
                       />
                       <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-5.5">
                         <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>

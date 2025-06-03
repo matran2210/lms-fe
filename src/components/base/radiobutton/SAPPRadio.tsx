@@ -9,11 +9,13 @@ interface IProps {
   onChange: React.ChangeEventHandler<HTMLInputElement>
   className?: string
   disabled?: boolean
-  state?: 'default' | 'error' | 'success'
+  state?: 'default' | 'error' | 'success' | 'primary'
   size?: 'small' | 'medium' | 'lager'
 }
 
 const STATE = {
+  primary:
+    'checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked',
   success:
     'checked:bg-radio-success-checked checked:text-transparent checked:hover:bg-radio-success-checked checked:focus:bg-radio-success-checked',
   error:

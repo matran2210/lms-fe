@@ -107,6 +107,7 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#DADFE5',
+          899: '#686868',
           900: '#181C32',
         },
         green: {
@@ -124,7 +125,7 @@ module.exports = {
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
           'dark-sidebar': 'rgba(0, 0, 0, 0.8)',
-          play: 'rgba(189, 189, 189, 0.7)',
+          play: '#E5E7EB',
           control: 'rgba(0, 0, 0, 0.6)',
           white: 'rgba(255, 255, 255, 0.4)',
           loading: 'rgba(0, 0, 0, 0.3)',
@@ -171,6 +172,11 @@ module.exports = {
           primary: '#1F2937',
           secondary: '#9CA3AF',
         },
+        dark: {
+          1: '#1C274C',
+        },
+      },
+      fill: {
         dark: {
           1: '#1C274C',
         },
@@ -297,6 +303,7 @@ module.exports = {
         16.75: '4.188rem',
         18: '72px',
         30: '7.5rem',
+        4.25: '1.0625rem',
         4.5: '1.125rem',
         '6-percent': '6%',
         '7-percent': '7%',
@@ -351,8 +358,9 @@ module.exports = {
         55: '0.55',
       },
       backgroundImage: {
+        'radio-primary-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB800' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-normal': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,
-        'radio-default-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23141414' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
+        'radio-default-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%231C274C' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-success-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23008000' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-error-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23D35563' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'show-password': `url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.7656 7.36719C15.8203 7.47656 15.8477 7.61328 15.8477 7.77734C15.8477 7.91406 15.8203 8.05078 15.7656 8.16016C14.2891 11.0586 11.3359 13 8 13C4.63672 13 1.68359 11.0586 0.207031 8.16016C0.152344 8.05078 0.125 7.91406 0.125 7.75C0.125 7.61328 0.152344 7.47656 0.207031 7.36719C1.68359 4.46875 4.63672 2.5 8 2.5C11.3359 2.5 14.2891 4.46875 15.7656 7.36719ZM8 11.6875V11.7148C10.1602 11.7148 11.9375 9.9375 11.9375 7.77734V7.75C11.9375 5.58984 10.1602 3.8125 8 3.8125C5.8125 3.8125 4.0625 5.58984 4.0625 7.75C4.0625 9.9375 5.8125 11.6875 8 11.6875ZM8 5.125V5.15234C9.44922 5.15234 10.625 6.30078 10.625 7.75C10.625 9.19922 9.44922 10.375 8 10.375C6.55078 10.375 5.375 9.19922 5.375 7.75C5.375 7.53125 5.40234 7.28516 5.45703 7.06641C5.67578 7.23047 5.94922 7.3125 6.25 7.3125C6.96094 7.3125 7.53516 6.73828 7.53516 6.02734C7.53516 5.72656 7.45312 5.45312 7.28906 5.23438C7.50781 5.17969 7.75391 5.15234 8 5.125Z' fill='%23A1A1A1'/%3E%3C/svg%3E%0A")`,

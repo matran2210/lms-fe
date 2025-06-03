@@ -1,27 +1,13 @@
-import {
-  CloseIcon,
-  CollapseArrowIcon,
-  DownloadIcon,
-  HourglassIcon,
-  IconDownArrow,
-  LinkIcon,
-  StarCircleIcon,
-} from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
+import { CloseIcon, HourglassIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
-import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
-import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
-import TextDocument from '@components/mycourses/activity/documents/TextDocument'
-import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -30,34 +16,23 @@ import {
   truncateBySpace,
   truncateString,
 } from '@utils/index'
-import { Collapse } from 'antd'
-import clsx from 'clsx'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
-import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   closeCalculator,
   courseActivityAction,
   courseActivityReducer,
-  getCourseActivityTapById,
   getDiscussion,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
@@ -65,13 +40,16 @@ import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
+import LearningOutcome from '@components/learning/activity/LearningOutcome'
+import ActivityResource from '@components/learning/activity/ActivityResource'
+import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
   name: string
   parent_id: string
 }
-interface VideoStateClicked {
+export interface VideoStateClicked {
   course_tab_document_id: string
   videos: {
     file_id: string
@@ -235,37 +213,6 @@ const ActivityPage = () => {
     dispatch(closeCalculator())
   }, [dispatch, router.asPath])
 
-  const onVideoStart = (file_id: string, course_tab_document_id: string) => {
-    if (isHasQuizGrading) {
-      return
-    }
-    if (isDoneActivity) {
-      return
-    }
-    if (!videoClicked.length) {
-      return
-    }
-    const courseTabIndex = videoClicked.findIndex(
-      (course_tab) =>
-        course_tab?.course_tab_document_id === course_tab_document_id,
-    )
-    const videoIndex = videoClicked[courseTabIndex].videos.findIndex(
-      (video) => video.file_id === file_id,
-    )
-    videoClicked[courseTabIndex].videos[videoIndex].is_click = true
-    // Kiểm tra xem đã đủ điều kiện gọi api processs chưa
-    let is_watch_all_video = true
-    videoClicked.forEach((course_tab) => {
-      if (course_tab.videos.every((video) => !video.is_click)) {
-        is_watch_all_video = false
-      }
-    })
-    if (is_watch_all_video) {
-      handleFinishedCourseSectionProgress()
-    }
-    setVideoClicked(videoClicked)
-  }
-
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.
    */
@@ -284,78 +231,6 @@ const ActivityPage = () => {
         dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
       }, 2000)
     }
-  }
-
-  const handleRefreshCurrentTab = () => {
-    try {
-      selector?.currentTabId &&
-        delete CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION[selector?.currentTabId]
-      dispatch(
-        getCourseActivityTapById({
-          courseId: courseId as string,
-          id: selector?.currentTabId ?? '',
-        }),
-      )
-      setActiveButtonId(selector?.currentTabId)
-    } catch (error) {}
-  }
-
-  /**
-   * Hàm xử lý khi thay đổi tab.
-   * @param {string} id - ID của tab.
-   */
-  const handleChangeTab = (courseId: string, id: string) => {
-    try {
-      dispatch(getCourseActivityTapById({ courseId, id }))
-      setActiveButtonId(id)
-    } catch (error) {}
-  }
-
-  /**
-   * Hàm để xác định màu tab active.
-   * @param {string} id - ID của tab.
-   * @returns {string} - Màu tab.
-   */
-  const tabButtonColor = (id: string) => {
-    let currentTabId
-    if (selector?.loading) {
-      currentTabId = activeButtonId
-    } else {
-      currentTabId = selector?.currentTabId
-    }
-    return id === currentTabId ? 'primary' : 'white'
-  }
-
-  /**
-   * Giá trị được memoized cho course_tab_documents.
-   */
-  const course_tab_documents = useMemo(() => {
-    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
-      ?.course_tab_documents
-  }, [selector?.tabs])
-
-  /**
-   * Hàm để lấy ID của tab trước đó.
-   * @returns {string | undefined} - ID của tab trước đó.
-   */
-  const getPreviousTabId = () => {
-    const currentIndex = selector?.tabs?.findIndex(
-      (tab) => tab?.id === selector?.currentTabId,
-    )
-    const previousIndex = (currentIndex || 0) - 1
-    return selector?.tabs?.[previousIndex]?.id
-  }
-
-  /**
-   * Hàm để lấy ID của tab tiếp theo.
-   * @returns {string | undefined} - ID của tab tiếp theo.
-   */
-  const getNextTabId = () => {
-    const currentIndex = selector?.tabs?.findIndex(
-      (tab) => tab?.id === selector?.currentTabId,
-    )
-    const nextIndex = (currentIndex || 0) + 1
-    return selector?.tabs?.[nextIndex]?.id
   }
 
   const handleOpenScratchPad = (
@@ -567,17 +442,6 @@ const ActivityPage = () => {
     )
   }
 
-  const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
-      files: [
-        {
-          name: name,
-          file_key: file_key,
-        },
-      ],
-    })
-  }
-
   const idPreviousActivity =
     activity?.previous_activity?.id || activityIds?.[previousActivityIndex - 1]
 
@@ -625,104 +489,7 @@ const ActivityPage = () => {
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
   }
-  const getItemsLearningOutcome = [
-    {
-      key: 'learning_outcome',
-      label: (
-        <div className={'select-none text-lg font-medium text-bw-13'}>
-          Learning Outcome
-        </div>
-      ),
-      children: (
-        <>
-          {activity?.course_outcomes?.length > 0 && (
-            <div className="mt-6 select-none text-base">
-              {activity?.course_outcomes?.map((e: any, index: number) => {
-                return (
-                  <div
-                    className={clsx('flex items-start gap-2', {
-                      'mb-4': index < activity?.course_outcomes?.length - 1,
-                    })}
-                    key={e?.id}
-                  >
-                    <div className="text-primary">
-                      <StarCircleIcon />
-                    </div>
-                    <EditorReader
-                      className="learning-outcome-content"
-                      text_editor_content={e.description}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </>
-      ),
-    },
-  ]
-  const getItemsActivityResource = [
-    {
-      key: 'activity_resource',
-      label: (
-        <div className={'select-none text-lg font-medium text-bw-13'}>
-          Activity Resource
-        </div>
-      ),
-      children: (
-        <>
-          {activity?.files?.length > 0 && (
-            <div className="mt-4 select-none text-sm">
-              {activity?.files.map((e: any, index: number) => {
-                const isPreviewFile =
-                  e.resource.suffix_type !== SUFFIX_TYPE.GENERAL_FILE &&
-                  e.resource.name.slice(-4) !== '.csv'
 
-                return (
-                  <div
-                    className={clsx(`flex items-start gap-8`, {
-                      'mb-3': index < activity?.files?.length - 1,
-                    })}
-                    key={index}
-                  >
-                    <div className="">
-                      <p
-                        className="cursor-pointer text-blue-7 underline hover:text-primary"
-                        onClick={() => {
-                          isPreviewFile
-                            ? handleOpenScratchPad(
-                                {
-                                  type: 'file',
-                                },
-                                e?.resource?.url,
-                                e?.resource?.name,
-                              )
-                            : download(e?.resource?.name, e?.resource?.file_key)
-
-                          trackGAEvent('Click Open File Resource')
-                        }}
-                      >
-                        {e?.resource?.name}
-                      </p>
-                    </div>
-                    <div
-                      className="cursor-pointer text-dark-1"
-                      onClick={() => {
-                        download(e?.resource?.name, e?.resource?.file_key)
-                        trackGAEvent('Click Button Download Resource Activity')
-                      }}
-                    >
-                      <DownloadIcon color="currentColor" />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </>
-      ),
-    },
-  ]
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
@@ -805,335 +572,157 @@ const ActivityPage = () => {
             </div>
 
             {/* Learning Outcome */}
-            <Collapse
-              bordered={false}
-              expandIconPosition="end"
-              defaultActiveKey={['learning_outcome']}
-              expandIcon={({ isActive }) => (
-                <CollapseArrowIcon selected={isActive} />
-              )}
-              items={getItemsLearningOutcome}
-              className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
-            />
+            <LearningOutcome activity={activity} />
             {/* Activity Resource */}
-            <Collapse
-              bordered={false}
-              expandIconPosition="end"
-              defaultActiveKey={['activity_resource']}
-              expandIcon={({ isActive }) => (
-                <CollapseArrowIcon selected={isActive} />
-              )}
-              items={getItemsActivityResource}
-              className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+            <ActivityResource
+              activity={activity}
+              handleOpenScratchPad={handleOpenScratchPad}
             />
-
             {/* Tabs */}
-            <div className="bg-gray-3">
-              <div className="flex flex-wrap gap-2 px-6">
-                {selector?.tabs?.map((e, index) => {
-                  return (
-                    <SappButton
-                      key={e?.id}
-                      size="small"
-                      className="!px-3 py-2.5 text-medium-sm !font-normal"
-                      color={tabButtonColor(e?.id)}
-                      title={truncateBySpace(e?.name, 5)}
-                      showTooltip={e?.name?.length > 20}
-                      toolTipTitle={e?.name}
-                      onClick={() => {
-                        handleChangeTab(courseId as string, e?.id)
-                        trackGAEvent('Click Button Tab Activity')
-                      }}
-                    />
-                  )
-                })}
-              </div>
-            </div>
-            <ActivitySkeleton
-              length={1}
-              loading={selector.loading}
-              className="mb-6 bg-white"
-              classChild="w-11/12 mx-auto max-w-[950px]"
-            >
-              <div className="mb-6 bg-white pb-6">
-                <div className={`mx-auto my-0 w-full max-w-[1000px] px-6 pt-6`}>
-                  <div className="tab-content overflow-x-auto overflow-y-hidden">
-                    {course_tab_documents?.map((e, i) => {
-                      const gradeStatus = e?.quiz?.attempt?.grading_status
-                      const marginBottom =
-                        i < course_tab_documents?.length - 1 ? 'mb-6' : ''
-                      if (e?.type === 'QUIZ') {
-                        return (
-                          <div
-                            className={marginBottom}
-                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
-                            ref={quizDocumentRef}
-                          >
-                            <QuizDocument
-                              questions={[
-                                ...(e?.quiz?.multiple_choice_questions || []),
-                                ...(e?.quiz?.constructed_questions || []),
-                              ]}
-                              activityId={activity?.id as string}
-                              tabId={selector?.currentTabId || ''}
-                              quizId={e?.quiz?.id || ''}
-                              grading_preference={
-                                e.quiz?.grading_preference ||
-                                'AFTER_EACH_QUESTION'
-                              }
-                              document_id={e?.id}
-                              is_graded={e?.quiz?.is_graded}
-                              setOpenFile={handleOpenScratchPad}
-                              class_user_id={activity?.class_user_id}
-                              quizSetting={e?.quiz?.quiz_setting}
-                              reload={refetch}
-                              gradeStatus={gradeStatus}
-                              quizName={e?.quiz?.name}
-                              grading_method={e?.quiz?.grading_method}
-                              refreshTab={() => handleRefreshCurrentTab()}
-                              exhibitText={exhibitText}
-                              attemptId={e?.quiz?.attempt?.id}
-                            />
-                          </div>
-                        )
-                      }
-                      if (e.type === 'TEXT') {
-                        return (
-                          <div
-                            className={`${marginBottom} select-none`}
-                            key={i + '_' + selector?.currentTabId}
-                          >
-                            <TextDocument
-                              text_editor_content={e?.text_editor_content}
-                            ></TextDocument>
-                          </div>
-                        )
-                      }
-                      if (e.type === 'VIDEO') {
-                        return (
-                          <div
-                            className={marginBottom}
-                            key={i + '_' + selector?.currentTabId}
-                          >
-                            <VideoDocument
-                              videos={e?.videos}
-                              activityId={activity?.id as string}
-                              tabId={selector?.currentTabId || ''}
-                              streamRefProp={(el: any) =>
-                                (videoRef.current[i || 0] = el)
-                              }
-                              handleProcess={onVideoStart}
-                              document_id={e?.id}
-                              quizId={e?.quiz?.id || ''}
-                              grading_preference={
-                                e.quiz?.grading_preference ||
-                                'AFTER_EACH_QUESTION'
-                              }
-                              class_user_id={activity?.class_user_id}
-                            ></VideoDocument>
-                          </div>
-                        )
-                      }
-                      return null
-                    })}
-                  </div>
-
-                  <div className="mt-8 flex flex-wrap justify-between gap-5">
-                    {getPreviousTabId() && (
-                      <div className="w-auto">
-                        <div className="relative">
-                          <div
-                            onClick={() => {
-                              handleChangeTab(
-                                courseId as string,
-                                getPreviousTabId() || '',
-                              )
-                              trackGAEvent('Click Button Previous Tab Activity')
-                            }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width={20}
-                              height={20}
-                              fill="none"
-                            >
-                              <path
-                                className="fill-bw-1 group-hover:fill-primary"
-                                fillRule="evenodd"
-                                d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Previous Tab
-                          </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+            <CourseTabDocument
+              {...{
+                activity,
+                handleOpenScratchPad,
+                exhibitText,
+                videoClicked,
+                setVideoClicked,
+                isHasQuizGrading,
+                isDoneActivity,
+                handleFinishedCourseSectionProgress,
+              }}
+            />
+            {/* Next/Prev Activities */}
+            {(activity?.previous_activity ||
+              activity?.next_activity ||
+              (nextActivityIndex !== -1 &&
+                nextActivityIndex !== sessionData?.length - 1) ||
+              (previousActivityIndex !== -1 &&
+                previousActivityIndex !== 0)) && (
+              <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
+                <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+                  <div
+                    ref={endActivityRef}
+                    className={`flex flex-nowrap gap-5 justify-${
+                      activity?.previous_activity ||
+                      (previousActivityIndex !== -1 &&
+                        previousActivityIndex !== 0)
+                        ? 'between'
+                        : 'end'
+                    }`}
+                  >
+                    {(activity?.previous_activity ||
+                      (previousActivityIndex !== -1 &&
+                        previousActivityIndex !== 0)) && (
+                      <div className="w-1/2">
+                        <div
+                          onClick={() =>
+                            handleActivityNavigation(
+                              isPreviousActivityLocked,
+                              idPreviousActivity,
+                              'Click Button Previous Activity',
+                            )
+                          }
+                          className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
+                        >
+                          Previous Activity
                         </div>
-                      </div>
-                    )}
-                    {getNextTabId() && (
-                      <div className="relative ml-auto w-auto">
-                        <div className="relative">
-                          <div
-                            onClick={() => {
-                              handleChangeTab(
-                                courseId as string,
-                                getNextTabId() || '',
-                              )
-                              trackGAEvent('Click Button Next Tab Activity')
-                            }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
-                          >
-                            Next Tab
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width={20}
-                              height={20}
-                              fill="none"
-                            >
-                              <path
-                                className="fill-bw-1 group-hover:fill-primary"
-                                fillRule="evenodd"
-                                d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </ActivitySkeleton>
-          </div>
-
-          {/* Next/Prev Activities */}
-          {(activity?.previous_activity ||
-            activity?.next_activity ||
-            (nextActivityIndex !== -1 &&
-              nextActivityIndex !== sessionData?.length - 1) ||
-            (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-            <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
-                <div
-                  ref={endActivityRef}
-                  className={`flex flex-nowrap gap-5 justify-${
-                    activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)
-                      ? 'between'
-                      : 'end'
-                  }`}
-                >
-                  {(activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() =>
-                          handleActivityNavigation(
-                            isPreviousActivityLocked,
-                            idPreviousActivity,
-                            'Click Button Previous Activity',
-                          )
-                        }
-                        className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
-                      >
-                        Previous Activity
-                      </div>
-                      <div className="flex text-medium-sm text-gray-1">
-                        {getCourseIcon(
-                          activity?.previous_activity
-                            ? activity?.previous_activity?.display_icon
-                            : findActivityByIndex(previousActivityIndex - 1)
-                                ?.display_icon,
-                          isPreviousActivityLocked,
-                        )}
-                        <Tooltip
-                          title={
+                        <div className="flex text-medium-sm text-gray-1">
+                          {getCourseIcon(
                             activity?.previous_activity
-                              ? activity?.previous_activity?.name
+                              ? activity?.previous_activity?.display_icon
                               : findActivityByIndex(previousActivityIndex - 1)
-                                  ?.name
+                                  ?.display_icon,
+                            isPreviousActivityLocked,
+                          )}
+                          <Tooltip
+                            title={
+                              activity?.previous_activity
+                                ? activity?.previous_activity?.name
+                                : findActivityByIndex(previousActivityIndex - 1)
+                                    ?.name
+                            }
+                            showTooltip={
+                              activity?.previous_activity?.name?.length > 80
+                            }
+                          >
+                            <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                              {activity?.previous_activity
+                                ? truncateString(
+                                    activity?.previous_activity?.name,
+                                    80,
+                                  )
+                                : truncateString(
+                                    findActivityByIndex(
+                                      previousActivityIndex - 1,
+                                    )?.name,
+                                    80,
+                                  )}
+                            </span>
+                          </Tooltip>
+                        </div>
+                      </div>
+                    )}
+                    {!activity?.previous_activity && <></>}
+                    {(activity?.next_activity ||
+                      (nextActivityIndex !== -1 &&
+                        nextActivityIndex !== sessionData?.length - 1)) && (
+                      <div className="w-1/2">
+                        <div
+                          onClick={() =>
+                            handleActivityNavigation(
+                              isNextActivityLocked,
+                              idNextActivity,
+                              'Click Button Next Activity',
+                            )
                           }
-                          showTooltip={
-                            activity?.previous_activity?.name?.length > 80
-                          }
+                          className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                         >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
-                            {activity?.previous_activity
-                              ? truncateString(
-                                  activity?.previous_activity?.name,
-                                  80,
-                                )
-                              : truncateString(
-                                  findActivityByIndex(previousActivityIndex - 1)
-                                    ?.name,
-                                  80,
-                                )}
-                          </span>
-                        </Tooltip>
-                      </div>
-                    </div>
-                  )}
-                  {!activity?.previous_activity && <></>}
-                  {(activity?.next_activity ||
-                    (nextActivityIndex !== -1 &&
-                      nextActivityIndex !== sessionData?.length - 1)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() =>
-                          handleActivityNavigation(
-                            isNextActivityLocked,
-                            idNextActivity,
-                            'Click Button Next Activity',
-                          )
-                        }
-                        className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
-                      >
-                        Next Activity
-                      </div>
-                      <div className="flex justify-end text-medium-sm text-gray-1">
-                        <Tooltip
-                          title={
+                          Next Activity
+                        </div>
+                        <div className="flex justify-end text-medium-sm text-gray-1">
+                          <Tooltip
+                            title={
+                              activity?.next_activity
+                                ? activity?.next_activity?.name
+                                : findActivityByIndex(nextActivityIndex + 1)
+                                    ?.name
+                            }
+                            showTooltip={
+                              activity?.next_activity?.name?.length > 80
+                            }
+                          >
+                            <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                              {activity?.next_activity
+                                ? truncateString(
+                                    activity?.next_activity.name,
+                                    80,
+                                  )
+                                : truncateString(
+                                    findActivityByIndex(nextActivityIndex + 1)
+                                      ?.name,
+                                    80,
+                                  )}
+                            </div>
+                          </Tooltip>
+                          {getCourseIcon(
                             activity?.next_activity
-                              ? activity?.next_activity?.name
-                              : findActivityByIndex(nextActivityIndex + 1)?.name
-                          }
-                          showTooltip={
-                            activity?.next_activity?.name?.length > 80
-                          }
-                        >
-                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
-                            {activity?.next_activity
-                              ? truncateString(activity?.next_activity.name, 80)
-                              : truncateString(
-                                  findActivityByIndex(nextActivityIndex + 1)
-                                    ?.name,
-                                  80,
-                                )}
-                          </div>
-                        </Tooltip>
-                        {getCourseIcon(
-                          activity?.next_activity
-                            ? activity?.next_activity?.display_icon
-                            : findActivityByIndex(nextActivityIndex + 1)
-                                ?.display_icon,
-                          isNextActivityLocked,
-                        )}
+                              ? activity?.next_activity?.display_icon
+                              : findActivityByIndex(nextActivityIndex + 1)
+                                  ?.display_icon,
+                            isNextActivityLocked,
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {!activity?.next_activity && <></>}
+                    )}
+                    {!activity?.next_activity && <></>}
+                  </div>
                 </div>
               </div>
+            )}
+            <div></div>
+            <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+              <Discussion class_id={(router.query.id as string) || ''} />
             </div>
-          )}
-          <div></div>
-          <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query.id as string) || ''} />
           </div>
 
           {/* Sratchpad */}
