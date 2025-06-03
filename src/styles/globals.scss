@@ -751,7 +751,7 @@ textarea.is-invalid:focus {
 }
 
 .sapp-modal .ant-modal-content {
-  padding: 70px !important;
+  @apply p-10;
 }
 .sapp-custom-modal.success-modal {
   .ant-modal-content {
@@ -793,6 +793,10 @@ textarea.is-invalid:focus {
       }
     }
   }
+}
+
+.ant-modal-footer {
+  margin: 0 !important;
 }
 
 .lf-player-container {

@@ -159,7 +159,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             <ButtonSecondary
               title="Begin"
               full={false}
-              size={'small'}
+              size={'medium'}
               className="ml-auto"
               onClick={handleClickBegin}
             />
@@ -168,7 +168,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             <>
               <ButtonSecondary
                 title="Retake"
-                size="small"
+                size="medium"
                 full={false}
                 onClick={() => setOpenExpired(true)}
               />
@@ -182,7 +182,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 isUnderLine
                 color="text"
                 className="!p-0 font-medium underline"
-                size="small"
+                size="medium"
               />
             </>
           )}

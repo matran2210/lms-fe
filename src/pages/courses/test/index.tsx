@@ -18,6 +18,10 @@ import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
+import BackIcon from '@assets/icons/BackIcon'
+import { TimeOutIcon } from '@components/icons'
+import { CoursesAPI } from '@pages/api/courses'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -384,6 +388,7 @@ const TestModal = ({
     }
     // Case: Limited time attempt
     if (data?.quiz?.is_limited && !!data?.quiz?.limit_count) {
+      if (isFinalAttemptTimeout) return 'View Result'
       // & Case: Not Attempt || Continue
       if (!data?.quiz?.attempt || isSubmitted || isUnsubmitted) return 'Start'
 
@@ -417,6 +422,14 @@ const TestModal = ({
       // Call api finish test
       handleFinishTest()
     }
+    if (renderOkButtonCaption() === 'View Result') {
+      await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
+      router.push({
+        pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+        query: { attempt: selectedResult?.label },
+      })
+      return
+    }
     if (
       renderOkButtonCaption() === 'Retake' &&
       !isExpiredLastAttempt &&
@@ -433,6 +446,14 @@ const TestModal = ({
     }
   }
 
+  const isFinalAttemptTimeout =
+    formatTime(
+      remainingTimeLastAttempt.current > 0
+        ? remainingTimeLastAttempt.current
+        : 0,
+    ) === '00:00:00' &&
+    data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
+
   return (
     <>
       {isSubmitted ||
@@ -440,37 +461,6 @@ const TestModal = ({
       !data?.quiz?.attempt ||
       data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
-          title={
-            <div className="flex items-center justify-center">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {!!data?.quiz?.quiz_timed &&
-                !!remainingTimeLastAttempt.current &&
-                renderShowOkButton() &&
-                renderOkButtonCaption() === 'Continue' && (
-                  <div
-                    className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
-                  >
-                    <div className="m-auto">
-                      <ClockIcon
-                        color={
-                          remainingTimeLastAttempt.current > 0
-                            ? '#3964EA'
-                            : '#B90E0A'
-                        }
-                        size={24}
-                      />
-                    </div>
-                    <div className="text-[20px]">
-                      {formatTime(
-                        remainingTimeLastAttempt.current > 0
-                          ? remainingTimeLastAttempt.current
-                          : 0,
-                      )}
-                    </div>
-                  </div>
-                )}
-            </div>
-          }
           open={open}
           handleCancel={() => {
             setOpen(false)
@@ -482,27 +472,78 @@ const TestModal = ({
           okButtonCaption={renderOkButtonCaption()}
           okButtonClass="w-full rounded-lg"
           footerButtonClassName="flex flex-col justify-center items-center gap-3"
-          cancelButtonCaption={'Cancel'}
-          cancelButtonClass={'p-0 underline'}
-          buttonSize="medium"
-          icon={undefined}
-          header={
-            renderShowOkButton() &&
-            renderOkButtonCaption() === 'Continue' &&
-            data?.quiz?.attempt?.number_of_attempts ===
-              data?.quiz?.limit_count && (
-              <div className="mt-8 text-center text-base !font-normal text-gray-200">
-                <div>Your last attempt was unexpectedly ended.</div>
-                <div>{"Please click 'Continue' to proceed with the test."}</div>
-              </div>
-            )
+          cancelButtonCaption={
+            <div className="flex gap-2">
+              <BackIcon />
+              Back to My Course
+            </div>
           }
+          cancelButtonClass={'p-0 underline hover:text-primary !p-0'}
+          buttonSize="medium"
+          icon={isFinalAttemptTimeout ? <TimeOutIcon /> : undefined}
           classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
           headerClassName="!m-0"
+          header={
+            <div className="text-3xl font-bold">
+              <div>{TEST_TYPE[data?.course_section_type]}</div>
+            </div>
+          }
         >
+          <>
+            {renderShowOkButton() &&
+              (renderOkButtonCaption() === 'Continue' ||
+                renderOkButtonCaption() === 'View Result') &&
+              data?.quiz?.attempt?.number_of_attempts ===
+                data?.quiz?.limit_count && (
+                <div>
+                  <div className="text-center text-base font-normal text-bw-13">
+                    {isFinalAttemptTimeout ? (
+                      <div>
+                        The test has timed out and has been submitted
+                        automatically.
+                      </div>
+                    ) : (
+                      <>
+                        <div>Your last attempt was unexpectedly ended. </div>
+                        <div>
+                          Please click &apos;Continue&apos; to proceed with the
+                          test.
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex justify-center gap-4 pt-6">
+                    {(!!data?.quiz?.quiz_timed &&
+                      !!remainingTimeLastAttempt.current &&
+                      renderShowOkButton() &&
+                      renderOkButtonCaption() === 'Continue') ||
+                      (renderOkButtonCaption() === 'View Result' && (
+                        <>
+                          <div className="flex items-center gap-2 text-base font-semibold">
+                            <RemainingTimeIcon />
+                            Your remaining time:
+                          </div>
+                          <div
+                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                          >
+                            <div className="text-base font-bold">
+                              {formatTime(
+                                remainingTimeLastAttempt.current > 0
+                                  ? remainingTimeLastAttempt.current
+                                  : 0,
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      ))}
+                  </div>
+                </div>
+              )}
+          </>
           {!(
             renderShowOkButton() &&
-            renderOkButtonCaption() === 'Continue' &&
+            (renderOkButtonCaption() === 'Continue' ||
+              renderOkButtonCaption() === 'View Result') &&
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
             <div className="flex flex-col gap-6">
@@ -648,7 +689,6 @@ const TestModal = ({
               </div>
             </div>
           )}
-
           <PopupCanNotRetakeTest
             open={openResource}
             setOpen={setOpenPopup}
@@ -683,6 +723,23 @@ const TestModal = ({
           open={open}
           handleContinue={handleContinueLastAttempt}
           handleRetake={handleRetakeNewAttempt}
+          time={
+            !!data?.quiz?.quiz_timed &&
+            (remainingTime !== undefined && remainingTime >= 0 ? (
+              <div
+                className={clsx(`text-base font-bold`, {
+                  'text-state-info': remainingTimeLastAttempt.current > 0,
+                  'text-state-error': remainingTimeLastAttempt.current <= 0,
+                })}
+              >
+                {formatTime(
+                  remainingTimeLastAttempt?.current >= 0
+                    ? remainingTimeLastAttempt.current
+                    : 0,
+                )}
+              </div>
+            ) : null)
+          }
           setOpen={() => {
             setOpen(false)
             trackGAEvent('Click Button Cancel Modal Test')
@@ -690,26 +747,6 @@ const TestModal = ({
           title={
             <div className="flex items-center justify-center">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {!!data?.quiz?.quiz_timed &&
-                (remainingTime !== undefined && remainingTime >= 0 ? (
-                  <div
-                    className={clsx(`flex items-center gap-2 font-normal`, {
-                      'text-state-info': remainingTimeLastAttempt.current > 0,
-                      'text-state-error': remainingTimeLastAttempt.current <= 0,
-                    })}
-                  >
-                    <div className="m-auto">
-                      <ClockIcon size={24} />
-                    </div>
-                    <div className="text-[20px]">
-                      {formatTime(
-                        remainingTimeLastAttempt?.current >= 0
-                          ? remainingTimeLastAttempt.current
-                          : 0,
-                      )}
-                    </div>
-                  </div>
-                ) : null)}
             </div>
           }
         />

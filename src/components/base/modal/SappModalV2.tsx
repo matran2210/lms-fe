@@ -75,7 +75,7 @@ const SappModalV2 = ({
   cancelButtonCaption,
   cancelButtonClass,
   classNameModal,
-  width = 630,
+  width = 560,
   handleClose,
 }: IProps) => {
   return (
@@ -91,7 +91,7 @@ const SappModalV2 = ({
     >
       {children}
       {showFooter && (
-        <div className={`relative pt-5 md:pt-9`}>
+        <div className={`relative pt-5 md:pt-10`}>
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
