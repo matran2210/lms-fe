@@ -350,7 +350,7 @@ const VideoDocument = ({
                   <span
                     className={`radio-item-label  ${
                       v?.file?.id === currentVideo?.file?.id
-                        ? 'text-primary'
+                        ? 'font-medium text-primary'
                         : 'text-gray-14'
                     }`}
                   >
