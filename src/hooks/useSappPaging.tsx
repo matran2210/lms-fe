@@ -51,14 +51,16 @@ const useSappPaging = ({
     if (
       data?.meta?.total_records ||
       data?.metadata?.total_records ||
-      data?.data?.metadata?.total_records
+      data?.data?.metadata?.total_records ||
+      data?.data?.meta?.total_records
     ) {
       setPagination((prev) => ({
         ...prev,
         total:
           data?.meta?.total_records ||
           data?.metadata?.total_records ||
-          data?.data?.metadata?.total_records,
+          data?.data?.metadata?.total_records ||
+          data?.data?.meta?.total_records,
       }))
     }
   }, [data])
