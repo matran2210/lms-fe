@@ -1,8 +1,6 @@
-import { Control, Controller } from 'react-hook-form'
-import ErrorMessage from 'src/common/ErrorMessage'
-import YourAnswer from '../base/tags/YourAnswer'
+import { CloseCircleIcon } from '@assets/icons'
 import { uniqueId } from 'lodash'
-import { CloseCircleIcon, IconClose } from '@assets/icons'
+import { Control, Controller } from 'react-hook-form'
 import SAPPFilterRadio from './SappFilterRadio'
 
 interface IFilterRadioGroupProps {

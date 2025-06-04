@@ -129,7 +129,7 @@ const HookFormCheckBoxGroup = ({
                     key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
-                      className={`me-2 ${className}}`}
+                      className={`me-2 ${className}`}
                       checked={checked}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
@@ -181,7 +181,9 @@ const HookFormCheckBoxGroup = ({
                         },
                       )}
                     >
-                      {option.label}
+                      <span className={clsx({ 'mr-3': checked && !!corrects })}>
+                        {option.label}
+                      </span>
                       <YourAnswer show={checked && !!corrects}></YourAnswer>
                     </span>
                   </label>

@@ -1,0 +1,17 @@
+.requirement-tabs {
+  .ant-tabs-nav {
+    padding: 0;
+  }
+
+  .ant-tabs-tab {
+    @apply font-normal text-bw-14;
+  }
+
+  .ant-tabs-tab-active {
+    @apply text-primary;
+  }
+
+  .ant-tabs-tab-btn {
+    padding: 0;
+  }
+}

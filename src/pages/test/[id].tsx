@@ -3,14 +3,12 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
   CalculatorIconV2,
   FlagIcon,
   ResizeIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-  TextSquareIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -54,11 +52,13 @@ import Popover from '@components/Popover'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { TabsProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
@@ -84,11 +84,11 @@ import {
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
+import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { Tooltip } from 'antd'
 
 declare global {
@@ -100,6 +100,7 @@ declare global {
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
+  const [editorReady, setEditorReady] = useState(true)
   const checkType = (
     data: any,
     type: string,
@@ -110,6 +111,64 @@ const TestDetail = () => {
     solution?: any,
     done?: boolean,
   ) => {
+    const handleEssayChange = (id: string) => {
+      setAnswerListValue(id as unknown as number)
+    }
+
+    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
+      return (
+        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          return {
+            label: `Requirement ${index + 1}`,
+            key: index,
+            children: (
+              <>
+                {editorReady && (
+                  <EssayQuestionPreview
+                    key={index}
+                    data={{
+                      ...currentTabContent?.data?.requirements?.[index],
+                      ...essayData?.req,
+                    }}
+                    question_content={currentTabContent?.data?.question_content}
+                    index={index}
+                    question_data={currentTabContent?.data}
+                    control={control}
+                    handleSaveHighLight={handleSaveHighLight}
+                    highlighted={highlighted}
+                    removeHighlight={removeHighlight}
+                    allowHighLight={allowHighLight}
+                    allowUnHighLight={allowUnHighLight}
+                    solution={solution}
+                    name={`${currentTabID}_${index}_answer`}
+                    setValue={setValue}
+                    defaultValue={defaultValue}
+                    response_option_custom={currentTabContent.response_type}
+                    externalRef={refEditor}
+                    fullData={currentTabContent}
+                    openChooseFile={(e: any) =>
+                      setOpenUpload({
+                        status: true,
+                        question_id: currentPage,
+                        requirementIndex: index,
+                      })
+                    }
+                    handleClearFile={handleClearFile}
+                    setOpenPdf={handleOpenScratchPad}
+                    handleSaveHighLightRequirement={
+                      handleSaveHighLightRequirement
+                    }
+                    showRequiment={showListRequirement}
+                    handleChange={handleEssayChange}
+                  />
+                )}
+              </>
+            ),
+          }
+        }) ?? []
+      )
+    }
+
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
         return (
@@ -236,9 +295,6 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
         const defaultValueEssay = () => {
           if (!isUndefined(essayData?.req?.short_answer)) {
             return essayData?.req?.short_answer
@@ -273,41 +329,18 @@ const TestDetail = () => {
           }
         }
         return (
-          <EssayQuestionPreview
-            data={{
-              ...currentTabContent?.data?.requirements?.[essayData?.index],
-              ...essayData?.req,
-            }}
-            question_content={currentTabContent?.data?.question_content}
-            index={essayData?.index}
-            question_data={currentTabContent?.data}
-            control={control}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            name={`${currentTabID}_${essayData?.index}_answer`}
-            setValue={setValue}
-            defaultValue={defaultValueEssay()}
-            response_option_custom={currentTabContent.response_type}
-            externalRef={refEditor}
-            fullData={currentTabContent}
-            openChooseFile={(e: any) =>
-              setOpenUpload({
-                status: true,
-                question_id: currentPage,
-                requirementIndex: essayData?.index,
+          <RequirementsTab
+            destroyInactiveTabPane={true}
+            items={essayRequirementsItem(defaultValueEssay())}
+            activeKey={essayData?.index ?? '0'}
+            defaultActiveKey="1"
+            onChange={(key) => {
+              setEssayData({
+                req: currentTabContent?.data?.requirements?.[key],
+                index: key,
               })
-            }
-            handleClearFile={handleClearFile}
-            setOpenPdf={handleOpenScratchPad}
-            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-            showRequiment={showListRequirement}
-            handleChange={handleEssayChange}
+            }}
           />
-          // <Luckysheet/>
         )
       default:
         return <div></div>
@@ -1194,8 +1227,26 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    const doAfterSetState = () => {
+      setEditorReady(false) // Ẩn trước
+      setTimeout(() => {
+        try {
+          if (refEditor?.current?.editor?.layout) {
+            refEditor.current.editor.layout()
+          } else if (refEditor?.current?.getEditor) {
+            refEditor.current.getEditor().root?.focus()
+          }
+          window.dispatchEvent(new Event('resize'))
+        } catch (e) {
+        } finally {
+          setEditorReady(true)
+        }
+      }, 100)
+    }
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       if (question) {
@@ -1227,6 +1278,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1238,17 +1290,20 @@ const TestDetail = () => {
         ref.current?.handleReset()
       }
       refEditor?.current?.reset()
+
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
     setScratchPadValues(null)
   }
-
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
       if (tabContent.id === item?.id) {
@@ -2028,7 +2083,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }
@@ -2245,7 +2299,7 @@ const TestDetail = () => {
             )}
           <button
             className={clsx(
-              'rounded-lg bg-sapp-black-1 px-4 py-2 text-sm font-semibold text-white hover:bg-black',
+              'rounded-lg bg-sapp-black-1 text-sm font-semibold text-white hover:bg-black',
               {
                 'bg-transparent !text-bw-13 underline hover:!bg-transparent':
                   currentTabContent?.is_viewed_answer,
@@ -2273,25 +2327,26 @@ const TestDetail = () => {
                 const index = filteredTabs.findIndex(
                   (e: any) => e.id === currentPage,
                 )
-                handleSubmitAnswer('change-tab')
-                setEssayData(undefined)
                 handleChangeTab(filteredTabs[index + 1].id)
+                handleSubmitAnswer('change-tab')
               }
 
               trackGAEvent('Click Button Confirm Answer')
             }}
           >
-            {isGradingAfterEachQuestion ? (
-              currentTabContent?.is_viewed_answer ? (
-                <div className="flex items-center gap-2">
-                  Next Question <Icon type="arrow-right" />
-                </div>
-              ) : (
-                'Confirm'
-              )
-            ) : (
-              'Confirm & Next'
-            )}
+            {isGradingAfterEachQuestion
+              ? currentTabContent?.is_viewed_answer
+                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <div className="flex items-center gap-2">
+                      Next Question <Icon type="arrow-right" />
+                    </div>
+                  )
+                : 'Confirm'
+              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1
+                ? 'Confirm & Next'
+                : 'Confirm'}
           </button>
         </div>
       </div>
@@ -2406,7 +2461,7 @@ const TestDetail = () => {
                   />
                 </button>
 
-                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                   <button className="relative h-full" ref={dropUpRequire}>
                     <div
                       className="flex items-center gap-3 border-l px-4 3xl:px-6"
@@ -2448,7 +2503,7 @@ const TestDetail = () => {
                       </div>
                     )}
                   </button>
-                )}
+                )} */}
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
