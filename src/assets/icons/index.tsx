@@ -2539,6 +2539,57 @@ export const PiPIcon = () => {
     </svg>
   )
 }
+export const ArrowLeft = ({ className }: IIconProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="24"
+      viewBox="0 0 25 24"
+      fill="none"
+      className={className}
+    >
+      <path
+        d="M9.94727 5.32129C10.2909 5.04071 10.7987 5.06041 11.1191 5.38086L11.1787 5.44727C11.4407 5.76815 11.4407 6.23185 11.1787 6.55273L11.1191 6.61914L6.61328 11.125H20.5C20.9832 11.125 21.375 11.5168 21.375 12C21.375 12.4832 20.9832 12.875 20.5 12.875H6.61328L11.1191 17.3809L11.1787 17.4473C11.4407 17.7681 11.4407 18.2319 11.1787 18.5527L11.1191 18.6191C10.7987 18.9396 10.2909 18.9593 9.94727 18.6787L9.88086 18.6191L3.88086 12.6191C3.53915 12.2774 3.53915 11.7226 3.88086 11.3809L9.88086 5.38086L9.94727 5.32129Z"
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="0.25"
+      />
+    </svg>
+  )
+}
+export const ArrowRight = ({ className }: IIconProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="24"
+      viewBox="0 0 25 24"
+      fill="none"
+      className={className}
+    >
+      <path
+        d="M13.9473 5.32129C14.2909 5.04071 14.7987 5.06041 15.1191 5.38086L21.1191 11.3809L21.1787 11.4473C21.4407 11.7681 21.4407 12.2319 21.1787 12.5527L21.1191 12.6191L15.1191 18.6191C14.7987 18.9396 14.2909 18.9593 13.9473 18.6787L13.8809 18.6191C13.5392 18.2774 13.5392 17.7226 13.8809 17.3809L18.3867 12.875H4.5C4.01675 12.875 3.625 12.4832 3.625 12C3.625 11.5168 4.01675 11.125 4.5 11.125H18.3867L13.8809 6.61914C13.5392 6.27743 13.5392 5.72257 13.8809 5.38086L13.9473 5.32129Z"
+        fill="currentColor"
+        stroke="currentColor"
+        stroke-width="0.25"
+      />
+    </svg>
+  )
+}
+export const PaginationDotIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+    >
+      <circle cx="8" cy="8" r="7.5" fill="currentColor" />
+    </svg>
+  )
+}
 
 export { default as NotificationIcon } from './NotificationIcon'
 export { SadIcon } from './SadIcon'

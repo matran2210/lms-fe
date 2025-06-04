@@ -58,3 +58,27 @@
     }
   }
 }
+
+.learning-act-tab-pagination {
+  @apply mt-6;
+  .tab-pagination {
+    @apply rounded-full p-2 text-dark-1;
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+    &:hover {
+      @apply bg-primary text-white;
+    }
+    &:focus {
+      @apply bg-primary text-white;
+    }
+    &.disabled {
+      @apply cursor-not-allowed bg-gray-2 text-dark-1 opacity-50;
+      &:hover {
+        @apply text-dark-1;
+      }
+    }
+  }
+
+  .tab-pagination-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-primary;
+  }
+}

@@ -1,3 +1,10 @@
+import {
+  ArrowLeft,
+  ArrowRight,
+  CircleArrowLeftIcon,
+  CircleArrowRightIcon,
+  PaginationDotIcon,
+} from '@assets/icons'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
@@ -6,10 +13,10 @@ import { CoursesAPI } from '@pages/api/courses'
 import { VideoStateClicked } from '@pages/courses/[id]/activity/[activityId]'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace } from '@utils/index'
-import { Tabs } from 'antd'
+import { Button, Tabs } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -47,6 +54,7 @@ const CourseTabDocument = ({
   focusOnlyQuiz,
   setFocusOnlyQuiz,
 }: IProps) => {
+  const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<any>(null)
   const queryAction = useQueryAction()
@@ -54,7 +62,6 @@ const CourseTabDocument = ({
   const courseId = router.query?.id
   const activityId = router.query.activityId
   const dispatch = useAppDispatch()
-  const selector = useAppSelector(courseActivityReducer)
   /**
    * Giá trị được memoized cho course_tab_documents.
    */
@@ -63,6 +70,9 @@ const CourseTabDocument = ({
       ?.course_tab_documents
   }, [selector?.tabs])
 
+  const currentIndex = selector?.tabs?.findIndex(
+    (tab) => tab?.id === selector?.currentTabId,
+  )
   /**
    * Hàm xử lý khi thay đổi tab.
    * @param {string} id - ID của tab.
@@ -92,9 +102,6 @@ const CourseTabDocument = ({
    * @returns {string | undefined} - ID của tab trước đó.
    */
   const getPreviousTabId = () => {
-    const currentIndex = selector?.tabs?.findIndex(
-      (tab) => tab?.id === selector?.currentTabId,
-    )
     const previousIndex = (currentIndex || 0) - 1
     return selector?.tabs?.[previousIndex]?.id
   }
@@ -104,12 +111,10 @@ const CourseTabDocument = ({
    * @returns {string | undefined} - ID của tab tiếp theo.
    */
   const getNextTabId = () => {
-    const currentIndex = selector?.tabs?.findIndex(
-      (tab) => tab?.id === selector?.currentTabId,
-    )
     const nextIndex = (currentIndex || 0) + 1
     return selector?.tabs?.[nextIndex]?.id
   }
+
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     if (isHasQuizGrading) {
       return
@@ -244,77 +249,6 @@ const CourseTabDocument = ({
                     return null
                   })}
                 </div>
-
-                <div
-                  className={clsx('mt-8 flex flex-wrap justify-between gap-5', {
-                    hidden: focusOnlyQuiz,
-                  })}
-                >
-                  {getPreviousTabId() && (
-                    <div className="w-auto">
-                      <div className="relative">
-                        <div
-                          onClick={() => {
-                            handleChangeTab(
-                              courseId as string,
-                              getPreviousTabId() || '',
-                            )
-                            trackGAEvent('Click Button Previous Tab Activity')
-                          }}
-                          className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            fill="none"
-                          >
-                            <path
-                              className="fill-bw-1 group-hover:fill-primary"
-                              fillRule="evenodd"
-                              d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          Previous Tab
-                        </div>
-                        <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
-                      </div>
-                    </div>
-                  )}
-                  {getNextTabId() && (
-                    <div className="relative ml-auto w-auto">
-                      <div className="relative">
-                        <div
-                          onClick={() => {
-                            handleChangeTab(
-                              courseId as string,
-                              getNextTabId() || '',
-                            )
-                            trackGAEvent('Click Button Next Tab Activity')
-                          }}
-                          className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
-                        >
-                          Next Tab
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={20}
-                            height={20}
-                            fill="none"
-                          >
-                            <path
-                              className="fill-bw-1 group-hover:fill-primary"
-                              fillRule="evenodd"
-                              d="M12.293 5.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414-1.414L14.586 11H3a1 1 0 0 1 0-2h11.586l-2.293-2.293a1 1 0 0 1 0-1.414Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </div>
-                        <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             </div>
           </ActivitySkeleton>
@@ -331,13 +265,56 @@ const CourseTabDocument = ({
         className={clsx('learning-activity-tabs', {
           'tabs-list-hidden': focusOnlyQuiz,
         })}
-        defaultActiveKey="1"
+        activeKey={selector?.currentTabId}
         items={items}
         onChange={(key: string) => {
           handleChangeTab(courseId as string, key)
           trackGAEvent('Click Button Tab Activity')
         }}
       />
+      <div
+        className={clsx(
+          'learning-act-tab-pagination flex items-center justify-center gap-8',
+          {
+            hidden: focusOnlyQuiz,
+          },
+        )}
+      >
+        <button
+          className={clsx('tab-pagination', { disabled: !getPreviousTabId() })}
+          disabled={!getPreviousTabId()}
+          onClick={() => {
+            handleChangeTab(courseId as string, getPreviousTabId() || '')
+            trackGAEvent('Click Button Previous Tab Activity')
+          }}
+          style={{ marginRight: 8 }}
+        >
+          <ArrowLeft />
+        </button>
+        <div className="flex items-center justify-between gap-3">
+          {selector?.tabs?.map((tab, index) => (
+            <span
+              key={tab.id}
+              className={clsx('cursor-pointer text-gray-897', {
+                '!text-primary': index == currentIndex,
+              })}
+              onClick={() => handleChangeTab(courseId as string, tab.id)}
+            >
+              <PaginationDotIcon />
+            </span>
+          ))}
+        </div>
+        <button
+          className={clsx('tab-pagination', { disabled: !getNextTabId() })}
+          disabled={!getNextTabId()}
+          onClick={() => {
+            handleChangeTab(courseId as string, getNextTabId() || '')
+            trackGAEvent('Click Button Previous Tab Activity')
+          }}
+        >
+          <ArrowRight />
+        </button>
+      </div>
     </div>
   )
 }
