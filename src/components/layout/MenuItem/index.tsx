@@ -24,7 +24,7 @@ import {
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { NotificationAPI } from '@pages/api/notification'
-import SappNotificationComponent from 'sapp-notification-package'
+import SappNotificationComponent from 'sapp-notification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -478,7 +478,10 @@ export default function MenuItem({
       </div>
       {openNotification && (
         <SappNotificationComponent
-          notifyDetail={notifyDetail}
+          notifyDetail={{
+            ...notifyDetail,
+            send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
+          }}
           tabs={tabs}
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
