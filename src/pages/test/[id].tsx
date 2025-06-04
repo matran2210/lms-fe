@@ -124,7 +124,6 @@ const TestDetail = () => {
               {editorReady && (
                 <EssayQuestionPreview
                   key={index}
-                  indexKey={index}
                   data={{
                     ...currentTabContent?.data?.requirements?.[index],
                     ...essayData?.req,
@@ -301,6 +300,7 @@ const TestDetail = () => {
           <RequirementsTab
             destroyInactiveTabPane={true}
             items={essayRequirementsItem}
+            activeKey={essayData?.index ?? '0'}
             defaultActiveKey="1"
             onChange={(key) => {
               setEssayData({
@@ -1195,6 +1195,7 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     const doAfterSetState = () => {
