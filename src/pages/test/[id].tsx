@@ -99,6 +99,7 @@ declare global {
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
+  const [editorReady, setEditorReady] = useState(true)
   const checkType = (
     data: any,
     type: string,
@@ -119,45 +120,52 @@ const TestDetail = () => {
           label: `Requirement ${index + 1}`,
           key: index,
           children: (
-            <EssayQuestionPreview
-              data={{
-                ...currentTabContent?.data?.requirements?.[essayData?.index],
-                ...essayData?.req,
-              }}
-              question_content={currentTabContent?.data?.question_content}
-              index={essayData?.index}
-              question_data={currentTabContent?.data}
-              control={control}
-              handleSaveHighLight={handleSaveHighLight}
-              highlighted={highlighted}
-              removeHighlight={removeHighlight}
-              allowHighLight={allowHighLight}
-              allowUnHighLight={allowUnHighLight}
-              solution={solution}
-              name={`${currentTabID}_${essayData?.index}_answer`}
-              setValue={setValue}
-              defaultValue={
-                getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-                currentTabContent?.data?.requirements?.[essayData?.index]
-                  ?.answer_text ||
-                currentTabContent?.answer
-              }
-              response_option_custom={currentTabContent.response_type}
-              externalRef={refEditor}
-              fullData={currentTabContent}
-              openChooseFile={(e: any) =>
-                setOpenUpload({
-                  status: true,
-                  question_id: currentPage,
-                  requirementIndex: essayData?.index,
-                })
-              }
-              handleClearFile={handleClearFile}
-              setOpenPdf={handleOpenScratchPad}
-              handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-              showRequiment={showListRequirement}
-              handleChange={handleEssayChange}
-            />
+            <>
+              {editorReady && (
+                <EssayQuestionPreview
+                  key={index}
+                  data={{
+                    ...currentTabContent?.data?.requirements?.[index],
+                    ...essayData?.req,
+                  }}
+                  question_content={currentTabContent?.data?.question_content}
+                  index={index}
+                  question_data={currentTabContent?.data}
+                  control={control}
+                  handleSaveHighLight={handleSaveHighLight}
+                  highlighted={highlighted}
+                  removeHighlight={removeHighlight}
+                  allowHighLight={allowHighLight}
+                  allowUnHighLight={allowUnHighLight}
+                  solution={solution}
+                  name={`${currentTabID}_${index}_answer`}
+                  setValue={setValue}
+                  defaultValue={
+                    getValues(`${currentTabID}_${index}_answer`) ||
+                    currentTabContent?.data?.requirements?.[index]
+                      ?.answer_text ||
+                    currentTabContent?.answer
+                  }
+                  response_option_custom={currentTabContent.response_type}
+                  externalRef={refEditor}
+                  fullData={currentTabContent}
+                  openChooseFile={(e: any) =>
+                    setOpenUpload({
+                      status: true,
+                      question_id: currentPage,
+                      requirementIndex: index,
+                    })
+                  }
+                  handleClearFile={handleClearFile}
+                  setOpenPdf={handleOpenScratchPad}
+                  handleSaveHighLightRequirement={
+                    handleSaveHighLightRequirement
+                  }
+                  showRequiment={showListRequirement}
+                  handleChange={handleEssayChange}
+                />
+              )}
+            </>
           ),
         }
       }) ?? []
@@ -290,7 +298,9 @@ const TestDetail = () => {
       case QUESTION_TYPES.ESSAY:
         return (
           <RequirementsTab
+            destroyInactiveTabPane={true}
             items={essayRequirementsItem}
+            activeKey={essayData?.index ?? '0'}
             defaultActiveKey="1"
             onChange={(key) => {
               setEssayData({
@@ -1185,8 +1195,26 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    const doAfterSetState = () => {
+      setEditorReady(false) // Ẩn trước
+      setTimeout(() => {
+        try {
+          if (refEditor?.current?.editor?.layout) {
+            refEditor.current.editor.layout()
+          } else if (refEditor?.current?.getEditor) {
+            refEditor.current.getEditor().root?.focus()
+          }
+          window.dispatchEvent(new Event('resize'))
+        } catch (e) {
+        } finally {
+          setEditorReady(true)
+        }
+      }, 100)
+    }
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       if (question) {
@@ -1218,6 +1246,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1229,17 +1258,20 @@ const TestDetail = () => {
         ref.current?.handleReset()
       }
       refEditor?.current?.reset()
+
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
     setScratchPadValues(null)
   }
-
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
       if (tabContent.id === item?.id) {
