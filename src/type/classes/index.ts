@@ -1,5 +1,6 @@
 import { QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { Metadata } from '../results'
+import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
 export interface IUniversityProgram {
   value: string
@@ -119,6 +120,9 @@ export interface IMyClass {
   course_type?: string
   course: { name: string }
   classes: IClass[]
+  started_at: Date
+  finished_at: Date
+  class_standard_schedules?: ClassStandardScheduleItem[]
 }
 
 export interface ICourseCategory {
