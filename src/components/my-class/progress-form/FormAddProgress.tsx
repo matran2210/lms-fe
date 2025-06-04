@@ -22,6 +22,7 @@ import {
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { sortSectionsByPosition } from '@utils/teacher-progress'
 
 const defaultValues = {
   lesson: undefined,
@@ -233,7 +234,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                 value: res.data[0]?.course_sections[0]?.id,
               },
             ])
-            setTreeDataNotConvert(res.data)
+            setTreeDataNotConvert(sortSectionsByPosition(res.data))
           }
           //
         } catch (error) {
