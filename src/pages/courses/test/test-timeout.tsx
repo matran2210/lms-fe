@@ -1,5 +1,5 @@
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { TimeIcon } from '@components/icons'
+import { TimeOutIcon } from '@components/icons'
 
 interface IProps {
   open: boolean
@@ -38,10 +38,10 @@ const TestTimeOutModal = ({
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
-      buttonSize="extra"
-      icon={<TimeIcon />}
+      buttonSize="medium"
+      icon={<TimeOutIcon />}
       header="Time Out"
-      content="The test has timed out and has been submitted automatically."
+      content="You are running out of time to do your test"
       isMaskClosable={false}
     />
   )

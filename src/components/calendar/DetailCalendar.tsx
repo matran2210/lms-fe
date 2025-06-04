@@ -130,6 +130,11 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     }
   }
 
+  const dateNow = dayjs().add(7, 'hour')
+  const dateOpenSection = dayjs(
+    `${data?.schedule?.start_date} ${data?.schedule?.start_time}`,
+  )
+
   useEffect(() => {
     if (open.isOpen) {
       fetchData()
@@ -149,7 +154,9 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       drawerSubId={'-notes-list'}
       heightBody={'h-[calc(100vh-112px)]'}
       showCancelButton={false}
-      showSubmitButton={data?.mode === 'ONLINE'}
+      showSubmitButton={
+        data?.mode === 'ONLINE' && dateOpenSection.isBefore(dateNow)
+      }
       btnSubmitTile={
         LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
           ? 'Start'

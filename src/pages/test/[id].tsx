@@ -54,7 +54,7 @@ import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -89,6 +89,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { Tooltip } from 'antd'
 
 declare global {
   interface Window {
@@ -114,61 +115,59 @@ const TestDetail = () => {
       setAnswerListValue(id as unknown as number)
     }
 
-    const essayRequirementsItem: TabsProps['items'] =
-      currentTabContent?.data?.requirements?.map((_: any, index: number) => {
-        return {
-          label: `Requirement ${index + 1}`,
-          key: index,
-          children: (
-            <>
-              {editorReady && (
-                <EssayQuestionPreview
-                  key={index}
-                  data={{
-                    ...currentTabContent?.data?.requirements?.[index],
-                    ...essayData?.req,
-                  }}
-                  question_content={currentTabContent?.data?.question_content}
-                  index={index}
-                  question_data={currentTabContent?.data}
-                  control={control}
-                  handleSaveHighLight={handleSaveHighLight}
-                  highlighted={highlighted}
-                  removeHighlight={removeHighlight}
-                  allowHighLight={allowHighLight}
-                  allowUnHighLight={allowUnHighLight}
-                  solution={solution}
-                  name={`${currentTabID}_${index}_answer`}
-                  setValue={setValue}
-                  defaultValue={
-                    getValues(`${currentTabID}_${index}_answer`) ||
-                    currentTabContent?.data?.requirements?.[index]
-                      ?.answer_text ||
-                    currentTabContent?.answer
-                  }
-                  response_option_custom={currentTabContent.response_type}
-                  externalRef={refEditor}
-                  fullData={currentTabContent}
-                  openChooseFile={(e: any) =>
-                    setOpenUpload({
-                      status: true,
-                      question_id: currentPage,
-                      requirementIndex: index,
-                    })
-                  }
-                  handleClearFile={handleClearFile}
-                  setOpenPdf={handleOpenScratchPad}
-                  handleSaveHighLightRequirement={
-                    handleSaveHighLightRequirement
-                  }
-                  showRequiment={showListRequirement}
-                  handleChange={handleEssayChange}
-                />
-              )}
-            </>
-          ),
-        }
-      }) ?? []
+    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
+      return (
+        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          return {
+            label: `Requirement ${index + 1}`,
+            key: index,
+            children: (
+              <>
+                {editorReady && (
+                  <EssayQuestionPreview
+                    key={index}
+                    data={{
+                      ...currentTabContent?.data?.requirements?.[index],
+                      ...essayData?.req,
+                    }}
+                    question_content={currentTabContent?.data?.question_content}
+                    index={index}
+                    question_data={currentTabContent?.data}
+                    control={control}
+                    handleSaveHighLight={handleSaveHighLight}
+                    highlighted={highlighted}
+                    removeHighlight={removeHighlight}
+                    allowHighLight={allowHighLight}
+                    allowUnHighLight={allowUnHighLight}
+                    solution={solution}
+                    name={`${currentTabID}_${index}_answer`}
+                    setValue={setValue}
+                    defaultValue={defaultValue}
+                    response_option_custom={currentTabContent.response_type}
+                    externalRef={refEditor}
+                    fullData={currentTabContent}
+                    openChooseFile={(e: any) =>
+                      setOpenUpload({
+                        status: true,
+                        question_id: currentPage,
+                        requirementIndex: index,
+                      })
+                    }
+                    handleClearFile={handleClearFile}
+                    setOpenPdf={handleOpenScratchPad}
+                    handleSaveHighLightRequirement={
+                      handleSaveHighLightRequirement
+                    }
+                    showRequiment={showListRequirement}
+                    handleChange={handleEssayChange}
+                  />
+                )}
+              </>
+            ),
+          }
+        }) ?? []
+      )
+    }
 
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -227,7 +226,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchQuizWrapper
+          <MatchQuizComponent
             data={data}
             ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
@@ -296,10 +295,43 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const defaultValueEssay = () => {
+          if (!isUndefined(essayData?.req?.short_answer)) {
+            return essayData?.req?.short_answer
+          }
+          if (
+            !isUndefined(
+              getValues(`${currentTabID}_${essayData?.index}_answer`),
+            )
+          ) {
+            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.short_answer,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.short_answer
+          }
+          if (
+            !isUndefined(
+              currentTabContent?.data?.requirements?.[essayData?.index]
+                ?.answer_text,
+            )
+          ) {
+            return currentTabContent?.data?.requirements?.[essayData?.index]
+              ?.answer_text
+          }
+          if (!isUndefined(currentTabContent?.answer)) {
+            return currentTabContent?.answer
+          }
+        }
         return (
           <RequirementsTab
             destroyInactiveTabPane={true}
-            items={essayRequirementsItem}
+            items={essayRequirementsItem(defaultValueEssay())}
             activeKey={essayData?.index ?? '0'}
             defaultActiveKey="1"
             onChange={(key) => {
@@ -603,7 +635,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -663,7 +695,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1553,7 +1585,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1578,7 +1616,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
@@ -1634,8 +1674,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -1728,8 +1768,8 @@ const TestDetail = () => {
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
-            router.replace(`/event-test`)
             setSubmitEventTest(true)
+            router.replace(`/event-test`)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2162,13 +2202,19 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer = answerMap.has(question.id)
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
+
+            // const hasAnswer = answerMap.has(question.id)
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2278,24 +2324,11 @@ const TestDetail = () => {
                   )
                 }
               } else {
+                const index = filteredTabs.findIndex(
+                  (e: any) => e.id === currentPage,
+                )
+                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
-                if (
-                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1
-                ) {
-                  const index = filteredTabs.findIndex(
-                    (e: any) => e.id === currentPage,
-                  )
-                  handleChangeTab(filteredTabs[index + 1].id)
-                } else {
-                  handleSubmitAnswer('finish')
-                  if (checkUnSubmitAnswer()?.length > 0) {
-                    setUnSubmitAnswer(true)
-                  } else {
-                    setOpenSubmit(true)
-                  }
-                  dispatch(disableUnsavedChange())
-                }
               }
 
               trackGAEvent('Click Button Confirm Answer')
@@ -2482,8 +2515,9 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
-                      id && handleChangeTab(id)
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }}
                     hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
@@ -2495,17 +2529,40 @@ const TestDetail = () => {
                   {hasScrollBar && (
                     <div className="ml-8 flex items-center">
                       {activeShowAll && <OptionShowAll />}
-                      <div
-                        className={clsx(
-                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
-                        )}
-                        onClick={() => {
-                          // setPageNums(activeShowAll ? arrPage : getPagination)
-                          setActiveShowAll(!activeShowAll)
-                        }}
+                      <Tooltip
+                        className="tooltip-show-all"
+                        title={
+                          <div className="flex items-center gap-2">
+                            {activeShowAll ? (
+                              <div className="rounded-full bg-white">
+                                <ShowLessIcon size={16} color="#404041" />
+                              </div>
+                            ) : (
+                              <div className="rounded-full bg-white">
+                                <ShowMoreIcon size={16} color="#404041" />
+                              </div>
+                            )}
+                            <span>
+                              {activeShowAll ? 'Show Less' : 'Show All'}
+                            </span>
+                          </div>
+                        }
                       >
-                        {!activeShowAll ? <ShowLessIcon /> : <ShowMoreIcon />}
-                      </div>
+                        <div
+                          className={clsx(
+                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                          )}
+                          onClick={() => {
+                            setActiveShowAll(!activeShowAll)
+                          }}
+                        >
+                          {!activeShowAll ? (
+                            <ShowLessIcon size={24} />
+                          ) : (
+                            <ShowMoreIcon size={24} />
+                          )}
+                        </div>
+                      </Tooltip>
                     </div>
                   )}
                 </div>
@@ -2896,7 +2953,7 @@ const TestDetail = () => {
               handleQuit={() => {
                 if (type === 'event-test') {
                   router.replace(`/event-test`)
-                  setSubmitEventTest(true)
+                  // setSubmitEventTest(true)
                 } else {
                   router.back()
                 }
@@ -2916,13 +2973,10 @@ const TestDetail = () => {
               open={openSubmit}
               setOpen={setOpenSubmit}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                handleSubmitQuestions('submit')
+                if (type !== 'event-test') {
                   setOpenSubmit(false)
                 }
-                handleSubmitQuestions('submit')
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2934,10 +2988,19 @@ const TestDetail = () => {
               setOpen={setUnSubmitAnswer}
               data={unSubmitAnswerData}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                if (type !== 'event-test') {
+                  setUnSubmitAnswer(false)
+                }
+                handleSubmitQuestions('submit')
+              }}
+              handleCancel={() => setUnSubmitAnswer(false)}
+            />
+            <UnSubmitAnswerModal
+              open={openUnSubmitAnswer}
+              setOpen={setUnSubmitAnswer}
+              data={unSubmitAnswerData}
+              handleSubmit={() => {
+                if (type !== 'event-test') {
                   setUnSubmitAnswer(false)
                 }
                 handleSubmitQuestions('submit')

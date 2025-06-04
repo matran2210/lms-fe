@@ -11,11 +11,44 @@ import { compareAsc, format } from 'date-fns'
 import Icon from '@components/icons'
 import ContentTestCongratution from './ContentTestCongratution'
 import { useCourseContext } from '@contexts/index'
+import dayjs from 'dayjs'
+import { EAttemptStatus } from 'src/constants/attempt'
+import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 
 const EventTest = ({ data }: { data: IEventTest }) => {
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
   const { setSubmitEventTest, submitEventTest } = useCourseContext()
+  const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
+    useState<number>(0)
+
+  useEffect(() => {
+    if (data) {
+      if (
+        data?.quiz_timed &&
+        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      ) {
+        const calcTime = dayjs(
+          dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
+        ).diff(dayjs(), 'seconds')
+
+        setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
+        const remainingTimeInterval = setInterval(() => {
+          setRemainingTimeLastAttempt((prev) => {
+            if (prev <= 0) {
+              clearInterval(remainingTimeInterval)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+
+        return () => {
+          clearInterval(remainingTimeInterval)
+        }
+      }
+    }
+  }, [data])
 
   const handleCancelModalSubmitTest = () => {
     setSubmitEventTest(false)
@@ -103,14 +136,12 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     textNotAttempt: string | number,
     textExpired: string | number,
   ) => {
-    if (data?.is_attempt) {
+    if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
       return textDoneAttempt
-    } else if (resultFinishAt === 1 && !data?.is_attempt) {
+    } else if (resultFinishAt === 1) {
       return textExpired
-    } else if (!data?.is_attempt) {
-      return textNotAttempt
     } else {
-      return ''
+      return textNotAttempt
     }
   }
 
@@ -120,6 +151,42 @@ const EventTest = ({ data }: { data: IEventTest }) => {
       : colorDefault
   }
 
+  const handleClickBegin = () => {
+    if (resultStartAt === -1 || resultFinishAt === 1) {
+      setOpen(true)
+    } else {
+      let isExpired = false
+      if (data?.quiz_timed) {
+        isExpired = isQuizExpired(new Date(data?.created_at), data?.quiz_timed)
+      }
+
+      const isContinue = data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+      if (
+        (isContinue && !isExpired) ||
+        (remainingTimeLastAttempt <= 0 &&
+          data?.attempt_status === EAttemptStatus['IN_PROGRESS'])
+      ) {
+        localStorage.setItem(
+          'quizAttempt',
+          JSON.stringify({
+            id: data?.quiz_attempt_id,
+            number_of_attempts: data?.attempt_times,
+            is_limited: data?.is_limited,
+            quiz_timed: data?.quiz_timed,
+            created_at: data?.created_at,
+          }),
+        )
+      } else {
+        localStorage.removeItem('quizAttempt')
+      }
+      router.push({
+        pathname: `/test/${data?.id}`,
+        query: {
+          type: 'event-test',
+        },
+      })
+    }
+  }
   return (
     <>
       <div className="name">
@@ -162,7 +229,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             <p className={`font-medium ${getTextColor('text-bw-1')}`}>
               {getEventTestStatus(
                 resultDate(data?.course_category?.name),
-                data?.quiz_question_instances?.length,
+                data?.total_question || data?.quiz_question_instances?.length,
                 format(new Date(data?.finished_at), 'dd/MM/yyyy'),
               )}
             </p>
@@ -177,32 +244,24 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             <p
               className={`ml-px pl-2 text-medium-sm font-medium ${getTextColor('text-bw-1')}`}
             >
-              {data?.is_attempt
+              {data?.attempt_status === EAttemptStatus['SUBMITTED']
                 ? 'Completed'
-                : resultFinishAt === 1 && !data?.is_attempt
+                : resultFinishAt === 1
                   ? 'Expired'
-                  : !data?.is_attempt
-                    ? 'Take Your Test '
-                    : ''}
+                  : 'Take Your Test'}
             </p>
           </div>
-          {!data?.is_attempt && resultFinishAt !== 1 && (
-            <ButtonSecondary
-              title="Begin"
-              size="small"
-              full={false}
-              onClick={() =>
-                resultStartAt === -1 || resultFinishAt === 1
-                  ? setOpen(true)
-                  : router.push({
-                      pathname: `/test/${data?.id}`,
-                      query: {
-                        type: 'event-test',
-                      },
-                    })
-              }
-            />
-          )}
+          {(!data?.attempt_status ||
+            data?.attempt_status === EAttemptStatus['UN_SUBMITTED'] ||
+            data?.attempt_status === EAttemptStatus['IN_PROGRESS']) &&
+            resultFinishAt !== 1 && (
+              <ButtonSecondary
+                title="Begin"
+                size="small"
+                full={false}
+                onClick={() => handleClickBegin()}
+              />
+            )}
         </div>
       </div>
 

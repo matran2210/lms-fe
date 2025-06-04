@@ -1,4 +1,5 @@
 import { TestAPI } from '@pages/api/test'
+import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
 
@@ -245,4 +246,13 @@ export const isValuesEqual = async (
   }
 
   return false
+}
+
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
 }

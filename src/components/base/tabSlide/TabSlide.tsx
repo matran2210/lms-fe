@@ -1,10 +1,7 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import Pagination from '../pagination/Pagination'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import PageLink from '../pagination/PageLink'
-import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
-import { ShowLessIcon, ShowMoreIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
 

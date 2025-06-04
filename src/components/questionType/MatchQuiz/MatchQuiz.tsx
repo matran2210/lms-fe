@@ -23,6 +23,7 @@ import CustomEdge from './CustomEdge'
 import { CustomNode } from './CustomNode'
 import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
+import { runHighlight } from '@utils/index'
 
 interface IProps {
   data: any
@@ -172,7 +173,7 @@ const MatchQuiz = forwardRef(
           id: item.id,
           label: item.content,
           role: 'question' as Role,
-          color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
+          color: Color.TextDefault,
         })) || []
 
       const answers: RawItem[] =
@@ -180,7 +181,7 @@ const MatchQuiz = forwardRef(
           id: item.answer.id,
           label: item.answer.answer,
           role: 'answer' as Role,
-          color: Color.TextDefault, // Mặc định màu đen, có thể thay đổi sau
+          color: Color.TextDefault,
         })) || []
 
       const transformed = transformDataToNodes({
@@ -256,6 +257,7 @@ const MatchQuiz = forwardRef(
       })
 
       setEdges(newEdges)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultAnswer, corrects])
 
     useEffect(() => {
@@ -409,6 +411,85 @@ const MatchQuiz = forwardRef(
 
     return (
       <div key={key} ref={extenalRef}>
+        <div
+          id="hightlight_area"
+          onMouseUp={(e: any) => {
+            if (
+              e?.target?.tagName?.charAt(0) !== 'm' &&
+              e?.target?.firstChild?.tagName !== 'math'
+            ) {
+              // if(e){
+              if (allowHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowHighLight || false,
+                  'hightlight_area',
+                )
+              } else if (allowUnHighLight) {
+                runHighlight(
+                  handleSaveHighLight,
+                  allowUnHighLight || false,
+                  'hightlight_area',
+                  { color: 'white' },
+                )
+              }
+              // }
+            }
+          }}
+        >
+          {data?.question_topic?.exhibits &&
+            !isHideExhibit &&
+            data?.question_topic?.exhibits?.length > 0 && (
+              <>
+                {!!data?.question_topic?.description && (
+                  <div className="my-6 border border-b-gray-2"></div>
+                )}
+                <div className="mb-4 flex items-center">
+                  <div className="font-semibold">
+                    {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                    {data?.question_topic?.exhibits?.length || 0})
+                  </div>
+                  <div className="ml-4">
+                    <span className="text-state-error">* </span>
+                    <span className="text-gray-1">Click to view</span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {data?.question_topic?.exhibits?.map((e: any, i: number) => {
+                    return (
+                      <div
+                        className="cursor-pointer hover:text-primary"
+                        key={e?.id ?? i}
+                        onClick={(event) => {
+                          setOpenFile &&
+                            setOpenFile(
+                              {
+                                type: 'exhibits',
+                                description: e?.description,
+                                name: e?.name,
+                                index: i,
+                                files: e?.files,
+                              },
+                              null,
+                              null,
+                              event,
+                            )
+                        }}
+                      >
+                        {exhibitText} {i + 1}: {e?.name}
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="my-6 border border-b-gray-2"></div>
+              </>
+            )}
+          <EditorReader
+            className="sapp-questions !mb-[32px]"
+            text_editor_content={data?.question_content}
+            highlighted={highlighted}
+          />
+        </div>
         <div className="flex h-full w-full flex-col">
           <div
             className={`relative w-full min-w-[700px]`}
@@ -469,10 +550,10 @@ const MatchQuiz = forwardRef(
 
 MatchQuiz.displayName = 'MatchQuiz'
 
-const MatchQuizWrapper = forwardRef((props: IProps, ref) => {
+const MatchQuizComponent = forwardRef((props: IProps, ref) => {
   return <MatchQuiz {...props} ref={ref} />
 })
 
-MatchQuizWrapper.displayName = 'MatchQuizWrapper'
+MatchQuizComponent.displayName = 'MatchQuizComponent'
 
-export default MatchQuizWrapper
+export default MatchQuizComponent
