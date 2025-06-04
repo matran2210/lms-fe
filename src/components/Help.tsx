@@ -29,7 +29,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   useEffect(() => {
     if (isTeacherPage) {
       const hsScript = document.getElementById('hs-script-loader')
-      if (hsScript) document.head.removeChild(hsScript)
+      if (hsScript) document?.head?.removeChild(hsScript)
 
       // Also clean up HubSpot containers if they exist
       const container = document.getElementById(

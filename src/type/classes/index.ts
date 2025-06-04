@@ -1,4 +1,4 @@
-import { QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { Metadata } from '../results'
 import { ClassStandardScheduleItem } from 'src/type/teachers/request-schedule.interface'
 
@@ -49,6 +49,7 @@ export interface IStudentClassDetail {
     finished_at?: string
     status?: QUIZ_ATTEMPT_STATUS
     score?: number
+    grading_status?: QUIZ_ATTEMPT_GRADING_STATUS
   }
   start_time?: string
   end_time?: string

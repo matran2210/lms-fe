@@ -132,7 +132,11 @@ const ChapterTest = () => {
     {
       title: 'Status',
       render: (record: IStudentClassDetail) => (
-        <StatusActionCell dataColumn={record?.attempt?.status} />
+        <StatusActionCell
+          dataColumn={
+            record?.attempt?.grading_status || record?.attempt?.status
+          }
+        />
       ),
     },
     {
