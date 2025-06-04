@@ -17,6 +17,7 @@ import StatusActionCell from '@components/teacher/components/StatusActionCell'
 import useSappPaging from 'src/hooks/useSappPaging'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { ProfilePages } from 'src/type/Profile'
 
 interface FilterParams {
   status?: string
@@ -59,7 +60,7 @@ const ChapterTest = () => {
       title: 'Class Detail',
     },
     {
-      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}?tabId=students-test-result`,
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}?tabId=${ProfilePages.STUDENTS_TEST_RESULT}`,
       title: 'Test/Quiz List',
     },
     { link: '', title: 'Chapter Test' },
