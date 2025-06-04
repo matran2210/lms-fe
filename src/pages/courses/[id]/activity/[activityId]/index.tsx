@@ -762,7 +762,7 @@ const ActivityPage = () => {
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="center"
+                  position="bottom left"
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
@@ -780,7 +780,7 @@ const ActivityPage = () => {
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="center"
+                  position="bottom left"
                   header={
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">

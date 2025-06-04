@@ -54,6 +54,7 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
+  className?: string
 }
 const EssayQuestionPreview = ({
   data,
@@ -82,6 +83,7 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
+  className = '',
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
@@ -179,7 +181,7 @@ const EssayQuestionPreview = ({
     }
   }
   return (
-    <div style={{ background: 'white' }}>
+    <div className={clsx('bg-white', className)}>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"

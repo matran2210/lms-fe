@@ -1,8 +1,9 @@
-import { FileTextIcon } from '@assets/icons'
+import { DownloadIcon, FileTextIcon } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { download } from '@components/learning/activity/ActivityResource'
 import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -468,7 +469,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -483,7 +483,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -498,7 +497,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -512,7 +510,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getValueFillText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -529,7 +526,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               resetDefaultAnswer={false}
               setOpenFile={setOpenFile}
               ref={DragDropRef}
-              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -543,7 +539,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
@@ -619,50 +614,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   </>
                 )}
-                {/* {exhibitData && exhibitData?.length > 0 && (
-                  <>
-                    <div className="my-6 border border-b-gray-2"></div>
-                    <div className="mb-4 flex items-center">
-                      <div className="font-semibold">
-                        {exhibitText}s ({exhibitData?.length || 0})
-                      </div>
-                      <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {exhibitData?.map((e: any, i: number) => {
-                        return (
-                          <div
-                            className="cursor-pointer hover:text-primary"
-                            key={e?.id ?? i}
-                            onClick={(event) => {
-                              setOpenFile &&
-                                setOpenFile(
-                                  {
-                                    type: 'exhibits',
-                                    description: e?.description,
-                                    name: e?.name,
-                                    index: i,
-                                    files: e?.files,
-                                  },
-                                  null,
-                                  null,
-                                  event,
-                                )
-                            }}
-                          >
-                            {exhibitText} {i + 1}: {e?.name}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </>
-                )} */}
               </div>
               <div className="my-6"></div>
               <EssayQuestionPreview
+                className="!bg-transparent"
                 defaultValue={
                   activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                     if (
@@ -822,6 +777,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
             {activeQuestion?.question_topic?.files?.length > 0 && (
               <Popover
+                className=""
                 placement="leftTop"
                 trigger="click"
                 content={
@@ -830,20 +786,38 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       (e: any, index: number) => {
                         return (
                           <div
-                            key={e?.value}
                             className={clsx(
-                              'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center',
+                              `flex items-start justify-between gap-8 p-2`,
                             )}
-                            onClick={() => {
-                              setOpenFile &&
-                                setOpenFile(
-                                  { type: 'file' },
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                            }}
+                            key={e?.value}
                           >
-                            {e?.resource?.name}
+                            <div
+                              key={e?.value}
+                              className={clsx(
+                                'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
+                              )}
+                              onClick={() => {
+                                setOpenFile &&
+                                  setOpenFile(
+                                    { type: 'file' },
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                              }}
+                            >
+                              {e?.resource?.name}
+                            </div>
+                            <div
+                              className="cursor-pointer text-white"
+                              onClick={() => {
+                                download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                )
+                              }}
+                            >
+                              <DownloadIcon color="currentColor" />
+                            </div>
                           </div>
                         )
                       },
@@ -851,8 +825,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 }
               >
-                <div className="group absolute right-8 top-[142px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay ">
+                <div
+                  className={clsx(
+                    'group absolute right-0 top-[104px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                    {
+                      '!top-[194px]':
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                    },
+                  )}
+                >
                   <FileTextIcon />
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
                 </div>
               </Popover>
             )}
@@ -867,7 +850,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         <div
                           key={e?.value}
                           className={clsx(
-                            'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center',
+                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-dark-2',
                           )}
                           onClick={(event) => {
                             setShowWarning(false)
@@ -886,14 +869,22 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               )
                           }}
                         >
-                          {exhibitText} {index + 1}: {e?.name}
+                          {exhibitText} {index + 1}
                         </div>
                       )
                     })}
                   </div>
                 }
               >
-                <div className="group absolute right-8 top-[214px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
+                <div
+                  className={clsx(
+                    'group absolute right-0 top-[32px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                    {
+                      '!top-[122px]':
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                    },
+                  )}
+                >
                   <NotesOutline className="h-8 w-8" />
                   <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
                   {showWarning && (

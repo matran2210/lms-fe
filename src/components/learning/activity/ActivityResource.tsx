@@ -8,6 +8,16 @@ import clsx from 'clsx'
 import React from 'react'
 import { IActivity } from 'src/type/course/my-course/Activity'
 
+export const download = async (name: string, file_key: string) => {
+  await UploadAPI.downloadFile({
+    files: [
+      {
+        name: name,
+        file_key: file_key,
+      },
+    ],
+  })
+}
 interface IProps {
   activity: IActivity
   handleOpenScratchPad: (
@@ -18,16 +28,6 @@ interface IProps {
   ) => void
 }
 const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
-  const download = async (name: string, file_key: string) => {
-    await UploadAPI.downloadFile({
-      files: [
-        {
-          name: name,
-          file_key: file_key,
-        },
-      ],
-    })
-  }
   const getItemsActivityResource = [
     {
       key: 'activity_resource',

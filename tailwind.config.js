@@ -176,6 +176,7 @@ module.exports = {
         },
         dark: {
           1: '#1C274C',
+          2: '#1A1A1A',
         },
       },
       fill: {
@@ -205,6 +206,7 @@ module.exports = {
       boxShadow: {
         0: '0',
         activity: '0px 2px 4px 0px #00000014, 0px 0px 6px 0px #00000005',
+        icon: '0px 4px 24px 0px rgba(0, 0, 0, 0.12)',
         sidebar:
           '0px 2px 4px 0px rgba(0, 0, 0, 0.08), 0px 0px 6px 0px rgba(0, 0, 0, 0.02)',
         'single-dialog': '0px 4px 62px 0px rgba(0, 0, 0, 0.07)',
