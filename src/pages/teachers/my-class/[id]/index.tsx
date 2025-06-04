@@ -2,7 +2,12 @@ import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import ClassCard from '@components/card/ClassCard'
 import { ITabs, NumberToDayOfWeekMap } from 'src/type'
-import { ANIMATION, PageLink } from 'src/constants'
+import {
+  ANIMATION,
+  DATE_FORMAT_HM,
+  DATE_FORMAT_YMD,
+  PageLink,
+} from 'src/constants'
 import { useQuery } from 'react-query'
 import { TeacherAPI } from 'src/pages/api/teacher/index'
 import { useEffect, useState } from 'react'
@@ -70,14 +75,14 @@ const getStandardSchedule = (data: IMyClass) => {
                 ? `${capitalize(NumberToDayOfWeekMap[item.day_of_week])} | `
                 : ''}
               {dayjs
-                .utc(`${dayjs().format('YYYY-MM-DD')}T${item.start_time}`)
+                .utc(`${dayjs().format(DATE_FORMAT_YMD)}T${item.start_time}`)
                 .local()
-                .format('HH:mm')}{' '}
+                .format(DATE_FORMAT_HM)}{' '}
               -{' '}
               {dayjs
-                .utc(`${dayjs().format('YYYY-MM-DD')}T${item.end_time}`)
+                .utc(`${dayjs().format(DATE_FORMAT_YMD)}T${item.end_time}`)
                 .local()
-                .format('HH:mm')}
+                .format(DATE_FORMAT_HM)}
             </div>
           ),
         )}
