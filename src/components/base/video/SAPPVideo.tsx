@@ -13,7 +13,7 @@ import Image from 'next/image'
 import { Thumbnail } from 'src/type/course/Question'
 import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
-import { LoadingIcon } from '@assets/icons'
+import { LoadingIcon, PiPIcon } from '@assets/icons'
 
 interface IProp {
   options: any
@@ -905,6 +905,14 @@ const SAPPVideo = ({
                         />
                       </div>
                     </div>
+                    <div className="volume-controls relative flex h-8 items-center">
+                      <button
+                        data-title="pip"
+                        className="btn-video volume-button text-white"
+                      >
+                        <PiPIcon />
+                      </button>
+                    </div>
                     <div
                       className={`settings-control icon-svg relative text-white ${
                         activeSettings ? 'active' : ''
@@ -1125,11 +1133,14 @@ const SAPPVideo = ({
                     >
                       <Icon
                         type={'fullscreen'}
-                        className={'icon-svg fullscreen text-white'}
+                        className={'fullscreen h-6 w-5 text-white'}
                       />
-                      <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-5.5">
-                        <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
-                      </svg>
+                      <Icon
+                        type={'fullscreen-exit'}
+                        className={
+                          ' fullscreen-exit hidden h-5.5 w-5 text-white'
+                        }
+                      />
                     </button>
                   </div>
                 </div>

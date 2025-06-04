@@ -21,6 +21,11 @@
 }
 
 .learning-activity-tabs {
+  &.tabs-list-hidden {
+    .ant-tabs-nav {
+      @apply hidden;
+    }
+  }
   .ant-tabs-tab {
     @apply pt-0;
     .ant-tabs-tab-btn {

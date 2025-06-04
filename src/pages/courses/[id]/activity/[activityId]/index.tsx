@@ -43,6 +43,7 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 import LearningOutcome from '@components/learning/activity/LearningOutcome'
 import ActivityResource from '@components/learning/activity/ActivityResource'
 import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
+import clsx from 'clsx'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -97,6 +98,8 @@ const ActivityPage = () => {
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const [isDoneActivity, setIsDoneActivity] = useState(false)
+  const [focusOnlyQuiz, setFocusOnlyQuiz] = useState(false)
+
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -495,7 +498,12 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex overflow-x-auto py-6 pb-8 text-medium-sm font-medium">
+          <ul
+            className={clsx(
+              'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-medium-sm font-medium',
+              { hidden: focusOnlyQuiz },
+            )}
+          >
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
@@ -558,7 +566,10 @@ const ActivityPage = () => {
           <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col gap-6">
             {/* Header */}
             <div
-              className={`flex w-full select-none items-center justify-between gap-4`}
+              className={clsx(
+                `flex w-full select-none items-center justify-between gap-4`,
+                { hidden: focusOnlyQuiz },
+              )}
             >
               <div className="text-2xl font-medium text-bw-13">
                 <Tooltip title={activity?.name?.length > 95 && activity?.name}>
@@ -572,12 +583,17 @@ const ActivityPage = () => {
             </div>
 
             {/* Learning Outcome */}
-            <LearningOutcome activity={activity} />
+            <div className={clsx({ hidden: focusOnlyQuiz })}>
+              <LearningOutcome activity={activity} />
+            </div>
+
             {/* Activity Resource */}
-            <ActivityResource
-              activity={activity}
-              handleOpenScratchPad={handleOpenScratchPad}
-            />
+            <div className={clsx({ hidden: focusOnlyQuiz })}>
+              <ActivityResource
+                activity={activity}
+                handleOpenScratchPad={handleOpenScratchPad}
+              />
+            </div>
             {/* Tabs */}
             <CourseTabDocument
               {...{
@@ -589,6 +605,8 @@ const ActivityPage = () => {
                 isHasQuizGrading,
                 isDoneActivity,
                 handleFinishedCourseSectionProgress,
+                focusOnlyQuiz,
+                setFocusOnlyQuiz,
               }}
             />
             {/* Next/Prev Activities */}
@@ -598,7 +616,10 @@ const ActivityPage = () => {
                 nextActivityIndex !== sessionData?.length - 1) ||
               (previousActivityIndex !== -1 &&
                 previousActivityIndex !== 0)) && (
-              <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
+              <div
+                data-aos={ANIMATION.DATA_AOS}
+                className={clsx('bg-red', { hidden: focusOnlyQuiz })}
+              >
                 <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
                   <div
                     ref={endActivityRef}
@@ -719,8 +740,12 @@ const ActivityPage = () => {
                 </div>
               </div>
             )}
-            <div></div>
-            <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+            <div
+              className={clsx('mt-6 shadow-activity', {
+                hidden: focusOnlyQuiz,
+              })}
+              data-aos={ANIMATION.DATA_AOS}
+            >
               <Discussion class_id={(router.query.id as string) || ''} />
             </div>
           </div>

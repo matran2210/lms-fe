@@ -785,9 +785,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.question_topic?.files?.length > 0 && (
             <div className="mb-2">
               {!!activeQuestion?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2" />
+                <div className="my-8 border border-b-gray-2" />
               )}
-              <div className="mb-2 font-semibold">Topic Resource:</div>
+              {/* <div className="mb-2 font-semibold">Topic Resource:</div>
               {activeQuestion?.question_topic?.files.map(
                 (e: any, index: number) => {
                   return (
@@ -808,26 +808,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   )
                 },
               )}
-              <div className="my-6 border border-b-gray-2" />
+              <div className="my-6 border border-b-gray-2" /> */}
             </div>
           )}
           <React.Fragment>{renderQuestion()}</React.Fragment>
         </div>
-        {/* <div>
-          {activeQuestion?.confirmed &&
-            activeQuestion.qType !== 'ESSAY' &&
-            showCorrect && (
-              <div className="mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">{MY_COURSES.explanations}</div>
-                {activeQuestion?.solution && (
-                  <EditorReader
-                    text_editor_content={activeQuestion?.solution}
-                    className="mt-4"
-                  />
-                )}
-              </div>
-            )}
-        </div> */}
+
         <ModalUploadFile
           open={openUpload.status}
           isMultiple={false}

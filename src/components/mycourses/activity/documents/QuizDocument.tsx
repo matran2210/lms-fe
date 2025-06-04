@@ -10,7 +10,14 @@ import {
   submitQuiz,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
-import { CloseIcon, ConfirmIcon } from '@assets/icons'
+import {
+  CircleArrowLeftIcon,
+  CircleArrowRightIcon,
+  CloseIcon,
+  ConfirmIcon,
+  MaximumContentIcon,
+  MinimumContentIcon,
+} from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
@@ -58,6 +65,8 @@ type Props = {
   refreshTab: () => void
   exhibitText: string
   attemptId?: string
+  focusOnlyQuiz: boolean
+  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 interface IAnswer {
@@ -79,10 +88,6 @@ interface IAnswer {
   }
 }
 
-interface IAnswers {
-  answers: IAnswer[]
-}
-
 const QuizDocument = ({
   questions,
   activityId,
@@ -101,11 +106,12 @@ const QuizDocument = ({
   refreshTab,
   exhibitText,
   attemptId,
+  focusOnlyQuiz,
+  setFocusOnlyQuiz,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const router = useRouter()
-
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
   const questionRef = useRef<QuizComponentRef>(null)
 
@@ -607,43 +613,14 @@ const QuizDocument = ({
     setOpenGradedReport(false)
   }
   return (
-    <div>
+    <div className="flex flex-col gap-8 rounded-xl bg-gray-898 p-8">
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
         handleCancel={handleCancelConfirmSubmit}
       />
-
-      <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
-          <BluredNotification />
-        )}
-        {activeQuestion &&
-          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
-            isNull(quizSetting)) && (
-            <QuizComponent
-              activityId={activityId}
-              tabId={tabId}
-              quizId={quizId}
-              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
-              activeQuestion={activeQuestion}
-              ref={questionRef}
-              key={quizComponentKey}
-              document_id={document_id}
-              setOpenFile={setOpenFile}
-              grading_preference={grading_preference}
-              showQuestionContent={false}
-              isHideExhibit={false}
-              saveAnswer={handleSaveAnswer}
-              exhibitText={exhibitText}
-            />
-          )}
-      </div>
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 rounded-md bg-white px-6 py-2 ">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
           <div
             className={`${
@@ -663,7 +640,7 @@ const QuizDocument = ({
             <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
               <button
                 disabled={activeQuestionIndex === 0 || loading}
-                className={`cursor-pointer select-none ${
+                className={`cursor-pointer select-none  ${
                   activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
                 }`}
                 onClick={() => {
@@ -674,9 +651,13 @@ const QuizDocument = ({
                   trackGAEvent('Click Prev Question Quiz Activity')
                 }}
               >
-                <SappIcon icon="arrow_left" />
+                <span className="text-dark-1">
+                  <CircleArrowLeftIcon />
+                </span>
               </button>
-              Question: {activeQuestionIndex + 1} of {questions?.length || 0}
+              <div className="text-base text-bw-13">
+                Question: {activeQuestionIndex + 1} of {questions?.length || 0}
+              </div>
               <button
                 disabled={isLastQuestion || loading}
                 className={`cursor-pointer select-none ${
@@ -690,11 +671,17 @@ const QuizDocument = ({
                   trackGAEvent('Click Next Question Quiz Activity')
                 }}
               >
-                <SappIcon icon="arrow_right" />
+                <span className="text-dark-1">
+                  <CircleArrowRightIcon />
+                </span>
               </button>
             </div>
-            <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
-              {(isQuestionConfirmed ||
+            <div
+              className="col-span-1 flex cursor-pointer justify-end text-dark-1"
+              onClick={() => setFocusOnlyQuiz(!focusOnlyQuiz)}
+            >
+              {focusOnlyQuiz ? <MinimumContentIcon /> : <MaximumContentIcon />}
+              {/* {(isQuestionConfirmed ||
                 grading_preference !== 'AFTER_EACH_QUESTION' ||
                 (isQuestionConfirmed && isLastQuestion)) && (
                 <SappButton
@@ -732,11 +719,42 @@ const QuizDocument = ({
                     color="primary"
                     loading={loading}
                   />
-                )}
+                )} */}
             </div>
           </>
         )}
       </div>
+
+      {/* Question */}
+      <div
+        className={`text-black-1 h-full select-none ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        data-aos={ANIMATION.DATA_AOS}
+      >
+        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+          <BluredNotification />
+        )}
+        {activeQuestion &&
+          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+            isNull(quizSetting)) && (
+            <QuizComponent
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
+              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+              activeQuestion={activeQuestion}
+              ref={questionRef}
+              key={quizComponentKey}
+              document_id={document_id}
+              setOpenFile={setOpenFile}
+              grading_preference={grading_preference}
+              showQuestionContent={false}
+              isHideExhibit={false}
+              saveAnswer={handleSaveAnswer}
+              exhibitText={exhibitText}
+            />
+          )}
+      </div>
+
       <SappModal
         open={modalResult?.status}
         okButtonCaption={'Yes'}

@@ -7,6 +7,7 @@ import { VideoStateClicked } from '@pages/courses/[id]/activity/[activityId]'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace } from '@utils/index'
 import { Tabs } from 'antd'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
 import useQueryAction from 'src/hooks/useQueryAction'
@@ -31,6 +32,8 @@ interface IProps {
   isHasQuizGrading: boolean
   isDoneActivity: boolean
   handleFinishedCourseSectionProgress: () => Promise<void>
+  focusOnlyQuiz: boolean
+  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<boolean>>
 }
 const CourseTabDocument = ({
   activity,
@@ -41,6 +44,8 @@ const CourseTabDocument = ({
   isHasQuizGrading,
   isDoneActivity,
   handleFinishedCourseSectionProgress,
+  focusOnlyQuiz,
+  setFocusOnlyQuiz,
 }: IProps) => {
   const quizDocumentRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<any>(null)
@@ -151,7 +156,12 @@ const CourseTabDocument = ({
           <ActivitySkeleton length={1} loading={selector.loading}>
             <div>
               <div>
-                <div className="tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden">
+                <div
+                  className={clsx(
+                    'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
+                    { 'mt-0': focusOnlyQuiz },
+                  )}
+                >
                   {course_tab_documents?.map((e, i) => {
                     const gradeStatus = e?.quiz?.attempt?.grading_status
 
@@ -185,6 +195,8 @@ const CourseTabDocument = ({
                             refreshTab={() => handleRefreshCurrentTab()}
                             exhibitText={exhibitText}
                             attemptId={e?.quiz?.attempt?.id}
+                            focusOnlyQuiz={focusOnlyQuiz}
+                            setFocusOnlyQuiz={setFocusOnlyQuiz}
                           />
                         </div>
                       )
@@ -192,7 +204,9 @@ const CourseTabDocument = ({
                     if (e.type === 'TEXT') {
                       return (
                         <div
-                          className={`select-none`}
+                          className={clsx(`select-none`, {
+                            hidden: focusOnlyQuiz,
+                          })}
                           key={i + '_' + selector?.currentTabId}
                         >
                           <TextDocument
@@ -204,7 +218,10 @@ const CourseTabDocument = ({
                     }
                     if (e.type === 'VIDEO') {
                       return (
-                        <div key={i + '_' + selector?.currentTabId}>
+                        <div
+                          key={i + '_' + selector?.currentTabId}
+                          className={clsx({ hidden: focusOnlyQuiz })}
+                        >
                           <VideoDocument
                             videos={e?.videos}
                             activityId={activity?.id as string}
@@ -228,7 +245,11 @@ const CourseTabDocument = ({
                   })}
                 </div>
 
-                <div className="mt-8 flex flex-wrap justify-between gap-5">
+                <div
+                  className={clsx('mt-8 flex flex-wrap justify-between gap-5', {
+                    hidden: focusOnlyQuiz,
+                  })}
+                >
                   {getPreviousTabId() && (
                     <div className="w-auto">
                       <div className="relative">
@@ -301,9 +322,15 @@ const CourseTabDocument = ({
       }
     }) ?? []
   return (
-    <div className="rounded-xl bg-white p-6 shadow-learning-activity ">
+    <div
+      className={clsx('rounded-xl bg-white p-6 shadow-learning-activity', {
+        'mt-6': focusOnlyQuiz,
+      })}
+    >
       <Tabs
-        className="learning-activity-tabs"
+        className={clsx('learning-activity-tabs', {
+          'tabs-list-hidden': focusOnlyQuiz,
+        })}
         defaultActiveKey="1"
         items={items}
         onChange={(key: string) => {
