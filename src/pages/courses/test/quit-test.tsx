@@ -34,7 +34,7 @@ const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
       buttonSize="extra"
       icon={<AlertTriagle />}
       header="Are you sure?"
-      content="If you quit at this time, the test results will not be saved"
+      content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
     />
   )
 }

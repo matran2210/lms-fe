@@ -7,6 +7,7 @@ import {
 } from 'src/type/teachers/request-schedule.interface'
 import {
   capitalizeFirstLetter,
+  convertSlugToTitle,
   sappFormatDate,
   truncateString,
 } from '@utils/index'
@@ -19,6 +20,7 @@ import {
 } from 'src/constants/my-request'
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
+import Tooltip from 'src/common/Tooltip'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
@@ -92,7 +94,15 @@ const PrimaryInformation = ({
             {/* Subject */}
             <PrimaryInfoItem
               title="Subject"
-              value={selectedRequest?.subject?.code}
+              value={
+                <span className="flex w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap">
+                  <Tooltip
+                    placement="topLeft"
+                    className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap"
+                    title={`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                  >{`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}</Tooltip>
+                </span>
+              }
             />
             {/* Construction Mode */}
             <PrimaryInfoItem
