@@ -37,10 +37,10 @@ export interface NotificationState {
   status: string
   action: string
   content: string
-  send_time?: string | null
-  created_by: string | null
+  send_time?: string
+  created_by: string
   avatar: { [key: string]: string }
-  created_from: string | null
+  created_from: string
   files: any
   total_records: number
   notification_status: boolean

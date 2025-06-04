@@ -24,7 +24,7 @@ import {
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { NotificationAPI } from '@pages/api/notification'
-import { SappNotificationComponent } from 'sapp-notification-package'
+import SappNotificationComponent from 'sapp-notification-package'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -490,7 +490,6 @@ export default function MenuItem({
           setOpenNotification={setOpenNotification}
           openNotification={openNotification}
           handleViewDetail={handleViewDetail}
-          trackGAEvent={trackGAEvent}
           notifyLists={notifyLists}
           notificationUnread={notificationUnread}
           scrollRef={scrollRef}
