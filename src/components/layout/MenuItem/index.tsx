@@ -17,14 +17,10 @@ import { LANG_SIGNIN } from 'src/constants/lang'
 import { isEmpty } from 'lodash'
 import {
   getCountUnRead,
-  getNotification,
-  getNotificationDetail,
   loadMoreNotification,
-  markAllNotifications,
-  updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
-import { NotificationAPI } from '@pages/api/notification'
 import SappNotificationComponent from 'sapp-notification'
+import { useNotification } from 'src/hooks/useNotification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -37,12 +33,28 @@ export default function MenuItem({
   setOpenResource,
   closeSideBar,
 }: MenuItemProps) {
-  const storedCount = localStorage.getItem(
-    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
-  )
   const [notificationUnread, setNotificationUnread] = useState(() => {
     return parseInt(storedCount ?? '0', 10)
   })
+  const storedCount = localStorage.getItem(
+    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+  )
+  const {
+    isViewDetail,
+    openNotification,
+    setOpenNotification,
+    selectedTab,
+    setSelectedTab,
+    notifyDetail,
+    notifyLists,
+    scrollRef,
+    handleMarkAll,
+    handleMarkById,
+    handleUnMarkById,
+    handleViewDetail,
+    handleBack,
+    refreshNotification,
+  } = useNotification()
 
   const tabs = [
     {
@@ -55,20 +67,12 @@ export default function MenuItem({
     },
   ]
 
-  const notifyLists = useAppSelector(
-    (state) => state.notificationReducer.list_notifications,
-  )
-  const notifyDetail = useAppSelector((state) => state.notificationReducer)
-  const [isViewDetail, setIsViewDetail] = useState(false)
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-  const [openNotification, setOpenNotification] = useState(false)
-  const [selectedTab, setSelectedTab] = useState<number>(tabs[0].id)
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
-  const scrollRef = useRef<HTMLDivElement>(null)
   const isFetching = useRef(false)
   const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
@@ -111,22 +115,6 @@ export default function MenuItem({
       pathname: `/courses/my-course/${router.query.courseId || router.query.id}/exam-information`,
     })
   }
-  const refreshNotification = (isRefresh = false) => {
-    const getNotifications = async (params: Object) => {
-      try {
-        isRefresh && (await dispatch(getCountUnRead()))
-        await dispatch(getNotification(params))
-      } catch (error) {}
-    }
-
-    getNotifications({
-      page_index: 1,
-      page_size: 10,
-      ...(selectedTab === 2 && {
-        is_read: false,
-      }),
-    })
-  }
 
   const handleActive = () => {
     if (isEmpty(url)) {
@@ -158,80 +146,6 @@ export default function MenuItem({
     try {
       await dispatch(getCountUnRead())
     } catch (error) {}
-  }
-  const markAllRead = async () => {
-    try {
-      await dispatch(markAllNotifications())
-      dispatch(updateStatusAll())
-      await countNotificationsUnRead()
-    } catch (error) {}
-  }
-
-  const handleMarkAll = () => {
-    setOpenNotification(false)
-    markAllRead()
-    trackGAEvent('Click Button Mark All As Read Notification')
-  }
-
-  const handleMarkById = async (ids: string[]) => {
-    try {
-      const res = await NotificationAPI.markById(ids, true)
-      if (!res?.data) {
-        return
-      }
-      refreshNotification(true)
-    } catch (error) {}
-  }
-
-  const handleUnMarkById = async (ids: string[]) => {
-    try {
-      const res = await NotificationAPI.markById(ids, false)
-      if (!res?.data) {
-        return
-      }
-      refreshNotification(true)
-    } catch (error) {}
-  }
-
-  const getApiNotificationDetail = async (
-    id: string,
-    redirect: string | null,
-    content: string,
-  ) => {
-    try {
-      if (id !== notifyDetail?.id) {
-        const res = await dispatch(getNotificationDetail(id))
-        if (res) {
-          await countNotificationsUnRead()
-        }
-      }
-      if (!isEmpty(redirect)) {
-        router.replace(`/${content}`)
-      }
-    } catch (error) {}
-  }
-
-  const handleViewDetail = async (
-    id: string,
-    redirect?: string,
-    content?: string,
-    tag?: string,
-  ) => {
-    await getApiNotificationDetail(id, redirect ?? null, content ?? '')
-    const regexTagA = /<a\b[^>]*>(.*?)<\/a>/
-    const containsAnchorTag = regexTagA.test(content ?? '')
-    if (containsAnchorTag && tag === 'STRONG') {
-      setIsViewDetail(false)
-    } else if (!isEmpty(redirect)) {
-      setOpenNotification(false)
-    } else if (isEmpty(redirect)) {
-      setIsViewDetail((prev) => !prev)
-    }
-  }
-
-  const handleBack = () => {
-    setIsViewDetail(false)
-    refreshNotification(true)
   }
 
   useEffect(() => {
