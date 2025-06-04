@@ -13,6 +13,7 @@ import { ICertificateData } from 'src/type/classes'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import Progress from '@components/my-class/progress-table/Progress'
+import { IProfilePages, ProfilePages } from 'src/type/Profile'
 
 const breadcrumbs: ITabs[] = [
   {
@@ -33,22 +34,22 @@ const tabs = [
   {
     id: 1,
     title: 'Overview',
-    urlTitle: 'overview',
+    urlTitle: ProfilePages.OVERVIEW,
   },
   {
     id: 2,
     title: 'Students',
-    urlTitle: 'students',
+    urlTitle: ProfilePages.STUDENTS,
   },
   {
     id: 3,
     title: 'Teaching Progress',
-    urlTitle: 'progress',
+    urlTitle: ProfilePages.TEACHING_PROGRESS,
   },
   {
     id: 4,
     title: 'Students Test Result',
-    urlTitle: 'students-test-result',
+    urlTitle: ProfilePages.STUDENTS_TEST_RESULT,
   },
 ]
 
@@ -79,6 +80,7 @@ const ClassDetail = () => {
   const [certificateData, setCertificateData] = useState<ICertificateData[]>([])
   const router = useRouter()
   const classId = router?.query?.id as string
+  const tabId = router.query?.tabId as IProfilePages
   const [selected, setSelected] = useState<number>(tabs[0].id)
 
   const { data } = useQuery({
@@ -94,15 +96,15 @@ const ClassDetail = () => {
     }
   }, [data])
 
-  const tabClassDetail = (selected: number) => {
-    switch (selected) {
-      case 1:
+  const tabClassDetail = () => {
+    switch (tabId) {
+      case ProfilePages.OVERVIEW:
         return <Overview certificateData={certificateData} />
-      case 2:
+      case ProfilePages.STUDENTS:
         return <Students />
-      case 3:
+      case ProfilePages.TEACHING_PROGRESS:
         return <Progress classDetail={data} />
-      case 4:
+      case ProfilePages.STUDENTS_TEST_RESULT:
         return <StudentsTestResult />
       default:
         return <Overview certificateData={certificateData} />
@@ -128,7 +130,7 @@ const ClassDetail = () => {
         data-aos={ANIMATION.DATA_AOS}
         className="h-fit w-full rounded-xl bg-white px-8 py-6"
       >
-        {tabClassDetail(selected)}
+        {tabClassDetail()}
       </div>
     </LayoutTeacher>
   )
