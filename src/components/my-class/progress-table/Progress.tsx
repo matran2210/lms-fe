@@ -178,6 +178,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
           setOpen={setIsOpenViewModal}
           refresh={handleRefetchData}
           allowSection={allowSection}
+          classId={id as string}
         />
       ) : null}
     </div>
