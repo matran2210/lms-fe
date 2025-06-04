@@ -1,5 +1,9 @@
+import { FileTextIcon } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
+import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
@@ -8,6 +12,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -129,6 +134,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       req?: IRequirement
       index?: number
     }>()
+    const [showWarning, setShowWarning] = useState(true)
 
     useClickOutside({
       ref: listRequirementRef,
@@ -613,7 +619,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     </div>
                   </>
                 )}
-                {exhibitData && exhibitData?.length > 0 && (
+                {/* {exhibitData && exhibitData?.length > 0 && (
                   <>
                     <div className="my-6 border border-b-gray-2"></div>
                     <div className="mb-4 flex items-center">
@@ -653,7 +659,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       })}
                     </div>
                   </>
-                )}
+                )} */}
               </div>
               <div className="my-6"></div>
               <EssayQuestionPreview
@@ -782,12 +788,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
-          {activeQuestion?.question_topic?.files?.length > 0 && (
+          {/* {activeQuestion?.question_topic?.files?.length > 0 && (
             <div className="mb-2">
               {!!activeQuestion?.question_topic?.description && (
                 <div className="my-8 border border-b-gray-2" />
               )}
-              {/* <div className="mb-2 font-semibold">Topic Resource:</div>
+              <div className="mb-2 font-semibold">Topic Resource:</div>
               {activeQuestion?.question_topic?.files.map(
                 (e: any, index: number) => {
                   return (
@@ -808,10 +814,101 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   )
                 },
               )}
-              <div className="my-6 border border-b-gray-2" /> */}
+              <div className="my-6 border border-b-gray-2" />
             </div>
-          )}
-          <React.Fragment>{renderQuestion()}</React.Fragment>
+          )} */}
+          <div className="relative">
+            {renderQuestion()}
+
+            {activeQuestion?.question_topic?.files?.length > 0 && (
+              <Popover
+                placement="leftTop"
+                trigger="click"
+                content={
+                  <div className="flex flex-col gap-2">
+                    {activeQuestion?.question_topic?.files?.map(
+                      (e: any, index: number) => {
+                        return (
+                          <div
+                            key={e?.value}
+                            className={clsx(
+                              'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center',
+                            )}
+                            onClick={() => {
+                              setOpenFile &&
+                                setOpenFile(
+                                  { type: 'file' },
+                                  e?.resource?.url,
+                                  e?.resource?.name,
+                                )
+                            }}
+                          >
+                            {e?.resource?.name}
+                          </div>
+                        )
+                      },
+                    )}
+                  </div>
+                }
+              >
+                <div className="group absolute right-8 top-[142px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay ">
+                  <FileTextIcon />
+                </div>
+              </Popover>
+            )}
+            {exhibitData && exhibitData?.length > 0 && (
+              <Popover
+                placement="leftTop"
+                trigger="click"
+                content={
+                  <div className="flex flex-col gap-2">
+                    {exhibitData?.map((e: any, index: number) => {
+                      return (
+                        <div
+                          key={e?.value}
+                          className={clsx(
+                            'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center',
+                          )}
+                          onClick={(event) => {
+                            setShowWarning(false)
+                            setOpenFile &&
+                              setOpenFile(
+                                {
+                                  type: 'exhibits',
+                                  description: e?.description,
+                                  name: e?.name,
+                                  index: index,
+                                  files: e?.files,
+                                },
+                                null,
+                                null,
+                                event,
+                              )
+                          }}
+                        >
+                          {exhibitText} {index + 1}: {e?.name}
+                        </div>
+                      )
+                    })}
+                  </div>
+                }
+              >
+                <div className="group absolute right-8 top-[214px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
+                  <NotesOutline className="h-8 w-8" />
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                  {showWarning && (
+                    <PulsingExclamation
+                      className="absolute -right-3 -top-4"
+                      style={{
+                        animation: 'pulseAnim 1.2s infinite ease-in-out',
+                        transformOrigin: 'center',
+                      }}
+                    />
+                  )}
+                </div>
+              </Popover>
+            )}
+          </div>
         </div>
 
         <ModalUploadFile

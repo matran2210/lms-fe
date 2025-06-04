@@ -13,7 +13,7 @@
 @import './components/_select.scss';
 @import './components/_datepicker.scss';
 @import './components/_collapse.scss';
-
+@import './components/_popover.scss';
 @import './components/_table.scss';
 @import 'progress.scss';
 @import './components/_input.scss';
@@ -976,10 +976,6 @@ p a {
 //     transform: scale(0);
 //   }
 // }
-
-.ant-popover-content {
-  width: 360px !important;
-}
 
 .ant-popover-inner {
   padding: 24px !important;

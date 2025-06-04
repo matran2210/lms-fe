@@ -13,7 +13,7 @@ import { CoursesAPI } from '@pages/api/courses'
 import { VideoStateClicked } from '@pages/courses/[id]/activity/[activityId]'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace } from '@utils/index'
-import { Button, Tabs } from 'antd'
+import { Button, Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef, useState } from 'react'
@@ -164,7 +164,7 @@ const CourseTabDocument = ({
                 <div
                   className={clsx(
                     'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
-                    { 'mt-0': focusOnlyQuiz },
+                    { '!mt-0': focusOnlyQuiz },
                   )}
                 >
                   {course_tab_documents?.map((e, i) => {
@@ -258,7 +258,7 @@ const CourseTabDocument = ({
   return (
     <div
       className={clsx('rounded-xl bg-white p-6 shadow-learning-activity', {
-        'mt-6': focusOnlyQuiz,
+        'my-6': focusOnlyQuiz,
       })}
     >
       <Tabs
@@ -272,49 +272,57 @@ const CourseTabDocument = ({
           trackGAEvent('Click Button Tab Activity')
         }}
       />
-      <div
-        className={clsx(
-          'learning-act-tab-pagination flex items-center justify-center gap-8',
-          {
-            hidden: focusOnlyQuiz,
-          },
-        )}
-      >
-        <button
-          className={clsx('tab-pagination', { disabled: !getPreviousTabId() })}
-          disabled={!getPreviousTabId()}
-          onClick={() => {
-            handleChangeTab(courseId as string, getPreviousTabId() || '')
-            trackGAEvent('Click Button Previous Tab Activity')
-          }}
-          style={{ marginRight: 8 }}
+      {selector?.tabs && selector?.tabs?.length > 1 && (
+        <div
+          className={clsx(
+            'learning-act-tab-pagination flex items-center justify-center gap-8',
+            {
+              hidden: focusOnlyQuiz,
+            },
+          )}
         >
-          <ArrowLeft />
-        </button>
-        <div className="flex items-center justify-between gap-3">
-          {selector?.tabs?.map((tab, index) => (
-            <span
-              key={tab.id}
-              className={clsx('cursor-pointer text-gray-897', {
-                '!text-primary': index == currentIndex,
+          <Tooltip title="Previous Tab">
+            <button
+              className={clsx('tab-pagination', {
+                disabled: !getPreviousTabId(),
               })}
-              onClick={() => handleChangeTab(courseId as string, tab.id)}
+              disabled={!getPreviousTabId()}
+              onClick={() => {
+                handleChangeTab(courseId as string, getPreviousTabId() || '')
+                trackGAEvent('Click Button Previous Tab Activity')
+              }}
+              style={{ marginRight: 8 }}
             >
-              <PaginationDotIcon />
-            </span>
-          ))}
+              <ArrowLeft />
+            </button>
+          </Tooltip>
+          <div className="flex items-center justify-between gap-3">
+            {selector?.tabs?.map((tab, index) => (
+              <span
+                key={tab.id}
+                className={clsx('cursor-pointer text-gray-897', {
+                  '!text-primary': index == currentIndex,
+                })}
+                onClick={() => handleChangeTab(courseId as string, tab.id)}
+              >
+                <PaginationDotIcon />
+              </span>
+            ))}
+          </div>
+          <Tooltip title="Next Tab">
+            <button
+              className={clsx('tab-pagination', { disabled: !getNextTabId() })}
+              disabled={!getNextTabId()}
+              onClick={() => {
+                handleChangeTab(courseId as string, getNextTabId() || '')
+                trackGAEvent('Click Button Previous Tab Activity')
+              }}
+            >
+              <ArrowRight />
+            </button>
+          </Tooltip>
         </div>
-        <button
-          className={clsx('tab-pagination', { disabled: !getNextTabId() })}
-          disabled={!getNextTabId()}
-          onClick={() => {
-            handleChangeTab(courseId as string, getNextTabId() || '')
-            trackGAEvent('Click Button Previous Tab Activity')
-          }}
-        >
-          <ArrowRight />
-        </button>
-      </div>
+      )}
     </div>
   )
 }

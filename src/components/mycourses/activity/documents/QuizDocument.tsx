@@ -755,68 +755,74 @@ const QuizDocument = ({
           )}
       </div>
 
-      <SappModal
-        open={modalResult?.status}
-        okButtonCaption={'Yes'}
-        cancelButtonCaption={'No'}
-        handleCancel={() => setModalResult(undefined)}
-        handleSubmit={() => setModalResult(undefined)}
-        setOpen={() => setModalResult(undefined)}
-        size="max-w-xxl"
-        position="center"
-        showFooter={false}
-        isFullScreen={true}
-        refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
-        showHeader={false}
-      >
-        <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
-          <div
-            className="absolute right-6 top-5  ml-auto cursor-pointer"
-            onClick={() => {
-              refreshTab()
-              setModalResult(undefined)
-            }}
-          >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+      {modalResult?.status && (
+        <SappModal
+          open={modalResult?.status}
+          okButtonCaption={'Yes'}
+          cancelButtonCaption={'No'}
+          handleCancel={() => setModalResult(undefined)}
+          handleSubmit={() => setModalResult(undefined)}
+          setOpen={() => setModalResult(undefined)}
+          size="max-w-xxl"
+          position="center"
+          showFooter={false}
+          isFullScreen={true}
+          refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
+          showHeader={false}
+        >
+          <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
+            <div
+              className="absolute right-6 top-5  ml-auto cursor-pointer"
+              onClick={() => {
+                refreshTab()
+                setModalResult(undefined)
+              }}
+            >
+              <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+            </div>
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={handleShowQuestionResultDetail}
+              loading={loading}
+            />
           </div>
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={handleShowQuestionResultDetail}
-            loading={loading}
-          />
-        </div>
-      </SappModal>
+        </SappModal>
+      )}
 
-      <ModalExplanationPackage
+      {/* <ModalExplanationPackage
         quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
         open={showQuestionResultDetail?.isOpen || false}
         setOpen={() => setShowQuestionResultDetail(undefined)}
-      />
-      <SappModalV3
-        open={openGradedReport}
-        okButtonCaption={
-          is_graded && grading_method === GRADING_METHOD.MANUAL
-            ? 'Review Answers'
-            : 'Back'
-        }
-        showCancelButton={is_graded && grading_method === GRADING_METHOD.MANUAL}
-        cancelButtonCaption={'Back'}
-        handleCancel={handleCalcelModalResult}
-        onOk={() => {
-          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-            router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
-          } else {
-            handleCalcelModalResult()
+      /> */}
+      {openGradedReport && (
+        <SappModalV3
+          open={openGradedReport}
+          okButtonCaption={
+            is_graded && grading_method === GRADING_METHOD.MANUAL
+              ? 'Review Answers'
+              : 'Back'
           }
-        }}
-        isMaskClosable={false}
-        fullWidthBtn={true}
-        buttonSize="extra"
-        icon={<ConfirmIcon />}
-        header={FINISHED_TEST_TITLE}
-        content={`Congratulations on completing ${quizName}. The result will be sent to you via email after the grading is finished.`}
-      />
+          showCancelButton={
+            is_graded && grading_method === GRADING_METHOD.MANUAL
+          }
+          cancelButtonCaption={'Back'}
+          handleCancel={handleCalcelModalResult}
+          onOk={() => {
+            if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+              router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+            } else {
+              handleCalcelModalResult()
+            }
+          }}
+          isMaskClosable={false}
+          fullWidthBtn={true}
+          buttonSize="extra"
+          icon={<ConfirmIcon />}
+          header={FINISHED_TEST_TITLE}
+          content={`Congratulations on completing ${quizName}. The result will be sent to you via email after the grading is finished.`}
+        />
+      )}
     </div>
   )
 }

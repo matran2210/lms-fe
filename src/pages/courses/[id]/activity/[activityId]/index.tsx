@@ -1,4 +1,4 @@
-import { CloseIcon, HourglassIcon } from '@assets/icons'
+import { CircleCloseIcon, CloseIcon, HourglassIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -44,6 +44,7 @@ import LearningOutcome from '@components/learning/activity/LearningOutcome'
 import ActivityResource from '@components/learning/activity/ActivityResource'
 import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
 import clsx from 'clsx'
+import { Triangle } from '@components/icons/Triangle'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -779,27 +780,26 @@ const ActivityPage = () => {
                   key={e.id}
                   dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center"
                   header={
-                    <div className="relative">
-                      <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                    <div className="relative mb-3 px-6">
+                      <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
                         <div className="truncate">
                           <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
                             e?.index + 1
-                          }: `}</span>
-                          {e?.name}
+                          }: ${e?.name}`}</span>
                         </div>
                       </div>
                       <button
-                        className="absolute right-3 top-2"
+                        className="absolute right-6 top-0"
                         onClick={() => handleCloseScratchPad(e)}
                       >
-                        <CloseIcon />
+                        <CircleCloseIcon />
                       </button>
                     </div>
                   }
                 >
-                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                  <div className="bg-white">
                     <EditorReader
                       text_editor_content={e?.description}
                       className=" w-full "
@@ -816,6 +816,7 @@ const ActivityPage = () => {
                         )
                       })}
                   </div>
+                  <Triangle className="absolute bottom-2 right-2" />
                 </ModalResizeable>
               )
             }
