@@ -6,25 +6,29 @@ interface IModalFoundationCompletedProps {
   openContinue: boolean
   handleSkipCourse: () => void
   handleContinueFoundation: () => void
+  handleClose: () => void
 }
 
 const ModalFoundationCompleted = ({
   openContinue,
   handleContinueFoundation,
   handleSkipCourse,
+  handleClose,
 }: IModalFoundationCompletedProps) => {
   return (
     <SappModalV3
       open={openContinue}
       handleCancel={handleSkipCourse}
+      handleClose={handleClose}
       onOk={handleContinueFoundation}
       icon={<ActiveIcon />}
       header="Foundation Not Completed"
       okButtonCaption="Continue with Foundation Course"
       cancelButtonCaption="Skip and start this course"
-      isMaskClosable={false}
+      isMaskClosable={true}
       fullWidthBtn={true}
       buttonSize="extra"
+      isClosable
     >
       <div className="mt-4 text-center text-medium-sm text-gray-1">
         It looks like you haven&apos;t finished the Foundation Course.
