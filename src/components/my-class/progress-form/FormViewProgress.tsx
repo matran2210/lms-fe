@@ -35,6 +35,7 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   refresh?: () => void
   allowSection?: boolean
+  classId?: string
 }
 
 const defaultValues: IDefaultFormAddProgress = {
@@ -52,6 +53,7 @@ function FormViewProgress({
   isView,
   refresh,
   allowSection,
+  classId,
 }: IProps) {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -137,11 +139,11 @@ function FormViewProgress({
     if (isView) return
 
     const fetchDataSection = async () => {
-      if (id && detailProgress?.lesson.class_schedule_id) {
+      if (classId && detailProgress?.lesson.class_schedule_id) {
         setLoading(true)
         try {
           const res = await ProgressAPI.getListSection(
-            id,
+            classId,
             detailProgress?.lesson.class_schedule_id,
             {
               progress_id: detailProgress?.id,
@@ -150,7 +152,6 @@ function FormViewProgress({
           if (res?.data) {
             setTreeDataNotConvert(sortSectionsByPosition(res.data))
           }
-          //
         } catch (error) {
           // Handled by axios interceptors
         } finally {
