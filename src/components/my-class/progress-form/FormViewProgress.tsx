@@ -9,7 +9,7 @@ import { ProgressAPI } from '@pages/api/progress'
 import { formatDate } from '@utils/common'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -26,6 +26,7 @@ import {
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 import { round } from 'lodash'
+import { sortSectionsByPosition } from '@utils/teacher-progress'
 
 export interface IProps {
   id: string | null
@@ -122,13 +123,43 @@ function FormViewProgress({
       (item) => item.class_schedule_id === data.lesson.class_schedule_id,
     )
     setValue('section', currentLesson?.class_schedule_name || '')
-    setTreeDataNotConvert(data.content_completed)
+    if (isView) {
+      setTreeDataNotConvert(sortSectionsByPosition(data.content_completed))
+    }
     setValue('time', [data.start_time, data.end_time])
   }
 
   useLayoutEffect(() => {
     loadData()
   }, [id, open])
+
+  useEffect(() => {
+    if (isView) return
+
+    const fetchDataSection = async () => {
+      if (id && detailProgress?.lesson.class_schedule_id) {
+        setLoading(true)
+        try {
+          const res = await ProgressAPI.getListSection(
+            id,
+            detailProgress?.lesson.class_schedule_id,
+            {
+              progress_id: detailProgress?.id,
+            },
+          )
+          if (res?.data) {
+            setTreeDataNotConvert(sortSectionsByPosition(res.data))
+          }
+          //
+        } catch (error) {
+          // Handled by axios interceptors
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+    fetchDataSection()
+  }, [detailProgress?.lesson.class_schedule_id])
 
   const handleSubmit = handleSubmitForm(async (formData) => {
     const payload: IRequestCreateProgress = {
@@ -144,47 +175,49 @@ function FormViewProgress({
       class_schedule_id: string
       course_section_ids: string[]
     }[] = []
-    formData?.checkedNodes.forEach((item: string) => {
-      const box = item.split('_')
-      if (box[1] === detailProgress?.lesson.class_schedule_id) {
-        // lớp học chính
-        if (!currentCourse[0]) {
-          currentCourse[0] = {
-            class_schedule_id: '',
-            course_section_ids: [],
-          }
-        }
-        currentCourse[0].class_schedule_id =
-          detailProgress?.lesson.class_schedule_id
-        if (box.length > 2) {
-          currentCourse[0].course_section_ids.push(box[box.length - 1])
-        }
-      } else {
-        // lớp học bù
-        const newData: {
-          class_schedule_id: string
-          course_section_ids: string[]
-        } = {
-          class_schedule_id: '',
+
+    const addToCurrentCourse = (lessonId: string, sectionId?: string) => {
+      if (!currentCourse[0]) {
+        currentCourse[0] = {
+          class_schedule_id: lessonId,
           course_section_ids: [],
         }
-        if (
-          compensatedCourse[compensatedCourse.length - 1]?.class_schedule_id !==
-          box[1]
-        ) {
-          newData.class_schedule_id = box[1]
-          if (box.length > 2) {
-            newData.course_section_ids.push(box[box.length - 1])
-          }
-          compensatedCourse.push(newData)
-        } else {
-          const itemCurrent = compensatedCourse.find(
-            (item) => item.class_schedule_id === box[1],
-          )
-          itemCurrent?.course_section_ids.push(box[box.length - 1])
+      }
+      if (sectionId) {
+        currentCourse[0].course_section_ids.push(sectionId)
+      }
+    }
+
+    const addToCompensatedCourse = (lessonId: string, sectionId?: string) => {
+      let existingCourse = compensatedCourse.find(
+        (course) => course.class_schedule_id === lessonId,
+      )
+
+      if (!existingCourse) {
+        existingCourse = {
+          class_schedule_id: lessonId,
+          course_section_ids: [],
         }
+        compensatedCourse.push(existingCourse)
+      }
+
+      if (sectionId) {
+        existingCourse.course_section_ids.push(sectionId)
+      }
+    }
+
+    formData?.checkedNodes.forEach((item: string) => {
+      const box = item.split('_')
+      const lessonId = box[1]
+      const sectionId = box.length > 2 ? box[box.length - 1] : undefined
+
+      if (lessonId === detailProgress?.lesson.class_schedule_id) {
+        addToCurrentCourse(lessonId, sectionId)
+      } else {
+        addToCompensatedCourse(lessonId, sectionId)
       }
     })
+
     payload.current_class_schedule_id =
       detailProgress?.lesson?.class_schedule_id || ''
     payload.description = formData.note
