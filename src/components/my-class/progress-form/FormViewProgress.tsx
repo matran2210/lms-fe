@@ -21,9 +21,11 @@ import {
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
+  LearningMode,
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { round } from 'lodash'
 
 export interface IProps {
   id: string | null
@@ -273,6 +275,7 @@ function FormViewProgress({
                     <CollapseItem
                       title="Time"
                       body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
                         detailProgress?.start_time &&
                         detailProgress?.end_time &&
                         `${detailProgress?.start_time?.replace(/:00$/, '')} - ${detailProgress?.end_time?.replace(/:00$/, '')}`
@@ -302,7 +305,7 @@ function FormViewProgress({
                                 : '#F01919',
                           }}
                         >
-                          {`${detailProgress?.progress ? detailProgress?.progress * 100 : 0} %`}
+                          {`${round((detailProgress?.progress ?? 0) * 100, 2) || 0} %`}
                         </span>
                       }
                     />
@@ -324,20 +327,25 @@ function FormViewProgress({
                           }
                         >
                           {item.class_teaching_progress_id &&
-                            `${item.compensated_progress * 100 + '%'}-${item.schedule_name}`}
+                            `${round((item.compensated_progress ?? 0) * 100, 2)}% - ${item.schedule_name}`}
                         </p>
                       ))}
                     />
 
                     <CollapseItem
                       title="Teacher"
-                      body={detailProgress?.teacher.full_name}
+                      body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.teacher?.full_name || '')
+                      }
                     />
                     <CollapseItem
                       title="Creator"
                       body={
-                        detailProgress?.staff_creator?.full_name ||
-                        detailProgress?.user_creator?.full_name
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.staff_creator?.full_name ||
+                          detailProgress?.user_creator?.full_name ||
+                          '')
                       }
                     />
                     <CollapseItem
@@ -391,15 +399,17 @@ function FormViewProgress({
                       options={[]}
                     />
                   </div>
-                  <div>
-                    <HookformTimePicker
-                      control={control}
-                      name="time"
-                      label="Time"
-                      disabled={isView}
-                      required
-                    />
-                  </div>
+                  {detailProgress?.mode !== LearningMode.ONLINE && (
+                    <div>
+                      <HookformTimePicker
+                        control={control}
+                        name="time"
+                        label="Time"
+                        disabled={isView}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               {allowSection && (

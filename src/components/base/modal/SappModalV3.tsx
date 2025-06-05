@@ -31,9 +31,9 @@ interface IProps {
   content?: string
   children?: ReactNode
   headerClassName?: string
-
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
+  isClosable?: boolean
 }
 
 const SappModalV3 = ({
@@ -61,6 +61,7 @@ const SappModalV3 = ({
   content,
   children,
   headerClassName,
+  isClosable = false,
   ...otherProps
 }: IProps) => {
   return (
@@ -68,7 +69,9 @@ const SappModalV3 = ({
       footer={false}
       centered
       closeIcon={false}
-      onCancel={handleClose || handleCancel}
+      onCancel={isClosable ? handleClose : handleClose || handleCancel}
+      maskClosable={isClosable}
+      closable={isClosable}
       {...otherProps}
     >
       {icon && (

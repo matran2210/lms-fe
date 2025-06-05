@@ -396,7 +396,7 @@ const Course = ({
       await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
     } finally {
       setOpenContinue(false)
-      refetch()
+      handleCourseDetail()
     }
   }
 
@@ -587,6 +587,7 @@ const Course = ({
       <ModalFoundationCompleted
         openContinue={openContinue}
         handleSkipCourse={handleSkipCourse}
+        handleClose={() => setOpenContinue(false)}
         handleContinueFoundation={
           classInstance?.duration_type === 'FLEXIBLE'
             ? () =>

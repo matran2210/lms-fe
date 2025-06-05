@@ -23,8 +23,8 @@ const Page = () => {
     startDate: Date
     endDate: Date
   }>({
-    startDate: dayjs().startOf('month').startOf('week').add(1, 'day').toDate(),
-    endDate: dayjs().endOf('month').endOf('week').add(1, 'day').toDate(),
+    startDate: dayjs().startOf('month').startOf('week').toDate(),
+    endDate: dayjs().endOf('month').endOf('week').toDate(),
   })
 
   const fetchCalendar = async (params: {

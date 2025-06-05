@@ -6,12 +6,19 @@ import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
+  content: string
   setOpen: Dispatch<SetStateAction<boolean>>
   handleQuit: () => void
   handleCancel: () => void
 }
 
-const QuitTestModal = ({ open, setOpen, handleQuit, handleCancel }: IProps) => {
+const QuitTestModal = ({
+  open,
+  content,
+  setOpen,
+  handleQuit,
+  handleCancel,
+}: IProps) => {
   const onSubmit = () => {
     setOpen(false)
     handleQuit()

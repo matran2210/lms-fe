@@ -3,12 +3,20 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
+  ArrowUpIcon,
+  CalculatorIcon,
   CalculatorIconV2,
+  ExcelIcon,
   FlagIcon,
+  HighlightIcon,
   ResizeIcon,
+  ScratchPadIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
+  TextSquareIcon,
+  UnHighLightIcon,
+  WordIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -49,6 +57,7 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
 import Popover from '@components/Popover'
+import SappButton from '@components/base/button/SappButton'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
@@ -58,9 +67,10 @@ import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { TabsProps } from 'antd'
+import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -70,11 +80,11 @@ import {
   IDataQuestion,
   Requirement,
   RequirementItem,
-  ScratchPad,
   ScratchPadValue,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import {
+  checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
   getAnswerMatching,
@@ -89,8 +99,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { Tooltip } from 'antd'
-import SappButton from '@components/base/button/SappButton'
 
 declare global {
   interface Window {
@@ -298,38 +306,27 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.ESSAY:
         const defaultValueEssay = () => {
-          if (!isUndefined(essayData?.req?.short_answer)) {
-            return essayData?.req?.short_answer
+          const key = `${currentTabID}_${essayData?.index}_answer`
+          const valueFromForm = getValues(key)
+
+          if (valueFromForm) {
+            return valueFromForm
           }
-          if (
-            !isUndefined(
-              getValues(`${currentTabID}_${essayData?.index}_answer`),
-            )
-          ) {
-            return getValues(`${currentTabID}_${essayData?.index}_answer`)
+
+          const requirement =
+            currentTabContent?.data?.requirements?.[essayData?.index]
+
+          if (requirement?.short_answer) {
+            return requirement.short_answer
           }
-          if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.short_answer,
-            )
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.short_answer
+
+          if (requirement?.answer_text) {
+            return requirement.answer_text
           }
-          if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text,
-            )
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.answer_text
-          }
-          if (!isUndefined(currentTabContent?.answer)) {
-            return currentTabContent?.answer
-          }
+
+          return currentTabContent.answer
         }
+
         return (
           <RequirementsTab
             destroyInactiveTabPane={true}
@@ -484,14 +481,17 @@ const TestDetail = () => {
     resultId: '',
   })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
-
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  const [scratchPads, setScratchPads] = useState<string>('')
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
     Array<{
       question_id: string
       total_attempt_time: number
-      scratch_pads: ScratchPad[]
+      scratch_pad: string
       [key: string]: any
     }>
   >([])
@@ -511,15 +511,33 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
+
+      const index = scratchPadValues?.findIndex(
+        (item: ScratchPadValue) => item.id === currentPage,
+      )
+
+      if (!index || index === -1) {
+        setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            id: currentPage,
+            value: '',
+          },
+        ])
+      }
+
+      setScratchPads(answerSubmitted?.scratch_pad || '')
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
           answerSubmitted: any,
+          scratchPad: string,
         ): {
           corrects: any
           solution: any
           isSelfReflection: boolean
           requirements: any[]
+          scratch_pad: string
         } => {
           if (!answerSubmitted?.[0]) {
             return {
@@ -527,6 +545,7 @@ const TestDetail = () => {
               solution: '',
               isSelfReflection: false,
               requirements: [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -558,6 +577,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -571,6 +591,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -580,6 +601,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -593,6 +615,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -601,17 +624,19 @@ const TestDetail = () => {
             solution: solution,
             isSelfReflection: is_self_reflection,
             requirements: requirements,
+            scratch_pad: scratchPad,
           }
         }
 
         const dataCorrectAndSolution = getCorrectAndSolution(
           objTab,
           answerSubmitted?.results,
+          answerSubmitted?.scratch_pad,
         )
 
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
-          : { ...objTab }
+          : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -971,10 +996,6 @@ const TestDetail = () => {
     })
   }
 
-  const [scratchPadValues, setScratchPadValues] = useState<
-    ScratchPadValue | null | undefined
-  >()
-
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
     removeHighlights(domEle as any)
@@ -998,6 +1019,7 @@ const TestDetail = () => {
   }
 
   const checkAnswered = (currentContent: any, isSubmit = false) => {
+    //check đã có câu trả lời
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
@@ -1306,7 +1328,6 @@ const TestDetail = () => {
     }
 
     setLoading(false)
-    setScratchPadValues(null)
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -1350,6 +1371,14 @@ const TestDetail = () => {
     return newData
   }
 
+  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
+    if (Array.isArray(tabContent.data?.requirements)) {
+      const hasAnswer = (req: any) =>
+        req?.answer_file?.file_key || answerListRef?.current?.[req?.id || '']
+      return tabContent.data.requirements.every(hasAnswer)
+    }
+  }
+
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1370,6 +1399,16 @@ const TestDetail = () => {
                   `${currentPage}_${reqIndex}_answer`,
                 )
 
+                //nếu bài làm là sheet và không có giá trị thì lưu lên BE là null
+                if (tabContent?.data?.response_option === 'SHEET') {
+                  if (!checkSheetAnswered(editorContent)) {
+                    return {
+                      ...requirement,
+                      answer_text: null,
+                    }
+                  }
+                }
+
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -1377,7 +1416,9 @@ const TestDetail = () => {
               }),
             },
 
-            attempted: item?.attempted || checkAnswered(item),
+            attempted:
+              item?.attempted ||
+              (checkAnswered(item) && handleCheckAllRequirementHasAnswer(item)),
             timeSpent: !item?.done
               ? item?.timeSpent
                 ? Date.now() - startTime + item?.timeSpent
@@ -1476,9 +1517,48 @@ const TestDetail = () => {
 
   const answerListRef = useRef<AnswerList>({})
 
+  // Initialize answerListRef values once when component mounts
+  useEffect(() => {
+    if (
+      currentTabContent?.data?.response_option === 'SHEET' ||
+      currentTabContent?.data?.response_option === 'WORD'
+    ) {
+      currentTabContent?.data?.requirements?.forEach((req: Requirement) => {
+        if (req?.id) {
+          if (req?.answer_file?.file_key) {
+            answerListRef.current[req.id] = req?.answer_file?.file_key
+          } else if (req?.answer_text) {
+            if (currentTabContent?.data?.response_option === 'SHEET') {
+              answerListRef.current[req.id] = checkSheetAnswered(
+                req.answer_text,
+              )
+                ? req.answer_text
+                : ''
+            } else {
+              answerListRef.current[req.id] = req.answer_text
+            }
+          }
+        }
+      })
+    }
+  }, [currentTabContent])
+
   const setAnswerListValue = debounce((requirementId: number) => {
-    answerListRef.current[requirementId] =
-      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
+    let answer = ''
+    if (getValues(`${currentPage}_${essayData?.index}_answer`)) {
+      if (currentTabContent?.data?.response_option === 'SHEET') {
+        if (
+          checkSheetAnswered(
+            getValues(`${currentPage}_${essayData?.index}_answer`),
+          )
+        ) {
+          answer = getValues(`${currentPage}_${essayData?.index}_answer`)
+        }
+      } else {
+        answer = getValues(`${currentPage}_${essayData?.index}_answer`)
+      }
+    }
+    answerListRef.current[requirementId] = answer
   }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
@@ -1518,7 +1598,7 @@ const TestDetail = () => {
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      scratch_pads: scratchPads || [],
+      scratch_pad: scratchPads || '',
       flag: currentTabContent?.flag,
       is_viewed_answer:
         action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
@@ -1552,9 +1632,16 @@ const TestDetail = () => {
 
   const handleFlagQuestion = async (question_id: string) => {
     try {
+      const hasRequiment = currentTabContent?.data?.requirements?.length > 0
       const payload = {
         question_id,
         flag: !currentTabContent?.flag,
+        ...(hasRequiment && {
+          answer: currentTabContent?.data?.requirements.map((e: any) => ({
+            requirement_id: e.id,
+            question_id: question_id,
+          })),
+        }),
       }
       await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
       setTabs((prevTabs: Tab[]) =>
@@ -1608,7 +1695,7 @@ const TestDetail = () => {
             (quizDetail?.quiz_timed
               ? timeRef?.current?.handleGetTime() || 0
               : 0),
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           answer: requirementAnswers,
         }
       }
@@ -1737,7 +1824,7 @@ const TestDetail = () => {
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           total_attempt_time:
             quizDetail.quiz_timed * 60 -
             (quizDetail.quiz_timed
@@ -2510,6 +2597,7 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
+                      setScratchPads('')
                       handleSubmitAnswer('change-tab')
                       setEssayData(undefined)
                       handleChangeTab(id)
@@ -2877,6 +2965,242 @@ const TestDetail = () => {
             )}
             {/** End Question Content */}
 
+            {/** Scratchpads */}
+            <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+              <div className="flex h-full items-center">
+                <button
+                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  onClick={() => {
+                    setAllowHighLight(!allowHighLight)
+                    setAllowUnHighLight(false)
+                    trackGAEvent('Click Button Highlight Test')
+                  }}
+                >
+                  <ButtonContent icon={<HighlightIcon />} content="Highlight" />
+                </button>
+                <button
+                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  onClick={() => {
+                    setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false)
+                    trackGAEvent('Click Button Unhighlight Test')
+                  }}
+                >
+                  <ButtonContent
+                    icon={<UnHighLightIcon />}
+                    content="Unhighlight"
+                  />
+                </button>
+                <button
+                  className="h-full"
+                  onClick={() => {
+                    handleOpenScratchPad('scratch_pad')
+                    trackGAEvent('Click Button ScratchPad Test')
+                  }}
+                >
+                  <ButtonContent
+                    icon={<ScratchPadIcon />}
+                    content="ScratchPad"
+                  />
+                </button>
+                <button
+                  className={`h-full ${
+                    checkCalExist > -1 && 'sapp-disable-button'
+                  }`}
+                  onClick={() => {
+                    handleOpenScratchPad('calculator')
+                    trackGAEvent('Click Button Calculator Test')
+                  }}
+                  disabled={checkCalExist > -1}
+                >
+                  <ButtonContent
+                    icon={<CalculatorIcon />}
+                    content="Calculator"
+                  />
+                </button>
+
+                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                  <button className="relative h-full" ref={dropUpRequire}>
+                    <div
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
+                      onClick={() => {
+                        setShowLisRequirement(!showListRequirement)
+                      }}
+                    >
+                      <TextSquareIcon />
+                      <div className="flex items-center gap-3 text-sm font-normal">
+                        <div>
+                          <span className="hidden lg:inline-block 3xl:me-1">
+                            Requirement
+                          </span>
+                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                        </div>
+                        <ArrowUpIcon />
+                      </div>
+                    </div>
+                    {showListRequirement && (
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                        {currentTabContent?.data?.requirements?.map(
+                          (e: any, indexReq: number) => {
+                            return (
+                              <button
+                                key={e.id}
+                                className={`p-3 ${
+                                  essayData?.index !== indexReq && 'text-gray-1'
+                                }`}
+                                onClick={() => {
+                                  if (e?.id !== essayData?.req?.id) {
+                                    //chọn requirement khác thì mới set lại state
+                                    setEssayData({ req: e, index: indexReq })
+                                    if (refEditor?.current) {
+                                      refEditor.current.reset()
+                                    }
+                                  }
+                                  rightSideRef?.current &&
+                                    rightSideRef.current.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    })
+                                }}
+                              >{`Requirement (${indexReq + 1})`}</button>
+                            )
+                          },
+                        )}
+                      </div>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              <div className="flex h-full items-center gap-3 pe-6">
+                {currentTabContent?.data?.response_option === null &&
+                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+                  !currentTabContent.done && (
+                    <div className="flex gap-1">
+                      <div className="hidden 3.5xl:block">
+                        Choose response option:
+                      </div>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(0)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent?.response_type === 0 && 'active'
+                        }`}
+                      >
+                        <WordIcon />
+                      </button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(1)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent.response_type === 1 && 'active'
+                        }`}
+                      >
+                        <ExcelIcon />
+                      </button>
+                    </div>
+                  )}
+                <button
+                  className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px]"
+                  onClick={() => {
+                    handleFlagQuestion(currentPage)
+                    trackGAEvent('Click Button Flag To Review Test')
+                  }}
+                >
+                  <FlagIcon />
+                  <div className="hidden text-medium-sm font-medium lg:block">
+                    Flag to Review
+                  </div>
+                </button>
+                <button
+                  disabled={currentTabContent?.is_viewed_answer}
+                  className={`flex items-center gap-3 border border-solid ${
+                    !currentTabContent?.is_viewed_answer
+                      ? 'border-gray-1 text-bw-1'
+                      : 'border-default text-gray-2'
+                  } w-[150px] justify-center p-1 py-2`}
+                  onClick={() => {
+                    handleClearSelection(currentTabContent)
+                    trackGAEvent('Click Button Clear Selection Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">
+                    Clear Selection
+                  </div>
+                </button>
+                {/* )} */}
+                {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+                !currentTabContent?.is_viewed_answer &&
+                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+                  <button
+                    className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                    onClick={async () => {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                      confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                      trackGAEvent('Click Button Submit & View Answer Test')
+                    }}
+                  >
+                    <div className="text-medium-sm font-medium">
+                      Submit & View Answer
+                    </div>
+                  </button>
+                ) : (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <button
+                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                      onClick={async () => {
+                        const index = filteredTabs.findIndex(
+                          (e: any) => e.id === currentPage,
+                        )
+                        if (filteredTabs[index + 1].id) {
+                          setScratchPads('')
+                          handleSubmitAnswer('change-tab')
+                          setEssayData(undefined)
+                          handleChangeTab(filteredTabs[index + 1].id)
+                        }
+                      }}
+                    >
+                      <div className="text-medium-sm font-medium">
+                        Next Question
+                      </div>
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
             <TestScratchPads
               currentPage={currentPage}
               exhibitData={exhibitData}
@@ -2956,6 +3280,7 @@ const TestDetail = () => {
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
+              content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
             />
 
             <LimitQuizModal

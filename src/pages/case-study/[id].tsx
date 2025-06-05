@@ -903,7 +903,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
           {/* Header */}
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
+            <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
               <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
@@ -995,7 +995,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onMouseUp={() => setStartResize(false)}
               ></div>
               <div
-                className={` h-full overflow-auto bg-white py-6 `}
+                className={`h-full overflow-auto bg-white py-6`}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}
                 onScroll={(e) => {
                   const { target } = e
@@ -1094,7 +1094,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1124,7 +1124,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Scratch Pad</div>
                         {/* <CloseIcon */}
@@ -1163,7 +1163,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <div className="relative">
                         <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
-                            <span className="text-base font-semibold ">{`${exhibitText} ${
+                            <span className="text-base font-semibold">{`${exhibitText} ${
                               (i ?? 0) + 1
                             }: `}</span>
                             {exhibitsDes?.name}
@@ -1181,7 +1181,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
-                        className=" w-full"
+                        className="w-full"
                       />
                       {exhibitsDes &&
                         exhibitsDes?.files?.length > 0 &&
@@ -1218,7 +1218,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1235,7 +1235,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     setAllowUnHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <HighlightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Highlight
@@ -1249,7 +1249,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       setAllowHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <UnHighLightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Unhighlight
@@ -1292,7 +1292,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <ExhibitsIcon />
                       <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
-                          <span className="hidden  lg:inline-block 3xl:me-1">
+                          <span className="hidden lg:inline-block 3xl:me-1">
                             {`${exhibitText}s (${exhibits?.length})`}
                           </span>
                         </div>
@@ -1308,9 +1308,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return (
                               <button
                                 key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-gray-1'
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -1364,6 +1364,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             setOpen={setOpenQuit}
             handleQuit={() => backToPart()}
             handleCancel={() => setUnsavedChanges(true)}
+            content="If you quit at this time, the test results will not be saved."
           />
           <LimitQuizModal
             open={openLimit}
