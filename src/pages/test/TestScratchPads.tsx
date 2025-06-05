@@ -1,4 +1,5 @@
 import { CloseIcon } from '@assets/icons'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -86,7 +87,7 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
+            width: '344px',
             height: 'fit-content',
             top: 'calc(25% - 150px)',
             left: 'calc(25% - 200px)',
@@ -97,11 +98,11 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="bg-gray-2 flex h-10 w-full items-center justify-between px-5">
-              <div className="text-sm font-normal">Calculator</div>
+          <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-[#9CA3AF] bg-[#99A1B70D] px-4 py-3">
+              <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
+                <CloseModalIcon />
               </button>
             </div>
             <Calculator />
@@ -112,8 +113,8 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
-            height: '300px',
+            width: '412px',
+            height: '312px',
             top: 'calc(50% - 150px)',
             left: 'calc(50% - 200px)',
           }}
@@ -125,12 +126,12 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="bg-gray-2 flex h-10 w-full items-center justify-between px-5">
-              <div className="text-sm font-normal">Scratch Pad</div>
+          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border">
+            <div className="flex w-full items-center justify-between bg-[#99A1B70D] px-4 py-3">
+              <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
+                <CloseModalIcon />
               </button>
             </div>
             <ScratchPatch

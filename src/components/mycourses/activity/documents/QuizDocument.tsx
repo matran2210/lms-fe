@@ -557,7 +557,7 @@ const QuizDocument = ({
         )
       default:
         return (
-          <div className="bg-gray-200 rounded px-2 font-medium text-[#a1a1aa]">
+          <div className="rounded bg-[#e5e7eb] px-2 font-medium text-[#a1a1aa]">
             Manual Grading
           </div>
         )

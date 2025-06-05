@@ -54,6 +54,7 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
+  indexKey?: number
 }
 const EssayQuestionPreview = ({
   data,
@@ -79,6 +80,7 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
+  indexKey,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
@@ -177,7 +179,7 @@ const EssayQuestionPreview = ({
   }
 
   return (
-    <div>
+    <div className="w-full overflow-hidden">
       {question_content && isShowContent && (
         <div
           id="hightlight_area"

@@ -9,7 +9,8 @@ const SIZES = {
 }
 
 const COLORS = {
-  primary: 'primary',
+  primary:
+    'bg-sapp-black-1 text-white rounded-lg hover:bg-gray-14 disabled:text-gray-12 disabled:bg-[#99A1B70D]',
   info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
   success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
   secondary:
@@ -32,8 +33,8 @@ const COLORS = {
 }
 
 const PADDINGS = {
-  small: 'px-7 h-8',
-  medium: 'px-8 py-2',
+  small: 'px-4 py-2',
+  medium: 'px-6 py-3',
   lager: 'px-9 py-2.8',
   extra: 'px-17.5 py-2.8',
   none: '',
@@ -77,7 +78,7 @@ const SappButton = ({
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium box-border ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
 
   isUnderLine = isUnderLine ?? color === 'text'
   componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`

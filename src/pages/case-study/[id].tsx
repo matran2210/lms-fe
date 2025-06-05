@@ -54,7 +54,7 @@ import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
-import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -123,7 +123,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchQuizWrapper
+          <MatchQuizComponent
             data={data}
             // action={getAnswerMatching}
             ref={MatchQuizRef}

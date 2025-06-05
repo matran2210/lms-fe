@@ -3,12 +3,20 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
+  ArrowUpIcon,
+  CalculatorIcon,
   CalculatorIconV2,
+  ExcelIcon,
   FlagIcon,
+  HighlightIcon,
   ResizeIcon,
+  ScratchPadIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
+  TextSquareIcon,
+  UnHighLightIcon,
+  WordIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -49,18 +57,20 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
 import Popover from '@components/Popover'
+import SappButton from '@components/base/button/SappButton'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { TabsProps } from 'antd'
+import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
+import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -99,6 +109,7 @@ declare global {
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
+  const [editorReady, setEditorReady] = useState(true)
   const checkType = (
     data: any,
     type: string,
@@ -113,54 +124,59 @@ const TestDetail = () => {
       setAnswerListValue(id as unknown as number)
     }
 
-    const essayRequirementsItem: TabsProps['items'] =
-      currentTabContent?.data?.requirements?.map((_: any, index: number) => {
-        return {
-          label: `Requirement ${index + 1}`,
-          key: index,
-          children: (
-            <EssayQuestionPreview
-              data={{
-                ...currentTabContent?.data?.requirements?.[essayData?.index],
-                ...essayData?.req,
-              }}
-              question_content={currentTabContent?.data?.question_content}
-              index={essayData?.index}
-              question_data={currentTabContent?.data}
-              control={control}
-              handleSaveHighLight={handleSaveHighLight}
-              highlighted={highlighted}
-              removeHighlight={removeHighlight}
-              allowHighLight={allowHighLight}
-              allowUnHighLight={allowUnHighLight}
-              solution={solution}
-              name={`${currentTabID}_${essayData?.index}_answer`}
-              setValue={setValue}
-              defaultValue={
-                getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-                currentTabContent?.data?.requirements?.[essayData?.index]
-                  ?.answer_text ||
-                currentTabContent?.answer
-              }
-              response_option_custom={currentTabContent.response_type}
-              externalRef={refEditor}
-              fullData={currentTabContent}
-              openChooseFile={(e: any) =>
-                setOpenUpload({
-                  status: true,
-                  question_id: currentPage,
-                  requirementIndex: essayData?.index,
-                })
-              }
-              handleClearFile={handleClearFile}
-              setOpenPdf={handleOpenScratchPad}
-              handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-              showRequiment={showListRequirement}
-              handleChange={handleEssayChange}
-            />
-          ),
-        }
-      }) ?? []
+    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
+      return (
+        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          return {
+            label: `Requirement ${index + 1}`,
+            key: index,
+            children: (
+              <>
+                {editorReady && (
+                  <EssayQuestionPreview
+                    key={index}
+                    data={{
+                      ...currentTabContent?.data?.requirements?.[index],
+                      ...essayData?.req,
+                    }}
+                    question_content={currentTabContent?.data?.question_content}
+                    index={index}
+                    question_data={currentTabContent?.data}
+                    control={control}
+                    handleSaveHighLight={handleSaveHighLight}
+                    highlighted={highlighted}
+                    removeHighlight={removeHighlight}
+                    allowHighLight={allowHighLight}
+                    allowUnHighLight={allowUnHighLight}
+                    solution={solution}
+                    name={`${currentTabID}_${index}_answer`}
+                    setValue={setValue}
+                    defaultValue={defaultValue}
+                    response_option_custom={currentTabContent.response_type}
+                    externalRef={refEditor}
+                    fullData={currentTabContent}
+                    openChooseFile={(e: any) =>
+                      setOpenUpload({
+                        status: true,
+                        question_id: currentPage,
+                        requirementIndex: index,
+                      })
+                    }
+                    handleClearFile={handleClearFile}
+                    setOpenPdf={handleOpenScratchPad}
+                    handleSaveHighLightRequirement={
+                      handleSaveHighLightRequirement
+                    }
+                    showRequiment={showListRequirement}
+                    handleChange={handleEssayChange}
+                  />
+                )}
+              </>
+            ),
+          }
+        }) ?? []
+      )
+    }
 
     switch (type) {
       case QUESTION_TYPES.TRUE_FALSE:
@@ -219,7 +235,7 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchQuizWrapper
+          <MatchQuizComponent
             data={data}
             ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
@@ -250,6 +266,7 @@ const TestDetail = () => {
             corrects={corrects?.corrects}
             ref={ref}
             solution={solution}
+            watch={watch}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -288,9 +305,32 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const defaultValueEssay = () => {
+          const key = `${currentTabID}_${essayData?.index}_answer`
+          const valueFromForm = getValues(key)
+
+          if (valueFromForm) {
+            return valueFromForm
+          }
+
+          const requirement =
+            currentTabContent?.data?.requirements?.[essayData?.index]
+
+          if (requirement?.short_answer) {
+            return requirement.short_answer
+          }
+
+          if (requirement?.answer_text) {
+            return requirement.answer_text
+          }
+
+          return currentTabContent.answer
+        }
+
         return (
           <RequirementsTab
-            items={essayRequirementsItem}
+            items={essayRequirementsItem(defaultValueEssay())}
+            activeKey={essayData?.index ?? '0'}
             defaultActiveKey="1"
             onChange={(key) => {
               setEssayData({
@@ -382,7 +422,6 @@ const TestDetail = () => {
 
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, getValues, setValue } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -392,6 +431,9 @@ const TestDetail = () => {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
+    control,
+    getValues,
+    setValue,
   } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -440,7 +482,8 @@ const TestDetail = () => {
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
 
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  const [scratchPads, setScratchPads] = useState<string>('')
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
     Array<{
       question_id: string
@@ -1185,8 +1228,26 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    const doAfterSetState = () => {
+      setEditorReady(false) // Ẩn trước
+      setTimeout(() => {
+        try {
+          if (refEditor?.current?.editor?.layout) {
+            refEditor.current.editor.layout()
+          } else if (refEditor?.current?.getEditor) {
+            refEditor.current.getEditor().root?.focus()
+          }
+          window.dispatchEvent(new Event('resize'))
+        } catch (e) {
+        } finally {
+          setEditorReady(true)
+        }
+      }, 100)
+    }
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       if (question) {
@@ -1218,6 +1279,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1229,17 +1291,20 @@ const TestDetail = () => {
         ref.current?.handleReset()
       }
       refEditor?.current?.reset()
+
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
     setScratchPadValues(null)
   }
-
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
       if (tabContent.id === item?.id) {
@@ -2203,30 +2268,20 @@ const TestDetail = () => {
             currentTabContent?.qType,
           ) &&
             !currentTabContent?.is_viewed_answer && (
-              <button
+              <SappButton
                 disabled={currentTabContent?.is_viewed_answer}
-                className={clsx(
-                  'rounded-lg border border-secondary bg-white px-4 py-2 text-sm font-semibold text-secondary',
-                  {
-                    'cursor-not-allowed': currentTabContent?.is_viewed_answer,
-                  },
-                )}
+                className={clsx({
+                  'cursor-not-allowed': currentTabContent?.is_viewed_answer,
+                })}
+                color="outline"
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
                 }}
-              >
-                Clear Selection
-              </button>
+                title="Clear Selection"
+              />
             )}
-          <button
-            className={clsx(
-              'rounded-lg bg-[#29353C] text-sm font-semibold text-white hover:bg-black',
-              {
-                'bg-transparent !text-ink-800 underline hover:!bg-transparent':
-                  currentTabContent?.is_viewed_answer,
-              },
-            )}
+          <SappButton
             onClick={async () => {
               if (isGradingAfterEachQuestion) {
                 if (currentTabContent?.is_viewed_answer) {
@@ -2246,43 +2301,31 @@ const TestDetail = () => {
                   )
                 }
               } else {
+                const index = filteredTabs.findIndex(
+                  (e: any) => e.id === currentPage,
+                )
+                handleChangeTab(filteredTabs[index + 1].id)
                 handleSubmitAnswer('change-tab')
-                if (
-                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1
-                ) {
-                  const index = filteredTabs.findIndex(
-                    (e: any) => e.id === currentPage,
-                  )
-                  handleChangeTab(filteredTabs[index + 1].id)
-                } else {
-                  handleSubmitAnswer('finish')
-                  if (checkUnSubmitAnswer()?.length > 0) {
-                    setUnSubmitAnswer(true)
-                  } else {
-                    setOpenSubmit(true)
-                  }
-                  dispatch(disableUnsavedChange())
-                }
               }
 
               trackGAEvent('Click Button Confirm Answer')
             }}
-          >
-            {isGradingAfterEachQuestion
-              ? currentTabContent?.is_viewed_answer
-                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 && (
-                    <div className="flex items-center gap-2">
-                      Next Question <Icon type="arrow-right" />
-                    </div>
-                  )
-                : 'Confirm'
-              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1
-                ? 'Confirm & Next'
-                : 'Confirm'}
-          </button>
+            title={
+              (isGradingAfterEachQuestion
+                ? currentTabContent?.is_viewed_answer
+                  ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                      filteredTabs.length - 1 && (
+                      <div className="flex items-center gap-2">
+                        Next Question <Icon type="arrow-right" />
+                      </div>
+                    )
+                  : 'Confirm'
+                : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1
+                  ? 'Confirm & Next'
+                  : 'Confirm') as string
+            }
+          />
         </div>
       </div>
     )
@@ -2450,8 +2493,10 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
-                      id && handleChangeTab(id)
+                      setScratchPads('')
                       handleSubmitAnswer('change-tab')
+                      setEssayData(undefined)
+                      handleChangeTab(id)
                     }}
                     hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
@@ -2463,17 +2508,40 @@ const TestDetail = () => {
                   {hasScrollBar && (
                     <div className="ml-8 flex items-center">
                       {activeShowAll && <OptionShowAll />}
-                      <div
-                        className={clsx(
-                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-[17px] text-white underline`,
-                        )}
-                        onClick={() => {
-                          // setPageNums(activeShowAll ? arrPage : getPagination)
-                          setActiveShowAll(!activeShowAll)
-                        }}
+                      <Tooltip
+                        className="tooltip-show-all"
+                        title={
+                          <div className="flex items-center gap-2">
+                            {activeShowAll ? (
+                              <div className="rounded-full bg-white">
+                                <ShowLessIcon size={16} color="#404041" />
+                              </div>
+                            ) : (
+                              <div className="rounded-full bg-white">
+                                <ShowMoreIcon size={16} color="#404041" />
+                              </div>
+                            )}
+                            <span>
+                              {activeShowAll ? 'Show Less' : 'Show All'}
+                            </span>
+                          </div>
+                        }
                       >
-                        {!activeShowAll ? <ShowLessIcon /> : <ShowMoreIcon />}
-                      </div>
+                        <div
+                          className={clsx(
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
+                          )}
+                          onClick={() => {
+                            setActiveShowAll(!activeShowAll)
+                          }}
+                        >
+                          {!activeShowAll ? (
+                            <ShowLessIcon size={24} />
+                          ) : (
+                            <ShowMoreIcon size={24} />
+                          )}
+                        </div>
+                      </Tooltip>
                     </div>
                   )}
                 </div>
@@ -2793,6 +2861,242 @@ const TestDetail = () => {
             )}
             {/** End Question Content */}
 
+            {/** Scratchpads */}
+            <div className="bg-gray-3 z-10 flex h-[48px] items-center justify-between shadow-question-footer">
+              <div className="flex h-full items-center">
+                <button
+                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  onClick={() => {
+                    setAllowHighLight(!allowHighLight)
+                    setAllowUnHighLight(false)
+                    trackGAEvent('Click Button Highlight Test')
+                  }}
+                >
+                  <ButtonContent icon={<HighlightIcon />} content="Highlight" />
+                </button>
+                <button
+                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  onClick={() => {
+                    setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false)
+                    trackGAEvent('Click Button Unhighlight Test')
+                  }}
+                >
+                  <ButtonContent
+                    icon={<UnHighLightIcon />}
+                    content="Unhighlight"
+                  />
+                </button>
+                <button
+                  className="h-full"
+                  onClick={() => {
+                    handleOpenScratchPad('scratch_pad')
+                    trackGAEvent('Click Button ScratchPad Test')
+                  }}
+                >
+                  <ButtonContent
+                    icon={<ScratchPadIcon />}
+                    content="ScratchPad"
+                  />
+                </button>
+                <button
+                  className={`h-full ${
+                    checkCalExist > -1 && 'sapp-disable-button'
+                  }`}
+                  onClick={() => {
+                    handleOpenScratchPad('calculator')
+                    trackGAEvent('Click Button Calculator Test')
+                  }}
+                  disabled={checkCalExist > -1}
+                >
+                  <ButtonContent
+                    icon={<CalculatorIcon />}
+                    content="Calculator"
+                  />
+                </button>
+
+                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                  <button className="relative h-full" ref={dropUpRequire}>
+                    <div
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
+                      onClick={() => {
+                        setShowLisRequirement(!showListRequirement)
+                      }}
+                    >
+                      <TextSquareIcon />
+                      <div className="flex items-center gap-3 text-sm font-normal">
+                        <div>
+                          <span className="hidden lg:inline-block 3xl:me-1">
+                            Requirement
+                          </span>
+                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                        </div>
+                        <ArrowUpIcon />
+                      </div>
+                    </div>
+                    {showListRequirement && (
+                      <div className="sapp-separateLine bg-gray-3 absolute bottom-full h-fit justify-center shadow-questions-exhibits 3xl:w-full">
+                        {currentTabContent?.data?.requirements?.map(
+                          (e: any, indexReq: number) => {
+                            return (
+                              <button
+                                key={e.id}
+                                className={`p-3 ${
+                                  essayData?.index !== indexReq && 'text-gray-1'
+                                }`}
+                                onClick={() => {
+                                  if (e?.id !== essayData?.req?.id) {
+                                    //chọn requirement khác thì mới set lại state
+                                    setEssayData({ req: e, index: indexReq })
+                                    if (refEditor?.current) {
+                                      refEditor.current.reset()
+                                    }
+                                  }
+                                  rightSideRef?.current &&
+                                    rightSideRef.current.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    })
+                                }}
+                              >{`Requirement (${indexReq + 1})`}</button>
+                            )
+                          },
+                        )}
+                      </div>
+                    )}
+                  </button>
+                )}
+              </div>
+
+              <div className="flex h-full items-center gap-3 pe-6">
+                {currentTabContent?.data?.response_option === null &&
+                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+                  !currentTabContent.done && (
+                    <div className="flex gap-1">
+                      <div className="3.5xl:block hidden">
+                        Choose response option:
+                      </div>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(0)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent?.response_type === 0 && 'active'
+                        }`}
+                      >
+                        <WordIcon />
+                      </button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(1)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent.response_type === 1 && 'active'
+                        }`}
+                      >
+                        <ExcelIcon />
+                      </button>
+                    </div>
+                  )}
+                <button
+                  className="border-gray-1 flex items-center justify-center gap-3 border px-3 py-2 3xl:w-[150px]"
+                  onClick={() => {
+                    handleFlagQuestion(currentPage)
+                    trackGAEvent('Click Button Flag To Review Test')
+                  }}
+                >
+                  <FlagIcon />
+                  <div className="text-medium-sm hidden font-medium lg:block">
+                    Flag to Review
+                  </div>
+                </button>
+                <button
+                  disabled={currentTabContent?.is_viewed_answer}
+                  className={`flex items-center gap-3 border border-solid ${
+                    !currentTabContent?.is_viewed_answer
+                      ? 'border-gray-1 text-bw-1'
+                      : 'border-default text-[#DCDDDD]'
+                  } w-[150px] justify-center p-1 py-2`}
+                  onClick={() => {
+                    handleClearSelection(currentTabContent)
+                    trackGAEvent('Click Button Clear Selection Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">
+                    Clear Selection
+                  </div>
+                </button>
+                {/* )} */}
+                {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+                !currentTabContent?.is_viewed_answer &&
+                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+                  <button
+                    className="border-gray-1 flex w-45 items-center justify-center gap-3 border px-3 py-2"
+                    onClick={async () => {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                      confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                      trackGAEvent('Click Button Submit & View Answer Test')
+                    }}
+                  >
+                    <div className="text-medium-sm font-medium">
+                      Submit & View Answer
+                    </div>
+                  </button>
+                ) : (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <button
+                      className="border-gray-1 flex w-[150px] items-center justify-center gap-3 border px-3 py-2"
+                      onClick={async () => {
+                        const index = filteredTabs.findIndex(
+                          (e: any) => e.id === currentPage,
+                        )
+                        if (filteredTabs[index + 1].id) {
+                          setScratchPads('')
+                          handleSubmitAnswer('change-tab')
+                          setEssayData(undefined)
+                          handleChangeTab(filteredTabs[index + 1].id)
+                        }
+                      }}
+                    >
+                      <div className="text-medium-sm font-medium">
+                        Next Question
+                      </div>
+                    </button>
+                  )
+                )}
+              </div>
+            </div>
+
             <TestScratchPads
               currentPage={currentPage}
               exhibitData={exhibitData}
@@ -2864,7 +3168,7 @@ const TestDetail = () => {
               handleQuit={() => {
                 if (type === 'event-test') {
                   router.replace(`/event-test`)
-                  setSubmitEventTest(true)
+                  // setSubmitEventTest(true)
                 } else {
                   router.back()
                 }
@@ -2872,7 +3176,7 @@ const TestDetail = () => {
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
-              content=""
+              content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
             />
 
             <LimitQuizModal
@@ -2885,13 +3189,10 @@ const TestDetail = () => {
               open={openSubmit}
               setOpen={setOpenSubmit}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                handleSubmitQuestions('submit')
+                if (type !== 'event-test') {
                   setOpenSubmit(false)
                 }
-                handleSubmitQuestions('submit')
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
@@ -2903,10 +3204,19 @@ const TestDetail = () => {
               setOpen={setUnSubmitAnswer}
               data={unSubmitAnswerData}
               handleSubmit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  setSubmitEventTest(true)
-                } else {
+                if (type !== 'event-test') {
+                  setUnSubmitAnswer(false)
+                }
+                handleSubmitQuestions('submit')
+              }}
+              handleCancel={() => setUnSubmitAnswer(false)}
+            />
+            <UnSubmitAnswerModal
+              open={openUnSubmitAnswer}
+              setOpen={setUnSubmitAnswer}
+              data={unSubmitAnswerData}
+              handleSubmit={() => {
+                if (type !== 'event-test') {
                   setUnSubmitAnswer(false)
                 }
                 handleSubmitQuestions('submit')

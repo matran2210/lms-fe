@@ -5,7 +5,7 @@ const ButtonCancelSubmit = ({
   submit,
   cancel,
   className = 'flex align-middle justify-between',
-  color = 'primary',
+  color,
   colorCancel = 'text',
   showOkButton = true,
   showCancelButton = true,
@@ -13,16 +13,16 @@ const ButtonCancelSubmit = ({
 }: IButtonCancelSubmitProps) => {
   return (
     <div className={className}>
-      {showCancelButton && (
-        <SappButton
-          color={colorCancel}
-          {...(!revertFunction ? { ...cancel } : { ...submit })}
-        />
-      )}
       {showOkButton && (
         <SappButton
           color={color}
           {...(!revertFunction ? { ...submit } : { ...cancel })}
+        />
+      )}
+      {showCancelButton && (
+        <SappButton
+          color={colorCancel}
+          {...(!revertFunction ? { ...cancel } : { ...submit })}
         />
       )}
     </div>
