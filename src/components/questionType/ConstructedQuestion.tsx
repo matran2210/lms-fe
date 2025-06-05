@@ -12,6 +12,8 @@ import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { MY_COURSES } from 'src/constants/lang'
 
 type SheetData = {
   name: string
@@ -55,6 +57,8 @@ export type IPreviewProp = {
   isShowContent?: boolean
   showRequiment?: boolean
   className?: string
+  editorClassName?: string
+  explainClassname?: string
 }
 const EssayQuestionPreview = ({
   data,
@@ -84,6 +88,8 @@ const EssayQuestionPreview = ({
   isShowContent = true,
   showRequiment = false,
   className = '',
+  editorClassName = '',
+  explainClassname,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
@@ -253,7 +259,7 @@ const EssayQuestionPreview = ({
             )}
             {data?.description && (
               <EditorReader
-                className="editor-wrap mb-4"
+                className="editor-wrap mb-6"
                 text_editor_content={data?.description}
                 highlighted={
                   question_data?.requirements?.[index || 0]?.highlighted
@@ -395,11 +401,12 @@ const EssayQuestionPreview = ({
                 fullData?.is_viewed_answer
               }
               handleChange={() => handleChange && handleChange(data?.id)}
+              className={editorClassName}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg border`}
             >
               <Controller
                 name={name}
@@ -558,8 +565,10 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className="mb-11 mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">Solution</div>
+              <div
+                className={clsx('mb-11 mt-8 bg-gray-4 p-4', explainClassname)}
+              >
+                <SappTitleSolution title={MY_COURSES.solution} />
                 <EditorReader
                   text_editor_content={
                     data?.explanation ??

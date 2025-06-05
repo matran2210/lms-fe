@@ -46,6 +46,7 @@ import {
 } from 'src/type/course/my-course/Activity'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
+import { Tooltip } from 'antd'
 
 type Props = {
   questions: IQuestion[]
@@ -753,6 +754,65 @@ const QuizDocument = ({
               exhibitText={exhibitText}
             />
           )}
+      </div>
+      {/* Confirm Button */}
+      <div className="flex justify-end">
+        <Tooltip
+          title={
+            isQuestionConfirmed ||
+            grading_preference !== 'AFTER_EACH_QUESTION' ||
+            (isQuestionConfirmed && isLastQuestion) ||
+            (is_graded && grading_method === GRADING_METHOD.MANUAL)
+              ? null
+              : 'You should select an answer before click'
+          }
+          classNames={{ root: 'max-w-72' }}
+          getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+          mouseEnterDelay={0.3}
+        >
+          <>
+            {(isQuestionConfirmed ||
+              grading_preference !== 'AFTER_EACH_QUESTION' ||
+              (isQuestionConfirmed && isLastQuestion)) && (
+              <SappButton
+                className="!rounded-lg !px-4 py-2"
+                title={isLastQuestion ? 'Finish' : 'Next'}
+                full={false}
+                size={'small'}
+                onClick={() => {
+                  if (loading) {
+                    return
+                  }
+                  if (isLastQuestion) {
+                    handleQuizFinish()
+                    setRunHandleFinishQuiz((e) => e + 1)
+                    trackGAEvent('Click Button Finish Quiz Activity')
+                  } else {
+                    handleNextQuestion()
+                    trackGAEvent('Click Button Next Quiz Activity')
+                  }
+                }}
+                color="light-dark"
+                loading={loading}
+              />
+            )}
+            {!isQuestionConfirmed &&
+              grading_preference === 'AFTER_EACH_QUESTION' && (
+                <SappButton
+                  className="!rounded-lg !px-4 py-2"
+                  title={getButttonTitle()}
+                  full={false}
+                  size={'small'}
+                  disabled={loading}
+                  onClick={() => {
+                    handleSubmit()
+                  }}
+                  color="light-dark"
+                  loading={loading}
+                />
+              )}
+          </>
+        </Tooltip>
       </div>
 
       {modalResult?.status && (

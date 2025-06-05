@@ -69,10 +69,13 @@ module.exports = {
           4: '#0Df01919',
           5: '#F019190D',
         },
+        warning: {
+          1: '#E68200',
+        },
         state: {
           info: '#3964EA',
-          success: '#397839',
-          error: '#B90E0A',
+          success: '#078A4D',
+          error: '#F80903',
           cancel: '#D20306',
         },
         bw: {
@@ -89,6 +92,7 @@ module.exports = {
           12: '#374151',
           13: '#1F2937',
           14: '#374151',
+          'black-2': '#3F3F3F',
         },
         gray: {
           1: '#A1A1A1',
@@ -107,6 +111,7 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#DADFE5',
+
           897: '#D9D9D9',
           898: '#F6F6F6',
           899: '#686868',
@@ -169,6 +174,7 @@ module.exports = {
         },
         purple: {
           1: '#8F6FEA',
+          2: '#ECF0FD',
         },
         txt: {
           primary: '#1F2937',
@@ -177,6 +183,7 @@ module.exports = {
         dark: {
           1: '#1C274C',
           2: '#1A1A1A',
+          3: '#29353C',
         },
       },
       fill: {
@@ -330,7 +337,9 @@ module.exports = {
         5.75: '23px', // 23px
         6.5: '26.5px',
         7.5: '1.875rem', // 30px
+        7.625: '1.90625rem', // 31px
         8.25: '2.0625rem', // 33px
+        10.5: '2.625rem', // 42px
         13.75: '3.4375rem', // 55px
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px

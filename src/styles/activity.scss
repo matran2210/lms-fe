@@ -37,9 +37,24 @@
       @apply text-primary;
     }
   }
-  .ant-tabs-tab + .ant-tabs-tab {
-    margin-left: 4rem !important;
+  &.course-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 4rem !important;
+    }
   }
+  &.requirement-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 2.5rem !important;
+    }
+
+    .learning-act-editor {
+      @apply overflow-hidden rounded-lg border border-2 border-gray-200;
+      .tox-tinymce {
+        @apply border-none;
+      }
+    }
+  }
+
   .ant-tabs-nav {
     margin: 0 !important;
   }

@@ -134,6 +134,7 @@ const HookFormRadioGroup = ({
                             {option.label}
                             <YourAnswer
                               show={checked && !!corrects}
+                              className="max-h-6 !rounded bg-purple-2 !text-sm text-state-info"
                             ></YourAnswer>
                           </div>
                           {option.description && (

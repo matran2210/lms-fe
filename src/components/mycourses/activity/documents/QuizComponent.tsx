@@ -1,4 +1,10 @@
-import { DownloadIcon, FileTextIcon } from '@assets/icons'
+import {
+  CircleCheckIcon,
+  CircleInfoIcon,
+  DownloadIcon,
+  FileTextIcon,
+  InfoIcon,
+} from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import { NotesOutline } from '@components/icons/Notes'
@@ -13,6 +19,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -120,7 +127,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const questionRef = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
-    const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const {
+      control: controlAnswer,
+      setValue,
+      reset,
+      getValues,
+      watch,
+    } = useForm({})
 
     const DragDropRef = useRef(null) as any
 
@@ -472,6 +485,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              isShowWarning={
+                !watch(`${activeQuestion?.id}_${document_id}_answer`)
+              }
+              explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           )
 
@@ -486,6 +503,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              isShowWarning={
+                !(
+                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
+                    0
+                )
+              }
+              explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           )
 
@@ -500,6 +525,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
@@ -513,6 +540,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
@@ -529,6 +558,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
@@ -542,139 +573,147 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
         case QUESTION_TYPES.ESSAY:
+          const items =
+            activeQuestion?.requirements?.map((e, i: number) => {
+              const hasAnswer = !!watch(
+                `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[i]?.id : document_id}_essay`,
+              )
+
+              return {
+                key: e?.id,
+                label: (
+                  <div className="learning-act-tab-label flex items-center gap-1 text-base font-normal capitalize">
+                    {`Requirement ${i + 1}`}{' '}
+                    {hasAnswer && (
+                      <div className="text-primary">
+                        <CircleCheckIcon />
+                      </div>
+                    )}
+                  </div>
+                ),
+                children: (
+                  <div className="mt-6">
+                    <EssayQuestionPreview
+                      className="!bg-transparent"
+                      editorClassName="learning-act-editor"
+                      explainClassname="!mt-8 !p-0 !bg-transparent"
+                      defaultValue={
+                        activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                          if (
+                            ans.requirement_id ===
+                            activeQuestion?.requirements?.[
+                              essayData?.index ?? 0
+                            ]?.id
+                          ) {
+                            return ans
+                          }
+                        })?.short_answer ??
+                        activeQuestion?.myAnswers?.[0]?.short_answer ??
+                        null
+                      }
+                      data={
+                        activeQuestion?.requirements?.[essayData?.index ?? 0]
+                      }
+                      question_content={activeQuestion?.question_content}
+                      index={essayData?.index}
+                      question_data={activeQuestion}
+                      control={controlAnswer}
+                      setValue={setValue}
+                      handleSaveHighLight={() => {}}
+                      forCaseStudy={true}
+                      name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                      fullData={{
+                        data: { ...activeQuestion },
+                        solution: activeQuestion?.solution ?? '',
+                      }}
+                      openChooseFile={(e: any) =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: activeQuestion?.id,
+                          requirement_id: showRequirement?.id,
+                        })
+                      }
+                      handleClearFile={() => {
+                        dispatch(
+                          clearFileEssay({
+                            activityId,
+                            tabId,
+                            quizId,
+                            question_id: activeQuestion?.id,
+                            requirement_id: showRequirement?.id,
+                            requirements: activeQuestion?.requirements?.map(
+                              (item: IRequirement) => {
+                                if (item?.id === showRequirement?.id) {
+                                  return { ...item, answer_file: null }
+                                }
+                                return item
+                              },
+                            ),
+                          }),
+                        )
+                      }}
+                      handleChange={() => {
+                        !isChange && setIsChange(true)
+                      }}
+                      isShowContent={showQuestionContent}
+                      externalRef={refEditor}
+                    />
+                  </div>
+                ),
+              }
+            }) ?? []
           return (
             <>
               <div>
-                <div>
+                <div className="mb-6">
                   <div>
                     <EditorReader
-                      className="editor-wrap mt-1.5"
+                      className="editor-wrap text-lg font-semibold"
                       text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
-                </div>
-                {!!activeQuestion?.requirements?.length && (
-                  <>
-                    <div className="my-6 border border-b-gray-2"></div>
-                    <div className="flex cursor-pointer select-none items-center">
-                      <div className="relative">
-                        <div
-                          className="group flex items-center hover:text-primary"
-                          onClick={() => setShowListRequirement(true)}
-                        >
-                          <div className="font-semibold">
-                            Requirement {showRequirement?.index}/
-                            {activeQuestion?.requirements?.length || 0}
-                          </div>
-                          <div>
-                            <SappIcon
-                              className="-mt-1 ml-2 fill-bw-1 group-hover:fill-primary"
-                              icon="arrow_down"
-                            ></SappIcon>
-                          </div>
-                        </div>
-                        {showListRequirement && (
-                          <div
-                            ref={listRequirementRef}
-                            className="text-over absolute bottom-0  left-0 z-50 w-max max-w-md translate-y-full bg-white py-1 shadow-md"
-                          >
-                            {activeQuestion?.requirements?.map((e, i) => {
-                              return (
-                                <div
-                                  onClick={() => {
-                                    handleShowRequirement({
-                                      id: e.id,
-                                      description: e?.description,
-                                      index: i + 1,
-                                      name: e?.name,
-                                      files: e?.files,
-                                    })
-                                  }}
-                                  className="truncate px-3 py-1.5 font-semibold hover:text-primary"
-                                  key={e.id}
-                                >{`Requirement ${i + 1}: ${e?.name}`}</div>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
-                      <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">
-                          You must finished{' '}
-                          {activeQuestion?.requirements?.length || 0}{' '}
-                          requirements to complete this question (Your answer is
-                          auto save)
-                        </span>
+                  {!!activeQuestion?.requirements?.length && (
+                    <div className="mt-6 flex items-center gap-2 text-warning-1">
+                      <CircleInfoIcon />
+                      <div className="text-base font-normal">
+                        You must finished{' '}
+                        {activeQuestion?.requirements?.length || 0} requirements
+                        to complete this question (Your answer is auto save)
                       </div>
                     </div>
-                  </>
+                  )}
+                </div>
+
+                {!!activeQuestion?.requirements?.length && (
+                  <Tabs
+                    className={clsx('learning-activity-tabs requirement-tab')}
+                    items={items}
+                    onChange={(key: string) => {
+                      const optionIndex =
+                        activeQuestion?.requirements?.findIndex(
+                          (item: IRequirement) => item?.id === key,
+                        )
+                      if (optionIndex !== -1) {
+                        const option =
+                          activeQuestion?.requirements?.[optionIndex ?? 0]
+                        handleShowRequirement({
+                          id: key,
+                          description: option?.description ?? '',
+                          index: (optionIndex ?? 0) + 1,
+                          name: option?.name ?? '',
+                          files: option?.files ?? [],
+                        })
+                      }
+                    }}
+                  />
                 )}
               </div>
-              <div className="my-6"></div>
-              <EssayQuestionPreview
-                className="!bg-transparent"
-                defaultValue={
-                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
-                      return ans
-                    }
-                  })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
-                  null
-                }
-                data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
-                question_content={activeQuestion?.question_content}
-                index={essayData?.index}
-                question_data={activeQuestion}
-                control={controlAnswer}
-                setValue={setValue}
-                handleSaveHighLight={() => {}}
-                forCaseStudy={true}
-                name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
-                fullData={{
-                  data: { ...activeQuestion },
-                  solution: activeQuestion?.solution ?? '',
-                }}
-                openChooseFile={(e: any) =>
-                  setOpenUpload({
-                    status: true,
-                    question_id: activeQuestion?.id,
-                    requirement_id: showRequirement?.id,
-                  })
-                }
-                handleClearFile={() => {
-                  dispatch(
-                    clearFileEssay({
-                      activityId,
-                      tabId,
-                      quizId,
-                      question_id: activeQuestion?.id,
-                      requirement_id: showRequirement?.id,
-                      requirements: activeQuestion?.requirements?.map(
-                        (item: IRequirement) => {
-                          if (item?.id === showRequirement?.id) {
-                            return { ...item, answer_file: null }
-                          }
-                          return item
-                        },
-                      ),
-                    }),
-                  )
-                }}
-                handleChange={() => {
-                  !isChange && setIsChange(true)
-                }}
-                isShowContent={showQuestionContent}
-                externalRef={refEditor}
-              />
             </>
           )
 
@@ -743,35 +782,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
-          {/* {activeQuestion?.question_topic?.files?.length > 0 && (
-            <div className="mb-2">
-              {!!activeQuestion?.question_topic?.description && (
-                <div className="my-8 border border-b-gray-2" />
-              )}
-              <div className="mb-2 font-semibold">Topic Resource:</div>
-              {activeQuestion?.question_topic?.files.map(
-                (e: any, index: number) => {
-                  return (
-                    <div
-                      className="cursor-pointer text-state-info hover:underline"
-                      onClick={() => {
-                        setOpenFile &&
-                          setOpenFile(
-                            { type: 'file' },
-                            e?.resource?.url,
-                            e?.resource?.name,
-                          )
-                      }}
-                      key={index}
-                    >
-                      {e?.resource?.name}
-                    </div>
-                  )
-                },
-              )}
-              <div className="my-6 border border-b-gray-2" />
-            </div>
-          )} */}
+          <Divider className="my-8" />
           <div className="relative">
             {renderQuestion()}
 
@@ -827,9 +838,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'group absolute right-0 top-[104px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                    'group absolute right-0 top-[104px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                     {
-                      '!top-[194px]':
+                      '!top-[214px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY,
                     },
                   )}
@@ -878,9 +889,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'group absolute right-0 top-[32px] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                    'group absolute right-0 top-[32px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
                     {
-                      '!top-[122px]':
+                      '!top-[142px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY,
                     },
                   )}

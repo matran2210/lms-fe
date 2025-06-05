@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -38,6 +39,8 @@ interface IProps {
   isHideExhibit?: boolean
   isAlwaysShowAnswer?: boolean
   exhibitText?: string
+  explainClassname?: string
+  correctAnswerClass?: string
 }
 type IProp = {
   value: string
@@ -64,6 +67,8 @@ const MatchingQuestion = forwardRef(
       isHideExhibit = true,
       isAlwaysShowAnswer = false,
       exhibitText = 'Exhibit',
+      explainClassname,
+      correctAnswerClass,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -456,38 +461,39 @@ const MatchingQuestion = forwardRef(
                 )
               })}
             </div>
-            <div className="flex flex-col gap-y-5 pt-[42px]">
-              <div className=" text-base font-semibold">Correct Answer</div>
-
-              {data?.question_matchings?.map((e: any, index: number) => {
-                return (
-                  <div
-                    className="flex flex-nowrap justify-between px-[123px]"
-                    key={index}
-                  >
-                    <QuestionCard
-                      value={e?.content}
-                      className="sapp-arrowed-container-corrects text-state-success"
-                    />
-                    <div className="sapp-match-result flex-1">
-                      {correctAnswer?.[e?.id]?.id && (
-                        <div
-                          // className="w-fit"
-                          className="sapp-notched-container-corrects min-w-132px text-state-success"
-                        >
-                          {correctAnswer?.[e?.id]?.answer}
-                        </div>
-                      )}
+            <div className={clsx('pt-10.5', correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
+              <div className="mt-4 flex flex-col gap-y-5">
+                {data?.question_matchings?.map((e: any, index: number) => {
+                  return (
+                    <div
+                      className="flex flex-nowrap justify-between px-[123px]"
+                      key={index}
+                    >
+                      <QuestionCard
+                        value={e?.content}
+                        className="sapp-arrowed-container-corrects text-state-success"
+                      />
+                      <div className="sapp-match-result flex-1">
+                        {correctAnswer?.[e?.id]?.id && (
+                          <div
+                            // className="w-fit"
+                            className="sapp-notched-container-corrects min-w-132px text-state-success"
+                          >
+                            {correctAnswer?.[e?.id]?.answer}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
         )}

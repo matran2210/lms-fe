@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -36,6 +37,8 @@ interface IProps {
   isHideExhibit?: boolean
   exhibitText?: string
   handleGetData?: (data: DragDropAnswerItem) => void
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
@@ -58,6 +61,8 @@ const DragNDropPreivew = forwardRef(
       isHideExhibit = true,
       exhibitText,
       handleGetData,
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -464,10 +469,8 @@ const DragNDropPreivew = forwardRef(
           </>
         )}
         {answerContent && (
-          <>
-            <div className="pt-[31px] text-base font-semibold">
-              Correct Answer
-            </div>
+          <div className={clsx('pt-7.625', correctAnswerClass)}>
+            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
               className="questions mt-2"
               text_editor_content={
@@ -475,11 +478,11 @@ const DragNDropPreivew = forwardRef(
                   ?.innerHTML || ''
               }
             />
-          </>
+          </div>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

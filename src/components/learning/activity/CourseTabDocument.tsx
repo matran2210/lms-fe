@@ -262,7 +262,7 @@ const CourseTabDocument = ({
       })}
     >
       <Tabs
-        className={clsx('learning-activity-tabs', {
+        className={clsx('learning-activity-tabs course-tab', {
           'tabs-list-hidden': focusOnlyQuiz,
         })}
         activeKey={selector?.currentTabId}

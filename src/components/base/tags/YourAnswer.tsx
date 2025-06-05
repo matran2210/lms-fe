@@ -1,14 +1,21 @@
+import clsx from 'clsx'
 import React from 'react'
 
 type Props = {
   show: boolean
+  className?: string
 }
 
-const YourAnswer = ({ show }: Props) => {
+const YourAnswer = ({ show, className }: Props) => {
   return (
     <>
       {show && (
-        <div className="ml-3 inline-block max-h-5.5 whitespace-nowrap rounded-sm border border-gray-2 bg-gray-4 px-2 text-ssm font-normal text-bw-1">
+        <div
+          className={clsx(
+            'ml-3 inline-block max-h-5.5 whitespace-nowrap rounded-sm border border-gray-2 bg-gray-4 px-2 text-ssm font-normal text-bw-1',
+            className,
+          )}
+        >
           Your Answer
         </div>
       )}

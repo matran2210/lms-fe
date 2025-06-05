@@ -6,6 +6,8 @@ import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
+import WarningSection from './WarningSection'
+import clsx from 'clsx'
 export type IPreviewProp = {
   data: any
   control: any
@@ -30,6 +32,8 @@ export type IPreviewProp = {
   tabs?: Array<{ id: string }> | undefined
   currentPage?: string | undefined
   exhibitText?: string
+  isShowWarning?: boolean
+  explainClassname?: string
 }
 
 type IAnswers = {
@@ -51,6 +55,8 @@ const OneChoiceQuestion = ({
   setOpenFile,
   isHideExhibit = true,
   exhibitText = 'Exhibit',
+  isShowWarning = false,
+  explainClassname,
 }: IPreviewProp) => {
   useEffect(() => {
     if (defaultValues) {
@@ -113,6 +119,7 @@ const OneChoiceQuestion = ({
           className="sapp-questions"
           highlighted={highlighted}
         />
+        <WarningSection isShowWarning={isShowWarning} className="mb-4" />
       </div>
       {data?.question_topic?.exhibits &&
         !isHideExhibit &&
@@ -176,8 +183,8 @@ const OneChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <div className="mt-6 bg-gray-4 p-6">
-          <SappTitleSolution title={MY_COURSES.explanations} />
+        <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+          <SappTitleSolution title={`${MY_COURSES.solution}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}

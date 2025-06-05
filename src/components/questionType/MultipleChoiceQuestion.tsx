@@ -5,6 +5,9 @@ import { useEffect, useMemo } from 'react'
 import { IPreviewProp } from './OneChoiceQuestion'
 import { MY_COURSES } from 'src/constants/lang'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { CircleInfoIcon } from '@assets/icons'
+import WarningSection from './WarningSection'
+import clsx from 'clsx'
 // import {IPreviewProp} from '../true-false-question'
 
 interface IDataAnswer {
@@ -31,6 +34,8 @@ const MultiChoiceQuestion = ({
   tabs,
   currentPage,
   exhibitText = 'Exhibit',
+  isShowWarning = false,
+  explainClassname,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -101,6 +106,7 @@ const MultiChoiceQuestion = ({
           className="sapp-questions"
           highlighted={highlighted}
         />
+        <WarningSection isShowWarning={isShowWarning} className="mb-4" />
         {data?.question_topic?.exhibits &&
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
@@ -165,8 +171,8 @@ const MultiChoiceQuestion = ({
         />
       </div>
       {solution && (
-        <div className="mt-6 bg-gray-4 p-6">
-          <SappTitleSolution title={MY_COURSES.explanations} />
+        <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+          <SappTitleSolution title={`${MY_COURSES.solution}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}
