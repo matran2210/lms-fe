@@ -1,3 +1,4 @@
+import { ISVG } from 'src/type'
 interface IProps {
   color?: string
   size?: number
@@ -311,9 +312,6 @@ export const ScratchPadIcon = () => {
     </svg>
   )
 }
-import { ISVG } from 'src/type'
-// Import Tailwind CSS classes
-import 'tailwindcss/tailwind.css'
 
 export const CloseIcon = ({
   className = 'stroke-[#050505] ',

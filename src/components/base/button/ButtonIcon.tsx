@@ -27,7 +27,7 @@ const ButtonIcon = ({
     <button
       className={`${className} btn ${
         customButton ? `btn-sapp-filter btn-light-primary` : 'btn-primary'
-      } h-[50px] w-12.5 rounded-full bg-primary text-white hover:bg-[#FFC83A]`}
+      } h-[50px] w-[50px] rounded-full bg-primary text-white hover:bg-[#FFC83A]`}
       onClick={onClick}
       data-kt-menu-trigger={trigger}
       data-kt-menu-placement={placement}

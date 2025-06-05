@@ -20,7 +20,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   return (
     <CertificateCard bodyClassName="xl:px-93.25 py-34.5 px-17.5">
       <div className="flex h-full items-center justify-between gap-12 xl:gap-20">
-        <div className="flex h-full w-45% items-center justify-center">
+        <div className="flex h-full w-[45%] items-center justify-center">
           {certificate?.certificate_url && (
             <Image
               src={certificate?.certificate_url || ''}

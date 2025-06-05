@@ -405,7 +405,7 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col rounded-xl ${index === 0 && 'bg-white'} p-7.5 shadow-sidebar`}
+          className={`item flex flex-col rounded-xl ${index === 0 && 'bg-white'} p-[30px] shadow-sidebar`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >

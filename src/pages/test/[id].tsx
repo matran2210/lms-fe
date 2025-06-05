@@ -2390,7 +2390,7 @@ const TestDetail = () => {
             >
               <div className="flex h-full w-[100px] items-center gap-1">
                 {/* <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -2400,7 +2400,7 @@ const TestDetail = () => {
                   <ButtonContent icon={<HighlightIcon />} content="" />
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)
@@ -2628,7 +2628,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
+                    className="flex w-[180px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')

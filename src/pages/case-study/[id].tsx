@@ -1229,7 +1229,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </div>
                 </button> */}
                 <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -1243,7 +1243,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)

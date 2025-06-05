@@ -25,7 +25,7 @@ const STATE = {
 }
 
 const SIZES = {
-  small: 'w-4.5 h-[18px]',
+  small: 'w-[1.125rem] h-[18px]',
   medium: 'w-[24px] h-[24px]',
   lager: 'w-[30px] h-[30px]',
 }

@@ -162,11 +162,11 @@ const OverProgress = () => {
             </div>
             {isNormal && (
               <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
-                <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
+                <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
                   <span className="h-3 w-3 rounded-full bg-[#37C78C]"></span>
                   <span className="font-medium">Activities completed</span>
                 </div>
-                <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
+                <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
                   <span className="h-3 w-3 rounded-full bg-ink-300"></span>
                   <span className="font-medium">Activities not completed</span>
                 </div>

@@ -230,7 +230,7 @@ function DiscussionElement({
         />
       </div>
       <div className="w-4" />
-      <div className="w-45">
+      <div className="w-[180px]">
         <div className="mb-1 text-base font-semibold text-[#050505]">
           {userInfo?.name}
         </div>

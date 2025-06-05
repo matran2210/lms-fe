@@ -135,9 +135,6 @@ module.exports = {
       inter: ['Inter', 'sans-serif'],
       fira: ['Fira Sans', 'sans-serif'],
     },
-    container: {
-      center: true,
-    },
     extend: {
       boxShadow: {
         0: '0',
@@ -159,56 +156,6 @@ module.exports = {
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
         matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
-      },
-      content: {
-        empty: '""',
-      },
-      width: {
-        5.5: '22px',
-        11.25: '45px',
-        12.5: '50px',
-        45: '180px',
-        16.75: '4.188rem',
-        18: '72px',
-        30: '7.5rem',
-        4.5: '1.125rem',
-        '6-percent': '6%',
-        '7-percent': '7%',
-        18: '18%',
-        3.6: '36%',
-        17: '17%',
-        '45%': '45%',
-        '624px': '624px',
-      },
-      padding: {
-        1.25: '0.3125rem', // 5px
-        1.5: '0.375rem', // 6px
-        1.75: '0.4375rem', // 7px
-        1.8: '0.47rem', // 7.5px
-        2.75: '0.688rem', // 11px
-        2.8: '0.71875rem', // 11.5px
-        3.25: '0.813rem', // 13px
-        3.8: '0.89rem', // 14.3px
-        4.5: '1.125rem', // 18px
-        5.25: '1.313rem', // 21px
-        5.75: '23px', // 23px
-        6.5: '26.5px',
-        7.5: '1.875rem', // 30px
-        8.25: '2.0625rem', // 33px
-        13.75: '3.4375rem', // 55px
-        17.5: '4.375rem', // 70px
-        19: '4.75rem', // 76px
-        22: '5.375rem', //86px
-        29.2: '7.3rem',
-        34.5: '8.625rem', // 138px
-        93.25: '23.3125rem', // 373px
-        149: '37.25rem', // 596px
-      },
-      margin: {
-        4.5: '1.125rem', // 18px
-        8.25: '2.0625rem', // 33px
-        13: '3.25rem', // 52px
-        15: '3.75rem', // 60px
       },
       backgroundImage: {
         'radio-primary-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB700' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
@@ -265,4 +212,7 @@ module.exports = {
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
   ],
+  corePlugins: {
+    container: false,
+  },
 }

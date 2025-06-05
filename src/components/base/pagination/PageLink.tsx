@@ -94,7 +94,7 @@ const PageLink = ({
         {children}
       </span>
       {isFlagedProp && (
-        <div className="absolute -right-1 -top-1.5">
+        <div className="absolute -right-1 -top-[5px]">
           <FlagIcon width={'16'} height={'16'} />
         </div>
       )}

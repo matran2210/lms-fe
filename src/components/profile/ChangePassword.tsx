@@ -150,13 +150,13 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                 size: 'medium',
                 isPaddingHorizontal: false,
                 disabled: loading,
-                className: 'min-w-fit text-sm w-30 rounded-lg py-2 px-4',
+                className: 'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
               }}
               submit={{
                 title: 'Confirm',
                 size: 'medium',
                 className:
-                  'min-w-fit text-sm w-30 !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                  'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
                 type: 'submit',
                 disabled:
                   loading ||

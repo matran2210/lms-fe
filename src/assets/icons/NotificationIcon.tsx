@@ -4,7 +4,7 @@ import { LOCAL_STORAGE_KEYS } from 'src/constants'
 import { IIcon } from 'src/type'
 
 const NotificationIcon = ({ className }: IIcon) => {
-  const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-1.5 -right-1.5') // Default width
+  const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
   const storedCount = localStorage.getItem(
     LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
   )
@@ -25,7 +25,7 @@ const NotificationIcon = ({ className }: IIcon) => {
     if (notificationUnread > 9) {
       setBadgeClass('w-6 h-6 -top-3.5 -right-3.5')
     } else {
-      setBadgeClass('w-4 h-4 -top-1.5 -right-1.5') // Default width for single digits
+      setBadgeClass('w-4 h-4 -top-[5px] -right-1.5') // Default width for single digits
     }
   }, [notificationUnread])
 

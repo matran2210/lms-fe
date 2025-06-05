@@ -23,7 +23,7 @@ const EventTestList = ({
         entranceTestLists?.map((e, index) => (
           <div
             key={index}
-            className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+            className={`item flex flex-col bg-white p-[30px] shadow-sidebar`}
           >
             <EventTest data={e} />
           </div>

@@ -15,7 +15,7 @@ const CourseSkeleton = forwardRef<
         </div>
       </div>
       <div className="heading flex bg-white">
-        <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl:flex 2xl:py-4.5">
+        <div className="px-7.5 py-7.5 2xl:py-4.5 w-full justify-between shadow-sidebar 2xl:flex">
           <h1 className="line-clamp-1 w-1/2 text-2xl font-light text-[#050505]">
             <Skeleton.Button size={'large'} block={true} />
           </h1>
@@ -27,7 +27,7 @@ const CourseSkeleton = forwardRef<
             .fill([])
             .map((_, index) => (
               <div
-                className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+                className={`item flex flex-col bg-white p-[30px] shadow-sidebar`}
                 key={index}
               >
                 <div className={`flex min-h-[352px] flex-col`}>
