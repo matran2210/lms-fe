@@ -87,6 +87,7 @@ module.exports = {
           6: '#D8D8E5',
           7: '#E3E3E3',
           8: '#F3F3F3',
+          200: '#6B7280',
           900: '#181C32',
         },
         overlay: {
@@ -112,6 +113,9 @@ module.exports = {
         },
         graded: {
           finish: '#4077E0',
+        },
+        yellow: {
+          900: '#FFFBF2',
         },
       },
       borderColor: {

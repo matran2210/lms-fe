@@ -46,13 +46,13 @@ interface ChangeEvent extends Event {
 }
 
 // Constants
-const baseBox = 'border border-gray-300 rounded'
+const baseBox = 'border rounded border-gray-15 rounded-lg'
 const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
   container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
-  options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto`,
-  option: 'px-3 py-2 hover:bg-gray-200 cursor-pointer',
+  options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
+  option: 'px-3 py-2 hover:bg-yellow-900 cursor-pointer rounded',
   icon: 'ml-2 text-gray-500',
 }
 
@@ -113,19 +113,15 @@ const SelectWord = forwardRef(
         (e: any) => e?.value === defaultAnswerValue,
       )
 
-      const textClass = corrects?.length
-        ? `text-state-${isCorrect ? 'success' : 'error'}`
-        : ''
-
       const disabledClass = !corrects?.length
         ? ''
-        : 'opacity-50 cursor-not-allowed pointer-events-none'
+        : 'cursor-not-allowed pointer-events-none'
       return `
-        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${textClass} ${disabledClass}">
+        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}">
           <span class="truncate">${selectedAnswer?.label || 'Choose'}</span>
-          <svg class="${DROPDOWN_STYLES.icon}" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z" fill="#1C274C"/>
+            </svg>
         </div>
         <div class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;">
           ${
@@ -227,7 +223,6 @@ const SelectWord = forwardRef(
               ? '!border-success'
               : '!border-danger',
             'sapp-select-confirmed',
-            isCorrect ? 'text-state-success' : 'text-state-error',
           )
           dropdownContainer?.setAttribute('disabled', 'true')
         }
@@ -359,21 +354,28 @@ const SelectWord = forwardRef(
     useEffect(() => {
       const setupDropdownListeners = () => {
         const dropdowns = document.querySelectorAll('.sapp-select--question')
+
         dropdowns.forEach((dropdown) => {
           if (!dropdown.getAttribute('data-listener-attached')) {
             const selectedText = dropdown.querySelector('.selected-text')
             const options = dropdown.querySelector(
               '.dropdown-options',
             ) as HTMLElement
+            const iconDropDown = dropdown.querySelector(
+              '.icon-dropdown',
+            ) as HTMLElement
 
-            // Toggle dropdown
+            // Toggle dropdown on click
             selectedText?.addEventListener('click', () => {
               if (!dropdown.getAttribute('disabled')) {
-                const isOpen = dropdown.getAttribute('data-open') === 'true'
-                dropdown.setAttribute('data-open', (!isOpen).toString())
+                const isNowOpen = !(
+                  dropdown.getAttribute('data-open') === 'true'
+                )
+                dropdown.setAttribute('data-open', isNowOpen.toString())
+
                 if (options) {
-                  if (!isOpen) {
-                    // Calculate position
+                  if (isNowOpen) {
+                    // Calculate dropdown position
                     const dropdownRect = dropdown.getBoundingClientRect()
                     const windowWidth = window.innerWidth
                     const windowHeight = window.innerHeight
@@ -382,87 +384,84 @@ const SelectWord = forwardRef(
                     const scrollLeft =
                       window.pageXOffset || document.documentElement.scrollLeft
 
-                    // Set initial position
+                    // Default position
                     options.style.top = `${dropdownRect.bottom + scrollTop + 4}px`
                     options.style.left = `${dropdownRect.left + scrollLeft}px`
 
-                    // Check if dropdown would overflow the right edge
+                    // Adjust to prevent overflow
                     if (dropdownRect.left + options.offsetWidth > windowWidth) {
                       options.style.left = `${windowWidth - options.offsetWidth - 16}px`
                     }
-                    // Check if dropdown would overflow the bottom edge
                     if (dropdownRect.bottom + 300 + 4 > windowHeight) {
                       options.style.top = `${dropdownRect.top + scrollTop - 300 - 4}px`
                     }
-                    // Remove highlight from all options
+
+                    // Clear highlights
                     options.querySelectorAll('.option').forEach((option) => {
                       option.classList.remove('bg-[#e5e7eb]', 'selected')
                     })
+
+                    options.style.display = 'block'
+                  } else {
+                    options.style.display = 'none'
                   }
-                  options.style.display = isOpen ? 'none' : 'block'
+
+                  // Toggle UI styles
+                  dropdown.classList.toggle('border-gray-200', isNowOpen)
+                  iconDropDown?.classList.toggle('rotate-180', isNowOpen)
                 }
               }
             })
 
-            // Add hover effect to options
+            // Hover effect on options
             options?.querySelectorAll('.option').forEach((option) => {
               option.addEventListener('mouseenter', () => {
-                // Remove highlight from all options
-                options.querySelectorAll('.option').forEach((opt) => {
-                  opt.classList.remove('bg-[#e5e7eb]', 'selected')
-                })
-                // Add highlight to hovered option
+                options
+                  .querySelectorAll('.option')
+                  .forEach((opt) =>
+                    opt.classList.remove('bg-[#e5e7eb]', 'selected'),
+                  )
                 option.classList.add('bg-[#e5e7eb]', 'selected')
               })
             })
 
-            // Handle option selection
+            // Option selection
             options?.querySelectorAll('.option').forEach((option) => {
               option.addEventListener('click', () => {
                 const value = option.getAttribute('data-value')
-                const label = option.textContent
+                const label = option.textContent?.trim()
+
                 if (value && label) {
-                  // Lấy index từ dropdown container
-                  const dropdownContainer = dropdown.closest(
-                    '.sapp-select--question',
-                  )
-                  if (dropdownContainer) {
-                    const dropdownIndex = Array.from(
-                      document.querySelectorAll('.sapp-select--question'),
-                    ).indexOf(dropdownContainer)
+                  const dropdownIndex = Array.from(
+                    document.querySelectorAll('.sapp-select--question'),
+                  ).indexOf(dropdown)
 
-                    dropdown.setAttribute('data-value', value)
-                    dropdown.setAttribute('data-text', (label ?? '').trim())
+                  dropdown.setAttribute('data-value', value)
+                  dropdown.setAttribute('data-text', label)
 
-                    // Cập nhật selectedValues với index chính xác
-                    setSelectedValues((prev) => {
-                      const newValues = { ...prev }
-                      newValues[dropdownIndex] = value
-                      return newValues
-                    })
+                  setSelectedValues((prev) => ({
+                    ...prev,
+                    [dropdownIndex]: value,
+                  }))
 
-                    if (selectedText) {
-                      const displayText =
-                        label.length > 50
-                          ? label.substring(0, 50) + '...'
-                          : label
-                      const textSpan = selectedText.querySelector('span')
-                      if (textSpan) {
-                        textSpan.textContent = displayText
-                      }
-                    }
-                    if (options) {
-                      options.style.display = 'none'
-                      options.querySelectorAll('.option').forEach((opt) => {
-                        if (opt.getAttribute('data-value') === value) {
-                          opt.classList.add('bg-[#e5e7eb]')
-                        } else {
-                          opt.classList.remove('bg-[#e5e7eb]')
-                        }
-                      })
-                    }
-                    dropdown.setAttribute('data-open', 'false')
+                  const span = selectedText?.querySelector('span')
+                  if (span) {
+                    span.textContent =
+                      label.length > 50 ? label.slice(0, 50) + '...' : label
                   }
+
+                  // Highlight selected option
+                  options.querySelectorAll('.option').forEach((opt) => {
+                    opt.classList.toggle(
+                      'bg-[#e5e7eb]',
+                      opt.getAttribute('data-value') === value,
+                    )
+                  })
+
+                  options.style.display = 'none'
+                  dropdown.setAttribute('data-open', 'false')
+                  iconDropDown?.classList.remove('rotate-180')
+                  dropdown.classList.remove('border-gray-200')
                 }
               })
             })
@@ -473,26 +472,33 @@ const SelectWord = forwardRef(
                 dropdown.setAttribute('data-open', 'false')
                 if (options) {
                   options.style.display = 'none'
-                  // Restore selected option highlight when closing
+
+                  // Restore selected option highlight
                   const selectedValue = dropdown.getAttribute('data-value')
                   options.querySelectorAll('.option').forEach((option) => {
-                    if (option.getAttribute('data-value') === selectedValue) {
-                      option.classList.add('bg-[#e5e7eb]')
-                    } else {
-                      option.classList.remove('bg-[#e5e7eb]')
-                    }
+                    option.classList.toggle(
+                      'bg-[#e5e7eb]',
+                      option.getAttribute('data-value') === selectedValue,
+                    )
                   })
                 }
+                iconDropDown?.classList.remove('rotate-180')
+                dropdown.classList.remove('border-gray-200')
               }
             })
+
             dropdown.setAttribute('data-listener-attached', 'true')
           }
         })
       }
 
+      // Observe new dropdowns being added to the DOM
       const observer = new MutationObserver(setupDropdownListeners)
       observer.observe(document.body, { childList: true, subtree: true })
+
+      // Initial setup
       setupDropdownListeners()
+
       return () => observer.disconnect()
     }, [data, defaultAnswer])
 
