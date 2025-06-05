@@ -2,16 +2,16 @@ import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
-import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
-import { Workbook } from '@fortune-sheet/react'
-import { Controller } from 'react-hook-form'
-import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
-import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
+import EditorReader from '@components/base/editor/EditorReader'
+import { Workbook } from '@fortune-sheet/react'
+import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
+import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { Controller } from 'react-hook-form'
+import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import clsx from 'clsx'
 
 type SheetData = {
   name: string
@@ -63,12 +63,9 @@ const EssayQuestionPreview = ({
   control,
   handleSaveHighLight = () => {},
   highlighted,
-  removeHighlight,
   allowHighLight,
   forCaseStudy = false,
-  solution,
   name,
-  setValue,
   defaultValue,
   response_option_custom,
   externalRef,
@@ -178,8 +175,9 @@ const EssayQuestionPreview = ({
       dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
+
   return (
-    <div style={{ background: 'white' }}>
+    <div>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -261,7 +259,7 @@ const EssayQuestionPreview = ({
             )}
 
             {data?.files?.length > 0 && (
-              <div className="mb-4">
+              <div>
                 {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
@@ -284,7 +282,11 @@ const EssayQuestionPreview = ({
             )}
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && <div className="sapp-seprate-line-preview"></div>}
+            !forCaseStudy && (
+              <div className="my-8">
+                <hr />
+              </div>
+            )}
         </>
       )}
       <>
@@ -323,7 +325,9 @@ const EssayQuestionPreview = ({
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
-                  <div className="sapp-seprate-line-preview"></div>
+                  <div className="mb-8">
+                    <hr />
+                  </div>
                 )}
             </React.Fragment>
           ) : (
@@ -333,7 +337,7 @@ const EssayQuestionPreview = ({
                   'sapp-upload-file-preview',
                   data
                     ? ''
-                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold',
+                    : 'justify- w-fit flex-col !items-start !pt-0 font-semibold',
                 )}
               >
                 <div
@@ -362,7 +366,11 @@ const EssayQuestionPreview = ({
               </div>
               {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
-                data && <div className="sapp-seprate-line-preview"></div>}
+                data && (
+                  <div className="mb-8">
+                    <hr />
+                  </div>
+                )}
             </React.Fragment>
           )
         ) : (
@@ -421,12 +429,8 @@ const EssayQuestionPreview = ({
                   }
                   return (
                     <Workbook
-                      // generateSheetId={() => name}
                       ref={refSheet}
-                      // column={2}
-                      // row={2}
-
-                      onChange={(e) => {
+                      onChange={(_) => {
                         if (
                           !fullData?.is_viewed_answer &&
                           !fullData?.confirmed
@@ -445,13 +449,10 @@ const EssayQuestionPreview = ({
                               old.splice(index, 1, currentSheet)
                             } else {
                               old.push(currentSheet)
-                              // setValue(name, JSON.stringify(old))
                             }
                             onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
                           } else {
                             onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
                       }}
@@ -461,13 +462,6 @@ const EssayQuestionPreview = ({
                           : [
                               {
                                 name: 'Sheet1',
-                                // config: {
-                                //   authority: {
-
-                                //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
-
-                                //   },
-                                // },
                               },
                             ]
                       }
@@ -549,15 +543,16 @@ const EssayQuestionPreview = ({
                     />
                   )
                 }}
-              ></Controller>
+              />
             </div>
           )}
           {(fullData?.confirmed ||
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className="mb-11 mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">Solution</div>
+              <div className="mt-8">
+                <hr />
+                <div className="mt-8 font-semibold">Solution:</div>
                 <EditorReader
                   text_editor_content={
                     data?.explanation ??

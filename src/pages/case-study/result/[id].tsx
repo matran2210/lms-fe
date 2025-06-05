@@ -45,6 +45,7 @@ import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 
 const CaseStudyResult = () => {
   const router = useRouter()
@@ -151,7 +152,7 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizWrapper
             data={data}
             highlighted={highlighted}
             allowHighLight={allowHighLight}

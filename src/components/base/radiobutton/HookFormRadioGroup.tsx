@@ -1,8 +1,9 @@
+import clsx from 'clsx'
+import { uniqueId } from 'lodash'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SAPPRadio from './SAPPRadio'
 import YourAnswer from '../tags/YourAnswer'
-import { uniqueId } from 'lodash'
+import SAPPRadio from './SAPPRadio'
 // import './HookFormRadioGroup.scss'
 
 interface IHookFormRadioGroupProps {
@@ -22,6 +23,7 @@ interface IHookFormRadioGroupProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement>
   labelClass?: string
   labelClassChecked?: string
+  optionClassName?: string
   disabled?: boolean
   corrects?: { [key: string]: boolean }
 }
@@ -38,6 +40,7 @@ const HookFormRadioGroup = ({
   justify = 'between',
   labelClass = '',
   labelClassChecked = '',
+  optionClassName = '',
   disabled,
   corrects,
 }: IHookFormRadioGroupProps) => {
@@ -116,8 +119,6 @@ const HookFormRadioGroup = ({
                           value={option.value.toString()}
                           checked={checked}
                           className="mt-[3px] flex-none"
-                          size="small"
-                          state={state}
                         />
                         <span className="flex-1">
                           <div
@@ -131,13 +132,17 @@ const HookFormRadioGroup = ({
                                   }`
                             } fw-bold flex-1 text-base`}
                           >
-                            {option.label}
-                            <YourAnswer
-                              show={checked && !!corrects}
-                            ></YourAnswer>
+                            <span
+                              className={clsx({
+                                'mr-3': checked && !!corrects,
+                              })}
+                            >
+                              {option.label}
+                            </span>
+                            <YourAnswer show={checked && !!corrects} />
                           </div>
                           {option.description && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-gray-500 text-sm">
                               {option.description}
                             </div>
                           )}

@@ -1,3 +1,4 @@
+import DragDrogIcon from '@assets/icons/DragDrogIcon'
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
@@ -226,12 +227,12 @@ const DragNDropPreivew = forwardRef(
               }">
             <span id="${
               defaultAnswer?.[index]?.idAnswer
-            }" class="flex justify-center w-full min-w-[100px]">${
+            }" class="flex justify-center w-full">${
               defaultAnswer?.[index]?.value
             }</span>
             </span>`
             } else {
-              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer min-w-[100px] ${
+              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
                 isSelfReflection === true ? 'corrects' : 'wrongs'
               }">
               <span class="sapp-input-dragNDrop-empty"></span>
@@ -257,7 +258,7 @@ const DragNDropPreivew = forwardRef(
               }">
                 <span class="answer-box" id="${
                   defaultAnswer?.[index]?.idAnswer
-                }">${defaultAnswer?.[index]?.value}</span>
+                }">${(<DragDrogIcon />)} ${defaultAnswer?.[index]?.value}</span>
                </span>
               `
             } else {
@@ -329,6 +330,7 @@ const DragNDropPreivew = forwardRef(
               draggable="true"
               {...{ indexBox: domNode?.attribs?.indexbox }}
             >
+              <DragDrogIcon />
               {domNode?.data}
             </span>
           )
@@ -431,8 +433,9 @@ const DragNDropPreivew = forwardRef(
             </div>
             {!corrects && (
               <div className="answer-area">
+                <div className="text-base font-medium">Drag your answer</div>
                 <div
-                  className={`sapp-store flex min-h-large w-full flex-wrap gap-5 border p-5 ${storageId}`}
+                  className={`sapp-store flex flex-wrap gap-5 ${storageId}`}
                   onDrop={(ev) => handleStorage(ev, data?.id)}
                   onDragOver={allowDrop}
                   id="storage"
@@ -454,6 +457,7 @@ const DragNDropPreivew = forwardRef(
                         onDragStart={drag}
                         onDrop={() => drop(event, data?.id, true)}
                       >
+                        <DragDrogIcon />
                         {e?.answer}
                       </span>
                     )

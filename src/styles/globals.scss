@@ -6,6 +6,7 @@
 @import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'my-profile.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -13,6 +14,8 @@
 @import './components/_select.scss';
 @import './components/_datepicker.scss';
 @import './components/_collapse.scss';
+@import './components/_popover.scss';
+@import './components/_tabs.scss';
 
 @import './components/_table.scss';
 @import 'progress.scss';
@@ -133,7 +136,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-answer-wrapper {
-  @apply flex flex-wrap gap-y-6 pt-2;
+  @apply flex flex-wrap gap-y-6;
 
   .answer {
     @apply flex items-start gap-x-3 break-words;
@@ -145,10 +148,26 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-questions {
-  @apply mb-4;
-
   p {
-    @apply mb-2 break-words;
+    @apply m-0 break-words text-lg-xl font-semibold text-bw-13;
+  }
+  span {
+    background-color: transparent !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #1f2937 !important;
+  }
+}
+.sapp-explanation {
+  p {
+    @apply m-0 break-words text-xl font-semibold text-bw-13;
+  }
+  span {
+    font-family: 'Roboto', sans-serif !important;
+    background-color: transparent !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: #1f2937 !important;
   }
 }
 
@@ -396,13 +415,13 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .answer-area {
-  @apply mt-4 flex flex-wrap gap-5;
+  @apply flex flex-wrap items-center gap-5 py-8;
 }
 
 .answer-box {
   border: 1px solid rgb(204, 204, 204);
-  background: rgb(243, 243, 243);
-  @apply z-10 block p-2;
+  gap: 2px;
+  @apply z-10 flex h-fit items-center rounded-md border-gray-15 bg-white px-2 py-1 text-base;
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
@@ -424,7 +443,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply m-1 inline-block min-w-[100px] border border-[#71717a] bg-gray-4 p-1;
+  @apply m-1 inline-block h-fit w-fit rounded-lg border border-[#71717a] bg-white px-2 py-1 text-base;
 
   &.corrects {
     @apply border-success text-state-success;
@@ -445,11 +464,11 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-seprate-line-preview {
-  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] bg-gray-3;
+  @apply -ms-6 mb-4 h-3 w-[calc(100%+48px)] border-b border-t border-b-gray-3 border-t-gray-3;
 }
 
 .sapp-upload-file-preview {
-  @apply mb-4 flex items-center gap-3 px-0;
+  @apply mb-8 flex items-center justify-between gap-3 px-0;
 }
 
 .sapp-upload-button-preview {
@@ -711,10 +730,20 @@ textarea.is-invalid:focus {
   }
 }
 
-.ant-modal .ant-modal-content {
-  @apply rounded-none;
+// .ant-modal .ant-modal-content {
+//   @apply rounded-none;
+// }
+.sapp-profile-modal {
+  .ant-modal-content {
+    @apply rounded-2xl p-10;
+  }
 }
-
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
+}
 .sapp-modal .ant-modal-content {
   padding: 70px !important;
 }
@@ -976,10 +1005,6 @@ p a {
 //     transform: scale(0);
 //   }
 // }
-
-.ant-popover-content {
-  width: 360px !important;
-}
 
 .ant-popover-inner {
   padding: 24px !important;
@@ -1303,6 +1328,19 @@ select:focus {
 .ant-tabs-tab.ant-tabs-tab-active > div {
   @apply text-heading !important;
 }
+
+.ant-tabs-nav {
+  @apply px-8 pt-2;
+}
+
+.ant-tabs-tab {
+  @apply pb-1 font-semibold text-secondary;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active {
+  @apply text-heading;
+}
+
 .ant-select span.ant-select-selection-item {
   @apply font-medium;
 }
@@ -1327,4 +1365,8 @@ select:focus {
 
 [type='search']:focus {
   --tw-ring-color: none;
+}
+
+.react-flow__panel {
+  display: none;
 }

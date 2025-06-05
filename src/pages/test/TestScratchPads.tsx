@@ -1,14 +1,15 @@
 import { CloseIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
+import { Triangle } from '@components/icons/Triangle'
 import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
-import FileViewer from '@components/base/fileViewer/FileViewer'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -138,19 +139,18 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="bottom left"
+          position="center"
           header={
-            <div className="relative">
-              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+            <div className="relative mb-3 px-6">
+              <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
                 <div className="truncate">
                   <span className="text-base font-semibold">{`${exhibitText} ${
                     (i ?? 0) + 1
-                  }: `}</span>
-                  {exhibitsDes?.name}
+                  }: ${exhibitsDes?.name}`}</span>
                 </div>
               </div>
               <button
-                className="absolute right-3 top-2"
+                className="absolute right-6 top-0"
                 onClick={() => handleCloseScratchPad(e)}
               >
                 <CloseIcon />
@@ -158,7 +158,7 @@ const TestScratchPads = ({
             </div>
           }
         >
-          <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+          <div className=" bg-white">
             <EditorReader
               text_editor_content={exhibitsDes?.description}
               className="w-full"
@@ -176,6 +176,7 @@ const TestScratchPads = ({
                 )
               })}
           </div>
+          <Triangle className="absolute bottom-2 right-2" />
         </ModalResizeable>
       )
     } else if (e.type === 'file') {

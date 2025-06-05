@@ -1,3 +1,4 @@
+import { FlagIcon } from '@assets/icons'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 interface Props {
@@ -30,7 +31,7 @@ const PageLink = ({
   if (arrow && disabled) {
     return (
       <li
-        className={`flex cursor-not-allowed items-center justify-center p-0.5 ${
+        className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
             ? 'min-h-8 min-w-8 text-gray-6'
             : 'min-h-default text-gray-1'
@@ -44,7 +45,7 @@ const PageLink = ({
       <li
         className={`${
           type === 'table' ? 'min-h-8 min-w-8 text-gray-5' : 'min-h-default'
-        } flex cursor-pointer items-center justify-center p-0.5`}
+        } flex cursor-pointer items-center justify-center`}
         {...otherProps}
       >
         {children}
@@ -71,20 +72,20 @@ const PageLink = ({
       className={`${
         type === 'table'
           ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-4.8'
-          : 'min-h-default min-w-default border text-sm font-normal leading-8.5'
-      } relative flex cursor-pointer items-center justify-center p-0.5
-      ${isViewedProp && type !== 'row' ? '!border-[#DCDDDD] bg-gray-3' : ''} ${
+          : 'min-h-9.5 max-h-10 min-w-9.5 text-sm font-normal leading-5.5'
+      } relative flex cursor-pointer items-center justify-center rounded p-2
+      ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
         active
           ? 'border-[#FFB800] bg-primary text-white'
           : !isViewedProp
-            ? 'border-[#DCDDDD] bg-white text-gray-1 hover:border-[#FFB800] hover:bg-primary hover:text-white'
-            : 'border-gray-2 text-gray-1 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            ? 'border-[#DCDDDD] text-bw-13 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            : 'text-gray-1  hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}
       {...otherProps}
     >
       <span
-        className="h-full w-full text-center"
+        className="h-5.5 w-4 text-center"
         // onClick={() => {
         //   setIsViewed(true)
         //   // setIsFlagged(!isFlagged)
@@ -93,7 +94,9 @@ const PageLink = ({
         {children}
       </span>
       {isFlagedProp && (
-        <i className="absolute right-1 top-1 h-2 w-2 rounded-full bg-gray-1"></i>
+        <div className="absolute -right-1 -top-1.5">
+          <FlagIcon width={'16'} height={'16'} />
+        </div>
       )}
     </li>
   )

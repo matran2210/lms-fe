@@ -1,9 +1,12 @@
-import SappButton from '@components/base/button/SappButton'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { useLayoutEffect, useState } from 'react'
 import { AuthAPI } from 'src/pages/api/profile'
 import PopUpCertificate from './popupCertificate'
-import TabLayout from './TabLayout'
+import { Divider, Table, TableProps } from 'antd'
+import Icon from '@components/icons'
+import useDownloadImage from 'src/hooks/useDownloadImage'
+import Image from 'next/image'
+import { sappFormatDate } from '@utils/index'
 
 interface ICertificate {
   certificate: {
@@ -22,11 +25,9 @@ interface ICertificate {
   user_id: string
   pass_point: number
 }
-interface IProp {
-  onOpenTab?: () => void
-}
 
-const Certificate = ({ onOpenTab }: IProp) => {
+const Certificate = () => {
+  const { downloadImage } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<ICertificate[]>([])
   const [totalCertificateData, setTotalCertificateData] = useState<string>('0')
   const [modalOpen, setOpenModal] = useState(false)
@@ -49,64 +50,108 @@ const Certificate = ({ onOpenTab }: IProp) => {
   }, [])
   const [certificateDataPopup, setCertificateDataPopup] = useState<any>()
 
+  const columns: TableProps<ICertificate>['columns'] = [
+    {
+      title: 'Certificate',
+      className: 'max-w-sm',
+      render: (record) => (
+        <div
+          className="group flex cursor-pointer items-center gap-2"
+          onClick={() =>
+            window.open(
+              `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
+              '_blank',
+            )
+          }
+        >
+          {record?.certificate_url ? (
+            <Image
+              src={record?.certificate_url || ''}
+              alt={record?.course?.name || ''}
+              className="ratio-16/9 max-h-50 max-w-80 object-contain"
+              width={50}
+              height={50}
+              priority
+            />
+          ) : (
+            <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
+          )}
+          <span className="font-semibold group-hover:text-primary">
+            {record?.course?.name}
+          </span>
+        </div>
+      ),
+    },
+    {
+      title: 'Grade Archive',
+      align: 'center',
+      render: (record) => (
+        <div className="text-gray-14">{record?.pass_point}%</div>
+      ),
+    },
+    {
+      title: 'Certificate Received',
+      align: 'center',
+      render: (record) => (
+        <div className="text-gray-14">{sappFormatDate()}</div>
+      ),
+    },
+    {
+      title: 'Action',
+      align: 'center',
+      render: (record) => (
+        <div className="flex items-center justify-center gap-1">
+          <div
+            onClick={() => {
+              downloadImage(record.certificate_url)
+            }}
+          >
+            <Icon
+              type="download"
+              className="cursor-pointer text-gray-14 hover:text-primary"
+            />
+          </div>
+
+          <Divider type="vertical" className="border-black" />
+          <div
+            onClick={() =>
+              window.open(
+                `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${record?.id}`,
+                '_blank',
+              )
+            }
+          >
+            <Icon
+              type="eye-view"
+              className="cursor-pointer text-gray-14 hover:text-primary"
+            />
+          </div>
+        </div>
+      ),
+    },
+  ]
+
   return (
-    <>
-      <TabLayout
-        title={`Certificates (${totalCertificateData})`}
-        headerButtons={
-          <SappButton
-            onClick={onOpenTab}
-            size="medium"
-            title={'Back'}
-            color="textUnderline"
-            className="-mr-8 block min-w-[120px] text-base lg:hidden"
-          />
-        }
-      >
-        {certificateData.map((certificate: ICertificate) => {
-          return (
-            <div key={certificate?.id}>
-              <div
-                className="group relative flex min-h-[88px] w-full cursor-pointer flex-row items-start gap-2 self-center border-b border-gray-3 px-6 pt-5  hover:bg-secondary hover:text-primary"
-                onClick={() =>
-                  window.open(
-                    `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`,
-                    '_blank',
-                  )
-                }
-              >
-                <div className=" border-bottom mb-5 flex flex-row  items-start justify-center border bg-gray-4 ">
-                  <a className="h-[48px] w-[80px] border border-solid px-5 py-1 hover:text-primary group-hover:border-[#FFB800] group-hover:bg-secondary ">
-                    <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
-                  </a>
-                </div>
-
-                <div className="relative flex w-full cursor-pointer flex-col items-start gap-1">
-                  <div className="text-active text-base font-medium leading-[24px] hover:text-primary">
-                    {certificate?.course?.name}
-                  </div>
-                  <div className="cursor-pointer text-[13px] leading-[16px] text-gray-1">
-                    <div> Grade Achieved: {certificate?.pass_point} %</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </TabLayout>
-
-      <PopUpCertificate
-        openPreview={modalOpen}
-        setOpenModal={setOpenModal}
-        data={certificateDataPopup}
-        message={''}
-        onClose={() => {
-          setCertificateDataPopup(null)
-          setOpenModal(false)
-        }}
-        userDetail={userDetail}
+    <div>
+      <Table<ICertificate>
+        className="profile-certificate-table"
+        columns={columns}
+        dataSource={certificateData}
       />
-    </>
+      {modalOpen && (
+        <PopUpCertificate
+          openPreview={modalOpen}
+          setOpenModal={setOpenModal}
+          data={certificateDataPopup}
+          message={''}
+          onClose={() => {
+            setCertificateDataPopup(null)
+            setOpenModal(false)
+          }}
+          userDetail={userDetail}
+        />
+      )}
+    </div>
   )
 }
 

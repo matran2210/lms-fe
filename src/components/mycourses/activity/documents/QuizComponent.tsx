@@ -4,6 +4,7 @@ import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
+import MatchQuizWrapper from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
@@ -117,6 +118,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const { control: controlAnswer, setValue, reset, getValues } = useForm({})
 
     const DragDropRef = useRef(null) as any
+    const MatchQuizRef = useRef(null) as any
 
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false)
@@ -200,15 +202,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
 
     const getAnswerMatching = () => {
-      let value = [] as any
-      const inputs = questionRef?.current?.querySelectorAll(
-        '.sapp-match-result',
-      ) as any
-      for (let e of inputs) {
-        const childId = e?.querySelector('.sapp-notched-container')
-        value.push({ question_id: e?.id, answer_id: childId?.id })
-      }
-      return value
+      const value = MatchQuizRef?.current?.getMatchedPairs?.()
+      return value || []
     }
 
     const getAnswerDragNDrop = () => {
@@ -486,7 +481,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.MATCHING:
           return (
-            <MatchingQuestion
+            <MatchQuizWrapper
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
@@ -496,6 +491,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              ref={MatchQuizRef}
             />
           )
 

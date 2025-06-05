@@ -1,5 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import styles from '@styles/components/ModalResizeable.module.scss'
+import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 
@@ -68,7 +69,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       },
       center: {
         x: (windowWidth - modalWidth) / 2,
-        y: (windowHeight - modalHeight) / 2,
+        y: (windowHeight - modalHeight) / 2 - modalHeight / 4,
       },
     }
 
@@ -104,11 +105,13 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         border: '1px solid #DCDDDD',
       }}
       dragHandleClassName={
-        dragHandleClassName ? dragHandleClassName : 'modal-header'
+        dragHandleClassName ? dragHandleClassName : 'modal-dragger'
       }
-      className={styles.modalResizeable}
+      className={clsx(styles.modalResizeable, 'rounded-xl')}
     >
       <div className="absolute left-0 top-0 h-full w-full">
+        <div className="modal-dragger h-6 cursor-move p-6 pb-0" />
+
         {header ? (
           header
         ) : (
@@ -124,7 +127,9 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             </button>
           </div>
         )}
-        <div className={styles.modalContent}>{children}</div>
+        <div className={styles.modalContent}>
+          <div className="h-full px-6">{children}</div>
+        </div>
       </div>
     </Rnd>
   )
