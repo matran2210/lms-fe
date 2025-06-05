@@ -104,7 +104,7 @@ const PopupStep = ({
                 )}
                 <SappButton
                   title={titleButtonNext || 'Next'}
-                  className="ml-3 bg-primary-3 px-5 py-2"
+                  className="bg-primary-3 ml-3 px-5 py-2"
                   size="small"
                   isPadding={false}
                   childClass="text-medium-sm"

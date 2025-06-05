@@ -149,7 +149,7 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-lg-xl font-semibold text-bw-13;
+    @apply text-lg-xl m-0 break-words font-semibold text-bw-13;
   }
   span {
     background-color: transparent !important;

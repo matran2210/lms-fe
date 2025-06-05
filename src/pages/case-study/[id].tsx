@@ -904,7 +904,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           {/* Header */}
           <div className="h-full" ref={containerRef}>
             <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
+              <div className="text-lg-xl w-1/3 truncate font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton
@@ -1324,7 +1324,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div>
                 <SappButton
-                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  className={`bg-slate-200 mr-2 h-full py-3`}
                   title="View Answer"
                   onClick={() => {
                     setOpenScratchPad([])
