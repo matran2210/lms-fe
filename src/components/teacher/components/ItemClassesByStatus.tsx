@@ -1,6 +1,6 @@
 import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
 import Icon from '@components/icons'
-import { convertLocalTimeToUTC } from '@utils/helpers'
+import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useState } from 'react'
 import {
@@ -39,36 +39,37 @@ const ItemClassesByStatus = ({
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    if (!isEmpty(classes)) {
-      let daysLeft = 0
-      const currentDate = new Date()
-      if (classes?.duration_type === FLEXIBLE && classes?.flexible_days) {
-        daysLeft = classes?.flexible_days
-      } else if (
-        classes?.status === CLASS_TEACHER_STATUS.NOT_STARTED &&
-        classes?.started_at &&
-        classes?.finished_at
-      ) {
-        const startDate = new Date(classes?.started_at)
-        const finishDate = new Date(classes?.finished_at)
-        const startUTCDate = convertLocalTimeToUTC(startDate)
-        const finishUTCDate = convertLocalTimeToUTC(finishDate)
-        daysLeft = Math.round(
-          (finishUTCDate.getTime() - startUTCDate.getTime()) /
-            (1000 * 60 * 60 * 24),
-        )
-      } else if (classes?.finished_at) {
-        const finishDate = new Date(classes?.finished_at)
-        const currentUTCDate = convertLocalTimeToUTC(currentDate)
-        const finishUTCDate = convertLocalTimeToUTC(finishDate)
-        daysLeft = Math.round(
-          (finishUTCDate.getTime() - currentUTCDate.getTime()) /
-            (1000 * 60 * 60 * 24),
-        )
-      }
+    if (isEmpty(classes)) return
 
-      setDaysDifference(daysLeft)
+    let daysLeft = 0
+
+    const { duration_type, flexible_days, status, started_at, finished_at } =
+      classes
+
+    if (duration_type === FLEXIBLE && flexible_days) {
+      daysLeft = flexible_days
+    } else if (
+      status === CLASS_TEACHER_STATUS.NOT_STARTED &&
+      started_at &&
+      finished_at
+    ) {
+      const startTime = convertLocalTimeToUTC(new Date(started_at)).getTime()
+      const finishTime = convertLocalTimeToUTC(new Date(finished_at)).getTime()
+      const hoursDiff = (finishTime - startTime) / 3600000
+      daysLeft = convertHourToDayLeft(hoursDiff)
+    } else if (finished_at) {
+      const nowUTC = convertLocalTimeToUTC(new Date())
+      const finishUTC = convertLocalTimeToUTC(new Date(finished_at))
+
+      if (finishUTC < nowUTC) {
+        daysLeft = 0
+      } else {
+        const hoursDiff = (finishUTC.getTime() - nowUTC.getTime()) / 3600000
+        daysLeft = convertHourToDayLeft(hoursDiff)
+      }
     }
+
+    setDaysDifference(daysLeft)
   }, [classes])
 
   const disabledCourseByClassType = [
@@ -211,11 +212,7 @@ const ItemClassesByStatus = ({
                     enableCourse ? 'text-bw-1' : 'text-gray-400'
                   } ml-2`}
                 >
-                  {daysDifference > 0
-                    ? daysDifference
-                    : enableCourse
-                      ? 1
-                      : 0}{' '}
+                  {daysDifference}{' '}
                 </span>
                 &nbsp;{daysDifference > 1 ? 'days left' : 'day left'}
               </span>
