@@ -1,8 +1,7 @@
 import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
 import Icon from '@components/icons'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import { convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import {
   ANIMATION,
@@ -14,7 +13,7 @@ import {
 } from 'src/constants'
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from 'src/type/classes'
-import { CLASS_TEACHER_STATUS } from '@utils/constants'
+import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@utils/constants'
 import Tooltip from 'src/common/Tooltip'
 import { isEmpty } from 'lodash'
 
@@ -35,22 +34,40 @@ const ItemClassesByStatus = ({
   lastElementRef?: (node: HTMLDivElement) => void
   refetch?: () => void
 }) => {
-  const router = useRouter()
   const student = classes?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = classes?.classes?.[0]
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
     if (!isEmpty(classes)) {
-      const startDate = new Date(classes?.started_at)
-      const finishDate = new Date(classes?.finished_at)
-      const startUTCDate = convertLocalTimeToUTC(startDate)
-      const finishUTCDate = convertLocalTimeToUTC(finishDate)
-      const days = Math.round(
-        (finishUTCDate.getTime() - startUTCDate.getTime()) /
-          (1000 * 60 * 60 * 24),
-      )
-      setDaysDifference(days)
+      let daysLeft = 0
+      const currentDate = new Date()
+      if (classes?.duration_type === FLEXIBLE && classes?.flexible_days) {
+        daysLeft = classes?.flexible_days
+      } else if (
+        classes?.status === CLASS_TEACHER_STATUS.NOT_STARTED &&
+        classes?.started_at &&
+        classes?.finished_at
+      ) {
+        const startDate = new Date(classes?.started_at)
+        const finishDate = new Date(classes?.finished_at)
+        const startUTCDate = convertLocalTimeToUTC(startDate)
+        const finishUTCDate = convertLocalTimeToUTC(finishDate)
+        daysLeft = Math.round(
+          (finishUTCDate.getTime() - startUTCDate.getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      } else if (classes?.finished_at) {
+        const finishDate = new Date(classes?.finished_at)
+        const currentUTCDate = convertLocalTimeToUTC(currentDate)
+        const finishUTCDate = convertLocalTimeToUTC(finishDate)
+        daysLeft = Math.round(
+          (finishUTCDate.getTime() - currentUTCDate.getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      }
+
+      setDaysDifference(daysLeft)
     }
   }, [classes])
 

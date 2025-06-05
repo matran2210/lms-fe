@@ -46,6 +46,7 @@ export const CLASS_TEACHER_STATUS = {
   IN_PROGRESS: 'IN_PROGRESS', // Đang học
   COMPLETED: 'COMPLETED', // Đã học xong
 }
+export const FLEXIBLE = 'FLEXIBLE'
 // Danh sách F thấp (< F4)
 export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
 export const F_HIGH_CODES = ['F5', 'F6']
