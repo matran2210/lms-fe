@@ -968,9 +968,9 @@ const TestDetail = () => {
     })
   }
 
-  const [scratchPadValues, setScratchPadValues] = useState<
-    ScratchPadValue | null | undefined
-  >()
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
 
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
@@ -1279,7 +1279,6 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
-        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1298,12 +1297,8 @@ const TestDetail = () => {
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
-
-      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
-
     setLoading(false)
-    setScratchPadValues(null)
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -3053,7 +3048,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="border-gray-1 flex w-45 items-center justify-center gap-3 border px-3 py-2"
+                    className="border-gray-1 w-45 flex items-center justify-center gap-3 border px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
