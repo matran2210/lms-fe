@@ -153,8 +153,8 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="border-b border-e-default bg-white">
-        <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
+      <div className="border-e-default border-b bg-white">
+        <div className="mx-auto my-0 flex max-w-xxl py-6 max-[1199px]:mx-5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
@@ -162,7 +162,7 @@ const CourseDetail = () => {
         </div>
       </div>
 
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
+      <div className="mx-auto my-0 max-w-xxl pt-6 max-[1199px]:mx-6">
         {isLoading ? (
           <CourseSkeleton />
         ) : (

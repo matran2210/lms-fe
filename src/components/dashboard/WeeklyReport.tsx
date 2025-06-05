@@ -105,7 +105,7 @@ const WeeklyReport = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-5 3.5xl:px-8">
+    <div className="bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-5 3xl:px-8">
       <div className="mb-5 flex flex-row items-center justify-between border-b pb-3">
         <div className="text-[#252F4A]">
           <span className="text-lg font-bold 4xl:text-xl">This Week:</span>

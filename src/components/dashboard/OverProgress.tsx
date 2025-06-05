@@ -139,7 +139,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-ink-700 shadow-activity lg:col-span-4 3.5xl:px-8">
+    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-ink-700 shadow-activity lg:col-span-4 3xl:px-8">
       <div className="mb-5 flex items-center justify-between border-b border-ink-300 pb-3">
         <div className="min-w-fit text-lg font-bold 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}

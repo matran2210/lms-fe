@@ -188,7 +188,7 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
+    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3xl:px-8">
       <div className="mb-5 flex items-center justify-between border-b pb-3">
         {isNormal ? (
           <Tooltip

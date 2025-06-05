@@ -168,7 +168,7 @@ const MyCourse = () => {
       <Layout title="My Course">
         <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
           <div
-            className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 xl-max:mx-6 
+            className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 max-[1199px]:mx-6 
               ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
@@ -192,7 +192,7 @@ const MyCourse = () => {
         <Row className="mx-auto my-0 flex max-w-xxl rounded-md bg-white shadow-sidebar">
           <Col
             span={16}
-            className={`heading relative rounded-md bg-white xl-max:mx-6
+            className={`heading relative rounded-md bg-white max-[1199px]:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}

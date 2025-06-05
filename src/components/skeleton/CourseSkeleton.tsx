@@ -15,7 +15,7 @@ const CourseSkeleton = forwardRef<
         </div>
       </div>
       <div className="heading flex bg-white">
-        <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl-min:flex 2xl-min:py-4.5">
+        <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl:flex 2xl:py-4.5">
           <h1 className="line-clamp-1 w-1/2 text-2xl font-light text-[#050505]">
             <Skeleton.Button size={'large'} block={true} />
           </h1>

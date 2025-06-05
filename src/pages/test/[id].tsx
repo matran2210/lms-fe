@@ -2483,7 +2483,7 @@ const TestDetail = () => {
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block ">
+                      <div className="hidden 3xl:block ">
                         Choose response option:
                       </div>
                       <button

@@ -29,7 +29,7 @@ const CoursesList: React.FC<CoursesProps> = ({
 }) => {
   if (isFetching && !isFetchingNextPage) {
     return (
-      <div className="mb-6 grid w-full gap-6 md:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
+      <div className="mb-6 grid w-full gap-6 max-[1199px]:px-6 md:grid-cols-2 xl:grid-cols-3">
         {Array(9)
           .fill([])
           .map((_, index) => (
@@ -50,7 +50,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   return (
     <>
       {!isEmpty(courses) && !guideIsActive ? (
-        <div className="mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 max-[1199px]:px-6 md:grid-cols-2 2xl:grid-cols-3">
           {courses?.map((course, index: number) => (
             <Course
               key={index}
@@ -62,7 +62,7 @@ const CoursesList: React.FC<CoursesProps> = ({
           ))}
         </div>
       ) : (
-        <div className=" mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
+        <div className=" mb-6 grid gap-6 max-[1199px]:px-6 md:grid-cols-2 2xl:grid-cols-3">
           {guideIsActive && (
             <div className="item flex flex-col rounded-xl bg-white p-8 text-[#1C274C] shadow-sidebar">
               <SAPPBadge label="ACCA" type="info" className="font-bold" />

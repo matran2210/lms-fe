@@ -132,7 +132,7 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[50vh] grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity xl:h-auto 3.5xl:px-8">
+    <div className="flex min-h-[50vh] grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity xl:h-auto 3xl:px-8">
       <div className="mb-5 border-b pb-3 text-lg font-bold text-[#252F4A] 4xl:text-xl">
         Topic Progress
       </div>

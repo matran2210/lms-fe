@@ -34,7 +34,7 @@ const ExamInformation = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Exam Information">
-        <div className="mx-auto my-0 max-w-xxl xl-max:mx-6">
+        <div className="mx-auto my-0 max-w-xxl max-[1199px]:mx-6">
           <>
             <div className="main relative mx-auto my-0 max-w-xxl">
               <div className="flex w-full items-center justify-between pb-4 pt-6">

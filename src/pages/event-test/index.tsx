@@ -35,7 +35,7 @@ const EventTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
         <div className="border-b border-[#DCDDDD] bg-white">
-          <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 ">
+          <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 max-[1199px]:mx-6 ">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
@@ -43,7 +43,7 @@ const EventTest = () => {
           </div>
         </div>
         <div className="main mx-8 my-0 max-w-xxl xl:mx-auto">
-          <div className="sm:flex-row flex flex-col justify-between gap-3 pb-4 pt-6">
+          <div className="flex flex-col justify-between gap-3 pb-4 pt-6 sm:flex-row">
             <h2 className="text-sm font-medium text-[#050505] ">
               {LANG_SIGNIN.eventTest}
             </h2>
