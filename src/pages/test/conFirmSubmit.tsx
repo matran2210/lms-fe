@@ -67,7 +67,7 @@ const ConFirmSubmit = ({
             className="flex w-full gap-2 border-none !p-0"
           >
             <BackIcon />
-            <div className="text-bw-13 text-base font-semibold underline hover:text-primary">
+            <div className="text-base font-semibold text-[#1F2937] underline hover:text-primary">
               Back to My Course
             </div>
           </SappButtonIcon>

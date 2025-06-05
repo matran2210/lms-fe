@@ -17,13 +17,13 @@ const TextSkeleton = ({
               role="status"
               className="border-1.5 mt-6 animate-pulse border-solid border-[#DCDDDD] p-6"
             >
-              <div className="bg-gray-200 dark:bg-gray-700 mb-3 h-7 rounded-full"></div>
-              <div className="bg-gray-200 dark:bg-gray-700 h-7 rounded-full"></div>
+              <div className="dark:bg-gray-700 mb-3 h-7 rounded-full bg-[#e5e7eb]"></div>
+              <div className="dark:bg-gray-700 h-7 rounded-full bg-[#e5e7eb]"></div>
               <div className="mt-5 flex items-center justify-between">
-                <div className="bg-gray-200 dark:bg-gray-700 me-3 h-6 w-20 rounded-full"></div>
+                <div className="dark:bg-gray-700 me-3 h-6 w-20 rounded-full bg-[#e5e7eb]"></div>
                 <div className="flex">
-                  <div className="bg-gray-200 dark:bg-gray-700 me-3 h-6 w-16 rounded-full"></div>
-                  <div className="bg-gray-200 dark:bg-gray-700 h-6 w-16 rounded-full"></div>
+                  <div className="dark:bg-gray-700 me-3 h-6 w-16 rounded-full bg-[#e5e7eb]"></div>
+                  <div className="dark:bg-gray-700 h-6 w-16 rounded-full bg-[#e5e7eb]"></div>
                 </div>
               </div>
               <span className="sr-only">Loading...</span>

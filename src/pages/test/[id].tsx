@@ -3037,7 +3037,7 @@ const TestDetail = () => {
                   className={`flex items-center gap-3 border border-solid ${
                     !currentTabContent?.is_viewed_answer
                       ? 'border-gray-1 text-bw-1'
-                      : 'border-default text-gray-2'
+                      : 'border-default text-[#DCDDDD]'
                   } w-[150px] justify-center p-1 py-2`}
                   onClick={() => {
                     handleClearSelection(currentTabContent)

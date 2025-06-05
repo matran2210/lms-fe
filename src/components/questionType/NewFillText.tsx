@@ -140,7 +140,7 @@ const NewFiltext = forwardRef(
                 }}
               >
                 <div
-                  className={`bg-gray-100 text-gray-1 absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm font-normal transition-opacity duration-150 ${
+                  className={`text-gray-1 absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#99A1B70D] text-sm font-normal transition-opacity duration-150 ${
                     focusedIndex === index || inputValue
                       ? 'opacity-0'
                       : 'opacity-100'

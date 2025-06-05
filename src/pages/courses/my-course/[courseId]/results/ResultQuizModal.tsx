@@ -55,7 +55,7 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
       isCheckedAll={false}
       classTable="w-full"
       theadClass="sticky top-0 bg-white"
-      tbodyClass="divide-y divide-gray-200"
+      tbodyClass="divide-y divide-[#e5e7eb]"
       classTableRes="max-h-96 overflow-y-auto mt-4"
     >
       {quizActivities?.map((row, index) => {
