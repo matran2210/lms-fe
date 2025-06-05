@@ -26,7 +26,7 @@ const ActivitySkeleton: React.FunctionComponent<SkeletonProps> = ({
               <div className="mb-6 h-4 bg-[#F1F1F1]"></div>
               <div className="mb-3 h-7 bg-[#F1F1F1]"></div>
               <div className="mb-6 h-4 bg-[#F1F1F1]"></div>
-              <div className="mb-3 h-30 bg-[#F1F1F1]"></div>
+              <div className="mb-3 h-[7.5rem] bg-[#F1F1F1]"></div>
             </div>
           ))}
         </div>

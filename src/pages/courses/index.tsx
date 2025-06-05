@@ -314,7 +314,7 @@ const MyCourse = () => {
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
+            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
       </Layout>

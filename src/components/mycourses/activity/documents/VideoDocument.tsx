@@ -426,8 +426,8 @@ const VideoDocument = ({
             position="center"
             isInner={true}
             isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+            okButtonClass="!w-20 h-[2.125rem] !px-0"
+            cancelButtonClass="!w-20 h-[2.125rem] !px-0 !w-fit"
             footerButtonClassName="!justify-between flex"
             handleSubmit={handleSubmit((e) =>
               onSubmit(activeQuestion?.corrects ? true : false),

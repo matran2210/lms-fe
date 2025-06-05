@@ -395,7 +395,7 @@ function FormViewProgress({
                       placeholder="Please choose"
                       required
                       disabled
-                      className="h-11.25 text-base font-medium"
+                      className="h-[45px] text-base font-medium"
                       options={[]}
                     />
                   </div>
@@ -421,7 +421,7 @@ function FormViewProgress({
                     placeholder="Please choose"
                     required
                     disabled
-                    className="h-11.25 text-base font-medium"
+                    className="h-[45px] text-base font-medium"
                     options={[]}
                   />
                 </div>
@@ -430,7 +430,7 @@ function FormViewProgress({
               <div className="mb-6">
                 <SAPPInput
                   label={'Note'}
-                  className="h-11.25"
+                  className="h-[45px]"
                   control={control}
                   name="note"
                   disabled={isView}

@@ -141,7 +141,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
             type="text"
             value={otp}
             onChange={(event) => onEnterDigit(index, event)}
-            inputClassName={`text-center h-16.75 w-16.75 ${
+            inputClassName={`text-center h-[4.188rem] w-16.75 ${
               errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
             } pt-5.25 pb-5 px-0`}
             onPaste={(e: any) =>

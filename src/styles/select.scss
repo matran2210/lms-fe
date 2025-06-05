@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 rounded-none border-[#DCDDDD] shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
+    @apply h-[50px] rounded-none border-[#DCDDDD] shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -70,7 +70,7 @@
 // style css for result popup
 .select-result {
   .select__control {
-    @apply h-12.5 border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+    @apply h-[50px] border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -146,7 +146,7 @@
 .select-options.repeat-unit {
   .select-single {
     .select__control {
-      @apply h-11.25 rounded-[4px];
+      @apply h-[45px] rounded-[4px];
     }
   }
 }

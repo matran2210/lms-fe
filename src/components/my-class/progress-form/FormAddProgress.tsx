@@ -278,7 +278,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                   onChange={(e) => handleChangeLesson(e)}
                   placeholder="Please choose"
                   required
-                  className="h-11.25 text-base font-medium"
+                  className="h-[45px] text-base font-medium"
                   options={lesson}
                 />
               </div>
@@ -301,7 +301,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                 placeholder="Please choose"
                 required
                 disabled
-                className="h-11.25 text-base font-medium"
+                className="h-[45px] text-base font-medium"
                 options={sectionOption}
               />
             </div>
@@ -310,7 +310,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
           <div className="mb-6">
             <SAPPInput
               label={'Note'}
-              className="h-11.25"
+              className="h-[45px]"
               control={control}
               name="note"
               placeholder={'Please enter'}

@@ -156,7 +156,7 @@ const OverProgress = () => {
             className={`flex flex-row justify-between gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
           >
             <div
-              className={`m-auto ${isNormal ? 'h-42.5 min-w-[170px] 3xl:h-45 3xl:min-w-[180px]' : 'mb-2 h-40 w-40'}`}
+              className={`m-auto ${isNormal ? 'h-[170px] min-w-[170px] 3xl:h-[180px] 3xl:min-w-[180px]' : 'mb-2 h-40 w-40'}`}
             >
               <EChart option={option} />
             </div>
