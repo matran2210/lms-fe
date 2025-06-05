@@ -1,10 +1,10 @@
 .requirement-tabs {
   .ant-tabs-nav {
-    padding: 0;
+    @apply mb-6 p-0;
   }
 
   .ant-tabs-tab {
-    @apply font-normal text-bw-14;
+    @apply text-base font-semibold text-bw-14;
   }
 
   .ant-tabs-tab-active {

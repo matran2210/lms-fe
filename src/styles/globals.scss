@@ -476,8 +476,8 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-questions-essay {
-  line-height: 33px;
-  @apply mb-4 font-sans text-base font-semibold text-bw-1;
+  line-height: 27px;
+  @apply mb-4 font-sans text-lg font-semibold text-bw-13;
 }
 
 .sapp-seprate-line-preview {
@@ -485,15 +485,15 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply mb-8 flex items-center justify-between gap-3 px-0;
+  @apply flex items-center justify-start gap-12 px-0;
 }
 
 .sapp-upload-button-preview {
-  @apply flex w-max cursor-pointer items-center justify-evenly gap-2 border px-2 py-0;
+  @apply flex w-max cursor-pointer items-center justify-evenly gap-2 rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14;
 }
 
 .tox-tinymce {
-  border-radius: 0 !important;
+  @apply rounded-xl;
 }
 
 .resizable {

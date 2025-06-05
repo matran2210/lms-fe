@@ -26,7 +26,7 @@ import { runHighlight } from '@utils/index'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
@@ -91,6 +91,7 @@ import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { Tooltip } from 'antd'
 import SappButton from '@components/base/button/SappButton'
+import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
 
 declare global {
   interface Window {
@@ -120,49 +121,59 @@ const TestDetail = () => {
       return (
         currentTabContent?.data?.requirements?.map((_: any, index: number) => {
           return {
-            label: `Requirement ${index + 1}`,
+            label: (
+              <span className="flex items-center gap-1">
+                Requirement {index + 1}
+                {getValues(`${currentTabID}_${index}_answer`) && (
+                  <CheckCircleOutlineYellow />
+                )}
+              </span>
+            ),
             key: index,
             children: (
               <>
-                {editorReady && (
-                  <EssayQuestionPreview
-                    key={index}
-                    data={{
-                      ...currentTabContent?.data?.requirements?.[index],
-                      ...essayData?.req,
-                    }}
-                    question_content={currentTabContent?.data?.question_content}
-                    index={index}
-                    question_data={currentTabContent?.data}
-                    control={control}
-                    handleSaveHighLight={handleSaveHighLight}
-                    highlighted={highlighted}
-                    removeHighlight={removeHighlight}
-                    allowHighLight={allowHighLight}
-                    allowUnHighLight={allowUnHighLight}
-                    solution={solution}
-                    name={`${currentTabID}_${index}_answer`}
-                    setValue={setValue}
-                    defaultValue={defaultValue}
-                    response_option_custom={currentTabContent.response_type}
-                    externalRef={refEditor}
-                    fullData={currentTabContent}
-                    openChooseFile={(e: any) =>
-                      setOpenUpload({
-                        status: true,
-                        question_id: currentPage,
-                        requirementIndex: index,
-                      })
-                    }
-                    handleClearFile={handleClearFile}
-                    setOpenPdf={handleOpenScratchPad}
-                    handleSaveHighLightRequirement={
-                      handleSaveHighLightRequirement
-                    }
-                    showRequiment={showListRequirement}
-                    handleChange={handleEssayChange}
-                  />
-                )}
+                <EssayQuestionPreview
+                  data={{
+                    ...currentTabContent?.data?.requirements?.[index],
+                    ...essayData?.req,
+                  }}
+                  question_content={currentTabContent?.data?.question_content}
+                  index={index}
+                  question_data={currentTabContent?.data}
+                  control={control}
+                  handleSaveHighLight={handleSaveHighLight}
+                  highlighted={highlighted}
+                  removeHighlight={removeHighlight}
+                  allowHighLight={allowHighLight}
+                  allowUnHighLight={allowUnHighLight}
+                  solution={solution}
+                  name={`${currentTabID}_${index}_answer`}
+                  setValue={setValue}
+                  defaultValue={
+                    getValues(`${currentTabID}_${essayData?.index}_answer`) ||
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                      ?.answer_text ||
+                    currentTabContent?.answer
+                  }
+                  response_option_custom={currentTabContent.response_type}
+                  externalRef={refEditor}
+                  fullData={currentTabContent}
+                  isShowContent={false}
+                  openChooseFile={(e: any) =>
+                    setOpenUpload({
+                      status: true,
+                      question_id: currentPage,
+                      requirementIndex: index,
+                    })
+                  }
+                  handleClearFile={handleClearFile}
+                  setOpenPdf={handleOpenScratchPad}
+                  handleSaveHighLightRequirement={
+                    handleSaveHighLightRequirement
+                  }
+                  showRequiment={showListRequirement}
+                  handleChange={handleEssayChange}
+                />
               </>
             ),
           }
@@ -331,18 +342,26 @@ const TestDetail = () => {
           }
         }
         return (
-          <RequirementsTab
-            destroyInactiveTabPane={true}
-            items={essayRequirementsItem(defaultValueEssay())}
-            activeKey={essayData?.index ?? '0'}
-            defaultActiveKey="1"
-            onChange={(key) => {
-              setEssayData({
-                req: currentTabContent?.data?.requirements?.[key],
-                index: key,
-              })
-            }}
-          />
+          <>
+            <EditorReader
+              className="sapp-questions"
+              text_editor_content={currentTabContent?.data?.question_content}
+              highlighted={highlighted}
+            />
+            <RequirementsTab
+              destroyInactiveTabPane={true}
+              items={essayRequirementsItem(defaultValueEssay())}
+              activeKey={essayData?.index ?? '0'}
+              defaultActiveKey="1"
+              onChange={(key) => {
+                setEssayData({
+                  req: currentTabContent?.data?.requirements?.[key],
+                  index: key,
+                })
+                refEditor.current.reset()
+              }}
+            />
+          </>
         )
       default:
         return <div></div>
@@ -2858,7 +2877,16 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                    <div
+                      className={clsx(
+                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100',
+                        {
+                          'bg-white':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.ESSAY,
+                        },
+                      )}
+                    >
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,

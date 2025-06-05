@@ -12,6 +12,7 @@ import { Controller } from 'react-hook-form'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { Divider } from 'antd'
 
 type SheetData = {
   name: string
@@ -80,7 +81,6 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
-  indexKey,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
@@ -179,7 +179,11 @@ const EssayQuestionPreview = ({
   }
 
   return (
-    <div className="w-full overflow-hidden">
+    <div
+      className={clsx('w-full overflow-hidden', {
+        'rounded-xl bg-gray-100 p-8': !isShowContent,
+      })}
+    >
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -296,7 +300,7 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-base font-semibold">
+                <div className="text-lg font-semibold text-bw-13">
                   {fullData.done
                     ? 'Your Answer File:'
                     : 'Upload file to submit'}
@@ -334,6 +338,7 @@ const EssayQuestionPreview = ({
             </React.Fragment>
           ) : (
             <React.Fragment>
+              <Divider />
               <div
                 className={clsx(
                   'sapp-upload-file-preview',
@@ -366,6 +371,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
+              <Divider />
               {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
                 data && (
