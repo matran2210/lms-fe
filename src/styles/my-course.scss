@@ -10,7 +10,7 @@
   @apply p-0 pr-2;
 
   & > input {
-    @apply text-sm font-normal text-gray-1;
+    @apply text-sm font-normal text-[#A1A1A1];
   }
 }
 
@@ -28,7 +28,7 @@
 
 .filter {
   .select__placeholder {
-    @apply text-gray-1;
+    @apply text-[#A1A1A1];
   }
 }
 
@@ -74,7 +74,7 @@
 }
 
 .notes-list-icon {
-  @apply text-gray-1;
+  @apply text-[#A1A1A1];
 
   &:hover {
     @apply text-primary;
@@ -87,7 +87,7 @@
 
 .select-single.status-course {
   .select__input-container {
-    @apply text-sm font-normal text-gray-1;
+    @apply text-sm font-normal text-[#A1A1A1];
   }
 }
 
@@ -99,7 +99,7 @@
   th {
     border-width: 1px;
     border-style: inset;
-    @apply border-gray-1; /* Add this line to set the border color to gray-2 */
+    @apply border-[#A1A1A1]; /* Add this line to set the border color to [#DCDDDD] */
   }
 
   tr {

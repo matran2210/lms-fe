@@ -30,8 +30,8 @@ const ButtonText = ({
     : ''
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'text-gray-2 cursor-not-allowed'
-    : 'text-bw-1 cursor-pointer'
+    ? 'text-[#DCDDDD] cursor-not-allowed'
+    : 'text-[#050505] cursor-pointer'
   let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold underline`
 
   if (link)

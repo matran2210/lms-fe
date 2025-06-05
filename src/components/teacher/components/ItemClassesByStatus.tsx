@@ -176,7 +176,7 @@ const ItemClassesByStatus = ({
             </span>
           ) : (
             <div className="name-class text-sm text-[#a1a1aa]">
-              <span className="ml-1 font-medium text-bw-1" />
+              <span className="ml-1 font-medium text-[#050505]" />
             </div>
           )}
           <div className="time-class text-sm text-[#a1a1aa]">
@@ -185,7 +185,7 @@ const ItemClassesByStatus = ({
                 <ClockInClassIcon />
                 <span
                   className={`font-medium ${
-                    enableCourse ? 'text-bw-1' : 'text-[#a1a1aa]'
+                    enableCourse ? 'text-[#050505]' : 'text-[#a1a1aa]'
                   } ml-2`}
                 >
                   {daysDifference > 0
@@ -215,12 +215,12 @@ const ItemClassesByStatus = ({
               <Icon
                 type={enableCourse ? iconType : 'expired'}
                 className={`relative ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2'
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                 }`}
               />
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
                 } ml-px pl-2`}
               >
                 {enableCourse ? showStatus : 'Expired'}
@@ -229,18 +229,18 @@ const ItemClassesByStatus = ({
             <div className="number">
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
                 }`}
               >
                 {classes?.progress}%
               </p>
             </div>
           </div>
-          <div className="progressbar h-1.5 bg-gray-3">
+          <div className="progressbar h-[6px] bg-[#F1F1F1]">
             <div
               className={`progress-percentage ${
-                enableCourse ? 'bg-primary' : 'bg-gray-2'
-              } h-1.5`}
+                enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
+              } h-[6px]`}
               style={{ width: `${classes?.progress}%` }}
             ></div>
           </div>
@@ -257,7 +257,7 @@ const ItemClassesByStatus = ({
               iconColorProps={isProgress ? '#ffb800' : '#374151'}
               className={
                 isProgress
-                  ? 'text- border border-primary text-orange-3'
+                  ? 'text- border border-primary text-[#FFB800]'
                   : 'border-gray-800 border'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}

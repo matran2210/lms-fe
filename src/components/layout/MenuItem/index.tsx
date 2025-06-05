@@ -142,7 +142,7 @@ export default function MenuItem({
               <ExpandIcon
                 type={Icon}
                 className={`before-icon min-h-6 min-w-6 shrink-0 ${
-                  selected ? 'text-primary' : 'text-gray-2'
+                  selected ? 'text-primary' : 'text-[#DCDDDD]'
                 } group-hover:text-primary 
                 `}
               />
@@ -152,13 +152,13 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div
             className={`label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-              selected ? 'text-primary' : 'text-gray-2'
+              selected ? 'text-primary' : 'text-[#DCDDDD]'
             } group-hover:text-primary`}
           >
-            <div className="line-clamp-1 text-base font-semibold text-bw-1 group-hover:text-primary">
+            <div className="line-clamp-1 text-base font-semibold text-[#050505] group-hover:text-primary">
               {user?.detail?.full_name}
             </div>
-            <div className="line-clamp-1 text-sm font-normal capitalize text-gray-1 group-hover:text-primary">
+            <div className="line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1] group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                  selected ? 'text-primary' : 'text-gray-2'
+                  selected ? 'text-primary' : 'text-[#DCDDDD]'
                 } group-hover:text-primary`}
               >
                 {user?.detail?.full_name}
@@ -175,7 +175,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                  selected ? 'text-primary' : 'text-gray-2'
+                  selected ? 'text-primary' : 'text-[#DCDDDD]'
                 } group-hover:text-primary`}
                 onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
               >
@@ -191,7 +191,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+        <div className="mx-auto h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center"></div>
       )}
       <div
         className={`group cursor-pointer hover:bg-secondary ${

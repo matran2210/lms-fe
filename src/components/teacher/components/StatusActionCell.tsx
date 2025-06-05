@@ -7,18 +7,18 @@ type Props = {
 export const statusQuizMap = {
   SUBMITTED: {
     label: 'Submitted',
-    color: 'text-green-1',
-    bg: 'bg-green-2',
+    color: 'text-[#07af17]',
+    bg: 'bg-[#01711f0D]',
   },
   IN_PROGRESS: {
     label: 'In Progress',
-    color: 'text-blue-3',
-    bg: 'bg-blue-4',
+    color: 'text-[#025eff]',
+    bg: 'bg-[#025eff0D]',
   },
   UN_SUBMITTED: {
     label: 'Unsubmitted',
-    color: 'text-danger-3',
-    bg: 'text-danger-4',
+    color: 'text-[#f01919]',
+    bg: 'text-[#0Df01919]',
   },
 }
 

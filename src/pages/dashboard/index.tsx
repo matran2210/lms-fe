@@ -31,7 +31,7 @@ const Dashboard = () => {
           className="main mx-auto my-0 max-w-xxl px-4 pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="pb-4 text-sm font-medium text-bw-1">Dashboard</h2>
+          <h2 className="pb-4 text-sm font-medium text-[#050505]">Dashboard</h2>
         </div>
       </div>
       <div
@@ -41,13 +41,13 @@ const Dashboard = () => {
         <div className="boxShadow-activity relative flex min-h-[calc(100vh-9rem)] flex-col justify-center">
           <div className="flex flex-col">
             <div className="mb-2.5 flex justify-center">
-              <div className="text-xl font-light text-gray-1">Hi,</div>
-              <div className="ms-2 text-xl font-semibold text-bw-1">
+              <div className="text-xl font-light text-[#A1A1A1]">Hi,</div>
+              <div className="ms-2 text-xl font-semibold text-[#050505]">
                 {user?.detail?.full_name}
               </div>
-              <div className="text-xl font-light text-gray-1">. Welcome!</div>
+              <div className="text-xl font-light text-[#A1A1A1]">. Welcome!</div>
             </div>
-            <div className="flex justify-center text-xl font-light text-gray-1">
+            <div className="flex justify-center text-xl font-light text-[#A1A1A1]">
               We are launching this site very soon. Please come back later.
             </div>
             <div className="mt-10 flex justify-center">

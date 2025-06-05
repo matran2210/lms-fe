@@ -5,7 +5,7 @@
 }
 
 .calc__display {
-  @apply grid items-center bg-pinned-1 text-right;
+  @apply grid items-center bg-[#18355D] text-right;
   font-size: 1.9rem;
   padding: 1.5em 2rem 1em;
   grid-template: 1fr 1fr / 1fr 2fr;
@@ -31,7 +31,7 @@
 }
 
 .calc__btn {
-  @apply cursor-pointer border-none bg-gray-2;
+  @apply cursor-pointer border-none bg-[#DCDDDD];
   color: $color-display;
   padding: 1.5em 2rem;
   border-radius: 0.2rem;

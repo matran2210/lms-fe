@@ -261,7 +261,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
       closeIcon={false}
     >
       <div className="flex h-full w-full flex-col">
-        <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+        <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
           <span className="font-sans text-lg font-semibold">Add Progress</span>
           <span className="cursor-pointer" onClick={handleCancel}>
             <SappIcon icon="closeicon" />
@@ -321,7 +321,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
             <span className="required">{'Content completed'}</span>
           </label>
           {errors.checkedNodes && (
-            <div className="text-state-error">
+            <div className="text-error">
               {errors.checkedNodes.message as string}
             </div>
           )}
@@ -330,7 +330,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
             setValue={setValue}
           />
         </div>
-        <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+        <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
           <SAPPButtonV2
             title={'Cancel'}
             onClick={handleCancel}

@@ -253,7 +253,7 @@ const ExamEditDrawer = ({
         loading={isChangingLoad}
       >
         Your learning progress in the Revision class for the{' '}
-        <span className="text-sm font-medium text-bw-1">
+        <span className="text-sm font-medium text-[#050505]">
           {exams?.current_exam_name}
         </span>{' '}
         exam cannot be saved. Do you want to continue making changes?

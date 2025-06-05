@@ -26,7 +26,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-bw-12 lg:px-5 3.5xl:px-13.75"
+        className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-ink-700 lg:px-5 3.5xl:px-13.75"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

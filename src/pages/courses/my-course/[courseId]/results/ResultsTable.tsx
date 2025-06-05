@@ -28,7 +28,7 @@ const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
 // Là essay nên không có điểm
 const commonHeaderCellStyle =
-  'text-left text-sm text-gray-1 font-semibold pb-3 min-w-28'
+  'text-left text-sm text-[#A1A1A1] font-semibold pb-3 min-w-28'
 
 export const headers = [
   ...['Name', 'Type'].map((label) => ({
@@ -168,14 +168,14 @@ const ResultsTable = () => {
               router.push(link)
             }}
           >
-            <strong className="cursor-pointer text-base text-bw-1 hover:underline">
+            <strong className="cursor-pointer text-base text-[#050505] hover:underline">
               {row?.name}
             </strong>
           </div>
         ) : (
-          <strong className="text-base text-bw-1">{row?.name}</strong>
+          <strong className="text-base text-[#050505]">{row?.name}</strong>
         )}
-        <p className="text-xs text-gray-1">{row?.path}</p>
+        <p className="text-xs text-[#A1A1A1]">{row?.path}</p>
       </div>
     )
   }
@@ -238,8 +238,8 @@ const ResultsTable = () => {
           return (
             <tr
               className={clsx({
-                'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': !isDoneQuiz(row),
+                'row h-auto border-b border-dashed border-[#DCDDDD]': true,
+                'text-[#DCDDDD]': !isDoneQuiz(row),
               })}
               key={row?.id}
             >
@@ -299,7 +299,7 @@ const ResultsTable = () => {
                     }}
                     className={clsx(
                       row?.quiz_activity.length > 0 &&
-                        `cursor-pointer text-state-info underline`,
+                        `cursor-pointer text-[#3964EA] underline`,
                     )}
                   >
                     {row.quiz_activity.length}

@@ -554,7 +554,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 </div>
                 {!!activeQuestion?.requirements?.length && (
                   <>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-[#DCDDDD]"></div>
                     <div className="flex cursor-pointer select-none items-center">
                       <div className="relative">
                         <div
@@ -567,7 +567,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           </div>
                           <div>
                             <SappIcon
-                              className="-mt-1 ml-2 fill-bw-1 group-hover:fill-primary"
+                              className="-mt-1 ml-2 fill-[#050505] group-hover:fill-primary"
                               icon="arrow_down"
                             ></SappIcon>
                           </div>
@@ -598,8 +598,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         )}
                       </div>
                       <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">
+                        <span className="text-error">* </span>
+                        <span className="text-[#A1A1A1]">
                           You must finished{' '}
                           {activeQuestion?.requirements?.length || 0}{' '}
                           requirements to complete this question (Your answer is
@@ -611,14 +611,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 )}
                 {exhibitData && exhibitData?.length > 0 && (
                   <>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-[#DCDDDD]"></div>
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
                         {exhibitText}s ({exhibitData?.length || 0})
                       </div>
                       <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
+                        <span className="text-error">* </span>
+                        <span className="text-[#A1A1A1]">Click to view</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -781,14 +781,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.question_topic?.files?.length > 0 && (
             <div className="mb-2">
               {!!activeQuestion?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2" />
+                <div className="my-6 border border-b-[#DCDDDD]" />
               )}
               <div className="mb-2 font-semibold">Topic Resource:</div>
               {activeQuestion?.question_topic?.files.map(
                 (e: any, index: number) => {
                   return (
                     <div
-                      className="cursor-pointer text-state-info hover:underline"
+                      className="cursor-pointer text-[#3964EA] hover:underline"
                       onClick={() => {
                         setOpenFile &&
                           setOpenFile(
@@ -804,7 +804,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   )
                 },
               )}
-              <div className="my-6 border border-b-gray-2" />
+              <div className="my-6 border border-b-[#DCDDDD]" />
             </div>
           )}
           <React.Fragment>{renderQuestion()}</React.Fragment>
@@ -813,7 +813,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.confirmed &&
             activeQuestion.qType !== 'ESSAY' &&
             showCorrect && (
-              <div className="mt-8 bg-gray-4 p-4">
+              <div className="mt-8 bg-[#F9F9F9] p-4">
                 <div className="font-semibold">{MY_COURSES.explanations}</div>
                 {activeQuestion?.solution && (
                   <EditorReader

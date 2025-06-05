@@ -21,11 +21,11 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
     <>
       <div className="flex">
         <IconSupportCenter onClick={() => setVisible(!visible)} />
-        <div className="ms-2 text-base font-semibold text-bw-1">
+        <div className="ms-2 text-base font-semibold text-[#050505]">
           Support Center
         </div>
       </div>
-      <div className="mb-4 mt-3 text-xs text-bw-1">
+      <div className="mb-4 mt-3 text-xs text-[#050505]">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
@@ -34,12 +34,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         onClick={() => onLinkSocial('https://knowledge.sapp.edu.vn/knowledge')}
         className="relative mt-3 hover:cursor-pointer"
       >
-        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
+        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary">
           <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconFAQ />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span>
                 Tra cứu các vấn đề thường gặp và tài liệu học tập qua trong
                 thông tin
@@ -61,12 +61,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         }
         className="relative mt-3 hover:cursor-pointer"
       >
-        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
+        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary">
           <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconRequestForm />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span>Gửi</span>{' '}
               <span className="font-bold">Phiếu yêu cầu dịch vụ </span>{' '}
               <span>để hỗ trợ giải quyết các vấn đề về dịch vụ khóa học</span>
@@ -82,12 +82,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         onClick={() => onLinkSocial('https://www.facebook.com/ServiceofSAPP')}
         className="relative mt-3 hover:cursor-pointer"
       >
-        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
+        <div className="mt-3 flex h-14 cursor-pointer border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary">
           <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconChat />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span>Nhắn tin qua</span>{' '}
               <span className="font-bold">Fanpage</span>{' '}
               <span>để được giải đáp kiến thức cùng bộ phận chuyên môn.</span>
@@ -105,12 +105,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         }
         className="relative mt-3"
       >
-        <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary hover:text-primary">
+        <div className="mt-3 flex h-14 border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary hover:text-primary">
           <div className="z-[2] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconAccess />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span className="">Tham gia</span>{' '}
               <span className="font-bold">"Everyday with SAPP"</span>{' '}
               <span className="">- cộng đồng học tập dành cho học viên</span>
@@ -123,12 +123,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
       </div>
 
       <div className="relative mt-3 hover:cursor-pointer">
-        <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
+        <div className="mt-3 flex h-14 border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary">
           <div className="z-[999] flex h-full w-full hover:hidden hover:bg-primary">
             <div className="flex items-center">
               <IconContact />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span className="font-bold">
                 Liên hệ Hotline: 19002225 (nhấn phím 2)
               </span>{' '}
@@ -142,12 +142,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
       </div>
 
       <div className="relative mt-3 hover:cursor-pointer">
-        <div className="mt-3 flex h-14 border-[1px] border-solid border-gray-3 px-3.5 py-2.5 hover:bg-primary">
+        <div className="mt-3 flex h-14 border-[1px] border-solid border-[#F1F1F1] px-3.5 py-2.5 hover:bg-primary">
           <div className="z-[999] flex h-full w-full hover:hidden">
             <div className="flex items-center">
               <IconEmergency />
             </div>
-            <div className="ms-3 text-[11px] text-bw-1">
+            <div className="ms-3 text-[11px] text-[#050505]">
               <span>Liên hệ trao đổi qua email hỗ trợ chính thức:</span>{' '}
               <span className="font-bold">support@sapp.edu.vn</span>
             </div>
@@ -157,7 +157,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-4 text-center text-xs italic text-bw-1">
+      <div className="mt-4 text-center text-xs italic text-[#050505]">
         Chúng tôi cam kết phản hồi trong 4 giờ làm việc (trừ Thứ 7, Chủ nhật và
         các ngày lễ)
       </div>

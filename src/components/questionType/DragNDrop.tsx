@@ -377,7 +377,7 @@ const DragNDropPreivew = forwardRef(
                 data?.question_topic?.exhibits?.length > 0 && (
                   <>
                     {data?.question_topic?.description && (
-                      <div className="my-6 border border-b-gray-2"></div>
+                      <div className="my-6 border border-b-[#DCDDDD]"></div>
                     )}
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
@@ -385,8 +385,8 @@ const DragNDropPreivew = forwardRef(
                         {data?.question_topic?.exhibits?.length || 0})
                       </div>
                       <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
+                        <span className="text-error">* </span>
+                        <span className="text-[#A1A1A1]">Click to view</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -418,7 +418,7 @@ const DragNDropPreivew = forwardRef(
                         },
                       )}
                     </div>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-[#DCDDDD]"></div>
                   </>
                 )}
               <EditorReader
@@ -482,7 +482,7 @@ const DragNDropPreivew = forwardRef(
           </>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
+          <div className="mt-6 bg-[#F9F9F9] p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

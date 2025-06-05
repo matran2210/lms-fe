@@ -83,7 +83,7 @@ const TestWrapper = ({
       >
         <div className="flex w-full items-center justify-between">
           <div
-            className="cursor-pointer rounded bg-gray-99 p-2"
+            className="cursor-pointer rounded bg-ink-200 p-2"
             onClick={() => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
@@ -112,7 +112,7 @@ const TestWrapper = ({
               title="Finish"
               type="text"
               color="secondary"
-              className="rounded-lg border border-bw-1 bg-white px-4 py-2 text-sm !text-black"
+              className="rounded-lg border border-[#050505] bg-white px-4 py-2 text-sm !text-black"
               onClick={() => {
                 onSubmitAnswer('finish')
                 if (checkUnSubmitAnswer()?.length > 0) {
@@ -131,7 +131,7 @@ const TestWrapper = ({
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm relative w-full border-t border-gray-15 bg-white p-0',
+          'shadow-t-sm relative w-full border-t border-ink-300 bg-white p-0',
           footerClass,
           'h-auto',
         )}

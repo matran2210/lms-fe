@@ -30,12 +30,12 @@ import TooltipParagraph from 'src/common/TooltipParagraph'
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
-      return 'bg-orange-1 text-accent-warning'
+      return 'bg-[#F897070D] text-warning'
     case StatusRequestSchedule.APPROVED:
-      return 'bg-green-5 text-green-1'
+      return 'bg-[#07AF170D] text-[#07af17]'
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
-      return 'bg-danger-5 text-danger-3'
+      return 'bg-[#F019190D] text-[#f01919]'
     default:
       return ''
   }

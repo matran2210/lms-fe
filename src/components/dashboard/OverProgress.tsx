@@ -105,7 +105,7 @@ const OverProgress = () => {
               fontSize: 14,
             },
             formatter: function (params) {
-              return `<div class="flex flex-row items-center justify-between gap-2 font-medium text-bw-12">
+              return `<div class="flex flex-row items-center justify-between gap-2 font-medium text-ink-700">
                     <div class="w-2 h-2 rounded-full" style="background-color: ${params.color}"></div>
                     <div>${params.name}:</div>
                     <div class="font-bold">${params.value}</div>
@@ -139,13 +139,13 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-bw-12 shadow-activity lg:col-span-4 3.5xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b border-gray-15 pb-3">
-        <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
+    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-ink-700 shadow-activity lg:col-span-4 3.5xl:px-8">
+      <div className="mb-5 flex items-center justify-between border-b border-ink-300 pb-3">
+        <div className="min-w-fit text-lg font-bold 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
         <div
-          className={`${isNormal ? 'invisible' : 'text-xsm text-gray-11 4xl:text-sm'}`}
+          className={`${isNormal ? 'invisible' : 'text-xsm text-[#99A1B7] 4xl:text-sm'}`}
         >
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
@@ -163,11 +163,11 @@ const OverProgress = () => {
             {isNormal && (
               <div className="flex min-w-45 flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-green-3"></span>
+                  <span className="h-3 w-3 rounded-full bg-[#37C78C]"></span>
                   <span className="font-medium">Activities completed</span>
                 </div>
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
-                  <span className="h-3 w-3 rounded-full bg-gray-15"></span>
+                  <span className="h-3 w-3 rounded-full bg-ink-300"></span>
                   <span className="font-medium">Activities not completed</span>
                 </div>
               </div>

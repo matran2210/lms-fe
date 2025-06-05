@@ -18,7 +18,7 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
       })}
     >
       <div className="font-medium">
-        <h1 className="text-[32px] leading-11 text-bw-1">
+        <h1 className="text-[32px] leading-11 text-[#050505]">
           {greeting}
           <span className="ml-1.5 text-primary">
             <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>
@@ -27,7 +27,7 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
       </div>
       {des && (
         <div className="flex w-full">
-          <div className="text-medium-sm w-full text-bw-1">{des}</div>
+          <div className="text-medium-sm w-full text-[#050505]">{des}</div>
         </div>
       )}
     </div>

@@ -29,7 +29,7 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
   const formattedDate = date.toLocaleDateString('en-US', options)
 
   return (
-    <div className="flex flex-row justify-between border-b border-gray-5 pb-5">
+    <div className="flex flex-row justify-between border-b border-[#7E8299] pb-5">
       <div className="flex flex-row items-center">
         <SappIcon icon="calendar" />
         <span className="ml-3 font-inter text-lg font-semibold leading-4.5 tracking-normal">
@@ -37,7 +37,7 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
         </span>
       </div>
       <div onClick={handleClose} className="cursor-pointer">
-        <SappIcon icon="closeicon" className="text-gray-11" />
+        <SappIcon icon="closeicon" className="text-[#99A1B7]" />
       </div>
     </div>
   )

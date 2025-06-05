@@ -228,7 +228,7 @@ const MyCourse = () => {
       `}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-gray-4 p-1">
+            <div className="flex gap-2 rounded-md bg-[#F9F9F9] p-1">
               <Button
                 type={courseType === MASTER ? 'primary' : 'text'}
                 block

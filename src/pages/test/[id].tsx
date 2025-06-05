@@ -2206,7 +2206,7 @@ const TestDetail = () => {
               <button
                 disabled={currentTabContent?.is_viewed_answer}
                 className={clsx(
-                  'rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14',
+                  'rounded-lg border border-secondary bg-white px-4 py-2 text-sm font-semibold text-secondary',
                   {
                     'cursor-not-allowed': currentTabContent?.is_viewed_answer,
                   },
@@ -2221,9 +2221,9 @@ const TestDetail = () => {
             )}
           <button
             className={clsx(
-              'rounded-lg bg-sapp-black-1 text-sm font-semibold text-white hover:bg-black',
+              'rounded-lg bg-[#29353C] text-sm font-semibold text-white hover:bg-black',
               {
-                'bg-transparent !text-bw-13 underline hover:!bg-transparent':
+                'bg-transparent !text-ink-800 underline hover:!bg-transparent':
                   currentTabContent?.is_viewed_answer,
               },
             )}
@@ -2414,14 +2414,14 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
                         {currentTabContent?.data?.requirements?.map(
                           (e: any, index: number) => {
                             return (
                               <button
                                 key={e.id}
                                 className={`p-3 ${
-                                  essayData.index !== index && 'text-gray-1'
+                                  essayData.index !== index && 'text-[#A1A1A1]'
                                 }`}
                                 onClick={() => {
                                   setEssayData({ req: e, index: index })
@@ -2531,7 +2531,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-ink-800 underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2544,8 +2544,8 @@ const TestDetail = () => {
                   disabled={currentTabContent?.is_viewed_answer}
                   className={`flex items-center gap-3 border border-solid ${
                     !currentTabContent?.is_viewed_answer
-                      ? 'border-gray-1 text-bw-1'
-                      : 'border-default text-gray-2'
+                      ? 'border-[#A1A1A1] text-[#050505]'
+                      : '[#DCDDDD] text-[#DCDDDD]'
                   } w-[150px] justify-center p-1 py-2`}
                   onClick={() => {
                     handleClearSelection(currentTabContent)
@@ -2560,7 +2560,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -2582,7 +2582,7 @@ const TestDetail = () => {
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                       onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
@@ -2615,7 +2615,7 @@ const TestDetail = () => {
                 {currentTabContent?.data?.display_type ===
                 DISPLAY_TYPE.VERTICAL ? (
                   <div
-                    className={`flex flex-1 overflow-auto bg-gray-3`}
+                    className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
                     id={'preview-question'}
                   >
                     <div
@@ -2663,7 +2663,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-state-info hover:underline"
+                                  className="cursor-pointer text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -2681,7 +2681,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-gray-12"
+                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
                       onMouseDown={() => {
                         setStartResize(true)
                       }}
@@ -2696,7 +2696,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2757,7 +2757,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-state-info hover:underline"
+                                className="cursor-pointer text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -2774,7 +2774,7 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,

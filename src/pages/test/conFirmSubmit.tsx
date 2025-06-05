@@ -44,10 +44,10 @@ const ConFirmSubmit = ({
       <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <ConfirmIcon />
       </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-[#050505]">
         Confirm Submission
       </div>
-      <div className="mb-11 mt-4 text-center text-sm font-normal text-gray-1">
+      <div className="mb-11 mt-4 text-center text-sm font-normal text-[#A1A1A1]">
         {message ??
           'Are you sure you are done here and ready to view the report?'}
       </div>

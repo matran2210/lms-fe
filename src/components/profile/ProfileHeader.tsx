@@ -193,7 +193,7 @@ const ProfileHeader = ({
             onClick={handlerCancelUploadAvatar}
           >
             <div
-              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-error"
               role="button"
             >
               <svg
@@ -216,12 +216,12 @@ const ProfileHeader = ({
       </div>
 
       <div className="my-6 flex-1 lg:my-0">
-        <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-bw-1">
+        <div className="mb-4 max-w-[600px] truncate text-2xl font-bold text-[#050505]">
           <TextSkeleton loading={loading || loadingEditName}>
             {user.detail.full_name}
           </TextSkeleton>
         </div>
-        <div className="block items-center justify-start gap-8 text-gray-1 md:flex">
+        <div className="block items-center justify-start gap-8 text-[#A1A1A1] md:flex">
           <div className="mb-3 flex items-center justify-start gap-1.5 md:mb-0">
             <svg
               width="24"

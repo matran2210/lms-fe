@@ -831,15 +831,15 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center text-xsm mr-4 gap-1 font-normal leading-normal text-gray-7">
+                    <div className="time flex-center text-xsm mr-4 gap-1 font-normal leading-normal text-[#E3E3E3]">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
                     </div>
                   </div>
-                  <div className="relative h-1.5 w-full text-justify">
+                  <div className="relative h-[6px] w-full text-justify">
                     <progress
-                      className="pointer-events-none absolute top-0 h-1.5 w-full"
+                      className="pointer-events-none absolute top-0 h-[6px] w-full"
                       ref={progressBarRef}
                     />
                     <input
@@ -862,7 +862,7 @@ const SAPPVideo = ({
                           return (
                             <div
                               key={i}
-                              className="marker absolute top-0 z-[5] h-1.5 w-1.5 bg-primary"
+                              className="marker absolute top-0 z-[5] h-[6px] w-1.5 bg-primary"
                               title={e[0]?.question_topic?.name}
                             ></div>
                           )

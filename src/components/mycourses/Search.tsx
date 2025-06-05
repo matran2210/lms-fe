@@ -91,7 +91,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
             type="text"
             placeholder={placeholder}
             disabled={disabled}
-            className="placeholder-text-gray-1 h-6 w-full rounded-xl border-0 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0"
+            className="placeholder-text-[#A1A1A1] h-6 w-full rounded-xl border-0 px-4 text-[#050505] focus:border-0 focus:outline-0 focus:ring-0"
           />
         )}
       />

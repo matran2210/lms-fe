@@ -64,7 +64,7 @@ const CoursesList: React.FC<CoursesProps> = ({
       ) : (
         <div className=" mb-6 grid gap-6 md:grid-cols-2 xl-max:px-6 2xl:grid-cols-3">
           {guideIsActive && (
-            <div className="item flex flex-col rounded-xl bg-white p-8 text-bw-15 shadow-sidebar">
+            <div className="item flex flex-col rounded-xl bg-white p-8 text-[#1C274C] shadow-sidebar">
               <SAPPBadge label="ACCA" type="info" className="font-bold" />
 
               <div className="name-course mb-4 mt-3 text-2xl font-medium">
@@ -95,7 +95,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 An introduction to ethics and its role in the investment
                 profession. We examine the CFA Institute Code of Ethics
               </p>
-              <div className="progress mb-6 h-8 text-bw-15">
+              <div className="progress mb-6 h-8 text-[#1C274C]">
                 <div className="info mb-2 flex items-center justify-between">
                   <div className="text flex items-center">
                     <Icon type={'like'} className={` relative`} />
@@ -107,8 +107,8 @@ const CoursesList: React.FC<CoursesProps> = ({
                     <p className={`text-medium-sm font-medium `}>0 %</p>
                   </div>
                 </div>
-                <div className="progressbar h-1.5 bg-gray-3">
-                  <div className={`progress-percentage h-1.5 w-0 bg-primary`} />
+                <div className="progressbar h-[6px] bg-[#F1F1F1]">
+                  <div className={`progress-percentage h-[6px] w-0 bg-primary`} />
                 </div>
               </div>
               <ButtonSecondary

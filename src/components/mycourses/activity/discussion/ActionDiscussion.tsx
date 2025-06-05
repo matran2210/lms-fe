@@ -16,11 +16,11 @@ const ActionDiscussion = ({
       <div className="flex flex-row items-center">
         <div
           onClick={onClick}
-          className="cursor-pointer text-sm text-bw-1 underline"
+          className="cursor-pointer text-sm text-[#050505] underline"
         >
           {titleSecondary}
         </div>
-        <span className="pl-1 text-sm text-gray-1">{titlePrimary}</span>
+        <span className="pl-1 text-sm text-[#A1A1A1]">{titlePrimary}</span>
       </div>
     </div>
   )

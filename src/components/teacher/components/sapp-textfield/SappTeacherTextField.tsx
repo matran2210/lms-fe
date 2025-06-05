@@ -64,8 +64,8 @@ const SappTeacherTextField = ({
                   }}
                   className={`${className} ${
                     error
-                      ? 'border-error focus:border-error'
-                      : 'focus:border-focus border-[#DCDDDD] '
+                      ? 'border-[#B90E0A] focus:border-[#B90E0A]'
+                      : 'focus:border-[#141414] border-[#DCDDDD] '
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}

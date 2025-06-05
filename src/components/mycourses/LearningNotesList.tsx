@@ -469,7 +469,7 @@ const LearningNotesList = () => {
                       paths={[...note?.course_section_path].reverse()}
                     />
                   </div>
-                  <div className="text-base font-normal text-bw-1">
+                  <div className="text-base font-normal text-[#050505]">
                     <span
                       className={`whitespace-pre-wrap break-all ${
                         isExpanded ? '' : 'line-clamp-3'
@@ -479,7 +479,7 @@ const LearningNotesList = () => {
                     </span>
                     {!isExpanded && note?.description?.length > 230 ? (
                       <button
-                        className="block text-base font-normal text-gray-1"
+                        className="block text-base font-normal text-[#A1A1A1]"
                         onClick={() => toggleExpand(note?.id)}
                       >
                         Show more
@@ -488,7 +488,7 @@ const LearningNotesList = () => {
                       <>
                         {note?.description?.length > 230 ? (
                           <button
-                            className="block text-base font-normal text-gray-1"
+                            className="block text-base font-normal text-[#A1A1A1]"
                             onClick={() => toggleExpand(note?.id)}
                           >
                             Show less
@@ -500,7 +500,7 @@ const LearningNotesList = () => {
                     )}
                   </div>
                   <div className="mt-5 flex justify-between">
-                    <div className="text-sm font-normal text-gray-1">
+                    <div className="text-sm font-normal text-[#A1A1A1]">
                       {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                     </div>
                     <div className="flex">

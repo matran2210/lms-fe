@@ -55,7 +55,7 @@ const EntranceTest = () => {
           <>
             <div className="main relative">
               <div className="sm:flex-row sm:items-center flex w-full flex-col justify-between gap-3 pb-4">
-                <h2 className="text-sm font-medium text-bw-1 ">
+                <h2 className="text-sm font-medium text-[#050505] ">
                   Entrance Test
                 </h2>
                 <EntranceTestFilter count={entranceTestLists?.length || 0} />

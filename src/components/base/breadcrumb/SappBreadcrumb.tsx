@@ -26,7 +26,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                   <Link href={tab.link}>
                     <a
                       className={`line-clamp-1 w-fit max-w-[210px] ${
-                        currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
+                        currentPage === tab.title
+                          ? 'text-[#050505]'
+                          : 'text-[#A1A1A1]'
                       }
                       `}
                     >
@@ -38,7 +40,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                 )}
                 <span
                   className={`${
-                    currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
+                    currentPage === tab.title
+                      ? 'text-[#050505]'
+                      : 'text-[#A1A1A1]'
                   } pr-1`}
                 >
                   {' / '}
@@ -47,7 +51,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
             ) : (
               <span
                 className={
-                  currentPage === tab.title ? 'text-bw-1' : 'text-gray-1'
+                  currentPage === tab.title
+                    ? 'text-[#050505]'
+                    : 'text-[#A1A1A1]'
                 }
               >
                 {tab.title}

@@ -103,7 +103,7 @@ const TestResultPage = ({
                   <div
                     className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
                   >
-                    <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
+                    <div className="mb-5 text-xl font-semibold text-[#050505] xl:font-medium">
                       {questions?.quizAttempt?.grading_status ===
                       GRADE_STATUS.FINISHED_GRADING
                         ? 'Overall Score'
@@ -125,7 +125,7 @@ const TestResultPage = ({
                           height={16}
                           alt="Globe"
                         />
-                        <div className={`text-sm leading-4.9 text-gray-1`}>
+                        <div className={`text-sm leading-4.9 text-[#A1A1A1]`}>
                           Global Average {GlobalAverage}%
                         </div>
                       </div>
@@ -248,7 +248,7 @@ const TestResultPage = ({
                 <div
                   className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
                 >
-                  <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
+                  <div className="mb-5 text-xl font-semibold text-[#050505] xl:font-medium">
                     {questions?.quizAttempt?.grading_status ===
                     GRADE_STATUS.FINISHED_GRADING
                       ? 'Overall Score'
@@ -270,7 +270,7 @@ const TestResultPage = ({
                         height={16}
                         alt="Globe"
                       />
-                      <div className={`text-sm leading-4.9 text-gray-1`}>
+                      <div className={`text-sm leading-4.9 text-[#A1A1A1]`}>
                         Global Average {GlobalAverage}%
                       </div>
                     </div>

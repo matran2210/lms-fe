@@ -15,7 +15,7 @@ import ExamInfoActionCell from './ExamInfoActionCell'
 import { IExamInformation } from './type'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderCellStyle = 'text-left text-sm text-gray-1 font-semibold pb-3'
+const commonHeaderCellStyle = 'text-left text-sm text-[#A1A1A1] font-semibold pb-3'
 const commonDataCellStyle = 'col text-start py-5 pr-6 whitespace-nowrap'
 const headers = [
   'Course',

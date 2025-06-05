@@ -412,7 +412,7 @@ const Course = ({
           <div className={`flex min-h-352 flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
-                !enableCourse ? 'text-gray-2' : 'text-bw-1'
+                !enableCourse ? 'text-[#DCDDDD]' : 'text-[#050505]'
               }`}
             >
               <div
@@ -434,9 +434,9 @@ const Course = ({
             </div>
             <div className="flex items-center justify-between">
               {enableCourse ? (
-                <div className="name-class text-sm text-gray-1">
+                <div className="name-class text-sm text-[#A1A1A1]">
                   Class:
-                  <span className="ml-1 font-medium text-bw-1">
+                  <span className="ml-1 font-medium text-[#050505]">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
                       showTooltip={course?.classes?.[0]?.code?.length > 20}
@@ -446,16 +446,16 @@ const Course = ({
                   </span>
                 </div>
               ) : (
-                <div className="name-class text-sm text-gray-1">
-                  <span className="ml-1 font-medium text-bw-1" />
+                <div className="name-class text-sm text-[#A1A1A1]">
+                  <span className="ml-1 font-medium text-[#050505]" />
                 </div>
               )}
-              <div className="time-class text-sm text-gray-2">
+              <div className="time-class text-sm text-[#DCDDDD]">
                 {determineButtonToShow !== 'Active' && (
                   <span>
                     <span
                       className={`font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-1'
+                        enableCourse ? 'text-[#050505]' : 'text-[#A1A1A1]'
                       }`}
                     >
                       {daysDifference > 0
@@ -486,7 +486,7 @@ const Course = ({
                       __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                     }`}
                   />
                 </Tooltip>
@@ -496,7 +496,7 @@ const Course = ({
                     __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2'
+                    enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                   }`}
                 />
               )}
@@ -508,12 +508,12 @@ const Course = ({
                     <Icon
                       type={enableCourse ? iconType : 'expired'}
                       className={`relative ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       }`}
                     />
                     <p
                       className={`text-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -522,18 +522,18 @@ const Course = ({
                   <div className="number">
                     <p
                       className={`text-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       }`}
                     >
                       {progressPart}%
                     </p>
                   </div>
                 </div>
-                <div className="progressbar h-1.5 bg-gray-3">
+                <div className="progressbar h-[6px] bg-[#F1F1F1]">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary' : 'bg-gray-2'
-                    } h-1.5`}
+                      enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
+                    } h-[6px]`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
                 </div>

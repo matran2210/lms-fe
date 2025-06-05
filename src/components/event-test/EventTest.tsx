@@ -151,7 +151,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
 
   function getTextColor(colorDefault: string) {
     return resultFinishAt === 1 && !data?.is_attempt
-      ? 'text-gray-2'
+      ? 'text-[#DCDDDD]'
       : colorDefault
   }
 
@@ -206,7 +206,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
     <>
       <div className="name">
         <h2
-          className={`mb-5 line-clamp-2 text-2xl font-medium ${getTextColor('text-bw-1')}`}
+          className={`mb-5 line-clamp-2 text-2xl font-medium ${getTextColor('text-[#050505]')}`}
         >
           {data?.name}
         </h2>
@@ -214,7 +214,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
       <div>
         <div className="info">
           <div
-            className={`flex justify-between border-b border-gray-2 pb-4 text-base capitalize ${getTextColor('text-gray-1')}`}
+            className={`flex justify-between border-b border-[#DCDDDD] pb-4 text-base capitalize ${getTextColor('text-[#A1A1A1]')}`}
           >
             <p>
               {getEventTestStatus(
@@ -223,7 +223,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
                 'Start Date:',
               )}
             </p>
-            <p className={`font-medium ${getTextColor('text-bw-1')}`}>
+            <p className={`font-medium ${getTextColor('text-[#050505]')}`}>
               {getEventTestStatus(
                 timeTakenFormatted,
                 timeAllowFormatted,
@@ -232,7 +232,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             </p>
           </div>
           <div
-            className={`flex justify-between pt-4 text-base capitalize ${getTextColor('text-gray-1')}`}
+            className={`flex justify-between pt-4 text-base capitalize ${getTextColor('text-[#A1A1A1]')}`}
           >
             <p>
               {getEventTestStatus(
@@ -241,7 +241,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
                 'End Date:',
               )}
             </p>
-            <p className={`font-medium ${getTextColor('text-bw-1')}`}>
+            <p className={`font-medium ${getTextColor('text-[#050505]')}`}>
               {getEventTestStatus(
                 resultDate(data?.course_category?.name),
                 data?.total_question || data?.quiz_question_instances?.length,
@@ -254,10 +254,10 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           <div className="text flex items-center">
             <Icon
               type={`${data?.is_attempt ? 'completed' : resultFinishAt === 1 && !data?.is_attempt ? 'expired' : !data?.is_attempt ? 'like' : ''}`}
-              className={`relative ${getTextColor('text-bw-1')}`}
+              className={`relative ${getTextColor('text-[#050505]')}`}
             />
             <p
-              className={`ml-px pl-2 text-sm font-medium ${getTextColor('text-bw-1')}`}
+              className={`ml-px pl-2 text-sm font-medium ${getTextColor('text-[#050505]')}`}
             >
               {data?.attempt_status === EAttemptStatus['SUBMITTED']
                 ? 'Completed'
@@ -289,7 +289,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
                 (!!remainingTimeLastAttempt ||
                   remainingTimeLastAttempt === 0) && (
                   <div
-                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt > 0 ? 'text-[#3964EA]' : 'text-error'}`}
                   >
                     <div className="m-auto">
                       <ClockIcon
@@ -323,7 +323,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-sm text-gray-1">
+          <div className="my-4 text-start text-sm text-[#A1A1A1]">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}
@@ -347,7 +347,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           'Ended Event Test',
         )}
       >
-        <div className="mb-1 mt-4 text-center text-sm text-gray-1 2xl:mb-11">
+        <div className="mb-1 mt-4 text-center text-sm text-[#A1A1A1] 2xl:mb-11">
           This Event Test{' '}
           {checkEventStatus(
             resultStartAt,
@@ -356,7 +356,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             'has ended',
           )}{' '}
           on{' '}
-          <span className="font-semibold text-bw-1">
+          <span className="font-semibold text-[#050505]">
             {formatDate(
               new Date(
                 resultStartAt === -1

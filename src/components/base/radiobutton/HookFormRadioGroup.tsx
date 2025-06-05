@@ -80,10 +80,10 @@ const HookFormRadioGroup = ({
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
-                    stateLabel = 'text-state-success'
+                    stateLabel = 'text-success-600'
                   } else if (checked) {
                     state = 'error'
-                    stateLabel = 'text-state-error'
+                    stateLabel = 'text-error'
                   }
                 }
 

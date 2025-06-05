@@ -71,7 +71,7 @@ export default function Sidebar({
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center"></div>
           <MenuItemsList
             options={
               Number(localStorage.getItem('countEvent')) <= 0
@@ -96,7 +96,7 @@ export default function Sidebar({
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center"></div>
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}

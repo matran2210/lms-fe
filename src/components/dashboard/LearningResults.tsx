@@ -77,7 +77,7 @@ const LearningResults = () => {
             const indicators = results.map((e: ILearningResult) => e.name)
             let tooltipText = `<strong>${params.name}</strong><br/>`
             values.forEach((val: any, i: number) => {
-              tooltipText += `<span class='text-blue-5'>●</span> ${indicators[i]}: ${val}%<br/>`
+              tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
             })
             return tooltipText
           },
@@ -193,7 +193,7 @@ const LearningResults = () => {
         {isNormal ? (
           <Tooltip
             title={
-              <div className="text-support-1">
+              <div className="text-[#33475B]">
                 {courseInfo?.category == 'ACCA'
                   ? '%Results = Graded activities (70%) + Final test (30%)'
                   : '%Results = Module test (40%) + Topic test (60%)'}
@@ -201,17 +201,17 @@ const LearningResults = () => {
             }
             className="dashboard_tooltip"
           >
-            <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
+            <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
               Your Learning Results
               <Image src={infoIcon} alt="" width={16} height={16} />
             </div>
           </Tooltip>
         ) : (
-          <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
+          <div className="min-w-fit text-lg font-bold 4xl:text-xl">
             Your Learning Results
           </div>
         )}
-        <div className="text-xsm text-gray-11 4xl:text-sm">
+        <div className="text-xsm text-[#99A1B7] 4xl:text-sm">
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
@@ -227,7 +227,7 @@ const LearningResults = () => {
           >
             {!isNormal && (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-green-4"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-[#6FD195]"></span>
                 <a
                   href={
                     mockTestId
@@ -235,7 +235,7 @@ const LearningResults = () => {
                       : ''
                   }
                   target="_blank"
-                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`}
+                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
                   rel="noreferrer"
                 >
                   Mock test results
@@ -244,7 +244,7 @@ const LearningResults = () => {
             )}
             {isNormal || hasLearning ? (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-blue-5"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-[#7086FD]"></span>
                 <span className="min-w-fit font-medium">Learning results</span>
               </div>
             ) : null}

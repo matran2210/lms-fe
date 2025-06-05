@@ -22,7 +22,7 @@ const SappTabs: React.FC<SappTabsProps> = ({
     tabUrlTitleQuery || tabs.find((tab) => tab.id === selected)?.urlTitle
 
   return (
-    <ul className={clsx('flex', { 'border-b border-gray-100': bordered })}>
+    <ul className={clsx('flex', { 'border-b border-ink-100': bordered })}>
       {tabs.map((tab) => {
         const isActive = tab.urlTitle === activeTabUrlTitle
         return (

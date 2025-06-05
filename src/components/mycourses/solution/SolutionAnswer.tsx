@@ -13,9 +13,9 @@ const SolutionAnswer = ({
 }: SolutionAnswerProps) => {
   let classParent = isYourAnswer
     ? isCorrect
-      ? 'text-state-success'
-      : 'text-state-error'
-    : 'text-bw-1'
+      ? 'text-success-600'
+      : 'text-error'
+    : 'text-[#050505]'
 
   return (
     <>
@@ -34,7 +34,7 @@ const SolutionAnswer = ({
         <div className="w-fit">
           {message}
           {isYourAnswer && (
-            <span className="ml-3 inline-block border-[#DCDDDD] bg-gray-4 px-2 py-0.5 text-xs text-bw-1">
+            <span className="ml-3 inline-block border-[#DCDDDD] bg-[#F9F9F9] px-2 py-0.5 text-xs text-[#050505]">
               Your Answer
             </span>
           )}

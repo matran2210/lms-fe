@@ -20,7 +20,7 @@ const BreadcrumbFilter = ({
       aria-label="breadcrumbs"
     >
       <ol className="breadcrumbs__list flex text-sm font-medium">
-        <li className="breadcrumbs__item shrink-0 cursor-pointer text-gray-1 hover:underline">
+        <li className="breadcrumbs__item shrink-0 cursor-pointer text-[#A1A1A1] hover:underline">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             <span onClick={() => trackGAEvent('Breadcrumb My Course')}>
               My Course
@@ -30,7 +30,7 @@ const BreadcrumbFilter = ({
         <li
           className={clsx(
             'breadcrumbs__item current-course line-clamp-1',
-            subpath ? 'text-gray-1' : 'text-bw-1',
+            subpath ? 'text-[#A1A1A1]' : 'text-[#050505]',
           )}
         >
           <Link
@@ -56,7 +56,7 @@ const BreadcrumbFilter = ({
           </Link>
         </li>
         {subpath && (
-          <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-bw-1">
+          <li className="breadcrumbs__item current-course ml-1 line-clamp-1 text-[#050505]">
             /&nbsp;{subpath}
           </li>
         )}

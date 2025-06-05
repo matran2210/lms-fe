@@ -27,7 +27,7 @@ const ButtonSecondary = ({
   let paddingHorizontalClass =
     size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-medium bg-gray-3 ${
+  let componentClass = `text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-[#050505] ${textSizeClass} font-medium bg-[#F1F1F1] ${
     disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
   } ${className}`
 

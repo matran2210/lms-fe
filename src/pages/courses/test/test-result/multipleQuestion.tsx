@@ -53,14 +53,14 @@ const MultipleQuestion = ({
     if (type === 'Constructed Questions') {
       return questions?.quizAttempt?.grading_status ===
         GRADE_STATUS.FINISHED_GRADING
-        ? ' text-graded-finish border-graded-finish'
+        ? ' text-[#4077E0] border-[#4077E0]'
         : data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-          ? ' text-pinned-1 border-pinned-1'
-          : ' text-gray-1 border-gray-1'
+          ? ' text-[#18355D] border-[#18355D]'
+          : ' text-[#A1A1A1] border-[#A1A1A1]'
     }
     return data?.is_correct
-      ? ' text-state-success border-success'
-      : ' text-state-error border-error'
+      ? ' text-success-600 border-[#397839]'
+      : ' text-error border-[#B90E0A]'
   }
 
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
@@ -87,7 +87,7 @@ const MultipleQuestion = ({
       <div className="w-full">
         {data?.length > 0 && (
           <>
-            <div className="text-lg-xl mb-4 font-semibold text-bw-1 xl:text-xl xl:font-medium">
+            <div className="text-lg mb-4 font-semibold text-[#050505] xl:text-xl xl:font-medium">
               {type}
             </div>
             <div
@@ -189,7 +189,7 @@ const MultipleQuestion = ({
           >
             <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
-                className="flex cursor-pointer flex-row pr-2 text-center text-gray-1  hover:text-primary"
+                className="flex cursor-pointer flex-row pr-2 text-center text-[#A1A1A1]  hover:text-primary"
                 onClick={() => setOpenAnnotaion(true)}
               >
                 <div className="my-auto">

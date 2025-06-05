@@ -26,15 +26,15 @@ const SubjectItem = ({ data, index, isEdit, setMakeDefaultDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'rounded-md border border-gray-3 bg-gray-4 px-6 py-4 hover:bg-yellow-2',
+          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] px-6 py-4 hover:bg-[#FFFBF2]',
         )}
       >
         <div className="flex items-center">
           <div>
             <div>
-              <span className="font-bold text-gray-14">{`${data.title} (${data.course_category_name})`}</span>
+              <span className="font-bold text-secondary">{`${data.title} (${data.course_category_name})`}</span>
             </div>
-            <div className="mt-4 text-bw-1">
+            <div className="mt-4 text-[#050505]">
               <div className="w-fit">
                 <div className="flex items-center gap-2">
                   <Icon type="contact" />

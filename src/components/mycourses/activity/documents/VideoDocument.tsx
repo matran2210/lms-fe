@@ -348,8 +348,8 @@ const VideoDocument = ({
                   <span
                     className={`radio-item-label  ${
                       v?.file?.id === currentVideo?.file?.id
-                        ? 'text-bw-1'
-                        : 'text-gray-1'
+                        ? 'text-[#050505]'
+                        : 'text-[#A1A1A1]'
                     }`}
                   >
                     Video {i + 1}
@@ -361,12 +361,12 @@ const VideoDocument = ({
         <div className="group relative z-30 flex cursor-pointer select-none items-center">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
-              <span className="mr-2 text-bw-1 group-hover:text-primary">
+              <span className="mr-2 text-[#050505] group-hover:text-primary">
                 Timeline
               </span>
               {/* Icon for course video timeline */}
               <SappIcon
-                className="fill-bw-1 group-hover:fill-primary"
+                className="fill-[#050505] group-hover:fill-primary"
                 icon="course_video_timeline"
               ></SappIcon>
             </>
@@ -380,15 +380,15 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-bw-1 hover:bg-gray-4"
+                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9]"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
                   >
-                    <div className="mim-w-[62px] text-state-info">
+                    <div className="mim-w-[62px] text-[#3964EA]">
                       {formatTime(e?.time)}
                     </div>
-                    <div className="text-inherit line-clamp-2 text-bw-1">
+                    <div className="text-inherit line-clamp-2 text-[#050505]">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
@@ -418,7 +418,7 @@ const VideoDocument = ({
           <SappModal
             open={modalOpen}
             customTitle={
-              <div className="!text-xl font-bold text-bw-1">Question</div>
+              <div className="!text-xl font-bold text-[#050505]">Question</div>
             }
             parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
             okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}

@@ -476,12 +476,12 @@ const QuizDocument = ({
           </div>
           <div className="body-modal-white -mt-2">
             <div id="hightlight_area">
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -501,7 +501,7 @@ const QuizDocument = ({
                   {exhibitText} 5: csv short
                 </div>
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>
@@ -545,13 +545,13 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="text-green-800 rounded bg-blur-green px-2 font-medium">
+          <div className="text-green-800 rounded bg-[#3978391A] px-2 font-medium">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="text-amber-400  rounded bg-blur-yellow px-2 font-medium">
+          <div className="text-amber-400  rounded bg-[#FFB8001A] px-2 font-medium">
             Awaiting Grading
           </div>
         )
@@ -611,7 +611,7 @@ const QuizDocument = ({
       />
 
       <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-[500px] select-none overflow-auto border border-[#DCDDDD] p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
@@ -638,12 +638,12 @@ const QuizDocument = ({
             />
           )}
       </div>
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-[#F1F1F1] px-6 py-2">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
           <div
             className={`${
               is_graded || 'invisible'
-            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+            } whitespace-nowrap   rounded bg-[#3964EA] bg-opacity-10 px-2 text-center  font-medium text-[#3964EA]`}
           >
             Graded Activity
           </div>
@@ -754,7 +754,7 @@ const QuizDocument = ({
               setModalResult(undefined)
             }}
           >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <QuizResultComponent
             questionResponse={modalResult?.questions || []}

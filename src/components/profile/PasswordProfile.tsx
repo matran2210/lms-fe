@@ -177,7 +177,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                   value={otp}
                   onChange={(event) => onEnterDigit(index, event)}
                   inputClassName={`text-center h-[67px] w-[67px] rounded-md ${
-                    errorMessage ? 'border-state-error' : 'border-gray-2'
+                    errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
                   } pt-5.25 pb-5 px-0`}
                   onPaste={(e: any) =>
                     code?.every((data) => data === '') && handlePaste(index, e)
@@ -186,12 +186,12 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               ))}
             </div>
             <div className="flex justify-between">
-              <span className="text-medium-sm text-state-error">
+              <span className="text-medium-sm text-error">
                 {errorMessage}
               </span>
               <span
                 className={`text-medium-sm min-w-fit text-right ${
-                  timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
+                  timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'
                 }`}
               >
                 {timeCountDown}
@@ -204,7 +204,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           <ButtonText
             title="Verify Code"
             full={true}
-            className="mb-2 rounded-md bg-sapp-black-1 px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
+            className="mb-2 rounded-md bg-[#29353C] px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
             size="lager"
             loading={loading}
             onClick={verifyCode}

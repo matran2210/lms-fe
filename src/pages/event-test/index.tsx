@@ -44,7 +44,7 @@ const EventTest = () => {
         </div>
         <div className="main mx-8 my-0 max-w-xxl xl:mx-auto">
           <div className="sm:flex-row flex flex-col justify-between gap-3 pb-4 pt-6">
-            <h2 className="text-sm font-medium text-bw-1 ">
+            <h2 className="text-sm font-medium text-[#050505] ">
               {LANG_SIGNIN.eventTest}
             </h2>
             <EventTestFilter count={eventTestLists?.length || 0} />

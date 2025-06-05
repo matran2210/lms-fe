@@ -134,8 +134,8 @@ const ProfileList = ({ isEdit }: IProps) => {
         >
           <div className="flex flex-col gap-4">
             {makeDefaultDrawer?.phone && (
-              <div className="flex items-center justify-between text-bw-1">
-                <span className="inline-block w-[302px] text-gray-14">
+              <div className="flex items-center justify-between text-[#050505]">
+                <span className="inline-block w-[302px] text-secondary">
                   <div className="flex">
                     <Icon type="phone-ring" className="mr-2" /> Phone Number:
                   </div>
@@ -145,8 +145,8 @@ const ProfileList = ({ isEdit }: IProps) => {
                 </span>
               </div>
             )}
-            <div className="flex items-center justify-between text-bw-1">
-              <span className="inline-block w-[302px] text-gray-14">
+            <div className="flex items-center justify-between text-[#050505]">
+              <span className="inline-block w-[302px] text-secondary">
                 <div className="flex">
                   <Icon type="email" className="mr-2" /> Email Adress:
                 </div>
@@ -156,8 +156,8 @@ const ProfileList = ({ isEdit }: IProps) => {
               </span>
             </div>
             {makeDefaultDrawer?.address && (
-              <div className="mt-5 text-bw-1">
-                <span className="inline-block w-[302px] text-gray-14">
+              <div className="mt-5 text-[#050505]">
+                <span className="inline-block w-[302px] text-secondary">
                   {' '}
                   Address:{' '}
                 </span>
@@ -171,7 +171,7 @@ const ProfileList = ({ isEdit }: IProps) => {
 
           <div>
             <div className="flex items-center gap-4">
-              <span className="text-base font-semibold text-gray-14">
+              <span className="text-base font-semibold text-secondary">
                 Set as default:
               </span>
               <Switch

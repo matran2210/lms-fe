@@ -33,32 +33,32 @@ const ProfileItem = ({
     <div className="mb-4">
       <div
         className={clsx(
-          'rounded-md border border-gray-3 bg-gray-4 px-6 py-4 hover:bg-yellow-2',
+          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] px-6 py-4 hover:bg-[#FFFBF2]',
           {
-            'bg-yellow-2': e?.is_default,
+            'bg-[#FFFBF2]': e?.is_default,
           },
         )}
       >
         <div className="flex items-center">
           <div>
             <div>
-              <span className="text-base font-bold text-gray-14">
+              <span className="text-base font-bold text-secondary">
                 Profile {index + 1}
               </span>
               {e?.is_default && (
-                <span className="text-medium-sm ml-[10px] inline-block select-none bg-green-6 bg-opacity-5 px-2 py-1 leading-4 text-green-7">
+                <span className="text-medium-sm ml-[10px] inline-block select-none bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
                   Default
                 </span>
               )}
             </div>
-            <div className="mt-4 font-medium text-bw-1">
+            <div className="mt-4 font-medium text-[#050505]">
               <div className="flex w-fit gap-2">
                 <div className="flex">
                   <Icon type="phone-ring" className="mr-2" />{' '}
                   {e?.phone && e?.phone}
                 </div>
                 {e?.email && e?.phone && (
-                  <span className="mx-3 text-gray-1">|</span>
+                  <span className="mx-3 text-[#A1A1A1]">|</span>
                 )}
                 <div className="flex">
                   <Icon type="email" className="mr-2" /> {e?.email && e?.email}

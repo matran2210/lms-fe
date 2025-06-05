@@ -57,7 +57,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
               <span>Account ID Number:</span>
               <span className="font-bold">
                 {' '}
-                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
+                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-[#050505]">
                   {getValues('hubspot_account_info')}
                 </div>
               </span>

@@ -48,7 +48,7 @@ const ProfilePage = () => {
           width="320"
           height="260"
         />
-        <h1 className="mt-3 text-2xl font-bold text-bw-1 md:text-4xl">
+        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
           Tab Not Found
         </h1>
       </div>
@@ -165,7 +165,7 @@ const ProfilePage = () => {
               <Tabs
                 tabBarExtraContent={
                   <div
-                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-danger-6"
+                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-[#F80903]"
                     onClick={handleLogout}
                   >
                     <Icon type="logout" className="font-normal" />

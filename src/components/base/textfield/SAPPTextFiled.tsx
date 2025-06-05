@@ -77,10 +77,10 @@ const SAPPTextFiled = ({
           className={clsx(
             inputClassName,
             TEXT_SIZES[textSize],
-            'form-control h-[50px] w-full border border-solid border-[#DCDDDD] px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none',
+            'form-control h-[50px] w-full border border-solid border-[#DCDDDD] px-4 py-3 font-medium text-[#050505] shadow-0 placeholder:font-medium placeholder:text-[#A1A1A1] focus:border-primary focus:shadow-0 focus:outline-none',
             {
-              '!border-error': isError,
-              'bg-gray-4': disabled,
+              '!border-[#B90E0A]': isError,
+              'bg-[#F9F9F9]': disabled,
               'bg-transparent': !disabled,
               'pl-12': placeholderIcon,
             },

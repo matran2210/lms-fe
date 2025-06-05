@@ -36,7 +36,7 @@ const Settings = ({ onBack }: IProp) => {
           }
         >
           <div className="flex h-full items-center justify-center">
-            <div className="text-gray-1">Coming soon</div>
+            <div className="text-[#A1A1A1]">Coming soon</div>
           </div>
         </TabLayout>
       </form>

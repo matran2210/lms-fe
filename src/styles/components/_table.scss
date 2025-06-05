@@ -76,7 +76,7 @@
 }
 .profile-certificate-table {
   .ant-table-thead > tr > th {
-    @apply border-b-0 bg-white py-2 text-lg text-gray-14;
+    @apply border-b-0 bg-white py-2 text-lg text-secondary;
 
     &::before {
       display: none !important;

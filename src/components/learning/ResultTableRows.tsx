@@ -10,7 +10,7 @@ const ResultTableRows: React.FC<ResultTableRows> = ({ resultTablerows }) => {
     <>
       {resultTablerows.map((resultTablerow, index) => (
         <tr key={index + 1} className={`item item-${index + 1}`}>
-          <td className="w-[5.5%] min-w-62px border-b border-dashed border-[#DCDDDD] py-5 text-center text-base text-bw-1">
+          <td className="w-[5.5%] min-w-62px border-b border-dashed border-[#DCDDDD] py-5 text-center text-base text-[#050505]">
             {index + 1}
           </td>
           <ResultRow

@@ -55,7 +55,7 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-bw-13`}
+        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-ink-800`}
       >
         <div>
           <div className="mb-4">
@@ -118,7 +118,7 @@ const PopupStep = ({
               <div
                 key={i}
                 className={`aspect-square h-[6px] w-[6px] rounded-full ${
-                  i + 1 === index ? 'bg-primary' : 'bg-gray-15'
+                  i + 1 === index ? 'bg-primary' : 'bg-ink-300'
                 }`}
               />
             ))}

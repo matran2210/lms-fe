@@ -178,7 +178,7 @@ const MyProfile = ({
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-30 !text-white !bg-sapp-black-1 hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-30 !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
                         type: 'submit',
                         loading: loading || loadingEditName,
                         classNameLoading: 'text-white',
@@ -187,7 +187,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                  <div className="max-w-[300px] flex-auto font-medium text-[#050505]">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -296,11 +296,11 @@ const TextWrapper = ({
         'mb-8 !block transition-[margin]': isEdit,
       })}
     >
-      <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+      <div className="w-[17.43rem] max-w-[200px] flex-none text-[#A1A1A1] lg:max-w-[50%]">
         {title}
       </div>
       <div
-        className={clsx('max-w-[300px] flex-auto font-medium text-bw-1', {
+        className={clsx('max-w-[300px] flex-auto font-medium text-[#050505]', {
           '!max-w-full': isEdit,
         })}
       >

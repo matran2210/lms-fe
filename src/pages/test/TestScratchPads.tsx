@@ -81,7 +81,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+            <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
               <div className="text-sm font-normal">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseIcon />
@@ -109,7 +109,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+            <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
               <div className="text-sm font-normal">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>

@@ -66,7 +66,7 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Test Result" className="!bg-gray-3">
+    <FullScreenLayout title="Test Result" className="!bg-[#F1F1F1]">
       <div className="mx-auto max-w-1570">
         <div className="px-5 xl:container md:px-10">
           <Breadcrumb

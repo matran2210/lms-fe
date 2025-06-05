@@ -3,7 +3,7 @@ import React from 'react'
 const NotifyActions = ({ handleMarkAll }: { handleMarkAll: () => void }) => {
   return (
     <div
-      className="border-b border-gray-2 py-3 text-sm text-bw-1 last:border-0"
+      className="border-b border-[#DCDDDD] py-3 text-sm text-[#050505] last:border-0"
       onClick={handleMarkAll}
     >
       <div className="cursor-pointer">Mark all as read</div>
