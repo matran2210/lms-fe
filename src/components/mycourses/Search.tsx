@@ -9,9 +9,10 @@ interface IProps {
   placeholder: string
   formStyle: string
   setPage?: Dispatch<SetStateAction<number>>
+  disabled?: boolean
 }
 
-const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
+const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -89,7 +90,8 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
             {...field}
             type="text"
             placeholder={placeholder}
-            className="placeholder-text-gray-1 h-6 w-full border-0 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0"
+            disabled={disabled}
+            className="placeholder-text-gray-1 h-6 w-full rounded-xl border-0 px-4 text-bw-1 focus:border-0 focus:outline-0 focus:ring-0"
           />
         )}
       />

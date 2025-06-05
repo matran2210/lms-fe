@@ -26,6 +26,12 @@ export const userGuideSlice = createSlice({
       // Tăng giá trị lên 1 khi action 'increment' được gọi
       state.step += 1
     },
+    decrement: (state) => {
+      // Tăng giá trị lên 1 khi action 'increment' được gọi
+      if (state.step > 1) {
+        state.step -= 1
+      }
+    },
     reset: (state) => {
       state.isActive = true
       state.status = false
@@ -37,7 +43,7 @@ export const userGuideSlice = createSlice({
   },
 })
 
-export const { increment, active, reset, clearGuideState } =
+export const { increment, active, reset, clearGuideState, decrement } =
   userGuideSlice.actions
 export const userGuideReducer = (state: RootState) => state.userGuideReducer
 export default userGuideSlice.reducer

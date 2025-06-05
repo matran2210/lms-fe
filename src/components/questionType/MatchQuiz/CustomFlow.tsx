@@ -48,21 +48,23 @@ const CustomFlow = ({
   useEffect(() => {
     const wrapper = wrapperRef.current
     if (!wrapper) return
-  
-    const canvas = wrapper.querySelector('.react-flow__viewport') as HTMLElement | null
+
+    const canvas = wrapper.querySelector(
+      '.react-flow__viewport',
+    ) as HTMLElement | null
     if (!canvas) return
-  
+
     const wheelHandler = (e: Event) => {
       e.stopPropagation()
     }
-  
+
     canvas.addEventListener('wheel', wheelHandler, { passive: true })
-  
+
     return () => {
       canvas.removeEventListener('wheel', wheelHandler)
     }
   }, [])
-  
+
   return (
     <div ref={wrapperRef} style={{ height: '100%', width: '100%' }}>
       <ReactFlow

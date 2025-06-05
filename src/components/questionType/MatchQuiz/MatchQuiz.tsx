@@ -512,7 +512,7 @@ const MatchQuiz = forwardRef(
           {!!corrects && !!correctNodes?.length && (
             <>
               <Divider className="bg-gray-15" />
-              <div className="mb-4 text-base font-bold text-bw-15">
+              <div className="mb-4 text-base font-bold text-bw-16">
                 Correct Answer:
               </div>
               <div

@@ -25,6 +25,9 @@ import {
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
 import TabLayout from './TabLayout'
+import ProfileCard from '@components/card/ProfileCard'
+import Icon from '@components/icons'
+import clsx from 'clsx'
 
 interface IProps {
   isEdit: boolean
@@ -34,7 +37,6 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
-  onOpenTab?: () => void
 }
 
 const schema = z.object({
@@ -50,7 +52,6 @@ const MyProfile = ({
   avatar,
   handleSetAvatar,
   setReViewImageSrc,
-  onOpenTab,
 }: IProps) => {
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
@@ -60,16 +61,6 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
-
-  const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
-    status: boolean
-    email: string
-    phone: string
-    address: string
-    index: number
-    id: string
-    is_default: boolean
-  }>()
 
   /**
    * Hàm để chuyển sang chế độ chỉnh sửa form
@@ -145,107 +136,60 @@ const MyProfile = ({
       }
     }
   }
-  const closeMakeDefault = () => {
-    setMakeDefaultDrawer(undefined)
-  }
-
-  const submitMakeDefault = async () => {
-    try {
-      if (makeDefaultDrawer?.id) {
-        await dispatch(makeContactDefault(makeDefaultDrawer.id))
-          .unwrap()
-          .then(async (e) => {
-            setMakeDefaultDrawer(undefined)
-            await dispatch(getMe())
-          })
-      }
-    } catch (error) {}
-  }
-
-  /**
-   * Sắp xếp mảng người dùng theo thời gian tạo và is_default.
-   *
-   * @param {Array} users - Mảng người dùng cần sắp xếp.
-   * @returns {Array} - Mảng đã sắp xếp theo is_default và created_at.
-   */
-  const sortByCreatedAtAndDefault = (users: Array<any>) => {
-    const sortedUsers = [...users]
-
-    sortedUsers.sort((a, b) => {
-      if (a?.is_default && !b?.is_default) return -1
-      if (!a?.is_default && b?.is_default) return 1
-
-      const dateA = new Date(a?.created_at)
-      const dateB = new Date(b?.created_at)
-
-      return dateB?.getTime() - dateA?.getTime()
-    })
-
-    return sortedUsers
-  }
 
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
-        <TabLayout
-          title="Overview"
-          headerButtons={
-            <div className=" flex gap-x-2">
-              <SappButton
-                onClick={onOpenTab}
-                size="medium"
-                title={'Back'}
-                color="textUnderline"
-                className="block min-w-[120px] pr-0 text-base lg:hidden"
-                loading={loading && !isEdit}
-              ></SappButton>
-              {!isEdit ? (
-                <SappButton
-                  onClick={handleChangeToEditForm}
-                  size="medium"
-                  title={'Edit'}
-                  className="min-w-[120px] text-base"
-                  loading={loading && !isEdit}
-                ></SappButton>
-              ) : (
-                <ButtonCancelSubmit
-                  className="flex gap-12"
-                  cancel={{
-                    title: 'Cancel',
-                    onClick: handleChangeToPreview,
-                    size: 'medium',
-                    isPaddingHorizontal: false,
-                    disabled: loading || loadingEditName,
-                    className: 'min-w-fit !px-0 text-base w-30',
-                  }}
-                  submit={{
-                    title: 'Save',
-                    size: 'medium',
-                    className: 'min-w-fit px-0 text-sm w-30',
-                    type: 'submit',
-                    loading: loading || loadingEditName,
-                  }}
-                ></ButtonCancelSubmit>
-              )}
-            </div>
-          }
-        >
+        <ProfileCard title="Overview">
           <>
-            <ul className="m-6">
+            <ul>
               <TextWrapper
                 title="Code"
                 value={user?.code?.toString() ?? user?.key?.toString()}
-                isEdit={isEdit}
                 loading={loading}
               />
-              <TextWrapper title="Full Name" isEdit={isEdit} loading={loading}>
+              <TextWrapper
+                title="Full Name"
+                showEditIcon
+                isEdit={isEdit}
+                loading={loading}
+                handleClickEdit={handleChangeToEditForm}
+              >
                 {isEdit ? (
-                  <HookFormTextField
-                    control={control}
-                    name="full_name"
-                    skeleton={loadingEditName}
-                    className="w-full flex-1"
-                  ></HookFormTextField>
+                  <div className="flex items-center gap-2">
+                    <HookFormTextField
+                      placeholder="Enter Text..."
+                      control={control}
+                      name="full_name"
+                      skeleton={loadingEditName}
+                      className="w-full flex-1 "
+                      inputClassName="rounded-lg !h-10"
+                      textSize="sm"
+                    ></HookFormTextField>
+                    <ButtonCancelSubmit
+                      className="flex gap-2"
+                      color="text"
+                      cancel={{
+                        title: 'Cancel',
+                        onClick: handleChangeToPreview,
+                        size: 'medium',
+                        isPaddingHorizontal: false,
+                        disabled: loading || loadingEditName,
+                        className:
+                          'min-w-fit text-sm w-30 rounded-lg py-2 px-4 !no-underline',
+                      }}
+                      submit={{
+                        title: 'Confirm',
+                        size: 'medium',
+                        className:
+                          'min-w-fit text-sm w-30 !text-white !bg-sapp-black-1 hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                        type: 'submit',
+                        loading: loading || loadingEditName,
+                        classNameLoading: 'text-white',
+                      }}
+                      revertFunction
+                    ></ButtonCancelSubmit>
+                  </div>
                 ) : (
                   <div className="max-w-[300px] flex-auto font-medium text-bw-1">
                     <TextSkeleton loading={loading && !isEdit}>
@@ -257,13 +201,11 @@ const MyProfile = ({
               <TextWrapper
                 title="Username"
                 value={user?.username}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Role"
                 value={USER_TYPE[user?.type]?.label}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
@@ -271,58 +213,49 @@ const MyProfile = ({
                 value={
                   user?.detail?.dob ? formatDate(user?.detail?.dob, true) : ''
                 }
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Email"
                 value={user?.user_contacts?.[0]?.email}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Phone"
                 value={user?.user_contacts?.[0]?.phone}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="University"
                 value={user?.detail?.university?.name ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Major"
                 value={user?.detail?.major?.name}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Field of work"
                 value={user?.detail?.company_type ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Position"
                 value={user?.detail?.company_position ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Main Class"
                 value={user?.main_class?.join(',') ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
               <TextWrapper
                 title="Deferred/Retake class"
                 value={user?.reserve_retook_class?.join(', ') ?? ''}
-                isEdit={isEdit}
                 loading={loading}
               />
-              <TextWrapper title="Status" isEdit={isEdit} loading={loading}>
+              <TextWrapper title="Status" loading={loading}>
                 <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
@@ -336,137 +269,61 @@ const MyProfile = ({
                 />
               )}
             </ul>
-            {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map(
-              (e, i) => {
-                return (
-                  <div className={`m-6`} key={e.id}>
-                    <div
-                      className={`border border-gray-3 p-4 ${
-                        isEdit ? 'bg-gray-3' : ''
-                      } `}
-                    >
-                      <div>
-                        <span className="text-gray-1">Profile {i + 1}</span>
-                        {e?.is_default && (
-                          <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
-                            Default
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-3 flex font-medium text-bw-1">
-                        <div className="w-fit">
-                          {e?.phone && e?.phone}
-                          {e?.email && e?.phone && (
-                            <span className="mx-3 text-gray-1">|</span>
-                          )}
-                          {e?.email && e?.email}
-                        </div>
-                        {!isEdit && (
-                          <div
-                            className="group ml-auto w-fit cursor-pointer select-none"
-                            onClick={() =>
-                              setMakeDefaultDrawer({
-                                status: true,
-                                email: e?.email,
-                                phone: e?.phone,
-                                address: e?.address,
-                                index: i + 1,
-                                id: e?.id,
-                                is_default: e?.is_default,
-                              })
-                            }
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width={24}
-                              height={24}
-                              fill="none"
-                            >
-                              <path
-                                className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
-                                d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
-                              />
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )
-              },
-            )}
           </>
-        </TabLayout>
+        </ProfileCard>
       </form>
-      <SappDrawer
-        isOpen={makeDefaultDrawer?.status || false}
-        onClose={closeMakeDefault}
-        title={'Profile ' + makeDefaultDrawer?.index || ''}
-        message=""
-        confirmOnClose={false}
-        widthDrawer="w-6/12"
-        btnSubmitTile="Make Default"
-        handleSubmit={submitMakeDefault}
-        showSubmitButton={makeDefaultDrawer?.is_default ? false : true}
-      >
-        <div className="text-bw-1">
-          <span className="inline-block w-[302px] text-gray-1">Email:</span>
-          <span className="font-medium">{makeDefaultDrawer?.email || ''}</span>
-        </div>
-        {makeDefaultDrawer?.phone && (
-          <div className="mt-5 text-bw-1">
-            <span className="inline-block w-[302px] text-gray-1">
-              Phone Number:
-            </span>
-            <span className="font-medium">
-              {makeDefaultDrawer?.phone || ''}{' '}
-            </span>
-          </div>
-        )}
-        {makeDefaultDrawer?.address && (
-          <div className="mt-5 text-bw-1">
-            <span className="inline-block w-[302px] text-gray-1">
-              {' '}
-              Address:{' '}
-            </span>
-            <span className="font-medium">
-              {makeDefaultDrawer?.address || ''}{' '}
-            </span>
-          </div>
-        )}
-      </SappDrawer>
     </div>
   )
 }
 
 const TextWrapper = ({
   title,
-  isEdit,
+  isEdit = false,
   value,
   loading,
   children,
+  handleClickEdit,
+  showEditIcon = false,
 }: {
   title: string
   children?: React.ReactNode
-  isEdit: boolean
+  isEdit?: boolean
   value?: string
   loading: boolean
+  handleClickEdit?: () => void
+  showEditIcon?: boolean
 }) => {
   return (
     <li
-      className={`block gap-[1.4rem] md:flex ${
-        !isEdit ? 'mb-5' : 'mb-8 transition-[margin]'
-      }`}
+      className={clsx('group block gap-[1.4rem] md:flex', {
+        'mb-4': !isEdit,
+        'mb-8 !block transition-[margin]': isEdit,
+      })}
     >
       <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
         {title}
       </div>
-      <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+      <div
+        className={clsx('max-w-[300px] flex-auto font-medium text-bw-1', {
+          '!max-w-full': isEdit,
+        })}
+      >
         {value && (
           <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
         )}
         {children}
       </div>
+      {!isEdit && showEditIcon && (
+        <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
+          <div
+            className="flex items-center justify-end gap-2"
+            onClick={handleClickEdit}
+          >
+            <div>Edit</div>
+            <Icon type="edit" />
+          </div>
+        </div>
+      )}
     </li>
   )
 }
