@@ -106,12 +106,6 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
       const authenticationManager = new AuthenticationManager()
       await authenticationManager.logout()
     } catch (error) {}
