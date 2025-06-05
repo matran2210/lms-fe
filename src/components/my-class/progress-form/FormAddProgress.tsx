@@ -22,6 +22,7 @@ import {
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { sortSectionsByPosition } from '@utils/teacher-progress'
 
 const defaultValues = {
   lesson: undefined,
@@ -113,44 +114,46 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
       class_schedule_id: string
       course_section_ids: string[]
     }[] = []
-    formData?.checkedNodes.forEach((item: string) => {
-      const box = item.split('_')
-      if (box[1] === watch('lesson')) {
-        // lớp học chính
-        if (!currentCourse[0]) {
-          currentCourse[0] = {
-            class_schedule_id: '',
-            course_section_ids: [],
-          }
-        }
-        currentCourse[0].class_schedule_id = watch('lesson')
-        if (box.length > 2) {
-          currentCourse[0].course_section_ids.push(box[box.length - 1])
-        }
-      } else {
-        // lớp học bù
-        const newData: {
-          class_schedule_id: string
-          course_section_ids: string[]
-        } = {
-          class_schedule_id: '',
+
+    const addToCurrentCourse = (lessonId: string, sectionId?: string) => {
+      if (!currentCourse[0]) {
+        currentCourse[0] = {
+          class_schedule_id: lessonId,
           course_section_ids: [],
         }
-        if (
-          compensatedCourse[compensatedCourse.length - 1]?.class_schedule_id !==
-          box[1]
-        ) {
-          newData.class_schedule_id = box[1]
-          if (box.length > 2) {
-            newData.course_section_ids.push(box[box.length - 1])
-          }
-          compensatedCourse.push(newData)
-        } else {
-          const itemCurrent = compensatedCourse.find(
-            (item) => item.class_schedule_id === box[1],
-          )
-          itemCurrent?.course_section_ids.push(box[box.length - 1])
+      }
+      if (sectionId) {
+        currentCourse[0].course_section_ids.push(sectionId)
+      }
+    }
+
+    const addToCompensatedCourse = (lessonId: string, sectionId?: string) => {
+      let existingCourse = compensatedCourse.find(
+        (course) => course.class_schedule_id === lessonId,
+      )
+
+      if (!existingCourse) {
+        existingCourse = {
+          class_schedule_id: lessonId,
+          course_section_ids: [],
         }
+        compensatedCourse.push(existingCourse)
+      }
+
+      if (sectionId) {
+        existingCourse.course_section_ids.push(sectionId)
+      }
+    }
+
+    formData?.checkedNodes.forEach((item: string) => {
+      const box = item.split('_')
+      const lessonId = box[1]
+      const sectionId = box.length > 2 ? box[box.length - 1] : undefined
+
+      if (lessonId === watch('lesson')) {
+        addToCurrentCourse(lessonId, sectionId)
+      } else {
+        addToCompensatedCourse(lessonId, sectionId)
       }
     })
 
@@ -231,7 +234,7 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
                 value: res.data[0]?.course_sections[0]?.id,
               },
             ])
-            setTreeDataNotConvert(res.data)
+            setTreeDataNotConvert(sortSectionsByPosition(res.data))
           }
           //
         } catch (error) {

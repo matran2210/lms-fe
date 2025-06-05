@@ -15,6 +15,8 @@ import {
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from 'src/type/classes'
 import { CLASS_TEACHER_STATUS } from '@utils/constants'
+import Tooltip from 'src/common/Tooltip'
+import { isEmpty } from 'lodash'
 
 const statusMap = {
   [CLASS_TEACHER_STATUS.NOT_STARTED]: 'Not Started',
@@ -39,19 +41,18 @@ const ItemClassesByStatus = ({
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    if (student?.finished_at) {
-      const currentLocalDate = new Date()
-      const currentUTCDate = convertLocalTimeToUTC(currentLocalDate)
-      const finishDate = new Date(student?.finished_at)
+    if (!isEmpty(classes)) {
+      const startDate = new Date(classes?.started_at)
+      const finishDate = new Date(classes?.finished_at)
+      const startUTCDate = convertLocalTimeToUTC(startDate)
       const finishUTCDate = convertLocalTimeToUTC(finishDate)
-      const currentTime = currentUTCDate.getTime()
-      const finishTime = finishUTCDate.getTime()
-      const theRestHours = (finishTime - currentTime) / 3600000
-      const dayLefts = convertHourToDayLeft(theRestHours)
-      // Update state with the difference
-      setDaysDifference(dayLefts)
+      const days = Math.round(
+        (finishUTCDate.getTime() - startUTCDate.getTime()) /
+          (1000 * 60 * 60 * 24),
+      )
+      setDaysDifference(days)
     }
-  }, [classes, student?.finished_at])
+  }, [classes])
 
   const disabledCourseByClassType = [
     CLASS_USER_TYPES.RESERVED,
@@ -172,7 +173,12 @@ const ItemClassesByStatus = ({
           {enableCourse ? (
             <span className="flex items-center gap-2 text-sm text-[#a1a1aa]">
               <BookInClassIcon />
-              {truncateString(classes?.code, 15)}
+              <Tooltip
+                title={classes?.code}
+                showTooltip={classes?.code?.length > 15}
+              >
+                {truncateString(classes?.code, 15)}
+              </Tooltip>
             </span>
           ) : (
             <div className="name-class text-sm text-[#a1a1aa]">
