@@ -90,6 +90,7 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { Tooltip } from 'antd'
+import SappButton from '@components/base/button/SappButton'
 
 declare global {
   interface Window {
@@ -257,6 +258,7 @@ const TestDetail = () => {
             corrects={corrects?.corrects}
             ref={ref}
             solution={solution}
+            watch={watch}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -424,7 +426,6 @@ const TestDetail = () => {
 
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, getValues, setValue } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -434,6 +435,9 @@ const TestDetail = () => {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
+    control,
+    getValues,
+    setValue,
   } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -2281,30 +2285,20 @@ const TestDetail = () => {
             currentTabContent?.qType,
           ) &&
             !currentTabContent?.is_viewed_answer && (
-              <button
+              <SappButton
                 disabled={currentTabContent?.is_viewed_answer}
-                className={clsx(
-                  'rounded-lg border border-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14',
-                  {
-                    'cursor-not-allowed': currentTabContent?.is_viewed_answer,
-                  },
-                )}
+                className={clsx({
+                  'cursor-not-allowed': currentTabContent?.is_viewed_answer,
+                })}
+                color="outline"
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
                 }}
-              >
-                Clear Selection
-              </button>
+                title="Clear Selection"
+              />
             )}
-          <button
-            className={clsx(
-              'rounded-lg bg-sapp-black-1 text-sm font-semibold text-white hover:bg-black',
-              {
-                'bg-transparent !text-bw-13 underline hover:!bg-transparent':
-                  currentTabContent?.is_viewed_answer,
-              },
-            )}
+          <SappButton
             onClick={async () => {
               if (isGradingAfterEachQuestion) {
                 if (currentTabContent?.is_viewed_answer) {
@@ -2333,21 +2327,22 @@ const TestDetail = () => {
 
               trackGAEvent('Click Button Confirm Answer')
             }}
-          >
-            {isGradingAfterEachQuestion
-              ? currentTabContent?.is_viewed_answer
-                ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 && (
-                    <div className="flex items-center gap-2">
-                      Next Question <Icon type="arrow-right" />
-                    </div>
-                  )
-                : 'Confirm'
-              : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1
-                ? 'Confirm & Next'
-                : 'Confirm'}
-          </button>
+            title={
+              (isGradingAfterEachQuestion
+                ? currentTabContent?.is_viewed_answer
+                  ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                      filteredTabs.length - 1 && (
+                      <div className="flex items-center gap-2">
+                        Next Question <Icon type="arrow-right" />
+                      </div>
+                    )
+                  : 'Confirm'
+                : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1
+                  ? 'Confirm & Next'
+                  : 'Confirm') as string
+            }
+          />
         </div>
       </div>
     )

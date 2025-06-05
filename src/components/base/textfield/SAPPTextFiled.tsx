@@ -24,6 +24,8 @@ interface IProps {
   isError?: boolean
   onPaste?: (e: any) => void
   style?: React.CSSProperties
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const TEXT_SIZES = {
@@ -51,6 +53,8 @@ const SAPPTextFiled = ({
   isError,
   style,
   onPaste,
+  onFocus,
+  onBlur,
 }: IProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -90,6 +94,8 @@ const SAPPTextFiled = ({
           style={style}
           maxLength={maxLength}
           onPaste={onPaste}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
         {type == 'password' && (
           <div

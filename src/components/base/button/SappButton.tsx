@@ -2,7 +2,7 @@ import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
-  small: 'text-[0.875rem] leading-4',
+  small: 'text-sm leading-4.5',
   medium: 'text-base font-medium',
   lager: 'text-lg leading-6.5',
   extra: 'text-lg leading-6.5',
@@ -21,7 +21,7 @@ const COLORS = {
   white:
     'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
   outline:
-    'bg-white border-bw-1 hover:border-gray-1 hover:text-gray-1 text-bw-1',
+    'rounded-lg border border-gray-14 text-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14 hover:bg-gray-100',
   text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 font-medium',
   textUnderline:
     'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
@@ -31,7 +31,7 @@ const COLORS = {
 }
 
 const PADDINGS = {
-  small: 'px-7 h-8',
+  small: 'px-4 py-2',
   medium: 'px-6 py-3',
   lager: 'px-9 py-2.8',
   extra: 'px-17.5 py-2.8',
@@ -76,7 +76,7 @@ const SappButton = ({
 }: IButtonProps) => {
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium box-border ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
 
   isUnderLine = isUnderLine ?? color === 'text'
   componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
