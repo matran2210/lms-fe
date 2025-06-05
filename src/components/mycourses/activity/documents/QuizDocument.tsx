@@ -545,7 +545,7 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="text-green-800 rounded bg-[#3978391A] px-2 font-medium">
+          <div className="rounded bg-[#3978391A] px-2 font-medium text-[#166534]">
             Finished Grading
           </div>
         )
@@ -611,7 +611,7 @@ const QuizDocument = ({
       />
 
       <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-[#DCDDDD] p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`h-[500px] select-none overflow-auto border border-[#DCDDDD] p-6 text-black ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (

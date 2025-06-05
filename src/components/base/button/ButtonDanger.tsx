@@ -24,9 +24,9 @@ const ButtonDanger = ({
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass =
     disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-danger'
+      ? 'cursor-not-allowed opacity-60 bg-[#D35563]'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-danger hover:bg-[#dd4339]`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-[#D35563] hover:bg-[#dd4339]`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>

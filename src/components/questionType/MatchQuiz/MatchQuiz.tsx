@@ -450,8 +450,8 @@ const MatchQuiz = forwardRef(
                     {data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">Click to view</span>
+                    <span className="text-error">* </span>
+                    <span className="text-[#A1A1A1]">Click to view</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">

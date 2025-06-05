@@ -100,7 +100,7 @@ const AddWordPreview = forwardRef(
           inputClass =
             correctAnswer || isSelfReflection === true
               ? '!border-[#397839] text-success-600 text-center !font-normal'
-              : '!border-danger text-danger text center !font-normal'
+              : '!border-[#d35563] text-[#d35563] text center !font-normal'
         }
 
         element.outerHTML = `

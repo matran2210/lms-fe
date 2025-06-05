@@ -69,7 +69,7 @@ const getStandardSchedule = (data: IMyClass) => {
         {data?.class_standard_schedules?.map(
           (item: ClassStandardScheduleItem) => (
             <div
-              className="bg-gray-2 rounded-md px-2 py-1"
+              className="rounded-md bg-[#dcdddd] px-2 py-1"
               key={item.day_of_week}
             >
               {item.day_of_week !== null

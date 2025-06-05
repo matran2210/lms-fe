@@ -23,28 +23,28 @@ export const statusQuizMap = {
   },
   FINISHED: {
     label: 'Finished',
-    color: 'text-green-1',
-    bg: 'bg-green-2',
+    color: 'text-[#07af17]',
+    bg: 'bg-[#01711f0D]',
   },
   UN_FINISHED: {
     label: 'UnFinished',
-    color: 'text-danger-3',
-    bg: 'bg-danger-5',
+    color: 'text-[#d35563]-3',
+    bg: 'bg-[#D35563]-5',
   },
   AWAITING_GRADING: {
     label: 'Awaiting grading',
-    color: 'text-orange-4',
-    bg: 'bg-orange-1',
+    color: 'text-[#F89707]',
+    bg: 'bg-[#F897070D]',
   },
   FINISHED_GRADING: {
     label: 'Finished Grading',
-    color: 'text-blue-7',
-    bg: 'bg-blue-900',
+    color: 'text-[#176CDD]',
+    bg: 'bg-[#176CDD0D]',
   },
   DRAFT: {
     label: 'Draft',
-    color: 'text-gray-11',
-    bg: 'bg-gray-100',
+    color: 'text-[#99A1B7]',
+    bg: 'bg-[#f3f4f6]',
   },
 }
 

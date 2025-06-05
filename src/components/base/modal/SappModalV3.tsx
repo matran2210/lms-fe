@@ -83,7 +83,7 @@ const SappModalV3 = ({
         {header && (
           <div
             className={clsx(
-              `text-bw-1 flex justify-center text-3xl font-semibold ${clsx({ 'mb-4': !content && !children })}`,
+              `flex justify-center text-3xl font-semibold text-[#050505] ${clsx({ 'mb-4': !content && !children })}`,
               headerClassName,
             )}
           >

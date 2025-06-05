@@ -54,7 +54,7 @@ const EntrancePopupContent = ({
             <p>Status:</p>
             <div
               className={`${
-                status ? 'text-success-600' : 'text-danger'
+                status ? 'text-success-600' : 'text-[#d35563]'
               } font-medium`}
             >
               {status ? 'Finished' : 'Unfinished'}

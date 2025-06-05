@@ -82,7 +82,7 @@ const ProfileItem = ({
               }
             >
               {e?.is_default && (
-                <span className="text-gray-500 text-base font-bold transition-colors duration-300 group-hover:text-primary">
+                <span className="text-base font-bold text-[#6b7280] transition-colors duration-300 group-hover:text-primary">
                   Xem Thêm
                 </span>
               )}
@@ -94,7 +94,7 @@ const ProfileItem = ({
                 fill="none"
               >
                 <path
-                  className="text-gray-500 fill-current transition-colors duration-300 group-hover:text-primary"
+                  className="fill-current text-[#6b7280] transition-colors duration-300 group-hover:text-primary"
                   d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                 />
               </svg>

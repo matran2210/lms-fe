@@ -19,7 +19,7 @@ export const statusMap = {
     color: 'text-primary-4',
     bg: 'bg-primary-5',
   },
-  ended: { label: 'Ended', color: 'text-gray-600', bg: 'bg-ink-100' },
+  ended: { label: 'Ended', color: 'text-[#4b5563]', bg: 'bg-ink-100' },
 }
 
 export const StatusTag = ({ status }: { status: keyof typeof statusMap }) => {

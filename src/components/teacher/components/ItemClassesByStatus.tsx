@@ -206,7 +206,7 @@ const ItemClassesByStatus = ({
           </div>
         </div>
 
-        <div className={`text-gray-700 text-lg font-semibold xl:h-[47px]`}>
+        <div className={`text-lg font-semibold text-[#374151] xl:h-[47px]`}>
           <div className="line-clamp-2 cursor-pointer text-ellipsis">
             {truncateString(classes?.course?.name, 50)}
           </div>
@@ -264,7 +264,7 @@ const ItemClassesByStatus = ({
               className={
                 isProgress
                   ? 'text- border border-primary text-[#FFB800]'
-                  : 'border-gray-800 border'
+                  : 'border border-[#1f2937]'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />

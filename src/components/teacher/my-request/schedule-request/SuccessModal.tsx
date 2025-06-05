@@ -18,7 +18,7 @@ const SuccessModal = ({ open, setOpen }: IProps) => {
       okButtonCaption={'Submit'}
       footerButtonClassName="flex flex-row-reverse justify-center gap-4"
       okButtonClass="rounded-md"
-      cancelButtonClass="bg-[#F9F9F9] hover:bg-gay-6 text-[#9CA3AF] !no-underline rounded-md px-4 py-2"
+      cancelButtonClass="bg-[#F9F9F9] hover:bg-gay-6 text-ink-300 !no-underline rounded-md px-4 py-2"
       buttonSize="medium"
       handleCancel={() => {
         setOpen(false)

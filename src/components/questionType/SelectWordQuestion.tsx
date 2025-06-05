@@ -138,7 +138,7 @@ const SelectWord = forwardRef(
           optionClass =
             isCorrect || isSelfReflection === true
               ? '!border-[#397839]'
-              : '!border-danger'
+              : '!border-[#d35563]'
           const textClass = isCorrect ? 'text-success-600' : 'text-error'
           selectElement?.classList?.add(optionClass)
           selectElement?.classList?.add('sapp-select-confirmed')
