@@ -211,7 +211,9 @@ const PartFailed = ({
           )}
           <div className="time-allow flex justify-between border-b border-[#DCDDDD] pb-4">
             <p className="text-base text-[#A1A1A1]">Time Allowed:</p>
-            <p className="text-base font-medium text-[#050505]">{formattedTime}</p>
+            <p className="text-base font-medium text-[#050505]">
+              {formattedTime}
+            </p>
           </div>
           <div className="time-allow flex justify-between pt-4">
             <p className="text-base text-[#A1A1A1]">Attempt:</p>

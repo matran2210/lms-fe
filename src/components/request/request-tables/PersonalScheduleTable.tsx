@@ -122,10 +122,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
       teacher_weekly_norms?.length > 0 ? (
         <ul className="flex flex-col gap-1 text-center">
           {teacher_weekly_norms.map(({ max_shift }, index) => (
-            <li
-              key={index}
-              className={clsx({ 'text-[#99A1B7]': !max_shift })}
-            >
+            <li key={index} className={clsx({ 'text-[#99A1B7]': !max_shift })}>
               {max_shift || '_ _ _ _ _ _'}
             </li>
           ))}
@@ -152,9 +149,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-ink-400">
-        {formatDate(value, DATE_TIME_FORMAT)}
-      </div>
+      <div className="text-ink-400">{formatDate(value, DATE_TIME_FORMAT)}</div>
     ),
   },
   {

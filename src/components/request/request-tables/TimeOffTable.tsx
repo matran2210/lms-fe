@@ -91,9 +91,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Update date',
     dataIndex: 'updated_at',
     render: (value: string) => (
-      <div className="text-ink-400">
-        {formatDate(value, DATE_TIME_FORMAT)}
-      </div>
+      <div className="text-ink-400">{formatDate(value, DATE_TIME_FORMAT)}</div>
     ),
   },
   {
@@ -107,9 +105,7 @@ const columnsTitles: TableColumn<IRequest>[] = [
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-ink-400">
-        {formatDate(value, DATE_TIME_FORMAT)}
-      </div>
+      <div className="text-ink-400">{formatDate(value, DATE_TIME_FORMAT)}</div>
     ),
   },
   {

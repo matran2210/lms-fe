@@ -87,7 +87,7 @@ const MultipleQuestion = ({
       <div className="w-full">
         {data?.length > 0 && (
           <>
-            <div className="text-lg mb-4 font-semibold text-[#050505] xl:text-xl xl:font-medium">
+            <div className="mb-4 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
               {type}
             </div>
             <div

@@ -161,7 +161,7 @@ const ScoreDetail = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="text-lg mb-6 font-semibold text-[#050505] xl:text-xl xl:font-medium">
+        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
           Score Details
         </div>
         {router?.query?.attempt && (

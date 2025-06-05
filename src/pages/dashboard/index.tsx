@@ -45,7 +45,9 @@ const Dashboard = () => {
               <div className="ms-2 text-xl font-semibold text-[#050505]">
                 {user?.detail?.full_name}
               </div>
-              <div className="text-xl font-light text-[#A1A1A1]">. Welcome!</div>
+              <div className="text-xl font-light text-[#A1A1A1]">
+                . Welcome!
+              </div>
             </div>
             <div className="flex justify-center text-xl font-light text-[#A1A1A1]">
               We are launching this site very soon. Please come back later.

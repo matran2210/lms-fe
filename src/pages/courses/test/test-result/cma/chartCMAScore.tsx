@@ -37,7 +37,7 @@ const ChartCMAScore = ({
               %
             </div>
           </div>
-          <div className="text-black-1 text-lg mb-6 font-semibold xl:text-xl xl:font-medium">
+          <div className="text-black-1 mb-6 text-lg font-semibold xl:text-xl xl:font-medium">
             Multiple Choice Score by Part
           </div>
         </div>

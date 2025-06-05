@@ -158,10 +158,10 @@ const ExamEditDrawer = ({
               <div>
                 <label className="mb-2 block text-base font-medium">
                   <span>{'New Exam Date'}</span>
-                  <span className="ml-2 text-red-500">*</span>
+                  <span className="text-red-500 ml-2">*</span>
                 </label>
                 {errors.examination_subject_id && (
-                  <p className="mb-2 text-red-500">
+                  <p className="text-red-500 mb-2">
                     {errors.examination_subject_id?.message}
                   </p>
                 )}
@@ -193,10 +193,10 @@ const ExamEditDrawer = ({
         <div>
           <label className="mb-2 block text-base font-medium">
             <span>{'Note'}</span>
-            <span className="ml-2 text-red-500">*</span>
+            <span className="text-red-500 ml-2">*</span>
           </label>
           {errors.note && (
-            <p className="mb-2 text-red-500">{errors.note.message}</p>
+            <p className="text-red-500 mb-2">{errors.note.message}</p>
           )}
           <Controller
             control={control}

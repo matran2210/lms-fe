@@ -21,7 +21,7 @@ interface IProps {
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block overflow-x-auto">
-      <div className="text-lg mb-6 font-semibold text-[#050505] xl:text-xl xl:font-medium">
+      <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">

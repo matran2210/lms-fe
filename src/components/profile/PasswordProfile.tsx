@@ -186,9 +186,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               ))}
             </div>
             <div className="flex justify-between">
-              <span className="text-medium-sm text-error">
-                {errorMessage}
-              </span>
+              <span className="text-medium-sm text-error">{errorMessage}</span>
               <span
                 className={`text-medium-sm min-w-fit text-right ${
                   timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'

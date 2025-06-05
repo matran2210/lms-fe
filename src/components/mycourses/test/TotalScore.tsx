@@ -46,7 +46,9 @@ const TotalScore = ({
               height={16}
               alt="Globe"
             />
-            <div className={`text-sm leading-4.9 text-[#A1A1A1] ${classCountAll}`}>
+            <div
+              className={`text-sm leading-4.9 text-[#A1A1A1] ${classCountAll}`}
+            >
               Global Average {globalAverage}%
             </div>
           </div>

@@ -36,7 +36,8 @@ const headers = [
   },
   {
     label: 'Result',
-    className: 'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-132px',
+    className:
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-132px',
   },
   {
     label: 'Time Spent',
@@ -219,7 +220,9 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         showHeader={false}
         showFooter={false}
       >
-        <h2 className="py-6 text-xl font-bold text-[#050505]">Your Score Details</h2>
+        <h2 className="py-6 text-xl font-bold text-[#050505]">
+          Your Score Details
+        </h2>
         <div
           className="absolute right-4 top-2.5 cursor-pointer p-2"
           onClick={() => {

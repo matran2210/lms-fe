@@ -164,7 +164,7 @@ const TableQuestions = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="text-lg mb-6 font-semibold text-[#050505] xl:text-xl xl:font-medium">
+        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
           Your Answer Details{' '}
           <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-base text-[#FFB800]">
             Awaiting Grading

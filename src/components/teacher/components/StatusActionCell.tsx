@@ -26,7 +26,7 @@ const StatusQuizTag = ({ status }: { status: keyof typeof statusQuizMap }) => {
   const { label, color, bg } = statusQuizMap[status] || statusQuizMap.SUBMITTED
   return (
     <div
-      className={`text-xs rounded px-2 py-1 font-medium ${color} ${bg} w-fit`}
+      className={`rounded px-2 py-1 text-xs font-medium ${color} ${bg} w-fit`}
     >
       {label}
     </div>

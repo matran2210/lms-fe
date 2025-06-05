@@ -48,9 +48,7 @@ const Annotation = ({
           <div className="content-center">
             <div className="h-2 bg-error text-error"></div>
           </div>
-          <div className="content-center text-right text-error">
-            Incorrect
-          </div>
+          <div className="content-center text-right text-error">Incorrect</div>
         </div>
         {gradingStatus === GRADE_STATUS.FINISHED_GRADING ? (
           <div className="my-[18px] grid w-full grid-cols-[70%,30%]">

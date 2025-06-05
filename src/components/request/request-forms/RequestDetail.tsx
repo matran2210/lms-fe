@@ -243,7 +243,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               {requestDetail?.name}
             </div>
             <div className="mb-4 flex gap-x-3 text-sm">
-              <span className="font-medium text-bw-9 ">
+              <span className="text-bw-9 font-medium ">
                 Approval Deadline:{' '}
               </span>
               <span className="">
@@ -252,7 +252,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               </span>
             </div>
             <div className="mb-4 flex items-center gap-x-3 text-sm">
-              <span className="font-medium text-bw-9">Status:</span>
+              <span className="text-bw-9 font-medium">Status:</span>
 
               {displayStatus(
                 REQUEST_STATUS[`${requestDetail?.status as REQUEST_STATUS}`],

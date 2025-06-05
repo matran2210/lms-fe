@@ -108,7 +108,9 @@ const CoursesList: React.FC<CoursesProps> = ({
                   </div>
                 </div>
                 <div className="progressbar h-[6px] bg-[#F1F1F1]">
-                  <div className={`progress-percentage h-[6px] w-0 bg-primary`} />
+                  <div
+                    className={`progress-percentage h-[6px] w-0 bg-primary`}
+                  />
                 </div>
               </div>
               <ButtonSecondary

@@ -160,7 +160,9 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               </span>
             </div>
             <div className="number">
-              <p className="text-sm font-medium text-[#050505]">{progressPart}%</p>
+              <p className="text-sm font-medium text-[#050505]">
+                {progressPart}%
+              </p>
             </div>
           </div>
           <div className="progressbar h-[6px] bg-[#F1F1F1]">

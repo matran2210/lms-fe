@@ -295,13 +295,13 @@ const TestModal = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-yellow-400">
+          <div className="text-yellow-400 pr-0.5 font-medium">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+          <div className="text-gray-500 pr-0.5 font-medium">Unsubmitted</div>
         )
     }
   }
@@ -505,13 +505,13 @@ const TestModal = ({
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
             <>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-[#A1A1A1]">Name:</div>
                 <div className="line-clamp-2 pr-0.5 font-medium text-[#050505]">
                   {data?.name}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-[#A1A1A1]">Pass Point:</div>
                 <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.is_graded ? (
@@ -521,7 +521,7 @@ const TestModal = ({
                   )}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-[#A1A1A1]">Time Allowed:</div>
                 <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.quiz_timed
@@ -529,14 +529,14 @@ const TestModal = ({
                     : 'Unlimited'}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-[#A1A1A1]">Grading Method:</div>
                 <div className="pr-0.5 font-medium text-[#050505]">
                   {capitalizeFirstLetter(selectedResult?.grading_method) ??
                     capitalizeFirstLetter(data?.quiz?.grading_method)}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-[#A1A1A1]">No of Attempts:</div>
                 <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.attempt?.number_of_attempts || 0}/
@@ -546,7 +546,7 @@ const TestModal = ({
                 </div>
               </div>
               {data?.quiz && (
-                <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                   <div className="flex items-center gap-2 hover:text-primary">
                     <div
                       className={`forcus-group:text-primary text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}

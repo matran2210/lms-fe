@@ -27,11 +27,13 @@ const headers = [
   },
   {
     label: 'Result',
-    className: 'text-left pb-3 text-sm text-[#A1A1A1] font-semibold  min-w-[70px]',
+    className:
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold  min-w-[70px]',
   },
   {
     label: '',
-    className: 'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[20px]',
+    className:
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[20px]',
   },
 ]
 

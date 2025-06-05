@@ -176,23 +176,23 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
         <span className="text-sm font-medium text-[#050505]">50%</span> lớp học{' '}
-        <span className="text-sm font-medium text-[#050505]">{class_code}</span>. Tại
-        SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
-        nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
-        giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ học
-        tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-[#050505]">{class_code}</span>
+        . Tại SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập
+        tốt nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp
+        quý giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ
+        học tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     finalCourse: (
       <span>
         Bạn đã đi đến chặng đường cuối cùng của lớp học{' '}
-        <span className="text-sm font-medium text-[#050505]">{class_code}</span>!
-        Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
-        nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
-        hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
-        được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp chúng tôi
-        cải thiện chất lượng khóa học và mang đến trải nghiệm học tập tốt hơn
-        cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-[#050505]">{class_code}</span>
+        ! Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm
+        đáng nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy
+        thấu hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong
+        nhận được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp
+        chúng tôi cải thiện chất lượng khóa học và mang đến trải nghiệm học tập
+        tốt hơn cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     completeCourse: (

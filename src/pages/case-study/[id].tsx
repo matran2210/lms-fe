@@ -904,7 +904,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           {/* Header */}
           <div className="h-full" ref={containerRef}>
             <div className="flex items-center justify-between bg-[#F1F1F1] px-6 py-2">
-              <div className="text-lg w-1/3 truncate font-medium">
+              <div className="w-1/3 truncate text-lg font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton
