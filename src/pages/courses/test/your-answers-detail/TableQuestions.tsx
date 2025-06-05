@@ -45,19 +45,19 @@ const TableQuestions = ({
   const headers = [
     {
       label: '#',
-      className: clsx(commonHeaderClass, 'min-w-20px xl:min-w-50px'),
+      className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
     },
     {
       label: 'Question',
-      className: clsx(commonHeaderClass, 'min-w-45'),
+      className: clsx(commonHeaderClass, 'min-w-[180px]'),
     },
     {
       label: 'Section',
-      className: clsx(commonHeaderClass, 'min-w-45'),
+      className: clsx(commonHeaderClass, 'min-w-[180px]'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-150px'),
+      className: clsx(commonHeaderClass, 'min-w-[150px]'),
     },
     {
       label: 'Result',
@@ -159,7 +159,7 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-237px bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >

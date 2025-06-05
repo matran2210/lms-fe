@@ -513,7 +513,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -739,7 +739,7 @@ const QuizDocument = ({
         handleCancel={() => setModalResult(undefined)}
         handleSubmit={() => setModalResult(undefined)}
         setOpen={() => setModalResult(undefined)}
-        size="max-w-xxl"
+        size="max-w-[1144px]"
         position="center"
         showFooter={false}
         isFullScreen={true}

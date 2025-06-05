@@ -615,7 +615,7 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-xxl text-[#050505]`}>
+        <div className={`mx-auto my-0 max-w-[1144px] text-[#050505]`}>
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex overflow-x-auto py-6 text-sm font-medium">
             <BreadCrumbs />
@@ -1039,7 +1039,7 @@ const ActivityPage = () => {
                             activity?.previous_activity?.name?.length > 80
                           }
                         >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-[17px]">
                             {activity?.previous_activity
                               ? truncateString(
                                   activity?.previous_activity?.name,
@@ -1083,7 +1083,7 @@ const ActivityPage = () => {
                             activity?.next_activity?.name?.length > 80
                           }
                         >
-                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-[17px]">
                             {activity?.next_activity
                               ? truncateString(activity?.next_activity.name, 80)
                               : truncateString(

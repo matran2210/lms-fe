@@ -34,9 +34,9 @@ const ExamInformation = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Exam Information">
-        <div className="mx-auto my-0 max-w-xxl max-[1199px]:mx-6">
+        <div className="mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
           <>
-            <div className="main relative mx-auto my-0 max-w-xxl">
+            <div className="main relative mx-auto my-0 max-w-[1144px]">
               <div className="flex w-full items-center justify-between pb-4 pt-6">
                 <BreadcrumbFilter
                   name={data?.data?.course?.name ?? ''}
@@ -45,7 +45,7 @@ const ExamInformation = () => {
                 />
               </div>
             </div>
-            <div className="mx-auto my-0 max-w-xxl bg-white px-7.5 py-7.5">
+            <div className="mx-auto my-0 max-w-[1144px] bg-white px-7.5 py-7.5">
               <h1 className="line-clamp-1 flex items-center justify-between border-b border-[#F9F9F9] pb-7.5 text-2xl font-light text-[#050505]">
                 <span className="ml-1.5 font-medium">Exam Information</span>
               </h1>

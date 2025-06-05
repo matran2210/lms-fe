@@ -364,7 +364,7 @@ const MatchingQuestion = forwardRef(
                     {defaultValue?.[e?.id]?.id && (
                       <div
                         // className="w-fit"
-                        className="sapp-notched-container min-w-132px"
+                        className="sapp-notched-container min-w-[132px]"
                         id={defaultValue[e?.id]?.answer?.id}
                         draggable="true"
                         onDragStart={drag}
@@ -379,7 +379,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
+              className={`sapp-store dropable min-h-large flex flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"
@@ -423,7 +423,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects min-w-132px !border-[#D8D8E5] before:!border-[#D8D8E5]"
+                              className="sapp-notched-container-corrects min-w-[132px] !border-[#D8D8E5] before:!border-[#D8D8E5]"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -444,7 +444,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-incorrects min-w-132px text-error"
+                              className="sapp-notched-container-incorrects min-w-[132px] text-error"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -474,7 +474,7 @@ const MatchingQuestion = forwardRef(
                       {correctAnswer?.[e?.id]?.id && (
                         <div
                           // className="w-fit"
-                          className="sapp-notched-container-corrects min-w-132px text-success-600"
+                          className="sapp-notched-container-corrects min-w-[132px] text-success-600"
                         >
                           {correctAnswer?.[e?.id]?.answer}
                         </div>

@@ -9,7 +9,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-base font-medium leading-4.5;
+    @apply m-0 p-0 text-base font-medium leading-[17px];
   }
 
   .select__placeholder {
@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-4.5 text-[#050505];
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -79,7 +79,7 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-[15px] font-medium leading-4.5;
+    @apply m-0 p-0 text-[15px] font-medium leading-[17px];
   }
 
   .select__control {
@@ -95,7 +95,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-4.5 text-[#050505];
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;

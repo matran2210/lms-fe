@@ -144,7 +144,7 @@ const ModalExplanationPackage = ({
         handleCancel={() => setOpen(undefined)}
         handleSubmit={() => setOpen(undefined)}
         setOpen={() => setOpen(undefined)}
-        size="max-w-xxl"
+        size="max-w-[1144px]"
         position="center"
         showFooter={false}
         isFullScreen={true}

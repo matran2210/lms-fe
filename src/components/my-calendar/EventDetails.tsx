@@ -32,7 +32,7 @@ const ModalHeader = ({ date, handleClose }: IModalHeaderProps) => {
     <div className="flex flex-row justify-between border-b border-[#7E8299] pb-5">
       <div className="flex flex-row items-center">
         <SappIcon icon="calendar" />
-        <span className="ml-3 font-inter text-lg font-semibold leading-4.5 tracking-normal">
+        <span className="ml-3 font-inter text-lg font-semibold leading-[17px] tracking-normal">
           {formattedDate}
         </span>
       </div>

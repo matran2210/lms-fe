@@ -4,8 +4,8 @@ import { IButtonProps } from 'src/type'
 const SIZES = {
   small: 'text-[0.875rem] leading-4',
   medium: 'text-[1rem] leading-6',
-  lager: 'text-lg leading-6.5',
-  extra: 'text-lg leading-6.5',
+  lager: 'text-lg leading-[27px]',
+  extra: 'text-lg leading-[27px]',
 }
 
 const COLORS = {

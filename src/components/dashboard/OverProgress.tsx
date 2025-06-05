@@ -156,12 +156,12 @@ const OverProgress = () => {
             className={`flex flex-row justify-between gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
           >
             <div
-              className={`m-auto ${isNormal ? 'h-42.5 min-w-42.5 3xl:h-45 3xl:min-w-45' : 'mb-2 h-40 w-40'}`}
+              className={`m-auto ${isNormal ? 'h-42.5 min-w-[170px] 3xl:h-45 3xl:min-w-[180px]' : 'mb-2 h-40 w-40'}`}
             >
               <EChart option={option} />
             </div>
             {isNormal && (
-              <div className="flex min-w-45 flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
+              <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-1.5">
                   <span className="h-3 w-3 rounded-full bg-[#37C78C]"></span>
                   <span className="font-medium">Activities completed</span>

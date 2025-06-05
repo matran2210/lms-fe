@@ -2465,7 +2465,7 @@ const TestDetail = () => {
                       {activeShowAll && <OptionShowAll />}
                       <div
                         className={clsx(
-                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline`,
+                          `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-[17px] text-white underline`,
                         )}
                         onClick={() => {
                           // setPageNums(activeShowAll ? arrPage : getPagination)

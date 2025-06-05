@@ -30,7 +30,7 @@ const CourseSkeleton = forwardRef<
                 className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
                 key={index}
               >
-                <div className={`flex min-h-352 flex-col`}>
+                <div className={`flex min-h-[352px] flex-col`}>
                   <Skeleton />
                   <Skeleton.Button className="mt-auto self-end" />
                 </div>

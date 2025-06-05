@@ -47,7 +47,7 @@ const TotalScore = ({
               alt="Globe"
             />
             <div
-              className={`text-sm leading-4.9 text-[#A1A1A1] ${classCountAll}`}
+              className={`text-sm leading-[19px] text-[#A1A1A1] ${classCountAll}`}
             >
               Global Average {globalAverage}%
             </div>

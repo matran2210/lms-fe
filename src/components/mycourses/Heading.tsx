@@ -18,7 +18,7 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
       })}
     >
       <div className="font-medium">
-        <h1 className="text-[32px] leading-11 text-[#050505]">
+        <h1 className="text-[32px] leading-[45px] text-[#050505]">
           {greeting}
           <span className="ml-1.5 text-primary">
             <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>

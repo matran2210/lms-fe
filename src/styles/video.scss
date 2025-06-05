@@ -23,7 +23,7 @@
   }
 
   progress::-webkit-progress-bar {
-    @apply bg-overlay-white;
+    @apply bg-[#FFFFFF66];
   }
 
   progress::-webkit-progress-value {
@@ -31,7 +31,7 @@
   }
 
   progress::-moz-progress-bar {
-    @apply border border-[#F9F9F9] bg-overlay-white;
+    @apply border border-[#F9F9F9] bg-[#FFFFFF66];
   }
 
   .seek:hover + .seek-tooltip {
@@ -78,7 +78,7 @@
   }
 
   .btn-video::before {
-    @apply absolute right-0 top-[-50px] z-10 hidden bg-overlay-control px-1.5 py-1 font-semibold text-white;
+    @apply absolute right-0 top-[-50px] z-10 hidden bg-[#00000099] px-1.5 py-1 font-semibold text-white;
     content: attr(data-title);
     word-break: keep-all;
     white-space: pre;
@@ -93,7 +93,7 @@
   }
 
   .playback-animation {
-    @apply pointer-events-none absolute left-1/2 top-1/2 z-20 -ml-10 -mt-10 h-20 w-20 rounded-full bg-overlay-control opacity-0;
+    @apply pointer-events-none absolute left-1/2 top-1/2 z-20 -ml-10 -mt-10 h-20 w-20 rounded-full bg-[#00000099] opacity-0;
     border-radius: 80px;
   }
 
@@ -101,7 +101,7 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    @apply h-[6px] cursor-pointer bg-overlay-white;
+    @apply h-[6px] cursor-pointer bg-[#FFFFFF66];
   }
 
   input[type='range']:focus {
@@ -162,7 +162,7 @@
   }
 
   .volume-process {
-    @apply absolute bottom-[200%] right-[-150%] z-20 hidden w-[115px] rounded-sm bg-overlay-play px-2 pb-2 pt-1;
+    @apply absolute bottom-[200%] right-[-150%] z-20 hidden w-[115px] rounded-sm bg-[#BDBDBDB3] px-2 pb-2 pt-1;
     transform: rotate(270deg);
   }
 

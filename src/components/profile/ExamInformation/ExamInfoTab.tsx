@@ -64,7 +64,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
           />
         }
       >
-        <div className="relative mx-auto my-0 mb-6 max-w-xxl bg-white px-8 pb-3 pt-8">
+        <div className="relative mx-auto my-0 mb-6 max-w-[1144px] bg-white px-8 pb-3 pt-8">
           <SappTable
             headers={headers}
             hasCheck={false}

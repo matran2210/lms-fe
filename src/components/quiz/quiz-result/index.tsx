@@ -72,7 +72,7 @@ const QuizResults = () => {
 
   return (
     <FullScreenLayout title="Quiz result">
-      <div className="m-auto max-w-1570 overflow-x-auto overflow-y-hidden px-6">
+      <div className="m-auto max-w-[1570px] overflow-x-auto overflow-y-hidden px-6">
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
           onClick={() => {

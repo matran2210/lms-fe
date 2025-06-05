@@ -34,7 +34,7 @@ const PageLink = ({
         className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
             ? 'min-h-8 min-w-8 text-[#D8D8E5]'
-            : 'min-h-default text-[#A1A1A1]'
+            : 'min-h-9 text-[#A1A1A1]'
         }`}
       >
         {children}
@@ -44,7 +44,7 @@ const PageLink = ({
     return (
       <li
         className={`${
-          type === 'table' ? 'min-h-8 min-w-8 text-[#7E8299]' : 'min-h-default'
+          type === 'table' ? 'min-h-8 min-w-8 text-[#7E8299]' : 'min-h-10'
         } flex cursor-pointer items-center justify-center`}
         {...otherProps}
       >
@@ -59,7 +59,7 @@ const PageLink = ({
         className={`flex items-center justify-center ${
           type === 'table'
             ? 'min-h-8 min-w-8 text-[#7E8299]'
-            : 'min-h-default text-3xl font-thin leading-8.5 text-[#A1A1A1] '
+            : 'min-h-10 text-3xl font-thin leading-[33px] text-[#A1A1A1] '
         }`}
       >
         {children}
@@ -71,8 +71,8 @@ const PageLink = ({
     <li
       className={`${
         type === 'table'
-          ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-4.8'
-          : 'min-h-9.5 max-h-10 min-w-9.5 text-sm font-normal leading-5.5'
+          ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-[18px]'
+          : 'min-h-9.5 max-h-10 min-w-[38px] text-sm font-normal leading-[22px]'
       } relative flex cursor-pointer items-center justify-center rounded p-2
       ${isViewedProp && type !== 'row' ? '![#DCDDDD] bg-[#F1F1F1]' : ''} ${
         active

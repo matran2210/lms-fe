@@ -409,7 +409,7 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`flex min-h-352 flex-col`}>
+          <div className={`flex min-h-[352px] flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-[#DCDDDD]' : 'text-[#050505]'

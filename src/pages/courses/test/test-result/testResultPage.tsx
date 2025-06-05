@@ -125,7 +125,9 @@ const TestResultPage = ({
                           height={16}
                           alt="Globe"
                         />
-                        <div className={`text-sm leading-4.9 text-[#A1A1A1]`}>
+                        <div
+                          className={`text-sm leading-[19px] text-[#A1A1A1]`}
+                        >
                           Global Average {GlobalAverage}%
                         </div>
                       </div>
@@ -270,7 +272,7 @@ const TestResultPage = ({
                         height={16}
                         alt="Globe"
                       />
-                      <div className={`text-sm leading-4.9 text-[#A1A1A1]`}>
+                      <div className={`text-sm leading-[19px] text-[#A1A1A1]`}>
                         Global Average {GlobalAverage}%
                       </div>
                     </div>

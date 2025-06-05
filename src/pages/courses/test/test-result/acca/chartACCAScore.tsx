@@ -28,7 +28,7 @@ const ChartACCAScore = ({ data, recommendation }: IProps) => {
           return (
             <div
               key={item?.part_id}
-              className="flex w-11/12 max-w-78 shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
+              className="flex w-11/12 max-w-[304px] shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
             >
               <div className="line-clamp-2 font-normal text-[#050505]">
                 {item?.title}

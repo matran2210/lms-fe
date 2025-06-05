@@ -13,7 +13,8 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 const headers = [
   {
     label: '#',
-    className: 'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-62px',
+    className:
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[62px]',
   },
   {
     label: 'Question',
@@ -257,7 +258,7 @@ const TableCaseStudyResult = () => {
                         ></div>
                       </td>
                       <td className="m-6 pr-4 text-start text-[#050505]">
-                        <div className="mb-6 mr-6 mt-6 min-w-132px">
+                        <div className="mb-6 mr-6 mt-6 min-w-[132px]">
                           {getTypeName(e?.question?.qType ?? '--')}
                         </div>
                       </td>

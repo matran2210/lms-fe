@@ -727,7 +727,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
+        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -811,7 +811,7 @@ const SAPPVideo = ({
                 <div className="flex-center w-full">
                   <div className="left-controls flex items-center text-white">
                     <button
-                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-overlay-play before:-right-4"
+                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#BDBDBDB3] before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -851,7 +851,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip text-xsm absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 font-semibold text-white"
+                      className="seek-tooltip text-xsm absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -923,7 +923,7 @@ const SAPPVideo = ({
                         ></path>
                       </svg>
                       <>
-                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-overlay-control py-1 text-center text-white">
+                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-[#00000099] py-1 text-center text-white">
                           {!activeQuality && !activeSpeed && !activeCC && (
                             <div className="px-4 py-1">
                               <div

@@ -95,7 +95,7 @@ const TestWrapper = ({
             <Icon type="close" />
           </div>
 
-          <div className="max-w-md">
+          <div className="max-w-[448px]">
             <div className="truncate text-center text-base">
               {quizDetail?.name}
             </div>

@@ -446,7 +446,7 @@ const CoursePartDetail = () => {
 
   return (
     <Layout title="Course Part Detail">
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="main default-content-editor mx-auto my-0 max-w-[1144px]">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (

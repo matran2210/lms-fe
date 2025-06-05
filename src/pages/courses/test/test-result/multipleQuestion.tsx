@@ -74,7 +74,7 @@ const MultipleQuestion = ({
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
           }
-          className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 xl:h-auto xl:w-auto
+          className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-[33px] xl:h-auto xl:w-auto
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -123,7 +123,7 @@ const MultipleQuestion = ({
             }
           }}
           className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
-            leading-8.5 xl:h-12 xl:w-12
+            leading-[33px] xl:h-12 xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >

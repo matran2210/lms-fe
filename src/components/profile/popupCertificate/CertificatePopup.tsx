@@ -103,7 +103,7 @@ const SappModalCerti: React.FC<IProps> = ({
   customFooter,
 
   confirmOnclose,
-  size = 'max-w-lg',
+  size = 'max-w-[512px]',
   modelClassname = '',
   refClass = 'md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',

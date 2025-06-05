@@ -19,7 +19,7 @@ const Dashboard = () => {
   return (
     <Layout title="Dashboard">
       <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
+        <div className="mx-auto my-0 flex max-w-[1144px] py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
@@ -28,14 +28,14 @@ const Dashboard = () => {
       </div>
       <div className="lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main mx-auto my-0 max-w-xxl px-4 pt-6 lg:px-0"
+          className="main mx-auto my-0 max-w-[1144px] px-4 pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
           <h2 className="pb-4 text-sm font-medium text-[#050505]">Dashboard</h2>
         </div>
       </div>
       <div
-        className="mx-auto min-h-[calc(100vh-9rem)] max-w-xxl bg-white shadow-activity"
+        className="mx-auto min-h-[calc(100vh-9rem)] max-w-[1144px] bg-white shadow-activity"
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="boxShadow-activity relative flex min-h-[calc(100vh-9rem)] flex-col justify-center">

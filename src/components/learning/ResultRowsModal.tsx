@@ -17,27 +17,27 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-6-percent min-w-62px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-6-percent min-w-[62px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold pl-11 w-18 min-w-165px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold pl-11 w-18 min-w-[165px]',
   },
   {
     label: 'Part',
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-3.6 min-w-400px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-3.6 min-w-[400px]',
   },
   {
     label: 'Chapter',
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-17 min-w-190px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold w-17 min-w-[190px]',
   },
   {
     label: 'Result',
     className:
-      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-132px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[132px]',
   },
   {
     label: 'Time Spent',
@@ -214,7 +214,7 @@ const ResultRowsModal: FC<ResultRowsModalProps> = ({ open, setOpen }) => {
         size="max-w-full w-full"
         refClass="max-h-100vh animate-jump-in relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all"
         childClass=""
-        parentChildClass="max-w-xxl mx-auto px-6 2xl:px-0"
+        parentChildClass="max-w-[1144px] mx-auto px-6 2xl:px-0"
         footerButtonClassName="justify-center flex flex-row-reverse"
         color="danger"
         showHeader={false}

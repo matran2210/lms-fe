@@ -102,7 +102,7 @@ function SappModelSidebar({
             <div
               ref={confirmDialogOverLayRef}
               onClick={handleClose}
-              className={`sapp-overlay fixed inset-0 z-40 animate-fade-in-overlay-sidebar cursor-pointer bg-overlay-dark-sidebar ${overlayClass}`}
+              className={`sapp-overlay fixed inset-0 z-40 animate-fade-in-overlay-sidebar cursor-pointer bg-[#000000CC] ${overlayClass}`}
             ></div>
           </>
         )}
