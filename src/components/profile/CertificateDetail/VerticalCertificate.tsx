@@ -54,7 +54,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
             </div>
             <div className="flex items-center justify-center gap-4">
               <Button
-                className="!border-none bg-sapp-black-1 px-6 py-3 text-white hover:!border-none hover:!bg-black hover:!text-white"
+                className="!border-none bg-[#29353C] px-6 py-3 text-white hover:!border-none hover:!bg-black hover:!text-white"
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}

@@ -21,9 +21,11 @@ import {
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
+  LearningMode,
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { round } from 'lodash'
 
 export interface IProps {
   id: string | null
@@ -251,7 +253,7 @@ function FormViewProgress({
       closeIcon={false}
     >
       <div className="border-b-none flex h-full w-full flex-col">
-        <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+        <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
           <span className="font-sans text-lg font-semibold">
             {isView ? 'View Detail' : 'Edit Progress'}
           </span>
@@ -273,6 +275,7 @@ function FormViewProgress({
                     <CollapseItem
                       title="Time"
                       body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
                         detailProgress?.start_time &&
                         detailProgress?.end_time &&
                         `${detailProgress?.start_time?.replace(/:00$/, '')} - ${detailProgress?.end_time?.replace(/:00$/, '')}`
@@ -302,7 +305,7 @@ function FormViewProgress({
                                 : '#F01919',
                           }}
                         >
-                          {`${detailProgress?.progress ? detailProgress?.progress * 100 : 0} %`}
+                          {`${round((detailProgress?.progress ?? 0) * 100, 2) || 0} %`}
                         </span>
                       }
                     />
@@ -324,20 +327,25 @@ function FormViewProgress({
                           }
                         >
                           {item.class_teaching_progress_id &&
-                            `${item.compensated_progress * 100 + '%'}-${item.schedule_name}`}
+                            `${round((item.compensated_progress ?? 0) * 100, 2)}% - ${item.schedule_name}`}
                         </p>
                       ))}
                     />
 
                     <CollapseItem
                       title="Teacher"
-                      body={detailProgress?.teacher.full_name}
+                      body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.teacher?.full_name || '')
+                      }
                     />
                     <CollapseItem
                       title="Creator"
                       body={
-                        detailProgress?.staff_creator?.full_name ||
-                        detailProgress?.user_creator?.full_name
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.staff_creator?.full_name ||
+                          detailProgress?.user_creator?.full_name ||
+                          '')
                       }
                     />
                     <CollapseItem
@@ -387,19 +395,21 @@ function FormViewProgress({
                       placeholder="Please choose"
                       required
                       disabled
-                      className="h-11.25 text-base font-medium"
+                      className="h-[45px] text-base font-medium"
                       options={[]}
                     />
                   </div>
-                  <div>
-                    <HookformTimePicker
-                      control={control}
-                      name="time"
-                      label="Time"
-                      disabled={isView}
-                      required
-                    />
-                  </div>
+                  {detailProgress?.mode !== LearningMode.ONLINE && (
+                    <div>
+                      <HookformTimePicker
+                        control={control}
+                        name="time"
+                        label="Time"
+                        disabled={isView}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               {allowSection && (
@@ -411,7 +421,7 @@ function FormViewProgress({
                     placeholder="Please choose"
                     required
                     disabled
-                    className="h-11.25 text-base font-medium"
+                    className="h-[45px] text-base font-medium"
                     options={[]}
                   />
                 </div>
@@ -420,7 +430,7 @@ function FormViewProgress({
               <div className="mb-6">
                 <SAPPInput
                   label={'Note'}
-                  className="h-11.25"
+                  className="h-[45px]"
                   control={control}
                   name="note"
                   disabled={isView}
@@ -432,7 +442,7 @@ function FormViewProgress({
                 <span className="required">{'Content completed'}</span>
               </label>
               {errors.checkedNodes && (
-                <div className="text-state-error">
+                <div className="text-error">
                   {errors.checkedNodes.message as string}
                 </div>
               )}
@@ -444,7 +454,7 @@ function FormViewProgress({
           )}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-gray-5 bg-white px-8 py-5">
+        <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-[#7E8299] bg-white px-8 py-5">
           <SAPPButtonV2
             title={'Cancel'}
             onClick={handleCancel}

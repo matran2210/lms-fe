@@ -15,12 +15,12 @@ const HistoryItem = ({ data }: any) => {
   return (
     <div className=" sapp-hover-device-item mb-4 gap-4 hover:bg-secondary">
       <div className="flex items-center gap-2">
-        <div className="text-base font-medium text-bw-1">{data.ip}</div>
+        <div className="text-base font-medium text-[#050505]">{data.ip}</div>
       </div>
       <div className="flex items-center gap-2">
-        <div className="text-xsm text-gray-1">{formattedTime}</div>
+        <div className="text-xsm text-[#A1A1A1]">{formattedTime}</div>
         {data.location && (
-          <div className="h-[4px] w-[4px] rounded-full bg-gray-1"></div>
+          <div className="h-[4px] w-[4px] rounded-full bg-[#A1A1A1]"></div>
         )}
         <div>{data.location || ''}</div>
       </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import TeacherTextField from './TeacherTextField'
+import GuidelineFieldV2 from 'src/common/GuidelineFieldV2'
 
 interface IProps {
   name: string
@@ -41,6 +42,7 @@ const SappTeacherTextField = ({
   required,
   maxLength,
   style,
+  guideline,
 }: IProps) => {
   return (
     <Controller
@@ -62,8 +64,8 @@ const SappTeacherTextField = ({
                   }}
                   className={`${className} ${
                     error
-                      ? 'border-error focus:border-error'
-                      : 'border-default focus:border-focus '
+                      ? 'border-[#B90E0A] focus:border-[#B90E0A]'
+                      : 'border-[#DCDDDD] focus:border-[#141414] '
                   }`}
                   placeholder={placeholder}
                   disabled={disabled}
@@ -75,7 +77,7 @@ const SappTeacherTextField = ({
                   name={name}
                   control={control}
                 />
-
+                <GuidelineFieldV2 guideline={guideline} />
                 <>
                   {error?.message && (
                     <div>

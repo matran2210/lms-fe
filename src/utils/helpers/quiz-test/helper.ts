@@ -1,6 +1,8 @@
 import { TestAPI } from '@pages/api/test'
+import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
+import { Sheet } from 'src/type/test'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -245,4 +247,50 @@ export const isValuesEqual = async (
   }
 
   return false
+}
+
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
+}
+
+export const checkSheetAnswered = (data: string | Sheet[]): boolean => {
+  try {
+    // Parse the JSON string if it's a string
+    const parsedData: Sheet[] =
+      typeof data === 'string' ? JSON.parse(data) : data
+
+    // Check if data is an array and has at least one sheet
+    if (!Array.isArray(parsedData) || parsedData.length === 0) {
+      return false
+    }
+
+    // Get the first sheet's data
+    const sheetData = parsedData[0].data
+
+    // Check if sheetData exists and is an array
+    if (!Array.isArray(sheetData)) {
+      return false
+    }
+
+    // Check if any cell contains a non-null value
+    for (const row of sheetData) {
+      if (!Array.isArray(row)) continue
+
+      for (const cell of row) {
+        if (cell !== null) {
+          return true // Found a non-null value, meaning there's an answer
+        }
+      }
+    }
+
+    return false // No non-null values found
+  } catch (error) {
+    // console.error('Error checking answer:', error)
+    return false
+  }
 }

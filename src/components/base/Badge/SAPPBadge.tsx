@@ -8,18 +8,18 @@ interface SAPPBadgeProps {
 }
 
 const badgeTypeToClass = {
-  error: 'bg-accent-error/5 text-accent-error',
-  warning: 'bg-accent-warning/5 text-accent-warning',
-  info: 'bg-accent-info/5 text-accent-info',
-  success: 'bg-accent-success/5 text-accent-success',
-  default: 'bg-accent-default/5 text-accent-default',
+  error: 'bg-error/5 text-error',
+  warning: 'bg-warning/5 text-warning',
+  info: 'bg-info/5 text-info',
+  success: 'bg-success/5 text-success',
+  default: 'bg-[#99A1B7]/5 text-[#99A1B7]',
 } as const
 
 function SAPPBadge({ className, label, type = 'default' }: SAPPBadgeProps) {
   return (
     <div
       className={clsx(
-        'w-20 rounded px-2 py-1 text-center text-ssm',
+        'w-20 rounded px-2 py-1 text-center text-xs',
         badgeTypeToClass[type],
         className,
       )}

@@ -9,7 +9,7 @@ import { Button, Col, Row } from 'antd'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
@@ -166,9 +166,9 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="header mb-6 border-b border-default bg-white">
+        <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
           <div
-            className={`relative mx-auto my-4 flex max-w-xxl rounded-md py-3 xl-max:mx-6 
+            className={`relative mx-auto my-4 flex max-w-[1144px] rounded-md py-3 max-[1199px]:mx-6 
               ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
@@ -189,10 +189,10 @@ const MyCourse = () => {
           </div>
         </div>
 
-        <Row className="mx-auto my-0 flex max-w-xxl rounded-md bg-white shadow-sidebar">
+        <Row className="mx-auto my-0 flex max-w-[1144px] rounded-md bg-white shadow-sidebar">
           <Col
             span={16}
-            className={`heading relative rounded-md bg-white xl-max:mx-6
+            className={`heading relative rounded-md bg-white max-[1199px]:mx-6
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
@@ -228,7 +228,7 @@ const MyCourse = () => {
       `}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-gray-4 p-1">
+            <div className="flex gap-2 rounded-md bg-[#F9F9F9] p-1">
               <Button
                 type={courseType === MASTER ? 'primary' : 'text'}
                 block
@@ -261,7 +261,7 @@ const MyCourse = () => {
             )}
           </Col>
         </Row>
-        <div className="mx-auto mb-6 mt-8 flex max-w-xxl items-center justify-between">
+        <div className="mx-auto mb-6 mt-8 flex max-w-[1144px] items-center justify-between">
           <h1 className="text-2xl font-semibold">My Courses</h1>
           <div className={`relative`}>
             <Filter
@@ -283,7 +283,7 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 max-w-xxl ${
+          className={`relative mx-auto my-0 max-w-[1144px] ${
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
@@ -314,7 +314,7 @@ const MyCourse = () => {
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
+            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
       </Layout>

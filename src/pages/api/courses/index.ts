@@ -452,6 +452,10 @@ export class CoursesAPI {
     payload: {
       question_id: string
       flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
     },
   ) {
     return fetcher(`quiz/${quiz_attempt_id}/flag`, {
@@ -486,6 +490,7 @@ export const getQuestionsById = async (
   }
 }
 
+//Hiện đang dùng để submit cho bài test trong activity
 export const submitQuizTest = async (
   id: string,
   data: any,
@@ -498,7 +503,7 @@ export const submitQuizTest = async (
 
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
-    const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
+    const uri = '/quiz' + `/${quizAttemptId}` + '/submit-with-all-answer'
     const response = await fetcher(`${uri}`, {
       data: data,
       method: 'POST',

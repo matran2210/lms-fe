@@ -21,10 +21,10 @@ interface IProps {
 
 const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
   const [startTime, setStartTime] = useState<Date>(
-    dayjs().startOf('month').startOf('week').add(1, 'day').toDate(),
+    dayjs().startOf('month').startOf('week').toDate(),
   )
   const [endTime, setEndTime] = useState<Date>(
-    dayjs().endOf('month').endOf('week').add(1, 'day').toDate(),
+    dayjs().endOf('month').endOf('week').toDate(),
   )
   const [eventName, setEventName] = useState<string>('')
   const [eventType, setEventType] = useState<
@@ -77,6 +77,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
             meetingLink: item.meeting_link,
+            repeat: item.repeat,
           }) as IEvent,
       ) || []
     const norms =

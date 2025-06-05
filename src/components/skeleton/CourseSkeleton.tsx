@@ -15,8 +15,8 @@ const CourseSkeleton = forwardRef<
         </div>
       </div>
       <div className="heading flex bg-white">
-        <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl-min:flex 2xl-min:py-4.5">
-          <h1 className="line-clamp-1 w-1/2 text-2xl font-light text-bw-1">
+        <div className="w-full justify-between px-7.5 py-7.5 shadow-sidebar 2xl:flex 2xl:py-4.5">
+          <h1 className="line-clamp-1 w-1/2 text-2xl font-light text-[#050505]">
             <Skeleton.Button size={'large'} block={true} />
           </h1>
         </div>
@@ -30,7 +30,7 @@ const CourseSkeleton = forwardRef<
                 className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
                 key={index}
               >
-                <div className={`flex min-h-352 flex-col`}>
+                <div className={`flex min-h-[352px] flex-col`}>
                   <Skeleton />
                   <Skeleton.Button className="mt-auto self-end" />
                 </div>

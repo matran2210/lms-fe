@@ -167,7 +167,7 @@ const NewEventSidebar = ({
         closeIcon={false}
       >
         <div className="flex h-full w-full flex-col">
-          <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+          <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
             <span className="font-sans text-lg font-semibold">
               {CALENDAR_SIDEBAR_TITLE}
             </span>
@@ -231,7 +231,7 @@ const NewEventSidebar = ({
               </form>
             )}
           </div>
-          <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+          <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
             <SAPPButtonV2
               title={CALENDAR_SIDEBAR_CANCEL_BUTTON}
               onClick={handleCancel}

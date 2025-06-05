@@ -71,7 +71,7 @@ export default function DashboardLayout({
         openResource={openResource}
       />
       <div className="min-h-screen w-full">
-        <div className={`${paddingTop} h-full bg-gray-4`}>
+        <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
           <div className="sapp-loading h-full">{children}</div>
         </div>
       </div>

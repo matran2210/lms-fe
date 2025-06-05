@@ -25,16 +25,17 @@ import {
 import StatusItem from './StatusItem'
 import { ColumnsType } from 'antd/es/table'
 import Tooltip from 'src/common/Tooltip'
+import TooltipParagraph from 'src/common/TooltipParagraph'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
-      return 'bg-orange-1 text-accent-warning'
+      return 'bg-[#F897070D] text-warning'
     case StatusRequestSchedule.APPROVED:
-      return 'bg-green-5 text-green-1'
+      return 'bg-[#07AF170D] text-[#07af17]'
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
-      return 'bg-danger-5 text-danger-3'
+      return 'bg-[#F019190D] text-[#f01919]'
     default:
       return ''
   }
@@ -132,14 +133,14 @@ export default function TableContainer({ params }: IProps) {
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
               (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
     {
       title: 'Class code',
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell data={record?.class?.code} className="!text-gray-400" />
+        <TableCell data={record?.class?.code} className="!text-[#a1a1aa]" />
       ),
     },
     {
@@ -157,12 +158,10 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
-          // data={`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
           data={
-            <Tooltip
-              className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap"
-              title={`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
-            >{`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}</Tooltip>
+            <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+              {`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
+            </TooltipParagraph>
           }
         />
       ),
@@ -190,7 +189,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.created_at)}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
@@ -199,7 +198,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
@@ -208,7 +207,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.updated_at)}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },

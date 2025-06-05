@@ -10,7 +10,7 @@ interface ResultQuizModalProps {
 }
 
 const commonHeaderCellStyle =
-  'text-left text-medium-sm font-normal text-gray-1 pb-3 min-w-16 h-14'
+  'text-left text-sm font-normal text-[#A1A1A1] pb-3 min-w-16 h-14'
 export const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
 const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
@@ -62,43 +62,65 @@ const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {
         return (
           <tr
             className={clsx({
-              'row h-auto border-b border-dashed border-gray-2': true,
-              'text-gray-2': !row?.attempts || row?.attempts.length === 0,
+              'row h-auto border-b border-dashed border-[#DCDDDD]': true,
+              'text-[#DCDDDD]': !row?.attempts || row?.attempts.length === 0,
             })}
             key={row?.id}
           >
             {/* Index */}
-            <td className={clsx(commonDataCellStyle, 'text-gray-1')}>
+            <td className={clsx(commonDataCellStyle, 'text-[#A1A1A1]')}>
               {index + 1}
             </td>
 
             {/* Type */}
-            <td className={clsx(commonDataCellStyle, 'font-medium text-bw-1')}>
+            <td
+              className={clsx(
+                commonDataCellStyle,
+                'font-medium text-[#050505]',
+              )}
+            >
               {TEST_TYPE[row?.quiz_type]}
             </td>
 
             {/* Graded Activity */}
-            <td className={clsx(commonDataCellStyle, 'text-center  text-bw-1')}>
+            <td
+              className={clsx(
+                commonDataCellStyle,
+                'text-center  text-[#050505]',
+              )}
+            >
               {row?.is_graded ? 'Yes' : 'No'}
             </td>
 
             {/* Status */}
-            <td className={clsx(commonDataCellStyle, ' text-bw-1')}>
+            <td className={clsx(commonDataCellStyle, ' text-[#050505]')}>
               {row?.attempts.length > 0 ? row?.attempts?.[0]?.status : '-'}
             </td>
 
             {/* Score */}
-            <td className={clsx(commonDataCellStyle, 'text-center  text-bw-1')}>
+            <td
+              className={clsx(
+                commonDataCellStyle,
+                'text-center  text-[#050505]',
+              )}
+            >
               {row?.attempts[0]?.score ?? '-'}
             </td>
 
             {/* Time Spent */}
-            <td className={clsx(commonDataCellStyle, 'text-center text-bw-1')}>
+            <td
+              className={clsx(
+                commonDataCellStyle,
+                'text-center text-[#050505]',
+              )}
+            >
               {getTimeFromInput(row?.attempts[0]?.total_attempt_time)}
             </td>
 
             {/* Last Submission */}
-            <td className={clsx('!pr-0', commonDataCellStyle, ' text-bw-1')}>
+            <td
+              className={clsx('!pr-0', commonDataCellStyle, ' text-[#050505]')}
+            >
               {row?.attempts.length > 0
                 ? dayjs(row?.attempts[0]?.finished_at).format(
                     'DD/MM/YYYY hh:mm',

@@ -21,6 +21,7 @@ import {
 import { CollapseArrowIcon } from '@assets/icons'
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
+import TooltipParagraph from 'src/common/TooltipParagraph'
 
 interface IProps {
   dataDetail: ScheduleRequestDetail | undefined
@@ -80,7 +81,7 @@ const PrimaryInformation = ({
       },
       children: (
         <div className="">
-          <div className="flex flex-col gap-5 border-t border-gray-5  py-4">
+          <div className="flex flex-col gap-5 border-t border-[#7E8299]  py-4">
             {/* Class Code */}
             <PrimaryInfoItem
               title="Class Code"
@@ -95,13 +96,16 @@ const PrimaryInformation = ({
             <PrimaryInfoItem
               title="Subject"
               value={
-                <span className="flex w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap">
-                  <Tooltip
-                    placement="topLeft"
-                    className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap"
-                    title={`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
-                  >{`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}</Tooltip>
-                </span>
+                <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                  {`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                </TooltipParagraph>
+                // <span className="flex w-full cursor-pointer overflow-hidden whitespace-nowrap">
+                //   <Tooltip
+                //     placement="topLeft"
+                //     className="inline-block w-full overflow-hidden whitespace-nowrap"
+                //     title={`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}
+                //   >{`${convertSlugToTitle(selectedRequest?.subject?.code)}_${selectedRequest?.course_section?.name}`}</Tooltip>
+                // </span>
               }
             />
             {/* Construction Mode */}
@@ -114,7 +118,7 @@ const PrimaryInformation = ({
             {selectedRequest.type === TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <span className="text-sm text-gray-12">Schedule</span>
+                  <span className="text-sm text-[#99A1B7]">Schedule</span>
                 </div>
                 <div className="col-span-2">
                   {isLoading ? (

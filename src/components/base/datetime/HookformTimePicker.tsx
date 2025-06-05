@@ -25,7 +25,7 @@ const HookformTimePicker = ({
   control,
   format = EDateTime.timepicker,
   placeholder = ['Start Time', 'End Time'],
-  className = 'h-11.25',
+  className = 'h-[45px]',
   label,
   required,
   needConfirm = false,

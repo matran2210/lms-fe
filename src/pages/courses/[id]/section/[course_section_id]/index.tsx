@@ -446,7 +446,7 @@ const CoursePartDetail = () => {
 
   return (
     <Layout title="Course Part Detail">
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="main default-content-editor mx-auto my-0 max-w-[1144px]">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -455,7 +455,6 @@ const CoursePartDetail = () => {
             partDetail={partDetail}
           />
         )}
-
         <PreviewPartDetail
           chapterMenu={partDetail}
           fetchChapterDetail={fetchChapterDetail}
@@ -477,7 +476,6 @@ const CoursePartDetail = () => {
           handleGetItem={handleActive}
           // handleShowToast={handleShowToast}
         />
-
         <SappDrawer
           isOpen={openLearningOutcome}
           onClose={handleCancel}
@@ -497,14 +495,14 @@ const CoursePartDetail = () => {
           >
             <div
               style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-6 text-bw-1"
+              className="learningOutcome-description pb-6 text-[#050505]"
               dangerouslySetInnerHTML={{
                 __html: learningOutcome?.description ?? '',
               }}
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            <div className="mb-2 mt-4 h-px w-full bg-[#DCDDDD]"></div>
           )}
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -514,25 +512,27 @@ const CoursePartDetail = () => {
           >
             {learningOutcome?.course_outcomes?.map((outcome, index) => (
               <div className="mr-3 mt-6 flex" key={outcome.id}>
-                <div className="me-1 text-base font-medium leading-5 text-bw-1">
+                <div className="me-1 text-base font-medium leading-5 text-[#050505]">
                   LO{index + 1}:
                 </div>
                 <div
-                  className="learningOutcome-description text-bw-1"
+                  className="learningOutcome-description text-[#050505]"
                   dangerouslySetInnerHTML={{ __html: outcome?.description }}
                 />
               </div>
             ))}
           </TextSkeleton>
         </SappDrawer>
-        <TestModal
-          open={open}
-          setOpen={setOpen}
-          data={chapterData}
-          class_user_id={previewPart?.class_user_id}
-          activeCourse={() => {}}
-          is_passed_course={isPassedCourse}
-        />
+        {open && (
+          <TestModal
+            open={open}
+            setOpen={setOpen}
+            data={chapterData}
+            class_user_id={previewPart?.class_user_id}
+            activeCourse={() => {}}
+            is_passed_course={isPassedCourse}
+          />
+        )}
       </div>
     </Layout>
   )
@@ -551,10 +551,10 @@ const BreadCrumbPartDetail = ({
     <div className="w-full">
       <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
         <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
+          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-sm font-medium text-[#A1A1A1] hover:text-primary"
           onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
         >
-          <div className=" mx-0.5 inline-block w-full">
+          <div className="mx-0.5 inline-block w-full">
             <Tooltip
               title={previewPart?.name}
               showTooltip={previewPart?.name?.length > 4}
@@ -564,7 +564,7 @@ const BreadCrumbPartDetail = ({
             </Tooltip>
           </div>
         </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
+        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-sm font-medium text-[#050505]">
           <ResponsiveTextTruncate
             placementTooltip="bottomLeft"
             textTooltip={partDetail?.name}

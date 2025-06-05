@@ -23,8 +23,8 @@ const Page = () => {
     startDate: Date
     endDate: Date
   }>({
-    startDate: dayjs().startOf('month').startOf('week').add(1, 'day').toDate(),
-    endDate: dayjs().endOf('month').endOf('week').add(1, 'day').toDate(),
+    startDate: dayjs().startOf('month').startOf('week').toDate(),
+    endDate: dayjs().endOf('month').endOf('week').toDate(),
   })
 
   const fetchCalendar = async (params: {
@@ -104,7 +104,7 @@ const Page = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-[1570px] pt-6 xl-max:mx-6">
+      <div className="mx-auto my-0 max-w-[1570px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="font-normal text-[#050505]">Calendar</div>

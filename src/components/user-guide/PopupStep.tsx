@@ -55,7 +55,7 @@ const PopupStep = ({
     <>
       <div
         ref={confirmDialogRef}
-        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-bw-13`}
+        className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-ink-800`}
       >
         <div>
           <div className="mb-4">
@@ -87,7 +87,7 @@ const PopupStep = ({
                 className="px-5 py-2"
                 size="small"
                 isPadding={false}
-                childClass="text-medium-sm"
+                childClass="text-sm"
                 onClick={handleClose}
               />
             ) : (
@@ -104,7 +104,7 @@ const PopupStep = ({
                 )}
                 <SappButton
                   title={titleButtonNext || 'Next'}
-                  className="ml-3 bg-primary-3 px-5 py-2"
+                  className="bg-primary-3 ml-3 px-5 py-2"
                   size="small"
                   isPadding={false}
                   childClass="text-medium-sm"
@@ -118,7 +118,7 @@ const PopupStep = ({
               <div
                 key={i}
                 className={`aspect-square h-[6px] w-[6px] rounded-full ${
-                  i + 1 === index ? 'bg-primary' : 'bg-gray-15'
+                  i + 1 === index ? 'bg-primary' : 'bg-ink-300'
                 }`}
               />
             ))}

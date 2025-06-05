@@ -33,20 +33,25 @@ const tabs = [
   {
     id: 1,
     title: 'Overview',
+    urlTitle: 'overview',
   },
   {
     id: 2,
     title: 'Students',
+    urlTitle: 'students',
   },
   {
     id: 3,
     title: 'Teaching Progress',
+    urlTitle: 'progress',
   },
   {
     id: 4,
     title: 'Students Test Result',
+    urlTitle: 'students-test-result',
   },
 ]
+
 const getCertificateData = (data: any): ICertificateData[] => [
   { label: 'Name', value: data?.name },
   { label: 'Code', value: data?.code },
@@ -108,7 +113,7 @@ const ClassDetail = () => {
     <LayoutTeacher
       title="Class Detail"
       breadcrumbs={breadcrumbs}
-      className="bg-gray-10 p-0"
+      className="bg-[#F2F4F7] p-0"
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard

@@ -38,7 +38,7 @@ const Recommendation = ({ data, key }: IProps) => {
 
   return (
     <React.Fragment>
-      <div key={key} className="text-bw-1">
+      <div key={key} className="text-[#050505]">
         {data?.comment && (
           <CommentModal
             title="Examiner’s Comment:"
@@ -72,11 +72,11 @@ const CommentModal = ({
   onSeeMore,
 }: ICommentModal) => {
   return (
-    <div className={`mb-6 bg-gray-4 p-4 ${className ?? ''}`}>
+    <div className={`mb-6 bg-[#F9F9F9] p-4 ${className ?? ''}`}>
       <div className="mb-1.5 flex items-center justify-between">
         <div className="text-base font-medium">{title}</div>
         <div
-          className="cursor-pointer text-sm text-state-info"
+          className="cursor-pointer text-sm text-[#3964EA]"
           onClick={onSeeMore}
         >
           <div className="group flex items-center group-hover:cursor-pointer group-hover:fill-primary">

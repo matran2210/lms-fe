@@ -37,7 +37,7 @@ const LoginHistoryList = () => {
       title={
         <div>
           Login History{' '}
-          <span className="text-base font-normal text-gray-16">
+          <span className="text-base font-normal text-secondary-300">
             ({loginHistory?.meta?.total_records || 0})
           </span>
         </div>

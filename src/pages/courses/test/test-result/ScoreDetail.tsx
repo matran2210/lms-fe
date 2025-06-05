@@ -21,8 +21,7 @@ import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderClass =
-  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
+const commonHeaderClass = 'text-left p-0 text-sm text-[#A1A1A1] font-semibold'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -133,15 +132,15 @@ const ScoreDetail = ({
   const renderBoxesAndLineClass = (type: string, data: IAnswer | undefined) => {
     if (type === 'Constructed') {
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
-        ? ' text-[#4077E0] border-pinned-1'
+        ? ' text-[#4077E0] border-[#18355D]'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
             data?.active === COMMON_TEXT_ENUM.SUBMITED
-          ? ' text-pinned-1 border-pinned-1'
-          : ' text-gray-1 border-gray-1'
+          ? ' text-[#18355D] border-[#18355D]'
+          : ' text-[#A1A1A1] border-[#A1A1A1]'
     }
     return data?.is_correct
-      ? ' text-state-success border-success'
-      : ' text-state-error border-error'
+      ? ' text-success-600 border-[#397839]'
+      : ' text-error border-[#B90E0A]'
   }
 
   React.useEffect(() => {
@@ -162,11 +161,11 @@ const ScoreDetail = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
           Score Details
         </div>
         {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-1">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="mb-6 text-base text-[#A1A1A1]">{`attempt: ${router?.query?.attempt}`}</div>
         )}
       </div>
       <div className="block pl-4">
@@ -182,7 +181,7 @@ const ScoreDetail = ({
             <React.Fragment key={program}>
               <tr>
                 <td
-                  className="sapp-border w-full pt-6 text-base font-medium text-bw-1"
+                  className="sapp-border w-full pt-6 text-base font-medium text-[#050505]"
                   colSpan={6}
                 >
                   {rows[0]?.belong_to?.name}
@@ -192,7 +191,7 @@ const ScoreDetail = ({
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
+                      <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
                         {answer?.index}
                       </td>
 
@@ -210,7 +209,7 @@ const ScoreDetail = ({
                           }
                         >
                           <div
-                            className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                            className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
                             dangerouslySetInnerHTML={{
                               __html: DOMPurify.sanitize(
                                 removeHtmlTags(
@@ -231,7 +230,7 @@ const ScoreDetail = ({
 
                       {/* Chapter/Module */}
                       <td
-                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
+                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-[#050505]"
                         title={
                           answer?.question?.question_filter?.chapter?.name ??
                           '--'
@@ -251,7 +250,7 @@ const ScoreDetail = ({
                       </td>
 
                       {/* Type */}
-                      <td className="sapp-border p-0 pr-4 text-bw-1">
+                      <td className="sapp-border p-0 pr-4 text-[#050505]">
                         <div className="min-w-[111px]">
                           {getTypeName(answer?.question?.qType)}
                         </div>
@@ -277,11 +276,11 @@ const ScoreDetail = ({
                           )}
                         </div>
                         {answer?.question?.qType !== 'ESSAY' && (
-                          <div className="ml-1 flex items-center justify-start gap-2 text-gray-1">
+                          <div className="ml-1 flex items-center justify-start gap-2 text-[#A1A1A1]">
                             <Image
                               src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                               alt="Correct"
-                              className="mr-1 text-state-success"
+                              className="mr-1 text-success-600"
                               width={16}
                               height={16}
                               layout="fixed"

@@ -307,6 +307,7 @@ export const POPUP_EVENT_DETAILS = {
   TITLE: 'Event name',
   TIME: 'Time',
   TYPE: 'Event type',
+  REPEAT: 'Repeat',
   CLASSROOM_NAME: 'Classroom name',
   CLASSROOM_ADDRESS: 'Classroom address',
   MEETING_LINK: 'Meeting link',

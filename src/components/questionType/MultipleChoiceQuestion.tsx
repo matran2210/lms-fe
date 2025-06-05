@@ -103,15 +103,15 @@ const MultiChoiceQuestion = ({
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   {exhibitText ? exhibitText + 's' : 'Exhibits'} (
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -141,7 +141,7 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             </>
           )}
       </div>

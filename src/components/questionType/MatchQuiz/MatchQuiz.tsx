@@ -430,8 +430,8 @@ const MatchQuiz = forwardRef(
           </div>
           {!!corrects && !!correctNodes?.length && (
             <>
-              <Divider className="bg-gray-15" />
-              <div className="mb-4 text-base font-bold text-bw-16">
+              <Divider className="bg-ink-300" />
+              <div className="mb-4 text-base font-bold text-[#3F3F3F]">
                 Correct Answer:
               </div>
               <div
@@ -457,7 +457,7 @@ const MatchQuiz = forwardRef(
         </div>
 
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
+          <div className="mt-6 bg-[#F9F9F9] p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>

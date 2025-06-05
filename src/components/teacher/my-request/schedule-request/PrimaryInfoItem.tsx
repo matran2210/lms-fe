@@ -10,7 +10,7 @@ const PrimaryInfoItem = ({ title, value, isLoading = false }: IProps) => {
   return (
     <div className="grid grid-cols-3 gap-4">
       <div>
-        <span className="text-sm text-gray-12">{title}</span>
+        <span className="text-sm text-[#99A1B7]">{title}</span>
       </div>
       <div className="col-span-2">
         {isLoading ? <ScheduleSkeleton className="w-1/2" /> : <>{value}</>}

@@ -26,26 +26,42 @@ const SappActionCell = ({
   labelButtonDelete = 'Delete',
   handleClickDelete = () => {},
 }: IProps) => {
+  const handleDelayAction = (actionFunc: () => void) => {
+    setTimeout(() => {
+      actionFunc()
+    }, 300)
+  }
   return (
     <TableActionCell>
-      <div className="flex flex-col">
-        <ActionItem
-          title={labelButtonView}
-          onClick={handleClickView}
-          isShow={isShowViewButton}
-          className="hover:bg-orange-2 hover:text-orange-3"
-        />
-        <ActionItem
-          title={labelButtonEdit}
-          onClick={handleClickEdit}
-          isShow={isShowEditButton}
-        />
-        <ActionItem
-          title={labelButtonDelete}
-          onClick={handleClickDelete}
-          isShow={isShowDeleteButton}
-        />
-      </div>
+      {(closeDropdown) => (
+        <div className="flex flex-col">
+          <ActionItem
+            title={labelButtonView}
+            onClick={() => {
+              closeDropdown()
+              handleDelayAction(handleClickView)
+            }}
+            isShow={isShowViewButton}
+            className="hover:bg-[#FFFDF6] hover:text-[#FFB800]"
+          />
+          <ActionItem
+            title={labelButtonEdit}
+            onClick={() => {
+              closeDropdown()
+              handleDelayAction(handleClickEdit)
+            }}
+            isShow={isShowEditButton}
+          />
+          <ActionItem
+            title={labelButtonDelete}
+            onClick={() => {
+              closeDropdown()
+              handleDelayAction(handleClickDelete)
+            }}
+            isShow={isShowDeleteButton}
+          />
+        </div>
+      )}
     </TableActionCell>
   )
 }

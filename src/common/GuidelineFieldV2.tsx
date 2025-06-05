@@ -2,19 +2,16 @@ import clsx from 'clsx'
 import React from 'react'
 
 interface Props {
-  guideline: Array<string> | undefined
+  guideline?: Array<string>
   classString?: string
 }
 
-const GuidelineField = ({ guideline, classString = 'mt-1' }: Props) => {
+const GuidelineFieldV2 = ({ guideline, classString = '' }: Props) => {
   return (
     guideline?.length && (
       <div
         className={clsx(
-          'sapp-guideline',
-          guideline.length < 2
-            ? 'text-xsm font-semibold text-[#DCDDDD]'
-            : 'font-semibold',
+          'ms-3 mt-1 justify-start text-xs font-normal leading-[18px] text-[#99A1B7]',
           classString,
         )}
       >
@@ -29,4 +26,4 @@ const GuidelineField = ({ guideline, classString = 'mt-1' }: Props) => {
   )
 }
 
-export default GuidelineField
+export default GuidelineFieldV2

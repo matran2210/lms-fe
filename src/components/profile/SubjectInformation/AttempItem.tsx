@@ -12,7 +12,7 @@ const AttempItem = ({ index, courseTabData, control }: IProps) => {
   return (
     <div>
       <div className="mb-2 text-base font-semibold">Attemp {index + 1}:</div>
-      <div className="mb-5 grid grid-cols-2 rounded-lg bg-gray-4 p-3">
+      <div className="mb-5 grid grid-cols-2 rounded-lg bg-[#F9F9F9] p-3">
         <div className="flex flex-col gap-4">
           <ItemCard
             title="Exam ID:"
@@ -34,8 +34,8 @@ const ItemCard = ({
   value: React.ReactNode
 }) => (
   <div className="flex items-center justify-between">
-    <div className="text-gray-14">{title}</div>
-    <div className="font-bold text-gray-14">{value}</div>
+    <div className="text-secondary">{title}</div>
+    <div className="font-bold text-secondary">{value}</div>
   </div>
 )
 export default AttempItem

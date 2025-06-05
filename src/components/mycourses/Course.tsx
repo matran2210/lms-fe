@@ -27,6 +27,7 @@ import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
+import dayjs from 'dayjs'
 
 const Course = ({
   course,
@@ -181,15 +182,19 @@ const Course = ({
   }
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
-  async function activeCourse() {
+  async function activeCourse(foundation_class_id?: string) {
     try {
       const params = {
-        classId: `${classInstance?.id}`,
+        classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       }
-      await CoursesAPI.activeCourse(params)
-      // await fetchCourseList()
-      refetch()
-      toast.success('Active thành công!')
+      const res = await CoursesAPI.activeCourse(params)
+      if (res?.success) {
+        router.push(`/courses/my-course/${foundation_class_id}`)
+        refetch()
+        if (course?.course_categories?.[0]?.name !== 'ACCA') {
+          toast.success('Active thành công!')
+        }
+      }
     } catch (error) {}
   }
   async function extendCourse() {
@@ -268,19 +273,38 @@ const Course = ({
    */
   const [openContinue, setOpenContinue] = useState(false)
 
-  const courseAction = () => {
-    const isPendingLesson =
-      classInstance?.type === 'LESSON' && !student?.is_passed
+  const utcNow = dayjs().utc()
+  const isPendingLesson =
+    classInstance?.type === 'LESSON' && !student?.is_passed
+  const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+  const isFixedDuration =
+    classInstance?.duration_type === 'FIXED' ||
+    classInstance?.duration_type === 'FLEXIBLE'
+  const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
+  const hasNotStarted = dayjs(utcNow).isBefore(
+    classInstance?.class_user_instances?.[0]?.started_at,
+  )
+  const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
+  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
 
-    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
+  const courseAction = () => {
+    // Handle pending lesson cases
+    if (isPendingLesson) {
+      if (isAccaCourse) {
+        if (hasNotStarted) {
+          setOpenClass(true)
+          return
+        }
+        setOpenContinue(true)
+        return
+      }
       setOpenLesson(true)
-    } else if (
-      isPendingLesson &&
-      course?.course_categories?.[0]?.name === 'ACCA'
-    ) {
-      setOpenContinue(true)
-    } else if (determineButtonToShow === 'Active') {
-      if (classInstance?.duration_type === 'FLEXIBLE') {
+      return
+    }
+
+    // Handle active course case
+    if (determineButtonToShow === 'Active') {
+      if (isFlexibleDuration) {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
         const classFinishedAt = parseISO(
@@ -293,12 +317,24 @@ const Course = ({
         setTimeActive(Number(getDateActive + 1))
       }
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Extend') {
+      return
+    }
+
+    // Handle extend case
+    if (determineButtonToShow === 'Extend') {
       setOpenExtend(true)
-    } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
+      return
+    }
+
+    // Handle not opened case
+    if (isNotOpened) {
       setOpenClass(true)
-    } else {
-      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
+      return
+    }
+
+    // Handle default case
+    if (!isCanceled) {
+      handleCourseDetail()
     }
   }
 
@@ -360,7 +396,7 @@ const Course = ({
       await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
     } finally {
       setOpenContinue(false)
-      refetch()
+      handleCourseDetail()
     }
   }
 
@@ -373,10 +409,10 @@ const Course = ({
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`flex min-h-352 flex-col`}>
+          <div className={`flex min-h-[352px] flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
-                !enableCourse ? 'text-gray-2' : 'text-bw-1'
+                !enableCourse ? 'text-[#DCDDDD]' : 'text-[#050505]'
               }`}
             >
               <div
@@ -398,9 +434,9 @@ const Course = ({
             </div>
             <div className="flex items-center justify-between">
               {enableCourse ? (
-                <div className="name-class text-medium-sm text-gray-1">
+                <div className="name-class text-sm text-[#A1A1A1]">
                   Class:
-                  <span className="ml-1 font-medium text-bw-1">
+                  <span className="ml-1 font-medium text-[#050505]">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
                       showTooltip={course?.classes?.[0]?.code?.length > 20}
@@ -410,16 +446,16 @@ const Course = ({
                   </span>
                 </div>
               ) : (
-                <div className="name-class text-medium-sm text-gray-1">
-                  <span className="ml-1 font-medium text-bw-1" />
+                <div className="name-class text-sm text-[#A1A1A1]">
+                  <span className="ml-1 font-medium text-[#050505]" />
                 </div>
               )}
-              <div className="time-class text-medium-sm text-gray-2">
+              <div className="time-class text-sm text-[#DCDDDD]">
                 {determineButtonToShow !== 'Active' && (
                   <span>
                     <span
                       className={`font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-1'
+                        enableCourse ? 'text-[#050505]' : 'text-[#A1A1A1]'
                       }`}
                     >
                       {daysDifference > 0
@@ -450,7 +486,7 @@ const Course = ({
                       __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                     }`}
                   />
                 </Tooltip>
@@ -460,7 +496,7 @@ const Course = ({
                     __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2'
+                    enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                   }`}
                 />
               )}
@@ -472,12 +508,12 @@ const Course = ({
                     <Icon
                       type={enableCourse ? iconType : 'expired'}
                       className={`relative ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       }`}
                     />
                     <p
-                      className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      className={`text-sm font-medium ${
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -485,19 +521,19 @@ const Course = ({
                   </div>
                   <div className="number">
                     <p
-                      className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2'
+                      className={`text-sm font-medium ${
+                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                       }`}
                     >
                       {progressPart}%
                     </p>
                   </div>
                 </div>
-                <div className="progressbar h-1.5 bg-gray-3">
+                <div className="progressbar h-[6px] bg-[#F1F1F1]">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary' : 'bg-gray-2'
-                    } h-1.5`}
+                      enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
+                    } h-[6px]`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
                 </div>
@@ -551,7 +587,16 @@ const Course = ({
       <ModalFoundationCompleted
         openContinue={openContinue}
         handleSkipCourse={handleSkipCourse}
-        handleContinueFoundation={handleContinueFoundation}
+        handleClose={() => setOpenContinue(false)}
+        handleContinueFoundation={
+          classInstance?.duration_type === 'FLEXIBLE'
+            ? () =>
+                activeCourse(
+                  classInstance?.normal_class_connections?.[0]
+                    ?.foundation_class_id,
+                )
+            : handleContinueFoundation
+        }
       />
     </>
   )
