@@ -70,7 +70,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         buttonSize="medium"
         title={undefined}
       >
-        <h2 className="max-w-screen-sm mb-4 text-4xl font-bold text-[#050505]">
+        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
           Test Information
         </h2>
         <div className="text-sm text-[#A1A1A1]">Let’s start!</div>

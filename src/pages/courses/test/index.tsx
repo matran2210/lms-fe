@@ -496,7 +496,7 @@ const TestModal = ({
               data?.quiz?.attempt?.number_of_attempts ===
                 data?.quiz?.limit_count && (
                 <div>
-                  <div className="text-center text-base font-normal text-bw-13">
+                  <div className="text-bw-13 text-center text-base font-normal">
                     {isFinalAttemptTimeout ? (
                       <div>
                         The test has timed out and has been submitted
@@ -549,13 +549,13 @@ const TestModal = ({
             <div className="flex flex-col gap-6">
               <div className="flex justify-between gap-8 text-base">
                 <div className="text-gray-200">Name:</div>
-                <div className="line-clamp-2 pr-0.5 font-medium text-[#050505">
+                <div className="text-[#050505 line-clamp-2 pr-0.5 font-medium">
                   {data?.name}
                 </div>
               </div>
               <div className="flex justify-between gap-8 text-base">
                 <div className="text-gray-200">Pass Point:</div>
-                <div className="pr-0.5 font-medium text-[#050505">
+                <div className="text-[#050505 pr-0.5 font-medium">
                   {data?.quiz?.is_graded ? (
                     <>{data?.quiz?.required_percent_score ?? '_ _'}</>
                   ) : (

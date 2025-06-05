@@ -132,7 +132,7 @@ const NewFiltext = forwardRef(
           if (!corrects) {
             return (
               <span
-                className="relative my-0.5 inline-block border-b border-gray-1"
+                className="border-gray-1 relative my-0.5 inline-block border-b"
                 style={{
                   display: 'inline-block',
                   height: '34px',
@@ -140,7 +140,7 @@ const NewFiltext = forwardRef(
                 }}
               >
                 <div
-                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gray-100 text-sm font-normal text-gray-1 transition-opacity duration-150 ${
+                  className={`bg-gray-100 text-gray-1 absolute -bottom-1 left-1/2 -translate-x-1/2 text-sm font-normal transition-opacity duration-150 ${
                     focusedIndex === index || inputValue
                       ? 'opacity-0'
                       : 'opacity-100'

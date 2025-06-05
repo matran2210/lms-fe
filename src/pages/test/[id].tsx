@@ -1,25 +1,23 @@
-import
-  {
-    removeHighlights,
-    serializeHighlights,
-  } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import
-  {
-    ArrowUpIcon,
-    CalculatorIcon,
-    CalculatorIconV2,
-    ExcelIcon,
-    FlagIcon,
-    HighlightIcon,
-    ResizeIcon,
-    ScratchPadIcon,
-    ScratchPadIconV2,
-    ShowLessIcon,
-    ShowMoreIcon,
-    TextSquareIcon,
-    UnHighLightIcon,
-    WordIcon,
-  } from '@assets/icons'
+import {
+  removeHighlights,
+  serializeHighlights,
+} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import {
+  ArrowUpIcon,
+  CalculatorIcon,
+  CalculatorIconV2,
+  ExcelIcon,
+  FlagIcon,
+  HighlightIcon,
+  ResizeIcon,
+  ScratchPadIcon,
+  ScratchPadIconV2,
+  ShowLessIcon,
+  ShowMoreIcon,
+  TextSquareIcon,
+  UnHighLightIcon,
+  WordIcon,
+} from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
@@ -39,17 +37,16 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import
-  {
-    DISPLAY_TYPE,
-    EXHIBIT_TEXT_REPLACE,
-    GRADING_METHOD,
-    PageLink,
-    PROGRAM,
-    QUESTION_TYPES,
-    RESPONSE_OPTION,
-    TEST_TYPE,
-  } from 'src/constants'
+import {
+  DISPLAY_TYPE,
+  EXHIBIT_TEXT_REPLACE,
+  GRADING_METHOD,
+  PageLink,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+  TEST_TYPE,
+} from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
@@ -75,29 +72,27 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import
-  {
-    Answer,
-    AnswerItem,
-    AnswerList,
-    DragDropAnswerItem,
-    IDataQuestion,
-    Requirement,
-    RequirementItem,
-    ScratchPad,
-    ScratchPadValue,
-  } from 'src/type'
+import {
+  Answer,
+  AnswerItem,
+  AnswerList,
+  DragDropAnswerItem,
+  IDataQuestion,
+  Requirement,
+  RequirementItem,
+  ScratchPad,
+  ScratchPadValue,
+} from 'src/type'
 import { IRequirement } from 'src/type/case-study'
-import
-  {
-    checkTypeAndRenderTitle,
-    getAnswerDragNDrop,
-    getAnswerMatching,
-    getResult,
-    getValueFillText,
-    getValueSelectText,
-    isValuesEqual,
-  } from '../../utils/helpers/quiz-test/helper'
+import {
+  checkTypeAndRenderTitle,
+  getAnswerDragNDrop,
+  getAnswerMatching,
+  getResult,
+  getValueFillText,
+  getValueSelectText,
+  isValuesEqual,
+} from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
 import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
@@ -2534,7 +2529,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
@@ -2867,7 +2862,7 @@ const TestDetail = () => {
             {/** End Question Content */}
 
             {/** Scratchpads */}
-            <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="bg-gray-3 z-10 flex h-[48px] items-center justify-between shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -2940,7 +2935,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine bg-gray-3 absolute bottom-full h-fit justify-center shadow-questions-exhibits 3xl:w-full">
                         {currentTabContent?.data?.requirements?.map(
                           (e: any, indexReq: number) => {
                             return (
@@ -2978,7 +2973,7 @@ const TestDetail = () => {
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block">
+                      <div className="3.5xl:block hidden">
                         Choose response option:
                       </div>
                       <button
@@ -3026,14 +3021,14 @@ const TestDetail = () => {
                     </div>
                   )}
                 <button
-                  className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px]"
+                  className="border-gray-1 flex items-center justify-center gap-3 border px-3 py-2 3xl:w-[150px]"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
                   }}
                 >
                   <FlagIcon />
-                  <div className="hidden text-medium-sm font-medium lg:block">
+                  <div className="text-medium-sm hidden font-medium lg:block">
                     Flag to Review
                   </div>
                 </button>
@@ -3058,7 +3053,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                    className="border-gray-1 flex w-45 items-center justify-center gap-3 border px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -3080,7 +3075,7 @@ const TestDetail = () => {
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                      className="border-gray-1 flex w-[150px] items-center justify-center gap-3 border px-3 py-2"
                       onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
