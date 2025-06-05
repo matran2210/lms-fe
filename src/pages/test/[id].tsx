@@ -2872,6 +2872,7 @@ const TestDetail = () => {
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
+              content=""
             />
 
             <LimitQuizModal

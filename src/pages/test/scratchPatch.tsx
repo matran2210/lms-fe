@@ -14,7 +14,7 @@ type ScratchPad = {
 interface IProps {
   scratchPadValues?: ScratchPadValue | null | undefined
   control: Control<any>
-  scratchPads: string
+  scratchPads: ScratchPad | null | undefined
   handleChangeScratchPad: React.ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   >
@@ -30,7 +30,7 @@ const ScratchPatch = ({
       placeholder="Take a note..."
       control={control}
       name={scratchPadValues?.id ?? ''}
-      defaultValue={scratchPads ?? ''}
+      defaultValue={scratchPads?.scratch_pad ?? ''}
       onChange={handleChangeScratchPad}
       className="sapp-text-area not-resizer h-[calc(100%-40px)] w-full px-5 py-3 placeholder:text-sm placeholder:font-normal"
     />

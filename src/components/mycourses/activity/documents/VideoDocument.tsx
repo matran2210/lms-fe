@@ -343,8 +343,7 @@ const VideoDocument = ({
                           checked: true,
                         }
                       : { checked: false })}
-                    size={'small'}
-                  ></SAPPRadio>
+                  />
                   <span
                     className={`radio-item-label  ${
                       v?.file?.id === currentVideo?.file?.id
