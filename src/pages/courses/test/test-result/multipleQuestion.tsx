@@ -53,14 +53,14 @@ const MultipleQuestion = ({
     if (type === 'Constructed Questions') {
       return questions?.quizAttempt?.grading_status ===
         GRADE_STATUS.FINISHED_GRADING
-        ? ' text-graded-finish border-graded-finish'
+        ? ' text-[#4077E0] border-[#4077E0]'
         : data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-          ? ' text-pinned-1 border-pinned-1'
-          : ' text-gray-1 border-gray-1'
+          ? ' text-[#18355D] border-[#18355D]'
+          : ' text-[#A1A1A1] border-[#A1A1A1]'
     }
     return data?.is_correct
-      ? ' text-state-success border-success'
-      : ' text-state-error border-error'
+      ? ' text-success-600 border-[#397839]'
+      : ' text-error border-[#B90E0A]'
   }
 
   const renderBoxes = (type: string, data: any, totalBefore: number) => {
@@ -74,7 +74,7 @@ const MultipleQuestion = ({
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
           }
-          className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 xl:h-auto xl:w-auto
+          className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-[33px] xl:h-auto xl:w-auto
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -87,7 +87,7 @@ const MultipleQuestion = ({
       <div className="w-full">
         {data?.length > 0 && (
           <>
-            <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+            <div className="mb-4 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
               {type}
             </div>
             <div
@@ -123,7 +123,7 @@ const MultipleQuestion = ({
             }
           }}
           className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
-            leading-8.5 xl:h-12 xl:w-12
+            leading-[33px] xl:h-12 xl:w-12
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -139,7 +139,7 @@ const MultipleQuestion = ({
             <div
               className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
                 type === 'Constructed Questions' && totalBefore > 0
-                  ? 'border-l border-default pl-3'
+                  ? 'border-l border-[#DCDDDD] pl-3'
                   : ''
               }`}
             >
@@ -183,19 +183,19 @@ const MultipleQuestion = ({
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:sticky">
           <div
-            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-default md:flex-row xl:items-center xl:py-6 ${
+            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-[#DCDDDD] md:flex-row xl:items-center xl:py-6 ${
               showMore ? 'items-center border-t pt-4' : 'pt-0 xl:border-t'
             }`}
           >
             <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
-                className="flex cursor-pointer flex-row pr-2 text-center text-gray-1  hover:text-primary"
+                className="flex cursor-pointer flex-row pr-2 text-center text-[#A1A1A1]  hover:text-primary"
                 onClick={() => setOpenAnnotaion(true)}
               >
                 <div className="my-auto">
                   <IconAnnotationGuide />
                 </div>
-                <div className="text-xs my-auto ml-1 font-normal">
+                <div className="my-auto ml-1 text-xs font-normal">
                   Annotation Guide
                 </div>
               </div>
@@ -226,7 +226,7 @@ const MultipleQuestion = ({
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (
                 <div
-                  className="mr-6 block cursor-pointer text-medium-sm font-medium underline xl:hidden"
+                  className="mr-6 block cursor-pointer text-sm font-medium underline xl:hidden"
                   onClick={() => {
                     setShowMore(!showMore)
                     if (multipleQuestionRef?.current) {
@@ -241,9 +241,7 @@ const MultipleQuestion = ({
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}
-                  className={
-                    'mb-0 max-w-[120px] px-11 text-medium-sm !font-medium'
-                  }
+                  className={'mb-0 max-w-[120px] px-11 text-sm !font-medium'}
                 />
               </Link>
             </div>

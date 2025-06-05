@@ -14,27 +14,27 @@ const headers = [
   {
     label: '#',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[62px]',
   },
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-max xl:min-w-[725px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold  min-w-[117px]',
   },
   {
     label: 'Result',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold  min-w-[70px]',
   },
   {
     label: '',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[20px]',
+      'text-left pb-3 text-sm text-[#A1A1A1] font-semibold min-w-[20px]',
   },
 ]
 
@@ -156,14 +156,14 @@ const TableCaseStudyResult = () => {
         <div className="m-auto max-h-full max-w-[1144px] bg-white pt-8">
           <div className="mb-10 flex flex-row items-center justify-between px-6 xl:px-0">
             <div className="pr-4">
-              <div className="line-clamp-1 text-xl font-medium text-bw-1">
+              <div className="line-clamp-1 text-xl font-medium text-[#050505]">
                 {topicAttemptDetail?.question_topic?.name}
               </div>
               <div className="pt-2.5 text-base">
-                <span className="pt-1.5 font-normal text-gray-1">
+                <span className="pt-1.5 font-normal text-[#A1A1A1]">
                   Your Score:
                 </span>{' '}
-                <span className="font-bold text-state-error">
+                <span className="font-bold text-error">
                   {topicAttemptDetail?.score}%
                 </span>
               </div>
@@ -240,13 +240,13 @@ const TableCaseStudyResult = () => {
                 {scoreDetail?.answers?.map((e: any, index: number) => {
                   return (
                     <tr
-                      className="border-b border-dashed border-gray-2"
+                      className="border-b border-dashed border-[#DCDDDD]"
                       key={e?.id}
                     >
-                      <td className="pr-1 text-bw-1">{index + 1}</td>
+                      <td className="pr-1 text-[#050505]">{index + 1}</td>
                       <td className="m-6 pr-4 text-start">
                         <div
-                          className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                          className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
                           dangerouslySetInnerHTML={{
                             __html: String(
                               e?.question?.question_content ?? '--',
@@ -257,8 +257,8 @@ const TableCaseStudyResult = () => {
                           }}
                         ></div>
                       </td>
-                      <td className="m-6 pr-4 text-start text-bw-1">
-                        <div className="mb-6 mr-6 mt-6 min-w-132px">
+                      <td className="m-6 pr-4 text-start text-[#050505]">
+                        <div className="mb-6 mr-6 mt-6 min-w-[132px]">
                           {getTypeName(e?.question?.qType ?? '--')}
                         </div>
                       </td>
@@ -266,8 +266,8 @@ const TableCaseStudyResult = () => {
                         className={`m-6 pr-1 text-start
                       ${
                         e?.is_correct || e?.active === 'SUBMITED'
-                          ? ' text-state-success'
-                          : ' text-state-error'
+                          ? ' text-success-600'
+                          : ' text-error'
                       }
                     `}
                       >
@@ -281,13 +281,13 @@ const TableCaseStudyResult = () => {
                           </>
                         )}
                       </td>
-                      <td className="m-6 pr-4 text-start text-gray-1">
+                      <td className="m-6 pr-4 text-start text-[#A1A1A1]">
                         {e?.question?.qType !== 'ESSAY' && (
                           <div className="ml-1 flex items-center">
                             <img
                               src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                               alt="Correct"
-                              className="mr-1 w-4 text-state-success"
+                              className="mr-1 w-4 text-success-600"
                             />
                             {roundNumber(
                               e?.question?.question_report?.ratio || 0,

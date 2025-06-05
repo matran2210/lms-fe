@@ -81,7 +81,7 @@ const PrimaryInformation = ({
       },
       children: (
         <div className="">
-          <div className="flex flex-col gap-5 border-t border-gray-5  py-4">
+          <div className="flex flex-col gap-5 border-t border-[#7E8299]  py-4">
             {/* Class Code */}
             <PrimaryInfoItem
               title="Class Code"
@@ -118,7 +118,7 @@ const PrimaryInformation = ({
             {selectedRequest.type === TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <span className="text-sm text-gray-12">Schedule</span>
+                  <span className="text-sm text-[#99A1B7]">Schedule</span>
                 </div>
                 <div className="col-span-2">
                   {isLoading ? (

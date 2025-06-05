@@ -53,18 +53,18 @@ const UnSubmitAnswerModal = ({
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
         <AlertTriagle />
       </div>
-      <div className="py-8 pt-10 text-center text-3xl font-semibold text-bw-13 md:text-4xl">
+      <div className="py-8 pt-10 text-center text-3xl font-semibold text-[#050505] md:text-4xl">
         Are You Sure?
       </div>
       <div className=" text-center">
-        <span className="text-center text-medium-sm font-normal text-bw-13">
+        <span className="text-medium-sm text-center font-normal text-[#A1A1A1]">
           Oops look like you&apos;ve got a few unfinished questions:&nbsp;
         </span>
-        <span className="text-center text-medium-sm font-semibold text-primary">
+        <span className="text-medium-sm text-center font-semibold text-[#050505]">
           {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}{' '}
           {data?.length > 10 ? '...' : ''}
         </span>
-        <span className="text-center text-medium-sm font-normal text-bw-13">
+        <span className="text-medium-sm text-center font-normal text-[#050505]">
           After you submit, you can&apos;t edit this assignment.
         </span>
       </div>

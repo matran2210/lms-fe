@@ -903,8 +903,8 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
           {/* Header */}
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
+            <div className="flex items-center justify-between bg-[#F1F1F1] px-6 py-2">
+              <div className="w-1/3 truncate text-lg font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton
@@ -917,7 +917,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             </div>
             {/* End Header */}
             <div
-              className="flex h-[calc(100%-104px)] bg-gray-3"
+              className="flex h-[calc(100%-104px)] bg-[#F1F1F1]"
               id={'preview-question'}
             >
               <div
@@ -969,7 +969,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       topics?.files.map((e: any, index: number) => {
                         return (
                           <div
-                            className="cursor-pointer text-state-info hover:underline"
+                            className="cursor-pointer text-[#3964EA] hover:underline"
                             onClick={() =>
                               handleOpenScratchPad(
                                 'file',
@@ -987,7 +987,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
               <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                className="h-full w-[20px] cursor-ew-resize bg-[#F1F1F1]"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -1095,7 +1095,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -1125,7 +1125,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Scratch Pad</div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1218,7 +1218,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="relative flex h-[48px] items-center justify-between bg-[#F1F1F1] shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1299,7 +1299,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
@@ -1310,7 +1310,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                                 key={e?.value}
                                 className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1'
+                                  'text-[#A1A1A1]'
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -1324,7 +1324,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div>
                 <SappButton
-                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  className={`bg-slate-200 mr-2 h-full py-3`}
                   title="View Answer"
                   onClick={() => {
                     setOpenScratchPad([])

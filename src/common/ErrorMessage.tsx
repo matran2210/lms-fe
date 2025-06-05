@@ -10,7 +10,7 @@ const ErrorMessage = ({ className = '', children }: IProps) => {
     <>
       {children && (
         <div
-          className={`${className}  ml-4 mt-1 flex items-start gap-1.5 text-sm font-normal leading-4.5 text-state-error`}
+          className={`${className}  ml-4 mt-1 flex items-start gap-1.5 text-sm font-normal leading-[17px] text-error`}
         >
           <svg
             width="14"

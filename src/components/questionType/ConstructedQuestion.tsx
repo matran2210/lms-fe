@@ -265,7 +265,7 @@ const EssayQuestionPreview = ({
                 {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
-                      className="mb-1 w-fit cursor-pointer text-state-info hover:underline"
+                      className="mb-1 w-fit cursor-pointer text-[#3964EA] hover:underline"
                       onClick={() => {
                         setOpenPdf &&
                           setOpenPdf(
@@ -302,7 +302,7 @@ const EssayQuestionPreview = ({
                     : 'Upload file to submit'}
                 </div>
                 <div
-                  className="cursor-pointer text-state-info hover:underline"
+                  className="cursor-pointer text-[#3964EA] hover:underline"
                   onClick={() =>
                     handleDownload({
                       files: [

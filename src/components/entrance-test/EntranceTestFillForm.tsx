@@ -187,10 +187,10 @@ const EntranceTestFillForm = ({
       closeAfterSubmit={false}
       title={undefined}
     >
-      <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
+      <h2 className="max-w-screen-sm mb-4 text-4xl font-bold text-[#050505]">
         Fill This Form
       </h2>
-      <div className="text-sm text-gray-1">
+      <div className="text-sm text-[#A1A1A1]">
         The information below will help SAPP evaluate your profile and suggest a
         suitable learning path. Click &apos;Next&apos; to see the test details.
       </div>

@@ -408,7 +408,7 @@ const Discussion = ({ class_id }: Props) => {
                           {selectedFiles.map((file, index) => (
                             <li key={index} className="relative mb-2 leading-0">
                               <div
-                                className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
+                                className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                                 role="button"
                                 onClick={() => handleRemoveSelectedFiles(index)}
                               >
@@ -521,7 +521,7 @@ const Discussion = ({ class_id }: Props) => {
                 {rootSelectedFiles?.map((file, index) => (
                   <li key={index} className="relative mb-2 leading-0">
                     <div
-                      className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
+                      className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"
                       onClick={() => handleRemoveSelectedFiles(index, true)}
                     >

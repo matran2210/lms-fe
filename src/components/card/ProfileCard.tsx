@@ -23,9 +23,9 @@ const ProfileCard = ({
     <Card
       title={
         <div className="mb-6 flex flex-col gap-2">
-          <span className="text-xl font-semibold text-gray-14">{title}</span>
+          <span className="text-xl font-semibold text-secondary">{title}</span>
           {subtitle && (
-            <span className="text-base font-normal text-gray-14">
+            <span className="text-base font-normal text-secondary">
               {subtitle}
             </span>
           )}

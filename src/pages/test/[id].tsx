@@ -1,23 +1,25 @@
-import {
-  removeHighlights,
-  serializeHighlights,
-} from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import {
-  ArrowUpIcon,
-  CalculatorIcon,
-  CalculatorIconV2,
-  ExcelIcon,
-  FlagIcon,
-  HighlightIcon,
-  ResizeIcon,
-  ScratchPadIcon,
-  ScratchPadIconV2,
-  ShowLessIcon,
-  ShowMoreIcon,
-  TextSquareIcon,
-  UnHighLightIcon,
-  WordIcon,
-} from '@assets/icons'
+import
+  {
+    removeHighlights,
+    serializeHighlights,
+  } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import
+  {
+    ArrowUpIcon,
+    CalculatorIcon,
+    CalculatorIconV2,
+    ExcelIcon,
+    FlagIcon,
+    HighlightIcon,
+    ResizeIcon,
+    ScratchPadIcon,
+    ScratchPadIconV2,
+    ShowLessIcon,
+    ShowMoreIcon,
+    TextSquareIcon,
+    UnHighLightIcon,
+    WordIcon,
+  } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
@@ -37,16 +39,17 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
-import {
-  DISPLAY_TYPE,
-  EXHIBIT_TEXT_REPLACE,
-  GRADING_METHOD,
-  PageLink,
-  PROGRAM,
-  QUESTION_TYPES,
-  RESPONSE_OPTION,
-  TEST_TYPE,
-} from 'src/constants'
+import
+  {
+    DISPLAY_TYPE,
+    EXHIBIT_TEXT_REPLACE,
+    GRADING_METHOD,
+    PageLink,
+    PROGRAM,
+    QUESTION_TYPES,
+    RESPONSE_OPTION,
+    TEST_TYPE,
+  } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
@@ -72,27 +75,29 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import {
-  Answer,
-  AnswerItem,
-  AnswerList,
-  DragDropAnswerItem,
-  IDataQuestion,
-  Requirement,
-  RequirementItem,
-  ScratchPadValue,
-} from 'src/type'
+import
+  {
+    Answer,
+    AnswerItem,
+    AnswerList,
+    DragDropAnswerItem,
+    IDataQuestion,
+    Requirement,
+    RequirementItem,
+    ScratchPad,
+    ScratchPadValue,
+  } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
-import {
-  checkSheetAnswered,
-  checkTypeAndRenderTitle,
-  getAnswerDragNDrop,
-  getAnswerMatching,
-  getResult,
-  getValueFillText,
-  getValueSelectText,
-  isValuesEqual,
-} from '../../utils/helpers/quiz-test/helper'
+import
+  {
+    checkTypeAndRenderTitle,
+    getAnswerDragNDrop,
+    getAnswerMatching,
+    getResult,
+    getValueFillText,
+    getValueSelectText,
+    isValuesEqual,
+  } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
 import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
@@ -329,7 +334,6 @@ const TestDetail = () => {
 
         return (
           <RequirementsTab
-            destroyInactiveTabPane={true}
             items={essayRequirementsItem(defaultValueEssay())}
             activeKey={essayData?.index ?? '0'}
             defaultActiveKey="1"
@@ -481,9 +485,7 @@ const TestDetail = () => {
     resultId: '',
   })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
-  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
-    [],
-  )
+
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
@@ -491,7 +493,7 @@ const TestDetail = () => {
     Array<{
       question_id: string
       total_attempt_time: number
-      scratch_pad: string
+      scratch_pads: ScratchPad[]
       [key: string]: any
     }>
   >([])
@@ -511,33 +513,15 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
-
-      const index = scratchPadValues?.findIndex(
-        (item: ScratchPadValue) => item.id === currentPage,
-      )
-
-      if (!index || index === -1) {
-        setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
-          ...prevScratchPads,
-          {
-            id: currentPage,
-            value: '',
-          },
-        ])
-      }
-
-      setScratchPads(answerSubmitted?.scratch_pad || '')
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
           answerSubmitted: any,
-          scratchPad: string,
         ): {
           corrects: any
           solution: any
           isSelfReflection: boolean
           requirements: any[]
-          scratch_pad: string
         } => {
           if (!answerSubmitted?.[0]) {
             return {
@@ -545,7 +529,6 @@ const TestDetail = () => {
               solution: '',
               isSelfReflection: false,
               requirements: [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -577,7 +560,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -591,7 +573,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -601,7 +582,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -615,7 +595,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -624,19 +603,17 @@ const TestDetail = () => {
             solution: solution,
             isSelfReflection: is_self_reflection,
             requirements: requirements,
-            scratch_pad: scratchPad,
           }
         }
 
         const dataCorrectAndSolution = getCorrectAndSolution(
           objTab,
           answerSubmitted?.results,
-          answerSubmitted?.scratch_pad,
         )
 
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
-          : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
+          : { ...objTab }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -664,7 +641,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answers ?? []
+                          answerSubmitted?.answer ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -724,7 +701,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answers ?? []
+                          answerSubmitted?.answer ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -996,6 +973,10 @@ const TestDetail = () => {
     })
   }
 
+  const [scratchPadValues, setScratchPadValues] = useState<
+    ScratchPadValue | null | undefined
+  >()
+
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
     removeHighlights(domEle as any)
@@ -1019,7 +1000,6 @@ const TestDetail = () => {
   }
 
   const checkAnswered = (currentContent: any, isSubmit = false) => {
-    //check đã có câu trả lời
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
@@ -1328,6 +1308,7 @@ const TestDetail = () => {
     }
 
     setLoading(false)
+    setScratchPadValues(null)
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -1371,14 +1352,6 @@ const TestDetail = () => {
     return newData
   }
 
-  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
-    if (Array.isArray(tabContent.data?.requirements)) {
-      const hasAnswer = (req: any) =>
-        req?.answer_file?.file_key || answerListRef?.current?.[req?.id || '']
-      return tabContent.data.requirements.every(hasAnswer)
-    }
-  }
-
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1399,16 +1372,6 @@ const TestDetail = () => {
                   `${currentPage}_${reqIndex}_answer`,
                 )
 
-                //nếu bài làm là sheet và không có giá trị thì lưu lên BE là null
-                if (tabContent?.data?.response_option === 'SHEET') {
-                  if (!checkSheetAnswered(editorContent)) {
-                    return {
-                      ...requirement,
-                      answer_text: null,
-                    }
-                  }
-                }
-
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -1416,9 +1379,7 @@ const TestDetail = () => {
               }),
             },
 
-            attempted:
-              item?.attempted ||
-              (checkAnswered(item) && handleCheckAllRequirementHasAnswer(item)),
+            attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
                 ? Date.now() - startTime + item?.timeSpent
@@ -1517,48 +1478,9 @@ const TestDetail = () => {
 
   const answerListRef = useRef<AnswerList>({})
 
-  // Initialize answerListRef values once when component mounts
-  useEffect(() => {
-    if (
-      currentTabContent?.data?.response_option === 'SHEET' ||
-      currentTabContent?.data?.response_option === 'WORD'
-    ) {
-      currentTabContent?.data?.requirements?.forEach((req: Requirement) => {
-        if (req?.id) {
-          if (req?.answer_file?.file_key) {
-            answerListRef.current[req.id] = req?.answer_file?.file_key
-          } else if (req?.answer_text) {
-            if (currentTabContent?.data?.response_option === 'SHEET') {
-              answerListRef.current[req.id] = checkSheetAnswered(
-                req.answer_text,
-              )
-                ? req.answer_text
-                : ''
-            } else {
-              answerListRef.current[req.id] = req.answer_text
-            }
-          }
-        }
-      })
-    }
-  }, [currentTabContent])
-
   const setAnswerListValue = debounce((requirementId: number) => {
-    let answer = ''
-    if (getValues(`${currentPage}_${essayData?.index}_answer`)) {
-      if (currentTabContent?.data?.response_option === 'SHEET') {
-        if (
-          checkSheetAnswered(
-            getValues(`${currentPage}_${essayData?.index}_answer`),
-          )
-        ) {
-          answer = getValues(`${currentPage}_${essayData?.index}_answer`)
-        }
-      } else {
-        answer = getValues(`${currentPage}_${essayData?.index}_answer`)
-      }
-    }
-    answerListRef.current[requirementId] = answer
+    answerListRef.current[requirementId] =
+      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
   }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
@@ -1598,7 +1520,7 @@ const TestDetail = () => {
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      scratch_pad: scratchPads || '',
+      scratch_pads: scratchPads || [],
       flag: currentTabContent?.flag,
       is_viewed_answer:
         action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
@@ -1632,16 +1554,9 @@ const TestDetail = () => {
 
   const handleFlagQuestion = async (question_id: string) => {
     try {
-      const hasRequiment = currentTabContent?.data?.requirements?.length > 0
       const payload = {
         question_id,
         flag: !currentTabContent?.flag,
-        ...(hasRequiment && {
-          answer: currentTabContent?.data?.requirements.map((e: any) => ({
-            requirement_id: e.id,
-            question_id: question_id,
-          })),
-        }),
       }
       await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
       setTabs((prevTabs: Tab[]) =>
@@ -1676,13 +1591,7 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            ...(!!(
-              requirement?.answer_text ||
-              requirement?.answer_file ||
-              question?.answer_file
-            ) && {
-              active: 'SUBMITED',
-            }),
+            active: 'SUBMITED',
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1695,7 +1604,7 @@ const TestDetail = () => {
             (quizDetail?.quiz_timed
               ? timeRef?.current?.handleGetTime() || 0
               : 0),
-          scratch_pad: scratchPads || '',
+          scratch_pads: scratchPads || [],
           answer: requirementAnswers,
         }
       }
@@ -1707,9 +1616,7 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        ...(!!(question?.answer || question?.answer_file) && {
-          active: 'SUBMITED',
-        }),
+        active: 'SUBMITED',
         answer_file: question?.answer_file || null,
       }
     }
@@ -1765,8 +1672,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question?.answer
-          ?.filter((item: string) => item && item !== '')
+        answer: question.answer
+          .filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -1824,7 +1731,7 @@ const TestDetail = () => {
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
-          scratch_pad: scratchPads || '',
+          scratch_pads: scratchPads || [],
           total_attempt_time:
             quizDetail.quiz_timed * 60 -
             (quizDetail.quiz_timed
@@ -1859,8 +1766,8 @@ const TestDetail = () => {
           if (type === 'entrance') {
             router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
-            setSubmitEventTest(true)
             router.replace(`/event-test`)
+            setSubmitEventTest(true)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2293,19 +2200,13 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
-              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer =
-              answerMap.has(question.id) &&
-              !!(answerMap.get(question.id) as any)?.has_answer
-
-            // const hasAnswer = answerMap.has(question.id)
-
+            const hasAnswer = answerMap.has(question.id)
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2561,14 +2462,14 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
                         {currentTabContent?.data?.requirements?.map(
                           (e: any, index: number) => {
                             return (
                               <button
                                 key={e.id}
                                 className={`p-3 ${
-                                  essayData.index !== index && 'text-gray-1'
+                                  essayData.index !== index && 'text-[#A1A1A1]'
                                 }`}
                                 onClick={() => {
                                   setEssayData({ req: e, index: index })
@@ -2655,7 +2556,7 @@ const TestDetail = () => {
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block ">
+                      <div className="hidden 3xl:block ">
                         Choose response option:
                       </div>
                       <button
@@ -2703,7 +2604,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-ink-800 underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2716,8 +2617,8 @@ const TestDetail = () => {
                   disabled={currentTabContent?.is_viewed_answer}
                   className={`flex items-center gap-3 border border-solid ${
                     !currentTabContent?.is_viewed_answer
-                      ? 'border-gray-1 text-bw-1'
-                      : 'border-default text-gray-2'
+                      ? 'border-[#A1A1A1] text-[#050505]'
+                      : '[#DCDDDD] text-[#DCDDDD]'
                   } w-[150px] justify-center p-1 py-2`}
                   onClick={() => {
                     handleClearSelection(currentTabContent)
@@ -2732,7 +2633,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -2754,7 +2655,7 @@ const TestDetail = () => {
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                       onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,
@@ -2787,7 +2688,7 @@ const TestDetail = () => {
                 {currentTabContent?.data?.display_type ===
                 DISPLAY_TYPE.VERTICAL ? (
                   <div
-                    className={`flex flex-1 overflow-auto bg-gray-3`}
+                    className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
                     id={'preview-question'}
                   >
                     <div
@@ -2835,7 +2736,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-state-info hover:underline"
+                                  className="cursor-pointer text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -2853,7 +2754,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-gray-12"
+                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
                       onMouseDown={() => {
                         setStartResize(true)
                       }}
@@ -2868,7 +2769,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2929,7 +2830,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-state-info hover:underline"
+                                className="cursor-pointer text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -2946,7 +2847,7 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,

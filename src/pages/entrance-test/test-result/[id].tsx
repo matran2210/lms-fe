@@ -24,7 +24,7 @@ const TestEntranceResult = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <FullScreenLayout title="Entrance Test Detail">
-        <div className="bg-gray-4" data-aos={ANIMATION.DATA_AOS}>
+        <div className="bg-[#F9F9F9]" data-aos={ANIMATION.DATA_AOS}>
           <div
             className="absolute right-6 z-10 ml-auto cursor-pointer"
             onClick={() =>
@@ -33,7 +33,7 @@ const TestEntranceResult = () => {
                 .then(() => window.location.reload())
             }
           >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+            <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
           </div>
           <QuizResult
             dataChart={chartData?.chart_data}

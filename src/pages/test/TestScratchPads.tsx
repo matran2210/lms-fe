@@ -6,9 +6,9 @@ import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import { Triangle } from '@components/icons/Triangle'
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { ScratchPadValue } from 'src/type'
+import { ScratchPad, ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
 interface IProps {
@@ -17,11 +17,13 @@ interface IProps {
   setOnFocusingPad: Dispatch<SetStateAction<string>>
   handleCloseScratchPad: (pad: any) => void
   currentPage: any
-  scratchPads: string
-  setScratchPads: Dispatch<SetStateAction<string>>
+  scratchPads: ScratchPad[]
+  setScratchPads: Dispatch<SetStateAction<ScratchPad[]>>
   exhibitData: IExhibit[] | undefined
-  setScratchPadValues: Dispatch<SetStateAction<ScratchPadValue[]>>
-  scratchPadValues: ScratchPadValue[]
+  setScratchPadValues: Dispatch<
+    SetStateAction<ScratchPadValue | null | undefined>
+  >
+  scratchPadValues: ScratchPadValue | null | undefined
   exhibitText?: string
 }
 
@@ -43,27 +45,42 @@ const TestScratchPads = ({
     id?: string,
   ) => {
     const { value } = e.target
-
-    const index = scratchPadValues?.findIndex(
-      (item: ScratchPadValue) => item.id === currentPage,
-    )
-    if (index !== -1) {
-      setScratchPadValues((prevScratchPads: ScratchPadValue[]) => {
-        const newScratchPads = [...prevScratchPads]
-        newScratchPads[index].value = value
-        return newScratchPads
-      })
-    } else {
-      setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
-        ...prevScratchPads,
-        {
-          id: currentPage,
-          value: value,
-        },
-      ])
-    }
+    setScratchPadValues((prevState: any) => ({
+      ...prevState,
+      id,
+      value,
+    }))
   }
+
   const { control: controlScratch } = useForm()
+
+  useEffect(() => {
+    if (currentPage) {
+      const currentPageScratchPadValues = scratchPadValues?.value ?? ''
+      const currentPageScratchPadId = scratchPadValues?.id ?? ''
+      if (currentPageScratchPadValues) {
+        const index = scratchPads.findIndex(
+          (item: ScratchPad) => item.question_id === currentPage,
+        )
+        if (index !== -1) {
+          setScratchPads((prevScratchPads: any) => {
+            const newScratchPads = [...prevScratchPads]
+            newScratchPads[index].scratch_pad = currentPageScratchPadValues
+            return newScratchPads
+          })
+        } else {
+          setScratchPads((prevScratchPads: any) => [
+            ...prevScratchPads,
+            {
+              question_id: currentPage,
+              id: currentPageScratchPadId,
+              scratch_pad: currentPageScratchPadValues,
+            },
+          ])
+        }
+      }
+    }
+  }, [currentPage, scratchPadValues])
 
   return openScratchPad.map((e, index: number) => {
     if (e.type === 'calculator') {
@@ -118,17 +135,14 @@ const TestScratchPads = ({
               </button>
             </div>
             <ScratchPatch
-              scratchPadValues={scratchPadValues.find(
-                (el) => el.id === currentPage,
-              )}
+              scratchPadValues={scratchPadValues}
               control={controlScratch}
-              scratchPads={scratchPads}
-              handleChangeScratchPad={(
-                event: ChangeEvent<HTMLInputElement>,
-              ) => {
-                setScratchPads(event.target.value)
+              scratchPads={scratchPads.find(
+                (item: ScratchPad) => item?.id === currentPage,
+              )}
+              handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) =>
                 handleChangeScratchPad(event, currentPage)
-              }}
+              }
             />
           </div>
         </MovableWindow>

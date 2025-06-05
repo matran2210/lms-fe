@@ -100,7 +100,7 @@ const NewFiltext = forwardRef(
             (ans) => ans.answer_position === index + 1,
           )
           if (correctAnswer) {
-            inputClass = 'text-base font-semibold text-state-success'
+            inputClass = 'text-base font-semibold text-success-600'
             element.outerHTML = `
               <span>
                 <span id="${inputId}" class="${inputClass}">
@@ -237,7 +237,7 @@ const NewFiltext = forwardRef(
         )}
 
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
+          <div className="mt-6 bg-[#F9F9F9] p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

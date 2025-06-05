@@ -2,10 +2,10 @@ import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
-  small: 'text-sm leading-4.5',
-  medium: 'text-base font-medium',
-  lager: 'text-lg leading-6.5',
-  extra: 'text-lg leading-6.5',
+  small: 'text-[0.875rem] leading-4',
+  medium: 'text-[1rem] leading-6',
+  lager: 'text-lg leading-[27px]',
+  extra: 'text-lg leading-[27px]',
 }
 
 const COLORS = {
@@ -13,21 +13,23 @@ const COLORS = {
     'bg-sapp-black-1 text-white rounded-lg hover:bg-gray-14 disabled:text-gray-12 disabled:bg-gray-100',
   info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
   success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
-  secondary: 'bg-gray-3 hover:bg-secondary-4 disabled:bg-secondary-4 text-bw-1',
-  danger: 'bg-danger hover:bg-danger-2 disabled:bg-danger-2 text-white',
+  secondary:
+    'bg-[#F1F1F1] hover:bg-secondary-4 disabled:bg-secondary-4 text-[#050505]',
+  danger: 'bg-danger hover:bg-[#dd4339] disabled:bg-[#dd4339] text-white',
   warning: 'bg-warning hover:bg-warning-2 disabled:bg-warning-2 text-white',
   light: 'bg-light hover:bg-light-2 disabled:bg-light-2 text-white',
   dark: 'bg-dark hover:bg-dark-2 disabled:bg-dark-2 text-white',
   white:
-    'bg-white hover:bg-primary-2 disabled:bg-white text-gray-1 hover:text-white',
+    'bg-white hover:bg-[#FFC83A] disabled:bg-white text-[#A1A1A1] hover:text-white',
   outline:
-    'rounded-lg border border-gray-14 text-gray-14 bg-white px-4 py-2 text-sm font-semibold text-gray-14 hover:bg-gray-100',
-  text: 'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 font-medium',
+    'bg-white border-[#050505] hover:border-[#A1A1A1] hover:text-[#A1A1A1] text-[#050505]',
+  text: 'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 font-medium',
   textUnderline:
-    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
-  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
-  okPopup: 'bg-accent-error text-white',
-  cancelPopup: 'bg-gray-4 text-accent-default',
+    'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 underline font-medium',
+  quizActivity:
+    'bg-[#A1A1A1] hover:bg-[#DCDDDD] disabled:bg-[#DCDDDD] text-white',
+  okPopup: 'bg-error text-white',
+  cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
 }
 
 const PADDINGS = {
@@ -42,13 +44,13 @@ const COLOR_LOADING = {
   primary: 'bg-white',
   info: 'bg-white',
   success: 'bg-white',
-  secondary: 'bg-bw-1',
+  secondary: 'bg-[#050505]',
   danger: 'bg-white',
   warning: 'bg-white',
   light: 'bg-white',
   dark: 'bg-white',
-  white: 'bg-gray-1',
-  outline: 'bg-gray-1',
+  white: 'bg-[#A1A1A1]',
+  outline: 'bg-[#A1A1A1]',
   text: 'bg-none',
   textUnderline: 'bg-none',
   quizActivity: 'bg-white',

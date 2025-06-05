@@ -46,10 +46,10 @@ const ConFirmSubmit = ({
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
         <ConfirmIcon />
       </div>
-      <div className="flex justify-center pb-8 pt-10 text-4xl font-semibold text-bw-13">
+      <div className="flex justify-center pb-8 pt-10 text-4xl font-semibold text-[#050505]">
         Confirm Submission
       </div>
-      <div className="text-center text-base font-normal text-bw-13">
+      <div className="text-center text-base font-normal text-[#050505]">
         {message ??
           'Are you sure you are done here and ready to view the report?'}
       </div>
@@ -58,7 +58,7 @@ const ConFirmSubmit = ({
           <SappButton
             title={'Submit'}
             size="medium"
-            className="h-12.5 w-full"
+            className="h-[50px] w-full"
             onClick={onSubmit}
           />
           <SappButtonIcon

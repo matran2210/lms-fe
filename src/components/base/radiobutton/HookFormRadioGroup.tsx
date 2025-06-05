@@ -80,10 +80,10 @@ const HookFormRadioGroup = ({
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
-                    stateLabel = 'text-state-success'
+                    stateLabel = 'text-success-600'
                   } else if (checked) {
                     state = 'error'
-                    stateLabel = 'text-state-error'
+                    stateLabel = 'text-error'
                   }
                 }
 
@@ -142,7 +142,7 @@ const HookFormRadioGroup = ({
                             <YourAnswer show={checked && !!corrects} />
                           </div>
                           {option.description && (
-                            <div className="text-sm text-gray-500">
+                            <div className="text-gray-500 text-sm">
                               {option.description}
                             </div>
                           )}

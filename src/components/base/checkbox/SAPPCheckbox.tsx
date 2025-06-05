@@ -16,16 +16,16 @@ interface IProps {
 
 const STATE = {
   success:
-    'checked:bg-state-success checked:hover:bg-state-success checked:focus:bg-state-success',
-  error:
-    'checked:bg-state-error checked:hover:bg-state-error checked:focus:bg-state-error',
-  default: 'checked:bg-bw-1 checked:hover:bg-bw-1 checked:focus:bg-bw-1',
+    'checked:bg-success-600 checked:hover:bg-success-600 checked:focus:bg-success-600',
+  error: 'checked:bg-error checked:hover:bg-error checked:focus:bg-error',
+  default:
+    'checked:bg-[#050505] checked:hover:bg-[#050505] checked:focus:bg-[#050505]',
   primary:
     'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
 }
 
 const SIZES = {
-  small: 'w-4.5 h-4.5',
+  small: 'w-4.5 h-[18px]',
   medium: 'w-[24px] h-[24px]',
   lager: 'w-[30px] h-[30px]',
 }
@@ -39,12 +39,11 @@ const SAPPCheckbox = ({
   state = 'default', // Gán giá trị mặc định cho prop state
   size = 'medium', // Gán giá trị mặc định cho prop size
   lowerOptions = false,
-  inputStyle = 'border-bw-1',
+  inputStyle = 'border-[#050505]',
 }: IProps) => {
   return (
     <div className={`inline-block ${className}`}>
       <input
-        style={{ borderWidth: '1.5px' }}
         className={clsx(
           'block h-6 w-6 bg-transparent',
           'rounded-[5px] outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0',

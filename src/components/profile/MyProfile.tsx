@@ -1,8 +1,8 @@
-import SappDrawer from '@components/base/SappDrawer'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import SappButton from '@components/base/button/SappButton'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import ProfileCard from '@components/card/ProfileCard'
+import Icon from '@components/icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
 import { formatDate } from '@utils/helpers'
@@ -11,23 +11,19 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
-  makeContactDefault,
   updateUser,
   updateUserAvatar,
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
-import TabLayout from './TabLayout'
-import ProfileCard from '@components/card/ProfileCard'
-import Icon from '@components/icons'
-import clsx from 'clsx'
 
 interface IProps {
   isEdit: boolean
@@ -182,7 +178,7 @@ const MyProfile = ({
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-30 !text-white !bg-sapp-black-1 hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-30 !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
                         type: 'submit',
                         loading: loading || loadingEditName,
                         classNameLoading: 'text-white',
@@ -191,7 +187,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="max-w-[300px] flex-auto font-medium text-bw-1">
+                  <div className="max-w-[300px] flex-auto font-medium text-[#050505]">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -300,11 +296,11 @@ const TextWrapper = ({
         'mb-8 !block transition-[margin]': isEdit,
       })}
     >
-      <div className="w-[17.43rem] max-w-[200px] flex-none text-gray-1 lg:max-w-[50%]">
+      <div className="w-[17.43rem] max-w-[200px] flex-none text-[#A1A1A1] lg:max-w-[50%]">
         {title}
       </div>
       <div
-        className={clsx('max-w-[300px] flex-auto font-medium text-bw-1', {
+        className={clsx('max-w-[300px] flex-auto font-medium text-[#050505]', {
           '!max-w-full': isEdit,
         })}
       >

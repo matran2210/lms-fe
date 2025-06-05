@@ -26,15 +26,15 @@ const SubjectItem = ({ data, index, isEdit, setMakeDefaultDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'rounded-md border border-gray-3 bg-gray-4 px-6 py-4 hover:bg-yellow-2',
+          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] px-6 py-4 hover:bg-[#FFFBF2]',
         )}
       >
         <div className="flex items-center">
           <div>
             <div>
-              <span className="font-bold text-gray-14">{`${data.title} (${data.course_category_name})`}</span>
+              <span className="font-bold text-secondary">{`${data.title} (${data.course_category_name})`}</span>
             </div>
-            <div className="mt-4 text-bw-1">
+            <div className="mt-4 text-[#050505]">
               <div className="w-fit">
                 <div className="flex items-center gap-2">
                   <Icon type="contact" />
@@ -61,7 +61,7 @@ const SubjectItem = ({ data, index, isEdit, setMakeDefaultDrawer }: IProps) => {
                 fill="none"
               >
                 <path
-                  className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
+                  className="text-gray-500 fill-current transition-colors duration-300 group-hover:text-primary"
                   d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                 />
               </svg>

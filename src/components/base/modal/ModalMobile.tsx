@@ -54,7 +54,7 @@ const ModalMobile = () => {
         <p className="mt-10 text-center text-[32px] font-semibold leading-10">
           Sorry, page is not mobile friendly
         </p>
-        <p className="my-4 text-center text-gray-1">
+        <p className="my-4 text-center text-[#A1A1A1]">
           LMS Pro can be difficult to use on a mobile device. We are going to
           improve our website very soon.
         </p>

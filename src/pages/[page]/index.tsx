@@ -8,27 +8,26 @@ import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
 import ProfileHeader from '@components/profile/ProfileHeader'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
 import { useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'
 import { ProfilePages } from 'src/type/Profile'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
 
 import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 
 import { useAppDispatch } from 'src/redux/hook'
 
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import MyProfile from '@components/profile/MyProfile'
-import SubjectList from '@components/profile/SubjectInformation/SubjectList'
-import MyPasword from '@components/profile/Security/MyPasword'
 import DeviceList from '@components/profile/DeviceInformation/DeviceList'
+import MyProfile from '@components/profile/MyProfile'
 import ProfileList from '@components/profile/ProfileInformation/ProfileList'
+import MyPasword from '@components/profile/Security/MyPasword'
+import SubjectList from '@components/profile/SubjectInformation/SubjectList'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
@@ -49,7 +48,7 @@ const ProfilePage = () => {
           width="320"
           height="260"
         />
-        <h1 className="mt-3 text-2xl font-bold text-bw-1 md:text-4xl">
+        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
           Tab Not Found
         </h1>
       </div>
@@ -142,15 +141,15 @@ const ProfilePage = () => {
   return (
     <Layout title="My Profile">
       <div className="flex h-full w-full flex-col">
-        <div className="border-b border-default bg-white px-4 lg:px-20">
-          <div className="mx-auto my-0 flex h-full max-w-xxl py-4.5">
+        <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
+          <div className="mx-auto my-0 flex h-full max-w-[1144px] py-4.5">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 xl:px-0">
+        <div className="mx-auto my-0 flex w-full max-w-[1144px] grow flex-col px-5 xl:px-0">
           <div className="main sm:mx-4 lg:mx-0 ">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
@@ -166,7 +165,7 @@ const ProfilePage = () => {
               <Tabs
                 tabBarExtraContent={
                   <div
-                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-danger-6"
+                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-[#F80903]"
                     onClick={handleLogout}
                   >
                     <Icon type="logout" className="font-normal" />

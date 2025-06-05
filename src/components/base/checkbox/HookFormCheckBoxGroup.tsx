@@ -107,10 +107,10 @@ const HookFormCheckBoxGroup = ({
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
-                    stateLabel = 'text-state-success'
+                    stateLabel = 'text-success-600'
                   } else if (checked) {
                     state = 'error'
-                    stateLabel = 'text-state-error'
+                    stateLabel = 'text-error'
                   }
                 }
                 const checkHasChecked = multiple
@@ -176,7 +176,7 @@ const HookFormCheckBoxGroup = ({
                         classNameTitle,
                         stateLabel,
                         {
-                          'text-gray-1':
+                          'text-[#A1A1A1]':
                             lowerOptions && !checked && checkHasChecked,
                         },
                       )}

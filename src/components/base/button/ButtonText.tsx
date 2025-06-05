@@ -18,7 +18,7 @@ const ButtonText = ({
       ? 'text-[0.875rem] leading-4'
       : size === 'medium'
         ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
+        : 'text-lg leading-[27px]'
   let paddingVerticalClass =
     size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
   let paddingHorizontalClass = isPaddingHorizontal
@@ -30,8 +30,8 @@ const ButtonText = ({
     : ''
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'text-gray-2 cursor-not-allowed'
-    : 'text-bw-1 cursor-pointer'
+    ? 'text-[#DCDDDD] cursor-not-allowed'
+    : 'text-[#050505] cursor-pointer'
   let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold underline`
 
   if (link)

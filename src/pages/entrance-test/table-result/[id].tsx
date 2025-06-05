@@ -77,7 +77,7 @@ const TableEntranceResult = () => {
             router.push(`/entrance-test/test-result/${id}`)
           }}
         >
-          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         {modalResult?.questions?.data?.length > 0 && (
           <QuizResultComponent

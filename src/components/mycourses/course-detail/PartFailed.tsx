@@ -188,9 +188,9 @@ const PartFailed = ({
         <div className="info mt-6">
           {checkFinished && (
             <>
-              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
-                <p className="text-base text-gray-1">Latest Results:</p>
-                <p className="text-base font-medium text-bw-1">
+              <div className="time-allow mb-4 flex justify-between border-b border-[#DCDDDD] pb-4">
+                <p className="text-base text-[#A1A1A1]">Latest Results:</p>
+                <p className="text-base font-medium text-[#050505]">
                   {isManualGradingAndAwaitGrading
                     ? '--'
                     : coursePart?.quiz?.attempt?.score !== undefined &&
@@ -199,9 +199,9 @@ const PartFailed = ({
                       : '--'}
                 </p>
               </div>
-              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
-                <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base font-medium text-bw-1">
+              <div className="time-allow mb-4 flex justify-between border-b border-[#DCDDDD] pb-4">
+                <p className="text-base text-[#A1A1A1]">Time Spent:</p>
+                <p className="text-base font-medium text-[#050505]">
                   {!!coursePart?.quiz?.attempt?.total_attempt_time
                     ? formatTime(coursePart?.quiz?.attempt?.total_attempt_time)
                     : '--'}
@@ -209,13 +209,15 @@ const PartFailed = ({
               </div>
             </>
           )}
-          <div className="time-allow flex justify-between border-b border-gray-2 pb-4">
-            <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base font-medium text-bw-1">{formattedTime}</p>
+          <div className="time-allow flex justify-between border-b border-[#DCDDDD] pb-4">
+            <p className="text-base text-[#A1A1A1]">Time Allowed:</p>
+            <p className="text-base font-medium text-[#050505]">
+              {formattedTime}
+            </p>
           </div>
           <div className="time-allow flex justify-between pt-4">
-            <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base font-medium text-bw-1">
+            <p className="text-base text-[#A1A1A1]">Attempt:</p>
+            <p className="text-base font-medium text-[#050505]">
               {`${quizAttempt?.attempt?.number_of_attempts || 0} / ${
                 quizAttempt?.limit_count !== 0
                   ? quizAttempt?.limit_count

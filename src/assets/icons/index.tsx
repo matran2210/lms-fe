@@ -316,7 +316,7 @@ import { ISVG } from 'src/type'
 import 'tailwindcss/tailwind.css'
 
 export const CloseIcon = ({
-  className = 'stroke-bw-1 ',
+  className = 'stroke-[#050505] ',
 }: {
   className?: string
 }) => {

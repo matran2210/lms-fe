@@ -74,7 +74,7 @@ const Certificate = () => {
               priority
             />
           ) : (
-            <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
+            <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
           )}
           <span className="font-semibold group-hover:text-primary">
             {record?.course?.name}
@@ -86,14 +86,14 @@ const Certificate = () => {
       title: 'Grade Archive',
       align: 'center',
       render: (record) => (
-        <div className="text-gray-14">{record?.pass_point}%</div>
+        <div className="text-secondary">{record?.pass_point}%</div>
       ),
     },
     {
       title: 'Certificate Received',
       align: 'center',
       render: (record) => (
-        <div className="text-gray-14">{sappFormatDate()}</div>
+        <div className="text-secondary">{sappFormatDate()}</div>
       ),
     },
     {
@@ -108,7 +108,7 @@ const Certificate = () => {
           >
             <Icon
               type="download"
-              className="cursor-pointer text-gray-14 hover:text-primary"
+              className="cursor-pointer text-secondary hover:text-primary"
             />
           </div>
 
@@ -123,7 +123,7 @@ const Certificate = () => {
           >
             <Icon
               type="eye-view"
-              className="cursor-pointer text-gray-14 hover:text-primary"
+              className="cursor-pointer text-secondary hover:text-primary"
             />
           </div>
         </div>

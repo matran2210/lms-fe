@@ -178,7 +178,7 @@ const TabSlide = ({
         className={`gap-4 ${
           !activeShowAll
             ? `relative mx-7 w-full`
-            : ' flex w-full items-center justify-between'
+            : 'flex w-full items-center justify-between'
         }`}
       >
         {hasScrollBar && (

@@ -33,8 +33,8 @@ const PageLink = ({
       <li
         className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-gray-6'
-            : 'min-h-default text-gray-1'
+            ? 'min-h-8 min-w-8 text-[#D8D8E5]'
+            : 'min-h-9 text-[#A1A1A1]'
         }`}
       >
         {children}
@@ -44,7 +44,7 @@ const PageLink = ({
     return (
       <li
         className={`${
-          type === 'table' ? 'min-h-8 min-w-8 text-gray-5' : 'min-h-default'
+          type === 'table' ? 'min-h-8 min-w-8 text-[#7E8299]' : 'min-h-10'
         } flex cursor-pointer items-center justify-center`}
         {...otherProps}
       >
@@ -58,8 +58,8 @@ const PageLink = ({
       <li
         className={`flex items-center justify-center ${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-gray-5'
-            : 'min-h-default text-3xl font-thin leading-8.5 text-gray-1 '
+            ? 'min-h-8 min-w-8 text-[#7E8299]'
+            : 'min-h-10 text-3xl font-thin leading-[33px] text-[#A1A1A1] '
         }`}
       >
         {children}
@@ -71,21 +71,21 @@ const PageLink = ({
     <li
       className={`${
         type === 'table'
-          ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
-          : 'min-h-9.5 max-h-10 min-w-9.5 text-sm font-normal leading-5.5'
+          ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-[18px]'
+          : 'min-h-9.5 max-h-10 min-w-[38px] text-sm font-normal leading-[22px]'
       } relative flex cursor-pointer items-center justify-center rounded p-2
-      ${isViewedProp && type !== 'row' ? 'bg-gray-12 text-white' : ''} ${
+      ${isViewedProp && type !== 'row' ? 'bg-[#F1F1F1] text-white' : ''} ${
         active
-          ? 'border-active bg-primary text-white'
+          ? 'border-[#FFB800] bg-primary text-white'
           : !isViewedProp
-            ? 'bg-gray-100 text-bw-13 hover:border-active hover:bg-primary hover:text-white'
-            : 'text-gray-1  hover:bg-primary hover:text-white'
+            ? 'border-[#DCDDDD] text-ink-800 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            : 'text-[#A1A1A1]  hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}
       {...otherProps}
     >
       <span
-        className="h-5.5 w-4 text-center"
+        className="h-[22px] w-4 text-center"
         // onClick={() => {
         //   setIsViewed(true)
         //   // setIsFlagged(!isFlagged)
