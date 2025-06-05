@@ -404,7 +404,7 @@ function FormViewProgress({
                 <CollapseBox title="Content Completed">
                   <div className="grid gap-y-4">
                     {!isView && errors.checkedNodes && (
-                      <div className="text-danger">
+                      <div className="text-[#d35563]">
                         {errors.checkedNodes.message as string}
                       </div>
                     )}

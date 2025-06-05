@@ -132,7 +132,7 @@ const NewFiltext = forwardRef(
           if (!corrects) {
             return (
               <span
-                className="border-gray-1 relative my-0.5 inline-block border-b"
+                className="relative my-0.5 inline-block border-b border-[#A1A1A1]"
                 style={{
                   display: 'inline-block',
                   height: '34px',
@@ -140,7 +140,7 @@ const NewFiltext = forwardRef(
                 }}
               >
                 <div
-                  className={`text-gray-1 absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#99A1B70D] text-sm font-normal transition-opacity duration-150 ${
+                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#99A1B70D] text-sm font-normal text-[#A1A1A1] transition-opacity duration-150 ${
                     focusedIndex === index || inputValue
                       ? 'opacity-0'
                       : 'opacity-100'
@@ -167,8 +167,8 @@ const NewFiltext = forwardRef(
             )
             inputClass =
               correctAnswer || isSelfReflection
-                ? '!border-success text-state-success text-center !font-normal'
-                : '!border-danger text-danger text-center !font-normal'
+                ? '!border-success text-success text-center !font-normal'
+                : '!border-[#d35563] text-[#d35563] text-center !font-normal'
 
             return (
               <span>

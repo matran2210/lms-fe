@@ -2857,7 +2857,7 @@ const TestDetail = () => {
             {/** End Question Content */}
 
             {/** Scratchpads */}
-            <div className="bg-gray-3 z-10 flex h-[48px] items-center justify-between shadow-question-footer">
+            <div className="z-10 flex h-[48px] items-center justify-between bg-[#f1f1f1] shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -2930,14 +2930,15 @@ const TestDetail = () => {
                       </div>
                     </div>
                     {showListRequirement && (
-                      <div className="sapp-separateLine bg-gray-3 absolute bottom-full h-fit justify-center shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#f1f1f1] shadow-questions-exhibits 3xl:w-full">
                         {currentTabContent?.data?.requirements?.map(
                           (e: any, indexReq: number) => {
                             return (
                               <button
                                 key={e.id}
                                 className={`p-3 ${
-                                  essayData?.index !== indexReq && 'text-gray-1'
+                                  essayData?.index !== indexReq &&
+                                  'text-[#A1A1A1]'
                                 }`}
                                 onClick={() => {
                                   if (e?.id !== essayData?.req?.id) {
@@ -3016,7 +3017,7 @@ const TestDetail = () => {
                     </div>
                   )}
                 <button
-                  className="border-gray-1 flex items-center justify-center gap-3 border px-3 py-2 3xl:w-[150px]"
+                  className="flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 3xl:w-[150px]"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
@@ -3031,7 +3032,7 @@ const TestDetail = () => {
                   disabled={currentTabContent?.is_viewed_answer}
                   className={`flex items-center gap-3 border border-solid ${
                     !currentTabContent?.is_viewed_answer
-                      ? 'border-gray-1 text-bw-1'
+                      ? 'border-[#A1A1A1] text-[#050505]'
                       : 'border-default text-[#DCDDDD]'
                   } w-[150px] justify-center p-1 py-2`}
                   onClick={() => {
@@ -3048,7 +3049,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="border-gray-1 w-45 flex items-center justify-center gap-3 border px-3 py-2"
+                    className="w-45 flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -3070,7 +3071,7 @@ const TestDetail = () => {
                   filteredTabs.findIndex((e: any) => e.id === currentPage) <
                     filteredTabs.length - 1 && (
                     <button
-                      className="border-gray-1 flex w-[150px] items-center justify-center gap-3 border px-3 py-2"
+                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                       onClick={async () => {
                         const index = filteredTabs.findIndex(
                           (e: any) => e.id === currentPage,

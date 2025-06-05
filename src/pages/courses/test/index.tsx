@@ -305,7 +305,7 @@ const TestModal = ({
         )
       default:
         return (
-          <div className="text-gray-500 pr-0.5 font-medium">Unsubmitted</div>
+          <div className="pr-0.5 font-medium text-[#6b7280]">Unsubmitted</div>
         )
     }
   }
@@ -524,7 +524,7 @@ const TestModal = ({
                             Your remaining time:
                           </div>
                           <div
-                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-error'}`}
                           >
                             <div className="text-base font-bold">
                               {formatTime(
@@ -728,8 +728,8 @@ const TestModal = ({
             (remainingTime !== undefined && remainingTime >= 0 ? (
               <div
                 className={clsx(`text-base font-bold`, {
-                  'text-state-info': remainingTimeLastAttempt.current > 0,
-                  'text-state-error': remainingTimeLastAttempt.current <= 0,
+                  'text-info': remainingTimeLastAttempt.current > 0,
+                  'text-error': remainingTimeLastAttempt.current <= 0,
                 })}
               >
                 {formatTime(

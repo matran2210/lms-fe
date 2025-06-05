@@ -25,7 +25,7 @@ const ClassCard = ({
 }: IProps) => {
   const InfoCourse = () => (
     <div className="mb-5 flex justify-between">
-      <div className="text-gray-500 flex items-center text-sm">
+      <div className="flex items-center text-sm text-[#6b7280]">
         <div className="mr-6">
           {dataDetail?.status && (
             <StatusTag status={dataDetail?.status as keyof typeof statusMap} />
@@ -58,7 +58,7 @@ const ClassCard = ({
   return (
     <div className="h-fit w-full rounded-xl bg-white">
       <div className="flex flex-col">
-        <Title level={4} className="text-gray-700">
+        <Title level={4} className="text-[#374151]">
           {dataDetail?.course?.name}
         </Title>
         <InfoCourse />

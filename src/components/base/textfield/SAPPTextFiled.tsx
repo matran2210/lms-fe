@@ -65,7 +65,7 @@ const SAPPTextFiled = ({
       )}
       <div className={`${className ?? ''} relative flex w-full items-center`}>
         {placeholderIcon && (
-          <span className="text-gray-500 absolute left-4">
+          <span className="absolute left-4 text-[#6b7280]">
             {placeholderIcon}
           </span>
         )}

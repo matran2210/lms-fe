@@ -84,7 +84,9 @@ const TeacherTextField = ({
     setPasswordVisible(!passwordVisible)
   }
   // Dấu (*) khi trường bắt buộc
-  const requiredMark = required ? <span className="text-danger">*</span> : null
+  const requiredMark = required ? (
+    <span className="text-[#d35563]">*</span>
+  ) : null
 
   return (
     <div className="float-label">

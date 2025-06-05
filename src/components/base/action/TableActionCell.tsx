@@ -32,7 +32,7 @@ const TableActionCell: React.FC<TableActionCellProps> = ({
     >
       <Tooltip title="Action" classNames={{ root: 'tooltip-action' }}>
         <span
-          className="h-[${height}] text-gray-500 flex w-9 cursor-pointer items-center justify-center rounded-full bg-transparent"
+          className="h-[${height}] flex w-9 cursor-pointer items-center justify-center rounded-full bg-transparent text-[#6b7280]"
           onClick={() => setOpenDropdown(!openDropdown)}
         >
           <ActionIcon />

@@ -29,7 +29,7 @@ const ChartCMAScore = ({
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">
-            <div className="text-black-1 text-xl font-medium">
+            <div className="text-xl font-medium text-black">
               {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
@@ -37,7 +37,7 @@ const ChartCMAScore = ({
               %
             </div>
           </div>
-          <div className="text-black-1 mb-6 text-lg font-semibold xl:text-xl xl:font-medium">
+          <div className="mb-6 text-lg font-semibold text-black xl:text-xl xl:font-medium">
             Multiple Choice Score by Part
           </div>
         </div>
@@ -69,7 +69,7 @@ const ChartCMAScore = ({
                 }}
               >
                 <div
-                  className={`text-black-1 relative -left-6 text-sm font-normal`}
+                  className={`relative -left-6 text-sm font-normal text-black`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
@@ -82,7 +82,7 @@ const ChartCMAScore = ({
               ''
             ) : (
               <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-[#DCDDDD]">
-                <div className="text-black-1 relative -left-6 bottom-[50%] text-sm font-normal">
+                <div className="relative -left-6 bottom-[50%] text-sm font-normal text-black">
                   <span className="relative">50</span>
                 </div>
               </div>
@@ -90,8 +90,8 @@ const ChartCMAScore = ({
           </div>
           <div className="flex w-full flex-row">
             <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
-              <div className="text-black-1 text-sm">Part</div>
-              <div className="text-black-1 text-sm">Weight </div>
+              <div className="text-sm text-black">Part</div>
+              <div className="text-sm text-black">Weight </div>
             </div>
             <div className="flex-start flex w-full flex-row">
               {data?.map((item) => (
@@ -116,12 +116,12 @@ const ChartCMAScore = ({
                         }}
                       />
                     </Tooltip>
-                    <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
+                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-black" />
                   </div>
                   <div className="mt-4 line-clamp-2 w-full text-center text-sm font-medium text-[#050505]">
                     {item?.short_name}
                   </div>
-                  <div className="text-black-1 w-full text-center text-sm font-normal">
+                  <div className="w-full text-center text-sm font-normal text-black">
                     {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
