@@ -299,7 +299,7 @@ const TestModal = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="text-yellow-400 pr-0.5 font-medium">
+          <div className="pr-0.5 font-medium text-[#facc15]">
             Awaiting Grading
           </div>
         )

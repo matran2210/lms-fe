@@ -10,7 +10,7 @@ const SIZES = {
 
 const COLORS = {
   primary:
-    'bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-ink-300 disabled:bg-[#99A1B70D]',
+    'bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-ink-300 disabled:bg-[#99A1B7]',
   info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
   success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
   secondary:

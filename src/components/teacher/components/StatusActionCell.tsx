@@ -33,13 +33,13 @@ export const statusQuizMap = {
   },
   AWAITING_GRADING: {
     label: 'Awaiting grading',
-    color: 'text-orange-4',
-    bg: 'bg-orange-1',
+    color: 'text-[#F89707]',
+    bg: 'bg-[#F897070D]',
   },
   FINISHED_GRADING: {
     label: 'Finished Grading',
-    color: 'text-blue-7',
-    bg: 'bg-blue-900',
+    color: 'text-[#176CDD]',
+    bg: 'bg-[#176CDD0D]',
   },
   DRAFT: {
     label: 'Draft',

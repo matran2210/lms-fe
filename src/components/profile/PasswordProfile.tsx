@@ -178,7 +178,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                   onChange={(event) => onEnterDigit(index, event)}
                   inputClassName={`text-center h-[67px] w-[67px] rounded-md ${
                     errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
-                  } pt-5.25 pb-5 px-0`}
+                  } pt-[25PX] pb-5 px-0`}
                   onPaste={(e: any) =>
                     code?.every((data) => data === '') && handlePaste(index, e)
                   }

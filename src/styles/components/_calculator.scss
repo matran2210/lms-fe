@@ -4,7 +4,7 @@
 }
 
 .calc__display {
-  @apply flex flex-col gap-4 border-x border-ink-300 px-6 py-8 text-right text-4xl;
+  @apply flex flex-col gap-4 border-x border-ink-300 bg-[#18355D] px-6 py-8 text-right text-4xl;
 }
 
 .display_expression {
@@ -17,7 +17,7 @@
 }
 
 .calc__btns-container {
-  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-[#99A1B70D] p-6;
+  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-[#99A1B7] p-6;
   grid-template-columns: repeat(4, 1fr);
 }
 

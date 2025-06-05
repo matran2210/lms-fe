@@ -951,7 +951,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="text-yellow-500 font-medium ">
+                  <span className="font-medium text-[#f59e0b] ">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(
@@ -985,7 +985,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="text-yellow-500 font-medium">
+                  <span className="font-medium text-[#f59e0b]">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(

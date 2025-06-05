@@ -53,7 +53,7 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) pt-5.25  relative rounded-xl pb-6 ${
+          className={`max-h-[calc(100vh-145px) relative  rounded-xl pb-6 pt-[25PX] ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'

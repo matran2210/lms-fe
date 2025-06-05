@@ -2860,7 +2860,7 @@ const TestDetail = () => {
             <div className="z-10 flex h-[48px] items-center justify-between bg-[#f1f1f1] shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-[#fde047]'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -2870,7 +2870,7 @@ const TestDetail = () => {
                   <ButtonContent icon={<HighlightIcon />} content="Highlight" />
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-[#fde047]'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)
@@ -3017,7 +3017,7 @@ const TestDetail = () => {
                     </div>
                   )}
                 <button
-                  className="flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 3xl:w-[150px]"
+                  className="flex w-[200px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                   onClick={() => {
                     handleFlagQuestion(currentPage)
                     trackGAEvent('Click Button Flag To Review Test')
