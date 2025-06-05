@@ -108,7 +108,7 @@ const ProfileHeader = ({
   return (
     <div className="flex items-center justify-start gap-6">
       <div className="relative">
-        <div className="w relative my-6 w-30 shrink rounded-full  border-2 border-primary pt-29.2 lg:my-0">
+        <div className="w pt-29.2 relative my-6 w-[5rem] shrink  rounded-full border-2 border-primary lg:my-0">
           <div
             className={`${
               loading ? 'animate-pulse' : ''
@@ -222,7 +222,7 @@ const ProfileHeader = ({
           </TextSkeleton>
         </div>
         <div className="block items-center justify-start gap-8 text-[#A1A1A1] md:flex">
-          <div className="mb-3 flex items-center justify-start gap-1.5 md:mb-0">
+          <div className="mb-3 flex items-center justify-start gap-[5px] md:mb-0">
             <svg
               width="24"
               height="24"

@@ -871,7 +871,7 @@ const CaseStudyResult = () => {
             <div className=" relative flex h-[48px] items-center justify-between bg-[#F1F1F1] shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -885,7 +885,7 @@ const CaseStudyResult = () => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)

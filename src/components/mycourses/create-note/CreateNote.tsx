@@ -106,7 +106,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         fixed
       >
         <div className="absolute left-0 top-0  h-full w-full border bg-white">
-          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-[#F1F1F1] px-2.5">
+          <div className="flex h-10 w-[6%] w-full items-center justify-between bg-[#F1F1F1] px-2.5">
             <button
               className="text-[#A1A1A1]"
               onClick={() => {

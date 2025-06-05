@@ -53,14 +53,14 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative  rounded-xl pb-6 pt-5.25 ${
+          className={`max-h-[calc(100vh-145px) pt-5.25  relative rounded-xl pb-6 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
           }`}
         >
           <div
-            className="group-logos mx-auto h-[71px] px-5 pb-5.25"
+            className="group-logos mx-auto h-[71px] px-5 pb-[21px]"
             onClick={() => closeSideBar()}
           >
             <div

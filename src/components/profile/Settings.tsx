@@ -21,13 +21,13 @@ const Settings = ({ onBack }: IProp) => {
                   size: 'medium',
                   isPaddingHorizontal: false,
                   disabled: false,
-                  className: 'min-w-fit !px-0 text-base w-30',
+                  className: 'min-w-fit !px-0 text-base w-[5rem]',
                   onClick: onBack,
                 }}
                 submit={{
                   title: 'Save',
                   size: 'medium',
-                  className: 'min-w-fit px-0 text-sm w-30',
+                  className: 'min-w-fit px-0 text-sm w-[5rem]',
                   type: 'submit',
                   disabled: true,
                 }}

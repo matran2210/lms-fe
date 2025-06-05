@@ -34,7 +34,7 @@ const CoursesList: React.FC<CoursesProps> = ({
           .fill([])
           .map((_, index) => (
             <div
-              className={`item flex w-full flex-col bg-white p-7.5 shadow-sidebar`}
+              className={`item flex w-full flex-col bg-white p-[30px] shadow-sidebar`}
               key={index}
             >
               <div className={`flex min-h-[352px] flex-col`}>

@@ -172,13 +172,13 @@ const MyProfile = ({
                         isPaddingHorizontal: false,
                         disabled: loading || loadingEditName,
                         className:
-                          'min-w-fit text-sm w-30 rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
                       }}
                       submit={{
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-30 !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
                         type: 'submit',
                         loading: loading || loadingEditName,
                         classNameLoading: 'text-white',

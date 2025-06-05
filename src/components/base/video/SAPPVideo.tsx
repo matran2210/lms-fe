@@ -877,10 +877,10 @@ const SAPPVideo = ({
                         ref={volumeButtonRef}
                         onClick={toggleMute}
                       >
-                        <svg className="icon-svg volume-mute ml-3 hidden h-[22px] w-5.5 scale-[0.8]">
+                        <svg className="icon-svg volume-mute ml-3 hidden h-[22px] w-[22px] scale-[0.8]">
                           <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
                         </svg>
-                        <svg className="icon-svg volume-low ml-3 hidden h-6 w-5.5">
+                        <svg className="icon-svg volume-low ml-3 hidden h-6 w-[22px]">
                           <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                         </svg>
                         <Icon
@@ -1123,7 +1123,7 @@ const SAPPVideo = ({
                         type={'fullscreen'}
                         className={'icon-svg fullscreen ml-4 text-white'}
                       />
-                      <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-5.5">
+                      <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-[22px]">
                         <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
                       </svg>
                     </button>
