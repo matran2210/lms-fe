@@ -25,7 +25,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           Support Center
         </div>
       </div>
-      <div className="mb-4 mt-3 text-ssm text-bw-1">
+      <div className="mb-4 mt-3 text-xs text-bw-1">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
@@ -47,7 +47,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span className="font-bold">Knowledge Base</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-[1000] hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-[1000] hover:bg-primary hover:text-white">
             <div className="text-white">Tra cứu tại đây</div>
           </div>
         </div>
@@ -72,7 +72,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span>để hỗ trợ giải quyết các vấn đề về dịch vụ khóa học</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-[1000] hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-[1000] hover:bg-primary hover:text-white">
             <div className="text-white">Gửi phiếu tại đây</div>
           </div>
         </div>
@@ -93,7 +93,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span>để được giải đáp kiến thức cùng bộ phận chuyên môn.</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-[1000] hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-[1000] hover:bg-primary hover:text-white">
             <div className="text-white">Chat cùng SAPP</div>
           </div>
         </div>
@@ -116,7 +116,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span className="">- cộng đồng học tập dành cho học viên</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-10 hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-10 hover:bg-primary hover:text-white">
             <div className="text-white">Truy Cập Ngay</div>
           </div>
         </div>
@@ -135,7 +135,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span>Tvới tình huống cần hỗ trợ khẩn cấp.</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-[1000] hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-[1000] hover:bg-primary hover:text-white">
             <div className="text-white">Gọi Khẩn Cấp</div>
           </div>
         </div>
@@ -152,12 +152,12 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
               <span className="font-bold">support@sapp.edu.vn</span>
             </div>
           </div>
-          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-ssm hover:z-[1000] hover:bg-primary hover:text-white">
+          <div className=" absolute left-0 top-0 flex h-full w-full items-center justify-center text-xs hover:z-[1000] hover:bg-primary hover:text-white">
             <div className="text-white">Gọi Khẩn Cấp</div>
           </div>
         </div>
       </div>
-      <div className="mt-4 text-center text-ssm italic text-bw-1">
+      <div className="mt-4 text-center text-xs italic text-bw-1">
         Chúng tôi cam kết phản hồi trong 4 giờ làm việc (trừ Thứ 7, Chủ nhật và
         các ngày lễ)
       </div>
@@ -167,7 +167,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
 
 const Infomation = ({ title }: { title: string }) => {
   return (
-    <div className="flex w-full items-center justify-center text-ssm text-white">
+    <div className="flex w-full items-center justify-center text-xs text-white">
       {title}
     </div>
   )

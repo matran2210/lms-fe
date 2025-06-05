@@ -19,7 +19,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         className={`breadcrumb flex flex-row py-6 text-sm font-medium ${className}`}
       >
         {tabs.map((tab, index) => (
-          <li className="flex items-center gap-0.5 text-medium-sm" key={index}>
+          <li className="flex items-center gap-0.5 text-sm" key={index}>
             {index !== tabs.length - 1 ? (
               <>
                 {tab.link && !tab?.disable ? (

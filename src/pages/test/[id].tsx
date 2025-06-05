@@ -2769,7 +2769,7 @@ const TestDetail = () => {
                 }}
               >
                 <FlagIcon />
-                <div className="hidden text-medium-sm font-medium lg:block">
+                <div className="hidden text-sm font-medium lg:block">
                   Flag to Review
                 </div>
               </button>
@@ -2778,16 +2778,14 @@ const TestDetail = () => {
                 className={`flex items-center gap-3 border border-solid ${
                   !currentTabContent?.is_viewed_answer
                     ? 'border-gray-1 text-bw-1'
-                    : 'border-default text-gray-2'
+                    : 'border-[#DCDDDD] text-gray-2'
                 } w-[150px] justify-center p-1 py-2`}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
                 }}
               >
-                <div className="text-medium-sm font-medium">
-                  Clear Selection
-                </div>
+                <div className="text-sm font-medium">Clear Selection</div>
               </button>
               {/* )} */}
               {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
@@ -2808,7 +2806,7 @@ const TestDetail = () => {
                     trackGAEvent('Click Button Submit & View Answer Test')
                   }}
                 >
-                  <div className="text-medium-sm font-medium">
+                  <div className="text-sm font-medium">
                     Submit & View Answer
                   </div>
                 </button>
@@ -2829,9 +2827,7 @@ const TestDetail = () => {
                       }
                     }}
                   >
-                    <div className="text-medium-sm font-medium">
-                      Next Question
-                    </div>
+                    <div className="text-sm font-medium">Next Question</div>
                   </button>
                 )
               )}

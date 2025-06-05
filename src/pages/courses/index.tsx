@@ -159,7 +159,7 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="header border-b border-default bg-white">
+        <div className="header border-b border-[#DCDDDD] bg-white">
           <div
             className={`relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 
           ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}

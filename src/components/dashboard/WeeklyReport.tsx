@@ -123,7 +123,7 @@ const WeeklyReport = () => {
           <div>
             <div className="text-lg font-medium">Completed Activities</div>
             <div
-              className="mt-1 text-medium-sm tracking-tight 3xl:tracking-normal"
+              className="mt-1 text-sm tracking-tight 3xl:tracking-normal"
               style={{ color: report?.activities?.color }}
             >
               {report?.activities?.note}
@@ -161,7 +161,7 @@ const WeeklyReport = () => {
                     className="m-auto"
                   />
                 </div>
-                <div className="text-ssm leading-3">
+                <div className="text-xs leading-3">
                   {report?.activities?.diff || 0}
                 </div>
               </div>
@@ -177,7 +177,7 @@ const WeeklyReport = () => {
           <div>
             <div className="text-lg font-medium">Learning Time</div>
             <div
-              className="mt-1 text-medium-sm tracking-tight 3xl:tracking-normal"
+              className="mt-1 text-sm tracking-tight 3xl:tracking-normal"
               style={{ color: report?.times?.color }}
             >
               {report?.times?.note}
@@ -210,7 +210,7 @@ const WeeklyReport = () => {
                     className="m-auto"
                   />
                 </div>
-                <div className="text-ssm leading-3">
+                <div className="text-xs leading-3">
                   {report?.times?.diff || 0}
                 </div>
               </div>

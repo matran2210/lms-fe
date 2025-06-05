@@ -199,7 +199,7 @@ body *::-webkit-scrollbar-thumb:hover {
   }
 
   hr {
-    @apply border-default;
+    @apply border-[#DCDDDD];
   }
 
   .sapp_overlay_video {
@@ -406,7 +406,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply relative min-h-[50px] min-w-[100px] border-0 border-b border-gray-500;
+  @apply relative min-h-[50px] min-w-[100px] border-0 border-b border-[#71717a];
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {
@@ -424,7 +424,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop-answer {
-  @apply m-1 inline-block min-w-[100px] border border-gray-500 bg-gray-4 p-1;
+  @apply m-1 inline-block min-w-[100px] border border-[#71717a] bg-gray-4 p-1;
 
   &.corrects {
     @apply border-success text-state-success;
@@ -858,7 +858,7 @@ textarea {
   transition: 0.25s;
 
   &:hover {
-    @apply bg-primary-2;
+    @apply bg-[#FFC83A];
   }
 }
 
@@ -1188,7 +1188,7 @@ td.sapp-border {
 }
 
 .tooltip-text {
-  @apply invisible absolute z-10 rounded-lg border border-gray-200 bg-white p-4 text-left text-gray-800 shadow-lg transition-transform duration-300;
+  @apply invisible absolute z-10 rounded-lg border border-[#e4e4e7] bg-white p-4 text-left text-[#27272a] shadow-lg transition-transform duration-300;
   min-width: 300px;
   padding: 15px;
   border-radius: 8px;

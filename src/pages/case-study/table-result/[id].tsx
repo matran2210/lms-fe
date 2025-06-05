@@ -13,28 +13,25 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 const headers = [
   {
     label: '#',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-62px',
+    className: 'text-left pb-3 text-sm text-gray-1 font-semibold min-w-62px',
   },
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
+      'text-left pb-3 text-sm text-gray-1 font-semibold min-w-max xl:min-w-[725px]',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[117px]',
+      'text-left pb-3 text-sm text-gray-1 font-semibold  min-w-[117px]',
   },
   {
     label: 'Result',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold  min-w-[70px]',
+    className: 'text-left pb-3 text-sm text-gray-1 font-semibold  min-w-[70px]',
   },
   {
     label: '',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-[20px]',
+    className: 'text-left pb-3 text-sm text-gray-1 font-semibold min-w-[20px]',
   },
 ]
 

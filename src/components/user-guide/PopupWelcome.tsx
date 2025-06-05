@@ -45,7 +45,7 @@ const PopupWelcome = ({}: Props) => {
         <h2 className="pt-6 text-4xl font-bold text-bw-1">
           {UserGuide.TITLE_WELCOME}
         </h2>
-        <span className="pt-4 text-medium-sm text-gray-1">
+        <span className="pt-4 text-sm text-gray-1">
           {UserGuide.CONTENT_WELCOME}
         </span>
         <SappButton

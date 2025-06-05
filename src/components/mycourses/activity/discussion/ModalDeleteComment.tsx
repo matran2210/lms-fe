@@ -42,7 +42,7 @@ const ModalDeleteComment = ({
       <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
         Delete Comment?
       </div>
-      <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
+      <div className="mb-11 mt-4 text-center text-sm text-gray-1">
         Are you sure you want to delete this comment?
       </div>
     </SappModalV2>

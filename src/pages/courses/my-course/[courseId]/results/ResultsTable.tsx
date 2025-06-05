@@ -28,7 +28,7 @@ const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
 // Là essay nên không có điểm
 const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
+  'text-left text-sm text-gray-1 font-semibold pb-3 min-w-28'
 
 export const headers = [
   ...['Name', 'Type'].map((label) => ({
@@ -175,7 +175,7 @@ const ResultsTable = () => {
         ) : (
           <strong className="text-base text-bw-1">{row?.name}</strong>
         )}
-        <p className="text-ssm text-gray-1">{row?.path}</p>
+        <p className="text-xs text-gray-1">{row?.path}</p>
       </div>
     )
   }

@@ -153,7 +153,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
         <div className="mb-2 text-4xl font-semibold text-bw-1">
           Change Password
         </div>
-        <span className="mb-10 text-medium-sm text-gray-1">
+        <span className="mb-10 text-sm text-gray-1">
           Enter your 6-digit code that you received on your email.
         </span>
         <div className="mb-2 mt-12 grid grid-cols-6 grid-rows-1 gap-3">
@@ -174,11 +174,9 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           ))}
         </div>
         <div className="mb-8 flex justify-between">
-          <span className="text-medium-sm text-state-error">
-            {errorMessage}
-          </span>
+          <span className="text-sm text-state-error">{errorMessage}</span>
           <span
-            className={`min-w-fit text-right text-medium-sm ${
+            className={`min-w-fit text-right text-sm ${
               timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
             }`}
           >

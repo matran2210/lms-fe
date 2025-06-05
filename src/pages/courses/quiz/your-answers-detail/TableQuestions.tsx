@@ -23,8 +23,7 @@ import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderClass =
-  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
+const commonHeaderClass = 'text-left p-0 text-sm text-gray-1 font-semibold'
 
 const DEFAULT_PAGESIZE = 20
 const DEFAULT_PAGEINDEX = 1
@@ -165,7 +164,7 @@ const TableQuestions = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        <div className="text-lg-xl mb-6 font-semibold text-bw-1 xl:text-xl xl:font-medium">
           Your Answer Details{' '}
           <span className="ml-5 rounded-sm bg-blur-yellow px-1 py-1.5 text-base text-yellow-1">
             Awaiting Grading

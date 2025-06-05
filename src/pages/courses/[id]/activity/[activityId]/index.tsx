@@ -617,7 +617,7 @@ const ActivityPage = () => {
       <Layout title="Activity">
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-sm font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
@@ -730,7 +730,7 @@ const ActivityPage = () => {
                     <SappButton
                       key={e?.id}
                       size="small"
-                      className="!px-3 py-2.5 text-medium-sm !font-normal"
+                      className="!px-3 py-2.5 text-sm !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateBySpace(e?.name, 5)}
                       showTooltip={e?.name?.length > 20}
@@ -993,7 +993,7 @@ const ActivityPage = () => {
               nextActivityIndex !== sessionData?.length - 1) ||
             (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
             <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+              <div className="border-b-primary-2 relative mb-6 border-b-2 bg-white px-6 py-3 shadow-activity">
                 <div
                   ref={endActivityRef}
                   className={`flex flex-nowrap gap-5 justify-${
@@ -1020,7 +1020,7 @@ const ActivityPage = () => {
                       >
                         Previous Activity
                       </div>
-                      <div className="flex text-medium-sm text-gray-1">
+                      <div className="flex text-sm text-gray-1">
                         {getCourseIcon(
                           activity?.previous_activity
                             ? activity?.previous_activity?.display_icon
@@ -1072,7 +1072,7 @@ const ActivityPage = () => {
                       >
                         Next Activity
                       </div>
-                      <div className="flex justify-end text-medium-sm text-gray-1">
+                      <div className="flex justify-end text-sm text-gray-1">
                         <Tooltip
                           title={
                             activity?.next_activity

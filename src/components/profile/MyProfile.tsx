@@ -348,7 +348,7 @@ const MyProfile = ({
                       <div>
                         <span className="text-gray-1">Profile {i + 1}</span>
                         {e?.is_default && (
-                          <span className="ml-[10px] inline-block select-none bg-blue-600 bg-opacity-5 px-2 py-1 text-medium-sm leading-4 text-state-info">
+                          <span className="bg-blue-600 ml-[10px] inline-block select-none bg-opacity-5 px-2 py-1 text-sm leading-4 text-state-info">
                             Default
                           </span>
                         )}
@@ -383,7 +383,7 @@ const MyProfile = ({
                               fill="none"
                             >
                               <path
-                                className="fill-current text-gray-500 transition-colors duration-300 group-hover:text-primary"
+                                className="text-gray-500 fill-current transition-colors duration-300 group-hover:text-primary"
                                 d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                               />
                             </svg>

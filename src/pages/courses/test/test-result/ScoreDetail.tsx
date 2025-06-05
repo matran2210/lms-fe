@@ -21,8 +21,7 @@ import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderClass =
-  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
+const commonHeaderClass = 'text-left p-0 text-sm text-gray-1 font-semibold'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -162,7 +161,7 @@ const ScoreDetail = ({
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        <div className="text-lg-xl mb-6 font-semibold text-bw-1 xl:text-xl xl:font-medium">
           Score Details
         </div>
         {router?.query?.attempt && (

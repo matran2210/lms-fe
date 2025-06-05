@@ -831,7 +831,7 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center mr-4 gap-1 text-xsm font-normal leading-normal text-gray-7">
+                    <div className="time flex-center text-xsm mr-4 gap-1 font-normal leading-normal text-gray-7">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
@@ -851,7 +851,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
+                      className="seek-tooltip text-xsm absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -933,7 +933,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Quality:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                   {playbackQuality === 'Auto'
                                     ? 'Auto'
                                     : getResolution(Number(playbackQuality))}
@@ -951,7 +951,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Speed:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                   {playbackRate === 1 ? 'Normal' : playbackRate}
                                   <ArrowIcon
                                     className={'h-4 w-3'}
@@ -968,7 +968,7 @@ const SAPPVideo = ({
                                   <span className="block w-16 text-left text-sm font-semibold">
                                     CC:
                                   </span>
-                                  <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                  <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                     {playbackCC === -1
                                       ? 'Off'
                                       : listCaptions[playbackCC].lang}
@@ -995,7 +995,7 @@ const SAPPVideo = ({
                                 Quality
                               </h4>
                               <ul
-                                className="quality-options text-ssm font-normal"
+                                className="quality-options text-xs font-normal"
                                 onClick={() => setActiveQuality(false)}
                               >
                                 <li
@@ -1045,7 +1045,7 @@ const SAPPVideo = ({
                                 Speed
                               </h4>
                               <ul
-                                className="speed-options text-ssm font-normal"
+                                className="speed-options text-xs font-normal"
                                 onClick={() => setActiveSpeed(false)}
                               >
                                 {playbackSpeeds.map((speed: any) => (
@@ -1078,7 +1078,7 @@ const SAPPVideo = ({
                                 CC
                               </h4>
                               <ul
-                                className="cc-options text-ssm font-normal"
+                                className="cc-options text-xs font-normal"
                                 onClick={() => setActiveCC(false)}
                               >
                                 <li

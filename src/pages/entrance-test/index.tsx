@@ -40,7 +40,7 @@ const EntranceTest = () => {
 
   return (
     <Layout title="Entrance Test">
-      <div className="border-b border-default bg-white">
+      <div className="border-b border-[#DCDDDD] bg-white">
         <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
@@ -54,8 +54,8 @@ const EntranceTest = () => {
         ) : (
           <>
             <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <h2 className="text-medium-sm font-medium text-bw-1 ">
+              <div className="sm:flex-row sm:items-center flex w-full flex-col justify-between gap-3 pb-4">
+                <h2 className="text-sm font-medium text-bw-1 ">
                   Entrance Test
                 </h2>
                 <EntranceTestFilter count={entranceTestLists?.length || 0} />

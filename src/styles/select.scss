@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 rounded-none border-default shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
+    @apply h-12.5 rounded-none border-[#DCDDDD] shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -87,7 +87,7 @@
   }
 
   .select__placeholder {
-    @apply p-0 text-base text-gray-400 focus:text-primary;
+    @apply p-0 text-base text-[#a1a1aa] focus:text-primary;
   }
 
   .select__menu {

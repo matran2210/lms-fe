@@ -151,9 +151,9 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         ))}
       </div>
       <div className="mb-8 flex justify-between">
-        <span className="text-medium-sm text-state-error">{errorMessage}</span>
+        <span className="text-sm text-state-error">{errorMessage}</span>
         <span
-          className={`min-w-fit text-right text-medium-sm ${
+          className={`min-w-fit text-right text-sm ${
             timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
           }`}
         >

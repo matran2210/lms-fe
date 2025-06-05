@@ -239,7 +239,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           handleSubmit={() => handleSubmit()}
         >
           <div className="mb-7">
-            <div className="mb-4 text-xl font-medium text-gray-800">
+            <div className="mb-4 text-xl font-medium text-[#27272a]">
               {requestDetail?.name}
             </div>
             <div className="mb-4 flex gap-x-3 text-sm">

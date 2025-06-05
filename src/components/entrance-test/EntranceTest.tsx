@@ -244,7 +244,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-medium-sm text-gray-1">
+          <div className="my-4 text-start text-sm text-gray-1">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}

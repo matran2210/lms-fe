@@ -10,7 +10,7 @@
   @apply p-0 pr-2;
 
   & > input {
-    @apply text-medium-sm font-normal text-gray-1;
+    @apply text-sm font-normal text-gray-1;
   }
 }
 
@@ -87,7 +87,7 @@
 
 .select-single.status-course {
   .select__input-container {
-    @apply text-medium-sm font-normal text-gray-1;
+    @apply text-sm font-normal text-gray-1;
   }
 }
 
@@ -118,7 +118,7 @@
   }
 
   hr {
-    @apply border-default;
+    @apply border-[#DCDDDD];
   }
 }
 

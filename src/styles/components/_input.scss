@@ -10,7 +10,7 @@
 .as-label {
   top: -8px;
   margin-left: -4px;
-  @apply text-ssm;
+  @apply text-xs;
   @apply bg-white;
   @apply px-1;
   @apply py-0;
@@ -21,7 +21,7 @@
   .ant-input-outlined:focus
   // .ant-input-affix-wrapper:not(.ant-input-disabled):hover,
   {
-    @apply border-active shadow-none outline-none;
+    @apply border-[#FFB800] shadow-none outline-none;
     box-shadow: none;
     outline: none;
   }
@@ -41,7 +41,7 @@
     @apply bg-white;
     @apply px-1;
     @apply py-0;
-    @apply text-ssm;
+    @apply text-xs;
     @apply text-bw-13;
   }
   .ant-input::placeholder {

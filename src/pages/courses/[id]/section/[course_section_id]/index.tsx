@@ -551,7 +551,7 @@ const BreadCrumbPartDetail = ({
     <div className="w-full">
       <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
         <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
+          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-sm font-medium text-gray-1 hover:text-primary"
           onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
         >
           <div className="mx-0.5 inline-block w-full">
@@ -564,7 +564,7 @@ const BreadCrumbPartDetail = ({
             </Tooltip>
           </div>
         </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
+        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-sm font-medium text-bw-1">
           <ResponsiveTextTruncate
             placementTooltip="bottomLeft"
             textTooltip={partDetail?.name}

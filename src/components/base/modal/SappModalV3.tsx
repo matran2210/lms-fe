@@ -102,7 +102,7 @@ const SappModalV3 = ({
       )}
 
       {(content || children) && (
-        <div className="mb-12 mt-4 text-center text-medium-sm text-gray-1">
+        <div className="mb-12 mt-4 text-center text-sm text-gray-1">
           {content ?? children}
         </div>
       )}

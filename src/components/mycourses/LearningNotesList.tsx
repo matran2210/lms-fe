@@ -458,7 +458,7 @@ const LearningNotesList = () => {
               const isExpanded = expandedNotes.includes(note?.id)
               return (
                 <div
-                  className="mt-6 border border-default p-6 last:mb-6"
+                  className="mt-6 border border-[#DCDDDD] p-6 last:mb-6"
                   key={note?.id}
                 >
                   <div

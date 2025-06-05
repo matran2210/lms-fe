@@ -122,16 +122,16 @@ module.exports = {
       '4xl': '1920px',
     },
     fontSize: {
-      xs: ['0.75rem', { lineHeight: '1rem' }],
-      sm: ['0.875rem', { lineHeight: '1.25rem' }],
-      base: ['1rem', { lineHeight: '1.5rem' }],
-      lg: ['1.125rem', { lineHeight: '1.75rem' }],
-      xl: ['1.25rem', { lineHeight: '1.75rem' }],
-      '2xl': ['1.5rem', { lineHeight: '2rem' }],
-      '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
-      '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
-      '5xl': ['3rem', { lineHeight: '1' }],
-      '6xl': ['3.75rem', { lineHeight: '1' }],
+      xs: ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
+      sm: ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
+      base: ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
+      lg: ['1.125rem', { lineHeight: '1.6875rem' }] /* 18px, 27px */,
+      xl: ['1.25rem', { lineHeight: '1.75rem' }] /* 20px, 28px */,
+      '2xl': ['1.5rem', { lineHeight: '2rem' }] /* 24px, 32px */,
+      '3xl': ['2rem', { lineHeight: '2.875rem' }] /* 32px, 46px */,
+      '4xl': ['2.25rem', { lineHeight: '3.125rem' }] /* 36px, 50px */,
+      '5xl': ['2.5rem', { lineHeight: '3.5rem' }] /* 40px, 56px */,
+      '6xl': ['3rem', { lineHeight: '4rem' }] /* 48px, 64px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -150,16 +150,9 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: {
-          2: '#FFC83A',
-          3: '#E5A600',
-          4: '#f57c00',
-          5: '#f57c000D',
-          6: '#FFAE4C',
-          light: 'rgba(255, 187, 0, .071)',
-        },
         secondary: {
           DEFAULT: '#FFFAF0',
+          800: '#1A1A1A',
         },
         danger: {
           DEFAULT: '#D35563',
@@ -167,11 +160,13 @@ module.exports = {
           3: '#f01919',
           4: '#0Df01919',
           5: '#F019190D',
+          6: '#F80903',
+          7: '#FEEDED',
         },
         state: {
           info: '#3964EA',
-          success: '#397839',
-          error: '#B90E0A',
+          success: '#078A4D',
+          error: '#F80903',
           cancel: '#D20306',
         },
         bw: {
@@ -188,6 +183,8 @@ module.exports = {
           12: '#374151',
           13: '#1F2937',
           14: '#374151',
+          15: '#1C274C',
+          16: '#3F3F3F',
         },
         gray: {
           1: '#A1A1A1',
@@ -205,7 +202,10 @@ module.exports = {
           13: '#78829D',
           14: '#404041',
           15: '#D1D5DB',
-          16: '#DADFE5',
+          16: '#7B7B7C',
+          17: '#DADFE5',
+          99: '#E5E7EB',
+          100: '#F6F6F6',
           900: '#181C32',
         },
         green: {
@@ -214,6 +214,8 @@ module.exports = {
           3: '#37C78C',
           4: '#6FD195',
           5: '#07AF170D',
+          6: '#E7FCF2',
+          7: '#10B367',
         },
         orange: {
           1: '#F897070D',
@@ -235,9 +237,12 @@ module.exports = {
           4: '#025eff0D',
           5: '#7086FD',
           6: '#607FE9',
+          100: '#ECF0FD',
+          500: '#3964EA',
         },
         yellow: {
           1: '#FFB800',
+          2: '#FFFBF2',
         },
         pinned: {
           1: '#18355D',
@@ -269,23 +274,26 @@ module.exports = {
           primary: '#1F2937',
           secondary: '#9CA3AF',
         },
+        'sapp-black': {
+          1: '#29353C',
+        },
       },
-      borderColor: {
-        DEFAULT: '#DCDDDD',
-        default: '#DCDDDD',
-        focus: '#141414',
-        success: '#397839',
-        error: '#B90E0A',
-        'gray-1': '#A1A1A1',
-        'gray-2': '#F1F1F1',
-        'gray-3': '#F8F8F8',
-        'gray-4': '#F3F3F3',
-        'gray-5': '#F1F1F4',
-        'pinned-1': '#18355D',
-        active: '#FFB800',
-        'graded-finish': '#4077E0',
-        dark: '#1C2039',
-      },
+      // borderColor: {
+      //   DEFAULT: '#DCDDDD',
+      //   default: '#DCDDDD',
+      //   focus: '#141414',
+      //   success: '#397839',
+      //   error: '#B90E0A',
+      //   'gray-1': '#A1A1A1',
+      //   'gray-2': '#F1F1F1',
+      //   'gray-3': '#F8F8F8',
+      //   'gray-4': '#F3F3F3',
+      //   'gray-5': '#F1F1F4',
+      //   'pinned-1': '#18355D',
+      //   active: '#FFB800',
+      //   'graded-finish': '#4077E0',
+      //   dark: '#1C2039',
+      // },
       borderWidth: {
         1.5: '1.5px',
       },
@@ -308,11 +316,13 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
       minWidth: {
         4: '16px',
         6: '24px',
         8: '30px',
+        9.5: '38px',
         11.25: '45px',
         120: '120px',
         small: '36px',
@@ -363,6 +373,7 @@ module.exports = {
         1729: '1729px',
         '8xl': '1920px',
         1570: '1570px',
+        '45%': '45%',
       },
       lineHeight: {
         0: '0',
@@ -370,6 +381,7 @@ module.exports = {
         4.8: '18px',
         4.9: '19.2px',
         5.2: '20.962px',
+        5.5: '22px',
         6.2: '25px',
         6.5: '27px',
         7.5: '30px',
@@ -397,6 +409,7 @@ module.exports = {
         18: '18%',
         3.6: '36%',
         17: '17%',
+        '45%': '45%',
         '624px': '624px',
       },
       padding: {
@@ -419,6 +432,9 @@ module.exports = {
         19: '4.75rem', // 76px
         22: '5.375rem', //86px
         29.2: '7.3rem',
+        34.5: '8.625rem', // 138px
+        93.25: '23.3125rem', // 373px
+        149: '37.25rem', // 596px
       },
       margin: {
         4.5: '1.125rem', // 18px
@@ -445,6 +461,7 @@ module.exports = {
         55: '0.55',
       },
       backgroundImage: {
+        'radio-primary-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB700' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-normal': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23A1A1A1' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-default-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23141414' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
         'radio-success-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23008000' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,

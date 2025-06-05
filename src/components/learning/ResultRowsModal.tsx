@@ -17,32 +17,31 @@ const headers = [
   {
     label: 'Question',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-6-percent min-w-62px',
+      'text-left pb-3 text-sm text-gray-1 font-semibold w-6-percent min-w-62px',
   },
   {
     label: 'Type',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold pl-11 w-18 min-w-165px',
+      'text-left pb-3 text-sm text-gray-1 font-semibold pl-11 w-18 min-w-165px',
   },
   {
     label: 'Part',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-3.6 min-w-400px',
+      'text-left pb-3 text-sm text-gray-1 font-semibold w-3.6 min-w-400px',
   },
   {
     label: 'Chapter',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-17 min-w-190px',
+      'text-left pb-3 text-sm text-gray-1 font-semibold w-17 min-w-190px',
   },
   {
     label: 'Result',
-    className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold min-w-132px',
+    className: 'text-left pb-3 text-sm text-gray-1 font-semibold min-w-132px',
   },
   {
     label: 'Time Spent',
     className:
-      'text-left pb-3 text-medium-sm text-gray-1 font-semibold w-7-percent min-w-78px',
+      'text-left pb-3 text-sm text-gray-1 font-semibold w-7-percent min-w-78px',
   },
 ]
 

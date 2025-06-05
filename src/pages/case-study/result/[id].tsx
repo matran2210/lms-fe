@@ -590,7 +590,7 @@ const CaseStudyResult = () => {
         >
           <div className="h-full" ref={containerRef}>
             <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
+              <div className="text-lg-xl w-1/3 truncate font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton title="Quit" onClick={() => backToPart()} />
@@ -969,14 +969,14 @@ const CaseStudyResult = () => {
                     className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                     onClick={handlePeriousTopic}
                   >
-                    <div className="text-medium-sm font-medium">Previous</div>
+                    <div className="text-sm font-medium">Previous</div>
                   </button>
                 )}
                 <button
                   className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
                   onClick={handleNextTopic}
                 >
-                  <div className="text-medium-sm font-medium">
+                  <div className="text-sm font-medium">
                     {result?.next_topic ? 'Next' : 'Finish'}
                   </div>
                 </button>

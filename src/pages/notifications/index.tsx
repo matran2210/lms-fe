@@ -168,7 +168,7 @@ const Notifications = () => {
           Loading
         </div>
       )} */}
-      <div className="border-b border-default bg-white px-4 lg:px-20">
+      <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
         <div className="mx-auto my-0 flex max-w-xxl py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
@@ -181,9 +181,7 @@ const Notifications = () => {
           className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
-            Notifications
-          </h2>
+          <h2 className="pb-4 text-sm font-medium text-bw-1">Notifications</h2>
         </div>
 
         <div

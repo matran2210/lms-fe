@@ -10,7 +10,7 @@ interface ResultQuizModalProps {
 }
 
 const commonHeaderCellStyle =
-  'text-left text-medium-sm font-normal text-gray-1 pb-3 min-w-16 h-14'
+  'text-left text-sm font-normal text-gray-1 pb-3 min-w-16 h-14'
 export const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
 const ResultQuizModal = ({ quizActivities }: ResultQuizModalProps) => {

@@ -19,7 +19,7 @@ const BreadcrumbFilter = ({
       role="navigation"
       aria-label="breadcrumbs"
     >
-      <ol className="breadcrumbs__list flex text-medium-sm font-medium">
+      <ol className="breadcrumbs__list flex text-sm font-medium">
         <li className="breadcrumbs__item shrink-0 cursor-pointer text-gray-1 hover:underline">
           <Link href="/courses" className="breadcrumbs__link" scroll={false}>
             <span onClick={() => trackGAEvent('Breadcrumb My Course')}>

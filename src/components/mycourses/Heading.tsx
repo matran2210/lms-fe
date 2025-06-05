@@ -21,7 +21,7 @@ const Heading = ({ greeting, title, des }: IProps) => {
       </div>
       {des && (
         <div className="mt-4 flex w-full">
-          <div className="w-full text-medium-sm text-bw-1">{des}</div>
+          <div className="w-full text-sm text-bw-1">{des}</div>
         </div>
       )}
     </div>

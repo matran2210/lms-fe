@@ -19,7 +19,7 @@ function SAPPBadge({ className, label, type = 'default' }: SAPPBadgeProps) {
   return (
     <div
       className={clsx(
-        'w-20 rounded px-2 py-1 text-center text-ssm',
+        'w-20 rounded px-2 py-1 text-center text-xs',
         badgeTypeToClass[type],
         className,
       )}

@@ -76,7 +76,7 @@ const Certificate = ({ onOpenTab }: IProp) => {
                 }
               >
                 <div className=" border-bottom mb-5 flex flex-row  items-start justify-center border bg-gray-4 ">
-                  <a className="h-[48px] w-[80px] border border-solid px-5 py-1 hover:text-primary group-hover:border-active group-hover:bg-secondary ">
+                  <a className="h-[48px] w-[80px] border border-solid px-5 py-1 hover:text-primary group-hover:border-[#FFB800] group-hover:bg-secondary ">
                     <CertificateImg className="border-none text-gray-1 group-hover:text-primary" />
                   </a>
                 </div>

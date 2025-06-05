@@ -37,7 +37,7 @@ const ChartCMAScore = ({
               %
             </div>
           </div>
-          <div className="text-black-1 mb-6 text-lg-xl font-semibold xl:text-xl xl:font-medium">
+          <div className="text-black-1 text-lg-xl mb-6 font-semibold xl:text-xl xl:font-medium">
             Multiple Choice Score by Part
           </div>
         </div>
@@ -69,7 +69,7 @@ const ChartCMAScore = ({
                 }}
               >
                 <div
-                  className={`text-black-1 relative -left-6 text-medium-sm font-normal`}
+                  className={`text-black-1 relative -left-6 text-sm font-normal`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
@@ -82,7 +82,7 @@ const ChartCMAScore = ({
               ''
             ) : (
               <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-gray-2">
-                <div className="text-black-1 relative -left-6 bottom-[50%] text-medium-sm font-normal">
+                <div className="text-black-1 relative -left-6 bottom-[50%] text-sm font-normal">
                   <span className="relative">50</span>
                 </div>
               </div>
@@ -90,8 +90,8 @@ const ChartCMAScore = ({
           </div>
           <div className="flex w-full flex-row">
             <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
-              <div className="text-black-1 text-medium-sm">Part</div>
-              <div className="text-black-1 text-medium-sm">Weight </div>
+              <div className="text-black-1 text-sm">Part</div>
+              <div className="text-black-1 text-sm">Weight </div>
             </div>
             <div className="flex-start flex w-full flex-row">
               {data?.map((item) => (
@@ -118,10 +118,10 @@ const ChartCMAScore = ({
                     </Tooltip>
                     <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
                   </div>
-                  <div className="mt-4 line-clamp-2 w-full text-center text-medium-sm font-medium text-bw-1">
+                  <div className="mt-4 line-clamp-2 w-full text-center text-sm font-medium text-bw-1">
                     {item?.short_name}
                   </div>
-                  <div className="text-black-1 w-full text-center text-medium-sm font-normal">
+                  <div className="text-black-1 w-full text-center text-sm font-normal">
                     {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
@@ -134,7 +134,7 @@ const ChartCMAScore = ({
         {data?.map((item) => {
           return (
             <div key={item.part_id} className="w-auto">
-              <div className="w-full break-all py-2 text-medium-sm font-medium leading-4 text-bw-1">
+              <div className="w-full break-all py-2 text-sm font-medium leading-4 text-bw-1">
                 {`${item?.short_name ? item?.short_name + ' -' : ''} ${item?.title}`}
               </div>
             </div>

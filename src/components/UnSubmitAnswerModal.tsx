@@ -56,13 +56,13 @@ const UnSubmitAnswerModal = ({
         Are You Sure
       </div>
       <div className="mb-3 mt-4 text-center">
-        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
+        <span className="mb-3 mt-4 text-center text-sm font-normal text-gray-1">
           Oops look like you&apos;ve got a few unfinished questions:
         </span>
-        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-sm font-semibold text-bw-1">
           {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}
         </span>
-        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-normal text-gray-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-sm font-normal text-gray-1">
           {data?.length > 10 ? '...' : ''}After you submit, you can&apos;t edit
           this assignment.
         </span>

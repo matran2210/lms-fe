@@ -48,7 +48,7 @@ const RepeatOn = ({ className = '', date, onChange, disabled }: IProps) => {
             })}
             disabled={disabled}
           >
-            <span className="custom-checkbox flex h-6 w-6 items-center justify-center rounded-full text-ssm font-medium leading-[14px] tracking-normal">
+            <span className="custom-checkbox flex h-6 w-6 items-center justify-center rounded-full text-xs font-medium leading-[14px] tracking-normal">
               {day}
             </span>
           </Checkbox>

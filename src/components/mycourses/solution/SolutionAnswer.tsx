@@ -34,7 +34,7 @@ const SolutionAnswer = ({
         <div className="w-fit">
           {message}
           {isYourAnswer && (
-            <span className="ml-3 inline-block border-default bg-gray-4 px-2 py-0.5 text-ssm text-bw-1">
+            <span className="ml-3 inline-block border-[#DCDDDD] bg-gray-4 px-2 py-0.5 text-xs text-bw-1">
               Your Answer
             </span>
           )}

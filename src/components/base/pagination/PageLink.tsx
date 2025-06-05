@@ -70,15 +70,15 @@ const PageLink = ({
     <li
       className={`${
         type === 'table'
-          ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-4.8'
+          ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-4.8'
           : 'min-h-default min-w-default border text-sm font-normal leading-8.5'
       } relative flex cursor-pointer items-center justify-center p-0.5
-      ${isViewedProp && type !== 'row' ? '!border-default bg-gray-3' : ''} ${
+      ${isViewedProp && type !== 'row' ? '!border-[#DCDDDD] bg-gray-3' : ''} ${
         active
-          ? 'border-active bg-primary text-white'
+          ? 'border-[#FFB800] bg-primary text-white'
           : !isViewedProp
-            ? 'border-default bg-white text-gray-1 hover:border-active hover:bg-primary hover:text-white'
-            : 'border-gray-2 text-gray-1 hover:border-active hover:bg-primary hover:text-white'
+            ? 'border-[#DCDDDD] bg-white text-gray-1 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            : 'border-gray-2 text-gray-1 hover:border-[#FFB800] hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}
       {...otherProps}

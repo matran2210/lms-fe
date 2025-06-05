@@ -87,7 +87,7 @@ const MultipleQuestion = ({
       <div className="w-full">
         {data?.length > 0 && (
           <>
-            <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+            <div className="text-lg-xl mb-4 font-semibold text-bw-1 xl:text-xl xl:font-medium">
               {type}
             </div>
             <div
@@ -139,7 +139,7 @@ const MultipleQuestion = ({
             <div
               className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
                 type === 'Constructed Questions' && totalBefore > 0
-                  ? 'border-l border-default pl-3'
+                  ? 'border-l border-[#DCDDDD] pl-3'
                   : ''
               }`}
             >
@@ -183,7 +183,7 @@ const MultipleQuestion = ({
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:sticky">
           <div
-            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-default md:flex-row xl:items-center xl:py-6 ${
+            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-[#DCDDDD] md:flex-row xl:items-center xl:py-6 ${
               showMore ? 'items-center border-t pt-4' : 'pt-0 xl:border-t'
             }`}
           >
@@ -195,7 +195,7 @@ const MultipleQuestion = ({
                 <div className="my-auto">
                   <IconAnnotationGuide />
                 </div>
-                <div className="text-xs my-auto ml-1 font-normal">
+                <div className="my-auto ml-1 text-xs font-normal">
                   Annotation Guide
                 </div>
               </div>
@@ -226,7 +226,7 @@ const MultipleQuestion = ({
                 Number(questions?.constructedResponseAnswers?.length || 0) >=
                 8 && (
                 <div
-                  className="mr-6 block cursor-pointer text-medium-sm font-medium underline xl:hidden"
+                  className="mr-6 block cursor-pointer text-sm font-medium underline xl:hidden"
                   onClick={() => {
                     setShowMore(!showMore)
                     if (multipleQuestionRef?.current) {
@@ -241,9 +241,7 @@ const MultipleQuestion = ({
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}
-                  className={
-                    'mb-0 max-w-[120px] px-11 text-medium-sm !font-medium'
-                  }
+                  className={'mb-0 max-w-[120px] px-11 text-sm !font-medium'}
                 />
               </Link>
             </div>

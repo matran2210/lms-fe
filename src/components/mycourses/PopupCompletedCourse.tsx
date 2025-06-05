@@ -44,7 +44,7 @@ const PopupCert = ({}: IProps) => {
 
       <EditorReader
         text_editor_content={selector?.content}
-        className="content-course mt-4 px-1 text-center text-medium-sm text-gray-1"
+        className="content-course mt-4 px-1 text-center text-sm text-gray-1"
       />
     </SappModalV2>
   )

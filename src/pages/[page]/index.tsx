@@ -159,7 +159,7 @@ const ProfilePage = () => {
   return (
     <Layout title="My Profile">
       <div className="flex h-full w-full flex-col">
-        <div className="border-b border-default bg-white px-4 lg:px-20">
+        <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
           <div className="mx-auto my-0 flex h-full max-w-xxl py-4.5">
             <SearchForm
               placeholder="Enter name of course..."
@@ -180,7 +180,7 @@ const ProfilePage = () => {
               inputFileRef={inputFileRef}
             />
           </div>
-          <div className="mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
+          <div className="sm:flex-row mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6">
             {isSelectPage && (
               <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
             )}

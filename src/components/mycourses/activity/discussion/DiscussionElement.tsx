@@ -333,7 +333,7 @@ function DiscussionElement({
                       <div className="content-center">
                         <VerifiedIcon />
                       </div>
-                      <div className="w-fit content-center px-2 text-ssm">
+                      <div className="w-fit content-center px-2 text-xs">
                         SAPP
                       </div>
                     </div>
@@ -443,7 +443,7 @@ function DiscussionElement({
               </div>
             )}
 
-            <div className="flex gap-x-6 gap-y-1 text-medium-sm">
+            <div className="flex gap-x-6 gap-y-1 text-sm">
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
@@ -465,13 +465,13 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="cursor-pointer pr-6 text-medium-sm font-medium text-bw-1 hover:underline"
+                          className="cursor-pointer pr-6 text-sm font-medium text-bw-1 hover:underline"
                           onClick={handleEdit}
                         >
                           Edit
                         </div>
                         <div
-                          className="cursor-pointer text-medium-sm font-medium hover:underline"
+                          className="cursor-pointer text-sm font-medium hover:underline"
                           onClick={handleDeleteComment}
                         >
                           Delete

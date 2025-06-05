@@ -144,7 +144,7 @@ const SappDrawer = ({
         {footer && (
           <div
             className={clsx(
-              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white',
+              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-[#DCDDDD] bg-white',
               footerClassName,
             )}
           >

@@ -52,14 +52,14 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
         Extend Trial Course
       </div>
       {noExtensions ? (
-        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
+        <div className="mb-1 mt-4 px-1 text-center text-sm xl:mb-7">
           <span className="text-gray-1">
             This is your final course extension. Would you like to extend it
             now?
           </span>
         </div>
       ) : (
-        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
+        <div className="mb-1 mt-4 px-1 text-center text-sm xl:mb-7">
           <span className="text-gray-1">
             You can only extend a trial course once. For further support, please
             contact SAPP Academy via

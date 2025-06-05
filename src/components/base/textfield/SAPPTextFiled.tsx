@@ -28,7 +28,7 @@ interface IProps {
 
 const TEXT_SIZES = {
   base: 'text-base placeholder:text-base',
-  sm: 'text-medium-sm placeholder:text-medium-sm',
+  sm: 'text-sm placeholder:text-sm',
 }
 
 const SAPPTextFiled = ({
@@ -61,7 +61,7 @@ const SAPPTextFiled = ({
       )}
       <div className={`${className ?? ''} relative flex w-full items-center`}>
         {placeholderIcon && (
-          <span className="absolute left-4 text-gray-500">
+          <span className="text-gray-500 absolute left-4">
             {placeholderIcon}
           </span>
         )}
@@ -77,7 +77,7 @@ const SAPPTextFiled = ({
           className={clsx(
             inputClassName,
             TEXT_SIZES[textSize],
-            'form-control h-[50px] w-full border border-solid border-default px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none',
+            'form-control h-[50px] w-full border border-solid border-[#DCDDDD] px-4 py-3 font-medium text-bw-1 shadow-0 placeholder:font-medium placeholder:text-gray-1 focus:border-primary focus:shadow-0 focus:outline-none',
             {
               '!border-error': isError,
               'bg-gray-4': disabled,

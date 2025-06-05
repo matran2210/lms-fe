@@ -257,7 +257,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
               className={`relative ${getTextColor('text-bw-1')}`}
             />
             <p
-              className={`ml-px pl-2 text-medium-sm font-medium ${getTextColor('text-bw-1')}`}
+              className={`ml-px pl-2 text-sm font-medium ${getTextColor('text-bw-1')}`}
             >
               {data?.attempt_status === EAttemptStatus['SUBMITTED']
                 ? 'Completed'
@@ -323,7 +323,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-medium-sm text-gray-1">
+          <div className="my-4 text-start text-sm text-gray-1">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}
@@ -347,7 +347,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           'Ended Event Test',
         )}
       >
-        <div className="mb-1 mt-4 text-center text-medium-sm text-gray-1 2xl:mb-11">
+        <div className="mb-1 mt-4 text-center text-sm text-gray-1 2xl:mb-11">
           This Event Test{' '}
           {checkEventStatus(
             resultStartAt,

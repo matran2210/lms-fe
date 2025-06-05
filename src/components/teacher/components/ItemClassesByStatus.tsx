@@ -170,22 +170,22 @@ const ItemClassesByStatus = ({
       <div className={`flex flex-col gap-6`}>
         <div className="flex items-center justify-between">
           {enableCourse ? (
-            <span className="flex items-center gap-2 text-sm text-gray-400">
+            <span className="flex items-center gap-2 text-sm text-[#a1a1aa]">
               <BookInClassIcon />
               {truncateString(classes?.code, 15)}
             </span>
           ) : (
-            <div className="name-class text-medium-sm text-gray-400">
+            <div className="name-class text-sm text-[#a1a1aa]">
               <span className="ml-1 font-medium text-bw-1" />
             </div>
           )}
-          <div className="time-class text-sm text-gray-400">
+          <div className="time-class text-sm text-[#a1a1aa]">
             {determineButtonToShow !== 'Active' && (
               <span className="flex items-center">
                 <ClockInClassIcon />
                 <span
                   className={`font-medium ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-400'
+                    enableCourse ? 'text-bw-1' : 'text-[#a1a1aa]'
                   } ml-2`}
                 >
                   {daysDifference > 0
@@ -200,12 +200,12 @@ const ItemClassesByStatus = ({
           </div>
         </div>
 
-        <div className={`text-lg font-semibold text-gray-700 xl:h-[47px]`}>
+        <div className={`text-gray-700 text-lg font-semibold xl:h-[47px]`}>
           <div className="line-clamp-2 cursor-pointer text-ellipsis">
             {truncateString(classes?.course?.name, 50)}
           </div>
         </div>
-        <div className="mt-[-12px] text-sm font-normal text-gray-800 xl:h-[72px]">
+        <div className="mt-[-12px] text-sm font-normal text-[#27272a] xl:h-[72px]">
           {classes?.description}
         </div>
 
@@ -219,7 +219,7 @@ const ItemClassesByStatus = ({
                 }`}
               />
               <p
-                className={`text-medium-sm font-medium ${
+                className={`text-sm font-medium ${
                   enableCourse ? 'text-bw-1' : 'text-gray-2 '
                 } ml-px pl-2`}
               >
@@ -228,7 +228,7 @@ const ItemClassesByStatus = ({
             </div>
             <div className="number">
               <p
-                className={`text-medium-sm font-medium ${
+                className={`text-sm font-medium ${
                   enableCourse ? 'text-bw-1' : 'text-gray-2 '
                 }`}
               >
@@ -258,7 +258,7 @@ const ItemClassesByStatus = ({
               className={
                 isProgress
                   ? 'text- border border-primary text-orange-3'
-                  : 'border border-gray-800'
+                  : 'border-gray-800 border'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />

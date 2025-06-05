@@ -111,7 +111,7 @@ const NotifyList = ({
                         : (notifyItem?.content ?? ''),
                   }}
                 ></h4>
-                <p className="text-left text-medium-sm text-gray-1">
+                <p className="text-left text-sm text-gray-1">
                   {calculateTimeAgo(notifyItem?.updated_at)}
                 </p>
               </div>

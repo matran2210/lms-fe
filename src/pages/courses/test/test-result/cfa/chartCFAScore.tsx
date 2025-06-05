@@ -21,11 +21,11 @@ interface IProps {
 const ChartCFAScore = ({ data }: IProps) => {
   return (
     <div className="block overflow-x-auto">
-      <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+      <div className="text-lg-xl mb-6 font-semibold text-bw-1 xl:text-xl xl:font-medium">
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">
-        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-medium-sm font-normal text-bw-1">
+        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-sm font-normal text-bw-1">
           Available Points
         </div>
         <div className="absolute left-27 top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-1"></div>
@@ -36,9 +36,7 @@ const ChartCFAScore = ({ data }: IProps) => {
               width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
-            <span className="pr-7 text-medium-sm font-normal text-bw-1">
-              70%
-            </span>
+            <span className="pr-7 text-sm font-normal text-bw-1">70%</span>
             <div className="w-full border-b border-gray-1"></div>
           </div>
           <div
@@ -47,7 +45,7 @@ const ChartCFAScore = ({ data }: IProps) => {
               width: `${data?.length > 0 && 17.5 * (data?.length + 3)}%`,
             }}
           >
-            <span className="pr-7 text-medium-sm font-normal">50%</span>
+            <span className="pr-7 text-sm font-normal">50%</span>
             <div className="w-full border-b border-gray-1"></div>
           </div>
         </div>
@@ -55,8 +53,8 @@ const ChartCFAScore = ({ data }: IProps) => {
       <div className="block">
         <div className="flex w-full flex-row gap-10">
           <div className="flex shrink-0 flex-col justify-between bg-white py-2 pr-7">
-            <div className="text-medium-sm">Topic</div>
-            <div className="text-medium-sm">Weight</div>
+            <div className="text-sm">Topic</div>
+            <div className="text-sm">Weight</div>
           </div>
           <div className="flex-start flex flex-row pr-12">
             {data?.map((item: any, index: number) => (
@@ -75,10 +73,10 @@ const ChartCFAScore = ({ data }: IProps) => {
                     }}
                   ></div>
                 </div>
-                <div className="line-clamp-2 w-full text-medium-sm font-medium text-bw-1">
+                <div className="line-clamp-2 w-full text-sm font-medium text-bw-1">
                   {item?.title}
                 </div>
-                <div className="text-medium-sm font-normal text-gray-1">
+                <div className="text-sm font-normal text-gray-1">
                   {`${roundNumber(item?.max_section_score)}%`}
                 </div>
               </div>

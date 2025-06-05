@@ -158,7 +158,7 @@ export default function MenuItem({
             <div className="line-clamp-1 text-base font-semibold text-bw-1 group-hover:text-primary">
               {user?.detail?.full_name}
             </div>
-            <div className="line-clamp-1 text-medium-sm font-normal capitalize text-gray-1 group-hover:text-primary">
+            <div className="line-clamp-1 text-sm font-normal capitalize text-gray-1 group-hover:text-primary">
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -200,7 +200,7 @@ export default function MenuItem({
             Icon !== 'avatar' &&
             Icon !== 'profile-detail') ||
             (type === 'level-2' && Icon === 'result'))
-            ? 'border-l-4 border-active pl-6 pr-1'
+            ? 'border-l-4 border-[#FFB800] pl-6 pr-1'
             : 'pl-7'
         } sidebar-list-items relative mb-4 py-2 last:mb-0 ${
           !isActivity &&

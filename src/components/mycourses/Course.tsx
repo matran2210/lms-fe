@@ -434,7 +434,7 @@ const Course = ({
             </div>
             <div className="flex items-center justify-between">
               {enableCourse ? (
-                <div className="name-class text-medium-sm text-gray-1">
+                <div className="name-class text-sm text-gray-1">
                   Class:
                   <span className="ml-1 font-medium text-bw-1">
                     <Tooltip
@@ -446,11 +446,11 @@ const Course = ({
                   </span>
                 </div>
               ) : (
-                <div className="name-class text-medium-sm text-gray-1">
+                <div className="name-class text-sm text-gray-1">
                   <span className="ml-1 font-medium text-bw-1" />
                 </div>
               )}
-              <div className="time-class text-medium-sm text-gray-2">
+              <div className="time-class text-sm text-gray-2">
                 {determineButtonToShow !== 'Active' && (
                   <span>
                     <span
@@ -512,7 +512,7 @@ const Course = ({
                       }`}
                     />
                     <p
-                      className={`text-medium-sm font-medium ${
+                      className={`text-sm font-medium ${
                         enableCourse ? 'text-bw-1' : 'text-gray-2'
                       } ml-px pl-2`}
                     >
@@ -521,7 +521,7 @@ const Course = ({
                   </div>
                   <div className="number">
                     <p
-                      className={`text-medium-sm font-medium ${
+                      className={`text-sm font-medium ${
                         enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     >

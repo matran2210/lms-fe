@@ -37,7 +37,7 @@ body:not(.no-hover) {
 
   .sidebar-child {
     &.level-1 {
-      @apply invisible absolute left-full top-0 z-20 w-max rounded-md border border-default bg-white p-4 opacity-0 transition-all duration-300;
+      @apply invisible absolute left-full top-0 z-20 w-max rounded-md border border-[#DCDDDD] bg-white p-4 opacity-0 transition-all duration-300;
       .sidebar-item {
         @apply justify-start;
 

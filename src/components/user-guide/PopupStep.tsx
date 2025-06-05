@@ -46,7 +46,7 @@ const PopupStep = ({
       >
         <span className="text-base font-normal text-white">{content}</span>
         <div className="mt-5 flex items-center justify-between">
-          <div className="text-medium-sm font-normal text-white">
+          <div className="text-sm font-normal text-white">
             {index}/{total}
           </div>
           <div className="flex">
@@ -56,16 +56,16 @@ const PopupStep = ({
                 className="px-5 py-2"
                 size="small"
                 isPadding={false}
-                childClass="text-medium-sm"
+                childClass="text-sm"
                 onClick={handleClose}
               />
             )}
             <SappButton
               title={titleButtonNext ? titleButtonNext : 'Next'}
-              className="ml-3 bg-primary-3 px-5 py-2"
+              className="bg-primary-3 ml-3 px-5 py-2"
               size="small"
               isPadding={false}
-              childClass="text-medium-sm"
+              childClass="text-sm"
               onClick={handleNext}
             />
           </div>

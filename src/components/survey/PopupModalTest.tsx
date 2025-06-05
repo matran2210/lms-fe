@@ -270,7 +270,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         {SURVEY_TITLES[surveyType]}
       </div>
 
-      <div className="mb-3 mt-4 text-center text-medium-sm leading-[150%] text-gray-1">
+      <div className="mb-3 mt-4 text-center text-sm leading-[150%] text-gray-1">
         {SURVEY_CONTENTS[surveyType]}
       </div>
     </SappModalV2>

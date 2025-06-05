@@ -25,9 +25,9 @@ const ButtonPrimary = ({
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass =
     disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-primary-2'
+      ? 'cursor-not-allowed opacity-60 bg-[#FFC83A]'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-primary hover:bg-primary-2`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-primary hover:bg-[#FFC83A]`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>

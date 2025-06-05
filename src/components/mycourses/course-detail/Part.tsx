@@ -152,17 +152,15 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-medium-sm font-medium leading-[14px] text-bw-1">
+              <p className="ml-px pl-1 text-sm font-medium leading-[14px] text-bw-1">
                 {showStatus}
               </p>
-              <span className="ml-px pl-1 text-medium-sm font-medium text-gray-1">
+              <span className="ml-px pl-1 text-sm font-medium text-gray-1">
                 {formattedTime > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
-              <p className="text-medium-sm font-medium text-bw-1">
-                {progressPart}%
-              </p>
+              <p className="text-sm font-medium text-bw-1">{progressPart}%</p>
             </div>
           </div>
           <div className="progressbar h-1.5 bg-gray-3">

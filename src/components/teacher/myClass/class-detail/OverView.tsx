@@ -42,7 +42,7 @@ export default function Overview({
         {certificateData?.map((item: ICertificateData) => (
           <div key={item?.value} className="grid grid-cols-5 items-center">
             <div className="col-span-1">
-              <Text className="text-sm font-normal text-gray-400">
+              <Text className="text-sm font-normal text-[#a1a1aa]">
                 {item.label}
               </Text>
             </div>

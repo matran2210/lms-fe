@@ -86,7 +86,7 @@ const HeaderTest = ({
 
       <div className="flex w-2/6 items-center justify-end">
         {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(quizDetail?.quiz_type) && (
-          <div className="mr-6 text-medium-sm text-bw-1">
+          <div className="mr-6 text-sm text-bw-1">
             Attempt: {quizAttempt?.number_of_attempts}
             {quizDetail?.is_limited ? `/${quizDetail?.limit_count}` : ''}
           </div>

@@ -15,8 +15,7 @@ import ExamInfoActionCell from './ExamInfoActionCell'
 import { IExamInformation } from './type'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+const commonHeaderCellStyle = 'text-left text-sm text-gray-1 font-semibold pb-3'
 const commonDataCellStyle = 'col text-start py-5 pr-6 whitespace-nowrap'
 const headers = [
   'Course',
@@ -126,7 +125,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                         row?.remaining_changes > 0 && (
                           <ExamInfoActionCell>
                             <p
-                              className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
+                              className="hover:bg-primary-light cursor-pointer rounded-md p-1 pl-2 transition-colors hover:text-primary"
                               onClick={() => {
                                 setIsDrawerOpen(true)
                                 setCurrentRow(row)
