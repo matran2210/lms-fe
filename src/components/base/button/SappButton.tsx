@@ -30,7 +30,8 @@ const COLORS = {
     'bg-[#A1A1A1] hover:bg-[#DCDDDD] disabled:bg-[#DCDDDD] text-white',
   okPopup: 'bg-error text-white',
   cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
-  'light-dark': 'bg-dark-3 hover:bg-gray-14 disabled:bg-gray-898 text-white',
+  'light-dark':
+    'bg-[#29353C] hover:bg-secondary disabled:bg-ink-100 text-white',
 }
 
 const PADDINGS = {

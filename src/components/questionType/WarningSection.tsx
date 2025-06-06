@@ -11,7 +11,7 @@ const WarningSection = ({ isShowWarning, className = '' }: IProps) => {
       {isShowWarning && (
         <div
           className={clsx(
-            'mb-4 mt-6 flex items-center gap-2 text-warning-1',
+            'mb-4 mt-6 flex items-center gap-2 text-warning',
             className,
           )}
         >

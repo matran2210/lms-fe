@@ -1,10 +1,4 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  CircleCloseIcon,
-  CloseIcon,
-  HourglassIcon,
-} from '@assets/icons'
+import { CircleCloseIcon, CloseIcon, HourglassIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -14,21 +8,15 @@ import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import {
-  convertMinutesToHourFormat,
-  truncateBySpace,
-  truncateString,
-} from '@utils/index'
+import { convertMinutesToHourFormat, truncateBySpace } from '@utils/index'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
-import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
@@ -58,6 +46,10 @@ interface IBreadCrumbs {
   name: string
   parent_id: string
 }
+export interface IFocusQuiz {
+  open: boolean
+  id: string
+}
 export interface VideoStateClicked {
   course_tab_document_id: string
   videos: {
@@ -82,11 +74,10 @@ const ActivityPage = () => {
     )
   }
 
-  const {
-    data: activity,
-    isLoading,
-    refetch,
-  } = useGetActivityById(router.query.activityId, router.query.id)
+  const { data: activity, isLoading } = useGetActivityById(
+    router.query.activityId,
+    router.query.id,
+  )
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId as string
@@ -96,15 +87,14 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
-  const [activeButtonId, setActiveButtonId] = useState<string>()
-  const quizDocumentRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<any>(null)
-  const observerRef = useRef<IntersectionObserver>()
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
   const [isDoneActivity, setIsDoneActivity] = useState(false)
-  const [focusOnlyQuiz, setFocusOnlyQuiz] = useState(false)
+  const [focusOnlyQuiz, setFocusOnlyQuiz] = useState<IFocusQuiz>({
+    open: false,
+    id: '',
+  })
 
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -403,7 +393,7 @@ const ActivityPage = () => {
           <ul
             className={clsx(
               'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-sm font-medium',
-              { hidden: focusOnlyQuiz },
+              { hidden: focusOnlyQuiz.open },
             )}
           >
             <BreadCrumbs />
@@ -470,27 +460,27 @@ const ActivityPage = () => {
             <div
               className={clsx(
                 `flex w-full select-none items-center justify-between gap-4`,
-                { hidden: focusOnlyQuiz },
+                { hidden: focusOnlyQuiz.open },
               )}
             >
-              <div className="text-2xl font-medium text-bw-13">
+              <div className="text-bw-13 text-2xl font-medium">
                 <Tooltip title={activity?.name?.length > 95 && activity?.name}>
                   {activity?.name}
                 </Tooltip>
               </div>
-              <div className="flex items-center gap-1 whitespace-nowrap text-sm text-bw-13">
+              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap text-sm">
                 <HourglassIcon />
                 <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
               </div>
             </div>
 
             {/* Learning Outcome */}
-            <div className={clsx({ hidden: focusOnlyQuiz })}>
+            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
               <LearningOutcome activity={activity} />
             </div>
 
             {/* Activity Resource */}
-            <div className={clsx({ hidden: focusOnlyQuiz })}>
+            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
               <ActivityResource
                 activity={activity}
                 handleOpenScratchPad={handleOpenScratchPad}
@@ -512,12 +502,15 @@ const ActivityPage = () => {
               }}
             />
             {/* Next/Prev Activities */}
-            <ActivityPagination {...{ activity, focusOnlyQuiz, sessionData }} />
+            <ActivityPagination
+              {...{ activity, sessionData }}
+              focusOnlyQuiz={focusOnlyQuiz.open}
+            />
 
             <div
               className={clsx(
                 'rounded-xl bg-white p-6 shadow-learning-activity',
-                { hidden: focusOnlyQuiz },
+                { hidden: focusOnlyQuiz.open },
               )}
               data-aos={ANIMATION.DATA_AOS}
             >
@@ -526,7 +519,7 @@ const ActivityPage = () => {
           </div>
 
           {/* Sratchpad */}
-          {openScratchPad.map((e, index: number) => {
+          {openScratchPad.map((e) => {
             if (e.type === 'file') {
               return (
                 <ModalResizeable
@@ -575,10 +568,10 @@ const ActivityPage = () => {
                     </div>
                   }
                 >
-                  <div className="bg-white">
+                  <div className="h-full bg-white">
                     <EditorReader
                       text_editor_content={e?.description}
-                      className=" w-full "
+                      className="w-full"
                     />
                     {e?.files?.length > 0 &&
                       e?.files.map((e: any, index: number) => {

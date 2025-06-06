@@ -154,11 +154,11 @@ const ActivityPagination = ({
                       'Click Button Previous Activity',
                     )
                   }
-                  className="mb-3 flex cursor-pointer select-none items-center gap-2 whitespace-nowrap text-sm font-semibold text-bw-1 underline hover:text-primary"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center gap-2 whitespace-nowrap text-sm font-semibold underline hover:text-primary"
                 >
                   <ArrowLeft /> Previous Activity
                 </div>
-                <div className="flex text-medium-sm text-gray-1">
+                <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                   {getCourseIcon(
                     activity?.previous_activity
                       ? activity?.previous_activity?.display_icon
@@ -179,7 +179,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                    <span className="leading-4.5 w-full overflow-hidden text-ellipsis">
                       {activity?.previous_activity
                         ? truncateString(activity?.previous_activity?.name, 80)
                         : truncateString(
@@ -205,11 +205,11 @@ const ActivityPagination = ({
                       'Click Button Next Activity',
                     )
                   }
-                  className="mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold text-bw-1 underline hover:text-primary"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
                 >
                   Next Activity <ArrowRight />
                 </div>
-                <div className="flex justify-end text-sm text-gray-500">
+                <div className="flex items-center justify-end gap-2 text-sm text-[#6b7280]">
                   {getCourseIcon(
                     activity?.next_activity
                       ? activity?.next_activity?.display_icon
@@ -230,7 +230,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                    <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                       {activity?.next_activity
                         ? truncateString(activity?.next_activity.name, 80)
                         : truncateString(
