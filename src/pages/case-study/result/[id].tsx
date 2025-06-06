@@ -590,15 +590,15 @@ const CaseStudyResult = () => {
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
+            <div className="flex items-center justify-between bg-[#F1F1F1] px-6 py-2 ">
+              <div className="w-1/3 truncate text-lg font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton title="Quit" onClick={() => backToPart()} />
             </div>
             {/* End Header */}
             <div
-              className="flex h-[calc(100%-104px)] bg-gray-3"
+              className="flex h-[calc(100%-104px)] bg-[#F1F1F1]"
               id={'preview-question'}
             >
               <div
@@ -647,7 +647,7 @@ const CaseStudyResult = () => {
                     topics?.files.map((e: IFile, index: number) => {
                       return (
                         <div
-                          className="cursor-pointer text-state-info hover:underline"
+                          className="cursor-pointer text-[#3964EA] hover:underline"
                           onClick={() =>
                             handleOpenScratchPad(
                               'file',
@@ -664,7 +664,7 @@ const CaseStudyResult = () => {
                 </div>
               </div>
               <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                className="h-full w-[20px] cursor-ew-resize bg-[#F1F1F1]"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -741,7 +741,7 @@ const CaseStudyResult = () => {
                     }
                   >
                     <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -769,7 +769,7 @@ const CaseStudyResult = () => {
                     }
                   >
                     <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Scratch Pad</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -868,10 +868,10 @@ const CaseStudyResult = () => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" relative flex h-[48px] items-center justify-between bg-[#F1F1F1] shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -885,7 +885,7 @@ const CaseStudyResult = () => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)
@@ -941,7 +941,7 @@ const CaseStudyResult = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
@@ -952,7 +952,7 @@ const CaseStudyResult = () => {
                                 key={e?.value}
                                 className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-[#A1A1A1] '
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -967,17 +967,17 @@ const CaseStudyResult = () => {
               <div className="flex items-center gap-x-2 px-3  ">
                 {result?.previous_topic && (
                   <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                     onClick={handlePeriousTopic}
                   >
-                    <div className="text-medium-sm font-medium">Previous</div>
+                    <div className="text-sm font-medium">Previous</div>
                   </button>
                 )}
                 <button
-                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
                   onClick={handleNextTopic}
                 >
-                  <div className="text-medium-sm font-medium">
+                  <div className="text-sm font-medium">
                     {result?.next_topic ? 'Next' : 'Finish'}
                   </div>
                 </button>

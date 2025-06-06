@@ -461,3 +461,14 @@ export function convertSlugToTitle(slug: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
     .join(' ') // ghép lại
 }
+
+export function convertMinutesToHourFormat(minutes: number): string {
+  const hrs = Math.floor(minutes / 60)
+  const mins = minutes % 60
+
+  const hourStr = hrs > 0 ? `${hrs} hour${hrs > 1 ? 's' : ''}` : ''
+  const minStr = mins > 0 ? `${mins} min${mins > 1 ? 's' : ''}` : ''
+
+  if (hourStr && minStr) return `${hourStr} ${minStr}`
+  return hourStr || minStr || '0 min'
+}

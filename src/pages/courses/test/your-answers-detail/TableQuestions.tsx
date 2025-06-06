@@ -23,8 +23,7 @@ import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderClass =
-  'text-left p-0 text-medium-sm text-gray-1 font-semibold'
+const commonHeaderClass = 'text-left p-0 text-sm text-[#A1A1A1] font-semibold'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -46,19 +45,19 @@ const TableQuestions = ({
   const headers = [
     {
       label: '#',
-      className: clsx(commonHeaderClass, 'min-w-20px xl:min-w-50px'),
+      className: clsx(commonHeaderClass, 'min-w-[20px] xl:min-w-[50px]'),
     },
     {
       label: 'Question',
-      className: clsx(commonHeaderClass, 'min-w-45'),
+      className: clsx(commonHeaderClass, 'min-w-[180px]'),
     },
     {
       label: 'Section',
-      className: clsx(commonHeaderClass, 'min-w-45'),
+      className: clsx(commonHeaderClass, 'min-w-[180px]'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-150px'),
+      className: clsx(commonHeaderClass, 'min-w-[150px]'),
     },
     {
       label: 'Result',
@@ -135,15 +134,15 @@ const TableQuestions = ({
   const renderBoxesAndLineClass = (type: string, data: IAnswer | undefined) => {
     if (type === 'Constructed') {
       return gradingStatus === GRADE_STATUS.FINISHED_GRADING
-        ? ' text-graded-finish border-pinned-1'
+        ? ' text-[#4077E0] border-[#18355D]'
         : data?.question?.qType === QUESTION_TYPES.ESSAY &&
             data?.active === COMMON_TEXT_ENUM.SUBMITED
-          ? ' text-pinned-1 border-pinned-1'
-          : ' text-gray-1 border-gray-1'
+          ? ' text-[#18355D] border-[#18355D]'
+          : ' text-[#A1A1A1] border-[#A1A1A1]'
     }
     return data?.is_correct
-      ? ' text-state-success border-success'
-      : ' text-state-error border-error'
+      ? ' text-success-600 border-[#397839]'
+      : ' text-error border-[#B90E0A]'
   }
 
   React.useEffect(() => {
@@ -160,19 +159,19 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-237px bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
       <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
           Your Answer Details{' '}
-          <span className="ml-5 rounded-sm bg-blur-yellow px-1 py-1.5 text-base text-yellow-1">
+          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-base text-[#FFB800]">
             Awaiting Grading
           </span>
         </div>
         {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-1">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="mb-6 text-base text-[#A1A1A1]">{`attempt: ${router?.query?.attempt}`}</div>
         )}
       </div>
       <div
@@ -183,7 +182,7 @@ const TableQuestions = ({
           )
         }}
       >
-        <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+        <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
       <div className="block pl-4">
         <SappTable
@@ -200,7 +199,7 @@ const TableQuestions = ({
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
+                      <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
                         {answer?.index}
                       </td>
 
@@ -218,7 +217,7 @@ const TableQuestions = ({
                           }
                         >
                           <div
-                            className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
+                            className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
                             dangerouslySetInnerHTML={{
                               __html: DOMPurify.sanitize(
                                 removeHtmlTags(
@@ -239,7 +238,7 @@ const TableQuestions = ({
 
                       {/* Section */}
                       <td
-                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
+                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-[#050505]"
                         title={rows[0]?.belong_to?.name ?? '--'}
                       >
                         <Tooltip title={rows[0]?.belong_to?.name}>
@@ -248,7 +247,7 @@ const TableQuestions = ({
                       </td>
 
                       {/* Type */}
-                      <td className="sapp-border p-0 pr-4 text-bw-1">
+                      <td className="sapp-border p-0 pr-4 text-[#050505]">
                         <div className="min-w-[111px]">
                           {getTypeName(answer?.question?.qType)}
                         </div>
@@ -274,11 +273,11 @@ const TableQuestions = ({
                           )}
                         </div>
                         {answer?.question?.qType !== 'ESSAY' && (
-                          <div className="ml-1 flex items-center justify-start gap-2 text-gray-1">
+                          <div className="ml-1 flex items-center justify-start gap-2 text-[#A1A1A1]">
                             <Image
                               src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                               alt="Correct"
-                              className="mr-1 text-state-success"
+                              className="mr-1 text-success-600"
                               width={16}
                               height={16}
                               layout="fixed"

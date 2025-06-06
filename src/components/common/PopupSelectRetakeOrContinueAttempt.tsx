@@ -58,10 +58,10 @@ const PopupSelectRetakeOrContinueAttempt = ({
       classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
       okButtonClass="w-full"
       cancelButtonClass={
-        '!px-0 w-full border rounded-lg border-gray-14 text-gray-14'
+        '!px-0 w-full border rounded-lg border-[#404041] text-[#404041]'
       }
     >
-      <div className="text-center text-base text-bw-13">
+      <div className="text-center text-base text-[#1F2937]">
         <div>Your last attempt was unexpectedly ended. </div>
         <div>Please click &apos;Continue&apos; to proceed with the test.</div>
       </div>

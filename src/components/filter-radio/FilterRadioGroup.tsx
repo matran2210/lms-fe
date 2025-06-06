@@ -117,7 +117,7 @@ const FilterRadioGroup = ({
                             {option.label}
                           </div>
                           {option.description && (
-                            <div className={'text-sm text-gray-500'}>
+                            <div className={'text-sm text-[#6b7280]'}>
                               {option.description}
                             </div>
                           )}
@@ -127,7 +127,7 @@ const FilterRadioGroup = ({
                             onClick={(e) => {
                               field.onChange()
                             }}
-                            className="text-gray-15 hover:text-red-1"
+                            className="text-ink-300 hover:text-[#FF524E]"
                           >
                             <CloseCircleIcon color="currentColor" />
                           </button>

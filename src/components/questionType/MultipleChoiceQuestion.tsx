@@ -3,7 +3,11 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { CircleInfoIcon } from '@assets/icons'
+import WarningSection from './WarningSection'
+import clsx from 'clsx'
 import { IPreviewProp } from './OneChoiceQuestion'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IDataAnswer {
   data: {
@@ -29,6 +33,8 @@ const MultiChoiceQuestion = ({
   tabs,
   currentPage,
   exhibitText = 'Exhibit',
+  isShowWarning = false,
+  explainClassname,
 }: IPreviewProp) => {
   const convertAnswer = useMemo(() => {
     let answers = []
@@ -99,19 +105,20 @@ const MultiChoiceQuestion = ({
           className="sapp-questions mb-6"
           highlighted={highlighted}
         />
+        <WarningSection isShowWarning={isShowWarning} className="mb-4" />
         {data?.question_topic?.exhibits &&
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   {exhibitText ? exhibitText + 's' : 'Exhibits'} (
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -141,7 +148,7 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             </>
           )}
       </div>
@@ -164,9 +171,8 @@ const MultiChoiceQuestion = ({
       </div>
 
       {solution && (
-        <div className="mt-8">
-          <hr />
-          <SappTitleSolution title={'Solution:'} className="mt-8" />
+        <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+          <SappTitleSolution title={`${MY_COURSES.solution}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}

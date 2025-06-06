@@ -442,7 +442,7 @@ const MatchQuiz = forwardRef(
             data?.question_topic?.exhibits?.length > 0 && (
               <>
                 {!!data?.question_topic?.description && (
-                  <div className="my-6 border border-b-gray-2"></div>
+                  <div className="my-6 border border-b-[#DCDDDD]"></div>
                 )}
                 <div className="mb-4 flex items-center">
                   <div className="font-semibold">
@@ -450,8 +450,8 @@ const MatchQuiz = forwardRef(
                     {data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">Click to view</span>
+                    <span className="text-error">* </span>
+                    <span className="text-[#A1A1A1]">Click to view</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -481,7 +481,7 @@ const MatchQuiz = forwardRef(
                     )
                   })}
                 </div>
-                <div className="my-6 border border-b-gray-2"></div>
+                <div className="my-6 border border-b-[#DCDDDD]"></div>
               </>
             )}
           <EditorReader
@@ -511,8 +511,8 @@ const MatchQuiz = forwardRef(
           </div>
           {!!corrects && !!correctNodes?.length && (
             <>
-              <Divider className="bg-gray-15" />
-              <div className="mb-4 text-base font-bold text-bw-15">
+              <Divider className="bg-ink-300" />
+              <div className="mb-4 text-base font-bold text-[#3F3F3F]">
                 Correct Answer:
               </div>
               <div
@@ -538,7 +538,7 @@ const MatchQuiz = forwardRef(
         </div>
 
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
+          <div className="mt-6 bg-[#F9F9F9] p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>

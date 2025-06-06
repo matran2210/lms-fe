@@ -416,10 +416,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                 style={{ border: '1px solid #DCDDDD' }}
               >
                 <div>
-                  <div className="text-base font-normal text-bw-1">
+                  <div className="text-base font-normal text-[#050505]">
                     {resource?.name}
                   </div>
-                  <div className="text-base font-normal text-gray-1">
+                  <div className="text-base font-normal text-[#A1A1A1]">
                     {bytesToKilobyte(resource?.size)}
                   </div>
                 </div>

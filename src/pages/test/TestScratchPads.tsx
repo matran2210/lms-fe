@@ -1,16 +1,15 @@
 import { CloseIcon } from '@assets/icons'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import { Triangle } from '@components/icons/Triangle'
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -82,7 +81,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-            <div className="border-gray-12 bg-gray-100 flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 px-4 py-3">
+            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-ink-300 bg-[#99A1B7] px-4 py-3">
               <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseModalIcon />
@@ -110,7 +109,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border">
-            <div className="bg-gray-100 flex w-full items-center justify-between px-4 py-3">
+            <div className="flex w-full items-center justify-between bg-[#99A1B7] px-4 py-3">
               <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
@@ -140,18 +139,19 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="center"
+          position="bottom left"
           header={
-            <div className="relative mb-3 px-6">
-              <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
+            <div className="relative">
+              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                 <div className="truncate">
                   <span className="text-base font-semibold">{`${exhibitText} ${
                     (i ?? 0) + 1
-                  }: ${exhibitsDes?.name}`}</span>
+                  }: `}</span>
+                  {exhibitsDes?.name}
                 </div>
               </div>
               <button
-                className="absolute right-6 top-0"
+                className="absolute right-3 top-2"
                 onClick={() => handleCloseScratchPad(e)}
               >
                 <CloseIcon />
@@ -159,7 +159,7 @@ const TestScratchPads = ({
             </div>
           }
         >
-          <div className=" bg-white">
+          <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
             <EditorReader
               text_editor_content={exhibitsDes?.description}
               className="w-full"
@@ -177,7 +177,6 @@ const TestScratchPads = ({
                 )
               })}
           </div>
-          <Triangle className="absolute bottom-2 right-2" />
         </ModalResizeable>
       )
     } else if (e.type === 'file') {

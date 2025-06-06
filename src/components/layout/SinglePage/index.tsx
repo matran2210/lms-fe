@@ -13,7 +13,7 @@ export default function SinglePageLayout(props: LayoutProps): ReactElement {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="h-screen overflow-hidden bg-gray-3">{children}</div>
+      <div className="h-screen overflow-hidden bg-[#F1F1F1]">{children}</div>
     </>
   )
 }

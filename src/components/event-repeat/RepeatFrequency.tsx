@@ -76,7 +76,7 @@ const RepeatFrequency = ({
           const value = Number(event.target.value)
           onNumberChange(value)
         }}
-        className="flex h-11.25 min-w-[80px] max-w-[80px] rounded border-default focus:border-primary"
+        className="flex h-[45px] min-w-[80px] max-w-[80px] rounded border-[#DCDDDD] focus:border-primary"
         name="repeat_every"
         disabled={disabled}
       />

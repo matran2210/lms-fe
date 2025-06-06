@@ -104,7 +104,7 @@ const Page = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="xl-max:mx-6 mx-auto my-0 max-w-[1570px] pt-6">
+      <div className="mx-auto my-0 max-w-[1570px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="font-normal text-[#050505]">Calendar</div>

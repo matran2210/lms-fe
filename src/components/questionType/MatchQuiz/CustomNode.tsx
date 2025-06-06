@@ -3,7 +3,6 @@ import { Handle, Position, NodeProps } from '@xyflow/react'
 import { Color } from './MatchQuiz'
 
 export const CustomNode: React.FC<NodeProps> = ({ data }) => {
-
   const handleStyle: React.CSSProperties = {
     width: '10px',
     height: '10px',

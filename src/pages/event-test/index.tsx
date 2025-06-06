@@ -34,30 +34,30 @@ const EventTest = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
-        <div className="border-b border-default bg-white">
-          <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 ">
+        <div className="border-b border-[#DCDDDD] bg-white">
+          <div className="py-5.75 relative mx-auto my-0 flex max-w-[1144px] max-[1199px]:mx-6 ">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="main mx-8 my-0 max-w-xxl xl:mx-auto">
+        <div className="main mx-8 my-0 max-w-[1144px] xl:mx-auto">
           <div className="flex flex-col justify-between gap-3 pb-4 pt-6 sm:flex-row">
-            <h2 className="text-medium-sm font-medium text-bw-1 ">
+            <h2 className="text-sm font-medium text-[#050505] ">
               {LANG_SIGNIN.eventTest}
             </h2>
             <EventTestFilter count={eventTestLists?.length || 0} />
           </div>
         </div>
         <div
-          className="heading mx-8 my-0 flex max-w-xxl bg-white md:mx-8 lg:mx-8 xl:mx-auto"
+          className="heading mx-8 my-0 flex max-w-[1144px] bg-white md:mx-8 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
           <Heading greeting="Welcome to" title={LANG_SIGNIN.eventTest} des="" />
         </div>
         <div
-          className="mx-8 my-0 max-w-xxl pt-6 lg:mx-8 xl:mx-auto"
+          className="mx-8 my-0 max-w-[1144px] pt-6 lg:mx-8 xl:mx-auto"
           data-aos={ANIMATION.DATA_AOS}
         >
           <EventTestList entranceTestLists={eventTestLists} />

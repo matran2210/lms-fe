@@ -7,6 +7,10 @@ import { userReducer } from 'src/redux/slice/User/User'
 import { ISubjectItem } from 'src/redux/types/User/urser'
 import TabLayout from './TabLayout'
 import SappButton from '@components/base/button/SappButton'
+import Icon from '@components/icons'
+import { Divider } from 'antd'
+import SappCollapse from '@components/collapse/SappCollapse'
+import AttempItem from './SubjectInformation/AttempItem'
 
 interface IProps {
   typeProgram: 'CMA' | 'ACCA' | 'CFA'
@@ -44,33 +48,25 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   }, [resetField, setValue, typeOfProgram, typeProgram, user])
 
   return (
-    <TabLayout
-      title={
-        typeProgram === 'ACCA' ? 'ACCA' : typeProgram === 'CFA' ? 'CFA' : 'CMA'
-      }
-      headerButtons={
-        <div className=" flex gap-x-2">
-          <SappButton
-            onClick={onOpenTab}
-            size="medium"
-            title={'Back'}
-            color="textUnderline"
-            className="block min-w-120 pr-0 text-base lg:hidden"
-          ></SappButton>
-        </div>
-      }
-    >
-      <div className="m-6">
+    <div>
+      <div>
         <div className="grid grid-cols-2">
-          <div className="col-span-1 flex w-[17.43rem] max-w-[200px] flex-none items-center text-gray-700 lg:max-w-[50%]">
-            ACCOUNT ID:
-          </div>
-          <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
-            {getValues('hubspot_account_info')}
+          <div className="w-fit">
+            <div className="flex items-center gap-2 text-base">
+              <Icon type="contact" />
+              <span>Account ID Number:</span>
+              <span className="font-bold">
+                {' '}
+                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-[#050505]">
+                  {getValues('hubspot_account_info')}
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>
-      <div className="m-6">
+      <Divider className="my-6" />
+      <div>
         {subjects?.map((subject: ISubjectItem, index: number) => {
           const courseTabData = user.course_tab_groups?.[
             typeProgram
@@ -80,40 +76,32 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
 
           return (
             <div key={`${subject.id}-${index}`}>
-              <div className="font-ligth mb-3 flex flex-none items-center text-gray-700 lg:max-w-[50%]">
-                {subject?.name}:
-              </div>
-              <div className="mb-5 grid grid-cols-2 rounded border p-3">
-                <div className="col-span-1 mb-3 flex flex-none items-center text-gray-1 lg:max-w-[50%]">
-                  Exam:
-                </div>
-                <div className="col-span-1 mb-3 flex-auto font-medium text-bw-1">
-                  <HookFormTextField
-                    control={control}
-                    disabled
-                    name={`user_hubspot_examination_subjects.[${index}].examination_subject_id`}
-                    defaultValue={
-                      courseTabData?.examination_subject?.examination?.name
-                    }
-                  />
-                </div>
-                <div className="col-span-1 flex flex-none items-center text-gray-1 lg:max-w-[50%]">
-                  Result:
-                </div>
-                <div className="col-span-1 flex-auto font-medium text-bw-1">
-                  <HookFormTextField
-                    control={control}
-                    disabled
-                    name={`user_hubspot_examination_subjects.[${index}].result`}
-                    defaultValue={courseTabData?.result ?? ''}
-                  />
-                </div>
-              </div>
+              <SappCollapse
+                ghost
+                items={[
+                  {
+                    key: '1',
+                    label: (
+                      <div className="flex flex-none items-center text-xl font-semibold text-[#374151] ">
+                        {subject?.name}
+                      </div>
+                    ),
+                    children: (
+                      <AttempItem
+                        index={0}
+                        courseTabData={courseTabData}
+                        control={control}
+                      />
+                    ),
+                  },
+                ]}
+              />
+              {index + 1 < subjects.length && <Divider className="my-6" />}
             </div>
           )
         })}
       </div>
-    </TabLayout>
+    </div>
   )
 }
 

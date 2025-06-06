@@ -29,7 +29,7 @@ const ChartCMAScore = ({
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">
-            <div className="text-black-1 text-xl font-medium">
+            <div className="text-xl font-medium text-black">
               {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
             <div className="my-2 text-6xl font-bold text-primary">
@@ -37,7 +37,7 @@ const ChartCMAScore = ({
               %
             </div>
           </div>
-          <div className="text-black-1 mb-6 text-lg-xl font-semibold xl:text-xl xl:font-medium">
+          <div className="mb-6 text-lg font-semibold text-black xl:text-xl xl:font-medium">
             Multiple Choice Score by Part
           </div>
         </div>
@@ -51,7 +51,7 @@ const ChartCMAScore = ({
                 alt="global"
               />
             </div>
-            <div className="text-base font-normal text-gray-1">
+            <div className="text-base font-normal text-[#A1A1A1]">
               Global Average {GlobalAverage}%
             </div>
           </div>
@@ -59,21 +59,21 @@ const ChartCMAScore = ({
       </div>
       <div className="">
         <div className="group relative h-[250px]">
-          <div className="h-full w-full border-b border-l border-gray-2 " />
+          <div className="h-full w-full border-b border-l border-[#DCDDDD] " />
           <div>
             {isGraded && (
               <div
-                className={`absolute flex h-0 w-full items-center border-t border-dotted border-gray-2 group-hover:border-state-info`}
+                className={`absolute flex h-0 w-full items-center border-t border-dotted border-[#DCDDDD] group-hover:border-[#3964EA]`}
                 style={{
                   bottom: passingScore + '%',
                 }}
               >
                 <div
-                  className={`text-black-1 relative -left-6 text-medium-sm font-normal`}
+                  className={`relative -left-6 text-sm font-normal text-black`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
-                <p className="sticky right-0 mb-7 ml-auto hidden text-sm text-state-info group-hover:block">
+                <p className="sticky right-0 mb-7 ml-auto hidden text-sm text-[#3964EA] group-hover:block">
                   Passing Score
                 </p>
               </div>
@@ -81,8 +81,8 @@ const ChartCMAScore = ({
             {passingScore === 50 && isGraded ? (
               ''
             ) : (
-              <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-gray-2">
-                <div className="text-black-1 relative -left-6 bottom-[50%] text-medium-sm font-normal">
+              <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-[#DCDDDD]">
+                <div className="relative -left-6 bottom-[50%] text-sm font-normal text-black">
                   <span className="relative">50</span>
                 </div>
               </div>
@@ -90,8 +90,8 @@ const ChartCMAScore = ({
           </div>
           <div className="flex w-full flex-row">
             <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
-              <div className="text-black-1 text-medium-sm">Part</div>
-              <div className="text-black-1 text-medium-sm">Weight </div>
+              <div className="text-sm text-black">Part</div>
+              <div className="text-sm text-black">Weight </div>
             </div>
             <div className="flex-start flex w-full flex-row">
               {data?.map((item) => (
@@ -116,12 +116,12 @@ const ChartCMAScore = ({
                         }}
                       />
                     </Tooltip>
-                    <div className="bg-black-1 absolute -bottom-2.5 left-1/2 h-2.5 w-[1px]" />
+                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-black" />
                   </div>
-                  <div className="mt-4 line-clamp-2 w-full text-center text-medium-sm font-medium text-bw-1">
+                  <div className="mt-4 line-clamp-2 w-full text-center text-sm font-medium text-[#050505]">
                     {item?.short_name}
                   </div>
-                  <div className="text-black-1 w-full text-center text-medium-sm font-normal">
+                  <div className="w-full text-center text-sm font-normal text-black">
                     {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
@@ -134,7 +134,7 @@ const ChartCMAScore = ({
         {data?.map((item) => {
           return (
             <div key={item.part_id} className="w-auto">
-              <div className="w-full break-all py-2 text-medium-sm font-medium leading-4 text-bw-1">
+              <div className="w-full break-all py-2 text-sm font-medium leading-4 text-[#050505]">
                 {`${item?.short_name ? item?.short_name + ' -' : ''} ${item?.title}`}
               </div>
             </div>

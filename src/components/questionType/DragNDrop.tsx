@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -36,6 +37,8 @@ interface IProps {
   isHideExhibit?: boolean
   exhibitText?: string
   handleGetData?: (data: DragDropAnswerItem) => void
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
@@ -58,6 +61,8 @@ const DragNDropPreivew = forwardRef(
       isHideExhibit = true,
       exhibitText,
       handleGetData,
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -378,7 +383,7 @@ const DragNDropPreivew = forwardRef(
                 data?.question_topic?.exhibits?.length > 0 && (
                   <>
                     {data?.question_topic?.description && (
-                      <div className="my-6 border border-b-gray-2"></div>
+                      <div className="my-6 border border-b-[#DCDDDD]"></div>
                     )}
                     <div className="mb-4 flex items-center">
                       <div className="font-semibold">
@@ -386,8 +391,8 @@ const DragNDropPreivew = forwardRef(
                         {data?.question_topic?.exhibits?.length || 0})
                       </div>
                       <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
+                        <span className="text-error">* </span>
+                        <span className="text-[#A1A1A1]">Click to view</span>
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -419,7 +424,7 @@ const DragNDropPreivew = forwardRef(
                         },
                       )}
                     </div>
-                    <div className="my-6 border border-b-gray-2"></div>
+                    <div className="my-6 border border-b-[#DCDDDD]"></div>
                   </>
                 )}
               <EditorReader
@@ -468,10 +473,8 @@ const DragNDropPreivew = forwardRef(
           </>
         )}
         {answerContent && (
-          <>
-            <div className="pt-[31px] text-base font-semibold">
-              Correct Answer
-            </div>
+          <div className={clsx('pt-7.625', correctAnswerClass)}>
+            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
               className="questions mt-2"
               text_editor_content={
@@ -479,11 +482,11 @@ const DragNDropPreivew = forwardRef(
                   ?.innerHTML || ''
               }
             />
-          </>
+          </div>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

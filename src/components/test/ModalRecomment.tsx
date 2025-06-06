@@ -27,8 +27,8 @@ const ModalRecomment = ({
       showFooter={false}
       classNameModal="sapp-modal--comment"
     >
-      <div className="flex items-center justify-between bg-gray-3 px-8 py-[13px]">
-        <div className="flex items-center text-base font-medium text-bw-1">
+      <div className="flex items-center justify-between bg-[#F1F1F1] px-8 py-[13px]">
+        <div className="flex items-center text-base font-medium text-[#050505]">
           {isComment ? 'Examiner’s Comment' : 'Recommendation'}
         </div>
         <div className="cursor-pointer" onClick={handleCloseRecomment}>

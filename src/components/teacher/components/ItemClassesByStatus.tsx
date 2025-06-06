@@ -171,7 +171,7 @@ const ItemClassesByStatus = ({
       <div className={`flex flex-col gap-6`}>
         <div className="flex items-center justify-between">
           {enableCourse ? (
-            <span className="text-gray-400 flex items-center gap-2 text-sm">
+            <span className="flex items-center gap-2 text-sm text-[#a1a1aa]">
               <BookInClassIcon />
               <Tooltip
                 title={classes?.code}
@@ -181,17 +181,17 @@ const ItemClassesByStatus = ({
               </Tooltip>
             </span>
           ) : (
-            <div className="name-class text-medium-sm text-gray-400">
-              <span className="text-bw-1 ml-1 font-medium" />
+            <div className="name-class text-sm text-[#a1a1aa]">
+              <span className="ml-1 font-medium text-[#050505]" />
             </div>
           )}
-          <div className="time-class text-gray-400 text-sm">
+          <div className="time-class text-sm text-[#a1a1aa]">
             {determineButtonToShow !== 'Active' && (
               <span className="flex items-center">
                 <ClockInClassIcon />
                 <span
                   className={`font-medium ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-400'
+                    enableCourse ? 'text-[#050505]' : 'text-[#a1a1aa]'
                   } ml-2`}
                 >
                   {daysDifference > 0
@@ -206,12 +206,12 @@ const ItemClassesByStatus = ({
           </div>
         </div>
 
-        <div className={`text-gray-700 text-lg font-semibold xl:h-[47px]`}>
+        <div className={`text-lg font-semibold text-[#374151] xl:h-[47px]`}>
           <div className="line-clamp-2 cursor-pointer text-ellipsis">
             {truncateString(classes?.course?.name, 50)}
           </div>
         </div>
-        <div className="text-gray-800 mt-[-12px] text-sm font-normal xl:h-[72px]">
+        <div className="mt-[-12px] text-sm font-normal text-[#27272a] xl:h-[72px]">
           {classes?.description}
         </div>
 
@@ -221,12 +221,12 @@ const ItemClassesByStatus = ({
               <Icon
                 type={enableCourse ? iconType : 'expired'}
                 className={`relative ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2'
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                 }`}
               />
               <p
-                className={`text-medium-sm font-medium ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                className={`text-sm font-medium ${
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
                 } ml-px pl-2`}
               >
                 {enableCourse ? showStatus : 'Expired'}
@@ -234,19 +234,19 @@ const ItemClassesByStatus = ({
             </div>
             <div className="number">
               <p
-                className={`text-medium-sm font-medium ${
-                  enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                className={`text-sm font-medium ${
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
                 }`}
               >
                 {classes?.progress}%
               </p>
             </div>
           </div>
-          <div className="progressbar bg-gray-3 h-1.5">
+          <div className="progressbar h-[6px] bg-[#F1F1F1]">
             <div
               className={`progress-percentage ${
-                enableCourse ? 'bg-primary' : 'bg-gray-2'
-              } h-1.5`}
+                enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
+              } h-[6px]`}
               style={{ width: `${classes?.progress}%` }}
             ></div>
           </div>
@@ -263,8 +263,8 @@ const ItemClassesByStatus = ({
               iconColorProps={isProgress ? '#ffb800' : '#374151'}
               className={
                 isProgress
-                  ? 'text- text-orange-3 border border-primary'
-                  : 'border-gray-800 border'
+                  ? 'text- border border-primary text-[#FFB800]'
+                  : 'border border-[#1f2937]'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />

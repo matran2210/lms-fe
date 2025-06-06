@@ -71,8 +71,9 @@ const SappModalV3 = ({
       centered
       closeIcon={false}
       onCancel={isClosable ? handleClose : handleClose || handleCancel}
-      {...otherProps}
+      maskClosable={isClosable}
       closable={isClosable}
+      {...otherProps}
     >
       {icon && (
         <div className="flex justify-center pb-10">
@@ -83,7 +84,7 @@ const SappModalV3 = ({
         {header && (
           <div
             className={clsx(
-              `text-bw-1 flex justify-center text-3xl font-semibold ${clsx({ 'mb-4': !content && !children })}`,
+              `flex justify-center text-3xl font-semibold text-[#050505] ${clsx({ 'mb-4': !content && !children })}`,
               headerClassName,
             )}
           >
@@ -91,7 +92,7 @@ const SappModalV3 = ({
           </div>
         )}
         {(content || children) && (
-          <div className="text-bw-13 text-center text-base">
+          <div className="text-center text-base text-[#1F2937]">
             {content ?? children}
           </div>
         )}

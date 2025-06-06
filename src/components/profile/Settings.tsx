@@ -21,13 +21,13 @@ const Settings = ({ onBack }: IProp) => {
                   size: 'medium',
                   isPaddingHorizontal: false,
                   disabled: false,
-                  className: 'min-w-fit !px-0 text-base w-30',
+                  className: 'min-w-fit !px-0 text-base w-[5rem]',
                   onClick: onBack,
                 }}
                 submit={{
                   title: 'Save',
                   size: 'medium',
-                  className: 'min-w-fit px-0 text-sm w-30',
+                  className: 'min-w-fit px-0 text-sm w-[5rem]',
                   type: 'submit',
                   disabled: true,
                 }}
@@ -36,7 +36,7 @@ const Settings = ({ onBack }: IProp) => {
           }
         >
           <div className="flex h-full items-center justify-center">
-            <div className="text-gray-1">Coming soon</div>
+            <div className="text-[#A1A1A1]">Coming soon</div>
           </div>
         </TabLayout>
       </form>

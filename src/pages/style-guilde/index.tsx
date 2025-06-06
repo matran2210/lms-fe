@@ -93,7 +93,7 @@ const StyleGuide: NextPage = () => {
     <>
       <div className={styles.main}>StyleGuildePage</div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Input</h2>
+        <h2 className="mb-4 text-3xl text-error">Input</h2>
         <HookFormTextField
           label="Default"
           required
@@ -104,7 +104,7 @@ const StyleGuide: NextPage = () => {
         />
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Select</h2>
+        <h2 className="mb-4 text-3xl text-error">Select</h2>
         <HookFormSelect
           options={selectOptions}
           defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
@@ -119,7 +119,7 @@ const StyleGuide: NextPage = () => {
       </div>
 
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Pagination Table</h2>
+        <h2 className="mb-4 text-3xl text-error">Pagination Table</h2>
         <table className="mb-3 table">
           <thead>
             <tr className={`text-start`}>
@@ -151,7 +151,7 @@ const StyleGuide: NextPage = () => {
           type={'table'}
         ></PaginationSAPP>
 
-        <h2 className="mt-4 text-3xl text-state-error">Pagination Row</h2>
+        <h2 className="mt-4 text-3xl text-error">Pagination Row</h2>
         <PaginationSAPP
           currentPage={currentPageRow}
           setCurrentPage={setCurrentPageRow}
@@ -162,8 +162,8 @@ const StyleGuide: NextPage = () => {
         ></PaginationSAPP>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Checkbox</h2>
-        <div className="mx-3 border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Checkbox</h2>
+        <div className="mx-3 border border-4 border-dashed border-[#050505] px-5 py-3">
           <HookFormCheckBox
             title="Right"
             required
@@ -199,8 +199,8 @@ const StyleGuide: NextPage = () => {
         </div>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Radio</h2>
-        <div className="mx-3 border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Radio</h2>
+        <div className="mx-3 border border-4 border-dashed border-[#050505] px-5 py-3">
           <HookFormRadioGroup
             name="HookFormRadioGroup1"
             control={control}
@@ -246,8 +246,8 @@ const StyleGuide: NextPage = () => {
         </div>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Buttons</h2>
-        <div className="mx-3 flex flex-col items-center border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Buttons</h2>
+        <div className="mx-3 flex flex-col items-center border border-4 border-dashed border-[#050505] px-5 py-3">
           <div>
             <ButtonPrimary
               title="ButtonPrimary lager"

@@ -1,10 +1,10 @@
 .calc {
-  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-gray-12;
+  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-ink-300;
   color: $color-btns-container;
 }
 
 .calc__display {
-  @apply flex flex-col gap-4 border-x border-gray-12 bg-pinned-2 px-6 py-8 text-right text-4xl;
+  @apply flex flex-col gap-4 border-x border-ink-300 bg-[#18355D] px-6 py-8 text-right text-4xl;
 }
 
 .display_expression {
@@ -17,12 +17,12 @@
 }
 
 .calc__btns-container {
-  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-gray-100 p-6;
+  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-[#99A1B7] p-6;
   grid-template-columns: repeat(4, 1fr);
 }
 
 .calc__btn {
-  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-gray-15 text-2xl text-bw-13;
+  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-[#D1D5DB] text-2xl text-[#1F2937];
 }
 
 .btn--span-2 {

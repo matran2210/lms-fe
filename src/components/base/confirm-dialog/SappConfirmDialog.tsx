@@ -72,7 +72,7 @@ const SappConfirmDialog: FC<SappConfirmDialogProps> = ({
             </div>
           </div>
           <div className="mb-3 mt-6">
-            <p className="text-center text-sm font-medium text-bw-11">
+            <p className="text-center text-sm font-medium text-[#252F4A]">
               {message}
             </p>
           </div>

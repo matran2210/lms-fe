@@ -37,10 +37,10 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
 
   const renderDetail = (label: string, value: React.ReactNode) => (
     <div className="mb-2 flex flex-row justify-between last:mb-0">
-      <div className="text-gray-11 min-w-[169px] text-sm leading-[21px] tracking-normal">
+      <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-[#99A1B7]">
         {label}
       </div>
-      <div className="text-bw-13 flex-1 text-sm leading-[21px] tracking-normal">
+      <div className="flex-1 text-sm leading-[21px] tracking-normal text-ink-800">
         {value}
       </div>
     </div>
@@ -72,7 +72,7 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
           <a
             href={event.meetingLink}
             target="_blank"
-            className="text-blue-2 text-sm font-normal italic leading-[21px] tracking-normal"
+            className="text-sm font-normal italic leading-[21px] tracking-normal text-[#025eff]"
             rel="noreferrer"
           >
             {event.meetingLink}

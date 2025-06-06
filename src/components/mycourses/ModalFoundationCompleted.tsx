@@ -30,10 +30,10 @@ const ModalFoundationCompleted = ({
       buttonSize="extra"
       isClosable
     >
-      <div className="text-medium-sm text-gray-1 mt-4 text-center">
+      <div className="mt-4 text-center text-sm text-[#A1A1A1]">
         It looks like you haven&apos;t finished the Foundation Course.
       </div>
-      <div className="text-medium-sm text-gray-1 mt-1 text-center">
+      <div className="mt-1 text-center text-sm text-[#A1A1A1]">
         Would you like to complete it first, or skip and start this course right
         away?
       </div>

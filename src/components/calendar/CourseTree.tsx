@@ -73,8 +73,8 @@ const TreeNodeItem = ({ node }: { node: TreeNode }) => {
         <span
           className={
             node.children.length > 0
-              ? 'font-normal text-gray-14'
-              : "relative pl-5 text-gray-14 before:absolute before:left-0 before:top-0 before:text-xl before:text-gray-14 before:content-['•']"
+              ? 'font-normal text-secondary'
+              : "relative pl-5 text-secondary before:absolute before:left-0 before:top-0 before:text-xl before:text-secondary before:content-['•']"
           }
         >
           {node.course_section.name}

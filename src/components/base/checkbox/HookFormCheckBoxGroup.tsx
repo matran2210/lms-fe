@@ -107,10 +107,10 @@ const HookFormCheckBoxGroup = ({
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
-                    stateLabel = 'text-state-success'
+                    stateLabel = 'text-success-600'
                   } else if (checked) {
                     state = 'error'
-                    stateLabel = 'text-state-error'
+                    stateLabel = 'text-error'
                   }
                 }
                 const checkHasChecked = multiple
@@ -169,6 +169,7 @@ const HookFormCheckBoxGroup = ({
                       state={state}
                       value={option.value.toString()}
                       size={size}
+                      inputStyle="rounded-lg w-6 h-6"
                     />
                     <span
                       className={clsx(
@@ -176,7 +177,7 @@ const HookFormCheckBoxGroup = ({
                         classNameTitle,
                         stateLabel,
                         {
-                          'text-gray-1':
+                          'text-[#A1A1A1]':
                             lowerOptions && !checked && checkHasChecked,
                         },
                       )}
@@ -184,7 +185,10 @@ const HookFormCheckBoxGroup = ({
                       <span className={clsx({ 'mr-3': checked && !!corrects })}>
                         {option.label}
                       </span>
-                      <YourAnswer show={checked && !!corrects}></YourAnswer>
+                      <YourAnswer
+                        show={checked && !!corrects}
+                        className="bg-purple-2 text-state-info max-h-6 !rounded !text-sm"
+                      ></YourAnswer>
                     </span>
                   </label>
                 )

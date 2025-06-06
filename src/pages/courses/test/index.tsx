@@ -293,19 +293,19 @@ const TestModal = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-state-success">
+          <div className="pr-0.5 font-medium text-success-600">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-yellow-400">
+          <div className="pr-0.5 font-medium text-[#facc15]">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+          <div className="pr-0.5 font-medium text-[#6b7280]">Unsubmitted</div>
         )
     }
   }
@@ -496,7 +496,7 @@ const TestModal = ({
               data?.quiz?.attempt?.number_of_attempts ===
                 data?.quiz?.limit_count && (
                 <div>
-                  <div className="text-center text-base font-normal text-bw-13">
+                  <div className="text-center text-base font-normal text-[#1F2937]">
                     {isFinalAttemptTimeout ? (
                       <div>
                         The test has timed out and has been submitted
@@ -524,7 +524,7 @@ const TestModal = ({
                             Your remaining time:
                           </div>
                           <div
-                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
+                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-error'}`}
                           >
                             <div className="text-base font-bold">
                               {formatTime(
@@ -548,14 +548,14 @@ const TestModal = ({
           ) && (
             <div className="flex flex-col gap-6">
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">Name:</div>
-                <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
+                <div className="text-[#DCDDDD]00">Name:</div>
+                <div className="text-[#050505 line-clamp-2 pr-0.5 font-medium">
                   {data?.name}
                 </div>
               </div>
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">Pass Point:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+                <div className="text-[#DCDDDD]00">Pass Point:</div>
+                <div className="text-[#050505 pr-0.5 font-medium">
                   {data?.quiz?.is_graded ? (
                     <>{data?.quiz?.required_percent_score ?? '_ _'}</>
                   ) : (
@@ -564,23 +564,23 @@ const TestModal = ({
                 </div>
               </div>
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">Time Allowed:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+                <div className="text-[#A1A1A1]">Time Allowed:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.quiz_timed
                     ? formatTime(data?.quiz?.quiz_timed * 60)
                     : 'Unlimited'}
                 </div>
               </div>
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">Grading Method:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+                <div className="text-[#A1A1A1]">Grading Method:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {capitalizeFirstLetter(selectedResult?.grading_method) ??
                     capitalizeFirstLetter(data?.quiz?.grading_method)}
                 </div>
               </div>
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">No of Attempts:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+                <div className="text-[#A1A1A1]">No of Attempts:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.attempt?.number_of_attempts || 0}/
                   {data?.quiz?.is_limited
                     ? data?.quiz?.limit_count
@@ -591,7 +591,7 @@ const TestModal = ({
                 <div className="flex justify-between gap-8 text-base">
                   <div className="flex items-center gap-2 hover:text-primary">
                     <div
-                      className={`forcus-group:text-primary text-gray-200 ${isFocus ? 'text-primary' : ''}`}
+                      className={`forcus-group:text-primary  text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
                     >
                       Result:
                     </div>
@@ -650,7 +650,7 @@ const TestModal = ({
                     </div>
                     {isShowDetail() && (
                       <div
-                        className="ml-2 cursor-pointer text-primary underline"
+                        className="ml-2 cursor-pointer text-[#3964EA] underline"
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
@@ -675,13 +675,13 @@ const TestModal = ({
                 </div>
               )}
               <div className="flex justify-between gap-8 text-base">
-                <div className="text-gray-200">Status:</div>
+                <div className="text-[#A1A1A1]">Status:</div>
                 {data?.quiz?.is_graded &&
                 data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
                   getGradedStatus(data?.quiz?.attempt?.grading_status)
                 ) : (
                   <div
-                    className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}
+                    className={`${status === StatusQuizAttempt.Passed ? 'text-success-600' : status === StatusQuizAttempt.Failed ? 'text-error' : 'text-[#050505]'} pr-0.5 font-medium`}
                   >
                     {status}
                   </div>
@@ -728,8 +728,8 @@ const TestModal = ({
             (remainingTime !== undefined && remainingTime >= 0 ? (
               <div
                 className={clsx(`text-base font-bold`, {
-                  'text-state-info': remainingTimeLastAttempt.current > 0,
-                  'text-state-error': remainingTimeLastAttempt.current <= 0,
+                  'text-info': remainingTimeLastAttempt.current > 0,
+                  'text-error': remainingTimeLastAttempt.current <= 0,
                 })}
               >
                 {formatTime(

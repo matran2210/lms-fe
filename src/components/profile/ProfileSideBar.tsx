@@ -329,7 +329,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
               const isActive = urlPage === page
 
               let className =
-                'text-gray-1 relative hover:text-primary font-normal'
+                'text-[#A1A1A1] relative hover:text-primary font-normal'
               if (isActive) {
                 className = 'bg-secondary font-medium text-primary'
               }
@@ -339,7 +339,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
               return (
                 <li
-                  className={`${className} border-gray-2 group relative cursor-pointer border-b-[1px]`}
+                  className={`${className} group relative cursor-pointer border-b-[1px] border-[#DCDDDD]`}
                   key={key}
                 >
                   <a
@@ -375,7 +375,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                   {urlChildren?.length > 0 && (
                     <div
                       className={clsx(
-                        'border-gray-2 ml-5 border-l',
+                        'ml-5 border-l border-[#DCDDDD]',
                         isExpanded.isOpen &&
                           isExpanded.urlPage === urlPage &&
                           'my-5',
@@ -413,20 +413,20 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                     </div>
                   )}
                   <div
-                    className={`hover-transition-font-weight border-gray-3 relative top-px border-b `}
+                    className={`hover-transition-font-weight relative top-px border-b border-[#F1F1F1] `}
                   />
                 </li>
               )
             })}
             <li
-              className="hover-transition-font-weight text-gray-1 relative cursor-pointer p-5 font-normal  hover:bg-secondary hover:text-primary"
+              className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-[#A1A1A1]  hover:bg-secondary hover:text-primary"
               onClick={handleLogout}
             >
               <div className="absolute inset-0 bottom-0"></div>
               <div>Logout</div>
             </li>
           </div>
-          <div className="text-gray-1 text-center text-sm font-normal">
+          <div className="text-center text-sm font-normal text-[#A1A1A1]">
             LMS Pro Version 2.8.0
           </div>
         </ul>

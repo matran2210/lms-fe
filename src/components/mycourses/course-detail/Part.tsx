@@ -97,7 +97,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
       <div
-        className="name-course text-2xl font-medium text-bw-1 xl:h-[60px]"
+        className="name-course text-2xl font-medium text-[#050505] xl:h-[60px]"
         onClick={handleRouterPartDetail}
       >
         {course?.course_section_link_parents?.[0]?.is_preview_locked ||
@@ -142,7 +142,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               dangerouslySetInnerHTML={{
                 __html: truncateHTML(25, course?.description) ?? '',
               }}
-              className="h-[120px] text-base text-bw-1"
+              className="h-[120px] text-base text-[#050505]"
             />
           </Tooltip>
         </div>
@@ -152,22 +152,22 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
           <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-medium-sm font-medium leading-[14px] text-bw-1">
+              <p className="ml-px pl-1 text-sm font-medium leading-[14px] text-[#050505]">
                 {showStatus}
               </p>
-              <span className="ml-px pl-1 text-medium-sm font-medium text-gray-1">
+              <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
                 {formattedTime > 0 ? `${formattedTime} left` : ''}
               </span>
             </div>
             <div className="number">
-              <p className="text-medium-sm font-medium text-bw-1">
+              <p className="text-sm font-medium text-[#050505]">
                 {progressPart}%
               </p>
             </div>
           </div>
-          <div className="progressbar h-1.5 bg-gray-3">
+          <div className="progressbar h-[6px] bg-[#F1F1F1]">
             <div
-              className="progress-percentage h-1.5 bg-primary"
+              className="progress-percentage h-[6px] bg-primary"
               style={{ width: `${progressPart}%` }}
             ></div>
           </div>

@@ -66,7 +66,7 @@ const SappTable = ({
             </tr>
           </thead>
         )}
-        <tbody className={`fw-semibold text-bw-1 ${tbodyClass}`}>
+        <tbody className={`fw-semibold text-[#050505] ${tbodyClass}`}>
           {children}
         </tbody>
       </table>

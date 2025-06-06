@@ -40,10 +40,10 @@ const PopUpRemindEntrance = ({
       icon={<LoginIcon />}
       header="Take Your Test"
     >
-      <div className="mb-7 mt-4 text-center text-sm font-normal text-gray-1">
+      <div className="mb-7 mt-4 text-center text-sm font-normal text-[#A1A1A1]">
         <span>
           You have
-          <span className="font-semibold text-bw-1"> {count}</span>
+          <span className="font-semibold text-[#050505]"> {count}</span>
         </span>
         <span> entrance tests that haven’t been taken, complete them now</span>
       </div>

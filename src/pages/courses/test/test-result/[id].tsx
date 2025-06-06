@@ -66,16 +66,16 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="mx-auto max-w-1570">
-        <div className="px-5 xl:container md:px-10">
+    <FullScreenLayout title="Test Result" className="!bg-[#F1F1F1]">
+      <div className="mx-auto max-w-[1570px]">
+        <div className="xl:container px-5 md:px-10">
           <Breadcrumb
             tabs={breadcrumbs}
             currentPage={'Results'}
-            className="2xl-max:py-4"
+            className="max-[1199px]:py-4"
           />
         </div>
-        <div className="px-5 xl:container md:px-10">
+        <div className="xl:container px-5 md:px-10">
           <TestResultPage
             questions={questions}
             type={questions?.course?.course_categories?.[0]?.name}

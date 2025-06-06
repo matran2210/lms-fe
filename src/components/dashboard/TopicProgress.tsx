@@ -132,8 +132,8 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[50vh] grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity xl:h-auto 3.5xl:px-8">
-      <div className="mb-5 border-b pb-3 text-lg-xl font-bold text-bw-11 4xl:text-xl">
+    <div className="flex min-h-[50vh] grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity xl:h-auto 3xl:px-8">
+      <div className="mb-5 border-b pb-3 text-lg font-bold text-[#252F4A] 4xl:text-xl">
         Topic Progress
       </div>
       {option && (
@@ -143,7 +143,7 @@ const TopicProgress = () => {
           </div>
           <div className="mt-5 flex w-full">
             <div className="m-auto">
-              <span className="mr-2.5 inline-block h-3 w-3 bg-primary-6"></span>
+              <span className="bg-primary-6 mr-2.5 inline-block h-3 w-3"></span>
               <span className="font-medium">Completed</span>
             </div>
           </div>
