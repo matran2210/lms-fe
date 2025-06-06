@@ -16,6 +16,7 @@ import SappIcon from 'src/common/SappIcon'
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { video_url } from '@utils/constants'
+import { TimeLineIcon } from '@assets/icons'
 
 type Props = {
   videos?: IVideo[]
@@ -325,8 +326,8 @@ const VideoDocument = ({
   }, [atLastQuestion, isConfirmQuestion])
 
   return (
-    <div>
-      <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between gap-x-10 gap-y-2 text-primary">
         <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
           {(videos as IVideo[])?.length > 1 &&
             videos?.map((v, i) => {
@@ -343,12 +344,14 @@ const VideoDocument = ({
                           checked: true,
                         }
                       : { checked: false })}
-                  />
+                    size={'small'}
+                    state="primary"
+                  ></SAPPRadio>
                   <span
                     className={`radio-item-label  ${
                       v?.file?.id === currentVideo?.file?.id
-                        ? 'text-[#050505]'
-                        : 'text-[#A1A1A1]'
+                        ? 'font-medium text-primary'
+                        : 'text-gray-14'
                     }`}
                   >
                     Video {i + 1}
@@ -359,16 +362,10 @@ const VideoDocument = ({
         </div>
         <div className="group relative z-30 flex cursor-pointer select-none items-center">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
-            <>
-              <span className="mr-2 text-[#050505] group-hover:text-primary">
-                Timeline
-              </span>
-              {/* Icon for course video timeline */}
-              <SappIcon
-                className="fill-[#050505] group-hover:fill-primary"
-                icon="course_video_timeline"
-              ></SappIcon>
-            </>
+            <div className="flex items-center gap-2">
+              <TimeLineIcon />
+              <span className="text-lg font-medium text-primary">Timeline</span>
+            </div>
           ) : (
             <></>
           )}
@@ -379,7 +376,7 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9]"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
@@ -397,7 +394,7 @@ const VideoDocument = ({
           </div>
         </div>
       </div>
-      <div className="relative">
+      <div className="relative overflow-hidden rounded-lg shadow-learning-activity">
         <SAPPVideo
           streamRef={streamRef}
           options={{

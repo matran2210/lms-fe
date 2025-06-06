@@ -14,7 +14,7 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
   return (
     <div
       style={{ color: (data?.color || Color?.TextDefault) as string }}
-      className={`relative min-h-10 w-[295px] break-words rounded-lg bg-white p-4 text-start text-base shadow-matchingquiz`}
+      className={`shadow-matchingquiz relative min-h-10 w-[295px] break-words rounded-lg bg-white p-4 text-start text-base`}
     >
       {data.label as any}
       {data.role === 'question' && (

@@ -1,7 +1,6 @@
 import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
-// import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import { Workbook } from '@fortune-sheet/react'
@@ -12,6 +11,8 @@ import { Controller } from 'react-hook-form'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { MY_COURSES } from 'src/constants/lang'
 
 type SheetData = {
   name: string
@@ -54,7 +55,9 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
-  indexKey?: number
+  className?: string
+  editorClassName?: string
+  explainClassname?: string
 }
 const EssayQuestionPreview = ({
   data,
@@ -80,7 +83,9 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
-  indexKey,
+  className = '',
+  editorClassName = '',
+  explainClassname,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const [key, setKey] = useState<string>('1')
@@ -179,7 +184,7 @@ const EssayQuestionPreview = ({
   }
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className={clsx('w-full overflow-hidden bg-white', className)}>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -251,7 +256,7 @@ const EssayQuestionPreview = ({
             )}
             {data?.description && (
               <EditorReader
-                className="editor-wrap mb-4"
+                className="editor-wrap mb-6"
                 text_editor_content={data?.description}
                 highlighted={
                   question_data?.requirements?.[index || 0]?.highlighted
@@ -403,11 +408,12 @@ const EssayQuestionPreview = ({
                 fullData?.is_viewed_answer
               }
               handleChange={() => handleChange && handleChange(data?.id)}
+              className={editorClassName}
               // externalRef={externalRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg border`}
             >
               <Controller
                 name={name}
@@ -552,9 +558,10 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className="mt-8">
-                <hr />
-                <div className="mt-8 font-semibold">Solution:</div>
+              <div
+                className={clsx('mb-11 mt-8 bg-gray-4 p-4', explainClassname)}
+              >
+                <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader
                   text_editor_content={
                     data?.explanation ??

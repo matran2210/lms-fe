@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -38,6 +39,8 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 const AddWordPreview = forwardRef(
   (
@@ -56,6 +59,8 @@ const AddWordPreview = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText = 'Exhibit',
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -254,22 +259,20 @@ const AddWordPreview = forwardRef(
           highlighted={highlighted}
         />
         {answerContent && (
-          <>
-            <div className="pt-[22px] text-base font-semibold">
-              Correct Answer
-            </div>
+          <div className={clsx('pt-5.75', correctAnswerClass)}>
+            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
-              className="questions mt-2"
+              className="questions mt-4"
               text_editor_content={
                 answerContent?.documentElement?.querySelector('body')
                   ?.innerHTML || ''
               }
             />
-          </>
+          </div>
         )}
         {solution && (
-          <div className="mt-6 bg-[#F9F9F9] p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

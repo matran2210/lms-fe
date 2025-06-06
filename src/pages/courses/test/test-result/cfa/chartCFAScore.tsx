@@ -28,7 +28,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-sm font-normal text-[#050505]">
           Available Points
         </div>
-        <div className="left-27 absolute top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-[#A1A1A1]"></div>
+        <div className="absolute left-27 top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-[#A1A1A1]"></div>
         <div className="ml-9 h-40 w-full">
           <div
             className="mt-10 flex min-w-full items-center"

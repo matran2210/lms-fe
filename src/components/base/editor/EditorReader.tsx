@@ -166,7 +166,7 @@ const EditorReader = ({
   return (
     <>
       <div
-        className={`${className} mce-content-body`}
+        className={`mce-content-body ${className}`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
