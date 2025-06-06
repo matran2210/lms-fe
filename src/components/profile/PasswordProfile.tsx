@@ -202,8 +202,8 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           <ButtonText
             title="Verify Code"
             full={true}
-            className="mb-2 rounded-md bg-[#29353C] px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
-            size="lager"
+            className="mb-2 bg-[#29353C] px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
+            size="large"
             loading={loading}
             onClick={verifyCode}
             disabled={code.some((e) => e === '') || time <= 0}

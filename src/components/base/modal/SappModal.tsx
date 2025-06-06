@@ -21,7 +21,7 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
@@ -342,8 +342,6 @@ const SappModal: React.FC<IProps> = ({
                       <ButtonCancelSubmit
                         revertFunction={revertFunction}
                         className={footerButtonClassName}
-                        color={color}
-                        colorCancel={colorCancel}
                         showOkButton={showOkButton}
                         showCancelButton={showCancelButton}
                         submit={{

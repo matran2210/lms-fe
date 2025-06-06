@@ -99,7 +99,6 @@ const HeaderTest = ({
             loading: false,
             disabled: submited,
             className: 'border border-[#050505]',
-            color: 'secondary',
             onClick: () => {
               onSubmitAnswer('finish')
               if (checkUnSubmitAnswer()?.length > 0) {
@@ -114,7 +113,6 @@ const HeaderTest = ({
             title: 'Quit',
             size: 'small',
             className: 'border border-[#050505] !w-[109px]',
-            color: 'secondary',
             onClick: () => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())

@@ -143,12 +143,10 @@ const ChangePassword = ({ handleCancel }: IProp) => {
           <div className="flex justify-end">
             <ButtonCancelSubmit
               className="flex gap-2"
-              color="text"
               cancel={{
                 title: 'Cancel',
                 onClick: handleCancel,
                 size: 'medium',
-                isPaddingHorizontal: false,
                 disabled: loading,
                 className: 'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
               }}
@@ -157,7 +155,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                 size: 'medium',
                 className:
                   'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
-                type: 'submit',
+                htmlType: 'submit',
                 disabled:
                   loading ||
                   isEmpty(watch('confirmPassword')) ||

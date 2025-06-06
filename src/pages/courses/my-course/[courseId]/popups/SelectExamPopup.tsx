@@ -101,7 +101,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
           />
           <ButtonPrimary
             title="Confirm Exam"
-            className="h-12 text-base"
+            className="h-12"
             onClick={confirmExamDate}
             loading={isLoading}
           />

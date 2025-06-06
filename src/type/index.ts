@@ -1,5 +1,6 @@
 import { Dayjs } from 'dayjs'
 import { Control } from 'react-hook-form'
+import { IButtonBaseProps } from './common'
 
 export type IButtonColors =
   | 'primary'
@@ -38,7 +39,7 @@ export interface IButtonProps {
   toolTipTitle?: string
   icon?: React.ReactNode
 }
-export type IButtonSize = 'small' | 'medium' | 'lager' | 'extra'
+export type IButtonSize = 'small' | 'medium' | 'large' | 'extra'
 export type IButtonVariant = 'primary' | 'secondary' | 'custom'
 export interface IButtonIconProps extends IButtonProps {
   variant?: IButtonVariant
@@ -57,11 +58,9 @@ export interface ITabsTeacher {
   urlTitle?: string
 }
 export type IButtonCancelSubmitProps = {
-  submit: IButtonProps
-  cancel: IButtonProps
+  submit: IButtonBaseProps
+  cancel: IButtonBaseProps
   className?: string
-  color?: IButtonColors
-  colorCancel?: IButtonColors
   showOkButton?: boolean
   showCancelButton?: boolean
   size?: IButtonSize

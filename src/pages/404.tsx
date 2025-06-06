@@ -40,8 +40,8 @@ const ErrorPage = () => {
           <SappButton
             title="Back to Home"
             full={false}
-            className="px-8 md:px-22"
-            size="lager"
+            className="md:px-22 px-8"
+            size="large"
             type="submit"
           />
         </div>

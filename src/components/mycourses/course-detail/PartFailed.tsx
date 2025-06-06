@@ -241,8 +241,6 @@ const PartFailed = ({
                     coursePart?.quiz?.limit_count
                 }
                 title={`Start`}
-                full={false}
-                size={'small'}
                 className={`${
                   coursePart?.quiz?.attempt?.number_of_attempts !==
                     coursePart?.quiz?.limit_count && ''
@@ -284,9 +282,6 @@ const PartFailed = ({
               {isShowButtonAction() && (
                 <ButtonSecondary
                   title={renderOkButtonCaption()}
-                  full={false}
-                  size="small"
-                  color="quizActivity"
                   className="ml-auto max-h-8"
                   onClick={() => {
                     if (

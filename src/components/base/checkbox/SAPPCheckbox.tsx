@@ -9,7 +9,7 @@ interface IProps {
   name?: string
   value?: string | boolean
   state?: 'default' | 'error' | 'success' | 'primary' // Thêm prop state
-  size?: 'small' | 'medium' | 'lager' // Thêm prop size
+  size?: 'small' | 'medium' | 'large' // Thêm prop size
   lowerOptions?: boolean
   inputStyle?: string
 }
@@ -27,7 +27,7 @@ const STATE = {
 const SIZES = {
   small: 'w-[1.125rem] h-[18px]',
   medium: 'w-[24px] h-[24px]',
-  lager: 'w-[30px] h-[30px]',
+  large: 'w-[30px] h-[30px]',
 }
 
 const SAPPCheckbox = ({
