@@ -28,7 +28,7 @@ interface IHookFormCheckBoxProps {
   justify?: 'between' | 'start' | 'center' | 'end'
   multiple?: boolean
   state?: 'default' | 'error' | 'success' // Thêm prop state
-  size?: 'small' | 'medium' | 'lager' // Thêm prop size
+  size?: 'small' | 'medium' | 'large' // Thêm prop size
   corrects?: { [key: string]: boolean }
   toggle?: boolean
   positionCheckBox?: 'start' | 'center' | 'bottom'

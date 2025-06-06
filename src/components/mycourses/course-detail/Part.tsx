@@ -183,8 +183,6 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
                     ? 'Review'
                     : 'Resume'
             }
-            full={false}
-            size={'small'}
             className="ml-auto"
             onClick={() => {
               handleRouterPartDetail()

@@ -546,8 +546,6 @@ const Course = ({
                         ? 'Activate'
                         : determineButtonToShow
                     }
-                    full={false}
-                    size={'small'}
                     className="ml-auto"
                     onClick={() => {
                       if (isActiveStudent) {

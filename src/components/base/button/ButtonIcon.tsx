@@ -1,42 +1,39 @@
 import React, { ReactNode } from 'react'
+import { IButtonBaseProps } from 'src/type'
+import BaseButton from './BaseButton'
 
-interface IProps {
-  title?: string
-  children: ReactNode
-  onClick?: () => void
-  className?: string
-  trigger?: 'click'
-  placement?: 'bottom-end'
-  toggle?: 'modal'
-  target?: string
-  customButton?: boolean
+interface IButtonIconProps extends IButtonBaseProps {
+  buttonType: 'rounded' | 'square' //bo tròn || bo tròn vuông với radius
 }
 
+// phải tự set w/h của icon và chuyển icon về fill=currentColor
 const ButtonIcon = ({
-  title,
-  children,
+  icon,
   onClick,
   className = '',
-  trigger,
-  placement,
-  target,
-  toggle,
-  customButton,
-}: IProps) => {
+  link,
+  size = 'small',
+  disabled = false,
+  full = false,
+  children,
+  buttonType = 'rounded',
+  ...props
+}: IButtonIconProps) => {
+  let padding = 'p-[7px]'
+  let borderRadius = buttonType === 'rounded' ? 'rounded-full' : 'rounded-md'
+  let disabledClass = disabled ? 'cursor-not-allowed' : 'cursor-pointer'
+  let componentClass = `text-center text-icon border border-ink-300 hover:!text-white hover:!bg-primary hover:!border-primary font-medium ${padding} ${borderRadius} ${disabledClass} ${className}`
+
   return (
-    <button
-      className={`${className} btn ${
-        customButton ? `btn-sapp-filter btn-light-primary` : 'btn-primary'
-      } h-[50px] w-[50px] rounded-full bg-primary text-white hover:bg-[#FFC83A]`}
+    <BaseButton
+      className={`${componentClass}`}
       onClick={onClick}
-      data-kt-menu-trigger={trigger}
-      data-kt-menu-placement={placement}
-      data-bs-toggle={toggle}
-      data-bs-target={target}
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {children}
-      {title}
-    </button>
+      {icon}
+    </BaseButton>
   )
 }
 

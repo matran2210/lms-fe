@@ -164,7 +164,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         title="Verify Code"
         full={true}
         className="mb-5 !font-semibold"
-        size="lager"
+        size="large"
         loading={loading}
         onClick={handleVerifyCode}
         disabled={code.some((e) => e === '') || time <= 0}

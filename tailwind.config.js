@@ -10,7 +10,7 @@ module.exports = {
       black: colors.black,
       white: colors.white,
       primary: {
-        50: '#FFF3F0',
+        50: '#FFFBF2',
         100: '#FFF1CC',
         200: '#FFE399',
         300: '#FFD466',
@@ -27,12 +27,12 @@ module.exports = {
         300: '#7B7B7C',
         400: '#5E5E5F',
         DEFAULT: '#404041',
-        600: '#333334',
-        700: '#262627',
-        800: '#1A1A1A',
+        600: '#29353C',
+        700: '#212B30',
+        800: '#0E1214',
       },
       ink: {
-        50: '#FFFAF0',
+        50: '#FFFFFF',
         100: '#F6F6F6',
         200: '#E5E7EB',
         300: '#D1D5DB',
@@ -106,6 +106,9 @@ module.exports = {
         DEFAULT: '#F2BD0E',
         200: '#FFFDF5',
       },
+      icon: {
+        DEFAULT: '#1C274C',
+      },
     },
     screens: {
       xs: '375px',
@@ -156,6 +159,7 @@ module.exports = {
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
         matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        card: '0px 4px 16px 0px #00000014',
         'learning-activity': '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
       backgroundImage: {

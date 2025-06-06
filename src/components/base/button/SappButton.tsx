@@ -4,7 +4,7 @@ import { IButtonProps } from 'src/type'
 const SIZES = {
   small: 'text-[0.875rem] leading-4',
   medium: 'text-[1rem] leading-6',
-  lager: 'text-lg leading-[27px]',
+  large: 'text-lg leading-[27px]',
   extra: 'text-lg leading-[27px]',
 }
 
@@ -37,7 +37,7 @@ const COLORS = {
 const PADDINGS = {
   small: 'px-4 py-2',
   medium: 'px-6 py-3',
-  lager: 'px-9 py-2.8',
+  large: 'px-9 py-2.8',
   extra: 'px-17.5 py-2.8',
   none: '',
 }
