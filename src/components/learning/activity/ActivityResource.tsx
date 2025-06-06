@@ -32,7 +32,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
     {
       key: 'activity_resource',
       label: (
-        <div className={'select-none text-lg font-medium text-bw-13'}>
+        <div className={'text-bw-13 select-none text-lg font-medium'}>
           Activity Resource
         </div>
       ),
@@ -54,7 +54,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                   >
                     <div className="">
                       <p
-                        className="cursor-pointer text-blue-7 underline hover:text-primary"
+                        className="text-blue-7 cursor-pointer underline hover:text-primary"
                         onClick={() => {
                           isPreviewFile
                             ? handleOpenScratchPad(
@@ -73,7 +73,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                       </p>
                     </div>
                     <div
-                      className="cursor-pointer text-dark-1"
+                      className="cursor-pointer text-[#1C274C]"
                       onClick={() => {
                         download(e?.resource?.name, e?.resource?.file_key)
                         trackGAEvent('Click Button Download Resource Activity')
@@ -97,7 +97,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
       defaultActiveKey={['activity_resource']}
       expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
       items={getItemsActivityResource}
-      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+      className="learning-activity-collapse shadow-learning-activity rounded-xl bg-white p-6"
     />
   )
 }

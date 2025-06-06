@@ -9,7 +9,7 @@
 .sapp-video-custom {
   .video-controls {
     transition: all 0.2s ease;
-    @apply bg-gray-899 bg-opacity-60;
+    @apply bg-ink-100 bg-opacity-60;
   }
 
   .video-controls.hide {
@@ -171,7 +171,7 @@
     fill: #ffffff;
     stroke: #ffffff;
     &.play {
-      @apply fill-dark-1;
+      @apply fill-[#1C274C];
     }
   }
 

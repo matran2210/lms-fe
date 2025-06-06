@@ -48,7 +48,7 @@
     }
 
     .learning-act-editor {
-      @apply overflow-hidden rounded-lg border border-2 border-gray-200;
+      @apply overflow-hidden rounded-lg border-2 border-[#e5e7eb];
       .tox-tinymce {
         @apply border-none;
       }
@@ -95,7 +95,7 @@
 .learning-act-tab-pagination {
   @apply mt-6;
   .tab-pagination {
-    @apply rounded-full p-2 text-dark-1;
+    @apply rounded-full p-2 text-[#1C274C];
     box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
     &:hover {
       @apply bg-primary text-white;
@@ -104,9 +104,9 @@
       @apply bg-primary text-white;
     }
     &.disabled {
-      @apply cursor-not-allowed bg-gray-2 text-dark-1 opacity-50;
+      @apply cursor-not-allowed bg-[#DCDDDD] text-[#1C274C] opacity-50;
       &:hover {
-        @apply text-dark-1;
+        @apply text-[#1C274C];
       }
     }
   }

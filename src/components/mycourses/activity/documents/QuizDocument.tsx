@@ -524,7 +524,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -613,7 +613,7 @@ const QuizDocument = ({
     setOpenGradedReport(false)
   }
   return (
-    <div className="flex flex-col gap-8 rounded-xl bg-gray-898 p-8">
+    <div className="bg-gray-898 flex flex-col gap-8 rounded-xl p-8">
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
@@ -651,11 +651,11 @@ const QuizDocument = ({
                   trackGAEvent('Click Prev Question Quiz Activity')
                 }}
               >
-                <span className="text-dark-1">
+                <span className="text-[#1C274C]">
                   <CircleArrowLeftIcon />
                 </span>
               </button>
-              <div className="text-base text-bw-13">
+              <div className="text-bw-13 text-base">
                 Question: {activeQuestionIndex + 1} of {questions?.length || 0}
               </div>
               <button
@@ -671,13 +671,13 @@ const QuizDocument = ({
                   trackGAEvent('Click Next Question Quiz Activity')
                 }}
               >
-                <span className="text-dark-1">
+                <span className="text-[#1C274C]">
                   <CircleArrowRightIcon />
                 </span>
               </button>
             </div>
             <div
-              className="col-span-1 flex cursor-pointer justify-end text-dark-1"
+              className="col-span-1 flex cursor-pointer justify-end text-[#1C274C]"
               onClick={() => setFocusOnlyQuiz(!focusOnlyQuiz)}
             >
               {focusOnlyQuiz ? <MinimumContentIcon /> : <MaximumContentIcon />}
