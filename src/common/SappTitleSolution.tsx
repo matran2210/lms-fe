@@ -3,7 +3,7 @@ import React from 'react'
 
 export const SappTitleSolution = ({
   title,
-  className = '',
+  className,
 }: {
   title: string
   className?: string

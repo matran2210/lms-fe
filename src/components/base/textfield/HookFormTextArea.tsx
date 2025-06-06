@@ -27,7 +27,7 @@ const HookFormTextArea = ({
   defaultValue,
   onChange,
   placeholder,
-  className = 'w-fill--available h-30',
+  className = 'w-fill--available h-[7.5rem]',
   // rows,
   // label,
   // guideline,

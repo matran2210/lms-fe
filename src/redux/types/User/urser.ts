@@ -32,8 +32,9 @@ export interface IUser {
     ACCA?: ICourseTabGroup
     CFA?: ICourseTabGroup
   }
+  hubspot_contact_id?: string
 }
-interface IUserContact {
+export interface IUserContact {
   id: string
   created_at: string
   updated_at: string
@@ -163,26 +164,25 @@ export interface IUserHubspotProgramInfo {
   }
 }
 
+export interface UserHubspotExaminationSubjectItem {
+  id: string
+  examination_subject_id: string
+  result: string
+  examination_subject: {
+    id: string
+    subject_id: string
+    examination_id: string
+    subject: ISubjectItem
+    examination: {
+      id: string
+      name: string
+    }
+  }
+  is_final_examination_subject: boolean
+}
 export interface ICourseTabGroup {
   id: string
-  user_hubspot_examination_subjects: [
-    {
-      id: string
-      examination_subject_id: string
-      result: string
-      examination_subject: {
-        id: string
-        subject_id: string
-        examination_id: string
-        subject: ISubjectItem
-        examination: {
-          id: string
-          name: string
-        }
-      }
-      is_final_examination_subject: boolean
-    },
-  ]
+  user_hubspot_examination_subjects: UserHubspotExaminationSubjectItem[]
 }
 
 export interface IExamination {

@@ -1,6 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
+import { Divider } from 'antd'
 import { useEffect, useMemo } from 'react'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
@@ -86,7 +87,7 @@ const OneChoiceQuestion = ({
   }, [data])
 
   return (
-    <>
+    <div>
       <div
         id="hightlight_area"
         onMouseUp={(e: any) => {
@@ -116,7 +117,7 @@ const OneChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions"
+          className={'sapp-questions mb-6'}
           highlighted={highlighted}
         />
         <WarningSection isShowWarning={isShowWarning} className="mb-4" />
@@ -126,7 +127,7 @@ const OneChoiceQuestion = ({
         data?.question_topic?.exhibits?.length > 0 && (
           <>
             {!!data?.question_topic?.description && (
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             )}
             <div className="mb-4 flex items-center">
               <div className="font-semibold">
@@ -134,8 +135,8 @@ const OneChoiceQuestion = ({
                 {data?.question_topic?.exhibits?.length || 0})
               </div>
               <div className="ml-4">
-                <span className="text-state-error">* </span>
-                <span className="text-gray-1">Click to view</span>
+                <span className="text-error">* </span>
+                <span className="text-[#A1A1A1]">Click to view</span>
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -165,11 +166,11 @@ const OneChoiceQuestion = ({
                 )
               })}
             </div>
-            <div className="my-6 border border-b-gray-2" />
+            <div className="my-6 border border-b-[#DCDDDD]" />
           </>
         )}
       <div
-        className="sapp-answer-wrapper"
+        className="sapp-answer-wrapper pt-0"
         style={{
           flexDirection: 'column',
         }}
@@ -180,6 +181,8 @@ const OneChoiceQuestion = ({
           name={name || 'answer'}
           corrects={corrects}
           defaultValue={defaultValues}
+          labelClass={'text-base font-normal text-ink-800'}
+          optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>
       {solution && (
@@ -188,7 +191,7 @@ const OneChoiceQuestion = ({
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
       )}
-    </>
+    </div>
   )
 }
 export default OneChoiceQuestion

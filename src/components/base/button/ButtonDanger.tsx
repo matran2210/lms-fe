@@ -16,7 +16,7 @@ const ButtonDanger = ({
       ? 'text-[0.875rem] leading-4'
       : size === 'medium'
         ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
+        : 'text-lg leading-[27px]'
   let paddingVerticalClass =
     size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
   let paddingHorizontalClass =
@@ -24,9 +24,9 @@ const ButtonDanger = ({
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass =
     disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-danger'
+      ? 'cursor-not-allowed opacity-60 bg-[#D35563]'
       : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-danger hover:bg-danger-2`
+  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-[#D35563] hover:bg-[#dd4339]`
   if (link)
     return (
       <a href={link} className={componentClass} aria-disabled={disabled}>

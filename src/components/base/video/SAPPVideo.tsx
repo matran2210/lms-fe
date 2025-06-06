@@ -758,7 +758,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
+        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -842,7 +842,7 @@ const SAPPVideo = ({
                 <div className="flex-center flex w-full items-center gap-6">
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video flex h-8 w-8 items-center justify-center bg-overlay-play before:-right-4"
+                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#BDBDBDB3] before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -862,16 +862,15 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center gap-1 text-xsm font-normal leading-normal text-gray-7">
+                    <div className="time flex-center text-xsm mr-4 gap-1 font-normal leading-normal text-[#E3E3E3]">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
                     </div>
                   </div>
-
-                  <div className="relative h-1.5 w-full text-justify">
+                  <div className="relative h-[6px] w-full text-justify">
                     <progress
-                      className="pointer-events-none absolute top-0 h-1.5 w-full"
+                      className="pointer-events-none absolute top-0 h-[6px] w-full"
                       ref={progressBarRef}
                     />
                     <input
@@ -883,7 +882,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-overlay-dark p-1 text-xsm font-semibold text-white"
+                      className="seek-tooltip text-xsm absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -894,7 +893,7 @@ const SAPPVideo = ({
                           return (
                             <div
                               key={i}
-                              className="marker absolute top-0 z-[5] h-1.5 w-1.5 bg-primary"
+                              className="marker absolute top-0 z-[5] h-[6px] w-1.5 bg-primary"
                               title={e[0]?.question_topic?.name}
                             ></div>
                           )
@@ -910,10 +909,10 @@ const SAPPVideo = ({
                         ref={volumeButtonRef}
                         onClick={toggleMute}
                       >
-                        <svg className="icon-svg volume-mute hidden h-5.5 w-4.5 scale-[0.8]">
+                        <svg className="icon-svg volume-mute ml-3 hidden h-[22px] w-[22px] scale-[0.8]">
                           <path d="M12 3.984v4.219l-2.109-2.109zM4.266 3l16.734 16.734-1.266 1.266-2.063-2.063q-1.547 1.313-3.656 1.828v-2.063q1.172-0.328 2.25-1.172l-4.266-4.266v6.75l-5.016-5.016h-3.984v-6h4.734l-4.734-4.734zM18.984 12q0-2.391-1.383-4.219t-3.586-2.484v-2.063q3.047 0.656 5.016 3.117t1.969 5.648q0 2.203-1.031 4.172l-1.5-1.547q0.516-1.266 0.516-2.625zM16.5 12q0 0.422-0.047 0.609l-2.438-2.438v-2.203q1.031 0.516 1.758 1.688t0.727 2.344z"></path>
                         </svg>
-                        <svg className="icon-svg volume-low hidden h-6 w-4.5">
+                        <svg className="icon-svg volume-low ml-3 hidden h-6 w-[22px]">
                           <path d="M5.016 9h3.984l5.016-5.016v16.031l-5.016-5.016h-3.984v-6zM18.516 12q0 2.766-2.531 4.031v-8.063q1.031 0.516 1.781 1.711t0.75 2.32z"></path>
                         </svg>
                         <Icon
@@ -967,7 +966,7 @@ const SAPPVideo = ({
                         ></path>
                       </svg>
                       <>
-                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-overlay-control py-1 text-center text-white">
+                        <div className="settings-control-popup absolute -right-8 bottom-5 hidden w-44 rounded bg-[#00000099] py-1 text-center text-white">
                           {!activeQuality && !activeSpeed && !activeCC && (
                             <div className="px-4 py-1">
                               <div
@@ -977,7 +976,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Quality:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                   {playbackQuality === 'Auto'
                                     ? 'Auto'
                                     : getResolution(Number(playbackQuality))}
@@ -995,7 +994,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Speed:
                                 </span>
-                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                   {playbackRate === 1 ? 'Normal' : playbackRate}
                                   <ArrowIcon
                                     className={'h-4 w-3'}
@@ -1012,7 +1011,7 @@ const SAPPVideo = ({
                                   <span className="block w-16 text-left text-sm font-semibold">
                                     CC:
                                   </span>
-                                  <span className="flex items-center justify-between gap-1 text-xsm font-medium">
+                                  <span className="text-xsm flex items-center justify-between gap-1 font-medium">
                                     {playbackCC === -1
                                       ? 'Off'
                                       : listCaptions[playbackCC].lang}
@@ -1039,7 +1038,7 @@ const SAPPVideo = ({
                                 Quality
                               </h4>
                               <ul
-                                className="quality-options text-ssm font-normal"
+                                className="quality-options text-xs font-normal"
                                 onClick={() => setActiveQuality(false)}
                               >
                                 <li
@@ -1089,7 +1088,7 @@ const SAPPVideo = ({
                                 Speed
                               </h4>
                               <ul
-                                className="speed-options text-ssm font-normal"
+                                className="speed-options text-xs font-normal"
                                 onClick={() => setActiveSpeed(false)}
                               >
                                 {playbackSpeeds.map((speed: any) => (
@@ -1122,7 +1121,7 @@ const SAPPVideo = ({
                                 CC
                               </h4>
                               <ul
-                                className="cc-options text-ssm font-normal"
+                                className="cc-options text-xs font-normal"
                                 onClick={() => setActiveCC(false)}
                               >
                                 <li

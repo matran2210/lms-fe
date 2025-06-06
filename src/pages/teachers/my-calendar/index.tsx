@@ -4,7 +4,6 @@ import NewEventSidebar from '@components/my-calendar/NewEventSidebar'
 import dayjs from 'dayjs'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
-// import 'sapp-common-package/dist/index.css'
 import { IEvent } from 'sapp-common-package/dist/types'
 import { DATE_TIME_FORMAT, TitleSidebar } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -56,7 +55,7 @@ const MyCalendar = () => {
     <LayoutTeacher
       title={TitleSidebar.MY_CALENDAR}
       breadcrumbs={breadcrumbs}
-      className="bg-gray-10 p-0"
+      className="bg-[#F2F4F7] p-0"
     >
       <div className="h-fit w-full rounded-xl bg-white px-8 py-5">
         <Calendar

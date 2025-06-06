@@ -153,7 +153,7 @@ const ResultCourse = ({
   ) : (
     <div className="flex h-8 items-center gap-2">
       <div
-        className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}
+        className={`forcus-group:text-primary text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
       >
         Result:
       </div>

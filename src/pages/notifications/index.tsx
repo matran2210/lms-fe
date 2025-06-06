@@ -168,8 +168,8 @@ const Notifications = () => {
           Loading
         </div>
       )} */}
-      <div className="border-b border-default bg-white px-4 lg:px-20">
-        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
+      <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
+        <div className="mx-auto my-0 flex max-w-[1144px] py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
@@ -178,16 +178,16 @@ const Notifications = () => {
       </div>
       <div className="h-full px-5 lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main mx-auto my-0 max-w-xxl pt-6 lg:px-0"
+          className="main mx-auto my-0 max-w-[1144px] pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
+          <h2 className="pb-4 text-sm font-medium text-[#050505]">
             Notifications
           </h2>
         </div>
 
         <div
-          className="heading mx-auto my-0 flex max-w-xxl justify-between border-b border-gray-2 bg-white px-6"
+          className="heading mx-auto my-0 flex max-w-[1144px] justify-between border-b border-[#DCDDDD] bg-white px-6"
           data-aos={ANIMATION.DATA_AOS}
         >
           <NotifyTab tabs={tabs} />
@@ -202,7 +202,10 @@ const Notifications = () => {
           </div>
         </div>
 
-        <div className="mx-auto my-0 max-w-xxl" data-aos={ANIMATION.DATA_AOS}>
+        <div
+          className="mx-auto my-0 max-w-[1144px]"
+          data-aos={ANIMATION.DATA_AOS}
+        >
           <NotifyList
             notifyLists={notifyLists}
             open={openModel}

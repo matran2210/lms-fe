@@ -1,21 +1,23 @@
 // components/SearchForm.tsx
 
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
-import { useRouter } from 'next/router'
-import { buildQueryString } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
-import { useForm } from 'react-hook-form'
-import { ICourseAll } from 'src/type/courses'
-import { defaultStatusCourse } from 'src/constants'
-import TotalResullt from 'src/common/TotalResullt'
+import { buildQueryString } from '@utils/index'
+import clsx from 'clsx'
 import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import TotalResullt from 'src/common/TotalResullt'
+import { defaultStatusCourse } from 'src/constants'
+import { ICourseAll } from 'src/type/courses'
 
 interface IProps {
   courses: ICourseAll
   setPage?: Dispatch<SetStateAction<number>>
+  tourGuideActive?: boolean
 }
 
-const Filter = ({ courses, setPage }: IProps) => {
+const Filter = ({ courses, setPage, tourGuideActive }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
@@ -72,12 +74,14 @@ const Filter = ({ courses, setPage }: IProps) => {
   }, [router?.query?.type])
 
   return (
-    <div className="flex items-center filter">
-      <TotalResullt total={totalResults} className="mr-6" />
+    <div className="flex items-center font-normal filter">
+      <TotalResullt total={totalResults} className="border-r-0" />
       <div
-        className={`border-r border-gray-1 pr-6 ${
-          !activeStatus ? 'inactive-filter' : ''
-        }`}
+        className={clsx({
+          'mr-1 border-x border-[#A1A1A1] py-2 pl-5 pr-6': true,
+          'inactive-filter': !activeStatus,
+          'z-50 rounded-lg bg-white ': tourGuideActive,
+        })}
       >
         <SappHookFormSelect
           control={control}
@@ -95,7 +99,14 @@ const Filter = ({ courses, setPage }: IProps) => {
           isSearchable={false}
         />
       </div>
-      <div className="flex self-center pl-6 filter">
+      <div
+        className={clsx(
+          `ml-1 flex self-center rounded-lg py-2 pl-5 pr-6 filter`,
+          {
+            'z-50  bg-white': tourGuideActive,
+          },
+        )}
+      >
         <SappHookFormSelect
           control={control}
           name="status"

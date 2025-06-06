@@ -238,12 +238,12 @@ function DiscussionElement({
         />
       </div>
       <div className="w-4" />
-      <div className="w-45">
-        <div className="mb-1 text-base font-semibold text-bw-1">
+      <div className="w-[180px]">
+        <div className="mb-1 text-base font-semibold text-[#050505]">
           {userInfo?.name}
         </div>
-        <div className="text-xs text-gray-1">{userInfo?.email}</div>
-        <div className="text-xs text-gray-1">{userInfo?.phone}</div>
+        <div className="text-xs text-[#A1A1A1]">{userInfo?.email}</div>
+        <div className="text-xs text-[#A1A1A1]">{userInfo?.phone}</div>
       </div>
     </div>
   )
@@ -286,7 +286,7 @@ function DiscussionElement({
   }, [userInfo])
 
   return (
-    <div className="flex gap-3 text-bw-1">
+    <div className="flex gap-3 text-[#050505]">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
           <div
@@ -304,7 +304,7 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'flex-none leading-0',
+                  'leading-0 flex-none',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -344,7 +344,7 @@ function DiscussionElement({
                       <div className="content-center">
                         <VerifiedIcon />
                       </div>
-                      <div className="w-fit content-center px-2 text-ssm">
+                      <div className="w-fit content-center px-2 text-xs">
                         SAPP Supporter
                       </div>
                     </div>

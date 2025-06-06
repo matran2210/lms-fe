@@ -23,7 +23,9 @@ import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import { isNull } from 'lodash'
+import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
 import {
@@ -36,16 +38,14 @@ import {
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
-import { IQuestion } from 'src/type/course/Question'
-import { CoursesAPI } from '../../../../pages/api/courses/index'
-import ModalExplanationPackage from '../ModalExplanationPackage'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'src/type/course/my-course/Activity'
-import { isNull } from 'lodash'
-import { useRouter } from 'next/router'
+import { IQuestion } from 'src/type/course/Question'
+import { CoursesAPI } from '../../../../pages/api/courses/index'
+import ModalExplanationPackage from '../ModalExplanationPackage'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { Tooltip } from 'antd'
 
 type Props = {
@@ -102,7 +102,6 @@ const QuizDocument = ({
   quizSetting,
   gradeStatus,
   quizName,
-  reload,
   grading_method,
   refreshTab,
   exhibitText,
@@ -488,12 +487,12 @@ const QuizDocument = ({
           </div>
           <div className="body-modal-white -mt-2">
             <div id="hightlight_area">
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -513,7 +512,7 @@ const QuizDocument = ({
                   {exhibitText} 5: csv short
                 </div>
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>
@@ -525,7 +524,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -557,19 +556,19 @@ const QuizDocument = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="rounded bg-blur-green px-2 font-medium text-green-800">
+          <div className="rounded bg-[#3978391A] px-2 font-medium text-[#166534]">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="rounded  bg-blur-yellow px-2 font-medium text-amber-400">
+          <div className="text-amber-400  rounded bg-[#FFB8001A] px-2 font-medium">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="rounded bg-gray-200 px-2 font-medium text-gray-400">
+          <div className="rounded bg-[#e5e7eb] px-2 font-medium text-[#a1a1aa]">
             Manual Grading
           </div>
         )
@@ -626,7 +625,7 @@ const QuizDocument = ({
           <div
             className={`${
               is_graded || 'invisible'
-            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+            } whitespace-nowrap   rounded bg-[#3964EA] bg-opacity-10 px-2 text-center  font-medium text-[#3964EA]`}
           >
             Graded Activity
           </div>
@@ -823,7 +822,7 @@ const QuizDocument = ({
           handleCancel={() => setModalResult(undefined)}
           handleSubmit={() => setModalResult(undefined)}
           setOpen={() => setModalResult(undefined)}
-          size="max-w-xxl"
+          size="max-w-[1144px]"
           position="center"
           showFooter={false}
           isFullScreen={true}
@@ -838,7 +837,7 @@ const QuizDocument = ({
                 setModalResult(undefined)
               }}
             >
-              <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+              <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
             </div>
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}

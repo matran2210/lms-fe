@@ -34,10 +34,10 @@ const UnSubmitAnswerModal = ({
       <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertTriagle />
       </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-[#050505]">
         UnSubmit Answer
       </div>
-      <div className="mb-11 mt-4 text-center text-2xl font-normal text-gray-1">
+      <div className="mb-11 mt-4 text-center text-2xl font-normal text-[#A1A1A1]">
         {caseStudy ? (
           <ul>
             {data.map((item, index) => (

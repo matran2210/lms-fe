@@ -7,11 +7,11 @@ const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
 
   return (
     <nav aria-label="breadcrumb">
-      <ul className="flex items-center justify-start space-x-2 text-medium-sm font-normal text-gray-400">
+      <ul className="flex items-center justify-start space-x-2 text-sm font-normal text-[#a1a1aa]">
         {breadcrumbs.map((breadcrumb, index) => (
           <React.Fragment key={breadcrumb.title}>
             <li
-              className={`${index === lastIndex ? 'justify-start text-medium-sm font-medium text-gray-800' : ''}`}
+              className={`${index === lastIndex ? 'justify-start text-sm font-medium text-[#27272a]' : ''}`}
             >
               {index !== lastIndex ? (
                 <Link href={breadcrumb.link}>{breadcrumb.title}</Link>
@@ -21,7 +21,7 @@ const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
             </li>
             {index !== lastIndex && (
               <li className="flex items-center">
-                <span className="text-[8px] text-gray-400">▶</span>
+                <span className="text-[8px] text-[#a1a1aa]">▶</span>
               </li>
             )}
           </React.Fragment>

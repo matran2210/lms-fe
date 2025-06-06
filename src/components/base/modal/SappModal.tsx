@@ -107,7 +107,7 @@ const SappModal: React.FC<IProps> = ({
   customFooter,
 
   confirmOnclose,
-  size = 'max-w-lg',
+  size = 'max-w-[512px]',
   modelClassname = '',
   refClass = 'md:px-6 px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all',
   childClass = '',
@@ -287,7 +287,7 @@ const SappModal: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } inset-0 animate-fade-in-overlay bg-bw-10 transition-opacity ${overlayClass}`}
+              } inset-0 animate-fade-in-overlay bg-[#000000cc] transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
@@ -304,11 +304,11 @@ const SappModal: React.FC<IProps> = ({
                   (customHeader || (
                     <div className="relative bg-white pb-5 md:pb-5">
                       {isBordered && (
-                        <div className="absolute bottom-0 left-0 right-0 -mx-6 border-b border-gray-2"></div>
+                        <div className="absolute bottom-0 left-0 right-0 -mx-6 border-b border-[#DCDDDD]"></div>
                       )}
                       <div className="flex">
                         {customTitle || (
-                          <div className="text-xl font-bold text-bw-1">
+                          <div className="text-xl font-bold text-[#050505]">
                             {title}
                           </div>
                         )}
@@ -317,7 +317,7 @@ const SappModal: React.FC<IProps> = ({
                             className="ml-auto cursor-pointer"
                             onClick={onCancel}
                           >
-                            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+                            <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
                           </div>
                         )}
                       </div>
@@ -336,7 +336,7 @@ const SappModal: React.FC<IProps> = ({
                 {showFooter && (
                   <div className={`relative pt-5 md:pt-5 ${footerClassName}`}>
                     {isBordered && (
-                      <div className="absolute left-0 right-0 top-0 -mx-6 border-b border-gray-2"></div>
+                      <div className="absolute left-0 right-0 top-0 -mx-6 border-b border-[#DCDDDD]"></div>
                     )}
                     {customFooter || (
                       <ButtonCancelSubmit

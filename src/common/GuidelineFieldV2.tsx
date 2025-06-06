@@ -11,7 +11,7 @@ const GuidelineFieldV2 = ({ guideline, classString = '' }: Props) => {
     guideline?.length && (
       <div
         className={clsx(
-          'text-xs ms-3 mt-1 justify-start font-normal leading-[18px] text-gray-11',
+          'ms-3 mt-1 justify-start text-xs font-normal leading-[18px] text-[#99A1B7]',
           classString,
         )}
       >

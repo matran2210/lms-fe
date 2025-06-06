@@ -269,6 +269,7 @@ const MatchingQuestion = forwardRef(
       setAnswers(arr)
       setDefaultValue(obj)
     }, [defaultAnswer, data?.question_matchings])
+
     return (
       <div key={key} ref={extenalRef} id={`${uuid}`}>
         <div
@@ -302,7 +303,7 @@ const MatchingQuestion = forwardRef(
             data?.question_topic?.exhibits?.length > 0 && (
               <>
                 {!!data?.question_topic?.description && (
-                  <div className="my-6 border border-b-gray-2"></div>
+                  <div className="my-6 border border-b-[#DCDDDD]"></div>
                 )}
                 <div className="mb-4 flex items-center">
                   <div className="font-semibold">
@@ -310,8 +311,8 @@ const MatchingQuestion = forwardRef(
                     {data?.question_topic?.exhibits?.length || 0})
                   </div>
                   <div className="ml-4">
-                    <span className="text-state-error">* </span>
-                    <span className="text-gray-1">Click to view</span>
+                    <span className="text-error">* </span>
+                    <span className="text-[#A1A1A1]">Click to view</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -341,7 +342,7 @@ const MatchingQuestion = forwardRef(
                     )
                   })}
                 </div>
-                <div className="my-6 border border-b-gray-2"></div>
+                <div className="my-6 border border-b-[#DCDDDD]"></div>
               </>
             )}
           <EditorReader
@@ -368,7 +369,7 @@ const MatchingQuestion = forwardRef(
                     {defaultValue?.[e?.id]?.id && (
                       <div
                         // className="w-fit"
-                        className="sapp-notched-container min-w-132px"
+                        className="sapp-notched-container min-w-[132px]"
                         id={defaultValue[e?.id]?.answer?.id}
                         draggable="true"
                         onDragStart={drag}
@@ -383,7 +384,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
+              className={`sapp-store dropable min-h-large flex flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"
@@ -418,7 +419,7 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6"
+                          className="sapp-arrowed-container-corrects !border-[#D8D8E5] before:!border-[#D8D8E5]"
                         />
                         <div
                           // id={e?.id}
@@ -427,7 +428,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-corrects min-w-132px !border-gray-6 before:!border-gray-6"
+                              className="sapp-notched-container-corrects min-w-[132px] !border-[#D8D8E5] before:!border-[#D8D8E5]"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -439,7 +440,7 @@ const MatchingQuestion = forwardRef(
                       <>
                         <QuestionCard
                           value={e?.content}
-                          className="sapp-arrowed-container-incorrects text-state-error"
+                          className="sapp-arrowed-container-incorrects text-error"
                         />
                         <div
                           // id={e?.id}
@@ -448,7 +449,7 @@ const MatchingQuestion = forwardRef(
                           {defaultValue?.[e?.id]?.id && (
                             <div
                               // className="w-fit"
-                              className="sapp-notched-container-incorrects min-w-132px text-state-error"
+                              className="sapp-notched-container-incorrects min-w-[132px] text-error"
                               // id={defaultValue[e?.id]?.answer.id}
                             >
                               {defaultValue[e?.id]?.answer?.answer}
@@ -472,13 +473,13 @@ const MatchingQuestion = forwardRef(
                     >
                       <QuestionCard
                         value={e?.content}
-                        className="sapp-arrowed-container-corrects text-state-success"
+                        className="sapp-arrowed-container-corrects text-success-600"
                       />
                       <div className="sapp-match-result flex-1">
                         {correctAnswer?.[e?.id]?.id && (
                           <div
                             // className="w-fit"
-                            className="sapp-notched-container-corrects min-w-132px text-state-success"
+                            className="sapp-notched-container-corrects min-w-[132px] text-success-600"
                           >
                             {correctAnswer?.[e?.id]?.answer}
                           </div>
@@ -492,7 +493,7 @@ const MatchingQuestion = forwardRef(
           </>
         )}
         {solution && (
-          <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>
@@ -501,5 +502,5 @@ const MatchingQuestion = forwardRef(
     )
   },
 )
-MatchingQuestion.displayName = 'MatchingQuestion'
+MatchingQuestion.displayName = 'MatchingQuestion123'
 export default memo(MatchingQuestion)

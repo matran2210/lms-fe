@@ -2,13 +2,12 @@ import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGro
 import EditorReader from '@components/base/editor/EditorReader'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
 import { useEffect, useMemo } from 'react'
-import { IPreviewProp } from './OneChoiceQuestion'
-import { MY_COURSES } from 'src/constants/lang'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { CircleInfoIcon } from '@assets/icons'
 import WarningSection from './WarningSection'
 import clsx from 'clsx'
-// import {IPreviewProp} from '../true-false-question'
+import { IPreviewProp } from './OneChoiceQuestion'
+import { MY_COURSES } from 'src/constants/lang'
 
 interface IDataAnswer {
   data: {
@@ -103,7 +102,7 @@ const MultiChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions"
+          className="sapp-questions mb-6"
           highlighted={highlighted}
         />
         <WarningSection isShowWarning={isShowWarning} className="mb-4" />
@@ -111,15 +110,15 @@ const MultiChoiceQuestion = ({
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   {exhibitText ? exhibitText + 's' : 'Exhibits'} (
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -149,7 +148,7 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             </>
           )}
       </div>
@@ -164,12 +163,13 @@ const MultiChoiceQuestion = ({
           control={control}
           name={name || 'multiples'}
           multiple
+          className="mr-4 mt-0"
           corrects={corrects}
           defaultValue={defaultValues || ''}
-          // justify='start'
           positionCheckBox="start"
         />
       </div>
+
       {solution && (
         <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
           <SappTitleSolution title={`${MY_COURSES.solution}:`} />

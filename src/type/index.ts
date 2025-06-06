@@ -55,6 +55,7 @@ export interface ITabs {
 export interface ITabsTeacher {
   id: number
   title: string
+  urlTitle?: string
 }
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps

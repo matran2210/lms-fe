@@ -1,8 +1,9 @@
+import { uniqueId } from 'lodash'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SAPPCheckbox from './SAPPCheckbox'
 import YourAnswer from '../tags/YourAnswer'
-import { uniqueId } from 'lodash'
+import SAPPCheckbox from './SAPPCheckbox'
+import clsx from 'clsx'
 
 interface IHookFormCheckBoxProps {
   name: string
@@ -41,13 +42,8 @@ const HookFormCheckBoxGroup = ({
   name,
   control,
   defaultValue,
-  // title,
   className = '',
   onChange,
-  // checked,
-  // isWrong,
-  // label,
-  // required,
   disabled,
   classNameTitle,
   options,
@@ -56,7 +52,6 @@ const HookFormCheckBoxGroup = ({
   justify,
   multiple = false,
   size = 'small',
-  // state,
   corrects,
   toggle = false,
   positionCheckBox = 'center',
@@ -112,10 +107,10 @@ const HookFormCheckBoxGroup = ({
                 if (!!corrects) {
                   if (corrects?.[option.value as string]) {
                     state = 'success'
-                    stateLabel = 'text-state-success'
+                    stateLabel = 'text-success-600'
                   } else if (checked) {
                     state = 'error'
-                    stateLabel = 'text-state-error'
+                    stateLabel = 'text-error'
                   }
                 }
                 const checkHasChecked = multiple
@@ -134,9 +129,7 @@ const HookFormCheckBoxGroup = ({
                     key={uniqueId(option.label)}
                   >
                     <SAPPCheckbox
-                      className={`me-2 ${className} ${
-                        positionCheckBox === 'start' && 'mt-[2px]'
-                      }`}
+                      className={`me-2 ${className}`}
                       checked={checked}
                       lowerOptions={lowerOptions && !checked && checkHasChecked}
                       onChange={(event: React.ChangeEvent<any>) => {
@@ -179,16 +172,19 @@ const HookFormCheckBoxGroup = ({
                       inputStyle="rounded-lg w-6 h-6"
                     />
                     <span
-                      className={`${
-                        classNameTitle ?? ''
-                      } ${stateLabel}  form-check-label fw-semibold ${
-                        lowerOptions &&
-                        !checked &&
-                        checkHasChecked &&
-                        'text-gray-1'
-                      }`}
+                      className={clsx(
+                        'form-check-label fw-semibold text-base',
+                        classNameTitle,
+                        stateLabel,
+                        {
+                          'text-[#A1A1A1]':
+                            lowerOptions && !checked && checkHasChecked,
+                        },
+                      )}
                     >
-                      {option.label}
+                      <span className={clsx({ 'mr-3': checked && !!corrects })}>
+                        {option.label}
+                      </span>
                       <YourAnswer
                         show={checked && !!corrects}
                         className="max-h-6 !rounded bg-purple-2 !text-sm text-state-info"

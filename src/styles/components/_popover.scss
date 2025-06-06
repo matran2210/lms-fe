@@ -1,8 +1,8 @@
 #sapp-popover.ant-popover-inner {
-  padding: 8px !important;
+  padding: 4px !important;
   margin-bottom: 0 !important;
 
-  @apply bg-gray-14;
+  @apply bg-secondary;
 }
 
 #sapp-popover {
@@ -15,7 +15,7 @@
   .ant-popover-arrow {
     &::before,
     &::after {
-      @apply bg-gray-14;
+      @apply bg-secondary;
     }
   }
 }

@@ -80,7 +80,7 @@ function CtaTrial() {
               unlock the full course.
             </span>
             <button
-              className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium leading-[17px] text-primary"
+              className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium  text-primary"
               onClick={handleUpgrade}
             >
               Upgrade Now

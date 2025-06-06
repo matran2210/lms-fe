@@ -1,65 +1,55 @@
+import clsx from 'clsx'
 import React from 'react'
 
 interface IProps {
   name?: string
   value?: string | boolean
-  ktCheck?: boolean
-  checkTarget?: string
   checked: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
-  className?: string
   disabled?: boolean
   state?: 'default' | 'error' | 'success' | 'primary'
   size?: 'small' | 'medium' | 'lager'
-}
-
-const STATE = {
-  primary:
-    'checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked',
-  success:
-    'checked:bg-radio-success-checked checked:text-transparent checked:hover:bg-radio-success-checked checked:focus:bg-radio-success-checked',
-  error:
-    'checked:bg-radio-error-checked checked:text-transparent checked:hover:bg-radio-error-checked checked:focus:bg-radio-error-checked',
-  default:
-    'checked:bg-radio-default-checked checked:text-transparent checked:hover:bg-radio-default-checked checked:focus:bg-radio-default-checked',
-}
-
-const SIZES = {
-  small: 'w-4.5 h-4.5',
-  medium: 'w-[24px] h-[24px]',
-  lager: 'w-[30px] h-[30px]',
+  className?: string
 }
 
 const SAPPRadio = ({
   name,
   value,
-  ktCheck,
-  checkTarget,
   checked,
   onChange,
-  className = '',
   disabled = false,
-  state = 'default',
-  size = 'medium',
+  className = '',
 }: IProps) => {
   return (
-    <div className={`inline-block ${SIZES[size]} ${className}`}>
+    <label className={clsx('relative inline-block h-5 w-5', className)}>
       <input
-        name={name}
-        className={`${
-          STATE[state]
-        } block h-full w-full rounded-full border-0 border-transparent bg-radio-normal bg-center bg-no-repeat  outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0 ${
-          disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
-        }`}
         type="radio"
-        data-kt-check={ktCheck}
-        data-kt-check-target={checkTarget}
+        name={name}
+        value={value?.toString()}
         checked={checked}
         onChange={onChange}
         disabled={disabled}
-        value={value?.toString()}
+        className="peer sr-only"
       />
-    </div>
+      <div
+        className={clsx('h-full w-full rounded-full border transition-all', {
+          'border-primary': checked,
+          'cursor-not-allowed opacity-50': disabled,
+          'cursor-pointer': !disabled,
+        })}
+      >
+        <div
+          className={clsx(
+            'mx-auto mt-[5px] h-2  w-2 rounded-full transition-opacity',
+            {
+              'opacity-100': checked,
+              'opacity-0': !checked,
+              'bg-primary': checked,
+            },
+          )}
+        />
+      </div>
+    </label>
   )
 }
 

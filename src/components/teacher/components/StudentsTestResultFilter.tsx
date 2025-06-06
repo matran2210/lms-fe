@@ -15,10 +15,10 @@ const StudentsTestResultFilter: React.FC<StudentsTestResultFilterProps> = ({
     <div className="grid grid-cols-4 gap-4">
       <HookFormTextField
         control={control}
-        name="text"
-        placeholder={'Search student'}
+        name="quiz_name"
+        placeholder={'Search test/quiz'}
         placeholderIcon={<SearchIcon />}
-        inputClassName="placeholder:text-sm placeholder:text-gray-11 placeholder:font-medium"
+        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,

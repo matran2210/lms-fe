@@ -354,7 +354,7 @@ const ActivityPage = () => {
                   <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
-                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
+                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#A1A1A1] hover:text-primary'
                       }
                       title={e?.name}
                     >
@@ -398,17 +398,17 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
+        <div className={`mx-auto my-0 max-w-[1144px] text-[#050505]`}>
           {/* Breadcrumbs */}
           <ul
             className={clsx(
-              'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-medium-sm font-medium',
+              'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-sm font-medium',
               { hidden: focusOnlyQuiz },
             )}
           >
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
-              <li className="responsive-truncate-container text-bw-1">
+              <li className="responsive-truncate-container text-[#050505]">
                 <Link
                   href={'#'}
                   className="breadcrumbs__link"
@@ -448,7 +448,7 @@ const ActivityPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0  h-full w-full">
-                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
+                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -542,7 +542,7 @@ const ActivityPage = () => {
                   <div
                     // className="overflow-auto p-4 bg-white"
                     style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-[#050505] hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -561,7 +561,7 @@ const ActivityPage = () => {
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                          <span className="text-base font-semibold text-[#050505]">{`${exhibitText} ${
                             e?.index + 1
                           }: ${e?.name}`}</span>
                         </div>

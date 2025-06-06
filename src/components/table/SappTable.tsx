@@ -42,7 +42,7 @@ const SappTable = <T extends { id: React.Key }>({
   return (
     <>
       {titleTable?.isShowTitle && titleTable?.title && (
-        <Title level={5} className="mt-6 text-gray-700">
+        <Title level={5} className="mt-6 text-[#374151]">
           {titleTable.title}
         </Title>
       )}

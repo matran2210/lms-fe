@@ -84,7 +84,9 @@ const TeacherTextField = ({
     setPasswordVisible(!passwordVisible)
   }
   // Dấu (*) khi trường bắt buộc
-  const requiredMark = required ? <span className="text-danger">*</span> : null
+  const requiredMark = required ? (
+    <span className="text-[#d35563]">*</span>
+  ) : null
 
   return (
     <div className="float-label">
@@ -131,7 +133,7 @@ const TeacherTextField = ({
           onPaste={onPaste}
           disabled={disabled}
           maxLength={maxLength}
-          className={`${isListScreen ? 'h-10' : 'h-11.25'} ${clsx(className, '')}`}
+          className={`${isListScreen ? 'h-10' : 'h-[45px]'} ${clsx(className, '')}`}
           allowClear={false}
           placeholder={placeholder?.trim() || ''}
           {...props}

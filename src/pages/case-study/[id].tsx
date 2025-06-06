@@ -54,6 +54,7 @@ import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -122,10 +123,10 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizComponent
             data={data}
             // action={getAnswerMatching}
-            // ref={ref}
+            ref={MatchQuizRef}
             handleSaveHighLight={() => {}}
             // highlighted={highlighted}
             // removeHighlight={removeHighlight}
@@ -263,6 +264,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
+  const MatchQuizRef = useRef(null) as any
 
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
@@ -504,25 +506,11 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
     return value
   }
-  const getAnswerMatching = (index: number) => {
-    let value = [] as any
-    if (valueRef.current?.[index]) {
-      const inputs = valueRef?.current?.[index].querySelectorAll(
-        '.sapp-match-result',
-      ) as any
-      for (let e of inputs) {
-        const childId = e.querySelector('.sapp-notched-container')
-        value.push({ question_id: e?.id, answer_id: childId?.id || undefined })
-      }
-    } else {
-      value.push({
-        question_id: listFullQuestions?.[index]?.id,
-        answer_id: '',
-      })
-    }
-
-    return value
+  const getAnswerMatching = () => {
+    const value = MatchQuizRef?.current?.getMatchedPairs?.()
+    return value || []
   }
+
   const getAnswerDragNDrop = (index: number) => {
     let value = [] as any
     if (valueRef?.current?.[index]) {
@@ -560,7 +548,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.MATCHING) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getAnswerMatching(i),
+          answer: getAnswerMatching(),
           id: question?.id,
           answers: question?.answers,
         })
@@ -915,8 +903,8 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
           {/* Header */}
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
+            <div className="flex items-center justify-between bg-[#F1F1F1] px-6 py-2">
+              <div className="w-1/3 truncate text-lg font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton
@@ -929,7 +917,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             </div>
             {/* End Header */}
             <div
-              className="flex h-[calc(100%-104px)] bg-gray-3"
+              className="flex h-[calc(100%-104px)] bg-[#F1F1F1]"
               id={'preview-question'}
             >
               <div
@@ -981,7 +969,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       topics?.files.map((e: any, index: number) => {
                         return (
                           <div
-                            className="cursor-pointer text-state-info hover:underline"
+                            className="cursor-pointer text-[#3964EA] hover:underline"
                             onClick={() =>
                               handleOpenScratchPad(
                                 'file',
@@ -999,7 +987,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 </div>
               </div>
               <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                className="h-full w-[20px] cursor-ew-resize bg-[#F1F1F1]"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -1107,7 +1095,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -1137,7 +1125,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="flex h-10 w-full items-center justify-between bg-[#DCDDDD] px-5">
                         <div>Scratch Pad</div>
                         {/* <CloseIcon */}
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1230,7 +1218,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="relative flex h-[48px] items-center justify-between bg-[#F1F1F1] shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1241,7 +1229,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </div>
                 </button> */}
                 <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -1255,7 +1243,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   </div>
                 </button>
                 <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
+                  className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
                     setAllowUnHighLight(!allowUnHighLight),
                       setAllowHighLight(false)
@@ -1311,7 +1299,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },
@@ -1322,7 +1310,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                                 key={e?.value}
                                 className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1'
+                                  'text-[#A1A1A1]'
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -1336,7 +1324,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div>
                 <SappButton
-                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  className={`bg-slate-200 mr-2 h-full py-3`}
                   title="View Answer"
                   onClick={() => {
                     setOpenScratchPad([])

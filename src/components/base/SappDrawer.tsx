@@ -99,7 +99,7 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="fixed left-0 top-0 z-[106] h-full w-full bg-bw-5 bg-opacity-50"
+          className="fixed left-0 top-0 z-[106] h-full w-full bg-[#000000CC] bg-opacity-50"
           onClick={handleMaskClick}
         />
       )}
@@ -118,7 +118,7 @@ const SappDrawer = ({
               headerClassName,
             )}
           >
-            <span className="line-clamp-3 pr-4 text-heading">{title}</span>
+            <span className="line-clamp-3 pr-4 text-ink-600">{title}</span>
             <div className="shrink-0 cursor-pointer" onClick={handleOnClose}>
               <CloseIcon />
             </div>
@@ -131,11 +131,7 @@ const SappDrawer = ({
         >
           {loading ? (
             <div className="flex h-full w-full items-center justify-center">
-              <Spin
-                tip="Loading"
-                size="large"
-                className="!text-accent-warning"
-              />
+              <Spin tip="Loading" size="large" className="!text-warning" />
             </div>
           ) : (
             <div className="">{children}</div>
@@ -144,7 +140,7 @@ const SappDrawer = ({
         {footer && (
           <div
             className={clsx(
-              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white',
+              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-[#DCDDDD] bg-white',
               footerClassName,
             )}
           >

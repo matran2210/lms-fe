@@ -5,16 +5,12 @@ import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import clsx from 'clsx'
 
 interface IProps {
-  title?: React.ReactNode
-  open: boolean | undefined
-  handleCancel: () => void
   showFooter?: boolean
   cancelButtonCaption?: any
   okButtonCaption?: any
-  okButtonClass?: string | undefined
-  cancelButtonClass?: string | undefined
+  okButtonClass?: string
+  cancelButtonClass?: string
   buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
-  size?: string
   footerButtonClassName?: string
   color?: IButtonColors
   colorCancel?: IButtonColors
@@ -28,24 +24,21 @@ interface IProps {
   loading?: boolean
   disabled?: boolean
   onOk: () => void
-  classNameModal?: string | undefined
-  width?: number | undefined | string
+  handleCancel: () => void
   handleClose?: () => void
   icon: ReactNode
   header?: ReactNode
-  content?: string | undefined
+  content?: string
   children?: ReactNode
-  isMaskClosable?: boolean
   headerClassName?: string
+  // Các props còn lại sẽ được gom vào otherProps
+  [key: string]: any
   isClosable?: boolean
 }
 
 const SappModalV3 = ({
-  open,
-  title,
-  handleCancel,
   showFooter = true,
-  footerButtonClassName = 'justify-between flex gap-3 flex flex-col-reverse gap-6',
+  footerButtonClassName = 'flex flex-col gap-3 items-center justify-between',
   color,
   colorCancel,
   showOkButton,
@@ -61,54 +54,51 @@ const SappModalV3 = ({
   okButtonClass,
   cancelButtonCaption,
   cancelButtonClass,
-  classNameModal,
-  width = 630,
+  handleCancel,
   handleClose,
-  header,
   icon,
+  header,
   content,
   children,
-  isMaskClosable = true,
   headerClassName,
   isClosable = false,
+  ...otherProps
 }: IProps) => {
   return (
     <Modal
       footer={false}
-      title={title}
       centered
-      open={open}
       closeIcon={false}
-      className={classNameModal ?? 'sapp-modal'}
       onCancel={isClosable ? handleClose : handleClose || handleCancel}
-      width={width}
-      maskClosable={isMaskClosable}
+      maskClosable={isClosable}
       closable={isClosable}
+      {...otherProps}
     >
       {icon && (
-        <div className="flex justify-center">
-          <div className="w-fit rounded-full bg-secondary">{icon}</div>
+        <div className="flex justify-center pb-10">
+          <div className="w-fit">{icon}</div>
         </div>
       )}
-      {header && (
-        <div
-          className={clsx(
-            `mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`,
-            headerClassName,
-          )}
-        >
-          {header}
-        </div>
-      )}
-
-      {(content || children) && (
-        <div className="mb-12 mt-4 text-center text-medium-sm text-gray-1">
-          {content ?? children}
-        </div>
-      )}
+      <div className="flex flex-col gap-10 pb-10">
+        {header && (
+          <div
+            className={clsx(
+              `flex justify-center text-3xl font-semibold text-[#050505] ${clsx({ 'mb-4': !content && !children })}`,
+              headerClassName,
+            )}
+          >
+            {header}
+          </div>
+        )}
+        {(content || children) && (
+          <div className="text-center text-base text-[#1F2937]">
+            {content ?? children}
+          </div>
+        )}
+      </div>
 
       {showFooter && (
-        <div className={`relative`}>
+        <div className="relative">
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
@@ -119,8 +109,8 @@ const SappModalV3 = ({
             submit={{
               title: okButtonCaption,
               size: buttonSize,
-              loading: externalLoading != undefined ? externalLoading : loading,
-              disabled: disabled,
+              loading: externalLoading ?? loading,
+              disabled,
               onClick: onOk,
               full: fullWidthBtn,
               className: okButtonClass,
@@ -129,9 +119,10 @@ const SappModalV3 = ({
               title: cancelButtonCaption,
               size: buttonSize,
               onClick: handleCancel,
-              loading: externalLoading != undefined ? externalLoading : loading,
+              loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
+              isUnderLine: false,
             }}
           />
         </div>

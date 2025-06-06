@@ -221,7 +221,7 @@ export class CoursesAPI {
     })
   }
 
-  static submitAllQuestion(id: string, data: any): Promise<any> {
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
     //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
@@ -452,6 +452,10 @@ export class CoursesAPI {
     payload: {
       question_id: string
       flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
     },
   ) {
     return fetcher(`quiz/${quiz_attempt_id}/flag`, {

@@ -15,13 +15,13 @@ import { StudentKey } from '@pages/api/queryKey'
 import useSappPaging from 'src/hooks/useSappPaging'
 
 interface FilterParams {
-  text?: string
+  quiz_name?: string
   grading_method?: string
   quiz_type?: string
 }
 
 const initialValues: FilterParams = {
-  text: undefined,
+  quiz_name: undefined,
   quiz_type: undefined,
   grading_method: undefined,
 }
@@ -46,13 +46,13 @@ export default function StudentsTestResult() {
     })
 
   const handleResetFilter = () => {
-    reset({ text: '', quiz_type: '', grading_method: '' })
+    reset({ quiz_name: '', quiz_type: '', grading_method: '' })
     setParams(initialValues)
   }
 
   const onSubmit = () => {
     setParams({
-      text: getValues('text') || undefined,
+      quiz_name: getValues('quiz_name') || undefined,
       quiz_type: getValues('quiz_type')?.value || undefined,
       grading_method: getValues('grading_method')?.value || undefined,
     })
