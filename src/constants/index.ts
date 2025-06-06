@@ -305,6 +305,7 @@ export const POPUP_EVENT_DETAILS = {
   TITLE: 'Event name',
   TIME: 'Time',
   TYPE: 'Event type',
+  REPEAT: 'Repeat',
   CLASSROOM_NAME: 'Classroom name',
   CLASSROOM_ADDRESS: 'Classroom address',
   MEETING_LINK: 'Meeting link',
@@ -532,6 +533,15 @@ export enum QUIZ_ATTEMPT_STATUS {
   UN_SUBMITTED = 'UN_SUBMITTED',
   IN_PROGRESS = 'IN_PROGRESS',
 }
+
+export enum QUIZ_ATTEMPT_GRADING_STATUS {
+  DRAFT = 'DRAFT',
+  FINISHED = 'FINISHED',
+  UN_FINISHED = 'UN_FINISHED',
+  AWAITING_GRADING = 'AWAITING_GRADING',
+  FINISHED_GRADING = 'FINISHED_GRADING',
+}
+
 export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',

@@ -452,6 +452,10 @@ export class CoursesAPI {
     payload: {
       question_id: string
       flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
     },
   ) {
     return fetcher(`quiz/${quiz_attempt_id}/flag`, {

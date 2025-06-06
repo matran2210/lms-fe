@@ -3,7 +3,6 @@ import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
-import PdfViewer from '@components/base/pdf/pdf-viewer'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -18,7 +17,6 @@ import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileIn
 import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { isPdfFile } from '@utils/helpers'
 import { truncateBySpace, truncateString } from '@utils/index'
 
 import { uniqueId } from 'lodash'
@@ -489,7 +487,7 @@ const ActivityPage = () => {
                   <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
-                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
+                        ' text-gray-1 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap hover:text-primary'
                       }
                       title={e?.name}
                     >
@@ -617,9 +615,9 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
+        <div className={`max-w-xxl text-bw-1 mx-auto my-0`}>
           {/* Breadcrumbs */}
-          <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
+          <ul className="text-medium-sm line-clamp-1 flex overflow-x-auto py-6 font-medium">
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
@@ -662,7 +660,7 @@ const ActivityPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0  h-full w-full">
-                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
+                    <div className="bg-gray-2 flex h-10 w-full items-center justify-between rounded-t-md px-5">
                       <div className="text-sm font-bold">Calculator</div>
                       <button
                         onClick={() => {
@@ -696,7 +694,7 @@ const ActivityPage = () => {
                     {activity?.name}
                   </Tooltip>
                 </div>
-                <div className="whitespace-nowrap text-sm text-gray-1">
+                <div className="text-gray-1 whitespace-nowrap text-sm">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
                 </div>
@@ -732,7 +730,7 @@ const ActivityPage = () => {
                     <SappButton
                       key={e?.id}
                       size="small"
-                      className="!px-3 py-2.5 text-medium-sm !font-normal"
+                      className="text-medium-sm !px-3 py-2.5 !font-normal"
                       color={tabButtonColor(e?.id)}
                       title={truncateBySpace(e?.name, 5)}
                       showTooltip={e?.name?.length > 20}
@@ -872,7 +870,7 @@ const ActivityPage = () => {
                                     placement="right"
                                   >
                                     <p
-                                      className="cursor-pointer text-gray-1 hover:text-primary"
+                                      className="text-gray-1 cursor-pointer hover:text-primary"
                                       onClick={() => {
                                         isPreviewFile
                                           ? handleOpenScratchPad(
@@ -929,7 +927,7 @@ const ActivityPage = () => {
                               )
                               trackGAEvent('Click Button Previous Tab Activity')
                             }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold text-bw-1 hover:text-primary"
+                            className="text-bw-1 group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-base font-semibold hover:text-primary"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -946,7 +944,7 @@ const ActivityPage = () => {
                             </svg>
                             Previous Tab
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
+                          <div className="bg-gray-3 absolute bottom-0 left-0 h-2.5 w-[129px]"></div>
                         </div>
                       </div>
                     )}
@@ -961,7 +959,7 @@ const ActivityPage = () => {
                               )
                               trackGAEvent('Click Button Next Tab Activity')
                             }}
-                            className="group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold text-bw-1 hover:text-primary"
+                            className="text-bw-1 group relative z-10 mb-2 flex cursor-pointer select-none items-center gap-2 text-right text-base font-semibold hover:text-primary"
                           >
                             Next Tab
                             <svg
@@ -978,7 +976,7 @@ const ActivityPage = () => {
                               />
                             </svg>
                           </div>
-                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
+                          <div className="bg-gray-3 absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1"></div>
                         </div>
                       </div>
                     )}
@@ -995,7 +993,7 @@ const ActivityPage = () => {
               nextActivityIndex !== sessionData?.length - 1) ||
             (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
             <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+              <div className="border-b-primary-2 relative mb-6 border-b-2 bg-white px-6 py-3 shadow-activity">
                 <div
                   ref={endActivityRef}
                   className={`flex flex-nowrap gap-5 justify-${
@@ -1018,11 +1016,11 @@ const ActivityPage = () => {
                             'Click Button Previous Activity',
                           )
                         }
-                        className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
+                        className="text-bw-1 mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold hover:text-primary"
                       >
                         Previous Activity
                       </div>
-                      <div className="flex text-medium-sm text-gray-1">
+                      <div className="text-medium-sm text-gray-1 flex">
                         {getCourseIcon(
                           activity?.previous_activity
                             ? activity?.previous_activity?.display_icon
@@ -1041,7 +1039,7 @@ const ActivityPage = () => {
                             activity?.previous_activity?.name?.length > 80
                           }
                         >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                          <span className="leading-4.5 ml-2 w-full overflow-hidden text-ellipsis">
                             {activity?.previous_activity
                               ? truncateString(
                                   activity?.previous_activity?.name,
@@ -1070,11 +1068,11 @@ const ActivityPage = () => {
                             'Click Button Next Activity',
                           )
                         }
-                        className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                        className="text-bw-1 mb-2 cursor-pointer select-none text-right text-base font-semibold hover:text-primary"
                       >
                         Next Activity
                       </div>
-                      <div className="flex justify-end text-medium-sm text-gray-1">
+                      <div className="text-medium-sm text-gray-1 flex justify-end">
                         <Tooltip
                           title={
                             activity?.next_activity
@@ -1085,7 +1083,7 @@ const ActivityPage = () => {
                             activity?.next_activity?.name?.length > 80
                           }
                         >
-                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                          <div className="leading-4.5 mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                             {activity?.next_activity
                               ? truncateString(activity?.next_activity.name, 80)
                               : truncateString(
@@ -1131,7 +1129,7 @@ const ActivityPage = () => {
                   <div
                     // className="overflow-auto p-4 bg-white"
                     style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                    className="text-bw-1 mb-2 cursor-pointer select-none text-right text-base font-semibold hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -1149,7 +1147,7 @@ const ActivityPage = () => {
                     <div className="relative">
                       <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                          <span className="text-bw-1 text-base font-semibold">{`${exhibitText} ${
                             e?.index + 1
                           }: `}</span>
                           {e?.name}

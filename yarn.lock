@@ -3715,6 +3715,10 @@
   version "1.17.6"
   resolved "https://registry.yarnpkg.com/@wiris/mathtype-html-integration-devkit/-/mathtype-html-integration-devkit-1.17.6.tgz#21a1f2bf93fd5841eb0b835ffe7ef9e14aa4026c"
   integrity sha512-DKZotcIwXygs6O5fzVsXz+PpNUqKqxlguSf0KKAdsgYCHIxr6gdqIW9ptOS0+ihsRG7BHx3MBvmjOYzC54fV9w==
+"@wiris/mathtype-html-integration-devkit@1.17.6":
+  version "1.17.6"
+  resolved "https://registry.yarnpkg.com/@wiris/mathtype-html-integration-devkit/-/mathtype-html-integration-devkit-1.17.6.tgz#21a1f2bf93fd5841eb0b835ffe7ef9e14aa4026c"
+  integrity sha512-DKZotcIwXygs6O5fzVsXz+PpNUqKqxlguSf0KKAdsgYCHIxr6gdqIW9ptOS0+ihsRG7BHx3MBvmjOYzC54fV9w==
   dependencies:
     dompurify "^3.0.10"
     uuid "^8.3.2"
@@ -5388,10 +5392,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.0.tgz#09c9e29cb79b0a6459a9b9db9efb418ac5bb8e51"
   integrity sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==
 
-entrance-test-result-package@^1.1.32-test:
-  version "1.1.32-test"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.1.32-test.tgz#8184c1ba883856bc77b8d10ffa39df7fa163d238"
-  integrity sha512-kc+0XBkLOxA1NDpa+mT5c1bm7z6wdI6U8MIOFlFFp0xYtCJ35OA0lElMSJti2Iy68wW4gOHK0hJR/ukUM47ogw==
+entrance-test-result-package@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.2.0.tgz#1999640557879ee82185cf25d62f0a24927f3b40"
+  integrity sha512-kDIx1JN8jviKev70TQsWsaa2tQmdrg/BlF2YuNVU6HhK/awXdV4S/m/pKz13R1IFja34VAJ0hasURacRMhtL+w==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"

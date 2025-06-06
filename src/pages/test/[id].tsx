@@ -24,6 +24,7 @@ import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadF
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFormContext } from 'react-hook-form'
@@ -70,11 +71,11 @@ import {
   IDataQuestion,
   Requirement,
   RequirementItem,
-  ScratchPad,
   ScratchPadValue,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import {
+  checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
   getAnswerMatching,
@@ -308,39 +309,31 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const defaultValueEssay = () => {
-          if (!isUndefined(essayData?.req?.short_answer)) {
-            return essayData?.req?.short_answer
-          }
-          if (
-            !isUndefined(
-              getValues(`${currentTabID}_${essayData?.index}_answer`),
-            )
-          ) {
-            return getValues(`${currentTabID}_${essayData?.index}_answer`)
-          }
-          if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.short_answer,
-            )
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.short_answer
-          }
-          if (
-            !isUndefined(
-              currentTabContent?.data?.requirements?.[essayData?.index]
-                ?.answer_text,
-            )
-          ) {
-            return currentTabContent?.data?.requirements?.[essayData?.index]
-              ?.answer_text
-          }
-          if (!isUndefined(currentTabContent?.answer)) {
-            return currentTabContent?.answer
-          }
+        const handleEssayChange = (id: string) => {
+          setAnswerListValue(id as unknown as number)
         }
+        const defaultValueEssay = () => {
+          const key = `${currentTabID}_${essayData?.index}_answer`
+          const valueFromForm = getValues(key)
+
+          if (valueFromForm) {
+            return valueFromForm
+          }
+
+          const requirement =
+            currentTabContent?.data?.requirements?.[essayData?.index]
+
+          if (requirement?.short_answer) {
+            return requirement.short_answer
+          }
+
+          if (requirement?.answer_text) {
+            return requirement.answer_text
+          }
+
+          return currentTabContent.answer
+        }
+
         return (
           <>
             <EditorReader
@@ -503,14 +496,17 @@ const TestDetail = () => {
     resultId: '',
   })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
-
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
-  const [scratchPads, setScratchPads] = useState<ScratchPad[]>([])
+  const [scratchPads, setScratchPads] = useState<string>('')
+  // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
   const [listSubmitError, setListSubmitError] = useState<
     Array<{
       question_id: string
       total_attempt_time: number
-      scratch_pads: ScratchPad[]
+      scratch_pad: string
       [key: string]: any
     }>
   >([])
@@ -530,15 +526,33 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
+
+      const index = scratchPadValues?.findIndex(
+        (item: ScratchPadValue) => item.id === currentPage,
+      )
+
+      if (!index || index === -1) {
+        setScratchPadValues((prevScratchPads: ScratchPadValue[]) => [
+          ...prevScratchPads,
+          {
+            id: currentPage,
+            value: '',
+          },
+        ])
+      }
+
+      setScratchPads(answerSubmitted?.scratch_pad || '')
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
           answerSubmitted: any,
+          scratchPad: string,
         ): {
           corrects: any
           solution: any
           isSelfReflection: boolean
           requirements: any[]
+          scratch_pad: string
         } => {
           if (!answerSubmitted?.[0]) {
             return {
@@ -546,6 +560,7 @@ const TestDetail = () => {
               solution: '',
               isSelfReflection: false,
               requirements: [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -577,6 +592,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -590,6 +606,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -599,6 +616,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -612,6 +630,7 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
+              scratch_pad: scratchPad,
             }
           }
 
@@ -620,17 +639,19 @@ const TestDetail = () => {
             solution: solution,
             isSelfReflection: is_self_reflection,
             requirements: requirements,
+            scratch_pad: scratchPad,
           }
         }
 
         const dataCorrectAndSolution = getCorrectAndSolution(
           objTab,
           answerSubmitted?.results,
+          answerSubmitted?.scratch_pad,
         )
 
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
-          : { ...objTab }
+          : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -990,10 +1011,6 @@ const TestDetail = () => {
     })
   }
 
-  const [scratchPadValues, setScratchPadValues] = useState<
-    ScratchPadValue | null | undefined
-  >()
-
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
     removeHighlights(domEle as any)
@@ -1017,6 +1034,7 @@ const TestDetail = () => {
   }
 
   const checkAnswered = (currentContent: any, isSubmit = false) => {
+    //check đã có câu trả lời
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE
@@ -1325,7 +1343,6 @@ const TestDetail = () => {
     }
 
     setLoading(false)
-    setScratchPadValues(null)
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -1369,6 +1386,14 @@ const TestDetail = () => {
     return newData
   }
 
+  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
+    if (Array.isArray(tabContent.data?.requirements)) {
+      const hasAnswer = (req: any) =>
+        req?.answer_file?.file_key || answerListRef?.current?.[req?.id || '']
+      return tabContent.data.requirements.every(hasAnswer)
+    }
+  }
+
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1389,6 +1414,16 @@ const TestDetail = () => {
                   `${currentPage}_${reqIndex}_answer`,
                 )
 
+                //nếu bài làm là sheet và không có giá trị thì lưu lên BE là null
+                if (tabContent?.data?.response_option === 'SHEET') {
+                  if (!checkSheetAnswered(editorContent)) {
+                    return {
+                      ...requirement,
+                      answer_text: null,
+                    }
+                  }
+                }
+
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -1396,7 +1431,9 @@ const TestDetail = () => {
               }),
             },
 
-            attempted: item?.attempted || checkAnswered(item),
+            attempted:
+              item?.attempted ||
+              (checkAnswered(item) && handleCheckAllRequirementHasAnswer(item)),
             timeSpent: !item?.done
               ? item?.timeSpent
                 ? Date.now() - startTime + item?.timeSpent
@@ -1495,9 +1532,48 @@ const TestDetail = () => {
 
   const answerListRef = useRef<AnswerList>({})
 
+  // Initialize answerListRef values once when component mounts
+  useEffect(() => {
+    if (
+      currentTabContent?.data?.response_option === 'SHEET' ||
+      currentTabContent?.data?.response_option === 'WORD'
+    ) {
+      currentTabContent?.data?.requirements?.forEach((req: Requirement) => {
+        if (req?.id) {
+          if (req?.answer_file?.file_key) {
+            answerListRef.current[req.id] = req?.answer_file?.file_key
+          } else if (req?.answer_text) {
+            if (currentTabContent?.data?.response_option === 'SHEET') {
+              answerListRef.current[req.id] = checkSheetAnswered(
+                req.answer_text,
+              )
+                ? req.answer_text
+                : ''
+            } else {
+              answerListRef.current[req.id] = req.answer_text
+            }
+          }
+        }
+      })
+    }
+  }, [currentTabContent])
+
   const setAnswerListValue = debounce((requirementId: number) => {
-    answerListRef.current[requirementId] =
-      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
+    let answer = ''
+    if (getValues(`${currentPage}_${essayData?.index}_answer`)) {
+      if (currentTabContent?.data?.response_option === 'SHEET') {
+        if (
+          checkSheetAnswered(
+            getValues(`${currentPage}_${essayData?.index}_answer`),
+          )
+        ) {
+          answer = getValues(`${currentPage}_${essayData?.index}_answer`)
+        }
+      } else {
+        answer = getValues(`${currentPage}_${essayData?.index}_answer`)
+      }
+    }
+    answerListRef.current[requirementId] = answer
   }, 200)
 
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
@@ -1537,7 +1613,7 @@ const TestDetail = () => {
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      scratch_pads: scratchPads || [],
+      scratch_pad: scratchPads || '',
       flag: currentTabContent?.flag,
       is_viewed_answer:
         action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
@@ -1571,9 +1647,16 @@ const TestDetail = () => {
 
   const handleFlagQuestion = async (question_id: string) => {
     try {
+      const hasRequiment = currentTabContent?.data?.requirements?.length > 0
       const payload = {
         question_id,
         flag: !currentTabContent?.flag,
+        ...(hasRequiment && {
+          answer: currentTabContent?.data?.requirements.map((e: any) => ({
+            requirement_id: e.id,
+            question_id: question_id,
+          })),
+        }),
       }
       await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
       setTabs((prevTabs: Tab[]) =>
@@ -1627,7 +1710,7 @@ const TestDetail = () => {
             (quizDetail?.quiz_timed
               ? timeRef?.current?.handleGetTime() || 0
               : 0),
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           answer: requirementAnswers,
         }
       }
@@ -1756,7 +1839,7 @@ const TestDetail = () => {
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
-          scratch_pads: scratchPads || [],
+          scratch_pad: scratchPads || '',
           total_attempt_time:
             quizDetail.quiz_timed * 60 -
             (quizDetail.quiz_timed
@@ -2529,6 +2612,7 @@ const TestDetail = () => {
                     currentTab={currentPage}
                     setCurrentTab={setCurrentPage}
                     handleChangeTab={async (id?: string) => {
+                      setScratchPads('')
                       handleSubmitAnswer('change-tab')
                       setEssayData(undefined)
                       handleChangeTab(id)
@@ -2564,7 +2648,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
@@ -2634,7 +2718,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-bw-13 underline"
+                className="text-bw-13 flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2718,7 +2802,7 @@ const TestDetail = () => {
                 {currentTabContent?.data?.display_type ===
                 DISPLAY_TYPE.VERTICAL ? (
                   <div
-                    className={`flex flex-1 overflow-auto bg-gray-3`}
+                    className={`bg-gray-3 flex flex-1 overflow-auto`}
                     id={'preview-question'}
                   >
                     <div
@@ -2766,7 +2850,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-state-info hover:underline"
+                                  className="text-state-info cursor-pointer hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -2784,7 +2868,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-gray-12"
+                      className="bg-gray-12 flex h-full w-[2px] cursor-ew-resize items-center justify-center"
                       onMouseDown={() => {
                         setStartResize(true)
                       }}
@@ -2799,7 +2883,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="bg-gray-100 mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2860,7 +2944,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-state-info hover:underline"
+                                className="text-state-info cursor-pointer hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -2879,7 +2963,7 @@ const TestDetail = () => {
 
                     <div
                       className={clsx(
-                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100',
+                        'bg-gray-100 mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl',
                         {
                           'bg-white':
                             currentTabContent?.data?.qType ===
@@ -2984,6 +3068,7 @@ const TestDetail = () => {
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
               }
+              content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
             />
 
             <LimitQuizModal

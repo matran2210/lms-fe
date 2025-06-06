@@ -9,7 +9,7 @@ import { ProgressAPI } from '@pages/api/progress'
 import { formatDate } from '@utils/common'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { Drawer } from 'antd'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -21,9 +21,12 @@ import {
   IDefaultFormAddProgress,
   IProgress,
   IRequestCreateProgress,
+  LearningMode,
 } from 'src/type/progress'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
+import { round } from 'lodash'
+import { sortSectionsByPosition } from '@utils/teacher-progress'
 
 export interface IProps {
   id: string | null
@@ -32,6 +35,7 @@ export interface IProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   refresh?: () => void
   allowSection?: boolean
+  classId?: string
 }
 
 const defaultValues: IDefaultFormAddProgress = {
@@ -49,6 +53,7 @@ function FormViewProgress({
   isView,
   refresh,
   allowSection,
+  classId,
 }: IProps) {
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
@@ -120,13 +125,42 @@ function FormViewProgress({
       (item) => item.class_schedule_id === data.lesson.class_schedule_id,
     )
     setValue('section', currentLesson?.class_schedule_name || '')
-    setTreeDataNotConvert(data.content_completed)
+    if (isView) {
+      setTreeDataNotConvert(sortSectionsByPosition(data.content_completed))
+    }
     setValue('time', [data.start_time, data.end_time])
   }
 
   useLayoutEffect(() => {
     loadData()
   }, [id, open])
+
+  useEffect(() => {
+    if (isView) return
+
+    const fetchDataSection = async () => {
+      if (classId && detailProgress?.lesson.class_schedule_id) {
+        setLoading(true)
+        try {
+          const res = await ProgressAPI.getListSection(
+            classId,
+            detailProgress?.lesson.class_schedule_id,
+            {
+              progress_id: detailProgress?.id,
+            },
+          )
+          if (res?.data) {
+            setTreeDataNotConvert(sortSectionsByPosition(res.data))
+          }
+        } catch (error) {
+          // Handled by axios interceptors
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+    fetchDataSection()
+  }, [detailProgress?.lesson.class_schedule_id])
 
   const handleSubmit = handleSubmitForm(async (formData) => {
     const payload: IRequestCreateProgress = {
@@ -142,47 +176,49 @@ function FormViewProgress({
       class_schedule_id: string
       course_section_ids: string[]
     }[] = []
-    formData?.checkedNodes.forEach((item: string) => {
-      const box = item.split('_')
-      if (box[1] === detailProgress?.lesson.class_schedule_id) {
-        // lớp học chính
-        if (!currentCourse[0]) {
-          currentCourse[0] = {
-            class_schedule_id: '',
-            course_section_ids: [],
-          }
-        }
-        currentCourse[0].class_schedule_id =
-          detailProgress?.lesson.class_schedule_id
-        if (box.length > 2) {
-          currentCourse[0].course_section_ids.push(box[box.length - 1])
-        }
-      } else {
-        // lớp học bù
-        const newData: {
-          class_schedule_id: string
-          course_section_ids: string[]
-        } = {
-          class_schedule_id: '',
+
+    const addToCurrentCourse = (lessonId: string, sectionId?: string) => {
+      if (!currentCourse[0]) {
+        currentCourse[0] = {
+          class_schedule_id: lessonId,
           course_section_ids: [],
         }
-        if (
-          compensatedCourse[compensatedCourse.length - 1]?.class_schedule_id !==
-          box[1]
-        ) {
-          newData.class_schedule_id = box[1]
-          if (box.length > 2) {
-            newData.course_section_ids.push(box[box.length - 1])
-          }
-          compensatedCourse.push(newData)
-        } else {
-          const itemCurrent = compensatedCourse.find(
-            (item) => item.class_schedule_id === box[1],
-          )
-          itemCurrent?.course_section_ids.push(box[box.length - 1])
+      }
+      if (sectionId) {
+        currentCourse[0].course_section_ids.push(sectionId)
+      }
+    }
+
+    const addToCompensatedCourse = (lessonId: string, sectionId?: string) => {
+      let existingCourse = compensatedCourse.find(
+        (course) => course.class_schedule_id === lessonId,
+      )
+
+      if (!existingCourse) {
+        existingCourse = {
+          class_schedule_id: lessonId,
+          course_section_ids: [],
         }
+        compensatedCourse.push(existingCourse)
+      }
+
+      if (sectionId) {
+        existingCourse.course_section_ids.push(sectionId)
+      }
+    }
+
+    formData?.checkedNodes.forEach((item: string) => {
+      const box = item.split('_')
+      const lessonId = box[1]
+      const sectionId = box.length > 2 ? box[box.length - 1] : undefined
+
+      if (lessonId === detailProgress?.lesson.class_schedule_id) {
+        addToCurrentCourse(lessonId, sectionId)
+      } else {
+        addToCompensatedCourse(lessonId, sectionId)
       }
     })
+
     payload.current_class_schedule_id =
       detailProgress?.lesson?.class_schedule_id || ''
     payload.description = formData.note
@@ -251,7 +287,7 @@ function FormViewProgress({
       closeIcon={false}
     >
       <div className="border-b-none flex h-full w-full flex-col">
-        <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+        <div className="border-b-gray-5 flex items-center justify-between border-b px-8 py-5">
           <span className="font-sans text-lg font-semibold">
             {isView ? 'View Detail' : 'Edit Progress'}
           </span>
@@ -273,6 +309,7 @@ function FormViewProgress({
                     <CollapseItem
                       title="Time"
                       body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
                         detailProgress?.start_time &&
                         detailProgress?.end_time &&
                         `${detailProgress?.start_time?.replace(/:00$/, '')} - ${detailProgress?.end_time?.replace(/:00$/, '')}`
@@ -302,7 +339,7 @@ function FormViewProgress({
                                 : '#F01919',
                           }}
                         >
-                          {`${detailProgress?.progress ? detailProgress?.progress * 100 : 0} %`}
+                          {`${round((detailProgress?.progress ?? 0) * 100, 2) || 0} %`}
                         </span>
                       }
                     />
@@ -324,20 +361,25 @@ function FormViewProgress({
                           }
                         >
                           {item.class_teaching_progress_id &&
-                            `${item.compensated_progress * 100 + '%'}-${item.schedule_name}`}
+                            `${round((item.compensated_progress ?? 0) * 100, 2)}% - ${item.schedule_name}`}
                         </p>
                       ))}
                     />
 
                     <CollapseItem
                       title="Teacher"
-                      body={detailProgress?.teacher.full_name}
+                      body={
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.teacher?.full_name || '')
+                      }
                     />
                     <CollapseItem
                       title="Creator"
                       body={
-                        detailProgress?.staff_creator?.full_name ||
-                        detailProgress?.user_creator?.full_name
+                        detailProgress?.mode !== LearningMode.ONLINE &&
+                        (detailProgress?.staff_creator?.full_name ||
+                          detailProgress?.user_creator?.full_name ||
+                          '')
                       }
                     />
                     <CollapseItem
@@ -391,15 +433,17 @@ function FormViewProgress({
                       options={[]}
                     />
                   </div>
-                  <div>
-                    <HookformTimePicker
-                      control={control}
-                      name="time"
-                      label="Time"
-                      disabled={isView}
-                      required
-                    />
-                  </div>
+                  {detailProgress?.mode !== LearningMode.ONLINE && (
+                    <div>
+                      <HookformTimePicker
+                        control={control}
+                        name="time"
+                        label="Time"
+                        disabled={isView}
+                        required
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               {allowSection && (
@@ -444,7 +488,7 @@ function FormViewProgress({
           )}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-gray-5 bg-white px-8 py-5">
+        <div className="border-t-gray-5 absolute bottom-0 left-0 right-0 flex w-full justify-end border-t bg-white px-8 py-5">
           <SAPPButtonV2
             title={'Cancel'}
             onClick={handleCancel}

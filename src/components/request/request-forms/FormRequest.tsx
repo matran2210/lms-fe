@@ -228,12 +228,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
       status: getValues('request_status')?.value,
       time: data.request_weekly_norm?.map((item: IWeeklyNorm) => {
         return {
-          start_date: dayjs(item?.date_range?.[0]).format(
-            'YYYY-MM-DD[T]16:59:59[Z]',
-          ),
-          end_date: dayjs(item?.date_range?.[1]).format(
-            'YYYY-MM-DD[T]16:59:59[Z]',
-          ),
+          start_date: dayjs(item?.date_range?.[0]).startOf('day').toISOString(),
+          end_date: dayjs(item?.date_range?.[1]).endOf('day').toISOString(),
           quantity: item.quantity,
         }
       }),
@@ -597,7 +593,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         closeIcon={false}
       >
         <div className="flex h-full w-full flex-col">
-          <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+          <div className="border-b-gray-5 flex items-center justify-between border-b px-8 py-5">
             <span className="text-xl font-semibold text-primary">
               {router.query.id ? 'Edit' : 'Create'} Request
             </span>
@@ -955,7 +951,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="font-medium text-yellow-500 ">
+                  <span className="text-yellow-500 font-medium ">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(
@@ -989,7 +985,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="font-medium text-yellow-500">
+                  <span className="text-yellow-500 font-medium">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(
@@ -1003,7 +999,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 </div>
               ) : null)}
           </div>
-          <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+          <div className="border-t-gray-5 flex justify-end border-t px-8 py-5">
             <SAPPButtonV2
               title={'Cancel'}
               onClick={handleCancel}

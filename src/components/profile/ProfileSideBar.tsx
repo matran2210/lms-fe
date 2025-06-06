@@ -339,7 +339,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
               return (
                 <li
-                  className={`${className} group relative cursor-pointer border-b-[1px] border-gray-2`}
+                  className={`${className} border-gray-2 group relative cursor-pointer border-b-[1px]`}
                   key={key}
                 >
                   <a
@@ -375,7 +375,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                   {urlChildren?.length > 0 && (
                     <div
                       className={clsx(
-                        'ml-5 border-l border-gray-2',
+                        'border-gray-2 ml-5 border-l',
                         isExpanded.isOpen &&
                           isExpanded.urlPage === urlPage &&
                           'my-5',
@@ -413,21 +413,21 @@ const ProfileSideBar = ({ page, children }: IProps) => {
                     </div>
                   )}
                   <div
-                    className={`hover-transition-font-weight relative top-px border-b border-gray-3 `}
+                    className={`hover-transition-font-weight border-gray-3 relative top-px border-b `}
                   />
                 </li>
               )
             })}
             <li
-              className="hover-transition-font-weight relative cursor-pointer p-5 font-normal text-gray-1  hover:bg-secondary hover:text-primary"
+              className="hover-transition-font-weight text-gray-1 relative cursor-pointer p-5 font-normal  hover:bg-secondary hover:text-primary"
               onClick={handleLogout}
             >
               <div className="absolute inset-0 bottom-0"></div>
               <div>Logout</div>
             </li>
           </div>
-          <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 2.7.0
+          <div className="text-gray-1 text-center text-sm font-normal">
+            LMS Pro Version 2.8.0
           </div>
         </ul>
       </div>

@@ -396,7 +396,7 @@ const Course = ({
       await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
     } finally {
       setOpenContinue(false)
-      refetch()
+      handleCourseDetail()
     }
   }
 
@@ -405,11 +405,11 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+          className={`item p-7.5 flex flex-col bg-white shadow-sidebar`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`flex min-h-352 flex-col`}>
+          <div className={`min-h-352 flex flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -436,7 +436,7 @@ const Course = ({
               {enableCourse ? (
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
-                  <span className="ml-1 font-medium text-bw-1">
+                  <span className="text-bw-1 ml-1 font-medium">
                     <Tooltip
                       title={course?.classes?.[0]?.code}
                       showTooltip={course?.classes?.[0]?.code?.length > 20}
@@ -447,7 +447,7 @@ const Course = ({
                 </div>
               ) : (
                 <div className="name-class text-medium-sm text-gray-1">
-                  <span className="ml-1 font-medium text-bw-1" />
+                  <span className="text-bw-1 ml-1 font-medium" />
                 </div>
               )}
               <div className="time-class text-medium-sm text-gray-2">
@@ -529,7 +529,7 @@ const Course = ({
                     </p>
                   </div>
                 </div>
-                <div className="progressbar h-1.5 bg-gray-3">
+                <div className="progressbar bg-gray-3 h-1.5">
                   <div
                     className={`progress-percentage ${
                       enableCourse ? 'bg-primary' : 'bg-gray-2'
@@ -587,6 +587,7 @@ const Course = ({
       <ModalFoundationCompleted
         openContinue={openContinue}
         handleSkipCourse={handleSkipCourse}
+        handleClose={() => setOpenContinue(false)}
         handleContinueFoundation={
           classInstance?.duration_type === 'FLEXIBLE'
             ? () =>

@@ -120,32 +120,40 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   return (
     <>
       <div className="name">
-        <h2 className="mb-5 line-clamp-2 text-2xl font-medium text-bw-1">
+        <h2 className="text-bw-1 mb-5 line-clamp-2 text-2xl font-medium">
           {data?.name}
         </h2>
       </div>
       <div className="mt-auto">
         <div className="info">
-          <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
+          <div className="border-gray-2 text-gray-1 flex justify-between border-b pb-4 text-base capitalize">
             {data?.is_attempt ? (
               <>
                 <p>Time taken:</p>
-                <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
+                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  <span>--</span>
+                ) : (
+                  <p className="text-bw-1 font-medium">{timeTakenFormatted}</p>
+                )}
               </>
             ) : (
               <>
                 <p>Time allowed: </p>
-                <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
+                <p className="text-bw-1 font-medium">{timeAllowFormatted}</p>
               </>
             )}
           </div>
-          <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
+          <div className="text-gray-1 flex justify-between pt-4 text-base capitalize">
             <p>Results:</p>
             {data?.is_attempt ? (
               <>
-                <p className="text-state-success">
-                  {data?.total_correct_answer + '/' + data?.total_question}
-                </p>
+                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  <span>--</span>
+                ) : (
+                  <p className="text-state-success">
+                    {data?.total_correct_answer + '/' + data?.total_question}
+                  </p>
+                )}
               </>
             ) : (
               <span>--</span>
@@ -236,7 +244,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           buttonSize="medium"
           icon={undefined}
         >
-          <div className="my-4 text-start text-medium-sm text-gray-1">
+          <div className="text-medium-sm text-gray-1 my-4 text-start">
             <div>
               {`Your last attempt was unexpectedly ended. Please click 'Continue'
               to proceed with the test.`}
