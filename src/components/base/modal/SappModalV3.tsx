@@ -33,7 +33,7 @@ interface IProps {
   handleClose?: () => void
   icon: ReactNode
   header?: ReactNode
-  content?: string | undefined
+  content?: string | undefined | ReactNode
   children?: ReactNode
   isMaskClosable?: boolean
   headerClassName?: string
