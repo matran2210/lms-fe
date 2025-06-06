@@ -24,6 +24,7 @@ import { CustomNode } from './CustomNode'
 import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 
 interface IProps {
   data: any
@@ -49,6 +50,8 @@ interface IProps {
   isHideExhibit?: boolean
   isAlwaysShowAnswer?: boolean
   exhibitText?: string
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 
 type Role = 'question' | 'answer'
@@ -94,6 +97,8 @@ const MatchQuiz = forwardRef(
       isHideExhibit = true,
       isAlwaysShowAnswer = false,
       exhibitText = 'Exhibit',
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -510,13 +515,10 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <>
-              <Divider className="bg-ink-300" />
-              <div className="mb-4 text-base font-bold text-[#3F3F3F]">
-                Correct Answer:
-              </div>
+            <div className={clsx(correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
               <div
-                className={`relative w-full min-w-[700px]`}
+                className={`relative mt-4 w-full min-w-[700px]`}
                 ref={flowRef}
                 style={{
                   height: `${(correctNodes?.length / 2 || 1) * 100}px`,
@@ -533,12 +535,12 @@ const MatchQuiz = forwardRef(
                   />
                 </ReactFlowProvider>
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {solution && (
-          <div className="mt-6 bg-[#F9F9F9] p-6">
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
             <SappTitleSolution title={MY_COURSES.explanations} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>

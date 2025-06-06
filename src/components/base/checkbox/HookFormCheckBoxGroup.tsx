@@ -169,7 +169,7 @@ const HookFormCheckBoxGroup = ({
                       state={state}
                       value={option.value.toString()}
                       size={size}
-                      inputStyle="rounded-lg w-6 h-6"
+                      inputStyle="rounded-lg w-[24px] h-[24px]"
                     />
                     <span
                       className={clsx(
@@ -187,7 +187,7 @@ const HookFormCheckBoxGroup = ({
                       </span>
                       <YourAnswer
                         show={checked && !!corrects}
-                        className="max-h-6 !rounded bg-purple-2 !text-sm text-state-info"
+                        className="bg-purple-2 text-state-info max-h-6 !rounded !text-sm"
                       ></YourAnswer>
                     </span>
                   </label>

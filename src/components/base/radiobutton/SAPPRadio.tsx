@@ -34,6 +34,7 @@ const SAPPRadio = ({
       <div
         className={clsx('h-full w-full rounded-full border transition-all', {
           'border-primary': checked,
+          'border-secondary': !checked,
           'cursor-not-allowed opacity-50': disabled,
           'cursor-pointer': !disabled,
         })}

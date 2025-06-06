@@ -521,8 +521,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
               ref={MatchQuizRef}
-              explainClassname="!mt-8 !p-0 !bg-transparent"
-              correctAnswerClass="!mt-8 !pt-0"
+              explainClassname="!mt-0 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-0 !pt-0"
             />
           )
 
@@ -598,7 +598,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     <EssayQuestionPreview
                       className="!bg-transparent"
                       editorClassName="learning-act-editor"
-                      explainClassname="!mt-8 !p-0 !bg-transparent"
+                      explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={
                         activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                           if (
@@ -675,7 +675,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     />
                   </div>
                   {!!activeQuestion?.requirements?.length && (
-                    <div className="mt-6 flex items-center gap-2 text-warning-1">
+                    <div className="mt-6 flex items-center gap-2 text-warning">
                       <CircleInfoIcon />
                       <div className="text-base font-normal">
                         You must finished{' '}
@@ -686,7 +686,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   )}
                 </div>
 
-                {!!activeQuestion?.requirements?.length && (
+                {!!activeQuestion?.requirements?.length ? (
                   <Tabs
                     className={clsx('learning-activity-tabs requirement-tab')}
                     items={items}
@@ -708,6 +708,74 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     }}
                   />
+                ) : (
+                  <div className="mt-6">
+                    <EssayQuestionPreview
+                      className="!bg-transparent"
+                      editorClassName="learning-act-editor"
+                      explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
+                      defaultValue={
+                        activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                          if (
+                            ans.requirement_id ===
+                            activeQuestion?.requirements?.[
+                              essayData?.index ?? 0
+                            ]?.id
+                          ) {
+                            return ans
+                          }
+                        })?.short_answer ??
+                        activeQuestion?.myAnswers?.[0]?.short_answer ??
+                        null
+                      }
+                      data={
+                        activeQuestion?.requirements?.[essayData?.index ?? 0]
+                      }
+                      question_content={activeQuestion?.question_content}
+                      index={essayData?.index}
+                      question_data={activeQuestion}
+                      control={controlAnswer}
+                      setValue={setValue}
+                      handleSaveHighLight={() => {}}
+                      forCaseStudy={true}
+                      name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                      fullData={{
+                        data: { ...activeQuestion },
+                        solution: activeQuestion?.solution ?? '',
+                      }}
+                      openChooseFile={(e: any) =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: activeQuestion?.id,
+                          requirement_id: showRequirement?.id,
+                        })
+                      }
+                      handleClearFile={() => {
+                        dispatch(
+                          clearFileEssay({
+                            activityId,
+                            tabId,
+                            quizId,
+                            question_id: activeQuestion?.id,
+                            requirement_id: showRequirement?.id,
+                            requirements: activeQuestion?.requirements?.map(
+                              (item: IRequirement) => {
+                                if (item?.id === showRequirement?.id) {
+                                  return { ...item, answer_file: null }
+                                }
+                                return item
+                              },
+                            ),
+                          }),
+                        )
+                      }}
+                      handleChange={() => {
+                        !isChange && setIsChange(true)
+                      }}
+                      isShowContent={showQuestionContent}
+                      externalRef={refEditor}
+                    />
+                  </div>
                 )}
               </div>
             </>
@@ -778,7 +846,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
-          <Divider className="my-8" />
+          {activeQuestion?.question_topic?.description && (
+            <Divider className="my-8" />
+          )}
           <div className="relative">
             {renderQuestion()}
 
@@ -801,7 +871,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                             <div
                               key={e?.value}
                               className={clsx(
-                                'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
+                                'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
                               )}
                               onClick={() => {
                                 setOpenFile &&
@@ -834,10 +904,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'group absolute right-0 top-[104px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                    'shadow-icon group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
                     {
                       '!top-[214px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
                     },
                   )}
                 >
@@ -857,7 +928,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         <div
                           key={e?.value}
                           className={clsx(
-                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-dark-2',
+                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
                           )}
                           onClick={(event) => {
                             setShowWarning(false)
@@ -885,10 +956,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'group absolute right-0 top-[32px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                    'shadow-icon group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay',
                     {
                       '!top-[142px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
                     },
                   )}
                 >
@@ -909,29 +981,31 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           </div>
         </div>
 
-        <ModalUploadFile
-          open={openUpload.status}
-          isMultiple={false}
-          handleClose={() => {
-            setOpenUpload({
-              status: false,
-              question_id: undefined,
-              requirement_id: undefined,
-            })
-          }}
-          overlayClass="!h-screen"
-          className="!overflow-auto"
-          fileType={'ESSAY'}
-          location={`question-answer/${openUpload.question_id}`}
-          setSelectedFile={(e: any) =>
-            handleSaveFileEssay(
-              e?.[0],
-              openUpload?.question_id ?? '',
-              '',
-              showRequirement?.id ?? '',
-            )
-          }
-        />
+        {openUpload.status && (
+          <ModalUploadFile
+            open={openUpload.status}
+            isMultiple={false}
+            handleClose={() => {
+              setOpenUpload({
+                status: false,
+                question_id: undefined,
+                requirement_id: undefined,
+              })
+            }}
+            overlayClass="!h-screen"
+            className="!overflow-auto"
+            fileType={'ESSAY'}
+            location={`question-answer/${openUpload.question_id}`}
+            setSelectedFile={(e: any) =>
+              handleSaveFileEssay(
+                e?.[0],
+                openUpload?.question_id ?? '',
+                '',
+                showRequirement?.id ?? '',
+              )
+            }
+          />
+        )}
       </div>
     )
   },

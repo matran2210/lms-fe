@@ -160,6 +160,7 @@ module.exports = {
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
         matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
         card: '0px 4px 16px 0px #00000014',
+        'learning-activity': '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
       backgroundImage: {
         'radio-primary-checked': `url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='%23FFB700' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='12'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='11.25' fill='white'%3E%3C/circle%3E%3Ccircle cx='12' cy='12' r='6'%3E%3C/circle%3E%3C/svg%3E")`,
