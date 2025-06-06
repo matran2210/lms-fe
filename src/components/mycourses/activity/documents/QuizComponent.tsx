@@ -907,7 +907,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     'shadow-icon group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
                     {
                       '!top-[214px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
                     },
                   )}
                 >
@@ -958,7 +959,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     'shadow-icon group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay',
                     {
                       '!top-[142px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
                     },
                   )}
                 >

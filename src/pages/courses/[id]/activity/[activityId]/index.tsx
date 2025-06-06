@@ -455,7 +455,10 @@ const ActivityPage = () => {
             </>
           </>
           {/* Main Activity */}
-          <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col gap-6">
+          <div
+            data-aos={ANIMATION.DATA_AOS}
+            className="mb-6 flex flex-col gap-6"
+          >
             {/* Header */}
             <div
               className={clsx(
