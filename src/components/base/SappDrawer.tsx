@@ -22,7 +22,7 @@ interface IProps {
   confirmOnClose?: boolean
   showSubmitButton?: boolean
   heightBody?: string
-  sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
+  sizeTextBtn?: 'small' | 'medium' | 'large' | 'extra'
   handleCancel?: () => void
   showCancelButton?: boolean
   footerClassName?: string
@@ -31,7 +31,6 @@ interface IProps {
   cancelButtonClassName?: string
   submitButtonClassName?: string
   handleClickCancelButton?: () => void
-  isSecondaryCancelButton?: boolean
 }
 
 const SappDrawer = ({
@@ -50,14 +49,13 @@ const SappDrawer = ({
   showSubmitButton = true,
   showCancelButton = true,
   heightBody = 'h-[calc(100vh-80px)]',
-  sizeTextBtn = 'lager',
+  sizeTextBtn = 'large',
   footerClassName = '',
   loading = false,
   headerClassName,
   cancelButtonClassName,
   submitButtonClassName,
   handleClickCancelButton = () => {},
-  isSecondaryCancelButton = true,
 }: IProps) => {
   const dispatch = useAppDispatch()
 
@@ -146,9 +144,8 @@ const SappDrawer = ({
           >
             {showCancelButton && (
               <ButtonSecondary
-                isSecondaryButton={isSecondaryCancelButton}
                 title={btnCancelTitle}
-                className={clsx('me-[32px] rounded-md', cancelButtonClassName)}
+                className={clsx('me-[32px]', cancelButtonClassName)}
                 onClick={(e) => {
                   handleMaskClick(e)
                   handleClickCancelButton()
@@ -160,8 +157,7 @@ const SappDrawer = ({
             {showSubmitButton && (
               <ButtonPrimary
                 title={btnSubmitTile}
-                className={clsx('me-[32px] rounded-md', submitButtonClassName)}
-                childClass="px-7"
+                className={clsx('me-[32px]', submitButtonClassName)}
                 onClick={handleSubmit}
                 size={sizeTextBtn}
               />
