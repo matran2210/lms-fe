@@ -148,6 +148,7 @@ module.exports = {
         },
         yellow: {
           1: '#FFB800',
+          2: '#FFFBF2',
         },
         pinned: {
           1: '#18355D',
@@ -260,6 +261,7 @@ module.exports = {
         5.5: '22px',
         6: '24px',
         8: '30px',
+        12.5: '50px',
         small: '36px',
         default: '40px',
         medium: '48px',

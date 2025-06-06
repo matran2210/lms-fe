@@ -14,6 +14,7 @@ import { Thumbnail } from 'src/type/course/Question'
 import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
 import { LoadingIcon, PiPIcon } from '@assets/icons'
+import { useRouter } from 'next/router'
 
 interface IProp {
   options: any
@@ -710,6 +711,36 @@ const SAPPVideo = ({
     )
   }
 
+  const togglePictureInPicture = async () => {
+    const video = streamRef.current
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture()
+      } else {
+        await video.play()
+        await video.requestPictureInPicture()
+      }
+    } catch (err) {}
+  }
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleRouteChange = async () => {
+      if (document.pictureInPictureElement) {
+        try {
+          await document.exitPictureInPicture()
+        } catch (err) {
+          // console.error('Error exiting PiP on route change:', err);
+        }
+      }
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router.events])
   return (
     <>
       <div
@@ -801,7 +832,7 @@ const SAPPVideo = ({
                   }
                 }}
                 autoPlay={false}
-                disablePictureInPicture
+                // disablePictureInPicture
                 controlsList="nodownload"
               />
               <div
@@ -909,6 +940,7 @@ const SAPPVideo = ({
                       <button
                         data-title="pip"
                         className="btn-video volume-button text-white"
+                        onClick={togglePictureInPicture}
                       >
                         <PiPIcon />
                       </button>

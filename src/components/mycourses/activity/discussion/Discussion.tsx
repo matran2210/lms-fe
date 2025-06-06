@@ -22,7 +22,7 @@ import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { Skeleton } from 'antd'
-import { IconSend } from '@assets/icons'
+import { CameraIcon, IconSend } from '@assets/icons'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'
@@ -320,8 +320,8 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   return (
-    <div className="mb-15 bg-white p-6">
-      <div className="mb-4 text-xl font-bold">Discussion</div>
+    <div className="mb-15 bg-white">
+      <div className="mb-6 text-lg font-medium">Discussion</div>
       <Skeleton loading={loading}>
         {selector?.discussion?.map((e, i) => {
           return (
@@ -448,32 +448,38 @@ const Discussion = ({ class_id }: Props) => {
                       <HookFormTextArea
                         control={control}
                         name={idReply === e?.id ? 'comment' : ''}
-                        placeholder="Your comment..."
+                        placeholder="Input Text..."
                         handleKeyDown={handleKeyDown}
+                        className="w-fill--available comment-scrollbar h-12.5 min-h-12.5 rounded-lg px-4 py-3"
+                        actions={
+                          <div className="flex items-center gap-x-3">
+                            <SappButtonIcon
+                              type="submit"
+                              ishover={false}
+                              className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                              classTitle="!m-0"
+                            >
+                              <SendComment />
+                            </SappButtonIcon>
+                            <div
+                              className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: selectedFiles?.length > 0 })}`}
+                            >
+                              <CameraIcon />
+                              <input
+                                type="file"
+                                className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0 "
+                                accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                                onChange={handleFileChange}
+                                ref={fileInputRef}
+                              />
+                            </div>
+                          </div>
+                        }
                       />
                       <ActionDiscussion
                         titlePrimary={'reply this comment'}
                         onClick={() => handleChangeIdReply('')}
                       />
-                      <div
-                        className={`absolute bottom-10 right-12 cursor-pointer ${clsx({ hidden: selectedFiles?.length > 0 })}`}
-                      >
-                        <SappIcon icon="camera" />
-                        <input
-                          type="file"
-                          className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
-                          accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
-                          onChange={handleFileChange}
-                          ref={fileInputRef}
-                        />
-                      </div>
-                      <SappButtonIcon
-                        type="submit"
-                        ishover={false}
-                        className="sapp-custom-hover absolute bottom-10 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-                      >
-                        <SendComment />
-                      </SappButtonIcon>
                     </div>
                     <SappButton
                       title=""
@@ -561,30 +567,35 @@ const Discussion = ({ class_id }: Props) => {
             <HookFormTextArea
               control={control}
               name={'commentRoot'}
-              placeholder="Your comment..."
+              placeholder="Input Text1..."
               handleKeyDown={(e: any) => handleKeyDown(e, true)}
+              className="w-fill--available comment-scrollbar h-12.5 min-h-12.5 rounded-lg px-4 py-3"
+              actions={
+                <div className="flex items-center gap-x-3">
+                  <SappButtonIcon
+                    type="submit"
+                    ishover={false}
+                    className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                    classTitle="!m-0"
+                  >
+                    <SendComment />
+                  </SappButtonIcon>
+                  <div
+                    className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
+                  >
+                    <CameraIcon className="cursor-pointer " />
+                    <input
+                      type="file"
+                      className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0"
+                      accept="image/jpeg, image/png, image/gif"
+                      multiple
+                      onChange={(e) => handleFileChange(e, true)}
+                      ref={rootFileInputRef}
+                    />
+                  </div>
+                </div>
+              }
             />
-            <SappButton title="" type="submit" className="hidden" />
-            <div
-              className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
-            >
-              <SappIcon icon="camera" />
-              <input
-                type="file"
-                className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
-                accept="image/jpeg, image/png, image/gif"
-                multiple
-                onChange={(e) => handleFileChange(e, true)}
-                ref={rootFileInputRef}
-              />
-            </div>
-            <SappButtonIcon
-              type="submit"
-              ishover={false}
-              className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-            >
-              <SendComment />
-            </SappButtonIcon>
           </div>
         </form>
       </div>

@@ -72,6 +72,24 @@
       @apply mb-0;
     }
   }
+  .comment-scrollbar {
+    scrollbar-width: thin;
+    // scrollbar-color: $scrollbar-thumb $scrollbar-track;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: red;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: blue;
+      border-radius: 4px;
+      border: 2px solid green;
+    }
+  }
 }
 
 .learning-act-tab-pagination {

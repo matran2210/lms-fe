@@ -515,9 +515,10 @@ const ActivityPage = () => {
             <ActivityPagination {...{ activity, focusOnlyQuiz, sessionData }} />
 
             <div
-              className={clsx('mt-6 shadow-activity', {
-                hidden: focusOnlyQuiz,
-              })}
+              className={clsx(
+                'rounded-xl bg-white p-6 shadow-learning-activity',
+                { hidden: focusOnlyQuiz },
+              )}
               data-aos={ANIMATION.DATA_AOS}
             >
               <Discussion class_id={(router.query.id as string) || ''} />
