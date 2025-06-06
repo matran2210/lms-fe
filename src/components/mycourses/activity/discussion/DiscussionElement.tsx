@@ -304,7 +304,7 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'leading-0 flex-none',
+                  'flex-none leading-0',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -502,7 +502,7 @@ function DiscussionElement({
                   </div>
                 </div>
               )}
-              <div className="cursor-default font-normal text-gray-500">
+              <div className="text-gray-500 cursor-default font-normal">
                 {timeAgo}
               </div>
             </div>

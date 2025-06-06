@@ -384,7 +384,7 @@ const MatchingQuestion = forwardRef(
               )
             })}
             <div
-              className={`sapp-store dropable min-h-large flex flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
+              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
               onDrop={(ev) => handleStorage(ev, data?.id)}
               onDragOver={allowDropStorage}
               id="storage"

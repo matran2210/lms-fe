@@ -758,7 +758,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}

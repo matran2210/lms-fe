@@ -64,14 +64,14 @@ const TestResultDetail = () => {
   return (
     <FullScreenLayout title="Your Answer Details">
       <div className="mx-auto max-w-[1570px]">
-        <div className="px-5 xl:container md:px-10">
+        <div className="xl:container px-5 md:px-10">
           <Breadcrumb
             tabs={breadcrumbs}
             currentPage={'Your Answer Details'}
             className="max-[1199px]:py-4"
           />
         </div>
-        <div className="px-5 xl:container md:px-10">
+        <div className="xl:container px-5 md:px-10">
           <>
             {!!questions?.course?.course_categories?.[0]?.name ? (
               <div>

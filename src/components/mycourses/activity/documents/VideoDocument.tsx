@@ -376,7 +376,7 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9]"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}

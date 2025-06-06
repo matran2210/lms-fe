@@ -126,7 +126,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
                         row?.remaining_changes > 0 && (
                           <ExamInfoActionCell>
                             <p
-                              className="hover:bg-primary-light cursor-pointer rounded-md p-1 pl-2 transition-colors hover:text-primary"
+                              className="cursor-pointer rounded-md p-1 pl-2 transition-colors hover:bg-primary-light hover:text-primary"
                               onClick={() => {
                                 setIsDrawerOpen(true)
                                 setCurrentRow(row)

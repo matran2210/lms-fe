@@ -15,7 +15,7 @@ const TextSkeleton = ({
             <div
               key={index}
               role="status"
-              className="border-1.5 mt-6 animate-pulse border-solid border-[#DCDDDD] p-6"
+              className="mt-6 animate-pulse border-1.5 border-solid border-[#DCDDDD] p-6"
             >
               <div className="mb-3 h-7 rounded-full bg-[#e5e7eb] dark:bg-[#374151]"></div>
               <div className="h-7 rounded-full bg-[#e5e7eb] dark:bg-[#374151]"></div>

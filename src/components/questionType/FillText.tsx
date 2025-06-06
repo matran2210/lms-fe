@@ -272,7 +272,7 @@ const AddWordPreview = forwardRef(
         )}
         {solution && (
           <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
-            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />           
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

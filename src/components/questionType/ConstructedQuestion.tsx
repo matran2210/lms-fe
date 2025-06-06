@@ -184,7 +184,7 @@ const EssayQuestionPreview = ({
   }
 
   return (
-    <div className={clsx('bg-white w-full overflow-hidden', className)}>
+    <div className={clsx('w-full overflow-hidden bg-white', className)}>
       {question_content && isShowContent && (
         <div
           id="hightlight_area"

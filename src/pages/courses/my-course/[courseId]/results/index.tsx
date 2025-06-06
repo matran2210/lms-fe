@@ -92,7 +92,7 @@ const Results = () => {
               <div className="mx-auto my-0 flex max-w-[1144px] bg-white">
                 <Heading greeting="" title={'Results'} />
               </div>
-              <div className="mx-auto my-0 mb-6 mt-6 max-w-[1144px] bg-white px-8 pb-3 pt-8 max-[1199px]:container">
+              <div className="max-[1199px]:container mx-auto my-0 mb-6 mt-6 max-w-[1144px] bg-white px-8 pb-3 pt-8">
                 {isSuccess && <ResultsTable />}
               </div>
             </>
