@@ -187,7 +187,7 @@ const EssayQuestionPreview = ({
   return (
     <div
       className={clsx(
-        'w-full overflow-hidden bg-white',
+        'w-full overflow-hidden',
         {
           'rounded-xl bg-ink-100 p-8': !isShowContent,
         },
@@ -424,7 +424,7 @@ const EssayQuestionPreview = ({
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 name={name}
@@ -507,7 +507,7 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 name={name}

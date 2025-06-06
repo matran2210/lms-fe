@@ -3,20 +3,12 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
-  CalculatorIcon,
   CalculatorIconV2,
-  ExcelIcon,
   FlagIcon,
-  HighlightIcon,
   ResizeIcon,
-  ScratchPadIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-  TextSquareIcon,
-  UnHighLightIcon,
-  WordIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -57,7 +49,6 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
 import Popover from '@components/Popover'
-import SappButton from '@components/base/button/SappButton'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
@@ -67,10 +58,9 @@ import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { TabsProps, Tooltip } from 'antd'
+import { TabsProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -85,6 +75,7 @@ import {
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import {
+  checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
   getAnswerMatching,
@@ -99,6 +90,8 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { Tooltip } from 'antd'
+import SappButton from '@components/base/button/SappButton'
 import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
 
 declare global {
@@ -128,60 +121,59 @@ const TestDetail = () => {
     const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
       return (
         currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          const hasAnswer =
+            currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+              ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
+              : getValues(`${currentTabID}_${index}_answer`)
           return {
             label: (
               <span className="flex items-center gap-1">
                 Requirement {index + 1}
-                {getValues(`${currentTabID}_${index}_answer`) && (
-                  <CheckCircleOutlineYellow />
-                )}
+                {hasAnswer && <CheckCircleOutlineYellow />}
               </span>
             ),
             key: index,
             children: (
               <>
-                <EssayQuestionPreview
-                  data={{
-                    ...currentTabContent?.data?.requirements?.[index],
-                    ...essayData?.req,
-                  }}
-                  question_content={currentTabContent?.data?.question_content}
-                  index={index}
-                  question_data={currentTabContent?.data}
-                  control={control}
-                  handleSaveHighLight={handleSaveHighLight}
-                  highlighted={highlighted}
-                  removeHighlight={removeHighlight}
-                  allowHighLight={allowHighLight}
-                  allowUnHighLight={allowUnHighLight}
-                  solution={solution}
-                  name={`${currentTabID}_${index}_answer`}
-                  setValue={setValue}
-                  defaultValue={
-                    getValues(`${currentTabID}_${essayData?.index}_answer`) ||
-                    currentTabContent?.data?.requirements?.[essayData?.index]
-                      ?.answer_text ||
-                    currentTabContent?.answer
-                  }
-                  response_option_custom={currentTabContent.response_type}
-                  externalRef={refEditor}
-                  fullData={currentTabContent}
-                  isShowContent={false}
-                  openChooseFile={(e: any) =>
-                    setOpenUpload({
-                      status: true,
-                      question_id: currentPage,
-                      requirementIndex: index,
-                    })
-                  }
-                  handleClearFile={handleClearFile}
-                  setOpenPdf={handleOpenScratchPad}
-                  handleSaveHighLightRequirement={
-                    handleSaveHighLightRequirement
-                  }
-                  showRequiment={showListRequirement}
-                  handleChange={handleEssayChange}
-                />
+                {editorReady && (
+                  <EssayQuestionPreview
+                    data={{
+                      ...currentTabContent?.data?.requirements?.[index],
+                      ...essayData?.req,
+                    }}
+                    question_content={currentTabContent?.data?.question_content}
+                    index={index}
+                    question_data={currentTabContent?.data}
+                    control={control}
+                    handleSaveHighLight={handleSaveHighLight}
+                    highlighted={highlighted}
+                    removeHighlight={removeHighlight}
+                    allowHighLight={allowHighLight}
+                    allowUnHighLight={allowUnHighLight}
+                    solution={solution}
+                    name={`${currentTabID}_${index}_answer`}
+                    setValue={setValue}
+                    defaultValue={defaultValue}
+                    response_option_custom={currentTabContent.response_type}
+                    externalRef={refEditor}
+                    fullData={currentTabContent}
+                    isShowContent={false}
+                    openChooseFile={(e: any) =>
+                      setOpenUpload({
+                        status: true,
+                        question_id: currentPage,
+                        requirementIndex: index,
+                      })
+                    }
+                    handleClearFile={handleClearFile}
+                    setOpenPdf={handleOpenScratchPad}
+                    handleSaveHighLightRequirement={
+                      handleSaveHighLightRequirement
+                    }
+                    showRequiment={showListRequirement}
+                    handleChange={handleEssayChange}
+                  />
+                )}
               </>
             ),
           }
@@ -316,9 +308,6 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
         const defaultValueEssay = () => {
           const key = `${currentTabID}_${essayData?.index}_answer`
           const valueFromForm = getValues(key)
@@ -355,7 +344,7 @@ const TestDetail = () => {
               defaultActiveKey="1"
               onChange={(key) => {
                 setEssayData({
-                  req: currentTabContent?.data?.requirements?.[key],
+                  req: getValues(`${currentTabID}_${key}_answer`),
                   index: key,
                 })
                 refEditor.current.reset()
@@ -659,7 +648,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -719,7 +708,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1302,6 +1291,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1320,8 +1310,11 @@ const TestDetail = () => {
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
+    setScratchPadValues([])
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -1604,7 +1597,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1629,7 +1628,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
@@ -1685,8 +1686,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -2213,13 +2214,19 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer = answerMap.has(question.id)
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
+
+            // const hasAnswer = answerMap.has(question.id)
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2408,7 +2415,7 @@ const TestDetail = () => {
             >
               <div className="flex h-full w-[100px] items-center gap-1">
                 {/* <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
+                 className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)

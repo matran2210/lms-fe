@@ -46,7 +46,7 @@ const HookFormTextArea = ({
       render={({ field, fieldState: { error } }) => (
         <>
           {!skeleton ? (
-            <div className="relative">
+            <div className="relative h-full">
               <textarea
                 {...field}
                 value={field.value ?? ''}

@@ -901,7 +901,7 @@ $focus: (
 }
 
 textarea:focus {
-  --tw-ring-color: none;
+  --tw-ring-color: none !important;
   @apply border-primary;
 }
 
