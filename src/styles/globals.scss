@@ -17,7 +17,6 @@
 @import './components/_popover.scss';
 @import './components/_tabs.scss';
 @import './components/_container.scss';
-
 @import './components/_table.scss';
 @import 'progress.scss';
 @import './components/_input.scss';
@@ -487,7 +486,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply mb-8 flex items-center justify-between gap-3 px-0;
+  @apply mb-6 flex items-center gap-3 px-0;
 }
 
 .sapp-upload-button-preview {

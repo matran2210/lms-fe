@@ -13,7 +13,8 @@ import Image from 'next/image'
 import { Thumbnail } from 'src/type/course/Question'
 import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
-import { LoadingIcon } from '@assets/icons'
+import { LoadingIcon, PiPIcon } from '@assets/icons'
+import { useRouter } from 'next/router'
 
 interface IProp {
   options: any
@@ -444,7 +445,7 @@ const SAPPVideo = ({
   // updateProgress indicates how far through the video
   // the current playback is by updating the progress bar
   function updateProgress() {
-    let currentTime = Math.floor(streamRef?.current?.currentTime || 0)
+    let currentTime = Math.ceil(streamRef?.current?.currentTime || 0)
     if (seekRef?.current) {
       seekRef.current.value = String(currentTime)
     }
@@ -710,6 +711,36 @@ const SAPPVideo = ({
     )
   }
 
+  const togglePictureInPicture = async () => {
+    const video = streamRef.current
+    try {
+      if (document.pictureInPictureElement) {
+        await document.exitPictureInPicture()
+      } else {
+        await video.play()
+        await video.requestPictureInPicture()
+      }
+    } catch (err) {}
+  }
+  const router = useRouter()
+
+  useEffect(() => {
+    const handleRouteChange = async () => {
+      if (document.pictureInPictureElement) {
+        try {
+          await document.exitPictureInPicture()
+        } catch (err) {
+          // console.error('Error exiting PiP on route change:', err);
+        }
+      }
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [router.events])
   return (
     <>
       <div
@@ -727,7 +758,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -801,15 +832,15 @@ const SAPPVideo = ({
                   }
                 }}
                 autoPlay={false}
-                disablePictureInPicture
+                // disablePictureInPicture
                 controlsList="nodownload"
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full px-4 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full rounded-b-lg px-5 py-3"
                 ref={videoControlsRef}
               >
-                <div className="flex-center w-full">
-                  <div className="left-controls flex items-center text-white">
+                <div className="flex-center flex w-full items-center gap-6">
+                  <div className="left-controls flex items-center gap-4 text-white">
                     <button
                       className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#BDBDBDB3] before:-right-4"
                       data-title="Play"
@@ -819,7 +850,7 @@ const SAPPVideo = ({
                         animatePlayback()
                       }}
                     >
-                      <svg className="icon-svg playback-icons h-6 w-6">
+                      <svg className="icon-svgplay playback-icons h-6 w-6">
                         <path
                           className="play"
                           d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
@@ -869,8 +900,9 @@ const SAPPVideo = ({
                         })}
                     </>
                   </div>
-                  <div className="right-controls flex-center">
-                    <div className="volume-controls relative flex h-8 w-8 items-center">
+
+                  <div className="right-controls flex-center flex items-center gap-4">
+                    <div className="volume-controls relative flex h-8 items-center">
                       <button
                         data-title="Mute"
                         className="btn-video volume-button"
@@ -885,7 +917,9 @@ const SAPPVideo = ({
                         </svg>
                         <Icon
                           type={'volume'}
-                          className={'icon-svg volume-high ml-4 text-white'}
+                          className={
+                            'icon-svg volume-high h-6 w-4.5 text-white'
+                          }
                         />
                       </button>
 
@@ -901,8 +935,17 @@ const SAPPVideo = ({
                         />
                       </div>
                     </div>
+                    <div className="volume-controls relative flex h-8 items-center">
+                      <button
+                        data-title="pip"
+                        className="btn-video volume-button text-white"
+                        onClick={togglePictureInPicture}
+                      >
+                        <PiPIcon />
+                      </button>
+                    </div>
                     <div
-                      className={`settings-control icon-svg relative ml-4 text-white ${
+                      className={`settings-control icon-svg relative text-white ${
                         activeSettings ? 'active' : ''
                       }`}
                       ref={listSettingsRef}
@@ -1121,11 +1164,14 @@ const SAPPVideo = ({
                     >
                       <Icon
                         type={'fullscreen'}
-                        className={'icon-svg fullscreen ml-4 text-white'}
+                        className={'fullscreen h-6 w-5 text-white'}
                       />
-                      <svg className="icon-svg fullscreen-exit ml-3 hidden h-6 w-[22px]">
-                        <path d="M15.984 8.016h3v1.969h-4.969v-4.969h1.969v3zM14.016 18.984v-4.969h4.969v1.969h-3v3h-1.969zM8.016 8.016v-3h1.969v4.969h-4.969v-1.969h3zM5.016 15.984v-1.969h4.969v4.969h-1.969v-3h-3z"></path>
-                      </svg>
+                      <Icon
+                        type={'fullscreen-exit'}
+                        className={
+                          ' fullscreen-exit hidden h-5.5 w-5 text-white'
+                        }
+                      />
                     </button>
                   </div>
                 </div>

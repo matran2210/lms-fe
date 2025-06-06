@@ -139,7 +139,10 @@ const HookFormRadioGroup = ({
                             >
                               {option.label}
                             </span>
-                            <YourAnswer show={checked && !!corrects} />
+                            <YourAnswer
+                              show={checked && !!corrects}
+                              className="max-h-6 !rounded bg-purple-2 !text-sm text-state-info"
+                            />
                           </div>
                           {option.description && (
                             <div className="text-sm text-[#6b7280]">

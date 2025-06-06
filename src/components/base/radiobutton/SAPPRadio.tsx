@@ -7,6 +7,8 @@ interface IProps {
   checked: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
   disabled?: boolean
+  state?: 'default' | 'error' | 'success' | 'primary'
+  size?: 'small' | 'medium' | 'lager'
   className?: string
 }
 
