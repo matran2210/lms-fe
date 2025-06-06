@@ -13,9 +13,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
 
   // Check if URL contains '/teachers'
   const isTeacherPage = router.asPath.includes('/teachers')
-  const isTest = router.asPath.includes('/test')
-  const isCaseStudy = router.asPath.includes('/case-study')
-  const isActivity = router.asPath.includes('/activity')
+  const isTestPage = router.asPath.includes('/test')
+  const isCaseStudyPage = router.asPath.includes('/case-study')
+  const isActivityPage = router.asPath.includes('/activity')
 
   // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
@@ -122,7 +122,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }, [visible])
 
   // Early return after all hooks are declared
-  if (isTeacherPage || isTest || isCaseStudy || isActivity) {
+  if (isTeacherPage || isTestPage || isCaseStudyPage || isActivityPage) {
     return null
   }
 
