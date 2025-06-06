@@ -173,7 +173,7 @@ const EditorReader = ({
       >
         <div
           ref={extenalRef}
-          className={clsx({
+          className={clsx('override-whitespace', {
             'pined-noti text-[14px] text-white': pinned,
           })}
           key={content}
