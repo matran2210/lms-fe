@@ -6,6 +6,7 @@ import NoData from 'src/common/NoData'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IOverProgress, IExamPrediction } from 'src/type/dashboard'
 import dayjs from 'dayjs'
+import { IconEssentional } from '@assets/icons/Dashboard'
 
 const OverProgress = () => {
   const router = useRouter()
@@ -30,88 +31,36 @@ const OverProgress = () => {
         : 100 - parseFloat(data.exam_prediction.toFixed(2)),
     }
 
-    const option: EChartsProps['option'] = {
-      tooltip: {
-        show: isNormal,
-        trigger: 'item',
+    const option = {
+      title: {
+        text: '0%',
+        subtext: 'Pass Rated',
+        left: 'center',
+        top: '42%',
+        textStyle: {
+          fontSize: 24,
+          fontWeight: '600',
+          color: '#1F2937',
+          lineHeight: 32,
+        },
+        subtextStyle: {
+          fontSize: 14,
+          color: '#666',
+        },
       },
-      color: [color, '#D1D5DB'],
-      responsive: true,
-      maintainAspectRatio: false,
-      graphic: {
-        elements: [
-          {
-            type: 'text',
-            left: 'center',
-            top: 'middle',
-            z: 999,
-            style: {
-              text: `${centerText}`,
-              align: 'center',
-              fontSize: 18,
-              fontWeight: 600,
-              fontFamily: 'Roboto',
-              fill: '#374151',
-            },
-          },
-        ],
-      },
+      legend: { show: false },
       series: [
         {
-          name: 'Overall Progress',
+          name: 'Pass Rate',
           type: 'pie',
-          radius: ['50%', '100%'],
-          label: { show: false },
-          emphasis: { disabled: true },
-          tooltip: {
-            show: false,
-          },
+          radius: ['90%', '67%'],
+          avoidLabelOverlap: false,
+          labelLine: { show: false },
+          legend: { show: false },
           data: [
-            {
-              value: values.completed,
-              name: 'Activities completed',
-              itemStyle: { color: color },
-            },
-            {
-              value: values.uncompleted,
-              name: 'Activities not completed',
-              itemStyle: { color: 'transparent' },
-            },
+            { value: 0, name: 'Passed', itemStyle: { color: '#FFB700' } }, // green
+            { value: 100, name: 'Remaining', itemStyle: { color: '#FFF1CC' } }, // light yellow
           ],
-        },
-        {
-          name: 'Overall Progress',
-          type: 'pie',
-          radius: ['50%', '75%'],
-          label: { show: false },
-          emphasis: { disabled: true },
-          data: [
-            {
-              value: values.completed,
-              name: 'Activities completed',
-            },
-            {
-              value: values.uncompleted,
-              name: 'Activities not completed',
-            },
-          ],
-          tooltip: {
-            trigger: 'item',
-            position: function (point) {
-              return [point[0], point[1]]
-            },
-            textStyle: {
-              fontFamily: 'Roboto',
-              fontSize: 14,
-            },
-            formatter: function (params) {
-              return `<div class="flex flex-row items-center justify-between gap-2 font-medium text-ink-700">
-                    <div class="w-2 h-2 rounded-full" style="background-color: ${params.color}"></div>
-                    <div>${params.name}:</div>
-                    <div class="font-bold">${params.value}</div>
-                  </div>`
-            },
-          },
         },
       ],
     }
@@ -139,13 +88,13 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-ink-700 shadow-activity lg:col-span-4 3xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b border-ink-300 pb-3">
-        <div className="min-w-fit text-lg font-bold 4xl:text-xl">
+    <div className="rounded- flex flex-col bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
+      <div className="mb-5 flex items-center justify-between pb-3">
+        <div className="min-w-fit text-xl font-semibold text-ink-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
         <div
-          className={`${isNormal ? 'invisible' : 'text-xsm text-[#99A1B7] 4xl:text-sm'}`}
+          className={`${isNormal ? 'invisible' : 'text-sm text-ink-400 4xl:text-sm'}`}
         >
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
@@ -153,13 +102,9 @@ const OverProgress = () => {
       {option && (
         <>
           <div
-            className={`flex flex-row justify-between gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
+            className={`flex flex-row justify-center gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
           >
-            <div
-              className={`m-auto ${isNormal ? 'h-[170px] min-w-[170px] 3xl:h-[180px] 3xl:min-w-[180px]' : 'mb-2 h-40 w-40'}`}
-            >
-              <EChart option={option} />
-            </div>
+            <EChart option={option} width="400px" height="400px" />
             {isNormal && (
               <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
@@ -173,7 +118,10 @@ const OverProgress = () => {
               </div>
             )}
           </div>
-          <div className="mt-4 text-center">
+          <div className="mt-4 flex items-center justify-center self-center text-center text-ink-800">
+            <div className="me-2">
+              <IconEssentional />
+            </div>
             {isNormal
               ? 'Complete your learning to win the exam'
               : 'Based on the score from Total test results and Topic progress'}
