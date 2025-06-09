@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Input, Popover } from 'antd'
+import { Button, Drawer, Input, List, Popover } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { PointerIcon } from '@assets/icons'
+import { PointerIcon, ShowCommentIcon } from '@assets/icons'
+import clsx from 'clsx'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100
@@ -17,11 +18,13 @@ export interface HighlightItem {
 interface Props {
   initialHTML: string
   storageKey: string
+  isShowNote?: boolean
 }
 
 export const HighlightableHTML: React.FC<Props> = ({
   initialHTML,
   storageKey,
+  isShowNote = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [html, setHtml] = useState<string>(initialHTML)
@@ -34,6 +37,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
     null,
   )
+  const [open, setOpen] = useState(false)
 
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const [noteInput, setNoteInput] = useState<string>('')
@@ -191,7 +195,57 @@ export const HighlightableHTML: React.FC<Props> = ({
     setSelectedHighlightId(null)
     setHighlightRect(null)
   }
+  // Scroll tới highlight trong danh sách
+  // Replace the empty scrollToHighlight function with this implementation:
 
+  // Replace the empty scrollToHighlight function with this implementation:
+
+  const scrollToHighlight = (id: string) => {
+    const container = containerRef.current
+    if (!container) return
+
+    // Find the highlight element by data-id
+    const highlightElement = container.querySelector(
+      `mark[data-id="${id}"]`,
+    ) as HTMLElement
+    if (!highlightElement) return
+
+    // Get the position of the highlight element
+    const elementRect = highlightElement.getBoundingClientRect()
+    const containerRect = container.getBoundingClientRect()
+
+    // Calculate scroll position
+    // We want to center the highlight in the viewport with some offset
+    const offset = 100 // pixels from top of viewport
+    const targetScrollTop = window.scrollY + elementRect.top - offset
+
+    // Smooth scroll to the highlight
+    window.scrollTo({
+      top: targetScrollTop,
+      behavior: 'smooth',
+    })
+
+    // Optional: Add a temporary visual effect to make the highlight more noticeable
+    highlightElement.style.transition = 'all 0.3s ease'
+    highlightElement.style.boxShadow = '0 0 10px rgba(255, 193, 7, 0.8)'
+    highlightElement.style.transform = 'scale(1.02)'
+
+    // Remove the effect after animation
+    setTimeout(() => {
+      highlightElement.style.boxShadow = ''
+      highlightElement.style.transform = ''
+    }, 1000)
+
+    // Close the drawer after scrolling (optional)
+    setOpen(false)
+  }
+  const showDrawer = () => {
+    setOpen(true)
+  }
+
+  const onClose = () => {
+    setOpen(false)
+  }
   return (
     <div
       onMouseUp={handleMouseUp}
@@ -281,7 +335,45 @@ export const HighlightableHTML: React.FC<Props> = ({
           <span />
         </Popover>
       )}
+      <div
+        className={clsx(
+          'fixed bottom-5 right-4 flex h-14 w-10 items-center justify-center rounded-full bg-white shadow-learning-activity',
+          {
+            hidden: !isShowNote,
+          },
+        )}
+      >
+        <span onClick={showDrawer}>
+          <ShowCommentIcon className="h-8 w-8" />
+        </span>
+      </div>
 
+      <Drawer
+        title="Highlights"
+        onClose={onClose}
+        open={open}
+        classNames={{
+          header: 'highlight-drawer-header',
+        }}
+      >
+        <List
+          className="px-6 py-4"
+          dataSource={highlights}
+          renderItem={(item) => (
+            <List.Item
+              className="hover:text-blue-600 cursor-pointer"
+              onClick={() => scrollToHighlight(item.id)}
+            >
+              <div>
+                <div className="font-medium">{item.text}</div>
+                {isShowNote && item.note && (
+                  <div className="text-gray-500 text-xs">Note: {item.note}</div>
+                )}
+              </div>
+            </List.Item>
+          )}
+        />
+      </Drawer>
       <div
         ref={containerRef}
         dangerouslySetInnerHTML={{ __html: html }}
