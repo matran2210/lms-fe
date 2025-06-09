@@ -551,6 +551,9 @@ export enum DATE_FORMAT {
 export const LABEL_MAX_LENGTH = 12
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+export const CLASS_TYPE = {
+  TRIAL: 'TRIAL',
+}
 
 export * from './socketEvents'
 export * from './localStorageKeys'

@@ -11,7 +11,7 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
+import { ANIMATION, CLASS_TYPE, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -130,6 +130,8 @@ const CourseDetail = () => {
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
+  const isTrial =
+    data?.pages?.[0]?.courseDetail?.class_type === CLASS_TYPE.TRIAL
 
   const { setCourseType } = useCourseContext()
 
@@ -167,17 +169,35 @@ const CourseDetail = () => {
           <CourseSkeleton />
         ) : (
           <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
+            {isTrial ? (
+              <>
                 <BreadcrumbFilter name={courseNameDetail} />
-                <FilterCourseDetail totalResult={courses?.length || 0} />
-              </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail} />
-            </div>
+                <div
+                  className="my-4 flex items-center justify-between"
+                  data-aos={ANIMATION.DATA_AOS}
+                >
+                  <div className="text-3xl font-semibold text-gray-800">
+                    {courseNameDetail}
+                  </div>
+                  <FilterCourseDetail totalResult={courses?.length || 0} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="main relative">
+                  <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
+                    <BreadcrumbFilter name={courseNameDetail} />
+                    <FilterCourseDetail totalResult={courses?.length || 0} />
+                  </div>
+                </div>
+                <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+                  <Heading greeting="Welcome to" title={courseNameDetail} />
+                </div>
+              </>
+            )}
             <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
+                isTrial
                 courses={courses}
                 is_passed_course={is_passed_course}
                 class_user_id={class_user_id}
