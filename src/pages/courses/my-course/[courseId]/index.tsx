@@ -11,11 +11,17 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, CLASS_TYPE, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
+import {
+  ANIMATION,
+  CLASS_TYPE,
+  defaultStatusDetail,
+  DELAY_TIME_DISPLAY_POPUP,
+} from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import FilterCourse from '@components/mycourses/FilterCourse'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -179,7 +185,16 @@ const CourseDetail = () => {
                   <div className="text-3xl font-semibold text-gray-800">
                     {courseNameDetail}
                   </div>
-                  <FilterCourseDetail totalResult={courses?.length || 0} />
+                  <FilterCourse
+                    totalResult={courses?.length || 0}
+                    listFilter={[
+                      {
+                        name: 'user_section_learning_status',
+                        placeholder: 'Status',
+                        options: defaultStatusDetail,
+                      },
+                    ]}
+                  />
                 </div>
               </>
             ) : (
