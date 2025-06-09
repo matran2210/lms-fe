@@ -1,5 +1,5 @@
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
-import SappButton from '@components/base/button/SappButton'
 import { RefObject } from 'react'
 import SappModal from 'src/components/base/modal/SappModal'
 import { HandShake } from 'src/components/icons'
@@ -60,7 +60,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
             {UserGuide.TITLE_WELCOME}
           </h2>
           <span className="text-medium-s">{UserGuide.CONTENT_WELCOME}</span>
-          <SappButton
+          <ButtonPrimary
             title={UserGuide.CONTENT_BUTTON}
             full={true}
             className="mt-10"
