@@ -49,6 +49,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     left: number
   } | null>(null)
   const HIGHLIGHT_KEY = 'highlight_items'
+
   // Debounce setSelectionRect để tránh scroll nháy
   const updateSelectionRect = (rect: DOMRect | null) => {
     if (debounceTimeout) clearTimeout(debounceTimeout)
@@ -79,7 +80,9 @@ export const HighlightableHTML: React.FC<Props> = ({
         )
         setHtml(restoredHTML)
         setHighlights(parsed.highlights)
-      } catch (err) {}
+      } catch (err) {
+        // console.error('Error loading highlights:', err)
+      }
     }
   }, [initialHTML])
 
@@ -129,8 +132,6 @@ export const HighlightableHTML: React.FC<Props> = ({
       range.endContainer,
       range.endOffset,
     )
-
-    // Kiểm tra highlight như đã nói trước đó...
 
     setSelection({
       text: selectionObj.toString(),
@@ -307,110 +308,132 @@ function getGlobalOffset(
   return offset
 }
 
+// Cải tiến function này để xử lý multiple highlights trong cùng câu
 function restoreHighlightsFromOffsetsPreserveHTML(
   html: string,
   highlights: HighlightItem[],
 ): string {
+  if (!highlights || highlights.length === 0) return html
+
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
 
+  // Tạo một mảng chứa tất cả các điểm cần split text (start và end của mỗi highlight)
+  const splitPoints: Array<{
+    offset: number
+    type: 'start' | 'end'
+    highlightId: string
+  }> = []
+
+  highlights.forEach((hl) => {
+    splitPoints.push({
+      offset: hl.startOffset,
+      type: 'start',
+      highlightId: hl.id,
+    })
+    splitPoints.push({ offset: hl.endOffset, type: 'end', highlightId: hl.id })
+  })
+
+  // Sort theo offset để xử lý từ đầu đến cuối
+  splitPoints.sort((a, b) => a.offset - b.offset)
+
+  // Tạo map từ highlightId đến highlight object
+  const highlightMap = new Map<string, HighlightItem>()
+  highlights.forEach((hl) => highlightMap.set(hl.id, hl))
+
+  // Collect tất cả text nodes với positions
   const textNodes: { node: Text; start: number; end: number }[] = []
   let offset = 0
   const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT, null)
   let currentNode: Text | null
+
   while ((currentNode = walker.nextNode() as Text | null)) {
     const length = currentNode.nodeValue?.length || 0
     textNodes.push({ node: currentNode, start: offset, end: offset + length })
     offset += length
   }
 
-  const sortedHighlights = [...highlights].sort(
-    (a, b) => b.startOffset - a.startOffset,
-  )
+  // Xử lý từng text node
+  textNodes.forEach(({ node, start, end }) => {
+    const relevantSplitPoints = splitPoints.filter(
+      (sp) => sp.offset >= start && sp.offset <= end,
+    )
 
-  for (const hl of sortedHighlights) {
-    const { startOffset, endOffset, id } = hl
-    const mark = document.createElement('mark')
-    mark.setAttribute('data-id', id)
-    mark.style.backgroundColor = 'yellow'
+    if (relevantSplitPoints.length === 0) return
 
-    let startNodeIndex = -1
-    let endNodeIndex = -1
-    for (let i = 0; i < textNodes.length; i++) {
-      const { start, end } = textNodes[i]
-      if (start <= startOffset && startOffset < end) startNodeIndex = i
-      if (start < endOffset && endOffset <= end) endNodeIndex = i
+    const parent = node.parentNode
+    if (!parent) return
+
+    const originalText = node.nodeValue || ''
+    const fragments: Array<{ text: string; highlightIds: Set<string> }> = []
+
+    let currentPos = 0
+    let activeHighlights = new Set<string>()
+
+    // Xử lý từng split point
+    relevantSplitPoints.forEach((sp) => {
+      const localOffset = sp.offset - start
+
+      // Thêm text từ currentPos đến split point
+      if (localOffset > currentPos) {
+        fragments.push({
+          text: originalText.slice(currentPos, localOffset),
+          highlightIds: new Set(activeHighlights),
+        })
+      }
+
+      // Cập nhật active highlights
+      if (sp.type === 'start') {
+        activeHighlights.add(sp.highlightId)
+      } else {
+        activeHighlights.delete(sp.highlightId)
+      }
+
+      currentPos = localOffset
+    })
+
+    // Thêm phần text còn lại
+    if (currentPos < originalText.length) {
+      fragments.push({
+        text: originalText.slice(currentPos),
+        highlightIds: new Set(activeHighlights),
+      })
     }
-    if (startNodeIndex === -1 || endNodeIndex === -1) continue
 
-    const startNode = textNodes[startNodeIndex]
-    const endNode = textNodes[endNodeIndex]
+    // Tạo các DOM nodes từ fragments
+    const newNodes: Node[] = []
+    fragments.forEach((fragment) => {
+      if (fragment.text.length === 0) return
 
-    const startText = startNode.node
-    const endText = endNode.node
+      if (fragment.highlightIds.size === 0) {
+        // Plain text
+        newNodes.push(document.createTextNode(fragment.text))
+      } else {
+        // Highlighted text - có thể có nested highlights
+        let container: HTMLElement | Text = document.createTextNode(
+          fragment.text,
+        )
 
-    const startPosInNode = startOffset - startNode.start
-    const endPosInNode = endOffset - endNode.start
+        // Wrap với mark elements cho mỗi highlight (từ ngoài vào trong)
+        const sortedHighlightIds = Array.from(fragment.highlightIds).sort()
+        sortedHighlightIds.forEach((hlId) => {
+          const mark = document.createElement('mark')
+          mark.setAttribute('data-id', hlId)
+          mark.style.backgroundColor = 'yellow'
+          mark.appendChild(container)
+          container = mark
+        })
 
-    if (startNode === endNode) {
-      const originalText = startText.nodeValue!
-      const before = originalText.slice(0, startPosInNode)
-      const selected = originalText.slice(startPosInNode, endPosInNode)
-      const after = originalText.slice(endPosInNode)
+        newNodes.push(container)
+      }
+    })
 
-      const newNode = document.createTextNode(after)
-      const markedNode = mark.cloneNode() as HTMLElement
-      markedNode.textContent = selected
-
-      const parent = startText.parentNode!
-      if (!parent) continue
-      parent.insertBefore(document.createTextNode(before), startText)
-      parent.insertBefore(markedNode, startText)
-      parent.insertBefore(newNode, startText)
-      parent.removeChild(startText)
-    } else {
-      const startOriginal = startText.nodeValue!
-      const startBefore = startOriginal.slice(0, startPosInNode)
-      const startSelected = startOriginal.slice(startPosInNode)
-
-      const endOriginal = endText.nodeValue!
-      const endSelected = endOriginal.slice(0, endPosInNode)
-      const endAfter = endOriginal.slice(endPosInNode)
-
-      const startParent = startText.parentNode!
-      const endParent = endText.parentNode!
-      if (!startParent || !endParent) continue
-
-      const newStartNode = document.createTextNode(startBefore)
-      const newEndNode = document.createTextNode(endAfter)
-
-      const markedNode = mark.cloneNode() as HTMLElement
-      markedNode.textContent =
-        startSelected +
-        getTextBetween(textNodes, startNodeIndex + 1, endNodeIndex - 1) +
-        endSelected
-
-      startParent.insertBefore(newStartNode, startText)
-      startParent.removeChild(startText)
-
-      endParent.insertBefore(newEndNode, endText)
-      endParent.removeChild(endText)
-
-      endParent.insertBefore(markedNode, newEndNode)
-    }
-  }
+    // Replace original node với new nodes
+    newNodes.forEach((newNode) => {
+      parent.insertBefore(newNode, node)
+    })
+    parent.removeChild(node)
+  })
 
   return wrapper.innerHTML
-}
-
-function getTextBetween(
-  nodes: { node: Text; start: number; end: number }[],
-  from: number,
-  to: number,
-): string {
-  let text = ''
-  for (let i = from; i <= to; i++) {
-    text += nodes[i]?.node.nodeValue || ''
-  }
-  return text
 }
