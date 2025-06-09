@@ -73,7 +73,7 @@ export default function Container({
 
   return (
     <div
-      className={`mx-auto grid grid-cols-12 gap-6 ${className}`}
+      className={`mx-auto grid max-w-screen-4xl grid-cols-12 gap-6 ${className}`}
       style={{ width: `calc(100% - ${margin * 2}px)`, ...style }}
       {...divProps}
     >
