@@ -7,6 +7,7 @@ import {
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import HighlightableText from '@components/highlights/HighlightableText'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { download } from '@components/learning/activity/ActivityResource'
@@ -846,6 +847,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
+
           {activeQuestion?.question_topic?.description && (
             <Divider className="my-8" />
           )}
@@ -904,7 +906,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'shadow-icon group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
+                    'group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                     {
                       '!top-[214px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
@@ -956,7 +958,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               >
                 <div
                   className={clsx(
-                    'shadow-icon group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay',
+                    'group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
                     {
                       '!top-[142px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY &&

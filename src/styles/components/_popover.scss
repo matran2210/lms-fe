@@ -19,3 +19,23 @@
     }
   }
 }
+
+.highlight-popover {
+  .ant-popover-arrow {
+    &::before,
+    &::after {
+      @apply bg-[#404041];
+    }
+    &:hover {
+      &::before,
+      &::after {
+        @apply bg-black;
+      }
+    }
+  }
+  .ant-popover-content {
+    .ant-popover-inner {
+      @apply bg-[#404041] !p-0;
+    }
+  }
+}
