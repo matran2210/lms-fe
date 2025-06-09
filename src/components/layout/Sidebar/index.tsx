@@ -48,12 +48,12 @@ export default function Sidebar({
         className={clsx(
           className,
           isGuideActive ? 'z-50' : 'z-30',
-          isOpened && 'w-[200px]',
+          isOpened || (isGuideActive && 'w-[230px]'),
           'mx-2 my-2 rounded-xl',
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative  rounded-xl pb-6 pt-[25PX] ${
+          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
@@ -71,7 +71,8 @@ export default function Sidebar({
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center"></div>
+          {/* Divider */}
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center" />
           <MenuItemsList
             options={
               Number(localStorage.getItem('countEvent')) <= 0
