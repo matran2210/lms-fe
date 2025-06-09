@@ -74,12 +74,12 @@ const PageLink = ({
           ? 'text-xsm min-h-8 min-w-8 rounded-md font-semibold leading-[18px]'
           : 'min-h-9.5 max-h-10 min-w-[38px] text-sm font-normal leading-[22px]'
       } relative flex cursor-pointer items-center justify-center rounded p-2
-      ${isViewedProp && type !== 'row' ? 'bg-[#F1F1F1] text-white' : ''} ${
+      ${isViewedProp && type !== 'row' ? 'bg-ink-400 text-white' : ''} ${
         active
           ? 'border-[#FFB800] bg-primary text-white'
           : !isViewedProp
-            ? 'border-[#DCDDDD] text-ink-800 hover:border-[#FFB800] hover:bg-primary hover:text-white'
-            : 'text-[#A1A1A1]  hover:bg-primary hover:text-white'
+            ? 'bg-ink-100 text-ink-800 hover:border-[#FFB800] hover:bg-primary hover:text-white'
+            : 'text-ink-100 hover:bg-primary hover:text-white'
       }`}
       aria-current={active ? 'page' : undefined}
       {...otherProps}

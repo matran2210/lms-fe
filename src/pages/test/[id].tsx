@@ -17,7 +17,7 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@components/questionType/NewFillText'
+import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
@@ -172,6 +172,7 @@ const TestDetail = () => {
                     }
                     showRequiment={showListRequirement}
                     handleChange={handleEssayChange}
+                    explainClassname="!mt-8 !p-0 !bg-transparent"
                   />
                 )}
               </>
@@ -197,6 +198,7 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -214,6 +216,7 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -234,6 +237,7 @@ const TestDetail = () => {
             getValue={getValues}
             tabs={tabs}
             currentPage={currentPage}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -250,11 +254,12 @@ const TestDetail = () => {
             done={done}
             corrects={corrects?.corrects}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFiltext
+          <NewFilltext
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}
@@ -270,6 +275,7 @@ const TestDetail = () => {
             ref={ref}
             solution={solution}
             watch={watch}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -289,6 +295,7 @@ const TestDetail = () => {
             handleGetData={(data: DragDropAnswerItem) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -305,6 +312,7 @@ const TestDetail = () => {
             corrects={corrects?.corrects}
             ref={ref}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -2869,7 +2877,7 @@ const TestDetail = () => {
 
                     <div
                       className={clsx(
-                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100',
+                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8',
                         {
                           'bg-white':
                             currentTabContent?.data?.qType ===

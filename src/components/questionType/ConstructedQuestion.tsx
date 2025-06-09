@@ -298,11 +298,7 @@ const EssayQuestionPreview = ({
             )}
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && (
-              <div className="my-8">
-                <hr />
-              </div>
-            )}
+            !forCaseStudy && <Divider className="my-8" />}
         </>
       )}
       <>

@@ -24,6 +24,7 @@ import { CustomNode } from './CustomNode'
 import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 
 interface IProps {
   data: any
@@ -49,6 +50,7 @@ interface IProps {
   isHideExhibit?: boolean
   isAlwaysShowAnswer?: boolean
   exhibitText?: string
+  explainClassname?: string
 }
 
 type Role = 'question' | 'answer'
@@ -78,22 +80,18 @@ const MatchQuiz = forwardRef(
   (
     {
       data,
-      action,
       handleSaveHighLight,
       highlighted,
-      removeHighlight,
       allowHighLight,
       defaultAnswer,
-      done,
       extenalRef,
       corrects,
       solution,
       allowUnHighLight,
-      uuid,
       setOpenFile,
       isHideExhibit = true,
-      isAlwaysShowAnswer = false,
       exhibitText = 'Exhibit',
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -538,10 +536,13 @@ const MatchQuiz = forwardRef(
         </div>
 
         {solution && (
-          <div className="mt-6 bg-[#F9F9F9] p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4 " text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )
