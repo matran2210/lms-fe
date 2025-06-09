@@ -5,14 +5,14 @@ import OngoingActivities from '@components/dashboard/OngoingActivities'
 
 const ExamDashboard = () => {
   return (
-    <div className="mx-auto flex max-w-[1729px] grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
-      <div className="flex w-full flex-col gap-4 xl:w-[65%] 3xl:gap-6">
+    <div className="mx-auto grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
+      <div className="flex w-full flex-col gap-4 3xl:gap-6">
         <LearningResults />
-        <OngoingActivities />
+        {/* <OngoingActivities /> */}
       </div>
-      <div className="flex grow flex-col gap-4 3xl:gap-6">
-        <OverProgress />
+      <div className="mt-8 flex gap-4 3xl:gap-6">
         <TopicProgress />
+        <OverProgress />
       </div>
     </div>
   )

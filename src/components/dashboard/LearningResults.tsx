@@ -10,6 +10,7 @@ import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
+import { IconEssentional } from '@assets/icons/Dashboard'
 
 const LearningResults = () => {
   const router = useRouter()
@@ -188,74 +189,106 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b pb-3">
-        {isNormal ? (
-          <Tooltip
-            title={
-              <div className="text-[#33475B]">
-                {courseInfo?.category == 'ACCA'
-                  ? '%Results = Graded activities (70%) + Final test (30%)'
-                  : '%Results = Module test (40%) + Topic test (60%)'}
+    <div>
+      <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3xl:px-8">
+        <div className="mb-5 flex items-center justify-between border-b pb-3">
+          {isNormal ? (
+            <Tooltip
+              title={
+                <div className="text-[#33475B]">
+                  {courseInfo?.category == 'ACCA'
+                    ? '%Results = Graded activities (70%) + Final test (30%)'
+                    : '%Results = Module test (40%) + Topic test (60%)'}
+                </div>
+              }
+              className="dashboard_tooltip"
+            >
+              <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
+                Your Learning Results
+                <Image src={infoIcon} alt="" width={16} height={16} />
               </div>
-            }
-            className="dashboard_tooltip"
-          >
-            <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
+            </Tooltip>
+          ) : (
+            <div className="min-w-fit text-lg font-bold 4xl:text-xl">
               Your Learning Results
-              <Image src={infoIcon} alt="" width={16} height={16} />
             </div>
-          </Tooltip>
-        ) : (
-          <div className="min-w-fit text-lg font-bold 4xl:text-xl">
-            Your Learning Results
+          )}
+          <div className="text-xsm text-[#99A1B7] 4xl:text-sm">
+            {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+          </div>
+        </div>
+        <div className="flex">
+          {option && (
+            <div
+              className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
+            >
+              <div className="grow">
+                <EChart option={option} />
+              </div>
+              <div
+                className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
+              >
+                {!isNormal && (
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className="min-h-3 min-w-3 rounded-full bg-[#6FD195]"></span>
+                    <a
+                      href={
+                        mockTestId
+                          ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                          : ''
+                      }
+                      target="_blank"
+                      className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                      rel="noreferrer"
+                    >
+                      Mock test results
+                    </a>
+                  </div>
+                )}
+                {isNormal || hasLearning ? (
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className="min-h-3 min-w-3 rounded-full bg-[#7086FD]"></span>
+                    <span className="min-w-fit font-medium">
+                      Learning results
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          )}
+
+          <LearningMockTest />
+        </div>
+
+        {!isLoading && !option && (
+          <div className="flex grow items-center justify-center">
+            <NoData />
           </div>
         )}
-        <div className="text-xsm text-[#99A1B7] 4xl:text-sm">
-          {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+      </div>
+    </div>
+  )
+}
+
+const LearningMockTest = () => {
+  return (
+    <div className="flex-col">
+      <div className="mb-10 flex text-xl font-semibold text-ink-800">
+        <div>Learning & Mock test Comparision</div>
+        <div className="ms-2">
+          <IconEssentional />
         </div>
       </div>
-      {option && (
+      {[1, 2].map((data) => (
         <div
-          className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
+          key={data}
+          className="gay-4 mb-4 flex flex-col rounded-lg bg-ink-100 px-4 py-2"
         >
-          <div className="grow">
-            <EChart option={option} />
-          </div>
-          <div
-            className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
-          >
-            {!isNormal && (
-              <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-[#6FD195]"></span>
-                <a
-                  href={
-                    mockTestId
-                      ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                      : ''
-                  }
-                  target="_blank"
-                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
-                  rel="noreferrer"
-                >
-                  Mock test results
-                </a>
-              </div>
-            )}
-            {isNormal || hasLearning ? (
-              <div className="flex items-center justify-center gap-2.5">
-                <span className="min-h-3 min-w-3 rounded-full bg-[#7086FD]"></span>
-                <span className="min-w-fit font-medium">Learning results</span>
-              </div>
-            ) : null}
-          </div>
+          <div className="mb-2 text-lg font-medium text-ink-800">Quant</div>
+          <div className="mb-1 text-sm text-ink-800">Learning result: 0%</div>
+          <div className="text-sm text-ink-800">Mock test: 0%</div>
         </div>
-      )}
-      {!isLoading && !option && (
-        <div className="flex grow items-center justify-center">
-          <NoData />
-        </div>
-      )}
+      ))}
     </div>
   )
 }
