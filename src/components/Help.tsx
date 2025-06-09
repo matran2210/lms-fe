@@ -10,12 +10,13 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
   const router = useRouter()
   const scriptRef = useRef<HTMLScriptElement | null>(null)
-
-  // Check if URL contains '/teachers'
-  const isTeacherPage = router.asPath.includes('/teachers')
-  const isTestPage = router.asPath.includes('/test')
-  const isCaseStudyPage = router.asPath.includes('/case-study')
-  const isActivityPage = router.asPath.includes('/activity')
+  const { asPath } = router
+  const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
+    '/teachers',
+    '/test',
+    '/case-study',
+    '/activity',
+  ].map((p) => asPath.includes(p))
 
   // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
