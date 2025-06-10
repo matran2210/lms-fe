@@ -22,6 +22,7 @@ import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -175,7 +176,19 @@ const CourseDetail = () => {
           <CourseSkeleton />
         ) : (
           <>
-            <BreadcrumbFilter name={courseNameDetail} />
+            <SappBreadCrumbs
+              isTeacher={false}
+              breadcrumbs={[
+                {
+                  title: 'My Course',
+                  link: '/courses/my-course',
+                },
+                {
+                  title: courseNameDetail,
+                  link: `/courses/my-course/${router.query.courseId}`,
+                },
+              ]}
+            />
             <div
               className="my-4 flex items-center justify-between"
               data-aos={ANIMATION.DATA_AOS}

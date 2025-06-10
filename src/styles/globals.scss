@@ -1328,3 +1328,11 @@ select:focus {
 [type='search']:focus {
   --tw-ring-color: none;
 }
+
+.truncate-breadcrumbs {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 200px;
+}
