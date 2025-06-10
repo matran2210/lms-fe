@@ -8,6 +8,7 @@ import {
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import HighlightableText from '@components/highlights/HighlightableText'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { download } from '@components/learning/activity/ActivityResource'
@@ -843,9 +844,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
-          <EditorReader
-            text_editor_content={activeQuestion?.question_topic?.description}
-            className="sapp-questions"
+          <HighlightableHTML
+            initialHTML={activeQuestion?.question_topic?.description}
+            storageKey="sapp-questions"
           />
 
           {activeQuestion?.question_topic?.description && (
