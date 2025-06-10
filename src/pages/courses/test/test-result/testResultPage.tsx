@@ -10,7 +10,6 @@ import {
   QuizAttemptChartType,
 } from 'src/type'
 import ChartACCAScore from './acca/chartACCAScore'
-import Annotation from './Annotation'
 import MultipleChoiceScore from './cfa/MultipleChoiceScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleQuestion from './multipleQuestion'
@@ -78,7 +77,7 @@ const TestResultPage = ({
   const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
   const commonMultipleScoreStyle =
-    'grid grid-cols-1 xl:grid-cols-test-result gap-x-6 w-full'
+    'grid grid-cols-1 xl:[grid-template-columns:minmax(0,7fr)_minmax(0,3fr)] gap-x-6 w-full'
 
   const renderDashboard = useMemo(() => {
     switch (type) {
@@ -99,7 +98,7 @@ const TestResultPage = ({
                 />
               </div>
               <div className="-order-1 mb-4 xl:order-1">
-                <div className="max-h-full w-full xl:sticky xl:top-6 ">
+                <div className="max-h-full w-full xl:sticky xl:top-[104px]">
                   <div
                     className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
                   >
@@ -137,7 +136,6 @@ const TestResultPage = ({
                     questions={questions}
                     className={'xl:w-full'}
                     multipleQuestionRef={multipleQuestionRef}
-                    setOpenAnnotaion={setOpenAnnotaion}
                   />
                 </div>
               </div>
@@ -169,7 +167,6 @@ const TestResultPage = ({
                 questions={questions}
                 className={'h-full'}
                 multipleQuestionRef={multipleQuestionRef}
-                setOpenAnnotaion={setOpenAnnotaion}
               />
             </div>
           )
@@ -199,7 +196,6 @@ const TestResultPage = ({
               questions={questions}
               className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
               multipleQuestionRef={multipleQuestionRef}
-              setOpenAnnotaion={setOpenAnnotaion}
             />
           </div>
         )
@@ -230,7 +226,6 @@ const TestResultPage = ({
               questions={questions}
               className={'h-full'}
               multipleQuestionRef={multipleQuestionRef}
-              setOpenAnnotaion={setOpenAnnotaion}
             />
           </div>
         )
@@ -246,9 +241,9 @@ const TestResultPage = ({
               />
             </div>
             <div className="-order-1 mb-4 xl:order-1">
-              <div className="max-h-full w-full xl:sticky xl:top-6 ">
+              <div className="max-h-full w-full xl:sticky xl:top-[104px]">
                 <div
-                  className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
+                  className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-8`}
                 >
                   <div className="mb-5 text-xl font-semibold text-[#050505] xl:font-medium">
                     {questions?.quizAttempt?.grading_status ===
@@ -290,25 +285,15 @@ const TestResultPage = ({
                   questions={questions}
                   className={'xl:w-full'}
                   multipleQuestionRef={multipleQuestionRef}
-                  setOpenAnnotaion={setOpenAnnotaion}
                 />
               </div>
             </div>
           </div>
         )
     }
-  }, [type, score, chartData, questions])
+  }, [type, chartData, questions, score, GlobalAverage, subjectCode])
 
-  return (
-    <>
-      {!!type ? renderDashboard : <SappLoading />}
-      <Annotation
-        gradingStatus={questions?.quizAttempt?.grading_status}
-        openAnnotaion={openAnnotaion}
-        setOpenAnnotaion={setOpenAnnotaion}
-      />
-    </>
-  )
+  return <>{!!type ? renderDashboard : <SappLoading />}</>
 }
 
 export default TestResultPage

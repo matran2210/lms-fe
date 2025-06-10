@@ -82,7 +82,7 @@ const TestResultDetail = () => {
         </div>
         <ButtonSecondary title="Retake" size="small" />
       </div>
-      <Container span={10} margin={32} className="mt-6">
+      <div className="mx-auto mt-6 max-w-[1542px]">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}
@@ -95,7 +95,7 @@ const TestResultDetail = () => {
               : chartData?.multiple_choice_score
           }
         />
-      </Container>
+      </div>
     </div>
   )
 }
