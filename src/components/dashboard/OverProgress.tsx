@@ -18,10 +18,10 @@ const OverProgress = () => {
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | any,
   ) => {
-    const color = isNormal ? '#37C78C' : '#7086FD'
-    const centerText = isNormal
-      ? `${data?.completed_activities}/${data?.total_activities}`
-      : `${parseFloat(data.exam_prediction.toFixed(2))}%`
+    // const color = isNormal ? '#37C78C' : '#7086FD'
+    // const centerText = isNormal
+    //   ? `${data?.completed_activities}/${data?.total_activities}`
+    //   : `${parseFloat(data.exam_prediction.toFixed(2))}%`
     const values = {
       completed: isNormal
         ? data.completed_activities
@@ -33,7 +33,7 @@ const OverProgress = () => {
 
     const option = {
       title: {
-        text: '0%',
+        text: `${values.completed}%`,
         subtext: 'Pass Rated',
         left: 'center',
         top: '42%',
@@ -48,6 +48,8 @@ const OverProgress = () => {
           color: '#666',
         },
       },
+      responsive: true,
+      maintainAspectRatio: false,
       legend: { show: false },
       series: [
         {
@@ -57,9 +59,14 @@ const OverProgress = () => {
           avoidLabelOverlap: false,
           labelLine: { show: false },
           legend: { show: false },
+          emphasis: { disabled: true },
           data: [
-            { value: 0, name: 'Passed', itemStyle: { color: '#FFB700' } }, // green
-            { value: 100, name: 'Remaining', itemStyle: { color: '#FFF1CC' } }, // light yellow
+            {
+              value: values.completed,
+              name: '',
+              itemStyle: { color: '#FFB700' },
+            }, // green
+            { value: 100, name: '', itemStyle: { color: '#FFF1CC' } }, // light yellow
           ],
         },
       ],
@@ -88,7 +95,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="rounded- flex flex-col bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
+    <div className="flex flex-col rounded-2xl bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
       <div className="mb-5 flex items-center justify-between pb-3">
         <div className="min-w-fit text-xl font-semibold text-ink-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}

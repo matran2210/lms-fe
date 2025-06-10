@@ -11,6 +11,7 @@ import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
+import Link from 'next/link'
 
 const LearningResults = () => {
   const router = useRouter()
@@ -54,22 +55,116 @@ const LearningResults = () => {
         }
       })
 
-      const option: EChartsProps['option'] = {
+      // const option: EChartsProps['option'] = {
+      //   title: {
+      //     show: false,
+      //   },
+      //   responsive: true,
+      //   maintainAspectRatio: false,
+      //   radar: {
+      //     indicator: indicator,
+      //     radius: '90%',
+      //     axisName: {
+      //       fontSize: 12,
+      //       color: '#374151',
+      //       lineHeight: 14,
+      //       fontFamily: 'Roboto',
+      //     },
+      //     z: 1,
+      //   },
+      //   tooltip: {
+      //     trigger: 'item',
+      //     formatter: function (params: any) {
+      //       const values = params.value
+      //       const indicators = results.map((e: ILearningResult) => e.name)
+      //       let tooltipText = `<strong>${params.name}</strong><br/>`
+      //       values.forEach((val: any, i: number) => {
+      //         tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
+      //       })
+      //       return tooltipText
+      //     },
+      //   },
+      //   series: [
+      //     {
+      //       name: 'Learning Results',
+      //       type: 'radar',
+      //       tooltip: {
+      //         show: isNormal,
+      //       },
+      //       data: [
+      //         {
+      //           value: results.map((e: ILearningResult) => e.score),
+      //           name: 'Your Learning results',
+      //           lineStyle: {
+      //             color: '#7086FD',
+      //           },
+      //           areaStyle: {
+      //             color: 'rgba(112, 134, 253, 0.5)',
+      //           },
+      //           symbol: 'none',
+      //         },
+      //         {
+      //           value: isNormal
+      //             ? []
+      //             : results.map((e: ILearningResult) => e.mock_test_score),
+      //           name: 'Mock test results',
+      //           lineStyle: {
+      //             color: '#6FD195',
+      //           },
+      //           areaStyle: {
+      //             color: 'rgba(111, 209, 149, 0.5)',
+      //           },
+      //           itemStyle: {
+      //             color: '#6FD195',
+      //           },
+      //         },
+      //       ],
+      //     },
+      //   ],
+      //   graphic: {
+      //     type: 'group',
+      //     left: 'center',
+      //     top: 'middle',
+      //     children: [
+      //       {
+      //         type: 'rect',
+      //         invisible: !isNormal,
+      //         shape: {
+      //           width: total ? 60 : 50,
+      //           height: 30,
+      //         },
+      //         style: {
+      //           fill: '#fff',
+      //           stroke: '#FFFFFF',
+      //           lineWidth: 2,
+      //           shadowColor: 'rgba(0, 0, 0, 0.1)',
+      //           shadowBlur: 10,
+      //         },
+      //         x: total ? -30 : -25,
+      //         y: -15,
+      //         z: 3,
+      //       },
+      //       {
+      //         type: 'text',
+      //         invisible: !isNormal,
+      //         style: {
+      //           text: `${parseFloat((total / results.length).toFixed(2))}%`,
+      //           fontSize: 16,
+      //           fontWeight: 'bold',
+      //           fill: !total ? '#252F4A' : '#7086FD',
+      //           align: 'center',
+      //           verticalAlign: 'middle',
+      //         },
+      //         x: 0,
+      //         y: 0,
+      //         z: 4,
+      //       },
+      //     ],
+      //   },
+      // }
+      const option = {
         title: {
-          show: false,
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        radar: {
-          indicator: indicator,
-          radius: '70%',
-          axisName: {
-            fontSize: 12,
-            color: '#374151',
-            lineHeight: 14,
-            fontFamily: 'Roboto',
-          },
-          z: 1,
+          text: '',
         },
         tooltip: {
           trigger: 'item',
@@ -83,83 +178,62 @@ const LearningResults = () => {
             return tooltipText
           },
         },
+        radar: [
+          {
+            shape: 'circle', // Hình tròn
+            radius: '75%',
+            indicator: (function () {
+              return results?.map((result: any) => ({
+                text: result?.short_name || result?.name,
+                max: result?.score,
+              }))
+            })(),
+            axisLine: {
+              lineStyle: {
+                color: '#D1D5DB', // đường trục
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#D1D5DB', // đường chia tròn
+              },
+            },
+            splitArea: {
+              areaStyle: {
+                color: 'transparent', // vùng nền giữa các vòng tròn
+              },
+            },
+            name: {
+              color: '#374151', // màu chữ (gray-700)
+              fontSize: 14,
+              fontWeight: '500',
+              lineHeight: 22,
+              formatter: function (name: string) {
+                const maxLength = 16
+                return name.length > maxLength
+                  ? name.slice(0, maxLength) + '…'
+                  : name
+              },
+            },
+          },
+        ],
         series: [
           {
-            name: 'Learning Results',
             type: 'radar',
-            tooltip: {
-              show: isNormal,
-            },
+            radarIndex: 2,
+            areaStyle: {},
             data: [
               {
-                value: results.map((e: ILearningResult) => e.score),
-                name: 'Your Learning results',
-                lineStyle: {
-                  color: '#7086FD',
-                },
-                areaStyle: {
-                  color: 'rgba(112, 134, 253, 0.5)',
-                },
-                symbol: 'none',
+                name: '',
+                value: [1],
               },
               {
-                value: isNormal
-                  ? []
-                  : results.map((e: ILearningResult) => e.mock_test_score),
-                name: 'Mock test results',
-                lineStyle: {
-                  color: '#6FD195',
-                },
-                areaStyle: {
-                  color: 'rgba(111, 209, 149, 0.5)',
-                },
-                itemStyle: {
-                  color: '#6FD195',
-                },
+                name: '',
+                value: [0],
               },
             ],
           },
         ],
-        graphic: {
-          type: 'group',
-          left: 'center',
-          top: 'middle',
-          children: [
-            {
-              type: 'rect',
-              invisible: !isNormal,
-              shape: {
-                width: total ? 60 : 50,
-                height: 30,
-              },
-              style: {
-                fill: '#fff',
-                stroke: '#FFFFFF',
-                lineWidth: 2,
-                shadowColor: 'rgba(0, 0, 0, 0.1)',
-                shadowBlur: 10,
-              },
-              x: total ? -30 : -25,
-              y: -15,
-              z: 3,
-            },
-            {
-              type: 'text',
-              invisible: !isNormal,
-              style: {
-                text: `${parseFloat((total / results.length).toFixed(2))}%`,
-                fontSize: 16,
-                fontWeight: 'bold',
-                fill: !total ? '#252F4A' : '#7086FD',
-                align: 'center',
-                verticalAlign: 'middle',
-              },
-              x: 0,
-              y: 0,
-              z: 4,
-            },
-          ],
-        },
       }
 
       setHasLearning(hasLearning)
@@ -189,74 +263,81 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div>
-      <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3xl:px-8">
-        <div className="mb-5 flex items-center justify-between border-b pb-3">
-          {isNormal ? (
-            <Tooltip
-              title={
-                <div className="text-[#33475B]">
-                  {courseInfo?.category == 'ACCA'
-                    ? '%Results = Graded activities (70%) + Final test (30%)'
-                    : '%Results = Module test (40%) + Topic test (60%)'}
+    <>
+      <div className="flex h-[55vh] w-full rounded-2xl bg-white p-8 shadow-matchingquiz">
+        <div className="w-8/12">
+          <div className="mb-5 flex items-center justify-between pb-3">
+            {isNormal ? (
+              <Tooltip
+                title={
+                  <div className="text-[#33475B]">
+                    {courseInfo?.category == 'ACCA'
+                      ? '%Results = Graded activities (70%) + Final test (30%)'
+                      : '%Results = Module test (40%) + Topic test (60%)'}
+                  </div>
+                }
+                className="dashboard_tooltip"
+              >
+                <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
+                  Your Learning Results
+                  <Image src={infoIcon} alt="" width={16} height={16} />
                 </div>
-              }
-              className="dashboard_tooltip"
-            >
-              <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
-                Your Learning Results
-                <Image src={infoIcon} alt="" width={16} height={16} />
+              </Tooltip>
+            ) : (
+              <div className="flex-col">
+                <div className="min-w-fit text-lg font-bold 4xl:text-xl">
+                  Your Learning Results
+                </div>
+                <div className="text-xsm text-[#99A1B7] 4xl:text-sm">
+                  {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+                </div>
               </div>
-            </Tooltip>
-          ) : (
-            <div className="min-w-fit text-lg font-bold 4xl:text-xl">
-              Your Learning Results
-            </div>
-          )}
-          <div className="text-xsm text-[#99A1B7] 4xl:text-sm">
-            {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+            )}
+          </div>
+
+          <div className="flex">
+            {option && (
+              <div
+                className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
+              >
+                <div className="grow">
+                  <EChart option={option} />
+                </div>
+                <div
+                  className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
+                >
+                  {!isNormal && (
+                    <div className="flex items-center justify-center gap-2.5">
+                      <span className="min-h-3 min-w-3 rounded-full bg-[#6FD195]"></span>
+                      <Link
+                        href={
+                          mockTestId
+                            ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                            : ''
+                        }
+                        target="_blank"
+                        className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                        rel="noreferrer"
+                      >
+                        Mock test results
+                      </Link>
+                    </div>
+                  )}
+                  {isNormal || hasLearning ? (
+                    <div className="flex items-center justify-center gap-2.5">
+                      <span className="min-h-3 min-w-3 rounded-full bg-[#7086FD]"></span>
+                      <span className="min-w-fit font-medium">
+                        Learning results
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className="flex">
-          {option && (
-            <div
-              className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
-            >
-              <div className="grow">
-                <EChart option={option} />
-              </div>
-              <div
-                className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
-              >
-                {!isNormal && (
-                  <div className="flex items-center justify-center gap-2.5">
-                    <span className="min-h-3 min-w-3 rounded-full bg-[#6FD195]"></span>
-                    <a
-                      href={
-                        mockTestId
-                          ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                          : ''
-                      }
-                      target="_blank"
-                      className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
-                      rel="noreferrer"
-                    >
-                      Mock test results
-                    </a>
-                  </div>
-                )}
-                {isNormal || hasLearning ? (
-                  <div className="flex items-center justify-center gap-2.5">
-                    <span className="min-h-3 min-w-3 rounded-full bg-[#7086FD]"></span>
-                    <span className="min-w-fit font-medium">
-                      Learning results
-                    </span>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          )}
 
+        <div className="w-4/12">
           <LearningMockTest />
         </div>
 
@@ -266,7 +347,7 @@ const LearningResults = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   )
 }
 

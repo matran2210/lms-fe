@@ -5,7 +5,7 @@ import OngoingActivities from '@components/dashboard/OngoingActivities'
 
 const ExamDashboard = () => {
   return (
-    <div className="mx-auto grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
+    <div className="mx-auto max-w-[1560px] grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
       <div className="flex w-full flex-col gap-4 3xl:gap-6">
         <LearningResults />
         {/* <OngoingActivities /> */}

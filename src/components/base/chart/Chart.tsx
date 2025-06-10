@@ -61,7 +61,7 @@ export default function EChart({
       style={{
         width: width ?? '100%',
         height: height ?? '100%',
-        minHeight: '300px',
+        minHeight: '380px',
         position: 'relative',
         ...style,
       }}
