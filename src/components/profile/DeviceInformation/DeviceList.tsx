@@ -56,7 +56,7 @@ const DeviceList = () => {
           )
         })}
         <div className="mt-4 flex items-center gap-2">
-          <div className="text-primary-4">
+          <div className="text-[#E68200]">
             <Icon type="shield-warning" />
           </div>
           <div className="text-sm text-[#050505]">

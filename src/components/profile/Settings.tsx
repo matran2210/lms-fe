@@ -13,25 +13,26 @@ const Settings = ({ onBack }: IProp) => {
         <TabLayout
           title="Settings"
           headerButtons={
-            <div className=" flex gap-x-2">
-              <ButtonCancelSubmit
-                className="flex gap-12"
-                cancel={{
-                  title: 'Cancel',
-                  size: 'medium',
-                  disabled: false,
-                  className: 'min-w-fit !px-0 text-base w-[5rem]',
-                  onClick: () => onBack(false), //chỗ này onBack đang là void nên fake tạm
-                }}
-                submit={{
-                  title: 'Save',
-                  size: 'medium',
-                  className: 'min-w-fit px-0 text-sm w-[5rem]',
-                  htmlType: 'submit',
-                  disabled: true,
-                }}
-              />
-            </div>
+            null
+            // <div className=" flex gap-x-2">
+            //   <ButtonCancelSubmit
+            //     className="flex gap-12"
+            //     cancel={{
+            //       title: 'Cancel',
+            //       size: 'medium',
+            //       disabled: false,
+            //       className: 'min-w-fit !px-0 text-base w-[5rem]',
+            //       onClick: () => onBack(false), //chỗ này onBack đang là void nên fake tạm
+            //     }}
+            //     submit={{
+            //       title: 'Save',
+            //       size: 'medium',
+            //       className: 'min-w-fit px-0 text-sm w-[5rem]',
+            //       htmlType: 'submit',
+            //       disabled: true,
+            //     }}
+            //   />
+            // </div>
           }
         >
           <div className="flex h-full items-center justify-center">
