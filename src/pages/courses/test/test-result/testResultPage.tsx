@@ -100,7 +100,7 @@ const TestResultPage = ({
               <div className="-order-1 xl:order-1">
                 <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
                   <div
-                    className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-small xl:mb-6`}
+                    className={`flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-small xl:mb-6`}
                   >
                     <div className="mb-4 text-2xl font-bold text-ink-800">
                       {questions?.quizAttempt?.grading_status ===
@@ -208,11 +208,41 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <MultipleQuestion
-              questions={questions}
-              className={'h-full'}
-              multipleQuestionRef={multipleQuestionRef}
-            />
+            <div className="-order-1 xl:order-1">
+              <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
+                <div
+                  className={`w-full justify-between rounded-xl bg-white p-6 shadow-sidebar xl:mb-8`}
+                >
+                  <div className="mb-4 text-2xl font-bold text-ink-800">
+                    {questions?.quizAttempt?.grading_status ===
+                    GRADE_STATUS.FINISHED_GRADING
+                      ? 'Overall Score'
+                      : 'Multiple Choice Score'}
+                  </div>
+                  <div
+                    className={`mb-1 font-inter text-7xl font-bold text-primary`}
+                  >
+                    {isNull(score) || isUndefined(score)
+                      ? '--'
+                      : `${Math.round(score)}%`}
+                  </div>
+                  <GlobalAverage globalAverage={globalAverageNumber} />
+                  <div className="w-full">
+                    {questions?.quizAttempt?.attempt_gradings.length > 0 &&
+                      questions?.quizAttempt?.attempt_gradings?.map(
+                        (item, index) => (
+                          <Recommendation data={item} key={index} />
+                        ),
+                      )}
+                  </div>
+                </div>
+                <MultipleQuestion
+                  questions={questions}
+                  className={'xl:w-full'}
+                  multipleQuestionRef={multipleQuestionRef}
+                />
+              </div>
+            </div>
           </div>
         )
       default:

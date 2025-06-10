@@ -1,12 +1,8 @@
 import Recommendation from '@components/test/Recommendation'
-import { formatNumber } from '@utils/formatNumber'
 import { calculatePercentage, roundNumber } from '@utils/helpers'
 
-import { isNull, isUndefined } from 'lodash'
-import Image from 'next/image'
 import Tooltip from 'src/common/Tooltip'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
-import GlobalAverage from '../GlobalAverage'
 
 interface IProps {
   data: ChartDatum[]
@@ -19,40 +15,22 @@ interface IProps {
 
 const ChartCMAScore = ({
   data,
-  globalAverage,
-  score,
   passingScore,
   isGraded,
   recommendation,
 }: IProps) => {
   return (
-    <div className="mb-4 w-full max-w-full items-start overflow-x-auto bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 xl:mb-6 xl:px-24">
-      <div className="sticky left-0 flex flex-row justify-between">
-        <div>
-          <div className="flex flex-col">
-            <div className="text-2xl font-bold text-black">
-              {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
-            </div>
-            <div className="my-2 text-7xl font-bold text-primary">
-              {isNull(score) || isUndefined(score) ? '--' : formatNumber(score)}
-              %
-            </div>
-          </div>
-          <div className="mb-6 text-lg font-semibold text-black xl:text-xl xl:font-medium">
-            Multiple Choice Score by Part
-          </div>
-        </div>
-        <div className="content-center">
-          <GlobalAverage globalAverage={globalAverage} />
-        </div>
+    <div className="mb-4 min-h-[433px] w-full max-w-full items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-ink-800 shadow-sidebar xl:mb-6">
+      <div className="-ml-6 mb-11 text-lg font-semibold xl:font-medium">
+        Multiple Choice Score by Part
       </div>
       <div className="">
-        <div className="group relative h-[250px]">
-          <div className="h-full w-full border-b border-l border-[#DCDDDD] " />
+        <div className="group relative h-[222px]">
+          <div className="h-full w-full border-b border-l border-ink-300" />
           <div>
             {isGraded && (
               <div
-                className={`absolute flex h-0 w-full items-center border-t border-dotted border-[#DCDDDD] group-hover:border-[#3964EA]`}
+                className={`absolute left-3 flex h-0 w-full items-center border-t border-dotted border-ink-300 group-hover:border-info`}
                 style={{
                   bottom: passingScore + '%',
                 }}
@@ -62,7 +40,7 @@ const ChartCMAScore = ({
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
-                <p className="sticky right-0 mb-7 ml-auto hidden text-sm text-[#3964EA] group-hover:block">
+                <p className="sticky right-0 mb-7 ml-auto hidden text-sm text-info group-hover:block">
                   Passing Score
                 </p>
               </div>
@@ -70,33 +48,28 @@ const ChartCMAScore = ({
             {passingScore === 50 && isGraded ? (
               ''
             ) : (
-              <div className="absolute bottom-1/2 flex h-0 w-full items-center border-t border-dotted border-[#DCDDDD]">
-                <div className="relative -left-6 bottom-[50%] text-sm font-normal text-black">
+              <div className="absolute bottom-1/2 left-3 flex h-0 w-[calc(100%-12px)] items-center border-t border-dotted border-ink-300">
+                <div className="relative -left-9 bottom-[50%] text-sm font-normal">
                   <span className="relative">50</span>
                 </div>
               </div>
             )}
           </div>
-          <div className="flex w-full flex-row">
-            <div className="mr-5 mt-4 flex shrink-0 flex-col justify-between bg-white py-2">
-              <div className="text-sm text-black">Part</div>
-              <div className="text-sm text-black">Weight </div>
+          <div className="-ml-6 flex w-full flex-row">
+            <div className="flex flex-col justify-between bg-white pt-4">
+              <div className="h-8 text-sm">Section</div>
+              <div className="text-sm">Weight </div>
             </div>
-            <div className="flex-start flex w-full flex-row">
+            <div className="flex w-full flex-row">
               {data?.map((item) => (
                 <div
                   key={item?.part_id}
-                  className="relative flex w-28 shrink-0 flex-col items-center justify-between gap-1 px-3 py-2 first:ml-6 4xl:w-[150px]"
+                  className="relative flex w-28 shrink-0 flex-col items-center justify-between gap-1 px-3 pt-2 4xl:w-[150px]"
                 >
-                  <div className="absolute bottom-full left-1/2 h-[250px] w-14 -translate-x-1/2">
-                    <Tooltip
-                      title={`${calculatePercentage(
-                        item?.section_score,
-                        item?.max_section_score,
-                      )}%`}
-                    >
+                  <div className="absolute bottom-full left-1/2 h-[calc(222px-8px)] w-14 -translate-x-1/2">
+                    <Tooltip title={`${item.title}`}>
                       <div
-                        className="absolute bottom-0 w-14 border border-l-primary border-r-primary border-t-primary bg-secondary "
+                        className="absolute bottom-2 w-[60px] rounded-lg border border-primary bg-primary-50"
                         style={{
                           height: `${calculatePercentage(
                             item?.section_score,
@@ -105,12 +78,12 @@ const ChartCMAScore = ({
                         }}
                       />
                     </Tooltip>
-                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-black" />
+                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-ink-800" />
                   </div>
-                  <div className="mt-4 line-clamp-2 w-full text-center text-sm font-medium text-[#050505]">
-                    {item?.short_name}
+                  <div className="mb-3 mt-2 line-clamp-2 h-8 w-full text-center text-sm">
+                    {item?.short_name ?? '-'}
                   </div>
-                  <div className="w-full text-center text-sm font-normal text-black">
+                  <div className="w-full text-center text-sm font-normal">
                     {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>
@@ -118,17 +91,6 @@ const ChartCMAScore = ({
             </div>
           </div>
         </div>
-      </div>
-      <div className="sticky left-0 mt-28 grid grid-cols-2 content-start gap-3 2xl:grid-cols-3">
-        {data?.map((item) => {
-          return (
-            <div key={item.part_id} className="w-auto">
-              <div className="w-full break-all py-2 text-sm font-medium leading-4 text-[#050505]">
-                {`${item?.short_name ? item?.short_name + ' -' : ''} ${item?.title}`}
-              </div>
-            </div>
-          )
-        })}
       </div>
       {recommendation?.map((item, index) => (
         <Recommendation data={item} key={index} />

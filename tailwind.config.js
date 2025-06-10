@@ -109,6 +109,10 @@ module.exports = {
       icon: {
         DEFAULT: '#1C274C',
       },
+      progress: {
+        active: '#e5e7eb',
+        unactive: '#d3d5d8',
+      },
     },
     screens: {
       xs: '375px',
@@ -240,6 +244,8 @@ module.exports = {
     require('@tailwindcss/forms'),
   ],
   corePlugins: {
-    container: false,
+    container: {
+      center: true,
+    },
   },
 }

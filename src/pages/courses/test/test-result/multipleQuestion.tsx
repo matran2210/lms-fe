@@ -79,16 +79,14 @@ const MultipleQuestion = ({
     })
 
     return (
-      <div className="w-full">
-        {data?.length > 0 && (
-          <>
-            <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl">
-              {type}
-            </div>
-            <div className={clsx('flex flex-wrap gap-5')}>{renderBoxItems}</div>
-          </>
-        )}
-      </div>
+      data?.length > 0 && (
+        <div className="w-full">
+          <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl">
+            {type}
+          </div>
+          <div className={clsx('flex flex-wrap gap-5')}>{renderBoxItems}</div>
+        </div>
+      )
     )
   }
 
@@ -161,8 +159,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-6 shadow-small 
-        xl:sticky xl:top-[104px] xl:!h-fit xl:rounded-xl xl:pl-7`}
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-4 shadow-sidebar-tablet xl:sticky xl:top-[104px] 
+        xl:!h-fit xl:rounded-xl xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
         <div
