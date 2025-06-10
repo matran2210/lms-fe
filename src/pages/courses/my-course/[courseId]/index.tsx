@@ -216,7 +216,11 @@ const CourseDetail = () => {
             </div>
           </>
         )}
-        <PinnedNotificationsV2 />
+        <PinnedNotificationsV2
+          LeftContent={<div>LeftContent</div>}
+          CenterContent={<div>CenterContent</div>}
+          RightContent={<div>RightContent</div>}
+        />
       </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
