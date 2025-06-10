@@ -19,12 +19,16 @@ interface Props {
   initialHTML: string
   storageKey: string
   isShowNote?: boolean
+  isSaveLocalStorage?: boolean
+  className?: string
 }
 
 export const HighlightableHTML: React.FC<Props> = ({
   initialHTML,
   storageKey,
   isShowNote = false,
+  isSaveLocalStorage = false,
+  className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [html, setHtml] = useState<string>(initialHTML)
@@ -52,6 +56,9 @@ export const HighlightableHTML: React.FC<Props> = ({
     top: number
     left: number
   } | null>(null)
+  // Memoize initialHTML để tránh infinite loop
+  const memoizedInitialHTML = useRef<string>(initialHTML)
+  const isInitialized = useRef<boolean>(false)
 
   // Debounce setSelectionRect để tránh scroll nháy
   const updateSelectionRect = (rect: DOMRect | null) => {
@@ -72,7 +79,15 @@ export const HighlightableHTML: React.FC<Props> = ({
     )
   }
 
+  // Load highlights from localStorage only once when component mounts
   useEffect(() => {
+    if (!isSaveLocalStorage) return
+    // Prevent loading if we're already in a loading state
+    if (isInitialized.current) return
+
+    memoizedInitialHTML.current = initialHTML
+    isInitialized.current = true
+
     const raw = localStorage.getItem(storageKey)
     if (raw) {
       try {
@@ -82,19 +97,23 @@ export const HighlightableHTML: React.FC<Props> = ({
           parsed.highlights || [],
         )
         setHtml(restoredHTML)
-        setHighlights(parsed.highlights)
+        setHighlights(parsed.highlights || [])
       } catch (err) {
         // console.error('Error loading highlights:', err)
       }
     }
-  }, [initialHTML])
+  }, [storageKey])
 
+  // Save highlights to localStorage only when highlights change
   useEffect(() => {
+    if (!isSaveLocalStorage) return
+    if (!isInitialized.current) return
+
     localStorage.setItem(
       storageKey,
-      JSON.stringify({ htmlContent: initialHTML, highlights }),
+      JSON.stringify({ htmlContent: memoizedInitialHTML.current, highlights }),
     )
-  }, [highlights, initialHTML])
+  }, [highlights, storageKey])
 
   const handleMouseUp = () => {
     const selectionObj = window.getSelection()
@@ -334,6 +353,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           open={true}
           trigger={[]}
           placement="bottom"
+          destroyOnHidden
           overlayStyle={{
             position: 'absolute',
             top: selectionRect.top + window.scrollY + 20,
@@ -482,8 +502,8 @@ export const HighlightableHTML: React.FC<Props> = ({
       </Drawer>
       <div
         ref={containerRef}
+        className={className}
         dangerouslySetInnerHTML={{ __html: html }}
-        style={{ padding: 16, background: '#fff', border: '1px solid #ccc' }}
       />
     </div>
   )
