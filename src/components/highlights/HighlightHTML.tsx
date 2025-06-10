@@ -19,7 +19,7 @@ interface Props {
   initialHTML: string
   storageKey: string
   isShowNote?: boolean
-  isSaveLocalStorage?: boolean
+  isSaveSessionStorage?: boolean
   className?: string
 }
 
@@ -27,7 +27,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   initialHTML,
   storageKey,
   isShowNote = false,
-  isSaveLocalStorage = false,
+  isSaveSessionStorage = false,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -79,16 +79,16 @@ export const HighlightableHTML: React.FC<Props> = ({
     )
   }
 
-  // Load highlights from localStorage only once when component mounts
+  // Load highlights from sessionStorage only once when component mounts
   useEffect(() => {
-    if (!isSaveLocalStorage) return
+    if (!isSaveSessionStorage) return
     // Prevent loading if we're already in a loading state
     if (isInitialized.current) return
 
     memoizedInitialHTML.current = initialHTML
     isInitialized.current = true
 
-    const raw = localStorage.getItem(storageKey)
+    const raw = sessionStorage.getItem(storageKey)
     if (raw) {
       try {
         const parsed = JSON.parse(raw)
@@ -104,12 +104,12 @@ export const HighlightableHTML: React.FC<Props> = ({
     }
   }, [storageKey])
 
-  // Save highlights to localStorage only when highlights change
+  // Save highlights to sessionStorage only when highlights change
   useEffect(() => {
-    if (!isSaveLocalStorage) return
+    if (!isSaveSessionStorage) return
     if (!isInitialized.current) return
 
-    localStorage.setItem(
+    sessionStorage.setItem(
       storageKey,
       JSON.stringify({ htmlContent: memoizedInitialHTML.current, highlights }),
     )
