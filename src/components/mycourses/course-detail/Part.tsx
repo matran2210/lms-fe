@@ -165,9 +165,9 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               </p>
             </div>
           </div>
-          <div className="progressbar h-1.5 bg-gray-3">
+          <div className="progressbar h-1.5 rounded-[100px] bg-gray-3">
             <div
-              className="progress-percentage h-1.5 bg-primary"
+              className="progress-percentage h-1.5 rounded-[100px] bg-primary"
               style={{ width: `${progressPart}%` }}
             ></div>
           </div>
