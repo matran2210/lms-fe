@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Drawer, Input, List, Popover } from 'antd'
+import { Button, Drawer, Input, List, Modal, Popover } from 'antd'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { PointerIcon, ShowCommentIcon } from '@assets/icons'
 import clsx from 'clsx'
@@ -300,6 +300,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setHighlightRect(null)
     setSelectedHighlightId(null)
     setNoteInput('')
+    setShowNoteEditor(false)
   }
 
   const showDrawer = () => {
@@ -336,7 +337,11 @@ export const HighlightableHTML: React.FC<Props> = ({
           overlayStyle={{
             position: 'absolute',
             top: selectionRect.top + window.scrollY + 20,
-            left: selectionRect.left + window.scrollX - 25,
+            left:
+              selectionRect.left +
+              window.scrollX +
+              selectionRect.width / 2 -
+              60,
             zIndex: 9999,
           }}
         >
@@ -344,45 +349,36 @@ export const HighlightableHTML: React.FC<Props> = ({
         </Popover>
       )}
 
-      {showNoteEditor && isShowNote && selectedHighlightId && (
-        <Popover
-          content={
-            <div>
-              <Input.TextArea
-                value={noteInput}
-                onChange={(e) => setNoteInput(e.target.value)}
-                onMouseDown={(e) => e.stopPropagation()}
-                rows={3}
-                placeholder="Enter note"
-                ref={(textarea) => {
-                  if (textarea && selectedHighlightId) {
-                    setTimeout(() => textarea.focus(), 100)
-                  }
-                }}
-              />
-
-              <Button
-                size="small"
-                onClick={saveNote}
-                onMouseDown={(e) => e.stopPropagation()}
-                type="primary"
-              >
-                Save Note
-              </Button>
-            </div>
-          }
-          open
-          placement="top"
+      {showNoteEditor && isShowNote && (
+        <Modal
+          open={showNoteEditor && isShowNote}
+          onCancel={() => setShowNoteEditor(false)}
+          footer={null}
         >
-          <div
-            style={{
-              position: 'fixed',
-              top: '50%',
-              right: 50,
-              zIndex: 9999,
-            }}
-          />
-        </Popover>
+          <div>
+            <TextArea
+              value={noteInput}
+              onChange={(e) => setNoteInput(e.target.value)}
+              onMouseDown={(e) => e.stopPropagation()}
+              rows={3}
+              placeholder="Enter note"
+              ref={(textarea) => {
+                if (textarea && selectedHighlightId) {
+                  setTimeout(() => textarea.focus(), 100)
+                }
+              }}
+            />
+
+            <Button
+              size="small"
+              onClick={saveNote}
+              onMouseDown={(e) => e.stopPropagation()}
+              type="primary"
+            >
+              Save Note
+            </Button>
+          </div>
+        </Modal>
       )}
 
       {selectedHighlightId && highlightRect && (
@@ -393,18 +389,23 @@ export const HighlightableHTML: React.FC<Props> = ({
           content={
             <>
               {isShowNote ? (
-                <div className="flex justify-end space-x-2">
+                <div
+                  className="flex justify-end space-x-2"
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
                   <Button
-                    size="small"
+                    className="!px-2 py-1 text-white hover:!text-white"
                     onClick={() => setShowNoteEditor(true)}
+                    onMouseDown={(e) => e.stopPropagation()}
                     type="text"
-                    icon={<ShowCommentIcon />}
-                  ></Button>
+                  >
+                    <ShowCommentIcon />
+                  </Button>
 
                   <Button
                     onClick={handleRemoveHighlight}
                     type="text"
-                    className="!px-2 py-1 text-white hover:!text-white"
+                    className="!m-0 !px-2 py-1 text-white hover:!text-white"
                     icon={<PointerIcon />}
                   >
                     Unhighlight this
@@ -426,7 +427,11 @@ export const HighlightableHTML: React.FC<Props> = ({
           overlayStyle={{
             position: 'absolute',
             top: highlightRect.top + window.scrollY + 20,
-            left: highlightRect.left + window.scrollX - 25,
+            left:
+              highlightRect.left +
+              window.scrollX +
+              highlightRect.width / 2 -
+              80,
             zIndex: 9999,
           }}
           open={true}
@@ -501,143 +506,16 @@ function getGlobalOffset(
   return offset
 }
 
-// Cải tiến function này để xử lý multiple highlights trong cùng câu
-// function restoreHighlightsFromOffsetsPreserveHTML(
-//   html: string,
-//   highlights: HighlightItem[],
-// ): string {
-//   if (!highlights || highlights.length === 0) return html
-
-//   const wrapper = document.createElement('div')
-//   wrapper.innerHTML = html
-
-//   // Tạo một mảng chứa tất cả các điểm cần split text (start và end của mỗi highlight)
-//   const splitPoints: Array<{
-//     offset: number
-//     type: 'start' | 'end'
-//     highlightId: string
-//   }> = []
-
-//   highlights.forEach((hl) => {
-//     splitPoints.push({
-//       offset: hl.startOffset,
-//       type: 'start',
-//       highlightId: hl.id,
-//     })
-//     splitPoints.push({ offset: hl.endOffset, type: 'end', highlightId: hl.id })
-//   })
-
-//   // Sort theo offset để xử lý từ đầu đến cuối
-//   splitPoints.sort((a, b) => a.offset - b.offset)
-
-//   // Tạo map từ highlightId đến highlight object
-//   const highlightMap = new Map<string, HighlightItem>()
-//   highlights.forEach((hl) => highlightMap.set(hl.id, hl))
-
-//   // Collect tất cả text nodes với positions
-//   const textNodes: { node: Text; start: number; end: number }[] = []
-//   let offset = 0
-//   const walker = document.createTreeWalker(wrapper, NodeFilter.SHOW_TEXT, null)
-//   let currentNode: Text | null
-
-//   while ((currentNode = walker.nextNode() as Text | null)) {
-//     const length = currentNode.nodeValue?.length || 0
-//     textNodes.push({ node: currentNode, start: offset, end: offset + length })
-//     offset += length
-//   }
-
-//   // Xử lý từng text node
-//   textNodes.forEach(({ node, start, end }) => {
-//     const relevantSplitPoints = splitPoints.filter(
-//       (sp) => sp.offset >= start && sp.offset <= end,
-//     )
-
-//     if (relevantSplitPoints.length === 0) return
-
-//     const parent = node.parentNode
-//     if (!parent) return
-
-//     const originalText = node.nodeValue || ''
-//     const fragments: Array<{ text: string; highlightIds: Set<string> }> = []
-
-//     let currentPos = 0
-//     let activeHighlights = new Set<string>()
-
-//     // Xử lý từng split point
-//     relevantSplitPoints.forEach((sp) => {
-//       const localOffset = sp.offset - start
-
-//       // Thêm text từ currentPos đến split point
-//       if (localOffset > currentPos) {
-//         fragments.push({
-//           text: originalText.slice(currentPos, localOffset),
-//           highlightIds: new Set(activeHighlights),
-//         })
-//       }
-
-//       // Cập nhật active highlights
-//       if (sp.type === 'start') {
-//         activeHighlights.add(sp.highlightId)
-//       } else {
-//         activeHighlights.delete(sp.highlightId)
-//       }
-
-//       currentPos = localOffset
-//     })
-
-//     // Thêm phần text còn lại
-//     if (currentPos < originalText.length) {
-//       fragments.push({
-//         text: originalText.slice(currentPos),
-//         highlightIds: new Set(activeHighlights),
-//       })
-//     }
-
-//     // Tạo các DOM nodes từ fragments
-//     const newNodes: Node[] = []
-//     fragments.forEach((fragment) => {
-//       if (fragment.text.length === 0) return
-
-//       if (fragment.highlightIds.size === 0) {
-//         // Plain text
-//         newNodes.push(document.createTextNode(fragment.text))
-//       } else {
-//         // Highlighted text - có thể có nested highlights
-//         let container: HTMLElement | Text = document.createTextNode(
-//           fragment.text,
-//         )
-
-//         // Wrap với mark elements cho mỗi highlight (từ ngoài vào trong)
-//         const sortedHighlightIds = Array.from(fragment.highlightIds).sort()
-//         sortedHighlightIds.forEach((hlId) => {
-//           const mark = document.createElement('mark')
-//           mark.setAttribute('data-id', hlId)
-//           mark.style.backgroundColor = '#FFE399'
-//           mark.appendChild(container)
-//           container = mark
-//         })
-
-//         newNodes.push(container)
-//       }
-//     })
-
-//     // Replace original node với new nodes
-//     newNodes.forEach((newNode) => {
-//       parent.insertBefore(newNode, node)
-//     })
-//     parent.removeChild(node)
-//   })
-
-//   return wrapper.innerHTML
-// }
-
-// Fixed function để xử lý cross-boundary highlights
+// Trả về HTML mới với các đoạn text từ startOffset đến endOffset được bọc bởi <mark> chứa data-id.
+// Giữ nguyên cấu trúc HTML (thẻ <p>, <img>, <div>,...).
+// Hỗ trợ nested highlight nếu các vùng bôi trùng nhau.
 function restoreHighlightsFromOffsetsPreserveHTML(
-  html: string,
+  html: string, // đoạn nội dung HTML gốc
   highlights: HighlightItem[],
 ): string {
   if (!highlights || highlights.length === 0) return html
 
+  // Dùng div để làm vùng DOM ảo giúp xử lý DOM mà không ảnh hưởng đến nội dung gốc.
   const wrapper = document.createElement('div')
   wrapper.innerHTML = html
 
@@ -661,7 +539,7 @@ function restoreHighlightsFromOffsetsPreserveHTML(
     globalOffset += length
   }
 
-  // Sort highlights theo thứ tự startOffset
+  // Sort highlights theo thứ tự startOffset → Đảm bảo xử lý highlight theo thứ tự xuất hiện.
   const sortedHighlights = [...highlights].sort(
     (a, b) => a.startOffset - b.startOffset,
   )
