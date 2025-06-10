@@ -45,8 +45,8 @@ const ExamInformation = () => {
                 />
               </div>
             </div>
-            <div className="mx-auto my-0 max-w-[1144px] bg-white px-7.5 py-7.5">
-              <h1 className="line-clamp-1 flex items-center justify-between border-b border-[#F9F9F9] pb-7.5 text-2xl font-light text-[#050505]">
+            <div className="px-7.5 py-7.5 mx-auto my-0 max-w-[1144px] bg-white">
+              <h1 className="pb-7.5 line-clamp-1 flex items-center justify-between border-b border-[#F9F9F9] text-2xl font-light text-[#050505]">
                 <span className="ml-1.5 font-medium">Exam Information</span>
               </h1>
               {isError && (

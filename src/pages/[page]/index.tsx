@@ -142,7 +142,7 @@ const ProfilePage = () => {
     <Layout title="My Profile">
       <div className="flex h-full w-full flex-col">
         <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-          <div className="mx-auto my-0 flex h-full max-w-[1144px] py-4.5">
+          <div className="py-4.5 mx-auto my-0 flex h-full max-w-[1144px]">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"

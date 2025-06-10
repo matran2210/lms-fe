@@ -2524,7 +2524,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
@@ -2594,7 +2594,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="text-ink-800 flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold underline"
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-ink-800 underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2759,7 +2759,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="bg-ink-100 mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2837,7 +2837,7 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="bg-ink-100 mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl p-8">
+                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,
@@ -2969,7 +2969,7 @@ const TestDetail = () => {
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
                   !currentTabContent.done && (
                     <div className="flex gap-1">
-                      <div className="hidden 3.5xl:block">
+                      <div className="3.5xl:block hidden">
                         Choose response option:
                       </div>
                       <button
@@ -3024,7 +3024,7 @@ const TestDetail = () => {
                   }}
                 >
                   <FlagIcon />
-                  <div className="hidden text-medium-sm font-medium lg:block">
+                  <div className="text-medium-sm hidden font-medium lg:block">
                     Flag to Review
                   </div>
                 </button>
@@ -3049,7 +3049,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
+                    className="w-45 flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -3271,7 +3271,7 @@ const TestDetail = () => {
                     <div
                       key={e?.value}
                       className={clsx(
-                        'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center',
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
                       )}
                       onClick={() => {
                         handleOpenExhibit(e?.value)

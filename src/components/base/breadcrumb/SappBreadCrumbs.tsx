@@ -32,7 +32,7 @@ const SappBreadCrumbs = ({
               <li className="flex items-center">
                 <span
                   className={clsx({
-                    'text-[8px] text-gray-400': isTeacher,
+                    'text-gray-400 text-[8px]': isTeacher,
                     'text-gray-800': !isTeacher,
                   })}
                 >

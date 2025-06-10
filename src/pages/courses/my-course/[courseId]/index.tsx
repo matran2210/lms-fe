@@ -162,7 +162,7 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="max-[1199px]:mx-6 mx-auto my-0 max-w-[1144px] pt-6">
+      <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
         <div className="mb-10 rounded-lg bg-white px-8 py-4">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearchV2}
@@ -190,7 +190,7 @@ const CourseDetail = () => {
               className="my-4 flex items-center justify-between"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <div className="text-3xl font-semibold text-gray-800">
+              <div className="text-gray-800 text-3xl font-semibold">
                 {courseNameDetail}
               </div>
               <FilterCourse
