@@ -99,6 +99,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 
 declare global {
   interface Window {
@@ -2524,7 +2525,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
@@ -2712,14 +2713,24 @@ const TestDetail = () => {
                           }
                         }}
                       >
-                        <EditorReader
+                        {currentTabContent?.topicDescription?.description && (
+                          <HighlightableHTML
+                            initialHTML={
+                              currentTabContent?.topicDescription
+                                ?.description || ''
+                            }
+                            storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            className="sapp-questions mb-6"
+                          />
+                        )}
+                        {/* <EditorReader
                           className="sapp-questions mb-6"
                           text_editor_content={
                             currentTabContent?.topicDescription?.description
                           }
                           highlighted={currentTabContent?.hightlightTopic}
                           highlighArea="hightlight_area_topic"
-                        />
+                        /> */}
                         {currentTabContent?.topicDescription?.files?.length >
                           0 &&
                           currentTabContent?.topicDescription?.files?.map(
@@ -2807,14 +2818,24 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      <EditorReader
+                      {currentTabContent?.topicDescription?.description && (
+                        <HighlightableHTML
+                          initialHTML={
+                            currentTabContent?.topicDescription?.description ||
+                            ''
+                          }
+                          storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                          className="mb-4"
+                        />
+                      )}
+                      {/* <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      />
+                      /> */}
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {
@@ -3049,7 +3070,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
+                    className="w-45 flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
