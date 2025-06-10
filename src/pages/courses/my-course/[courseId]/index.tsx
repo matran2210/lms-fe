@@ -1,8 +1,5 @@
 import Layout from '@components/layout'
-import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -23,7 +20,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -163,7 +160,7 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
+      <div className="mx-auto my-0 max-w-[1144px] pt-2 max-[1199px]:mx-6">
         <div className="mb-10 rounded-lg bg-white px-8 py-4">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearchV2}
@@ -216,11 +213,9 @@ const CourseDetail = () => {
             </div>
           </>
         )}
-        <PinnedNotificationsV2
-          LeftContent={<div>LeftContent</div>}
-          CenterContent={<div>CenterContent</div>}
-          RightContent={<div>RightContent</div>}
-        />
+        <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
+          <CtaTrial />
+        </div>
       </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
