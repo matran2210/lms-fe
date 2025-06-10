@@ -35,7 +35,7 @@ const EventTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest}>
         <div className="border-b border-[#DCDDDD] bg-white">
-          <div className="relative mx-auto my-0 flex max-w-[1144px] py-5.75 max-[1199px]:mx-6 ">
+          <div className="py-5.75 relative mx-auto my-0 flex max-w-[1144px] max-[1199px]:mx-6 ">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"

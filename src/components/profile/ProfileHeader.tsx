@@ -108,7 +108,7 @@ const ProfileHeader = ({
   return (
     <div className="flex items-center justify-start gap-6">
       <div className="relative">
-        <div className="w relative my-6 w-[5rem] shrink rounded-full  border-2 border-primary pt-29.2 lg:my-0">
+        <div className="w pt-29.2 relative my-6 w-[5rem] shrink  rounded-full border-2 border-primary lg:my-0">
           <div
             className={`${
               loading ? 'animate-pulse' : ''

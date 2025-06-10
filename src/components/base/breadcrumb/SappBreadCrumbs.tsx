@@ -1,8 +1,15 @@
+import clsx from 'clsx'
 import Link from 'next/link'
 import React from 'react'
 import { ITabs } from 'src/type'
 
-const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
+const SappBreadCrumbs = ({
+  breadcrumbs = [],
+  isTeacher = true,
+}: {
+  breadcrumbs?: ITabs[]
+  isTeacher?: boolean
+}) => {
   const lastIndex = breadcrumbs.length - 1
 
   return (
@@ -14,14 +21,23 @@ const SappBreadCrumbs = ({ breadcrumbs = [] }: { breadcrumbs?: ITabs[] }) => {
               className={`${index === lastIndex ? 'justify-start text-sm font-medium text-[#27272a]' : ''}`}
             >
               {index !== lastIndex ? (
-                <Link href={breadcrumb.link}>{breadcrumb.title}</Link>
+                <Link href={breadcrumb.link} className="truncate-breadcrumbs">
+                  {breadcrumb.title}
+                </Link>
               ) : (
                 <span>{breadcrumb.title}</span>
               )}
             </li>
             {index !== lastIndex && (
               <li className="flex items-center">
-                <span className="text-[8px] text-[#a1a1aa]">▶</span>
+                <span
+                  className={clsx({
+                    'text-gray-400 text-tiny': isTeacher,
+                    'text-ink-800': !isTeacher,
+                  })}
+                >
+                  {isTeacher ? '▶' : '/'}
+                </span>
               </li>
             )}
           </React.Fragment>

@@ -9,7 +9,7 @@ export const SappTitleSolution = ({
   className?: string
 }) => {
   return (
-    <div className={clsx('text-base font-bold text-bw-black-2', className)}>
+    <div className={clsx('text-bw-black-2 text-base font-bold', className)}>
       {title}
     </div>
   )

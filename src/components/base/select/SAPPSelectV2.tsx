@@ -25,6 +25,7 @@ interface SAPPSelectProps {
   onMenuScrollToBottom?: () => void
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
+  heightCustom?: string
 }
 
 const SAPPSelectV2 = ({
@@ -47,6 +48,7 @@ const SAPPSelectV2 = ({
   onMenuScrollToBottom,
   onChange: onSelectChange,
   onDropdownVisibleChange,
+  heightCustom = 'h-12',
 }: SAPPSelectProps) => {
   return (
     <>
@@ -61,7 +63,11 @@ const SAPPSelectV2 = ({
               <>
                 <Select
                   {...field}
-                  className={clsx('h-12 w-full font-normal', className)}
+                  className={clsx(
+                    'w-full font-normal',
+                    heightCustom,
+                    className,
+                  )}
                   placeholder={placeholder || ''}
                   value={field?.value}
                   options={options}
