@@ -18,6 +18,7 @@ interface IProps {
   // required?: boolean
   skeleton?: boolean
   handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
+  actions?: React.ReactNode
 }
 
 const HookFormTextArea = ({
@@ -26,7 +27,7 @@ const HookFormTextArea = ({
   defaultValue,
   onChange,
   placeholder,
-  className = 'w-fill--available h-30',
+  className = 'w-fill--available h-[7.5rem]',
   // rows,
   // label,
   // guideline,
@@ -35,6 +36,7 @@ const HookFormTextArea = ({
   // required,
   skeleton,
   handleKeyDown,
+  actions,
 }: IProps) => {
   return (
     <Controller
@@ -44,22 +46,27 @@ const HookFormTextArea = ({
       render={({ field, fieldState: { error } }) => (
         <>
           {!skeleton ? (
-            <textarea
-              {...field}
-              value={field.value ?? ''}
-              defaultValue={field.value ? undefined : defaultValue}
-              onChange={(value) => {
-                field.onChange(value)
-                onChange && onChange(value)
-              }}
-              className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
-                error?.message ? 'is-invalid' : ''
-              }`}
-              placeholder={placeholder}
-              // rows={rows ?? 3}
-              disabled={disabled}
-              onKeyDown={handleKeyDown}
-            />
+            <div className="relative">
+              <textarea
+                {...field}
+                value={field.value ?? ''}
+                defaultValue={field.value ? undefined : defaultValue}
+                onChange={(value) => {
+                  field.onChange(value)
+                  onChange && onChange(value)
+                }}
+                className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
+                  error?.message ? 'is-invalid' : ''
+                }`}
+                placeholder={placeholder}
+                // rows={rows ?? 3}
+                disabled={disabled}
+                onKeyDown={handleKeyDown}
+              />
+              <div className="absolute right-4 top-1/2 translate-y-[-50%]">
+                {actions}
+              </div>
+            </div>
           ) : (
             <Skeleton.Input
               active

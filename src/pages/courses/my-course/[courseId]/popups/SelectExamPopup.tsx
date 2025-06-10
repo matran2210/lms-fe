@@ -72,7 +72,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     >
       <div className="px-5 py-6">
         <h2 className="text-xl font-semibold">Choosing Exam</h2>
-        <p className="text-sm text-gray-1">
+        <p className="text-sm text-[#A1A1A1]">
           Please select your scheduled exam date.
         </p>
 
@@ -101,7 +101,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
           />
           <ButtonPrimary
             title="Confirm Exam"
-            className="h-12 text-base"
+            className="h-12"
             onClick={confirmExamDate}
             loading={isLoading}
           />

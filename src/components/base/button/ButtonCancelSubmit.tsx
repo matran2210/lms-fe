@@ -1,29 +1,22 @@
 import { IButtonCancelSubmitProps } from 'src/type'
-import SappButton from './SappButton'
+import ButtonPrimary from './ButtonPrimary'
+import ButtonText from './ButtonText'
 
 const ButtonCancelSubmit = ({
   submit,
   cancel,
   className = 'flex align-middle justify-between',
-  color = 'primary',
-  colorCancel = 'text',
   showOkButton = true,
   showCancelButton = true,
   revertFunction = false,
 }: IButtonCancelSubmitProps) => {
   return (
     <div className={className}>
-      {showCancelButton && (
-        <SappButton
-          color={colorCancel}
-          {...(!revertFunction ? { ...cancel } : { ...submit })}
-        />
-      )}
       {showOkButton && (
-        <SappButton
-          color={color}
-          {...(!revertFunction ? { ...submit } : { ...cancel })}
-        />
+        <ButtonPrimary {...(!revertFunction ? { ...submit } : { ...cancel })} />
+      )}
+      {showCancelButton && (
+        <ButtonText {...(!revertFunction ? { ...cancel } : { ...submit })} />
       )}
     </div>
   )

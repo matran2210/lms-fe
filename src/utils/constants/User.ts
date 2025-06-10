@@ -78,7 +78,7 @@ export const USER_TYPE = {
   TEACHER: { key: 'TEACHER', label: 'Giáo viên' },
 } as const
 export const USER_STATUS = {
-  ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-state-success' },
+  ACTIVE: { key: 'ACTIVE', label: 'Active', color: 'text-success-600' },
 }
 
 export const SECURITY_TREE = ['devices', 'login_history', 'change_password']

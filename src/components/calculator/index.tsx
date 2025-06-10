@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { isNumber, calculate } from './logic/calculate'
+import { calculate, isNumber } from './logic/calculate'
 
+import ButtonsContainer from './ButtonsContainer'
 import Display from './display'
 import Warning from './warning'
-import ButtonsContainer from './ButtonsContainer'
 
 const Calculator = () => {
+  const [lastExpression, setLastExpression] = useState('')
   const [calc, setCalc] = useState({
     total: null,
     next: null,
@@ -13,6 +14,7 @@ const Calculator = () => {
   })
 
   const [badDivision, setBadDivision] = useState(false)
+
   useEffect(() => {
     if (badDivision) {
       setTimeout(() => {
@@ -28,6 +30,14 @@ const Calculator = () => {
       return
     }
 
+    // Lưu biểu thức trước khi state bị xóa sau khi bấm "="
+    if (key === '=' && obj.total && obj.operation && obj.next) {
+      setLastExpression(`${obj.total} ${obj.operation} ${obj.next}`)
+    }
+    if (key === 'AC') {
+      setLastExpression('')
+    }
+
     const newObj = calculate(obj, key)
 
     if (newObj.total === 'Undefined') {
@@ -38,8 +48,12 @@ const Calculator = () => {
     }
   }
 
-  const handleClick = (obj: any, e: any) => {
-    updateState(obj, e.target.dataset.name)
+  const handleClick = (obj: any, e: React.MouseEvent) => {
+    const button = (e.target as HTMLElement).closest('button[data-name]')
+    if (!button) return
+
+    const value = button.getAttribute('data-name')
+    updateState(obj, value)
   }
 
   const handleKeyDown = (e: any) => {
@@ -54,6 +68,7 @@ const Calculator = () => {
         total={total ?? ''}
         next={next ?? ''}
         operation={operation ?? ''}
+        lastExpression={lastExpression}
       />
       <ButtonsContainer
         click={(e) => handleClick(calc, e)}

@@ -16,7 +16,7 @@ import { IExamInformation } from './type'
 import Tooltip from 'src/common/Tooltip'
 
 const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3'
+  'text-left text-sm text-[#A1A1A1] font-semibold pb-3'
 const commonDataCellStyle = 'col text-start py-5 pr-6 whitespace-nowrap'
 const headers = [
   'Course',
@@ -64,7 +64,7 @@ const ExamInfoTab = ({ onBack }: IProp) => {
           />
         }
       >
-        <div className="relative mx-auto my-0 mb-6 max-w-xxl bg-white px-8 pb-3 pt-8">
+        <div className="relative mx-auto my-0 mb-6 max-w-[1144px] bg-white px-8 pb-3 pt-8">
           <SappTable
             headers={headers}
             hasCheck={false}

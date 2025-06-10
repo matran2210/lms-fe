@@ -22,7 +22,7 @@ const ModalDeleteComment = ({
       onOk={onDeleteComment}
       okButtonCaption={'Delete'}
       cancelButtonCaption={'Cancel'}
-      buttonSize="lager"
+      buttonSize="large"
       cancelButtonClass={'no-underline'}
       showHeader={false}
       refClass="p-6 md:py-[70px] md:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all overflow-y-auto"
@@ -39,10 +39,10 @@ const ModalDeleteComment = ({
           <AlertIcon />
         </div>
       </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-[#050505]">
         Delete Comment?
       </div>
-      <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
+      <div className="mb-11 mt-4 text-center text-sm text-[#A1A1A1]">
         Are you sure you want to delete this comment?
       </div>
     </SappModalV2>

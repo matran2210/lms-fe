@@ -63,20 +63,20 @@ const Results = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Course Result">
-        <div className="h-[70px] border-b border-default bg-white">
-          <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
+        <div className="h-[70px] border-b border-[#DCDDDD] bg-white">
+          <div className="mx-auto my-0 flex max-w-[1144px] py-6 max-[1199px]:mx-5">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="mx-auto my-0 max-w-xxl xl-max:mx-6">
+        <div className="mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
           {isLoading ? (
             <CourseSkeleton className="pt-6" />
           ) : (
             <>
-              <div className="main relative mx-auto my-0 max-w-xxl">
+              <div className="main relative mx-auto my-0 max-w-[1144px]">
                 <div className="flex w-full items-center justify-between pb-4 pt-6">
                   {isSuccess && (
                     <BreadcrumbFilter
@@ -89,10 +89,10 @@ const Results = () => {
                   {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
                 </div>
               </div>
-              <div className="mx-auto my-0 flex max-w-xxl bg-white">
+              <div className="mx-auto my-0 flex max-w-[1144px] bg-white">
                 <Heading greeting="" title={'Results'} />
               </div>
-              <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
+              <div className="max-[1199px]:container mx-auto my-0 mb-6 mt-6 max-w-[1144px] bg-white px-8 pb-3 pt-8">
                 {isSuccess && <ResultsTable />}
               </div>
             </>

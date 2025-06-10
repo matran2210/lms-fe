@@ -1,13 +1,27 @@
+import {
+  CircleCheckIcon,
+  CircleInfoIcon,
+  DownloadIcon,
+  FileTextIcon,
+  InfoIcon,
+} from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
+import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { download } from '@components/learning/activity/ActivityResource'
+import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { Divider, Tabs } from 'antd'
+import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -114,9 +128,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const questionRef = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
-    const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const {
+      control: controlAnswer,
+      setValue,
+      reset,
+      getValues,
+      watch,
+    } = useForm({})
 
     const DragDropRef = useRef(null) as any
+    const MatchQuizRef = useRef(null) as any
 
     const [showListRequirement, setShowListRequirement] =
       useState<boolean>(false)
@@ -129,6 +150,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       req?: IRequirement
       index?: number
     }>()
+    const [showWarning, setShowWarning] = useState(true)
 
     useClickOutside({
       ref: listRequirementRef,
@@ -200,15 +222,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }
 
     const getAnswerMatching = () => {
-      let value = [] as any
-      const inputs = questionRef?.current?.querySelectorAll(
-        '.sapp-match-result',
-      ) as any
-      for (let e of inputs) {
-        const childId = e?.querySelector('.sapp-notched-container')
-        value.push({ question_id: e?.id, answer_id: childId?.id })
-      }
-      return value
+      const value = MatchQuizRef?.current?.getMatchedPairs?.()
+      return value || []
     }
 
     const getAnswerDragNDrop = () => {
@@ -462,10 +477,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              isShowWarning={
+                !watch(`${activeQuestion?.id}_${document_id}_answer`)
+              }
+              explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           )
 
@@ -477,25 +495,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setValue={setValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               name={`${activeQuestion?.id}_${document_id}_answer`}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              isShowWarning={
+                !(
+                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
+                    0
+                )
+              }
+              explainClassname="!mt-8 !p-0 !bg-transparent"
             />
           )
 
         case QUESTION_TYPES.MATCHING:
           return (
-            <MatchingQuestion
+            <MatchQuizComponent
               data={activeQuestion}
               action={getAnswerMatching}
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              ref={MatchQuizRef}
+              explainClassname="!mt-0 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-0 !pt-0"
             />
           )
 
@@ -506,10 +533,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getValueFillText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
@@ -523,10 +551,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               resetDefaultAnswer={false}
               setOpenFile={setOpenFile}
               ref={DragDropRef}
-              isHideExhibit={isHideExhibit}
               uuid={'_' + uuidv4().replaceAll('-', '_')}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
@@ -537,183 +566,218 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
-              isHideExhibit={isHideExhibit}
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              explainClassname="!mt-8 !p-0 !bg-transparent"
+              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 
         case QUESTION_TYPES.ESSAY:
+          const items =
+            activeQuestion?.requirements?.map((e, i: number) => {
+              const hasAnswer = !!watch(
+                `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[i]?.id : document_id}_essay`,
+              )
+
+              return {
+                key: e?.id,
+                label: (
+                  <div className="learning-act-tab-label flex items-center gap-1 text-base font-normal capitalize">
+                    {`Requirement ${i + 1}`}{' '}
+                    {hasAnswer && (
+                      <div className="text-primary">
+                        <CircleCheckIcon />
+                      </div>
+                    )}
+                  </div>
+                ),
+                children: (
+                  <div className="mt-6">
+                    <EssayQuestionPreview
+                      className="!bg-transparent"
+                      editorClassName="learning-act-editor"
+                      explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
+                      defaultValue={
+                        activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                          if (
+                            ans.requirement_id ===
+                            activeQuestion?.requirements?.[
+                              essayData?.index ?? 0
+                            ]?.id
+                          ) {
+                            return ans
+                          }
+                        })?.short_answer ??
+                        activeQuestion?.myAnswers?.[0]?.short_answer ??
+                        null
+                      }
+                      data={
+                        activeQuestion?.requirements?.[essayData?.index ?? 0]
+                      }
+                      question_content={activeQuestion?.question_content}
+                      index={essayData?.index}
+                      question_data={activeQuestion}
+                      control={controlAnswer}
+                      setValue={setValue}
+                      handleSaveHighLight={() => {}}
+                      forCaseStudy={true}
+                      name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                      fullData={{
+                        data: { ...activeQuestion },
+                        solution: activeQuestion?.solution ?? '',
+                      }}
+                      openChooseFile={(e: any) =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: activeQuestion?.id,
+                          requirement_id: showRequirement?.id,
+                        })
+                      }
+                      handleClearFile={() => {
+                        dispatch(
+                          clearFileEssay({
+                            activityId,
+                            tabId,
+                            quizId,
+                            question_id: activeQuestion?.id,
+                            requirement_id: showRequirement?.id,
+                            requirements: activeQuestion?.requirements?.map(
+                              (item: IRequirement) => {
+                                if (item?.id === showRequirement?.id) {
+                                  return { ...item, answer_file: null }
+                                }
+                                return item
+                              },
+                            ),
+                          }),
+                        )
+                      }}
+                      handleChange={() => {
+                        !isChange && setIsChange(true)
+                      }}
+                      isShowContent={showQuestionContent}
+                      externalRef={refEditor}
+                    />
+                  </div>
+                ),
+              }
+            }) ?? []
           return (
             <>
               <div>
-                <div>
+                <div className="mb-6">
                   <div>
                     <EditorReader
-                      className="editor-wrap mt-1.5"
+                      className="editor-wrap text-lg font-semibold"
                       text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
+                  {!!activeQuestion?.requirements?.length && (
+                    <div className="mt-6 flex items-center gap-2 text-warning">
+                      <CircleInfoIcon />
+                      <div className="text-base font-normal">
+                        You must finished{' '}
+                        {activeQuestion?.requirements?.length || 0} requirements
+                        to complete this question (Your answer is auto save)
+                      </div>
+                    </div>
+                  )}
                 </div>
-                {!!activeQuestion?.requirements?.length && (
-                  <>
-                    <div className="my-6 border border-b-gray-2"></div>
-                    <div className="flex cursor-pointer select-none items-center">
-                      <div className="relative">
-                        <div
-                          className="group flex items-center hover:text-primary"
-                          onClick={() => setShowListRequirement(true)}
-                        >
-                          <div className="font-semibold">
-                            Requirement {showRequirement?.index}/
-                            {activeQuestion?.requirements?.length || 0}
-                          </div>
-                          <div>
-                            <SappIcon
-                              className="-mt-1 ml-2 fill-bw-1 group-hover:fill-primary"
-                              icon="arrow_down"
-                            ></SappIcon>
-                          </div>
-                        </div>
-                        {showListRequirement && (
-                          <div
-                            ref={listRequirementRef}
-                            className="text-over absolute bottom-0  left-0 z-50 w-max max-w-md translate-y-full bg-white py-1 shadow-md"
-                          >
-                            {activeQuestion?.requirements?.map((e, i) => {
-                              return (
-                                <div
-                                  onClick={() => {
-                                    handleShowRequirement({
-                                      id: e.id,
-                                      description: e?.description,
-                                      index: i + 1,
-                                      name: e?.name,
-                                      files: e?.files,
-                                    })
-                                  }}
-                                  className="truncate px-3 py-1.5 font-semibold hover:text-primary"
-                                  key={e.id}
-                                >{`Requirement ${i + 1}: ${e?.name}`}</div>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
-                      <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">
-                          You must finished{' '}
-                          {activeQuestion?.requirements?.length || 0}{' '}
-                          requirements to complete this question (Your answer is
-                          auto save)
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                )}
-                {exhibitData && exhibitData?.length > 0 && (
-                  <>
-                    <div className="my-6 border border-b-gray-2"></div>
-                    <div className="mb-4 flex items-center">
-                      <div className="font-semibold">
-                        {exhibitText}s ({exhibitData?.length || 0})
-                      </div>
-                      <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {exhibitData?.map((e: any, i: number) => {
-                        return (
-                          <div
-                            className="cursor-pointer hover:text-primary"
-                            key={e?.id ?? i}
-                            onClick={(event) => {
-                              setOpenFile &&
-                                setOpenFile(
-                                  {
-                                    type: 'exhibits',
-                                    description: e?.description,
-                                    name: e?.name,
-                                    index: i,
-                                    files: e?.files,
-                                  },
-                                  null,
-                                  null,
-                                  event,
-                                )
-                            }}
-                          >
-                            {exhibitText} {i + 1}: {e?.name}
-                          </div>
+
+                {!!activeQuestion?.requirements?.length ? (
+                  <Tabs
+                    className={clsx('learning-activity-tabs requirement-tab')}
+                    items={items}
+                    onChange={(key: string) => {
+                      const optionIndex =
+                        activeQuestion?.requirements?.findIndex(
+                          (item: IRequirement) => item?.id === key,
                         )
-                      })}
-                    </div>
-                  </>
+                      if (optionIndex !== -1) {
+                        const option =
+                          activeQuestion?.requirements?.[optionIndex ?? 0]
+                        handleShowRequirement({
+                          id: key,
+                          description: option?.description ?? '',
+                          index: (optionIndex ?? 0) + 1,
+                          name: option?.name ?? '',
+                          files: option?.files ?? [],
+                        })
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="mt-6">
+                    <EssayQuestionPreview
+                      className="!bg-transparent"
+                      editorClassName="learning-act-editor"
+                      explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
+                      defaultValue={
+                        activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                          if (
+                            ans.requirement_id ===
+                            activeQuestion?.requirements?.[
+                              essayData?.index ?? 0
+                            ]?.id
+                          ) {
+                            return ans
+                          }
+                        })?.short_answer ??
+                        activeQuestion?.myAnswers?.[0]?.short_answer ??
+                        null
+                      }
+                      data={
+                        activeQuestion?.requirements?.[essayData?.index ?? 0]
+                      }
+                      question_content={activeQuestion?.question_content}
+                      index={essayData?.index}
+                      question_data={activeQuestion}
+                      control={controlAnswer}
+                      setValue={setValue}
+                      handleSaveHighLight={() => {}}
+                      forCaseStudy={true}
+                      name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                      fullData={{
+                        data: { ...activeQuestion },
+                        solution: activeQuestion?.solution ?? '',
+                      }}
+                      openChooseFile={(e: any) =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: activeQuestion?.id,
+                          requirement_id: showRequirement?.id,
+                        })
+                      }
+                      handleClearFile={() => {
+                        dispatch(
+                          clearFileEssay({
+                            activityId,
+                            tabId,
+                            quizId,
+                            question_id: activeQuestion?.id,
+                            requirement_id: showRequirement?.id,
+                            requirements: activeQuestion?.requirements?.map(
+                              (item: IRequirement) => {
+                                if (item?.id === showRequirement?.id) {
+                                  return { ...item, answer_file: null }
+                                }
+                                return item
+                              },
+                            ),
+                          }),
+                        )
+                      }}
+                      handleChange={() => {
+                        !isChange && setIsChange(true)
+                      }}
+                      isShowContent={showQuestionContent}
+                      externalRef={refEditor}
+                    />
+                  </div>
                 )}
               </div>
-              <div className="my-6"></div>
-              <EssayQuestionPreview
-                defaultValue={
-                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
-                      return ans
-                    }
-                  })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
-                  null
-                }
-                data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
-                question_content={activeQuestion?.question_content}
-                index={essayData?.index}
-                question_data={activeQuestion}
-                control={controlAnswer}
-                setValue={setValue}
-                handleSaveHighLight={() => {}}
-                forCaseStudy={true}
-                name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
-                fullData={{
-                  data: { ...activeQuestion },
-                  solution: activeQuestion?.solution ?? '',
-                }}
-                openChooseFile={(e: any) =>
-                  setOpenUpload({
-                    status: true,
-                    question_id: activeQuestion?.id,
-                    requirement_id: showRequirement?.id,
-                  })
-                }
-                handleClearFile={() => {
-                  dispatch(
-                    clearFileEssay({
-                      activityId,
-                      tabId,
-                      quizId,
-                      question_id: activeQuestion?.id,
-                      requirement_id: showRequirement?.id,
-                      requirements: activeQuestion?.requirements?.map(
-                        (item: IRequirement) => {
-                          if (item?.id === showRequirement?.id) {
-                            return { ...item, answer_file: null }
-                          }
-                          return item
-                        },
-                      ),
-                    }),
-                  )
-                }}
-                handleChange={() => {
-                  !isChange && setIsChange(true)
-                }}
-                isShowContent={showQuestionContent}
-                externalRef={refEditor}
-              />
             </>
           )
 
@@ -782,75 +846,166 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             text_editor_content={activeQuestion?.question_topic?.description}
             className="sapp-questions"
           />
-          {activeQuestion?.question_topic?.files?.length > 0 && (
-            <div className="mb-2">
-              {!!activeQuestion?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2" />
-              )}
-              <div className="mb-2 font-semibold">Topic Resource:</div>
-              {activeQuestion?.question_topic?.files.map(
-                (e: any, index: number) => {
-                  return (
-                    <div
-                      className="cursor-pointer text-state-info hover:underline"
-                      onClick={() => {
-                        setOpenFile &&
-                          setOpenFile(
-                            { type: 'file' },
-                            e?.resource?.url,
-                            e?.resource?.name,
-                          )
-                      }}
-                      key={index}
-                    >
-                      {e?.resource?.name}
-                    </div>
-                  )
-                },
-              )}
-              <div className="my-6 border border-b-gray-2" />
-            </div>
+          {activeQuestion?.question_topic?.description && (
+            <Divider className="my-8" />
           )}
-          <React.Fragment>{renderQuestion()}</React.Fragment>
-        </div>
-        {/* <div>
-          {activeQuestion?.confirmed &&
-            activeQuestion.qType !== 'ESSAY' &&
-            showCorrect && (
-              <div className="mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">{MY_COURSES.explanations}</div>
-                {activeQuestion?.solution && (
-                  <EditorReader
-                    text_editor_content={activeQuestion?.solution}
-                    className="mt-4"
-                  />
-                )}
-              </div>
+          <div className="relative">
+            {renderQuestion()}
+
+            {activeQuestion?.question_topic?.files?.length > 0 && (
+              <Popover
+                className=""
+                placement="leftTop"
+                trigger="click"
+                content={
+                  <div className="flex flex-col gap-2">
+                    {activeQuestion?.question_topic?.files?.map(
+                      (e: any, index: number) => {
+                        return (
+                          <div
+                            className={clsx(
+                              `flex items-start justify-between gap-8 p-2`,
+                            )}
+                            key={e?.value}
+                          >
+                            <div
+                              key={e?.value}
+                              className={clsx(
+                                'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
+                              )}
+                              onClick={() => {
+                                setOpenFile &&
+                                  setOpenFile(
+                                    { type: 'file' },
+                                    e?.resource?.url,
+                                    e?.resource?.name,
+                                  )
+                              }}
+                            >
+                              {e?.resource?.name}
+                            </div>
+                            <div
+                              className="cursor-pointer text-white"
+                              onClick={() => {
+                                download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                )
+                              }}
+                            >
+                              <DownloadIcon color="currentColor" />
+                            </div>
+                          </div>
+                        )
+                      },
+                    )}
+                  </div>
+                }
+              >
+                <div
+                  className={clsx(
+                    'shadow-icon group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
+                    {
+                      '!top-[214px]':
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
+                    },
+                  )}
+                >
+                  <FileTextIcon />
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                </div>
+              </Popover>
             )}
-        </div> */}
-        <ModalUploadFile
-          open={openUpload.status}
-          isMultiple={false}
-          handleClose={() => {
-            setOpenUpload({
-              status: false,
-              question_id: undefined,
-              requirement_id: undefined,
-            })
-          }}
-          overlayClass="!h-screen"
-          className="!overflow-auto"
-          fileType={'ESSAY'}
-          location={`question-answer/${openUpload.question_id}`}
-          setSelectedFile={(e: any) =>
-            handleSaveFileEssay(
-              e?.[0],
-              openUpload?.question_id ?? '',
-              '',
-              showRequirement?.id ?? '',
-            )
-          }
-        />
+            {exhibitData && exhibitData?.length > 0 && (
+              <Popover
+                placement="leftTop"
+                trigger="click"
+                content={
+                  <div className="flex flex-col gap-2">
+                    {exhibitData?.map((e: any, index: number) => {
+                      return (
+                        <div
+                          key={e?.value}
+                          className={clsx(
+                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
+                          )}
+                          onClick={(event) => {
+                            setShowWarning(false)
+                            setOpenFile &&
+                              setOpenFile(
+                                {
+                                  type: 'exhibits',
+                                  description: e?.description,
+                                  name: e?.name,
+                                  index: index,
+                                  files: e?.files,
+                                },
+                                null,
+                                null,
+                                event,
+                              )
+                          }}
+                        >
+                          {exhibitText} {index + 1}
+                        </div>
+                      )
+                    })}
+                  </div>
+                }
+              >
+                <div
+                  className={clsx(
+                    'shadow-icon group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay',
+                    {
+                      '!top-[142px]':
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
+                    },
+                  )}
+                >
+                  <NotesOutline className="h-8 w-8" />
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                  {showWarning && (
+                    <PulsingExclamation
+                      className="absolute -right-3 -top-4"
+                      style={{
+                        animation: 'pulseAnim 1.2s infinite ease-in-out',
+                        transformOrigin: 'center',
+                      }}
+                    />
+                  )}
+                </div>
+              </Popover>
+            )}
+          </div>
+        </div>
+
+        {openUpload.status && (
+          <ModalUploadFile
+            open={openUpload.status}
+            isMultiple={false}
+            handleClose={() => {
+              setOpenUpload({
+                status: false,
+                question_id: undefined,
+                requirement_id: undefined,
+              })
+            }}
+            overlayClass="!h-screen"
+            className="!overflow-auto"
+            fileType={'ESSAY'}
+            location={`question-answer/${openUpload.question_id}`}
+            setSelectedFile={(e: any) =>
+              handleSaveFileEssay(
+                e?.[0],
+                openUpload?.question_id ?? '',
+                '',
+                showRequirement?.id ?? '',
+              )
+            }
+          />
+        )}
       </div>
     )
   },

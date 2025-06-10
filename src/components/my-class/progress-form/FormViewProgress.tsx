@@ -287,7 +287,7 @@ function FormViewProgress({
       closeIcon={false}
     >
       <div className="border-b-none flex h-full w-full flex-col">
-        <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+        <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
           <span className="font-sans text-lg font-semibold">
             {isView ? 'View Detail' : 'Edit Progress'}
           </span>
@@ -404,7 +404,7 @@ function FormViewProgress({
                 <CollapseBox title="Content Completed">
                   <div className="grid gap-y-4">
                     {!isView && errors.checkedNodes && (
-                      <div className="text-danger">
+                      <div className="text-[#d35563]">
                         {errors.checkedNodes.message as string}
                       </div>
                     )}
@@ -429,7 +429,7 @@ function FormViewProgress({
                       placeholder="Please choose"
                       required
                       disabled
-                      className="h-11.25 text-base font-medium"
+                      className="h-[45px] text-base font-medium"
                       options={[]}
                     />
                   </div>
@@ -455,7 +455,7 @@ function FormViewProgress({
                     placeholder="Please choose"
                     required
                     disabled
-                    className="h-11.25 text-base font-medium"
+                    className="h-[45px] text-base font-medium"
                     options={[]}
                   />
                 </div>
@@ -464,7 +464,7 @@ function FormViewProgress({
               <div className="mb-6">
                 <SAPPInput
                   label={'Note'}
-                  className="h-11.25"
+                  className="h-[45px]"
                   control={control}
                   name="note"
                   disabled={isView}
@@ -476,7 +476,7 @@ function FormViewProgress({
                 <span className="required">{'Content completed'}</span>
               </label>
               {errors.checkedNodes && (
-                <div className="text-state-error">
+                <div className="text-error">
                   {errors.checkedNodes.message as string}
                 </div>
               )}
@@ -488,7 +488,7 @@ function FormViewProgress({
           )}
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-gray-5 bg-white px-8 py-5">
+        <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-[#7E8299] bg-white px-8 py-5">
           <SAPPButtonV2
             title={'Cancel'}
             onClick={handleCancel}

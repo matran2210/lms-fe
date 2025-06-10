@@ -105,25 +105,25 @@ const WeeklyReport = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-5 3.5xl:px-8">
+    <div className="bg-white px-3 pb-7 pt-4 shadow-activity lg:col-span-5 3xl:px-8">
       <div className="mb-5 flex flex-row items-center justify-between border-b pb-3">
-        <div className="text-bw-11">
-          <span className="text-lg-xl font-bold 4xl:text-xl">This Week:</span>
+        <div className="text-[#252F4A]">
+          <span className="text-lg font-bold 4xl:text-xl">This Week:</span>
           <span className="text-sm font-medium">
             {` ${dayjs().startOf('isoWeek').format(DATE_FORMAT.DATE)} - ${dayjs().endOf('isoWeek').format(DATE_FORMAT.DATE)}`}
           </span>
         </div>
-        <div className="text-xsm text-gray-11 4xl:text-sm">{`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}</div>
+        <div className="text-xsm text-[#99A1B7] 4xl:text-sm">{`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}</div>
       </div>
       <div className="flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 rounded-sm bg-green-3 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 rounded-sm bg-[#37C78C] bg-opacity-10 p-2">
             <Image src={bookOpenIcon} alt="" width={32} height={32} />
           </div>
           <div>
             <div className="text-lg font-medium">Completed Activities</div>
             <div
-              className="mt-1 text-medium-sm tracking-tight 3xl:tracking-normal"
+              className="mt-1 text-sm tracking-tight 3xl:tracking-normal"
               style={{ color: report?.activities?.color }}
             >
               {report?.activities?.note}
@@ -140,7 +140,7 @@ const WeeklyReport = () => {
           <div>
             {report?.activities?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-green-3 px-1.75 py-1.25"
+                className="flex min-w-8 rounded-sm bg-[#37C78C] px-1.75 py-1.25"
                 style={{ backgroundColor: report?.activities?.color }}
               >
                 <Image
@@ -151,7 +151,7 @@ const WeeklyReport = () => {
                 />
               </div>
             ) : (
-              <div className="flex flex-row items-center rounded-sm bg-red-1 p-1.75 font-inter text-sm font-semibold text-white">
+              <div className="flex flex-row items-center rounded-sm bg-[#FF524E] p-[7px] font-inter text-sm font-semibold text-white">
                 <div className="flex h-3 min-w-3">
                   <Image
                     src={arrowDownIcon}
@@ -161,7 +161,7 @@ const WeeklyReport = () => {
                     className="m-auto"
                   />
                 </div>
-                <div className="text-ssm leading-3">
+                <div className="text-xs leading-3">
                   {report?.activities?.diff || 0}
                 </div>
               </div>
@@ -171,13 +171,13 @@ const WeeklyReport = () => {
       </div>
       <div className="mt-6 flex flex-row items-center justify-between border border-dashed px-5 py-6">
         <div className="flex h-12 flex-row items-center gap-4">
-          <div className="h-12 w-12 min-w-12 rounded-sm bg-blue-6 bg-opacity-10 p-2">
+          <div className="h-12 w-12 min-w-12 rounded-sm bg-[#607FE9] bg-opacity-10 p-2">
             <Image src={timeIcon} alt="" width={32} height={32} />
           </div>
           <div>
             <div className="text-lg font-medium">Learning Time</div>
             <div
-              className="mt-1 text-medium-sm tracking-tight 3xl:tracking-normal"
+              className="mt-1 text-sm tracking-tight 3xl:tracking-normal"
               style={{ color: report?.times?.color }}
             >
               {report?.times?.note}
@@ -194,13 +194,13 @@ const WeeklyReport = () => {
           <div>
             {report?.times?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-green-3 px-1.75 py-1.25"
+                className="flex min-w-8 rounded-sm bg-[#37C78C] px-1.75 py-1.25"
                 style={{ backgroundColor: report?.times?.color }}
               >
                 <Image src={report.times.icon} alt="" width={16} height={16} />
               </div>
             ) : (
-              <div className="flex flex-row items-center rounded-sm bg-red-1 p-1.75 font-inter text-sm font-semibold text-white">
+              <div className="flex flex-row items-center rounded-sm bg-[#FF524E] p-[7px] font-inter text-sm font-semibold text-white">
                 <div className="flex h-3 min-w-3">
                   <Image
                     src={arrowDownIcon}
@@ -210,7 +210,7 @@ const WeeklyReport = () => {
                     className="m-auto"
                   />
                 </div>
-                <div className="text-ssm leading-3">
+                <div className="text-xs leading-3">
                   {report?.times?.diff || 0}
                 </div>
               </div>

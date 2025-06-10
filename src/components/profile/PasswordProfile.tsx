@@ -1,8 +1,8 @@
 import useCountdown from '@components/auth/Countdown'
 import ButtonText from '@components/base/button/ButtonText'
-import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
+import Icon from '@components/icons'
 import React, {
   createRef,
   Dispatch,
@@ -11,9 +11,11 @@ import React, {
   useState,
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
-import { AuthAPI } from 'src/pages/api/profile'
-import { IChangePassword } from './ChangePassword'
 import toast from 'react-hot-toast'
+import { AuthAPI } from 'src/pages/api/profile'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
+import { IChangePassword } from './ChangePassword'
 
 interface IProps {
   open: boolean
@@ -23,6 +25,8 @@ interface IProps {
 }
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
+  const { user } = useAppSelector(userReducer)
+
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
@@ -148,61 +152,72 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       handleCancel={() => setOpen(false)}
       onOk={() => {}}
       showFooter={false}
+      classNameModal="sapp-profile-modal"
     >
-      <div className="">
-        <div className="mb-2 text-4xl font-semibold text-bw-1">
-          Change Password
+      <div className="flex flex-col items-center justify-between gap-10">
+        <div className="text-primary">
+          <Icon type="mail-box" />
         </div>
-        <span className="mb-10 text-medium-sm text-gray-1">
-          Enter your 6-digit code that you received on your email.
-        </span>
-        <div className="mb-2 mt-12 grid grid-cols-6 grid-rows-1 gap-3">
-          {code?.map((otp, index) => (
-            <SAPPTextFiled
-              key={index}
-              inputRef={inputRefs[index]}
-              type="text"
-              value={otp}
-              onChange={(event) => onEnterDigit(index, event)}
-              inputClassName={`text-center h-[67px] w-[67px] ${
-                errorMessage ? 'border-state-error' : 'border-gray-2'
-              } pt-5.25 pb-5 px-0`}
-              onPaste={(e: any) =>
-                code?.every((data) => data === '') && handlePaste(index, e)
-              }
-            />
-          ))}
+        <div className="flex flex-col items-center justify-between gap-8">
+          <div className="text-center text-xl">
+            <div>Please enter the code we sent to</div>
+            <div>
+              <span className="font-semibold">
+                {user?.user_contacts?.[0]?.email || ''}
+              </span>
+            </div>
+          </div>
+          <div>
+            <div className="mb-2 grid grid-cols-6 grid-rows-1 gap-3">
+              {code?.map((otp, index) => (
+                <SAPPTextFiled
+                  key={index}
+                  inputRef={inputRefs[index]}
+                  type="text"
+                  value={otp}
+                  onChange={(event) => onEnterDigit(index, event)}
+                  inputClassName={`text-center h-[67px] w-[67px] rounded-md ${
+                    errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
+                  } pt-[25PX] pb-5 px-0`}
+                  onPaste={(e: any) =>
+                    code?.every((data) => data === '') && handlePaste(index, e)
+                  }
+                />
+              ))}
+            </div>
+            <div className="flex justify-between">
+              <span className="text-medium-sm text-error">{errorMessage}</span>
+              <span
+                className={`text-medium-sm min-w-fit text-right ${
+                  timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'
+                }`}
+              >
+                {timeCountDown}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="mb-8 flex justify-between">
-          <span className="text-medium-sm text-state-error">
-            {errorMessage}
-          </span>
-          <span
-            className={`min-w-fit text-right text-medium-sm ${
-              timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
-            }`}
-          >
-            {timeCountDown}
-          </span>
+
+        <div className="w-full">
+          <ButtonText
+            title="Verify Code"
+            full={true}
+            className="mb-2 bg-[#29353C] px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
+            size="large"
+            loading={loading}
+            onClick={verifyCode}
+            disabled={code.some((e) => e === '') || time <= 0}
+          />
+          <ButtonText
+            title="Resend Code"
+            full={true}
+            disabled={!canResend}
+            onClick={onResendCode}
+            className="text-sm font-semibold"
+            size="medium"
+            loading={loading}
+          />
         </div>
-        <SappButton
-          title="Verify Code"
-          full={true}
-          className="mb-5 h-12.5 !font-semibold"
-          size="lager"
-          loading={loading}
-          onClick={verifyCode}
-          disabled={code.some((e) => e === '') || time <= 0}
-        />
-        <ButtonText
-          title="Resend Code"
-          full={true}
-          disabled={!canResend}
-          onClick={onResendCode}
-          className="pb-3.25 pt-3 no-underline"
-          size="medium"
-          loading={loading}
-        />
       </div>
     </SappModalV2>
   )

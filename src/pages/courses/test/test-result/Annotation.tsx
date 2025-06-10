@@ -26,31 +26,29 @@ const Annotation = ({
         className="flex cursor-pointer justify-end text-white"
         onClick={() => setOpenAnnotaion(false)}
       >
-        <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-black" />
+        <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-black" />
       </div>
       <div className="mx-auto my-auto flex flex-col px-2 md:px-12">
-        <div className="mt-4 text-4xl font-semibold text-bw-1">
+        <div className="mt-4 text-4xl font-semibold text-[#050505]">
           Annotation by Color
         </div>
-        <div className="mb-4 mt-2 text-sm text-gray-1">
+        <div className="mb-4 mt-2 text-sm text-[#A1A1A1]">
           The annotation uses colors as labels for the status of the question in
           your test/ quiz.
         </div>
         <div className="my-[18px] grid w-full grid-cols-[80%,20%]">
           <div className="content-center">
-            <div className="h-2 bg-state-success text-state-success"></div>
+            <div className="h-2 bg-success-600 text-success-600"></div>
           </div>
-          <div className="content-center text-right text-state-success">
+          <div className="content-center text-right text-success-600">
             Correct
           </div>
         </div>
         <div className="my-[18px] grid w-full grid-cols-[75%,25%]">
           <div className="content-center">
-            <div className="h-2 bg-state-error text-state-error"></div>
+            <div className="h-2 bg-error text-error"></div>
           </div>
-          <div className="content-center text-right text-state-error">
-            Incorrect
-          </div>
+          <div className="content-center text-right text-error">Incorrect</div>
         </div>
         {gradingStatus === GRADE_STATUS.FINISHED_GRADING ? (
           <div className="my-[18px] grid w-full grid-cols-[70%,30%]">
@@ -64,9 +62,9 @@ const Annotation = ({
         ) : (
           <div className="my-[18px] grid w-full grid-cols-[70%,30%]">
             <div className="content-center">
-              <div className="h-2 bg-pinned-1 text-pinned-1"></div>
+              <div className="h-2 bg-[#18355D] text-[#18355D]"></div>
             </div>
-            <div className="content-center text-right text-pinned-1">
+            <div className="content-center text-right text-[#18355D]">
               Completed
             </div>
           </div>
@@ -74,9 +72,9 @@ const Annotation = ({
         {gradingStatus !== GRADE_STATUS.FINISHED_GRADING && (
           <div className="my-[18px] grid w-full grid-cols-[65%,35%]">
             <div className="content-center">
-              <div className="h-2 bg-gray-1 text-gray-1"></div>
+              <div className="h-2 bg-[#A1A1A1] text-[#A1A1A1]"></div>
             </div>
-            <div className="content-center text-right text-gray-1">
+            <div className="content-center text-right text-[#A1A1A1]">
               Not Completed
             </div>
           </div>

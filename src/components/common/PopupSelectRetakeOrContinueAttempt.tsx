@@ -1,5 +1,6 @@
+import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { Radio, RadioChangeEvent } from 'antd'
+import { RadioChangeEvent } from 'antd'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 
 interface IProps {
@@ -8,6 +9,7 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   handleRetake: () => Promise<void>
   title: ReactNode
+  time: ReactNode | null
 }
 const PopupSelectRetakeOrContinueAttempt = ({
   open,
@@ -15,6 +17,7 @@ const PopupSelectRetakeOrContinueAttempt = ({
   setOpen,
   handleRetake,
   title,
+  time,
 }: IProps) => {
   const [value, setValue] = useState('continue')
 
@@ -42,50 +45,35 @@ const PopupSelectRetakeOrContinueAttempt = ({
   return (
     <SappModalV3
       open={open}
-      okButtonCaption="Continue"
-      cancelButtonCaption={'Cancel'}
+      okButtonCaption="Continue the previous attempt"
+      cancelButtonCaption={'Start a new attempt'}
       onOk={handleOK}
       handleCancel={() => {
         setOpen(false)
       }}
-      footerButtonClassName="flex justify-between item-center mt-6"
+      footerButtonClassName="flex flex-col w-full justify-center items-center gap-3"
       buttonSize="medium"
-      title={title}
+      header={title}
       icon={undefined}
-      header=""
       classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
-      cancelButtonClass={'!px-0'}
+      okButtonClass="w-full"
+      cancelButtonClass={
+        '!px-0 w-full border rounded-lg border-[#404041] text-[#404041]'
+      }
     >
-      <div>
-        <div className="mt-10 text-center text-base text-gray-1">
-          <div>Your last attempt was unexpectedly ended. </div>
-          <div>
-            Do you want to continue from where you left off in the previous one?
-          </div>
-        </div>
-        <div className={`relative pt-5 md:pt-8`}>
-          {/* Select Option */}
-          <Radio.Group
-            className="sapp-group-radio-wrapper flex flex-col gap-6"
-            onChange={onChange}
-            value={value}
-            options={[
-              {
-                value: 'continue',
-                label: (
-                  <span className="text-base">
-                    Continue the previous attempt
-                  </span>
-                ),
-              },
-              {
-                value: 'retake',
-                label: <span className="text-base">Start a new attempt</span>,
-              },
-            ]}
-          />
-        </div>
+      <div className="text-center text-base text-[#1F2937]">
+        <div>Your last attempt was unexpectedly ended. </div>
+        <div>Please click &apos;Continue&apos; to proceed with the test.</div>
       </div>
+      {time && (
+        <div className="flex justify-center gap-4 pt-6">
+          <div className="flex items-center gap-2 text-base font-semibold">
+            <RemainingTimeIcon />
+            Your remaining time:
+          </div>
+          {time}
+        </div>
+      )}
     </SappModalV3>
   )
 }

@@ -9,9 +9,10 @@ interface IProps {
   placeholder: string
   formStyle: string
   setPage?: Dispatch<SetStateAction<number>>
+  disabled?: boolean
 }
 
-const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
+const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)

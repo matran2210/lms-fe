@@ -25,7 +25,7 @@ const ClassCard = ({
 }: IProps) => {
   const InfoCourse = () => (
     <div className="mb-5 flex justify-between">
-      <div className="flex items-center text-sm text-gray-500">
+      <div className="flex items-center text-sm text-[#6b7280]">
         <div className="mr-6">
           {dataDetail?.status && (
             <StatusTag status={dataDetail?.status as keyof typeof statusMap} />
@@ -34,7 +34,7 @@ const ClassCard = ({
         {dataDetail?.facility?.address && (
           <>
             <GeoLocationIcon />
-            <span className="ml-1 mr-6 text-sm font-medium text-gray-400">
+            <span className="ml-1 mr-6 text-sm font-medium text-[#a1a1aa]">
               {dataDetail?.facility?.address}
             </span>
           </>
@@ -42,7 +42,7 @@ const ClassCard = ({
         {dataDetail?.started_at && dataDetail?.finished_at && (
           <>
             <CalendarIcon />
-            <span className="ml-1  text-sm font-medium text-gray-400">
+            <span className="ml-1  text-sm font-medium text-[#a1a1aa]">
               {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
               {formatDateFromUTC(dataDetail?.finished_at)}
             </span>
@@ -58,7 +58,7 @@ const ClassCard = ({
   return (
     <div className="h-fit w-full rounded-xl bg-white">
       <div className="flex flex-col">
-        <Title level={4} className="text-gray-700">
+        <Title level={4} className="text-[#374151]">
           {dataDetail?.course?.name}
         </Title>
         <InfoCourse />
