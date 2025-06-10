@@ -40,29 +40,6 @@ enum EAttemptStatus {
   IN_PROGRESS = 'IN_PROGRESS',
 }
 
-const mappingBadgeFromStatus = {
-  [EAttemptStatus.IN_PROGRESS]: {
-    badge: 'In Progress',
-    badgeBgColor: 'success-50',
-    badgeColor: 'success-50',
-  },
-  [EAttemptStatus.SUBMITTED]: {
-    badge: 'Finished',
-    badgeBgColor: 'success-50',
-    badgeColor: 'success-50',
-  },
-  [EAttemptStatus.UN_FINISHED]: {
-    badge: 'Unfinished',
-    badgeBgColor: 'error-DEFAULT',
-    badgeColor: 'error-DEFAULT',
-  },
-  [EAttemptStatus.UN_SUBMITTED]: {
-    badge: 'Unsubmitted',
-    badgeBgColor: 'error-DEFAULT',
-    badgeColor: 'error-DEFAULT',
-  },
-}
-
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
@@ -193,7 +170,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         attemptStatus={data?.attempt_status}
         footer={cardFooter}
       >
-        <div className="mt-10 mt-auto">
+        <div className="mt-10">
           <div className="info border-l border-[#DCDDDD] px-4">
             <div className="flex justify-between text-base capitalize text-ink">
               {data?.is_attempt ? (

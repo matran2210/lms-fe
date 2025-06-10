@@ -19,7 +19,7 @@ const Dashboard = () => {
   return (
     <Layout title="Dashboard">
       <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-        <div className="mx-auto my-0 flex max-w-[1144px] py-4.5">
+        <div className="py-4.5 mx-auto my-0 flex max-w-[1144px]">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"

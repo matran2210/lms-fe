@@ -13,7 +13,7 @@ const LearningOutcome = ({ activity }: IProps) => {
     {
       key: 'learning_outcome',
       label: (
-        <div className={'select-none text-lg font-medium text-bw-13'}>
+        <div className={'text-bw-13 select-none text-lg font-medium'}>
           Learning Outcome
         </div>
       ),

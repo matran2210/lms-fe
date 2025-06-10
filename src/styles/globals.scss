@@ -1387,6 +1387,13 @@ select:focus {
   --tw-ring-color: none;
 }
 
+.truncate-breadcrumbs {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 200px;
+}
 .react-flow__panel {
   display: none;
 }

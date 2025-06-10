@@ -143,7 +143,7 @@ const TopicProgress = () => {
           </div>
           <div className="mt-5 flex w-full">
             <div className="m-auto">
-              <span className="mr-2.5 inline-block h-3 w-3 bg-primary-6"></span>
+              <span className="bg-primary-6 mr-2.5 inline-block h-3 w-3"></span>
               <span className="font-medium">Completed</span>
             </div>
           </div>

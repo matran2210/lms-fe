@@ -140,7 +140,7 @@ const WeeklyReport = () => {
           <div>
             {report?.activities?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-[#37C78C] px-1.75 py-1.25"
+                className="px-1.75 py-1.25 flex min-w-8 rounded-sm bg-[#37C78C]"
                 style={{ backgroundColor: report?.activities?.color }}
               >
                 <Image
@@ -194,7 +194,7 @@ const WeeklyReport = () => {
           <div>
             {report?.times?.icon ? (
               <div
-                className="flex min-w-8 rounded-sm bg-[#37C78C] px-1.75 py-1.25"
+                className="px-1.75 py-1.25 flex min-w-8 rounded-sm bg-[#37C78C]"
                 style={{ backgroundColor: report?.times?.color }}
               >
                 <Image src={report.times.icon} alt="" width={16} height={16} />
