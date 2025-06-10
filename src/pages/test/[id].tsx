@@ -99,6 +99,7 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import RequirementsTab from '@components/test/RequirementsTab'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 
 declare global {
   interface Window {
@@ -2712,14 +2713,24 @@ const TestDetail = () => {
                           }
                         }}
                       >
-                        <EditorReader
+                        {currentTabContent?.topicDescription?.description && (
+                          <HighlightableHTML
+                            initialHTML={
+                              currentTabContent?.topicDescription
+                                ?.description || ''
+                            }
+                            storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            className="sapp-questions mb-6"
+                          />
+                        )}
+                        {/* <EditorReader
                           className="sapp-questions mb-6"
                           text_editor_content={
                             currentTabContent?.topicDescription?.description
                           }
                           highlighted={currentTabContent?.hightlightTopic}
                           highlighArea="hightlight_area_topic"
-                        />
+                        /> */}
                         {currentTabContent?.topicDescription?.files?.length >
                           0 &&
                           currentTabContent?.topicDescription?.files?.map(
@@ -2807,14 +2818,24 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      <EditorReader
+                      {currentTabContent?.topicDescription?.description && (
+                        <HighlightableHTML
+                          initialHTML={
+                            currentTabContent?.topicDescription?.description ||
+                            ''
+                          }
+                          storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                          className="mb-4"
+                        />
+                      )}
+                      {/* <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      />
+                      /> */}
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {

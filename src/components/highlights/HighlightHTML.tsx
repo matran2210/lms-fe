@@ -56,9 +56,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     top: number
     left: number
   } | null>(null)
-  // Memoize initialHTML để tránh infinite loop
-  const memoizedInitialHTML = useRef<string>(initialHTML)
-  const isInitialized = useRef<boolean>(false)
 
   // Debounce setSelectionRect để tránh scroll nháy
   const updateSelectionRect = (rect: DOMRect | null) => {
@@ -81,13 +78,7 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   // Load highlights from sessionStorage only once when component mounts
   useEffect(() => {
-    if (!isSaveSessionStorage) return
-    // Prevent loading if we're already in a loading state
-    if (isInitialized.current) return
-
-    memoizedInitialHTML.current = initialHTML
-    isInitialized.current = true
-
+    // if (!isSaveSessionStorage) return
     const raw = sessionStorage.getItem(storageKey)
     if (raw) {
       try {
@@ -101,19 +92,19 @@ export const HighlightableHTML: React.FC<Props> = ({
       } catch (err) {
         // console.error('Error loading highlights:', err)
       }
+    } else {
+      setHtml(initialHTML)
     }
-  }, [storageKey])
+  }, [initialHTML])
 
   // Save highlights to sessionStorage only when highlights change
   useEffect(() => {
-    if (!isSaveSessionStorage) return
-    if (!isInitialized.current) return
-
+    // if (!isSaveSessionStorage) return
     sessionStorage.setItem(
       storageKey,
-      JSON.stringify({ htmlContent: memoizedInitialHTML.current, highlights }),
+      JSON.stringify({ htmlContent: initialHTML, highlights }),
     )
-  }, [highlights, storageKey])
+  }, [highlights, initialHTML])
 
   const handleMouseUp = () => {
     const selectionObj = window.getSelection()
@@ -356,7 +347,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           destroyOnHidden
           overlayStyle={{
             position: 'absolute',
-            top: selectionRect.top + window.scrollY + 20,
+            top: selectionRect.top + window.scrollY + 28,
             left:
               selectionRect.left +
               window.scrollX +
@@ -446,7 +437,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           destroyOnHidden
           overlayStyle={{
             position: 'absolute',
-            top: highlightRect.top + window.scrollY + 20,
+            top: highlightRect.top + window.scrollY + 28,
             left:
               highlightRect.left +
               window.scrollX +
