@@ -15,11 +15,11 @@ interface IProps {
  */
 const ChartACCAScore = ({ data, recommendation }: IProps) => {
   return (
-    <div className=" mb-4 block h-fit min-h-[152px] bg-white pb-3 pl-6 pr-5 shadow-sidebar xl:mb-6 xl:pl-[99px]">
-      <div className="pb-4 pt-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
+    <div className="relative mb-4 block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-ink-800 shadow-sidebar xl:mb-6">
+      <div className="mb-8 text-lg font-semibold ">
         Multiple Choice Score by Part
       </div>
-      <div className="flex-start dashboard-scroll-x flex w-full snap-x flex-row gap-14 scroll-smooth">
+      <div className="flex-start scrollbar flex w-full snap-x flex-row gap-12 overflow-x-auto scroll-smooth pb-6">
         {data?.map((item: ChartDatum) => {
           const percentage = calculatePercentage(
             item?.section_score,
@@ -28,25 +28,31 @@ const ChartACCAScore = ({ data, recommendation }: IProps) => {
           return (
             <div
               key={item?.part_id}
-              className="flex w-11/12 max-w-[304px] shrink-0 snap-start flex-col items-start justify-end gap-2 md:w-1/2 xl:w-1/3"
+              className="flex w-11/12 max-w-[444px] shrink-0 snap-start flex-col items-start justify-end gap-4 md:w-1/2 xl:w-1/3"
             >
-              <div className="line-clamp-2 font-normal text-[#050505]">
-                {item?.title}
-              </div>
-              <div className="relative h-2 w-full bg-[#F1F1F1]">
+              <div className="line-clamp-2 font-medium">{item?.title}</div>
+              <div className="relative h-2 w-full rounded-full bg-progress-active">
                 <div
-                  className="absolute left-0 top-0 h-2 bg-primary"
+                  className="absolute left-0 top-0 h-2 rounded-full bg-primary"
                   style={{
                     width: `${percentage}%`,
                   }}
-                ></div>
+                />
               </div>
-              <div className="flex w-full items-center justify-end text-base font-normal text-[#050505]">
-                {`${percentage}%`}
+              <div>
+                <span>{`${percentage}%`}</span>
+                <span className="ml-2 inline-block text-sm text-ink-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
               </div>
             </div>
           )
         })}
+        {/* <div
+          className="absolute bottom-0 right-0 h-full w-48"
+          style={{
+            background:
+              'linear-gradient(270deg, #FFF 38.41%, rgba(255, 255, 255, 0.00) 100%)',
+          }}
+        /> */}
       </div>
       <div>
         {recommendation?.map((item, index) => (
