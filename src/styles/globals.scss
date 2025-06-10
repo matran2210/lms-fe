@@ -21,6 +21,7 @@
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
+@import './components/drawer.scss';
 // @tailwind base;
 // @tailwind components;
 @tailwind utilities;
@@ -149,13 +150,10 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-lg font-semibold text-ink-800;
+    @apply m-0 break-words text-lg text-ink-800;
   }
   span {
-    background-color: transparent !important;
-    font-size: 18px !important;
-    font-weight: 600 !important;
-    color: #1f2937 !important;
+    @apply bg-transparent text-lg text-[#1f2937];
   }
 }
 .sapp-explanation {
