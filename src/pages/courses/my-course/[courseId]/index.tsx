@@ -175,44 +175,28 @@ const CourseDetail = () => {
           <CourseSkeleton />
         ) : (
           <>
-            {isTrial ? (
-              <>
-                <BreadcrumbFilter name={courseNameDetail} />
-                <div
-                  className="my-4 flex items-center justify-between"
-                  data-aos={ANIMATION.DATA_AOS}
-                >
-                  <div className="text-3xl font-semibold text-gray-800">
-                    {courseNameDetail}
-                  </div>
-                  <FilterCourse
-                    totalResult={courses?.length || 0}
-                    listFilter={[
-                      {
-                        name: 'user_section_learning_status',
-                        placeholder: 'Status',
-                        options: defaultStatusDetail,
-                      },
-                    ]}
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="main relative">
-                  <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                    <BreadcrumbFilter name={courseNameDetail} />
-                    <FilterCourseDetail totalResult={courses?.length || 0} />
-                  </div>
-                </div>
-                <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-                  <Heading greeting="Welcome to" title={courseNameDetail} />
-                </div>
-              </>
-            )}
+            <BreadcrumbFilter name={courseNameDetail} />
+            <div
+              className="my-4 flex items-center justify-between"
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <div className="text-3xl font-semibold text-gray-800">
+                {courseNameDetail}
+              </div>
+              <FilterCourse
+                totalResult={courses?.length || 0}
+                listFilter={[
+                  {
+                    name: 'user_section_learning_status',
+                    placeholder: 'Status',
+                    options: defaultStatusDetail,
+                  },
+                ]}
+              />
+            </div>
             <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
-                isTrial
+                isTrial={isTrial}
                 courses={courses}
                 is_passed_course={is_passed_course}
                 class_user_id={class_user_id}
