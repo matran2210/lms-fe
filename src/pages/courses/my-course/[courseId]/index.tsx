@@ -23,6 +23,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -178,7 +179,7 @@ const CourseDetail = () => {
               breadcrumbs={[
                 {
                   title: 'My Course',
-                  link: '/courses/my-course',
+                  link: '/courses',
                 },
                 {
                   title: courseNameDetail,
@@ -215,6 +216,7 @@ const CourseDetail = () => {
             </div>
           </>
         )}
+        <PinnedNotificationsV2 />
       </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&

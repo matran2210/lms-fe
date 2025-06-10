@@ -2,6 +2,7 @@ import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { useForm, useWatch } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { DefaultOptionType } from 'antd/es/select'
 
 const FilterCourse = ({
   totalResult,
@@ -11,7 +12,7 @@ const FilterCourse = ({
   listFilter: {
     name: string
     placeholder: string
-    options: any[]
+    options: DefaultOptionType[]
   }[]
 }) => {
   const { control, setValue } = useForm()
@@ -43,7 +44,7 @@ const FilterCourse = ({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="text-base font-medium text-gray-800">
+      <div className="text-gray-800 text-base font-medium">
         {totalResult} Results
       </div>
       <div className="flex gap-4">
