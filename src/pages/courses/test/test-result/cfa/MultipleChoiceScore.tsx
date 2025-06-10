@@ -11,7 +11,7 @@ interface IProps {
   score?: number
 }
 
-const MultipleChoiceScore = ({
+const CfaMultipleChoiceScore = ({
   chartData,
   recommendation,
   isGraded,
@@ -35,4 +35,4 @@ const MultipleChoiceScore = ({
   )
 }
 
-export default MultipleChoiceScore
+export default CfaMultipleChoiceScore

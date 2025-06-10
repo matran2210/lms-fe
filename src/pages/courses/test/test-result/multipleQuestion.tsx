@@ -183,7 +183,7 @@ const MultipleQuestion = ({
               questions?.constructedResponseAnswers ?? [],
               questions?.selectedResponseAnswers?.length ?? 0,
             )}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-x-14 gap-y-3">
               {annotations.map((annotation) => (
                 <div key={annotation.text} className="flex items-center gap-2">
                   <div

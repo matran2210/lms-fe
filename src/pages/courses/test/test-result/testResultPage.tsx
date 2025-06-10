@@ -1,8 +1,6 @@
-import Recommendation from '@components/test/Recommendation'
 import { F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
-import { isNull, isUndefined } from 'lodash'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
 import { GRADE_STATUS } from 'src/constants'
 import {
@@ -12,9 +10,9 @@ import {
   QuizAttemptChartType,
 } from 'src/type'
 import ChartACCAScore from './acca/chartACCAScore'
-import MultipleChoiceScore from './cfa/MultipleChoiceScore'
+import CfaMultipleChoiceScore from './cfa/MultipleChoiceScore'
 import ChartCMAScore from './cma/chartCMAScore'
-import GlobalAverage from './GlobalAverage'
+import MultipleChoiceScore from './MultipleChoiceScore'
 import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
 
@@ -41,8 +39,6 @@ const TestResultPage = ({
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
-
-  const [openAnnotaion, setOpenAnnotaion] = useState(false)
 
   const handleResize = () => {
     const multipleQuestionElem = multipleQuestionRef?.current
@@ -97,34 +93,12 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <div className="-order-1 xl:order-1">
-                <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
-                  <div
-                    className={`flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-small xl:mb-6`}
-                  >
-                    <div className="mb-4 text-2xl font-bold text-ink-800">
-                      {questions?.quizAttempt?.grading_status ===
-                      GRADE_STATUS.FINISHED_GRADING
-                        ? 'Overall Score'
-                        : 'Multiple Choice Score'}
-                    </div>
-                    <div className="flex w-full items-end justify-between">
-                      <div className={`mb-1 text-7xl font-bold text-primary`}>
-                        {isNull(score) || isUndefined(score)
-                          ? '--'
-                          : Math.round(score)}
-                        %
-                      </div>
-                      <GlobalAverage globalAverage={globalAverageNumber} />
-                    </div>
-                  </div>
-                  <MultipleQuestion
-                    questions={questions}
-                    className={'xl:w-full'}
-                    multipleQuestionRef={multipleQuestionRef}
-                  />
-                </div>
-              </div>
+              <MultipleChoiceScore
+                questions={questions}
+                score={score}
+                globalAverage={globalAverageNumber}
+                multipleQuestionRef={multipleQuestionRef}
+              />
             </div>
           )
         } else {
@@ -162,7 +136,7 @@ const TestResultPage = ({
         return (
           <div className={commonMultipleScoreStyle}>
             <div className="flex max-h-full flex-col">
-              <MultipleChoiceScore
+              <CfaMultipleChoiceScore
                 chartData={chartData}
                 recommendation={questions?.quizAttempt?.attempt_gradings}
                 isGraded={
@@ -208,41 +182,12 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <div className="-order-1 xl:order-1">
-              <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
-                <div
-                  className={`w-full justify-between rounded-xl bg-white p-6 shadow-sidebar xl:mb-8`}
-                >
-                  <div className="mb-4 text-2xl font-bold text-ink-800">
-                    {questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING
-                      ? 'Overall Score'
-                      : 'Multiple Choice Score'}
-                  </div>
-                  <div
-                    className={`mb-1 font-inter text-7xl font-bold text-primary`}
-                  >
-                    {isNull(score) || isUndefined(score)
-                      ? '--'
-                      : `${Math.round(score)}%`}
-                  </div>
-                  <GlobalAverage globalAverage={globalAverageNumber} />
-                  <div className="w-full">
-                    {questions?.quizAttempt?.attempt_gradings.length > 0 &&
-                      questions?.quizAttempt?.attempt_gradings?.map(
-                        (item, index) => (
-                          <Recommendation data={item} key={index} />
-                        ),
-                      )}
-                  </div>
-                </div>
-                <MultipleQuestion
-                  questions={questions}
-                  className={'xl:w-full'}
-                  multipleQuestionRef={multipleQuestionRef}
-                />
-              </div>
-            </div>
+            <MultipleChoiceScore
+              questions={questions}
+              score={score}
+              globalAverage={globalAverageNumber}
+              multipleQuestionRef={multipleQuestionRef}
+            />
           </div>
         )
       default:
@@ -256,42 +201,12 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <div className="-order-1 xl:order-1">
-              <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
-                <div
-                  className={`w-full justify-between rounded-xl bg-white p-6 shadow-sidebar xl:mb-8`}
-                >
-                  <div className="mb-4 text-2xl font-bold text-ink-800">
-                    {questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING
-                      ? 'Overall Score'
-                      : 'Multiple Choice Score'}
-                  </div>
-                  <div
-                    className={`mb-1 font-inter text-7xl font-bold text-primary`}
-                  >
-                    {isNull(score) || isUndefined(score)
-                      ? '--'
-                      : Math.round(score)}
-                    %
-                  </div>
-                  <GlobalAverage globalAverage={globalAverageNumber} />
-                  <div className="w-full">
-                    {questions?.quizAttempt?.attempt_gradings.length > 0 &&
-                      questions?.quizAttempt?.attempt_gradings?.map(
-                        (item, index) => (
-                          <Recommendation data={item} key={index} />
-                        ),
-                      )}
-                  </div>
-                </div>
-                <MultipleQuestion
-                  questions={questions}
-                  className={'xl:w-full'}
-                  multipleQuestionRef={multipleQuestionRef}
-                />
-              </div>
-            </div>
+            <MultipleChoiceScore
+              questions={questions}
+              score={score}
+              globalAverage={globalAverageNumber}
+              multipleQuestionRef={multipleQuestionRef}
+            />
           </div>
         )
     }
