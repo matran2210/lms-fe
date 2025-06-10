@@ -23,7 +23,6 @@ const MultipleChoiceScore = ({
       <TotalScore
         score={score}
         globalAverage={GlobalAverage}
-        classGlobal="mt-15 xl:pr-0"
         isGraded={isGraded}
       />
       <div className="block w-full">

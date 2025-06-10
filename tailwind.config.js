@@ -131,6 +131,7 @@ module.exports = {
       '4xl': ['2.25rem', { lineHeight: '3.125rem' }] /* 36px, 50px */,
       '5xl': ['2.5rem', { lineHeight: '3.5rem' }] /* 40px, 56px */,
       '6xl': ['3rem', { lineHeight: '4rem' }] /* 48px, 64px */,
+      '7xl': ['4rem', { lineHeight: '5rem' }] /* 64px, 80px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -179,7 +180,7 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
-        matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
         card: '0px 4px 16px 0px #00000014',
         'learning-activity': '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },

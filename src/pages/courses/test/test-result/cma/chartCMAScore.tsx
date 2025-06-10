@@ -6,10 +6,11 @@ import { isNull, isUndefined } from 'lodash'
 import Image from 'next/image'
 import Tooltip from 'src/common/Tooltip'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
+import GlobalAverage from '../GlobalAverage'
 
 interface IProps {
   data: ChartDatum[]
-  GlobalAverage?: number
+  globalAverage: number
   score?: number
   isGraded?: boolean
   passingScore?: number
@@ -18,7 +19,7 @@ interface IProps {
 
 const ChartCMAScore = ({
   data,
-  GlobalAverage,
+  globalAverage,
   score,
   passingScore,
   isGraded,
@@ -29,10 +30,10 @@ const ChartCMAScore = ({
       <div className="sticky left-0 flex flex-row justify-between">
         <div>
           <div className="flex flex-col">
-            <div className="text-xl font-medium text-black">
+            <div className="text-2xl font-bold text-black">
               {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
             </div>
-            <div className="my-2 text-6xl font-bold text-primary">
+            <div className="my-2 text-7xl font-bold text-primary">
               {isNull(score) || isUndefined(score) ? '--' : formatNumber(score)}
               %
             </div>
@@ -42,19 +43,7 @@ const ChartCMAScore = ({
           </div>
         </div>
         <div className="content-center">
-          <div className="flex flex-row">
-            <div className="mr-2 pt-[2px]">
-              <Image
-                src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                width={16}
-                height={16}
-                alt="global"
-              />
-            </div>
-            <div className="text-base font-normal text-[#A1A1A1]">
-              Global Average {GlobalAverage}%
-            </div>
-          </div>
+          <GlobalAverage globalAverage={globalAverage} />
         </div>
       </div>
       <div className="">

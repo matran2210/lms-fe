@@ -161,8 +161,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-6 shadow-sidebar-tablet xl:sticky 
-        xl:top-[104px] xl:!h-fit xl:rounded-xl xl:pl-7 xl:shadow-sidebar`}
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-6 shadow-small 
+        xl:sticky xl:top-[104px] xl:!h-fit xl:rounded-xl xl:pl-7`}
         ref={multipleQuestionRef}
       >
         <div
@@ -199,11 +199,11 @@ const MultipleQuestion = ({
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
           <div
-            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${
+            className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${
               showMore ? 'items-center' : 'pt-0'
             }`}
           >
-            <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
+            <div className="flex flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
                 ref={elementRef as React.LegacyRef<HTMLDivElement>}
                 onMouseDown={handleMouseDown}
