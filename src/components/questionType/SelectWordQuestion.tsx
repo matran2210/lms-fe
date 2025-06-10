@@ -1,5 +1,9 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import {
+  DeserializeHighlight,
+  replaceWhiteSpacePreWrapToNormal,
+  runHighlight,
+} from '@utils/index'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -66,7 +70,7 @@ const SelectWord = forwardRef(
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
-    const str = data?.question_content
+    const str = replaceWhiteSpacePreWrapToNormal(data?.question_content || '')
     const [key, setKey] = useState<string>(uniqueId('key'))
     const isSelfReflection = data?.is_self_reflection
 
