@@ -179,7 +179,7 @@ const TableCaseStudyResult = () => {
                         : '/Unlimited'
                     }`}
                     size="medium"
-                    className={'shrink-0 !font-medium'}
+                    className={'shrink-0'}
                     onClick={() =>
                       handleRetake(
                         topicAttemptDetail?.question_topic?.id,
@@ -199,7 +199,7 @@ const TableCaseStudyResult = () => {
                         : '/Unlimited'
                     }`}
                     size="medium"
-                    className={'shrink-0 !font-medium'}
+                    className={'shrink-0'}
                   />
                 )
               ) : (
@@ -222,7 +222,7 @@ const TableCaseStudyResult = () => {
                     router?.query?.course_section_id as string,
                   )
                 }
-                className={'shrink-0 !font-medium'}
+                className={'shrink-0'}
               />
             )}
           </div>

@@ -4,7 +4,7 @@ import { IButtonProps } from 'src/type'
 const SIZES = {
   small: 'text-[0.875rem] leading-4',
   medium: 'text-[1rem] leading-6',
-  lager: 'text-lg leading-[27px]',
+  large: 'text-lg leading-[27px]',
   extra: 'text-lg leading-[27px]',
 }
 
@@ -30,13 +30,14 @@ const COLORS = {
     'bg-[#A1A1A1] hover:bg-[#DCDDDD] disabled:bg-[#DCDDDD] text-white',
   okPopup: 'bg-error text-white',
   cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
-  'light-dark': 'bg-dark-3 hover:bg-gray-14 disabled:bg-gray-898 text-white',
+  'light-dark':
+    'bg-[#29353C] hover:bg-secondary disabled:bg-ink-100 text-white',
 }
 
 const PADDINGS = {
   small: 'px-4 py-2',
   medium: 'px-6 py-3',
-  lager: 'px-9 py-2.8',
+  large: 'px-9 py-2.8',
   extra: 'px-17.5 py-2.8',
   none: '',
 }

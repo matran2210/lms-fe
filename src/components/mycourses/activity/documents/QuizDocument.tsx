@@ -47,6 +47,8 @@ import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { Tooltip } from 'antd'
+import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
+import ModalResults from '../ModalResults'
 
 type Props = {
   questions: IQuestion[]
@@ -66,8 +68,8 @@ type Props = {
   refreshTab: () => void
   exhibitText: string
   attemptId?: string
-  focusOnlyQuiz: boolean
-  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<boolean>>
+  focusOnlyQuiz: IFocusQuiz
+  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
 }
 
 interface IAnswer {
@@ -613,7 +615,7 @@ const QuizDocument = ({
     setOpenGradedReport(false)
   }
   return (
-    <div className="bg-gray-898 flex flex-col gap-8 rounded-xl p-8">
+    <div className="flex flex-col gap-8 rounded-xl bg-ink-100 p-8">
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
@@ -678,9 +680,18 @@ const QuizDocument = ({
             </div>
             <div
               className="col-span-1 flex cursor-pointer justify-end text-[#1C274C]"
-              onClick={() => setFocusOnlyQuiz(!focusOnlyQuiz)}
+              onClick={() =>
+                setFocusOnlyQuiz({
+                  open: !focusOnlyQuiz.open,
+                  id: !!focusOnlyQuiz.id ? '' : quizId,
+                })
+              }
             >
-              {focusOnlyQuiz ? <MinimumContentIcon /> : <MaximumContentIcon />}
+              {focusOnlyQuiz.open ? (
+                <MinimumContentIcon />
+              ) : (
+                <MaximumContentIcon />
+              )}
               {/* {(isQuestionConfirmed ||
                 grading_preference !== 'AFTER_EACH_QUESTION' ||
                 (isQuestionConfirmed && isLastQuestion)) && (
@@ -727,7 +738,7 @@ const QuizDocument = ({
 
       {/* Question */}
       <div
-        className={`text-black-1 h-full select-none ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-full ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
@@ -815,45 +826,59 @@ const QuizDocument = ({
       </div>
 
       {modalResult?.status && (
-        <SappModal
+        <ModalResults
+          getTable={getTable}
+          handleShowQuestionResultDetail={handleShowQuestionResultDetail}
+          modalResult={modalResult}
           open={modalResult?.status}
-          okButtonCaption={'Yes'}
-          cancelButtonCaption={'No'}
-          handleCancel={() => setModalResult(undefined)}
-          handleSubmit={() => setModalResult(undefined)}
-          setOpen={() => setModalResult(undefined)}
-          size="max-w-[1144px]"
-          position="center"
-          showFooter={false}
-          isFullScreen={true}
-          refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all z-[100000]"
-          showHeader={false}
-        >
-          <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
-            <div
-              className="absolute right-6 top-5  ml-auto cursor-pointer"
-              onClick={() => {
-                refreshTab()
-                setModalResult(undefined)
-              }}
-            >
-              <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-            </div>
-            <QuizResultComponent
-              questionResponse={modalResult?.questions || []}
-              getTable={getTable}
-              onShowDetail={handleShowQuestionResultDetail}
-              loading={loading}
-            />
-          </div>
-        </SappModal>
+          handleCancel={() => {
+            refreshTab()
+            setModalResult(undefined)
+          }}
+          loading={loading}
+          handleOk={() => setModalResult(undefined)}
+        />
+        // <SappModal
+        //   open={modalResult?.status}
+        //   okButtonCaption={'Yes'}
+        //   cancelButtonCaption={'No'}
+        //   handleCancel={() => setModalResult(undefined)}
+        //   handleSubmit={() => setModalResult(undefined)}
+        //   setOpen={() => setModalResult(undefined)}
+        //   size="max-w-[1144px]"
+        //   position="center"
+        //   showFooter={false}
+        //   isFullScreen={true}
+        //   // refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-auto bg-white text-left shadow-xl transition-all z-[100000]"
+        //   showHeader={false}
+        // >
+        //   <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
+        //     <div
+        //       className="absolute right-6 top-5  ml-auto cursor-pointer"
+        //       onClick={() => {
+        //         refreshTab()
+        //         setModalResult(undefined)
+        //       }}
+        //     >
+        //       <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+        //     </div>
+        //     <QuizResultComponent
+        //       questionResponse={modalResult?.questions || []}
+        //       getTable={getTable}
+        //       onShowDetail={handleShowQuestionResultDetail}
+        //       loading={loading}
+        //     />
+        //   </div>
+        // </SappModal>
       )}
 
-      {/* <ModalExplanationPackage
-        quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
-        open={showQuestionResultDetail?.isOpen || false}
-        setOpen={() => setShowQuestionResultDetail(undefined)}
-      /> */}
+      {showQuestionResultDetail?.isOpen && (
+        <ModalExplanationPackage
+          quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
+          open={showQuestionResultDetail?.isOpen || false}
+          setOpen={() => setShowQuestionResultDetail(undefined)}
+        />
+      )}
       {openGradedReport && (
         <SappModalV3
           open={openGradedReport}

@@ -19,16 +19,15 @@ const Settings = ({ onBack }: IProp) => {
                 cancel={{
                   title: 'Cancel',
                   size: 'medium',
-                  isPaddingHorizontal: false,
                   disabled: false,
                   className: 'min-w-fit !px-0 text-base w-[5rem]',
-                  onClick: onBack,
+                  onClick: () => onBack(false), //chỗ này onBack đang là void nên fake tạm
                 }}
                 submit={{
                   title: 'Save',
                   size: 'medium',
                   className: 'min-w-fit px-0 text-sm w-[5rem]',
-                  type: 'submit',
+                  htmlType: 'submit',
                   disabled: true,
                 }}
               />

@@ -25,7 +25,6 @@ interface IProps {
   setUnSubmitAnswer: Dispatch<SetStateAction<boolean>>
   checkUnSubmitAnswer: () => number[]
   setOpenQuit: Dispatch<SetStateAction<boolean>>
-  setSubmitEventTest: Dispatch<SetStateAction<boolean>>
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
@@ -48,7 +47,6 @@ const HeaderTest = ({
   quizAttempt,
   quizDetail,
   setOpenQuit,
-  setSubmitEventTest,
   setUnSubmitAnswer,
   timeRef,
   type,
@@ -99,7 +97,6 @@ const HeaderTest = ({
             loading: false,
             disabled: submited,
             className: 'border border-[#050505]',
-            color: 'secondary',
             onClick: () => {
               onSubmitAnswer('finish')
               if (checkUnSubmitAnswer()?.length > 0) {
@@ -114,7 +111,6 @@ const HeaderTest = ({
             title: 'Quit',
             size: 'small',
             className: 'border border-[#050505] !w-[109px]',
-            color: 'secondary',
             onClick: () => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())

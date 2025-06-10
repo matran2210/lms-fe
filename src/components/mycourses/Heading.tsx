@@ -17,8 +17,8 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
         'shadow-sidebar': showShadow === true,
       })}
     >
-      <div className="font-medium">
-        <h1 className="text-[32px] leading-[45px] text-[#050505]">
+      <div className="mb-1 text-3xl font-medium">
+        <h1 className="text-ink-800">
           {greeting}
           <span className="ml-1.5 text-primary">
             <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>
@@ -27,7 +27,7 @@ const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
       </div>
       {des && (
         <div className="flex w-full">
-          <div className="text-medium-sm w-full text-[#050505]">{des}</div>
+          <div className="w-full text-sm text-ink-800">{des}</div>
         </div>
       )}
     </div>

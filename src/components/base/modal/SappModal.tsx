@@ -21,7 +21,7 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
@@ -157,6 +157,20 @@ const SappModal: React.FC<IProps> = ({
           document.body.style.removeProperty('padding-right')
           document.body.classList.remove('overflow-hidden')
         }
+      }
+    }
+    return () => {
+      if (!isInner) {
+        // Kiểm tra lại một lần nữa khi component bị hủy
+        setTimeout(() => {
+          const remainingModals = document.querySelectorAll(
+            '.sapp-custom-modal:not(.sapp-custom-modal-inner)',
+          )
+          if (!remainingModals?.length) {
+            document.body.style.removeProperty('padding-right')
+            document.body.classList.remove('overflow-hidden')
+          }
+        }, 50)
       }
     }
   }, [open])
@@ -342,8 +356,6 @@ const SappModal: React.FC<IProps> = ({
                       <ButtonCancelSubmit
                         revertFunction={revertFunction}
                         className={footerButtonClassName}
-                        color={color}
-                        colorCancel={colorCancel}
                         showOkButton={showOkButton}
                         showCancelButton={showCancelButton}
                         submit={{

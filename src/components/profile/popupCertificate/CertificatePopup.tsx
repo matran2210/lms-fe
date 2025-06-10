@@ -22,7 +22,7 @@ interface IProps {
   okButtonCaption?: string
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
 
   handleCancel?: () => Promise<void> | void
   handleSubmit?: () => Promise<void> | void
@@ -321,8 +321,6 @@ const SappModalCerti: React.FC<IProps> = ({
                     {customFooter || (
                       <ButtonCancelSubmit
                         className={footerButtonClassName}
-                        color={color}
-                        colorCancel={colorCancel}
                         showOkButton={showOkButton}
                         showCancelButton={showCancelButton}
                         submit={{

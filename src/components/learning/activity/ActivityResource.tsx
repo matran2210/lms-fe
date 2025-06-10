@@ -1,5 +1,4 @@
-import { CollapseArrowIcon, DownloadIcon, StarCircleIcon } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
+import { CollapseArrowIcon, DownloadIcon } from '@assets/icons'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import { UploadAPI } from '@pages/api/upload'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -54,7 +53,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                   >
                     <div className="">
                       <p
-                        className="text-blue-7 cursor-pointer underline hover:text-primary"
+                        className="cursor-pointer text-info-600 underline hover:text-primary"
                         onClick={() => {
                           isPreviewFile
                             ? handleOpenScratchPad(
@@ -97,7 +96,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
       defaultActiveKey={['activity_resource']}
       expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
       items={getItemsActivityResource}
-      className="learning-activity-collapse shadow-learning-activity rounded-xl bg-white p-6"
+      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
     />
   )
 }

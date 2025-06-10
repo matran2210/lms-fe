@@ -10,10 +10,8 @@ interface IProps {
   okButtonCaption?: any
   okButtonClass?: string
   cancelButtonClass?: string
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
   footerButtonClassName?: string
-  color?: IButtonColors
-  colorCancel?: IButtonColors
   fullWidthBtn?: boolean
   showOkButton?: boolean
   showCancelButton?: boolean
@@ -28,7 +26,7 @@ interface IProps {
   handleClose?: () => void
   icon: ReactNode
   header?: ReactNode
-  content?: string
+  content?: string | undefined | ReactNode
   children?: ReactNode
   headerClassName?: string
   // Các props còn lại sẽ được gom vào otherProps
@@ -102,8 +100,6 @@ const SappModalV3 = ({
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
-            color={color}
-            colorCancel={colorCancel}
             showOkButton={showOkButton}
             showCancelButton={showCancelButton}
             submit={{

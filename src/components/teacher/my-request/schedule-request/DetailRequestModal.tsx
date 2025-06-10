@@ -160,7 +160,6 @@ const DetailRequestModal = ({
       })}
       submitButtonClassName="rounded-md"
       showSubmitButton={isPending}
-      isSecondaryCancelButton={false}
     >
       <div>
         <div className="mb-6 flex flex-col gap-4">

@@ -10,9 +10,26 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
+import CardCourse from '@components/common/CardCourse/CardCourse'
+import { AccessIcon } from '@assets/icons/entranceTest'
+import Link from 'next/link'
+import ButtonText from '@components/base/button/ButtonText'
 
 interface EntranceTestProps {
-  data: any
+  data: {
+    id: string
+    name: string
+    attempt_status?: EAttemptStatus
+    quiz_timed?: number
+    created_at?: string
+    quiz_attempt_id?: string
+    is_attempt?: boolean
+    total_attempt_time?: number
+    total_correct_answer?: number
+    total_question?: number
+    attempt_times?: number
+    is_limited?: boolean
+  }
   test_id_default?: any | undefined
 }
 
@@ -117,89 +134,84 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     }
   }
 
+  const cardFooter = (
+    <div className="action relative mt-10 flex items-center justify-end">
+      {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
+      {!data?.attempt_status ||
+      data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+        <ButtonSecondary
+          title="Begin"
+          className="ml-auto"
+          onClick={handleClickBegin}
+        />
+      ) : (
+        // đã làm bài xong
+        <>
+          <ButtonText
+            title="Result"
+            onClick={() =>
+              router.push(`/entrance-test/test-result/${data?.quiz_attempt_id}`)
+            }
+            className="mr-4"
+          />
+          <ButtonSecondary
+            title="Retake"
+            onClick={() => setOpenExpired(true)}
+          />
+        </>
+      )}
+    </div>
+  )
+
   return (
     <>
-      <div className="name">
-        <h2 className="mb-5 line-clamp-2 text-2xl font-medium text-[#050505]">
-          {data?.name}
-        </h2>
-      </div>
-      <div className="mt-auto">
-        <div className="info">
-          <div className="flex justify-between border-b border-[#DCDDDD] pb-4 text-base capitalize text-[#A1A1A1]">
-            {data?.is_attempt ? (
-              <>
-                <p>Time taken:</p>
-                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-                  <span>--</span>
-                ) : (
+      <CardCourse
+        title={data?.name || ''}
+        attemptStatus={data?.attempt_status}
+        footer={cardFooter}
+      >
+        <div className="mt-10">
+          <div className="info border-l border-[#DCDDDD] px-4">
+            <div className="flex justify-between text-base capitalize text-ink">
+              {data?.is_attempt ? (
+                <>
+                  <p>Time taken:</p>
+                  {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                    <span>--</span>
+                  ) : (
+                    <p className="font-medium text-[#050505]">
+                      {timeTakenFormatted}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p>Time allowed: </p>
                   <p className="font-medium text-[#050505]">
-                    {timeTakenFormatted}
+                    {timeAllowFormatted}
                   </p>
-                )}
-              </>
-            ) : (
-              <>
-                <p>Time allowed: </p>
-                <p className="font-medium text-[#050505]">
-                  {timeAllowFormatted}
-                </p>
-              </>
-            )}
-          </div>
-          <div className="flex justify-between pt-4 text-base capitalize text-[#A1A1A1]">
-            <p>Results:</p>
-            {data?.is_attempt ? (
-              <>
-                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-                  <span>--</span>
-                ) : (
-                  <p className="text-success-600">
-                    {data?.total_correct_answer + '/' + data?.total_question}
-                  </p>
-                )}
-              </>
-            ) : (
-              <span>--</span>
-            )}
+                </>
+              )}
+            </div>
+            <div className="flex justify-between pt-4 text-base capitalize text-ink">
+              <p>Results:</p>
+              {data?.is_attempt ? (
+                <>
+                  {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                    <span className="text-ink-800">--</span>
+                  ) : (
+                    <p className="font-medium text-info">
+                      {data?.total_correct_answer + '/' + data?.total_question}
+                    </p>
+                  )}
+                </>
+              ) : (
+                <span className="text-ink-800">--</span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="action relative mt-10 flex items-center justify-between">
-          {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
-          {!data?.attempt_status ||
-          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-            <ButtonSecondary
-              title="Begin"
-              full={false}
-              size={'medium'}
-              className="ml-auto"
-              onClick={handleClickBegin}
-            />
-          ) : (
-            // đã làm bài xong
-            <>
-              <ButtonSecondary
-                title="Retake"
-                size="medium"
-                full={false}
-                onClick={() => setOpenExpired(true)}
-              />
-              <SappButton
-                title="Result"
-                onClick={() =>
-                  router.push(
-                    `/entrance-test/test-result/${data?.quiz_attempt_id}`,
-                  )
-                }
-                isUnderLine
-                color="text"
-                className="!p-0 font-medium underline"
-                size="medium"
-              />
-            </>
-          )}
-        </div>
-      </div>
+      </CardCourse>
       <PopUpRemindEntrance
         setOpenFillForm={setOpenFillForm}
         setOpenTest={setOpen}

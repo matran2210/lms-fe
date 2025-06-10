@@ -758,7 +758,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
+        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -842,7 +842,7 @@ const SAPPVideo = ({
                 <div className="flex-center flex w-full items-center gap-6">
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#BDBDBDB3] before:-right-4"
+                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#E5E7EB] before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -918,7 +918,7 @@ const SAPPVideo = ({
                         <Icon
                           type={'volume'}
                           className={
-                            'icon-svg volume-high h-6 w-4.5 text-white'
+                            'icon-svg volume-high w-4.5 h-6 text-white'
                           }
                         />
                       </button>
@@ -1169,7 +1169,7 @@ const SAPPVideo = ({
                       <Icon
                         type={'fullscreen-exit'}
                         className={
-                          ' fullscreen-exit hidden h-5.5 w-5 text-white'
+                          ' fullscreen-exit h-5.5 hidden w-5 text-white'
                         }
                       />
                     </button>

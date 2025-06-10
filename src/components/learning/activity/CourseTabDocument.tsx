@@ -1,22 +1,19 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  CircleArrowLeftIcon,
-  CircleArrowRightIcon,
-  PaginationDotIcon,
-} from '@assets/icons'
+import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
-import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import { CoursesAPI } from '@pages/api/courses'
-import { VideoStateClicked } from '@pages/courses/[id]/activity/[activityId]'
+import {
+  IFocusQuiz,
+  VideoStateClicked,
+} from '@pages/courses/[id]/activity/[activityId]'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace } from '@utils/index'
-import { Button, Tabs, Tooltip } from 'antd'
+import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -39,8 +36,8 @@ interface IProps {
   isHasQuizGrading: boolean
   isDoneActivity: boolean
   handleFinishedCourseSectionProgress: () => Promise<void>
-  focusOnlyQuiz: boolean
-  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<boolean>>
+  focusOnlyQuiz: IFocusQuiz
+  setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
 }
 const CourseTabDocument = ({
   activity,
@@ -148,6 +145,7 @@ const CourseTabDocument = ({
   const refetch = () => {
     queryAction(['activity', activityId, courseId], 'refetch') // Gọi lại query [blogKeys.list(queryParams)] ngay lập tức
   }
+
   const items =
     selector?.tabs?.map((tab) => {
       return {
@@ -164,17 +162,21 @@ const CourseTabDocument = ({
                 <div
                   className={clsx(
                     'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
-                    { '!mt-0': focusOnlyQuiz },
+                    { '!mt-0': focusOnlyQuiz.open },
                   )}
                 >
                   {course_tab_documents?.map((e, i) => {
                     const gradeStatus = e?.quiz?.attempt?.grading_status
-
                     if (e?.type === 'QUIZ') {
                       return (
                         <div
                           key={e?.id + '_' + i + '_' + selector?.currentTabId}
                           ref={quizDocumentRef}
+                          className={clsx({
+                            hidden:
+                              focusOnlyQuiz.open &&
+                              e?.quiz?.id !== focusOnlyQuiz.id,
+                          })}
                         >
                           <QuizDocument
                             questions={[
@@ -209,15 +211,20 @@ const CourseTabDocument = ({
                     if (e.type === 'TEXT') {
                       return (
                         <div
-                          className={clsx(`select-none`, {
-                            hidden: focusOnlyQuiz,
+                          className={clsx(``, {
+                            hidden: focusOnlyQuiz.open,
                           })}
                           key={i + '_' + selector?.currentTabId}
                         >
-                          <TextDocument
+                          <HighlightableHTML
+                            initialHTML={e?.text_editor_content || ''}
+                            storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
+                            className="course-tab-text"
+                          />
+                          {/* <TextDocument
                             text_editor_content={e?.text_editor_content}
                             className="course-tab-text"
-                          ></TextDocument>
+                          ></TextDocument> */}
                         </div>
                       )
                     }
@@ -225,7 +232,7 @@ const CourseTabDocument = ({
                       return (
                         <div
                           key={i + '_' + selector?.currentTabId}
-                          className={clsx({ hidden: focusOnlyQuiz })}
+                          className={clsx({ hidden: focusOnlyQuiz.open })}
                         >
                           <VideoDocument
                             videos={e?.videos}
@@ -258,12 +265,12 @@ const CourseTabDocument = ({
   return (
     <div
       className={clsx('rounded-xl bg-white p-6 shadow-learning-activity', {
-        'my-6': focusOnlyQuiz,
+        'my-6': focusOnlyQuiz.open,
       })}
     >
       <Tabs
         className={clsx('learning-activity-tabs course-tab', {
-          'tabs-list-hidden': focusOnlyQuiz,
+          'tabs-list-hidden': focusOnlyQuiz.open,
         })}
         activeKey={selector?.currentTabId}
         items={items}
@@ -277,7 +284,7 @@ const CourseTabDocument = ({
           className={clsx(
             'learning-act-tab-pagination flex items-center justify-center gap-8',
             {
-              hidden: focusOnlyQuiz,
+              hidden: focusOnlyQuiz.open,
             },
           )}
         >
@@ -300,7 +307,7 @@ const CourseTabDocument = ({
             {selector?.tabs?.map((tab, index) => (
               <span
                 key={tab.id}
-                className={clsx('cursor-pointer text-gray-897', {
+                className={clsx('cursor-pointer text-[#D9D9D9]', {
                   '!text-primary': index == currentIndex,
                 })}
                 onClick={() => handleChangeTab(courseId as string, tab.id)}

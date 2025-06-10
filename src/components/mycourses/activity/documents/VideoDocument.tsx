@@ -345,13 +345,13 @@ const VideoDocument = ({
                         }
                       : { checked: false })}
                     size={'small'}
-                    state="primary"
+                    // state="primary"
                   ></SAPPRadio>
                   <span
-                    className={`radio-item-label  ${
+                    className={`radio-item-label ${
                       v?.file?.id === currentVideo?.file?.id
                         ? 'font-medium text-primary'
-                        : 'text-gray-14'
+                        : 'text-secondary'
                     }`}
                   >
                     Video {i + 1}
@@ -376,7 +376,7 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
+                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9]"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}

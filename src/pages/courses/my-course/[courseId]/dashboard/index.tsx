@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   return (
     <Layout title="Dashboard">
-      <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
+      <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="flex w-full items-center justify-between pb-4 pt-6">
             <BreadcrumbFilter
@@ -26,7 +26,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-ink-700 lg:px-5 3xl:px-13.75"
+        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-ink-700 lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (
