@@ -6,17 +6,20 @@ import { IMyCourseDetail } from 'src/type/courses'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import { useRouter } from 'next/router'
+import clsx from 'clsx'
 
 const CourseParts = ({
   courses,
   class_user_id,
   is_passed_course,
   lastElementRef,
+  isTrial = false,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
   is_passed_course: boolean
   lastElementRef: (node: HTMLDivElement) => void
+  isTrial?: boolean
 }) => {
   const router = useRouter()
 
@@ -40,58 +43,45 @@ const CourseParts = ({
       }`}
     >
       {!isEmpty(courses) ? (
-        courses?.map((coursePart, index: number) => {
+        courses?.map((coursePart, index) => {
+          const isFocused = router?.query?.focus_id === coursePart?.id
+          const isMiddleTest = [
+            TEST_TYPE.MID_TERM_TEST,
+            TEST_TYPE.FINAL_TEST,
+            TEST_TYPE.MOCK_TEST,
+          ].includes(coursePart?.course_section_type as TEST_TYPE)
+
+          const content = isMiddleTest ? (
+            <PartMiddleTest
+              coursePart={coursePart}
+              is_passed_course={is_passed_course}
+              class_user_id={class_user_id}
+            />
+          ) : (
+            <Part course={coursePart} />
+          )
+
+          const cardClass = clsx(
+            'item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white shadow-sidebar rounded-xl p-[32px]',
+            {
+              'p-[32px]': isFocused,
+              'card active-section': isFocused,
+            },
+          )
+
           return (
             <div
               key={coursePart?.id}
               ref={(el) => (cardRefs.current[coursePart.id] = el)}
             >
-              {router?.query?.focus_id === coursePart.id ? (
-                <div
-                  className={`item card active-section aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
-                  data-aos={ANIMATION.DATA_AOS}
-                  style={{ zIndex: courses?.length - index }}
-                  ref={lastElementRef}
-                >
-                  {[
-                    TEST_TYPE.MID_TERM_TEST,
-                    TEST_TYPE.FINAL_TEST,
-                    TEST_TYPE.MOCK_TEST,
-                  ].includes(coursePart?.course_section_type as TEST_TYPE) ? (
-                    <PartMiddleTest
-                      key={index}
-                      coursePart={coursePart}
-                      is_passed_course={is_passed_course}
-                      class_user_id={class_user_id}
-                    />
-                  ) : (
-                    <Part key={index} course={coursePart} />
-                  )}
-                </div>
-              ) : (
-                <div
-                  key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
-                  ref={lastElementRef}
-                  data-aos={ANIMATION.DATA_AOS}
-                  style={{ zIndex: courses?.length - index }}
-                >
-                  {[
-                    TEST_TYPE.MID_TERM_TEST,
-                    TEST_TYPE.FINAL_TEST,
-                    TEST_TYPE.MOCK_TEST,
-                  ].includes(coursePart?.course_section_type as TEST_TYPE) ? (
-                    <PartMiddleTest
-                      key={index}
-                      coursePart={coursePart}
-                      is_passed_course={is_passed_course}
-                      class_user_id={class_user_id}
-                    />
-                  ) : (
-                    <Part key={index} course={coursePart} />
-                  )}
-                </div>
-              )}
+              <div
+                className={cardClass}
+                ref={lastElementRef}
+                data-aos={ANIMATION.DATA_AOS}
+                style={{ zIndex: courses.length - index }}
+              >
+                {content}
+              </div>
             </div>
           )
         })

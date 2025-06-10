@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
-import Icon from '@components/icons'
+import { CourseSearchIcon } from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
@@ -79,7 +79,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
   return (
     <form className={formStyle} onSubmit={handleSubmit} onChange={handleReset}>
       <button type="submit" className="flex">
-        <Icon type="search" className="text-primary" />
+        <CourseSearchIcon />
       </button>
       <Controller
         control={control}
@@ -90,8 +90,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
             {...field}
             type="text"
             placeholder={placeholder}
-            disabled={disabled}
-            className="placeholder-text-[#A1A1A1] h-6 w-full rounded-xl border-0 px-4 text-[#050505] focus:border-0 focus:outline-0 focus:ring-0"
+            className="placeholder-text-gray-400 h-6 w-full border-0 px-4 text-base focus:border-0 focus:outline-0 focus:ring-0"
           />
         )}
       />

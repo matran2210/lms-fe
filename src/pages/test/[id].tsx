@@ -85,11 +85,11 @@ import {
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
-import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import RequirementsTab from '@components/test/RequirementsTab'
 import { Tooltip } from 'antd'
 import SappButton from '@components/base/button/SappButton'
 import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
@@ -2919,6 +2919,7 @@ const TestDetail = () => {
             {/** End Scratchpads */}
 
             <TestTimeOutModal
+              type={type}
               okButtonCaption={
                 quizDetail?.grading_method === GRADING_METHOD.MANUAL
                   ? 'Review Answers'

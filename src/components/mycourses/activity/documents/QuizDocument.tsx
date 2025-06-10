@@ -738,7 +738,7 @@ const QuizDocument = ({
 
       {/* Question */}
       <div
-        className={`text-black-1 h-full select-none ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+        className={`text-black-1 h-full ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
         data-aos={ANIMATION.DATA_AOS}
       >
         {!quizSetting?.allow_attempt && !isNull(quizSetting) && (

@@ -11,11 +11,19 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
+import {
+  ANIMATION,
+  CLASS_TYPE,
+  defaultStatusDetail,
+  DELAY_TIME_DISPLAY_POPUP,
+} from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import FilterCourse from '@components/mycourses/FilterCourse'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -130,6 +138,8 @@ const CourseDetail = () => {
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
+  const isTrial =
+    data?.pages?.[0]?.courseDetail?.class_type === CLASS_TYPE.TRIAL
 
   const { setCourseType } = useCourseContext()
 
@@ -153,31 +163,51 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="border-e-default border-b bg-white">
-        <div className="mx-auto my-0 flex max-w-[1144px] py-6 max-[1199px]:mx-5">
+      <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
+        <div className="mb-10 rounded-lg bg-white px-8 py-4">
           <SearchForm
-            placeholder={MY_COURSES.placeholderSearch}
+            placeholder={MY_COURSES.placeholderSearchV2}
             formStyle="w-full flex items-center"
           />
         </div>
-      </div>
-
-      <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
         {isLoading ? (
           <CourseSkeleton />
         ) : (
           <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <BreadcrumbFilter name={courseNameDetail} />
-                <FilterCourseDetail totalResult={courses?.length || 0} />
+            <SappBreadCrumbs
+              isTeacher={false}
+              breadcrumbs={[
+                {
+                  title: 'My Course',
+                  link: '/courses',
+                },
+                {
+                  title: courseNameDetail,
+                  link: `/courses/my-course/${router.query.courseId}`,
+                },
+              ]}
+            />
+            <div
+              className="my-4 flex items-center justify-between"
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <div className="text-gray-800 text-3xl font-semibold">
+                {courseNameDetail}
               </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail} />
+              <FilterCourse
+                totalResult={courses?.length || 0}
+                listFilter={[
+                  {
+                    name: 'user_section_learning_status',
+                    placeholder: 'Status',
+                    options: defaultStatusDetail,
+                  },
+                ]}
+              />
             </div>
             <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
+                isTrial={isTrial}
                 courses={courses}
                 is_passed_course={is_passed_course}
                 class_user_id={class_user_id}
@@ -186,6 +216,11 @@ const CourseDetail = () => {
             </div>
           </>
         )}
+        <PinnedNotificationsV2
+          LeftContent={<div>LeftContent</div>}
+          CenterContent={<div>CenterContent</div>}
+          RightContent={<div>RightContent</div>}
+        />
       </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
