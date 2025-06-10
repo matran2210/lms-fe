@@ -566,7 +566,10 @@ const EssayQuestionPreview = ({
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
               <div
-                className={clsx('bg-gray-4 mb-11 mt-8 p-4', explainClassname)}
+                className={clsx(
+                  'mb-11 mt-8 bg-[#F9F9F9] p-4',
+                  explainClassname,
+                )}
               >
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader

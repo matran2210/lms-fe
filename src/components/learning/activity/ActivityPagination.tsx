@@ -158,7 +158,7 @@ const ActivityPagination = ({
                 >
                   <ArrowLeft /> Previous Activity
                 </div>
-                <div className="text-medium-sm text-gray-1 flex">
+                <div className="flex items-center gap-2 text-sm text-[#6b7280]">
                   {getCourseIcon(
                     activity?.previous_activity
                       ? activity?.previous_activity?.display_icon
@@ -179,7 +179,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <span className="leading-4.5 ml-2 w-full overflow-hidden text-ellipsis">
+                    <span className="leading-4.5 w-full overflow-hidden text-ellipsis">
                       {activity?.previous_activity
                         ? truncateString(activity?.previous_activity?.name, 80)
                         : truncateString(
@@ -206,10 +206,11 @@ const ActivityPagination = ({
                     )
                   }
                   className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
                 >
                   Next Activity <ArrowRight />
                 </div>
-                <div className="text-gray-500 flex justify-end text-sm">
+                <div className="flex items-center justify-end gap-2 text-sm text-[#6b7280]">
                   {getCourseIcon(
                     activity?.next_activity
                       ? activity?.next_activity?.display_icon
@@ -230,7 +231,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <div className="leading-4.5 mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
+                    <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                       {activity?.next_activity
                         ? truncateString(activity?.next_activity.name, 80)
                         : truncateString(

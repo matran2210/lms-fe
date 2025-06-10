@@ -345,13 +345,13 @@ const VideoDocument = ({
                         }
                       : { checked: false })}
                     size={'small'}
-                    state="primary"
+                    // state="primary"
                   ></SAPPRadio>
                   <span
-                    className={`radio-item-label  ${
+                    className={`radio-item-label ${
                       v?.file?.id === currentVideo?.file?.id
                         ? 'font-medium text-primary'
-                        : 'text-gray-14'
+                        : 'text-secondary'
                     }`}
                   >
                     Video {i + 1}

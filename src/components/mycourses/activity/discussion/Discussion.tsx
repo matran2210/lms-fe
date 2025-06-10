@@ -342,7 +342,7 @@ const Discussion = ({ class_id }: Props) => {
               <div
                 className={`${
                   e?.children?.[0] ? 'mt-6' : ''
-                } ' ml-13 relative overflow-hidden pl-5`}
+                } relative ml-[52px] overflow-hidden pl-5`}
               >
                 {e?.children?.[0] && (
                   <div>
@@ -450,7 +450,7 @@ const Discussion = ({ class_id }: Props) => {
                         name={idReply === e?.id ? 'comment' : ''}
                         placeholder="Input Text..."
                         handleKeyDown={handleKeyDown}
-                        className="w-fill--available comment-scrollbar h-12.5 min-h-12.5 rounded-lg px-4 py-3"
+                        className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
                         actions={
                           <div className="flex items-center gap-x-3">
                             <SappButtonIcon
@@ -569,7 +569,7 @@ const Discussion = ({ class_id }: Props) => {
               name={'commentRoot'}
               placeholder="Input Text1..."
               handleKeyDown={(e: any) => handleKeyDown(e, true)}
-              className="w-fill--available comment-scrollbar h-12.5 min-h-12.5 rounded-lg px-4 py-3"
+              className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
               actions={
                 <div className="flex items-center gap-x-3">
                   <SappButtonIcon

@@ -10,10 +10,8 @@ interface IProps {
   okButtonCaption?: any
   okButtonClass?: string
   cancelButtonClass?: string
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
   footerButtonClassName?: string
-  color?: IButtonColors
-  colorCancel?: IButtonColors
   fullWidthBtn?: boolean
   showOkButton?: boolean
   showCancelButton?: boolean
@@ -103,8 +101,6 @@ const SappModalV3 = ({
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
-            color={color}
-            colorCancel={colorCancel}
             showOkButton={showOkButton}
             showCancelButton={showCancelButton}
             submit={{

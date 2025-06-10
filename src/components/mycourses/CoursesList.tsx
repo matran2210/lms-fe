@@ -113,12 +113,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                   />
                 </div>
               </div>
-              <ButtonSecondary
-                title={'Active'}
-                full={false}
-                size={'small'}
-                className="ml-auto"
-              />
+              <ButtonSecondary title={'Active'} className="ml-auto" />
             </div>
           )}
         </div>

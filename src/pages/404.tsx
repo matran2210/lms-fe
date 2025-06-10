@@ -41,7 +41,7 @@ const ErrorPage = () => {
             title="Back to Home"
             full={false}
             className="md:px-22 px-8"
-            size="lager"
+            size="large"
             type="submit"
           />
         </div>

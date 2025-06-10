@@ -241,7 +241,7 @@ const MultipleQuestion = ({
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}
-                  className={'mb-0 max-w-[120px] px-11 text-sm !font-medium'}
+                  className={'mb-0 max-w-[120px]'}
                 />
               </Link>
             </div>

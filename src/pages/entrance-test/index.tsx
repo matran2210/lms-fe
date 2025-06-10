@@ -53,20 +53,20 @@ const EntranceTest = () => {
           <CourseSkeleton />
         ) : (
           <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <h2 className="text-sm font-medium text-[#050505] ">
-                  Entrance Test
-                </h2>
-                <EntranceTestFilter count={entranceTestLists?.length || 0} />
-              </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+            <div className="mb-8 flex bg-white" data-aos={ANIMATION.DATA_AOS}>
               <Heading
                 greeting="Welcome to"
                 title="Entrance Test"
                 des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
               />
+            </div>
+            <div className="relative">
+              <div className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                <h2 className="text-sm font-medium text-[#050505] ">
+                  Entrance Test
+                </h2>
+                <EntranceTestFilter count={entranceTestLists?.length || 0} />
+              </div>
             </div>
             <div
               className="my-0 max-w-[1144px] pt-6 xl:mx-auto"

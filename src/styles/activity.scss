@@ -56,7 +56,7 @@
   }
 
   .ant-tabs-nav {
-    margin: 0 !important;
+    @apply m-0 p-0;
   }
   .ant-tabs-tab-active {
     .learning-act-tab-label {

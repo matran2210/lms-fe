@@ -305,6 +305,7 @@ function DiscussionElement({
               <div
                 className={clsx(
                   'leading-0 flex-none',
+                  'leading-0 flex-none',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -339,7 +340,7 @@ function DiscussionElement({
                     : discussion?.full_name}
                 </div>
                 {discussion?.is_sapp_supporter && (
-                  <div className="bg-yellow-2 w-fit content-center rounded px-3 py-1 font-medium text-primary">
+                  <div className="w-fit content-center rounded bg-[#FFFBF2] px-3 py-1 font-medium text-primary">
                     <div className="flex flex-row">
                       <div className="content-center">
                         <VerifiedIcon />
@@ -418,7 +419,7 @@ function DiscussionElement({
                     name="editData"
                     defaultValue={editValue}
                     handleKeyDown={handleKeyDown}
-                    className="w-fill--available comment-scrollbar h-12.5 min-h-12.5 rounded-lg px-4 py-3"
+                    className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
                     actions={
                       <div className="flex items-center gap-x-3">
                         <SappButtonIcon

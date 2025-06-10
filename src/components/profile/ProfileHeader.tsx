@@ -276,7 +276,7 @@ const ProfileHeader = ({
         </div>
       </div>
       {/* <div>
-          <SappButton size="lager" title={'Enroll New Course'}></SappButton>
+          <SappButton size="large" title={'Enroll New Course'}></SappButton>
         </div> */}
       {/* <div className="hidden lg:block">
         <Image

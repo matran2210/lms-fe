@@ -164,12 +164,10 @@ const MyProfile = ({
                     ></HookFormTextField>
                     <ButtonCancelSubmit
                       className="flex gap-2"
-                      color="text"
                       cancel={{
                         title: 'Cancel',
                         onClick: handleChangeToPreview,
                         size: 'medium',
-                        isPaddingHorizontal: false,
                         disabled: loading || loadingEditName,
                         className:
                           'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
@@ -179,9 +177,8 @@ const MyProfile = ({
                         size: 'medium',
                         className:
                           'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
-                        type: 'submit',
+                        htmlType: 'submit',
                         loading: loading || loadingEditName,
-                        classNameLoading: 'text-white',
                       }}
                       revertFunction
                     ></ButtonCancelSubmit>

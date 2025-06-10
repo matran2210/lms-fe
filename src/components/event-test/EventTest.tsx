@@ -272,8 +272,6 @@ const EventTest = ({ data }: { data: IEventTest }) => {
             resultFinishAt !== 1 && (
               <ButtonSecondary
                 title="Begin"
-                size="small"
-                full={false}
                 onClick={() => handleClickBegin()}
               />
             )}

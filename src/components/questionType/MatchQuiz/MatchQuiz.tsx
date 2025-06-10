@@ -50,6 +50,7 @@ interface IProps {
   isHideExhibit?: boolean
   isAlwaysShowAnswer?: boolean
   exhibitText?: string
+  correctAnswerClass?: string
   explainClassname?: string
 }
 
@@ -91,6 +92,7 @@ const MatchQuiz = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText = 'Exhibit',
+      correctAnswerClass,
       explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
@@ -508,13 +510,10 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <>
-              <Divider className="bg-ink-300" />
-              <div className="mb-4 text-base font-bold text-[#3F3F3F]">
-                Correct Answer:
-              </div>
+            <div className={clsx(correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
               <div
-                className={`relative w-full min-w-[700px]`}
+                className={`relative mt-4 w-full min-w-[700px]`}
                 ref={flowRef}
                 style={{
                   height: `${(correctNodes?.length / 2 || 1) * 100}px`,
@@ -531,14 +530,14 @@ const MatchQuiz = forwardRef(
                   />
                 </ReactFlowProvider>
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {solution && (
           <>
             <Divider className="my-8" />
-            <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+            <div className={clsx('bg-[#F9F9F9] mt-6 p-6', explainClassname)}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>

@@ -1,4 +1,5 @@
-import SappButton from '@components/base/button/SappButton'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonText from '@components/base/button/ButtonText'
 import Lottie from 'lottie-react'
 import Image, { StaticImageData } from 'next/image'
 import { useRef } from 'react'
@@ -58,7 +59,7 @@ const PopupStep = ({
         className={`absolute z-50 animate-jump-in rounded-xl bg-white p-4 ${className} w-[315px] text-ink-800`}
       >
         <div>
-          <div className="mb-4">
+          <div className={imgSrc && `mb-4`}>
             {(imgType === 'static' && typeof imgSrc === 'string') ||
             (typeof imgSrc === 'object' &&
               imgSrc !== null &&
@@ -82,32 +83,25 @@ const PopupStep = ({
             className={`mt-3 flex items-center ${index === 1 ? 'justify-end' : 'justify-between'}`}
           >
             {isEnd === true ? (
-              <SappButton
+              <ButtonPrimary
                 title="Finish"
-                className="px-5 py-2"
                 size="small"
-                isPadding={false}
-                childClass="text-sm"
                 onClick={handleClose}
+                className="min-w-[84px]"
               />
             ) : (
               <>
                 {index !== 1 && (
-                  <SappButton
+                  <ButtonText
                     title="Previous"
-                    className="px-5 py-2"
                     size="small"
-                    isPadding={false}
-                    childClass="text-medium-sm"
                     onClick={previousStep}
                   />
                 )}
-                <SappButton
+                <ButtonPrimary
                   title={titleButtonNext || 'Next'}
-                  className="bg-primary-3 ml-3 px-5 py-2"
+                  className="ml-3 min-w-[84px]"
                   size="small"
-                  isPadding={false}
-                  childClass="text-medium-sm"
                   onClick={index === total ? handleClose : nextStep}
                 />
               </>

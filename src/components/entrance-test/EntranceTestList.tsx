@@ -22,17 +22,13 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
     >
       {!isEmpty(entranceTestLists) ? (
         entranceTestLists?.map((e, index) => (
-          <div
+          <EntranceTest
             key={index}
-            className={`item flex flex-col bg-white p-[30px] shadow-sidebar`}
-          >
-            <EntranceTest
-              data={e}
-              test_id_default={entranceTestLists.find(
-                (entrance) => entrance.is_attempt === false,
-              )}
-            />
-          </div>
+            data={e}
+            test_id_default={entranceTestLists.find(
+              (entrance) => entrance.is_attempt === false,
+            )}
+          />
         ))
       ) : (
         <NoData />
