@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
-import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import { CoursesAPI } from '@pages/api/courses'
 import {
@@ -145,6 +145,7 @@ const CourseTabDocument = ({
   const refetch = () => {
     queryAction(['activity', activityId, courseId], 'refetch') // Gọi lại query [blogKeys.list(queryParams)] ngay lập tức
   }
+
   const items =
     selector?.tabs?.map((tab) => {
       return {
@@ -166,7 +167,6 @@ const CourseTabDocument = ({
                 >
                   {course_tab_documents?.map((e, i) => {
                     const gradeStatus = e?.quiz?.attempt?.grading_status
-
                     if (e?.type === 'QUIZ') {
                       return (
                         <div
@@ -211,15 +211,20 @@ const CourseTabDocument = ({
                     if (e.type === 'TEXT') {
                       return (
                         <div
-                          className={clsx(`select-none`, {
+                          className={clsx(``, {
                             hidden: focusOnlyQuiz.open,
                           })}
                           key={i + '_' + selector?.currentTabId}
                         >
-                          <TextDocument
+                          <HighlightableHTML
+                            initialHTML={e?.text_editor_content || ''}
+                            storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
+                            className="course-tab-text"
+                          />
+                          {/* <TextDocument
                             text_editor_content={e?.text_editor_content}
                             className="course-tab-text"
-                          ></TextDocument>
+                          ></TextDocument> */}
                         </div>
                       )
                     }

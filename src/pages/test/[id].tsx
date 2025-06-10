@@ -94,11 +94,11 @@ import {
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
-import { RequirementsTab } from './RequirementsTab'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import RequirementsTab from '@components/test/RequirementsTab'
 
 declare global {
   interface Window {
@@ -2524,7 +2524,7 @@ const TestDetail = () => {
                       >
                         <div
                           className={clsx(
-                            `absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline `,
+                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
                           )}
                           onClick={() => {
                             setActiveShowAll(!activeShowAll)
@@ -3049,7 +3049,7 @@ const TestDetail = () => {
                 !currentTabContent?.is_viewed_answer &&
                 quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                   <button
-                    className="flex w-45 items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
+                    className="w-45 flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
                     onClick={async () => {
                       const data = await getResult(currentTabContent)
                       handleSubmitAnswer('view-answer')
@@ -3109,6 +3109,7 @@ const TestDetail = () => {
             {/** End Scratchpads */}
 
             <TestTimeOutModal
+              type={type}
               okButtonCaption={
                 quizDetail?.grading_method === GRADING_METHOD.MANUAL
                   ? 'Review Answers'

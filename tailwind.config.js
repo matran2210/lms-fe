@@ -125,6 +125,7 @@ module.exports = {
       '4xl': '1920px',
     },
     fontSize: {
+      tiny: ['0.5rem', { lineHeight: '0.75rem' }] /* 8px, 12px */,
       xs: ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
       sm: ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
       base: ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
