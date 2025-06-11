@@ -29,9 +29,10 @@ interface IProps {
   content?: string | undefined | ReactNode
   children?: ReactNode
   headerClassName?: string
+  isClosable?: boolean
+
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
-  isClosable?: boolean
 }
 
 const SappModalV3 = ({

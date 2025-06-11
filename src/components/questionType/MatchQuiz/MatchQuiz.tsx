@@ -81,21 +81,16 @@ const MatchQuiz = forwardRef(
   (
     {
       data,
-      action,
       handleSaveHighLight,
       highlighted,
-      removeHighlight,
       allowHighLight,
       defaultAnswer,
-      done,
       extenalRef,
       corrects,
       solution,
       allowUnHighLight,
-      uuid,
       setOpenFile,
       isHideExhibit = true,
-      isAlwaysShowAnswer = false,
       exhibitText = 'Exhibit',
       correctAnswerClass,
       explainClassname,
@@ -540,10 +535,13 @@ const MatchQuiz = forwardRef(
         </div>
 
         {solution && (
-          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4 " text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx('bg-[#F9F9F9] mt-6 p-6', explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )

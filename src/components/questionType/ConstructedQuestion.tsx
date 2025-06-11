@@ -13,6 +13,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { Divider } from 'antd'
 
 type SheetData = {
   name: string
@@ -184,7 +185,15 @@ const EssayQuestionPreview = ({
   }
 
   return (
-    <div className={clsx('w-full overflow-hidden bg-white', className)}>
+    <div
+      className={clsx(
+        'w-full overflow-hidden',
+        {
+          'rounded-xl bg-ink-100 p-8': !isShowContent,
+        },
+        className,
+      )}
+    >
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -289,11 +298,7 @@ const EssayQuestionPreview = ({
             )}
           </div>
           {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && (
-              <div className="my-8">
-                <hr />
-              </div>
-            )}
+            !forCaseStudy && <Divider className="my-8" />}
         </>
       )}
       <>
@@ -301,7 +306,7 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-base font-semibold">
+                <div className="text-bw-13 text-lg font-semibold">
                   {fullData.done
                     ? 'Your Answer File:'
                     : 'Upload file to submit'}
@@ -339,6 +344,7 @@ const EssayQuestionPreview = ({
             </React.Fragment>
           ) : (
             <React.Fragment>
+              <Divider />
               <div
                 className={clsx(
                   'sapp-upload-file-preview',
@@ -371,6 +377,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
+              <Divider />
               {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy &&
                 data && (
@@ -413,7 +420,7 @@ const EssayQuestionPreview = ({
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 name={name}
@@ -496,7 +503,7 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 name={name}

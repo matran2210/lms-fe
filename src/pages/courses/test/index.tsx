@@ -78,7 +78,7 @@ const TestModal = ({
   const [openResource, setOpenPopup] = useState(false)
   const [openLastAttempt, setOpenLastAttempt] = useState(false)
   const [remainingTime, setRemainingTime] = useState<number>()
-  let remainingTimeLastAttempt = useRef<number>(0)
+  const remainingTimeLastAttempt = useRef<number | null>(null)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const onCancel = () => {
@@ -163,16 +163,19 @@ const TestModal = ({
           ),
         ).diff(dayjs(), 'seconds')
 
-        remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+        if (remainingTimeLastAttempt.current === null) {
+          remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+        }
+
         const remainingTimeInterval = setInterval(() => {
-          setRemainingTime(
-            remainingTimeLastAttempt?.current >= 0
-              ? remainingTimeLastAttempt?.current
-              : 0,
-          )
-          remainingTimeLastAttempt.current -= 1
-          if (remainingTimeLastAttempt.current <= 0) {
-            clearInterval(remainingTimeInterval)
+          if (remainingTimeLastAttempt.current !== null) {
+            // Kiểm tra null
+            const currentTime = remainingTimeLastAttempt.current
+            setRemainingTime(currentTime >= 0 ? currentTime : 0)
+            remainingTimeLastAttempt.current -= 1
+            if (remainingTimeLastAttempt.current <= 0) {
+              clearInterval(remainingTimeInterval)
+            }
           }
         }, 1000)
 
@@ -188,6 +191,21 @@ const TestModal = ({
       fetchResult(1, 10)
     }
   }, [open])
+
+  const isFinalAttemptTimeout =
+    remainingTimeLastAttempt?.current != null &&
+    remainingTimeLastAttempt.current <= 0 &&
+    data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
+
+  useEffect(() => {
+    const handleSubmit = async () => {
+      if (isFinalAttemptTimeout) {
+        await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
+      }
+    }
+
+    handleSubmit()
+  }, [isFinalAttemptTimeout])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -379,6 +397,7 @@ const TestModal = ({
     }
     return false
   }
+
   const renderOkButtonCaption = () => {
     // Case: Unlimited time attempt
     if (!data?.quiz?.is_limited) {
@@ -402,6 +421,7 @@ const TestModal = ({
   }
 
   const handleContinueLastAttempt = async () => {
+    if (remainingTimeLastAttempt.current === null) return
     if (remainingTimeLastAttempt.current <= 0) {
       handleFinishTest()
     } else {
@@ -416,6 +436,7 @@ const TestModal = ({
   const onSubmit = async () => {
     if (
       renderOkButtonCaption() === 'Continue' &&
+      remainingTimeLastAttempt.current !== null &&
       remainingTimeLastAttempt.current <= 0 &&
       isContinue
     ) {
@@ -423,17 +444,23 @@ const TestModal = ({
       handleFinishTest()
     }
     if (renderOkButtonCaption() === 'View Result') {
-      await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-      router.push({
-        pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-        query: { attempt: selectedResult?.label },
-      })
+      if (isManualGradingAndNotFinishedGrading) {
+        router.push(
+          `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+        )
+      } else {
+        router.push({
+          pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+          query: { attempt: selectedResult?.label },
+        })
+      }
       return
     }
     if (
       renderOkButtonCaption() === 'Retake' &&
       !isExpiredLastAttempt &&
       selectedResult?.status === 'IN_PROGRESS' &&
+      remainingTimeLastAttempt.current !== null &&
       remainingTimeLastAttempt.current > 0
     ) {
       setOpenLastAttempt(true)
@@ -445,14 +472,6 @@ const TestModal = ({
       handleSubmit()
     }
   }
-
-  const isFinalAttemptTimeout =
-    formatTime(
-      remainingTimeLastAttempt.current > 0
-        ? remainingTimeLastAttempt.current
-        : 0,
-    ) === '00:00:00' &&
-    data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
 
   return (
     <>
@@ -513,18 +532,19 @@ const TestModal = ({
                     )}
                   </div>
                   <div className="flex justify-center gap-4 pt-6">
-                    {(!!data?.quiz?.quiz_timed &&
+                    {((!!data?.quiz?.quiz_timed &&
                       !!remainingTimeLastAttempt.current &&
                       renderShowOkButton() &&
                       renderOkButtonCaption() === 'Continue') ||
-                      (renderOkButtonCaption() === 'View Result' && (
+                      renderOkButtonCaption() === 'View Result') &&
+                      remainingTimeLastAttempt.current !== null && (
                         <>
                           <div className="flex items-center gap-2 text-base font-semibold">
                             <RemainingTimeIcon />
                             Your remaining time:
                           </div>
                           <div
-                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-error'}`}
+                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt?.current > 0 ? 'text-info' : 'text-error'}`}
                           >
                             <div className="text-base font-bold">
                               {formatTime(
@@ -535,7 +555,7 @@ const TestModal = ({
                             </div>
                           </div>
                         </>
-                      ))}
+                      )}
                   </div>
                 </div>
               )}
@@ -725,6 +745,7 @@ const TestModal = ({
           handleRetake={handleRetakeNewAttempt}
           time={
             !!data?.quiz?.quiz_timed &&
+            remainingTimeLastAttempt.current !== null &&
             (remainingTime !== undefined && remainingTime >= 0 ? (
               <div
                 className={clsx(`text-base font-bold`, {

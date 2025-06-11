@@ -42,7 +42,7 @@ const QuitTestModal = ({
       buttonSize="medium"
       icon={<QuizIcon />}
       header="Are you sure?"
-      content="If you quit at this time, the test results will not be saved"
+      content={content}
       cancelButtonClass="underline !p-0 !w-fit hover:text-primary"
     />
   )
