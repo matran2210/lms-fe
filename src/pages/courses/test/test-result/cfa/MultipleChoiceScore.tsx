@@ -11,7 +11,7 @@ interface IProps {
   score?: number
 }
 
-const MultipleChoiceScore = ({
+const CfaMultipleChoiceScore = ({
   chartData,
   recommendation,
   isGraded,
@@ -23,7 +23,6 @@ const MultipleChoiceScore = ({
       <TotalScore
         score={score}
         globalAverage={GlobalAverage}
-        classGlobal="mt-15 xl:pr-0"
         isGraded={isGraded}
       />
       <div className="block w-full">
@@ -36,4 +35,4 @@ const MultipleChoiceScore = ({
   )
 }
 
-export default MultipleChoiceScore
+export default CfaMultipleChoiceScore

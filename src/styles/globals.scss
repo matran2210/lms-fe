@@ -22,8 +22,8 @@
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @import './components/drawer.scss';
-// @tailwind base;
-// @tailwind components;
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 @font-face {
@@ -673,6 +673,22 @@ textarea.is-invalid:focus {
 }
 
 @layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply border bg-white;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply rounded-full bg-transparent;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-primary;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-300;
+  }
+
   .grid-fit-content {
     grid-template-columns: min-content 1fr;
   }
@@ -1214,7 +1230,7 @@ td.py-5.px-3.sapp-table-quiz {
   @apply mb-0;
 }
 .ant-menu {
-  @apply bg-[#025eff];
+  @apply bg-[#091D37];
 }
 
 .ant-menu-item-selected {

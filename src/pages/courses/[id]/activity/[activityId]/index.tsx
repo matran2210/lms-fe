@@ -388,7 +388,7 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-[1144px] text-[#050505]`}>
+        <div className={`my-0 text-[#050505]`}>
           {/* Breadcrumbs */}
           <ul
             className={clsx(
@@ -467,12 +467,10 @@ const ActivityPage = () => {
               )}
             >
               <div className="text-bw-13 text-2xl font-medium">
-              <div className="text-bw-13 text-2xl font-medium">
                 <Tooltip title={activity?.name?.length > 95 && activity?.name}>
                   {activity?.name}
                 </Tooltip>
               </div>
-              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap text-sm">
               <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap text-sm">
                 <HourglassIcon />
                 <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
