@@ -57,24 +57,25 @@ export default function Layout(props: LayoutProps): ReactElement {
         <title>{title}</title>
       </Head>
       <div className="flex flex-nowrap rounded-xl">
-        <Sidebar
-          isOpened={isOpened}
-          toggleDrawer={toggleDrawer}
-          className={clsx(
-            'menu-sidebar-left',
-            'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-            'fixed hidden h-[calc(100vh-16px)] w-20 rounded-xl bg-white shadow-sidebar',
-            {
-              'overflow-hidden': !guideStatus,
-              'menu-sidebar-left--hover':
-                guideStatus && (guideStep === 2 || guideStep === 3),
-              'lg:block': showSidebar === true,
-            },
-            paddingTop,
-          )}
-          setOpenResource={setOpenResource}
-          openResource={openResource}
-        />
+        {showSidebar === true && (
+          <Sidebar
+            isOpened={isOpened}
+            toggleDrawer={toggleDrawer}
+            className={clsx(
+              'menu-sidebar-left',
+              'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
+              'fixed hidden h-[calc(100vh-16px)] w-20 rounded-xl bg-white shadow-sidebar lg:block',
+              {
+                'overflow-hidden': !guideStatus,
+                'menu-sidebar-left--hover':
+                  guideStatus && (guideStep === 2 || guideStep === 3),
+              },
+              paddingTop,
+            )}
+            setOpenResource={setOpenResource}
+            openResource={openResource}
+          />
+        )}
         <div
           className={clsx(`container min-h-screen`, {
             'max-w-[1179px]': size === 'sm',

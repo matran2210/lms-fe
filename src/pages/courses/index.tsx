@@ -165,7 +165,7 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="My Course" showSidebar={false}>
+      <Layout title="My Course">
         <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
           <div
             className={`relative mx-auto my-4 flex rounded-md py-3 
