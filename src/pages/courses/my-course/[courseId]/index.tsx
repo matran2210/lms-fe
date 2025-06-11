@@ -163,7 +163,7 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
+      <div className="my-0 pt-6">
         <div className="mb-10 rounded-lg bg-white px-8 py-4">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearchV2}

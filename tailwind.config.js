@@ -115,7 +115,6 @@ module.exports = {
       },
     },
     screens: {
-      xs: '375px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
@@ -239,14 +238,17 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+      },
+      // screens: {},
+    },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
   ],
-  corePlugins: {
-    container: {
-      center: true,
-    },
-  },
 }

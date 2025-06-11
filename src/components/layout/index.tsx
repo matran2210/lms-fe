@@ -1,24 +1,95 @@
-import { ReactElement, ReactNode } from 'react'
-import DashboardLayout from './DashboardLayout/DashboardLayout'
-import Head from 'next/head'
 import ModalMobile from '@components/base/modal/ModalMobile'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { useCourseContext } from '@contexts/index'
+import clsx from 'clsx'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { ReactElement, ReactNode, useState } from 'react'
+import { PageLink } from 'src/constants'
+import { useAppSelector } from 'src/redux/hook'
+import Sidebar from './Sidebar'
 
 interface LayoutProps {
   children: ReactNode
   title: string
+  size?: 'sm' | 'md' | 'xl'
+  showSidebar?: boolean
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
-  const { children, title } = props
+  const { children, title, size = 'xl', showSidebar = true } = props
+  const router = useRouter()
+  const [isOpened, setOpened] = useState(false)
+  const toggleDrawer = () => setOpened((prev) => !prev)
+
+  const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
+  const { showPinnedTrial } = useCourseContext()
+
+  const guideStatus = useAppSelector(
+    (state: { userGuideReducer: { status: any } }) =>
+      state.userGuideReducer?.status,
+  )
+
+  const [openResource, setOpenResource] = useState(false)
+
+  const isEnablePinnedPages = [
+    PageLink.COURSES,
+    PageLink.USERPAGE,
+    PageLink.COURSE_DETAIL,
+    PageLink.COURSE_PART_DETAIL,
+    PageLink.COURSE_ACTIVITY,
+  ].includes(router.pathname)
+
+  let paddingTop = ''
+
+  if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
+    paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
+  } else if (showPinnedTrial) {
+    paddingTop = 'pt-[54px]'
+  }
+
+  const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
 
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
+      <div className="flex flex-nowrap rounded-xl">
+        <Sidebar
+          isOpened={isOpened}
+          toggleDrawer={toggleDrawer}
+          className={clsx(
+            'menu-sidebar-left',
+            'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
+            'fixed hidden h-[calc(100vh-16px)] w-20 rounded-xl bg-white shadow-sidebar',
+            {
+              'overflow-hidden': !guideStatus,
+              'menu-sidebar-left--hover':
+                guideStatus && (guideStep === 2 || guideStep === 3),
+              'lg:block': showSidebar === true,
+            },
+            paddingTop,
+          )}
+          setOpenResource={setOpenResource}
+          openResource={openResource}
+        />
+        <div
+          className={clsx(`container min-h-screen`, {
+            'max-w-[1179px]': size === 'sm',
+            'max-w-[1444px]': size === 'md',
+            'max-w-[1524px]': size === 'xl',
+          })}
+        >
+          <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
+            <div className={clsx('ml-0 h-full', { 'lg:ml-20': showSidebar })}>
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
       <ModalMobile />
-      <DashboardLayout>{children}</DashboardLayout>
     </>
   )
 }
