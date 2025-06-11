@@ -35,7 +35,7 @@ function PinnedNotifications() {
         pinnedNotifications?.data?.content && (
           <React.Fragment>
             <div
-              className={`fixed top-0 z-50 h-12 w-full bg-[#33475B] text-white`}
+              className={`fixed left-0 right-0 top-0 z-50 mx-auto my-0 h-12 max-w-[1144px] bg-[#33475B] text-white max-[1199px]:mx-6`}
             >
               <Row className="flex h-12 flex-row">
                 <Col span={1}></Col>

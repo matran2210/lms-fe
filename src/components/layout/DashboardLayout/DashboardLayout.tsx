@@ -43,6 +43,8 @@ export default function DashboardLayout({
 
   if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
     paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
+  } else if (!pinnedNotifications?.data?.content) {
+    paddingTop = 'pt-[54px]'
   }
 
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)

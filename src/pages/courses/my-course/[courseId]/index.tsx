@@ -20,7 +20,6 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -213,9 +212,6 @@ const CourseDetail = () => {
             </div>
           </>
         )}
-        <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
-          <CtaTrial />
-        </div>
       </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
