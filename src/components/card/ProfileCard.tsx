@@ -32,7 +32,10 @@ const ProfileCard = ({
         </div>
       }
       variant="borderless"
-      className={clsx('profile-card w-full !shadow-none', className)}
+      className={clsx(
+        'profile-card w-full !shadow-none md:mt-8 lg:mt-10',
+        className,
+      )}
       extra={extra}
     >
       <div onScroll={onScroll} className={bodyClassName}>

@@ -136,7 +136,20 @@ const MyProfile = ({
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
-        <ProfileCard title="Overview">
+        <ProfileCard
+          title="Overview"
+          extra={
+            <div className="cursor-pointer text-primary hover:underline md:block lg:hidden">
+              <div
+                className="flex items-center justify-end gap-2"
+                onClick={handleChangeToEditForm}
+              >
+                <div>Edit Profile</div>
+                <Icon type="edit" />
+              </div>
+            </div>
+          }
+        >
           <>
             <ul>
               <TextWrapper
@@ -152,14 +165,14 @@ const MyProfile = ({
                 handleClickEdit={handleChangeToEditForm}
               >
                 {isEdit ? (
-                  <div className="flex items-center gap-2">
+                  <div className="flex w-full items-center gap-2">
                     <HookFormTextField
                       placeholder="Enter Text..."
                       control={control}
                       name="full_name"
                       skeleton={loadingEditName}
-                      className="w-full flex-1 "
-                      inputClassName="rounded-lg !h-[22px]"
+                      className="h-full w-full flex-1"
+                      inputClassName="rounded-lg h-full px-4 py-[10px]"
                       textSize="sm"
                     ></HookFormTextField>
                     <ButtonCancelSubmit
@@ -183,7 +196,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="max-w-[300px] flex-auto font-medium text-[#050505]">
+                  <div className="flex-auto font-medium text-[#050505] md:flex md:justify-end lg:max-w-[300px] lg:justify-start">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -296,9 +309,12 @@ const TextWrapper = ({
         {title}
       </div>
       <div
-        className={clsx('max-w-[300px] flex-auto font-medium text-[#050505]', {
-          '!max-w-full': isEdit,
-        })}
+        className={clsx(
+          'flex-auto font-medium text-[#050505] md:flex md:justify-end lg:max-w-[300px] lg:justify-start',
+          {
+            '!max-w-full': isEdit,
+          },
+        )}
       >
         {value && (
           <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
@@ -306,13 +322,15 @@ const TextWrapper = ({
         {children}
       </div>
       {!isEdit && showEditIcon && (
-        <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
-          <div
-            className="flex items-center justify-end gap-2"
-            onClick={handleClickEdit}
-          >
-            <div>Edit</div>
-            <Icon type="edit" />
+        <div className="flex-auto justify-end md:hidden lg:flex">
+          <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
+            <div
+              className="flex items-center justify-end gap-2"
+              onClick={handleClickEdit}
+            >
+              <div>Edit</div>
+              <Icon type="edit" />
+            </div>
           </div>
         </div>
       )}

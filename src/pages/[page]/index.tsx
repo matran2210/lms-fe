@@ -29,6 +29,7 @@ import MyPasword from '@components/profile/Security/MyPasword'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
+import ButtonDanger from '@components/base/button/ButtonDanger'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
@@ -60,6 +61,18 @@ const ProfilePage = () => {
     setAvatar(avatar)
   }
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser()).then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+        }
+      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
+    } catch (error) {}
+  }
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -126,19 +139,6 @@ const ProfilePage = () => {
     },
   ]
 
-  const handleLogout = async () => {
-    try {
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
-      const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
-    } catch (error) {}
-  }
-
   return (
     <Layout title="My Profile" size="sm">
       <div className="flex h-full w-full flex-col">
@@ -163,20 +163,29 @@ const ProfilePage = () => {
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
               />
-              <Tabs
-                tabBarExtraContent={
-                  <div
-                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-[#F80903]"
-                    onClick={handleLogout}
-                  >
-                    <Icon type="logout" className="font-normal" />
-                    <div>Logout</div>
-                  </div>
-                }
-                className="sapp-tabs-profile"
-                defaultActiveKey="my-profile"
-                items={items}
-              />
+              <div>
+                <Tabs
+                  tabBarExtraContent={
+                    <div
+                      className="hover-transition-font-weight cursor-pointer items-center gap-2 font-bold text-error md:hidden lg:flex"
+                      onClick={handleLogout}
+                    >
+                      <Icon type="logout" className="font-normal" />
+                      <div>Logout</div>
+                    </div>
+                  }
+                  className="sapp-tabs-profile"
+                  defaultActiveKey="my-profile"
+                  items={items}
+                />
+                <div
+                  className="hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden"
+                  onClick={handleLogout}
+                >
+                  <Icon type="logout" className="font-normal" />
+                  <div>Logout</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
