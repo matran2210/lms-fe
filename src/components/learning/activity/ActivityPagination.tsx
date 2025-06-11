@@ -129,7 +129,7 @@ const ActivityPagination = ({
         <div
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
-            'learning-activity-collapse shadow-learning-activity rounded-xl bg-white p-6',
+            'learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity',
             { hidden: focusOnlyQuiz },
           )}
         >
@@ -205,7 +205,6 @@ const ActivityPagination = ({
                       'Click Button Next Activity',
                     )
                   }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
                   className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
                 >
                   Next Activity <ArrowRight />
