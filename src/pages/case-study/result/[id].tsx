@@ -851,7 +851,6 @@ const CaseStudyResult = () => {
                     minWidth={200}
                     minHeight={200}
                     key={e.id}
-                    dragHandleClassName="modal-header"
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center"
                   >
