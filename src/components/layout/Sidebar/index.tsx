@@ -43,12 +43,12 @@ export default function Sidebar({
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
 
   return (
-    <>
+    <div>
       <div
         className={clsx(
           className,
           isGuideActive ? 'z-50' : 'z-30',
-          isOpened || (isGuideActive && 'w-[230px]'),
+          isOpened || (isGuideActive && 'w-[220px]'),
           'mx-2 my-2 rounded-xl',
         )}
       >
@@ -125,6 +125,6 @@ export default function Sidebar({
         } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-[#00000080]`}
       />
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
-    </>
+    </div>
   )
 }

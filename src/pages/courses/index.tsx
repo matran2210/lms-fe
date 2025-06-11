@@ -165,10 +165,10 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="My Course">
+      <Layout title="My Course" showSidebar={false}>
         <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
           <div
-            className={`relative mx-auto my-4 flex max-w-[1144px] rounded-md py-3 max-[1199px]:mx-6 
+            className={`relative mx-auto my-4 flex rounded-md py-3 
               ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
           >
             <SearchForm
@@ -189,7 +189,7 @@ const MyCourse = () => {
           </div>
         </div>
 
-        <Row className="mx-auto my-0 flex max-w-[1144px] rounded-md bg-white shadow-sidebar">
+        <Row className="mx-auto my-0 flex rounded-md bg-white shadow-sidebar">
           <Col
             span={16}
             className={`heading relative rounded-md bg-white max-[1199px]:mx-6
@@ -261,7 +261,7 @@ const MyCourse = () => {
             )}
           </Col>
         </Row>
-        <div className="mx-auto mb-6 mt-8 flex max-w-[1144px] items-center justify-between">
+        <div className="mx-auto mb-6 mt-8 flex items-center justify-between">
           <h1 className="text-2xl font-semibold">My Courses</h1>
           <div className={`relative`}>
             <Filter
@@ -283,7 +283,7 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 max-w-[1144px] ${
+          className={`relative mx-auto my-0 ${
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
