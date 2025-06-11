@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
 import SubjectItem from './SubjectItem'
-import SappDrawer from '@components/base/SappDrawer'
-import { getMe, makeContactDefault } from 'src/redux/slice/User/User'
-import { useAppDispatch } from 'src/redux/hook'
 import ProfileCard from '@components/card/ProfileCard'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import ProgramDetail from '../ProgramDetail'
 import { Select } from 'antd'
 import Icon from '@components/icons'
+import { CollapseArrowIcon } from '@assets/icons'
+
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'
   status: boolean
@@ -21,12 +18,11 @@ interface IProps {
   isEdit: boolean
 }
 const SubjectList = ({ isEdit }: IProps) => {
-  const dispatch = useAppDispatch()
-
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
     course_category_name: 'CMA' | 'CFA' | 'ACCA'
   }>()
+
   const closeMakeDefault = () => {
     setMakeDefaultDrawer(undefined)
   }
@@ -73,7 +69,7 @@ const SubjectList = ({ isEdit }: IProps) => {
           onClose={closeMakeDefault}
           title={
             <Select
-              suffixIcon={<Icon type="arrow-select" />}
+              suffixIcon={<CollapseArrowIcon selected />}
               value={makeDefaultDrawer?.course_category_name}
               onChange={(value) => {
                 setMakeDefaultDrawer({
@@ -87,7 +83,12 @@ const SubjectList = ({ isEdit }: IProps) => {
             />
           }
           handleCancel={closeMakeDefault}
-          classNameHeader="bg-white !text-black"
+          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
+          classNameBody="md:px-0 lg:px-8"
+          rootClassName={'profile-subject-drawer'}
+          classNames={{
+            content: 'md:rounded-2xl lg:rounded-none',
+          }}
         >
           <ProgramDetail
             typeProgram={makeDefaultDrawer?.course_category_name}
@@ -95,6 +96,8 @@ const SubjectList = ({ isEdit }: IProps) => {
           />
         </SappDrawerV2>
       )}
+
+      {}
     </ProfileCard>
   )
 }

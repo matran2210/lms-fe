@@ -28,6 +28,7 @@ import ProfileList from '@components/profile/ProfileInformation/ProfileList'
 import MyPasword from '@components/profile/Security/MyPasword'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import Footer from '@components/layout/Footer'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
@@ -139,17 +140,17 @@ const ProfilePage = () => {
   }
 
   return (
-    <Layout title="My Profile">
+    <Layout title="My Profile" size="sm">
       <div className="flex h-full w-full flex-col">
         <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-          <div className="py-4.5 mx-auto my-0 flex h-full max-w-[1144px]">
+          <div className="py-4.5 mx-auto my-0 flex h-full">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="mx-auto my-0 flex w-full max-w-[1144px] grow flex-col px-5 xl:px-0">
+        <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main sm:mx-4 lg:mx-0 ">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
@@ -179,6 +180,7 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </Layout>
   )

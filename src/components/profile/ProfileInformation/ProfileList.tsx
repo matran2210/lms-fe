@@ -9,6 +9,7 @@ import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import Icon from '@components/icons'
 import { Divider, Select, Switch } from 'antd'
 import { IUserContact } from 'src/redux/types/User/urser'
+import { CollapseArrowIcon } from '@assets/icons'
 interface ProfileOptionItem {
   label: string
   value: string
@@ -109,7 +110,7 @@ const ProfileList = ({ isEdit }: IProps) => {
           onClose={closeMakeDefault}
           title={
             <Select
-              suffixIcon={<Icon type="arrow-select" />}
+              suffixIcon={<CollapseArrowIcon selected />}
               value={makeDefaultDrawer?.id}
               onChange={(value, option) => {
                 if (!Array.isArray(option) && option) {
@@ -130,7 +131,12 @@ const ProfileList = ({ isEdit }: IProps) => {
             />
           }
           handleCancel={closeMakeDefault}
-          classNameHeader="bg-white !text-black"
+          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
+          classNameBody="md:px-0 lg:px-8"
+          rootClassName={'profile-subject-drawer'}
+          classNames={{
+            content: 'md:rounded-2xl lg:rounded-none',
+          }}
         >
           <div className="flex flex-col gap-4">
             {makeDefaultDrawer?.phone && (
