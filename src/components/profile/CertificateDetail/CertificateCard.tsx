@@ -11,8 +11,13 @@ const CertificateCard = ({
   bodyClassName,
 }: PropsWithChildren<IProps>) => {
   return (
-    <div className={`certificate-card-wrapper relative h-screen w-screen`}>
-      <div className={clsx('absolute inset-0 bg-white/25', className)} />
+    <div
+      className={clsx(
+        `certificate-card-wrapper relative h-screen w-screen`,
+        className,
+      )}
+    >
+      <div className={'absolute inset-0 bg-white/25'} />
       <div className={clsx('relative z-10 flex h-full', bodyClassName)}>
         {children}
       </div>
