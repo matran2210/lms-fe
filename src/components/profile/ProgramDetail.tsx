@@ -1,12 +1,9 @@
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { ISubjectItem } from 'src/redux/types/User/urser'
-import TabLayout from './TabLayout'
-import SappButton from '@components/base/button/SappButton'
 import Icon from '@components/icons'
 import { Divider } from 'antd'
 import SappCollapse from '@components/collapse/SappCollapse'
@@ -78,6 +75,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
             <div key={`${subject.id}-${index}`}>
               <SappCollapse
                 ghost
+                className="profile-program-collapse"
                 items={[
                   {
                     key: '1',

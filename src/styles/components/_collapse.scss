@@ -5,3 +5,15 @@
     border-top: none;
   }
 }
+.profile-program-collapse {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      @apply p-0;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}
