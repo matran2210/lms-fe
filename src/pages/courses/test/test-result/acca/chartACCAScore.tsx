@@ -1,7 +1,8 @@
 import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage } from '@utils/helpers'
+import { useDraggable } from 'react-use-draggable-scroll'
+import { useScrollShadows } from 'src/hooks/useScrollShadows'
 import { ChartDatum, IQuizAttempComment } from 'src/type'
-
 interface IProps {
   data: ChartDatum[]
   recommendation: IQuizAttempComment[]
@@ -14,12 +15,18 @@ interface IProps {
  *
  */
 const ChartACCAScore = ({ data, recommendation }: IProps) => {
+  const { ref, showLeft, showRight } = useScrollShadows<HTMLDivElement>()
+  const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
     <div className="relative mb-4 block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-ink-800 shadow-sidebar xl:mb-6">
       <div className="mb-8 text-lg font-semibold ">
         Multiple Choice Score by Part
       </div>
-      <div className="flex-start scrollbar flex w-full snap-x flex-row gap-12 overflow-x-auto scroll-smooth pb-6">
+      <div
+        className="scrollbar flex w-full cursor-grab select-none gap-12 space-x-3 overflow-x-scroll pb-6"
+        ref={ref}
+        {...events}
+      >
         {data?.map((item: ChartDatum) => {
           const percentage = calculatePercentage(
             item?.section_score,
@@ -46,14 +53,22 @@ const ChartACCAScore = ({ data, recommendation }: IProps) => {
             </div>
           )
         })}
-        {/* <div
-          className="absolute bottom-0 right-0 h-full w-48"
-          style={{
-            background:
-              'linear-gradient(270deg, #FFF 38.41%, rgba(255, 255, 255, 0.00) 100%)',
-          }}
-        /> */}
+        {/* Left shadow */}
+        <div
+          className={`pointer-events-none absolute bottom-0 left-0 h-2/3 w-28 bg-gradient-to-r from-white to-white/0 transition-opacity duration-300 ${
+            showLeft ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+
+        {/* Right shadow */}
+        <div
+          className={`pointer-events-none absolute bottom-0 right-0 h-2/3 w-28 bg-gradient-to-l from-white to-white/0 transition-opacity duration-300 ${
+            showRight ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
       </div>
+      {/* Conditional shadows */}
+
       <div>
         {recommendation?.map((item, index) => (
           <Recommendation data={item} key={index} />
