@@ -94,6 +94,8 @@ import { Tooltip } from 'antd'
 import SappButton from '@components/base/button/SappButton'
 import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 declare global {
   interface Window {
@@ -2293,8 +2295,10 @@ const TestDetail = () => {
   }
   const isGradingAfterEachQuestion =
     quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
-
+  const isGradingAfterAllQuestion =
+    quizDetail?.grading_preference === GradingPreference.AFTER_ALL_QUESTIONS
   const groupAction = () => {
+    const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
@@ -2302,12 +2306,7 @@ const TestDetail = () => {
             currentTabContent?.qType,
           ) &&
             !currentTabContent?.is_viewed_answer && (
-              <SappButton
-                disabled={currentTabContent?.is_viewed_answer}
-                className={clsx({
-                  'cursor-not-allowed': currentTabContent?.is_viewed_answer,
-                })}
-                color="outline"
+              <ButtonSecondary
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
@@ -2315,51 +2314,148 @@ const TestDetail = () => {
                 title="Clear Selection"
               />
             )}
-          <SappButton
-            onClick={async () => {
-              if (isGradingAfterEachQuestion) {
-                if (currentTabContent?.is_viewed_answer) {
+          <Tooltip
+            title={
+              (isGradingAfterEachQuestion &&
+                currentTabContent?.is_viewed_answer) ||
+              isGradingAfterAllQuestion ||
+              ![
+                QUESTION_TYPES.TRUE_FALSE,
+                QUESTION_TYPES.ONE_CHOICE,
+                QUESTION_TYPES.MULTIPLE_CHOICE,
+              ].includes(currentTabContent?.qType)
+                ? null
+                : 'You should select an answer before click'
+            }
+            classNames={{ root: 'max-w-72' }}
+            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+            mouseEnterDelay={0.3}
+            placement="left"
+          >
+            <ButtonPrimary
+              onClick={async () => {
+                if (isGradingAfterEachQuestion) {
+                  if (currentTabContent?.is_viewed_answer) {
+                    if (indexTab < filteredTabs.length - 1) {
+                      handleChangeTab(filteredTabs[indexTab + 1].id)
+                    } else if (indexTab === filteredTabs.length - 1) {
+                      handleSubmitAnswer('finish')
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    }
+                  } else {
+                    if (indexTab < filteredTabs.length - 1) {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                      confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                    } else {
+                      handleSubmitAnswer('finish')
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    }
+                  }
+                } else {
+                  if (indexTab < filteredTabs.length - 1) {
+                    handleChangeTab(filteredTabs[indexTab + 1].id)
+                    handleSubmitAnswer('change-tab')
+                  } else if (indexTab === filteredTabs.length - 1) {
+                    handleSubmitAnswer('finish')
+                    if (checkUnSubmitAnswer()?.length > 0) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
+                    dispatch(disableUnsavedChange())
+                  }
+                }
+                trackGAEvent('Click Button Confirm Answer')
+              }}
+              title={
+                (isGradingAfterEachQuestion ? (
+                  currentTabContent?.is_viewed_answer ? (
+                    indexTab < filteredTabs.length - 1 ? (
+                      <div className="flex items-center gap-2">
+                        Next Question <Icon type="arrow-right" />
+                      </div>
+                    ) : (
+                      'Finish'
+                    )
+                  ) : (
+                    'Confirm'
+                  )
+                ) : indexTab < filteredTabs.length - 1 ? (
+                  'Confirm & Next'
+                ) : (
+                  'Confirm'
+                )) as string
+              }
+            />
+            {/* <SappButton
+              onClick={async () => {
+                if (isGradingAfterEachQuestion) {
+                  if (currentTabContent?.is_viewed_answer) {
+                    const index = filteredTabs.findIndex(
+                      (e: any) => e.id === currentPage,
+                    )
+                    handleChangeTab(filteredTabs[index + 1].id)
+                  } else {
+                    const data = await getResult(currentTabContent)
+                    handleSubmitAnswer('view-answer')
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
+                  }
+                } else {
                   const index = filteredTabs.findIndex(
                     (e: any) => e.id === currentPage,
                   )
                   handleChangeTab(filteredTabs[index + 1].id)
-                } else {
-                  const data = await getResult(currentTabContent)
-                  handleSubmitAnswer('view-answer')
-                  confirmAnswer(
-                    data?.corrects,
-                    data?.solution,
-                    currentTabContent,
-                    data?.isSelfReflection,
-                    data?.requirements,
-                  )
+                  handleSubmitAnswer('change-tab')
                 }
-              } else {
-                const index = filteredTabs.findIndex(
-                  (e: any) => e.id === currentPage,
-                )
-                handleChangeTab(filteredTabs[index + 1].id)
-                handleSubmitAnswer('change-tab')
-              }
 
-              trackGAEvent('Click Button Confirm Answer')
-            }}
-            title={
-              (isGradingAfterEachQuestion
-                ? currentTabContent?.is_viewed_answer
-                  ? filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                      filteredTabs.length - 1 && (
+                trackGAEvent('Click Button Confirm Answer')
+              }}
+              title={
+                (isGradingAfterEachQuestion ? (
+                  currentTabContent?.is_viewed_answer ? (
+                    filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 ? (
                       <div className="flex items-center gap-2">
                         Next Question <Icon type="arrow-right" />
                       </div>
+                    ) : (
+                      'Finish'
                     )
-                  : 'Confirm'
-                : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1
-                  ? 'Confirm & Next'
-                  : 'Confirm') as string
-            }
-          />
+                  ) : (
+                    'Confirm'
+                  )
+                ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                  filteredTabs.length - 1 ? (
+                  'Confirm & Next'
+                ) : (
+                  'Finish'
+                )) as string
+              }
+            /> */}
+          </Tooltip>
         </div>
       </div>
     )

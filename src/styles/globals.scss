@@ -1406,3 +1406,8 @@ select:focus {
 .react-flow__panel {
   display: none;
 }
+
+mark {
+  cursor: pointer;
+  pointer-events: auto;
+}

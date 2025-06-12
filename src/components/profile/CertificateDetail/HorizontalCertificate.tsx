@@ -5,8 +5,8 @@ import Image from 'next/image'
 import Icon from '@components/icons'
 import { ICertificate } from '@pages/certificates/[id]'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
-
-const { Title, Text } = Typography
+import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
+import SAPP_Logo from '@assets/images/sapp_logo.svg'
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate
@@ -20,29 +20,42 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   onDownload,
 }) => {
   return (
-    <CertificateCard bodyClassName="flex justify-center py-14 container mx-auto px-149">
-      <div className="flex  h-full max-w-[90%] flex-col items-center gap-10">
+    <CertificateCard
+      bodyClassName="flex h-screen justify-center container mx-auto"
+      className="lg:hidden"
+    >
+      <div className="flex max-w-[90%] flex-col items-center gap-10 py-[56px]">
         <div
-          className="flex cursor-pointer items-end"
+          className="flex w-full flex-shrink-0 cursor-pointer items-end"
           onClick={() => window.open('https://sapp.edu.vn', '_blank')}
         >
-          <Icon type="sapp-icon" />
-          <Icon type="sapp-logo" />
-        </div>
-        <div className="flex h-full items-center justify-center">
-          {certificate?.certificate_url && (
+          <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
             <Image
-              src={certificate.certificate_url}
-              alt={certificate.course.name}
-              className="max-h-full max-w-full"
-              width={726}
-              height={515}
-              priority
-              style={{ objectFit: 'contain' }}
+              src={SAPP_Logo}
+              alt="SAPP Logo"
+              priority={true}
+              layout="responsive"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full flex-1 items-center justify-center overflow-hidden">
+          {certificate?.certificate_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={certificate?.certificate_url || ''}
+              alt={certificate?.course.name}
+              className="max-h-full max-w-full object-contain"
+            />
+          ) : (
+            <CertificateImg
+              size={500}
+              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>
-        <div className="flex flex-col items-center gap-12">
+
+        <div className="flex h-[200px] flex-shrink-0 flex-col items-center gap-12">
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-4">
               <div className="text-5xl font-bold text-primary">

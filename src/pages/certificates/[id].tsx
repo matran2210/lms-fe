@@ -8,6 +8,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import useDownloadImage from 'src/hooks/useDownloadImage'
 import CertificateVertical from '@components/profile/CertificateDetail/VerticalCertificate'
+import HorizontalCertificate from '@components/profile/CertificateDetail/HorizontalCertificate'
 
 export interface ICertificate {
   certificate_url: string
@@ -53,10 +54,10 @@ const Certificate = () => {
     <SappLoadingGlobal loading={isLoading}>
       <SinglePageLayout title="Certificate">
         <CertificateVertical certificate={certificate} onDownload={download} />
-        {/* <HorizontalCertificate
+        <HorizontalCertificate
           certificate={certificate}
           onDownload={download}
-        /> */}
+        />
       </SinglePageLayout>
     </SappLoadingGlobal>
   )

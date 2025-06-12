@@ -1,6 +1,11 @@
 .sapp-tabs-profile {
   .ant-tabs-nav {
     @apply px-0;
+    .ant-tabs-nav-wrap {
+      .ant-tabs-nav-list {
+        @apply flex md:w-full md:justify-between lg:w-auto;
+      }
+    }
   }
   .ant-tabs-tab + .ant-tabs-tab {
     margin-left: 64px;
@@ -27,7 +32,7 @@
 
 .ant-card.profile-card {
   .ant-card-head {
-    @apply border-b-0;
+    @apply border-b-0 p-0;
     .ant-card-head-wrapper {
       .ant-card-head-title {
         @apply text-xl font-bold text-secondary;
@@ -35,7 +40,7 @@
     }
   }
   .ant-card-body {
-    @apply py-0;
+    @apply p-0;
   }
 }
 
