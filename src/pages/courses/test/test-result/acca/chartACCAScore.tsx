@@ -1,11 +1,9 @@
-import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage } from '@utils/helpers'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { useScrollShadows } from 'src/hooks/useScrollShadows'
-import { ChartDatum, IQuizAttempComment } from 'src/type'
+import { ChartDatum } from 'src/type'
 interface IProps {
   data: ChartDatum[]
-  recommendation: IQuizAttempComment[]
 }
 
 /**
@@ -14,11 +12,11 @@ interface IProps {
  * Renders a horizontal bar chart displaying ACCA - Low F scores by part.
  *
  */
-const ChartACCAScore = ({ data, recommendation }: IProps) => {
+const ChartACCAScore = ({ data }: IProps) => {
   const { ref, showLeft, showRight } = useScrollShadows<HTMLDivElement>()
   const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
-    <div className="relative mb-4 block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-ink-800 shadow-sidebar xl:mb-6">
+    <div className="relative block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-ink-800 shadow-sidebar">
       <div className="mb-8 text-lg font-semibold ">
         Multiple Choice Score by Part
       </div>
@@ -66,13 +64,6 @@ const ChartACCAScore = ({ data, recommendation }: IProps) => {
             showRight ? 'opacity-100' : 'opacity-0'
           }`}
         />
-      </div>
-      {/* Conditional shadows */}
-
-      <div>
-        {recommendation?.map((item, index) => (
-          <Recommendation data={item} key={index} />
-        ))}
       </div>
     </div>
   )

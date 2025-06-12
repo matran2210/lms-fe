@@ -82,11 +82,11 @@ const TestResultPage = ({
         if (!F_LOW_CODES.includes(subjectCode)) {
           return (
             <div className={commonMultipleScoreStyle}>
-              <div className="flex max-h-full flex-col overflow-y-auto">
-                <ChartACCAScore
-                  data={chartData?.chart_data}
-                  recommendation={questions?.quizAttempt?.attempt_gradings}
-                />
+              <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
+                <ChartACCAScore data={chartData?.chart_data} />
+                {questions?.quizAttempt?.attempt_gradings?.map(
+                  (item, index) => <Recommendation data={item} key={index} />,
+                )}
                 <ScoreDetail
                   className={'relative'}
                   yourScoreDetailRef={yourScoreDetailRef}
@@ -139,10 +139,10 @@ const TestResultPage = ({
             <div className="max-h-ful flex flex-col">
               <div className="mb-4 items-start rounded-xl bg-white p-6 shadow-sidebar xl:mb-6">
                 <ChartCFAScore data={chartData?.chart_data} />
-                {questions?.quizAttempt?.attempt_gradings?.map(
-                  (item, index) => <Recommendation data={item} key={index} />,
-                )}
               </div>
+              {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
+                <Recommendation data={item} key={index} />
+              ))}
               <ScoreDetail
                 className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
