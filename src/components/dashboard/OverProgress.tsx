@@ -66,7 +66,11 @@ const OverProgress = () => {
               name: '',
               itemStyle: { color: '#FFB700' },
             }, // green
-            { value: 100, name: '', itemStyle: { color: '#FFF1CC' } }, // light yellow
+            {
+              value: values.uncompleted,
+              name: '',
+              itemStyle: { color: '#FFF1CC' },
+            }, // light yellow
           ],
         },
       ],
@@ -95,7 +99,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
+    <div className="flex w-[566px] flex-col rounded-2xl bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
       <div className="mb-5 flex items-center justify-between pb-3">
         <div className="min-w-fit text-xl font-semibold text-ink-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}

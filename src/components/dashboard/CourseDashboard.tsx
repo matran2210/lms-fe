@@ -3,21 +3,48 @@ import WeeklyReport from '@components/dashboard/WeeklyReport'
 import TopicProgress from '@components/dashboard/TopicProgress'
 import LearningResults from '@components/dashboard/LearningResults'
 import OngoingActivities from '@components/dashboard/OngoingActivities'
+import OverallProgress from './dashboard-normal/OverallProgress'
 
 const CourseDashboard = () => {
   return (
-    <div className="mx-auto flex max-w-[1729px] grow flex-col gap-4 bg-[#F9F9F9] xl:flex-row 3xl:gap-6">
-      <div className="flex flex-col gap-4 2xl:w-[65%] 3xl:gap-6">
-        <div className="grid min-h-80 grid-cols-1 gap-2 lg:grid-cols-9 3xl:gap-6">
-          <OverProgress />
-          <WeeklyReport />
+    <div className="flex max-w-[1560px] flex-col gap-4 bg-[#F9F9F9]">
+      <div className="grid xl:grid-cols-2 xl:gap-6">
+        <div className="min-h-80">
+          <OverallProgress />
         </div>
-        <TopicProgress />
+        <div className="min-h-80 rounded-2xl bg-white shadow-matchingquiz">
+          b
+        </div>
       </div>
-      <div className="flex grow flex-col gap-4 3xl:gap-6">
-        <LearningResults />
-        <OngoingActivities />
+
+      <div className="flex">
+        <div className="w-[357px] rounded-2xl bg-white shadow-matchingquiz">
+          sss
+        </div>
+        <div className="w-[357px] rounded-2xl bg-white shadow-matchingquiz">
+          sss
+        </div>
+        <div className="w-[357px] rounded-2xl bg-white shadow-matchingquiz">
+          sss
+        </div>
+        <div className="w-[357px] rounded-2xl bg-white shadow-matchingquiz">
+          sss
+        </div>
+        <div className="w-[357px] rounded-2xl bg-white shadow-matchingquiz">
+          sss
+        </div>
       </div>
+
+      <div className="grid xl:grid-cols-2  3xl:gap-6">
+        <div>
+          <TopicProgress />
+        </div>
+        <div className="flex rounded-2xl bg-white shadow-matchingquiz 3xl:px-8">
+          {/* <LearningResults /> */}
+          learning
+        </div>
+      </div>
+      <div>aâ</div>
     </div>
   )
 }

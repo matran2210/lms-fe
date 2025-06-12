@@ -107,12 +107,34 @@ const TopicProgress = () => {
       //     },
       //   ],
       // }
+
       const option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: function (params: any) {
+            return `
+              <div style="
+                font-weight: 500;
+                box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
+                min-width: 120px;
+                background: '#fff';
+                text-align: left;
+              ">
+                <div style="font-weight: 700; color: #2563eb; margin-bottom: 0.25rem;">${params.name}</div>
+                <div>Hoàn thành: <span style="font-weight:700; color:#16a34a;">${params.value}%</span></div>
+              </div>
+            `
+          },
+        },
         xAxis: {
           type: 'category',
           data: data.map((e: ITopicProgress) => e.short_name || e.name),
           axisLabel: {
             show: true,
+            color: '#374151', // Màu chữ (blue-600)
+            fontSize: 14, // Cỡ chữ
+            fontWeight: 500, // Đậm
+            lineHeight: 22,
             formatter: function (value: string) {
               const maxLength = 10 // số ký tự tối đa muốn hiển thị
               return value.length > maxLength
@@ -120,6 +142,12 @@ const TopicProgress = () => {
                 : value
             },
             overflow: 'truncate', // hoặc 'break', 'breakAll'
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#D1D5DB', // Màu của đường viền trục Y
+            },
           },
           splitLine: {
             show: false, // ✅ Tắt đường kẻ dọc
@@ -129,10 +157,33 @@ const TopicProgress = () => {
           type: 'value',
           min: 0,
           max: 100, // ✅ Trục dọc có giá trị tối đa là 100
+          axisLine: {
+            show: false,
+            lineStyle: {
+              color: '#D1D5DB', // Màu của đường viền trục Y
+              width: 1, // Độ dày của đường viền
+            },
+          },
+          axisLabel: {
+            show: true,
+            color: '#374151', // Màu chữ (blue-600)
+            fontSize: 12, // Cỡ chữ
+            fontWeight: 400,
+          },
+          axisTick: {
+            show: false,
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: '#D1D5DB', // Màu của đường kẻ ngang
+              width: 1, // Độ dày của đường kẻ
+            },
+          },
         },
         series: [
           {
-            data: data.map((e: ITopicProgress, idx) => ({
+            data: data.map((e: ITopicProgress) => ({
               value: e.total_activities
                 ? Math.round(
                     (e.completed_activities / e.total_activities) * 100,
@@ -140,7 +191,7 @@ const TopicProgress = () => {
                 : 0,
               itemStyle: {
                 color: '#63ACFF', // Màu xen kẽ
-                borderRadius: [8, 8, 0, 0],
+                borderRadius: [12, 12, 0, 0],
               },
             })),
             type: 'bar',
@@ -173,7 +224,7 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[50vh] grow flex-col rounded-2xl bg-white px-3 pb-7 pt-4 shadow-matchingquiz xl:h-auto 3xl:px-8">
+    <div className="flex min-h-[50vh] grow flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
       <div className="mb-5 pb-3 text-lg font-bold text-[#252F4A] 4xl:text-xl">
         Topic Progress
       </div>
