@@ -3135,18 +3135,6 @@ const TestDetail = () => {
               }}
               handleCancel={() => setUnSubmitAnswer(false)}
             />
-            <UnSubmitAnswerModal
-              open={openUnSubmitAnswer}
-              setOpen={setUnSubmitAnswer}
-              data={unSubmitAnswerData}
-              handleSubmit={() => {
-                if (type !== 'event-test') {
-                  setUnSubmitAnswer(false)
-                }
-                handleSubmitQuestions('submit')
-              }}
-              handleCancel={() => setUnSubmitAnswer(false)}
-            />
 
             <ModalUploadFile
               open={openUpload?.status}
