@@ -45,8 +45,6 @@ export default function Layout(props: LayoutProps): ReactElement {
 
   if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
     paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
-  } else if (showPinnedTrial) {
-    paddingTop = 'pt-[54px]'
   }
 
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -64,7 +62,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             className={clsx(
               'menu-sidebar-left',
               'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-              'fixed hidden h-[calc(100vh-16px)] w-20 rounded-xl bg-white shadow-sidebar lg:block',
+              'fixed hidden h-[calc(100vh-16px-60px)] w-20 rounded-xl bg-white shadow-sidebar lg:block',
               {
                 'overflow-hidden': !guideStatus,
                 'menu-sidebar-left--hover':
