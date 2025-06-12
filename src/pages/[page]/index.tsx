@@ -30,6 +30,7 @@ import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
 import ButtonDanger from '@components/base/button/ButtonDanger'
+import clsx from 'clsx'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
@@ -167,7 +168,7 @@ const ProfilePage = () => {
                 <Tabs
                   tabBarExtraContent={
                     <div
-                      className="hover-transition-font-weight cursor-pointer items-center gap-2 font-bold text-error md:hidden lg:flex"
+                      className="hover-transition-font-weight hidden cursor-pointer items-center gap-2 font-bold text-error lg:flex"
                       onClick={handleLogout}
                     >
                       <Icon type="logout" className="font-normal" />
@@ -179,7 +180,12 @@ const ProfilePage = () => {
                   items={items}
                 />
                 <div
-                  className="hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden"
+                  className={clsx(
+                    'hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden',
+                    {
+                      '!hidden': isEdit,
+                    },
+                  )}
                   onClick={handleLogout}
                 >
                   <Icon type="logout" className="font-normal" />

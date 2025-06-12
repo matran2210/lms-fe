@@ -1,6 +1,7 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import HookFormTextFieldV2 from '@components/base/textfield/HookFormTextFieldV2'
 import ProfileCard from '@components/card/ProfileCard'
 import Icon from '@components/icons'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,10 +12,14 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
+import {
+  convertHumanReadableToSnakeCase,
+  convertSnakeCaseToHumanReadable,
+} from '@utils/index'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
-import { useForm } from 'react-hook-form'
+import { Control, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
@@ -139,15 +144,19 @@ const MyProfile = ({
         <ProfileCard
           title="Overview"
           extra={
-            <div className="cursor-pointer text-primary hover:underline md:block lg:hidden">
-              <div
-                className="flex items-center justify-end gap-2"
-                onClick={handleChangeToEditForm}
-              >
-                <div>Edit Profile</div>
-                <Icon type="edit" />
-              </div>
-            </div>
+            <>
+              {!isEdit && (
+                <div className="cursor-pointer text-primary hover:underline lg:hidden">
+                  <div
+                    className="flex items-center justify-end gap-2"
+                    onClick={handleChangeToEditForm}
+                  >
+                    <div>Edit Profile</div>
+                    <Icon type="edit" />
+                  </div>
+                </div>
+              )}
+            </>
           }
         >
           <>
@@ -156,6 +165,8 @@ const MyProfile = ({
                 title="Code"
                 value={user?.code?.toString() ?? user?.key?.toString()}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Full Name"
@@ -163,6 +174,8 @@ const MyProfile = ({
                 isEdit={isEdit}
                 loading={loading}
                 handleClickEdit={handleChangeToEditForm}
+                control={control}
+                isInForm
               >
                 {isEdit ? (
                   <div className="flex w-full items-center gap-2">
@@ -172,7 +185,7 @@ const MyProfile = ({
                       name="full_name"
                       skeleton={loadingEditName}
                       className="h-full w-full flex-1"
-                      inputClassName="rounded-lg h-full px-4 py-[10px]"
+                      inputClassName="rounded-lg h-full px-4 py-3"
                       textSize="sm"
                     ></HookFormTextField>
                     <ButtonCancelSubmit
@@ -196,7 +209,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="flex-auto font-medium text-[#050505] md:flex md:justify-end lg:max-w-[300px] lg:justify-start">
+                  <div className="flex flex-auto justify-end font-medium text-[#050505] lg:max-w-[300px] lg:justify-start">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -207,11 +220,15 @@ const MyProfile = ({
                 title="Username"
                 value={user?.username}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Role"
                 value={USER_TYPE[user?.type]?.label}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="D.O.B"
@@ -219,48 +236,71 @@ const MyProfile = ({
                   user?.detail?.dob ? formatDate(user?.detail?.dob, true) : ''
                 }
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Email"
                 value={user?.user_contacts?.[0]?.email}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Phone"
                 value={user?.user_contacts?.[0]?.phone}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="University"
                 value={user?.detail?.university?.name ?? ''}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Major"
                 value={user?.detail?.major?.name}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Field of work"
                 value={user?.detail?.company_type ?? ''}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Position"
                 value={user?.detail?.company_position ?? ''}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Main Class"
                 value={user?.main_class?.join(',') ?? ''}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
               <TextWrapper
                 title="Deferred/Retake class"
                 value={user?.reserve_retook_class?.join(', ') ?? ''}
                 loading={loading}
+                control={control}
+                isEdit={isEdit}
               />
-              <TextWrapper title="Status" loading={loading}>
+              <TextWrapper
+                title="Status"
+                loading={loading}
+                control={control}
+                isEdit={isEdit}
+              >
                 <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
                 </span>
@@ -271,9 +311,33 @@ const MyProfile = ({
                   value={formatDate(user?.updated_at) ?? ''}
                   isEdit={isEdit}
                   loading={loading}
+                  control={control}
                 />
               )}
             </ul>
+            {isEdit && (
+              <div className="lg:hidden">
+                <ButtonCancelSubmit
+                  className="flex gap-2"
+                  cancel={{
+                    title: 'Cancel',
+                    onClick: handleChangeToPreview,
+                    size: 'medium',
+                    disabled: loading || loadingEditName,
+                    className:
+                      'min-w-fit text-sm flex-1 w-full rounded-lg py-2 px-4',
+                  }}
+                  submit={{
+                    title: 'Confirm',
+                    size: 'medium',
+                    className:
+                      'min-w-fit text-sm flex-1 w-full rounded-lg py-2 px-4 !no-underline',
+                    htmlType: 'submit',
+                    loading: loading || loadingEditName,
+                  }}
+                ></ButtonCancelSubmit>
+              </div>
+            )}
           </>
         </ProfileCard>
       </form>
@@ -289,6 +353,8 @@ const TextWrapper = ({
   children,
   handleClickEdit,
   showEditIcon = false,
+  control,
+  isInForm = false,
 }: {
   title: string
   children?: React.ReactNode
@@ -297,22 +363,52 @@ const TextWrapper = ({
   loading: boolean
   handleClickEdit?: () => void
   showEditIcon?: boolean
+  control: Control<
+    {
+      full_name: string
+    },
+    any
+  >
+  isInForm?: boolean
 }) => {
   return (
     <li
-      className={clsx('group block gap-[1.4rem] md:flex', {
-        'mb-4': !isEdit,
-        'mb-8 !block transition-[margin]': isEdit,
+      className={clsx('group mb-4 flex gap-[1.4rem]', {
+        'transition-[margin]': isEdit,
+        '!block': isInForm && isEdit,
       })}
     >
-      <div className="w-[17.43rem] max-w-[200px] flex-none text-[#A1A1A1] lg:max-w-[50%]">
+      <div
+        className={clsx({
+          hidden: !isEdit,
+          'w-full md:block lg:hidden': isEdit,
+        })}
+      >
+        <HookFormTextFieldV2
+          label={title}
+          placeholder="Enter Text..."
+          control={control}
+          name={convertHumanReadableToSnakeCase(title)}
+          skeleton={loading}
+          className="h-full w-full flex-1 rounded-lg px-4 py-3"
+          textSize="sm"
+          defaultValue={value}
+        ></HookFormTextFieldV2>
+      </div>
+
+      <div
+        className={clsx(
+          'w-[17.43rem] max-w-[200px] flex-none text-[#A1A1A1] lg:max-w-[50%]',
+          { 'hidden lg:block': isEdit },
+        )}
+      >
         {title}
       </div>
       <div
         className={clsx(
-          'flex-auto font-medium text-[#050505] md:flex md:justify-end lg:max-w-[300px] lg:justify-start',
+          'flex flex-auto justify-end font-medium text-[#050505] lg:max-w-[300px] lg:justify-start',
           {
-            '!max-w-full': isEdit,
+            '!hidden !max-w-full lg:!block': isEdit,
           },
         )}
       >
@@ -322,7 +418,7 @@ const TextWrapper = ({
         {children}
       </div>
       {!isEdit && showEditIcon && (
-        <div className="flex-auto justify-end md:hidden lg:flex">
+        <div className="hidden flex-auto justify-end lg:flex">
           <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
             <div
               className="flex items-center justify-end gap-2"

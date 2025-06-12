@@ -10,6 +10,7 @@ import Icon from '@components/icons'
 import { Divider, Select, Switch } from 'antd'
 import { IUserContact } from 'src/redux/types/User/urser'
 import { CollapseArrowIcon } from '@assets/icons'
+import clsx from 'clsx'
 interface ProfileOptionItem {
   label: string
   value: string
@@ -92,7 +93,10 @@ const ProfileList = ({ isEdit }: IProps) => {
     }
   })
   return (
-    <ProfileCard title="Profile">
+    <ProfileCard
+      title="Profile"
+      className={clsx({ 'hidden lg:block': isEdit })}
+    >
       {sortByCreatedAtAndDefault(user?.user_contacts || [])?.map((e, i) => {
         return (
           <ProfileItem

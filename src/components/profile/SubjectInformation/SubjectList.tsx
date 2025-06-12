@@ -6,6 +6,7 @@ import ProgramDetail from '../ProgramDetail'
 import { Select } from 'antd'
 import Icon from '@components/icons'
 import { CollapseArrowIcon } from '@assets/icons'
+import clsx from 'clsx'
 
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'
@@ -51,7 +52,10 @@ const SubjectList = ({ isEdit }: IProps) => {
     },
   ]
   return (
-    <ProfileCard title="Exam ID">
+    <ProfileCard
+      title="Exam ID"
+      className={clsx({ 'hidden lg:block': isEdit })}
+    >
       {subjectOptions.map((e, i) => {
         return (
           <SubjectItem
