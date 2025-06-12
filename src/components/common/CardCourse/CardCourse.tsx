@@ -1,9 +1,6 @@
 import React from 'react'
-import Badge from '../Badge/Badge'
 import { EAttemptStatus } from 'src/constants/attempt'
-import router from 'next/router'
-import SappButton from '@components/base/button/SappButton'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import Badge from '../Badge/Badge'
 
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>

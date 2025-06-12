@@ -72,7 +72,7 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
           <a
             href={event.meetingLink}
             target="_blank"
-            className="text-sm font-normal italic leading-[21px] tracking-normal text-[#025eff]"
+            className="text-sm font-normal italic leading-[21px] tracking-normal text-[#091D37]"
             rel="noreferrer"
           >
             {event.meetingLink}

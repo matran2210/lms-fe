@@ -159,7 +159,7 @@ const MyProfile = ({
                       name="full_name"
                       skeleton={loadingEditName}
                       className="w-full flex-1 "
-                      inputClassName="rounded-lg !h-10"
+                      inputClassName="rounded-lg !h-[22px]"
                       textSize="sm"
                     ></HookFormTextField>
                     <ButtonCancelSubmit
@@ -170,17 +170,16 @@ const MyProfile = ({
                         size: 'medium',
                         disabled: loading || loadingEditName,
                         className:
-                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
                       }}
                       submit={{
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
                         htmlType: 'submit',
                         loading: loading || loadingEditName,
                       }}
-                      revertFunction
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (

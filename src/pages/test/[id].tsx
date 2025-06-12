@@ -3,20 +3,12 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
-  ArrowUpIcon,
-  CalculatorIcon,
   CalculatorIconV2,
-  ExcelIcon,
   FlagIcon,
-  HighlightIcon,
   ResizeIcon,
-  ScratchPadIcon,
   ScratchPadIconV2,
   ShowLessIcon,
   ShowMoreIcon,
-  TextSquareIcon,
-  UnHighLightIcon,
-  WordIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -25,7 +17,7 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@components/questionType/NewFillText'
+import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
@@ -34,7 +26,7 @@ import { runHighlight } from '@utils/index'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
@@ -57,7 +49,6 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
 import Popover from '@components/Popover'
-import SappButton from '@components/base/button/SappButton'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
@@ -67,10 +58,9 @@ import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { TabsProps, Tooltip } from 'antd'
+import { TabsProps } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
   Answer,
@@ -85,6 +75,7 @@ import {
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import {
+  checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
   getAnswerMatching,
@@ -99,6 +90,10 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import RequirementsTab from '@components/test/RequirementsTab'
+import { Tooltip } from 'antd'
+import SappButton from '@components/base/button/SappButton'
+import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 
 declare global {
   interface Window {
@@ -127,14 +122,22 @@ const TestDetail = () => {
     const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
       return (
         currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          const hasAnswer =
+            currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+              ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
+              : getValues(`${currentTabID}_${index}_answer`)
           return {
-            label: `Requirement ${index + 1}`,
+            label: (
+              <span className="flex items-center gap-1">
+                Requirement {index + 1}
+                {hasAnswer && <CheckCircleOutlineYellow />}
+              </span>
+            ),
             key: index,
             children: (
               <>
                 {editorReady && (
                   <EssayQuestionPreview
-                    key={index}
                     data={{
                       ...currentTabContent?.data?.requirements?.[index],
                       ...essayData?.req,
@@ -155,6 +158,7 @@ const TestDetail = () => {
                     response_option_custom={currentTabContent.response_type}
                     externalRef={refEditor}
                     fullData={currentTabContent}
+                    isShowContent={false}
                     openChooseFile={(e: any) =>
                       setOpenUpload({
                         status: true,
@@ -169,6 +173,7 @@ const TestDetail = () => {
                     }
                     showRequiment={showListRequirement}
                     handleChange={handleEssayChange}
+                    explainClassname="!mt-8 !p-0 !bg-transparent"
                   />
                 )}
               </>
@@ -194,6 +199,7 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -211,6 +217,7 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -231,6 +238,7 @@ const TestDetail = () => {
             getValue={getValues}
             tabs={tabs}
             currentPage={currentPage}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -247,11 +255,12 @@ const TestDetail = () => {
             done={done}
             corrects={corrects?.corrects}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.FILL_WORD:
         return (
-          <NewFiltext
+          <NewFilltext
             control={control}
             name={`${currentTabID}_fillword`}
             data={data}
@@ -267,6 +276,7 @@ const TestDetail = () => {
             ref={ref}
             solution={solution}
             watch={watch}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -286,6 +296,7 @@ const TestDetail = () => {
             handleGetData={(data: DragDropAnswerItem) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -302,6 +313,7 @@ const TestDetail = () => {
             corrects={corrects?.corrects}
             ref={ref}
             solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -328,17 +340,26 @@ const TestDetail = () => {
         }
 
         return (
-          <RequirementsTab
-            items={essayRequirementsItem(defaultValueEssay())}
-            activeKey={essayData?.index ?? '0'}
-            defaultActiveKey="1"
-            onChange={(key) => {
-              setEssayData({
-                req: currentTabContent?.data?.requirements?.[key],
-                index: key,
-              })
-            }}
-          />
+          <>
+            <EditorReader
+              className="sapp-questions"
+              text_editor_content={currentTabContent?.data?.question_content}
+              highlighted={highlighted}
+            />
+            <RequirementsTab
+              destroyInactiveTabPane={true}
+              items={essayRequirementsItem(defaultValueEssay())}
+              activeKey={essayData?.index ?? '0'}
+              defaultActiveKey="1"
+              onChange={(key) => {
+                setEssayData({
+                  req: getValues(`${currentTabID}_${key}_answer`),
+                  index: key,
+                })
+                refEditor.current.reset()
+              }}
+            />
+          </>
         )
       default:
         return <div></div>
@@ -636,7 +657,7 @@ const TestDetail = () => {
                     requirements: (objTab?.data?.requirements ?? []).map(
                       (req: any) => {
                         const requirementData = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -696,7 +717,7 @@ const TestDetail = () => {
                     requirements: (updatedObjTab?.data?.requirements ?? []).map(
                       (req: Requirement) => {
                         const requirementAmswer = (
-                          answerSubmitted?.answer ?? []
+                          answerSubmitted?.answers ?? []
                         ).find(
                           (r: RequirementItem) => r.requirement_id === req?.id,
                         )
@@ -1279,6 +1300,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1297,8 +1319,11 @@ const TestDetail = () => {
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
+    setScratchPadValues([])
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
@@ -1581,7 +1606,13 @@ const TestDetail = () => {
               question?.data?.response_option ??
               (question?.response_type === 0 ? 'WORD' : 'SHEET'),
             time_spent: Math.ceil(question.timeSpent / 1000),
-            active: 'SUBMITED',
+            ...(!!(
+              requirement?.answer_text ||
+              requirement?.answer_file ||
+              question?.answer_file
+            ) && {
+              active: 'SUBMITED',
+            }),
             answer_file:
               requirement?.answer_file || question?.answer_file || null,
           }),
@@ -1606,7 +1637,9 @@ const TestDetail = () => {
         response_option:
           question?.data?.response_option ??
           (question?.response_type === 0 ? 'WORD' : 'SHEET'),
-        active: 'SUBMITED',
+        ...(!!(question?.answer || question?.answer_file) && {
+          active: 'SUBMITED',
+        }),
         answer_file: question?.answer_file || null,
       }
     }
@@ -1662,8 +1695,8 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question.answer
-          .filter((item: string) => item && item !== '')
+        answer: question?.answer
+          ?.filter((item: string) => item && item !== '')
           .map((item: string, index: number) => ({
             answer_id: item,
             answer_position: index + 1,
@@ -2190,13 +2223,19 @@ const TestDetail = () => {
               questionId: string
               flag?: boolean
               is_viewed_answer?: boolean
+              has_answer?: boolean
             }) => [answer.questionId, answer],
           ),
         )
 
         const arr = await Promise.all(
           questions.map(async (question: any, index: any) => {
-            const hasAnswer = answerMap.has(question.id)
+            const hasAnswer =
+              answerMap.has(question.id) &&
+              !!(answerMap.get(question.id) as any)?.has_answer
+
+            // const hasAnswer = answerMap.has(question.id)
+
             let baseData = {
               ...question,
               viewed: index === 0,
@@ -2385,7 +2424,7 @@ const TestDetail = () => {
             >
               <div className="flex h-full w-[100px] items-center gap-1">
                 {/* <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
+                 className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
                     setAllowHighLight(!allowHighLight)
                     setAllowUnHighLight(false)
@@ -2712,14 +2751,24 @@ const TestDetail = () => {
                           }
                         }}
                       >
-                        <EditorReader
+                        {currentTabContent?.topicDescription?.description && (
+                          <HighlightableHTML
+                            initialHTML={
+                              currentTabContent?.topicDescription
+                                ?.description || ''
+                            }
+                            storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            className="sapp-questions mb-6"
+                          />
+                        )}
+                        {/* <EditorReader
                           className="sapp-questions mb-6"
                           text_editor_content={
                             currentTabContent?.topicDescription?.description
                           }
                           highlighted={currentTabContent?.hightlightTopic}
                           highlighArea="hightlight_area_topic"
-                        />
+                        /> */}
                         {currentTabContent?.topicDescription?.files?.length >
                           0 &&
                           currentTabContent?.topicDescription?.files?.map(
@@ -2807,14 +2856,24 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      <EditorReader
+                      {currentTabContent?.topicDescription?.description && (
+                        <HighlightableHTML
+                          initialHTML={
+                            currentTabContent?.topicDescription?.description ||
+                            ''
+                          }
+                          storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                          className="mb-4"
+                        />
+                      )}
+                      {/* <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      />
+                      /> */}
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {
@@ -2837,7 +2896,16 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
+                    <div
+                      className={clsx(
+                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8',
+                        {
+                          'bg-white':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.ESSAY,
+                        },
+                      )}
+                    >
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,
@@ -2855,243 +2923,6 @@ const TestDetail = () => {
               </>
             )}
             {/** End Question Content */}
-
-            {/** Scratchpads */}
-            <div className="z-10 flex h-[48px] items-center justify-between bg-[#f1f1f1] shadow-question-footer">
-              <div className="flex h-full items-center">
-                <button
-                  className={`h-full ${allowHighLight && 'bg-[#fde047]'}`}
-                  onClick={() => {
-                    setAllowHighLight(!allowHighLight)
-                    setAllowUnHighLight(false)
-                    trackGAEvent('Click Button Highlight Test')
-                  }}
-                >
-                  <ButtonContent icon={<HighlightIcon />} content="Highlight" />
-                </button>
-                <button
-                  className={`h-full ${allowUnHighLight && 'bg-[#fde047]'}`}
-                  onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
-                    trackGAEvent('Click Button Unhighlight Test')
-                  }}
-                >
-                  <ButtonContent
-                    icon={<UnHighLightIcon />}
-                    content="Unhighlight"
-                  />
-                </button>
-                <button
-                  className="h-full"
-                  onClick={() => {
-                    handleOpenScratchPad('scratch_pad')
-                    trackGAEvent('Click Button ScratchPad Test')
-                  }}
-                >
-                  <ButtonContent
-                    icon={<ScratchPadIcon />}
-                    content="ScratchPad"
-                  />
-                </button>
-                <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
-                  onClick={() => {
-                    handleOpenScratchPad('calculator')
-                    trackGAEvent('Click Button Calculator Test')
-                  }}
-                  disabled={checkCalExist > -1}
-                >
-                  <ButtonContent
-                    icon={<CalculatorIcon />}
-                    content="Calculator"
-                  />
-                </button>
-
-                {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-                  <button className="relative h-full" ref={dropUpRequire}>
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowLisRequirement(!showListRequirement)
-                      }}
-                    >
-                      <TextSquareIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden lg:inline-block 3xl:me-1">
-                            Requirement
-                          </span>
-                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
-                        </div>
-                        <ArrowUpIcon />
-                      </div>
-                    </div>
-                    {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#f1f1f1] shadow-questions-exhibits 3xl:w-full">
-                        {currentTabContent?.data?.requirements?.map(
-                          (e: any, indexReq: number) => {
-                            return (
-                              <button
-                                key={e.id}
-                                className={`p-3 ${
-                                  essayData?.index !== indexReq &&
-                                  'text-[#A1A1A1]'
-                                }`}
-                                onClick={() => {
-                                  if (e?.id !== essayData?.req?.id) {
-                                    //chọn requirement khác thì mới set lại state
-                                    setEssayData({ req: e, index: indexReq })
-                                    if (refEditor?.current) {
-                                      refEditor.current.reset()
-                                    }
-                                  }
-                                  rightSideRef?.current &&
-                                    rightSideRef.current.scrollTo({
-                                      top: 0,
-                                      behavior: 'smooth',
-                                    })
-                                }}
-                              >{`Requirement (${indexReq + 1})`}</button>
-                            )
-                          },
-                        )}
-                      </div>
-                    )}
-                  </button>
-                )}
-              </div>
-
-              <div className="flex h-full items-center gap-3 pe-6">
-                {currentTabContent?.data?.response_option === null &&
-                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
-                  !currentTabContent.done && (
-                    <div className="flex gap-1">
-                      <div className="3.5xl:block hidden">
-                        Choose response option:
-                      </div>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(0)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                        }}
-                        className={`${
-                          currentTabContent?.response_type === 0 && 'active'
-                        }`}
-                      >
-                        <WordIcon />
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(1)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                        }}
-                        className={`${
-                          currentTabContent.response_type === 1 && 'active'
-                        }`}
-                      >
-                        <ExcelIcon />
-                      </button>
-                    </div>
-                  )}
-                <button
-                  className="flex w-[200px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
-                  onClick={() => {
-                    handleFlagQuestion(currentPage)
-                    trackGAEvent('Click Button Flag To Review Test')
-                  }}
-                >
-                  <FlagIcon />
-                  <div className="text-medium-sm hidden font-medium lg:block">
-                    Flag to Review
-                  </div>
-                </button>
-                <button
-                  disabled={currentTabContent?.is_viewed_answer}
-                  className={`flex items-center gap-3 border border-solid ${
-                    !currentTabContent?.is_viewed_answer
-                      ? 'border-[#A1A1A1] text-[#050505]'
-                      : 'border-default text-[#DCDDDD]'
-                  } w-[150px] justify-center p-1 py-2`}
-                  onClick={() => {
-                    handleClearSelection(currentTabContent)
-                    trackGAEvent('Click Button Clear Selection Test')
-                  }}
-                >
-                  <div className="text-medium-sm font-medium">
-                    Clear Selection
-                  </div>
-                </button>
-                {/* )} */}
-                {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-                !currentTabContent?.is_viewed_answer &&
-                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                  <button
-                    className="w-45 flex items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
-                    onClick={async () => {
-                      const data = await getResult(currentTabContent)
-                      handleSubmitAnswer('view-answer')
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                        data?.requirements,
-                      )
-                      trackGAEvent('Click Button Submit & View Answer Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Submit & View Answer
-                    </div>
-                  </button>
-                ) : (
-                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 && (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2"
-                      onClick={async () => {
-                        const index = filteredTabs.findIndex(
-                          (e: any) => e.id === currentPage,
-                        )
-                        if (filteredTabs[index + 1].id) {
-                          setScratchPads('')
-                          handleSubmitAnswer('change-tab')
-                          setEssayData(undefined)
-                          handleChangeTab(filteredTabs[index + 1].id)
-                        }
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">
-                        Next Question
-                      </div>
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
 
             <TestScratchPads
               currentPage={currentPage}

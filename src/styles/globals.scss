@@ -21,8 +21,9 @@
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
-// @tailwind base;
-// @tailwind components;
+@import './components/drawer.scss';
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 @font-face {
@@ -149,13 +150,10 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-lg font-semibold text-ink-800;
+    @apply m-0 break-words text-lg text-ink-800;
   }
   span {
-    background-color: transparent !important;
-    font-size: 18px !important;
-    font-weight: 600 !important;
-    color: #1f2937 !important;
+    @apply bg-transparent text-lg text-[#1f2937];
   }
 }
 .sapp-explanation {
@@ -477,8 +475,8 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-questions-essay {
-  line-height: 33px;
-  @apply mb-4 font-sans text-base font-semibold text-[#050505];
+  line-height: 27px;
+  @apply mb-4 font-sans text-lg font-semibold text-[#050505];
 }
 
 .sapp-seprate-line-preview {
@@ -486,15 +484,15 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-upload-file-preview {
-  @apply mb-6 flex items-center gap-3 px-0;
+  @apply flex items-center justify-start gap-12 px-0;
 }
 
 .sapp-upload-button-preview {
-  @apply flex w-max cursor-pointer items-center justify-evenly gap-2 border px-2 py-0;
+  @apply flex w-max cursor-pointer items-center justify-evenly gap-2 rounded-lg border border-[#404041] bg-white px-4 py-2 text-sm font-semibold text-[#404041];
 }
 
 .tox-tinymce {
-  border-radius: 0 !important;
+  @apply rounded-xl;
 }
 
 .resizable {
@@ -675,6 +673,22 @@ textarea.is-invalid:focus {
 }
 
 @layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    @apply border bg-white;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    @apply rounded-full bg-transparent;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-primary;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-300;
+  }
+
   .grid-fit-content {
     grid-template-columns: min-content 1fr;
   }
@@ -901,7 +915,7 @@ $focus: (
 }
 
 textarea:focus {
-  --tw-ring-color: none;
+  --tw-ring-color: none !important;
   @apply border-primary;
 }
 
@@ -1216,7 +1230,7 @@ td.py-5.px-3.sapp-table-quiz {
   @apply mb-0;
 }
 .ant-menu {
-  @apply bg-[#025eff];
+  @apply bg-[#091D37];
 }
 
 .ant-menu-item-selected {
