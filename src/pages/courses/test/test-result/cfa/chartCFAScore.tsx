@@ -1,4 +1,6 @@
 import { calculatePercentage, roundNumber } from '@utils/helpers'
+import { useRef } from 'react'
+import { useDraggable } from 'react-use-draggable-scroll'
 import { ChartDatum } from 'src/type'
 
 interface IProps {
@@ -19,8 +21,15 @@ interface IProps {
  *
  */
 const ChartCFAScore = ({ data }: IProps) => {
+  const ref =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
+  const { events } = useDraggable(ref)
   return (
-    <div className="overflow-x-auto text-ink-800">
+    <div
+      className="scrollbar overflow-x-auto text-ink-800"
+      {...events}
+      ref={ref}
+    >
       <div className="sticky left-0 mb-8 text-lg font-semibold">
         Multiple Choice Score by Topic
       </div>
@@ -83,10 +92,13 @@ const ChartCFAScore = ({ data }: IProps) => {
                   <div
                     className="absolute bottom-0 left-8 hidden w-[1px] rounded-none border-r border-dotted border-ink-300 group-hover:block"
                     style={{
-                      height: `calc(${calculatePercentage(
-                        item?.section_score,
-                        item?.max_section_score,
-                      )}% + 4px)`,
+                      height:
+                        item?.section_score > 0
+                          ? `calc(${calculatePercentage(
+                              item?.section_score,
+                              item?.max_section_score,
+                            )}% + 4px)`
+                          : 0,
                     }}
                   />
                 </div>
