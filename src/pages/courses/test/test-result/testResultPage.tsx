@@ -1,3 +1,4 @@
+import Recommendation from '@components/test/Recommendation'
 import { F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
 import { useEffect, useMemo, useRef } from 'react'
@@ -10,7 +11,7 @@ import {
   QuizAttemptChartType,
 } from 'src/type'
 import ChartACCAScore from './acca/chartACCAScore'
-import CfaMultipleChoiceScore from './cfa/MultipleChoiceScore'
+import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
 import MultipleQuestion from './multipleQuestion'
@@ -135,16 +136,13 @@ const TestResultPage = ({
       case 'CFA':
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="flex max-h-full flex-col">
-              <CfaMultipleChoiceScore
-                chartData={chartData}
-                recommendation={questions?.quizAttempt?.attempt_gradings}
-                isGraded={
-                  questions?.quizAttempt?.grading_status ===
-                  GRADE_STATUS.FINISHED_GRADING
-                }
-                score={score}
-              />
+            <div className="max-h-ful flex flex-col">
+              <div className="mb-4 items-start rounded-xl bg-white p-6 shadow-sidebar xl:mb-6">
+                <ChartCFAScore data={chartData?.chart_data} />
+                {questions?.quizAttempt?.attempt_gradings?.map(
+                  (item, index) => <Recommendation data={item} key={index} />,
+                )}
+              </div>
               <ScoreDetail
                 className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
@@ -152,9 +150,10 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <MultipleQuestion
+            <MultipleChoiceScore
               questions={questions}
-              className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
+              score={score}
+              globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
             />
           </div>
