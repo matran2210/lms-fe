@@ -33,10 +33,11 @@ const ChartCFAScore = ({ data }: IProps) => {
           <div
             className="absolute top-[30%] flex w-full -translate-y-1/2 items-center"
             style={{
-              // 54 = width of 50% blocks;
+              // 54 = width of  the 50% blocks;
               // 14 = extra width extending from the vertical bar
-              // 134 column size
-              width: `${data?.length > 0 && 134 * data?.length + 54 + 14}px`,
+              // 156 column size + gap
+              // 24 padding left
+              width: `${data?.length > 0 && 156 * data?.length + 54 + 14 + 24}px`,
             }}
           >
             <span className="pr-7 text-sm font-normal">70%</span>
@@ -47,8 +48,9 @@ const ChartCFAScore = ({ data }: IProps) => {
             style={{
               // 54 = width of 50% blocks;
               // 14 = extra width extending from the vertical bar
-              // 134 column size
-              width: `${data?.length > 0 && 134 * data?.length + 54 + 14}px`,
+              // 156 column size + gap
+              // 24 padding left
+              width: `${data?.length > 0 && 156 * data?.length + 54 + 14 + 24}px`,
             }}
           >
             <span className="pr-7 text-sm font-normal">50%</span>
@@ -68,15 +70,18 @@ const ChartCFAScore = ({ data }: IProps) => {
                 key={item?.id + index}
                 className="group relative flex w-[134px] shrink-0 cursor-pointer flex-col items-start justify-between gap-1"
               >
-                <div className="absolute bottom-[calc(100%+2rem)]  left-0 h-40 w-auto">
+                <div className="absolute bottom-[calc(100%+2rem)] left-0 h-40 w-auto">
                   <div
                     className="absolute left-0 h-1 w-16 rounded-sm bg-primary"
                     style={{
-                      bottom: `70%`,
+                      bottom: `calc(${calculatePercentage(
+                        item?.section_score,
+                        item?.max_section_score,
+                      )}% + 4px)`,
                     }}
                   />
                   <div
-                    className="absolute -bottom-1 left-8 hidden w-[1px] rounded-none border-r border-dotted border-ink-300 group-hover:block"
+                    className="absolute bottom-0 left-8 hidden w-[1px] rounded-none border-r border-dotted border-ink-300 group-hover:block"
                     style={{
                       height: `calc(${calculatePercentage(
                         item?.section_score,
