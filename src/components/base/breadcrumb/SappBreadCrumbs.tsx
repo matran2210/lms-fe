@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import React from 'react'
 import { ITabs } from 'src/type'
+import Tooltip from 'src/common/Tooltip'
 
 const SappBreadCrumbs = ({
   breadcrumbs = [],
@@ -14,34 +15,61 @@ const SappBreadCrumbs = ({
 
   return (
     <nav aria-label="breadcrumb">
-      <ul className="flex items-center justify-start space-x-2 text-sm font-normal text-[#a1a1aa]">
-        {breadcrumbs.map((breadcrumb, index) => (
-          <React.Fragment key={breadcrumb.title}>
-            <li
-              className={`${index === lastIndex ? 'justify-start text-sm font-medium text-[#27272a]' : ''}`}
-            >
-              {index !== lastIndex ? (
-                <Link href={breadcrumb.link} className="truncate-breadcrumbs">
-                  {breadcrumb.title}
-                </Link>
-              ) : (
-                <span>{breadcrumb.title}</span>
-              )}
-            </li>
-            {index !== lastIndex && (
-              <li className="flex items-center">
-                <span
-                  className={clsx({
-                    'text-gray-400 text-tiny': isTeacher,
-                    'text-ink-800': !isTeacher,
-                  })}
-                >
-                  {isTeacher ? '▶' : '/'}
-                </span>
+      <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
+        {breadcrumbs.map((breadcrumb, index) => {
+          const isLast = index === lastIndex
+          const isLong = breadcrumb.title?.length > 30
+          const titleDisplay = isLong
+            ? breadcrumb.title.slice(0, 30) + '...'
+            : breadcrumb.title
+
+          return (
+            <React.Fragment key={breadcrumb.title}>
+              <li
+                className={clsx(
+                  'text-base',
+                  isLast ? 'font-semibold text-ink-800' : 'text-ink-400',
+                )}
+              >
+                {isLast ? (
+                  <span>{breadcrumb.title}</span>
+                ) : (
+                  <Link href={breadcrumb.link}>
+                    <div>
+                      <Tooltip
+                        title={breadcrumb.title}
+                        showTooltip={isLong}
+                        placement="bottomLeft"
+                      >
+                        <span
+                          className={clsx(
+                            'cursor-pointer',
+                            isLong && 'hover:text-primary',
+                          )}
+                        >
+                          {titleDisplay}
+                        </span>
+                      </Tooltip>
+                    </div>
+                  </Link>
+                )}
               </li>
-            )}
-          </React.Fragment>
-        ))}
+
+              {!isLast && (
+                <li className="flex items-center">
+                  <span
+                    className={clsx(
+                      isTeacher && 'text-tiny',
+                      index === lastIndex - 1 ? 'text-ink-800' : 'text-ink-400',
+                    )}
+                  >
+                    {isTeacher ? '▶' : '/'}
+                  </span>
+                </li>
+              )}
+            </React.Fragment>
+          )
+        })}
       </ul>
     </nav>
   )

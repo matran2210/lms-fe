@@ -179,7 +179,7 @@ const CourseDetail = () => {
                 },
                 {
                   title: courseNameDetail,
-                  link: `/courses/my-course/${router.query.courseId}`,
+                  link: '',
                 },
               ]}
             />

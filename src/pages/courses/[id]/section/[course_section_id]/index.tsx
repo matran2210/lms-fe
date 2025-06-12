@@ -1,6 +1,5 @@
 import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
@@ -8,16 +7,15 @@ import PreviewPartDetail from 'preview-part'
 
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { truncateBySpace } from '@utils/index'
-import Tooltip from 'src/common/Tooltip'
 import { useCourseContext } from '@contexts/index'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 interface IProps {
   course_section_type: string
@@ -446,13 +444,26 @@ const CoursePartDetail = () => {
 
   return (
     <Layout title="Course Part Detail">
-      <div className="main default-content-editor mx-auto my-0 max-w-[1144px]">
+      <div className="main mx-auto my-0 max-w-[1144px]">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
-          <BreadCrumbPartDetail
-            previewPart={previewPart}
-            partDetail={partDetail}
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: previewPart?.name,
+                link: `/courses/my-course/${router.query.id}`,
+              },
+              {
+                title: partDetail?.name,
+                link: '',
+              },
+            ]}
           />
         )}
         <PreviewPartDetail
@@ -535,45 +546,6 @@ const CoursePartDetail = () => {
         )}
       </div>
     </Layout>
-  )
-}
-
-const BreadCrumbPartDetail = ({
-  previewPart,
-  partDetail,
-}: {
-  previewPart: { name: string }
-  partDetail: { name: string }
-}) => {
-  const router = useRouter()
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
-        <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-sm font-medium text-[#A1A1A1] hover:text-primary"
-          onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
-        >
-          <div className="mx-0.5 inline-block w-full">
-            <Tooltip
-              title={previewPart?.name}
-              showTooltip={previewPart?.name?.length > 4}
-              placement={'bottomLeft'}
-            >
-              {truncateBySpace(previewPart?.name, 2, true)}
-            </Tooltip>
-          </div>
-        </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-sm font-medium text-[#050505]">
-          <ResponsiveTextTruncate
-            placementTooltip="bottomLeft"
-            textTooltip={partDetail?.name}
-            text={partDetail?.name}
-            isShowTooltip
-          />
-        </div>
-      </div>
-    </div>
   )
 }
 
