@@ -48,7 +48,7 @@ const ButtonText = ({
       link={link}
       {...props}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         {startIcon && <div className="w-full">{startIcon}</div>}
         <div className="w-full">{title || children}</div>
         {endIcon && <div className="w-full">{endIcon}</div>}

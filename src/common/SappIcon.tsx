@@ -286,7 +286,7 @@ const SappIcon = ({ icon, className }: Props) => {
         width="12"
         height="7"
         viewBox="0 0 12 7"
-        fill="#3964EA" // Original color
+        fill="currentColor" // Original color
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
