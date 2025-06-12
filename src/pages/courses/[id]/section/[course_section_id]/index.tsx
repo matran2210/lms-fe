@@ -5,7 +5,7 @@ import Layout from '@components/layout'
 import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
-import 'preview-part/dist/index.css'
+
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { ANIMATION, TEST_TYPE } from 'src/constants'

@@ -35,12 +35,12 @@ function PinnedNotifications() {
         pinnedNotifications?.data?.content && (
           <React.Fragment>
             <div
-              className={`fixed left-0 right-0 top-0 z-50 mx-auto my-0 h-12 max-w-[1144px] bg-[#33475B] text-white max-[1199px]:mx-6`}
+              className={`test-base sticky top-0 z-50 h-[60px] w-full bg-secondary-600 font-medium text-white`}
             >
-              <Row className="flex h-12 flex-row">
+              <Row className="flex h-[60px] flex-row">
                 <Col span={1}></Col>
                 <Col span={22}>
-                  <div className="flex h-12 flex-row justify-items-center">
+                  <div className="flex h-[60px] flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
                       <div className="flex content-center items-center text-center">
                         <IconLoudSpeaker />
