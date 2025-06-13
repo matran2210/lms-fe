@@ -1,8 +1,9 @@
-import Recommendation from '@components/test/Recommendation'
 import { calculatePercentage, roundNumber } from '@utils/helpers'
+import { useRef } from 'react'
+import { useDraggable } from 'react-use-draggable-scroll'
 
 import Tooltip from 'src/common/Tooltip'
-import { ChartDatum, IQuizAttempComment } from 'src/type'
+import { ChartDatum } from 'src/type'
 
 interface IProps {
   data: ChartDatum[]
@@ -10,33 +11,40 @@ interface IProps {
   score?: number
   isGraded?: boolean
   passingScore?: number
-  recommendation?: IQuizAttempComment[]
 }
 
-const ChartCMAScore = ({
-  data,
-  passingScore,
-  isGraded,
-  recommendation,
-}: IProps) => {
+const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
+  const ref =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
+  const { events } = useDraggable(ref)
   return (
-    <div className="mb-4 min-h-[433px] w-full max-w-full items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-gray-800 shadow-sidebar xl:mb-6">
+    <div
+      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-gray-800 shadow-sidebar"
+      ref={ref}
+      {...events}
+    >
       <div className="-ml-6 mb-11 text-lg font-semibold xl:font-medium">
         Multiple Choice Score by Part
       </div>
       <div className="">
         <div className="group relative h-[222px]">
-          <div className="h-full w-full border-b border-l border-gray-300" />
+          <div
+            className="h-full border-b border-l border-gray-300"
+            style={{
+              width: data?.length * 150 + 'px',
+            }}
+          />
           <div>
             {isGraded && (
               <div
-                className={`absolute left-3 flex h-0 w-full items-center border-t border-dotted border-gray-300 group-hover:border-info`}
+                className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
                 style={{
                   bottom: passingScore + '%',
+                  width: data?.length * 150 - 12 + 'px',
                 }}
               >
                 <div
-                  className={`relative -left-6 text-sm font-normal text-black`}
+                  className={`relative -left-10 text-sm font-normal text-black`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
@@ -48,7 +56,12 @@ const ChartCMAScore = ({
             {passingScore === 50 && isGraded ? (
               ''
             ) : (
-              <div className="absolute bottom-1/2 left-3 flex h-0 w-[calc(100%-12px)] items-center border-t border-dotted border-gray-300">
+              <div
+                className="absolute bottom-1/2 left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300"
+                style={{
+                  width: data?.length * 150 - 12 + 'px',
+                }}
+              >
                 <div className="relative -left-9 bottom-[50%] text-sm font-normal">
                   <span className="relative">50</span>
                 </div>
@@ -92,9 +105,6 @@ const ChartCMAScore = ({
           </div>
         </div>
       </div>
-      {recommendation?.map((item, index) => (
-        <Recommendation data={item} key={index} />
-      ))}
     </div>
   )
 }
