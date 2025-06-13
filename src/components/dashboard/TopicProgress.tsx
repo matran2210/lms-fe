@@ -233,12 +233,12 @@ const TopicProgress = () => {
           <div className="grow">
             <EChart option={option} />
           </div>
-          <div className="mt-5 flex w-full">
+          {/* <div className="mt-5 flex w-full">
             <div className="m-auto">
               <span className="bg-primary-6 mr-2.5 inline-block h-3 w-3"></span>
               <span className="font-medium">Completed</span>
             </div>
-          </div>
+          </div> */}
         </>
       )}
       {!isLoading && !option && (
