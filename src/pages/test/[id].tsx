@@ -346,19 +346,57 @@ const TestDetail = () => {
               text_editor_content={currentTabContent?.data?.question_content}
               highlighted={highlighted}
             />
-            <RequirementsTab
-              destroyInactiveTabPane={true}
-              items={essayRequirementsItem(defaultValueEssay())}
-              activeKey={essayData?.index ?? '0'}
-              defaultActiveKey="1"
-              onChange={(key) => {
-                setEssayData({
-                  req: getValues(`${currentTabID}_${key}_answer`),
-                  index: key,
-                })
-                refEditor.current.reset()
-              }}
-            />
+            {currentTabContent?.data?.requirements?.length > 0 ? (
+              <RequirementsTab
+                destroyInactiveTabPane={true}
+                items={essayRequirementsItem(defaultValueEssay())}
+                activeKey={essayData?.index ?? '0'}
+                defaultActiveKey="1"
+                onChange={(key) => {
+                  setEssayData({
+                    req: getValues(`${currentTabID}_${key}_answer`),
+                    index: key,
+                  })
+                  refEditor.current.reset()
+                }}
+              />
+            ) : (
+              <EssayQuestionPreview
+                isShowContent={false}
+                data={{
+                  ...currentTabContent?.data?.requirements?.[essayData?.index],
+                  ...essayData?.req,
+                }}
+                question_content={currentTabContent?.data?.question_content}
+                index={essayData?.index}
+                question_data={currentTabContent?.data}
+                control={control}
+                handleSaveHighLight={handleSaveHighLight}
+                highlighted={highlighted}
+                removeHighlight={removeHighlight}
+                allowHighLight={allowHighLight}
+                allowUnHighLight={allowUnHighLight}
+                solution={solution}
+                name={`${currentTabID}_${essayData?.index}_answer`}
+                setValue={setValue}
+                defaultValue={defaultValueEssay()}
+                response_option_custom={currentTabContent.response_type}
+                externalRef={refEditor}
+                fullData={currentTabContent}
+                openChooseFile={(e: any) =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: currentPage,
+                    requirementIndex: essayData?.index,
+                  })
+                }
+                handleClearFile={handleClearFile}
+                setOpenPdf={handleOpenScratchPad}
+                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+                showRequiment={showListRequirement}
+                handleChange={handleEssayChange}
+              />
+            )}
           </>
         )
       default:
