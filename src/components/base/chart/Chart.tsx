@@ -11,6 +11,7 @@ export interface EChartsProps {
   theme?: 'light' | 'dark'
   width?: string
   height?: string
+  minHeight?: string
 }
 
 export default function EChart({
@@ -19,8 +20,9 @@ export default function EChart({
   settings,
   loading,
   theme,
-  height,
-  width,
+  height = '100%',
+  width = '100%',
+  minHeight = '380px'
 }: EChartsProps): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null)
 
@@ -59,9 +61,9 @@ export default function EChart({
     <div
       ref={chartRef}
       style={{
-        width: width ?? '100%',
-        height: height ?? '100%',
-        minHeight: '380px',
+        width: width,
+        height: height,
+        minHeight: minHeight,
         position: 'relative',
         ...style,
       }}

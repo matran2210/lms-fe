@@ -100,7 +100,7 @@ const OverallProgress = () => {
       {option && (
         <>
           <div className="flex flex-row justify-around gap-2 4xl:gap-8">
-            <EChart option={option} width="300px" height="200px" />
+            <EChart option={option} width="220px" height="220px" minHeight='270px' />
             <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
               <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
                 <span className="h-3 w-3 rounded-full bg-primary"></span>

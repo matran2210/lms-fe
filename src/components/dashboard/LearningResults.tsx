@@ -168,7 +168,6 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <>
       <div className="flex h-[55vh] w-full rounded-2xl bg-white p-8 shadow-matchingquiz">
         <div className="w-full">
           <div className="mb-5 flex items-center justify-between pb-3">
@@ -258,7 +257,6 @@ const LearningResults = () => {
           </div>
         )}
       </div>
-    </>
   )
 }
 
