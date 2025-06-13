@@ -181,7 +181,7 @@ const OneChoiceQuestion = ({
           name={name || 'answer'}
           corrects={corrects}
           defaultValue={defaultValues}
-          labelClass={'text-base font-normal text-ink-800'}
+          labelClass={'text-base font-normal text-gray-800'}
           optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>

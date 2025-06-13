@@ -63,16 +63,18 @@ const TestWrapper = ({
   onSubmitAnswer,
 }: PropsWithChildren<IProps>) => {
   const dispatch = useAppDispatch()
-  const remainingTimeinSeconds = quizDetail?.quiz_timed
-    ? dayjs(
-        dayjs(new Date(quizAttempt.created_at ?? '')).add(
-          quizDetail?.quiz_timed,
-          'minutes',
-        ),
-      ).diff(dayjs(), 'seconds')
-    : null
+  const startTime = dayjs(quizAttempt.created_at)
+  const isValidStart = startTime.isValid()
+  const duration = quizDetail?.quiz_timed
+
+  const remainingTimeinSeconds =
+    duration && isValidStart
+      ? startTime.add(duration, 'minutes').diff(dayjs(), 'seconds')
+      : null
+
   const remainingTimeAttempt =
     (remainingTimeinSeconds ?? 0) > 0 ? (remainingTimeinSeconds ?? 0) : 0
+
   return (
     <Layout className="flex h-screen flex-col">
       <Header
@@ -83,7 +85,7 @@ const TestWrapper = ({
       >
         <div className="flex w-full items-center justify-between">
           <div
-            className="cursor-pointer rounded bg-ink-200 p-2"
+            className="cursor-pointer rounded bg-gray-200 p-2"
             onClick={() => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
@@ -131,7 +133,7 @@ const TestWrapper = ({
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm relative w-full border-t border-ink-300 bg-white p-0',
+          'shadow-t-sm relative w-full border-t border-gray-300 bg-white p-0',
           footerClass,
           'h-auto',
         )}

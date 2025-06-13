@@ -1,4 +1,6 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormTextFieldV2 from '@components/base/textfield/HookFormTextFieldV2'
@@ -12,10 +14,7 @@ import {
   VALIDATE_MIN,
   VALIDATE_REQUIRED,
 } from '@utils/helpers/ValidateMessage'
-import {
-  convertHumanReadableToSnakeCase,
-  convertSnakeCaseToHumanReadable,
-} from '@utils/index'
+import { convertHumanReadableToSnakeCase } from '@utils/index'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
 import { Dispatch, SetStateAction } from 'react'
@@ -142,7 +141,7 @@ const MyProfile = ({
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
         <ProfileCard
-          title="Overview"
+          title={isEdit ? 'Edit Profile' : 'Overview'}
           extra={
             <>
               {!isEdit && (
@@ -189,7 +188,7 @@ const MyProfile = ({
                       textSize="sm"
                     ></HookFormTextField>
                     <ButtonCancelSubmit
-                      className="flex gap-2"
+                      className="flex flex-row-reverse gap-2"
                       cancel={{
                         title: 'Cancel',
                         onClick: handleChangeToPreview,
@@ -316,26 +315,21 @@ const MyProfile = ({
               )}
             </ul>
             {isEdit && (
-              <div className="lg:hidden">
-                <ButtonCancelSubmit
-                  className="flex gap-2"
-                  cancel={{
-                    title: 'Cancel',
-                    onClick: handleChangeToPreview,
-                    size: 'medium',
-                    disabled: loading || loadingEditName,
-                    className:
-                      'min-w-fit text-sm flex-1 w-full rounded-lg py-2 px-4',
-                  }}
-                  submit={{
-                    title: 'Confirm',
-                    size: 'medium',
-                    className:
-                      'min-w-fit text-sm flex-1 w-full rounded-lg py-2 px-4 !no-underline',
-                    htmlType: 'submit',
-                    loading: loading || loadingEditName,
-                  }}
-                ></ButtonCancelSubmit>
+              <div className="flex items-center justify-between gap-2 lg:hidden">
+                <ButtonSecondary
+                  className="w-full"
+                  size="medium"
+                  title="Cancel"
+                  onClick={handleChangeToPreview}
+                  disabled={loading || loadingEditName}
+                />
+                <ButtonPrimary
+                  className="w-full"
+                  size="medium"
+                  title="Confirm"
+                  htmlType="submit"
+                  disabled={loading || loadingEditName}
+                />
               </div>
             )}
           </>

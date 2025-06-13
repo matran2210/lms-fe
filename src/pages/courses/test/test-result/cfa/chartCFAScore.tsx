@@ -1,4 +1,6 @@
 import { calculatePercentage, roundNumber } from '@utils/helpers'
+import { useRef } from 'react'
+import { useDraggable } from 'react-use-draggable-scroll'
 import { ChartDatum } from 'src/type'
 
 interface IProps {
@@ -19,8 +21,15 @@ interface IProps {
  *
  */
 const ChartCFAScore = ({ data }: IProps) => {
+  const ref =
+    useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
+  const { events } = useDraggable(ref)
   return (
-    <div className="overflow-x-auto text-ink-800">
+    <div
+      className="scrollbar overflow-x-auto text-gray-800"
+      {...events}
+      ref={ref}
+    >
       <div className="sticky left-0 mb-8 text-lg font-semibold">
         Multiple Choice Score by Topic
       </div>
@@ -28,7 +37,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-sm font-normal">
           Available Points
         </div>
-        <div className="absolute left-[108px] top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-ink-300" />
+        <div className="absolute left-[108px] top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-300" />
         <div className="relative h-40 w-full pl-11">
           <div
             className="absolute top-[30%] flex w-full -translate-y-1/2 items-center"
@@ -41,7 +50,7 @@ const ChartCFAScore = ({ data }: IProps) => {
             }}
           >
             <span className="pr-7 text-sm font-normal">70%</span>
-            <div className="w-full border-b border-ink-300"></div>
+            <div className="w-full border-b border-gray-300"></div>
           </div>
           <div
             className="absolute top-1/2 flex w-full -translate-y-1/2 items-center"
@@ -54,7 +63,7 @@ const ChartCFAScore = ({ data }: IProps) => {
             }}
           >
             <span className="pr-7 text-sm font-normal">50%</span>
-            <div className="w-full border-b border-ink-300"></div>
+            <div className="w-full border-b border-gray-300"></div>
           </div>
         </div>
       </div>
@@ -64,7 +73,7 @@ const ChartCFAScore = ({ data }: IProps) => {
             <div className="text-sm">Topic</div>
             <div className="text-sm">Weight</div>
           </div>
-          <div className="flex-start top- flex flex-row gap-6 rounded-xl bg-ink-100 px-6 py-4">
+          <div className="flex-start top- flex flex-row gap-6 rounded-xl bg-gray-100 px-6 py-4">
             {data?.map((item, index: number) => (
               <div
                 key={item?.id + index}
@@ -81,12 +90,15 @@ const ChartCFAScore = ({ data }: IProps) => {
                     }}
                   />
                   <div
-                    className="absolute bottom-0 left-8 hidden w-[1px] rounded-none border-r border-dotted border-ink-300 group-hover:block"
+                    className="absolute bottom-0 left-8 hidden w-[1px] rounded-none border-r border-dotted border-gray-300 group-hover:block"
                     style={{
-                      height: `calc(${calculatePercentage(
-                        item?.section_score,
-                        item?.max_section_score,
-                      )}% + 4px)`,
+                      height:
+                        item?.section_score > 0
+                          ? `calc(${calculatePercentage(
+                              item?.section_score,
+                              item?.max_section_score,
+                            )}% + 4px)`
+                          : 0,
                     }}
                   />
                 </div>

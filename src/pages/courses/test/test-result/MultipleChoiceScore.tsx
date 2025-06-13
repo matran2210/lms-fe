@@ -1,4 +1,3 @@
-import Recommendation from '@components/test/Recommendation'
 import { isNull, isUndefined } from 'lodash'
 import { RefObject } from 'react'
 import { GRADE_STATUS } from 'src/constants'
@@ -30,7 +29,7 @@ const MultipleChoiceScore = ({
         <div
           className={`w-full justify-between rounded-xl bg-white p-6 shadow-sidebar xl:mb-8`}
         >
-          <div className="mb-4 text-2xl font-bold text-ink-800">
+          <div className="mb-4 text-2xl font-bold text-gray-800">
             {questions?.quizAttempt?.grading_status ===
             GRADE_STATUS.FINISHED_GRADING
               ? 'Overall Score'
@@ -40,12 +39,6 @@ const MultipleChoiceScore = ({
             {isNull(score) || isUndefined(score) ? '--' : Math.round(score)}%
           </div>
           <GlobalAverage globalAverage={globalAverage} />
-          <div className="w-full">
-            {questions?.quizAttempt?.attempt_gradings.length > 0 &&
-              questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
-                <Recommendation data={item} key={index} />
-              ))}
-          </div>
         </div>
         <MultipleQuestion
           questions={questions}

@@ -187,7 +187,7 @@ const CourseDetail = () => {
               className="my-4 flex items-center justify-between"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <div className="text-gray-800 text-3xl font-semibold">
+              <div className="text-3xl font-semibold text-gray-800">
                 {courseNameDetail}
               </div>
               <FilterCourse

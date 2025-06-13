@@ -16,7 +16,11 @@ import { AuthAPI } from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { IChangePassword } from './ChangePassword'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import type { GetProps } from 'antd'
+import { Input } from 'antd'
 
+type OTPProps = GetProps<typeof Input.OTP>
 interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -32,10 +36,6 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState('')
-  const inputRefs = Array(6)
-    .fill(0)
-    .map(() => createRef<HTMLInputElement>())
-
   const [loading, setLoading] = useState<boolean>(false)
 
   /**
@@ -63,48 +63,6 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   }, [timeCountDown])
 
   /**
-   * @description Handling when entering code into the input cell
-   */
-  const onEnterDigit = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const value = event.target.value
-
-    // Validate input data, pass if data is single number or empty string
-    if ((Number.isNaN(parseInt(value)) && value != '') || value.length > 1)
-      return event.preventDefault()
-
-    // Focus to next input cell
-    if (index < 5 && value) {
-      inputRefs[index + 1].current?.focus()
-    }
-
-    // Update the code
-    let newCode = [...code]
-    newCode[index] = value
-    setCode(newCode)
-  }
-
-  /**
-   * @description chức năng paste OTP
-   */
-  const handlePaste = (index: number, e: any) => {
-    e.preventDefault() // Ngăn chặn hành động paste mặc định
-    const pasted = e.clipboardData
-      .getData('text/plain')
-      .replace(/\n/g, '')
-      .replace(/\r/g, '')
-      .split(' ')
-      .slice(0, 6)
-
-    // Update the OTP array
-    const newOtp = [...code]
-    newOtp.splice(index, pasted.length, ...pasted)
-    setCode(newOtp?.filter((value) => value !== ''))
-  }
-
-  /**
    * @description function verify code
    */
   const verifyCode = async () => {
@@ -120,6 +78,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       setCode(['', '', '', '', '', ''])
       toast.success('Change Password Successfully!')
     } catch (error) {
+      setErrorMessage('Invaild OTP. Please try again!')
     } finally {
       setLoading(false)
     }
@@ -145,6 +104,19 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     } catch (error) {}
   }
 
+  const otpLength = 6
+
+  const onInput: OTPProps['onInput'] = (value) => {
+    const paddedValue = Array.from(
+      { length: otpLength },
+      (_, i) => value[i] || '',
+    )
+    setCode(paddedValue)
+  }
+
+  const sharedProps: OTPProps = {
+    onInput,
+  }
   return (
     <SappModalV2
       title={undefined}
@@ -168,28 +140,22 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             </div>
           </div>
           <div>
-            <div className="mb-2 grid grid-cols-6 grid-rows-1 gap-3">
-              {code?.map((otp, index) => (
-                <SAPPTextFiled
-                  key={index}
-                  inputRef={inputRefs[index]}
-                  type="text"
-                  value={otp}
-                  onChange={(event) => onEnterDigit(index, event)}
-                  inputClassName={`text-center h-[67px] w-[67px] rounded-md ${
-                    errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
-                  } pt-[25PX] pb-5 px-0`}
-                  onPaste={(e: any) =>
-                    code?.every((data) => data === '') && handlePaste(index, e)
-                  }
-                />
-              ))}
+            <div className="mb-2">
+              <Input.OTP
+                length={otpLength}
+                {...sharedProps}
+                size="large"
+                rootClassName="profile-change-password"
+                status={errorMessage ? 'error' : undefined}
+              />
             </div>
             <div className="flex justify-between">
-              <span className="text-medium-sm text-error">{errorMessage}</span>
+              <span className="text-sm text-error-400">{errorMessage}</span>
               <span
-                className={`text-medium-sm min-w-fit text-right ${
-                  timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'
+                className={`min-w-fit text-right text-sm font-semibold ${
+                  timeCountDown === '00 : 00'
+                    ? 'text-error-400'
+                    : 'text-[#050505]'
                 }`}
               >
                 {timeCountDown}
@@ -199,11 +165,11 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
         </div>
 
         <div className="w-full">
-          <ButtonText
+          <ButtonPrimary
             title="Verify Code"
             full={true}
-            className="mb-2 bg-[#29353C] px-6 py-3 text-base font-semibold text-white no-underline hover:bg-black"
-            size="large"
+            className="mb-4 rounded-lg font-semibold"
+            size="medium"
             loading={loading}
             onClick={verifyCode}
             disabled={code.some((e) => e === '') || time <= 0}
@@ -213,7 +179,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
             full={true}
             disabled={!canResend}
             onClick={onResendCode}
-            className="text-sm font-semibold"
+            className="text-base font-medium"
             size="medium"
             loading={loading}
           />

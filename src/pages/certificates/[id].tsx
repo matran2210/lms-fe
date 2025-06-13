@@ -47,6 +47,7 @@ const Certificate = () => {
    */
   const download = async () => {
     const originalImage = certificate?.certificate_url
+    if (!originalImage) return
     downloadImage(originalImage)
   }
 

@@ -106,9 +106,9 @@ const Certificate = () => {
       render: (record) => (
         <div className="flex items-center justify-center gap-1">
           <div
-            onClick={() => {
-              downloadImage(record.certificate_url)
-            }}
+            onClick={() =>
+              record?.certificate_url && downloadImage(record.certificate_url)
+            }
           >
             <Icon
               type="download"
@@ -136,14 +136,14 @@ const Certificate = () => {
   ]
 
   return (
-    <div>
+    <div className="mt-8 lg:mt-10">
       <Table<ICertificate>
         className="profile-certificate-table hidden lg:block"
         columns={columns}
         dataSource={certificateData}
       />
       <div className="flex flex-col gap-6 lg:hidden">
-        <div className="text-lg font-semibold">Certificate</div>
+        <div className="text-xl font-semibold text-secondary">Certificate</div>
         {certificateData.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem
@@ -184,7 +184,7 @@ const CertificateItem = ({
   return (
     <div
       className={clsx('flex flex-col gap-6', {
-        'border-b border-b-ink-300 pb-6': !isLastItem,
+        'border-b border-b-gray-300 pb-6': !isLastItem,
       })}
     >
       <div
@@ -222,9 +222,9 @@ const CertificateItem = ({
         value={
           <div className="flex items-center justify-center gap-1">
             <div
-              onClick={() => {
-                downloadImage(record.certificate_url)
-              }}
+              onClick={() =>
+                record?.certificate_url && downloadImage(record.certificate_url)
+              }
             >
               <Icon
                 type="download"
@@ -262,7 +262,7 @@ const InfoWrapper = ({
   return (
     <div className="flex items-center justify-between text-base ">
       <div className="font-normal">{title}</div>
-      <div className="font-semibold text-ink-800">{value}</div>
+      <div className="font-semibold text-gray-800">{value}</div>
     </div>
   )
 }

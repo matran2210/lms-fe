@@ -144,7 +144,7 @@ const NewFilltext = forwardRef(
                 }}
               >
                 <div
-                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-ink-100 text-sm font-normal text-[#A1A1A1] transition-opacity duration-150 ${
+                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gray-100 text-sm font-normal text-[#A1A1A1] transition-opacity duration-150 ${
                     focusedIndex === index || inputValue
                       ? 'opacity-0'
                       : 'opacity-100'
