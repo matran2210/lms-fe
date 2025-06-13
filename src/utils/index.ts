@@ -113,7 +113,9 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
 
   return words.join(' ')
 }
-
+export function convertHumanReadableToSnakeCase(text: string) {
+  return text.trim().toLowerCase().split(/\s+/).join('_')
+}
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters

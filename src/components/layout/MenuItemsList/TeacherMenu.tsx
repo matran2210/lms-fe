@@ -200,7 +200,7 @@ export default function TeacherMenu() {
     <Sider
       width={80}
       collapsed
-      className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-[#025eff]"
+      className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-[#091d37]"
     >
       <div className="flex h-full flex-col items-center justify-between">
         <ItemMenuLink />

@@ -49,7 +49,7 @@ export interface IFieldInputProps extends IBaseInputProps {
   }
 }
 
-const TeacherTextField = ({
+const SappTextFieldV2 = ({
   type,
   value,
   defaultValue,
@@ -175,4 +175,4 @@ const TeacherTextField = ({
   )
 }
 
-export default TeacherTextField
+export default SappTextFieldV2

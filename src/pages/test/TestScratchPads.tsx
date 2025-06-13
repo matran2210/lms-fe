@@ -81,7 +81,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-[#99A1B7] px-4 py-3">
+            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
               <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseModalIcon />
@@ -108,8 +108,8 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border">
-            <div className="flex w-full items-center justify-between bg-[#99A1B7] px-4 py-3">
+          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border border-gray-400">
+            <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
               <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
@@ -141,8 +141,8 @@ const TestScratchPads = ({
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
           position="bottom left"
           header={
-            <div className="relative">
-              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+            <div className="relative h-full">
+              <div className="modal-header flex h-10 w-full items-center justify-between bg-white px-5">
                 <div className="truncate">
                   <span className="text-base font-semibold">{`${exhibitText} ${
                     (i ?? 0) + 1

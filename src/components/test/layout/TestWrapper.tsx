@@ -63,16 +63,18 @@ const TestWrapper = ({
   onSubmitAnswer,
 }: PropsWithChildren<IProps>) => {
   const dispatch = useAppDispatch()
-  const remainingTimeinSeconds = quizDetail?.quiz_timed
-    ? dayjs(
-        dayjs(new Date(quizAttempt.created_at ?? '')).add(
-          quizDetail?.quiz_timed,
-          'minutes',
-        ),
-      ).diff(dayjs(), 'seconds')
-    : null
+  const startTime = dayjs(quizAttempt.created_at)
+  const isValidStart = startTime.isValid()
+  const duration = quizDetail?.quiz_timed
+
+  const remainingTimeinSeconds =
+    duration && isValidStart
+      ? startTime.add(duration, 'minutes').diff(dayjs(), 'seconds')
+      : null
+
   const remainingTimeAttempt =
     (remainingTimeinSeconds ?? 0) > 0 ? (remainingTimeinSeconds ?? 0) : 0
+
   return (
     <Layout className="flex h-screen flex-col">
       <Header

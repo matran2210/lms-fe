@@ -1,6 +1,8 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { runHighlight } from '@utils/index'
+import { Divider } from 'antd'
+import clsx from 'clsx'
 import { Element, HTMLReactParserOptions } from 'html-react-parser'
 import {
   ForwardedRef,
@@ -35,9 +37,10 @@ interface IProps {
   name?: string
   setValue?: any
   watch?: UseFormWatch<FieldValues>
+  explainClassname?: string
 }
 
-const NewFiltext = forwardRef(
+const NewFilltext = forwardRef(
   (
     {
       control,
@@ -55,6 +58,7 @@ const NewFiltext = forwardRef(
       name,
       setValue,
       watch,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -140,7 +144,7 @@ const NewFiltext = forwardRef(
                 }}
               >
                 <div
-                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-[#99A1B7] text-sm font-normal text-[#A1A1A1] transition-opacity duration-150 ${
+                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 bg-gray-100 text-sm font-normal text-[#A1A1A1] transition-opacity duration-150 ${
                     focusedIndex === index || inputValue
                       ? 'opacity-0'
                       : 'opacity-100'
@@ -167,18 +171,27 @@ const NewFiltext = forwardRef(
             )
             inputClass =
               correctAnswer || isSelfReflection
-                ? '!border-success text-success text-center !font-normal'
-                : '!border-[#d35563] text-[#d35563] text-center !font-normal'
+                ? ' inline-block !border-0 !bg-transparent text-success text-center !p-0 '
+                : ' inline-block !border-0 !bg-transparent text-[#d35563] text-center !p-0'
 
             return (
               <span>
-                <input
-                  disabled
-                  type="text"
-                  id={(domNode as Element).attribs.id}
-                  className={`sapp-input-preview ${inputClass}`}
-                  value={inputValue}
-                />
+                {corrects.length > 0 ? (
+                  <div
+                    id={(domNode as Element).attribs.id}
+                    className={inputClass}
+                  >
+                    {inputValue}
+                  </div>
+                ) : (
+                  <input
+                    disabled
+                    type="text"
+                    id={(domNode as Element).attribs.id}
+                    className={`sapp-input-preview ${inputClass}`}
+                    value={inputValue}
+                  />
+                )}
               </span>
             )
           }
@@ -237,15 +250,18 @@ const NewFiltext = forwardRef(
         )}
 
         {solution && (
-          <div className="mt-6 bg-[#F9F9F9] p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )
   },
 )
 
-NewFiltext.displayName = 'NewFiltext'
-export default NewFiltext
+NewFilltext.displayName = 'NewFilltext'
+export default NewFilltext

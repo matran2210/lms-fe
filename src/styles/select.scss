@@ -162,7 +162,7 @@
 
 .profile-subject-select {
   .ant-select-selector {
-    @apply flex items-center justify-between gap-2;
+    @apply flex items-center justify-between gap-2 !pl-0;
   }
 
   .ant-select-arrow {
