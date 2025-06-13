@@ -14,6 +14,8 @@ import { AuthAPI } from 'src/pages/api/profile'
 import { z } from 'zod'
 import exceptions from '../../services/en.exceptions.json'
 import PasswordProfile from './PasswordProfile'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 export interface IChangePassword {
   password: string
@@ -101,7 +103,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
 
   return (
     <React.Fragment>
-      <div className="mt-10">
+      <div className="mt-8 lg:mt-10">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="mb-6 flex flex-col gap-6">
             <div className="relative">
@@ -140,9 +142,9 @@ const ChangePassword = ({ handleCancel }: IProp) => {
               />
             </div>
           </div>
-          <div className="flex justify-end">
+          <div className="hidden justify-end lg:flex">
             <ButtonCancelSubmit
-              className="flex gap-2"
+              className="flex flex-row-reverse gap-2"
               cancel={{
                 title: 'Cancel',
                 onClick: handleCancel,
@@ -163,6 +165,27 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                   isEmpty(watch('password')),
               }}
             ></ButtonCancelSubmit>
+          </div>
+          <div className="flex items-center justify-between gap-2 lg:hidden">
+            <ButtonSecondary
+              className="w-full"
+              size="medium"
+              title="Cancel"
+              onClick={handleCancel}
+              disabled={loading}
+            />
+            <ButtonPrimary
+              className="w-full"
+              size="medium"
+              title="Confirm"
+              htmlType="submit"
+              disabled={
+                loading ||
+                isEmpty(watch('confirmPassword')) ||
+                isEmpty(watch('newPassword')) ||
+                isEmpty(watch('password'))
+              }
+            />
           </div>
         </form>
       </div>

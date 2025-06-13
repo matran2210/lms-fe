@@ -136,14 +136,14 @@ const Certificate = () => {
   ]
 
   return (
-    <div>
+    <div className="mt-8 lg:mt-10">
       <Table<ICertificate>
         className="profile-certificate-table hidden lg:block"
         columns={columns}
         dataSource={certificateData}
       />
       <div className="flex flex-col gap-6 lg:hidden">
-        <div className="text-lg font-semibold">Certificate</div>
+        <div className="text-xl font-semibold text-secondary">Certificate</div>
         {certificateData.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem
