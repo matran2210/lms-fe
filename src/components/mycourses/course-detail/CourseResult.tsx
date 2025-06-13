@@ -43,16 +43,35 @@ interface CoursePart {
 interface IProps {
   class_user_id?: string
   coursePart: CoursePart
-  quizAttempt: IQuizAttempt
-  trackGA: () => void
   setOpenReport: Dispatch<SetStateAction<boolean>>
+  selectedResult:
+    | {
+        label: string
+        value: string
+        ratio_score?: string
+        status: string
+        score: number
+      }
+    | undefined
+  setSelectedResult: Dispatch<
+    SetStateAction<
+      | {
+          label: string
+          value: string
+          ratio_score?: string
+          status: string
+          score: number
+        }
+      | undefined
+    >
+  >
 }
 
 const ResultCourse = ({
   class_user_id,
   coursePart,
-  quizAttempt,
-  trackGA,
+  selectedResult,
+  setSelectedResult,
   setOpenReport,
 }: IProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false)
@@ -65,13 +84,6 @@ const ResultCourse = ({
     },
     data: [],
   })
-
-  const [selectedResult, setSelectedResult] = useState<{
-    label: string
-    value: string
-    ratio_score?: string
-    status: string
-  }>()
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -104,6 +116,7 @@ const ResultCourse = ({
           value: results?.[0]?.id,
           ratio_score: results?.[0]?.ratio_score,
           status: results?.[0]?.status,
+          score: results?.[0]?.score,
         })
       }
     }
@@ -112,91 +125,50 @@ const ResultCourse = ({
     fetchResult(1, 10)
   }, [])
 
-  const isManualGradingAndNotFinishedGrading =
-    coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
-    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
-
-  return resultList.data.length <= 1 ? (
-    isManualGradingAndNotFinishedGrading ? (
-      <>
-        {coursePart?.quiz?.attempt?.grading_status ===
-        GRADE_STATUS.AWAITING_GRADING ? (
-          <SappButton
-            title={'Your Answers'}
-            isUnderLine
-            color="text"
-            className="!p-0 font-medium underline"
-            onClick={() => {
-              router.push(
-                `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
-              )
-              trackGA()
-            }}
-          />
-        ) : null}
-      </>
-    ) : (
-      <SappButton
-        title={'Result'}
-        isUnderLine
-        color="text"
-        className="!p-0 font-medium underline"
-        onClick={() => {
-          if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
-            router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
-          }
-
-          trackGA()
-        }}
-      />
-    )
-  ) : (
+  return (
     <div className="flex h-8 items-center gap-2">
-      <div
-        className={`forcus-group:text-primary text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
-      >
-        Result:
-      </div>
+      <div className={`forcus-group:text-primary text-gray-800`}>Attempt:</div>
       <div>
-        <HookFormSelect
-          classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-          placeholder=""
-          className="right-top"
-          value={selectedResult}
-          onChange={(selectedOption) => {
-            setSelectedResult(selectedOption)
-            setIsFocus(false)
-            router.push({
-              pathname: `/courses/test/test-result/${selectedOption.value}`,
-              query: { attempt: selectedOption?.label },
-            })
-          }}
-          options={resultList.data.map((item) => ({
-            value: item.id,
-            label: item.name,
-            status: item.status,
-            ratio_score: item.ratio_score,
-          }))}
-          onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
-            const { target } = e
-            if (
-              (target as HTMLDivElement).scrollTop +
-                (target as HTMLDivElement).offsetHeight ===
-              (target as HTMLDivElement).scrollHeight
-            ) {
-              handleNextPage()
-            }
-          }}
-          isResultSelect
-          maxMenuHeight={130}
-          onFocus={(e) => {
-            setIsFocus(true)
-          }}
-          onBlur={(e) => {
-            setIsFocus(false)
-          }}
-          isSearchable={false}
-        />
+        {resultList.data.length <= 1 ? (
+          <div className="text-base font-normal">1</div>
+        ) : (
+          <HookFormSelect
+            classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
+            placeholder=""
+            className="right-top text-base"
+            value={selectedResult}
+            onChange={(selectedOption) => {
+              setSelectedResult(selectedOption)
+              setIsFocus(false)
+            }}
+            options={resultList.data.map((item) => ({
+              value: item.id,
+              label: item.name,
+              status: item.status,
+              ratio_score: item.ratio_score,
+              score: item.score,
+            }))}
+            onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
+              const { target } = e
+              if (
+                (target as HTMLDivElement).scrollTop +
+                  (target as HTMLDivElement).offsetHeight ===
+                (target as HTMLDivElement).scrollHeight
+              ) {
+                handleNextPage()
+              }
+            }}
+            isResultSelect
+            maxMenuHeight={130}
+            onFocus={(e) => {
+              setIsFocus(true)
+            }}
+            onBlur={(e) => {
+              setIsFocus(false)
+            }}
+            isSearchable={false}
+          />
+        )}
       </div>
     </div>
   )
