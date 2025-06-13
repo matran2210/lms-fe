@@ -91,7 +91,7 @@ const SubjectList = ({ isEdit }: IProps) => {
           classNameBody="md:px-0 lg:px-8"
           rootClassName={'profile-subject-drawer'}
           classNames={{
-            content: 'md:rounded-2xl lg:rounded-none',
+            content: 'md:rounded-2xl',
           }}
         >
           <ProgramDetail

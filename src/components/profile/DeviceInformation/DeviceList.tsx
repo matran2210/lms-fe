@@ -85,7 +85,7 @@ const DeviceList = () => {
           rootClassName={'profile-subject-drawer'}
           className="h-full"
           classNames={{
-            content: 'md:rounded-2xl lg:rounded-none',
+            content: 'md:rounded-2xl',
           }}
         >
           <div className="items flex h-full flex-col justify-between gap-8 text-base">
