@@ -1,7 +1,7 @@
 import { Skeleton } from 'antd'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import dynamic from 'next/dynamic'
+import DynamicBundledEditor from '../../form/editor'
 
 export const DEFAULT_EDITOR_VALUE = ''
 
@@ -22,10 +22,6 @@ interface Props {
   disabled?: boolean
   key?: number | string
 }
-
-const DynamicBundledEditor = dynamic(() => import('../../form/editor'), {
-  ssr: false,
-})
 
 const HookFormEditor = ({
   name,
