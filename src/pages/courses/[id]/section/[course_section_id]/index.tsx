@@ -526,7 +526,7 @@ const CoursePartDetail = () => {
                   <div>
                     <StarCircleIcon />
                   </div>
-                  <div className="flex items-center text-base font-normal leading-normal text-ink-800">
+                  <div className="flex items-center text-base font-normal leading-normal text-gray-800">
                     <div className="me-1">LO{index + 1}:</div>
                     <div
                       className="learningOutcome-description"

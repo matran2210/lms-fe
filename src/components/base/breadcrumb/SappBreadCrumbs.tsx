@@ -28,7 +28,7 @@ const SappBreadCrumbs = ({
               <li
                 className={clsx(
                   'text-base',
-                  isLast ? 'font-semibold text-ink-800' : 'text-ink-400',
+                  isLast ? 'font-semibold text-gray-800' : 'text-gray-400',
                 )}
               >
                 {isLast ? (
@@ -60,7 +60,9 @@ const SappBreadCrumbs = ({
                   <span
                     className={clsx(
                       isTeacher && 'text-tiny',
-                      index === lastIndex - 1 ? 'text-ink-800' : 'text-ink-400',
+                      index === lastIndex - 1
+                        ? 'text-gray-800'
+                        : 'text-gray-400',
                     )}
                   >
                     {isTeacher ? '▶' : '/'}
