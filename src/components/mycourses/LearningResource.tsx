@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@assets/icons'
-import SappDrawer from '@components/base/SappDrawer'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -19,8 +19,9 @@ const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
+import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 
 interface IProps {
   open: boolean
@@ -291,15 +292,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
 
   return (
-    <SappDrawer
-      drawerSubId={'-resource-list'}
-      isOpen={open}
-      message="Bạn có chắc chán muốn hủy không?"
-      onClose={onClose}
+    <SappDrawerV3
+      open={open}
+      handleCancel={onClose}
       title="Resource"
-      footer={false}
-      confirmOnClose={false}
-      heightBody={'h-[calc(100vh-112px)]'}
+      isShowBtnClose
     >
       <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
         <HookFormSelect
@@ -435,10 +432,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         </TextSkeleton>
       ) : (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-          <NoData />
+          <NoDataV2 />
         </div>
       )}
-    </SappDrawer>
+    </SappDrawerV3>
   )
 }
 

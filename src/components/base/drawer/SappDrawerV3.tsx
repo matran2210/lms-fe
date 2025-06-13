@@ -37,8 +37,8 @@ const SappDrawerV3 = ({
       loading={loading}
       {...props}
     >
-      <div className="h-full w-full bg-white py-8 pl-8">
-        <div className="mb-8 flex items-center justify-between pr-8">
+      <div className="h-full w-full bg-white p-8">
+        <div className="mb-8 flex items-center justify-between">
           <div className="text-gray-14 flex items-center gap-2 text-2xl font-semibold leading-loose">
             {!isShowBtnClose && (
               <div onClick={handleBack} className="cursor-pointer">
