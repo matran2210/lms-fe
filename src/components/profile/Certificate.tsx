@@ -106,9 +106,9 @@ const Certificate = () => {
       render: (record) => (
         <div className="flex items-center justify-center gap-1">
           <div
-            onClick={() => {
-              downloadImage(record.certificate_url)
-            }}
+            onClick={() =>
+              record?.certificate_url && downloadImage(record.certificate_url)
+            }
           >
             <Icon
               type="download"
@@ -222,9 +222,9 @@ const CertificateItem = ({
         value={
           <div className="flex items-center justify-center gap-1">
             <div
-              onClick={() => {
-                downloadImage(record.certificate_url)
-              }}
+              onClick={() =>
+                record?.certificate_url && downloadImage(record.certificate_url)
+              }
             >
               <Icon
                 type="download"
