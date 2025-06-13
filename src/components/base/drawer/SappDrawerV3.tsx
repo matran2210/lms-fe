@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, CloseIconV2 } from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface IProps extends DrawerProps {
   open: boolean
@@ -12,48 +13,81 @@ interface IProps extends DrawerProps {
   isShowFooter?: boolean
   children: ReactNode
   loading?: boolean
+  btnSubmitTile?: string
+  handleSubmit?: () => void
+  sizeTextBtn?: 'small' | 'medium' | 'large' | 'extra'
+  submitButtonClassName?: string
 }
 
-const SappDrawerV3 = ({
+const SappDrawerV3: React.FC<IProps> = ({
   open,
-  handleBack,
   handleCancel,
-  width,
+  handleBack,
+  width = '30%',
   title,
   children,
   isShowBtnClose = true,
   isShowFooter = false,
   loading = false,
   className,
+  btnSubmitTile,
+  handleSubmit,
+  sizeTextBtn = 'medium',
+  submitButtonClassName,
   ...props
-}: IProps) => {
+}) => {
   return (
     <Drawer
       open={open}
-      title={undefined}
       onClose={handleCancel}
-      width={width ?? '30%'}
+      width={width}
+      title={undefined}
       closeIcon={false}
-      loading={loading}
       {...props}
     >
-      <div className="h-full w-full bg-white p-8">
+      <div className="relative h-full w-full bg-white p-8">
+        {/* Header */}
         <div className="mb-8 flex items-center justify-between">
-          <div className="text-gray-14 flex items-center gap-2 text-2xl font-semibold leading-loose">
-            {!isShowBtnClose && (
-              <div onClick={handleBack} className="cursor-pointer">
+          <div className="flex items-center gap-2">
+            {!isShowBtnClose && handleBack && (
+              <button
+                onClick={handleBack}
+                className="cursor-pointer"
+                aria-label="Go back"
+              >
                 <ArrowLeftIcon />
-              </div>
+              </button>
             )}
-            <div>{title}</div>
+            <span className="text-2xl font-semibold leading-loose text-secondary">
+              {title}
+            </span>
           </div>
           {isShowBtnClose && (
-            <div className="cursor-pointer" onClick={handleCancel}>
+            <button
+              onClick={handleCancel}
+              className="cursor-pointer"
+              aria-label="Close"
+            >
               <CloseIconV2 />
-            </div>
+            </button>
           )}
         </div>
+
+        {/* Content */}
         <div>{children}</div>
+
+        {/* Footer */}
+        {isShowFooter && (
+          <div className="absolute bottom-0 left-0 right-0 flex justify-end px-8 pb-8">
+            <ButtonPrimary
+              title={btnSubmitTile}
+              className={submitButtonClassName}
+              onClick={handleSubmit}
+              size={sizeTextBtn}
+              loading={loading}
+            />
+          </div>
+        )}
       </div>
     </Drawer>
   )
