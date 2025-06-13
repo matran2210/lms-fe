@@ -132,9 +132,9 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const dateNow = dayjs().add(7, 'hour')
-  const dateOpenSection = dayjs(
-    `${data?.schedule?.start_date} ${data?.schedule?.start_time}`,
-  )
+  const dateOpenSection = data?.class?.opening_at
+    ? dayjs(data?.class?.opening_at)
+    : dayjs(data?.class?.started_at)
 
   useEffect(() => {
     if (open.isOpen) {
