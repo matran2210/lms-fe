@@ -77,11 +77,18 @@ const DeviceList = () => {
           onClose={closeDeviceDrawer}
           title={`${selectedDrawer.data.user_agent.browserName} ${selectedDrawer.data.user_agent.browserVersion} (${selectedDrawer.data.user_agent.osName})`}
           handleCancel={closeDeviceDrawer}
-          classNameHeader="bg-white !text-black"
-          classNameBody="h-[calc(100%-78px)] overflow-y-auto"
+          // classNameHeader="bg-white !text-black"
+          // classNameBody="h-[calc(100%-78px)] overflow-y-auto"
+          // className="h-full"
+          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
+          classNameBody="md:px-0 md:pb-0 lg:px-8 lg:pb-6 h-[calc(100%-80px)] overflow-y-auto"
+          rootClassName={'profile-subject-drawer'}
           className="h-full"
+          classNames={{
+            content: 'md:rounded-2xl lg:rounded-none',
+          }}
         >
-          <div className="items flex h-full flex-col justify-between text-base">
+          <div className="items flex h-full flex-col justify-between gap-8 text-base">
             <div className="flex flex-col gap-4">
               {selectedDrawer.data?.user_agent.browserName && (
                 <div className="flex items-center justify-between text-[#050505]">

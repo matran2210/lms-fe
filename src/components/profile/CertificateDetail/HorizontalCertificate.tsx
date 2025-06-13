@@ -7,6 +7,7 @@ import { ICertificate } from '@pages/certificates/[id]'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate
@@ -49,8 +50,8 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
             />
           ) : (
             <CertificateImg
-              size={500}
-              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+              size={400}
+              className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>
@@ -68,14 +69,14 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
               </div>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <Button
-                className="!border-none bg-[#29353C] px-6 py-3 text-white hover:!border-none hover:!bg-black hover:!text-white"
+              <ButtonPrimary
+                size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}
               >
                 Download
-              </Button>
+              </ButtonPrimary>
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >

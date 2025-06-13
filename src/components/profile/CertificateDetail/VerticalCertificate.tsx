@@ -7,6 +7,7 @@ import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { ICertificate } from '@pages/certificates/[id]'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -66,14 +67,14 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               </div>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <Button
-                className="!border-none bg-[#29353C] px-6 py-3 text-white hover:!border-none hover:!bg-black hover:!text-white"
+              <ButtonPrimary
+                size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}
               >
                 Download
-              </Button>
+              </ButtonPrimary>
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
