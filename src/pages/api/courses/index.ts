@@ -175,7 +175,11 @@ export class CoursesAPI {
 
   static getQuizAttemptsTable(
     id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
   ): Promise<{
     success: boolean
     data: IScoreDetails
@@ -184,6 +188,7 @@ export class CoursesAPI {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
+        ...(no_group_view && { no_group_view }),
       },
     })
   }
