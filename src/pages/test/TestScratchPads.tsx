@@ -81,7 +81,7 @@ const TestScratchPads = ({
           }
         >
           <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-ink-300 bg-[#99A1B7] px-4 py-3">
+            <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-[#99A1B7] px-4 py-3">
               <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
                 <CloseModalIcon />

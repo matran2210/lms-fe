@@ -105,7 +105,7 @@ const OverProgress = () => {
               fontSize: 14,
             },
             formatter: function (params) {
-              return `<div class="flex flex-row items-center justify-between gap-2 font-medium text-ink-700">
+              return `<div class="flex flex-row items-center justify-between gap-2 font-medium text-gray-700">
                     <div class="w-2 h-2 rounded-full" style="background-color: ${params.color}"></div>
                     <div>${params.name}:</div>
                     <div class="font-bold">${params.value}</div>
@@ -139,8 +139,8 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-ink-700 shadow-activity lg:col-span-4 3xl:px-8">
-      <div className="mb-5 flex items-center justify-between border-b border-ink-300 pb-3">
+    <div className="flex flex-col bg-white px-3 pb-7 pt-4 text-gray-700 shadow-activity lg:col-span-4 3xl:px-8">
+      <div className="mb-5 flex items-center justify-between border-b border-gray-300 pb-3">
         <div className="min-w-fit text-lg font-bold 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
@@ -167,7 +167,7 @@ const OverProgress = () => {
                   <span className="font-medium">Activities completed</span>
                 </div>
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                  <span className="h-3 w-3 rounded-full bg-ink-300"></span>
+                  <span className="h-3 w-3 rounded-full bg-gray-300"></span>
                   <span className="font-medium">Activities not completed</span>
                 </div>
               </div>

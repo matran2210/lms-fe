@@ -116,7 +116,7 @@ const SappDrawer = ({
               headerClassName,
             )}
           >
-            <span className="line-clamp-3 pr-4 text-ink-600">{title}</span>
+            <span className="line-clamp-3 pr-4 text-gray-600">{title}</span>
             <div className="shrink-0 cursor-pointer" onClick={handleOnClose}>
               <CloseIcon />
             </div>

@@ -13,7 +13,7 @@ function CollapseBox({ title, children }: IProps) {
       <div
         className={`flex items-center justify-between ${isOpen && 'mb-4 border-b border-[#7E8299] pb-3'}`}
       >
-        <div className="text-base font-semibold text-ink-600">{title}</div>
+        <div className="text-base font-semibold text-gray-600">{title}</div>
         <div className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           <CollapseArrowIcon selected={isOpen} />
         </div>

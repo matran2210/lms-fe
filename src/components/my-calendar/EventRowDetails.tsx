@@ -40,7 +40,7 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
       <div className="min-w-[169px] text-sm leading-[21px] tracking-normal text-[#99A1B7]">
         {label}
       </div>
-      <div className="flex-1 text-sm leading-[21px] tracking-normal text-ink-800">
+      <div className="flex-1 text-sm leading-[21px] tracking-normal text-gray-800">
         {value}
       </div>
     </div>

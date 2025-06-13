@@ -26,7 +26,7 @@ const ButtonSecondary = ({
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-ink-100 !text-ink-400 hover:!bg-ink-100 hover:!text-ink-400 hover:!border-ink-100'
+    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
     : 'cursor-pointer'
 
   let componentClass = `
@@ -37,7 +37,7 @@ const ButtonSecondary = ({
     rounded-lg
     border border-secondary
     hover:!border-secondary
-    hover:!bg-ink-100
+    hover:!bg-gray-100
     box-border
     font-medium
     ${padding}

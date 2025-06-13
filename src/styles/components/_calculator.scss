@@ -1,10 +1,10 @@
 .calc {
-  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-ink-300;
+  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-gray-300;
   color: $color-btns-container;
 }
 
 .calc__display {
-  @apply flex flex-col gap-4 border-x border-ink-300 bg-[#18355D] px-6 py-8 text-right text-4xl;
+  @apply flex flex-col gap-4 border-x border-gray-300 bg-[#18355D] px-6 py-8 text-right text-4xl;
 }
 
 .display_expression {

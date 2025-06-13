@@ -2594,7 +2594,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-ink-800 underline"
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2759,7 +2759,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2837,7 +2837,7 @@ const TestDetail = () => {
                         )}
                     </div>
 
-                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
+                    <div className="mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,

@@ -16,7 +16,7 @@ const ChartACCAScore = ({ data }: IProps) => {
   const { ref, showLeft, showRight } = useScrollShadows<HTMLDivElement>()
   const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
-    <div className="relative block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-ink-800 shadow-sidebar">
+    <div className="relative block h-fit min-h-[152px] rounded-xl bg-white p-6 pb-0 text-gray-800 shadow-sidebar">
       <div className="mb-8 text-lg font-semibold ">
         Multiple Choice Score by Part
       </div>
@@ -46,7 +46,7 @@ const ChartACCAScore = ({ data }: IProps) => {
               </div>
               <div>
                 <span>{`${percentage}%`}</span>
-                <span className="ml-2 inline-block text-sm text-ink-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
+                <span className="ml-2 inline-block text-sm text-gray-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
               </div>
             </div>
           )

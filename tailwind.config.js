@@ -31,7 +31,7 @@ module.exports = {
         700: '#212B30',
         800: '#0E1214',
       },
-      ink: {
+      gray: {
         50: '#FFFFFF',
         100: '#F6F6F6',
         200: '#E5E7EB',
