@@ -44,7 +44,7 @@ const SappDrawerV2 = ({
         >
           <div className="pr-10 text-2xl font-medium">{title}</div>
           <div
-            className="absolute top-1/2 -translate-y-2/4 cursor-pointer md:right-0 lg:right-8"
+            className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer md:right-0 lg:right-8"
             onClick={handleCancel}
           >
             <CloseModalIcon />
