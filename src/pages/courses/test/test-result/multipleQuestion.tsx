@@ -177,7 +177,7 @@ const MultipleQuestion = ({
               questions?.selectedResponseAnswers ?? [],
               0,
             )}
-            <div className="h-[1px] w-full bg-ink-300" />
+            <div className="h-[1px] w-full bg-gray-300" />
             {renderBoxes(
               'Constructed Questions',
               questions?.constructedResponseAnswers ?? [],

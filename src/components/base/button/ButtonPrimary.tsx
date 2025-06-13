@@ -24,7 +24,7 @@ const ButtonPrimary = ({
         : 'py-4 px-8'
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-ink-100 !text-ink-400 hover:!bg-ink-100 hover:!text-ink-400 hover:!border-ink-100'
+    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
     : 'cursor-pointer'
   let componentClass = `text-center text-white font-medium bg-secondary-600 hover:!text-white hover:!bg-secondary border-none ${fullWidthClass} ${padding} ${disabledClass} ${textSizeClass} ${className}`
 

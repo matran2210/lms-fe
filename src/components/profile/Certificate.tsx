@@ -184,7 +184,7 @@ const CertificateItem = ({
   return (
     <div
       className={clsx('flex flex-col gap-6', {
-        'border-b border-b-ink-300 pb-6': !isLastItem,
+        'border-b border-b-gray-300 pb-6': !isLastItem,
       })}
     >
       <div
@@ -262,7 +262,7 @@ const InfoWrapper = ({
   return (
     <div className="flex items-center justify-between text-base ">
       <div className="font-normal">{title}</div>
-      <div className="font-semibold text-ink-800">{value}</div>
+      <div className="font-semibold text-gray-800">{value}</div>
     </div>
   )
 }

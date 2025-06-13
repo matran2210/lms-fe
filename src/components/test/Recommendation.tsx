@@ -73,7 +73,7 @@ const CommentModal = ({
 }: ICommentModal) => {
   return (
     <div
-      className={`rounded-xl bg-white p-6 shadow-small ${className ?? ''} text-ink-800`}
+      className={`rounded-xl bg-white p-6 shadow-small ${className ?? ''} text-gray-800`}
     >
       <div className="mb-4 flex items-center justify-between">
         <div className="text-xl font-semibold">{title}</div>

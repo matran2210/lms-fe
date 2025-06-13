@@ -54,7 +54,7 @@ const PopupWelcome = ({ confirmDialogOverLayRef }: Props) => {
           'animate-jump-in relative transform overflow-hidden shadow-xl transition-all rounded-xl'
         }
       >
-        <div className="flex flex-col items-center p-10 text-ink-800">
+        <div className="flex flex-col items-center p-10 text-gray-800">
           <HandShake />
           <h2 className="mb-8 mt-10 text-3xl font-bold ">
             {UserGuide.TITLE_WELCOME}

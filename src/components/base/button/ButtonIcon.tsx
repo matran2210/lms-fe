@@ -22,7 +22,7 @@ const ButtonIcon = ({
   let padding = 'p-[7px]'
   let borderRadius = buttonType === 'rounded' ? 'rounded-full' : 'rounded-md'
   let disabledClass = disabled ? 'cursor-not-allowed' : 'cursor-pointer'
-  let componentClass = `text-center text-icon border border-ink-300 hover:!text-white hover:!bg-primary hover:!border-primary font-medium ${padding} ${borderRadius} ${disabledClass} ${className}`
+  let componentClass = `text-center text-icon border border-gray-300 hover:!text-white hover:!bg-primary hover:!border-primary font-medium ${padding} ${borderRadius} ${disabledClass} ${className}`
 
   return (
     <BaseButton

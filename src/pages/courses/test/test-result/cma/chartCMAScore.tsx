@@ -20,17 +20,17 @@ const ChartCMAScore = ({
   recommendation,
 }: IProps) => {
   return (
-    <div className="mb-4 min-h-[433px] w-full max-w-full items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-ink-800 shadow-sidebar xl:mb-6">
+    <div className="mb-4 min-h-[433px] w-full max-w-full items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-gray-800 shadow-sidebar xl:mb-6">
       <div className="-ml-6 mb-11 text-lg font-semibold xl:font-medium">
         Multiple Choice Score by Part
       </div>
       <div className="">
         <div className="group relative h-[222px]">
-          <div className="h-full w-full border-b border-l border-ink-300" />
+          <div className="h-full w-full border-b border-l border-gray-300" />
           <div>
             {isGraded && (
               <div
-                className={`absolute left-3 flex h-0 w-full items-center border-t border-dotted border-ink-300 group-hover:border-info`}
+                className={`absolute left-3 flex h-0 w-full items-center border-t border-dotted border-gray-300 group-hover:border-info`}
                 style={{
                   bottom: passingScore + '%',
                 }}
@@ -48,7 +48,7 @@ const ChartCMAScore = ({
             {passingScore === 50 && isGraded ? (
               ''
             ) : (
-              <div className="absolute bottom-1/2 left-3 flex h-0 w-[calc(100%-12px)] items-center border-t border-dotted border-ink-300">
+              <div className="absolute bottom-1/2 left-3 flex h-0 w-[calc(100%-12px)] items-center border-t border-dotted border-gray-300">
                 <div className="relative -left-9 bottom-[50%] text-sm font-normal">
                   <span className="relative">50</span>
                 </div>
@@ -78,7 +78,7 @@ const ChartCMAScore = ({
                         }}
                       />
                     </Tooltip>
-                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-ink-800" />
+                    <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-gray-800" />
                   </div>
                   <div className="mb-3 mt-2 line-clamp-2 h-8 w-full text-center text-sm">
                     {item?.short_name ?? '-'}

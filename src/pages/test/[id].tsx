@@ -26,7 +26,7 @@ import { runHighlight } from '@utils/index'
 import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useForm, useFormContext } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import SappLoading from 'src/common/SappLoading'
 import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
@@ -48,17 +48,22 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
+import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
 import Popover from '@components/Popover'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
+import RequirementsTab from '@components/test/RequirementsTab'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { TabsProps } from 'antd'
+import { TabsProps, Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
@@ -89,13 +94,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import RequirementsTab from '@components/test/RequirementsTab'
-import { Tooltip } from 'antd'
-import SappButton from '@components/base/button/SappButton'
-import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
-import { HighlightableHTML } from '@components/highlights/HighlightHTML'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 declare global {
   interface Window {
@@ -2729,7 +2727,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-ink-800 underline"
+                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2904,7 +2902,7 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-ink-100 p-8">
+                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2994,7 +2992,7 @@ const TestDetail = () => {
 
                     <div
                       className={clsx(
-                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-ink-100 p-8',
+                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
                           'bg-white':
                             currentTabContent?.data?.qType ===

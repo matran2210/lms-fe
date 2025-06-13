@@ -189,7 +189,7 @@ const EssayQuestionPreview = ({
       className={clsx(
         'w-full overflow-hidden',
         {
-          'rounded-xl bg-ink-100 p-8': !isShowContent,
+          'rounded-xl bg-gray-100 p-8': !isShowContent,
         },
         className,
       )}

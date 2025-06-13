@@ -85,7 +85,7 @@ const TestWrapper = ({
       >
         <div className="flex w-full items-center justify-between">
           <div
-            className="cursor-pointer rounded bg-ink-200 p-2"
+            className="cursor-pointer rounded bg-gray-200 p-2"
             onClick={() => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
@@ -133,7 +133,7 @@ const TestWrapper = ({
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm relative w-full border-t border-ink-300 bg-white p-0',
+          'shadow-t-sm relative w-full border-t border-gray-300 bg-white p-0',
           footerClass,
           'h-auto',
         )}

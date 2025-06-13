@@ -10,7 +10,7 @@ const SIZES = {
 
 const COLORS = {
   primary:
-    'bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-ink-300 disabled:bg-[#99A1B7]',
+    'bg-black text-white rounded-lg hover:bg-[#404041] disabled:text-gray-300 disabled:bg-[#99A1B7]',
   info: 'bg-info hover:bg-info-2 disabled:bg-info-2 text-white',
   success: 'bg-success hover:bg-success-2 disabled:bg-success-2 text-white',
   secondary:
@@ -31,7 +31,7 @@ const COLORS = {
   okPopup: 'bg-error text-white',
   cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
   'light-dark':
-    'bg-[#29353C] hover:bg-secondary disabled:bg-ink-100 text-white',
+    'bg-[#29353C] hover:bg-secondary disabled:bg-gray-100 text-white',
 }
 
 const PADDINGS = {

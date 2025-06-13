@@ -23,7 +23,7 @@ const TotalScore = ({
     >
       <div className="flex w-full flex-row justify-between">
         <div className="block">
-          <div className="mb-3 text-2xl font-semibold text-ink-800 xl:font-bold">
+          <div className="mb-3 text-2xl font-semibold text-gray-800 xl:font-bold">
             {isGraded ? 'Overall Score' : 'Multiple Choice Score'}
           </div>
           <div

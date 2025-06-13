@@ -615,7 +615,7 @@ const QuizDocument = ({
     setOpenGradedReport(false)
   }
   return (
-    <div className="flex flex-col gap-8 rounded-xl bg-ink-100 p-8">
+    <div className="flex flex-col gap-8 rounded-xl bg-gray-100 p-8">
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}

@@ -127,7 +127,7 @@ const FilterRadioGroup = ({
                             onClick={(e) => {
                               field.onChange()
                             }}
-                            className="text-ink-300 hover:text-[#FF524E]"
+                            className="text-gray-300 hover:text-[#FF524E]"
                           >
                             <CloseCircleIcon color="currentColor" />
                           </button>
