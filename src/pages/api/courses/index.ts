@@ -346,7 +346,7 @@ export class CoursesAPI {
     return fetcher(
       `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
-      }&type=${type}&parentId=${parentId ?? ''}${
+      }&type=${type}${parentId ? `&parentId=${parentId}` : ''}${
         classId ? `&classId=${classId}` : ''
       }`,
       { params: params },

@@ -22,6 +22,7 @@ import { isEmpty } from 'lodash'
 import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import { useForm } from 'react-hook-form'
 
 interface IProps {
   open: boolean
@@ -34,40 +35,47 @@ const DEFAULT_PAGESIZE = 20
 const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
-  const [selectedSection, setSelectedSection] = useState<any>(null)
-  const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
-  const [selectedUnit, setSelectedUnit] = useState<any>(null)
-  const [selectedActivity, setSelectedActivity] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const { control, watch, setValue, reset } = useForm({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
+  const selectedSection = watch('section')
+  const selectedSubsection = watch('subsection')
+  const selectedUnit = watch('unit')
+  const selectedActivity = watch('activity')
   const handleDropdownChange = (
-    selectedOption: any,
-    setFunction: any,
-    resetFunction: any,
+    fieldName: 'section' | 'subsection' | 'unit' | 'activity',
+    selected: any,
+    fieldsToReset: ('section' | 'subsection' | 'unit' | 'activity')[],
   ) => {
-    setFunction(selectedOption)
+    setValue(fieldName, selected)
 
-    // Reset the downstream dropdowns if a reset function is provided
-    if (resetFunction) {
-      resetFunction(null)
-    }
+    // Reset the downstream dropdowns
+    fieldsToReset.forEach((field) => {
+      setValue(field, null)
+    })
   }
 
   useEffect(() => {
-    if (selectedSection?.value === '') {
-      setSelectedSubsection(null)
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+    if (!selectedSection) {
+      setValue('subsection', null)
+      setValue('unit', null)
+      setValue('activity', null)
     }
-  }, [selectedSection?.value])
+  }, [selectedSection])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
     setOpenResource(false)
-    setSelectedSubsection(null)
-    setSelectedUnit(null)
-    setSelectedActivity(null)
-    setSelectedSection(null)
+    setValue('subsection', null)
+    setValue('unit', null)
+    setValue('activity', null)
+    setValue('section', null)
     setPageIndex(DEFAULT_PAGE_INDEX)
     setResources(undefined)
     const pageStateVariables = [
@@ -91,9 +99,9 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           page_size || DEFAULT_PAGESIZE,
         )
         setSections([...res?.data?.sections].reverse())
-        setSelectedSubsection(null)
-        setSelectedUnit(null)
-        setSelectedActivity(null)
+        setValue('subsection', null)
+        setValue('unit', null)
+        setValue('activity', null)
       }
     } catch (error) {}
   }
@@ -112,17 +120,17 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'CHAPTER',
-        selectedSection.value,
+        selectedSection || '',
         class_id as any,
       )
       setSubsections([...res?.data?.sections].reverse())
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+      setValue('unit', null)
+      setValue('activity', null)
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (selectedSection?.value !== '' && open) {
+    if (selectedSection && open) {
       getCourseSubsections(DEFAULT_PAGESIZE)
     }
   }, [selectedSection])
@@ -135,11 +143,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       const res = await CoursesAPI.getCourseSubsectionList(
         DEFAULT_PAGESIZE,
         'UNIT',
-        selectedSubsection.value,
+        selectedSubsection || '',
         class_id as any,
       )
       setUnit([...res?.data?.sections].reverse())
-      setSelectedActivity(null)
+      setValue('activity', null)
     } catch (error) {}
   }
 
@@ -157,7 +165,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       const res = await CoursesAPI.getCourseSubsectionList(
         page_size,
         'ACTIVITY',
-        selectedUnit.value,
+        selectedUnit || '',
         class_id as any,
       )
       setActivity([...res?.data?.sections].reverse())
@@ -174,10 +182,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   const params = cleanParamsAPI({
     sub_id:
-      selectedActivity?.value ||
-      selectedUnit?.value ||
-      selectedSubsection?.value ||
-      selectedSection?.value ||
+      selectedActivity ||
+      selectedUnit ||
+      selectedSubsection ||
+      selectedSection ||
       '',
     page_index: DEFAULT_PAGE_INDEX,
     page_size: DEFAULT_PAGESIZE,
@@ -205,10 +213,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     initFetchData()
   }, [
     open,
-    selectedSection?.value,
-    selectedSubsection?.value,
-    selectedUnit?.value,
-    selectedActivity?.value,
+    selectedSection,
+    selectedSubsection,
+    selectedUnit,
+    selectedActivity,
   ])
 
   const requestOngoingRef = useRef(false)
@@ -295,112 +303,76 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     <SappDrawerV3
       open={open}
       handleCancel={onClose}
-      title="Resource"
+      title="Course Resource"
       isShowBtnClose
     >
-      <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+      <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">
+        <SAPPSelectV2
+          control={control}
+          name="section"
           placeholder="Section"
-          isClearable={true}
-          value={selectedSection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSection,
-              setSelectedSubsection,
-            )
+          options={DEFAULT_SELECT.concat(
+            sections?.map((section) => ({
+              label: section.name,
+              value: section.id,
+            })),
+          )}
+          onChange={(selected) =>
+            handleDropdownChange('section', selected, [
+              'subsection',
+              'unit',
+              'activity',
+            ])
           }
-          options={
-            sections &&
-            DEFAULT_SELECT.concat(
-              sections?.map((section) => ({
-                label: (
-                  <>
-                    <span title={section.name}>{section.name}</span>
-                  </>
-                ).props.children,
-                value: section.id,
-              })),
-            )
-          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+
+        <SAPPSelectV2
+          control={control}
+          name="subsection"
           placeholder="Subsection"
-          isClearable={true}
-          value={selectedSubsection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSubsection,
-              setSelectedUnit,
-            )
-          }
           options={
             selectedSection
-              ? subSections?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? subSections?.map((s) => ({ label: s.name, value: s.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
+          onChange={(selected) =>
+            handleDropdownChange('subsection', selected, ['unit', 'activity'])
+          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToSubsections}
         />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+
+        <SAPPSelectV2
+          control={control}
+          name="unit"
           placeholder="Unit"
-          isClearable={true}
-          value={selectedUnit}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedUnit,
-              setSelectedActivity,
-            )
-          }
           options={
             selectedSubsection
-              ? unit?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? unit?.map((u) => ({ label: u.name, value: u.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
+          onChange={(selected) =>
+            handleDropdownChange('unit', selected, ['activity'])
+          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToUnit}
         />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+
+        <SAPPSelectV2
+          control={control}
+          name="activity"
           placeholder="Activity"
-          isClearable={true}
-          value={selectedActivity}
-          onChange={(selectedOption) =>
-            handleDropdownChange(selectedOption, setSelectedActivity, null)
-          }
           options={
             selectedUnit
-              ? activity?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? activity?.map((a) => ({ label: a.name, value: a.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
+          onChange={(selected) =>
+            handleDropdownChange('activity', selected, [])
+          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToActivity}
         />
       </div>
