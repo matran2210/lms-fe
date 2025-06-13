@@ -172,3 +172,6 @@
     @apply flex-1 pr-2 text-2xl font-bold;
   }
 }
+.ant-select-disabled .ant-select-selector {
+  @apply cursor-not-allowed bg-gray-100 text-gray-400 !important;
+}

@@ -342,6 +342,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           }
           size="large"
           onMenuScrollToBottom={handleMenuScrollToSubsections}
+          disabled={!selectedSection}
         />
 
         <SAPPSelectV2
@@ -358,6 +359,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           }
           size="large"
           onMenuScrollToBottom={handleMenuScrollToUnit}
+          disabled={!selectedSubsection}
         />
 
         <SAPPSelectV2
@@ -374,6 +376,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           }
           size="large"
           onMenuScrollToBottom={handleMenuScrollToActivity}
+          disabled={!selectedUnit}
         />
       </div>
       {!isEmpty(resources?.resources) ? (
