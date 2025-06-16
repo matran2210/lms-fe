@@ -275,4 +275,7 @@ export type SectionDropdownFormValues = {
   unit: string | null
   activity: string | null
 }
+
+export type SectionField = 'section' | 'subsection' | 'unit' | 'activity'
+
 export * from './test'

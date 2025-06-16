@@ -7,7 +7,11 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { ISection, SectionDropdownFormValues } from 'src/type/courses'
+import {
+  ISection,
+  SectionDropdownFormValues,
+  SectionField,
+} from 'src/type/courses'
 import { DEFAULT_SELECT } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -62,6 +66,9 @@ const LearningNotesList = () => {
   const selectedSubsection = watch('subsection')
   const selectedUnit = watch('unit')
   const selectedActivity = watch('activity')
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
       if (prevExpanded?.includes(noteId)) {
@@ -76,10 +83,8 @@ const LearningNotesList = () => {
 
   // Set default change section all
   useEffect(() => {
-    if (selectedSection === '') {
-      setValue('subsection', null)
-      setValue('unit', null)
-      setValue('activity', null)
+    if (!selectedSection) {
+      resetFormFields(['subsection', 'unit', 'activity'])
     }
   }, [selectedSection])
 
@@ -225,25 +230,20 @@ const LearningNotesList = () => {
   } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
 
   const handleDropdownChange = (
-    fieldName: 'section' | 'subsection' | 'unit' | 'activity',
+    fieldName: SectionField,
     selected: string | null,
-    fieldsToReset: ('section' | 'subsection' | 'unit' | 'activity')[],
+    fieldsToReset: SectionField[],
   ) => {
     setValue(fieldName, selected)
 
     // Reset the downstream dropdowns
-    fieldsToReset.forEach((field) => {
-      setValue(field, null)
-    })
+    resetFormFields(fieldsToReset)
   }
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
     dispatch(resetNotesList())
-    setValue('subsection', null)
-    setValue('unit', null)
-    setValue('activity', null)
-    setValue('section', null)
+    resetFormFields(['section', 'subsection', 'unit', 'activity'])
     const pageStateVariables = [
       setPageSection,
       setPageSubsection,
@@ -270,9 +270,7 @@ const LearningNotesList = () => {
           page_size || DEFAULT_PAGESIZE,
         )
         setSections([...res?.data?.sections].reverse())
-        setValue('subsection', null)
-        setValue('unit', null)
-        setValue('activity', null)
+        resetFormFields(['subsection', 'unit', 'activity'])
       }
     } catch (error) {}
   }
@@ -288,8 +286,7 @@ const LearningNotesList = () => {
           class_id as any,
         )
         setSubsections([...res?.data?.sections].reverse())
-        setValue('unit', null)
-        setValue('activity', null)
+        resetFormFields(['unit', 'activity'])
       }
     } catch (error) {}
   }
@@ -308,8 +305,7 @@ const LearningNotesList = () => {
         setValue('activity', null)
       }
     } catch (error) {
-      setValue('unit', null)
-      setValue('activity', null)
+      resetFormFields(['unit', 'activity'])
     }
   }
 

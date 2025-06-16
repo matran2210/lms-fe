@@ -18,6 +18,7 @@ import {
   IResourceDetail,
   ISection,
   SectionDropdownFormValues,
+  SectionField,
 } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -54,33 +55,30 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const selectedSubsection = watch('subsection')
   const selectedUnit = watch('unit')
   const selectedActivity = watch('activity')
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
   const handleDropdownChange = (
-    fieldName: 'section' | 'subsection' | 'unit' | 'activity',
+    fieldName: SectionField,
     selected: string | null,
-    fieldsToReset: ('section' | 'subsection' | 'unit' | 'activity')[],
+    fieldsToReset: SectionField[],
   ) => {
     setValue(fieldName, selected)
 
     // Reset the downstream dropdowns
-    fieldsToReset.forEach((field) => {
-      setValue(field, null)
-    })
+    resetFormFields(fieldsToReset)
   }
 
   useEffect(() => {
     if (!selectedSection) {
-      setValue('subsection', null)
-      setValue('unit', null)
-      setValue('activity', null)
+      resetFormFields(['subsection', 'unit', 'activity'])
     }
   }, [selectedSection])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
     setOpenResource(false)
-    setValue('subsection', null)
-    setValue('unit', null)
-    setValue('activity', null)
+    resetFormFields(['section', 'subsection', 'unit', 'activity'])
     setValue('section', null)
     setPageIndex(DEFAULT_PAGE_INDEX)
     setResources(undefined)
@@ -112,9 +110,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         )
         if (!isEmpty(data?.sections)) {
           setSections([...data?.sections].reverse())
-          setValue('subsection', null)
-          setValue('unit', null)
-          setValue('activity', null)
+          resetFormFields(['subsection', 'unit', 'activity'])
         }
       }
     } catch (error) {
@@ -140,8 +136,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           class_id as string,
         )
         setSubsections([...res?.data?.sections].reverse())
-        setValue('unit', null)
-        setValue('activity', null)
+        resetFormFields(['unit', 'activity'])
       }
     } catch (error) {}
   }
@@ -163,7 +158,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           class_id as string,
         )
         setUnit([...res?.data?.sections].reverse())
-        setValue('activity', null)
+        resetFormFields(['activity'])
       }
     } catch (error) {}
   }
