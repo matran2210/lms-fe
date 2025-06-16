@@ -61,7 +61,7 @@ const CardCourse = ({
       <h2
         className={clsx(
           classNameTitle,
-          'line-clamp-2 h-16 cursor-pointer text-2xl font-medium',
+          'line-clamp-2 cursor-pointer text-2xl font-medium',
           {
             'text-gray-300': disabledTitle,
             'text-gray-800': !disabledTitle,
