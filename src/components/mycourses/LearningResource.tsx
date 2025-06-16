@@ -44,6 +44,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       activity: null,
     },
   })
+  const isFetchingRef = useRef(false)
   const selectedSection = watch('section')
   const selectedSubsection = watch('subsection')
   const selectedUnit = watch('unit')
@@ -93,13 +94,47 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSections(page_size: number) {
     try {
-      if (open) {
-        const res = await CoursesAPI.getCourseSectionList(
+      if (
+        open &&
+        isEmpty(sections) &&
+        (router.query.courseId || router.query.id) &&
+        !isFetchingRef.current
+      ) {
+        isFetchingRef.current = true
+        const { data } = await CoursesAPI.getCourseSectionList(
           router.query.courseId || router.query.id,
           page_size || DEFAULT_PAGESIZE,
         )
-        setSections([...res?.data?.sections].reverse())
-        setValue('subsection', null)
+        if (!isEmpty(data?.sections)) {
+          setSections([...data?.sections].reverse())
+          setValue('subsection', null)
+          setValue('unit', null)
+          setValue('activity', null)
+        }
+      }
+    } catch (error) {
+    } finally {
+      isFetchingRef.current = false
+    }
+  }
+
+  useEffect(() => {
+    getCourseSections(DEFAULT_PAGESIZE)
+  }, [open])
+
+  const [subSections, setSubsections] = useState<ISection[]>([])
+
+  async function getCourseSubsections(page_size: number) {
+    try {
+      if (selectedSection && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'CHAPTER',
+          selectedSection || '',
+          class_id as any,
+        )
+        setSubsections([...res?.data?.sections].reverse())
         setValue('unit', null)
         setValue('activity', null)
       }
@@ -107,75 +142,50 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    if ((router.query.courseId || router.query.id) && open) {
-      getCourseSections(DEFAULT_PAGESIZE)
-    }
-  }, [open])
-
-  const [subSections, setSubsections] = useState<ISection[]>([])
-
-  async function getCourseSubsections(page_size: number) {
-    try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'CHAPTER',
-        selectedSection || '',
-        class_id as any,
-      )
-      setSubsections([...res?.data?.sections].reverse())
-      setValue('unit', null)
-      setValue('activity', null)
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    if (selectedSection && open) {
-      getCourseSubsections(DEFAULT_PAGESIZE)
-    }
+    getCourseSubsections(DEFAULT_PAGESIZE)
   }, [selectedSection])
 
   const [unit, setUnit] = useState<ISection[]>([])
 
   async function getCourseUnit() {
     try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        DEFAULT_PAGESIZE,
-        'UNIT',
-        selectedSubsection || '',
-        class_id as any,
-      )
-      setUnit([...res?.data?.sections].reverse())
-      setValue('activity', null)
+      if (selectedSubsection && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'UNIT',
+          selectedSubsection || '',
+          class_id as any,
+        )
+        setUnit([...res?.data?.sections].reverse())
+        setValue('activity', null)
+      }
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (open) {
-      getCourseUnit()
-    }
+    getCourseUnit()
   }, [selectedSubsection])
 
   const [activity, setActivity] = useState<ISection[]>([])
 
   async function getCourseActivity(page_size: number) {
     try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'ACTIVITY',
-        selectedUnit || '',
-        class_id as any,
-      )
-      setActivity([...res?.data?.sections].reverse())
+      if (selectedUnit && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'ACTIVITY',
+          selectedUnit || '',
+          class_id as any,
+        )
+        setActivity([...res?.data?.sections].reverse())
+      }
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (open) {
-      getCourseActivity(DEFAULT_PAGESIZE)
-    }
+    getCourseActivity(DEFAULT_PAGESIZE)
   }, [selectedUnit])
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
