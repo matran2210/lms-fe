@@ -97,7 +97,7 @@ const SappDrawer = ({
     <>
       {isOpen && (
         <div
-          className="bg-bw-5 fixed left-0 top-0 z-[999999] h-full w-full bg-opacity-50"
+          className="fixed left-0 top-0 z-[999999] h-full w-full bg-[#000000CC] bg-opacity-50"
           onClick={handleMaskClick}
         />
       )}
