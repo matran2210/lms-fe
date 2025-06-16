@@ -269,4 +269,10 @@ export type IQuizAttemptChartType =
   | 'CMA'
   | 'OTHER'
 
+export type SectionDropdownFormValues = {
+  section: string | null
+  subsection: string | null
+  unit: string | null
+  activity: string | null
+}
 export * from './test'

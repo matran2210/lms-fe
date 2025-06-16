@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { ISection } from 'src/type/courses'
+import { ISection, SectionDropdownFormValues } from 'src/type/courses'
 import { DEFAULT_SELECT } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -49,14 +49,15 @@ const LearningNotesList = () => {
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const { control, watch, setValue, reset } = useForm({
-    defaultValues: {
-      section: null,
-      subsection: null,
-      unit: null,
-      activity: null,
-    },
-  })
+  const { control, watch, setValue, reset } =
+    useForm<SectionDropdownFormValues>({
+      defaultValues: {
+        section: null,
+        subsection: null,
+        unit: null,
+        activity: null,
+      },
+    })
   const selectedSection = watch('section')
   const selectedSubsection = watch('subsection')
   const selectedUnit = watch('unit')
@@ -84,27 +85,19 @@ const LearningNotesList = () => {
 
   //Change dropdown
   useEffect(() => {
-    if ((courseId || queryId) && notesListStatus) {
-      getCourseSections(DEFAULT_PAGESIZE)
-    }
+    getCourseSections(DEFAULT_PAGESIZE)
   }, [notesListStatus])
 
   useEffect(() => {
-    if (selectedSection !== '' && notesListStatus) {
-      getCourseSubsections(DEFAULT_PAGESIZE)
-    }
+    getCourseSubsections(DEFAULT_PAGESIZE)
   }, [selectedSection])
 
   useEffect(() => {
-    if (notesListStatus) {
-      getCourseUnit()
-    }
+    getCourseUnit()
   }, [selectedSubsection])
 
   useEffect(() => {
-    if (notesListStatus) {
-      getCourseActivity(DEFAULT_PAGESIZE)
-    }
+    getCourseActivity(DEFAULT_PAGESIZE)
   }, [selectedUnit])
 
   const params = cleanParamsAPI({
@@ -233,7 +226,7 @@ const LearningNotesList = () => {
 
   const handleDropdownChange = (
     fieldName: 'section' | 'subsection' | 'unit' | 'activity',
-    selected: any,
+    selected: string | null,
     fieldsToReset: ('section' | 'subsection' | 'unit' | 'activity')[],
   ) => {
     setValue(fieldName, selected)
@@ -271,7 +264,7 @@ const LearningNotesList = () => {
 
   async function getCourseSections(page_size: number) {
     try {
-      if (!sections.length && notesListStatus) {
+      if ((courseId || queryId) && notesListStatus) {
         const res = await CoursesAPI.getCourseSectionList(
           courseId || queryId,
           page_size || DEFAULT_PAGESIZE,
@@ -286,30 +279,34 @@ const LearningNotesList = () => {
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'CHAPTER',
-        selectedSection || '',
-        class_id as any,
-      )
-      setSubsections([...res?.data?.sections].reverse())
-      setValue('unit', null)
-      setValue('activity', null)
+      if (selectedSection && notesListStatus) {
+        const class_id = courseId || queryId
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'CHAPTER',
+          selectedSection || '',
+          class_id as any,
+        )
+        setSubsections([...res?.data?.sections].reverse())
+        setValue('unit', null)
+        setValue('activity', null)
+      }
     } catch (error) {}
   }
 
   async function getCourseUnit() {
     try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        DEFAULT_PAGESIZE,
-        'UNIT',
-        selectedSubsection || '',
-        class_id as any,
-      )
-      setUnit([...res?.data?.sections].reverse())
-      setValue('activity', null)
+      if (selectedSubsection && notesListStatus) {
+        const class_id = courseId || queryId
+        const res = await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'UNIT',
+          selectedSubsection || '',
+          class_id as any,
+        )
+        setUnit([...res?.data?.sections].reverse())
+        setValue('activity', null)
+      }
     } catch (error) {
       setValue('unit', null)
       setValue('activity', null)
@@ -318,14 +315,16 @@ const LearningNotesList = () => {
 
   async function getCourseActivity(page_size: number) {
     try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'ACTIVITY',
-        selectedUnit || '',
-        class_id as any,
-      )
-      setActivity([...res?.data?.sections].reverse())
+      if (selectedUnit && notesListStatus) {
+        const class_id = courseId || queryId
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'ACTIVITY',
+          selectedUnit || '',
+          class_id as any,
+        )
+        setActivity([...res?.data?.sections].reverse())
+      }
     } catch (error) {
       setValue('activity', null)
     }
@@ -368,7 +367,7 @@ const LearningNotesList = () => {
     <SappDrawerV3
       open={notesListStatus}
       handleCancel={onClose}
-      title="Course Resource"
+      title="Note List"
       isShowBtnClose
     >
       <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">

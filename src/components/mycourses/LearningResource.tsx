@@ -14,7 +14,11 @@ import React, {
 } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { IResourceDetail, ISection } from 'src/type/courses'
+import {
+  IResourceDetail,
+  ISection,
+  SectionDropdownFormValues,
+} from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
@@ -29,13 +33,6 @@ interface IProps {
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
-type FormValues = {
-  section: string | null
-  subsection: string | null
-  unit: string | null
-  activity: string | null
-}
-
 const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
@@ -43,14 +40,15 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  const { control, watch, setValue, reset } = useForm<FormValues>({
-    defaultValues: {
-      section: null,
-      subsection: null,
-      unit: null,
-      activity: null,
-    },
-  })
+  const { control, watch, setValue, reset } =
+    useForm<SectionDropdownFormValues>({
+      defaultValues: {
+        section: null,
+        subsection: null,
+        unit: null,
+        activity: null,
+      },
+    })
   const isFetchingRef = useRef(false)
   const selectedSection = watch('section')
   const selectedSubsection = watch('subsection')
