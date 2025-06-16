@@ -891,10 +891,9 @@ $focus: (
   }
 }
 
+/* Drawer body padding và scroll */
 .ant-drawer .ant-drawer-body {
-  padding: 0 !important;
-}
-.ant-drawer .ant-drawer-body {
+  @apply p-0;
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
@@ -909,7 +908,7 @@ $focus: (
 }
 
 .ant-drawer {
-  position: fixed;
+  @apply fixed;
 }
 
 .ant-drawer .ant-drawer-mask,
