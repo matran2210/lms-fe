@@ -26,8 +26,8 @@ const CourseDashboard = () => {
               </svg>
             </div>
             <div className='ms-4'>
-              <div className='text-lg font-semibold text-ink-800'>Number of Finished Sections</div>
-              <div className='text-base font-medium text-ink-400'>340/500</div>
+              <div className='text-lg font-semibold text-gray-800'>Number of Finished Sections</div>
+              <div className='text-base font-medium text-gray-400'>340/500</div>
             </div>
           </div>
         </div>
@@ -44,7 +44,6 @@ const CourseDashboard = () => {
           <LearningResult />
         </div>
       </div>
-      <div>aâ</div>
     </div>
   )
 }

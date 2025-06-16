@@ -181,15 +181,18 @@ const OneChoiceQuestion = ({
           name={name || 'answer'}
           corrects={corrects}
           defaultValue={defaultValues}
-          labelClass={'text-base font-normal text-ink-800'}
+          labelClass={'text-base font-normal text-gray-800'}
           optionClassName="checked:bg-radio-primary-checked checked:text-transparent checked:hover:bg-radio-primary-checked checked:focus:bg-radio-primary-checked"
         />
       </div>
       {solution && (
-        <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
-          <SappTitleSolution title={`${MY_COURSES.solution}:`} />
-          <EditorReader className="mt-4" text_editor_content={solution} />
-        </div>
+        <>
+          <Divider className="my-8" />
+          <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
+        </>
       )}
     </div>
   )

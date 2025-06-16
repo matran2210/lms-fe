@@ -28,6 +28,9 @@ import ProfileList from '@components/profile/ProfileInformation/ProfileList'
 import MyPasword from '@components/profile/Security/MyPasword'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import Footer from '@components/layout/Footer'
+import ButtonDanger from '@components/base/button/ButtonDanger'
+import clsx from 'clsx'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
@@ -59,6 +62,18 @@ const ProfilePage = () => {
     setAvatar(avatar)
   }
 
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser()).then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+        }
+      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout(window.location.origin)
+    } catch (error) {}
+  }
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -114,7 +129,7 @@ const ProfilePage = () => {
           {isChangePassword ? (
             <ChangePassword handleCancel={() => setIsChangePassword(false)} />
           ) : (
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-0 lg:gap-10">
               <MyPasword setIsChangePassword={setIsChangePassword} />
               <DeviceList />
               <LoginHistoryList />
@@ -125,31 +140,18 @@ const ProfilePage = () => {
     },
   ]
 
-  const handleLogout = async () => {
-    try {
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
-      const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
-    } catch (error) {}
-  }
-
   return (
-    <Layout title="My Profile">
+    <Layout title="My Profile" size="sm">
       <div className="flex h-full w-full flex-col">
         <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-          <div className="py-4.5 mx-auto my-0 flex h-full max-w-[1144px]">
+          <div className="py-4.5 mx-auto my-0 flex h-full">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="mx-auto my-0 flex w-full max-w-[1144px] grow flex-col px-5 xl:px-0">
+        <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main sm:mx-4 lg:mx-0 ">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
@@ -162,23 +164,38 @@ const ProfilePage = () => {
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
               />
-              <Tabs
-                tabBarExtraContent={
-                  <div
-                    className="hover-transition-font-weight flex cursor-pointer items-center gap-2 font-bold text-[#F80903]"
-                    onClick={handleLogout}
-                  >
-                    <Icon type="logout" className="font-normal" />
-                    <div>Logout</div>
-                  </div>
-                }
-                className="sapp-tabs-profile"
-                defaultActiveKey="my-profile"
-                items={items}
-              />
+              <div>
+                <Tabs
+                  tabBarExtraContent={
+                    <div
+                      className="hover-transition-font-weight hidden cursor-pointer items-center gap-2 font-bold text-error lg:flex"
+                      onClick={handleLogout}
+                    >
+                      <Icon type="logout" className="font-normal" />
+                      <div>Logout</div>
+                    </div>
+                  }
+                  className="sapp-tabs-profile"
+                  defaultActiveKey="my-profile"
+                  items={items}
+                />
+                <div
+                  className={clsx(
+                    'hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden',
+                    {
+                      '!hidden': isEdit || isChangePassword,
+                    },
+                  )}
+                  onClick={handleLogout}
+                >
+                  <Icon type="logout" className="font-normal" />
+                  <div>Logout</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </Layout>
   )

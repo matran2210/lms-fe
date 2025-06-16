@@ -197,7 +197,7 @@ const LearningResults = () => {
                     <IconEssentional />
                   </div>
                 </div>
-                <div className="text-sm text-ink-400">
+                <div className="text-sm text-gray-400">
                   {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
                 </div>
               </div>
@@ -225,7 +225,7 @@ const LearningResults = () => {
                             : ''
                         }
                         target="_blank"
-                        className={`inline-block min-w-fit text-base font-medium text-ink-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                        className={`inline-block min-w-fit text-base font-medium text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
                         rel="noreferrer"
                       >
                         Mock test results
@@ -236,7 +236,7 @@ const LearningResults = () => {
                   {isNormal || hasLearning ? (
                     <div className="flex items-center justify-center gap-2.5">
                       <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
-                      <span className="min-w-fit text-base font-medium text-ink-800">
+                      <span className="min-w-fit text-base font-medium text-gray-800">
                         Learning results
                       </span>
                     </div>
@@ -263,7 +263,7 @@ const LearningResults = () => {
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
     <div className="w-[515px] flex-col">
-      <div className="mb-10 flex text-xl font-semibold text-ink-800">
+      <div className="mb-10 flex text-xl font-semibold text-gray-800">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
@@ -277,14 +277,14 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           return (
             <div
               key={result?.id}
-              className="mb-4 flex flex-col rounded-lg bg-ink-100 px-4 py-2"
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-4 py-2"
             >
-              <div className="mb-2 text-lg font-medium text-ink-800">
+              <div className="mb-2 text-lg font-medium text-gray-800">
                 {result?.short_name || result?.name}
               </div>
 
               <div className="items-cente mb-1 flex justify-between">
-                <div className="text-sm text-ink-800">
+                <div className="text-sm text-gray-800">
                   Learning result: {result?.score}%
                 </div>
                 <div className="flex items-center">
@@ -325,10 +325,10 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               </div>
 
               <div className="mb-2 flex items-center justify-between">
-                <div className="text-sm text-ink-800">
+                <div className="text-sm text-gray-800">
                   Mock test: {result?.mock_test_score}%
                 </div>
-                <div className="text-base text-ink-400">difference</div>
+                <div className="text-base text-gray-400">difference</div>
               </div>
 
               <div

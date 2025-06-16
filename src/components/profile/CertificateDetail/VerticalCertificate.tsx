@@ -5,6 +5,9 @@ import Image from 'next/image'
 import Icon from '@components/icons'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { ICertificate } from '@pages/certificates/[id]'
+import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
+import SAPP_Logo from '@assets/images/sapp_logo.svg'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -18,28 +21,39 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   onDownload,
 }) => {
   return (
-    <CertificateCard bodyClassName="xl:px-93.25 py-34.5 px-17.5">
-      <div className="flex h-full items-center justify-between gap-12 xl:gap-20">
-        <div className="flex h-full w-[45%] items-center justify-center">
-          {certificate?.certificate_url && (
-            <Image
+    <CertificateCard
+      bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
+      className=" hidden lg:block"
+    >
+      <div className="flex h-full items-center gap-12 xl:gap-20">
+        <div className="flex-2 flex h-full w-[55%] items-center justify-center">
+          {certificate?.certificate_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={certificate?.certificate_url || ''}
               alt={certificate?.course.name}
-              className="max-h-full max-w-full"
-              width={573}
-              height={805}
-              priority
-              style={{ objectFit: 'contain' }}
+              className="max-h-full max-w-full object-contain"
+            />
+          ) : (
+            <CertificateImg
+              size={800}
+              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>
-        <div className="flex flex-col items-center gap-12">
+        <div className="flex flex-1 flex-col items-center gap-12">
           <div
-            className="flex cursor-pointer items-end"
+            className="flex w-full cursor-pointer items-end"
             onClick={() => window.open('https://sapp.edu.vn', '_blank')}
           >
-            <Icon type="sapp-icon" />
-            <Icon type="sapp-logo" />
+            <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
+              <Image
+                src={SAPP_Logo}
+                alt="SAPP Logo"
+                priority={true}
+                layout="responsive"
+              />
+            </div>
           </div>
           <div className="flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-4">
@@ -53,14 +67,14 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               </div>
             </div>
             <div className="flex items-center justify-center gap-4">
-              <Button
-                className="!border-none bg-[#29353C] px-6 py-3 text-white hover:!border-none hover:!bg-black hover:!text-white"
+              <ButtonPrimary
+                size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}
               >
                 Download
-              </Button>
+              </ButtonPrimary>
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >

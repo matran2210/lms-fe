@@ -216,11 +216,13 @@ const CourseTabDocument = ({
                           })}
                           key={i + '_' + selector?.currentTabId}
                         >
-                          <HighlightableHTML
-                            initialHTML={e?.text_editor_content || ''}
-                            storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
-                            className="course-tab-text"
-                          />
+                          {e?.text_editor_content && (
+                            <HighlightableHTML
+                              initialHTML={e?.text_editor_content || ''}
+                              storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
+                              className="course-tab-text"
+                            />
+                          )}
                           {/* <TextDocument
                             text_editor_content={e?.text_editor_content}
                             className="course-tab-text"

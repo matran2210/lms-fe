@@ -172,7 +172,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       >
         <div className="mt-10">
           <div className="info border-l border-[#DCDDDD] px-4">
-            <div className="flex justify-between text-base capitalize text-ink">
+            <div className="text-ink flex justify-between text-base capitalize">
               {data?.is_attempt ? (
                 <>
                   <p>Time taken:</p>
@@ -193,12 +193,12 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 </>
               )}
             </div>
-            <div className="flex justify-between pt-4 text-base capitalize text-ink">
+            <div className="text-ink flex justify-between pt-4 text-base capitalize">
               <p>Results:</p>
               {data?.is_attempt ? (
                 <>
                   {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-                    <span className="text-ink-800">--</span>
+                    <span className="text-gray-800">--</span>
                   ) : (
                     <p className="font-medium text-info">
                       {data?.total_correct_answer + '/' + data?.total_question}
@@ -206,7 +206,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                   )}
                 </>
               ) : (
-                <span className="text-ink-800">--</span>
+                <span className="text-gray-800">--</span>
               )}
             </div>
           </div>

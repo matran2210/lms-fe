@@ -71,7 +71,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       },
       center: {
         x: (windowWidth - modalWidth) / 2,
-        y: (windowHeight - modalHeight) / 2 - modalHeight / 4,
+        y: (windowHeight - modalHeight) / 2,
       },
     }
 
@@ -118,7 +118,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           header
         ) : (
           <div className={styles.modalHeader}>
-            <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
+            <div className="modal-header flex h-10 w-full items-center justify-between px-5">
               <div className="truncate">{title}</div>
             </div>
             <button

@@ -31,7 +31,7 @@ module.exports = {
         700: '#212B30',
         800: '#0E1214',
       },
-      ink: {
+      gray: {
         50: '#FFFFFF',
         100: '#F6F6F6',
         200: '#E5E7EB',
@@ -109,9 +109,12 @@ module.exports = {
       icon: {
         DEFAULT: '#1C274C',
       },
+      progress: {
+        active: '#e5e7eb',
+        unactive: '#d3d5d8',
+      },
     },
     screens: {
-      xs: '375px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
@@ -132,12 +135,34 @@ module.exports = {
       '4xl': ['2.25rem', { lineHeight: '3.125rem' }] /* 36px, 50px */,
       '5xl': ['2.5rem', { lineHeight: '3.5rem' }] /* 40px, 56px */,
       '6xl': ['3rem', { lineHeight: '4rem' }] /* 48px, 64px */,
+      '7xl': ['4rem', { lineHeight: '5rem' }] /* 64px, 80px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
       tech: 'techNology',
       inter: ['Inter', 'sans-serif'],
       fira: ['Fira Sans', 'sans-serif'],
+    },
+    aspectRatio: {
+      auto: 'auto',
+      square: '1 / 1',
+      video: '16 / 9',
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+      8: '8',
+      9: '9',
+      10: '10',
+      11: '11',
+      12: '12',
+      13: '13',
+      14: '14',
+      15: '15',
+      16: '16',
     },
     extend: {
       boxShadow: {
@@ -159,7 +184,7 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
-        matchingquiz: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
         card: '0px 4px 16px 0px #00000014',
         'learning-activity': '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
       },
@@ -213,12 +238,17 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
     },
+    container: {
+      center: true,
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+      },
+      // screens: {},
+    },
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
   ],
-  corePlugins: {
-    container: false,
-  },
 }

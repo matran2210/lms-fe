@@ -3,3 +3,11 @@
     @apply flex-row-reverse;
   }
 }
+.profile-subject-drawer {
+  .ant-drawer-content-wrapper {
+    @apply rounded-2xl md:bottom-8 md:left-8 md:right-8  md:top-auto md:!w-auto lg:bottom-4 lg:left-auto lg:right-4 lg:top-4;
+    .ant-drawer-body {
+      @apply md:m-6 md:!h-full md:max-h-[600px] md:min-h-[200px] lg:m-0 lg:max-h-full;
+    }
+  }
+}

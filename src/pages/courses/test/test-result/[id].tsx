@@ -70,7 +70,7 @@ const TestResultDetail = () => {
     <div>
       <div className="sticky top-0 z-20 grid h-20 w-full grid-cols-[auto_1fr_auto] items-center bg-white px-8 py-3 shadow-[0_4px_16px_0_rgba(44,48,0,0.05)]">
         <div
-          className="grid h-10 w-10 cursor-pointer place-items-center rounded-md bg-ink-200 transition-colors hover:bg-ink-300"
+          className="grid h-10 w-10 cursor-pointer place-items-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
             router.push(`/courses/my-course/${questions?.class_id ?? ''}`)
           }}
@@ -82,7 +82,7 @@ const TestResultDetail = () => {
         </div>
         <ButtonSecondary title="Retake" size="small" />
       </div>
-      <Container span={10} margin={32} className="mt-6">
+      <div className="mx-auto mt-6 max-w-[1542px]">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}
@@ -95,7 +95,7 @@ const TestResultDetail = () => {
               : chartData?.multiple_choice_score
           }
         />
-      </Container>
+      </div>
     </div>
   )
 }

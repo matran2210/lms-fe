@@ -186,8 +186,8 @@ const TopicProgress = () => {
             data: data.map((e: ITopicProgress) => ({
               value: e.total_activities
                 ? Math.round(
-                    (e.completed_activities / e.total_activities) * 100,
-                  )
+                  (e.completed_activities / e.total_activities) * 100,
+                )
                 : 0,
               itemStyle: {
                 color: '#63ACFF', // Màu xen kẽ
@@ -224,23 +224,11 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[50vh] grow flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
+    <div className="flex min-h-[580px] flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
       <div className="mb-5 pb-3 text-lg font-bold text-[#252F4A] 4xl:text-xl">
         Topic Progress
       </div>
-      {option && (
-        <>
-          <div className="grow">
-            <EChart option={option} />
-          </div>
-          {/* <div className="mt-5 flex w-full">
-            <div className="m-auto">
-              <span className="bg-primary-6 mr-2.5 inline-block h-3 w-3"></span>
-              <span className="font-medium">Completed</span>
-            </div>
-          </div> */}
-        </>
-      )}
+      {option && <EChart option={option} minHeight='450px' />}
       {!isLoading && !option && (
         <div className="flex h-full w-full items-center justify-center">
           <NoData />

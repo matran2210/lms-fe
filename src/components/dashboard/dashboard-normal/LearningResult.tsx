@@ -164,7 +164,7 @@ const LearningResult = () => {
                                 <IconEssentional />
                             </div>
                         </div>
-                        <div className="text-sm text-ink-400">
+                        <div className="text-sm text-gray-400">
                             {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
                         </div>
                     </div>
@@ -191,7 +191,7 @@ const LearningResult = () => {
                                                     : ''
                                             }
                                             target="_blank"
-                                            className={`inline-block min-w-fit text-base font-medium text-ink-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                                            className={`inline-block min-w-fit text-base font-medium text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
                                             rel="noreferrer"
                                         >
                                             Mock test results
@@ -202,7 +202,7 @@ const LearningResult = () => {
                                 {isNormal || hasLearning ? (
                                     <div className="flex items-center justify-center gap-2.5">
                                         <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
-                                        <span className="min-w-fit text-base font-medium text-ink-800">
+                                        <span className="min-w-fit text-base font-medium text-gray-800">
                                             Learning results
                                         </span>
                                     </div>

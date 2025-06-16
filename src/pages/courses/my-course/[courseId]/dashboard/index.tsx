@@ -13,9 +13,9 @@ const Dashboard = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
 
   return (
-    <Layout title="Dashboard">
+    <Layout title="Dashboard" size='2xl'>
       <div
-        className="3xl:px-13.75 max-w-[1524px] lg:px-5"
+        className="3xl:px-13.75 lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="main relative mx-auto my-0">
@@ -29,7 +29,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] max-w-[1524px] font-sans text-ink-700 lg:px-5"
+        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-ink-700 lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

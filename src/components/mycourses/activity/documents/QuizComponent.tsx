@@ -844,11 +844,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
-          <HighlightableHTML
-            initialHTML={activeQuestion?.question_topic?.description}
-            storageKey={`${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
-            className="sapp-questions"
-          />
+          {activeQuestion?.question_topic?.description && (
+            <HighlightableHTML
+              initialHTML={activeQuestion?.question_topic?.description ?? ''}
+              storageKey={`${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
+              className="sapp-questions"
+            />
+          )}
 
           {activeQuestion?.question_topic?.description && (
             <Divider className="my-8" />

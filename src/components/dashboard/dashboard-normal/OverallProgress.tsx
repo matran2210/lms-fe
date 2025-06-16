@@ -16,11 +16,12 @@ const OverallProgress = () => {
     const values = {
       completed: data.completed_activities,
       uncompleted: data.uncompleted_activities,
+      total_activities: data?.total_activities
     }
 
     const option = {
       title: {
-        text: `${values.completed}/${values.uncompleted + values.completed}`,
+        text: `${values.completed}/${values?.total_activities}`,
         subtext: 'Activities',
         left: 'center',
         top: '42%',
@@ -66,13 +67,17 @@ const OverallProgress = () => {
     setOption(option)
   }
 
+  const [activities, setActivities] = useState<any>()
+
   const getOverProgress = async (id: string) => {
     try {
-      const res = isNormal
-        ? await DashboardAPI.getOverProgress(id)
-        : await DashboardAPI.getExamPrediction(id)
+      const res = await DashboardAPI.getOverProgress(id)
 
-      if (res && res.success) handlePieChartOption(res.data)
+
+      if (res && res.success) {
+        setActivities(res?.data)
+        handlePieChartOption(res.data)
+      }
     } catch (error) {
       setOption(null)
     } finally {
@@ -100,20 +105,20 @@ const OverallProgress = () => {
       {option && (
         <>
           <div className="flex flex-row justify-around gap-2 4xl:gap-8">
-            <EChart option={option} width="220px" height="220px" minHeight='270px' />
+            <EChart option={option} width="250px" height="250px" minHeight='270px' />
             <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
               <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
                 <span className="h-3 w-3 rounded-full bg-primary"></span>
                 <span className="text-base font-medium">
-                  <span className="text-ink-800">Not completed</span>{' '}
-                  <span className="text-ink">(160)</span>
+                  <span className="text-gray-800">Completed</span>{' '}
+                  <span className="text-gray">({activities?.completed_activities})</span>
                 </span>
               </div>
               <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
                 <span className="h-3 w-3 rounded-full bg-primary-100"></span>
                 <span className="text-base font-medium">
-                  <span className="text-ink-800">Not completed</span>{' '}
-                  <span className="text-ink">(160)</span>
+                  <span className="text-gray-800">Completed</span>{' '}
+                  <span className="text-gray">({activities?.uncompleted_activities})</span>
                 </span>
               </div>
 
@@ -140,7 +145,7 @@ const OverallProgress = () => {
                     fill="#E68200"
                   />
                 </svg>
-                <span className="text-base text-ink-800">
+                <span className="text-base text-gray-800">
                   Complete your learning to win the exam
                 </span>
               </div>

@@ -43,14 +43,14 @@ const EntranceTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Entrance Test">
         <div className="border-b border-[#DCDDDD] bg-white">
-          <div className="py-5.75 relative mx-auto my-0 flex max-w-[1144px] max-[1199px]:mx-6">
+          <div className="py-5.75 relative my-0 flex">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
             />
           </div>
         </div>
-        <div className="mx-auto my-0 max-w-[1144px] pt-6 max-[1199px]:mx-6">
+        <div className="my-0 pt-6">
           {isLoading ? (
             <CourseSkeleton />
           ) : (
@@ -70,10 +70,7 @@ const EntranceTest = () => {
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />
                 </div>
               </div>
-              <div
-                className="my-0 max-w-[1144px] pt-6 xl:mx-auto"
-                data-aos={ANIMATION.DATA_AOS}
-              >
+              <div className="my-0 pt-6" data-aos={ANIMATION.DATA_AOS}>
                 <EntranceTestList entranceTestLists={entranceTestLists} />
               </div>
             </>

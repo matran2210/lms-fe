@@ -388,7 +388,7 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-[1144px] text-[#050505]`}>
+        <div className={`my-0 text-[#050505]`}>
           {/* Breadcrumbs */}
           <ul
             className={clsx(

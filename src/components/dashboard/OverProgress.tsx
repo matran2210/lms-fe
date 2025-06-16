@@ -99,13 +99,13 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex w-[566px] flex-col rounded-2xl bg-white p-6 text-ink-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
+    <div className="flex w-[566px] flex-col rounded-2xl bg-white p-6 text-gray-700 shadow-matchingquiz lg:col-span-4 3xl:px-6">
       <div className="mb-5 flex items-center justify-between pb-3">
-        <div className="min-w-fit text-xl font-semibold text-ink-800 4xl:text-xl">
+        <div className="min-w-fit text-xl font-semibold text-gray-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
         <div
-          className={`${isNormal ? 'invisible' : 'text-sm text-ink-400 4xl:text-sm'}`}
+          className={`${isNormal ? 'invisible' : 'text-sm text-gray-400 4xl:text-sm'}`}
         >
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
@@ -123,13 +123,13 @@ const OverProgress = () => {
                   <span className="font-medium">Activities completed</span>
                 </div>
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                  <span className="h-3 w-3 rounded-full bg-ink-300"></span>
+                  <span className="h-3 w-3 rounded-full bg-gray-300"></span>
                   <span className="font-medium">Activities not completed</span>
                 </div>
               </div>
             )}
           </div>
-          <div className="mt-4 flex items-center justify-center self-center text-center text-ink-800">
+          <div className="mt-4 flex items-center justify-center self-center text-center text-gray-800">
             <div className="me-2">
               <IconEssentional />
             </div>

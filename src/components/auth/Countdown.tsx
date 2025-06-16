@@ -43,7 +43,7 @@ function useCountdown(
   const formatTime = () => {
     let mins = Math.floor(time / 60)
     let secs = time % 60
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    return `${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`
   }
 
   return [formatTime(), resetTime, time]

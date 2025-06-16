@@ -1,7 +1,7 @@
 import React from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import SappTextFieldV2 from '../../../base/textfield/SappTextFieldV2'
+import SappTextFieldV2 from './SappTextFieldV2'
 import GuidelineFieldV2 from 'src/common/GuidelineFieldV2'
 
 interface IProps {
@@ -23,12 +23,11 @@ interface IProps {
   required?: boolean
   maxLength?: number
   textSize?: 'base' | 'sm'
-  inputClassName?: string
   style?: React.CSSProperties
   placeholderIcon?: React.ReactNode
 }
 
-const SappTeacherTextField = ({
+const HookFormTextFieldV2 = ({
   name,
   control,
   defaultValue,
@@ -96,4 +95,4 @@ const SappTeacherTextField = ({
   )
 }
 
-export default SappTeacherTextField
+export default HookFormTextFieldV2
