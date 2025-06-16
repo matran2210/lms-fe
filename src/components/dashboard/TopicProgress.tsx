@@ -1,10 +1,9 @@
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
+import EChart from '@components/base/chart/Chart'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { ITopicProgress } from 'src/type/dashboard'
 import NoData from 'src/common/NoData'
-import { LABEL_MAX_LENGTH } from 'src/constants'
 
 const TopicProgress = () => {
   const router = useRouter()
@@ -224,8 +223,8 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex min-h-[580px] flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
-      <div className="mb-5 pb-3 text-lg font-bold text-[#252F4A] 4xl:text-xl">
+    <div className="flex h-[68vh] flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
+      <div className="mb-5 pb-3 text-lg font-bold text-gray-800 4xl:text-xl">
         Topic Progress
       </div>
       {option && <EChart option={option} minHeight='450px' />}

@@ -1,14 +1,10 @@
-import infoIcon from '@assets/images/info-icon.svg'
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
+import EChart from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
-
-import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
 import Link from 'next/link'
@@ -168,102 +164,84 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-      <div className="flex h-[55vh] w-full rounded-2xl bg-white p-8 shadow-matchingquiz">
-        <div className="w-full">
-          <div className="mb-5 flex items-center justify-between pb-3">
-            {isNormal ? (
-              <Tooltip
-                title={
-                  <div className="text-[#33475B]">
-                    {courseInfo?.category == 'ACCA'
-                      ? '%Results = Graded activities (70%) + Final test (30%)'
-                      : '%Results = Module test (40%) + Topic test (60%)'}
-                  </div>
-                }
-                className="dashboard_tooltip"
-              >
-                <div className="flex min-w-fit items-center gap-1 text-lg font-bold 4xl:text-xl">
-                  Your Learning Results
-                  <Image src={infoIcon} alt="" width={16} height={16} />
-                </div>
-              </Tooltip>
-            ) : (
-              <div className="flex-col">
-                <div className="flex">
-                  <div className="min-w-fit text-xl font-semibold">
-                    Your Learning Results
-                  </div>
-                  <div className="ms-2">
-                    <IconEssentional />
-                  </div>
-                </div>
-                <div className="text-sm text-gray-400">
-                  {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
-                </div>
+    <div className="xl:flex xl:h-[48vh] w-full rounded-2xl bg-white p-8 shadow-matchingquiz">
+      <div className="w-full">
+        <div className="mb-5 flex items-center justify-between pb-3">
+          <div className="flex xl:flex-col flex-row justify-between w-full">
+            <div className="flex">
+              <div className="min-w-fit text-xl font-semibold">
+                Your Learning Results
               </div>
-            )}
+              <div className="ms-2">
+                <IconEssentional />
+              </div>
+            </div>
+            <div className="text-sm text-gray-400">
+              {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
+            </div>
           </div>
+        </div>
 
-          <div className="flex">
-            {option && (
+        <div className="flex">
+          {option && (
+            <div
+              className='flex grow xl:flex-row flex-col gap-5 px-5 2xl:px-12'
+            >
+              <div className="grow">
+                <EChart option={option} />
+              </div>
               <div
-                className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
+                className='flex xl:flex-col flex-row items-start justify-center xl:gap-4 gap-10'
               >
-                <div className="grow">
-                  <EChart option={option} />
-                </div>
-                <div
-                  className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
-                >
-                  {!isNormal && (
-                    <div className="flex items-center justify-center gap-2.5">
-                      <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
-                      <Link
-                        href={
-                          mockTestId
-                            ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                            : ''
-                        }
-                        target="_blank"
-                        className={`inline-block min-w-fit text-base font-medium text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
-                        rel="noreferrer"
-                      >
-                        Mock test results
-                      </Link>
-                    </div>
-                  )}
+                {!isNormal && (
+                  <div className="flex items-center justify-center gap-2.5 font-medium">
+                    <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
+                    <Link
+                      href={
+                        mockTestId
+                          ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                          : ''
+                      }
+                      target="_blank"
+                      className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                      rel="noreferrer"
+                    >
+                      Mock test results
+                    </Link>
+                  </div>
+                )}
 
-                  {isNormal || hasLearning ? (
-                    <div className="flex items-center justify-center gap-2.5">
-                      <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
-                      <span className="min-w-fit text-base font-medium text-gray-800">
-                        Learning results
-                      </span>
-                    </div>
-                  ) : null}
-                </div>
+                {isNormal || hasLearning ? (
+                  <div className="flex items-center justify-center gap-2.5">
+                    <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
+                    <span className="min-w-fit text-base font-medium text-gray-800">
+                      Learning results
+                    </span>
+                  </div>
+                ) : null}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-
-        <div className="w-[515px]">
-          <LearningMockTest results={results} />
-        </div>
-
-        {!isLoading && !option && (
-          <div className="flex grow items-center justify-center">
-            <NoData />
-          </div>
-        )}
       </div>
+
+      <div className="xl:w-[515px] w-full">
+        <LearningMockTest results={results} />
+      </div>
+
+      {!isLoading && !option && (
+        <div className="flex grow items-center justify-center">
+          <NoData />
+        </div>
+      )}
+    </div>
   )
 }
 
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
-    <div className="w-[515px] flex-col">
-      <div className="mb-10 flex text-xl font-semibold text-gray-800">
+    <div className="xl:w-[515px] w-full flex-col">
+      <div className="xl:mb-10 mb-6 flex text-xl font-semibold text-gray-800 xl:mt-0 mt-10">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
@@ -279,7 +257,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               key={result?.id}
               className="mb-4 flex flex-col rounded-lg bg-gray-100 px-4 py-2"
             >
-              <div className="mb-2 text-lg font-medium text-gray-800">
+              <div className="mb-2 text-lg xl:font-medium font-semibold text-gray-800">
                 {result?.short_name || result?.name}
               </div>
 

@@ -1,15 +1,11 @@
-import infoIcon from '@assets/images/info-icon.svg'
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
+import EChart from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
-
-import Tooltip from 'src/common/Tooltip'
-import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
+import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
 import Link from 'next/link'
 
@@ -21,12 +17,6 @@ const LearningResult = () => {
     const [mockTestId, setMockTestId] = useState<string>('')
     const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
     const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
-
-    const shortName = (name: string) => {
-        return name.length < LABEL_MAX_LENGTH
-            ? name
-            : `${name.slice(0, LABEL_MAX_LENGTH)}...`
-    }
 
     const handleLearningResults = (
         data: ILearningResult[] | IMockTestResult | any,
@@ -66,10 +56,53 @@ const LearningResult = () => {
                         return tooltipText
                     },
                 },
+                graphic: {
+                    type: 'group',
+                    left: 'center',
+                    top: 'middle',
+                    children: [
+                      {
+                        type: 'rect',
+                        invisible: !isNormal,
+                        shape: {
+                          width: total ? 60 : 50,
+                          height: 30,
+                          r: 8
+                        },
+                        style: {
+                          fill: '#fff',
+                          stroke: '#FFFFFF',
+                          lineWidth: 2,
+                          shadowColor: 'rgba(0, 0, 0, 0.1)',
+                          shadowBlur: 10,
+                        },
+                        x: total ? -30 : -25,
+                        y: -15,
+                        z: 3,
+                      },
+                      {
+                        type: 'text',
+                        invisible: !isNormal,
+                        style: {
+                          text: `${parseFloat((total / results.length).toFixed(2))}%`,
+                          fontSize: 20,
+                          fontWeight: 600,
+                          fill: '#6FD3B0',
+                          align: 'center',
+                          verticalAlign: 'middle',
+                        },
+                        x: 0,
+                        y: 0,
+                        z: 4,
+                      },
+                    ],
+                },
+          
+                // ... các thuộc tính khá
                 radar: [
                     {
                         shape: 'circle', // Hình tròn
-                        radius: '75%',
+                        radius: '80%',
                         indicator,
                         axisLine: {
                             lineStyle: {
@@ -152,10 +185,10 @@ const LearningResult = () => {
     }, [router?.query?.courseId])
 
     return (
-        <div className="flex h-[55vh] w-full rounded-2xl bg-white shadow-matchingquiz p-8">
+        <div className="flex xl:h-[55vh] w-full rounded-2xl bg-white shadow-matchingquiz p-8">
             <div className="w-full">
                 <div className="mb-5 flex items-center justify-between pb-3">
-                    <div className="flex-col">
+                    <div className="flex justify-between w-full">
                         <div className="flex">
                             <div className="min-w-fit text-xl font-semibold">
                                 Your Learning Results
@@ -176,8 +209,9 @@ const LearningResult = () => {
                             className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
                         >
                             <div className="grow">
-                                <EChart option={option} />
+                                <EChart option={option} height='400px' minHeight='400px'/>
                             </div>
+ 
                             <div
                                 className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
                             >
@@ -191,8 +225,7 @@ const LearningResult = () => {
                                                     : ''
                                             }
                                             target="_blank"
-                                            className={`inline-block min-w-fit text-base font-medium text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
-                                            rel="noreferrer"
+                                            className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
                                         >
                                             Mock test results
                                         </Link>
