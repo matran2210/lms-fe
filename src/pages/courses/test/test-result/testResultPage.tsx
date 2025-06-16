@@ -105,7 +105,7 @@ const TestResultPage = ({
         } else {
           return (
             <div className={commonMultipleScoreStyle}>
-              <div className="xl:3/4 flex h-auto w-full flex-col">
+              <div className="flex h-auto w-full flex-col gap-6">
                 <ChartCMAScore
                   data={chartData?.chart_data}
                   globalAverage={globalAverageNumber}
@@ -115,8 +115,10 @@ const TestResultPage = ({
                     GRADE_STATUS.FINISHED_GRADING
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
-                  recommendation={questions?.quizAttempt?.attempt_gradings}
                 />
+                {questions?.quizAttempt?.attempt_gradings?.map(
+                  (item, index) => <Recommendation data={item} key={index} />,
+                )}
                 <ScoreDetail
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
@@ -136,8 +138,8 @@ const TestResultPage = ({
       case 'CFA':
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="max-h-ful flex flex-col">
-              <div className="mb-4 items-start rounded-xl bg-white p-6 shadow-sidebar xl:mb-6">
+            <div className="max-h-ful flex flex-col gap-6">
+              <div className="items-start rounded-xl bg-white p-6 shadow-sidebar">
                 <ChartCFAScore data={chartData?.chart_data} />
               </div>
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
@@ -162,7 +164,7 @@ const TestResultPage = ({
       case QuizAttemptChartType.CMA:
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="xl:3/4 flex h-auto w-full flex-col">
+            <div className="xl:3/4 flex h-auto w-full flex-col gap-6">
               <ChartCMAScore
                 data={chartData?.chart_data}
                 globalAverage={globalAverageNumber}
@@ -172,8 +174,10 @@ const TestResultPage = ({
                   GRADE_STATUS.FINISHED_GRADING
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
-                recommendation={questions?.quizAttempt?.attempt_gradings}
               />
+              {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
+                <Recommendation data={item} key={index} />
+              ))}
               <ScoreDetail
                 className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
