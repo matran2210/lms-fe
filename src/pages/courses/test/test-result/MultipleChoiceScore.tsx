@@ -25,7 +25,7 @@ const MultipleChoiceScore = ({
 }: IMultipleChoiceScore) => {
   return (
     <div className="-order-1 xl:order-1">
-      <div className="max-h-full w-full pb-6 xl:sticky xl:top-[104px]">
+      <div className="max-h-full w-full xl:sticky xl:top-[104px]">
         <div
           className={`w-full justify-between rounded-xl bg-white p-6 shadow-sidebar xl:mb-8`}
         >
