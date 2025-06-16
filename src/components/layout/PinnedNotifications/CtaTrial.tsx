@@ -5,7 +5,7 @@ import { PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
-import PinnedNotificationsV2 from './PinnedNotificationsV2'
+import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const ENABLED_PINNED_PAGES = [
   PageLink.COURSE_DETAIL,
