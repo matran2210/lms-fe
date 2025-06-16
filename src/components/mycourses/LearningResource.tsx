@@ -29,6 +29,13 @@ interface IProps {
   setOpenResource: Dispatch<SetStateAction<boolean>>
 }
 
+type FormValues = {
+  section: string | null
+  subsection: string | null
+  unit: string | null
+  activity: string | null
+}
+
 const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
@@ -36,7 +43,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  const { control, watch, setValue, reset } = useForm({
+  const { control, watch, setValue, reset } = useForm<FormValues>({
     defaultValues: {
       section: null,
       subsection: null,
@@ -51,7 +58,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const selectedActivity = watch('activity')
   const handleDropdownChange = (
     fieldName: 'section' | 'subsection' | 'unit' | 'activity',
-    selected: any,
+    selected: string | null,
     fieldsToReset: ('section' | 'subsection' | 'unit' | 'activity')[],
   ) => {
     setValue(fieldName, selected)
@@ -132,7 +139,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           page_size,
           'CHAPTER',
           selectedSection || '',
-          class_id as any,
+          class_id as string,
         )
         setSubsections([...res?.data?.sections].reverse())
         setValue('unit', null)
@@ -155,7 +162,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           DEFAULT_PAGESIZE,
           'UNIT',
           selectedSubsection || '',
-          class_id as any,
+          class_id as string,
         )
         setUnit([...res?.data?.sections].reverse())
         setValue('activity', null)
@@ -177,7 +184,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           page_size,
           'ACTIVITY',
           selectedUnit || '',
-          class_id as any,
+          class_id as string,
         )
         setActivity([...res?.data?.sections].reverse())
       }
