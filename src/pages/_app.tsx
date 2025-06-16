@@ -45,7 +45,7 @@ import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import 'sapp-common-package/dist/index.css'
 import '@xyflow/react/dist/style.css'
-import 'preview-part/dist/index.css'
+
 type MyAppProps = AppProps & {
   Component: {
     layout?: String

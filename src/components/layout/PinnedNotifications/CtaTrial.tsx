@@ -56,12 +56,9 @@ function CtaTrial() {
     <>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
       {openPopupCTA && (
-        <PinnedNotificationsV2
-          bgColor="bg-info-100"
-          borderColor="border-info-500"
-        >
+        <PinnedNotificationsV2 bgColor="bg-info-100" borderColor="border-info">
           <div />
-          <div className="text-gray-800 flex gap-2 text-lg font-semibold">
+          <div className="flex gap-2 text-lg font-semibold text-gray-800">
             <div>
               You have&nbsp;
               {localStorage.getItem('daysDifference')}

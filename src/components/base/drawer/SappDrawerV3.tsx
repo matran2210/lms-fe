@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, CloseIconV2 } from '@components/icons'
+import { CloseIconV2 } from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
@@ -49,15 +49,6 @@ const SappDrawerV3: React.FC<IProps> = ({
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            {!isShowBtnClose && handleBack && (
-              <button
-                onClick={handleBack}
-                className="cursor-pointer"
-                aria-label="Go back"
-              >
-                <ArrowLeftIcon />
-              </button>
-            )}
             <span className="text-2xl font-semibold leading-loose text-secondary">
               {title}
             </span>
@@ -74,7 +65,7 @@ const SappDrawerV3: React.FC<IProps> = ({
         </div>
 
         {/* Content */}
-        <div>{children}</div>
+        <>{children}</>
 
         {/* Footer */}
         {isShowFooter && (

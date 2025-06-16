@@ -919,10 +919,10 @@ $focus: (
   background-color: #000000cc;
 }
 .ant-drawer-content {
-  @apply rounded-[16px];
+  @apply rounded-2xl;
 }
 .ant-drawer-content-wrapper {
-  @apply m-[16px] rounded-[16px];
+  @apply m-4 rounded-2xl;
 }
 
 .shadow-activity.aos-init.aos-animate {
