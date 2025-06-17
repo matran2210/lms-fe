@@ -159,60 +159,59 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-[1144px] pt-2 max-[1199px]:mx-6">
-        <div className="mb-10 rounded-lg bg-white px-8 py-4">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearchV2}
-            formStyle="w-full flex items-center"
+      <div className="mb-10 rounded-lg bg-white px-8 py-4">
+        <SearchForm
+          placeholder={MY_COURSES.placeholderSearchV2}
+          formStyle="w-full flex items-center"
+        />
+      </div>
+      {isLoading ? (
+        <CourseSkeleton />
+      ) : (
+        <>
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: courseNameDetail,
+                link: '',
+              },
+            ]}
           />
-        </div>
-        {isLoading ? (
-          <CourseSkeleton />
-        ) : (
-          <>
-            <SappBreadCrumbs
-              isTeacher={false}
-              breadcrumbs={[
+          <div
+            className="my-4 flex items-center justify-between"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div className="text-3xl font-semibold text-gray-800">
+              {courseNameDetail}
+            </div>
+            <FilterCourse
+              totalResult={courses?.length || 0}
+              listFilter={[
                 {
-                  title: 'My Course',
-                  link: '/courses',
-                },
-                {
-                  title: courseNameDetail,
-                  link: '',
+                  name: 'user_section_learning_status',
+                  placeholder: 'Status',
+                  options: defaultStatusDetail,
                 },
               ]}
             />
-            <div
-              className="my-4 flex items-center justify-between"
-              data-aos={ANIMATION.DATA_AOS}
-            >
-              <div className="text-3xl font-semibold text-gray-800">
-                {courseNameDetail}
-              </div>
-              <FilterCourse
-                totalResult={courses?.length || 0}
-                listFilter={[
-                  {
-                    name: 'user_section_learning_status',
-                    placeholder: 'Status',
-                    options: defaultStatusDetail,
-                  },
-                ]}
-              />
-            </div>
-            <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
-              <CourseParts
-                isTrial={isTrial}
-                courses={courses}
-                is_passed_course={is_passed_course}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
-          </>
-        )}
-      </div>
+          </div>
+          <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
+          </div>
+        </>
+      )}
+
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
         showSelectExamPopup && <SelectExamPopup courseData={data} />}
