@@ -113,6 +113,10 @@ module.exports = {
         active: '#e5e7eb',
         unactive: '#d3d5d8',
       },
+      badge: {
+        200: '#B3CEE0',
+        500: '#08719D',
+      },
     },
     screens: {
       sm: '640px',
