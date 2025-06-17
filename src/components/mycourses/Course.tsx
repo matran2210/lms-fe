@@ -435,6 +435,7 @@ const Course = ({
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
+          classNameCard="min-h-[434px]"
         >
           <div className="flex items-center justify-between">
             {enableCourse ? (

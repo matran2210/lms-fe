@@ -34,6 +34,7 @@ const CardCourse = forwardRef<
       className: string
     }
     classNameTitle?: string
+    classNameCard?: string
   }
 >(
   (
@@ -47,12 +48,16 @@ const CardCourse = forwardRef<
       hideBadge = false,
       badgeCode,
       classNameTitle = 'mb-6 mt-3',
+      classNameCard = '',
     },
     ref,
   ) => {
     return (
       <div
-        className="relative min-h-[434px] rounded-xl bg-white p-8 shadow-card"
+        className={clsx(
+          'relative rounded-xl bg-white p-8 shadow-card',
+          classNameCard,
+        )}
         ref={ref}
         data-aos={ANIMATION.DATA_AOS}
       >
