@@ -9369,10 +9369,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.61:
-  version "1.3.61"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.61.tgz#b34345695f410c88093cd5f5476e9857dcbf61f2"
-  integrity sha512-bMLgTTEMCU1+6FeQNAC9ub9kc1aMWa9pQuT+DTlnMq2tClUpAz0LGPEEWlc2+5WVcZ+dSs0J/q5iFTz4oBUmbQ==
+preview-part@^1.3.62:
+  version "1.3.62"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.62.tgz#1f859e75174ebc99f7ea0810afc82d0cbc50446c"
+  integrity sha512-edGIPJdN2eTOfDmA1dKKQG8xKFNX0W2HBqU7aqA8Kty3D0/C183NvdZey5vRodoQVidDseNWAwR1vhPIeZrekg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
