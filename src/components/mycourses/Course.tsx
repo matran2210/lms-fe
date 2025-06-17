@@ -413,7 +413,7 @@ const Course = ({
         <CardCourse
           title={course?.name}
           key={index}
-          ref={lastElementRef as unknown as React.RefObject<HTMLDivElement>}
+          ref={lastElementRef}
           disabledTitle={!enableCourse}
           classNameTitle="h-16 font-semibold mb-4 mt-3"
           handleClickTitle={handleClickTitle}
