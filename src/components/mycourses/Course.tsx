@@ -8,7 +8,7 @@ import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import Tooltip from 'src/common/Tooltip'
 import {
@@ -30,6 +30,7 @@ import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
 import dayjs from 'dayjs'
 import CardCourse from '@components/common/CardCourse/CardCourse'
+import clsx from 'clsx'
 
 const Course = ({
   course,
@@ -427,7 +428,7 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle="h-16 font-semibold mb-4 mt-3"
+          classNameTitle={`h-16 font-semibold mb-4 ${enableCourse && 'mt-3'}`}
           handleClickTitle={handleClickTitle}
           hideBadge={!enableCourse}
           badgeCode={{
@@ -514,45 +515,52 @@ const Course = ({
               />
             )}
           </div>
+          {enableCourse && (
+            <div className="progress mb-6 h-8">
+              <div className="info mb-2 flex items-center justify-between">
+                <div className="text flex items-center">
+                  <Icon
+                    type={enableCourse ? iconType : 'expired'}
+                    className={`relative ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
+                  />
+                  <p
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-gray-800' : 'text-gray-300'
+                    } ml-px pl-2`}
+                  >
+                    {enableCourse ? showStatus : 'Expired'}
+                  </p>
+                </div>
+                <div className="number">
+                  <p
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
+                  >
+                    {progressPart}%
+                  </p>
+                </div>
+              </div>
+              <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
+                <div
+                  className={`progress-percentage rounded-[100px] ${
+                    enableCourse ? 'bg-primary' : 'bg-gray-200'
+                  } h-[6px]`}
+                  style={{ width: `${progressPart}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
 
-          <div className="progress mb-6 h-8">
-            <div className="info mb-2 flex items-center justify-between">
-              <div className="text flex items-center">
-                <Icon
-                  type={enableCourse ? iconType : 'expired'}
-                  className={`relative ${
-                    enableCourse ? 'text-[#050505]' : 'text-gray-300'
-                  }`}
-                />
-                <p
-                  className={`text-sm font-normal ${
-                    enableCourse ? 'text-gray-800' : 'text-gray-300'
-                  } ml-px pl-2`}
-                >
-                  {enableCourse ? showStatus : 'Expired'}
-                </p>
-              </div>
-              <div className="number">
-                <p
-                  className={`text-sm font-normal ${
-                    enableCourse ? 'text-[#050505]' : 'text-gray-300'
-                  }`}
-                >
-                  {progressPart}%
-                </p>
-              </div>
-            </div>
-            <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
-              <div
-                className={`progress-percentage rounded-[100px] ${
-                  enableCourse ? 'bg-primary' : 'bg-gray-200'
-                } h-[6px]`}
-                style={{ width: `${progressPart}%` }}
-              ></div>
-            </div>
-          </div>
-          <div className="action relative flex items-center justify-end">
-            {determineButtonToShow !== 'Disabled' ? (
+          <div
+            className={clsx(
+              'action flex items-center justify-end',
+              !enableCourse && 'absolute bottom-8 right-8',
+            )}
+          >
+            {determineButtonToShow !== 'Disabled' && (
               <ButtonSecondary
                 title={
                   determineButtonToShow === 'Active'
@@ -567,10 +575,7 @@ const Course = ({
                   trackGAEvent('CLick Button Course Item')
                 }}
               />
-            ) : (
-              <div className="action relative flex h-8 items-center justify-end"></div>
             )}
-            {/* )} */}
           </div>
 
           <ResultRowsModal open={open} setOpen={setOpen} />

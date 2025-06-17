@@ -52,7 +52,7 @@ const CardCourse = forwardRef<
   ) => {
     return (
       <div
-        className="rounded-xl bg-white p-8 shadow-card"
+        className="relative min-h-[434px] rounded-xl bg-white p-8 shadow-card"
         ref={ref}
         data-aos={ANIMATION.DATA_AOS}
       >
