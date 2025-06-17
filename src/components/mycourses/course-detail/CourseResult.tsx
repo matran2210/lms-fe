@@ -129,7 +129,7 @@ const ResultCourse = ({
     <div className="flex h-8 items-center gap-2">
       <div className={`forcus-group:text-primary text-gray-800`}>Attempt:</div>
       <div>
-        {resultList.data.length <= 1 ? (
+        {resultList?.data?.length <= 1 ? (
           <div className="text-base font-normal">1</div>
         ) : (
           <HookFormSelect

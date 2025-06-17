@@ -1,6 +1,5 @@
 import Layout from '@components/layout'
 import CoursesList from '@components/mycourses/CoursesList'
-import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import PopupStep from '@components/user-guide/PopupStep'
@@ -16,17 +15,24 @@ import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import TourGuideStart from 'src/assets/lotties/tour-guide-start.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, UserGuide } from 'src/constants'
+import { ANIMATION, defaultStatusCourse, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
+import FilterCourse from '@components/mycourses/FilterCourse'
 
 const DEFAULT_PAGESIZE = 9
 const MASTER = 'Master Finance'
 const GENERAL = 'General Course'
+const defaultCategory = [
+  {
+    label: `All`,
+    value: '',
+  },
+]
 
 const MyCourse = () => {
   const {
@@ -163,30 +169,45 @@ const MyCourse = () => {
     }
   }, [courses])
 
+  const firstPage = data?.pages?.[0]
+  const totalRecords = firstPage?.category?.metadata?.total_records || 0
+  const dynamicCategoryOptions =
+    firstPage?.category?.total?.map((category: { categoryName: string }) => ({
+      label: category.categoryName,
+      value: category.categoryName,
+    })) || []
+  const listFilter = [
+    {
+      name: 'type',
+      placeholder: 'Category',
+      options: defaultCategory.concat(dynamicCategoryOptions),
+    },
+    {
+      name: 'status',
+      placeholder: 'Status',
+      options: defaultStatusCourse,
+    },
+  ]
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
-          <div
-            className={`relative mx-auto my-4 flex rounded-md py-3 
-              ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
-          >
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
-              disabled={guideIsActive}
+        <div className="mb-6 mt-2 rounded-lg bg-white px-8 py-4">
+          <SearchForm
+            placeholder={MY_COURSES.placeholderSearchV2}
+            formStyle="w-full flex items-center"
+            disabled={guideIsActive}
+          />
+          {guideStatus && guideStep === 1 && (
+            <PopupStep
+              content={UserGuide.CONTENT_STEP_1}
+              className="left-0 top-full mt-3"
+              title={'Search box'}
+              index={1}
+              total={7}
+              imgSrc={TourGuideStart}
             />
-            {guideStatus && guideStep === 1 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3"
-                title={'Search box'}
-                index={1}
-                total={7}
-                imgSrc={TourGuideStart}
-              />
-            )}
-          </div>
+          )}
         </div>
 
         <Row className="mx-auto my-0 flex rounded-md bg-white shadow-sidebar">
@@ -261,13 +282,10 @@ const MyCourse = () => {
             )}
           </Col>
         </Row>
-        <div className="mx-auto mb-6 mt-8 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">My Courses</h1>
+        <div className="mx-auto mb-6 mt-11 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold text-gray-800">My Courses</h1>
           <div className={`relative`}>
-            <Filter
-              courses={data?.pages?.[0]?.category}
-              tourGuideActive={guideStatus && guideStep === 7}
-            />
+            <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
             {guideStatus && guideStep === 7 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_7}

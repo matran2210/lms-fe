@@ -2729,9 +2729,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className={clsx(
-                          `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
-                        )}
+                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}
@@ -2974,11 +2972,11 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="h-full overflow-auto bg-white py-6 "
+                      className="h-full min-w-[300px] overflow-auto bg-white p-8"
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2996,7 +2994,7 @@ const TestDetail = () => {
                   </div>
                 ) : (
                   <div
-                    className={`flex-1 overflow-auto px-6 py-6`}
+                    className={`flex-1 overflow-auto p-8`}
                     id={'preview-question'}
                     ref={scrollRef}
                   >
@@ -3071,7 +3069,7 @@ const TestDetail = () => {
                       className={clsx(
                         'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
-                          'bg-white':
+                          'bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
                         },
@@ -3260,9 +3258,9 @@ const TestDetail = () => {
                   return (
                     <div
                       key={e?.value}
-                      className={clsx(
-                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
-                      )}
+                      className={
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800'
+                      }
                       onClick={() => {
                         handleOpenExhibit(e?.value)
                         setShowWarning(false)
@@ -3320,9 +3318,7 @@ const TestDetail = () => {
           handleFlagQuestion(currentPage)
           trackGAEvent('Click Button Flag To Review Test')
         }}
-        className={clsx(
-          'group fixed bottom-[422px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
-        )}
+        className="group fixed bottom-[422px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
         <FlagIconV2 isActive={currentTabContent?.flag} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />

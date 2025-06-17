@@ -165,30 +165,30 @@ const TabSlide = ({
    */
   const [scrollLeft, setScrollLeft] = useState(0)
 
-  const handleMouseDown = (event: React.MouseEvent<any>) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
-    setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
-    setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
+    setStartX(event.pageX - elementRef?.current?.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
+    setScrollLeft(elementRef?.current?.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
   }
 
-  const handleMouseMove = (event: React.MouseEvent<any>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
-    const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
+    const x = event?.pageX - elementRef?.current?.offsetLeft // Tính toán vị trí x mới của chuột
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
-  const handleTouchStart = (event: React.TouchEvent<any>) => {
-    const touch = event.touches[0]
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event?.touches[0]
     setIsDragging(true)
-    setStartX(touch.pageX - elementRef.current.offsetLeft)
-    setScrollLeft(elementRef.current.scrollLeft)
+    setStartX(touch?.pageX - elementRef?.current?.offsetLeft)
+    setScrollLeft(elementRef?.current?.scrollLeft)
   }
 
-  const handleTouchMove = (event: React.TouchEvent<any>) => {
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
     if (!isDragging) return
-    const touch = event.touches[0]
-    const x = touch.pageX - elementRef.current.offsetLeft
+    const touch = event?.touches[0]
+    const x = touch?.pageX - elementRef?.current?.offsetLeft
     const distance = (x - startX) * 2
     elementRef.current.scrollLeft = scrollLeft - distance
   }

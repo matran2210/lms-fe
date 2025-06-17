@@ -68,10 +68,11 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
    * @returns {Object} Object chứa header, content và icon tương ứng với trạng thái
    */
   const getModalContent = () => {
-    if (showForm.lockSection) return MODAL_CONTENT.lockSection
-    if (showForm.ctaUpgrade) return MODAL_CONTENT.ctaUpgrade
-    if (showForm.thankYouLater) return MODAL_CONTENT.thankYouLater
-    return MODAL_CONTENT.thankYou
+    const activeKey = (Object.entries(showForm).find(
+      ([_, value]) => value,
+    )?.[0] || 'thankYou') as keyof typeof MODAL_CONTENT
+
+    return MODAL_CONTENT[activeKey]
   }
 
   /**
@@ -79,40 +80,58 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
    * Gọi API để nâng cấp tài khoản trial
    * Dựa vào kết quả API để hiển thị thông báo thank you phù hợp
    */
+
   const handleUpgrade = async () => {
     const res = await CoursesAPI.upgradeNowTrial(
       router.query.courseId || router.query.id,
     )
-    if (res.success) {
-      setShowForm({
-        lockSection: false,
-        ctaUpgrade: false,
-        thankYou: !!res?.data?.upgrade_now_available,
-        thankYouLater: !res?.data?.upgrade_now_available,
-      })
+
+    const isAvailable = !!res?.data?.upgrade_now_available
+
+    setShowForm({
+      lockSection: false,
+      ctaUpgrade: false,
+      thankYou: isAvailable,
+      thankYouLater: !isAvailable,
+    })
+  }
+
+  const handleOk = () => {
+    if (showForm.thankYou || showForm.thankYouLater) {
+      handleClose()
+    } else {
+      handleUpgrade()
     }
   }
 
+  const isOpen = Object.values(showForm).some(Boolean)
   const { header, content, icon } = getModalContent()
-  const showFooter = showForm.ctaUpgrade || showForm.lockSection
+
+  const okButtonCaption =
+    showForm.thankYou || showForm.thankYouLater
+      ? 'Back to Study'
+      : 'Upgrade Now'
+
+  const cancelButtonCaption =
+    showForm.lockSection || showForm.ctaUpgrade ? 'Maybe Later' : ''
+
+  const showFooter = isOpen
+  const isUnderLine = showForm.lockSection || showForm.ctaUpgrade
 
   return (
     <SappModalV3
-      open={
-        showForm.ctaUpgrade ||
-        showForm.lockSection ||
-        showForm?.thankYou ||
-        showForm?.thankYouLater
-      }
+      open={isOpen}
       handleCancel={handleClose}
-      onOk={handleUpgrade}
+      onOk={handleOk}
       icon={icon}
       header={header}
       content={content}
       showFooter={showFooter}
-      okButtonCaption="Upgrade Now"
-      fullWidthBtn={true}
+      okButtonCaption={okButtonCaption}
+      fullWidthBtn
       buttonSize="extra"
+      cancelButtonCaption={cancelButtonCaption}
+      isUnderLine={isUnderLine}
     />
   )
 }
