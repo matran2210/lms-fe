@@ -4,7 +4,7 @@ import React from 'react'
 import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
-import ExamDashboard from '@components/dashboard/ExamDashboard'
+import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 

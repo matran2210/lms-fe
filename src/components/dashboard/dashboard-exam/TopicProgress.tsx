@@ -3,124 +3,27 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { ITopicProgress } from 'src/type/dashboard'
-import NoData from 'src/common/NoData'
+import { EChartsOption } from 'echarts'
 
 const TopicProgress = () => {
   const router = useRouter()
-  const [option, setOption] = useState<any>()
+  const [option, setOption] = useState<EChartsOption>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
-      // const option: EChartsProps['option'] = {
-      //   color: ['#FFAE4C'],
-      //   responsive: true,
-      //   maintainAspectRatio: false,
-      //   grid: {
-      //     left: 20,
-      //     right: 20,
-      //     top: 30,
-      //     bottom: 10,
-      //     containLabel: true,
-      //   },
-      //   tooltip: {
-      //     trigger: 'axis',
-      //     axisPointer: {
-      //       type: 'shadow',
-      //     },
-      //     textStyle: {
-      //       fontSize: 14,
-      //       fontWeight: 500,
-      //       fontFamily: 'Roboto',
-      //       color: '#374151',
-      //     },
-      //     formatter: (params: any) => {
-      //       const index = params[0]?.dataIndex
-      //       const fullLabel = data[index]?.short_name || data[index]?.name
-      //       return fullLabel || ''
-      //     },
-      //   },
-      //   xAxis: {
-      //     type: 'category',
-      //     data: data.map((e: ITopicProgress) => e.short_name || e.name),
-      //     axisLabel: {
-      //       rotate: 40,
-      //       fontFamily: 'Roboto',
-      //       formatter: function (value) {
-      //         return value.length > LABEL_MAX_LENGTH
-      //           ? value.slice(0, LABEL_MAX_LENGTH) + '…'
-      //           : value
-      //       },
-      //       rich: {
-      //         tooltip: {
-      //           color: '#374151',
-      //         },
-      //       },
-      //       fontSize: 14,
-      //       margin: 20,
-      //     },
-      //     splitLine: {
-      //       show: true,
-      //       lineStyle: {
-      //         type: 'dashed',
-      //         color: '#eee',
-      //       },
-      //     },
-      //     axisTick: {
-      //       show: false,
-      //     },
-      //   },
-      //   yAxis: {
-      //     type: 'value',
-      //     max: 100,
-      //     splitLine: {
-      //       show: true,
-      //       lineStyle: {
-      //         type: 'dashed',
-      //         color: '#eee',
-      //       },
-      //     },
-      //   },
-      //   series: [
-      //     {
-      //       data: data.map((e: ITopicProgress) => {
-      //         return e.total_activities
-      //           ? Math.round(
-      //               (e.completed_activities / e.total_activities) * 100,
-      //             )
-      //           : 0
-      //       }),
-      //       type: 'bar',
-      //       barMaxWidth: 48,
-      //       label: {
-      //         show: true,
-      //         formatter: '{c}%',
-      //         fontWeight: 600,
-      //         fontFamily: 'Roboto',
-      //         position: 'top',
-      //       },
-      //       showBackground: true,
-      //       backgroundStyle: {
-      //         color: 'rgba(255, 174, 76, 0.2)',
-      //       },
-      //     },
-      //   ],
-      // }
-
       const option = {
         tooltip: {
           trigger: 'item',
-          formatter: function (params: any) {
+          borderWidth: 0,
+          formatter: function (params: {name: string, value: string}) {
             return `
               <div style="
-                font-weight: 500;
-                box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
                 min-width: 120px;
-                background: '#fff';
-                text-align: left;
+                background: #fff;
               ">
-                <div style="font-weight: 700; color: #2563eb; margin-bottom: 0.25rem;">${params.name}</div>
-                <div>Hoàn thành: <span style="font-weight:700; color:#16a34a;">${params.value}%</span></div>
+                <div style="font-weight: 600; color: #374151; margin-bottom: 4px; font-size: 16px; line-height: 24px">${params.name}</div>
+                <div style="font-size: 14px; line-height: 22px; font-weight: 400; color: #374151">Progress: ${params.value}%</div>
               </div>
             `
           },
@@ -199,9 +102,9 @@ const TopicProgress = () => {
         ],
       }
 
-      setOption(option)
+      setOption(option as EChartsOption)
     } else {
-      setOption(null)
+      setOption(undefined)
     }
   }
 
@@ -211,7 +114,7 @@ const TopicProgress = () => {
 
       if (res && res.success) handleTopicProgress(res.data)
     } catch (error) {
-      setOption(null)
+      setOption(undefined)
     } finally {
       setIsLoading(false)
     }
@@ -223,16 +126,13 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex h-[68vh] flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto">
+    <div className="flex flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto h-[48vh]">
       <div className="mb-5 pb-3 text-lg font-bold text-gray-800 4xl:text-xl">
         Topic Progress
       </div>
+
       {option && <EChart option={option} minHeight='450px' />}
-      {!isLoading && !option && (
-        <div className="flex h-full w-full items-center justify-center">
-          <NoData />
-        </div>
-      )}
+
     </div>
   )
 }

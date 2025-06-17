@@ -1,6 +1,6 @@
-import OverProgress from '@components/dashboard/OverProgress'
-import TopicProgress from '@components/dashboard/TopicProgress'
-import LearningResults from '@components/dashboard/LearningResults'
+import OverProgress from '@components/dashboard/dashboard-exam/OverProgress'
+import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
+import LearningResults from '@components/dashboard/dashboard-exam/LearningResults'
 
 const ExamDashboard = () => {
   return (

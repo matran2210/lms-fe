@@ -1,4 +1,4 @@
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
+import EChart from '@components/base/chart/Chart'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
@@ -122,7 +122,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex xl:w-[566px] w-full flex-col rounded-2xl bg-white p-6 text-gray-700 shadow-matchingquiz 3xl:px-6 xl:mt-0 mt-6 xl:mb-0 mb-5 xl:h-auto h-[63vh]">
+    <div className="flex xl:w-[566px] w-full flex-col rounded-2xl bg-white p-6 text-gray-700 shadow-matchingquiz 3xl:px-6 xl:mt-0 mt-6 xl:mb-0 mb-5 xl:h-auto h-[47vh]">
       <div className="mb-5 flex items-center justify-between pb-3">
         <div className="min-w-fit text-xl font-semibold text-gray-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}

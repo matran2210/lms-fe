@@ -3,11 +3,11 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
 import Link from 'next/link'
+import Tooltip from 'src/common/Tooltip'
 
 const LearningResult = () => {
     const router = useRouter()
@@ -46,6 +46,7 @@ const LearningResult = () => {
                 },
                 tooltip: {
                     trigger: 'item',
+                    borderWidth: 0,
                     formatter: function (params: any) {
                         const values = params.value
                         const indicators = results.map((e: ILearningResult) => e.name)
@@ -61,43 +62,43 @@ const LearningResult = () => {
                     left: 'center',
                     top: 'middle',
                     children: [
-                      {
-                        type: 'rect',
-                        invisible: !isNormal,
-                        shape: {
-                          width: total ? 60 : 50,
-                          height: 30,
-                          r: 8
+                        {
+                            type: 'rect',
+                            invisible: !isNormal,
+                            shape: {
+                                width: total ? 60 : 50,
+                                height: 30,
+                                r: 8
+                            },
+                            style: {
+                                fill: '#fff',
+                                stroke: '#FFFFFF',
+                                lineWidth: 2,
+                                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                shadowBlur: 10,
+                            },
+                            x: total ? -30 : -25,
+                            y: -15,
+                            z: 3,
                         },
-                        style: {
-                          fill: '#fff',
-                          stroke: '#FFFFFF',
-                          lineWidth: 2,
-                          shadowColor: 'rgba(0, 0, 0, 0.1)',
-                          shadowBlur: 10,
+                        {
+                            type: 'text',
+                            invisible: !isNormal,
+                            style: {
+                                text: `${parseFloat((total / results.length).toFixed(2))}%`,
+                                fontSize: 20,
+                                fontWeight: 600,
+                                fill: '#6FD3B0',
+                                align: 'center',
+                                verticalAlign: 'middle',
+                            },
+                            x: 0,
+                            y: 0,
+                            z: 4,
                         },
-                        x: total ? -30 : -25,
-                        y: -15,
-                        z: 3,
-                      },
-                      {
-                        type: 'text',
-                        invisible: !isNormal,
-                        style: {
-                          text: `${parseFloat((total / results.length).toFixed(2))}%`,
-                          fontSize: 20,
-                          fontWeight: 600,
-                          fill: '#6FD3B0',
-                          align: 'center',
-                          verticalAlign: 'middle',
-                        },
-                        x: 0,
-                        y: 0,
-                        z: 4,
-                      },
                     ],
                 },
-          
+
                 // ... các thuộc tính khá
                 radar: [
                     {
@@ -167,9 +168,7 @@ const LearningResult = () => {
 
     const getLearningResults = async (id: string) => {
         try {
-            const res = isNormal
-                ? await DashboardAPI.getLearningResults(id)
-                : await DashboardAPI.getMockTestResults(id)
+            const res = await DashboardAPI.getLearningResults(id)
 
             if (res && res.success) handleLearningResults(res.data)
         } catch (error) {
@@ -184,8 +183,12 @@ const LearningResult = () => {
             getLearningResults(router.query.courseId as string)
     }, [router?.query?.courseId])
 
+    const resultFormula = courseInfo?.category === 'ACCA'
+        ? '%Results = Graded activities (70%) + Final test (30%)'
+        : '%Results = Module test (40%) + Topic test (60%)'
+
     return (
-        <div className="flex xl:h-[55vh] w-full rounded-2xl bg-white shadow-matchingquiz p-8">
+        <div className="flex xl:h-[55vh] w-full rounded-2xl bg-white shadow-matchingquiz p-8 h-[48px]">
             <div className="w-full">
                 <div className="mb-5 flex items-center justify-between pb-3">
                     <div className="flex justify-between w-full">
@@ -193,9 +196,11 @@ const LearningResult = () => {
                             <div className="min-w-fit text-xl font-semibold">
                                 Your Learning Results
                             </div>
-                            <div className="ms-2">
-                                <IconEssentional />
-                            </div>
+                            <Tooltip title={<div className='text-center'>{resultFormula}</div>} placement='bottom'>
+                                <div className="ms-2">
+                                    <IconEssentional />
+                                </div>
+                            </Tooltip>
                         </div>
                         <div className="text-sm text-gray-400">
                             {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
@@ -209,9 +214,9 @@ const LearningResult = () => {
                             className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
                         >
                             <div className="grow">
-                                <EChart option={option} height='400px' minHeight='400px'/>
+                                <EChart option={option} height='400px' minHeight='400px' />
                             </div>
- 
+
                             <div
                                 className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
                             >
@@ -245,12 +250,6 @@ const LearningResult = () => {
                     )}
                 </div>
             </div>
-
-            {!isLoading && !option && (
-                <div className="flex grow items-center justify-center">
-                    <NoData />
-                </div>
-            )}
         </div>
     )
 }

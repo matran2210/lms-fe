@@ -1,5 +1,5 @@
-import WeeklyReport from '@components/dashboard/WeeklyReport'
-import TopicProgress from '@components/dashboard/TopicProgress'
+import WeeklyReport from '@components/dashboard/dashboard-normal/WeeklyReport'
+import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import OverallProgress from './dashboard-normal/OverallProgress'
 import LearningResult from './dashboard-normal/LearningResult'
 
@@ -40,7 +40,7 @@ const CourseDashboard = () => {
         <div className="order-2 xl:order-1">
           <TopicProgress />
         </div>
-        <div className="flex rounded-2xl bg-white shadow-matchingquiz xl:my-0 my-6 order-1 xl:order-2">
+        <div className="flex rounded-2xl bg-white shadow-matchingquiz xl:my-0 mb-6 order-1 xl:order-2">
           <LearningResult />
         </div>
       </div>
