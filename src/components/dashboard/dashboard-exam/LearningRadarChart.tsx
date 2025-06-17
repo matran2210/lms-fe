@@ -8,7 +8,10 @@ interface LearningRadarChartProps {
   isNormal: boolean
 }
 
-const LearningRadarChart: React.FC<LearningRadarChartProps> = ({ results, isNormal }) => {
+const LearningRadarChart: React.FC<LearningRadarChartProps> = ({
+  results,
+  isNormal,
+}) => {
   const option = useMemo(() => {
     if (!results || results.length === 0) return {}
 
@@ -50,7 +53,9 @@ const LearningRadarChart: React.FC<LearningRadarChartProps> = ({ results, isNorm
             lineHeight: 22,
             formatter: function (name: string) {
               const maxLength = 16
-              return name.length > maxLength ? name.slice(0, maxLength) + '…' : name
+              return name.length > maxLength
+                ? name.slice(0, maxLength) + '…'
+                : name
             },
           },
         },
@@ -61,14 +66,18 @@ const LearningRadarChart: React.FC<LearningRadarChartProps> = ({ results, isNorm
           data: [
             {
               name: 'Learning results',
-              value: results.map((result: {score: number}) => result?.score),
+              value: results.map((result: ILearningResult | IMockTestResult) =>
+                'score' in result ? result.score : 0,
+              ),
               areaStyle: { color: 'rgba(111, 211, 176, 0.45)' },
               lineStyle: { color: '#6FD3B0', width: 1 },
               itemStyle: { color: '#6FD3B0' },
             },
             {
               name: 'Mock test results',
-              value: results.map((result: any) => result?.mock_test_score),
+              value: results.map((result: ILearningResult | IMockTestResult) =>
+                'mock_test_score' in result ? result.mock_test_score : 0,
+              ),
               areaStyle: { color: 'rgba(251, 140, 91, 0.45)' },
               lineStyle: { color: '#FB8C5B', width: 1 },
               itemStyle: { color: '#FB8C5B' },
