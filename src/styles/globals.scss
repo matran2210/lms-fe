@@ -22,6 +22,8 @@
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @import './components/drawer.scss';
+@import './pages/test';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -891,8 +893,16 @@ $focus: (
   }
 }
 
+/* Drawer body padding và scroll */
 .ant-drawer .ant-drawer-body {
-  padding: 0 !important;
+  @apply p-0;
+  @apply overflow-y-scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.ant-drawer .ant-drawer-body::-webkit-scrollbar {
+  @apply hidden; /* Chrome, Safari */
 }
 
 .sapp-notifcation a:hover {
@@ -900,7 +910,7 @@ $focus: (
 }
 
 .ant-drawer {
-  position: unset;
+  @apply fixed;
 }
 
 .ant-drawer .ant-drawer-mask,
@@ -908,6 +918,12 @@ $focus: (
 .ant-drawer .ant-drawer-content-wrapper {
   position: fixed;
   background-color: #000000cc;
+}
+.ant-drawer-content {
+  @apply rounded-2xl;
+}
+.ant-drawer-content-wrapper {
+  @apply m-4 rounded-2xl;
 }
 
 .shadow-activity.aos-init.aos-animate {
@@ -1403,13 +1419,6 @@ select:focus {
   --tw-ring-color: none;
 }
 
-.truncate-breadcrumbs {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-  max-width: 200px;
-}
 .react-flow__panel {
   display: none;
 }

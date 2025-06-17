@@ -172,7 +172,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       >
         <div className="mt-10">
           <div className="info border-l border-[#DCDDDD] px-4">
-            <div className="text-ink flex justify-between text-base capitalize">
+            <div className="flex justify-between text-base capitalize text-gray">
               {data?.is_attempt ? (
                 <>
                   <p>Time taken:</p>
@@ -193,7 +193,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 </>
               )}
             </div>
-            <div className="text-ink flex justify-between pt-4 text-base capitalize">
+            <div className="flex justify-between pt-4 text-base capitalize text-gray">
               <p>Results:</p>
               {data?.is_attempt ? (
                 <>

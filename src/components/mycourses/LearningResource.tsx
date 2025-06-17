@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@assets/icons'
-import SappDrawer from '@components/base/SappDrawer'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -14,13 +14,20 @@ import React, {
 } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { IResourceDetail, ISection } from 'src/type/courses'
+import {
+  IResourceDetail,
+  ISection,
+  SectionDropdownFormValues,
+  SectionField,
+} from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
-import NoData from 'src/common/NoData'
+import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import { useForm } from 'react-hook-form'
 
 interface IProps {
   open: boolean
@@ -33,40 +40,46 @@ const DEFAULT_PAGESIZE = 20
 const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
-  const [selectedSection, setSelectedSection] = useState<any>(null)
-  const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
-  const [selectedUnit, setSelectedUnit] = useState<any>(null)
-  const [selectedActivity, setSelectedActivity] = useState<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
-
+  const { control, watch, setValue, reset } =
+    useForm<SectionDropdownFormValues>({
+      defaultValues: {
+        section: null,
+        subsection: null,
+        unit: null,
+        activity: null,
+      },
+    })
+  const isFetchingRef = useRef(false)
+  const selectedSection = watch('section')
+  const selectedSubsection = watch('subsection')
+  const selectedUnit = watch('unit')
+  const selectedActivity = watch('activity')
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
   const handleDropdownChange = (
-    selectedOption: any,
-    setFunction: any,
-    resetFunction: any,
+    fieldName: SectionField,
+    selected: string | null,
+    fieldsToReset: SectionField[],
   ) => {
-    setFunction(selectedOption)
+    setValue(fieldName, selected)
 
-    // Reset the downstream dropdowns if a reset function is provided
-    if (resetFunction) {
-      resetFunction(null)
-    }
+    // Reset the downstream dropdowns
+    resetFormFields(fieldsToReset)
   }
 
   useEffect(() => {
-    if (selectedSection?.value === '') {
-      setSelectedSubsection(null)
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+    if (!selectedSection) {
+      resetFormFields(['subsection', 'unit', 'activity'])
     }
-  }, [selectedSection?.value])
+  }, [selectedSection])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
     setOpenResource(false)
-    setSelectedSubsection(null)
-    setSelectedUnit(null)
-    setSelectedActivity(null)
-    setSelectedSection(null)
+    resetFormFields(['section', 'subsection', 'unit', 'activity'])
+    setValue('section', null)
     setPageIndex(DEFAULT_PAGE_INDEX)
     setResources(undefined)
     const pageStateVariables = [
@@ -84,99 +97,105 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   async function getCourseSections(page_size: number) {
     try {
-      if (open) {
-        const res = await CoursesAPI.getCourseSectionList(
+      if (
+        open &&
+        isEmpty(sections) &&
+        (router.query.courseId || router.query.id) &&
+        !isFetchingRef.current
+      ) {
+        isFetchingRef.current = true
+        const { data } = await CoursesAPI.getCourseSectionList(
           router.query.courseId || router.query.id,
           page_size || DEFAULT_PAGESIZE,
         )
-        setSections([...res?.data?.sections].reverse())
-        setSelectedSubsection(null)
-        setSelectedUnit(null)
-        setSelectedActivity(null)
+        if (!isEmpty(data?.sections)) {
+          setSections([...data?.sections].reverse())
+          resetFormFields(['subsection', 'unit', 'activity'])
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      isFetchingRef.current = false
+    }
   }
 
   useEffect(() => {
-    if ((router.query.courseId || router.query.id) && open) {
-      getCourseSections(DEFAULT_PAGESIZE)
-    }
+    getCourseSections(DEFAULT_PAGESIZE)
   }, [open])
 
   const [subSections, setSubsections] = useState<ISection[]>([])
 
   async function getCourseSubsections(page_size: number) {
     try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'CHAPTER',
-        selectedSection.value,
-        class_id as any,
-      )
-      setSubsections([...res?.data?.sections].reverse())
-      setSelectedUnit(null)
-      setSelectedActivity(null)
+      if (selectedSection && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'CHAPTER',
+          selectedSection || '',
+          class_id as string,
+        )
+        setSubsections([...res?.data?.sections].reverse())
+        resetFormFields(['unit', 'activity'])
+      }
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (selectedSection?.value !== '' && open) {
-      getCourseSubsections(DEFAULT_PAGESIZE)
-    }
+    getCourseSubsections(DEFAULT_PAGESIZE)
   }, [selectedSection])
 
   const [unit, setUnit] = useState<ISection[]>([])
 
   async function getCourseUnit() {
     try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        DEFAULT_PAGESIZE,
-        'UNIT',
-        selectedSubsection.value,
-        class_id as any,
-      )
-      setUnit([...res?.data?.sections].reverse())
-      setSelectedActivity(null)
+      if (selectedSubsection && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          DEFAULT_PAGESIZE,
+          'UNIT',
+          selectedSubsection || '',
+          class_id as string,
+        )
+        setUnit([...res?.data?.sections].reverse())
+        resetFormFields(['activity'])
+      }
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (open) {
-      getCourseUnit()
-    }
+    getCourseUnit()
   }, [selectedSubsection])
 
   const [activity, setActivity] = useState<ISection[]>([])
 
   async function getCourseActivity(page_size: number) {
     try {
-      const class_id = router.query.courseId || router.query.id
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'ACTIVITY',
-        selectedUnit.value,
-        class_id as any,
-      )
-      setActivity([...res?.data?.sections].reverse())
+      if (selectedUnit && open) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          'ACTIVITY',
+          selectedUnit || '',
+          class_id as string,
+        )
+        setActivity([...res?.data?.sections].reverse())
+      }
     } catch (error) {}
   }
 
   useEffect(() => {
-    if (open) {
-      getCourseActivity(DEFAULT_PAGESIZE)
-    }
+    getCourseActivity(DEFAULT_PAGESIZE)
   }, [selectedUnit])
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
 
   const params = cleanParamsAPI({
     sub_id:
-      selectedActivity?.value ||
-      selectedUnit?.value ||
-      selectedSubsection?.value ||
-      selectedSection?.value ||
+      selectedActivity ||
+      selectedUnit ||
+      selectedSubsection ||
+      selectedSection ||
       '',
     page_index: DEFAULT_PAGE_INDEX,
     page_size: DEFAULT_PAGESIZE,
@@ -204,10 +223,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     initFetchData()
   }, [
     open,
-    selectedSection?.value,
-    selectedSubsection?.value,
-    selectedUnit?.value,
-    selectedActivity?.value,
+    selectedSection,
+    selectedSubsection,
+    selectedUnit,
+    selectedActivity,
   ])
 
   const requestOngoingRef = useRef(false)
@@ -291,120 +310,83 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
 
   return (
-    <SappDrawer
-      drawerSubId={'-resource-list'}
-      isOpen={open}
-      message="Bạn có chắc chán muốn hủy không?"
-      onClose={onClose}
-      title="Resource"
-      footer={false}
-      confirmOnClose={false}
-      heightBody={'h-[calc(100vh-112px)]'}
+    <SappDrawerV3
+      open={open}
+      handleCancel={onClose}
+      title="Course Resource"
+      isShowBtnClose
     >
-      <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+      <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">
+        <SAPPSelectV2
+          control={control}
+          name="section"
           placeholder="Section"
-          isClearable={true}
-          value={selectedSection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSection,
-              setSelectedSubsection,
-            )
+          options={DEFAULT_SELECT.concat(
+            sections?.map((section) => ({
+              label: section.name,
+              value: section.id,
+            })),
+          )}
+          onChange={(selected) =>
+            handleDropdownChange('section', selected, [
+              'subsection',
+              'unit',
+              'activity',
+            ])
           }
-          options={
-            sections &&
-            DEFAULT_SELECT.concat(
-              sections?.map((section) => ({
-                label: (
-                  <>
-                    <span title={section.name}>{section.name}</span>
-                  </>
-                ).props.children,
-                value: section.id,
-              })),
-            )
-          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToSections}
         />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
+
+        <SAPPSelectV2
+          control={control}
+          name="subsection"
           placeholder="Subsection"
-          isClearable={true}
-          value={selectedSubsection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSubsection,
-              setSelectedUnit,
-            )
-          }
           options={
             selectedSection
-              ? subSections?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? subSections?.map((s) => ({ label: s.name, value: s.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
-          onMenuScrollToBottom={handleMenuScrollToSubsections}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Unit"
-          isClearable={true}
-          value={selectedUnit}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedUnit,
-              setSelectedActivity,
-            )
+          onChange={(selected) =>
+            handleDropdownChange('subsection', selected, ['unit', 'activity'])
           }
+          size="large"
+          onMenuScrollToBottom={handleMenuScrollToSubsections}
+          disabled={!selectedSection}
+        />
+
+        <SAPPSelectV2
+          control={control}
+          name="unit"
+          placeholder="Unit"
           options={
             selectedSubsection
-              ? unit?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? unit?.map((u) => ({ label: u.name, value: u.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
-          onMenuScrollToBottom={handleMenuScrollToUnit}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Activity"
-          isClearable={true}
-          value={selectedActivity}
-          onChange={(selectedOption) =>
-            handleDropdownChange(selectedOption, setSelectedActivity, null)
+          onChange={(selected) =>
+            handleDropdownChange('unit', selected, ['activity'])
           }
+          size="large"
+          onMenuScrollToBottom={handleMenuScrollToUnit}
+          disabled={!selectedSubsection}
+        />
+
+        <SAPPSelectV2
+          control={control}
+          name="activity"
+          placeholder="Activity"
           options={
             selectedUnit
-              ? activity?.map((section) => ({
-                  label: (
-                    <>
-                      <span title={section.name}>{section.name}</span>
-                    </>
-                  ).props.children,
-                  value: section.id,
-                }))
+              ? activity?.map((a) => ({ label: a.name, value: a.id }))
               : []
           }
-          isDisabled={selectedSection?.value === ''}
+          onChange={(selected) =>
+            handleDropdownChange('activity', selected, [])
+          }
+          size="large"
           onMenuScrollToBottom={handleMenuScrollToActivity}
+          disabled={!selectedUnit}
         />
       </div>
       {!isEmpty(resources?.resources) ? (
@@ -435,10 +417,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         </TextSkeleton>
       ) : (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-          <NoData />
+          <NoDataV2 />
         </div>
       )}
-    </SappDrawer>
+    </SappDrawerV3>
   )
 }
 
