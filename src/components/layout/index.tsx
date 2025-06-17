@@ -14,11 +14,18 @@ interface LayoutProps {
   title: string
   size?: 'sm' | 'md' | 'xl'
   showSidebar?: boolean
+  fullWidth?: boolean
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
-  const { children, title, size = 'xl', showSidebar = true } = props
+  const {
+    children,
+    title,
+    size = 'xl',
+    showSidebar = true,
+    fullWidth = false,
+  } = props
   const router = useRouter()
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => setOpened((prev) => !prev)
@@ -81,6 +88,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-[1179px]': size === 'sm',
             'max-w-[1444px]': size === 'md',
             'max-w-[1524px]': size === 'xl',
+            'max-w-full p-0': fullWidth,
           })}
         >
           <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>

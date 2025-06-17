@@ -4,6 +4,7 @@ import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 import clsx from 'clsx'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
+import { Grid } from 'antd'
 
 interface IProps {
   data: Array<any>
@@ -31,6 +32,13 @@ const TabSlide = ({
   hasScrollBar,
   setHasScrollBar,
 }: IProps) => {
+  const { useBreakpoint } = Grid
+  const screens = useBreakpoint()
+  const NUMBER_DISPLAY_DATA_DESKTOP = 25
+  const NUMBER_DISPLAY_DATA_TABLET = 14
+  const numberDisplayData = screens?.lg
+    ? NUMBER_DISPLAY_DATA_DESKTOP
+    : NUMBER_DISPLAY_DATA_TABLET
   const elementRef = useRef(null) as any
   useEffect(() => {
     if (elementRef?.current && !activeShowAll && isScrollCenter) {
@@ -71,7 +79,8 @@ const TabSlide = ({
           el.scrollWidth > el.getBoundingClientRect().width && data?.length > 0,
         )
     }
-  }, [elementRef?.current])
+  }, [elementRef?.current, data?.length])
+
   const renderTab = useMemo(() => {
     let arr = [] as any
     let i = 1
@@ -169,9 +178,24 @@ const TabSlide = ({
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
+  const handleTouchStart = (event: React.TouchEvent<any>) => {
+    const touch = event.touches[0]
+    setIsDragging(true)
+    setStartX(touch.pageX - elementRef.current.offsetLeft)
+    setScrollLeft(elementRef.current.scrollLeft)
+  }
+
+  const handleTouchMove = (event: React.TouchEvent<any>) => {
+    if (!isDragging) return
+    const touch = event.touches[0]
+    const x = touch.pageX - elementRef.current.offsetLeft
+    const distance = (x - startX) * 2
+    elementRef.current.scrollLeft = scrollLeft - distance
+  }
+
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'max-w-[1222px]' : 'h-[44px] max-w-[1142px]'}`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] max-w-[calc(100vw-88px-32px)]'}`}
       aria-label="Pagination"
     >
       <div
@@ -198,7 +222,7 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIconV2></ArrowIconV2>
+              <ArrowIconV2 />
             </PageLink>
           </div>
         )}
@@ -208,7 +232,7 @@ const TabSlide = ({
             {
               'justify-center': !hasScrollBar,
               '!w-fit': activeShowAll,
-              'h-[88px]': activeShowAll,
+              'h-[88px]': activeShowAll && data?.length > numberDisplayData,
               'h-[44px]': !activeShowAll,
             },
           )}
@@ -217,9 +241,12 @@ const TabSlide = ({
           onMouseMove={handleMouseMove}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={() => setIsDragging(false)}
         >
           {data.length > 0 ? (
-            !activeShowAll || data?.length <= 25 ? (
+            !activeShowAll || data?.length <= numberDisplayData ? (
               data.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
@@ -346,7 +373,7 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIconV2 right={true}></ArrowIconV2>
+              <ArrowIconV2 right={true} />
             </PageLink>
           </div>
         )}
