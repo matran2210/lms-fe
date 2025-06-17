@@ -13,7 +13,7 @@ const Dashboard = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
 
   return (
-    <Layout title="Dashboard" size='2xl'>
+    <Layout title="Dashboard">
       <div
         className="3xl:px-13.75 lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
