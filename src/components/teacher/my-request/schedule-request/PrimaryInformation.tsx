@@ -70,6 +70,7 @@ const PrimaryInformation = ({
     // case schedules.length > 1
     return `${sappFormatDate(data?.schedules[0]?.start_date ?? '') ?? '--'} - ${sappFormatDate(data?.schedules[data?.schedules.length - 1]?.end_date ?? '') ?? '--'}`
   }
+
   const items: CollapseProps['items'] = [
     {
       key: '1',
@@ -90,7 +91,7 @@ const PrimaryInformation = ({
             {/* Program */}
             <PrimaryInfoItem
               title="Program"
-              value={selectedRequest?.subject.course_category?.name}
+              value={selectedRequest?.subject?.course_category?.name}
             />
             {/* Subject */}
             <PrimaryInfoItem
@@ -115,7 +116,8 @@ const PrimaryInformation = ({
               isLoading={isLoading}
             />
             {/* Schedule */}
-            {selectedRequest.type === TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
+            {selectedRequest?.type ===
+              TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <span className="text-sm text-[#99A1B7]">Schedule</span>

@@ -41,40 +41,40 @@ const TestResultPage = ({
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
 
-  const handleResize = () => {
-    const multipleQuestionElem = multipleQuestionRef?.current
-    const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem) {
-      const maxHeight = Math.max(
-        multipleQuestionElem.offsetHeight,
-        yourScoreDetailElem.offsetHeight,
-      )
-      multipleQuestionElem.style.height =
-        window.innerWidth > 1777
-          ? `calc(100vh - ${maxHeight}px)`
-          : 'fit-content'
-      yourScoreDetailElem.style.marginBottom =
-        window.innerWidth > 1777
-          ? '24px'
-          : `${multipleQuestionElem.offsetHeight}px`
-      yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
-    }
-  }
-  useEffect(() => {
-    type !== undefined && handleResize()
-  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  // const handleResize = () => {
+  //   const multipleQuestionElem = multipleQuestionRef?.current
+  //   const yourScoreDetailElem = yourScoreDetailRef?.current
+  //   if (multipleQuestionElem && yourScoreDetailElem) {
+  //     const maxHeight = Math.max(
+  //       multipleQuestionElem.offsetHeight,
+  //       yourScoreDetailElem.offsetHeight,
+  //     )
+  //     multipleQuestionElem.style.height =
+  //       window.innerWidth > 1777
+  //         ? `calc(100vh - ${maxHeight}px)`
+  //         : 'fit-content'
+  //     yourScoreDetailElem.style.marginBottom =
+  //       window.innerWidth > 1777
+  //         ? '24px'
+  //         : `${multipleQuestionElem.offsetHeight}px`
+  //     yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
+  //   }
+  // }
+  // useEffect(() => {
+  //   type !== undefined && handleResize()
+  // }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener('resize', handleResize)
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize)
+  //   }
+  // }, [])
 
   const globalAverageNumber = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
   const commonMultipleScoreStyle =
-    'grid grid-cols-1 xl:[grid-template-columns:minmax(0,7fr)_minmax(0,3fr)] gap-x-6 w-full'
+    'grid grid-cols-1 xl:[grid-template-columns:minmax(0,7fr)_minmax(0,3fr)] gap-x-6 w-full pb-6'
 
   const renderDashboard = useMemo(() => {
     switch (type) {
@@ -146,7 +146,6 @@ const TestResultPage = ({
                 <Recommendation data={item} key={index} />
               ))}
               <ScoreDetail
-                className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
@@ -178,12 +177,11 @@ const TestResultPage = ({
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
                 <Recommendation data={item} key={index} />
               ))}
-              <ScoreDetail
-                className={''}
+              {/* <ScoreDetail
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
-              />
+              /> */}
             </div>
             <MultipleChoiceScore
               questions={questions}
