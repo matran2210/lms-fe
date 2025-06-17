@@ -6,7 +6,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round } from 'lodash'
+import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -18,6 +18,7 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
   COURSE_TYPE,
+  LEARNING_USER_STATUS,
   PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -132,6 +133,7 @@ const Course = ({
             return BUTTON_STATUS.Active
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
+
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
@@ -146,6 +148,16 @@ const Course = ({
             if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
           } else return BUTTON_STATUS.Disabled
         }
+
+        if (startedAt && isNull(finishedAt)) {
+          if (studentStatus === LEARNING_USER_STATUS.READY_TO_LEARN)
+            return BUTTON_STATUS.Begin
+          if (studentStatus === LEARNING_USER_STATUS.IN_PROGRESS)
+            return BUTTON_STATUS.Resume
+          if (studentStatus === LEARNING_USER_STATUS.COMPLETED)
+            return BUTTON_STATUS.Review
+        }
+
         return BUTTON_STATUS.Disabled
       }
       if (
