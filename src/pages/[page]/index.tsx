@@ -129,7 +129,7 @@ const ProfilePage = () => {
           {isChangePassword ? (
             <ChangePassword handleCancel={() => setIsChangePassword(false)} />
           ) : (
-            <div className="flex flex-col gap-10">
+            <div className="flex flex-col gap-0 lg:gap-10">
               <MyPasword setIsChangePassword={setIsChangePassword} />
               <DeviceList />
               <LoginHistoryList />
@@ -183,7 +183,7 @@ const ProfilePage = () => {
                   className={clsx(
                     'hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden',
                     {
-                      '!hidden': isEdit,
+                      '!hidden': isEdit || isChangePassword,
                     },
                   )}
                   onClick={handleLogout}

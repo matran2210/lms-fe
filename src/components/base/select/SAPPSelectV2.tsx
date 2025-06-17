@@ -22,7 +22,7 @@ interface SAPPSelectProps {
   isSearchable?: boolean
   onSearch?: (value: string) => Promise<void> | any
   isLoading?: boolean
-  onMenuScrollToBottom?: () => void
+  onMenuScrollToBottom?: any
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
   heightCustom?: string
@@ -64,7 +64,7 @@ const SAPPSelectV2 = ({
                 <Select
                   {...field}
                   className={clsx(
-                    'w-full font-normal',
+                    'sapp-disabled w-full font-normal',
                     heightCustom,
                     className,
                   )}
