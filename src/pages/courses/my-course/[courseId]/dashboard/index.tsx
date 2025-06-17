@@ -4,7 +4,7 @@ import React from 'react'
 import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
-import ExamDashboard from '@components/dashboard/ExamDashboard'
+import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
@@ -13,8 +13,11 @@ const Dashboard = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
 
   return (
-    <Layout title="Dashboard">
-      <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
+    <Layout title="Dashboard" size='2xl'>
+      <div
+        className="3xl:px-13.75 lg:px-5"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <div className="main relative mx-auto my-0">
           <div className="flex w-full items-center justify-between pb-4 pt-6">
             <BreadcrumbFilter
@@ -26,7 +29,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-gray-700 lg:px-5"
+        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-ink-700 lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

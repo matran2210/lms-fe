@@ -12,7 +12,7 @@ import Sidebar from './Sidebar'
 interface LayoutProps {
   children: ReactNode
   title: string
-  size?: 'sm' | 'md' | 'xl'
+  size?: 'sm' | 'md' | 'xl' | '2xl'
   showSidebar?: boolean
 }
 
@@ -79,6 +79,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-[1179px]': size === 'sm',
             'max-w-[1444px]': size === 'md',
             'max-w-[1524px]': size === 'xl',
+            'max-w-[1954px]': size === '2xl',
           })}
         >
           <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
