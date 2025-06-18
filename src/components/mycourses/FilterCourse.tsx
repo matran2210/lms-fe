@@ -44,7 +44,7 @@ const FilterCourse = ({
 
   return (
     <div className="flex items-center gap-4">
-      <div className="text-gray-800 text-base font-medium">
+      <div className="text-base font-medium text-gray-800">
         {totalResult} Results
       </div>
       <div className="flex gap-4">

@@ -9,6 +9,8 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
+import Layout from '@components/layout'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -69,7 +71,7 @@ const TableEntranceResult = () => {
     }
   }, [id])
   return (
-    <FullScreenLayout title="Entrance Test Result">
+    <Layout size="xl" title="Entrance Test Result" showSidebar={false}>
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
         <div
           className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
@@ -93,7 +95,7 @@ const TableEntranceResult = () => {
           />
         )}
       </div>
-    </FullScreenLayout>
+    </Layout>
   )
 }
 export default withAuthorization([UserType.STUDENT])(TableEntranceResult)

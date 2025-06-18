@@ -1,14 +1,15 @@
+import { CloseIcon } from '@assets/icons'
+import Layout from '@components/layout'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
+import { useGetDataQuery } from '@utils/index'
 import QuizResult from 'entrance-test-result-package'
 import { useRouter } from 'next/router'
-import { CloseIcon } from '@assets/icons'
-import { ANIMATION, PageLink } from 'src/constants'
-import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { useGetDataQuery } from '@utils/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { ANIMATION, PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from 'src/redux/types/User/urser'
-import Layout from '@components/layout'
+import { useState, useEffect } from 'react'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -20,6 +21,26 @@ const TestEntranceResult = () => {
     () => CoursesAPI.getQuizAttemptsEntranceTestChartData(router.query.id),
     router.query.id !== undefined,
   )
+
+  const [showPinnedNotification, setShowPinnedNotification] = useState(true)
+  const [isVisible, setIsVisible] = useState(true)
+  const ANIMATION_DURATION = 500
+  const SHOW_DURATION = 5000
+
+  useEffect(() => {
+    const hideTimer = setTimeout(() => {
+      setIsVisible(false)
+    }, SHOW_DURATION)
+
+    const removeTimer = setTimeout(() => {
+      setShowPinnedNotification(false)
+    }, SHOW_DURATION + ANIMATION_DURATION)
+
+    return () => {
+      clearTimeout(hideTimer)
+      clearTimeout(removeTimer)
+    }
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -35,7 +56,7 @@ const TestEntranceResult = () => {
           <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         <Layout size="xl" title="Entrance Test Detail" showSidebar={false}>
-          <div className="mt-12" data-aos={ANIMATION.DATA_AOS}>
+          <div className="relative mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (
               <QuizResult
                 dataChart={chartData?.chart_data}
@@ -48,6 +69,38 @@ const TestEntranceResult = () => {
                 is_ops={false}
                 handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
               />
+            )}
+            {showPinnedNotification && (
+              <div
+                className={`sticky bottom-4 mt-10 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <PinnedNotificationsV2
+                  bgColor="bg-primary-200"
+                  borderColor="border-primary"
+                >
+                  <div className="text-sm">
+                    Đội ngũ chuyên viên của SAPP sẽ liên lạc lại với bạn trong
+                    vòng 24h (không kể Thứ 7, Chủ nhật) để tư vấn thiết kế lộ
+                    trình học tập cá nhân hóa phù hợp với kết quả bài đánh giá
+                    và mục tiêu của bạn. Mọi thắc mắc vui lòng liên hệ tới
+                    Hotline:{' '}
+                    <a href="tel:19002225" className="font-bold underline">
+                      19002225
+                    </a>{' '}
+                    hoặc{' '}
+                    <a
+                      href="https://www.facebook.com/sapp.edu.vn/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold underline"
+                    >
+                      Fanpage
+                    </a>{' '}
+                    để được hỗ trợ nhanh chóng nhất. SAPP Academy mong rằng sẽ
+                    được đồng hành cùng bạn trong lộ trình học tập sắp tới.
+                  </div>
+                </PinnedNotificationsV2>
+              </div>
             )}
           </div>
         </Layout>
