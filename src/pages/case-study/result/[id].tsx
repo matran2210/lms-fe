@@ -13,7 +13,7 @@ import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
+import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -178,7 +178,7 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreivew
+          <DragNDropPreview
             data={data}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
