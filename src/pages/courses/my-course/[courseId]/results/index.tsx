@@ -92,9 +92,7 @@ const Results = () => {
                 {TEST_AND_QUIZ_TITLE}
               </h1>
 
-              <div className="mx-auto my-0 mb-6 mt-6 bg-white px-8 pb-3 pt-8 max-[1199px]:container">
-                {isSuccess && <ResultsTable />}
-              </div>
+              {isSuccess && <ResultsTable />}
             </>
           )}
         </div>
