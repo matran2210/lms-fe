@@ -49,21 +49,19 @@ const FilterRadioGroup = ({
         return (
           <>
             <div
-              className={
-                (direction === 'horizontal'
-                  ? '_horizontal flex flex-wrap'
-                  : '_vertical flex flex-col') +
-                ` ${gap} ` +
-                ` ${
-                  justify === 'between'
-                    ? 'justify-between'
-                    : justify == 'center'
-                      ? 'justify-center'
-                      : justify === 'start'
-                        ? 'justify-start'
-                        : 'justify-end'
-                }`
-              }
+              className={`flex ${
+                direction === 'horizontal'
+                  ? '_horizontal flex-row flex-wrap sm:flex-row md:flex-row lg:flex-col'
+                  : '_vertical flex-col sm:flex-row md:flex-row lg:flex-col'
+              } ${gap} ${
+                justify === 'between'
+                  ? 'justify-between'
+                  : justify === 'center'
+                    ? 'justify-center'
+                    : justify === 'start'
+                      ? 'justify-start'
+                      : 'justify-end'
+              }`}
             >
               {options.map((option, index) => {
                 let stateLabel: string = ''
@@ -74,7 +72,7 @@ const FilterRadioGroup = ({
                     key={uniqueId('check')}
                     className={`${!!corrects && 'pointer-events-none'}`}
                   >
-                    <div className="flex">
+                    <div className="flex ">
                       <label
                         className={`flex items-center gap-2 ${
                           (

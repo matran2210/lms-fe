@@ -8,8 +8,8 @@ type Props = {
 export const statusQuizMap = {
   SUBMITTED: {
     label: 'Submitted',
-    color: 'text-[#07af17]',
-    bg: 'bg-[#01711f0D]',
+    color: 'text-success',
+    bg: 'bg-success-50',
   },
   IN_PROGRESS: {
     label: 'In Progress',
@@ -18,8 +18,8 @@ export const statusQuizMap = {
   },
   UN_SUBMITTED: {
     label: 'Unsubmitted',
-    color: 'text-[#f01919]',
-    bg: 'text-[#0Df01919]',
+    color: 'text-warning',
+    bg: 'bg-warning-50',
   },
   FINISHED: {
     label: 'Finished',
@@ -48,7 +48,11 @@ export const statusQuizMap = {
   },
 }
 
-const StatusQuizTag = ({ status }: { status: keyof typeof statusQuizMap }) => {
+export const StatusQuizTag = ({
+  status,
+}: {
+  status: keyof typeof statusQuizMap
+}) => {
   const { label, color, bg } = statusQuizMap[status] || {
     label: '',
     color: '',
