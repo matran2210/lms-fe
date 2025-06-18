@@ -1,65 +1,53 @@
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { Dispatch, SetStateAction, useRef, useState } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import { isEmpty } from 'lodash'
+import clsx from 'clsx'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
 import { SectionField, SectionDropdownFormValues } from 'src/type/courses'
 import { ISection } from 'src/type'
-import { isEmpty } from 'lodash'
 import { CoursesAPI } from 'src/pages/api/courses'
 import useDynamicLoading from 'src/hooks/use-dynamic'
-import clsx from 'clsx'
 
 const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
-const FilterCourseSection = ({
-  setParams,
-  heightCustom,
-  isPageStateVariables,
-}: {
+interface FilterCourseSectionProps {
   setParams: Dispatch<SetStateAction<string>>
   heightCustom?: string
   isPageStateVariables?: boolean
-}) => {
-  const router = useRouter()
-  const { control, watch, setValue } = useForm<SectionDropdownFormValues>({
-    defaultValues: {
-      section: null,
-      subsection: null,
-      unit: null,
-      activity: null,
-    },
-  })
-  const isFetchingRef = useRef(false)
-  const selectedSection = watch('section')
-  const selectedSubsection = watch('subsection')
-  const selectedUnit = watch('unit')
-  const selectedActivity = watch('activity')
-  const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => setValue(field, null))
-  }
+  allowClear?: boolean
+}
 
-  const handleDropdownChange = (
-    fieldName: SectionField,
-    selected: string | null,
-    fieldsToReset: SectionField[],
-  ) => {
-    setValue(fieldName, selected)
-
-    // Reset the downstream dropdowns
-    resetFormFields(fieldsToReset)
-  }
-
-  useEffect(() => {
-    if (!selectedSection) {
-      resetFormFields(['subsection', 'unit', 'activity'])
-    }
-  }, [selectedSection])
-
+const useSectionData = (sectionId: string | null, type: string) => {
   const [sections, setSections] = useState<ISection[]>([])
+  const router = useRouter()
 
-  async function getCourseSections(page_size: number) {
+  const fetchSections = async (page_size: number) => {
+    try {
+      if (sectionId) {
+        const class_id = router.query.courseId || router.query.id
+        const res = await CoursesAPI.getCourseSubsectionList(
+          page_size,
+          type as 'CHAPTER' | 'UNIT' | 'ACTIVITY',
+          sectionId,
+          class_id as string,
+        )
+        setSections([...res?.data?.sections].reverse())
+      }
+    } catch (error) {}
+  }
+
+  return { sections, setSections, fetchSections }
+}
+
+const useInitialSections = () => {
+  const [sections, setSections] = useState<ISection[]>([])
+  const isFetchingRef = useRef(false)
+  const router = useRouter()
+
+  const fetchInitialSections = async (page_size: number) => {
     try {
       if (
         isEmpty(sections) &&
@@ -73,7 +61,6 @@ const FilterCourseSection = ({
         )
         if (!isEmpty(data?.sections)) {
           setSections([...data?.sections].reverse())
-          resetFormFields(['subsection', 'unit', 'activity'])
         }
       }
     } catch (error) {
@@ -82,69 +69,72 @@ const FilterCourseSection = ({
     }
   }
 
-  const [subSections, setSubsections] = useState<ISection[]>([])
+  return { sections, setSections, fetchInitialSections }
+}
 
-  async function getCourseSubsections(page_size: number) {
-    try {
-      if (selectedSection) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'CHAPTER',
-          selectedSection || '',
-          class_id as string,
-        )
-        setSubsections([...res?.data?.sections].reverse())
-        resetFormFields(['unit', 'activity'])
-      }
-    } catch (error) {}
+const FilterCourseSection = ({
+  setParams,
+  heightCustom,
+  isPageStateVariables,
+  allowClear = false,
+}: FilterCourseSectionProps) => {
+  const { control, watch, setValue } = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
+
+  const selectedSection = watch('section')
+  const selectedSubsection = watch('subsection')
+  const selectedUnit = watch('unit')
+  const selectedActivity = watch('activity')
+
+  const { sections, fetchInitialSections } = useInitialSections()
+  const { sections: subSections, fetchSections: fetchSubsections } =
+    useSectionData(selectedSection, 'CHAPTER')
+  const { sections: units, fetchSections: fetchUnits } = useSectionData(
+    selectedSubsection,
+    'UNIT',
+  )
+  const { sections: activities, fetchSections: fetchActivities } =
+    useSectionData(selectedUnit, 'ACTIVITY')
+
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
+
+  const handleDropdownChange = (
+    fieldName: SectionField,
+    selected: string | null,
+    fieldsToReset: SectionField[],
+  ) => {
+    setValue(fieldName, selected)
+    resetFormFields(fieldsToReset)
   }
 
   useEffect(() => {
-    getCourseSubsections(DEFAULT_PAGE_SIZE)
+    if (!selectedSection) {
+      resetFormFields(['subsection', 'unit', 'activity'])
+    }
   }, [selectedSection])
 
-  const [unit, setUnit] = useState<ISection[]>([])
-
-  async function getCourseUnit() {
-    try {
-      if (selectedSubsection) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          DEFAULT_PAGE_SIZE,
-          'UNIT',
-          selectedSubsection || '',
-          class_id as string,
-        )
-        setUnit([...res?.data?.sections].reverse())
-        resetFormFields(['activity'])
-      }
-    } catch (error) {}
-  }
+  useEffect(() => {
+    fetchInitialSections(DEFAULT_PAGE_SIZE)
+  }, [])
 
   useEffect(() => {
-    getCourseUnit()
+    fetchSubsections(DEFAULT_PAGE_SIZE)
+  }, [selectedSection])
+
+  useEffect(() => {
+    fetchUnits(DEFAULT_PAGE_SIZE)
   }, [selectedSubsection])
 
-  const [activity, setActivity] = useState<ISection[]>([])
-
-  async function getCourseActivity(page_size: number) {
-    try {
-      if (selectedUnit) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'ACTIVITY',
-          selectedUnit || '',
-          class_id as string,
-        )
-        setActivity([...res?.data?.sections].reverse())
-      }
-    } catch (error) {}
-  }
-
   useEffect(() => {
-    getCourseActivity(DEFAULT_PAGE_SIZE)
+    fetchActivities(DEFAULT_PAGE_SIZE)
   }, [selectedUnit])
 
   useEffect(() => {
@@ -157,43 +147,37 @@ const FilterCourseSection = ({
     )
   }, [selectedActivity, selectedUnit, selectedSubsection, selectedSection])
 
-  useEffect(() => {
-    getCourseSections(DEFAULT_PAGE_SIZE)
-  }, [])
-
   const {
     handleMenuScrollToBottom: handleMenuScrollToSections,
     setPage: setPageSection,
-  } = useDynamicLoading(getCourseSections, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(fetchInitialSections, DEFAULT_PAGE_SIZE)
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
     setPage: setPageSubsection,
-  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(fetchSubsections, DEFAULT_PAGE_SIZE)
+
   const {
     handleMenuScrollToBottom: handleMenuScrollToUnit,
     setPage: setPageUnit,
-  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(fetchUnits, DEFAULT_PAGE_SIZE)
+
   const {
     handleMenuScrollToBottom: handleMenuScrollToActivity,
     setPage: setPageActivity,
-  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGE_SIZE)
-
-  const handlePageStateVariables = () => {
-    const pageStateVariables = [
-      setPageSection,
-      setPageSubsection,
-      setPageUnit,
-      setPageActivity,
-    ]
-    pageStateVariables.forEach((setPageVariable) => {
-      setPageVariable(DEFAULT_PAGE_SIZE * 2)
-    })
-  }
+  } = useDynamicLoading(fetchActivities, DEFAULT_PAGE_SIZE)
 
   useEffect(() => {
     if (isPageStateVariables) {
-      handlePageStateVariables()
+      const pageStateVariables = [
+        setPageSection,
+        setPageSubsection,
+        setPageUnit,
+        setPageActivity,
+      ]
+      pageStateVariables.forEach((setPageVariable) => {
+        setPageVariable(DEFAULT_PAGE_SIZE * 2)
+      })
     }
   }, [isPageStateVariables])
 
@@ -223,6 +207,7 @@ const FilterCourseSection = ({
         }
         heightCustom={heightCustom}
         onMenuScrollToBottom={handleMenuScrollToSections}
+        allowClear={allowClear}
       />
       <SAPPSelectV2
         control={control}
@@ -236,6 +221,7 @@ const FilterCourseSection = ({
         onChange={(selected) =>
           handleDropdownChange('subsection', selected, ['unit', 'activity'])
         }
+        allowClear={allowClear}
         onMenuScrollToBottom={handleMenuScrollToSubsections}
         disabled={!selectedSection}
         heightCustom={heightCustom}
@@ -246,7 +232,7 @@ const FilterCourseSection = ({
         placeholder="Unit"
         options={
           selectedSubsection
-            ? unit?.map((u) => ({ label: u.name, value: u.id }))
+            ? units?.map((u) => ({ label: u.name, value: u.id }))
             : []
         }
         onChange={(selected) =>
@@ -255,6 +241,7 @@ const FilterCourseSection = ({
         onMenuScrollToBottom={handleMenuScrollToUnit}
         disabled={!selectedSubsection}
         heightCustom={heightCustom}
+        allowClear={allowClear}
       />
       <SAPPSelectV2
         control={control}
@@ -262,13 +249,14 @@ const FilterCourseSection = ({
         placeholder="Activity"
         options={
           selectedUnit
-            ? activity?.map((a) => ({ label: a.name, value: a.id }))
+            ? activities?.map((a) => ({ label: a.name, value: a.id }))
             : []
         }
         onChange={(selected) => handleDropdownChange('activity', selected, [])}
         onMenuScrollToBottom={handleMenuScrollToActivity}
         disabled={!selectedUnit}
         heightCustom={heightCustom}
+        allowClear={allowClear}
       />
     </div>
   )
