@@ -2391,7 +2391,8 @@ const TestDetail = () => {
                 QUESTION_TYPES.TRUE_FALSE,
                 QUESTION_TYPES.ONE_CHOICE,
                 QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(currentTabContent?.qType)
+              ].includes(currentTabContent?.qType) ||
+              !!watch(`${currentPage}_answer`)
                 ? null
                 : 'You should select an answer before click'
             }
