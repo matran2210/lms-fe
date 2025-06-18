@@ -25,6 +25,7 @@ import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
+import { Grid } from 'antd'
 
 interface IProps {
   data: any
@@ -61,6 +62,8 @@ interface RawItem {
   id: string
   label: string
   role: Role
+  color: string
+  width: string
 }
 
 interface TransformDataInput {
@@ -103,6 +106,10 @@ const MatchQuiz = forwardRef(
     const [correctNodes, setCorrectNodes] = useState<Node[]>([])
     const [correctEdges, setCorrectEdges] = useState<Edge[]>([])
     const [key, setKey] = useState(1)
+    const { useBreakpoint } = Grid
+    const { lg } = useBreakpoint()
+    const NODE_WIDTH = lg ? 328 : 290
+    const CONTAINER_WIDTH = lg ? 852 : 640
 
     const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
       const nodeMap = new Map(nodes.map((n) => [n.id, n]))
@@ -187,11 +194,11 @@ const MatchQuiz = forwardRef(
       const transformed = transformDataToNodes({
         questions,
         answers,
-        containerWidth: flowRef.current?.clientWidth || 700,
-        nodeWidth: 295,
+        containerWidth: flowRef.current?.clientWidth || CONTAINER_WIDTH,
+        nodeWidth: NODE_WIDTH,
       })
       setNodes(transformed)
-    }, [data])
+    }, [data, NODE_WIDTH, CONTAINER_WIDTH])
 
     const nodeTypes = {
       custom: CustomNode,
@@ -410,7 +417,7 @@ const MatchQuiz = forwardRef(
     }, [correctFlow])
 
     return (
-      <div key={key} ref={extenalRef}>
+      <div className="w-fit" key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {
@@ -492,10 +499,12 @@ const MatchQuiz = forwardRef(
         </div>
         <div className="flex h-full w-full flex-col">
           <div
-            className={`relative w-full min-w-[700px]`}
+            className={`relative w-full min-w-[${CONTAINER_WIDTH}]`}
             ref={flowRef}
             style={{
+              width: CONTAINER_WIDTH + 'px',
               height: `${(nodes?.length / 2 || 1) * 100}px`,
+              maxWidth: CONTAINER_WIDTH + 'px',
             }}
           >
             <ReactFlowProvider>

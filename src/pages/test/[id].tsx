@@ -13,7 +13,6 @@ import {
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -2939,7 +2938,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-[#3964EA] hover:underline"
+                                  className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -3048,7 +3047,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-[#3964EA] hover:underline"
+                                className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -3072,6 +3071,9 @@ const TestDetail = () => {
                           'bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
+                          '!w-fit':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.MATCHING,
                         },
                       )}
                     >
