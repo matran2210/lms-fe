@@ -16,29 +16,31 @@ const LearningResult = () => {
     const [hasLearning, setHasLearning] = useState<boolean>(false)
     const [mockTestId, setMockTestId] = useState<string>('')
     const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
-    const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
+    const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
     const handleLearningResults = (
         data: ILearningResult[] | IMockTestResult | any,
     ) => {
-        const results = isNormal ? data : data.reports
-        if (!isNormal && data.mock_tests?.length == 1)
+        if (data.mock_tests?.length == 1)
             setMockTestId(data.mock_tests[0].id)
 
-        if (results.length) {
+        if (data.length) {
             let total = 0
-            const hasLearning = results.some((e: ILearningResult) => e.score)
+            const hasLearning = data.some((e: ILearningResult) => e.score)
             // Tính max cho từng section
-            const maxValues = results.map((result: any) => {
+            const maxValues = data.map((result: any) => {
                 const learning = result?.score || 0
                 const mock = result?.mock_test_score || 0
                 const fixed = Math.max(learning, mock, 100) // 10 là min để không bị quá nhỏ
                 return fixed
             })
-            const indicator = results.map((result: any, idx: any) => ({
-                text: result?.short_name || result?.name,
-                max: maxValues[idx],
-            }))
+            const indicator = data.map((e: ILearningResult, index: number) => {
+                total += e.score
+                return {
+                    name: e?.short_name || e?.name,
+                    max: maxValues[index],
+                }
+            })
 
             const option = {
                 title: {
@@ -49,7 +51,7 @@ const LearningResult = () => {
                     borderWidth: 0,
                     formatter: function (params: any) {
                         const values = params.value
-                        const indicators = results.map((e: ILearningResult) => e.name)
+                        const indicators = data?.map((e: ILearningResult) => e.name)
                         let tooltipText = `<strong>${params.name}</strong><br/>`
                         values.forEach((val: any, i: number) => {
                             tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
@@ -57,14 +59,15 @@ const LearningResult = () => {
                         return tooltipText
                     },
                 },
-                graphic: {
+                graphic: total > 0 ? {
                     type: 'group',
                     left: 'center',
                     top: 'middle',
+                    invisible: true,
                     children: [
                         {
                             type: 'rect',
-                            invisible: !isNormal,
+                            invisible: false,
                             shape: {
                                 width: total ? 60 : 50,
                                 height: 30,
@@ -83,9 +86,9 @@ const LearningResult = () => {
                         },
                         {
                             type: 'text',
-                            invisible: !isNormal,
+                            invisible: false,
                             style: {
-                                text: `${parseFloat((total / results.length).toFixed(2))}%`,
+                                text: `${parseFloat((total / data.length).toFixed(2))}%`,
                                 fontSize: 20,
                                 fontWeight: 600,
                                 fill: '#6FD3B0',
@@ -97,9 +100,8 @@ const LearningResult = () => {
                             z: 4,
                         },
                     ],
-                },
+                } : undefined,
 
-                // ... các thuộc tính khá
                 radar: [
                     {
                         shape: 'circle', // Hình tròn
@@ -140,7 +142,7 @@ const LearningResult = () => {
                         data: [
                             {
                                 name: 'Learning results',
-                                value: results?.map(
+                                value: data?.map(
                                     (result: { score: number }) => result?.score,
                                 ),
                                 areaStyle: {
@@ -211,41 +213,22 @@ const LearningResult = () => {
                 <div className="flex">
                     {option && (
                         <div
-                            className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
+                            className={`flex grow flex-col`}
                         >
                             <div className="grow">
-                                <EChart option={option} height='400px' minHeight='400px' />
+                                <EChart option={option} height='420px' minHeight='420px' />
                             </div>
-
-                            <div
-                                className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
-                            >
-                                {!isNormal && (
+                            {
+                                isNormal && (
                                     <div className="flex items-center justify-center gap-2.5">
-                                        <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
-                                        <Link
-                                            href={
-                                                mockTestId
-                                                    ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
-                                                    : ''
-                                            }
-                                            target="_blank"
-                                            className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
-                                        >
-                                            Mock test results
-                                        </Link>
-                                    </div>
-                                )}
-
-                                {isNormal || hasLearning ? (
-                                    <div className="flex items-center justify-center gap-2.5">
-                                        <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
+                                        <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
                                         <span className="min-w-fit text-base font-medium text-gray-800">
                                             Learning results
                                         </span>
                                     </div>
-                                ) : null}
-                            </div>
+                                )
+                            }
+
                         </div>
                     )}
                 </div>

@@ -117,6 +117,10 @@ module.exports = {
         200: '#B3CEE0',
         500: '#08719D',
       },
+      dashboard: {
+        learing: '#6FD3B0',
+        'mock-test': '#FB8C5B'
+      }
     },
     screens: {
       sm: '640px', // Mobile
