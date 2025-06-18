@@ -101,6 +101,9 @@ const WeeklyReport = () => {
       getWeeklyReport(router.query.courseId as string)
   }, [router?.query?.courseId])
 
+  const hasCurrentActivities = report?.activities && report?.activities?.current > 0
+  const hasDiffLearningTimes = report?.times && report?.times?.diff > 0
+
   return (
     <div className="rounded-2xl p-6 lg:col-span-5">
       <div className="mb-5 flex flex-col pb-3">
@@ -114,41 +117,44 @@ const WeeklyReport = () => {
       </div>
       <div className="flex flex-col rounded-lg bg-gray-100 p-4">
         <div className="mb-2 flex flex-row items-center gap-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-success">
+          <div className={`flex h-8 w-8 items-center justify-center rounded-md ${hasCurrentActivities ? 'bg-success' : 'bg-gray-400'} `}>
             <BooksIcon />
           </div>
           <div className="text-lg font-semibold text-gray-800">
-            Activities Completed: {report?.activities?.current || 0}
+            Activities Completed: {report?.activities?.current ?? 0}
           </div>
         </div>
-        <div className="text-base text-success">
-          You&apos;ve outperformed last week! Aim higher!
+        <div className={`text-base ${hasCurrentActivities ? 'text-success' : 'text-gray-400'}`}>
+          {hasCurrentActivities ? "You've outperformed last week! Aim higher!" : 'You haven’t have any activity yet! '}
         </div>
       </div>
 
       <div className="mt-6 flex flex-col rounded-lg bg-gray-100 p-4">
         <div className="mb-2 flex flex-row items-center justify-between gap-4">
           <div className="flex">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-error">
+            <div className={`flex h-8 w-8 items-center justify-center rounded-md ${hasCurrentActivities ? 'bg-error' : 'bg-gray-400'}`}>
               <ClockIcon />
             </div>
             <div className="ms-4 flex items-center text-lg font-semibold text-gray-800">
-              Learning Times: {report?.activities?.diff || 0}
+              Learning Times: {report?.times?.current || 0} minutes
             </div>
           </div>
 
-          <div className="flex items-center">
-            <CheckMatchIcon />
-            <div className="ms-1 text-lg font-semibold text-error">
-              {report?.times?.diff}%
+          {hasDiffLearningTimes && (
+            <div className="flex items-center">
+              <CheckMatchIcon />
+              <div className="ms-1 text-lg font-semibold text-error">
+                {report?.times?.diff}%
+              </div>
             </div>
-          </div>
+          )}
+
         </div>
         <div className="flex justify-between">
-          <div className="text-base text-error">
-            More minutes to outperform last week!
+          <div className={`text-base ${hasCurrentActivities ? 'text-error' : 'text-gray-400'}`}>
+            {hasCurrentActivities ? "More minutes to outperform last week!" : 'You haven’t have any activity yet! '}
           </div>
-          <div className="text-base text-gray-400">From last week</div>
+          {hasDiffLearningTimes && <div className="text-base text-gray-400">From last week</div>}
         </div>
       </div>
     </div>

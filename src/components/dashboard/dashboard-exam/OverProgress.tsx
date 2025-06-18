@@ -160,11 +160,6 @@ const OverProgress = () => {
           </div>
         </>
       )}
-      {!isLoading && !option && (
-        <div className="flex grow items-center justify-center">
-          <NoData />
-        </div>
-      )}
     </div>
   )
 }
