@@ -8,8 +8,8 @@ const ExamDashboard = () => {
       <div className="flex w-full flex-col gap-4 3xl:gap-6">
         <LearningResults />
       </div>
-      <div className="mb-10 xl:mt-8 mt-6 xl:gap-8 gap-6 xl:flex">
-        <div className='xl:w-8/12 w-full'>
+      <div className="mb-10 mt-6 gap-6 xl:mt-8 xl:flex xl:gap-8">
+        <div className="w-full xl:w-8/12">
           <TopicProgress />
         </div>
         <OverProgress />

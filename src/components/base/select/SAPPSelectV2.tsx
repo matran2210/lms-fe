@@ -26,6 +26,7 @@ interface SAPPSelectProps {
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
   heightCustom?: string
+  allowClear?: boolean
 }
 
 const SAPPSelectV2 = ({
@@ -49,6 +50,7 @@ const SAPPSelectV2 = ({
   onChange: onSelectChange,
   onDropdownVisibleChange,
   heightCustom = 'h-12',
+  allowClear = false,
 }: SAPPSelectProps) => {
   return (
     <>
@@ -81,6 +83,7 @@ const SAPPSelectV2 = ({
                   showSearch={isSearchable}
                   onSearch={onSearch}
                   loading={isLoading}
+                  allowClear={allowClear}
                   onDropdownVisibleChange={onDropdownVisibleChange}
                   onPopupScroll={(e) => {
                     const { target } = e

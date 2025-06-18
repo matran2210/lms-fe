@@ -13,11 +13,11 @@ interface IProps {
 const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
   return (
     <div
-      className={clsx('w-full rounded-md px-8 py-6', {
+      className={clsx('w-full rounded-md md:p-6 lg:px-8 lg:py-6', {
         'shadow-sidebar': showShadow === true,
       })}
     >
-      <div className="mb-1 text-3xl font-medium">
+      <div className="mb-1 font-medium md:text-[28px] lg:text-3xl">
         <h1 className="text-gray-800">
           {greeting}
           <span className="ml-1.5 text-primary">

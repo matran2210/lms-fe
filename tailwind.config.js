@@ -119,8 +119,8 @@ module.exports = {
       },
       dashboard: {
         learing: '#6FD3B0',
-        'mock-test': '#FB8C5B'
-      }
+        'mock-test': '#FB8C5B',
+      },
     },
     screens: {
       sm: '640px', // Mobile
