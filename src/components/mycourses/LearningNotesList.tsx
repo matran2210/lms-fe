@@ -365,6 +365,8 @@ const LearningNotesList = () => {
       handleCancel={onClose}
       title="Note List"
       isShowBtnClose
+      classNameBody="md:p-0 lg:p-8"
+      rootClassName={'responsive-drawer-v3'}
     >
       <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">
         <SAPPSelectV2

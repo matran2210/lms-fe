@@ -1,10 +1,11 @@
 import {
-  ArrowCollapseIcon,
-  ArrowLeft,
+  CalculatorIconV2,
   CircleCloseIcon,
   CloseIcon,
-  CollapseArrowIcon,
+  DocumentTextIcon,
   HourglassIcon,
+  ResourceIcon,
+  ScratchPadIconV2,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -51,8 +52,13 @@ import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
 import clsx from 'clsx'
 import { Triangle } from '@components/icons/Triangle'
 import ActivityPagination from '@components/learning/activity/ActivityPagination'
-import { ArrowIconV2 } from '@components/base/pagination/ArrowIconV2'
-import ArrowIcon from '@components/base/pagination/ArrowIcon'
+import { Divider } from 'antd'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import LearningResource from '@components/mycourses/LearningResource'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
+import { v4 as uuidv4 } from 'uuid'
+
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -118,6 +124,7 @@ const ActivityPage = () => {
     left: 'calc(50% - 200px)',
   })
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [openResource, setOpenResource] = useState(false)
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -173,6 +180,20 @@ const ActivityPage = () => {
       return
     }
     handleFinishedCourseSectionProgress()
+  }
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+  const handleAddNote = () => {
+    const note = {
+      uuid: uuidv4(),
+      id: '',
+      name: 'Note',
+      description: '',
+    }
+    dispatch(pushNotes(note))
   }
 
   useLayoutEffect(() => {
@@ -252,18 +273,35 @@ const ActivityPage = () => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      if (data?.type === 'file') {
-        arr?.push({
-          type: data.type,
-          file: file,
-          id: uniqueId('file'),
-          fileName: fileName,
-        })
-      } else if (data?.type === 'exhibits') {
-        arr.push({
-          id: uniqueId('exhibits'),
-          ...data,
-        })
+      switch (data.type) {
+        case 'calculator':
+          arr?.push({
+            id: uniqueId('calculator'),
+            ...data,
+          })
+          break
+        case 'scratch_pad':
+          arr?.push({
+            id: uniqueId('scratch_pad'),
+            ...data,
+          })
+          break
+        case 'exhibits':
+          arr.push({
+            id: uniqueId('exhibits'),
+            ...data,
+          })
+          break
+        case 'file':
+          arr?.push({
+            type: data.type,
+            file: file,
+            id: uniqueId('file'),
+            fileName: fileName,
+          })
+          break
+        default:
+          break
       }
       return arr
     })
@@ -554,9 +592,89 @@ const ActivityPage = () => {
             </div>
           </div>
 
+          <div className="sticky bottom-8 mx-auto w-full max-w-sm lg:hidden">
+            <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
+              <div className="flex items-center justify-center gap-5">
+                <CardMenuItem
+                  title="Note List"
+                  icon={<DocumentTextIcon className="h-6 w-6" />}
+                  onClick={handleOpenNotesList}
+                />
+                <CardMenuItem
+                  title="Resource"
+                  icon={<ResourceIcon className="h-6 w-6" />}
+                  onClick={() => setOpenResource(true)}
+                />
+              </div>
+              <Divider
+                type="vertical"
+                className="mx-6 my-auto h-6 border-white text-white"
+                orientation="center"
+              />
+              <div className="flex items-center justify-center gap-5">
+                <CardMenuItem
+                  title="Calculator"
+                  icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                  onClick={() => {
+                    handleOpenScratchPad({
+                      type: 'calculator',
+                    })
+                  }}
+                />
+                <CardMenuItem
+                  title="New Note"
+                  icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                  onClick={handleAddNote}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Sratchpad */}
           {openScratchPad.map((e) => {
-            if (e.type === 'file') {
+            if (e.type === 'calculator') {
+              return (
+                <MovableWindow
+                  key={e.id}
+                  className="lg:hidden"
+                  position="bottom left"
+                  zIndex={40}
+                >
+                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                    <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-bold">Calculator</div>
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseModalIcon />
+                      </button>
+                    </div>
+                    <Calculator />
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'scratch_pad') {
+              return (
+                <MovableWindow
+                  key={e.id}
+                  position={{
+                    width: '412px',
+                    height: '312px',
+                  }}
+                  className="lg:hidden"
+                  zIndex={40}
+                >
+                  <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border border-gray-400">
+                    <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-bold">Scratch Pad</div>
+                      {/* <CloseIcon */}
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseModalIcon />
+                      </button>
+                    </div>
+                    <div className="-mt-[1px] h-full"></div>
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'file') {
               return (
                 <ModalResizeable
                   title={e.fileName}
@@ -628,6 +746,12 @@ const ActivityPage = () => {
           })}
         </div>
       </Layout>
+      {openResource && (
+        <LearningResource
+          open={openResource}
+          setOpenResource={setOpenResource}
+        />
+      )}
     </SappLoadingGlobal>
   )
 }
