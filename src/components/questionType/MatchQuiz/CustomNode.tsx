@@ -15,13 +15,20 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
   const { lg } = useBreakpoint()
   const NODE_WIDTH = lg ? 328 : 290
 
+  // Thêm màu border vàng khi được chọn
+  const borderColor = data?.isSelected ? '#FFB700' : '#E5E7EB'
+
   return (
     <div
       style={{
         color: (data?.color || Color?.TextDefault) as string,
         width: NODE_WIDTH + 'px',
+        border: `2px solid ${borderColor}`,
+        boxSizing: 'border-box',
+        cursor: data?.onClick ? 'pointer' : 'default',
       }}
       className={`relative min-h-10 break-words rounded-lg bg-white p-4 text-start text-base shadow-small`}
+      onClick={data?.onClick as React.MouseEventHandler<HTMLDivElement>}
     >
       {data.label as any}
       {data.role === 'question' && (
@@ -41,7 +48,7 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
           style={{
             ...handleStyle,
             borderWidth: 2,
-            left: -4,
+            left: -5,
             transform: 'translateY(-50%)',
             opacity: 0,
           }}

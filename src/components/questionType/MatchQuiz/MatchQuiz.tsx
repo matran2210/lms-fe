@@ -111,6 +111,51 @@ const MatchQuiz = forwardRef(
     const NODE_WIDTH = lg ? 328 : 290
     const CONTAINER_WIDTH = lg ? 852 : 640
 
+    // State để lưu tối đa 2 node đang được chọn
+    const [selectedNodes, setSelectedNodes] = useState<string[]>([])
+
+    // Hàm xử lý khi click vào node
+    const handleNodeClick = useCallback(
+      (nodeId: string) => {
+        const clickedNode = nodes.find((n) => n.id === nodeId)
+        if (!clickedNode) return
+
+        // Nếu node đã được chọn thì bỏ qua
+        if (selectedNodes.includes(nodeId)) return
+
+        // Nếu chưa chọn node nào hoặc mới chọn 1 node
+        if (selectedNodes.length === 0) {
+          setSelectedNodes([nodeId])
+        } else if (selectedNodes.length === 1) {
+          const firstNode = nodes.find((n) => n.id === selectedNodes[0])
+          if (firstNode && firstNode.data.role !== clickedNode.data.role) {
+            // Đủ 2 node khác role, highlight cả 2 node
+            setSelectedNodes([selectedNodes[0], nodeId])
+            // Sau một nhịp event, nối edge và reset selection
+            setTimeout(() => {
+              const source =
+                firstNode.data.role === 'question' ? firstNode.id : nodeId
+              const target =
+                firstNode.data.role === 'question' ? nodeId : firstNode.id
+              setEdges((prev) =>
+                addEdge(
+                  { source, target, type: 'custom' } as Edge,
+                  prev.filter(
+                    (e) => e.source !== source && e.target !== target,
+                  ),
+                ),
+              )
+              setSelectedNodes([])
+            }, 100)
+          } else {
+            // Nếu cùng role thì chỉ đổi selected
+            setSelectedNodes([nodeId])
+          }
+        }
+      },
+      [nodes, selectedNodes],
+    )
+
     const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
       const nodeMap = new Map(nodes.map((n) => [n.id, n]))
 
@@ -200,9 +245,29 @@ const MatchQuiz = forwardRef(
       setNodes(transformed)
     }, [data, NODE_WIDTH, CONTAINER_WIDTH])
 
-    const nodeTypes = {
-      custom: CustomNode,
-    }
+    // CustomNode sẽ nhận selectedNodes, tự kiểm tra node.id có trong selectedNodes không để render border vàng
+    const nodeTypes = useMemo(
+      () => ({
+        custom: (props: any) => {
+          const { id } = props
+          const isSelected = selectedNodes.includes(id)
+          return (
+            <CustomNode
+              {...props}
+              data={{
+                ...props.data,
+                isSelected,
+                onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+                  e.stopPropagation()
+                  if (!corrects) handleNodeClick(id)
+                },
+              }}
+            />
+          )
+        },
+      }),
+      [selectedNodes, handleNodeClick, corrects],
+    )
 
     const edgeTypes = {
       custom: CustomEdge,

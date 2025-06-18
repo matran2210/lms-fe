@@ -2976,7 +2976,19 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div
+                        className={clsx(
+                          'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
+                          {
+                            'bg-white px-0 py-8':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.ESSAY,
+                            '!w-fit':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.MATCHING,
+                          },
+                        )}
+                      >
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
