@@ -15,6 +15,7 @@ module.exports = {
         200: '#FFE399',
         300: '#FFD466',
         400: '#FFC633',
+        500: '#FFB700',
         DEFAULT: '#FFB700',
         600: '#CC9300',
         700: '#996E00',
@@ -40,7 +41,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
-        'canvas': '#F9F9F9'
+        canvas: '#F9F9F9',
       },
       success: {
         50: '#E7FCF2',

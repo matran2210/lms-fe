@@ -45,6 +45,7 @@ import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import 'sapp-common-package/dist/index.css'
 import '@xyflow/react/dist/style.css'
+import 'preview-part/dist/index.css'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -308,15 +309,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   <>
                     <div className="relative">
                       <PinnedNotifications />
-                      <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
+                      <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1524px]">
                         <CtaTrial />
+                        <PopupCompletedCourse />
                       </div>
                       <Component {...pageProps} />
                     </div>
                     <BackToTop />
                     <Help showHelp={showHelp} />
                     <LearningNotesList />
-                    <PopupCompletedCourse />
                   </>
                 </RouteGuard>
               </SocketContext.Provider>
