@@ -23,7 +23,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
         <span className="text-base font-normal leading-normal text-gray-800">
           You will have{' '}
         </span>
-        <span className="text-base font-bold leading-normal text-primary-500">
+        <span className="text-base font-bold leading-normal text-primary">
           {time} {time > 1 ? 'days' : 'day'}
         </span>
         <span className="text-base font-normal leading-normal text-gray-800">

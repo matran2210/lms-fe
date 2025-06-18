@@ -28,7 +28,7 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
   // CSS classes to avoid duplication
   const textBaseClasses = 'text-base font-normal leading-normal text-gray-800'
   const linkClasses =
-    'text-primary-500 cursor-pointer text-base font-bold leading-normal'
+    'text-primary cursor-pointer text-base font-bold leading-normal'
 
   const modalIcon = noExtensions ? <AlertIcon /> : <LockIcon />
   const okButtonCaption = noExtensions ? 'Confirm' : 'Back to my course'
