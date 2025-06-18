@@ -308,15 +308,15 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   <>
                     <div className="relative">
                       <PinnedNotifications />
-                      <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
+                      <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1524px]">
                         <CtaTrial />
+                        <PopupCompletedCourse />
                       </div>
                       <Component {...pageProps} />
                     </div>
                     <BackToTop />
                     <Help showHelp={showHelp} />
                     <LearningNotesList />
-                    <PopupCompletedCourse />
                   </>
                 </RouteGuard>
               </SocketContext.Provider>

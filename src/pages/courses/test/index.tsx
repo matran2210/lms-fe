@@ -615,7 +615,7 @@ const TestModal = ({
                     >
                       Result:
                     </div>
-                    {resultList.data.length > 1 && (
+                    {resultList?.data?.length > 1 && (
                       <div className="flex gap-2">
                         <HookFormSelect
                           classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"

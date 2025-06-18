@@ -14,7 +14,7 @@ import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { download } from '@components/learning/activity/ActivityResource'
 import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
+import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
@@ -556,7 +556,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.DRAG_DROP:
           return (
-            <DragNDropPreivew
+            <DragNDropPreview
               data={activeQuestion}
               action={getAnswerDragNDrop}
               defaultAnswer={activeQuestion?.defaultValue}

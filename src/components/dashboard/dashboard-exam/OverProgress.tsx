@@ -60,16 +60,16 @@ const OverProgress = () => {
             {
               value: 0,
               name: '',
-              itemStyle: { color: '#FFB700' }
+              itemStyle: { color: '#FFB700' },
             },
             {
               value: values.uncompleted,
               name: '',
               itemStyle: {
                 color: '#FFF1CC',
-                borderRadius: [-20, -20, -20, -20]
+                borderRadius: [-20, -20, -20, -20],
               },
-            }
+            },
           ],
         },
         {
@@ -86,16 +86,16 @@ const OverProgress = () => {
               name: '',
               itemStyle: {
                 color: '#FFB700',
-                borderRadius: [25, 25, 25, 25]
+                borderRadius: [25, 25, 25, 25],
               },
             },
             {
               value: values.uncompleted,
               name: '',
-              itemStyle: { color: 'transparent' }
-            }
+              itemStyle: { color: 'transparent' },
+            },
           ],
-        }
+        },
       ],
     }
 
@@ -122,12 +122,12 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex xl:w-[566px] w-full flex-col rounded-2xl bg-white p-6 text-gray-700 shadow-matchingquiz 3xl:px-6 xl:mt-0 mt-6 xl:mb-0 mb-5 xl:h-auto h-[47vh]">
+    <div className="shadow-matchingquiz mb-5 mt-6 flex h-[47vh] w-full flex-col rounded-2xl bg-white p-6 text-gray-700 xl:mb-0 xl:mt-0 xl:h-auto xl:w-[566px] 3xl:px-6">
       <div className="mb-5 flex items-center justify-between pb-3">
         <div className="min-w-fit text-xl font-semibold text-gray-800 4xl:text-xl">
           {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
         </div>
-        <div className='text-sm text-gray-400 4xl:text-sm'>
+        <div className="text-sm text-gray-400 4xl:text-sm">
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
@@ -159,11 +159,6 @@ const OverProgress = () => {
               : 'Based on the score from Total test results and Topic progress'}
           </div>
         </>
-      )}
-      {!isLoading && !option && (
-        <div className="flex grow items-center justify-center">
-          <NoData />
-        </div>
       )}
     </div>
   )
