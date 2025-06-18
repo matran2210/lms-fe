@@ -40,7 +40,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
-        'canvas': '#F9F9F9'
+        canvas: '#F9F9F9',
       },
       success: {
         50: '#E7FCF2',
