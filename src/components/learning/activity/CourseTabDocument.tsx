@@ -167,6 +167,7 @@ const CourseTabDocument = ({
                 >
                   {course_tab_documents?.map((e, i) => {
                     const gradeStatus = e?.quiz?.attempt?.grading_status
+
                     if (e?.type === 'QUIZ') {
                       return (
                         <div

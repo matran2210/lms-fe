@@ -32,7 +32,15 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  UseFormGetValues,
+  UseFormReset,
+  UseFormSetValue,
+  UseFormWatch,
+  useForm,
+} from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
@@ -103,6 +111,11 @@ type Props = {
   isHideExhibit?: boolean
   saveAnswer?: () => void
   exhibitText?: string
+  controlAnswer: Control<FieldValues, any>
+  setValue: UseFormSetValue<FieldValues>
+  reset: UseFormReset<FieldValues>
+  getValues: UseFormGetValues<FieldValues>
+  watch: UseFormWatch<FieldValues>
 }
 
 type RefEditor = {
@@ -124,19 +137,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       isHideExhibit = true,
       saveAnswer,
       exhibitText = 'Exhibit',
+      controlAnswer,
+      setValue,
+      reset,
+      getValues,
+      watch,
     }: Props,
     ref,
   ) => {
     const questionRef = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
-    const {
-      control: controlAnswer,
-      setValue,
-      reset,
-      getValues,
-      watch,
-    } = useForm({})
 
     const DragDropRef = useRef(null) as any
     const MatchQuizRef = useRef(null) as any
@@ -598,7 +609,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 children: (
                   <div className="mt-6">
                     <EssayQuestionPreview
-                      className="!bg-transparent"
+                      className="!bg-transparent !p-0"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={

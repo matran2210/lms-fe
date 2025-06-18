@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from '@assets/icons'
+import { ArrowLeft, ArrowRight, CollapseArrowIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
@@ -13,11 +13,13 @@ interface IProps {
   activity: IActivity
   focusOnlyQuiz: boolean
   sessionData: any[]
+  isArrowTitle?: boolean
 }
 const ActivityPagination = ({
   activity,
   focusOnlyQuiz,
   sessionData,
+  isArrowTitle = false,
 }: IProps) => {
   const router = useRouter()
   const endActivityRef = useRef<HTMLDivElement>(null)
@@ -129,8 +131,12 @@ const ActivityPagination = ({
         <div
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
-            'learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity',
+            'learning-activity-collapse rounded-xl',
             { hidden: focusOnlyQuiz },
+            {
+              'bg-transparent p-0 shadow-none': isArrowTitle,
+              'bg-white p-6 shadow-learning-activity': !isArrowTitle,
+            },
           )}
         >
           <div
@@ -145,7 +151,7 @@ const ActivityPagination = ({
             {(activity?.previous_activity ||
               (previousActivityIndex !== -1 &&
                 previousActivityIndex !== 0)) && (
-              <div className="w-1/2">
+              <div className={clsx('w-1/2', { 'w-full': isArrowTitle })}>
                 <div
                   onClick={() =>
                     handleActivityNavigation(
@@ -154,11 +160,28 @@ const ActivityPagination = ({
                       'Click Button Previous Activity',
                     )
                   }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center gap-2 whitespace-nowrap text-sm font-semibold underline hover:text-primary"
+                  className={clsx(
+                    'flex cursor-pointer select-none items-center gap-2 whitespace-nowrap text-sm font-semibold underline hover:text-primary',
+                    {
+                      'text-bw-13': isArrowTitle,
+                      'text-bw-1 mb-3': !isArrowTitle,
+                    },
+                  )}
                 >
-                  <ArrowLeft /> Previous Activity
+                  {isArrowTitle ? (
+                    <CollapseArrowIcon className="rotate-90" />
+                  ) : (
+                    <>
+                      <ArrowLeft /> Previous Activity
+                    </>
+                  )}
                 </div>
-                <div className="flex items-center gap-2 text-sm text-[#6b7280]">
+                <div
+                  className={clsx(
+                    'flex items-center gap-2 text-sm text-[#6b7280]',
+                    { hidden: isArrowTitle },
+                  )}
+                >
                   {getCourseIcon(
                     activity?.previous_activity
                       ? activity?.previous_activity?.display_icon
@@ -193,55 +216,56 @@ const ActivityPagination = ({
               </div>
             )}
             {!activity?.previous_activity && <></>}
-            {(activity?.next_activity ||
-              (nextActivityIndex !== -1 &&
-                nextActivityIndex !== sessionData?.length - 1)) && (
-              <div className="w-1/2">
-                <div
-                  onClick={() =>
-                    handleActivityNavigation(
-                      isNextActivityLocked,
-                      idNextActivity,
-                      'Click Button Next Activity',
-                    )
-                  }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
-                >
-                  Next Activity <ArrowRight />
-                </div>
-                <div className="flex items-center justify-end gap-2 text-sm text-[#6b7280]">
-                  {getCourseIcon(
-                    activity?.next_activity
-                      ? activity?.next_activity?.display_icon
-                      : findActivityByIndex(nextActivityIndex + 1)
-                          ?.display_icon,
-                    isNextActivityLocked,
-                  )}
-                  <Tooltip
-                    title={
-                      activity?.next_activity
-                        ? activity?.next_activity?.name
-                        : findActivityByIndex(nextActivityIndex + 1)?.name
-                    }
-                    showTooltip={
-                      !!(
-                        activity?.next_activity?.name &&
-                        activity?.next_activity?.name?.length > 80
+            {!isArrowTitle &&
+              (activity?.next_activity ||
+                (nextActivityIndex !== -1 &&
+                  nextActivityIndex !== sessionData?.length - 1)) && (
+                <div className="w-1/2">
+                  <div
+                    onClick={() =>
+                      handleActivityNavigation(
+                        isNextActivityLocked,
+                        idNextActivity,
+                        'Click Button Next Activity',
                       )
                     }
+                    className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
                   >
-                    <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
-                      {activity?.next_activity
-                        ? truncateString(activity?.next_activity.name, 80)
-                        : truncateString(
-                            findActivityByIndex(nextActivityIndex + 1)?.name,
-                            80,
-                          )}
-                    </div>
-                  </Tooltip>
+                    Next Activity <ArrowRight />
+                  </div>
+                  <div className="flex items-center justify-end gap-2 text-sm text-[#6b7280]">
+                    {getCourseIcon(
+                      activity?.next_activity
+                        ? activity?.next_activity?.display_icon
+                        : findActivityByIndex(nextActivityIndex + 1)
+                            ?.display_icon,
+                      isNextActivityLocked,
+                    )}
+                    <Tooltip
+                      title={
+                        activity?.next_activity
+                          ? activity?.next_activity?.name
+                          : findActivityByIndex(nextActivityIndex + 1)?.name
+                      }
+                      showTooltip={
+                        !!(
+                          activity?.next_activity?.name &&
+                          activity?.next_activity?.name?.length > 80
+                        )
+                      }
+                    >
+                      <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
+                        {activity?.next_activity
+                          ? truncateString(activity?.next_activity.name, 80)
+                          : truncateString(
+                              findActivityByIndex(nextActivityIndex + 1)?.name,
+                              80,
+                            )}
+                      </div>
+                    </Tooltip>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             {!activity?.next_activity && <></>}
           </div>
         </div>

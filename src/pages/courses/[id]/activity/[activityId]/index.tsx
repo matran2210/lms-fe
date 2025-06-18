@@ -1,4 +1,11 @@
-import { CircleCloseIcon, CloseIcon, HourglassIcon } from '@assets/icons'
+import {
+  ArrowCollapseIcon,
+  ArrowLeft,
+  CircleCloseIcon,
+  CloseIcon,
+  CollapseArrowIcon,
+  HourglassIcon,
+} from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -10,7 +17,11 @@ import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { convertMinutesToHourFormat, truncateBySpace } from '@utils/index'
+import {
+  convertMinutesToHourFormat,
+  truncateBySpace,
+  truncateString,
+} from '@utils/index'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
@@ -40,6 +51,8 @@ import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
 import clsx from 'clsx'
 import { Triangle } from '@components/icons/Triangle'
 import ActivityPagination from '@components/learning/activity/ActivityPagination'
+import { ArrowIconV2 } from '@components/base/pagination/ArrowIconV2'
+import ArrowIcon from '@components/base/pagination/ArrowIcon'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -462,28 +475,48 @@ const ActivityPage = () => {
             {/* Header */}
             <div
               className={clsx(
-                `flex w-full select-none items-center justify-between gap-4`,
+                `flex w-full select-none flex-wrap items-center justify-between gap-4`,
                 { hidden: focusOnlyQuiz.open },
               )}
             >
-              <div className="text-bw-13 text-2xl font-medium">
+              <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
+                <ActivityPagination
+                  {...{ activity, sessionData }}
+                  focusOnlyQuiz={focusOnlyQuiz.open}
+                  isArrowTitle
+                />
                 <Tooltip title={activity?.name?.length > 95 && activity?.name}>
-                  {activity?.name}
+                  {truncateString(activity?.name, 91)}
                 </Tooltip>
               </div>
-              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap text-sm">
+              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
                 <HourglassIcon />
                 <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
               </div>
             </div>
 
             {/* Learning Outcome */}
-            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
+            <div
+              className={clsx({
+                hidden:
+                  focusOnlyQuiz.open ||
+                  !(
+                    activity?.course_outcomes &&
+                    activity?.course_outcomes?.length > 0
+                  ),
+              })}
+            >
               <LearningOutcome activity={activity} />
             </div>
 
             {/* Activity Resource */}
-            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
+            <div
+              className={clsx({
+                hidden:
+                  focusOnlyQuiz.open ||
+                  !(activity?.files && activity?.files?.length > 0),
+              })}
+            >
               <ActivityResource
                 activity={activity}
                 handleOpenScratchPad={handleOpenScratchPad}
