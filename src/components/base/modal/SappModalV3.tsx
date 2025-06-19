@@ -24,13 +24,13 @@ interface IProps {
   onOk: () => void
   handleCancel: () => void
   handleClose?: () => void
-  icon: ReactNode
+  icon?: ReactNode
   header?: ReactNode
   content?: string | undefined | ReactNode
   children?: ReactNode
   headerClassName?: string
   isClosable?: boolean
-
+  isUnderLine?: boolean
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -61,6 +61,7 @@ const SappModalV3 = ({
   children,
   headerClassName,
   isClosable = false,
+  isUnderLine = false,
   ...otherProps
 }: IProps) => {
   return (
@@ -119,7 +120,7 @@ const SappModalV3 = ({
               loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
-              isUnderLine: false,
+              isUnderLine: isUnderLine,
             }}
           />
         </div>

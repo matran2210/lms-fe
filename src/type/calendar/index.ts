@@ -45,6 +45,8 @@ export interface ICalendarDetail {
     name: string
     code: string
     link_meeting: string
+    opening_at: Date
+    started_at: Date
   }
   subject: {
     id: string

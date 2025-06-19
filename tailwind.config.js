@@ -32,7 +32,6 @@ module.exports = {
         800: '#0E1214',
       },
       gray: {
-        50: '#FFFFFF',
         100: '#F6F6F6',
         200: '#E5E7EB',
         300: '#D1D5DB',
@@ -41,7 +40,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
-        'canvas': '#F9F9F9'
+        canvas: '#F9F9F9',
       },
       success: {
         50: '#E7FCF2',
@@ -114,12 +113,20 @@ module.exports = {
         active: '#e5e7eb',
         unactive: '#d3d5d8',
       },
+      badge: {
+        200: '#B3CEE0',
+        500: '#08719D',
+      },
+      dashboard: {
+        learing: '#6FD3B0',
+        'mock-test': '#FB8C5B',
+      },
     },
     screens: {
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
+      sm: '640px', // Mobile
+      md: '768px', // Tablet
+      lg: '1024px', // Laptop
+      xl: '1280px', // Desktop
       '2xl': '1536px',
       '3xl': '1728px',
       '4xl': '1920px',

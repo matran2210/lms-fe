@@ -1,8 +1,5 @@
 import Layout from '@components/layout'
-import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -23,7 +20,6 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -163,65 +159,59 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="my-0 pt-6">
-        <div className="mb-10 rounded-lg bg-white px-8 py-4">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearchV2}
-            formStyle="w-full flex items-center"
+      <div className="mb-10 mt-2 rounded-lg bg-white px-8 py-4">
+        <SearchForm
+          placeholder={MY_COURSES.placeholderSearchV2}
+          formStyle="w-full flex items-center"
+        />
+      </div>
+      {isLoading ? (
+        <CourseSkeleton />
+      ) : (
+        <>
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: courseNameDetail,
+                link: '',
+              },
+            ]}
           />
-        </div>
-        {isLoading ? (
-          <CourseSkeleton />
-        ) : (
-          <>
-            <SappBreadCrumbs
-              isTeacher={false}
-              breadcrumbs={[
+          <div
+            className="my-4 flex items-center justify-between"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div className="text-3xl font-semibold text-gray-800">
+              {courseNameDetail}
+            </div>
+            <FilterCourse
+              totalResult={courses?.length || 0}
+              listFilter={[
                 {
-                  title: 'My Course',
-                  link: '/courses',
-                },
-                {
-                  title: courseNameDetail,
-                  link: `/courses/my-course/${router.query.courseId}`,
+                  name: 'user_section_learning_status',
+                  placeholder: 'Status',
+                  options: defaultStatusDetail,
                 },
               ]}
             />
-            <div
-              className="my-4 flex items-center justify-between"
-              data-aos={ANIMATION.DATA_AOS}
-            >
-              <div className="text-3xl font-semibold text-gray-800">
-                {courseNameDetail}
-              </div>
-              <FilterCourse
-                totalResult={courses?.length || 0}
-                listFilter={[
-                  {
-                    name: 'user_section_learning_status',
-                    placeholder: 'Status',
-                    options: defaultStatusDetail,
-                  },
-                ]}
-              />
-            </div>
-            <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
-              <CourseParts
-                isTrial={isTrial}
-                courses={courses}
-                is_passed_course={is_passed_course}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
-          </>
-        )}
-        <PinnedNotificationsV2
-          LeftContent={<div>LeftContent</div>}
-          CenterContent={<div>CenterContent</div>}
-          RightContent={<div>RightContent</div>}
-        />
-      </div>
+          </div>
+          <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
+          </div>
+        </>
+      )}
+
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
         showSelectExamPopup && <SelectExamPopup courseData={data} />}

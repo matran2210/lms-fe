@@ -15,7 +15,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
+import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
@@ -48,7 +48,7 @@ import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
-import CheckCircleOutlineYellow from '@assets/icons/TestIcons'
+import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
 import Popover from '@components/Popover'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
@@ -94,6 +94,8 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import Layout from '@components/layout'
+import BackToTop from '@components/BackToTop'
 
 declare global {
   interface Window {
@@ -105,6 +107,8 @@ const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const dragNDropRef = useRef<HTMLDivElement>(null)
   const checkType = (
     data: any,
     type: string,
@@ -281,10 +285,11 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreivew
+          <DragNDropPreview
             data={data}
             action={getAnswerDragNDrop}
             ref={ref}
+            extenalRef={dragNDropRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -346,19 +351,57 @@ const TestDetail = () => {
               text_editor_content={currentTabContent?.data?.question_content}
               highlighted={highlighted}
             />
-            <RequirementsTab
-              destroyInactiveTabPane={true}
-              items={essayRequirementsItem(defaultValueEssay())}
-              activeKey={essayData?.index ?? '0'}
-              defaultActiveKey="1"
-              onChange={(key) => {
-                setEssayData({
-                  req: getValues(`${currentTabID}_${key}_answer`),
-                  index: key,
-                })
-                refEditor.current.reset()
-              }}
-            />
+            {currentTabContent?.data?.requirements?.length > 0 ? (
+              <RequirementsTab
+                destroyInactiveTabPane={true}
+                items={essayRequirementsItem(defaultValueEssay())}
+                activeKey={essayData?.index ?? '0'}
+                defaultActiveKey="1"
+                onChange={(key) => {
+                  setEssayData({
+                    req: getValues(`${currentTabID}_${key}_answer`),
+                    index: key,
+                  })
+                  refEditor.current.reset()
+                }}
+              />
+            ) : (
+              <EssayQuestionPreview
+                isShowContent={false}
+                data={{
+                  ...currentTabContent?.data?.requirements?.[essayData?.index],
+                  ...essayData?.req,
+                }}
+                question_content={currentTabContent?.data?.question_content}
+                index={essayData?.index}
+                question_data={currentTabContent?.data}
+                control={control}
+                handleSaveHighLight={handleSaveHighLight}
+                highlighted={highlighted}
+                removeHighlight={removeHighlight}
+                allowHighLight={allowHighLight}
+                allowUnHighLight={allowUnHighLight}
+                solution={solution}
+                name={`${currentTabID}_${essayData?.index}_answer`}
+                setValue={setValue}
+                defaultValue={defaultValueEssay()}
+                response_option_custom={currentTabContent.response_type}
+                externalRef={refEditor}
+                fullData={currentTabContent}
+                openChooseFile={(e: any) =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: currentPage,
+                    requirementIndex: essayData?.index,
+                  })
+                }
+                handleClearFile={handleClearFile}
+                setOpenPdf={handleOpenScratchPad}
+                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+                showRequiment={showListRequirement}
+                handleChange={handleEssayChange}
+              />
+            )}
           </>
         )
       default:
@@ -490,7 +533,10 @@ const TestDetail = () => {
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
   const { unsavedChange } = useAppSelector((state) => state.loginReducer)
   const rightSideRef = useRef<any>(null)
-  const [mousePosition, setMousePosition] = useState({ x: null, y: null })
+  const [mousePosition, setMousePosition] = useState<{
+    x: number | null
+    y: number | null
+  }>({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
@@ -2046,25 +2092,49 @@ const TestDetail = () => {
   }, [watchFilter('filter')])
 
   useEffect(() => {
-    const updateMousePosition = (ev: any) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY })
+    const updateMousePosition = (ev: MouseEvent | TouchEvent) => {
+      const clientX =
+        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
+      const clientY =
+        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
+
+      setMousePosition({ x: clientX as number, y: clientY as number })
     }
-    const clickPosition = (ev: any) => {
+
+    const clickPosition = (ev: MouseEvent | TouchEvent) => {
+      const clientX =
+        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
+      const clientY =
+        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
+
       setMousePosition(() => {
-        setCurrentMousePos(ev.clientX)
-        return { x: ev.clientX, y: ev.clientY }
+        setCurrentMousePos(clientX)
+        return { x: clientX, y: clientY }
       })
     }
+
     if (startResize) {
       window.addEventListener('mousemove', updateMousePosition)
       window.addEventListener('mousedown', clickPosition)
+
+      window.addEventListener('touchmove', updateMousePosition, {
+        passive: false,
+      })
+      window.addEventListener('touchstart', clickPosition, { passive: false })
     } else {
       window.removeEventListener('mousemove', updateMousePosition)
       window.removeEventListener('mousedown', clickPosition)
+
+      window.removeEventListener('touchmove', updateMousePosition)
+      window.removeEventListener('touchstart', clickPosition)
     }
+
     return () => {
       window.removeEventListener('mousemove', updateMousePosition)
       window.removeEventListener('mousedown', clickPosition)
+
+      window.removeEventListener('touchmove', updateMousePosition)
+      window.removeEventListener('touchstart', clickPosition)
     }
   }, [startResize])
 
@@ -2321,7 +2391,8 @@ const TestDetail = () => {
                 QUESTION_TYPES.TRUE_FALSE,
                 QUESTION_TYPES.ONE_CHOICE,
                 QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(currentTabContent?.qType)
+              ].includes(currentTabContent?.qType) ||
+              !!watch(`${currentPage}_answer`)
                 ? null
                 : 'You should select an answer before click'
             }
@@ -2460,7 +2531,11 @@ const TestDetail = () => {
   }
 
   return (
-    <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
+    <Layout
+      title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}
+      showSidebar={false}
+      fullWidth
+    >
       <CourseProvider>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
@@ -2512,11 +2587,11 @@ const TestDetail = () => {
           footer={
             <div
               className={clsx(
-                'flex items-center justify-between overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents',
-                activeShowAll ? 'h-[124px]' : 'h-[80px]',
+                'flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:justify-between',
+                activeShowAll ? 'lg:h-[124px]' : 'lg:h-[80px]',
               )}
             >
-              <div className="flex h-full w-[100px] items-center gap-1">
+              <div className="hidden h-full w-[100px] items-center gap-1 lg:flex">
                 {/* <button
                  className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
@@ -2614,7 +2689,7 @@ const TestDetail = () => {
               {/** Tabs */}
               {tabs?.length > 0 && (
                 <div
-                  className={`flex w-fit min-w-0 max-w-[68%] flex-1 justify-center`}
+                  className={`flex w-fit min-w-0 max-w-[100%] flex-1 flex-col justify-center gap-3 lg:max-w-[68%] lg:flex-row`}
                 >
                   <TabSlide
                     data={filteredTabs}
@@ -2633,45 +2708,41 @@ const TestDetail = () => {
                     setValueFilter={setValueFilter}
                     isScrollCenter={false}
                   />
-                  {hasScrollBar && (
-                    <div className="ml-8 flex items-center">
-                      {activeShowAll && <OptionShowAll />}
-                      <Tooltip
-                        className="tooltip-show-all"
-                        title={
-                          <div className="flex items-center gap-2">
-                            {activeShowAll ? (
-                              <div className="rounded-full bg-white">
-                                <ShowLessIcon size={16} color="#404041" />
-                              </div>
-                            ) : (
-                              <div className="rounded-full bg-white">
-                                <ShowMoreIcon size={16} color="#404041" />
-                              </div>
-                            )}
-                            <span>
-                              {activeShowAll ? 'Show Less' : 'Show All'}
-                            </span>
-                          </div>
-                        }
-                      >
-                        <div
-                          className={clsx(
-                            `leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline `,
-                          )}
-                          onClick={() => {
-                            setActiveShowAll(!activeShowAll)
-                          }}
-                        >
-                          {!activeShowAll ? (
-                            <ShowLessIcon size={24} />
+                  <div className="flex items-center justify-center lg:ml-8 lg:justify-start">
+                    {activeShowAll && <OptionShowAll />}
+                    <Tooltip
+                      className="tooltip-show-all"
+                      title={
+                        <div className="flex items-center gap-2">
+                          {activeShowAll ? (
+                            <div className="rounded-full bg-white">
+                              <ShowLessIcon size={16} color="#404041" />
+                            </div>
                           ) : (
-                            <ShowMoreIcon size={24} />
+                            <div className="rounded-full bg-white">
+                              <ShowMoreIcon size={16} color="#404041" />
+                            </div>
                           )}
+                          <span>
+                            {activeShowAll ? 'Show Less' : 'Show All'}
+                          </span>
                         </div>
-                      </Tooltip>
-                    </div>
-                  )}
+                      }
+                    >
+                      <div
+                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
+                        onClick={() => {
+                          setActiveShowAll(!activeShowAll)
+                        }}
+                      >
+                        {!activeShowAll ? (
+                          <ShowLessIcon size={24} />
+                        ) : (
+                          <ShowMoreIcon size={24} />
+                        )}
+                      </div>
+                    </Tooltip>
+                  </div>
                 </div>
               )}
               {/** End Tabs */}
@@ -2727,7 +2798,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="flex min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline"
+                className="hidden min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline lg:flex"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
@@ -2888,21 +2959,25 @@ const TestDetail = () => {
                     </div>
                     <div
                       className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
-                      onMouseDown={() => {
+                      onMouseDown={() => setStartResize(true)}
+                      onTouchStart={(e) => {
+                        e.preventDefault()
                         setStartResize(true)
                       }}
+                      onTouchMove={() => setStartResize(true)}
                       onMouseUp={() => setStartResize(false)}
+                      onTouchEnd={() => setStartResize(false)}
                     >
                       <div className="z-10 h-8 w-8 bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
                     <div
-                      className="h-full overflow-auto bg-white py-6 "
+                      className="h-full min-w-[300px] overflow-auto bg-white p-8"
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="mx-8 mt-8 flex min-w-[700px] flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div className="flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8">
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -2920,8 +2995,9 @@ const TestDetail = () => {
                   </div>
                 ) : (
                   <div
-                    className={`flex-1 overflow-auto px-6 py-6`}
+                    className={`flex-1 overflow-auto p-8`}
                     id={'preview-question'}
+                    ref={scrollRef}
                   >
                     <div
                       id="hightlight_area_topic"
@@ -2950,7 +3026,7 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      {currentTabContent?.topicDescription?.description && (
+                      {/* {currentTabContent?.topicDescription?.description && (
                         <HighlightableHTML
                           initialHTML={
                             currentTabContent?.topicDescription?.description ||
@@ -2959,15 +3035,15 @@ const TestDetail = () => {
                           storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                           className="mb-4"
                         />
-                      )}
-                      {/* <EditorReader
+                      )} */}
+                      <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      /> */}
+                      />
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {
@@ -2994,7 +3070,7 @@ const TestDetail = () => {
                       className={clsx(
                         'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
-                          'bg-white':
+                          'bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
                         },
@@ -3183,9 +3259,9 @@ const TestDetail = () => {
                   return (
                     <div
                       key={e?.value}
-                      className={clsx(
-                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
-                      )}
+                      className={
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800'
+                      }
                       onClick={() => {
                         handleOpenExhibit(e?.value)
                         setShowWarning(false)
@@ -3212,7 +3288,44 @@ const TestDetail = () => {
           </div>
         </Popover>
       )}
-    </FullScreenLayout>
+      <div
+        onClick={() => {
+          handleOpenScratchPad('scratch_pad')
+          trackGAEvent('Click Button ScratchPad Test')
+        }}
+        className={clsx(
+          'group fixed bottom-[302px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          { '!bg-primary': isScatchPadEnabled },
+        )}
+      >
+        <ScratchPadIconV2 isActive={isScatchPadEnabled} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleOpenScratchPad('calculator')
+          trackGAEvent('Click Button Calculator Test')
+        }}
+        className={clsx(
+          'group fixed bottom-[362px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          { '!bg-primary': checkCalExist > -1 },
+        )}
+      >
+        <CalculatorIconV2 isActive={checkCalExist > -1} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleFlagQuestion(currentPage)
+          trackGAEvent('Click Button Flag To Review Test')
+        }}
+        className="group fixed bottom-[422px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
+      >
+        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <BackToTop scrollContainerRef={scrollRef} />
+    </Layout>
   )
 }
 

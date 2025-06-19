@@ -82,7 +82,6 @@ const WeeklyReport = () => {
       activities: activities,
       times: times,
     })
-
   }
 
   const getWeeklyReport = async (id: string) => {
@@ -102,8 +101,12 @@ const WeeklyReport = () => {
       getWeeklyReport(router.query.courseId as string)
   }, [router?.query?.courseId])
 
+  const hasCurrentActivities =
+    report?.activities && report?.activities?.current > 0
+  const hasDiffLearningTimes = report?.times && report?.times?.diff > 0
+
   return (
-    <div className="p-6 lg:col-span-5 rounded-2xl">
+    <div className="rounded-2xl p-6 lg:col-span-5">
       <div className="mb-5 flex flex-col pb-3">
         <div className="text-gray-800">
           <span className="text-xl font-semibold">This Week:</span>
@@ -113,35 +116,59 @@ const WeeklyReport = () => {
         </div>
         <div className="text-gray-400 4xl:text-sm">{`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}</div>
       </div>
-      <div className="flex flex-col p-4 bg-gray-100 rounded-lg">
-        <div className="flex mb-2 flex-row items-center gap-4">
-          <div className="h-8 w-8 rounded-md bg-success flex justify-center items-center">
+      <div className="flex flex-col rounded-lg bg-gray-100 p-4">
+        <div className="mb-2 flex flex-row items-center gap-4">
+          <div
+            className={`flex h-8 w-8 items-center justify-center rounded-md ${hasCurrentActivities ? 'bg-success' : 'bg-gray-400'} `}
+          >
             <BooksIcon />
           </div>
-          <div className='text-lg font-semibold text-gray-800'>Activities Completed: {report?.activities?.current || 0}</div>
+          <div className="text-lg font-semibold text-gray-800">
+            Activities Completed: {report?.activities?.current ?? 0}
+          </div>
         </div>
-        <div className='text-success text-base'>You've outperformed last week! Aim higher!</div>
+        <div
+          className={`text-base ${hasCurrentActivities ? 'text-success' : 'text-gray-400'}`}
+        >
+          {hasCurrentActivities
+            ? "You've outperformed last week! Aim higher!"
+            : 'You haven’t have any activity yet! '}
+        </div>
       </div>
 
-      <div className="mt-6 flex flex-col p-4 bg-gray-100 rounded-lg">
-        <div className="flex mb-2 flex-row items-center gap-4 justify-between">
-          <div className='flex'>
-            <div className="h-8 w-8 rounded-md bg-error flex justify-center items-center">
+      <div className="mt-6 flex flex-col rounded-lg bg-gray-100 p-4">
+        <div className="mb-2 flex flex-row items-center justify-between gap-4">
+          <div className="flex">
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-md ${hasCurrentActivities ? 'bg-error' : 'bg-gray-400'}`}
+            >
               <ClockIcon />
             </div>
-            <div className='text-lg font-semibold text-gray-800 items-center flex ms-4'>Learning Times: {report?.activities?.diff || 0}</div>
-          </div>
-
-          <div className='flex items-center'>
-            <CheckMatchIcon />
-            <div className='ms-1 text-lg font-semibold text-error' >
-              {report?.times?.diff}%
+            <div className="ms-4 flex items-center text-lg font-semibold text-gray-800">
+              Learning Times: {report?.times?.current || 0} minutes
             </div>
           </div>
+
+          {hasDiffLearningTimes && (
+            <div className="flex items-center">
+              <CheckMatchIcon />
+              <div className="ms-1 text-lg font-semibold text-error">
+                {report?.times?.diff}%
+              </div>
+            </div>
+          )}
         </div>
-        <div className='flex justify-between'>
-          <div className='text-error text-base'>More minutes to outperform last week!</div>
-          <div className='text-base text-gray-400'>From last week</div>
+        <div className="flex justify-between">
+          <div
+            className={`text-base ${hasCurrentActivities ? 'text-error' : 'text-gray-400'}`}
+          >
+            {hasCurrentActivities
+              ? 'More minutes to outperform last week!'
+              : 'You haven’t have any activity yet! '}
+          </div>
+          {hasDiffLearningTimes && (
+            <div className="text-base text-gray-400">From last week</div>
+          )}
         </div>
       </div>
     </div>

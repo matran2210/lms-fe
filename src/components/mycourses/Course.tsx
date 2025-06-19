@@ -1,14 +1,14 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon from '@components/icons'
+import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round } from 'lodash'
+import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import Tooltip from 'src/common/Tooltip'
 import {
@@ -18,6 +18,7 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
   COURSE_TYPE,
+  LEARNING_USER_STATUS,
   PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -28,6 +29,8 @@ import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
 import dayjs from 'dayjs'
+import CardCourse from '@components/common/CardCourse/CardCourse'
+import clsx from 'clsx'
 
 const Course = ({
   course,
@@ -131,6 +134,7 @@ const Course = ({
             return BUTTON_STATUS.Active
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
+
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
@@ -145,6 +149,16 @@ const Course = ({
             if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
           } else return BUTTON_STATUS.Disabled
         }
+
+        if (startedAt && isNull(finishedAt)) {
+          if (studentStatus === LEARNING_USER_STATUS.READY_TO_LEARN)
+            return BUTTON_STATUS.Begin
+          if (studentStatus === LEARNING_USER_STATUS.IN_PROGRESS)
+            return BUTTON_STATUS.Resume
+          if (studentStatus === LEARNING_USER_STATUS.COMPLETED)
+            return BUTTON_STATUS.Review
+        }
+
         return BUTTON_STATUS.Disabled
       }
       if (
@@ -208,6 +222,7 @@ const Course = ({
   }
 
   const { courseType } = useCourseContext()
+  const category = course?.course_categories[0]?.name || ''
 
   useEffect(() => {
     if (course?.course_type === 'TRIAL_COURSE') {
@@ -218,7 +233,6 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
-    const category = course?.course_categories[0]?.name || ''
     const isRedirectDashboard =
       (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
         course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
@@ -276,7 +290,7 @@ const Course = ({
   const utcNow = dayjs().utc()
   const isPendingLesson =
     classInstance?.type === 'LESSON' && !student?.is_passed
-  const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+  const isAccaCourse = category === 'ACCA'
   const isFixedDuration =
     classInstance?.duration_type === 'FIXED' ||
     classInstance?.duration_type === 'FLEXIBLE'
@@ -399,170 +413,174 @@ const Course = ({
       handleCourseDetail()
     }
   }
+  const handleClickTitle = () => {
+    if (isActiveStudent && enableCourse) {
+      courseAction()
+    }
+    trackGAEvent('Click Title Course Item')
+  }
 
   return (
     <>
       {determineButtonToShow !== 'Hidden' && (
-        <div
+        <CardCourse
+          title={course?.name}
           key={index}
-          className={`item flex flex-col rounded-xl ${index === 0 && 'bg-white'} p-[30px] shadow-sidebar`}
-          data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
+          disabledTitle={!enableCourse}
+          classNameTitle={`h-16 font-semibold mb-4 ${enableCourse && 'mt-3'}`}
+          handleClickTitle={handleClickTitle}
+          hideBadge={!enableCourse}
+          badgeCode={{
+            badge: category,
+            className: 'bg-badge-200 text-badge-500 font-medium',
+          }}
+          classNameCard="min-h-[434px]"
         >
-          <div className={`flex min-h-[352px] flex-col`}>
-            <div
-              className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
-                !enableCourse ? 'text-[#DCDDDD]' : 'text-[#050505]'
-              }`}
-            >
-              <div
-                className="line-clamp-2 cursor-pointer text-ellipsis"
-                onClick={() => {
-                  if (isActiveStudent && enableCourse) {
-                    courseAction()
-                  }
-                  trackGAEvent('Click Title Course Item')
-                }}
-              >
-                <Tooltip
-                  title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 60}
-                >
-                  {truncateString(course?.name, 60)}
-                </Tooltip>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              {enableCourse ? (
-                <div className="name-class text-sm text-[#A1A1A1]">
-                  Class:
-                  <span className="ml-1 font-medium text-[#050505]">
-                    <Tooltip
-                      title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 20}
-                    >
-                      {truncateString(course?.classes?.[0]?.code, 20)}
-                    </Tooltip>
-                  </span>
+          <div className="flex items-center justify-between">
+            {enableCourse ? (
+              <div className="flex items-center gap-2">
+                <div>
+                  <GraduationCapIcon />
                 </div>
-              ) : (
-                <div className="name-class text-sm text-[#A1A1A1]">
-                  <span className="ml-1 font-medium text-[#050505]" />
+                <div className="text-sm font-semibold text-icon">
+                  <Tooltip
+                    title={course?.classes?.[0]?.code}
+                    showTooltip={course?.classes?.[0]?.code?.length > 20}
+                  >
+                    {truncateString(course?.classes?.[0]?.code, 20)}
+                  </Tooltip>
                 </div>
-              )}
-              <div className="time-class text-sm text-[#DCDDDD]">
-                {determineButtonToShow !== 'Active' && (
-                  <span>
-                    <span
-                      className={`font-medium ${
-                        enableCourse ? 'text-[#050505]' : 'text-[#A1A1A1]'
-                      }`}
-                    >
-                      {daysDifference > 0
-                        ? daysDifference
-                        : enableCourse
-                          ? 1
-                          : 0}{' '}
-                    </span>
-                    {daysDifference > 1 ? 'days left' : 'day left'}
-                  </span>
-                )}
               </div>
-            </div>
-            <div className="des mb-8 mt-6 line-clamp-5 h-[116px] text-ellipsis">
-              {(course?.description as string)?.length > 250 ? (
-                <Tooltip
-                  title={
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: clearStylesHtml(course?.description),
-                      }}
-                    />
-                  }
-                  placement="bottom"
+            ) : (
+              <div className="name-class text-sm text-[#A1A1A1]">
+                <span className="ml-1 font-medium text-[#050505]" />
+              </div>
+            )}
+
+            {determineButtonToShow !== 'Active' && (
+              <div className="flex items-center gap-1">
+                <div className="mr-1">
+                  <CourseTimeIcon />
+                </div>
+                <div
+                  className={`text-sm font-semibold ${
+                    enableCourse ? 'text-icon' : 'text-gray-300'
+                  }`}
                 >
+                  {daysDifference > 0
+                    ? daysDifference
+                    : enableCourse
+                      ? 1
+                      : 0}{' '}
+                </div>
+                <div
+                  className={`text-sm font-normal ${
+                    enableCourse ? 'text-gray-500' : 'text-gray-300'
+                  }`}
+                >
+                  {daysDifference > 1 ? 'days left' : 'day left'}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="des my-8 line-clamp-3 h-[72px] text-ellipsis">
+            {(course?.description as string)?.length > 250 ? (
+              <Tooltip
+                title={
                   <p
                     dangerouslySetInnerHTML={{
                       __html: clearStylesHtml(course?.description),
                     }}
-                    className={`text-bas h-24 ${
-                      enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
-                    }`}
                   />
-                </Tooltip>
-              ) : (
+                }
+                placement="bottom"
+              >
                 <p
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(course?.description),
                   }}
-                  className={`text-bas h-24 ${
-                    enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
+                  className={`text-base font-normal ${
+                    enableCourse ? 'text-gray-800' : 'text-gray-300'
                   }`}
                 />
-              )}
-            </div>
-            <div className="mt-auto">
-              <div className="progress mb-6 h-8">
-                <div className="info mb-2 flex items-center justify-between">
-                  <div className="text flex items-center">
-                    <Icon
-                      type={enableCourse ? iconType : 'expired'}
-                      className={`relative ${
-                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
-                      }`}
-                    />
-                    <p
-                      className={`text-sm font-medium ${
-                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
-                      } ml-px pl-2`}
-                    >
-                      {enableCourse ? showStatus : 'Expired'}
-                    </p>
-                  </div>
-                  <div className="number">
-                    <p
-                      className={`text-sm font-medium ${
-                        enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
-                      }`}
-                    >
-                      {progressPart}%
-                    </p>
-                  </div>
-                </div>
-                <div className="progressbar h-[6px] bg-[#F1F1F1]">
-                  <div
-                    className={`progress-percentage ${
-                      enableCourse ? 'bg-primary' : 'bg-[#DCDDDD]'
-                    } h-[6px]`}
-                    style={{ width: `${progressPart}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="action relative flex items-center justify-end">
-                {determineButtonToShow !== 'Disabled' ? (
-                  <ButtonSecondary
-                    title={
-                      determineButtonToShow === 'Active'
-                        ? 'Activate'
-                        : determineButtonToShow
-                    }
-                    className="ml-auto"
-                    onClick={() => {
-                      if (isActiveStudent) {
-                        courseAction()
-                      }
-                      trackGAEvent('CLick Button Course Item')
-                    }}
-                  />
-                ) : (
-                  <div className="action relative flex h-8 items-center justify-end"></div>
-                )}
-                {/* )} */}
-              </div>
-            </div>
-            <ResultRowsModal open={open} setOpen={setOpen} />
+              </Tooltip>
+            ) : (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: clearStylesHtml(course?.description),
+                }}
+                className={`text-base font-normal ${
+                  enableCourse ? 'text-gray-800' : 'text-gray-300'
+                }`}
+              />
+            )}
           </div>
-        </div>
+          {enableCourse && (
+            <div className="progress mb-6 h-8">
+              <div className="info mb-2 flex items-center justify-between">
+                <div className="text flex items-center">
+                  <Icon
+                    type={enableCourse ? iconType : 'expired'}
+                    className={`relative ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
+                  />
+                  <p
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-gray-800' : 'text-gray-300'
+                    } ml-px pl-2`}
+                  >
+                    {enableCourse ? showStatus : 'Expired'}
+                  </p>
+                </div>
+                <div className="number">
+                  <p
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
+                  >
+                    {progressPart}%
+                  </p>
+                </div>
+              </div>
+              <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
+                <div
+                  className={`progress-percentage rounded-[100px] ${
+                    enableCourse ? 'bg-primary' : 'bg-gray-200'
+                  } h-[6px]`}
+                  style={{ width: `${progressPart}%` }}
+                ></div>
+              </div>
+            </div>
+          )}
+
+          <div
+            className={clsx(
+              'action flex items-center justify-end',
+              !enableCourse && 'absolute bottom-8 right-8',
+            )}
+          >
+            {determineButtonToShow !== 'Disabled' && (
+              <ButtonSecondary
+                title={
+                  determineButtonToShow === 'Active'
+                    ? 'Activate'
+                    : determineButtonToShow
+                }
+                className="ml-auto"
+                onClick={() => {
+                  if (isActiveStudent) {
+                    courseAction()
+                  }
+                  trackGAEvent('CLick Button Course Item')
+                }}
+              />
+            )}
+          </div>
+
+          <ResultRowsModal open={open} setOpen={setOpen} />
+        </CardCourse>
       )}
       <PopupExtend
         open={openExtend}

@@ -36,11 +36,9 @@ const LearningResults = () => {
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
-        const res = isNormal
-          ? await DashboardAPI.getLearningResults(id)
-          : ((await DashboardAPI.getMockTestResults(id)) as any)
+        const res = (await DashboardAPI.getMockTestResults(id)) as any
         if (res && res.success) {
-          const data = isNormal ? res.data : res.data.reports
+          const data = res.data.reports
           setResults(data)
           setHasLearning(data.some((e: ILearningResult) => e.score))
           if (!isNormal && res.data.mock_tests?.length === 1) {
@@ -164,7 +162,7 @@ const LearningResults = () => {
               <div className="flex flex-row items-start justify-center gap-10 xl:flex-col xl:gap-4">
                 {!isNormal && (
                   <div className="flex items-center justify-center gap-2.5 font-medium">
-                    <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
+                    <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
                     <Link
                       href={
                         mockTestId
@@ -172,21 +170,20 @@ const LearningResults = () => {
                           : ''
                       }
                       target="_blank"
-                      className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-[#6FD195]'}`}
+                      className={`inline-block min-w-fit text-base font-bold text-gray-800 ${!mockTestId ? 'pointer-events-none' : 'hover:text-dashboard-learing'}`}
                       rel="noreferrer"
                     >
                       Mock test results
                     </Link>
                   </div>
                 )}
-                {(isNormal || hasLearning) && (
-                  <div className="flex items-center justify-center gap-2.5">
-                    <span className="min-h-3 min-w-3 rounded-full bg-[#6FD3B0]"></span>
-                    <span className="min-w-fit text-base font-medium text-gray-800">
-                      Learning results
-                    </span>
-                  </div>
-                )}
+
+                <div className="flex items-center justify-center gap-2.5">
+                  <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
+                  <span className="min-w-fit text-base font-medium text-gray-800">
+                    Learning results
+                  </span>
+                </div>
               </div>
             </div>
           )}
@@ -218,6 +215,9 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           const differenceResult =
             (result?.mock_test_score || 0) - (result?.score || 0)
 
+          const hasBothScores =
+            result?.score !== 0 && result?.mock_test_score != 0
+
           return (
             <div
               key={result?.id}
@@ -231,39 +231,44 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                 <div className="text-sm text-gray-800">
                   Learning result: {result?.score}%
                 </div>
-                <div className="flex items-center">
-                  {differenceResult > 0 ? (
-                    <SuccessMatchIcon />
-                  ) : (
-                    <MatchFailIcon />
-                  )}
-                  <div
-                    className={`ms-1 text-lg font-semibold ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
-                  >
-                    {differenceResult > 0 ? '+' : ''}
-                    {differenceResult}%
+                {hasBothScores && (
+                  <div className="flex items-center">
+                    {differenceResult > 0 ? (
+                      <SuccessMatchIcon />
+                    ) : (
+                      <MatchFailIcon />
+                    )}
+                    <div
+                      className={`ms-1 text-lg font-semibold ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
+                    >
+                      {differenceResult > 0 ? '+' : ''}
+                      {differenceResult}%
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
-              <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-800">
                   Mock test: {result?.mock_test_score}%
                 </div>
-                <div className="text-base text-gray-400">difference</div>
+                {hasBothScores && (
+                  <div className="mt-2 text-base text-gray-400">difference</div>
+                )}
               </div>
-
-              <div
-                className={
-                  differenceResult > 0
-                    ? 'text-sm text-success'
-                    : 'text-sm text-error'
-                }
-              >
-                {differenceResult > 0
-                  ? 'Okay, keep it up!'
-                  : 'Review more formulas'}
-              </div>
+              {hasBothScores && (
+                <div
+                  className={
+                    differenceResult > 0
+                      ? 'text-sm text-success'
+                      : 'text-sm text-error'
+                  }
+                >
+                  {differenceResult > 0
+                    ? 'Okay, keep it up!'
+                    : 'Review more formulas'}
+                </div>
+              )}
             </div>
           )
         })}

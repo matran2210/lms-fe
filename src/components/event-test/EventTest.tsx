@@ -105,7 +105,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your results for Round 2 will"
-            text2="be emailed to you on September 27 - 30, 2024"
+            text2="be emailed to you on June 28, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
@@ -126,7 +126,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return '04/10/2024'
 
       case 'CFA':
-        return '27-30/09/2024'
+        return '28/06/2025'
 
       case 'CMA':
         return '28/09/2024'
@@ -236,7 +236,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
           >
             <p>
               {getEventTestStatus(
-                'Results Release Date:',
+                'Result Release Date:',
                 'No of Questions:',
                 'End Date:',
               )}

@@ -12,13 +12,20 @@ import Sidebar from './Sidebar'
 interface LayoutProps {
   children: ReactNode
   title: string
-  size?: 'sm' | 'md' | 'xl' | '2xl'
+  size?: 'sm' | 'md' | 'xl'
   showSidebar?: boolean
+  fullWidth?: boolean
 }
 
 // eslint-disable-next-line import/no-unused-modules
 export default function Layout(props: LayoutProps): ReactElement {
-  const { children, title, size = 'xl', showSidebar = true } = props
+  const {
+    children,
+    title,
+    size = 'xl',
+    showSidebar = true,
+    fullWidth = false,
+  } = props
   const router = useRouter()
   const [isOpened, setOpened] = useState(false)
   const toggleDrawer = () => setOpened((prev) => !prev)
@@ -45,8 +52,6 @@ export default function Layout(props: LayoutProps): ReactElement {
 
   if (isEnablePinnedPages && openPinned && pinnedNotifications?.data?.content) {
     paddingTop = showPinnedTrial ? 'pt-[102px]' : 'pt-12'
-  } else if (showPinnedTrial) {
-    paddingTop = 'pt-[54px]'
   }
 
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -64,7 +69,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             className={clsx(
               'menu-sidebar-left',
               'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-              'fixed hidden h-[calc(100vh-16px)] w-20 rounded-xl bg-white shadow-sidebar lg:block',
+              `fixed hidden h-[calc(100vh-16px${openPinned ? '-60px' : ''})] w-20 rounded-xl bg-white shadow-sidebar lg:block`,
               {
                 'overflow-hidden': !guideStatus,
                 'menu-sidebar-left--hover':
@@ -81,7 +86,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-[1179px]': size === 'sm',
             'max-w-[1444px]': size === 'md',
             'max-w-[1524px]': size === 'xl',
-            'max-w-[1954px]': size === '2xl',
+            'max-w-full p-0': fullWidth,
           })}
         >
           <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>

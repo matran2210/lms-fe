@@ -1,6 +1,5 @@
 import Layout from '@components/layout'
 import CoursesList from '@components/mycourses/CoursesList'
-import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import PopupStep from '@components/user-guide/PopupStep'
@@ -16,17 +15,25 @@ import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import TourGuideStart from 'src/assets/lotties/tour-guide-start.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, UserGuide } from 'src/constants'
+import { ANIMATION, defaultStatusCourse, UserGuide } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
+import FilterCourse from '@components/mycourses/FilterCourse'
+import { HamburgerMenuLargeIcon } from 'src/assets/icons'
 
 const DEFAULT_PAGESIZE = 9
 const MASTER = 'Master Finance'
 const GENERAL = 'General Course'
+const defaultCategory = [
+  {
+    label: `All`,
+    value: '',
+  },
+]
 
 const MyCourse = () => {
   const {
@@ -163,16 +170,36 @@ const MyCourse = () => {
     }
   }, [courses])
 
+  const firstPage = data?.pages?.[0]
+  const totalRecords = firstPage?.category?.metadata?.total_records || 0
+  const dynamicCategoryOptions =
+    firstPage?.category?.total?.map((category: { categoryName: string }) => ({
+      label: category.categoryName,
+      value: category.categoryName,
+    })) || []
+  const listFilter = [
+    {
+      name: 'type',
+      placeholder: 'Category',
+      options: defaultCategory.concat(dynamicCategoryOptions),
+    },
+    {
+      name: 'status',
+      placeholder: 'Status',
+      options: defaultStatusCourse,
+    },
+  ]
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="header mb-6 border-b border-[#DCDDDD] bg-white">
-          <div
-            className={`relative mx-auto my-4 flex rounded-md py-3 
-              ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
-          >
+        <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-[0px_4px_20px_0px_rgba(41,41,41,0.05)] lg:hidden">
+            <HamburgerMenuLargeIcon />
+          </div>
+          <div className="w-full rounded-lg bg-white px-8 py-4">
             <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
+              placeholder={MY_COURSES.placeholderSearchV2}
               formStyle="w-full flex items-center"
               disabled={guideIsActive}
             />
@@ -189,10 +216,9 @@ const MyCourse = () => {
           </div>
         </div>
 
-        <Row className="mx-auto my-0 flex rounded-md bg-white shadow-sidebar">
-          <Col
-            span={16}
-            className={`heading relative rounded-md bg-white max-[1199px]:mx-6
+        <div className="mx-auto my-0 flex justify-between rounded-md bg-white shadow-sidebar">
+          <div
+            className={`heading relative rounded-md bg-white 
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
@@ -201,12 +227,6 @@ const MyCourse = () => {
               greeting="Welcome to"
               title={courseType}
               showShadow={false}
-              des={
-                <div>
-                  From here, you can access every topic, reading, and video
-                  lesson, as well as assignment questions.
-                </div>
-              }
             />
             {guideStatus && guideStep === 4 && (
               <PopupStep
@@ -220,15 +240,14 @@ const MyCourse = () => {
                 title="Welcome"
               />
             )}
-          </Col>
-          <Col
-            span={8}
-            className={`grid place-items-center rounded-md bg-white
+          </div>
+          <div
+            className={`grid place-items-center rounded-md bg-white md:mr-6 lg:mr-8
         ${guideStatus && guideStep === 5 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-[#F9F9F9] p-1">
+            <div className="flex gap-2 rounded-md bg-[#F9F9F9]">
               <Button
                 type={courseType === MASTER ? 'primary' : 'text'}
                 block
@@ -259,15 +278,12 @@ const MyCourse = () => {
                 title="Course Tab"
               />
             )}
-          </Col>
-        </Row>
-        <div className="mx-auto mb-6 mt-8 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">My Courses</h1>
+          </div>
+        </div>
+        <div className="mx-auto mb-6 flex items-center justify-between md:mt-8 lg:mt-11">
+          <h1 className="text-2xl font-semibold text-gray-800">My Courses</h1>
           <div className={`relative`}>
-            <Filter
-              courses={data?.pages?.[0]?.category}
-              tourGuideActive={guideStatus && guideStep === 7}
-            />
+            <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
             {guideStatus && guideStep === 7 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_7}

@@ -124,7 +124,12 @@ export default function Sidebar({
           isOpened ? 'block md:hidden' : 'hidden'
         } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-[#00000080]`}
       />
-      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+      {openResource && (
+        <LearningResource
+          open={openResource}
+          setOpenResource={setOpenResource}
+        />
+      )}
     </div>
   )
 }
