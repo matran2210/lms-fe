@@ -72,7 +72,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
     isLoading,
     handleChangeParams,
     setPagination,
-    other,
+    refetch,
   } = useSappPaging({
     uniqueKey: ProgressKey.ProgressList,
     queryFn: () =>
@@ -99,7 +99,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
     setOpenAddModal(true)
   }
   const handleRefetchData = () => {
-    other?.refetch()
+    refetch()
   }
   return (
     <div className="flex flex-col gap-6 p-8 pt-1">

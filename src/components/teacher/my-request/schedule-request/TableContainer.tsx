@@ -78,7 +78,7 @@ export default function TableContainer({ params }: IProps) {
     isLoading,
     handleChangeParams,
     setPagination,
-    other,
+    refetch,
   } = useSappPaging({
     uniqueKey: TeacherKey.ScheduleRequest,
     queryFn: () =>
@@ -268,7 +268,7 @@ export default function TableContainer({ params }: IProps) {
       /**
        * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
        */
-      other?.refetch()
+      refetch()
     } catch (error) {
     } finally {
     }
