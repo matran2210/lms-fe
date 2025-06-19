@@ -6,12 +6,12 @@ import { IButtonIconProps, IButtonSize, IButtonVariant } from 'src/type'
 const sizeStyles: Record<IButtonSize, string> = {
   small: 'px-4 py-2 text-sm',
   medium: 'px-5 py-2.5 text-base',
-  lager: 'px-6 py-3 text-lg',
+  large: 'px-6 py-3 text-lg',
   extra: 'px-6 py-3 text-lg',
 }
 
 const variantStyles: Record<IButtonVariant, string> = {
-  primary: 'bg-primary text-white hover:bg-primary-2',
+  primary: 'bg-primary text-white hover:bg-[#FFC83A]',
   secondary: 'hover:border-primary bg-white hover:bg-primary hover:text-white',
   custom: '',
 }
@@ -38,7 +38,7 @@ const ButtonIconSapp = ({
     ${isPrimary ? variantStyles.primary : ''}
     ${isSecondary ? variantStyles.secondary : ''}
     ${full ? 'w-full' : 'inline-flex'} 
-    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.lager}
+    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.large}
     ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
     ${className}
   `

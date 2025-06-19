@@ -18,6 +18,10 @@ import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
+import BackIcon from '@assets/icons/BackIcon'
+import { TimeOutIcon } from '@components/icons'
+import { CoursesAPI } from '@pages/api/courses'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -74,7 +78,7 @@ const TestModal = ({
   const [openResource, setOpenPopup] = useState(false)
   const [openLastAttempt, setOpenLastAttempt] = useState(false)
   const [remainingTime, setRemainingTime] = useState<number>()
-  let remainingTimeLastAttempt = useRef<number>(0)
+  const remainingTimeLastAttempt = useRef<number | null>(null)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
 
   const onCancel = () => {
@@ -159,16 +163,19 @@ const TestModal = ({
           ),
         ).diff(dayjs(), 'seconds')
 
-        remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+        if (remainingTimeLastAttempt.current === null) {
+          remainingTimeLastAttempt.current = calcTime >= 0 ? calcTime : 0
+        }
+
         const remainingTimeInterval = setInterval(() => {
-          setRemainingTime(
-            remainingTimeLastAttempt?.current >= 0
-              ? remainingTimeLastAttempt?.current
-              : 0,
-          )
-          remainingTimeLastAttempt.current -= 1
-          if (remainingTimeLastAttempt.current <= 0) {
-            clearInterval(remainingTimeInterval)
+          if (remainingTimeLastAttempt.current !== null) {
+            // Kiểm tra null
+            const currentTime = remainingTimeLastAttempt.current
+            setRemainingTime(currentTime >= 0 ? currentTime : 0)
+            remainingTimeLastAttempt.current -= 1
+            if (remainingTimeLastAttempt.current <= 0) {
+              clearInterval(remainingTimeInterval)
+            }
           }
         }, 1000)
 
@@ -184,6 +191,21 @@ const TestModal = ({
       fetchResult(1, 10)
     }
   }, [open])
+
+  const isFinalAttemptTimeout =
+    remainingTimeLastAttempt?.current != null &&
+    remainingTimeLastAttempt.current <= 0 &&
+    data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
+
+  useEffect(() => {
+    const handleSubmit = async () => {
+      if (isFinalAttemptTimeout) {
+        await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
+      }
+    }
+
+    handleSubmit()
+  }, [isFinalAttemptTimeout])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
@@ -289,19 +311,19 @@ const TestModal = ({
     switch (status) {
       case GRADE_STATUS.FINISHED_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-state-success">
+          <div className="pr-0.5 font-medium text-success-600">
             Finished Grading
           </div>
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-yellow-400">
+          <div className="pr-0.5 font-medium text-[#facc15]">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+          <div className="pr-0.5 font-medium text-[#6b7280]">Unsubmitted</div>
         )
     }
   }
@@ -318,10 +340,10 @@ const TestModal = ({
           ? StatusQuizAttempt.Failed
           : StatusQuizAttempt.Passed
       }
-      return '--'
+      return '_ _'
     }
     return (
-      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '--'
+      selectedResult?.ratio_score ?? data?.quiz?.attempt?.ratio_score ?? '_ _'
     )
   }
 
@@ -375,6 +397,7 @@ const TestModal = ({
     }
     return false
   }
+
   const renderOkButtonCaption = () => {
     // Case: Unlimited time attempt
     if (!data?.quiz?.is_limited) {
@@ -384,6 +407,7 @@ const TestModal = ({
     }
     // Case: Limited time attempt
     if (data?.quiz?.is_limited && !!data?.quiz?.limit_count) {
+      if (isFinalAttemptTimeout) return 'View Result'
       // & Case: Not Attempt || Continue
       if (!data?.quiz?.attempt || isSubmitted || isUnsubmitted) return 'Start'
 
@@ -397,6 +421,7 @@ const TestModal = ({
   }
 
   const handleContinueLastAttempt = async () => {
+    if (remainingTimeLastAttempt.current === null) return
     if (remainingTimeLastAttempt.current <= 0) {
       handleFinishTest()
     } else {
@@ -411,16 +436,31 @@ const TestModal = ({
   const onSubmit = async () => {
     if (
       renderOkButtonCaption() === 'Continue' &&
+      remainingTimeLastAttempt.current !== null &&
       remainingTimeLastAttempt.current <= 0 &&
       isContinue
     ) {
       // Call api finish test
       handleFinishTest()
     }
+    if (renderOkButtonCaption() === 'View Result') {
+      if (isManualGradingAndNotFinishedGrading) {
+        router.push(
+          `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+        )
+      } else {
+        router.push({
+          pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+          query: { attempt: selectedResult?.label },
+        })
+      }
+      return
+    }
     if (
       renderOkButtonCaption() === 'Retake' &&
       !isExpiredLastAttempt &&
       selectedResult?.status === 'IN_PROGRESS' &&
+      remainingTimeLastAttempt.current !== null &&
       remainingTimeLastAttempt.current > 0
     ) {
       setOpenLastAttempt(true)
@@ -440,37 +480,6 @@ const TestModal = ({
       !data?.quiz?.attempt ||
       data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
         <SappModalV3
-          title={
-            <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {!!data?.quiz?.quiz_timed &&
-                !!remainingTimeLastAttempt.current &&
-                renderShowOkButton() &&
-                renderOkButtonCaption() === 'Continue' && (
-                  <div
-                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt.current > 0 ? 'text-[#3964EA]' : 'text-state-error'}`}
-                  >
-                    <div className="m-auto">
-                      <ClockIcon
-                        color={
-                          remainingTimeLastAttempt.current > 0
-                            ? '#3964EA'
-                            : '#B90E0A'
-                        }
-                        size={24}
-                      />
-                    </div>
-                    <div className="text-[20px]">
-                      {formatTime(
-                        remainingTimeLastAttempt.current > 0
-                          ? remainingTimeLastAttempt.current
-                          : 0,
-                      )}
-                    </div>
-                  </div>
-                )}
-            </div>
-          }
           open={open}
           handleCancel={() => {
             setOpen(false)
@@ -480,65 +489,118 @@ const TestModal = ({
           showOkButton={renderShowOkButton()}
           onOk={onSubmit}
           okButtonCaption={renderOkButtonCaption()}
-          footerButtonClassName="flex justify-between item-center"
-          cancelButtonCaption={'Cancel'}
-          cancelButtonClass={'!px-0'}
-          buttonSize="medium"
-          icon={undefined}
-          header={
-            renderShowOkButton() &&
-            renderOkButtonCaption() === 'Continue' &&
-            data?.quiz?.attempt?.number_of_attempts ===
-              data?.quiz?.limit_count && (
-              <div className="mt-8 text-center text-base !font-normal text-gray-1">
-                <div>Your last attempt was unexpectedly ended.</div>
-                <div>{"Please click 'Continue' to proceed with the test."}</div>
-              </div>
-            )
+          okButtonClass="w-full rounded-lg"
+          footerButtonClassName="flex flex-col justify-center items-center gap-3"
+          cancelButtonCaption={
+            <div className="flex gap-2">
+              <BackIcon />
+              Back to My Course
+            </div>
           }
+          cancelButtonClass={'p-0 underline hover:text-primary !p-0'}
+          buttonSize="medium"
+          icon={isFinalAttemptTimeout ? <TimeOutIcon /> : undefined}
           classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
           headerClassName="!m-0"
+          header={
+            <div className="text-3xl font-bold">
+              <div>{TEST_TYPE[data?.course_section_type]}</div>
+            </div>
+          }
         >
+          <>
+            {renderShowOkButton() &&
+              (renderOkButtonCaption() === 'Continue' ||
+                renderOkButtonCaption() === 'View Result') &&
+              data?.quiz?.attempt?.number_of_attempts ===
+                data?.quiz?.limit_count && (
+                <div>
+                  <div className="text-center text-base font-normal text-gray-800">
+                    {isFinalAttemptTimeout ? (
+                      <div>
+                        The test has timed out and has been submitted
+                        automatically.
+                      </div>
+                    ) : (
+                      <>
+                        <div>Your last attempt was unexpectedly ended. </div>
+                        <div>
+                          Please click &apos;Continue&apos; to proceed with the
+                          test.
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="flex justify-center gap-4 pt-6">
+                    {((!!data?.quiz?.quiz_timed &&
+                      !!remainingTimeLastAttempt.current &&
+                      renderShowOkButton() &&
+                      renderOkButtonCaption() === 'Continue') ||
+                      renderOkButtonCaption() === 'View Result') &&
+                      remainingTimeLastAttempt.current !== null && (
+                        <>
+                          <div className="flex items-center gap-2 text-base font-semibold">
+                            <RemainingTimeIcon />
+                            Your remaining time:
+                          </div>
+                          <div
+                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt?.current > 0 ? 'text-info' : 'text-error'}`}
+                          >
+                            <div className="text-base font-bold">
+                              {formatTime(
+                                remainingTimeLastAttempt.current > 0
+                                  ? remainingTimeLastAttempt.current
+                                  : 0,
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
+                  </div>
+                </div>
+              )}
+          </>
           {!(
             renderShowOkButton() &&
-            renderOkButtonCaption() === 'Continue' &&
+            (renderOkButtonCaption() === 'Continue' ||
+              renderOkButtonCaption() === 'View Result') &&
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
-            <>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Name:</div>
-                <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
+            <div className="flex flex-col gap-6">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#DCDDDD]00">Name:</div>
+                <div className="text-[#050505 line-clamp-2 pr-0.5 font-medium">
                   {data?.name}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Pass Point:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#DCDDDD]00">Pass Point:</div>
+                <div className="text-[#050505 pr-0.5 font-medium">
                   {data?.quiz?.is_graded ? (
-                    <>{data?.quiz?.required_percent_score ?? '- -'}</>
+                    <>{data?.quiz?.required_percent_score ?? '_ _'}</>
                   ) : (
-                    <>--</>
+                    <>_ _</>
                   )}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Time Allowed:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#A1A1A1]">Time Allowed:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.quiz_timed
                     ? formatTime(data?.quiz?.quiz_timed * 60)
                     : 'Unlimited'}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">Grading Method:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#A1A1A1]">Grading Method:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {capitalizeFirstLetter(selectedResult?.grading_method) ??
                     capitalizeFirstLetter(data?.quiz?.grading_method)}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
-                <div className="text-gray-1">No of Attempts:</div>
-                <div className="pr-0.5 font-medium text-bw-1">
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#A1A1A1]">No of Attempts:</div>
+                <div className="pr-0.5 font-medium text-[#050505]">
                   {data?.quiz?.attempt?.number_of_attempts || 0}/
                   {data?.quiz?.is_limited
                     ? data?.quiz?.limit_count
@@ -546,14 +608,14 @@ const TestModal = ({
                 </div>
               </div>
               {data?.quiz && (
-                <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+                <div className="flex justify-between gap-8 text-base">
                   <div className="flex items-center gap-2 hover:text-primary">
                     <div
-                      className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}
+                      className={`forcus-group:text-primary  text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
                     >
                       Result:
                     </div>
-                    {resultList.data.length > 1 && (
+                    {resultList?.data?.length > 1 && (
                       <div className="flex gap-2">
                         <HookFormSelect
                           classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
@@ -608,7 +670,7 @@ const TestModal = ({
                     </div>
                     {isShowDetail() && (
                       <div
-                        className="ml-2 cursor-pointer text-state-info underline"
+                        className="ml-2 cursor-pointer text-[#3964EA] underline"
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
@@ -632,22 +694,21 @@ const TestModal = ({
                   </div>
                 </div>
               )}
-              <div className="flex justify-between gap-8 py-6 text-base">
-                <div className="text-gray-1">Status:</div>
+              <div className="flex justify-between gap-8 text-base">
+                <div className="text-[#A1A1A1]">Status:</div>
                 {data?.quiz?.is_graded &&
                 data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
                   getGradedStatus(data?.quiz?.attempt?.grading_status)
                 ) : (
                   <div
-                    className={`${status === StatusQuizAttempt.Passed ? 'text-state-success' : status === StatusQuizAttempt.Failed ? 'text-state-error' : 'text-bw-1'} pr-0.5 font-medium`}
+                    className={`${status === StatusQuizAttempt.Passed ? 'text-success-600' : status === StatusQuizAttempt.Failed ? 'text-error' : 'text-[#050505]'} pr-0.5 font-medium`}
                   >
                     {status}
                   </div>
                 )}
               </div>
-            </>
+            </div>
           )}
-
           <PopupCanNotRetakeTest
             open={openResource}
             setOpen={setOpenPopup}
@@ -682,33 +743,31 @@ const TestModal = ({
           open={open}
           handleContinue={handleContinueLastAttempt}
           handleRetake={handleRetakeNewAttempt}
+          time={
+            !!data?.quiz?.quiz_timed &&
+            remainingTimeLastAttempt.current !== null &&
+            (remainingTime !== undefined && remainingTime >= 0 ? (
+              <div
+                className={clsx(`text-base font-bold`, {
+                  'text-info': remainingTimeLastAttempt.current > 0,
+                  'text-error': remainingTimeLastAttempt.current <= 0,
+                })}
+              >
+                {formatTime(
+                  remainingTimeLastAttempt?.current >= 0
+                    ? remainingTimeLastAttempt.current
+                    : 0,
+                )}
+              </div>
+            ) : null)
+          }
           setOpen={() => {
             setOpen(false)
             trackGAEvent('Click Button Cancel Modal Test')
           }}
           title={
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-center">
               <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {!!data?.quiz?.quiz_timed &&
-                (remainingTime !== undefined && remainingTime >= 0 ? (
-                  <div
-                    className={clsx(`item-center flex gap-2 font-normal`, {
-                      'text-state-info': remainingTimeLastAttempt.current > 0,
-                      'text-state-error': remainingTimeLastAttempt.current <= 0,
-                    })}
-                  >
-                    <div className="m-auto">
-                      <ClockIcon size={24} />
-                    </div>
-                    <div className="text-[20px]">
-                      {formatTime(
-                        remainingTimeLastAttempt?.current >= 0
-                          ? remainingTimeLastAttempt.current
-                          : 0,
-                      )}
-                    </div>
-                  </div>
-                ) : null)}
             </div>
           }
         />

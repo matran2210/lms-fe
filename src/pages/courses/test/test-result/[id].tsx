@@ -1,12 +1,13 @@
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import Container from '@components/Container'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { ITabs } from 'src/type'
-import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 import { GRADE_STATUS } from 'src/constants'
+import { CoursesAPI } from 'src/pages/api/courses'
+import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
+import { ITabs } from 'src/type'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -66,31 +67,36 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Test Result" className="!bg-gray-3">
-      <div className="mx-auto max-w-1570">
-        <div className="px-5 xl:container md:px-10">
-          <Breadcrumb
-            tabs={breadcrumbs}
-            currentPage={'Results'}
-            className="2xl-max:py-4"
-          />
+    <div>
+      <div className="sticky top-0 z-20 grid h-20 w-full grid-cols-[auto_1fr_auto] items-center bg-white px-8 py-3 shadow-[0_4px_16px_0_rgba(44,48,0,0.05)]">
+        <div
+          className="grid h-10 w-10 cursor-pointer place-items-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
+          onClick={() => {
+            router.push(`/courses/my-course/${questions?.class_id ?? ''}`)
+          }}
+        >
+          <CloseModalIcon />
         </div>
-        <div className="px-5 xl:container md:px-10">
-          <TestResultPage
-            questions={questions}
-            type={questions?.course?.course_categories?.[0]?.name}
-            chartData={chartData}
-            subjectCode={questions?.course?.subject?.code ?? ''}
-            score={
-              questions?.quizAttempt?.grading_status ===
-              GRADE_STATUS.FINISHED_GRADING
-                ? questions?.quizAttempt?.score
-                : chartData?.multiple_choice_score
-            }
-          />
+        <div className="text-center text-xl font-bold">
+          {questions?.quizAttempt?.quiz?.name}
         </div>
+        <ButtonSecondary title="Retake" size="small" />
       </div>
-    </FullScreenLayout>
+      <div className="mx-auto mt-6 max-w-[1542px]">
+        <TestResultPage
+          questions={questions}
+          type={questions?.course?.course_categories?.[0]?.name}
+          chartData={chartData}
+          subjectCode={questions?.course?.subject?.code ?? ''}
+          score={
+            questions?.quizAttempt?.grading_status ===
+            GRADE_STATUS.FINISHED_GRADING
+              ? questions?.quizAttempt?.score
+              : chartData?.multiple_choice_score
+          }
+        />
+      </div>
+    </div>
   )
 }
 

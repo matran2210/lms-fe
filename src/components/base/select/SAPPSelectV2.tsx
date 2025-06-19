@@ -22,9 +22,11 @@ interface SAPPSelectProps {
   isSearchable?: boolean
   onSearch?: (value: string) => Promise<void> | any
   isLoading?: boolean
-  onMenuScrollToBottom?: () => void
+  onMenuScrollToBottom?: any
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
+  heightCustom?: string
+  allowClear?: boolean
 }
 
 const SAPPSelectV2 = ({
@@ -47,6 +49,8 @@ const SAPPSelectV2 = ({
   onMenuScrollToBottom,
   onChange: onSelectChange,
   onDropdownVisibleChange,
+  heightCustom = 'h-12',
+  allowClear = false,
 }: SAPPSelectProps) => {
   return (
     <>
@@ -61,7 +65,11 @@ const SAPPSelectV2 = ({
               <>
                 <Select
                   {...field}
-                  className={clsx('h-12 w-full font-normal', className)}
+                  className={clsx(
+                    'sapp-disabled w-full font-normal',
+                    heightCustom,
+                    className,
+                  )}
                   placeholder={placeholder || ''}
                   value={field?.value}
                   options={options}
@@ -75,6 +83,7 @@ const SAPPSelectV2 = ({
                   showSearch={isSearchable}
                   onSearch={onSearch}
                   loading={isLoading}
+                  allowClear={allowClear}
                   onDropdownVisibleChange={onDropdownVisibleChange}
                   onPopupScroll={(e) => {
                     const { target } = e

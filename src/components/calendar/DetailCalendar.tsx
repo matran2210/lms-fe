@@ -31,7 +31,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const getMode = () => {
     if (data?.schedule.is_holiday) {
       return (
-        <div className="max-w-fit bg-accent-warning/5 px-[19px] py-[4.5px] text-base font-normal text-accent-warning">
+        <div className="max-w-fit bg-warning/5 px-[19px] py-[4.5px] text-base font-normal text-warning">
           Online
         </div>
       )
@@ -39,19 +39,19 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     switch (data?.mode) {
       case CALENDAR_FILTER_TYPE.OFFLINE:
         return (
-          <div className="max-w-fit bg-accent-success/5 px-[19px] py-[4.5px] text-accent-success">
+          <div className="max-w-fit bg-success/5 px-[19px] py-[4.5px] text-success">
             Offline
           </div>
         )
       case CALENDAR_FILTER_TYPE.ONLINE:
         return (
-          <div className="max-w-fit bg-accent-info/5  px-[19px] py-[4.5px] text-accent-info">
+          <div className="max-w-fit bg-info/5  px-[19px] py-[4.5px] text-info">
             Online
           </div>
         )
       case CALENDAR_FILTER_TYPE.LIVE_ONLINE:
         return (
-          <div className="max-w-fit bg-purple-1/5 px-[19px] py-[4.5px] text-purple-1">
+          <div className="max-w-fit bg-liveOnline/5 px-[19px] py-[4.5px] text-liveOnline">
             Live Online
           </div>
         )
@@ -63,7 +63,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <div
           key={item.id}
-          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
+          className="max-w-[111px] bg-[#F9F9F9] px-2 py-1 text-sm text-secondary"
         >
           {item.name}
         </div>
@@ -93,7 +93,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     if (data?.schedule.is_holiday) {
       return (
         <>
-          <div className="col-span-1 text-gray-1">Lesson Date</div>
+          <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
           <div className="col-span-1">{start.format('MMM DD, YYYY')}</div>
         </>
       )
@@ -101,16 +101,16 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     if (data?.mode === LearningMode?.ONLINE) {
       return (
         <>
-          <div className="col-span-1 text-gray-1">Lesson Date</div>
+          <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
           <div className="col-span-1">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
-          <div className="col-span-1 text-gray-1">Deadline</div>
+          <div className="col-span-1 text-[#A1A1A1]">Deadline</div>
           <div className="col-span-1">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
-        <div className="col-span-1 text-gray-1">Lesson Date</div>
+        <div className="col-span-1 text-[#A1A1A1]">Lesson Date</div>
         <div className="col-span-1">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
@@ -181,8 +181,8 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       loading={loading}
     >
       <div>
-        <div className="border border-solid border-gray-2 px-7 py-4">
-          <div className="flex items-center justify-between border-b pb-4 text-base  font-semibold text-gray-14">
+        <div className="border border-solid border-[#DCDDDD] px-7 py-4">
+          <div className="flex items-center justify-between border-b pb-4 text-base  font-semibold text-secondary">
             <div>Primary Information</div>
             <div
               className="hover:cursor-pointer"
@@ -197,13 +197,13 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
           </div>
           {collapse.top && (
             <div className="grid grid-cols-2 gap-y-[21.5px] pt-[21.5px] text-sm">
-              <div className="col-span-1 text-gray-1">
+              <div className="col-span-1 text-[#A1A1A1]">
                 {data?.schedule.is_holiday ? 'Event Name' : 'Class Code'}
               </div>
               <div className="col-span-1">
                 {data?.schedule.is_holiday ? data?.name : data?.class?.code}
               </div>
-              <div className="col-span-1 text-gray-1">
+              <div className="col-span-1 text-[#A1A1A1]">
                 {data?.schedule.is_holiday ? 'Type' : 'Learning Mode'}
               </div>
               <div className="col-span-1 flex gap-x-2">
@@ -217,16 +217,16 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   ) && (
                     <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
                       <SappIcon icon={'warningIcon'} />
-                      <div className="font-medium text-accent-error">
-                        Overdue
-                      </div>
+                      <div className="font-medium text-error">Overdue</div>
                     </div>
                   )}
               </div>
               {renderTime}
               {!data?.schedule.is_holiday && (
                 <>
-                  <div className="col-span-1 text-gray-1">Key Content Of</div>
+                  <div className="col-span-1 text-[#A1A1A1]">
+                    Key Content Of
+                  </div>
                   <div className="col-span-1 flex flex-wrap gap-2">
                     {getKeyContent()}
                   </div>
@@ -234,17 +234,17 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
               )}
               {data?.is_test && isOnlyMidTermOrFinalTest && (
                 <>
-                  <div className="col-span-1 text-gray-1">Test Name</div>
+                  <div className="col-span-1 text-[#A1A1A1]">Test Name</div>
                   <div className="col-span-1 break-words">{data?.name}</div>
                 </>
               )}
               {data?.mode === LearningMode.OFFLINE && (
                 <>
-                  <div className="col-span-1 text-gray-1">Classroom</div>
+                  <div className="col-span-1 text-[#A1A1A1]">Classroom</div>
                   <div className="col-span-1 break-words">
                     {data?.room?.name}
                   </div>
-                  <div className="col-span-1 text-gray-1">
+                  <div className="col-span-1 text-[#A1A1A1]">
                     Classroom Address
                   </div>
                   <div className="col-span-1 break-words">
@@ -257,7 +257,9 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   data?.mode as LearningMode,
                 ) && (
                   <>
-                    <div className="col-span-1 text-gray-1">Link meeting</div>
+                    <div className="col-span-1 text-[#A1A1A1]">
+                      Link meeting
+                    </div>
                     <div className="col-span-1">
                       {data?.class?.link_meeting}
                     </div>
@@ -268,8 +270,8 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         </div>
         {!(data?.is_case_study || data?.schedule?.is_holiday) &&
           !isOnlyMidTermOrFinalTest && (
-            <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
-              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
+            <div className="mt-4 border border-solid border-[#DCDDDD] px-7 py-4">
+              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-secondary">
                 <div>Course Content</div>
                 <div
                   className="hover:cursor-pointer"

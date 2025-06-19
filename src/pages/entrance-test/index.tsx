@@ -14,6 +14,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -39,45 +40,44 @@ const EntranceTest = () => {
   }, [])
 
   return (
-    <Layout title="Entrance Test">
-      <div className="border-b border-default bg-white">
-        <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearch}
-            formStyle="w-full flex items-center"
-          />
+    <SappLoadingGlobal loading={isLoading}>
+      <Layout title="Entrance Test">
+        <div className="border-b border-[#DCDDDD] bg-white">
+          <div className="py-5.75 relative my-0 flex">
+            <SearchForm
+              placeholder={MY_COURSES.placeholderSearch}
+              formStyle="w-full flex items-center"
+            />
+          </div>
         </div>
-      </div>
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
-        {isLoading ? (
-          <CourseSkeleton />
-        ) : (
-          <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <h2 className="text-medium-sm font-medium text-bw-1 ">
-                  Entrance Test
-                </h2>
-                <EntranceTestFilter count={entranceTestLists?.length || 0} />
+        <div className="my-0 pt-6">
+          {isLoading ? (
+            <CourseSkeleton />
+          ) : (
+            <>
+              <div className="mb-8 flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+                <Heading
+                  greeting="Welcome to"
+                  title="Entrance Test"
+                  des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
+                />
               </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading
-                greeting="Welcome to"
-                title="Entrance Test"
-                des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
-              />
-            </div>
-            <div
-              className="my-0 max-w-xxl pt-6 xl:mx-auto"
-              data-aos={ANIMATION.DATA_AOS}
-            >
-              <EntranceTestList entranceTestLists={entranceTestLists} />
-            </div>
-          </>
-        )}
-      </div>
-    </Layout>
+              <div className="relative">
+                <div className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                  <h2 className="text-sm font-medium text-[#050505] ">
+                    Entrance Test
+                  </h2>
+                  <EntranceTestFilter count={entranceTestLists?.length || 0} />
+                </div>
+              </div>
+              <div className="my-0 pt-6" data-aos={ANIMATION.DATA_AOS}>
+                <EntranceTestList entranceTestLists={entranceTestLists} />
+              </div>
+            </>
+          )}
+        </div>
+      </Layout>
+    </SappLoadingGlobal>
   )
 }
 

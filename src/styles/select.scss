@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 rounded-none border-default shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
+    @apply h-[50px] rounded-none border-[#DCDDDD] shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -9,11 +9,11 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-base font-medium leading-4.5;
+    @apply m-0 p-0 text-base font-medium leading-[17px];
   }
 
   .select__placeholder {
-    @apply text-bw-1;
+    @apply text-[#050505];
   }
 
   .select__menu {
@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-4.5 text-bw-1;
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -37,14 +37,14 @@
   }
 
   .select__indicator {
-    @apply text-gray-1;
+    @apply text-[#A1A1A1];
   }
 
   .select__indicator-separator {
     @apply hidden;
 
     svg {
-      @apply h-7 w-7-percent;
+      @apply h-7 w-[7%];
     }
   }
 
@@ -64,22 +64,22 @@
 }
 
 .select-single .select__single-value {
-  @apply text-gray-11;
+  @apply text-base text-[#99A1B7];
 }
 
 // style css for result popup
 .select-result {
   .select__control {
-    @apply h-12.5 border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+    @apply h-[50px] border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
-    @apply px-4 pl-0;
+    @apply p-0;
   }
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-[15px] font-medium leading-4.5;
+    @apply m-0 p-0 text-[15px] font-medium leading-[17px];
   }
 
   .select__control {
@@ -87,7 +87,7 @@
   }
 
   .select__placeholder {
-    @apply p-0 text-base text-gray-400 focus:text-primary;
+    @apply p-0 text-base text-[#a1a1aa] focus:text-primary;
   }
 
   .select__menu {
@@ -95,7 +95,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-4.5 text-bw-1;
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -111,14 +111,14 @@
   }
 
   .select__indicator {
-    @apply w-[30px] text-gray-1;
+    @apply w-[30px] text-[#A1A1A1];
   }
 
   .select__indicator-separator {
     @apply hidden;
 
     svg {
-      @apply h-7 w-7-percent;
+      @apply h-7 w-[7%];
     }
   }
 
@@ -146,7 +146,7 @@
 .select-options.repeat-unit {
   .select-single {
     .select__control {
-      @apply h-11.25 rounded-[4px];
+      @apply h-[45px] rounded-[4px];
     }
   }
 }
@@ -156,6 +156,26 @@
     @apply h-10 rounded-md;
   }
   .select__placeholder {
-    @apply text-sm font-medium text-gray-11;
+    @apply text-sm font-medium text-[#99A1B7];
   }
+}
+
+.profile-subject-select {
+  .ant-select-selector {
+    @apply flex items-center justify-between gap-2 !pl-0;
+  }
+
+  .ant-select-arrow {
+    @apply ml-2;
+  }
+  .ant-select-selection-item {
+    @apply flex-1 pr-2 text-2xl font-bold;
+  }
+}
+
+.sapp-disabled.ant-select-outlined.ant-select-disabled:not(
+    .ant-select-customize-input
+  )
+  .ant-select-selector {
+  @apply cursor-not-allowed bg-gray-100 text-gray-400;
 }

@@ -1,7 +1,5 @@
-import { IRibbon } from '@assets/icons'
-import EditorReader from '@components/base/editor/EditorReader'
-import SappModalV2 from '@components/base/modal/SappModalV2'
-import { isEmpty } from 'lodash'
+import { ArrowRightV2Icon } from '@assets/icons'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { hidePopup } from 'src/redux/slice/Popup/Result-test'
 
@@ -16,37 +14,39 @@ const PopupCert = ({}: IProps) => {
   }
 
   return (
-    <SappModalV2
-      title={undefined}
-      open={selector.is_open}
-      handleCancel={onClickBackCourse}
-      onOk={onClickBackCourse}
-      // showCancelButton={true}
-      size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
-      buttonSize="extra"
-      scrollbale={false}
-      confirmOnclose={false}
-      okButtonCaption={'Back'}
-      // cancelButtonCaption="Back"
-      handleClose={onClickBackCourse}
-      showOkButton
-    >
-      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
-        <IRibbon />
-      </div>
-      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        Congratulations
-      </div>
+    <>
+      {selector.is_open && (
+        <PinnedNotificationsV2
+          bgColor="bg-primary-200"
+          borderColor="border-primary"
+        >
+          <div className="flex items-center gap-4">
+            <div></div>
+            <div className="flex flex-col">
+              <div className="text-xl font-semibold text-gray-800">
+                Congratulations on getting your certificate!
+              </div>
+              <div className="text-sm font-normal text-gray-800">
+                You completed course Performance Management Revision on
+                September 16, 2024
+              </div>
+            </div>
+          </div>
 
-      <EditorReader
-        text_editor_content={selector?.content}
-        className="content-course mt-4 px-1 text-center text-medium-sm text-gray-1"
-      />
-    </SappModalV2>
+          <div
+            className="flex cursor-pointer items-center gap-2"
+            onClick={onClickBackCourse}
+          >
+            <div className="text-base font-semibold text-gray-800 underline">
+              See Certificate
+            </div>
+            <div>
+              <ArrowRightV2Icon />
+            </div>
+          </div>
+        </PinnedNotificationsV2>
+      )}
+    </>
   )
 }
 

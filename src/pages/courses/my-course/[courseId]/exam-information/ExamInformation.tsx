@@ -34,9 +34,9 @@ const ExamInformation = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Exam Information">
-        <div className="mx-auto my-0 max-w-xxl xl-max:mx-6">
+        <div className="mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
           <>
-            <div className="main relative mx-auto my-0 max-w-xxl">
+            <div className="main relative mx-auto my-0 max-w-[1144px]">
               <div className="flex w-full items-center justify-between pb-4 pt-6">
                 <BreadcrumbFilter
                   name={data?.data?.course?.name ?? ''}
@@ -45,8 +45,8 @@ const ExamInformation = () => {
                 />
               </div>
             </div>
-            <div className="mx-auto my-0 max-w-xxl bg-white px-7.5 py-7.5">
-              <h1 className="line-clamp-1 flex items-center justify-between border-b border-gray-4 pb-7.5 text-2xl font-light text-bw-1">
+            <div className="p-7.5 mx-auto my-0 max-w-[1144px] bg-white">
+              <h1 className="pb-7.5 line-clamp-1 flex items-center justify-between border-b border-[#F9F9F9] text-2xl font-light text-[#050505]">
                 <span className="ml-1.5 font-medium">Exam Information</span>
               </h1>
               {isError && (
@@ -60,21 +60,21 @@ const ExamInformation = () => {
                 isSuccess && (
                   <>
                     <div className="mt-5 grid w-3/4 grid-cols-2">
-                      <p className="text-gray-1">Program</p>
-                      <p className="font-medium text-bw-1">
+                      <p className="text-[#A1A1A1]">Program</p>
+                      <p className="font-medium text-[#050505]">
                         {data.data?.program?.name ?? '-'}
                       </p>
                     </div>
                     <div className="mt-5 grid w-3/4 grid-cols-2">
-                      <p className="text-gray-1">Subject</p>
-                      <p className="font-medium text-bw-1">
+                      <p className="text-[#A1A1A1]">Subject</p>
+                      <p className="font-medium text-[#050505]">
                         {data.data?.subject?.name ?? '-'}
                       </p>
                     </div>
                     <div className="mt-5 grid w-3/4 grid-cols-2">
-                      <p className="text-gray-1">Scheduled Exam Date</p>
+                      <p className="text-[#A1A1A1]">Scheduled Exam Date</p>
                       <div className="flex items-center gap-3">
-                        <p className="font-medium text-bw-1">
+                        <p className="font-medium text-[#050505]">
                           {data.data?.exam?.examination?.name ?? '-'}
                         </p>
                         {data.data?.is_final_examination_subject === true ? (

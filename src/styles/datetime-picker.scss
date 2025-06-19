@@ -3,7 +3,7 @@
 }
 
 .ant-picker-outlined {
-  @apply border-default outline-none;
+  @apply border-[#DCDDDD] outline-none;
 }
 
 .ant-picker:hover {
@@ -27,7 +27,7 @@
 }
 
 .ant-picker-input > input::placeholder {
-  @apply text-base font-medium text-gray-1;
+  @apply text-base font-medium text-[#A1A1A1];
 }
 
 .ant-picker .ant-picker-range .ant-picker-input > input {
@@ -35,7 +35,7 @@
 }
 
 .ant-picker .ant-picker-input > input {
-  @apply text-sm font-medium leading-[21px] text-[var(--bs-gray-700)];
+  @apply text-sm font-medium leading-[21px] text-[var(--bs-[#374151])];
 }
 
 .ant-picker div.ant-picker-input > input::placeholder {

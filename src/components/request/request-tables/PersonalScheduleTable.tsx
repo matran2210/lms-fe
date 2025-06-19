@@ -105,14 +105,14 @@ const columnsTitles: TableColumn<IRequest>[] = [
           {data.map(({ schedule: { description } }, index) => (
             <li
               key={index}
-              className={clsx({ 'text-accent-default': !description })}
+              className={clsx({ 'text-[#99A1B7]': !description })}
             >
               {description || '_ _ _ _ _ _ _ _ _ _ _'}
             </li>
           ))}
         </ul>
       ) : (
-        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+        <div className="text-[#99A1B7]">_ _ _ _ _ _ _ _ _ _ _</div>
       ),
   },
   {
@@ -122,46 +122,41 @@ const columnsTitles: TableColumn<IRequest>[] = [
       teacher_weekly_norms?.length > 0 ? (
         <ul className="flex flex-col gap-1 text-center">
           {teacher_weekly_norms.map(({ max_shift }, index) => (
-            <li
-              key={index}
-              className={clsx({ 'text-accent-default': !max_shift })}
-            >
+            <li key={index} className={clsx({ 'text-[#99A1B7]': !max_shift })}>
               {max_shift || '_ _ _ _ _ _'}
             </li>
           ))}
         </ul>
       ) : (
-        <div className="text-accent-default">_ _ _ _ _ _ _ _ _ _ _</div>
+        <div className="text-[#99A1B7]">_ _ _ _ _ _ _ _ _ _ _</div>
       ),
   },
   {
     title: 'Approver',
     dataIndex: 'staff_assignee',
     render: (value: Partial<IUser>) => (
-      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
+      <div className="text-gray-400">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Creator',
     dataIndex: 'creator',
     render: (value: Partial<IUser>) => (
-      <div className="text-txt-secondary">{value?.detail?.full_name}</div>
+      <div className="text-gray-400">{value?.detail?.full_name}</div>
     ),
   },
   {
     title: 'Create date',
     dataIndex: 'created_at',
     render: (value: string) => (
-      <div className="text-txt-secondary">
-        {formatDate(value, DATE_TIME_FORMAT)}
-      </div>
+      <div className="text-gray-400">{formatDate(value, DATE_TIME_FORMAT)}</div>
     ),
   },
   {
     title: 'Note',
     dataIndex: 'note',
     render: (value: string) => (
-      <div className="text-txt-secondary">{value || '_ _ _ _ _ _'}</div>
+      <div className="text-gray-400">{value || '_ _ _ _ _ _'}</div>
     ),
   },
   {

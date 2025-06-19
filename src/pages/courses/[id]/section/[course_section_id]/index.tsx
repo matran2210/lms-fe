@@ -1,23 +1,22 @@
-import SappDrawer from '@components/base/SappDrawer'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import { Skeleton } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
-import 'preview-part/dist/index.css'
+
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { truncateBySpace } from '@utils/index'
-import Tooltip from 'src/common/Tooltip'
 import { useCourseContext } from '@contexts/index'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { StarCircleIcon } from '@components/icons'
 
 interface IProps {
   course_section_type: string
@@ -446,13 +445,26 @@ const CoursePartDetail = () => {
 
   return (
     <Layout title="Course Part Detail">
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="mt-10">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
-          <BreadCrumbPartDetail
-            previewPart={previewPart}
-            partDetail={partDetail}
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: previewPart?.name,
+                link: `/courses/my-course/${router.query.id}`,
+              },
+              {
+                title: partDetail?.name,
+                link: '',
+              },
+            ]}
           />
         )}
         <PreviewPartDetail
@@ -476,16 +488,14 @@ const CoursePartDetail = () => {
           handleGetItem={handleActive}
           // handleShowToast={handleShowToast}
         />
-        <SappDrawer
-          isOpen={openLearningOutcome}
+        <SappDrawerV3
+          open={openLearningOutcome}
           onClose={handleCancel}
-          title={learningOutcome?.name}
-          message="Bạn có chắc chắn muốn hủy không?"
-          widthDrawer="w-6/12"
+          title={learningOutcome?.name ?? 'Learning Outcome'}
+          handleCancel={handleCancel}
+          btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
-          confirmOnClose={false}
-          heightBody="h-[calc(100vh-186px)] pb-6"
-          sizeTextBtn="medium"
+          isShowFooter
         >
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -495,34 +505,39 @@ const CoursePartDetail = () => {
           >
             <div
               style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-6 text-bw-1"
+              className="learningOutcome-description pb-8 text-base font-normal leading-normal text-secondary"
               dangerouslySetInnerHTML={{
                 __html: learningOutcome?.description ?? '',
               }}
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            <div className="mb-2 mt-4 h-px w-full bg-[#DCDDDD]"></div>
           )}
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            className="mt-4 last:mb-4"
-            classChild="rounded"
-            widths={['70', '100', '100', '50', '100']}
-          >
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div className="mr-3 mt-6 flex" key={outcome.id}>
-                <div className="me-1 text-base font-medium leading-5 text-bw-1">
-                  LO{index + 1}:
+          <div className="mt-8 flex flex-col gap-6">
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              className="mt-3 last:mb-4"
+              classChild="rounded"
+              widths={['70', '100', '100', '50', '100']}
+            >
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div key={outcome.id} className="flex items-start gap-2">
+                  <div>
+                    <StarCircleIcon />
+                  </div>
+                  <div className="flex items-center text-base font-normal leading-normal text-gray-800">
+                    <div className="me-1">LO{index + 1}:</div>
+                    <div
+                      className="learningOutcome-description"
+                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                    />
+                  </div>
                 </div>
-                <div
-                  className="learningOutcome-description text-bw-1"
-                  dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                />
-              </div>
-            ))}
-          </TextSkeleton>
-        </SappDrawer>
+              ))}
+            </TextSkeleton>
+          </div>
+        </SappDrawerV3>
         {open && (
           <TestModal
             open={open}
@@ -535,45 +550,6 @@ const CoursePartDetail = () => {
         )}
       </div>
     </Layout>
-  )
-}
-
-const BreadCrumbPartDetail = ({
-  previewPart,
-  partDetail,
-}: {
-  previewPart: { name: string }
-  partDetail: { name: string }
-}) => {
-  const router = useRouter()
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
-        <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
-          onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
-        >
-          <div className="mx-0.5 inline-block w-full">
-            <Tooltip
-              title={previewPart?.name}
-              showTooltip={previewPart?.name?.length > 4}
-              placement={'bottomLeft'}
-            >
-              {truncateBySpace(previewPart?.name, 2, true)}
-            </Tooltip>
-          </div>
-        </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
-          <ResponsiveTextTruncate
-            placementTooltip="bottomLeft"
-            textTooltip={partDetail?.name}
-            text={partDetail?.name}
-            isShowTooltip
-          />
-        </div>
-      </div>
-    </div>
   )
 }
 

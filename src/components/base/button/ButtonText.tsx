@@ -1,5 +1,6 @@
 import React from 'react'
-import { IButtonProps } from 'src/type'
+import { IButtonBaseProps } from 'src/type'
+import BaseButton from './BaseButton'
 
 const ButtonText = ({
   title,
@@ -7,49 +8,52 @@ const ButtonText = ({
   className = '',
   link,
   size = 'small',
-  full = false,
   disabled = false,
-  type,
-  isPaddingHorizontal = true,
-  loading = false,
-}: IButtonProps) => {
+  startIcon,
+  endIcon,
+  full = false,
+  isUnderLine = true,
+  children,
+  ...props
+}: IButtonBaseProps) => {
   let textSizeClass =
-    size === 'small'
-      ? 'text-[0.875rem] leading-4'
-      : size === 'medium'
-        ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
-  let paddingVerticalClass =
-    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
-  let paddingHorizontalClass = isPaddingHorizontal
-    ? size === 'small'
-      ? 'px-7'
-      : size === 'medium'
-        ? 'px-8'
-        : 'px-9'
-    : ''
+    size === 'small' ? 'text-sm' : size === 'medium' ? 'text-base' : 'text-lg'
+
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'text-gray-2 cursor-not-allowed'
-    : 'text-bw-1 cursor-pointer'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-semibold underline`
+    ? 'cursor-not-allowed !bg-transparent !text-secondary-100 hover:!text-secondary-100'
+    : 'cursor-pointer'
 
-  if (link)
-    return (
-      <a href={link} className={componentClass} aria-disabled={disabled}>
-        {title}
-      </a>
-    )
+  let isUnderline = isUnderLine ? 'underline' : ''
+
+  let componentClass = `
+    p-0
+    text-center 
+    font-medium
+    !border-none
+    text-gray-800
+    hover:text-primary
+    ${isUnderline}
+    ${fullWidthClass} 
+    ${disabledClass} 
+    ${textSizeClass} 
+    ${className} 
+  `
 
   return (
-    <button
+    <BaseButton
       className={componentClass}
-      type={type ?? 'button'}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {title}
-    </button>
+      <div className="flex items-center gap-2">
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
+      </div>
+    </BaseButton>
   )
 }
 

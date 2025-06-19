@@ -93,7 +93,7 @@ const StyleGuide: NextPage = () => {
     <>
       <div className={styles.main}>StyleGuildePage</div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Input</h2>
+        <h2 className="mb-4 text-3xl text-error">Input</h2>
         <HookFormTextField
           label="Default"
           required
@@ -104,7 +104,7 @@ const StyleGuide: NextPage = () => {
         />
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Select</h2>
+        <h2 className="mb-4 text-3xl text-error">Select</h2>
         <HookFormSelect
           options={selectOptions}
           defaultValue={{ value: 'vanilla', label: 'Vanilla' }}
@@ -119,7 +119,7 @@ const StyleGuide: NextPage = () => {
       </div>
 
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Pagination Table</h2>
+        <h2 className="mb-4 text-3xl text-error">Pagination Table</h2>
         <table className="mb-3 table">
           <thead>
             <tr className={`text-start`}>
@@ -151,7 +151,7 @@ const StyleGuide: NextPage = () => {
           type={'table'}
         ></PaginationSAPP>
 
-        <h2 className="mt-4 text-3xl text-state-error">Pagination Row</h2>
+        <h2 className="mt-4 text-3xl text-error">Pagination Row</h2>
         <PaginationSAPP
           currentPage={currentPageRow}
           setCurrentPage={setCurrentPageRow}
@@ -162,8 +162,8 @@ const StyleGuide: NextPage = () => {
         ></PaginationSAPP>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Checkbox</h2>
-        <div className="mx-3 border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Checkbox</h2>
+        <div className="mx-3 border border-4 border-dashed border-[#050505] px-5 py-3">
           <HookFormCheckBox
             title="Right"
             required
@@ -199,8 +199,8 @@ const StyleGuide: NextPage = () => {
         </div>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Radio</h2>
-        <div className="mx-3 border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Radio</h2>
+        <div className="mx-3 border border-4 border-dashed border-[#050505] px-5 py-3">
           <HookFormRadioGroup
             name="HookFormRadioGroup1"
             control={control}
@@ -246,57 +246,33 @@ const StyleGuide: NextPage = () => {
         </div>
       </div>
       <div className="p-8">
-        <h2 className="mb-4 text-3xl text-state-error">Buttons</h2>
-        <div className="mx-3 flex flex-col items-center border border-4 border-dashed border-bw-1 px-5 py-3">
+        <h2 className="mb-4 text-3xl text-error">Buttons</h2>
+        <div className="mx-3 flex flex-col items-center border border-4 border-dashed border-[#050505] px-5 py-3">
           <div>
-            <ButtonPrimary
-              title="ButtonPrimary lager"
-              full={false}
-              size={'lager'}
-            />
+            <ButtonPrimary title="ButtonPrimary large" size={'large'} />
             <span className="px-2"></span>
-            <ButtonPrimary
-              title="ButtonPrimary medium"
-              full={false}
-              size={'medium'}
-            />
+            <ButtonPrimary title="ButtonPrimary medium" size={'medium'} />
             <span className="px-2"></span>
-            <ButtonPrimary
-              title="ButtonPrimary small"
-              full={false}
-              size={'small'}
-            />
+            <ButtonPrimary title="ButtonPrimary small" size={'small'} />
             <span className="px-2"></span>
-            <ButtonIcon>+</ButtonIcon>
+            <ButtonIcon buttonType="rounded">+</ButtonIcon>
           </div>
           <br />
           <br />
           <div>
-            <ButtonSecondary
-              title="ButtonSecondary lager"
-              full={false}
-              size={'lager'}
-            />
+            <ButtonSecondary title="ButtonSecondary large" size={'large'} />
             <span className="px-2"></span>
-            <ButtonSecondary
-              title="ButtonSecondary medium"
-              full={false}
-              size={'medium'}
-            />
+            <ButtonSecondary title="ButtonSecondary medium" size={'medium'} />
             <span className="px-2"></span>
-            <ButtonSecondary
-              title="ButtonSecondary small"
-              full={false}
-              size={'small'}
-            />
+            <ButtonSecondary title="ButtonSecondary small" />
           </div>
           <br />
           <br />
           <div>
             <ButtonOutlined
-              title="ButtonOutlined lager"
+              title="ButtonOutlined large"
               full={false}
-              size={'lager'}
+              size={'large'}
             />
             <span className="px-2"></span>
             <ButtonOutlined
@@ -314,15 +290,11 @@ const StyleGuide: NextPage = () => {
           <br />
           <br />
           <div>
-            <ButtonText title="ButtonText large" full={false} size={'lager'} />
+            <ButtonText title="ButtonText large" size={'large'} />
             <span className="px-2"></span>
-            <ButtonText
-              title="ButtonText medium"
-              full={false}
-              size={'medium'}
-            />
+            <ButtonText title="ButtonText medium" size={'medium'} />
             <span className="px-2"></span>
-            <ButtonText title="ButtonText small" full={false} size={'small'} />
+            <ButtonText title="ButtonText small" size={'small'} />
           </div>
           <br />
           <br />
@@ -331,28 +303,24 @@ const StyleGuide: NextPage = () => {
             <ButtonPrimary
               title="ButtonPrimary link medium"
               link="#"
-              full={false}
               size={'medium'}
             />
             <span className="px-2"></span>
             <ButtonSecondary
               title="ButtonSecondary link medium"
               link="#"
-              full={false}
               size={'medium'}
             />
             <span className="px-2"></span>
             <ButtonOutlined
               title="ButtonOutlined link medium"
               link="#"
-              full={false}
               size={'medium'}
             />
             <span className="px-2"></span>
             <ButtonText
               title="ButtonText link medium"
               link="#"
-              full={false}
               size={'medium'}
             />
           </div>
@@ -360,57 +328,57 @@ const StyleGuide: NextPage = () => {
           <br />
           <br />
           <ButtonPrimary
-            title="ButtonPrimary full width lager"
+            title="ButtonPrimary full width large"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonSecondary
-            title="ButtonSecondary full width lager"
+            title="ButtonSecondary full width large"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonOutlined
-            title="ButtonOutlined full width lager"
+            title="ButtonOutlined full width large"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonText
-            title="ButtonText full width lager"
+            title="ButtonText full width large"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <br />
           <br />
           <ButtonPrimary
-            title="ButtonPrimary link full width lager"
+            title="ButtonPrimary link full width large"
             link="#"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonSecondary
-            title="ButtonSecondary link full width lager"
+            title="ButtonSecondary link full width large"
             link="#"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonOutlined
-            title="ButtonOutlined link full width lager"
+            title="ButtonOutlined link full width large"
             link="#"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
           <ButtonText
-            title="ButtonText link full width lager"
+            title="ButtonText link full width large"
             link="#"
             full={true}
-            size={'lager'}
+            size={'large'}
           />
           <br />
         </div>

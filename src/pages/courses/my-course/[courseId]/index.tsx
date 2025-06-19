@@ -1,8 +1,5 @@
 import Layout from '@components/layout'
-import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -11,11 +8,18 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
+import {
+  ANIMATION,
+  CLASS_TYPE,
+  defaultStatusDetail,
+  DELAY_TIME_DISPLAY_POPUP,
+} from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import FilterCourse from '@components/mycourses/FilterCourse'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -130,6 +134,8 @@ const CourseDetail = () => {
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
+  const isTrial =
+    data?.pages?.[0]?.courseDetail?.class_type === CLASS_TYPE.TRIAL
 
   const { setCourseType } = useCourseContext()
 
@@ -153,40 +159,59 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="border-b border-e-default bg-white">
-        <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearch}
-            formStyle="w-full flex items-center"
+      <div className="mb-10 mt-2 rounded-lg bg-white px-8 py-4">
+        <SearchForm
+          placeholder={MY_COURSES.placeholderSearchV2}
+          formStyle="w-full flex items-center"
+        />
+      </div>
+      {isLoading ? (
+        <CourseSkeleton />
+      ) : (
+        <>
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: courseNameDetail,
+                link: '',
+              },
+            ]}
           />
-        </div>
-      </div>
+          <div
+            className="my-4 flex items-center justify-between"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div className="text-3xl font-semibold text-gray-800">
+              {courseNameDetail}
+            </div>
+            <FilterCourse
+              totalResult={courses?.length || 0}
+              listFilter={[
+                {
+                  name: 'user_section_learning_status',
+                  placeholder: 'Status',
+                  options: defaultStatusDetail,
+                },
+              ]}
+            />
+          </div>
+          <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
+          </div>
+        </>
+      )}
 
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
-        {isLoading ? (
-          <CourseSkeleton />
-        ) : (
-          <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <BreadcrumbFilter name={courseNameDetail} />
-                <FilterCourseDetail totalResult={courses?.length || 0} />
-              </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail} />
-            </div>
-            <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
-              <CourseParts
-                courses={courses}
-                is_passed_course={is_passed_course}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
-          </>
-        )}
-      </div>
       {isSuccess &&
         data.pages[0].courseDetail.remind_choosing_exam &&
         showSelectExamPopup && <SelectExamPopup courseData={data} />}

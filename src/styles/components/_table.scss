@@ -11,7 +11,7 @@
     .ant-table-tbody {
       .ant-table-row.ant-table-row-selected {
         > .ant-table-cell {
-          @apply bg-orange-50; // Màu nền cam nhạt cho các ô được chọn
+          @apply bg-[#fff7ed]; // Màu nền cam nhạt cho các ô được chọn
         }
       }
     }
@@ -46,14 +46,14 @@
     }
 
     .ant-select-item-option-active {
-      @apply bg-yellow-50 text-primary; // Màu nền vàng nhạt và màu chữ chính khi chọn item
+      @apply bg-[#fefce8] text-primary; // Màu nền vàng nhạt và màu chữ chính khi chọn item
     }
 
     .ant-select-item-option-selected {
       @apply bg-white text-primary !important; // Màu nền trắng và màu chữ chính khi item được chọn
 
       &:hover {
-        @apply bg-yellow-50; // Màu nền vàng nhạt khi hover lên item đã chọn
+        @apply bg-[#fefce8]; // Màu nền vàng nhạt khi hover lên item đã chọn
       }
     }
 
@@ -72,5 +72,14 @@
   // Định dạng cho phần options trong phân trang
   .ant-pagination-options {
     @apply outline-none !important; // Loại bỏ outline cho các options trong phân trang
+  }
+}
+.profile-certificate-table {
+  .ant-table-thead > tr > th {
+    @apply border-b-0 bg-white py-2 text-lg text-secondary;
+
+    &::before {
+      display: none !important;
+    }
   }
 }

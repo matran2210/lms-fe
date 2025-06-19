@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -7,6 +8,8 @@ import {
   useEffect,
   useImperativeHandle,
   useState,
+  useCallback,
+  useLayoutEffect,
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
@@ -36,16 +39,34 @@ interface IProps {
   isHideExhibit?: boolean
   exhibitText?: string
   handleGetData?: (data: DragDropAnswerItem) => void
+  correctAnswerClass?: string
+  explainClassname?: string
 }
-let dragParentIdRef: string
-const DragNDropPreivew = forwardRef(
+
+interface DragState {
+  isDragging: boolean
+  currentElement: HTMLElement | null
+  initialX: number
+  initialY: number
+  currentX: number
+  currentY: number
+  offsetX: number
+  offsetY: number
+}
+
+interface AnswerItem {
+  idAnswer: string
+  id: string
+  answer: string
+}
+
+const DragNDropPreview = forwardRef(
   (
     {
       data,
       action,
       handleSaveHighLight,
       highlighted,
-      removeHighlight,
       allowHighLight,
       defaultAnswer,
       extenalRef,
@@ -58,6 +79,8 @@ const DragNDropPreivew = forwardRef(
       isHideExhibit = true,
       exhibitText,
       handleGetData,
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -65,15 +88,58 @@ const DragNDropPreivew = forwardRef(
     const [answered, setAnswered] = useState<any>([])
     const [isDropEnd, setIsDopEnd] = useState<string>('')
     const isSelfReflection = data?.is_self_reflection
+    const [questionContent, setQuestionContent] = useState<any>()
+    const [answerContent, setAnswerContent] = useState<any>()
+    const [key, setKey] = useState(1)
+    const [dragState, setDragState] = useState<DragState>({
+      isDragging: false,
+      currentElement: null,
+      initialX: 0,
+      initialY: 0,
+      currentX: 0,
+      currentY: 0,
+      offsetX: 0,
+      offsetY: 0,
+    })
 
     useEffect(() => {
       const answerOfStudent = action ? action() : defaultAnswer
+
+      // Xử lý trường hợp defaultAnswer thiếu ID
+      const processAnswers = (answers: any[]) => {
+        if (!answers || !answers.length) return []
+
+        return answers
+          .map((answer: any) => {
+            // Tìm matching answer trong data.answers theo value
+            const matchingAnswer = data?.answers?.find(
+              (dataAnswer: any) => dataAnswer.answer === answer.value,
+            )
+
+            // Tìm default answer tương ứng với value
+            const defaultAnswerItem = defaultAnswer?.find(
+              (def: any) => def.value === answer.value,
+            )
+
+            if (!matchingAnswer || !defaultAnswerItem) return null
+
+            return {
+              ...defaultAnswerItem,
+              id: matchingAnswer.id, // từ data.answers
+            }
+          })
+          .filter(Boolean) // loại bỏ null
+      }
+
       const filledAnswered =
-        answerOfStudent && answerOfStudent?.length
-          ? answerOfStudent
-          : defaultAnswer
+        answerOfStudent && answerOfStudent.length
+          ? processAnswers(answerOfStudent)
+          : defaultAnswer && defaultAnswer.length
+            ? processAnswers(defaultAnswer)
+            : []
+
       setAnswered(filledAnswered)
-    }, [defaultAnswer])
+    }, [defaultAnswer, data?.answers])
 
     useEffect(() => {
       if (isDropEnd) {
@@ -82,168 +148,253 @@ const DragNDropPreivew = forwardRef(
       }
     }, [isDropEnd])
 
-    function allowDrop(ev: any) {
+    // Desktop drag handlers
+    function allowDrop(ev: React.DragEvent<HTMLElement>) {
       ev.preventDefault()
+    }
 
-      // Lấy tọa độ của sự kiện kéo
-      const x = ev.clientX // Tọa độ ngang
-      const y = ev.clientY // Tọa độ dọc
-
-      // Giới hạn tọa độ tối đa
-      const maxX = 535
-      const maxY = 160
-
-      // Kiểm tra tọa độ có trong giới hạn
-      if (x <= maxX && y <= maxY) {
-      } else {
-        ev.stopPropagation() // Ngăn sự kiện nếu không chấp thuận
+    function drag(ev: React.DragEvent<HTMLElement>) {
+      const target = ev.target as HTMLElement
+      if (ev.dataTransfer) {
+        ev?.dataTransfer?.setData('text', target.id)
+        ev?.dataTransfer?.setData('questionId', data?.id || '')
       }
     }
 
-    function drag(ev: any) {
-      ev?.dataTransfer?.setData('text', ev?.target?.id)
-      ev?.dataTransfer?.setData('questionId', data?.id)
-
-      if (uuid) {
-        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id
-      }
-    }
-    function drop(ev: any, dropId: string, dropItem?: boolean) {
+    function drop(ev: React.DragEvent<HTMLElement>, dropId: string) {
       ev.preventDefault()
-      setIsDopEnd(crypto.randomUUID())
+      const target = ev.target as HTMLElement
+      const dataTransfer = ev.dataTransfer
 
-      const slotElement = ev?.target
+      if (!dataTransfer) return
 
-      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
-        return
+      const textData = dataTransfer.getData('text')
+      const questionId = dataTransfer.getData('questionId')
+
+      if (questionId !== dropId) return
+
+      const draggingItem = document.getElementById(textData)
+      if (!draggingItem) return
+
+      // Nếu thả vào ô trống
+      if (
+        target.classList.contains('dropable') &&
+        target.children.length === 0
+      ) {
+        target.appendChild(draggingItem)
       }
-      dragParentIdRef = ''
-
-      const questionId = ev?.dataTransfer?.getData('questionId')
-
-      let storage
-      if (uuid) {
-        storage = slotElement
-          ?.closest(`#${uuid}`)
-          ?.querySelector(`.${storageId}`)
-      } else {
-        storage = document?.querySelector(`.${storageId}`)
+      // Nếu thả vào vùng chứa câu trả lời
+      else if (target.classList.contains('sapp-store')) {
+        target.appendChild(draggingItem)
       }
+      // Nếu thả vào ô đã có câu trả lời, hoán đổi vị trí
+      else if (target.classList.contains('drag-icon')) {
+        const dropTarget = target.parentElement
+        const dragParent = draggingItem.parentElement
 
-      if (questionId === dropId) {
-        var data = ev.dataTransfer.getData('text')
-
-        let draggingItem
-
-        if (uuid) {
-          draggingItem = slotElement
-            ?.closest(`#${uuid}`)
-            ?.querySelector(`[id="${data}"]`)
-        } else {
-          draggingItem = document?.getElementById(data)
+        if (dropTarget && dragParent) {
+          dropTarget.appendChild(draggingItem)
+          dragParent.appendChild(target)
         }
-
-        if (
-          slotElement?.children?.length === 0 &&
-          ev?.target?.classList?.contains('dropable') &&
-          !dropItem
-        ) {
-          ev?.target?.appendChild(draggingItem)
-        } else if (dropItem) {
-          const parent = ev?.target?.parentNode
-          storage?.appendChild(ev?.target)
-          parent.appendChild(draggingItem)
-          return
-        }
-      } else return
+      }
     }
 
-    const handleStorage = (event: any, id: string) => {
-      // prevent the default behavior of the drop event
-      event.preventDefault()
-      // get the id of the dragged piece from the dataTransfer object
-      const pieceId = event?.dataTransfer?.getData('text')
-      const questId = event?.dataTransfer?.getData('questionId')
+    // Touch handlers
+    useLayoutEffect(() => {
+      // Tạo một style element để set touch-action
+      const style = document.createElement('style')
+      style.textContent = `
+        .drag-icon, .dropable, .sapp-store {
+          touch-action: none !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+        }
+      `
+      document.head.appendChild(style)
 
-      // get the storage element from the DOM
-      let storage
-      if (uuid) {
-        storage = event?.target
-          ?.closest(`#${uuid}`)
-          ?.querySelector(`.${storageId}`)
-      } else {
-        storage = document?.querySelector(`.${storageId}`)
+      // Cleanup
+      return () => {
+        if (style.parentNode === document.head) {
+          document.head.removeChild(style)
+        }
       }
-      // append the piece element to the storage element
-      if (event?.target === storage && questId === id) {
-        if (uuid) {
-          storage?.appendChild(
-            event?.target
-              ?.closest(`#${uuid}`)
-              ?.querySelector(`[id="${pieceId}"]`) as any,
+    }, [])
+
+    const handleTouchStart = useCallback((e: React.TouchEvent<HTMLElement>) => {
+      const target = e.target as HTMLElement
+      if (!target.classList.contains('drag-icon')) return
+
+      const touch = e.touches[0]
+      const rect = target.getBoundingClientRect()
+
+      // Clone element for dragging
+      const clone = target.cloneNode(true) as HTMLElement
+      clone.id = `${target.id}-clone`
+      clone.style.position = 'fixed'
+      clone.style.zIndex = '1000'
+      clone.style.width = `${rect.width}px`
+      clone.style.height = `${rect.height}px`
+      clone.style.left = `${rect.left}px`
+      clone.style.top = `${rect.top}px`
+      clone.style.opacity = '0.8'
+      clone.style.pointerEvents = 'none'
+      document.body.appendChild(clone)
+
+      // Hide original element
+      target.style.opacity = '0.4'
+
+      setDragState({
+        isDragging: true,
+        currentElement: target,
+        initialX: touch.clientX,
+        initialY: touch.clientY,
+        currentX: rect.left,
+        currentY: rect.top,
+        offsetX: touch.clientX - rect.left,
+        offsetY: touch.clientY - rect.top,
+      })
+    }, [])
+
+    const handleTouchMove = useCallback(
+      (e: React.TouchEvent<HTMLElement>) => {
+        if (!dragState.isDragging || !dragState.currentElement) return
+
+        const touch = e.touches[0]
+        const clone = document.getElementById(
+          `${dragState.currentElement.id}-clone`,
+        )
+
+        if (clone) {
+          const newX = touch.clientX - dragState.offsetX
+          const newY = touch.clientY - dragState.offsetY
+          clone.style.left = `${newX}px`
+          clone.style.top = `${newY}px`
+        }
+      },
+      [dragState],
+    )
+
+    const handleTouchEnd = useCallback(
+      (e: React.TouchEvent<HTMLElement>, dropId: string) => {
+        if (!dragState.isDragging || !dragState.currentElement) return
+
+        const clone = document.getElementById(
+          `${dragState.currentElement.id}-clone`,
+        )
+        if (!clone) return
+
+        const cloneRect = clone.getBoundingClientRect()
+        const dropTargets = document.querySelectorAll('.dropable, .sapp-store')
+        let validDrop = false
+
+        dropTargets.forEach((target) => {
+          const targetRect = target.getBoundingClientRect()
+          const dropTarget = target as HTMLElement
+
+          const isOverlapping = !(
+            cloneRect.right < targetRect.left ||
+            cloneRect.left > targetRect.right ||
+            cloneRect.bottom < targetRect.top ||
+            cloneRect.top > targetRect.bottom
           )
-        } else {
-          storage?.appendChild(document?.getElementById(pieceId) as any)
+
+          if (isOverlapping && dragState.currentElement) {
+            // Nếu thả vào ô trống
+            if (
+              dropTarget.classList.contains('dropable') &&
+              dropTarget.children.length === 0
+            ) {
+              dropTarget.appendChild(dragState.currentElement)
+              validDrop = true
+            }
+            // Nếu thả vào vùng chứa đáp án
+            else if (dropTarget.classList.contains('sapp-store')) {
+              dropTarget.appendChild(dragState.currentElement)
+              validDrop = true
+            }
+            // Nếu thả vào ô đã có đáp án
+            else {
+              const existingAnswer = dropTarget.querySelector('.drag-icon')
+              const dragParent = dragState.currentElement.parentElement
+
+              if (existingAnswer && dragParent) {
+                dropTarget.appendChild(dragState.currentElement)
+                dragParent.appendChild(existingAnswer)
+                validDrop = true
+              }
+            }
+          }
+        })
+
+        // Restore original element visibility
+        dragState.currentElement.style.opacity = ''
+
+        // Remove clone
+        if (clone.parentNode) {
+          clone.parentNode.removeChild(clone)
         }
-      } else return
-    }
+
+        // Reset state
+        setDragState({
+          isDragging: false,
+          currentElement: null,
+          initialX: 0,
+          initialY: 0,
+          currentX: 0,
+          currentY: 0,
+          offsetX: 0,
+          offsetY: 0,
+        })
+
+        if (validDrop) {
+          setIsDopEnd(Date.now().toString())
+        }
+      },
+      [dragState],
+    )
 
     const str = data?.question_content
     const parser = new DOMParser()
 
-    const [questionContent, setQuestionContent] = useState<any>()
-    const [answerContent, setAnswerContent] = useState<any>()
-    const [key, setKey] = useState(1)
     useImperativeHandle(ref, () => ({
       handleReset() {
-        setKey((prev) => {
-          const newKey = prev + 1
-          return newKey
-        })
+        setKey((prev) => prev + 1)
       },
     }))
 
     useEffect(() => {
       const doc = parser?.parseFromString(str, 'text/html')
       const doc2 = parser?.parseFromString(str, 'text/html')
-      // if (refContent?.current) {
       const elements = doc?.querySelectorAll('.question-content-tag')
       const elementsCorrects = doc2?.querySelectorAll('.question-content-tag')
+
       if (corrects) {
         elementsCorrects.forEach((element: any, index: number) => {
-          element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer corrects ">
-        <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
-        </span>`
+          element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer corrects">
+            <span id="${corrects[index].id}" class="flex justify-center w-full">${corrects[index].answer}</span>
+          </span>`
         })
         elements.forEach((element: any, index: number) => {
           if (defaultAnswer?.length > 0) {
             if (defaultAnswer?.[index]?.value !== '') {
-              element.outerHTML = `<span  id="${element?.id}" class="sapp-input-dragNDrop-answer  ${
+              element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer ${
                 defaultAnswer?.[index]?.idAnswer === corrects?.[index]?.id ||
-                isSelfReflection === true
+                isSelfReflection
                   ? 'corrects'
                   : 'wrongs'
               }">
-            <span id="${
-              defaultAnswer?.[index]?.idAnswer
-            }" class="flex justify-center w-full min-w-[100px]">${
-              defaultAnswer?.[index]?.value
-            }</span>
-            </span>`
+                <span id="${defaultAnswer?.[index]?.idAnswer}" class="flex justify-center w-full">${defaultAnswer?.[index]?.value}</span>
+              </span>`
             } else {
-              element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer min-w-[100px] ${
-                isSelfReflection === true ? 'corrects' : 'wrongs'
-              }">
-              <span class="sapp-input-dragNDrop-empty"></span>
-            </span>`
-              //   })
+              element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer ${isSelfReflection ? 'corrects' : 'wrongs'}">
+                <span class="sapp-input-dragNDrop-empty"></span>
+              </span>`
             }
           } else {
-            element.outerHTML = `<span id="${element?.id}" class= "sapp-input-dragNDrop-answer ${
-              isSelfReflection === true ? 'corrects' : 'wrongs'
-            }">
-            <span class="sapp-input-dragNDrop-empty"></span>
-          </span>`
+            element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop-answer ${isSelfReflection ? 'corrects' : 'wrongs'}">
+              <span class="sapp-input-dragNDrop-empty"></span>
+            </span>`
           }
         })
         setAnswerContent(doc2)
@@ -255,8 +406,8 @@ const DragNDropPreivew = forwardRef(
               element.outerHTML = `<span id="${element?.id}" class="sapp-input-dragNDrop" indexBox="${
                 index + 1
               }">
-                <span class="answer-box" id="${
-                  defaultAnswer?.[index]?.idAnswer
+                <span class="answer-box drag-icon" id="${
+                  defaultAnswer?.[index]?.id
                 }">${defaultAnswer?.[index]?.value}</span>
                </span>
               `
@@ -273,61 +424,83 @@ const DragNDropPreivew = forwardRef(
         })
         setQuestionContent(doc)
       }
-      // }
-    }, [defaultAnswer, corrects, str])
+    }, [defaultAnswer, corrects, str, isSelfReflection])
+
+    useEffect(() => {
+      // Add touch event options to document
+      const options = { passive: false }
+
+      // Add touch-action CSS
+      const style = document.createElement('style')
+      style.textContent = `
+        .sapp-input-dragNDrop, .sapp-store, .answer-box {
+          touch-action: none !important;
+        }
+      `
+      document.head.appendChild(style)
+
+      // Add event listeners with options
+      const preventTouch = (e: TouchEvent) => {
+        if (dragState.isDragging) {
+          e.preventDefault()
+        }
+      }
+
+      document.addEventListener('touchmove', preventTouch, options)
+      document.addEventListener('touchstart', preventTouch, options)
+
+      return () => {
+        document.removeEventListener('touchmove', preventTouch)
+        document.removeEventListener('touchstart', preventTouch)
+        document.head.removeChild(style)
+      }
+    }, [dragState.isDragging])
 
     const options = {
-      replace(domNode: any) {
-        if (
-          domNode?.attribs &&
-          domNode?.attribs?.class === 'sapp-input-dragNDrop'
-        ) {
-          if (domNode.children.length > 1) {
-            const children = domNode?.children?.[1]
-            return (
-              <span
-                id={domNode?.attribs?.id}
-                className="sapp-input-dragNDrop dropable"
-                onDrop={() => drop(event, data?.id)}
-                onDragOver={allowDrop}
-                {...{ indexBox: domNode?.attribs?.indexbox }}
-              >
+      replace: (domNode: any) => {
+        if (domNode?.attribs?.class === 'sapp-input-dragNDrop') {
+          const answerElement = domNode.children?.find((child: any) =>
+            child.attribs?.class?.includes('answer-box'),
+          )
+
+          return (
+            <span
+              id={domNode?.attribs?.id}
+              className="sapp-input-dragNDrop dropable"
+              onDrop={(e) => drop(e, data?.id)}
+              onDragOver={allowDrop}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={(e) => handleTouchEnd(e, data?.id)}
+              {...{ indexBox: domNode?.attribs?.indexbox }}
+            >
+              {answerElement && (
                 <span
-                  id={children?.attribs?.id}
-                  className={children?.attribs?.class}
-                  onDrop={() => drop(event, data?.id, true)}
-                  onDragOver={allowDrop}
+                  id={answerElement.attribs?.id}
+                  className="answer-box drag-icon"
                   draggable="true"
                   onDragStart={drag}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={(e) => handleTouchEnd(e, data?.id)}
                 >
-                  {children?.children?.[0]?.data}
+                  {answerElement.children?.[0]?.data}
                 </span>
-              </span>
-            )
-          } else {
-            return (
-              <span
-                id={domNode?.attribs?.id}
-                className="sapp-input-dragNDrop dropable"
-                onDrop={() => drop(event, data?.id)}
-                onDragOver={allowDrop}
-                {...{ indexBox: domNode?.attribs?.indexbox }}
-                style={{
-                  height: '60px',
-                }}
-              ></span>
-            )
-          }
+              )}
+            </span>
+          )
         }
-        if (domNode?.attribs && domNode?.attribs?.class === 'answer-box') {
+        if (domNode?.attribs?.class === 'answer-box drag-icon') {
           return (
             <span
               id={domNode?.attribs?.id}
               className={domNode?.attribs?.class}
-              onDrop={() => drop(event, data?.id)}
-              onDragOver={allowDrop}
               draggable="true"
-              {...{ indexBox: domNode?.attribs?.indexbox }}
+              onDragStart={drag}
+              onTouchStart={handleTouchStart}
+              onTouchMove={(e) => {
+                handleTouchMove(e)
+              }}
             >
               {domNode?.data}
             </span>
@@ -335,157 +508,185 @@ const DragNDropPreivew = forwardRef(
         }
       },
     }
+
+    // Thêm useLayoutEffect để đăng ký event listeners sớm hơn
+    useLayoutEffect(() => {
+      const addNonPassiveEventListener = (element: HTMLElement) => {
+        element.addEventListener('touchstart', (e) => e.preventDefault(), {
+          passive: false,
+        })
+        element.addEventListener('touchmove', (e) => e.preventDefault(), {
+          passive: false,
+        })
+        element.addEventListener('touchend', (e) => e.preventDefault(), {
+          passive: false,
+        })
+      }
+
+      // Thêm listeners cho tất cả các phần tử drag-drop
+      const dragElements = document.querySelectorAll(
+        '.drag-icon, .dropable, .sapp-store',
+      )
+      dragElements.forEach((el) =>
+        addNonPassiveEventListener(el as HTMLElement),
+      )
+
+      return () => {
+        dragElements.forEach((el) => {
+          el.removeEventListener('touchstart', (e) => e.preventDefault())
+          el.removeEventListener('touchmove', (e) => e.preventDefault())
+          el.removeEventListener('touchend', (e) => e.preventDefault())
+        })
+      }
+    }, [])
+
     return (
-      <div
-        className="body-modal-white -mt-2"
-        key={key}
-        ref={extenalRef || null}
-        id={`${uuid}`}
-      >
-        {questionContent && (
-          <>
-            <div
-              id="hightlight_area"
-              onMouseUp={(e: any) => {
-                if (
-                  e?.target?.tagName?.charAt(0) !== 'm' &&
-                  e?.target?.firstChild?.tagName !== 'math'
-                ) {
-                  if (e) {
+      <>
+        <div className="body-modal-white -mt-2" key={key} id={`${uuid}`}>
+          {questionContent && (
+            <>
+              <div
+                id="hightlight_area"
+                onMouseUp={(e: any) => {
+                  if (
+                    e?.target?.tagName?.charAt(0) !== 'm' &&
+                    e?.target?.firstChild?.tagName !== 'math'
+                  ) {
                     if (allowHighLight) {
                       runHighlight(
                         handleSaveHighLight,
-                        allowHighLight || false,
+                        allowHighLight,
                         'hightlight_area',
                       )
                     } else if (allowUnHighLight) {
                       runHighlight(
                         handleSaveHighLight,
-                        allowUnHighLight || false,
+                        allowUnHighLight,
                         'hightlight_area',
                         { color: 'white' },
                       )
                     }
                   }
-                }
-              }}
-            >
-              {data?.question_topic?.exhibits &&
-                !isHideExhibit &&
-                data?.question_topic?.exhibits?.length > 0 && (
-                  <>
-                    {data?.question_topic?.description && (
-                      <div className="my-6 border border-b-gray-2"></div>
-                    )}
-                    <div className="mb-4 flex items-center">
-                      <div className="font-semibold">
-                        {exhibitText ? exhibitText + 's' : 'Exhibits'} (
-                        {data?.question_topic?.exhibits?.length || 0})
+                }}
+              >
+                {data?.question_topic?.exhibits &&
+                  !isHideExhibit &&
+                  data?.question_topic?.exhibits?.length > 0 && (
+                    <>
+                      {data?.question_topic?.description && (
+                        <div className="my-6 border border-b-[#DCDDDD]" />
+                      )}
+                      <div className="mb-4 flex items-center">
+                        <div className="font-semibold">
+                          {exhibitText ? exhibitText + 's' : 'Exhibits'} (
+                          {data?.question_topic?.exhibits?.length || 0})
+                        </div>
+                        <div className="ml-4">
+                          <span className="text-error">* </span>
+                          <span className="text-[#A1A1A1]">Click to view</span>
+                        </div>
                       </div>
-                      <div className="ml-4">
-                        <span className="text-state-error">* </span>
-                        <span className="text-gray-1">Click to view</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {data?.question_topic?.exhibits?.map(
-                        (e: any, i: number) => {
-                          return (
+                      <div className="flex flex-col gap-2">
+                        {data?.question_topic?.exhibits?.map(
+                          (e: any, i: number) => (
                             <div
                               className="cursor-pointer hover:text-primary"
                               key={e.id}
                               onClick={(event) => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    {
-                                      type: 'exhibits',
-                                      description: e?.description,
-                                      name: e?.name,
-                                      index: i,
-                                      files: e?.files,
-                                    },
-                                    null,
-                                    null,
-                                    event,
-                                  )
+                                setOpenFile?.(
+                                  {
+                                    type: 'exhibits',
+                                    description: e?.description,
+                                    name: e?.name,
+                                    index: i,
+                                    files: e?.files,
+                                  },
+                                  null,
+                                  null,
+                                  event,
+                                )
                               }}
                             >
                               {exhibitText || 'Exhibit'} {i + 1}: {e?.name}
                             </div>
-                          )
-                        },
-                      )}
-                    </div>
-                    <div className="my-6 border border-b-gray-2"></div>
-                  </>
-                )}
-              <EditorReader
-                className="questions"
-                text_editor_content={
-                  questionContent?.documentElement?.querySelector('body')
-                    ?.innerHTML || ''
-                }
-                options={options}
-                highlighted={highlighted}
-              />
-            </div>
-            {!corrects && (
-              <div className="answer-area">
-                <div
-                  className={`sapp-store flex min-h-large w-full flex-wrap gap-5 border p-5 ${storageId}`}
-                  onDrop={(ev) => handleStorage(ev, data?.id)}
-                  onDragOver={allowDrop}
-                  id="storage"
-                >
-                  {data?.answers?.map((e: any) => {
-                    if (answered) {
-                      for (let as of answered) {
-                        if (as?.idAnswer === e?.id) {
-                          return null
+                          ),
+                        )}
+                      </div>
+                      <div className="my-6 border border-b-[#DCDDDD]" />
+                    </>
+                  )}
+                <EditorReader
+                  className="questions"
+                  text_editor_content={
+                    questionContent?.documentElement?.querySelector('body')
+                      ?.innerHTML || ''
+                  }
+                  options={options}
+                  highlighted={highlighted}
+                />
+              </div>
+              {!corrects && (
+                <div className="answer-area">
+                  <div className="text-base font-medium">Drag your answer</div>
+                  <div
+                    className={`sapp-store flex flex-wrap gap-5 ${storageId}`}
+                    id="storage"
+                    onDrop={(e) => drop(e, data?.id)}
+                    onDragOver={allowDrop}
+                    onTouchEnd={(e) => handleTouchEnd(e, data?.id)}
+                  >
+                    {data?.answers?.map((e: any) => {
+                      if (answered) {
+                        for (let as of answered) {
+                          if (as?.idAnswer === e?.id || as?.id === e?.id) {
+                            return null
+                          }
                         }
                       }
-                    }
-                    return (
-                      <span
-                        className={`answer-box`}
-                        key={e?.id}
-                        id={e?.id}
-                        draggable="true"
-                        onDragStart={drag}
-                        onDrop={() => drop(event, data?.id, true)}
-                      >
-                        {e?.answer}
-                      </span>
-                    )
-                  })}
+                      return (
+                        <span
+                          key={e?.id}
+                          className="answer-box drag-icon"
+                          id={e?.id}
+                          draggable="true"
+                          onDragStart={drag}
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={(e) => {
+                            handleTouchMove(e)
+                          }}
+                          onTouchEnd={(ev) => handleTouchEnd(ev, data?.id)}
+                        >
+                          {e?.answer}
+                        </span>
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
-          </>
-        )}
-        {answerContent && (
-          <>
-            <div className="pt-[31px] text-base font-semibold">
-              Correct Answer
+              )}
+            </>
+          )}
+          {answerContent && (
+            <div className={clsx('pt-7.625', correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
+              <EditorReader
+                className="questions mt-2"
+                text_editor_content={
+                  answerContent?.documentElement?.querySelector('body')
+                    ?.innerHTML || ''
+                }
+              />
             </div>
-            <EditorReader
-              className="questions mt-2"
-              text_editor_content={
-                answerContent?.documentElement?.querySelector('body')
-                  ?.innerHTML || ''
-              }
-            />
-          </>
-        )}
-        {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
-        )}
-      </div>
+          )}
+          {solution && (
+            <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          )}
+        </div>
+      </>
     )
   },
 )
-DragNDropPreivew.displayName = 'DragNDropPreivew'
-export default DragNDropPreivew
+DragNDropPreview.displayName = 'DragNDropPreview'
+export default DragNDropPreview

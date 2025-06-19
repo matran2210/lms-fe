@@ -113,15 +113,9 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
 
   return words.join(' ')
 }
-
-export const convertHumanReadableToSnakeCase = (str: string) => {
-  const words = str
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  return words.join('_')
+export function convertHumanReadableToSnakeCase(text: string) {
+  return text.trim().toLowerCase().split(/\s+/).join('_')
 }
-
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
@@ -468,4 +462,15 @@ export function convertSlugToTitle(slug: string): string {
     .split(' ') // tách từ
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
     .join(' ') // ghép lại
+}
+
+export function convertMinutesToHourFormat(minutes: number): string {
+  const hrs = Math.floor(minutes / 60)
+  const mins = minutes % 60
+
+  const hourStr = hrs > 0 ? `${hrs} hour${hrs > 1 ? 's' : ''}` : ''
+  const minStr = mins > 0 ? `${mins} min${mins > 1 ? 's' : ''}` : ''
+
+  if (hourStr && minStr) return `${hourStr} ${minStr}`
+  return hourStr || minStr || '0 min'
 }

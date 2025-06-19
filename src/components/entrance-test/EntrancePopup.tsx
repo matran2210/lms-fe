@@ -70,10 +70,10 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         buttonSize="medium"
         title={undefined}
       >
-        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-bw-1">
+        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
           Test Information
         </h2>
-        <div className="text-sm text-gray-1">Let’s start!</div>
+        <div className="text-sm text-[#A1A1A1]">Let’s start!</div>
         <EntrancePopupContent
           name={count === 1 ? entranceTest?.name : data?.name || ''}
           timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}

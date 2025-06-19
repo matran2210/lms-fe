@@ -221,7 +221,7 @@ export class CoursesAPI {
     })
   }
 
-  static submitAllQuestion(id: string, data: any): Promise<any> {
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
     //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
@@ -346,7 +346,7 @@ export class CoursesAPI {
     return fetcher(
       `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
-      }&type=${type}&parentId=${parentId ?? ''}${
+      }&type=${type}${parentId ? `&parentId=${parentId}` : ''}${
         classId ? `&classId=${classId}` : ''
       }`,
       { params: params },

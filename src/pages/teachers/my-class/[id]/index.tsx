@@ -69,7 +69,7 @@ const getStandardSchedule = (data: IMyClass) => {
         {data?.class_standard_schedules?.map(
           (item: ClassStandardScheduleItem) => (
             <div
-              className="rounded-md bg-gray-2 px-2 py-1"
+              className="rounded-md bg-[#dcdddd] px-2 py-1"
               key={item.day_of_week}
             >
               {item.day_of_week !== null
@@ -157,7 +157,7 @@ const ClassDetail = () => {
     <LayoutTeacher
       title="Class Detail"
       breadcrumbs={breadcrumbs}
-      className="bg-gray-10 p-0"
+      className="bg-[#F2F4F7] p-0"
     >
       <div className="mb-6 h-fit w-full rounded-xl bg-white px-8 pt-8">
         <ClassCard

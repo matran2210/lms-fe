@@ -1,15 +1,12 @@
 import { DeleteIcon, EditIcon, ViewIcon } from '@assets/icons'
-import SappDrawer from '@components/base/SappDrawer'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
-import HookFormSelect from '@components/base/select/HookFormSelect'
+
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { ISection } from 'src/type/courses'
-import { DEFAULT_SELECT_SECTION } from 'src/constants'
+import { SectionDropdownFormValues, SectionField } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
@@ -21,6 +18,9 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Link from 'next/link'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { useForm } from 'react-hook-form'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -28,7 +28,6 @@ const LearningNotesList = () => {
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
   )
-
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
@@ -40,18 +39,24 @@ const LearningNotesList = () => {
   const queryId = router.query.id
   const activityId = router.query.activityId
   const courseSectionId = router.query.course_section_id
-  const [selectedSection, setSelectedSection] = useState<any>(null)
-  const [selectedSubsection, setSelectedSubsection] = useState<any>(null)
-  const [selectedUnit, setSelectedUnit] = useState<any>(null)
-  const [selectedActivity, setSelectedActivity] = useState<any>(null)
-  const [sections, setSections] = useState<ISection[]>([])
-  const [subSections, setSubsections] = useState<ISection[]>([])
-  const [unit, setUnit] = useState<ISection[]>([])
-  const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
+  const [isPageStateVariables, setIsPageStateVariables] =
+    useState<boolean>(false)
+  const { setValue } = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
   const toggleExpand = (noteId: string) => {
     setExpandedNotes((prevExpanded: any) => {
       if (prevExpanded?.includes(noteId)) {
@@ -64,48 +69,9 @@ const LearningNotesList = () => {
     })
   }
 
-  // Set default change section all
-  useEffect(() => {
-    if (selectedSection?.value === '') {
-      setSelectedSubsection(null)
-      setSelectedUnit(null)
-      setSelectedActivity(null)
-    }
-  }, [selectedSection?.value])
-
-  //Change dropdown
-  useEffect(() => {
-    if ((courseId || queryId) && notesListStatus) {
-      getCourseSections(DEFAULT_PAGESIZE)
-    }
-  }, [notesListStatus])
-
-  useEffect(() => {
-    if (selectedSection?.value !== '' && notesListStatus) {
-      getCourseSubsections(DEFAULT_PAGESIZE)
-    }
-  }, [selectedSection])
-
-  useEffect(() => {
-    if (notesListStatus) {
-      getCourseUnit()
-    }
-  }, [selectedSubsection])
-
-  useEffect(() => {
-    if (notesListStatus) {
-      getCourseActivity(DEFAULT_PAGESIZE)
-    }
-  }, [selectedUnit])
-
   const params = cleanParamsAPI({
     class_id: courseId || queryId,
-    course_section_id:
-      selectedActivity?.value ||
-      selectedUnit?.value ||
-      selectedSubsection?.value ||
-      selectedSection?.value ||
-      '',
+    course_section_id: paramsCourseSectionId,
   })
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
@@ -124,19 +90,25 @@ const LearningNotesList = () => {
           const course_section_path = res?.data?.notes?.[0]?.course_section_path
 
           if (res && course_section_path?.length > 0) {
-            setSelectedSection(
-              defaultValueActivity(course_section_path, 'PART'),
+            setValue(
+              'section',
+              defaultValueActivity(course_section_path, 'PART')?.value,
             )
-            setSelectedSubsection(
-              defaultValueActivity(course_section_path, 'CHAPTER'),
+            setValue(
+              'subsection',
+              defaultValueActivity(course_section_path, 'CHAPTER')?.value,
             )
             // Hiệu ứng fill data vào ô select
             setTimeout(() => {
-              setSelectedUnit(defaultValueActivity(course_section_path, 'UNIT'))
+              setValue(
+                'unit',
+                defaultValueActivity(course_section_path, 'UNIT')?.value,
+              )
             }, 500)
             setTimeout(() => {
-              setSelectedActivity(
-                defaultValueActivity(course_section_path, 'ACTIVITY'),
+              setValue(
+                'activity',
+                defaultValueActivity(course_section_path, 'ACTIVITY')?.value,
               )
               setFirstLoadActity(true)
             }, 1000)
@@ -168,14 +140,7 @@ const LearningNotesList = () => {
           }, 500)
         })
     }
-  }, [
-    notesListStatus,
-    selectedSection?.value,
-    selectedSubsection?.value,
-    selectedUnit?.value,
-    selectedActivity?.value,
-    firstLoadActity,
-  ])
+  }, [notesListStatus, paramsCourseSectionId, firstLoadActity])
 
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
@@ -198,53 +163,11 @@ const LearningNotesList = () => {
     return () => containerDiv?.removeEventListener('scroll', handleScroll)
   }, [pageIndex])
 
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSections,
-    setPage: setPageSection,
-  } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE)
-
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSubsections,
-    setPage: setPageSubsection,
-  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToUnit,
-    setPage: setPageUnit,
-  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToActivity,
-    setPage: setPageActivity,
-  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
-
-  const handleDropdownChange = (
-    selectedOption: any,
-    setFunction: any,
-    resetFunction: any,
-  ) => {
-    setFunction(selectedOption)
-
-    // Reset the downstream dropdowns if a reset function is provided
-    if (resetFunction) {
-      resetFunction(null)
-    }
-  }
-
   const onClose = () => {
     document.body.style.overflow = 'auto'
     dispatch(resetNotesList())
-    setSelectedSubsection(null)
-    setSelectedUnit(null)
-    setSelectedActivity(null)
-    setSelectedSection(null)
-    const pageStateVariables = [
-      setPageSection,
-      setPageSubsection,
-      setPageUnit,
-      setPageActivity,
-    ]
-    pageStateVariables.forEach((setPageVariable) => {
-      setPageVariable(DEFAULT_PAGESIZE * 2)
-    })
+    resetFormFields(['section', 'subsection', 'unit', 'activity'])
+    setIsPageStateVariables(true)
     setFirstLoadActity(false)
   }
 
@@ -252,68 +175,6 @@ const LearningNotesList = () => {
     const value = course_section_path.find((item: any) => item?.type === type)
     const responce = { value: value.id, label: value.name }
     return responce
-  }
-
-  async function getCourseSections(page_size: number) {
-    try {
-      if (!sections.length && notesListStatus) {
-        const res = await CoursesAPI.getCourseSectionList(
-          courseId || queryId,
-          page_size || DEFAULT_PAGESIZE,
-        )
-        setSections([...res?.data?.sections].reverse())
-        setSelectedSubsection(null)
-        setSelectedUnit(null)
-        setSelectedActivity(null)
-      }
-    } catch (error) {}
-  }
-
-  async function getCourseSubsections(page_size: number) {
-    try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'CHAPTER',
-        selectedSection.value,
-        class_id as any,
-      )
-      setSubsections([...res?.data?.sections].reverse())
-      setSelectedUnit(null)
-      setSelectedActivity(null)
-    } catch (error) {}
-  }
-
-  async function getCourseUnit() {
-    try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        DEFAULT_PAGESIZE,
-        'UNIT',
-        selectedSubsection.value,
-        class_id as any,
-      )
-      setUnit([...res?.data?.sections].reverse())
-      setSelectedActivity(null)
-    } catch (error) {
-      setSelectedUnit(null)
-      setSelectedActivity(null)
-    }
-  }
-
-  async function getCourseActivity(page_size: number) {
-    try {
-      const class_id = courseId || queryId
-      const res = await CoursesAPI.getCourseSubsectionList(
-        page_size,
-        'ACTIVITY',
-        selectedUnit.value,
-        class_id as any,
-      )
-      setActivity([...res?.data?.sections].reverse())
-    } catch (error) {
-      setSelectedActivity(null)
-    }
   }
 
   const fetchData = async (params?: Object) => {
@@ -350,106 +211,17 @@ const LearningNotesList = () => {
   }
 
   return (
-    <SappDrawer
-      isOpen={notesListStatus}
-      message="Bạn có chắc chán muốn hủy không?"
-      onClose={onClose}
-      title="Notes List"
-      footer={false}
-      drawerSubId={'-notes-list'}
-      confirmOnClose={false}
-      heightBody={'h-[calc(100vh-112px)]'}
+    <SappDrawerV3
+      open={notesListStatus}
+      handleCancel={onClose}
+      title="Note List"
+      isShowBtnClose
     >
-      <div className="mt-2 grid grid-cols-2 gap-4 md:gap-6 xl:grid-cols-4">
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Section"
-          isClearable={true}
-          value={selectedSection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSection,
-              setSelectedSubsection,
-            )
-          }
-          options={
-            sections &&
-            DEFAULT_SELECT_SECTION.concat(
-              sections?.map((section) => ({
-                label: section.name,
-                value: section.id,
-              })),
-            )
-          }
-          onMenuScrollToBottom={handleMenuScrollToSections}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Subsection"
-          isClearable={true}
-          value={selectedSubsection}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedSubsection,
-              setSelectedUnit,
-            )
-          }
-          options={
-            selectedSection
-              ? subSections?.map((section) => ({
-                  label: section.name,
-                  value: section.id,
-                }))
-              : []
-          }
-          isDisabled={selectedSection?.value === ''}
-          onMenuScrollToBottom={handleMenuScrollToSubsections}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Unit"
-          isClearable={true}
-          value={selectedUnit}
-          onChange={(selectedOption) =>
-            handleDropdownChange(
-              selectedOption,
-              setSelectedUnit,
-              setSelectedActivity,
-            )
-          }
-          options={
-            selectedSubsection
-              ? unit?.map((section) => ({
-                  label: section.name,
-                  value: section.id,
-                }))
-              : []
-          }
-          isDisabled={selectedSection?.value === ''}
-          onMenuScrollToBottom={handleMenuScrollToUnit}
-        />
-        <HookFormSelect
-          classParent="w-full md:max-w-full"
-          placeholder="Activity"
-          isClearable={true}
-          value={selectedActivity}
-          onChange={(selectedOption) =>
-            handleDropdownChange(selectedOption, setSelectedActivity, null)
-          }
-          options={
-            selectedUnit
-              ? activity?.map((section) => ({
-                  label: section.name,
-                  value: section.id,
-                }))
-              : []
-          }
-          isDisabled={selectedSection?.value === ''}
-          onMenuScrollToBottom={handleMenuScrollToActivity}
-        />
-      </div>
+      <FilterCourseSection
+        setParams={setCourseSectionId}
+        heightCustom="h-10"
+        isPageStateVariables={isPageStateVariables}
+      />
 
       <div>
         {!isEmpty(notesListData?.notes) ? (
@@ -458,7 +230,7 @@ const LearningNotesList = () => {
               const isExpanded = expandedNotes.includes(note?.id)
               return (
                 <div
-                  className="mt-6 border border-default p-6 last:mb-6"
+                  className="mt-6 border border-[#DCDDDD] p-6 last:mb-6"
                   key={note?.id}
                 >
                   <div
@@ -469,7 +241,7 @@ const LearningNotesList = () => {
                       paths={[...note?.course_section_path].reverse()}
                     />
                   </div>
-                  <div className="text-base font-normal text-bw-1">
+                  <div className="text-base font-normal text-[#050505]">
                     <span
                       className={`whitespace-pre-wrap break-all ${
                         isExpanded ? '' : 'line-clamp-3'
@@ -479,7 +251,7 @@ const LearningNotesList = () => {
                     </span>
                     {!isExpanded && note?.description?.length > 230 ? (
                       <button
-                        className="block text-base font-normal text-gray-1"
+                        className="block text-base font-normal text-[#A1A1A1]"
                         onClick={() => toggleExpand(note?.id)}
                       >
                         Show more
@@ -488,7 +260,7 @@ const LearningNotesList = () => {
                       <>
                         {note?.description?.length > 230 ? (
                           <button
-                            className="block text-base font-normal text-gray-1"
+                            className="block text-base font-normal text-[#A1A1A1]"
                             onClick={() => toggleExpand(note?.id)}
                           >
                             Show less
@@ -500,7 +272,7 @@ const LearningNotesList = () => {
                     )}
                   </div>
                   <div className="mt-5 flex justify-between">
-                    <div className="text-sm font-normal text-gray-1">
+                    <div className="text-sm font-normal text-[#A1A1A1]">
                       {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                     </div>
                     <div className="flex">
@@ -564,7 +336,7 @@ const LearningNotesList = () => {
           </div>
         )}
       </div>
-    </SappDrawer>
+    </SappDrawerV3>
   )
 }
 
