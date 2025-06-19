@@ -142,6 +142,14 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     }
   }, [open])
 
+  const isOfflineOrLiveOnlineWithReview =
+    [LearningMode.OFFLINE, LearningMode.LIVE_ONLINE].includes(
+      data?.mode as LearningMode,
+    ) && data?.is_review_allowed
+
+  const isOnlineAndOpen =
+    data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
+
   return (
     <SappDrawer
       isOpen={open.isOpen}
@@ -155,9 +163,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       drawerSubId={'-notes-list'}
       heightBody={'h-[calc(100vh-112px)]'}
       showCancelButton={false}
-      showSubmitButton={
-        data?.mode === LearningMode?.ONLINE && dateOpenSection.isBefore(dateNow)
-      }
+      showSubmitButton={isOfflineOrLiveOnlineWithReview || isOnlineAndOpen}
       btnSubmitTile={
         LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
           ? 'Start'
