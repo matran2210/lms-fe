@@ -54,9 +54,11 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
         item?.name as PROGRAM,
       ),
     ) &&
-    [CONSTRUCTION.ONLINE, CONSTRUCTION.BLENDED, CONSTRUCTION.OFFLINE].includes(
-      classDetail.instruction_mode as CONSTRUCTION,
-    )
+    [
+      CONSTRUCTION.LIVE_ONLINE,
+      CONSTRUCTION.BLENDED,
+      CONSTRUCTION.OFFLINE,
+    ].includes(classDetail?.instruction_mode as CONSTRUCTION)
   const getValuesFilter = () => ({
     progress: getValues('progress'),
     fromDate: getValues('rangeDate')?.[0]?.toISOString(),
