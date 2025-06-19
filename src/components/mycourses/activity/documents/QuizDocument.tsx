@@ -51,6 +51,7 @@ import { Tooltip } from 'antd'
 import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import ModalResults from '../ModalResults'
 import { useForm } from 'react-hook-form'
+import clsx from 'clsx'
 
 type Props = {
   questions: IQuestion[]
@@ -625,7 +626,11 @@ const QuizDocument = ({
   }
 
   return (
-    <div className="flex flex-col gap-8 rounded-xl bg-gray-100 p-8">
+    <div
+      className={clsx('flex flex-col gap-8 rounded-xl bg-gray-100 p-8', {
+        'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
+      })}
+    >
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}

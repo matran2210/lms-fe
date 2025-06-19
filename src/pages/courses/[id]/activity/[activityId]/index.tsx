@@ -508,7 +508,7 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={ANIMATION.DATA_AOS}
-            className="mb-6 flex flex-col gap-6"
+            className="mb-[122px] flex flex-col gap-6 lg:mb-6"
           >
             {/* Header */}
             <div
@@ -592,7 +592,7 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <div className="sticky bottom-8 mx-auto w-full max-w-sm lg:hidden">
+          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-sm -translate-x-1/2 transform lg:hidden">
             <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
               <div className="flex items-center justify-center gap-5">
                 <CardMenuItem
@@ -648,29 +648,6 @@ const ActivityPage = () => {
                       </button>
                     </div>
                     <Calculator />
-                  </div>
-                </MovableWindow>
-              )
-            } else if (e.type === 'scratch_pad') {
-              return (
-                <MovableWindow
-                  key={e.id}
-                  position={{
-                    width: '412px',
-                    height: '312px',
-                  }}
-                  className="lg:hidden"
-                  zIndex={40}
-                >
-                  <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border border-gray-400">
-                    <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
-                      <div className="text-sm font-bold">Scratch Pad</div>
-                      {/* <CloseIcon */}
-                      <button onClick={() => handleCloseScratchPad(e)}>
-                        <CloseModalIcon />
-                      </button>
-                    </div>
-                    <div className="-mt-[1px] h-full"></div>
                   </div>
                 </MovableWindow>
               )

@@ -265,6 +265,11 @@ const CourseTabDocument = ({
         ),
       }
     }) ?? []
+
+  if (!selector?.tabs || selector?.tabs?.length === 0) {
+    return null
+  }
+
   return (
     <div
       className={clsx('rounded-xl bg-white p-6 shadow-learning-activity', {
@@ -291,7 +296,7 @@ const CourseTabDocument = ({
             },
           )}
         >
-          <Tooltip title="Previous Tab">
+          <Tooltip title="Previous Tab" trigger={['hover']}>
             <button
               className={clsx('tab-pagination', {
                 disabled: !getPreviousTabId(),
@@ -319,7 +324,7 @@ const CourseTabDocument = ({
               </span>
             ))}
           </div>
-          <Tooltip title="Next Tab">
+          <Tooltip title="Next Tab" trigger={['hover']}>
             <button
               className={clsx('tab-pagination', { disabled: !getNextTabId() })}
               disabled={!getNextTabId()}

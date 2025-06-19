@@ -1,4 +1,9 @@
-import { ArrowLeft, ArrowRight, CollapseArrowIcon } from '@assets/icons'
+import {
+  ArrowLeft,
+  ArrowRight,
+  CollapseArrowIcon,
+  LockClosedIcon,
+} from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
@@ -107,7 +112,7 @@ const ActivityPagination = ({
   const getCourseIcon = (type: string, lockActivity: boolean) => {
     // Nếu cấu phần bị khóa, trả về biểu tượng khóa
     if (lockActivity) {
-      return <SappIcon icon="locksection"></SappIcon>
+      return <LockClosedIcon className="shrink-0" />
     }
 
     // Bản đồ các loại hoạt động với biểu tượng tương ứng
@@ -187,7 +192,7 @@ const ActivityPagination = ({
                       ? activity?.previous_activity?.display_icon
                       : findActivityByIndex(previousActivityIndex - 1)
                           ?.display_icon,
-                    isPreviousActivityLocked,
+                    false,
                   )}
                   <Tooltip
                     title={
@@ -212,6 +217,7 @@ const ActivityPagination = ({
                           )}
                     </span>
                   </Tooltip>
+                  {getCourseIcon('locksection', isPreviousActivityLocked)}
                 </div>
               </div>
             )}
@@ -239,7 +245,7 @@ const ActivityPagination = ({
                         ? activity?.next_activity?.display_icon
                         : findActivityByIndex(nextActivityIndex + 1)
                             ?.display_icon,
-                      isNextActivityLocked,
+                      false,
                     )}
                     <Tooltip
                       title={
@@ -263,6 +269,7 @@ const ActivityPagination = ({
                             )}
                       </div>
                     </Tooltip>
+                    {getCourseIcon('locksection', isNextActivityLocked)}
                   </div>
                 </div>
               )}
