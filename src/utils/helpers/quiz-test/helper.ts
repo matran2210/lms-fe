@@ -196,7 +196,7 @@ export const isValuesEqual = async (
         newValue = getAnswerDragNDrop()
         break
       case QUESTION_TYPES.SELECT_WORD:
-        newValue = getValueSelectText()
+        newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.FILL_WORD:
         newValue = getValues(`${currentTabContent?.id}_fillword`)

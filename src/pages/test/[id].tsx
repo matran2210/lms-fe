@@ -84,16 +84,11 @@ import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import {
   checkTypeAndRenderTitle,
-  getAnswerDragNDrop,
-  getAnswerMatching,
-  getResult,
-  getValueFillText,
-  getValueSelectText,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
-import CompletingReportModal from './modal/CompletingReportModal'
 import dayjs from 'dayjs'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
+import { TestAPI } from '@pages/api/test'
 
 declare global {
   interface Window {
@@ -226,11 +221,12 @@ const TestDetail = () => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(value: string[]) =>
+              setValue(`${currentTabID}_answer`, value)
+            }
             data={data}
-            action={getValueSelectText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
-            removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -1065,13 +1061,8 @@ const TestDetail = () => {
   const getValueFillText = () => {}
 
   const getValueSelectText = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('div.sapp-select--question') as any
-
-    for (let e of inputs) {
-      value.push(e?.dataset.value)
-    }
-    return value
+    const value = getValues(`${currentPage}_answer`) || []
+    return value.filter((e: string) => e && e !== '')
   }
 
   const getAnswerMatching = () => {

@@ -16,10 +16,8 @@ import { IExhibitData } from 'src/type/exhibit'
 // Types
 interface IProps {
   data: any
-  action?: any
   handleSaveHighLight?: any
   highlighted?: any
-  removeHighlight?: any
   allowHighLight?: boolean
   defaultAnswer?: any
   corrects?: {
@@ -39,10 +37,7 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
-}
-
-interface ChangeEvent extends Event {
-  target: HTMLSelectElement
+  onChange?: (values: string[]) => void
 }
 
 // Constants
@@ -60,10 +55,8 @@ const SelectWord = forwardRef(
   (
     {
       data,
-      action,
       handleSaveHighLight,
       highlighted,
-      removeHighlight,
       allowHighLight,
       defaultAnswer,
       corrects,
@@ -73,6 +66,7 @@ const SelectWord = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText,
+      onChange,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -86,6 +80,27 @@ const SelectWord = forwardRef(
     const [selectedValues, setSelectedValues] = useState<
       Record<number, string>
     >({})
+
+    useEffect(() => {
+      if (onChange) {
+        // Lấy ra mảng id theo thứ tự index
+        const values = Object.keys(selectedValues)
+          .sort((a, b) => Number(a) - Number(b))
+          .map((k) => selectedValues[Number(k)])
+        onChange(values)
+      }
+    }, [selectedValues])
+
+    // Đồng bộ selectedValues với defaultAnswer khi defaultAnswer thay đổi
+    useEffect(() => {
+      if (defaultAnswer && Array.isArray(defaultAnswer)) {
+        const newSelected: Record<number, string> = {}
+        defaultAnswer.forEach((id, idx) => {
+          newSelected[idx] = id
+        })
+        setSelectedValues(newSelected)
+      }
+    }, [defaultAnswer])
 
     // Methods
     const formatAnswer = (data: any) => {

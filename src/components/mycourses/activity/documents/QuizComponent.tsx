@@ -534,7 +534,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           return (
             <SelectWord
               data={activeQuestion}
-              action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
