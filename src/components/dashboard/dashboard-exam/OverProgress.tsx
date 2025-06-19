@@ -51,7 +51,7 @@ const OverProgress = () => {
         {
           name: 'Pass Rate',
           type: 'pie',
-          radius: ['90%', '67%'],
+          radius: ['87%', '63%'],
           avoidLabelOverlap: false,
           labelLine: { show: false },
           legend: { show: false },

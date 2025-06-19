@@ -10,19 +10,18 @@ import { Modal } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { GRADE_STATUS } from 'src/constants'
-import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, QuizActivity, Results } from 'src/type/results'
 import ResultQuizModal from './ResultQuizModal'
-import ResultsTableFilter from './ResultsTableFilter'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
@@ -73,18 +72,7 @@ const ResultsTable = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [openReport, setOpenReport] = useState<boolean>(false)
-
-  /**
-   * Filter
-   */
-  const selectFilterProp = useSelectFilter(router?.query?.courseId)
-  const { selected } = selectFilterProp
-  /**
-   * @description config params khi filter
-   */
-  const params = {
-    parent_id: selected?.value || undefined,
-  }
+  const [params, setParams] = useState<any>({})
 
   /**
    * @description sử dụng react-query để lấy data
@@ -96,13 +84,15 @@ const ResultsTable = () => {
     isFetching,
   } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
-    queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
+    queryKey: [CourseKey.ResultsList, currentPage, pageSize, params],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
         router.query.courseId as string,
         currentPage || 1,
         pageSize,
-        params,
+        params && {
+          parent_id: params,
+        },
       )
     },
     enabled: router.query.courseId !== undefined,
@@ -208,15 +198,12 @@ const ResultsTable = () => {
     }
   }
 
-  useEffect(() => {
-    refetch()
-  }, [selected])
-
   return (
     <>
-      <div className="mb-8 flex flex-wrap gap-6 md:flex-nowrap">
-        <ResultsTableFilter {...selectFilterProp} />
+      <div className="my-6">
+        <FilterCourseSection setParams={setParams} />
       </div>
+
       <SappTable
         headers={headers}
         hasCheck={false}

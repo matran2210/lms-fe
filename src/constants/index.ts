@@ -556,6 +556,7 @@ export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
 export const CLASS_TYPE = {
   TRIAL: 'TRIAL',
 }
+export const TEST_AND_QUIZ_TITLE = 'Test & Quiz'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

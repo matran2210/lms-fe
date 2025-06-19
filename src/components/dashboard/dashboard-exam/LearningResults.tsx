@@ -131,7 +131,7 @@ const LearningResults = () => {
   }, [results])
 
   return (
-    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-8 xl:flex xl:h-[48vh]">
+    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-8 xl:flex xl:h-[53vh]">
       <div className="w-full">
         <div className="mb-5 flex items-center justify-between pb-3">
           <div className="flex w-full flex-row justify-between xl:flex-col">
