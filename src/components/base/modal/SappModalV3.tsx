@@ -31,6 +31,8 @@ interface IProps {
   headerClassName?: string
   isClosable?: boolean
   isUnderLine?: boolean
+  customFooter?: ReactNode
+  className?: string
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -62,28 +64,33 @@ const SappModalV3 = ({
   headerClassName,
   isClosable = false,
   isUnderLine = false,
+  className,
+  customFooter,
   ...otherProps
 }: IProps) => {
+  const onCancel = isClosable && handleClose ? handleClose : handleCancel
   return (
     <Modal
+      className={clsx('sapp-modal', className)}
       footer={false}
       centered
       closeIcon={false}
-      onCancel={isClosable ? handleClose : handleClose || handleCancel}
-      maskClosable={isClosable}
+      onCancel={onCancel}
+      maskClosable={true}
       closable={isClosable}
       {...otherProps}
     >
       {icon && (
-        <div className="flex justify-center pb-10">
+        <div className="flex justify-center">
           <div className="w-fit">{icon}</div>
         </div>
       )}
-      <div className="flex flex-col gap-10 pb-10">
+      <div className={clsx('flex flex-col gap-10', { 'pb-10': showFooter })}>
         {header && (
           <div
             className={clsx(
-              `flex justify-center text-3xl font-semibold text-[#050505] ${clsx({ 'mb-4': !content && !children })}`,
+              'flex justify-center text-3xl font-semibold text-gray-800',
+              { 'mb-4': !content && !children },
               headerClassName,
             )}
           >
@@ -91,12 +98,11 @@ const SappModalV3 = ({
           </div>
         )}
         {(content || children) && (
-          <div className="text-center text-base text-[#1F2937]">
+          <div className="text-center text-base text-gray-800">
             {content ?? children}
           </div>
         )}
       </div>
-
       {showFooter && (
         <div className="relative">
           <ButtonCancelSubmit
@@ -124,6 +130,9 @@ const SappModalV3 = ({
             }}
           />
         </div>
+      )}
+      {!showFooter && customFooter && (
+        <div className={'relative flex justify-center'}>{customFooter}</div>
       )}
     </Modal>
   )

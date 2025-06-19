@@ -131,7 +131,7 @@ const TestDetail = () => {
               : getValues(`${currentTabID}_${index}_answer`)
           return {
             label: (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 text-base font-normal">
                 Requirement {index + 1}
                 {hasAnswer && <CheckCircleOutlineYellow />}
               </span>
@@ -2967,7 +2967,7 @@ const TestDetail = () => {
                       onMouseUp={() => setStartResize(false)}
                       onTouchEnd={() => setStartResize(false)}
                     >
-                      <div className="z-10 h-8 w-8 bg-white">
+                      <div className="z-10 h-8 w-8 rounded-full bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
@@ -2980,7 +2980,7 @@ const TestDetail = () => {
                         className={clsx(
                           'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
                           {
-                            'bg-white px-0 py-8':
+                            'min-w-[350px] bg-white px-0 py-8':
                               currentTabContent?.data?.qType ===
                               QUESTION_TYPES.ESSAY,
                             '!w-fit':
@@ -3081,7 +3081,7 @@ const TestDetail = () => {
                       className={clsx(
                         'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
-                          'bg-white px-0 py-8':
+                          'min-w-[350px] bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
                           '!w-fit':
