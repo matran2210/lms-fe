@@ -59,7 +59,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const getKeyContent = () => {
-    return data?.key_before_contents?.map((item) => {
+    return data?.key_after_contents?.map((item) => {
       return (
         <div
           key={item.id}

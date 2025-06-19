@@ -92,7 +92,7 @@ export interface ICalendarDetail {
     mode: string
     virtual_metadata: string
   }
-  key_before_contents: [
+  key_after_contents: [
     {
       id: string
       name: string
