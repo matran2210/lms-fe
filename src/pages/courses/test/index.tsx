@@ -515,7 +515,7 @@ const TestModal = ({
               data?.quiz?.attempt?.number_of_attempts ===
                 data?.quiz?.limit_count && (
                 <div>
-                  <div className="text-center text-base font-normal text-[#1F2937]">
+                  <div className="text-center text-base font-normal text-gray-800">
                     {isFinalAttemptTimeout ? (
                       <div>
                         The test has timed out and has been submitted

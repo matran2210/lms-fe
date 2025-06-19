@@ -1,5 +1,29 @@
 import React from 'react'
 import { BaseEdge, EdgeProps, getBezierPath } from '@xyflow/react'
+import { Grid } from 'antd'
+
+function getCustomBezierPath({
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  curvature = 0.5,
+}: {
+  sourceX: number
+  sourceY: number
+  targetX: number
+  targetY: number
+  curvature?: number
+}): string {
+  const dx = targetX - sourceX
+  const dy = targetY - sourceY
+  const cpx1 = sourceX + dx * curvature
+  const cpy1 = sourceY
+  const cpx2 = targetX - dx * curvature
+  const cpy2 = targetY
+
+  return `M ${sourceX},${sourceY} C ${cpx1},${cpy1} ${cpx2},${cpy2} ${targetX},${targetY}`
+}
 
 const CustomEdge: React.FC<EdgeProps> = ({
   id,
@@ -11,6 +35,9 @@ const CustomEdge: React.FC<EdgeProps> = ({
   targetPosition,
   style,
 }) => {
+  const { useBreakpoint } = Grid
+  const { lg } = useBreakpoint()
+
   // Điều chỉnh điểm target nếu cần
   let adjustedTargetX = targetX
   let adjustedTargetY = targetY
@@ -19,16 +46,14 @@ const CustomEdge: React.FC<EdgeProps> = ({
     adjustedTargetX = targetX + 3
   }
 
-  const curvature = 0.2
+  const curvature = lg ? 0.5 : 0.8
 
-  const [edgePath] = getBezierPath({
+  const edgePath = getCustomBezierPath({
     sourceX,
     sourceY,
-    sourcePosition,
     targetX: adjustedTargetX,
     targetY: adjustedTargetY,
-    targetPosition,
-    curvature,
+    curvature: curvature,
   })
 
   const markerId = `arrowhead-${id}`
