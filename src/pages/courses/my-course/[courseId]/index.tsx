@@ -169,21 +169,22 @@ const CourseDetail = () => {
    * @description hiển thị pinned completed course
    */
   useEffect(() => {
-    if (!data?.pages?.[0]?.courseDetail?.is_passed) return
+    const courseDetail = data?.pages?.[0]?.courseDetail
+    if (!courseDetail) return
 
-    const isPassed = data?.pages?.[0]?.courseDetail?.is_passed
-    const userCertificateUrl =
-      data?.pages?.[0]?.courseDetail?.user_certificate_url
-    const userCertificateId =
-      data?.pages?.[0]?.courseDetail?.user_certificate_id
-    const passedAt = data?.pages?.[0]?.courseDetail?.passed_at
+    const {
+      is_passed: isPassed,
+      user_certificate_url: userCertificateUrl,
+      user_certificate_id: userCertificateId,
+      passed_at: passedAt,
+    } = courseDetail
 
-    if (isPassed && userCertificateUrl && userCertificateId) {
+    if (isPassed && userCertificateId) {
       setPinnedCompletedCourse({
         isOpen: isPassed,
-        passedAt: passedAt,
-        userCertificateUrl: userCertificateUrl,
-        userCertificateId: userCertificateId,
+        passedAt,
+        userCertificateUrl,
+        userCertificateId,
         courseName: courseNameDetail,
       })
     }
