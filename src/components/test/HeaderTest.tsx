@@ -25,7 +25,6 @@ interface IProps {
   setUnSubmitAnswer: Dispatch<SetStateAction<boolean>>
   checkUnSubmitAnswer: () => number[]
   setOpenQuit: Dispatch<SetStateAction<boolean>>
-  setSubmitEventTest: Dispatch<SetStateAction<boolean>>
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
@@ -48,7 +47,6 @@ const HeaderTest = ({
   quizAttempt,
   quizDetail,
   setOpenQuit,
-  setSubmitEventTest,
   setUnSubmitAnswer,
   timeRef,
   type,

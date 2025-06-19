@@ -274,6 +274,12 @@ export default function TableContainer({ params }: IProps) {
     }
   }
 
+  useEffect(() => {
+    if (router.query.showRequestDetail === 'true') {
+      setOpenDetail(true)
+    }
+  }, [])
+
   return (
     <>
       <SappTable
@@ -286,7 +292,7 @@ export default function TableContainer({ params }: IProps) {
         emptyText="No matching records found"
       />
 
-      {openDetail && selectedRequest && (
+      {openDetail && (selectedRequest || router.query.request_id) && (
         <DetailRequestModal
           open={openDetail}
           setOpen={setOpenDetail}

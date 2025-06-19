@@ -107,6 +107,7 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#DADFE5',
+          100: '#99A1B70D',
           900: '#181C32',
         },
         green: {
@@ -120,6 +121,7 @@ module.exports = {
           1: '#F897070D',
           2: '#FFFDF6',
           3: '#FFB800',
+          4: '#F89707',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -136,6 +138,8 @@ module.exports = {
           4: '#025eff0D',
           5: '#7086FD',
           6: '#607FE9',
+          7: '#176CDD',
+          900: '#176CDD0D',
         },
         yellow: {
           1: '#FFB800',

@@ -2325,7 +2325,6 @@ const TestDetail = () => {
                 setUnSubmitAnswer={setUnSubmitAnswer}
                 checkUnSubmitAnswer={checkUnSubmitAnswer}
                 setOpenQuit={setOpenQuit}
-                setSubmitEventTest={setSubmitEventTest}
                 type={type}
                 submited={submited}
                 setOpenSubmit={setOpenSubmit}
@@ -2854,6 +2853,7 @@ const TestDetail = () => {
           {/** End Scratchpads */}
 
           <TestTimeOutModal
+            type={type}
             okButtonCaption={
               quizDetail?.grading_method === GRADING_METHOD.MANUAL
                 ? 'Review Answers'
@@ -2869,7 +2869,7 @@ const TestDetail = () => {
                     router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else if (type === 'event-test') {
                     router.replace(`/event-test`)
-                    setSubmitEventTest(true)
+                    // setSubmitEventTest(true)
                   } else {
                     if (
                       type !== 'entrance' &&
