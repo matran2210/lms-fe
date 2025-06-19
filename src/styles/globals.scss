@@ -155,7 +155,7 @@ body *::-webkit-scrollbar-thumb:hover {
     @apply m-0 break-words text-lg text-gray-800;
   }
   span {
-    @apply bg-transparent text-lg text-[#1f2937];
+    @apply bg-transparent text-lg text-gray-800;
   }
 }
 .sapp-explanation {
@@ -825,6 +825,10 @@ textarea.is-invalid:focus {
 
 .ant-modal-footer {
   margin: 0 !important;
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .lf-player-container {

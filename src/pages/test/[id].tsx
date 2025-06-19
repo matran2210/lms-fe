@@ -13,7 +13,6 @@ import {
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -132,7 +131,7 @@ const TestDetail = () => {
               : getValues(`${currentTabID}_${index}_answer`)
           return {
             label: (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 text-base font-normal">
                 Requirement {index + 1}
                 {hasAnswer && <CheckCircleOutlineYellow />}
               </span>
@@ -2940,7 +2939,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-[#3964EA] hover:underline"
+                                  className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -2968,7 +2967,7 @@ const TestDetail = () => {
                       onMouseUp={() => setStartResize(false)}
                       onTouchEnd={() => setStartResize(false)}
                     >
-                      <div className="z-10 h-8 w-8 bg-white">
+                      <div className="z-10 h-8 w-8 rounded-full bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
@@ -2977,7 +2976,19 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div
+                        className={clsx(
+                          'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
+                          {
+                            'min-w-[350px] bg-white px-0 py-8':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.ESSAY,
+                            '!w-fit':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.MATCHING,
+                          },
+                        )}
+                      >
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -3049,7 +3060,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-[#3964EA] hover:underline"
+                                className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -3070,9 +3081,12 @@ const TestDetail = () => {
                       className={clsx(
                         'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
-                          'bg-white px-0 py-8':
+                          'min-w-[350px] bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
+                          '!w-fit':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.MATCHING,
                         },
                       )}
                     >
