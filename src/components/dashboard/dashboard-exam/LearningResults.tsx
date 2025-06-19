@@ -6,32 +6,39 @@ import { useRouter } from 'next/router'
 import NoData from 'src/common/NoData'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
-import { IconEssentional, MatchFailIcon, SuccessMatchIcon } from '@assets/icons/Dashboard'
+import {
+  IconEssentional,
+  MatchFailIcon,
+  SuccessMatchIcon,
+} from '@assets/icons/Dashboard'
 import Link from 'next/link'
 import { EChartsOption } from 'echarts'
 import Tooltip from 'src/common/Tooltip'
 
 const LearningResults = () => {
   const router = useRouter()
-  const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>([])
+  const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
+    [],
+  )
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = useMemo(
     () => JSON.parse(localStorage.getItem('courseInfo') as any),
-    []
+    [],
   )
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
-  const resultFormula = courseInfo?.category === 'ACCA'
-    ? '%Results = Graded activities (70%) + Final test (30%)'
-    : '%Results = Module test (40%) + Topic test (60%)'
+  const resultFormula =
+    courseInfo?.category === 'ACCA'
+      ? '%Results = Graded activities (70%) + Final test (30%)'
+      : '%Results = Module test (40%) + Topic test (60%)'
 
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
         const res = isNormal
           ? await DashboardAPI.getLearningResults(id)
-          : await DashboardAPI.getMockTestResults(id) as any
+          : ((await DashboardAPI.getMockTestResults(id)) as any)
         if (res && res.success) {
           const data = isNormal ? res.data : res.data.reports
           setResults(data)
@@ -68,8 +75,9 @@ const LearningResults = () => {
         trigger: 'item',
         formatter: function (params: any) {
           const values = params.value
-          const indicators = results.map((e: ILearningResult | IMockTestResult) =>
-            'name' in e ? e.name : e.short_name
+          const indicators = results.map(
+            (e: ILearningResult | IMockTestResult) =>
+              'name' in e ? e.name : e.short_name,
           )
           let tooltipText = `<strong>${params.name}</strong><br/>`
           values.forEach((val: any, i: number) => {
@@ -125,15 +133,18 @@ const LearningResults = () => {
   }, [results])
 
   return (
-    <div className="xl:flex xl:h-[48vh] w-full rounded-2xl bg-white p-8 shadow-matchingquiz">
+    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-8 xl:flex xl:h-[53vh]">
       <div className="w-full">
         <div className="mb-5 flex items-center justify-between pb-3">
-          <div className="flex xl:flex-col flex-row justify-between w-full">
+          <div className="flex w-full flex-row justify-between xl:flex-col">
             <div className="flex">
               <div className="min-w-fit text-xl font-semibold">
                 Your Learning Results
               </div>
-              <Tooltip title={<div className='text-center'>{resultFormula}</div>} placement='bottom'>
+              <Tooltip
+                title={<div className="text-center">{resultFormula}</div>}
+                placement="bottom"
+              >
                 <div className="ms-2">
                   <IconEssentional />
                 </div>
@@ -146,11 +157,11 @@ const LearningResults = () => {
         </div>
         <div className="flex">
           {option && (
-            <div className='flex grow xl:flex-row flex-col gap-5 px-5 2xl:px-12'>
+            <div className="flex grow flex-col gap-5 px-5 xl:flex-row 2xl:px-12">
               <div className="grow">
                 <EChart option={option as EChartsOption} />
               </div>
-              <div className='flex xl:flex-col flex-row items-start justify-center xl:gap-4 gap-10'>
+              <div className="flex flex-row items-start justify-center gap-10 xl:flex-col xl:gap-4">
                 {!isNormal && (
                   <div className="flex items-center justify-center gap-2.5 font-medium">
                     <span className="min-h-3 min-w-3 rounded-full bg-[#FB8C5B]"></span>
@@ -181,7 +192,7 @@ const LearningResults = () => {
           )}
         </div>
       </div>
-      <div className="xl:w-[515px] w-full">
+      <div className="w-full xl:w-[515px]">
         <LearningMockTest results={results as ILearningResult[]} />
       </div>
       {!isLoading && !option && (
@@ -195,8 +206,8 @@ const LearningResults = () => {
 
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
-    <div className="xl:w-[515px] w-full flex-col">
-      <div className="xl:mb-10 mb-6 flex text-xl font-semibold text-gray-800 xl:mt-0 mt-10">
+    <div className="w-full flex-col xl:w-[515px]">
+      <div className="mb-6 mt-10 flex text-xl font-semibold text-gray-800 xl:mb-10 xl:mt-0">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
@@ -212,7 +223,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               key={result?.id}
               className="mb-4 flex flex-col rounded-lg bg-gray-100 px-4 py-2"
             >
-              <div className="mb-2 text-lg xl:font-medium font-semibold text-gray-800">
+              <div className="mb-2 text-lg font-semibold text-gray-800 xl:font-medium">
                 {result?.short_name || result?.name}
               </div>
 
@@ -221,7 +232,11 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                   Learning result: {result?.score}%
                 </div>
                 <div className="flex items-center">
-                  {differenceResult > 0 ? <SuccessMatchIcon /> : <MatchFailIcon />}
+                  {differenceResult > 0 ? (
+                    <SuccessMatchIcon />
+                  ) : (
+                    <MatchFailIcon />
+                  )}
                   <div
                     className={`ms-1 text-lg font-semibold ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
                   >
