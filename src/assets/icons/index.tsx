@@ -697,17 +697,25 @@ export const CloseIconNote = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
-      viewBox="0 0 20 20"
     >
       <path
-        stroke="currentColor"
-        strokeLinecap="square"
-        strokeLinejoin="round"
-        d="M15 5L5 15M5 5l10 10"
-      ></path>
+        d="M18 18L6 6"
+        stroke="#1C274C"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6 18L18 6"
+        stroke="#1C274C"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
   )
 }
