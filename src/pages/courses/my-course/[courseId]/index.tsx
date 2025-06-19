@@ -20,6 +20,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -27,6 +28,13 @@ const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
+  const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
+    isOpen: false,
+    passedAt: '',
+    userCertificateUrl: '',
+    userCertificateId: '',
+    courseName: '',
+  })
 
   const params = {
     user_section_learning_status:
@@ -157,6 +165,30 @@ const CourseDetail = () => {
     }
   }, [isSuccess, data])
 
+  /**
+   * @description hiển thị pinned completed course
+   */
+  useEffect(() => {
+    if (!data?.pages?.[0]?.courseDetail?.is_passed) return
+
+    const isPassed = data?.pages?.[0]?.courseDetail?.is_passed
+    const userCertificateUrl =
+      data?.pages?.[0]?.courseDetail?.user_certificate_url
+    const userCertificateId =
+      data?.pages?.[0]?.courseDetail?.user_certificate_id
+    const passedAt = data?.pages?.[0]?.courseDetail?.passed_at
+
+    if (isPassed && userCertificateUrl && userCertificateId) {
+      setPinnedCompletedCourse({
+        isOpen: isPassed,
+        passedAt: passedAt,
+        userCertificateUrl: userCertificateUrl,
+        userCertificateId: userCertificateId,
+        courseName: courseNameDetail,
+      })
+    }
+  }, [data])
+
   return (
     <Layout title="Course Detail">
       <div className="mb-10 mt-2 rounded-lg bg-white px-8 py-4">
@@ -221,6 +253,15 @@ const CourseDetail = () => {
         program={data?.pages?.[0]?.courseDetail?.data?.program}
         data={data?.pages?.[0]?.courseDetail}
       />
+      {pinnedCompletedCourse.isOpen && (
+        <div className="fixed inset-x-0 bottom-4 z-50 lg:container md:px-8 lg:max-w-[1524px]">
+          <div className="w-full">
+            <PinnedCompletedCourse
+              pinnedCompletedCourse={pinnedCompletedCourse}
+            />
+          </div>
+        </div>
+      )}
     </Layout>
   )
 }
