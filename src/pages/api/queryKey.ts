@@ -20,10 +20,16 @@ export const UserKey = {
 
 export const TeacherKey = {
   MyClass: 'myClass',
+  ScheduleRequest: 'teacherScheduleRequest',
 }
 
 export const StudentKey = {
   Student: 'student',
   StudentsTestResult: 'studentsTestResult',
   ChapterTest: 'chapterTest',
+}
+
+export const ProgressKey = {
+  ProgressList: 'progressList',
+  ProgressDetail: 'progressDetail',
 }

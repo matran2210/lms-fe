@@ -5,24 +5,17 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SappIcon from 'src/common/SappIcon'
 import SAPPLabel from '../Label/SAPPLabel'
+import { IBaseFormFieldProps } from 'src/type/common'
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
 
-interface IProps {
-  name: string
-  control: Control<any>
+interface IProps extends IBaseFormFieldProps {
   defaultValue?: [Date, Date] | null
   onChange?: RangePickerProps['onChange']
   placeholder?: [string, string]
-  className?: string
-  disabled?: boolean
-  label?: string
-  labelClass?: string
   guideline?: Array<string> | undefined
-  skeleton?: boolean
   showTime?: RangePickerProps['showTime']
   format?: string
-  required?: boolean
   inputClassName?: string | undefined
   suffixIcon?: React.ReactNode
   allowClear?: boolean

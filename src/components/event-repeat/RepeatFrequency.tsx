@@ -1,5 +1,7 @@
+import { StyleProvider } from '@ant-design/cssinjs'
+import SAPPInput from '@components/base/Input/SAPPInput'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { InputNumber } from 'antd'
+import { Input } from 'antd'
 import clsx from 'clsx'
 import { memo, useEffect, useMemo, useState } from 'react'
 import {
@@ -63,14 +65,18 @@ const RepeatFrequency = ({
   }, [frequency])
 
   return (
-    <div className={clsx('flex flex-row items-center', className)}>
-      <InputNumber
+    <div className={clsx('flex flex-row items-center gap-x-3', className)}>
+      <Input
+        type="number"
         min={FREQUENCY_UNITS_LIMIT.MIN}
         max={FREQUENCY_UNITS_LIMIT.MAX[frequency.unit]}
         defaultValue={FREQUENCY_UNITS_LIMIT.MIN}
         value={frequency.interval}
-        onChange={onNumberChange}
-        className="mr-5 flex h-11.25 min-w-[50px] max-w-[55px]"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          const value = Number(event.target.value)
+          onNumberChange(value)
+        }}
+        className="flex h-11.25 min-w-[80px] max-w-[80px] rounded border-default focus:border-primary"
         name="repeat_every"
         disabled={disabled}
       />

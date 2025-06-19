@@ -1,3 +1,4 @@
+import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
 import { round } from 'lodash'
 
@@ -292,6 +293,24 @@ export const isMobileOrTablet = () => {
   return /Mobi|Tablet|iPad|iPhone/.test(navigator.userAgent)
 }
 
+type Option = {
+  label?: string
+  value?: string
+  [key: string]: any
+}
+
+export const getSelectOptions = (
+  options?: Option[],
+  existedOption?: Option,
+  key: string = 'value',
+): Option[] => {
+  return _.chain([existedOption])
+    .compact() // loại bỏ undefined/null
+    .concat(options ?? []) // gộp với options
+    .filter((item) => item[key]) // lọc item có key
+    .uniqBy(key) // loại trùng theo key
+    .value()
+}
 export const isPdfFile = (fileName: string) => {
   return fileName.toLowerCase().endsWith('.pdf')
 }

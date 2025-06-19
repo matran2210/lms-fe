@@ -1,4 +1,5 @@
 import { FixedType } from 'rc-table/lib/interface'
+import { Control, FieldValues } from 'react-hook-form'
 
 export interface ITabs {
   link: string
@@ -34,10 +35,10 @@ export interface OtherColumn {
 
 export interface TableColumn<T, O = OtherColumn> {
   title: React.ReactNode
-  dataIndex: keyof T | keyof O
+  dataIndex?: keyof T | keyof O
   key?: string | number
   width?: number | string
-  render?: (value: any) => React.ReactNode
+  render?: (value: any, record: T, index: number) => React.ReactNode
   fixed?: FixedType
 }
 
@@ -45,4 +46,35 @@ export interface IQueryParams {
   page_index: number
   page_size: number
   otherParams?: Record<string, any>
+}
+
+export interface IBaseFormFieldProps<T extends FieldValues = any> {
+  name: string
+  control: Control<T>
+  className?: string
+  label?: string
+  labelClass?: string
+  required?: boolean
+  disabled?: boolean
+  defaultValue?: any
+  skeleton?: boolean
+  // More common props can be added here
+}
+export type DayOfWeek =
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY'
+
+export const NumberToDayOfWeekMap: Record<number, DayOfWeek> = {
+  1: 'MONDAY',
+  2: 'TUESDAY',
+  3: 'WEDNESDAY',
+  4: 'THURSDAY',
+  5: 'FRIDAY',
+  6: 'SATURDAY',
+  7: 'SUNDAY',
 }

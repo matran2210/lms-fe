@@ -56,6 +56,14 @@ export const TitleSidebar = {
   CALENDAR: 'Calendar',
 }
 
+export const TitleTeacherSidebar = {
+  DASHBOARD: 'Dashboard',
+  MYCLASS: 'My Class',
+  MYCALENDAR: 'My Calendar',
+  MYREQUEST: 'My Request',
+  NOTIFICATIONS: 'Notifications',
+}
+
 export const GUIDELINE_PASSWORD = [
   'Tối thiểu 8 ký tự, ít nhất 1 ký tự hoa, 1 ký tự số',
 ]
@@ -297,6 +305,7 @@ export const POPUP_EVENT_DETAILS = {
   TITLE: 'Event name',
   TIME: 'Time',
   TYPE: 'Event type',
+  REPEAT: 'Repeat',
   CLASSROOM_NAME: 'Classroom name',
   CLASSROOM_ADDRESS: 'Classroom address',
   MEETING_LINK: 'Meeting link',
@@ -338,9 +347,9 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.LIVE_ONLINE]: '',
 }
 
-export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
-  ([key, value]) => ({ value: key, label: value }),
-)
+export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
+  .filter(([key, label]) => key !== EVENT_TYPES.LIVE_ONLINE)
+  .map(([key, value]) => ({ value: key, label: value }))
 
 export const EVENT_REPEAT_TYPES = {
   NO_REPEAT: 'NO_REPEAT',
@@ -357,6 +366,9 @@ export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
   [EVENT_REPEAT_TYPES.EVERY_WEEKDAY]: 'Every weekday (Monday to Friday)',
   [EVENT_REPEAT_TYPES.CUSTOM]: 'Custom',
+  [EVENT_REPEAT_TYPES.WEEKLY]: 'Weekly',
+  [EVENT_REPEAT_TYPES.MONTHLY]: 'Monthly',
+  [EVENT_REPEAT_TYPES.ANNUALLY]: 'Annually',
 }
 
 export enum FREQUENCY_UNITS {
@@ -521,6 +533,15 @@ export enum QUIZ_ATTEMPT_STATUS {
   UN_SUBMITTED = 'UN_SUBMITTED',
   IN_PROGRESS = 'IN_PROGRESS',
 }
+
+export enum QUIZ_ATTEMPT_GRADING_STATUS {
+  DRAFT = 'DRAFT',
+  FINISHED = 'FINISHED',
+  UN_FINISHED = 'UN_FINISHED',
+  AWAITING_GRADING = 'AWAITING_GRADING',
+  FINISHED_GRADING = 'FINISHED_GRADING',
+}
+
 export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
@@ -528,6 +549,8 @@ export enum DATE_FORMAT {
 }
 
 export const LABEL_MAX_LENGTH = 12
+
+export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
 
 export * from './socketEvents'
 export * from './localStorageKeys'

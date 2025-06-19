@@ -207,7 +207,22 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
-  static submitQuestion(id: string, data: any): Promise<any> {
+  //get answer a question
+  static getAnswersSubmitted(id: string): Promise<any> {
+    return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
+  }
+
+  //submit a question
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST',
+    })
+  }
+
+  static submitAllQuestion(id: string, data: any): Promise<any> {
+    //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
@@ -423,6 +438,31 @@ export class CoursesAPI {
       data: data,
     })
   }
+
+  static skipFoundation(
+    class_id: string | undefined,
+  ): Promise<{ success: boolean }> {
+    return fetcher(`courses/${class_id}/skip-foundation`, {
+      method: 'PUT',
+    })
+  }
+
+  static updateFlagInQuestion(
+    quiz_attempt_id: string,
+    payload: {
+      question_id: string
+      flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
+    },
+  ) {
+    return fetcher(`quiz/${quiz_attempt_id}/flag`, {
+      data: payload,
+      method: 'PUT',
+    })
+  }
 }
 
 /**
@@ -450,6 +490,7 @@ export const getQuestionsById = async (
   }
 }
 
+//Hiện đang dùng để submit cho bài test trong activity
 export const submitQuizTest = async (
   id: string,
   data: any,
@@ -462,7 +503,7 @@ export const submitQuizTest = async (
 
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
-    const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
+    const uri = '/quiz' + `/${quizAttemptId}` + '/submit-with-all-answer'
     const response = await fetcher(`${uri}`, {
       data: data,
       method: 'POST',

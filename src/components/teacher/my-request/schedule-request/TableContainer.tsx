@@ -24,6 +24,10 @@ import {
 } from 'src/utils/index'
 import StatusItem from './StatusItem'
 import { ColumnsType } from 'antd/es/table'
+import Tooltip from 'src/common/Tooltip'
+import TooltipParagraph from 'src/common/TooltipParagraph'
+import useSappPaging from 'src/hooks/useSappPaging'
+import { TeacherKey } from '@pages/api/queryKey'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
@@ -68,29 +72,22 @@ export default function TableContainer({ params }: IProps) {
   const [selectedRequest, setSelectedRequest] = useState<
     IScheduleRequestItem | undefined
   >()
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || DEFAULT_PAGE_NUMBER,
-    pageSize: Number(router.query.page_size) || DEFAULT_PAGE_SIZE,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
-
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [pagination, params],
-    queryFn: async () => {
-      try {
-        const payload: RequestScheduleParams = {
-          page_index: pagination.current ?? DEFAULT_PAGE_NUMBER,
-          page_size: pagination.pageSize ?? DEFAULT_PAGE_SIZE,
-          ...params,
-        }
-        return await TeacherAPI.getListRequestSchedule(payload)
-      } catch (error) {
-        return null
-      }
-    },
-    retry: false,
+  const {
+    data,
+    pagination,
+    isLoading,
+    handleChangeParams,
+    setPagination,
+    other,
+  } = useSappPaging({
+    uniqueKey: TeacherKey.ScheduleRequest,
+    queryFn: () =>
+      TeacherAPI.getListRequestSchedule({
+        page_index: pagination.current ?? DEFAULT_PAGE_NUMBER,
+        page_size: pagination.pageSize ?? DEFAULT_PAGE_SIZE,
+        ...params,
+      }),
+    params,
   })
 
   useEffect(() => {
@@ -109,13 +106,6 @@ export default function TableContainer({ params }: IProps) {
     )
   }, [pagination, params])
 
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
   const Action = (data: IScheduleRequestItem) => {
     setOpenDetail(true)
     setSelectedRequest(data)
@@ -154,7 +144,14 @@ export default function TableContainer({ params }: IProps) {
     {
       title: 'Subject',
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell data={convertSlugToTitle(record?.subject?.code)} />
+        <TableCell
+          className="max-w-36 overflow-hidden text-ellipsis whitespace-nowrap"
+          data={
+            <TooltipParagraph className="inline-block w-full overflow-hidden text-ellipsis whitespace-nowrap">
+              {`${convertSlugToTitle(record?.subject?.code)}_${record?.course_section?.name}`}
+            </TooltipParagraph>
+          }
+        />
       ),
     },
     {
@@ -271,11 +268,18 @@ export default function TableContainer({ params }: IProps) {
       /**
        * Refetch dữ liệu sau khi cập nhật trạng thái thành công.
        */
-      refetch()
+      other?.refetch()
     } catch (error) {
     } finally {
     }
   }
+
+  useEffect(() => {
+    if (router.query.showRequestDetail === 'true') {
+      setOpenDetail(true)
+    }
+  }, [])
+
   return (
     <>
       <SappTable
@@ -288,7 +292,7 @@ export default function TableContainer({ params }: IProps) {
         emptyText="No matching records found"
       />
 
-      {openDetail && selectedRequest && (
+      {openDetail && (selectedRequest || router.query.request_id) && (
         <DetailRequestModal
           open={openDetail}
           setOpen={setOpenDetail}

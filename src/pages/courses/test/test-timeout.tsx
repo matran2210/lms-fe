@@ -6,12 +6,16 @@ interface IProps {
   setOpen: any
   handleSubmit: any
   handleQuit: any
+  okButtonCaption?: string
+  type: string | string[] | undefined
 }
 const TestTimeOutModal = ({
   open,
   setOpen,
   handleSubmit,
   handleQuit,
+  type,
+  okButtonCaption = 'View Results',
 }: IProps) => {
   // const dispatch = useAppDispatch()
   // const {} = useAppSelector()
@@ -27,18 +31,31 @@ const TestTimeOutModal = ({
     setOpen(false)
     handleQuit()
   }
+
+  const content =
+    type === 'event-test' ? (
+      <span>
+        The test has timed out and has been submitted automatically. Your test
+        result will <strong>be emailed to you on June 28, 2025.</strong> Please
+        check your email regularly to receive the earliest update.
+      </span>
+    ) : (
+      'The test has timed out and has been submitted automatically.'
+    )
   return (
     <SappModalV3
       open={open}
       cancelButtonCaption="Quit"
-      okButtonCaption="Submit"
+      okButtonCaption={okButtonCaption}
+      showCancelButton={false}
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
       buttonSize="extra"
       icon={<TimeIcon />}
       header="Time Out"
-      content="You are running out of time to do your test"
+      content={content}
+      isMaskClosable={false}
     />
   )
 }

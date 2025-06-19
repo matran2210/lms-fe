@@ -15,6 +15,8 @@ export type IButtonColors =
   | 'text'
   | 'textUnderline'
   | 'quizActivity'
+  | 'okPopup'
+  | 'cancelPopup'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -52,6 +54,7 @@ export interface ITabs {
 export interface ITabsTeacher {
   id: number
   title: string
+  urlTitle?: string
 }
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps
@@ -117,6 +120,7 @@ export enum EDateTime {
   monthFormat = 'MM/YYYY',
   fullDate = 'DD/MM/YYYY HH:mm',
   backendFormat = 'yyyy-MM-dd',
+  timepicker = 'HH:mm',
 }
 export interface IHookFormProps {
   name: string

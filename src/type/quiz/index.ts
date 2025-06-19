@@ -77,6 +77,7 @@ interface Question {
 }
 
 export interface IQuizResult {
+  created_at: string
   finished_at: Date
   id: string
   is_graded: boolean

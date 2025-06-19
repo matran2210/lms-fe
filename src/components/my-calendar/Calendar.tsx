@@ -21,10 +21,10 @@ interface IProps {
 
 const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
   const [startTime, setStartTime] = useState<Date>(
-    dayjs().startOf('month').startOf('week').add(1, 'day').toDate(),
+    dayjs().startOf('month').startOf('week').toDate(),
   )
   const [endTime, setEndTime] = useState<Date>(
-    dayjs().endOf('month').endOf('week').add(1, 'day').toDate(),
+    dayjs().endOf('month').endOf('week').toDate(),
   )
   const [eventName, setEventName] = useState<string>('')
   const [eventType, setEventType] = useState<
@@ -77,6 +77,7 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
             meetingLink: item.meeting_link,
+            repeat: item.repeat,
           }) as IEvent,
       ) || []
     const norms =
@@ -97,11 +98,9 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['schedules', startTime, endTime, eventName, eventType],
     queryFn: () => {
-      const formatter = new Intl.DateTimeFormat('en-CA')
-
       let finalParams = {
-        start_date: params.start_date || formatter.format(startTime),
-        end_date: params.end_date || formatter.format(endTime),
+        start_date: params.start_date || dayjs(startTime).toISOString(),
+        end_date: params.end_date || dayjs(endTime).toISOString(),
       } as Object
 
       if (params.event_name || eventName) {

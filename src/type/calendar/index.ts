@@ -29,6 +29,7 @@ export interface ICalendar {
   start_time: string
   end_time: string
   is_key_before_content: boolean
+  is_key_after_content: boolean
   course_id: string
 }
 
@@ -44,6 +45,8 @@ export interface ICalendarDetail {
     name: string
     code: string
     link_meeting: string
+    opening_at: Date
+    started_at: Date
   }
   subject: {
     id: string
