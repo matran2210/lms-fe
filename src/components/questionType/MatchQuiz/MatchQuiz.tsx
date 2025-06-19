@@ -53,6 +53,7 @@ interface IProps {
   exhibitText?: string
   correctAnswerClass?: string
   explainClassname?: string
+  onChangeMatchedPairs?: (matchedPairs: any[]) => void
 }
 
 type Role = 'question' | 'answer'
@@ -97,6 +98,7 @@ const MatchQuiz = forwardRef(
       exhibitText = 'Exhibit',
       correctAnswerClass,
       explainClassname,
+      onChangeMatchedPairs,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -480,6 +482,13 @@ const MatchQuiz = forwardRef(
       setCorrectEdges(correctFlow.edges)
       setCorrectNodes(correctFlow.nodes)
     }, [correctFlow])
+
+    // Thông báo matchedPairs lên parent mỗi khi edges hoặc nodes thay đổi
+    useEffect(() => {
+      if (onChangeMatchedPairs) {
+        onChangeMatchedPairs(getMatchedPairs(edges, nodes))
+      }
+    }, [edges, nodes])
 
     return (
       <div className="w-fit" key={key} ref={extenalRef}>

@@ -16,7 +16,7 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
   const NODE_WIDTH = lg ? 328 : 290
 
   // Thêm màu border vàng khi được chọn
-  const borderColor = data?.isSelected ? '#FFB700' : '#E5E7EB'
+  const borderColor = data?.isSelected ? '#FFB700' : 'none'
 
   return (
     <div
