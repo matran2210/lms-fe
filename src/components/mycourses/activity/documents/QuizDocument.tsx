@@ -871,38 +871,6 @@ const QuizDocument = ({
           loading={loading}
           handleOk={() => setModalResult(undefined)}
         />
-        // <SappModal
-        //   open={modalResult?.status}
-        //   okButtonCaption={'Yes'}
-        //   cancelButtonCaption={'No'}
-        //   handleCancel={() => setModalResult(undefined)}
-        //   handleSubmit={() => setModalResult(undefined)}
-        //   setOpen={() => setModalResult(undefined)}
-        //   size="max-w-[1144px]"
-        //   position="center"
-        //   showFooter={false}
-        //   isFullScreen={true}
-        //   // refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-auto bg-white text-left shadow-xl transition-all z-[100000]"
-        //   showHeader={false}
-        // >
-        //   <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
-        //     <div
-        //       className="absolute right-6 top-5  ml-auto cursor-pointer"
-        //       onClick={() => {
-        //         refreshTab()
-        //         setModalResult(undefined)
-        //       }}
-        //     >
-        //       <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-        //     </div>
-        //     <QuizResultComponent
-        //       questionResponse={modalResult?.questions || []}
-        //       getTable={getTable}
-        //       onShowDetail={handleShowQuestionResultDetail}
-        //       loading={loading}
-        //     />
-        //   </div>
-        // </SappModal>
       )}
 
       {showQuestionResultDetail?.isOpen && (
