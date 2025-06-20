@@ -491,7 +491,7 @@ const Course = ({
               </div>
             )}
           </div>
-          <div className="des my-8 line-clamp-3 h-[72px] text-ellipsis">
+          <div className="des mb-6 mt-8 line-clamp-3 h-[72px] text-ellipsis">
             {(course?.description as string)?.length > 250 ? (
               <Tooltip
                 title={
@@ -570,6 +570,7 @@ const Course = ({
           >
             {determineButtonToShow !== 'Disabled' && (
               <ButtonSecondary
+                size="medium"
                 title={
                   determineButtonToShow === 'Active'
                     ? 'Activate'
