@@ -24,6 +24,7 @@ import Tooltip from 'src/common/Tooltip'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import CollapseActivity from '@components/learning/activity/CollapseActivity'
 import { isEmpty } from 'lodash'
+import CardResultTest from '@components/learning/activity/CardResultTest'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
@@ -169,32 +170,93 @@ const ResultsTable = () => {
         return true
     }
   }
-  const dataActivity = resultData?.data
-    ?.filter((item) => !isEmpty(item?.quiz_activity))
-    .map((item) => ({
-      activityName: item?.name,
-      listQuiz: item?.quiz_activity,
-      activityId: item?.id,
-      courseSectionPath: item?.path,
-    }))
+  const handleGetDataActivity = ({ type }: { type: string }) => {
+    return (
+      resultData?.data
+        ?.filter((item) => item.course_section_type === type)
+        .map((item) => ({
+          activityName: item?.name,
+          listQuiz: item?.quiz_activity || [],
+          quiz: item?.quiz || {},
+          activityId: item?.id,
+          courseSectionPath: item?.path,
+        })) || []
+    )
+  }
+  const dataActivity = handleGetDataActivity({ type: TEST_TYPE.ACTIVITY })
+  const dataMidTermTest = handleGetDataActivity({
+    type: TEST_TYPE.MID_TERM_TEST,
+  })
+  const dataFinalTest = handleGetDataActivity({ type: TEST_TYPE.FINAL_TEST })
+  const dataChapterTest = handleGetDataActivity({
+    type: TEST_TYPE.CHAPTER_TEST,
+  })
+  const dataPartTest = handleGetDataActivity({ type: TEST_TYPE.PART_TEST })
 
   return (
     <>
       <div className="my-6">
         <FilterCourseSection setParams={setParams} />
       </div>
-      {!isEmpty(dataActivity) && (
-        <div className="flex flex-col gap-6">
-          {dataActivity?.map((item) => (
-            <CollapseActivity
-              activity={item?.listQuiz}
-              key={item?.activityId}
-              activityName={item?.activityName}
-              courseSectionPath={item?.courseSectionPath}
-            />
-          ))}
-        </div>
-      )}
+      <div className="flex flex-col gap-6">
+        {!isEmpty(dataActivity) && (
+          <div className="flex flex-col gap-6">
+            {dataActivity?.map((item) => (
+              <CollapseActivity
+                activity={item?.listQuiz}
+                key={item?.activityId}
+                activityName={item?.activityName}
+                courseSectionPath={item?.courseSectionPath}
+              />
+            ))}
+          </div>
+        )}
+        {!isEmpty(dataPartTest) && (
+          <div className="flex flex-col gap-6">
+            {dataPartTest?.map((item) => (
+              <CardResultTest
+                quiz={item?.quiz}
+                key={item?.activityId}
+                activityName={item?.activityName}
+              />
+            ))}
+          </div>
+        )}
+        {!isEmpty(dataMidTermTest) && (
+          <div className="flex flex-col gap-6">
+            {dataMidTermTest?.map((item) => (
+              <CardResultTest
+                quiz={item?.quiz}
+                key={item?.activityId}
+                activityName={item?.activityName}
+              />
+            ))}
+          </div>
+        )}
+        {!isEmpty(dataChapterTest) && (
+          <div className="flex flex-col gap-6">
+            {dataChapterTest?.map((item) => (
+              <CardResultTest
+                quiz={item?.quiz}
+                key={item?.activityId}
+                activityName={item?.activityName}
+              />
+            ))}
+          </div>
+        )}
+        {!isEmpty(dataFinalTest) && (
+          <div className="flex flex-col gap-6">
+            {dataFinalTest?.map((item) => (
+              <CardResultTest
+                quiz={item?.quiz}
+                key={item?.activityId}
+                activityName={item?.activityName}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"

@@ -2,18 +2,14 @@ import { CollapseArrowIcon } from '@assets/icons'
 import { Collapse } from 'antd'
 import React from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
-import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
+import { ITestQuizProps } from 'src/type/results'
 
-interface IProps {
-  activity: any
-  activityName: string
-  courseSectionPath: string
-}
 const CollapseActivity = ({
   activity,
   activityName,
   courseSectionPath,
-}: IProps) => {
+}: ITestQuizProps) => {
+  if (!activity) return null
   const getItemsActivity = [
     {
       key: 'activity',
