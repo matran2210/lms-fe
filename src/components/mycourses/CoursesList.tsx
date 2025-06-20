@@ -29,7 +29,7 @@ const CoursesList: React.FC<CoursesProps> = ({
 }) => {
   if (isFetching && !isFetchingNextPage) {
     return (
-      <div className="mb-6 grid w-full gap-6  md:grid-cols-2 xl:grid-cols-3">
+      <div className="mb-6 grid w-full grid-cols-2 gap-6 lg:grid-cols-3">
         {Array(9)
           .fill([])
           .map((_, index) => (

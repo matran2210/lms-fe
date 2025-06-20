@@ -17,7 +17,7 @@ const SappBreadCrumbs = ({
     return isLong ? title.slice(0, length) + '...' : title
   }
   return (
-    <nav aria-label="breadcrumb" className="md:hidden lg:block">
+    <nav aria-label="breadcrumb" className="hidden lg:block">
       <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
         {breadcrumbs.map((breadcrumb, index) => {
           const isLast = index === lastIndex

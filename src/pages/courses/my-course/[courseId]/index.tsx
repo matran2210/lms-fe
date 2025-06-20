@@ -194,7 +194,7 @@ const CourseDetail = () => {
   return (
     <Layout title="Course Detail">
       <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
-        <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-[0px_4px_20px_0px_rgba(41,41,41,0.05)] lg:hidden">
+        <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden">
           <HamburgerMenuLargeIcon />
         </div>
         <div className="w-full rounded-lg bg-white px-8 py-4">
