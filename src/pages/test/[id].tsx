@@ -82,7 +82,6 @@ import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
-  getAnswerMatching,
   getResult,
   getValueFillText,
   getValueSelectText,
@@ -247,8 +246,10 @@ const TestDetail = () => {
       case QUESTION_TYPES.MATCHING:
         return (
           <MatchQuizComponent
+            onChangeMatchedPairs={(pairs) =>
+              setValue(`${currentTabID}_answer`, pairs)
+            }
             data={data}
-            ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -561,7 +562,6 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
-  const matchQuizRef = useRef<any>(null)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -1063,7 +1063,8 @@ const TestDetail = () => {
   const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentContent.qType === QUESTION_TYPES.TRUE_FALSE
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       if (
         !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
@@ -1077,12 +1078,6 @@ const TestDetail = () => {
         !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
         getValues(`${currentContent?.id}_answer`)?.length > 0
       ) {
-        return true
-      }
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answerMatching = getAnswerMatching(matchQuizRef)
-      if (answerMatching && answerMatching.length > 0) {
         return true
       }
       return false
@@ -1230,17 +1225,11 @@ const TestDetail = () => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       const answers = handleSaveAnswer(
         getValues(`${currentPage}_answer`),
-        currentContent,
-        tabs,
-      )
-      return answers
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answers = handleSaveAnswer(
-        getAnswerMatching(matchQuizRef),
         currentContent,
         tabs,
       )
@@ -1558,7 +1547,6 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
-          matchQuizRef,
         )
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
