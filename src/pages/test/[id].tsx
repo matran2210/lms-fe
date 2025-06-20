@@ -2383,9 +2383,7 @@ const TestDetail = () => {
             )}
           <Tooltip
             title={
-              (isGradingAfterEachQuestion &&
-                currentTabContent?.is_viewed_answer) ||
-              isGradingAfterAllQuestion ||
+              currentTabContent?.is_viewed_answer ||
               ![
                 QUESTION_TYPES.TRUE_FALSE,
                 QUESTION_TYPES.ONE_CHOICE,
@@ -2416,25 +2414,15 @@ const TestDetail = () => {
                       dispatch(disableUnsavedChange())
                     }
                   } else {
-                    if (indexTab < filteredTabs.length - 1) {
-                      const data = await getResult(currentTabContent)
-                      handleSubmitAnswer('view-answer')
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                        data?.requirements,
-                      )
-                    } else {
-                      handleSubmitAnswer('finish')
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    }
+                    const data = await getResult(currentTabContent)
+                    handleSubmitAnswer('view-answer')
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
                   }
                 } else {
                   if (indexTab < filteredTabs.length - 1) {
