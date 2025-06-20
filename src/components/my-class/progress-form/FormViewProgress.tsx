@@ -252,11 +252,6 @@ function FormViewProgress({
     setOpen(false)
     reset()
   }
-  const handleCancel = () => {
-    dispatch(
-      confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: handleClose }),
-    )
-  }
 
   const handleClickCatchUpContent = (idProgress: string) => {
     const loadDataProgress = async () => {
@@ -282,7 +277,7 @@ function FormViewProgress({
     <Drawer
       open={open}
       footer={true}
-      onClose={() => handleCancel()}
+      onClose={() => handleClose()}
       width={'50%'}
       closeIcon={false}
     >
@@ -291,7 +286,7 @@ function FormViewProgress({
           <span className="font-sans text-lg font-semibold">
             {isView ? 'View Detail' : 'Edit Progress'}
           </span>
-          <span className="cursor-pointer" onClick={handleCancel}>
+          <span className="cursor-pointer" onClick={handleClose}>
             <SappIcon icon="closeicon" />
           </span>
         </div>
@@ -491,7 +486,7 @@ function FormViewProgress({
         <div className="absolute bottom-0 left-0 right-0 flex w-full justify-end border-t border-t-gray-5 bg-white px-8 py-5">
           <SAPPButtonV2
             title={'Cancel'}
-            onClick={handleCancel}
+            onClick={handleClose}
             className="mb-4 mr-4"
             color="secondary"
           />

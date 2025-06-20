@@ -114,6 +114,14 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
   return words.join(' ')
 }
 
+export const convertHumanReadableToSnakeCase = (str: string) => {
+  const words = str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  return words.join('_')
+}
+
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
