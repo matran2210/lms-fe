@@ -792,8 +792,7 @@ const QuizDocument = ({
         <Tooltip
           title={
             isQuestionConfirmed ||
-            grading_preference !== 'AFTER_EACH_QUESTION' ||
-            (isQuestionConfirmed && isLastQuestion) ||
+            // grading_preference !== 'AFTER_EACH_QUESTION' ||
             (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
             ![
               QUESTION_TYPES.TRUE_FALSE,

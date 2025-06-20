@@ -92,15 +92,6 @@ export const getValueSelectText = () => {
 }
 
 /**
- * @description Get matching question answers from DOM elements
- * @return {Array<Object>} Array of objects containing question_id and answer_id
- */
-export const getAnswerMatching = (MatchQuizRef: React.RefObject<any>) => {
-  const value = MatchQuizRef?.current?.getMatchedPairs?.()
-  return value || []
-}
-
-/**
  * @description Get drag and drop answers from DOM elements
  * @return {Array<Object>} Array of objects containing id, value and idAnswer
  */
@@ -163,7 +154,6 @@ export const isValuesEqual = async (
   currentTabContent: any,
   oldCurrentTabData: any,
   getValues: UseFormGetValues<FieldValues>,
-  matchQuizRef?: React.RefObject<any>,
 ) => {
   const { qType } = currentTabContent
 
@@ -190,7 +180,7 @@ export const isValuesEqual = async (
         newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.MATCHING:
-        newValue = getAnswerMatching(matchQuizRef as React.RefObject<any>)
+        newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.DRAG_DROP:
         newValue = getAnswerDragNDrop()

@@ -507,7 +507,6 @@ export const HighlightableHTML: React.FC<Props> = ({
           open={true}
           trigger={[]}
           placement="bottom"
-          destroyOnHidden
           overlayStyle={{
             position: 'absolute',
             top: selectionRect.top + window.scrollY + 28,
@@ -594,7 +593,6 @@ export const HighlightableHTML: React.FC<Props> = ({
               )}
             </>
           }
-          destroyOnHidden
           overlayStyle={{
             position: 'absolute',
             top: highlightRect.top + window.scrollY + 28,
