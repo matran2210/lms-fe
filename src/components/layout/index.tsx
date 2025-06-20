@@ -61,7 +61,11 @@ export default function Layout(props: LayoutProps): ReactElement {
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="flex flex-nowrap rounded-xl">
+      <div
+        className={clsx('flex flex-nowrap rounded-xl', {
+          'lg:ml-20': showSidebar,
+        })}
+      >
         {showSidebar === true && (
           <Sidebar
             isOpened={isOpened}
@@ -74,6 +78,7 @@ export default function Layout(props: LayoutProps): ReactElement {
                 'overflow-hidden': !guideStatus,
                 'menu-sidebar-left--hover':
                   guideStatus && (guideStep === 2 || guideStep === 3),
+                'left-0': showSidebar,
               },
               paddingTop,
             )}
@@ -82,10 +87,10 @@ export default function Layout(props: LayoutProps): ReactElement {
           />
         )}
         <div
-          className={clsx(`container min-h-screen`, {
-            'max-w-[1179px]': size === 'sm',
-            'max-w-[1444px]': size === 'md',
-            'max-w-[1524px]': size === 'xl',
+          className={clsx('container min-h-screen', {
+            'max-w-[calc(1179px+2rem)]': size === 'sm',
+            'max-w-[calc(1444px+2rem)]': size === 'md',
+            'max-w-[calc(1524px+2rem)]': size === 'xl',
             'max-w-full p-0': fullWidth,
           })}
         >
