@@ -853,7 +853,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.question_topic?.description && (
             <HighlightableHTML
               initialHTML={activeQuestion?.question_topic?.description ?? ''}
-              storageKey={`${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
+              storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
               className="sapp-questions"
             />
           )}

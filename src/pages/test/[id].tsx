@@ -3037,7 +3037,7 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      {/* {currentTabContent?.topicDescription?.description && (
+                      {currentTabContent?.topicDescription?.description && (
                         <HighlightableHTML
                           initialHTML={
                             currentTabContent?.topicDescription?.description ||
@@ -3046,15 +3046,15 @@ const TestDetail = () => {
                           storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                           className="mb-4"
                         />
-                      )} */}
-                      <EditorReader
+                      )}
+                      {/* <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      />
+                      /> */}
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {

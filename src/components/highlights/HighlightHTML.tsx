@@ -40,6 +40,9 @@ export const HighlightableHTML: React.FC<Props> = ({
     null,
   )
   const [open, setOpen] = useState(false)
+  // Thêm state để track khi nào DOM đã được cập nhật
+  const [isDOMReady, setIsDOMReady] = useState(false)
+  const prevStorageKeyRef = useRef<string>(storageKey)
 
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
   const [noteInput, setNoteInput] = useState<string>('')
@@ -60,7 +63,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     )
   }
 
-  // Load highlights from sessionStorage
+  // Load highlights from sessionStorage - chỉ chạy khi storageKey thay đổi
   useEffect(() => {
     const raw = sessionStorage.getItem(storageKey)
     if (raw) {
@@ -69,25 +72,68 @@ export const HighlightableHTML: React.FC<Props> = ({
         setHtml(parsed.htmlContent || initialHTML)
         setHighlights(parsed.highlights || [])
       } catch (err) {
-        // console.error('Error loading highlights:', err)
+        setHtml(initialHTML)
+        setHighlights([])
       }
     } else {
       setHtml(initialHTML)
+      setHighlights([])
+    }
+
+    // Reset các state khi chuyển câu hỏi
+    setSelection(null)
+    setSelectionRect(null)
+    setSelectedHighlightId(null)
+    setHighlightRect(null)
+    setShowNoteEditor(false)
+    setNoteInput('')
+    setIsDOMReady(false)
+
+    prevStorageKeyRef.current = storageKey
+  }, [storageKey])
+
+  // Effect riêng để handle khi initialHTML thay đổi nhưng storageKey không đổi
+  useEffect(() => {
+    if (prevStorageKeyRef.current === storageKey) {
+      // Nếu cùng storageKey nhưng initialHTML thay đổi, có thể là trường hợp đặc biệt
+      // Kiểm tra xem có data trong storage không
+      const raw = sessionStorage.getItem(storageKey)
+      if (!raw) {
+        setHtml(initialHTML)
+        setHighlights([])
+      }
     }
   }, [initialHTML, storageKey])
 
-  // Save highlights to sessionStorage
+  // Effect để đánh dấu DOM đã sẵn sàng
   useEffect(() => {
-    if (containerRef.current) {
-      sessionStorage.setItem(
-        storageKey,
-        JSON.stringify({
-          htmlContent: containerRef.current.innerHTML,
-          highlights,
-        }),
-      )
+    if (containerRef.current && html) {
+      // Sử dụng setTimeout để đảm bảo DOM đã được render
+      const timer = setTimeout(() => {
+        setIsDOMReady(true)
+      }, 0)
+
+      return () => clearTimeout(timer)
     }
-  }, [highlights, storageKey])
+  }, [html])
+
+  // Save highlights to sessionStorage - chỉ save khi DOM đã sẵn sàng
+  useEffect(() => {
+    if (containerRef.current && isDOMReady && highlights.length >= 0) {
+      // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
+      const currentHTML = containerRef.current.innerHTML
+      // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
+      if (currentHTML.trim() || highlights.length > 0) {
+        sessionStorage.setItem(
+          storageKey,
+          JSON.stringify({
+            htmlContent: currentHTML,
+            highlights,
+          }),
+        )
+      }
+    }
+  }, [highlights, storageKey, isDOMReady])
 
   const handleMouseUp = () => {
     const selectionObj = window.getSelection()
