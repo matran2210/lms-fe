@@ -141,7 +141,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ref,
   ) => {
     const questionRef = useRef<HTMLDivElement>(null)
-
+    const isShowIconButtonInBottom = [
+      QUESTION_TYPES.FILL_WORD,
+      QUESTION_TYPES.TRUE_FALSE,
+      QUESTION_TYPES.ONE_CHOICE,
+      QUESTION_TYPES.SELECT_WORD,
+    ].includes(activeQuestion?.qType as QUESTION_TYPES)
     const dispatch = useAppDispatch()
 
     const DragDropRef = useRef(null) as any
@@ -831,6 +836,30 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
       setExhibitData(exhibitOption)
     }
+    const handleOpenExhibit = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+      e: IExhibitData,
+      index: number,
+    ) => {
+      setShowWarning(false)
+      setOpenFile &&
+        setOpenFile(
+          {
+            type: 'exhibits',
+            description: e?.description,
+            name: e?.name,
+            index: index,
+            files: e?.files,
+          },
+          null,
+          null,
+          event,
+        )
+    }
+    const handleOpenFile = (e: IFile) => {
+      setOpenFile &&
+        setOpenFile({ type: 'file' }, e?.resource?.url, e?.resource?.name)
+    }
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
@@ -878,22 +907,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           className={clsx(
                             'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
                           )}
-                          onClick={(event) => {
-                            setShowWarning(false)
-                            setOpenFile &&
-                              setOpenFile(
-                                {
-                                  type: 'exhibits',
-                                  description: e?.description,
-                                  name: e?.name,
-                                  index: index,
-                                  files: e?.files,
-                                },
-                                null,
-                                null,
-                                event,
-                              )
-                          }}
+                          onClick={(event) =>
+                            handleOpenExhibit(event, e, index)
+                          }
                         >
                           {exhibitText} {index + 1}
                         </div>
@@ -910,21 +926,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       'top-[12px]':
                         (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                           !activeQuestion?.requirements?.length) ||
-                        ![
-                          QUESTION_TYPES.FILL_WORD,
-                          QUESTION_TYPES.TRUE_FALSE,
-                          QUESTION_TYPES.ONE_CHOICE,
-                          QUESTION_TYPES.SELECT_WORD,
-                        ].includes(activeQuestion?.qType as QUESTION_TYPES),
+                        !isShowIconButtonInBottom,
                       'top-[142px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                         !!activeQuestion?.requirements?.length,
-                      'bottom-[62px]': [
-                        QUESTION_TYPES.FILL_WORD,
-                        QUESTION_TYPES.TRUE_FALSE,
-                        QUESTION_TYPES.ONE_CHOICE,
-                        QUESTION_TYPES.SELECT_WORD,
-                      ].includes(activeQuestion?.qType as QUESTION_TYPES),
+                      'bottom-[62px]': isShowIconButtonInBottom,
                     },
                   )}
                 >
@@ -964,14 +970,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               className={clsx(
                                 'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
                               )}
-                              onClick={() => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    { type: 'file' },
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                              }}
+                              onClick={() => handleOpenFile(e)}
                             >
                               {e?.resource?.name}
                             </div>
@@ -1001,21 +1000,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       'top-[74px]':
                         (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                           !activeQuestion?.requirements?.length) ||
-                        ![
-                          QUESTION_TYPES.FILL_WORD,
-                          QUESTION_TYPES.TRUE_FALSE,
-                          QUESTION_TYPES.ONE_CHOICE,
-                          QUESTION_TYPES.SELECT_WORD,
-                        ].includes(activeQuestion?.qType as QUESTION_TYPES),
+                        !isShowIconButtonInBottom,
                       'top-[214px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                         !!activeQuestion?.requirements?.length,
-                      'bottom-0': [
-                        QUESTION_TYPES.FILL_WORD,
-                        QUESTION_TYPES.TRUE_FALSE,
-                        QUESTION_TYPES.ONE_CHOICE,
-                        QUESTION_TYPES.SELECT_WORD,
-                      ].includes(activeQuestion?.qType as QUESTION_TYPES),
+                      'bottom-0': isShowIconButtonInBottom,
                     },
                   )}
                 >
