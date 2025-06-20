@@ -25,6 +25,7 @@ export interface ReusableTableProps<DataType, ParamType>
   isShowIndex?: boolean
   showFooter?: boolean
   footerComponent?: React.ReactNode
+  isShowPagination?: boolean
 }
 
 const getIndexColumns = (
@@ -56,6 +57,7 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
   isShowIndex = false,
   showFooter = false,
   footerComponent = undefined,
+  isShowPagination = true,
   ...props
 }: ReusableTableProps<DataType, ParamType>) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
@@ -78,7 +80,7 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
       )}
       <Table<DataType>
         dataSource={data}
-        pagination={pagination}
+        pagination={isShowPagination ? pagination : false}
         onChange={handleTableChange}
         loading={loading}
         rowKey={props.rowKey || 'id'}

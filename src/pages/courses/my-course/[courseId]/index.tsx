@@ -22,6 +22,7 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
 import { HamburgerMenuLargeIcon } from '@assets/icons'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -269,6 +270,11 @@ const CourseDetail = () => {
           </div>
         </div>
       )}
+      <div className="sticky inset-x-0 bottom-4 z-50">
+        <div className="w-full">
+          <CtaTrial />
+        </div>
+      </div>
     </Layout>
   )
 }
