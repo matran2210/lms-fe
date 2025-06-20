@@ -22,6 +22,8 @@ import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
+import CollapseActivity from '@components/learning/activity/CollapseActivity'
+import { isEmpty } from 'lodash'
 
 const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
 
@@ -119,36 +121,6 @@ const ResultsTable = () => {
     return '-'
   }
 
-  const getStatus = (row: Results) => {
-    if (row?.course_section_type === TEST_TYPE.ACTIVITY) {
-      for (const quiz of row?.quiz_activity) {
-        if (
-          quiz?.attempts?.length === 0 ||
-          (!quiz?.attempts?.[0].grading_status &&
-            quiz?.grading_method === GradingMethod.MANUAL) ||
-          (quiz?.grading_method === GradingMethod.AUTO &&
-            quiz?.attempts?.[0].status !== 'SUBMITTED')
-        )
-          return '-'
-      }
-      return 'Submitted'
-    } else {
-      if (row?.quiz?.grading_method === GradingMethod.MANUAL) {
-        switch (row?.quiz?.attempts?.[0]?.grading_status) {
-          case GRADE_STATUS.AWAITING_GRADING:
-            return 'Awaiting Grading'
-          case GRADE_STATUS.FINISHED_GRADING:
-            return 'Finish Grading'
-          default:
-            return 'Manual Grading'
-        }
-      }
-      return capitalizeFirstLetter(
-        row?.quiz?.attempts?.[0]?.status?.toLocaleLowerCase(),
-      )
-    }
-  }
-
   const getNameTooltipContent = (row: Results, link: string) => {
     return (
       <div>
@@ -197,132 +169,31 @@ const ResultsTable = () => {
         return true
     }
   }
+  const dataActivity = resultData?.data
+    ?.filter((item) => !isEmpty(item?.quiz_activity))
+    .map((item) => ({
+      activityName: item?.name,
+      listQuiz: item?.quiz_activity,
+      activityId: item?.id,
+      courseSectionPath: item?.path,
+    }))
 
   return (
     <>
       <div className="my-6">
         <FilterCourseSection setParams={setParams} />
       </div>
-
-      <SappTable
-        headers={headers}
-        hasCheck={false}
-        isCheckedAll={false}
-        classTable="w-full"
-        loading={isFetching}
-      >
-        {resultData?.data?.map((row) => {
-          let link: string = '#'
-          if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-            link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
-          } else {
-            if (row?.quiz?.attempts?.length) {
-              link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-            } else {
-              link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
-            }
-          }
-          return (
-            <tr
-              className={clsx({
-                'row h-auto border-b border-dashed border-[#DCDDDD]': true,
-                'text-[#DCDDDD]': !isDoneQuiz(row),
-              })}
-              key={row?.id}
-            >
-              {/* Name */}
-              <td className={clsx(commonDataCellStyle)}>
-                <Tooltip
-                  title={getNameTooltipContent(row, link)}
-                  arrow={false}
-                  placement="topLeft"
-                >
-                  <div
-                    onClick={() => {
-                      if (
-                        row?.course_section_type !== TEST_TYPE.ACTIVITY &&
-                        row?.quiz?.grading_method === 'MANUAL' &&
-                        row?.quiz?.attempts?.[0]?.grading_status ===
-                          GRADE_STATUS.AWAITING_GRADING
-                      ) {
-                        setOpenReport(true)
-                        return
-                      }
-                      router.push(link)
-                    }}
-                    className="cursor-pointer"
-                  >
-                    {truncateString(row?.name, 30)}
-                  </div>
-                </Tooltip>
-              </td>
-
-              {/* Type */}
-              <td className={clsx(commonDataCellStyle)}>
-                {testTypeTitle[row?.course_section_type]}
-              </td>
-
-              {/* Graded Activity */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {row?.quiz?.is_graded ? 'Yes' : 'No'}
-              </td>
-
-              {/* Status */}
-              <td className={clsx(commonDataCellStyle)}>{getStatus(row)}</td>
-
-              {/* Score */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getScore(row, row?.quiz?.grading_method)}
-              </td>
-              {/* Quizzes/Tests */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz_activity && row?.quiz_activity.length >= 0 ? (
-                  <span
-                    onClick={() => {
-                      if (row?.quiz_activity.length > 0) {
-                        setOpenModal(true)
-                        setQuizActivities(row.quiz_activity)
-                      }
-                    }}
-                    className={clsx(
-                      row?.quiz_activity.length > 0 &&
-                        `cursor-pointer text-[#3964EA] underline`,
-                    )}
-                  >
-                    {row.quiz_activity.length}
-                  </span>
-                ) : (
-                  <span>-</span>
-                )}
-              </td>
-
-              {/* Time Spent */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
-              </td>
-
-              {/* Last Submission */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz?.attempts?.length > 0
-                  ? dayjs(row?.quiz?.attempts[0]?.updated_at).format(
-                      'DD/MM/YYYY HH:mm',
-                    )
-                  : '-'}
-              </td>
-            </tr>
-          )
-        })}
-      </SappTable>
-      {resultData && (
-        <PaginationSAPP
-          currentPage={resultData.metadata?.page_index}
-          pageSize={resultData.metadata?.page_size}
-          totalItems={resultData.metadata?.total_records}
-          setCurrentPage={setCurrentPage}
-          setPageSize={setPageSize}
-          type={'table'}
-          classname="mt-3"
-        />
+      {!isEmpty(dataActivity) && (
+        <div className="flex flex-col gap-6">
+          {dataActivity?.map((item) => (
+            <CollapseActivity
+              activity={item?.listQuiz}
+              key={item?.activityId}
+              activityName={item?.activityName}
+              courseSectionPath={item?.courseSectionPath}
+            />
+          ))}
+        </div>
       )}
       <SappModalV3
         open={openReport}

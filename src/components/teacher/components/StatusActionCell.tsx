@@ -17,7 +17,7 @@ export const statusQuizMap = {
     bg: 'bg-[#025eff0D]',
   },
   UN_SUBMITTED: {
-    label: 'Unsubmitted',
+    label: 'UnSubmitted',
     color: 'text-warning',
     bg: 'bg-warning-50',
   },
