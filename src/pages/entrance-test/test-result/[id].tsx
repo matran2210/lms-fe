@@ -47,10 +47,9 @@ const TestEntranceResult = () => {
       <div className="relative">
         <div
           className="absolute right-10 top-10 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-2"
-          onClick={() =>
-            router
-              .push(PageLink.ENTRANCE_TEST)
-              .then(() => window.location.reload())
+          onClick={
+            () => router.push(PageLink.ENTRANCE_TEST)
+            // .then(() => window.location.reload())
           }
         >
           <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />

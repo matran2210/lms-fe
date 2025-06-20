@@ -5,14 +5,8 @@ import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
-import {
-  ISection,
-  SectionDropdownFormValues,
-  SectionField,
-} from 'src/type/courses'
-import { DEFAULT_SELECT } from 'src/constants'
+import { SectionDropdownFormValues, SectionField } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
@@ -25,8 +19,8 @@ import Link from 'next/link'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { useForm } from 'react-hook-form'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -45,27 +39,21 @@ const LearningNotesList = () => {
   const queryId = router.query.id
   const activityId = router.query.activityId
   const courseSectionId = router.query.course_section_id
-  const [sections, setSections] = useState<ISection[]>([])
-  const [subSections, setSubsections] = useState<ISection[]>([])
-  const [unit, setUnit] = useState<ISection[]>([])
-  const [activity, setActivity] = useState<ISection[]>([])
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<any>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const { control, watch, setValue, reset } =
-    useForm<SectionDropdownFormValues>({
-      defaultValues: {
-        section: null,
-        subsection: null,
-        unit: null,
-        activity: null,
-      },
-    })
-  const selectedSection = watch('section')
-  const selectedSubsection = watch('subsection')
-  const selectedUnit = watch('unit')
-  const selectedActivity = watch('activity')
+  const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
+  const [isPageStateVariables, setIsPageStateVariables] =
+    useState<boolean>(false)
+  const { setValue } = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
   const resetFormFields = (fields: SectionField[]) => {
     fields.forEach((field) => setValue(field, null))
   }
@@ -81,38 +69,9 @@ const LearningNotesList = () => {
     })
   }
 
-  // Set default change section all
-  useEffect(() => {
-    if (!selectedSection) {
-      resetFormFields(['subsection', 'unit', 'activity'])
-    }
-  }, [selectedSection])
-
-  //Change dropdown
-  useEffect(() => {
-    getCourseSections(DEFAULT_PAGESIZE)
-  }, [notesListStatus])
-
-  useEffect(() => {
-    getCourseSubsections(DEFAULT_PAGESIZE)
-  }, [selectedSection])
-
-  useEffect(() => {
-    getCourseUnit()
-  }, [selectedSubsection])
-
-  useEffect(() => {
-    getCourseActivity(DEFAULT_PAGESIZE)
-  }, [selectedUnit])
-
   const params = cleanParamsAPI({
     class_id: courseId || queryId,
-    course_section_id:
-      selectedActivity ||
-      selectedUnit ||
-      selectedSubsection ||
-      selectedSection ||
-      '',
+    course_section_id: paramsCourseSectionId,
   })
   // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
   useEffect(() => {
@@ -181,14 +140,7 @@ const LearningNotesList = () => {
           }, 500)
         })
     }
-  }, [
-    notesListStatus,
-    selectedSection,
-    selectedSubsection,
-    selectedUnit,
-    selectedActivity,
-    firstLoadActity,
-  ])
+  }, [notesListStatus, paramsCourseSectionId, firstLoadActity])
 
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
@@ -211,48 +163,11 @@ const LearningNotesList = () => {
     return () => containerDiv?.removeEventListener('scroll', handleScroll)
   }, [pageIndex])
 
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSections,
-    setPage: setPageSection,
-  } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE)
-
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSubsections,
-    setPage: setPageSubsection,
-  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToUnit,
-    setPage: setPageUnit,
-  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToActivity,
-    setPage: setPageActivity,
-  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
-
-  const handleDropdownChange = (
-    fieldName: SectionField,
-    selected: string | null,
-    fieldsToReset: SectionField[],
-  ) => {
-    setValue(fieldName, selected)
-
-    // Reset the downstream dropdowns
-    resetFormFields(fieldsToReset)
-  }
-
   const onClose = () => {
     document.body.style.overflow = 'auto'
     dispatch(resetNotesList())
     resetFormFields(['section', 'subsection', 'unit', 'activity'])
-    const pageStateVariables = [
-      setPageSection,
-      setPageSubsection,
-      setPageUnit,
-      setPageActivity,
-    ]
-    pageStateVariables.forEach((setPageVariable) => {
-      setPageVariable(DEFAULT_PAGESIZE * 2)
-    })
+    setIsPageStateVariables(true)
     setFirstLoadActity(false)
   }
 
@@ -260,70 +175,6 @@ const LearningNotesList = () => {
     const value = course_section_path.find((item: any) => item?.type === type)
     const responce = { value: value.id, label: value.name }
     return responce
-  }
-
-  async function getCourseSections(page_size: number) {
-    try {
-      if ((courseId || queryId) && notesListStatus) {
-        const res = await CoursesAPI.getCourseSectionList(
-          courseId || queryId,
-          page_size || DEFAULT_PAGESIZE,
-        )
-        setSections([...res?.data?.sections].reverse())
-        resetFormFields(['subsection', 'unit', 'activity'])
-      }
-    } catch (error) {}
-  }
-
-  async function getCourseSubsections(page_size: number) {
-    try {
-      if (selectedSection && notesListStatus) {
-        const class_id = courseId || queryId
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'CHAPTER',
-          selectedSection || '',
-          class_id as any,
-        )
-        setSubsections([...res?.data?.sections].reverse())
-        resetFormFields(['unit', 'activity'])
-      }
-    } catch (error) {}
-  }
-
-  async function getCourseUnit() {
-    try {
-      if (selectedSubsection && notesListStatus) {
-        const class_id = courseId || queryId
-        const res = await CoursesAPI.getCourseSubsectionList(
-          DEFAULT_PAGESIZE,
-          'UNIT',
-          selectedSubsection || '',
-          class_id as any,
-        )
-        setUnit([...res?.data?.sections].reverse())
-        setValue('activity', null)
-      }
-    } catch (error) {
-      resetFormFields(['unit', 'activity'])
-    }
-  }
-
-  async function getCourseActivity(page_size: number) {
-    try {
-      if (selectedUnit && notesListStatus) {
-        const class_id = courseId || queryId
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'ACTIVITY',
-          selectedUnit || '',
-          class_id as any,
-        )
-        setActivity([...res?.data?.sections].reverse())
-      }
-    } catch (error) {
-      setValue('activity', null)
-    }
   }
 
   const fetchData = async (params?: Object) => {
@@ -366,79 +217,11 @@ const LearningNotesList = () => {
       title="Note List"
       isShowBtnClose
     >
-      <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">
-        <SAPPSelectV2
-          control={control}
-          name="section"
-          placeholder="Section"
-          options={DEFAULT_SELECT.concat(
-            sections?.map((section) => ({
-              label: section.name,
-              value: section.id,
-            })),
-          )}
-          onChange={(selected) =>
-            handleDropdownChange('section', selected, [
-              'subsection',
-              'unit',
-              'activity',
-            ])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToSections}
-        />
-
-        <SAPPSelectV2
-          control={control}
-          name="subsection"
-          placeholder="Subsection"
-          options={
-            selectedSection
-              ? subSections?.map((s) => ({ label: s.name, value: s.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('subsection', selected, ['unit', 'activity'])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToSubsections}
-          disabled={!selectedSection}
-        />
-
-        <SAPPSelectV2
-          control={control}
-          name="unit"
-          placeholder="Unit"
-          options={
-            selectedSubsection
-              ? unit?.map((u) => ({ label: u.name, value: u.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('unit', selected, ['activity'])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToUnit}
-          disabled={!selectedSubsection}
-        />
-
-        <SAPPSelectV2
-          control={control}
-          name="activity"
-          placeholder="Activity"
-          options={
-            selectedUnit
-              ? activity?.map((a) => ({ label: a.name, value: a.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('activity', selected, [])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToActivity}
-          disabled={!selectedUnit}
-        />
-      </div>
+      <FilterCourseSection
+        setParams={setCourseSectionId}
+        heightCustom="h-10"
+        isPageStateVariables={isPageStateVariables}
+      />
 
       <div>
         {!isEmpty(notesListData?.notes) ? (

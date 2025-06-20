@@ -187,8 +187,12 @@ export const defaultStatusEnstraceTest = [
     value: 'SUBMITTED',
   },
   {
-    label: 'Unsubmitted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -556,6 +560,7 @@ export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
 export const CLASS_TYPE = {
   TRIAL: 'TRIAL',
 }
+export const TEST_AND_QUIZ_TITLE = 'Test & Quiz'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

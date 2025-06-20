@@ -23,6 +23,7 @@
 @import './components/_tooltip.scss';
 @import './components/drawer.scss';
 @import './pages/test';
+@import './pages/_entrance-test.scss';
 
 @tailwind base;
 @tailwind components;
@@ -443,7 +444,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box)) {
-  @apply relative min-h-[50px] min-w-[100px] border-0 border-b border-[#71717a];
+  @apply relative min-h-[22px] min-w-[100px] border-0 border-b border-[#71717a];
 }
 
 .sapp-input-dragNDrop:not(:has(.answer-box))::after {

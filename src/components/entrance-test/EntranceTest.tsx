@@ -1,19 +1,19 @@
 import { ClockIcon } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import SappButton from '@components/base/button/SappButton'
+import ButtonText from '@components/base/button/ButtonText'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { EAttemptStatus } from 'src/constants/attempt'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
-import CardCourse from '@components/common/CardCourse/CardCourse'
-import { AccessIcon } from '@assets/icons/entranceTest'
-import Link from 'next/link'
-import ButtonText from '@components/base/button/ButtonText'
+import { Select } from 'antd'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 interface EntranceTestProps {
   data: {
@@ -29,15 +29,22 @@ interface EntranceTestProps {
     total_question?: number
     attempt_times?: number
     is_limited?: boolean
+    attempts?: IAttempt[]
+    limit_count?: number
   }
   test_id_default?: any | undefined
 }
 
-enum EAttemptStatus {
-  UN_SUBMITTED = 'UN_SUBMITTED',
-  SUBMITTED = 'SUBMITTED',
-  UN_FINISHED = 'UN_FINISHED',
-  IN_PROGRESS = 'IN_PROGRESS',
+interface IAttempt {
+  answers?: []
+  created_at?: string
+  id?: string
+  is_graded?: boolean
+  number_of_attempts?: number
+  status?: string
+  ratio_score?: string
+  total_attempt_time?: number
+  started_at?: string
 }
 
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
@@ -48,6 +55,9 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     useState<boolean>(false)
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
     useState<number>(0)
+  const [currentAttempt, setCurrentAttempt] = useState<IAttempt>(
+    data?.attempts?.[0] || ({} as IAttempt),
+  )
 
   useEffect(() => {
     if (data) {
@@ -56,7 +66,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         data?.attempt_status === EAttemptStatus['IN_PROGRESS']
       ) {
         const calcTime = dayjs(
-          dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
+          dayjs(currentAttempt?.started_at).add(data?.quiz_timed, 'minutes'),
         ).diff(dayjs(), 'seconds')
 
         setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
@@ -77,8 +87,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     }
   }, [data])
 
-  const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
+  const timeTakenFormatted = currentAttempt?.total_attempt_time
+    ? formatTime(currentAttempt?.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
@@ -125,7 +135,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,
-          created_at: data?.created_at,
+          created_at: currentAttempt?.started_at,
         }),
       )
       setIsOpenPopupLastAttempt(true)
@@ -134,32 +144,54 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     }
   }
 
-  const cardFooter = (
-    <div className="action relative mt-10 flex items-center justify-end">
-      {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
-      {!data?.attempt_status ||
-      data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+  const renderButton = () => {
+    if (!data?.attempts?.length) {
+      //lần đầu làm bài
+      return (
         <ButtonSecondary
           title="Begin"
           className="ml-auto"
           onClick={handleClickBegin}
         />
-      ) : (
-        // đã làm bài xong
+      )
+    }
+    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
+      return (
+        <ButtonSecondary
+          title="Resume"
+          className="ml-auto"
+          onClick={handleClickBegin}
+        />
+      )
+    } else {
+      return (
         <>
           <ButtonText
             title="Result"
             onClick={() =>
-              router.push(`/entrance-test/test-result/${data?.quiz_attempt_id}`)
+              router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
             }
             className="mr-4"
           />
           <ButtonSecondary
             title="Retake"
-            onClick={() => setOpenExpired(true)}
+            onClick={() => {
+              if (data?.attempts?.length === data?.limit_count) {
+                setOpenExpired(true)
+              } else {
+                localStorage.removeItem('quizAttempt')
+                setOpen(true)
+              }
+            }}
           />
         </>
-      )}
+      )
+    }
+  }
+
+  const cardFooter = (
+    <div className="action relative mt-10 flex items-center justify-end">
+      {renderButton()}
     </div>
   )
 
@@ -167,7 +199,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     <>
       <CardCourse
         title={data?.name || ''}
-        attemptStatus={data?.attempt_status}
+        attemptStatus={currentAttempt?.status as EAttemptStatus}
         footer={cardFooter}
       >
         <div className="mt-10">
@@ -176,7 +208,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               {data?.is_attempt ? (
                 <>
                   <p>Time taken:</p>
-                  {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
                     <span>--</span>
                   ) : (
                     <p className="font-medium text-[#050505]">
@@ -194,14 +226,67 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               )}
             </div>
             <div className="flex justify-between pt-4 text-base capitalize text-gray">
-              <p>Results:</p>
-              {data?.is_attempt ? (
+              <p>No of Attemps:</p>
+              {data?.attempts && data.attempts.length > 0 ? (
                 <>
-                  {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+                  {/* {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
                     <span className="text-gray-800">--</span>
                   ) : (
                     <p className="font-medium text-info">
-                      {data?.total_correct_answer + '/' + data?.total_question}
+                      {data.attempts.length + '/' + data?.limit_count}
+                    </p>
+                  )} */}
+                  <p className="font-medium text-gray-800">
+                    {data.attempts.length + '/' + data?.limit_count}
+                  </p>
+                </>
+              ) : (
+                <span className="text-gray-800">--</span>
+              )}
+            </div>
+            <div className="flex justify-between pt-4 text-base capitalize text-gray-800">
+              <div className="flex items-center">
+                {data?.attempts?.length && data?.attempts?.length > 0 ? (
+                  <>
+                    <span>Result of Attemps:</span>
+                    {data?.attempts?.length > 1 ? (
+                      <Select
+                        options={data?.attempts
+                          ?.map((item, index) => ({
+                            value: item.id,
+                            label: `${(data?.attempts?.length ?? 0) - index}`,
+                          }))
+                          .reverse()}
+                        classNames={{
+                          root: 'select-result-attempt',
+                          popup: { root: 'select-result-attempt-option' },
+                        }}
+                        variant="borderless"
+                        value={currentAttempt?.id}
+                        onChange={(value) => {
+                          setCurrentAttempt(
+                            data?.attempts?.find((item) => item.id === value) ||
+                              ({} as IAttempt),
+                          )
+                        }}
+                        suffixIcon={<ArrowDownIcon />}
+                      />
+                    ) : (
+                      <span className="ml-1">{data?.attempts?.length}</span>
+                    )}
+                  </>
+                ) : (
+                  <span className="mr-1">Result of Attemps:</span>
+                )}
+              </div>
+              {data?.attempts?.length && data?.attempts?.length > 0 ? (
+                <>
+                  {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
+                    <span className="text-gray-800">--</span>
+                  ) : (
+                    <p className="flex items-center font-medium text-info">
+                      {/* {data?.total_correct_answer + '/' + data?.total_question} */}
+                      {currentAttempt?.ratio_score}
                     </p>
                   )}
                 </>

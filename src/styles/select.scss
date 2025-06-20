@@ -64,7 +64,7 @@
 }
 
 .select-single .select__single-value {
-  @apply text-[#99A1B7];
+  @apply text-base text-[#99A1B7];
 }
 
 // style css for result popup
@@ -74,7 +74,7 @@
   }
 
   .select__value-container {
-    @apply px-4 pl-0;
+    @apply p-0;
   }
 
   .select__single-value,

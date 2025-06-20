@@ -4,7 +4,7 @@ import React from 'react'
 import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
-import ExamDashboard from '@components/dashboard/ExamDashboard'
+import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
@@ -26,7 +26,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans text-gray-700 lg:px-5"
+        className="3xl:px-13.75 text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

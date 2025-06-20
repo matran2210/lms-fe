@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@assets/icons'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import HookFormSelect from '@components/base/select/HookFormSelect'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
@@ -12,11 +11,9 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
 import {
   IResourceDetail,
-  ISection,
   SectionDropdownFormValues,
   SectionField,
 } from 'src/type/courses'
@@ -26,7 +23,7 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
 import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useForm } from 'react-hook-form'
 
 interface IProps {
@@ -41,39 +38,21 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  const { control, watch, setValue, reset } =
-    useForm<SectionDropdownFormValues>({
-      defaultValues: {
-        section: null,
-        subsection: null,
-        unit: null,
-        activity: null,
-      },
-    })
-  const isFetchingRef = useRef(false)
-  const selectedSection = watch('section')
-  const selectedSubsection = watch('subsection')
-  const selectedUnit = watch('unit')
-  const selectedActivity = watch('activity')
+  const [paramsSubId, setParamsSubId] = useState<string>('')
+  const [isPageStateVariables, setIsPageStateVariables] =
+    useState<boolean>(false)
+  const { setValue } = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
+
   const resetFormFields = (fields: SectionField[]) => {
     fields.forEach((field) => setValue(field, null))
   }
-  const handleDropdownChange = (
-    fieldName: SectionField,
-    selected: string | null,
-    fieldsToReset: SectionField[],
-  ) => {
-    setValue(fieldName, selected)
-
-    // Reset the downstream dropdowns
-    resetFormFields(fieldsToReset)
-  }
-
-  useEffect(() => {
-    if (!selectedSection) {
-      resetFormFields(['subsection', 'unit', 'activity'])
-    }
-  }, [selectedSection])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
@@ -82,121 +61,13 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     setValue('section', null)
     setPageIndex(DEFAULT_PAGE_INDEX)
     setResources(undefined)
-    const pageStateVariables = [
-      setPageSection,
-      setPageSubsection,
-      setPageUnit,
-      setPageActivity,
-    ]
-    pageStateVariables.forEach((setPageVariable) => {
-      setPageVariable(DEFAULT_PAGESIZE * 2)
-    })
+    setIsPageStateVariables(true)
   }
-
-  const [sections, setSections] = useState<ISection[]>([])
-
-  async function getCourseSections(page_size: number) {
-    try {
-      if (
-        open &&
-        isEmpty(sections) &&
-        (router.query.courseId || router.query.id) &&
-        !isFetchingRef.current
-      ) {
-        isFetchingRef.current = true
-        const { data } = await CoursesAPI.getCourseSectionList(
-          router.query.courseId || router.query.id,
-          page_size || DEFAULT_PAGESIZE,
-        )
-        if (!isEmpty(data?.sections)) {
-          setSections([...data?.sections].reverse())
-          resetFormFields(['subsection', 'unit', 'activity'])
-        }
-      }
-    } catch (error) {
-    } finally {
-      isFetchingRef.current = false
-    }
-  }
-
-  useEffect(() => {
-    getCourseSections(DEFAULT_PAGESIZE)
-  }, [open])
-
-  const [subSections, setSubsections] = useState<ISection[]>([])
-
-  async function getCourseSubsections(page_size: number) {
-    try {
-      if (selectedSection && open) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'CHAPTER',
-          selectedSection || '',
-          class_id as string,
-        )
-        setSubsections([...res?.data?.sections].reverse())
-        resetFormFields(['unit', 'activity'])
-      }
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    getCourseSubsections(DEFAULT_PAGESIZE)
-  }, [selectedSection])
-
-  const [unit, setUnit] = useState<ISection[]>([])
-
-  async function getCourseUnit() {
-    try {
-      if (selectedSubsection && open) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          DEFAULT_PAGESIZE,
-          'UNIT',
-          selectedSubsection || '',
-          class_id as string,
-        )
-        setUnit([...res?.data?.sections].reverse())
-        resetFormFields(['activity'])
-      }
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    getCourseUnit()
-  }, [selectedSubsection])
-
-  const [activity, setActivity] = useState<ISection[]>([])
-
-  async function getCourseActivity(page_size: number) {
-    try {
-      if (selectedUnit && open) {
-        const class_id = router.query.courseId || router.query.id
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          'ACTIVITY',
-          selectedUnit || '',
-          class_id as string,
-        )
-        setActivity([...res?.data?.sections].reverse())
-      }
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    getCourseActivity(DEFAULT_PAGESIZE)
-  }, [selectedUnit])
 
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
 
   const params = cleanParamsAPI({
-    sub_id:
-      selectedActivity ||
-      selectedUnit ||
-      selectedSubsection ||
-      selectedSection ||
-      '',
+    sub_id: paramsSubId,
     page_index: DEFAULT_PAGE_INDEX,
     page_size: DEFAULT_PAGESIZE,
   })
@@ -221,13 +92,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       }
     }
     initFetchData()
-  }, [
-    open,
-    selectedSection,
-    selectedSubsection,
-    selectedUnit,
-    selectedActivity,
-  ])
+  }, [open, paramsSubId])
 
   const requestOngoingRef = useRef(false)
   const fetchData = async (nextPageIndex: number) => {
@@ -278,8 +143,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     }
   }, [fetchData, pageIndex])
 
-  const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
-
   const download = async (name: string, file_key: string) => {
     await UploadAPI.downloadFile({
       files: [
@@ -291,24 +154,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     })
   }
 
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSections,
-    setPage: setPageSection,
-  } = useDynamicLoading(getCourseSections, DEFAULT_PAGESIZE)
-
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToSubsections,
-    setPage: setPageSubsection,
-  } = useDynamicLoading(getCourseSubsections, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToUnit,
-    setPage: setPageUnit,
-  } = useDynamicLoading(getCourseUnit, DEFAULT_PAGESIZE)
-  const {
-    handleMenuScrollToBottom: handleMenuScrollToActivity,
-    setPage: setPageActivity,
-  } = useDynamicLoading(getCourseActivity, DEFAULT_PAGESIZE)
-
   return (
     <SappDrawerV3
       open={open}
@@ -316,79 +161,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       title="Course Resource"
       isShowBtnClose
     >
-      <div className="grid grid-cols-2 gap-2 md:gap-2 xl:grid-cols-4">
-        <SAPPSelectV2
-          control={control}
-          name="section"
-          placeholder="Section"
-          options={DEFAULT_SELECT.concat(
-            sections?.map((section) => ({
-              label: section.name,
-              value: section.id,
-            })),
-          )}
-          onChange={(selected) =>
-            handleDropdownChange('section', selected, [
-              'subsection',
-              'unit',
-              'activity',
-            ])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToSections}
-        />
+      <FilterCourseSection
+        setParams={setParamsSubId}
+        heightCustom="h-10"
+        isPageStateVariables={isPageStateVariables}
+      />
 
-        <SAPPSelectV2
-          control={control}
-          name="subsection"
-          placeholder="Subsection"
-          options={
-            selectedSection
-              ? subSections?.map((s) => ({ label: s.name, value: s.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('subsection', selected, ['unit', 'activity'])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToSubsections}
-          disabled={!selectedSection}
-        />
-
-        <SAPPSelectV2
-          control={control}
-          name="unit"
-          placeholder="Unit"
-          options={
-            selectedSubsection
-              ? unit?.map((u) => ({ label: u.name, value: u.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('unit', selected, ['activity'])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToUnit}
-          disabled={!selectedSubsection}
-        />
-
-        <SAPPSelectV2
-          control={control}
-          name="activity"
-          placeholder="Activity"
-          options={
-            selectedUnit
-              ? activity?.map((a) => ({ label: a.name, value: a.id }))
-              : []
-          }
-          onChange={(selected) =>
-            handleDropdownChange('activity', selected, [])
-          }
-          size="large"
-          onMenuScrollToBottom={handleMenuScrollToActivity}
-          disabled={!selectedUnit}
-        />
-      </div>
       {!isEmpty(resources?.resources) ? (
         <TextSkeleton loading={loading} length={10}>
           {resources?.resources?.map((resource) => (
