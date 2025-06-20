@@ -174,6 +174,7 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
         </div>
         <div className="action jusity-end relative flex items-center">
           <ButtonSecondary
+            size="medium"
             title={
               course?.cta_status === 'PREVIEW'
                 ? 'Preview'

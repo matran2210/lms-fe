@@ -302,6 +302,7 @@ const PartFailed = ({
               coursePart?.quiz?.limit_count &&
               isRunoutAttemp) ? (
               <ButtonSecondary
+                size="medium"
                 disabled={
                   coursePart?.quiz?.is_limited &&
                   coursePart?.quiz?.attempt?.number_of_attempts ===
