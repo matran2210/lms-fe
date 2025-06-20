@@ -216,6 +216,8 @@ const LearningNotesList = () => {
       handleCancel={onClose}
       title="Note List"
       isShowBtnClose
+      classNameBody="md:p-0 lg:p-8"
+      rootClassName={'responsive-drawer-v3'}
     >
       <FilterCourseSection
         setParams={setCourseSectionId}

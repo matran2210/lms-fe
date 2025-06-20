@@ -2,6 +2,7 @@ import { CloseIconV2 } from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import clsx from 'clsx'
 
 interface IProps extends DrawerProps {
   open: boolean
@@ -17,6 +18,7 @@ interface IProps extends DrawerProps {
   handleSubmit?: () => void
   sizeTextBtn?: 'small' | 'medium' | 'large' | 'extra'
   submitButtonClassName?: string
+  classNameBody?: string
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -34,6 +36,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   handleSubmit,
   sizeTextBtn = 'medium',
   submitButtonClassName,
+  classNameBody,
   ...props
 }) => {
   return (
@@ -45,7 +48,9 @@ const SappDrawerV3: React.FC<IProps> = ({
       closeIcon={false}
       {...props}
     >
-      <div className="relative h-full w-full bg-white p-8">
+      <div
+        className={clsx('relative h-full w-full bg-white p-8', classNameBody)}
+      >
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-2">

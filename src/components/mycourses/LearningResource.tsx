@@ -160,6 +160,8 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       handleCancel={onClose}
       title="Course Resource"
       isShowBtnClose
+      classNameBody="md:p-0 lg:p-8"
+      rootClassName={'responsive-drawer-v3'}
     >
       <FilterCourseSection
         setParams={setParamsSubId}
