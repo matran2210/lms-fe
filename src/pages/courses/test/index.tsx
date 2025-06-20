@@ -10,18 +10,20 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
+import {
+  GRADING_METHOD,
+  GRADE_STATUS,
+  QUIZ_ATTEMPT_GRADING_STATUS,
+  QUIZ_ATTEMPT_STATUS,
+} from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
-import { useDispatch } from 'react-redux'
-import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRetakeOrContinueAttempt'
-import { ClockIcon } from '@assets/icons'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import clsx from 'clsx'
-import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
-import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
 import BackIcon from '@assets/icons/BackIcon'
-import { TimeOutIcon } from '@components/icons'
 import { CoursesAPI } from '@pages/api/courses'
+import TestPopup from '@components/common/TestPopup'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonText from '@components/base/button/ButtonText'
+import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -48,7 +50,6 @@ const TestModal = ({
   is_passed_course,
 }: IProps) => {
   const router = useRouter()
-  const dispatch = useDispatch()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
   const isUnsubmitted =
@@ -76,7 +77,6 @@ const TestModal = ({
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [openResource, setOpenPopup] = useState(false)
-  const [openLastAttempt, setOpenLastAttempt] = useState(false)
   const [remainingTime, setRemainingTime] = useState<number>()
   const remainingTimeLastAttempt = useRef<number | null>(null)
   const [isExpiredLastAttempt, setIsExpiredLastAttempt] = useState(false)
@@ -197,14 +197,14 @@ const TestModal = ({
     remainingTimeLastAttempt.current <= 0 &&
     data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
 
-  useEffect(() => {
-    const handleSubmit = async () => {
-      if (isFinalAttemptTimeout) {
-        await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
-      }
-    }
+  const handleSubmitNow = async () => {
+    await CoursesAPI.submitAllQuestion(data?.quiz?.attempt?.id as string)
+  }
 
-    handleSubmit()
+  useEffect(() => {
+    if (isFinalAttemptTimeout) {
+      handleSubmitNow()
+    }
   }, [isFinalAttemptTimeout])
 
   const handleNextPage = () => {
@@ -255,7 +255,7 @@ const TestModal = ({
     }
   }, [selectedResult?.value, data?.quiz?.attempt])
 
-  const handleSubmit = async () => {
+  const handleStartANewAttempt = async () => {
     //to do: start test
     try {
       activeCourse && (await activeCourse())
@@ -282,7 +282,7 @@ const TestModal = ({
         created_at: selectedResult?.created_at,
       }),
     )
-    handleSubmit()
+    handleStartANewAttempt()
   }
 
   // const startTime = dayjs().add(1, 'day')
@@ -419,18 +419,210 @@ const TestModal = ({
         return 'Retake'
     }
   }
+  const renderCustomFooter = () => {
+    // Nếu chưa có quiz, không hiển thị gì
+    if (!data?.quiz) return null
+
+    if (isDisplayTestInfo) {
+      //Trường hợp chưa làm hoặc đã làm hết số lần cho phép
+      if (!data.quiz.is_limited) {
+        // Trường hợp không giới hạn số lần làm (unlimited attempt)
+        if (!data.quiz.attempt) {
+          // Trường hợp chưa làm bài
+          return (
+            <>
+              <ButtonPrimary
+                title="Start"
+                size="medium"
+                full
+                onClick={() => handleStartANewAttempt()}
+              />
+              <ButtonText
+                title="Back to My Course"
+                icon={<BackIcon />}
+                size="medium"
+                onClick={() => {
+                  setOpen(false)
+                  trackGAEvent('Click Button Back to My Course')
+                }}
+              />
+            </>
+          )
+        }
+
+        if (isContinue) {
+          // Trường hợp đang làm bài
+          return (
+            <>
+              <ButtonPrimary
+                title="Continue"
+                size="medium"
+                full
+                onClick={() => handleFinishTest()}
+              />
+              <ButtonText
+                title="Back to My Course"
+                icon={<BackIcon />}
+                onClick={() => {
+                  setOpen(false)
+                  trackGAEvent('Click Button Back to My Course')
+                }}
+              />
+            </>
+          )
+        }
+
+        return (
+          <>
+            <ButtonPrimary
+              title="Retake"
+              size="medium"
+              full
+              onClick={() => handleRetakeNewAttempt()}
+            />
+            <ButtonText
+              title="Back to My Course"
+              icon={<BackIcon />}
+              size="medium"
+              onClick={() => {
+                setOpen(false)
+                trackGAEvent('Click Button Back to My Course')
+              }}
+            />
+          </>
+        )
+      }
+      // 🟡 Trường hợp giới hạn số lần làm
+      if (data.quiz.is_limited && !!data.quiz.limit_count) {
+        if (isFinalAttemptTimeout) {
+          return (
+            <ButtonPrimary
+              title="View Result"
+              size="medium"
+              full
+              onClick={() => handleRedirectResult()}
+            />
+          )
+        }
+
+        if (!data.quiz.attempt || isSubmitted || isUnsubmitted) {
+          return (
+            <ButtonPrimary
+              title="Start"
+              size="medium"
+              full
+              onClick={() => handleStartANewAttempt()}
+            />
+          )
+        }
+
+        if (data.quiz.attempt.number_of_attempts === data.quiz.limit_count) {
+          return (
+            <>
+              <ButtonPrimary
+                title="Continue"
+                size="medium"
+                full
+                onClick={() => handleFinishTest()}
+              />
+              <ButtonText
+                title="Back to My Course"
+                icon={<BackIcon />}
+                size="medium"
+                onClick={() => {
+                  setOpen(false)
+                  trackGAEvent('Click Button Back to My Course')
+                }}
+              />
+            </>
+          )
+        }
+
+        if (data.quiz.attempt.number_of_attempts < data.quiz.limit_count) {
+          return (
+            <div className="flex flex-col items-center gap-3">
+              <ButtonPrimary
+                title="Continue the previous attempt"
+                size="medium"
+                full
+                onClick={() => handleContinueLastAttempt()}
+              />
+              <ButtonSecondary
+                title="Submit now"
+                size="medium"
+                full
+                onClick={async () => await handleSubmitNow()}
+              />
+              <ButtonText
+                title="Start a new attempt"
+                size="medium"
+                full
+                onClick={async () => {
+                  await handleSubmitNow()
+                  handleRetakeNewAttempt()
+                }}
+              />
+            </div>
+          )
+        }
+      }
+    } else {
+      //Trường hợp đã làm bài hoặc vẫn còn lượt làm bài
+      if (isContinue) {
+        return (
+          <>
+            <ButtonPrimary
+              title={'Continue the previous attempt'}
+              size="medium"
+              full
+              onClick={handleContinueLastAttempt}
+            />
+            <ButtonSecondary
+              title={'Start a new attempt'}
+              size="medium"
+              full
+              onClick={handleRetakeNewAttempt}
+            />
+            <ButtonText
+              title={'Back to My Course'}
+              size="medium"
+              onClick={() => {
+                setOpen(false)
+                trackGAEvent('Click Button Back to My Course')
+              }}
+            />
+          </>
+        )
+      }
+    }
+
+    return null
+  }
 
   const handleContinueLastAttempt = async () => {
     if (remainingTimeLastAttempt.current === null) return
     if (remainingTimeLastAttempt.current <= 0) {
       handleFinishTest()
     } else {
-      handleSubmit()
+      handleStartANewAttempt()
     }
   }
   const handleRetakeNewAttempt = async () => {
     localStorage.removeItem('quizAttempt')
-    handleSubmit()
+    handleStartANewAttempt()
+  }
+
+  const handleRedirectResult = () => {
+    if (isManualGradingAndNotFinishedGrading) {
+      router.push(
+        `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+      )
+    } else {
+      router.push({
+        pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+        query: { attempt: selectedResult?.label },
+      })
+    }
   }
 
   const onSubmit = async () => {
@@ -444,128 +636,60 @@ const TestModal = ({
       handleFinishTest()
     }
     if (renderOkButtonCaption() === 'View Result') {
-      if (isManualGradingAndNotFinishedGrading) {
-        router.push(
-          `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-        )
-      } else {
-        router.push({
-          pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-          query: { attempt: selectedResult?.label },
-        })
-      }
+      handleRedirectResult()
       return
     }
     if (
-      renderOkButtonCaption() === 'Retake' &&
-      !isExpiredLastAttempt &&
-      selectedResult?.status === 'IN_PROGRESS' &&
-      remainingTimeLastAttempt.current !== null &&
-      remainingTimeLastAttempt.current > 0
+      !(
+        renderOkButtonCaption() === 'Retake' &&
+        !isExpiredLastAttempt &&
+        selectedResult?.status === 'IN_PROGRESS' &&
+        remainingTimeLastAttempt.current !== null &&
+        remainingTimeLastAttempt.current > 0
+      )
     ) {
-      setOpenLastAttempt(true)
-    } else {
       if (!can_retake) {
         setOpenPopup(true)
         return
       }
-      handleSubmit()
+      handleStartANewAttempt()
     }
   }
 
+  const isDisplayTestInfo =
+    isSubmitted ||
+    isUnsubmitted ||
+    !data?.quiz?.attempt ||
+    data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count // Hiển thị bài chưa làm hoặc đã làm hết số lần cho phép
+
+  const displayTime =
+    !!data?.quiz?.quiz_timed &&
+    remainingTimeLastAttempt.current !== null &&
+    remainingTime !== undefined &&
+    remainingTime >= 0
+      ? dayjs()
+          .startOf('day')
+          .add(
+            remainingTimeLastAttempt.current >= 0
+              ? remainingTimeLastAttempt.current
+              : 0,
+            'second',
+          )
+      : ''
+
   return (
-    <>
-      {isSubmitted ||
-      isUnsubmitted ||
-      !data?.quiz?.attempt ||
-      data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count ? (
-        <SappModalV3
-          open={open}
-          handleCancel={() => {
-            setOpen(false)
-            setSelectedResult(undefined)
-            trackGAEvent('Click Button Cancel Modal Test')
-          }}
-          showOkButton={renderShowOkButton()}
-          onOk={onSubmit}
-          okButtonCaption={renderOkButtonCaption()}
-          okButtonClass="w-full rounded-lg"
-          footerButtonClassName="flex flex-col justify-center items-center gap-3"
-          cancelButtonCaption={
-            <div className="flex gap-2">
-              <BackIcon />
-              Back to My Course
-            </div>
-          }
-          cancelButtonClass={'p-0 underline hover:text-primary !p-0'}
-          buttonSize="medium"
-          icon={isFinalAttemptTimeout ? <TimeOutIcon /> : undefined}
-          classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
-          headerClassName="!m-0"
-          header={
-            <div className="text-3xl font-bold">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-            </div>
-          }
-        >
+    <TestPopup
+      open={open}
+      setOpen={setOpen}
+      title={
+        <div className="flex items-center justify-center">
+          {TEST_TYPE[data?.course_section_type]}
+        </div>
+      }
+      time={displayTime}
+      otherContent={
+        isDisplayTestInfo && (
           <>
-            {renderShowOkButton() &&
-              (renderOkButtonCaption() === 'Continue' ||
-                renderOkButtonCaption() === 'View Result') &&
-              data?.quiz?.attempt?.number_of_attempts ===
-                data?.quiz?.limit_count && (
-                <div>
-                  <div className="text-center text-base font-normal text-gray-800">
-                    {isFinalAttemptTimeout ? (
-                      <div>
-                        The test has timed out and has been submitted
-                        automatically.
-                      </div>
-                    ) : (
-                      <>
-                        <div>Your last attempt was unexpectedly ended. </div>
-                        <div>
-                          Please click &apos;Continue&apos; to proceed with the
-                          test.
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex justify-center gap-4 pt-6">
-                    {((!!data?.quiz?.quiz_timed &&
-                      !!remainingTimeLastAttempt.current &&
-                      renderShowOkButton() &&
-                      renderOkButtonCaption() === 'Continue') ||
-                      renderOkButtonCaption() === 'View Result') &&
-                      remainingTimeLastAttempt.current !== null && (
-                        <>
-                          <div className="flex items-center gap-2 text-base font-semibold">
-                            <RemainingTimeIcon />
-                            Your remaining time:
-                          </div>
-                          <div
-                            className={`flex items-center gap-2 font-normal ${remainingTimeLastAttempt?.current > 0 ? 'text-info' : 'text-error'}`}
-                          >
-                            <div className="text-base font-bold">
-                              {formatTime(
-                                remainingTimeLastAttempt.current > 0
-                                  ? remainingTimeLastAttempt.current
-                                  : 0,
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      )}
-                  </div>
-                </div>
-              )}
-          </>
-          {!(
-            renderShowOkButton() &&
-            (renderOkButtonCaption() === 'Continue' ||
-              renderOkButtonCaption() === 'View Result') &&
-            data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
-          ) && (
             <div className="flex flex-col gap-6">
               <div className="flex justify-between gap-8 text-base">
                 <div className="text-[#DCDDDD]00">Name:</div>
@@ -708,71 +832,20 @@ const TestModal = ({
                 )}
               </div>
             </div>
-          )}
-          <PopupCanNotRetakeTest
-            open={openResource}
-            setOpen={setOpenPopup}
-            onCancel={() => onCancel()}
-          />
-          {/* {openLastAttempt && remainingTimeLastAttempt.current > 0 && (
-        <PopupSelectRetakeOrContinueAttempt
-          open={openLastAttempt}
-          handleContinue={handleContinueLastAttempt}
-          handleRetake={handleRetakeNewAttempt}
-          setOpen={setOpenLastAttempt}
-          title={
-            <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {remainingTimeLastAttempt.current > 0 && (
-                <div className="item-center flex gap-2 font-normal text-[#3964EA]">
-                  <div className="m-auto">
-                    <ClockIcon color={'#3964EA'} size={24} />
-                  </div>
-                  <div className="text-[20px]">
-                    {formatTime(remainingTimeLastAttempt.current)}
-                  </div>
-                </div>
-              )}
-            </div>
-          }
-        />
-      )} */}
-        </SappModalV3>
-      ) : (
-        <PopupSelectRetakeOrContinueAttempt
-          open={open}
-          handleContinue={handleContinueLastAttempt}
-          handleRetake={handleRetakeNewAttempt}
-          time={
-            !!data?.quiz?.quiz_timed &&
-            remainingTimeLastAttempt.current !== null &&
-            (remainingTime !== undefined && remainingTime >= 0 ? (
-              <div
-                className={clsx(`text-base font-bold`, {
-                  'text-info': remainingTimeLastAttempt.current > 0,
-                  'text-error': remainingTimeLastAttempt.current <= 0,
-                })}
-              >
-                {formatTime(
-                  remainingTimeLastAttempt?.current >= 0
-                    ? remainingTimeLastAttempt.current
-                    : 0,
-                )}
-              </div>
-            ) : null)
-          }
-          setOpen={() => {
-            setOpen(false)
-            trackGAEvent('Click Button Cancel Modal Test')
-          }}
-          title={
-            <div className="flex items-center justify-center">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-            </div>
-          }
-        />
-      )}
-    </>
+            <PopupCanNotRetakeTest
+              open={openResource}
+              setOpen={setOpenPopup}
+              onCancel={() => onCancel()}
+            />
+          </>
+        )
+      }
+      customFooter={
+        <div className="flex w-full flex-col items-center justify-center gap-3">
+          {renderCustomFooter()}
+        </div>
+      }
+    />
   )
 }
 
