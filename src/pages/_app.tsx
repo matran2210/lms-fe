@@ -46,6 +46,10 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import 'sapp-common-package/dist/sapp-editor.css'
+import 'sapp-common-package/dist/index.css'
+import '@xyflow/react/dist/style.css'
+import 'preview-part/dist/index.css'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -309,15 +313,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   <>
                     <div className="relative">
                       <PinnedNotifications />
-                      <div className="fixed bottom-4 left-0 right-0 z-50 mx-auto my-0 max-w-[1524px]">
-                        <CtaTrial />
-                        <PopupCompletedCourse />
+                      <div className="fixed inset-x-0 bottom-4 z-50 lg:container md:px-8 lg:max-w-[1524px]">
+                        <div className="w-full">
+                          <CtaTrial />
+                        </div>
                       </div>
                       <Component {...pageProps} />
                     </div>
                     <BackToTop />
                     <Help showHelp={showHelp} />
                     <LearningNotesList />
+                    <PopupCompletedCourse />
                   </>
                 </RouteGuard>
               </SocketContext.Provider>

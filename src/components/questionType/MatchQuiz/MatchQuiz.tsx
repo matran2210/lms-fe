@@ -25,6 +25,7 @@ import CustomFlow from './CustomFlow'
 import { Divider } from 'antd'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
+import { Grid } from 'antd'
 
 interface IProps {
   data: any
@@ -52,6 +53,7 @@ interface IProps {
   exhibitText?: string
   correctAnswerClass?: string
   explainClassname?: string
+  onChangeMatchedPairs?: (matchedPairs: any[]) => void
 }
 
 type Role = 'question' | 'answer'
@@ -61,6 +63,8 @@ interface RawItem {
   id: string
   label: string
   role: Role
+  color: string
+  width: string
 }
 
 interface TransformDataInput {
@@ -94,6 +98,7 @@ const MatchQuiz = forwardRef(
       exhibitText = 'Exhibit',
       correctAnswerClass,
       explainClassname,
+      onChangeMatchedPairs,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -103,6 +108,55 @@ const MatchQuiz = forwardRef(
     const [correctNodes, setCorrectNodes] = useState<Node[]>([])
     const [correctEdges, setCorrectEdges] = useState<Edge[]>([])
     const [key, setKey] = useState(1)
+    const { useBreakpoint } = Grid
+    const { lg } = useBreakpoint()
+    const NODE_WIDTH = lg ? 328 : 290
+    const CONTAINER_WIDTH = lg ? 852 : 640
+
+    // State để lưu tối đa 2 node đang được chọn
+    const [selectedNodes, setSelectedNodes] = useState<string[]>([])
+
+    // Hàm xử lý khi click vào node
+    const handleNodeClick = useCallback(
+      (nodeId: string) => {
+        const clickedNode = nodes.find((n) => n.id === nodeId)
+        if (!clickedNode) return
+
+        // Nếu node đã được chọn thì bỏ qua
+        if (selectedNodes.includes(nodeId)) return
+
+        // Nếu chưa chọn node nào hoặc mới chọn 1 node
+        if (selectedNodes.length === 0) {
+          setSelectedNodes([nodeId])
+        } else if (selectedNodes.length === 1) {
+          const firstNode = nodes.find((n) => n.id === selectedNodes[0])
+          if (firstNode && firstNode.data.role !== clickedNode.data.role) {
+            // Đủ 2 node khác role, highlight cả 2 node
+            setSelectedNodes([selectedNodes[0], nodeId])
+            // Sau một nhịp event, nối edge và reset selection
+            setTimeout(() => {
+              const source =
+                firstNode.data.role === 'question' ? firstNode.id : nodeId
+              const target =
+                firstNode.data.role === 'question' ? nodeId : firstNode.id
+              setEdges((prev) =>
+                addEdge(
+                  { source, target, type: 'custom' } as Edge,
+                  prev.filter(
+                    (e) => e.source !== source && e.target !== target,
+                  ),
+                ),
+              )
+              setSelectedNodes([])
+            }, 100)
+          } else {
+            // Nếu cùng role thì chỉ đổi selected
+            setSelectedNodes([nodeId])
+          }
+        }
+      },
+      [nodes, selectedNodes],
+    )
 
     const getMatchedPairs = (edges: Edge[], nodes: MatchNode[]) => {
       const nodeMap = new Map(nodes.map((n) => [n.id, n]))
@@ -187,15 +241,35 @@ const MatchQuiz = forwardRef(
       const transformed = transformDataToNodes({
         questions,
         answers,
-        containerWidth: flowRef.current?.clientWidth || 700,
-        nodeWidth: 295,
+        containerWidth: flowRef.current?.clientWidth || CONTAINER_WIDTH,
+        nodeWidth: NODE_WIDTH,
       })
       setNodes(transformed)
-    }, [data])
+    }, [data, NODE_WIDTH, CONTAINER_WIDTH])
 
-    const nodeTypes = {
-      custom: CustomNode,
-    }
+    // CustomNode sẽ nhận selectedNodes, tự kiểm tra node.id có trong selectedNodes không để render border vàng
+    const nodeTypes = useMemo(
+      () => ({
+        custom: (props: any) => {
+          const { id } = props
+          const isSelected = selectedNodes.includes(id)
+          return (
+            <CustomNode
+              {...props}
+              data={{
+                ...props.data,
+                isSelected,
+                onClick: (e: React.MouseEvent<HTMLDivElement>) => {
+                  e.stopPropagation()
+                  if (!corrects) handleNodeClick(id)
+                },
+              }}
+            />
+          )
+        },
+      }),
+      [selectedNodes, handleNodeClick, corrects],
+    )
 
     const edgeTypes = {
       custom: CustomEdge,
@@ -409,8 +483,15 @@ const MatchQuiz = forwardRef(
       setCorrectNodes(correctFlow.nodes)
     }, [correctFlow])
 
+    // Thông báo matchedPairs lên parent mỗi khi edges hoặc nodes thay đổi
+    useEffect(() => {
+      if (onChangeMatchedPairs) {
+        onChangeMatchedPairs(getMatchedPairs(edges, nodes))
+      }
+    }, [edges, nodes])
+
     return (
-      <div key={key} ref={extenalRef}>
+      <div className="w-fit" key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
           onMouseUp={(e: any) => {
@@ -492,10 +573,12 @@ const MatchQuiz = forwardRef(
         </div>
         <div className="flex h-full w-full flex-col">
           <div
-            className={`relative w-full min-w-[700px]`}
+            className={`relative w-full min-w-[${CONTAINER_WIDTH}]`}
             ref={flowRef}
             style={{
+              width: CONTAINER_WIDTH + 'px',
               height: `${(nodes?.length / 2 || 1) * 100}px`,
+              maxWidth: CONTAINER_WIDTH + 'px',
             }}
           >
             <ReactFlowProvider>

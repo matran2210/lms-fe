@@ -1,4 +1,12 @@
-import { CircleCloseIcon, CloseIcon, HourglassIcon } from '@assets/icons'
+import {
+  CalculatorIconV2,
+  CircleCloseIcon,
+  CloseIcon,
+  DocumentTextIcon,
+  HourglassIcon,
+  ResourceIcon,
+  ScratchPadIconV2,
+} from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -10,7 +18,11 @@ import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
-import { convertMinutesToHourFormat, truncateBySpace } from '@utils/index'
+import {
+  convertMinutesToHourFormat,
+  truncateBySpace,
+  truncateString,
+} from '@utils/index'
 
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
@@ -40,6 +52,13 @@ import CourseTabDocument from '@components/learning/activity/CourseTabDocument'
 import clsx from 'clsx'
 import { Triangle } from '@components/icons/Triangle'
 import ActivityPagination from '@components/learning/activity/ActivityPagination'
+import { Divider } from 'antd'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import LearningResource from '@components/mycourses/LearningResource'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
+import { v4 as uuidv4 } from 'uuid'
+
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string
@@ -105,6 +124,7 @@ const ActivityPage = () => {
     left: 'calc(50% - 200px)',
   })
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [openResource, setOpenResource] = useState(false)
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -160,6 +180,20 @@ const ActivityPage = () => {
       return
     }
     handleFinishedCourseSectionProgress()
+  }
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+  const handleAddNote = () => {
+    const note = {
+      uuid: uuidv4(),
+      id: '',
+      name: 'Note',
+      description: '',
+    }
+    dispatch(pushNotes(note))
   }
 
   useLayoutEffect(() => {
@@ -239,18 +273,35 @@ const ActivityPage = () => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
-      if (data?.type === 'file') {
-        arr?.push({
-          type: data.type,
-          file: file,
-          id: uniqueId('file'),
-          fileName: fileName,
-        })
-      } else if (data?.type === 'exhibits') {
-        arr.push({
-          id: uniqueId('exhibits'),
-          ...data,
-        })
+      switch (data.type) {
+        case 'calculator':
+          arr?.push({
+            id: uniqueId('calculator'),
+            ...data,
+          })
+          break
+        case 'scratch_pad':
+          arr?.push({
+            id: uniqueId('scratch_pad'),
+            ...data,
+          })
+          break
+        case 'exhibits':
+          arr.push({
+            id: uniqueId('exhibits'),
+            ...data,
+          })
+          break
+        case 'file':
+          arr?.push({
+            type: data.type,
+            file: file,
+            id: uniqueId('file'),
+            fileName: fileName,
+          })
+          break
+        default:
+          break
       }
       return arr
     })
@@ -457,33 +508,53 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={ANIMATION.DATA_AOS}
-            className="mb-6 flex flex-col gap-6"
+            className="mb-[122px] flex flex-col gap-6 lg:mb-6"
           >
             {/* Header */}
             <div
               className={clsx(
-                `flex w-full select-none items-center justify-between gap-4`,
+                `flex w-full select-none flex-wrap items-center justify-between gap-4`,
                 { hidden: focusOnlyQuiz.open },
               )}
             >
-              <div className="text-bw-13 text-2xl font-medium">
+              <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
+                <ActivityPagination
+                  {...{ activity, sessionData }}
+                  focusOnlyQuiz={focusOnlyQuiz.open}
+                  isArrowTitle
+                />
                 <Tooltip title={activity?.name?.length > 95 && activity?.name}>
-                  {activity?.name}
+                  {truncateString(activity?.name, 91)}
                 </Tooltip>
               </div>
-              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap text-sm">
+              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
                 <HourglassIcon />
                 <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
               </div>
             </div>
 
             {/* Learning Outcome */}
-            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
+            <div
+              className={clsx({
+                hidden:
+                  focusOnlyQuiz.open ||
+                  !(
+                    activity?.course_outcomes &&
+                    activity?.course_outcomes?.length > 0
+                  ),
+              })}
+            >
               <LearningOutcome activity={activity} />
             </div>
 
             {/* Activity Resource */}
-            <div className={clsx({ hidden: focusOnlyQuiz.open })}>
+            <div
+              className={clsx({
+                hidden:
+                  focusOnlyQuiz.open ||
+                  !(activity?.files && activity?.files?.length > 0),
+              })}
+            >
               <ActivityResource
                 activity={activity}
                 handleOpenScratchPad={handleOpenScratchPad}
@@ -521,9 +592,66 @@ const ActivityPage = () => {
             </div>
           </div>
 
+          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-sm -translate-x-1/2 transform lg:hidden">
+            <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
+              <div className="flex items-center justify-center gap-5">
+                <CardMenuItem
+                  title="Note List"
+                  icon={<DocumentTextIcon className="h-6 w-6" />}
+                  onClick={handleOpenNotesList}
+                />
+                <CardMenuItem
+                  title="Resource"
+                  icon={<ResourceIcon className="h-6 w-6" />}
+                  onClick={() => setOpenResource(true)}
+                />
+              </div>
+              <Divider
+                type="vertical"
+                className="mx-6 my-auto h-6 border-white text-white"
+                orientation="center"
+              />
+              <div className="flex items-center justify-center gap-5">
+                <CardMenuItem
+                  title="Calculator"
+                  icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                  onClick={() => {
+                    handleOpenScratchPad({
+                      type: 'calculator',
+                    })
+                  }}
+                />
+                <CardMenuItem
+                  title="New Note"
+                  icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                  onClick={handleAddNote}
+                />
+              </div>
+            </div>
+          </div>
+
           {/* Sratchpad */}
           {openScratchPad.map((e) => {
-            if (e.type === 'file') {
+            if (e.type === 'calculator') {
+              return (
+                <MovableWindow
+                  key={e.id}
+                  className="lg:hidden"
+                  position="bottom left"
+                  zIndex={40}
+                >
+                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                    <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-bold">Calculator</div>
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseModalIcon />
+                      </button>
+                    </div>
+                    <Calculator />
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'file') {
               return (
                 <ModalResizeable
                   title={e.fileName}
@@ -595,6 +723,12 @@ const ActivityPage = () => {
           })}
         </div>
       </Layout>
+      {openResource && (
+        <LearningResource
+          open={openResource}
+          setOpenResource={setOpenResource}
+        />
+      )}
     </SappLoadingGlobal>
   )
 }

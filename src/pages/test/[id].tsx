@@ -13,7 +13,6 @@ import {
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -83,7 +82,6 @@ import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
   getAnswerDragNDrop,
-  getAnswerMatching,
   getResult,
   getValueFillText,
   getValueSelectText,
@@ -132,7 +130,7 @@ const TestDetail = () => {
               : getValues(`${currentTabID}_${index}_answer`)
           return {
             label: (
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-1 text-base font-normal">
                 Requirement {index + 1}
                 {hasAnswer && <CheckCircleOutlineYellow />}
               </span>
@@ -248,8 +246,10 @@ const TestDetail = () => {
       case QUESTION_TYPES.MATCHING:
         return (
           <MatchQuizComponent
+            onChangeMatchedPairs={(pairs) =>
+              setValue(`${currentTabID}_answer`, pairs)
+            }
             data={data}
-            ref={matchQuizRef}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
             removeHighlight={removeHighlight}
@@ -562,7 +562,6 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
-  const matchQuizRef = useRef<any>(null)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -1064,7 +1063,8 @@ const TestDetail = () => {
   const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentContent.qType === QUESTION_TYPES.TRUE_FALSE
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       if (
         !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
@@ -1078,12 +1078,6 @@ const TestDetail = () => {
         !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
         getValues(`${currentContent?.id}_answer`)?.length > 0
       ) {
-        return true
-      }
-      return false
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answerMatching = getAnswerMatching(matchQuizRef)
-      if (answerMatching && answerMatching.length > 0) {
         return true
       }
       return false
@@ -1231,17 +1225,11 @@ const TestDetail = () => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       const answers = handleSaveAnswer(
         getValues(`${currentPage}_answer`),
-        currentContent,
-        tabs,
-      )
-      return answers
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answers = handleSaveAnswer(
-        getAnswerMatching(matchQuizRef),
         currentContent,
         tabs,
       )
@@ -1559,7 +1547,6 @@ const TestDetail = () => {
           currentTabContent,
           oldCurrentTabData,
           getValues,
-          matchQuizRef,
         )
         // Check if the current tab content is the same as the old tab content
         if (isEqualValue) return
@@ -2384,9 +2371,7 @@ const TestDetail = () => {
             )}
           <Tooltip
             title={
-              (isGradingAfterEachQuestion &&
-                currentTabContent?.is_viewed_answer) ||
-              isGradingAfterAllQuestion ||
+              currentTabContent?.is_viewed_answer ||
               ![
                 QUESTION_TYPES.TRUE_FALSE,
                 QUESTION_TYPES.ONE_CHOICE,
@@ -2417,25 +2402,15 @@ const TestDetail = () => {
                       dispatch(disableUnsavedChange())
                     }
                   } else {
-                    if (indexTab < filteredTabs.length - 1) {
-                      const data = await getResult(currentTabContent)
-                      handleSubmitAnswer('view-answer')
-                      confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                        data?.requirements,
-                      )
-                    } else {
-                      handleSubmitAnswer('finish')
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    }
+                    const data = await getResult(currentTabContent)
+                    handleSubmitAnswer('view-answer')
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
                   }
                 } else {
                   if (indexTab < filteredTabs.length - 1) {
@@ -2940,7 +2915,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="cursor-pointer text-[#3964EA] hover:underline"
+                                  className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -2968,7 +2943,7 @@ const TestDetail = () => {
                       onMouseUp={() => setStartResize(false)}
                       onTouchEnd={() => setStartResize(false)}
                     >
-                      <div className="z-10 h-8 w-8 bg-white">
+                      <div className="z-10 h-8 w-8 rounded-full bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
@@ -2977,7 +2952,19 @@ const TestDetail = () => {
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >
-                      <div className="flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8">
+                      <div
+                        className={clsx(
+                          'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
+                          {
+                            'min-w-[350px] bg-white px-0 py-8':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.ESSAY,
+                            '!w-fit':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.MATCHING,
+                          },
+                        )}
+                      >
                         {checkType(
                           currentTabContent?.data,
                           currentTabContent?.data?.qType,
@@ -3049,7 +3036,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="cursor-pointer text-[#3964EA] hover:underline"
+                                className="w-fit cursor-pointer text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
@@ -3070,9 +3057,12 @@ const TestDetail = () => {
                       className={clsx(
                         'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
                         {
-                          'bg-white px-0 py-8':
+                          'min-w-[350px] bg-white px-0 py-8':
                             currentTabContent?.data?.qType ===
                             QUESTION_TYPES.ESSAY,
+                          '!w-fit':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.MATCHING,
                         },
                       )}
                     >
