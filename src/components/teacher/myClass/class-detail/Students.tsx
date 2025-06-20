@@ -68,22 +68,6 @@ export default function Students() {
 
   const columnsValue = [
     {
-      title: '#',
-      render: (
-        _: IStudentClassDetail,
-        record: IStudentClassDetail,
-        index: number,
-      ) => (
-        <NameNoActionCell
-          dataColumn={
-            index +
-            1 +
-            ((pagination?.current || 1) - 1) * (pagination?.pageSize || 10)
-          }
-        />
-      ),
-    },
-    {
       title: 'ID',
       render: (record: IStudentClassDetail) => (
         <NameNoActionCell dataColumn={record?.user?.hubspot_contact_id} />
@@ -174,6 +158,7 @@ export default function Students() {
           title: `Student List: ${data?.meta?.total_records ?? 0} Students`,
           isShowTitle: true,
         }}
+        isShowIndex
       />
     </>
   )
