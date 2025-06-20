@@ -31,6 +31,8 @@ import ModalFoundationCompleted from './ModalFoundationCompleted'
 import dayjs from 'dayjs'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import clsx from 'clsx'
+import { Grid } from 'antd'
+const { useBreakpoint } = Grid
 
 const Course = ({
   course,
@@ -43,6 +45,7 @@ const Course = ({
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
 }) => {
+  const screens = useBreakpoint()
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
   const [openActive, setOpenActive] = useState<boolean>(false)
@@ -419,6 +422,8 @@ const Course = ({
     }
     trackGAEvent('Click Title Course Item')
   }
+  const isDesktop = screens.lg
+  const maxLengthTitle = isDesktop ? 25 : 15
 
   return (
     <>
@@ -435,7 +440,7 @@ const Course = ({
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="min-h-[434px]"
+          classNameCard="lg:min-h-[444px] md:min-h-[428px]"
         >
           <div className="flex items-center justify-between">
             {enableCourse ? (
@@ -446,9 +451,11 @@ const Course = ({
                 <div className="text-sm font-semibold text-icon">
                   <Tooltip
                     title={course?.classes?.[0]?.code}
-                    showTooltip={course?.classes?.[0]?.code?.length > 20}
+                    showTooltip={
+                      course?.classes?.[0]?.code?.length > maxLengthTitle
+                    }
                   >
-                    {truncateString(course?.classes?.[0]?.code, 20)}
+                    {truncateString(course?.classes?.[0]?.code, maxLengthTitle)}
                   </Tooltip>
                 </div>
               </div>
@@ -517,7 +524,7 @@ const Course = ({
             )}
           </div>
           {enableCourse && (
-            <div className="progress mb-6 h-8">
+            <div className="progress mb-[30px] h-8">
               <div className="info mb-2 flex items-center justify-between">
                 <div className="text flex items-center">
                   <Icon

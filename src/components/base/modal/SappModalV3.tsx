@@ -24,7 +24,7 @@ interface IProps {
   onOk: () => void
   handleCancel: () => void
   handleClose?: () => void
-  icon: ReactNode
+  icon?: ReactNode
   header?: ReactNode
   content?: string | undefined | ReactNode
   children?: ReactNode

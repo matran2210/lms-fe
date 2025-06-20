@@ -15,7 +15,7 @@ const WarningSection = ({ isShowWarning, className = '' }: IProps) => {
             className,
           )}
         >
-          <CircleInfoIcon />
+          <CircleInfoIcon className="shrink-0" />
           <div className="text-base font-normal">
             You should select an answer before clicking “Submit”, because once
             you submit, the correct answer will be displayed.

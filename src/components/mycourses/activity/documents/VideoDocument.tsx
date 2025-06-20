@@ -46,6 +46,13 @@ const VideoDocument = ({
   quizId,
   grading_preference,
 }: Props) => {
+  const {
+    control: controlAnswer,
+    setValue,
+    reset: resetAnswer,
+    getValues,
+    watch,
+  } = useForm({})
   const [currentVideo, setCurrentVideo] = useState<IVideo>(
     videos && videos.length > 0 ? videos[0] : ({} as IVideo),
   )
@@ -449,6 +456,13 @@ const VideoDocument = ({
                 showCorrect={true}
                 document_id={document_id}
                 grading_preference={grading_preference}
+                {...{
+                  controlAnswer,
+                  setValue,
+                  reset: resetAnswer,
+                  getValues,
+                  watch,
+                }}
               ></QuizComponent>
             </div>
           </SappModal>

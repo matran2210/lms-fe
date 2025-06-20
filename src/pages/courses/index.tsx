@@ -23,6 +23,7 @@ import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import FilterCourse from '@components/mycourses/FilterCourse'
+import { HamburgerMenuLargeIcon } from 'src/assets/icons'
 
 const DEFAULT_PAGESIZE = 9
 const MASTER = 'Master Finance'
@@ -192,28 +193,32 @@ const MyCourse = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="My Course">
-        <div className="mb-6 mt-2 rounded-lg bg-white px-8 py-4">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearchV2}
-            formStyle="w-full flex items-center"
-            disabled={guideIsActive}
-          />
-          {guideStatus && guideStep === 1 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_1}
-              className="left-0 top-full mt-3"
-              title={'Search box'}
-              index={1}
-              total={7}
-              imgSrc={TourGuideStart}
+        <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-[0px_4px_20px_0px_rgba(41,41,41,0.05)] lg:hidden">
+            <HamburgerMenuLargeIcon />
+          </div>
+          <div className="w-full rounded-lg bg-white px-8 py-4">
+            <SearchForm
+              placeholder={MY_COURSES.placeholderSearchV2}
+              formStyle="w-full flex items-center"
+              disabled={guideIsActive}
             />
-          )}
+            {guideStatus && guideStep === 1 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_1}
+                className="left-0 top-full mt-3"
+                title={'Search box'}
+                index={1}
+                total={7}
+                imgSrc={TourGuideStart}
+              />
+            )}
+          </div>
         </div>
 
-        <Row className="mx-auto my-0 flex rounded-md bg-white shadow-sidebar">
-          <Col
-            span={16}
-            className={`heading relative rounded-md bg-white max-[1199px]:mx-6
+        <div className="mx-auto my-0 flex justify-between rounded-md bg-white shadow-sidebar">
+          <div
+            className={`heading relative rounded-md bg-white 
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
@@ -222,12 +227,6 @@ const MyCourse = () => {
               greeting="Welcome to"
               title={courseType}
               showShadow={false}
-              des={
-                <div>
-                  From here, you can access every topic, reading, and video
-                  lesson, as well as assignment questions.
-                </div>
-              }
             />
             {guideStatus && guideStep === 4 && (
               <PopupStep
@@ -241,15 +240,14 @@ const MyCourse = () => {
                 title="Welcome"
               />
             )}
-          </Col>
-          <Col
-            span={8}
-            className={`grid place-items-center rounded-md bg-white
+          </div>
+          <div
+            className={`grid place-items-center rounded-md bg-white md:mr-6 lg:mr-8
         ${guideStatus && guideStep === 5 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-[#F9F9F9] p-1">
+            <div className="flex gap-2 rounded-md bg-[#F9F9F9]">
               <Button
                 type={courseType === MASTER ? 'primary' : 'text'}
                 block
@@ -280,9 +278,9 @@ const MyCourse = () => {
                 title="Course Tab"
               />
             )}
-          </Col>
-        </Row>
-        <div className="mx-auto mb-6 mt-11 flex items-center justify-between">
+          </div>
+        </div>
+        <div className="mx-auto mb-6 flex items-center justify-between md:mt-8 lg:mt-11">
           <h1 className="text-2xl font-semibold text-gray-800">My Courses</h1>
           <div className={`relative`}>
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
