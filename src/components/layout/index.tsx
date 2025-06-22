@@ -90,9 +90,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           })}
         >
           <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
-            <div className={clsx('ml-0 h-full', { 'lg:ml-20': showSidebar })}>
-              {children}
-            </div>
+            <div className={clsx('ml-0 h-full')}>{children}</div>
           </div>
         </div>
       </div>

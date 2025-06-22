@@ -3,11 +3,9 @@ import {
   CircleInfoIcon,
   DownloadIcon,
   FileTextIcon,
-  InfoIcon,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
-import HighlightableText from '@components/highlights/HighlightableText'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
@@ -16,7 +14,6 @@ import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
@@ -32,9 +29,15 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  UseFormGetValues,
+  UseFormReset,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 import toast from 'react-hot-toast'
-import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import {
@@ -103,6 +106,11 @@ type Props = {
   isHideExhibit?: boolean
   saveAnswer?: () => void
   exhibitText?: string
+  controlAnswer: Control<FieldValues, any>
+  setValue: UseFormSetValue<FieldValues>
+  reset: UseFormReset<FieldValues>
+  getValues: UseFormGetValues<FieldValues>
+  watch: UseFormWatch<FieldValues>
 }
 
 type RefEditor = {
@@ -124,19 +132,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       isHideExhibit = true,
       saveAnswer,
       exhibitText = 'Exhibit',
+      controlAnswer,
+      setValue,
+      reset,
+      getValues,
+      watch,
     }: Props,
     ref,
   ) => {
     const questionRef = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
-    const {
-      control: controlAnswer,
-      setValue,
-      reset,
-      getValues,
-      watch,
-    } = useForm({})
 
     const DragDropRef = useRef(null) as any
     const MatchQuizRef = useRef(null) as any
@@ -598,7 +604,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 children: (
                   <div className="mt-6">
                     <EssayQuestionPreview
-                      className="!bg-transparent"
+                      className="!bg-transparent !p-0"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={
@@ -713,7 +719,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) : (
                   <div className="mt-6">
                     <EssayQuestionPreview
-                      className="!bg-transparent"
+                      className="!bg-transparent !p-0"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={

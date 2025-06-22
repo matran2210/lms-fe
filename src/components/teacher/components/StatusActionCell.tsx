@@ -53,8 +53,6 @@ export const StatusQuizTag = ({
 }: {
   status: keyof typeof statusQuizMap
 }) => {
-
-  console.log('StatusQuizTag', status)
   const { label, color, bg } = statusQuizMap[status] || {
     label: '',
     color: '',

@@ -56,16 +56,25 @@ function CtaTrial() {
     <>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
       {openPopupCTA && (
-        <PinnedNotificationsV2 bgColor="bg-info-100" borderColor="border-info">
-          <div />
-          <div className="flex gap-2 text-lg font-semibold text-gray-800">
+        <PinnedNotificationsV2
+          bgColor="bg-info-100"
+          borderColor="border-info"
+          classPinned="md:items-start lg:items-center"
+          heightPinned="h-[86px]"
+        >
+          <div className="md:hidden lg:block" />
+          <div className="h- flex gap-2 leading-normal text-gray-800 md:flex-col md:text-base lg:flex-row lg:text-lg">
             <div>
               You have&nbsp;
-              {localStorage.getItem('daysDifference')}
-              &nbsp;days left on your free trial. Upgrade today to unlock the
-              full course.
+              <span className="font-semibold">
+                {localStorage.getItem('daysDifference')}&nbsp;days left&nbsp;
+              </span>
+              on your free trial. Upgrade today to unlock the full course.
             </div>
-            <div className="cursor-pointer underline" onClick={handleUpgrade}>
+            <div
+              className="cursor-pointer font-semibold underline"
+              onClick={handleUpgrade}
+            >
               Upgrade Now
             </div>
           </div>

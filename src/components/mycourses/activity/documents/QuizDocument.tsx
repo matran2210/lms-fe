@@ -33,6 +33,7 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
+  QUESTION_TYPES,
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
@@ -49,6 +50,8 @@ import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { Tooltip } from 'antd'
 import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import ModalResults from '../ModalResults'
+import { useForm } from 'react-hook-form'
+import clsx from 'clsx'
 
 type Props = {
   questions: IQuestion[]
@@ -144,6 +147,13 @@ const QuizDocument = ({
     id: string
     isOpen: boolean
   }>()
+  const {
+    control: controlAnswer,
+    setValue,
+    reset,
+    getValues,
+    watch,
+  } = useForm({})
 
   useEffect(() => {
     ;(async () => {
@@ -614,15 +624,20 @@ const QuizDocument = ({
     refreshTab()
     setOpenGradedReport(false)
   }
+
   return (
-    <div className="flex flex-col gap-8 rounded-xl bg-gray-100 p-8">
+    <div
+      className={clsx('flex flex-col gap-8 rounded-xl bg-gray-100 p-8', {
+        'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
+      })}
+    >
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
         handleCancel={handleCancelConfirmSubmit}
       />
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 rounded-md bg-white px-6 py-2 ">
+      <div className="grid min-h-[50px] grid-cols-4 items-center gap-3 rounded-md bg-white px-6 py-2 ">
         <div className="col-span-1 flex flex-wrap items-center gap-2">
           <div
             className={`${
@@ -639,7 +654,7 @@ const QuizDocument = ({
         {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
           isNull(quizSetting)) && (
           <>
-            <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
+            <div className="col-span-2 mx-auto flex w-fit items-center gap-3">
               <button
                 disabled={activeQuestionIndex === 0 || loading}
                 className={`cursor-pointer select-none  ${
@@ -762,6 +777,13 @@ const QuizDocument = ({
               isHideExhibit={false}
               saveAnswer={handleSaveAnswer}
               exhibitText={exhibitText}
+              {...{
+                controlAnswer,
+                setValue,
+                reset,
+                getValues,
+                watch,
+              }}
             />
           )}
       </div>
@@ -770,15 +792,25 @@ const QuizDocument = ({
         <Tooltip
           title={
             isQuestionConfirmed ||
-            grading_preference !== 'AFTER_EACH_QUESTION' ||
-            (isQuestionConfirmed && isLastQuestion) ||
-            (is_graded && grading_method === GRADING_METHOD.MANUAL)
+            // grading_preference !== 'AFTER_EACH_QUESTION' ||
+            (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+            ![
+              QUESTION_TYPES.TRUE_FALSE,
+              QUESTION_TYPES.ONE_CHOICE,
+              QUESTION_TYPES.MULTIPLE_CHOICE,
+            ].includes(activeQuestion?.qType) ||
+            ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+              activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+              watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+            (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+              watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+              watch(`${activeQuestion?.id}_${document_id}_answer`).length > 0)
               ? null
               : 'You should select an answer before click'
           }
           classNames={{ root: 'max-w-72' }}
           getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-          mouseEnterDelay={0.3}
+          trigger={'hover'}
         >
           <>
             {(isQuestionConfirmed ||
@@ -838,38 +870,6 @@ const QuizDocument = ({
           loading={loading}
           handleOk={() => setModalResult(undefined)}
         />
-        // <SappModal
-        //   open={modalResult?.status}
-        //   okButtonCaption={'Yes'}
-        //   cancelButtonCaption={'No'}
-        //   handleCancel={() => setModalResult(undefined)}
-        //   handleSubmit={() => setModalResult(undefined)}
-        //   setOpen={() => setModalResult(undefined)}
-        //   size="max-w-[1144px]"
-        //   position="center"
-        //   showFooter={false}
-        //   isFullScreen={true}
-        //   // refClass="h-full md:px-6 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-auto bg-white text-left shadow-xl transition-all z-[100000]"
-        //   showHeader={false}
-        // >
-        //   <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
-        //     <div
-        //       className="absolute right-6 top-5  ml-auto cursor-pointer"
-        //       onClick={() => {
-        //         refreshTab()
-        //         setModalResult(undefined)
-        //       }}
-        //     >
-        //       <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-        //     </div>
-        //     <QuizResultComponent
-        //       questionResponse={modalResult?.questions || []}
-        //       getTable={getTable}
-        //       onShowDetail={handleShowQuestionResultDetail}
-        //       loading={loading}
-        //     />
-        //   </div>
-        // </SappModal>
       )}
 
       {showQuestionResultDetail?.isOpen && (

@@ -583,7 +583,12 @@ const Discussion = ({ class_id }: Props) => {
                   <div
                     className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
                   >
-                    <CameraIcon className="cursor-pointer " />
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => rootFileInputRef?.current?.click()}
+                    >
+                      <CameraIcon />
+                    </span>
                     <input
                       type="file"
                       className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0"

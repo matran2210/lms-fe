@@ -40,6 +40,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
+        canvas: '#F9F9F9',
       },
       success: {
         50: '#E7FCF2',
@@ -115,6 +116,10 @@ module.exports = {
       badge: {
         200: '#B3CEE0',
         500: '#08719D',
+      },
+      dashboard: {
+        learing: '#6FD3B0',
+        'mock-test': '#FB8C5B',
       },
     },
     screens: {

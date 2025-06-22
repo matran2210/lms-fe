@@ -145,6 +145,15 @@ export const calculateTimeAgo = (date: string): string => {
   return ''
 }
 
+export function formatDateToLongString(isoDateString: string): string {
+  const date = new Date(isoDateString)
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date)
+}
+
 /**
  * Hàm debounce giúp trì hoãn thực thi một hàm cho đến khi không có lời gọi mới sau một khoảng thời gian.
  *
