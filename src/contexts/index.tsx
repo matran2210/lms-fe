@@ -30,6 +30,8 @@ type Context = {
   setShowPinnedTrial: React.Dispatch<React.SetStateAction<boolean>>
   openPopupCTA: IPopupFormState
   setOpenPopupCTA: React.Dispatch<React.SetStateAction<IPopupFormState>>
+  isOpenSidebar: boolean
+  setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 // initContext
@@ -53,6 +55,8 @@ const initContext: Context = {
     thankYouLater: false,
   },
   setOpenPopupCTA: () => {},
+  isOpenSidebar: false,
+  setOpenSidebar: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -97,7 +101,10 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     thankYou: false,
     thankYouLater: false,
   })
-
+  /**
+   * @description state này bằng true khi hiển thị sidebar
+   */
+  const [isOpenSidebar, setOpenSidebar] = useState(false)
   const router = useRouter()
 
   async function fetchEventTest() {
@@ -135,6 +142,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       showPinnedTrial,
       openPopupCTA,
       setOpenPopupCTA,
+      isOpenSidebar,
+      setOpenSidebar,
     }),
     [
       openPopupCongrats,
@@ -151,6 +160,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       showPinnedTrial,
       openPopupCTA,
       setOpenPopupCTA,
+      isOpenSidebar,
+      setOpenSidebar,
     ],
   )
 

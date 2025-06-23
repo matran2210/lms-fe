@@ -58,6 +58,7 @@ import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import LearningResource from '@components/mycourses/LearningResource'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -78,7 +79,10 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -438,7 +442,7 @@ const ActivityPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Activity">
+      <Layout title="Activity" showSidebar={isAlwaysShowSidebar}>
         <div className={`my-0 text-[#050505]`}>
           {/* Breadcrumbs */}
           <ul

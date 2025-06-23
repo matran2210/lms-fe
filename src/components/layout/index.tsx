@@ -8,13 +8,14 @@ import { ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import Sidebar from './Sidebar'
-
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface LayoutProps {
   children: ReactNode
   title: string
   size?: 'sm' | 'md' | 'xl'
   showSidebar?: boolean
   fullWidth?: boolean
+  handleToggleSidebar?: () => void
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -25,10 +26,17 @@ export default function Layout(props: LayoutProps): ReactElement {
     size = 'xl',
     showSidebar = true,
     fullWidth = false,
+    handleToggleSidebar,
   } = props
   const router = useRouter()
-  const [isOpened, setOpened] = useState(false)
-  const toggleDrawer = () => setOpened((prev) => !prev)
+  const screens = useTailwindBreakpoint()
+  const isShowMenuContent = ['base', 'sm', 'md'].includes(screens)
+
+  const { isOpenSidebar, setOpenSidebar } = useCourseContext()
+  const toggleDrawer = () => {
+    handleToggleSidebar?.()
+    setOpenSidebar(!isOpenSidebar)
+  }
 
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
   const { showPinnedTrial } = useCourseContext()
@@ -66,26 +74,30 @@ export default function Layout(props: LayoutProps): ReactElement {
           'lg:ml-20': showSidebar,
         })}
       >
-        {showSidebar === true && (
-          <Sidebar
-            isOpened={isOpened}
-            toggleDrawer={toggleDrawer}
-            className={clsx(
-              'menu-sidebar-left',
-              'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-              `fixed hidden h-[calc(100vh-16px${openPinned ? '-60px' : ''})] w-20 rounded-xl bg-white shadow-sidebar lg:block`,
-              {
-                'overflow-hidden': !guideStatus,
-                'menu-sidebar-left--hover':
-                  guideStatus && (guideStep === 2 || guideStep === 3),
-                'left-0': showSidebar,
-              },
-              paddingTop,
-            )}
-            setOpenResource={setOpenResource}
-            openResource={openResource}
-          />
-        )}
+        <Sidebar
+          isOpened={isOpenSidebar}
+          toggleDrawer={toggleDrawer}
+          className={clsx(
+            'menu-sidebar-left transition-all duration-150 ease-in-out',
+            'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
+            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] w-0 rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
+            {
+              'overflow-hidden': !guideStatus,
+              'menu-sidebar-left--hover':
+                (guideStatus && (guideStep === 2 || guideStep === 3)) ||
+                isShowMenuContent,
+              'h-[calc(100vh-32px-60px)]': !openPinned,
+              // 'hidden': !showSidebar,
+              // 'w-[220px]': isOpenSidebar,
+              'w-[220px] translate-x-0': showSidebar,
+              'w-[220px] -translate-x-60': !showSidebar,
+            },
+            paddingTop,
+          )}
+          setOpenResource={setOpenResource}
+          openResource={openResource}
+        />
+
         <div
           className={clsx('container min-h-screen', {
             'max-w-[calc(1179px+4rem)]': size === 'sm',

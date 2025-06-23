@@ -16,11 +16,15 @@ import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EntranceTestAPI } from '../api/entrance-test'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const EntranceTest = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const {
     data: entranceTestLists,
     isLoading,
@@ -48,7 +52,7 @@ const EntranceTest = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Entrance Test">
+      <Layout title="Entrance Test" showSidebar={isAlwaysShowSidebar}>
         <div
           className="mt-4 rounded-lg bg-white px-8 py-4"
           style={{ boxShadow: '0px 4px 12px 0px #2C30000A' }}

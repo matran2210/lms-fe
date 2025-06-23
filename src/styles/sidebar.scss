@@ -2,12 +2,8 @@
   .menu-sidebar-left--hover {
     @apply w-[220px];
 
-    .group-logos {
-      @apply pb-5;
-    }
-
     .logo-full {
-      @apply visible opacity-100;
+      @apply visible !block opacity-100;
     }
 
     .sidebar-item .label {
@@ -64,10 +60,6 @@
 
       .menu-items-list {
         @apply p-4 pb-0;
-      }
-
-      .sidebar-list-items {
-        @apply mb-3 last:mb-0;
       }
     }
   }
