@@ -24,22 +24,21 @@ const PopupSelectRetakeOrContinueAttempt = ({
   title,
   time,
 }: IProps) => {
-
-const handleOK = async (type: 'continue' | 'retake' | 'submit') => {
-  switch (type) {
-    case 'continue':
-      await handleContinue()
-      break
-    case 'retake':
-      await handleRetake()
-      break
-    case 'submit':
-    default:
-      await handleSubmit()
-      break
+  const handleOK = async (type: 'continue' | 'retake' | 'submit') => {
+    switch (type) {
+      case 'continue':
+        await handleContinue()
+        break
+      case 'retake':
+        await handleRetake()
+        break
+      case 'submit':
+      default:
+        await handleSubmit()
+        break
+    }
+    setOpen(false)
   }
-  setOpen(false)
-}
 
   return (
     <SappModalV3

@@ -2,42 +2,70 @@ import { ArrowRight } from '@assets/icons'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
 import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
+import Tooltip from 'src/common/Tooltip'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { EDateTime } from 'src/type'
 import { ITestQuizProps } from 'src/type/results'
 
-const CardResultTest = ({ quiz, activityName }: ITestQuizProps) => {
-  if (!quiz) return null
-  const dateSubmitted = quiz?.attempts?.[0]?.updated_at
-  const timeSpent = quiz?.attempts?.[0]?.total_attempt_time
+const CardResultTest = ({
+  resultData,
+  handleViewResult,
+  getNameTooltipContent,
+}: ITestQuizProps) => {
+  if (!resultData) return null
+  const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
+  const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
   return (
-    <div className="flex items-center justify-between gap-2.5 rounded-xl bg-white p-6 shadow-small">
-      <div className="flex flex-col gap-2.5">
+    <div className="flex items-center justify-between rounded-xl bg-white p-6 shadow-small">
+      <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          <div className="">{activityName}</div>
-          <div className="">
-            <StatusQuizTag
-              status={
-                (quiz?.attempts?.[0]?.status || 'UN_SUBMITTED') as
-                  | QUIZ_ATTEMPT_GRADING_STATUS
-                  | QUIZ_ATTEMPT_STATUS
-              }
-            />
-          </div>
+          <Tooltip
+            title={getNameTooltipContent?.(resultData)}
+            arrow={false}
+            placement="topLeft"
+          >
+            <div
+              className="text-lg font-semibold leading-[27px] text-gray-800"
+              onClick={() => handleViewResult(resultData)}
+            >
+              {resultData?.name}
+            </div>
+          </Tooltip>
+          <StatusQuizTag
+            status={
+              (resultData?.quiz?.attempts?.[0]?.status || 'UN_SUBMITTED') as
+                | QUIZ_ATTEMPT_GRADING_STATUS
+                | QUIZ_ATTEMPT_STATUS
+            }
+          />
         </div>
-        <div className="flex items-center">
-          {dateSubmitted && timeSpent && (
-            <div className="flex items-center gap-2">
-              <div className="">
+
+        {dateSubmitted && timeSpent ? (
+          <div className="flex items-center">
+            <div className="flex items-center">
+              <div className="mr-2 text-base font-normal leading-normal text-gray-400">
+                Last submission:
+              </div>
+              <div className="text-base font-medium leading-normal text-gray-800">
                 {dateSubmitted
-                  ? dayjs(dateSubmitted).format('DD/MM/YYYY HH:mm')
+                  ? dayjs(dateSubmitted).format(EDateTime.fullDate)
                   : '-'}
               </div>
-              <div className="">{getTimeFromInput(timeSpent)}</div>
+              <div className="mx-3 text-gray-300">|</div>
+              <div className="mr-2 text-base font-normal leading-normal text-gray-400">
+                Time spent:
+              </div>
+              <div className="text-base font-medium leading-normal text-gray-800">
+                {getTimeFromInput(timeSpent)}
+              </div>
             </div>
-          )}
-        </div>
+          </div>
+        ) : null}
       </div>
-      <div className="flex items-center">
+      <div
+        className="flex cursor-pointer items-center"
+        onClick={() => handleViewResult(resultData)}
+      >
         <ArrowRight />
       </div>
     </div>
