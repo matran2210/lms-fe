@@ -12,12 +12,17 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
 import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
   const router = useRouter()
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
 
@@ -33,7 +38,7 @@ const ExamInformation = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Exam Information">
+      <Layout title="Exam Information" showSidebar={isAlwaysShowSidebar}>
         <div className="mx-auto my-0 max-w-[1144px] max-[1199px]:mx-6">
           <>
             <div className="main relative mx-auto my-0 max-w-[1144px]">

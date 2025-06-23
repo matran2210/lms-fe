@@ -15,11 +15,15 @@ import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const EntranceTest = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await EntranceTestAPI.get(params)
@@ -41,7 +45,7 @@ const EntranceTest = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Entrance Test">
+      <Layout title="Entrance Test" showSidebar={isAlwaysShowSidebar}>
         <div className="border-b border-[#DCDDDD] bg-white">
           <div className="py-5.75 relative my-0 flex">
             <SearchForm

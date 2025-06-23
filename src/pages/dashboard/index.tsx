@@ -11,13 +11,17 @@ import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const Dashboard = () => {
   const router = useRouter()
   const { user } = useAppSelector(userReducer)
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   return (
-    <Layout title="Dashboard">
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
       <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
         <div className="py-4.5 mx-auto my-0 flex max-w-[1144px]">
           <SearchForm

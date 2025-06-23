@@ -14,7 +14,7 @@ export default function MenuItemsList({
   closeSideBar,
 }: MenuItemsListProps) {
   return (
-    <div className="menu-items-list">
+    <div className="menu-items-list flex flex-col gap-4 px-3">
       {options.map((option, index) => (
         <MenuItem
           menuItem={option}

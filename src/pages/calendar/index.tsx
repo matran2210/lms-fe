@@ -10,8 +10,13 @@ import {
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
 } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
 const Page = () => {
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<ICalendarList>()
   const [filter, setFilter] = useState<IFilter>()
@@ -103,7 +108,7 @@ const Page = () => {
   }, [filter, data])
 
   return (
-    <Layout title="Course Detail">
+    <Layout title="Course Detail" showSidebar={isAlwaysShowSidebar}>
       <div className="mx-auto my-0 max-w-[1570px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">

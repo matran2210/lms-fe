@@ -31,9 +31,14 @@ import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
 import ButtonDanger from '@components/base/button/ButtonDanger'
 import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
@@ -141,7 +146,7 @@ const ProfilePage = () => {
   ]
 
   return (
-    <Layout title="My Profile" size="sm">
+    <Layout title="My Profile" size="sm" showSidebar={isAlwaysShowSidebar}>
       <div className="flex h-full w-full flex-col">
         <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
           <div className="py-4.5 mx-auto my-0 flex h-full">

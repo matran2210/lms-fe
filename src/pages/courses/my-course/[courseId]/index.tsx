@@ -22,12 +22,19 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
 import { HamburgerMenuLargeIcon } from '@assets/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setshowSidebar] = useState(false)
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
   const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
     isOpen: false,
@@ -40,6 +47,18 @@ const CourseDetail = () => {
   const params = {
     user_section_learning_status:
       router.query.user_section_learning_status || undefined,
+  }
+
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setshowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setshowSidebar(false)
+    setOpenSidebar(false)
   }
 
   /**
@@ -192,9 +211,16 @@ const CourseDetail = () => {
   }, [data])
 
   return (
-    <Layout title="Course Detail">
+    <Layout
+      title="Course Detail"
+      showSidebar={showSidebar || isAlwaysShowSidebar}
+      handleToggleSidebar={handleCloseSidebar}
+    >
       <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
-        <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden">
+        <div
+          className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
+          onClick={handleOpenSidebar}
+        >
           <HamburgerMenuLargeIcon />
         </div>
         <div className="w-full rounded-lg bg-white px-8 py-4">

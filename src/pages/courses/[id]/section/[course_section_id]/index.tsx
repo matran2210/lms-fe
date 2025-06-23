@@ -17,6 +17,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { StarCircleIcon } from '@components/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProps {
   course_section_type: string
@@ -51,6 +52,10 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -444,7 +449,7 @@ const CoursePartDetail = () => {
   }, [courseChapterId])
 
   return (
-    <Layout title="Course Part Detail">
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       <div className="mt-10">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
