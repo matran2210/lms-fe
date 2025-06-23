@@ -3,6 +3,7 @@ import { Collapse } from 'antd'
 import React from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
 import { ITestQuizProps } from 'src/type/results'
+import clsx from 'clsx'
 
 const CollapseActivity = ({
   resultData,
@@ -39,8 +40,13 @@ const CollapseActivity = ({
     <Collapse
       bordered={false}
       expandIconPosition="end"
-      defaultActiveKey={['learning_outcome']}
-      expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
+      defaultActiveKey={['activity']}
+      expandIcon={({ isActive }) => (
+        <CollapseArrowIcon
+          className={clsx({ '-rotate-180': isActive })}
+          selected={isActive}
+        />
+      )}
       items={getItemsActivity}
       className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
     />
