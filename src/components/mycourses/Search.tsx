@@ -90,7 +90,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
             {...field}
             type="text"
             placeholder={placeholder}
-            className="placeholder-text-gray-400 h-6 w-full border-0 px-4 text-base focus:border-0 focus:outline-0 focus:ring-0"
+            className="h-6 w-full border-0 px-4 text-base placeholder:text-gray-400 focus:border-0 focus:outline-0 focus:ring-0"
           />
         )}
       />

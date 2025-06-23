@@ -23,7 +23,7 @@
       d="M19.978 43.0225L21.9297 49.4145H22.0021L23.9538 43.0225H26.3146L23.37 51.7497H20.5618L17.6172 43.0225H19.978Z"
       fill="white" />
     <path d="M29.1719 16.2451V22.9726V29.6889L42.8294 22.9726L29.1719 16.2451Z" stroke="#F15668"
-      stroke-linecap="round" stroke-linejoin="round" />
+      strokeLinecap="round" strokeLinejoin="round" />
   </g>
   <defs>
     <clipPath id="clip0_4164_353">

@@ -9,12 +9,16 @@ import { ANIMATION } from 'src/constants'
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
 > = {
+  [EAttemptStatus.NOT_STARTED]: {
+    badge: 'Not started',
+    className: 'bg-info-50 text-info',
+  },
   [EAttemptStatus.IN_PROGRESS]: {
     badge: 'In Progress',
     className: 'bg-warning-50 text-warning',
   },
   [EAttemptStatus.SUBMITTED]: {
-    badge: 'Finished',
+    badge: 'Submitted',
     className: 'bg-success-50 text-success',
   },
 }
@@ -68,7 +72,7 @@ const CardCourse = forwardRef<
               : badgeCode
                 ? badgeCode
                 : {
-                    badge: 'Take your Test',
+                    badge: 'Not started',
                     className: 'bg-info-50 text-info',
                   })}
           />

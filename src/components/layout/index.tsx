@@ -100,9 +100,9 @@ export default function Layout(props: LayoutProps): ReactElement {
 
         <div
           className={clsx('container min-h-screen', {
-            'max-w-[calc(1179px+2rem)]': size === 'sm',
-            'max-w-[calc(1444px+2rem)]': size === 'md',
-            'max-w-[calc(1524px+2rem)]': size === 'xl',
+            'max-w-[calc(1179px+4rem)]': size === 'sm',
+            'max-w-[calc(1444px+4rem)]': size === 'md',
+            'max-w-[calc(1524px+4rem)]': size === 'xl',
             'max-w-full p-0': fullWidth,
           })}
         >

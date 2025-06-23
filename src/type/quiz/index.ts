@@ -10,6 +10,10 @@ export interface IScoreDetails {
     is_graded: boolean
     score: number
   }
+  result_answer: {
+    total_correct_answers: number
+    total_question: number
+  }
 }
 
 export interface ActivityInfo {

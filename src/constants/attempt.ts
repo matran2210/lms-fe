@@ -3,4 +3,5 @@ export enum EAttemptStatus {
   SUBMITTED = 'SUBMITTED',
   UN_FINISHED = 'UN_FINISHED',
   IN_PROGRESS = 'IN_PROGRESS',
+  NOT_STARTED = 'NOT_STARTED',
 }
