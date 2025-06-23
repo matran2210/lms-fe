@@ -1,20 +1,18 @@
-import { ClockIcon } from '@assets/icons'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonText from '@components/base/button/ButtonText'
-import SappModalV3 from '@components/base/modal/SappModalV3'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
-import { trackGAEvent } from '@utils/google-analytics'
+import { CoursesAPI } from '@pages/api/courses'
+import { Select } from 'antd'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { EAttemptStatus } from 'src/constants/attempt'
+import { IEntranceTest, IEntranceTestAttempt } from 'src/type/entrance-test'
 import EntrancePopup from './EntrancePopup'
-import PopupExtend from './PopupExtend'
-import { Select } from 'antd'
-import { ArrowDownIcon } from '@assets/icons/entranceTest'
-import { IEntranceTestAttempt } from 'src/type/entrance-test'
+import EntrancePopupContinue from './EntrancePopupContinue'
 
 interface EntranceTestProps {
   data: {
@@ -47,6 +45,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [currentAttempt, setCurrentAttempt] = useState<IEntranceTestAttempt>(
     data?.attempts?.[0] || ({} as IEntranceTestAttempt),
   )
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (data) {
@@ -64,6 +63,9 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             if (prev <= 0) {
               clearInterval(remainingTimeInterval)
               return 0
+            }
+            if (prev === 1) {
+              handleSubmitQuestion()
             }
             return prev - 1
           })
@@ -86,7 +88,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   /**
    * @description state này để đóng mở popup nếu học viên làm 2 lần
    */
-  const [openExpired, setOpenExpired] = useState(false)
+  // const [openExpired, setOpenExpired] = useState(false)
 
   /**
    * @description Kiểm tra điều kiện có hiệu lực
@@ -99,17 +101,21 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   //     EAttemptStatus.UN_SUBMITTED,
   //   ].includes(data?.attempt_status)
 
-  const handleSubmit = async () => {
-    //to do: start test
+  const handleSubmitQuestion = async (redirectToResult: boolean = false) => {
+    setIsLoading(true)
     try {
-      router.push({
-        pathname: `/test/${data?.id}`,
-        query: {
-          type: 'entrance',
-        },
-      })
-      trackGAEvent('Click Button Continue Modal Test')
-    } catch (err) {}
+      const res = await CoursesAPI.submitAllQuestion(
+        currentAttempt?.id as string,
+      )
+      if (res.success) {
+        if (redirectToResult) {
+          router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
+        }
+      }
+    } catch (err) {
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleClickBegin = () => {
@@ -140,6 +146,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         <ButtonSecondary
           title="Begin"
           className="ml-auto"
+          size="medium"
           onClick={handleClickBegin}
         />
       )
@@ -148,6 +155,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       return (
         <ButtonSecondary
           title="Resume"
+          size="medium"
           className="ml-auto"
           onClick={handleClickBegin}
         />
@@ -157,22 +165,22 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         <>
           <ButtonText
             title="Result"
+            size="medium"
             onClick={() =>
               router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
             }
-            className="mr-4"
           />
-          <ButtonSecondary
-            title="Retake"
-            onClick={() => {
-              if (data?.attempts?.length === data?.limit_count) {
-                setOpenExpired(true)
-              } else {
+          {data?.attempts?.length < (data?.limit_count ?? 0) && (
+            <ButtonSecondary
+              title="Retake"
+              className="ml-4"
+              size="medium"
+              onClick={() => {
                 localStorage.removeItem('quizAttempt')
                 setOpen(true)
-              }
-            }}
-          />
+              }}
+            />
+          )}
         </>
       )
     }
@@ -310,55 +318,15 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       />
 
       {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-        <SappModalV3
-          title={
-            <div className="flex items-center justify-between gap-2">
-              <div>Entrance Test</div>
-              {!!data?.quiz_timed &&
-                (!!remainingTimeLastAttempt ||
-                  remainingTimeLastAttempt === 0) && (
-                  <div
-                    className={`item-center flex gap-2 font-normal ${remainingTimeLastAttempt > 0 ? 'text-[#3964EA]' : 'text-error'}`}
-                  >
-                    <div className="m-auto">
-                      <ClockIcon
-                        color={
-                          remainingTimeLastAttempt > 0 ? '#3964EA' : '#B90E0A'
-                        }
-                        size={24}
-                      />
-                    </div>
-                    <div className="text-[20px]">
-                      {formatTime(
-                        remainingTimeLastAttempt > 0
-                          ? remainingTimeLastAttempt
-                          : 0,
-                      )}
-                    </div>
-                  </div>
-                )}
-            </div>
-          }
-          open={isOpenPopupLastAttempt}
-          handleCancel={() => {
-            setIsOpenPopupLastAttempt(false)
-            trackGAEvent('Click Button Cancel Modal Test')
-          }}
-          onOk={handleSubmit}
-          okButtonCaption={'Continue'}
-          footerButtonClassName="flex justify-between item-center"
-          cancelButtonCaption={'Cancel'}
-          cancelButtonClass={'!px-0'}
-          buttonSize="medium"
-          icon={undefined}
-        >
-          <div className="my-4 text-start text-sm text-[#A1A1A1]">
-            <div>
-              {`Your last attempt was unexpectedly ended. Please click 'Continue'
-              to proceed with the test.`}
-            </div>
-          </div>
-        </SappModalV3>
+        <EntrancePopupContinue
+          isOpenPopupLastAttempt={isOpenPopupLastAttempt}
+          setIsOpenPopupLastAttempt={setIsOpenPopupLastAttempt}
+          data={data as IEntranceTest}
+          remainingTimeLastAttempt={remainingTimeLastAttempt}
+          handleSubmit={handleSubmitQuestion}
+          currentAttempt={currentAttempt}
+          isLoading={isLoading}
+        />
       ) : (
         <EntrancePopup
           open={open}
@@ -369,7 +337,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           entranceTest={test_id_default}
         />
       )}
-      <PopupExtend open={openExpired} setOpen={setOpenExpired} />
+      {/* <PopupExtend open={openExpired} setOpen={setOpenExpired} /> */}
     </>
   )
 }
