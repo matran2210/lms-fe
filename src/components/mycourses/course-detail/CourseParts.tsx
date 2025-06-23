@@ -62,7 +62,7 @@ const CourseParts = ({
           )
 
           const cardClass = clsx(
-            'item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white shadow-sidebar rounded-xl p-[32px]',
+            'item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white shadow-sidebar rounded-xl lg:p-8 p-6',
             {
               'p-[32px]': isFocused,
               'card active-section': isFocused,

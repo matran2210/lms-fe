@@ -21,6 +21,8 @@ import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
+import { HamburgerMenuLargeIcon } from '@assets/icons'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -192,11 +194,16 @@ const CourseDetail = () => {
 
   return (
     <Layout title="Course Detail">
-      <div className="mb-10 mt-2 rounded-lg bg-white px-8 py-4">
-        <SearchForm
-          placeholder={MY_COURSES.placeholderSearchV2}
-          formStyle="w-full flex items-center"
-        />
+      <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
+        <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden">
+          <HamburgerMenuLargeIcon />
+        </div>
+        <div className="w-full rounded-lg bg-white px-8 py-4">
+          <SearchForm
+            placeholder={MY_COURSES.placeholderSearchV2}
+            formStyle="w-full flex items-center"
+          />
+        </div>
       </div>
       {isLoading ? (
         <CourseSkeleton />
@@ -216,10 +223,10 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="my-4 flex items-center justify-between"
+            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="text-3xl font-semibold text-gray-800">
+            <div className="line-clamp-2 w-[60%] text-3xl font-semibold text-gray-800">
               {courseNameDetail}
             </div>
             <FilterCourse
@@ -263,6 +270,11 @@ const CourseDetail = () => {
           </div>
         </div>
       )}
+      <div className="sticky inset-x-0 bottom-4 z-50">
+        <div className="w-full">
+          <CtaTrial />
+        </div>
+      </div>
     </Layout>
   )
 }

@@ -141,7 +141,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     ref,
   ) => {
     const questionRef = useRef<HTMLDivElement>(null)
-
+    const isShowIconButtonInBottom = [
+      QUESTION_TYPES.FILL_WORD,
+      QUESTION_TYPES.TRUE_FALSE,
+      QUESTION_TYPES.ONE_CHOICE,
+      QUESTION_TYPES.SELECT_WORD,
+    ].includes(activeQuestion?.qType as QUESTION_TYPES)
     const dispatch = useAppDispatch()
 
     const DragDropRef = useRef(null) as any
@@ -831,6 +836,30 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
       setExhibitData(exhibitOption)
     }
+    const handleOpenExhibit = (
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+      e: IExhibitData,
+      index: number,
+    ) => {
+      setShowWarning(false)
+      setOpenFile &&
+        setOpenFile(
+          {
+            type: 'exhibits',
+            description: e?.description,
+            name: e?.name,
+            index: index,
+            files: e?.files,
+          },
+          null,
+          null,
+          event,
+        )
+    }
+    const handleOpenFile = (e: IFile) => {
+      setOpenFile &&
+        setOpenFile({ type: 'file' }, e?.resource?.url, e?.resource?.name)
+    }
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
@@ -853,7 +882,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           {activeQuestion?.question_topic?.description && (
             <HighlightableHTML
               initialHTML={activeQuestion?.question_topic?.description ?? ''}
-              storageKey={`${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
+              storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
               className="sapp-questions"
             />
           )}
@@ -864,11 +893,67 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           <div className="relative">
             {renderQuestion()}
 
+            {exhibitData && exhibitData?.length > 0 && (
+              <Popover
+                placement="leftTop"
+                trigger="click"
+                getPopupContainer={() => document.body}
+                content={
+                  <div className="flex flex-col gap-2">
+                    {exhibitData?.map((e: any, index: number) => {
+                      return (
+                        <div
+                          key={e?.value}
+                          className={clsx(
+                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
+                          )}
+                          onClick={(event) =>
+                            handleOpenExhibit(event, e, index)
+                          }
+                        >
+                          {exhibitText} {index + 1}
+                        </div>
+                      )
+                    })}
+                  </div>
+                }
+                zIndex={1050}
+              >
+                <div
+                  className={clsx(
+                    'group absolute right-0  z-[1050] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                    {
+                      'top-[12px]':
+                        (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                          !activeQuestion?.requirements?.length) ||
+                        !isShowIconButtonInBottom,
+                      'top-[142px]':
+                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                        !!activeQuestion?.requirements?.length,
+                      'bottom-[62px]': isShowIconButtonInBottom,
+                    },
+                  )}
+                >
+                  <NotesOutline className="h-8 w-8" />
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                  {showWarning && (
+                    <PulsingExclamation
+                      className="absolute -right-3 -top-4"
+                      style={{
+                        animation: 'pulseAnim 1.2s infinite ease-in-out',
+                        transformOrigin: 'center',
+                      }}
+                    />
+                  )}
+                </div>
+              </Popover>
+            )}
             {activeQuestion?.question_topic?.files?.length > 0 && (
               <Popover
                 className=""
                 placement="leftTop"
                 trigger="click"
+                getPopupContainer={() => document.body}
                 content={
                   <div className="flex flex-col gap-2">
                     {activeQuestion?.question_topic?.files?.map(
@@ -885,14 +970,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               className={clsx(
                                 'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
                               )}
-                              onClick={() => {
-                                setOpenFile &&
-                                  setOpenFile(
-                                    { type: 'file' },
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                              }}
+                              onClick={() => handleOpenFile(e)}
                             >
                               {e?.resource?.name}
                             </div>
@@ -913,80 +991,25 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     )}
                   </div>
                 }
+                zIndex={1050}
               >
                 <div
                   className={clsx(
-                    'group absolute right-0 top-[74px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                    'group absolute right-0 z-[1050] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                     {
-                      '!top-[214px]':
+                      'top-[74px]':
+                        (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                          !activeQuestion?.requirements?.length) ||
+                        !isShowIconButtonInBottom,
+                      'top-[214px]':
                         activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
                         !!activeQuestion?.requirements?.length,
+                      'bottom-0': isShowIconButtonInBottom,
                     },
                   )}
                 >
                   <FileTextIcon />
                   <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-                </div>
-              </Popover>
-            )}
-            {exhibitData && exhibitData?.length > 0 && (
-              <Popover
-                placement="leftTop"
-                trigger="click"
-                content={
-                  <div className="flex flex-col gap-2">
-                    {exhibitData?.map((e: any, index: number) => {
-                      return (
-                        <div
-                          key={e?.value}
-                          className={clsx(
-                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
-                          )}
-                          onClick={(event) => {
-                            setShowWarning(false)
-                            setOpenFile &&
-                              setOpenFile(
-                                {
-                                  type: 'exhibits',
-                                  description: e?.description,
-                                  name: e?.name,
-                                  index: index,
-                                  files: e?.files,
-                                },
-                                null,
-                                null,
-                                event,
-                              )
-                          }}
-                        >
-                          {exhibitText} {index + 1}
-                        </div>
-                      )
-                    })}
-                  </div>
-                }
-              >
-                <div
-                  className={clsx(
-                    'group absolute right-0 top-[12px] z-10 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
-                    {
-                      '!top-[142px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                        !!activeQuestion?.requirements?.length,
-                    },
-                  )}
-                >
-                  <NotesOutline className="h-8 w-8" />
-                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-                  {showWarning && (
-                    <PulsingExclamation
-                      className="absolute -right-3 -top-4"
-                      style={{
-                        animation: 'pulseAnim 1.2s infinite ease-in-out',
-                        transformOrigin: 'center',
-                      }}
-                    />
-                  )}
                 </div>
               </Popover>
             )}
