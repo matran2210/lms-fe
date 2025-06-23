@@ -64,18 +64,16 @@ const ResultsTable = () => {
     }
     return '-'
   }
-  const handleGetLink = (row: Results) => {
-    let link: string = '#'
+  const handleGetLink = (row: Results): string => {
     if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-      link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
-    } else {
-      if (row?.quiz?.attempts?.length) {
-        link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-      } else {
-        link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
-      }
+      return `/courses/${router?.query?.courseId}/activity/${row?.id}`
     }
-    return link
+
+    if (row?.quiz?.attempts?.length) {
+      return `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
+    }
+
+    return `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
   }
   const getNameTooltipContent = (row: Results) => {
     const link = handleGetLink(row)

@@ -28,7 +28,7 @@ const CollapseActivity = ({
             {resultData?.path}
           </div>
           <TableListQuizInActivity
-            dataTestQuiz={resultData}
+            data={resultData}
             handleViewActivity={handleViewActivity}
             getScore={getScore ?? (() => '-')}
           />

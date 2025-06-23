@@ -9,11 +9,11 @@ import { EDateTime } from 'src/type'
 import { GradingMethod } from '@utils/constants'
 
 const TableListQuizInActivity = ({
-  dataTestQuiz,
+  data,
   handleViewActivity,
   getScore,
 }: {
-  dataTestQuiz: Results
+  data: Results
   handleViewActivity: () => void
   getScore: (row: Results, grading_method: GradingMethod) => string
 }) => {
@@ -41,7 +41,7 @@ const TableListQuizInActivity = ({
     {
       title: 'Score',
       render: (record) => (
-        <div>{getScore(dataTestQuiz, dataTestQuiz?.quiz?.grading_method)}</div>
+        <div>{getScore(data, data?.quiz?.grading_method)}</div>
       ),
     },
     {
@@ -65,11 +65,11 @@ const TableListQuizInActivity = ({
   return (
     <SappTable
       columns={columnsValue}
-      data={dataTestQuiz?.quiz_activity ?? []}
+      data={data?.quiz_activity ?? []}
       pagination={{
         current: 1,
-        pageSize: dataTestQuiz?.quiz_activity?.length,
-        total: dataTestQuiz?.quiz_activity?.length,
+        pageSize: data?.quiz_activity?.length,
+        total: data?.quiz_activity?.length,
       }}
       loading={false}
       isShowIndex
