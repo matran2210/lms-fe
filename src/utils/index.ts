@@ -172,7 +172,11 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     'text-align: -webkit-center',
   )
 }
-
+// Hàm thay thế style white-space: pre-wrap thành style white-space: normal trong chuỗi HTML
+export const replaceWhiteSpacePreWrapToNormal = (htmlString: string) => {
+  // Sử dụng biểu thức chính quy để thay thế
+  return htmlString.replace(/white-space:\s*pre-wrap/g, 'white-space: normal')
+}
 export const useGetData = (
   queryKey: string,
   params: Object,

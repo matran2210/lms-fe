@@ -1336,7 +1336,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div>
                 <SappButton
-                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  className={`mr-2 h-full bg-primary py-3`}
                   title="View Answer"
                   onClick={() => {
                     setOpenScratchPad([])
