@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
+import React from 'react'
 import NoData from 'src/common/NoData'
-// import { ANIMATION } from 'src/constants'
+import { IEntranceTest } from 'src/type/entrance-test'
+import EntranceTest from './EntranceTest'
 
 interface EntranceTestListProps {
-  entranceTestLists: any[]
+  entranceTestLists: IEntranceTest[]
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
@@ -21,7 +21,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       // data-aos={ANIMATION.DATA_AOS}
     >
       {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e, index) => (
+        entranceTestLists?.map((e: IEntranceTest, index) => (
           <EntranceTest
             key={index}
             data={e}

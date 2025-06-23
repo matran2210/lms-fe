@@ -76,3 +76,9 @@ export interface IAtempt {
       | 'ENTRANCE_TEST'
   }
 }
+export interface ITestQuizProps {
+  activity?: QuizActivity[]
+  quiz?: Quiz
+  activityName: string
+  courseSectionPath?: string
+}

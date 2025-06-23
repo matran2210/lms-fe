@@ -14,6 +14,7 @@ import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
 import { Select } from 'antd'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
+import { IEntranceTestAttempt } from 'src/type/entrance-test'
 
 interface EntranceTestProps {
   data: {
@@ -29,22 +30,10 @@ interface EntranceTestProps {
     total_question?: number
     attempt_times?: number
     is_limited?: boolean
-    attempts?: IAttempt[]
+    attempts?: IEntranceTestAttempt[]
     limit_count?: number
   }
   test_id_default?: any | undefined
-}
-
-interface IAttempt {
-  answers?: []
-  created_at?: string
-  id?: string
-  is_graded?: boolean
-  number_of_attempts?: number
-  status?: string
-  ratio_score?: string
-  total_attempt_time?: number
-  started_at?: string
 }
 
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
@@ -55,8 +44,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     useState<boolean>(false)
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
     useState<number>(0)
-  const [currentAttempt, setCurrentAttempt] = useState<IAttempt>(
-    data?.attempts?.[0] || ({} as IAttempt),
+  const [currentAttempt, setCurrentAttempt] = useState<IEntranceTestAttempt>(
+    data?.attempts?.[0] || ({} as IEntranceTestAttempt),
   )
 
   useEffect(() => {
@@ -189,6 +178,42 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     }
   }
 
+  const renderTimeContent = () => {
+    if (data?.attempts && data?.attempts?.length > 0) {
+      if (
+        currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] &&
+        remainingTimeLastAttempt >= 0
+      ) {
+        return (
+          <>
+            <p>Time Remaining:</p>
+            <p
+              className={`font-medium ${remainingTimeLastAttempt > 0 ? 'text-gray-800' : 'text-error'}`}
+            >
+              {formatTime(
+                remainingTimeLastAttempt > 0 ? remainingTimeLastAttempt : 0,
+              )}
+            </p>
+          </>
+        )
+      } else {
+        return (
+          <>
+            <p>Time taken:</p>
+            <p className="font-medium text-gray-800">{timeTakenFormatted}</p>
+          </>
+        )
+      }
+    } else {
+      return (
+        <>
+          <p>Time allowed: </p>
+          <p className="font-medium text-gray-800">{timeAllowFormatted}</p>
+        </>
+      )
+    }
+  }
+
   const cardFooter = (
     <div className="action relative mt-10 flex items-center justify-end">
       {renderButton()}
@@ -205,25 +230,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         <div>
           <div className="info border-l border-[#DCDDDD] px-4">
             <div className="flex justify-between text-base capitalize text-gray">
-              {data?.is_attempt ? (
-                <>
-                  <p>Time taken:</p>
-                  {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
-                    <span>--</span>
-                  ) : (
-                    <p className="font-medium text-gray-800">
-                      {timeTakenFormatted}
-                    </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <p>Time allowed: </p>
-                  <p className="font-medium text-gray-800">
-                    {timeAllowFormatted}
-                  </p>
-                </>
-              )}
+              {renderTimeContent()}
             </div>
             <div className="flex justify-between pt-4 text-base capitalize text-gray">
               <p>No of Attemps:</p>
@@ -266,7 +273,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                         onChange={(value) => {
                           setCurrentAttempt(
                             data?.attempts?.find((item) => item.id === value) ||
-                              ({} as IAttempt),
+                              ({} as IEntranceTestAttempt),
                           )
                         }}
                         suffixIcon={<ArrowDownIcon />}

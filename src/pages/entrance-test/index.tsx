@@ -8,13 +8,13 @@ import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EntranceTestAPI } from '../api/entrance-test'
 
 const EntranceTest = () => {
@@ -79,7 +79,7 @@ const EntranceTest = () => {
                 </div>
               </div>
               <div className="my-0 pt-7" data-aos={ANIMATION.DATA_AOS}>
-                <EntranceTestList entranceTestLists={entranceTestLists} />
+                <EntranceTestList entranceTestLists={entranceTestLists || []} />
               </div>
             </>
           )}
