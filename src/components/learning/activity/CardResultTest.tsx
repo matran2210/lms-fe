@@ -1,12 +1,17 @@
 import { ArrowRight } from '@assets/icons'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
 import { getTimeFromInput } from '@utils/index'
+import Tooltip from 'src/common/Tooltip'
 import dayjs from 'dayjs'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { EDateTime } from 'src/type'
 import { ITestQuizProps } from 'src/type/results'
 
-const CardResultTest = ({ resultData, handleViewResult }: ITestQuizProps) => {
+const CardResultTest = ({
+  resultData,
+  handleViewResult,
+  getNameTooltipContent,
+}: ITestQuizProps) => {
   if (!resultData) return null
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
   const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
@@ -14,9 +19,18 @@ const CardResultTest = ({ resultData, handleViewResult }: ITestQuizProps) => {
     <div className="flex items-center justify-between rounded-xl bg-white p-6 shadow-small">
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          <div className="text-lg font-semibold leading-[27px] text-gray-800">
-            {resultData?.name}
-          </div>
+          <Tooltip
+            title={getNameTooltipContent?.(resultData)}
+            arrow={false}
+            className="cursor-pointer bg-white"
+          >
+            <div
+              className="text-lg font-semibold leading-[27px] text-gray-800"
+              onClick={() => handleViewResult(resultData)}
+            >
+              {resultData?.name}
+            </div>
+          </Tooltip>
           <StatusQuizTag
             status={
               (resultData?.quiz?.attempts?.[0]?.status || 'UN_SUBMITTED') as

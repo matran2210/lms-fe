@@ -121,8 +121,21 @@ const ResultsTable = () => {
     }
     return '-'
   }
-
-  const getNameTooltipContent = (row: Results, link: string) => {
+  const handleGetLink = (row: Results) => {
+    let link: string = '#'
+    if (row.course_section_type === TEST_TYPE.ACTIVITY) {
+      link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
+    } else {
+      if (row?.quiz?.attempts?.length) {
+        link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
+      } else {
+        link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
+      }
+    }
+    return link
+  }
+  const getNameTooltipContent = (row: Results) => {
+    const link = handleGetLink(row)
     return (
       <div>
         {true ? (
@@ -177,7 +190,7 @@ const ResultsTable = () => {
         .map((item) => ({
           name: item?.name,
           quiz_activity: item?.quiz_activity || [],
-          quiz: item?.quiz || {},
+          quiz: item?.quiz || null,
           id: item?.id,
           path: item?.path,
           course_section_type: item?.course_section_type,
@@ -195,16 +208,7 @@ const ResultsTable = () => {
   const dataPartTest = handleGetDataActivity({ type: TEST_TYPE.PART_TEST })
 
   const handleViewResult = (row: Results) => {
-    let link: string = '#'
-    if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-      link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
-    } else {
-      if (row?.quiz?.attempts?.length) {
-        link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-      } else {
-        link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
-      }
-    }
+    const link = handleGetLink(row)
     if (
       row?.course_section_type !== TEST_TYPE.ACTIVITY &&
       row?.quiz?.grading_method === 'MANUAL' &&
@@ -229,6 +233,7 @@ const ResultsTable = () => {
                 key={item?.id}
                 resultData={item}
                 handleViewResult={handleViewResult}
+                getScore={getScore}
               />
             ))}
           </div>
@@ -240,6 +245,7 @@ const ResultsTable = () => {
                 key={item?.id}
                 resultData={item}
                 handleViewResult={handleViewResult}
+                getNameTooltipContent={getNameTooltipContent}
               />
             ))}
           </div>
@@ -251,6 +257,7 @@ const ResultsTable = () => {
                 key={item?.id}
                 resultData={item}
                 handleViewResult={handleViewResult}
+                getNameTooltipContent={getNameTooltipContent}
               />
             ))}
           </div>
@@ -262,6 +269,7 @@ const ResultsTable = () => {
                 key={item?.id}
                 resultData={item}
                 handleViewResult={handleViewResult}
+                getNameTooltipContent={getNameTooltipContent}
               />
             ))}
           </div>
@@ -273,6 +281,7 @@ const ResultsTable = () => {
                 key={item?.id}
                 resultData={item}
                 handleViewResult={handleViewResult}
+                getNameTooltipContent={getNameTooltipContent}
               />
             ))}
           </div>

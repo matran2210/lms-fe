@@ -4,8 +4,15 @@ import React from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
 import { ITestQuizProps } from 'src/type/results'
 
-const CollapseActivity = ({ resultData, handleViewResult }: ITestQuizProps) => {
+const CollapseActivity = ({
+  resultData,
+  handleViewResult,
+  getScore,
+}: ITestQuizProps) => {
   if (!resultData) return null
+  const handleViewActivity = () => {
+    handleViewResult(resultData)
+  }
   const getItemsActivity = [
     {
       key: 'activity',
@@ -19,7 +26,11 @@ const CollapseActivity = ({ resultData, handleViewResult }: ITestQuizProps) => {
           <div className="mb-6 mt-2 text-base font-normal leading-normal text-gray-400">
             {resultData?.path}
           </div>
-          <TableListQuizInActivity activity={resultData?.quiz_activity} />
+          <TableListQuizInActivity
+            resultData={resultData}
+            handleViewActivity={handleViewActivity}
+            getScore={getScore ?? (() => '-')}
+          />
         </>
       ),
     },
