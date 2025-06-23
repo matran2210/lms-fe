@@ -126,7 +126,6 @@ const SappModalV3 = ({
               loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
-              isUnderLine: isUnderLine,
             }}
           />
         </div>

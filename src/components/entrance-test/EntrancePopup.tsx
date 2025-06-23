@@ -70,6 +70,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         showHeader={false}
         buttonSize="medium"
         title={undefined}
+        fullWidthBtn={true}
       >
         <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
           Test Information

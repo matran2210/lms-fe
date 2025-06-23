@@ -202,7 +202,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         attemptStatus={currentAttempt?.status as EAttemptStatus}
         footer={cardFooter}
       >
-        <div className="mt-10">
+        <div>
           <div className="info border-l border-[#DCDDDD] px-4">
             <div className="flex justify-between text-base capitalize text-gray">
               {data?.is_attempt ? (
@@ -211,7 +211,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                   {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
                     <span>--</span>
                   ) : (
-                    <p className="font-medium text-[#050505]">
+                    <p className="font-medium text-gray-800">
                       {timeTakenFormatted}
                     </p>
                   )}
@@ -219,7 +219,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               ) : (
                 <>
                   <p>Time allowed: </p>
-                  <p className="font-medium text-[#050505]">
+                  <p className="font-medium text-gray-800">
                     {timeAllowFormatted}
                   </p>
                 </>

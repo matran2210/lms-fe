@@ -37,9 +37,9 @@ const PopUpRemindEntrance = ({
       onOk={onOk}
       //   showCancelButton={true}
       fullWidthBtn={true}
-      buttonSize="extra"
       icon={<AccessIcon fill="#FFB700" />}
       header="Take Your Test"
+      buttonSize="medium"
     >
       <div className="text-center text-base font-normal text-gray-800">
         <span>

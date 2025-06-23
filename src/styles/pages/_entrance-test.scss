@@ -22,5 +22,12 @@
 }
 
 .select-result-attempt-option {
-  @apply min-w-20;
+  width: unset !important;
+
+  .ant-select-item-option {
+    padding: 8px 15px !important;
+    .ant-select-item-option-content {
+      @apply text-center text-sm font-normal text-gray-800;
+    }
+  }
 }
