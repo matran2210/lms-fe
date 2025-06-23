@@ -2933,7 +2933,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()
@@ -2943,7 +2943,7 @@ const TestDetail = () => {
                       onMouseUp={() => setStartResize(false)}
                       onTouchEnd={() => setStartResize(false)}
                     >
-                      <div className="z-10 h-8 w-8 rounded-full bg-white">
+                      <div className="h-8 w-8 rounded-full bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
