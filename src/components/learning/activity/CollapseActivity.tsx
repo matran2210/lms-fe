@@ -4,26 +4,22 @@ import React from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
 import { ITestQuizProps } from 'src/type/results'
 
-const CollapseActivity = ({
-  activity,
-  activityName,
-  courseSectionPath,
-}: ITestQuizProps) => {
-  if (!activity) return null
+const CollapseActivity = ({ resultData, handleViewResult }: ITestQuizProps) => {
+  if (!resultData) return null
   const getItemsActivity = [
     {
       key: 'activity',
       label: (
         <div className="text-lg font-semibold leading-[27px] text-gray-800">
-          {activityName}
+          {resultData?.name}
         </div>
       ),
       children: (
         <>
           <div className="mb-6 mt-2 text-base font-normal leading-normal text-gray-400">
-            {courseSectionPath}
+            {resultData?.path}
           </div>
-          <TableListQuizInActivity activity={activity} />
+          <TableListQuizInActivity activity={resultData?.quiz_activity} />
         </>
       ),
     },

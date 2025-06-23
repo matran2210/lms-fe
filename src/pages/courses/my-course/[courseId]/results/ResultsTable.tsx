@@ -175,11 +175,12 @@ const ResultsTable = () => {
       resultData?.data
         ?.filter((item) => item.course_section_type === type)
         .map((item) => ({
-          activityName: item?.name,
-          listQuiz: item?.quiz_activity || [],
+          name: item?.name,
+          quiz_activity: item?.quiz_activity || [],
           quiz: item?.quiz || {},
-          activityId: item?.id,
-          courseSectionPath: item?.path,
+          id: item?.id,
+          path: item?.path,
+          course_section_type: item?.course_section_type,
         })) || []
     )
   }
@@ -193,6 +194,28 @@ const ResultsTable = () => {
   })
   const dataPartTest = handleGetDataActivity({ type: TEST_TYPE.PART_TEST })
 
+  const handleViewResult = (row: Results) => {
+    let link: string = '#'
+    if (row.course_section_type === TEST_TYPE.ACTIVITY) {
+      link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
+    } else {
+      if (row?.quiz?.attempts?.length) {
+        link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
+      } else {
+        link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
+      }
+    }
+    if (
+      row?.course_section_type !== TEST_TYPE.ACTIVITY &&
+      row?.quiz?.grading_method === 'MANUAL' &&
+      row?.quiz?.attempts?.[0]?.grading_status === GRADE_STATUS.AWAITING_GRADING
+    ) {
+      setOpenReport(true)
+      return
+    }
+    router.push(link)
+  }
+
   return (
     <>
       <div className="my-6">
@@ -203,10 +226,9 @@ const ResultsTable = () => {
           <div className="flex flex-col gap-6">
             {dataActivity?.map((item) => (
               <CollapseActivity
-                activity={item?.listQuiz}
-                key={item?.activityId}
-                activityName={item?.activityName}
-                courseSectionPath={item?.courseSectionPath}
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
               />
             ))}
           </div>
@@ -215,9 +237,9 @@ const ResultsTable = () => {
           <div className="flex flex-col gap-6">
             {dataPartTest?.map((item) => (
               <CardResultTest
-                quiz={item?.quiz}
-                key={item?.activityId}
-                activityName={item?.activityName}
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
               />
             ))}
           </div>
@@ -226,9 +248,9 @@ const ResultsTable = () => {
           <div className="flex flex-col gap-6">
             {dataMidTermTest?.map((item) => (
               <CardResultTest
-                quiz={item?.quiz}
-                key={item?.activityId}
-                activityName={item?.activityName}
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
               />
             ))}
           </div>
@@ -237,9 +259,9 @@ const ResultsTable = () => {
           <div className="flex flex-col gap-6">
             {dataChapterTest?.map((item) => (
               <CardResultTest
-                quiz={item?.quiz}
-                key={item?.activityId}
-                activityName={item?.activityName}
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
               />
             ))}
           </div>
@@ -248,9 +270,9 @@ const ResultsTable = () => {
           <div className="flex flex-col gap-6">
             {dataFinalTest?.map((item) => (
               <CardResultTest
-                quiz={item?.quiz}
-                key={item?.activityId}
-                activityName={item?.activityName}
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
               />
             ))}
           </div>
