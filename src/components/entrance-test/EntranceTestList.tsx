@@ -21,7 +21,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       // data-aos={ANIMATION.DATA_AOS}
     >
       {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e, index) => (
+        entranceTestLists?.map((e: IEntranceTest, index) => (
           <EntranceTest
             key={index}
             data={e}
