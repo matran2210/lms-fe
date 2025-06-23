@@ -81,20 +81,20 @@ const ResultsTable = () => {
     const link = handleGetLink(row)
     return (
       <div>
-        {true ? (
+        {link ? (
           <div
             onClick={() => {
               router.push(link)
             }}
           >
-            <strong className="cursor-pointer text-base text-[#050505] hover:underline">
+            <strong className="cursor-pointer text-base hover:underline">
               {row?.name}
             </strong>
           </div>
         ) : (
-          <strong className="text-base text-[#050505]">{row?.name}</strong>
+          <strong className="text-base">{row?.name}</strong>
         )}
-        <p className="text-xs text-[#A1A1A1]">{row?.path}</p>
+        <p className="text-xs">{row?.path}</p>
       </div>
     )
   }
