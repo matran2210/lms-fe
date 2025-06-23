@@ -83,6 +83,7 @@ const TableQuestions = ({
         {
           page_index: pageParam,
           page_size: DEFAULT_PAGESIZE,
+          no_group_view: true,
         },
       )
       if (res.success) {
@@ -154,8 +155,6 @@ const TableQuestions = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
 
-  // Group data by program
-  const groupedData = _.groupBy(allData, (item) => item?.belong_to.id)
   return (
     <div
       id="sapp-drawer-test-result-list"
@@ -193,123 +192,126 @@ const TableQuestions = ({
           hasCheck={false}
           classTable="w-full"
         >
-          {Object.entries(groupedData).map(([program, rows]) => (
-            <React.Fragment key={program}>
-              {rows?.map((answer) => {
-                return (
-                  <React.Fragment key={answer?.id}>
-                    <tr key={answer?.id}>
-                      <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
-                        {answer?.index}
-                      </td>
+          {allData?.map((answer, index) => {
+            return (
+              <React.Fragment key={answer?.id}>
+                <tr key={answer?.id}>
+                  <td className="sapp-border text-gray-1 p-0 pr-3 font-semibold">
+                    {index + 1}
+                  </td>
 
-                      {/* Question */}
-                      <td className="sapp-border p-0 pr-4">
-                        <Tooltip
-                          title={
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(
-                                  answer?.question?.question_content ?? '--',
-                                ),
-                              }}
-                            />
-                          }
-                        >
-                          <div
-                            className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
-                            dangerouslySetInnerHTML={{
-                              __html: DOMPurify.sanitize(
-                                removeHtmlTags(
-                                  answer?.question?.question_content,
-                                ) ?? '--',
-                              ),
-                            }}
-                            onClick={() => {
-                              if (answer?.id) {
-                                router.push(
-                                  `/explanation/${answer?.id}?title=Your Answers Detail&type=test`,
-                                )
-                              }
-                            }}
-                          />
-                        </Tooltip>
-                      </td>
-
-                      {/* Section */}
-                      <td
-                        className="sapp-border my-5 line-clamp-1 p-0 text-start text-[#050505]"
-                        title={rows[0]?.belong_to?.name ?? '--'}
-                      >
-                        <Tooltip title={rows[0]?.belong_to?.name}>
-                          {truncateString(rows[0]?.belong_to?.name ?? '--', 25)}
-                        </Tooltip>
-                      </td>
-
-                      {/* Type */}
-                      <td className="sapp-border p-0 pr-4 text-[#050505]">
-                        <div className="min-w-[111px]">
-                          {getTypeName(answer?.question?.qType)}
-                        </div>
-                      </td>
-
-                      {/* Result */}
-                      <td
-                        className={`sapp-border flex justify-between gap-12 pr-4`}
-                      >
+                  {/* Question */}
+                  <td className="sapp-border p-0 pr-4">
+                    <Tooltip
+                      placement="topLeft"
+                      title={
                         <div
-                          className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
-                        >
-                          {answer?.question?.qType !== 'ESSAY' ? (
-                            <>{answer?.is_correct ? 'Correct' : 'Incorrect'}</>
-                          ) : (
-                            <>
-                              {gradingStatus === GRADE_STATUS.FINISHED_GRADING
-                                ? 'Graded'
-                                : answer?.active === 'SUBMITED'
-                                  ? 'Completed'
-                                  : 'Not Completed'}
-                            </>
-                          )}
-                        </div>
-                        {answer?.question?.qType !== 'ESSAY' && (
-                          <div className="ml-1 flex items-center justify-start gap-2 text-[#A1A1A1]">
-                            <Image
-                              src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                              alt="Correct"
-                              className="mr-1 text-success-600"
-                              width={16}
-                              height={16}
-                              layout="fixed"
-                            />
-                            {roundNumber(
-                              answer?.question?.question_report?.ratio || 0,
-                            )}
-                            %
-                          </div>
-                        )}
-                      </td>
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                              answer?.question?.question_content ?? '--',
+                            ),
+                          }}
+                        />
+                      }
+                    >
+                      <div
+                        className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            removeHtmlTags(
+                              answer?.question?.question_content,
+                            ) ?? '--',
+                          ),
+                        }}
+                        onClick={() => {
+                          if (answer?.id) {
+                            router.push(
+                              `/explanation/${answer?.id}?title=Your Answers Detail&type=test`,
+                            )
+                          }
+                        }}
+                      />
+                    </Tooltip>
+                  </td>
 
-                      {/* Time Spent */}
-                      <td className="sapp-border m-6 p-0">
-                        <div className="text-center">
-                          {(() => {
-                            if (answer?.time_spent !== null) {
-                              return convertSecondsToMinutesSeconds(
-                                answer?.time_spent || 0,
-                              )
-                            } else {
-                              return '---'
-                            }
-                          })()}
-                        </div>
-                      </td>
-                    </tr>
-                  </React.Fragment>
-                )
-              })}
-            </React.Fragment>
-          ))}
+                  {/* Section */}
+                  <td
+                    className="sapp-border text-bw-1 my-5 line-clamp-1 p-0 text-start"
+                    title={answer?.question.question_filter.part.name ?? '--'}
+                  >
+                    <Tooltip
+                      placement="topLeft"
+                      title={answer?.question.question_filter.part.name}
+                    >
+                      {truncateString(
+                        answer?.question.question_filter.part.name ?? '--',
+                        25,
+                      )}
+                    </Tooltip>
+                  </td>
+
+                  {/* Type */}
+                  <td className="sapp-border text-bw-1 p-0 pr-4">
+                    <div className="min-w-[111px]">
+                      {getTypeName(answer?.question?.qType)}
+                    </div>
+                  </td>
+
+                  {/* Result */}
+                  <td
+                    className={`sapp-border flex justify-between gap-12 pr-4`}
+                  >
+                    <div
+                      className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
+                    >
+                      {answer?.question?.qType !== 'ESSAY' ? (
+                        <>{answer?.is_correct ? 'Correct' : 'Incorrect'}</>
+                      ) : (
+                        <>
+                          {gradingStatus === GRADE_STATUS.FINISHED_GRADING
+                            ? 'Graded'
+                            : answer?.active === 'SUBMITED'
+                              ? 'Completed'
+                              : 'Not Completed'}
+                        </>
+                      )}
+                    </div>
+                    {answer?.question?.qType !== 'ESSAY' && (
+                      <div className="text-gray-1 ml-1 flex items-center justify-start gap-2">
+                        <Image
+                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                          alt="Correct"
+                          className="text-state-success mr-1"
+                          width={16}
+                          height={16}
+                          layout="fixed"
+                        />
+                        {roundNumber(
+                          answer?.question?.question_report?.ratio || 0,
+                        )}
+                        %
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Time Spent */}
+                  <td className="sapp-border m-6 p-0">
+                    <div className="text-center">
+                      {(() => {
+                        if (answer?.time_spent !== null) {
+                          return convertSecondsToMinutesSeconds(
+                            answer?.time_spent || 0,
+                          )
+                        } else {
+                          return '---'
+                        }
+                      })()}
+                    </div>
+                  </td>
+                </tr>
+              </React.Fragment>
+            )
+          })}
         </SappTable>
       </div>
       <span ref={ref} />

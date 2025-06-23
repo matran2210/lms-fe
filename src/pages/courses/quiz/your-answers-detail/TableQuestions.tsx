@@ -8,7 +8,7 @@ import DOMPurify from 'dompurify'
 import _ from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import {
@@ -26,7 +26,6 @@ import Tooltip from 'src/common/Tooltip'
 const commonHeaderClass = 'text-left p-0 text-sm text-[#A1A1A1] font-semibold'
 
 const DEFAULT_PAGESIZE = 20
-const DEFAULT_PAGEINDEX = 1
 
 interface ScoreDetailProps {
   className?: string
@@ -42,7 +41,7 @@ const TableQuestions = ({
   yourScoreDetailRef,
 }: ScoreDetailProps) => {
   const router = useRouter()
-  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGEINDEX)
+
   const headers = [
     {
       label: '#',
@@ -62,7 +61,7 @@ const TableQuestions = ({
     },
     {
       label: 'Result',
-      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+      className: clsx(commonHeaderClass),
     },
     {
       label: 'Time Spent',
@@ -79,12 +78,12 @@ const TableQuestions = ({
   } = useInfiniteQuery({
     queryKey: ['scoreDetails', router.query.id],
     queryFn: async ({ pageParam }) => {
-      setCurrentPage(Number(pageParam) || DEFAULT_PAGEINDEX)
       const res = await CoursesAPI.getQuizAttemptsTable(
         router.query.id as string,
         {
           page_index: pageParam,
           page_size: DEFAULT_PAGESIZE,
+          no_group_view: true,
         },
       )
       if (res.success) {
@@ -198,12 +197,13 @@ const TableQuestions = ({
               <React.Fragment key={answer?.id}>
                 <tr key={answer?.id}>
                   <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
-                    {index + 1 + (currentPage - 1) * DEFAULT_PAGESIZE}
+                    {index + 1}
                   </td>
 
                   {/* Question */}
                   <td className="sapp-border p-0 pr-4">
                     <Tooltip
+                      placement="topLeft"
                       title={
                         <div
                           dangerouslySetInnerHTML={{
@@ -243,6 +243,7 @@ const TableQuestions = ({
                   >
                     <Tooltip
                       color="white"
+                      placement="topLeft"
                       title={answer?.question?.question_filter?.part?.name}
                     >
                       {truncateString(
