@@ -19,11 +19,7 @@ const CardResultTest = ({
     <div className="flex items-center justify-between rounded-xl bg-white p-6 shadow-small">
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
-          <Tooltip
-            title={getNameTooltipContent?.(resultData)}
-            arrow={false}
-            className="cursor-pointer bg-white"
-          >
+          <Tooltip title={getNameTooltipContent?.(resultData)} arrow={false}>
             <div
               className="text-lg font-semibold leading-[27px] text-gray-800"
               onClick={() => handleViewResult(resultData)}
