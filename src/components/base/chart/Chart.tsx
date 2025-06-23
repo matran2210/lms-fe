@@ -22,7 +22,7 @@ export default function EChart({
   theme,
   height = '100%',
   width = '100%',
-  minHeight = '380px'
+  minHeight = '380px',
 }: EChartsProps): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null)
 

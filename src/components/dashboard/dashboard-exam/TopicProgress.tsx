@@ -16,7 +16,7 @@ const TopicProgress = () => {
         tooltip: {
           trigger: 'item',
           borderWidth: 0,
-          formatter: function (params: {name: string, value: string}) {
+          formatter: function (params: { name: string; value: string }) {
             return `
               <div style="
                 min-width: 120px;
@@ -88,8 +88,8 @@ const TopicProgress = () => {
             data: data.map((e: ITopicProgress) => ({
               value: e.total_activities
                 ? Math.round(
-                  (e.completed_activities / e.total_activities) * 100,
-                )
+                    (e.completed_activities / e.total_activities) * 100,
+                  )
                 : 0,
               itemStyle: {
                 color: '#63ACFF', // Màu xen kẽ
@@ -126,13 +126,12 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white p-8 shadow-matchingquiz xl:h-auto h-[48vh]">
+    <div className="shadow-matchingquiz flex h-[48vh] flex-col rounded-2xl bg-white p-8 xl:h-auto">
       <div className="mb-5 pb-3 text-lg font-bold text-gray-800 4xl:text-xl">
         Topic Progress
       </div>
 
-      {option && <EChart option={option} minHeight='450px' />}
-
+      {option && <EChart option={option} minHeight="450px" />}
     </div>
   )
 }
