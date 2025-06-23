@@ -167,7 +167,10 @@ const CourseTabDocument = ({
                 >
                   {course_tab_documents?.map((e, i) => {
                     const gradeStatus = e?.quiz?.attempt?.grading_status
-
+                    const questions = [
+                      ...(e?.quiz?.multiple_choice_questions || []),
+                      ...(e?.quiz?.constructed_questions || []),
+                    ]
                     if (e?.type === 'QUIZ') {
                       return (
                         <div
@@ -175,15 +178,13 @@ const CourseTabDocument = ({
                           ref={quizDocumentRef}
                           className={clsx({
                             hidden:
-                              focusOnlyQuiz.open &&
-                              e?.quiz?.id !== focusOnlyQuiz.id,
+                              (focusOnlyQuiz.open &&
+                                e?.quiz?.id !== focusOnlyQuiz.id) ||
+                              questions?.length === 0,
                           })}
                         >
                           <QuizDocument
-                            questions={[
-                              ...(e?.quiz?.multiple_choice_questions || []),
-                              ...(e?.quiz?.constructed_questions || []),
-                            ]}
+                            questions={questions}
                             activityId={activity?.id as string}
                             tabId={selector?.currentTabId || ''}
                             quizId={e?.quiz?.id || ''}

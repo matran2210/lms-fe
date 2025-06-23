@@ -92,7 +92,7 @@ const Results = () => {
                 )}
               </div>
 
-              <h1 className="text-2xl font-semibold text-gray-800">
+              <h1 className="text-3xl font-semibold text-gray-800">
                 {TEST_AND_QUIZ_TITLE}
               </h1>
 

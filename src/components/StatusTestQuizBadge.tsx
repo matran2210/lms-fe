@@ -1,11 +1,14 @@
-import { FC } from 'react'
-import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
-
-type Props = {
-  dataColumn?: QUIZ_ATTEMPT_GRADING_STATUS | QUIZ_ATTEMPT_STATUS
-}
-
-export const statusQuizMap = {
+export const STATUS_QUIZ_TEST = {
+  PASSED: {
+    label: 'Passed',
+    color: 'text-success',
+    bg: 'bg-success-50',
+  },
+  FAILED: {
+    label: 'Failed',
+    color: 'text-warning',
+    bg: 'bg-warning-50',
+  },
   SUBMITTED: {
     label: 'Submitted',
     color: 'text-success',
@@ -17,7 +20,7 @@ export const statusQuizMap = {
     bg: 'bg-[#025eff0D]',
   },
   UN_SUBMITTED: {
-    label: 'UnSubmitted',
+    label: 'Unsubmitted',
     color: 'text-warning',
     bg: 'bg-warning-50',
   },
@@ -48,12 +51,12 @@ export const statusQuizMap = {
   },
 }
 
-export const StatusQuizTag = ({
+const StatusTestQuizBadge = ({
   status,
 }: {
-  status: keyof typeof statusQuizMap
+  status: keyof typeof STATUS_QUIZ_TEST
 }) => {
-  const { label, color, bg } = statusQuizMap[status] || {
+  const { label, color, bg } = STATUS_QUIZ_TEST[status] || {
     label: '',
     color: '',
     bg: '',
@@ -68,8 +71,5 @@ export const StatusQuizTag = ({
     </div>
   )
 }
-const StatusActionCell: FC<Props> = ({ dataColumn }) => (
-  <StatusQuizTag status={dataColumn as keyof typeof statusQuizMap} />
-)
 
-export default StatusActionCell
+export default StatusTestQuizBadge

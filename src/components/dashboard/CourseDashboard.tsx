@@ -5,12 +5,12 @@ import LearningResult from './dashboard-normal/LearningResult'
 
 const CourseDashboard = () => {
   return (
-    <div className="flex flex-col xl:gap-8 gap-6 bg-[#F9F9F9] w-full">
+    <div className="flex w-full flex-col gap-6 bg-[#F9F9F9] xl:gap-8">
       <div className="grid xl:grid-cols-2 xl:gap-8">
         <div>
           <OverallProgress />
         </div>
-        <div className="rounded-2xl bg-white shadow-matchingquiz xl:mt-0 mt-6">
+        <div className="shadow-matchingquiz mt-6 rounded-2xl bg-white xl:mt-0">
           <WeeklyReport />
         </div>
       </div>
@@ -40,7 +40,7 @@ const CourseDashboard = () => {
         <div className="order-2 xl:order-1">
           <TopicProgress />
         </div>
-        <div className="flex rounded-2xl bg-white shadow-matchingquiz xl:my-0 mb-6 order-1 xl:order-2">
+        <div className="shadow-matchingquiz order-1 mb-6 flex rounded-2xl bg-white xl:order-2 xl:my-0">
           <LearningResult />
         </div>
       </div>
