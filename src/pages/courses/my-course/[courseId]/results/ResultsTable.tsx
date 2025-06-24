@@ -1,15 +1,12 @@
-import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
+import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { GradingMethod } from '@utils/constants'
-import { Modal } from 'antd'
-import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { GRADE_STATUS } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import ResultQuizModal from './ResultQuizModal'
+import { IResultsList, Results } from 'src/type/results'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
@@ -64,6 +61,7 @@ const ResultsTable = () => {
     }
     return '-'
   }
+
   const handleGetLink = (row: Results): string => {
     if (row.course_section_type === TEST_TYPE.ACTIVITY) {
       return `/courses/${router?.query?.courseId}/activity/${row?.id}`
@@ -75,6 +73,7 @@ const ResultsTable = () => {
 
     return `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
   }
+
   const getNameTooltipContent = (row: Results) => {
     const link = handleGetLink(row)
     return (
@@ -168,14 +167,12 @@ const ResultsTable = () => {
           )}
       </div>
       {resultData && (
-        <PaginationSAPP
+        <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
           pageSize={resultData.metadata?.page_size}
           totalItems={resultData.metadata?.total_records}
           setCurrentPage={setCurrentPage}
           setPageSize={setPageSize}
-          type={'table'}
-          classname="mt-3"
         />
       )}
       <SappModalV3

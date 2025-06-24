@@ -179,3 +179,6 @@
   .ant-select-selector {
   @apply cursor-not-allowed bg-gray-100 text-gray-400;
 }
+.custom-ant-select .ant-select-selector {
+  @apply flex h-auto w-12 border-none bg-gray-canvas p-0 text-base font-normal leading-normal text-gray-600 shadow-none !important;
+}

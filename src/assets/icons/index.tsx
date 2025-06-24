@@ -3081,5 +3081,43 @@ export const ResourceIcon = ({ className }: IIconProps) => {
     </svg>
   )
 }
+
+export const RightOutlined = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M11.2273 4.55806C11.4714 4.31398 11.8671 4.31398 12.1112 4.55806L17.1112 9.55806C17.3553 9.80214 17.3553 10.1979 17.1112 10.4419L12.1112 15.4419C11.8671 15.686 11.4714 15.686 11.2273 15.4419C10.9833 15.1979 10.9833 14.8021 11.2273 14.5581L15.1604 10.625H3.33594C2.99076 10.625 2.71094 10.3452 2.71094 10C2.71094 9.65482 2.99076 9.375 3.33594 9.375H15.1604L11.2273 5.44194C10.9833 5.19786 10.9833 4.80214 11.2273 4.55806Z"
+        fill="#4B5563"
+      />
+    </svg>
+  )
+}
+export const AntSelectIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="16"
+      viewBox="0 0 15 16"
+      fill="none"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M2.76911 5.81995C2.93759 5.62339 3.23351 5.60063 3.43007 5.76911L7.50001 9.25763L11.57 5.76911C11.7665 5.60063 12.0624 5.62339 12.2309 5.81995C12.3994 6.01651 12.3766 6.31243 12.1801 6.48091L7.80507 10.2309C7.62953 10.3814 7.37049 10.3814 7.19495 10.2309L2.81995 6.48091C2.62339 6.31243 2.60063 6.01651 2.76911 5.81995Z"
+        fill="#1C274C"
+      />
+    </svg>
+  )
+}
+
 export { default as NotificationIcon } from './NotificationIcon'
 export { SadIcon } from './SadIcon'
