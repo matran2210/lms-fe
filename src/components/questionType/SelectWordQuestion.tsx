@@ -1,6 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
 import clsx from 'clsx'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -71,7 +71,7 @@ const SelectWord = forwardRef(
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
-    const str = data?.question_content
+    const str = replaceWhiteSpacePreWrapToNormal(data?.question_content || '')
     const [key, setKey] = useState<string>(uniqueId('key'))
     const isSelfReflection = data?.is_self_reflection
 
@@ -126,7 +126,7 @@ const SelectWord = forwardRef(
               answer?.id === defaultAnswer?.[index],
           )?.answer || ''
         tooltip.innerHTML = `
-          <div class="tooltip-text ${!!answer && answer.length > 7 ? 'block' : 'hidden'}">${answer}</div>
+          <div class="tooltip-text ${!!answer && answer.length > 10 ? 'block' : 'hidden'}">${answer}</div>
         `
         tooltip.appendChild(selectElement)
 
@@ -153,10 +153,11 @@ const SelectWord = forwardRef(
         <option value="" disabled selected ></option>
         ${answerObj?.[+index + 1]?.map((e: any) => {
           const isSelected = e?.value === defaultAnswerValue
-
+          const shortLabel =
+            e?.label?.length > 10 ? e.label.slice(0, 10) + '...' : e?.label
           return `<option value="${e?.value}" ${
             isSelected ? 'selected' : ''
-          } >${e?.label}</option>`
+          } >${shortLabel}</option>`
         })}
       `
         } else {

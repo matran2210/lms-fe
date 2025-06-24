@@ -354,7 +354,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="ml-14 mt-1.5">
+          <div className="-mt-3 ml-14 w-fit">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image

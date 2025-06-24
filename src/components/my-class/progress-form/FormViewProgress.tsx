@@ -27,6 +27,7 @@ import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 import { round } from 'lodash'
 import { sortSectionsByPosition } from '@utils/teacher-progress'
+import { useRouter } from 'next/router'
 
 export interface IProps {
   id: string | null
@@ -56,6 +57,9 @@ function FormViewProgress({
   classId,
 }: IProps) {
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const currentQuery = { ...router.query }
+
   const [loading, setLoading] = useState<boolean>(false)
   const [detailProgress, setDetailProgress] = useState<IProgress>()
   const [treeDataNotConvert, setTreeDataNotConvert] = useState<
@@ -238,11 +242,25 @@ function FormViewProgress({
     }
     try {
       setLoading(true)
-      await ProgressAPI.updateProgress(id as string, payload)
-      toast.success('Update successful')
-      refresh?.()
-      setOpen(false)
-      reset()
+      const data = await ProgressAPI.updateProgress(id as string, payload)
+      if (data?.success) {
+        const updatedQuery = {
+          ...currentQuery,
+          classProgress: data?.data?.progress || 0,
+        }
+        router.push(
+          {
+            pathname: router.pathname,
+            query: updatedQuery,
+          },
+          undefined,
+          { shallow: true },
+        )
+        toast.success('Update successful')
+        refresh?.()
+        setOpen(false)
+        reset()
+      }
     } catch (err) {
     } finally {
       setLoading(false)

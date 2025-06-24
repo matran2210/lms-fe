@@ -124,6 +124,8 @@ export interface IMyClass {
   started_at: Date
   finished_at: Date
   class_standard_schedules?: ClassStandardScheduleItem[]
+  duration_type?: string
+  flexible_days?: number
 }
 
 export interface ICourseCategory {
