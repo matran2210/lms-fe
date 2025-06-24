@@ -1011,14 +1011,16 @@ const ActivityPage = () => {
                         title={activity?.next_activity?.name}
                         showTooltip={activity?.next_activity?.name?.length > 80}
                       >
-                        <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                        <div className="line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
                           {truncateString(activity?.next_activity?.name, 80)}
                         </div>
                       </Tooltip>
-                      {getCourseIcon(
-                        activity?.next_activity?.display_icon,
-                        activity?.next_activity?.is_preview_locked,
-                      )}
+                      <div className="ms-2">
+                        {getCourseIcon(
+                          activity?.next_activity?.display_icon,
+                          activity?.next_activity?.is_preview_locked,
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
