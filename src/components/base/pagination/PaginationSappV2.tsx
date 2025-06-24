@@ -68,7 +68,15 @@ const PaginationSappV2 = ({
               )
             }
             if (type === 'prev') {
-              return null
+              if (currentPage < 2) return null
+              return (
+                <div className="flex items-center gap-1 ">
+                  <div>
+                    <RightOutlined className="rotate-180" />
+                  </div>
+                  <div className="font-medium text-gray-600">Previous</div>
+                </div>
+              )
             }
 
             return <div>{originalElement}</div>

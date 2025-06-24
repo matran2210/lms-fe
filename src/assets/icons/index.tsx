@@ -3082,7 +3082,7 @@ export const ResourceIcon = ({ className }: IIconProps) => {
   )
 }
 
-export const RightOutlined = () => {
+export const RightOutlined = ({ className }: IIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -3090,6 +3090,7 @@ export const RightOutlined = () => {
       height="20"
       viewBox="0 0 20 20"
       fill="none"
+      className={className}
     >
       <path
         fill-rule="evenodd"
