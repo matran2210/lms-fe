@@ -9,7 +9,6 @@ interface IProps {
   pageSize: number
   setPageSize?: Dispatch<SetStateAction<number>>
   totalItems: number
-  children?: ReactNode
   classname?: string
 }
 
