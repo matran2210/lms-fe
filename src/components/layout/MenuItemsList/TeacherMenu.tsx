@@ -106,17 +106,9 @@ export default function TeacherMenu() {
   const handleLogout = async () => {
     // Hàm đăng xuất
     try {
-      // Gửi action `getLogoutUser()` để đăng xuất người dùng
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        // Nếu trạng thái thông báo đang hiển thị, xóa `pinnedId` khỏi LocalStorage
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
-      const authenticationManager = new AuthenticationManager()
       // Gọi phương thức `logout()` của AuthenticationManager, chuyển hướng về trang gốc sau khi đăng xuất
-      await authenticationManager.logout(window.location.origin)
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout()
     } catch (error) {}
   }
 
