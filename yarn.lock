@@ -10100,10 +10100,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.1.0.tgz#49e54e6a72befc5595d39a543b1b4643a87d9753"
-  integrity sha512-prPEQcRaqKAIll66I22gzCSrMv05Xv59UUk5MBMnxrUMY18RVaUf6VtHRZeHJVe9MhAKlweCGDbMpW2DsmrFOg==
+sapp-common-package@^1.1.5-test:
+  version "1.1.5-test"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.1.5-test.tgz#5cded98d7a056a39cfa6bfe0fd8f7c8a349d1bc4"
+  integrity sha512-IPP2ThNM6hUpqsfo4H7iTp/8gHuELSSO+HDQcvDTNxLg6mTyrrOfaOO3bXDXP4o+TMiqORLo1llk+JQVo4+tPA==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
@@ -10132,7 +10132,7 @@ sapp-common-package@^1.1.0:
     antd "^5.22.3"
     clsx "^1.2.1"
     dayjs "^1.11.7"
-    sass "^1.87.0"
+    sass "^1.89.0"
     sass-loader "^13"
     tailwindcss "^3"
 
@@ -10152,10 +10152,21 @@ sass@1.50.1:
     immutable "^4.0.0"
     source-map-js ">=0.6.2 <2.0.0"
 
-sass@^1.53.0, sass@^1.67.0, sass@^1.69.5, sass@^1.87.0:
+sass@^1.53.0, sass@^1.67.0, sass@^1.69.5:
   version "1.88.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.88.0.tgz#cd1495749bebd9e4aca86e93ee60b3904a107789"
   integrity sha512-sF6TWQqjFvr4JILXzG4ucGOLELkESHL+I5QJhh7CNaE+Yge0SI+ehCatsXhJ7ymU1hAFcIS3/PBpjdIbXoyVbg==
+  dependencies:
+    chokidar "^4.0.0"
+    immutable "^5.0.2"
+    source-map-js ">=0.6.2 <2.0.0"
+  optionalDependencies:
+    "@parcel/watcher" "^2.4.1"
+
+sass@^1.89.0:
+  version "1.89.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.89.2.tgz#a771716aeae774e2b529f72c0ff2dfd46c9de10e"
+  integrity sha512-xCmtksBKd/jdJ9Bt9p7nPKiuqrlBMBuuGkQlkhZjjQk3Ty48lv93k5Dq6OPkKt4XwxDJ7tvlfrTa1MPA9bf+QA==
   dependencies:
     chokidar "^4.0.0"
     immutable "^5.0.2"
@@ -10602,6 +10613,7 @@ string_decoder@~1.1.1:
     safe-buffer "~5.1.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -11433,6 +11445,7 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
