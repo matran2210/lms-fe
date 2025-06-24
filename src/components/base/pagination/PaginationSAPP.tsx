@@ -1,7 +1,6 @@
-import { Pagination, Select } from 'antd'
+import Pagination from 'src/components/base/pagination/Pagination'
 import { Dispatch, SetStateAction, ReactNode } from 'react'
 import clsx from 'clsx'
-import { RightOutlined, AntSelectIcon } from '@assets/icons'
 
 interface IProps {
   currentPage: number
@@ -9,7 +8,9 @@ interface IProps {
   pageSize: number
   setPageSize?: Dispatch<SetStateAction<number>>
   totalItems: number
+  type?: 'row' | 'table'
   children?: ReactNode
+  optionShowAll?: ReactNode
   classname?: string
 }
 
@@ -19,6 +20,8 @@ const PaginationSAPP = ({
   setCurrentPage,
   setPageSize,
   totalItems,
+  type,
+  optionShowAll,
   classname,
 }: IProps) => {
   const options = [
@@ -27,53 +30,48 @@ const PaginationSAPP = ({
     { value: 50, label: '50' },
     { value: 100, label: '100' },
   ]
-  const handlePageChange = (page: number, newSize?: number) => {
-    const size = newSize || pageSize
+  const handlePageChange = (size: number) => {
+    setCurrentPage && setCurrentPage(1)
     setPageSize && setPageSize(size)
-    setCurrentPage && setCurrentPage(page)
   }
 
   return (
     <>
-      <div className={clsx(`flex items-center justify-end gap-4`, classname)}>
-        <label className="flex items-center">
-          <span className="mr-2 text-base font-normal leading-normal text-gray-800">
-            Columns per page:
-          </span>
-          <Select
-            value={pageSize}
-            onChange={(value) => handlePageChange(1, value)}
-            options={options}
-            className="custom-ant-select w-12 border-0 bg-gray-canvas shadow-none"
-            suffixIcon={<AntSelectIcon />}
-            dropdownStyle={{ minWidth: 60 }}
-          />
-        </label>
-
+      <div
+        className={clsx(
+          `flex flex-wrap items-center justify-center gap-4 overflow-hidden md:justify-between`,
+          classname,
+        )}
+      >
+        {type === 'table' && (
+          <label className="flex items-center">
+            <span className="text-xsm mr-2.5 text-[#A1A1A1]">Show</span>
+            <select
+              className="w-[70px] cursor-pointer border-0 bg-[#F9F9F9] px-2.5 py-1 shadow-0"
+              onChange={(e) => {
+                const pageNumber = parseInt(e.target.value)
+                handlePageChange(pageNumber)
+              }}
+            >
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span className="text-xsm ml-2.5 text-[#A1A1A1]">
+              of {totalItems} entries
+            </span>
+          </label>
+        )}
         <Pagination
-          total={totalItems}
-          pageSize={pageSize}
-          className="custom-ant-pagination"
-          current={currentPage}
-          onChange={handlePageChange}
-          showSizeChanger={false}
-          itemRender={(page, type, originalElement) => {
-            if (type === 'next') {
-              return (
-                <div className="flex items-center gap-1 ">
-                  <div className="font-medium text-gray-600">Next</div>
-                  <div>
-                    <RightOutlined />
-                  </div>
-                </div>
-              )
-            }
-            if (type === 'prev') {
-              return null
-            }
-
-            return <div>{originalElement}</div>
-          }}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          pageSize={Math.ceil(totalItems / pageSize)}
+          maxLength={`${type === 'table' ? 9 : totalItems}`}
+          totalItems={totalItems}
+          type={type}
+          optionShowAll={optionShowAll}
         />
       </div>
     </>
