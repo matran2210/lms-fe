@@ -14,6 +14,7 @@ import {
 } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
+import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
 type SidebarProps = {
   isOpened: boolean
@@ -21,6 +22,8 @@ type SidebarProps = {
   toggleDrawer: () => void
   setOpenResource: Dispatch<SetStateAction<boolean>>
   openResource: boolean
+  openExaminationInfo: boolean
+  setOpenExaminationInfo: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Sidebar({
@@ -29,6 +32,8 @@ export default function Sidebar({
   toggleDrawer,
   setOpenResource,
   openResource,
+  openExaminationInfo,
+  setOpenExaminationInfo,
 }: SidebarProps) {
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
@@ -81,6 +86,7 @@ export default function Sidebar({
             }
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
+            setOpenExaminationInfo={setOpenExaminationInfo}
           />
           {guideStatus && guideStep == 2 && (
             <PopupStep
@@ -102,6 +108,7 @@ export default function Sidebar({
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
             closeSideBar={closeSideBar}
+            setOpenExaminationInfo={setOpenExaminationInfo}
           />
           {guideStatus && guideStep == 3 && (
             <PopupStep
@@ -128,6 +135,12 @@ export default function Sidebar({
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
+        />
+      )}
+      {openExaminationInfo && (
+        <ExaminationInfo
+          open={openExaminationInfo}
+          setOpen={setOpenExaminationInfo}
         />
       )}
     </div>

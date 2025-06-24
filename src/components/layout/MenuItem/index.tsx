@@ -19,12 +19,14 @@ type MenuItemProps = {
   menuItem: MenuItemType
   setOpenResource?: Dispatch<SetStateAction<boolean>>
   closeSideBar: () => void
+  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
 }
 
 export default function MenuItem({
   menuItem: { name, icon: Icon, url, type, subItems },
   setOpenResource,
   closeSideBar,
+  setOpenExaminationInfo,
 }: MenuItemProps) {
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
@@ -69,9 +71,7 @@ export default function MenuItem({
   }
 
   const handleOpenExaminationInfoPage = () => {
-    router.push({
-      pathname: `/courses/my-course/${router.query.courseId || router.query.id}/exam-information`,
-    })
+    setOpenExaminationInfo && setOpenExaminationInfo(true)
   }
 
   const handleActive = () => {
@@ -283,6 +283,7 @@ export default function MenuItem({
               options={subItems}
               setOpenResource={setOpenResource}
               closeSideBar={closeSideBar}
+              setOpenExaminationInfo={setOpenExaminationInfo}
             />
           </div>
         ) : null}
