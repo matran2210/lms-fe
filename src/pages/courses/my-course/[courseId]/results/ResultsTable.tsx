@@ -14,6 +14,7 @@ import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import CollapseActivity from '@components/learning/activity/CollapseActivity'
 import { isEmpty } from 'lodash'
 import CardResultTest from '@components/learning/activity/CardResultTest'
+import { Avatar, List, Skeleton } from 'antd'
 
 const ResultsTable = () => {
   const router = useRouter()
@@ -25,7 +26,11 @@ const ResultsTable = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data: resultData } = useQuery<IResultsList>({
+  const {
+    data: resultData,
+    isLoading,
+    isFetching,
+  } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
     queryKey: [CourseKey.ResultsList, currentPage, pageSize, params],
     queryFn: () => {
@@ -136,37 +141,48 @@ const ResultsTable = () => {
       <div className="my-6">
         <FilterCourseSection setParams={setParams} />
       </div>
-      <div className="flex flex-col gap-6">
-        {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
-          <div className="flex flex-col gap-6">
-            {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-              <CollapseActivity
-                key={item?.id}
-                resultData={item}
-                handleViewResult={handleViewResult}
-                getScore={getScore}
-              />
-            ))}
-          </div>
-        )}
-        {Object.entries(groupedDataByType)
-          ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
-          ?.map(([type, data]) =>
-            !isEmpty(data) ? (
-              <div key={type} className="flex flex-col gap-6">
-                {data.map((item) => (
-                  <CardResultTest
-                    key={item.id}
-                    resultData={item}
-                    handleViewResult={handleViewResult}
-                    getNameTooltipContent={getNameTooltipContent}
-                  />
-                ))}
-              </div>
-            ) : null,
+      {isLoading || isFetching ? (
+        <>
+          {[...Array(6)].map((_, index) => (
+            <Skeleton key={index} active avatar>
+              <List.Item.Meta avatar={<Avatar />} />
+            </Skeleton>
+          ))}
+        </>
+      ) : (
+        <div className="flex flex-col gap-6">
+          {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
+            <div className="flex flex-col gap-6">
+              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
+                <CollapseActivity
+                  key={item?.id}
+                  resultData={item}
+                  handleViewResult={handleViewResult}
+                  getScore={getScore}
+                />
+              ))}
+            </div>
           )}
-      </div>
-      {resultData && (
+          {Object.entries(groupedDataByType)
+            ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
+            ?.map(([type, data]) =>
+              !isEmpty(data) ? (
+                <div key={type} className="flex flex-col gap-6">
+                  {data.map((item) => (
+                    <CardResultTest
+                      key={item.id}
+                      resultData={item}
+                      handleViewResult={handleViewResult}
+                      getNameTooltipContent={getNameTooltipContent}
+                    />
+                  ))}
+                </div>
+              ) : null,
+            )}
+        </div>
+      )}
+
+      {resultData && !isLoading && !isFetching && (
         <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
           pageSize={resultData.metadata?.page_size}
