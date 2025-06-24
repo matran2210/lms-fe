@@ -1,11 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
+import { UserApi } from '@pages/api/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
 import Keycloak, { KeycloakConfig } from 'keycloak-js'
+import { isNull } from 'lodash'
 import { PageLink } from 'src/constants'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
+import { deleteCookie, getCookie, setCookie } from '..'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -42,37 +45,46 @@ export class AuthenticationManager {
   }
 
   async initKeyCloakConnect() {
-    if (typeof window === 'undefined') {
-      return
-    }
+    if (typeof window === 'undefined') return // Chạy client-side thôi
 
-    const keycloakConfig: KeycloakConfig = {
+    const keycloakConfig: Keycloak.KeycloakConfig = {
       url: process.env.NEXT_PUBLIC_KEYCLOAK_URL ?? '',
       realm: process.env.NEXT_PUBLIC_KEYCLOAK_REALM ?? '',
       clientId: process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID ?? '',
     }
 
-    // Kiểm tra trạng thái login lần đầu tiên
+    const existingToken = getCookie('keycloakToken')
+    const existingRefreshToken = getCookie('keycloakRefreshToken')
     let isFirstLogin = false
+
+    this.keyCloak = new Keycloak(keycloakConfig)
+
+    if (existingToken && existingRefreshToken) {
+      this.keyCloak.token = existingToken
+      this.keyCloak.refreshToken = existingRefreshToken
+      return
+    }
+
+    const pathname = window.location.pathname
     if (
-      window.location.pathname?.split('/')?.[1] !== CERTIFICATE &&
-      window.location.pathname?.split('test-result/')?.[0] !==
-        '/entrance-test/' &&
-      window.location.pathname?.split('table-result/')?.[0] !==
-        '/entrance-test/'
+      pathname.split('/')?.[1] !== CERTIFICATE &&
+      pathname.split('test-result/')?.[0] !== '/entrance-test/' &&
+      pathname.split('table-result/')?.[0] !== '/entrance-test/'
     ) {
-      this.keyCloak = new Keycloak(keycloakConfig)
       const authenticated = await this.keyCloak.init({
         onLoad: 'login-required',
       })
 
       if (authenticated) {
-        // Kiểm tra lần login đầu tiên
-        document.cookie = `keycloak-token=${this.keyCloak.token}; path=/`
+        const token = this.keyCloak.token
+        const refreshToken = this.keyCloak.refreshToken
+
+        setCookie('keycloakToken', token ?? '')
+        setCookie('keycloakRefreshToken', refreshToken ?? '')
 
         if (!localStorage.getItem('hasLoggedInBefore')) {
-          isFirstLogin = true // Lần đầu tiên login
-          localStorage.setItem('hasLoggedInBefore', 'true') // Đánh dấu đã login lần đầu
+          isFirstLogin = true
+          localStorage.setItem('hasLoggedInBefore', 'true')
           const res = await EntranceTestAPI.getEntranceCount()
           if (isFirstLogin) {
             localStorage.setItem('enstranceTest', 'true')
@@ -82,14 +94,11 @@ export class AuthenticationManager {
               window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}`
             }
           }
-        } else {
-          isFirstLogin = false // Các lần login tiếp theo
         }
-      } else {
+
+        await handleFirebaseToken()
       }
     }
-
-    await handleFirebaseToken()
   }
 
   getToken(): string {
@@ -117,9 +126,16 @@ export class AuthenticationManager {
     return null
   }
 
-  async logout(redirectUri: string) {
-    await this.keyCloak?.logout({ redirectUri: redirectUri })
+  async logout() {
+    const res = await UserApi.logout(getCookie('keycloakRefreshToken') ?? '')
+    if (isNull(res?.user_id_init)) {
+      localStorage.clear()
+      deleteCookie('keycloakToken')
+      deleteCookie('keycloakRefreshToken')
+      window.location.href = '/'
+    }
   }
+
   static instance: AuthenticationManager
 }
 
