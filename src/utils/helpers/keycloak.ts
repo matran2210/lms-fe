@@ -91,7 +91,7 @@ export class AuthenticationManager {
             if (res?.data?.count > 0) {
               window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.ENTRANCE_TEST}`
             } else {
-              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}${PageLink.COURSES}`
+              window.location.href = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}`
             }
           }
         }

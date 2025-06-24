@@ -3,15 +3,17 @@ import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import Layout from '@components/layout'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
-import { EntranceTestAPI } from '../api/entrance-test'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { MY_COURSES } from 'src/constants/lang'
-import { useEffect } from 'react'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
+import { UserType } from 'src/redux/types/User/urser'
+import { EntranceTestAPI } from '../api/entrance-test'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -70,7 +72,7 @@ const EntranceTest = () => {
               className="my-0 max-w-xxl pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <EntranceTestList entranceTestLists={entranceTestLists} />
+              <EntranceTestList entranceTestLists={entranceTestLists ?? []} />
             </div>
           </>
         )}
@@ -79,4 +81,4 @@ const EntranceTest = () => {
   )
 }
 
-export default EntranceTest
+export default withAuthorization([UserType.STUDENT])(EntranceTest)

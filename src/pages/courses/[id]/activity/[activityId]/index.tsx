@@ -1,7 +1,8 @@
 import { CloseIcon, DownloadIcon, LinkIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
-import PdfViewer from '@components/base/pdf/pdf-viewer'
+import FileViewer from '@components/base/fileViewer/FileViewer'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -13,11 +14,12 @@ import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
 import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
+import { useCourseContext } from '@contexts/index'
 import { CourseSectionType } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateBySpace, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
-import { truncate, uniqueId } from 'lodash'
+
+import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, {
@@ -31,8 +33,9 @@ import { useQuery } from 'react-query'
 import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -46,6 +49,7 @@ import {
 import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -62,6 +66,7 @@ interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
+  const { setOpenPopupCTA } = useCourseContext()
 
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -215,76 +220,6 @@ const ActivityPage = () => {
     dispatch(clearNote())
     dispatch(closeCalculator())
   }, [dispatch, router.asPath])
-
-  // /**
-  //  * Hàm xử lý khi kết thúc tiến trình của phần khóa học.
-  //  */
-  // const finishedCourseSectionProgress = async () => {
-  //   if (timeoutRef.current) {
-  //     clearTimeout(timeoutRef.current)
-  //   }
-
-  //   timeoutRef.current = setTimeout(async () => {
-  //     if (isDoneActivity) {
-  //       return
-  //     }
-  //     // Nếu có quiz chấm điểm thì ko xử lý progress này
-  //     if (isHasQuizGrading) {
-  //       return
-  //     }
-
-  //     // Nếu có video thì ko xử lý progress trong này
-  //     if (videoClicked.length) {
-  //       return
-  //     }
-
-  //     // Xử lý khi scroll đến element next or preview activity
-  //     if (endActivityRef?.current) {
-  //       // Hủy theo dõi nếu đã có observerRef.current
-  //       if (observerRef?.current) {
-  //         observerRef?.current?.unobserve(endActivityRef?.current)
-  //       }
-
-  //       // Thiết lập các tùy chọn cho IntersectionObserver
-  //       const options = {
-  //         root: null,
-  //         rootMargin: '0px',
-  //         threshold: 0.5,
-  //       }
-
-  //       // Hàm xử lý khi có sự giao thoa
-  //       const handleIntersection = async (
-  //         entries: IntersectionObserverEntry[],
-  //       ) => {
-  //         const isVisible = entries?.[0]?.isIntersecting
-
-  //         // Nếu phần tử trở nên nhìn thấy và có tham chiếu đến endActivityRef hiện tại
-  //         if (isVisible && endActivityRef?.current) {
-  //           observerRef?.current?.unobserve(endActivityRef?.current)
-  //           await handleFinishedCourseSectionProgress()
-  //         }
-  //       }
-
-  //       // Tạo một instance mới của IntersectionObserver và đặt các tùy chọn
-  //       observerRef.current = new IntersectionObserver(
-  //         handleIntersection,
-  //         options,
-  //       )
-
-  //       // Bắt đầu theo dõi nếu có tham chiếu đến endActivityRef hiện tại
-  //       if (endActivityRef?.current) {
-  //         observerRef?.current?.observe(endActivityRef?.current)
-  //       }
-
-  //       // Trả về hàm cleanup
-  //       return () => {
-  //         if (endActivityRef?.current) {
-  //           observerRef?.current?.unobserve(endActivityRef?.current)
-  //         }
-  //       }
-  //     }
-  //   }, 1000)
-  // }
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     if (isHasQuizGrading) {
@@ -448,19 +383,28 @@ const ActivityPage = () => {
     })
   }
 
-  const getCourseIcon = (type: String) => {
-    if (type === 'TEXT') {
-      return <SappIcon icon="course_text"></SappIcon>
+  /**
+   * Hàm trả về biểu tượng (icon) tương ứng với loại hoạt động của khóa học.
+   * @param type - Loại hoạt động (TEXT, VIDEO, PAST_EXAM_ANALYSIS, QUIZ).
+   * @param lockActivity - Trạng thái khóa hoạt động (true nếu bị khóa).
+   * @returns JSX.Element hoặc null nếu không tìm thấy loại hoạt động.
+   */
+  const getCourseIcon = (type: string, lockActivity: boolean) => {
+    // Nếu cấu phần bị khóa, trả về biểu tượng khóa
+    if (lockActivity) {
+      return <SappIcon icon="locksection"></SappIcon>
     }
-    if (type === 'VIDEO') {
-      return <SappIcon icon="course_video"></SappIcon>
+
+    // Bản đồ các loại hoạt động với biểu tượng tương ứng
+    const iconMap: Record<string, any> = {
+      TEXT: 'course_text', // Biểu tượng cho hoạt động dạng văn bản
+      VIDEO: 'course_video', // Biểu tượng cho hoạt động dạng video
+      PAST_EXAM_ANALYSIS: 'course_past_exam_analysis', // Biểu tượng cho phân tích bài thi cũ
+      QUIZ: 'course_quiz', // Biểu tượng cho bài kiểm tra
     }
-    if (type === 'PAST_EXAM_ANALYSIS') {
-      return <SappIcon icon="course_past_exam_analysis"></SappIcon>
-    }
-    if (type === 'QUIZ') {
-      return <SappIcon icon="course_quiz"></SappIcon>
-    }
+
+    // Trả về biểu tượng tương ứng nếu tìm thấy, nếu không trả về null
+    return iconMap[type] ? <SappIcon icon={iconMap[type]} /> : null
   }
 
   /**
@@ -540,10 +484,7 @@ const ActivityPage = () => {
                     trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
                   }}
                 >
-                  <SappTooltip
-                    title={e?.name}
-                    showTooltip={e?.name?.length > 45}
-                  >
+                  <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
                     <li
                       className={
                         ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-gray-1 hover:text-primary'
@@ -552,7 +493,7 @@ const ActivityPage = () => {
                     >
                       {truncateBySpace(e.name, 3) + '/'}
                     </li>
-                  </SappTooltip>
+                  </Tooltip>
                 </li>
               ) : null}
             </React.Fragment>
@@ -630,6 +571,47 @@ const ActivityPage = () => {
     ? activity?.next_activity?.id
     : activityIds?.[nextActivityIndex + 1]
 
+  // Lấy danh sách trạng thái khóa của các hoạt động trong phiên làm việc
+  const activityPreviewLocks = sessionData?.map(
+    (activity: IActivity) => activity?.is_preview_locked,
+  )
+
+  // Kiểm tra xem hoạt động tiếp theo có bị khóa hay không
+  const isNextActivityLocked =
+    activityPreviewLocks?.[nextActivityIndex + 1] || false
+
+  // Kiểm tra xem hoạt động trước đó có bị khóa hay không
+  const isPreviousActivityLocked =
+    activityPreviewLocks?.[previousActivityIndex - 1] || false
+
+  /**
+   * Hàm xử lý điều hướng hoạt động.
+   * @param isLocked - Trạng thái khóa của hoạt động (true nếu bị khóa).
+   * @param activityId - ID của hoạt động cần điều hướng.
+   * @param eventLabel - Nhãn sự kiện để theo dõi Google Analytics.
+   */
+  const handleActivityNavigation = (
+    isLocked: boolean,
+    activityId: string,
+    eventLabel: string,
+  ) => {
+    if (isLocked) {
+      // Nếu hoạt động bị khóa, hiển thị popup thông báo
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
+    } else {
+      // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
+      router.push({
+        pathname: `/courses/${router.query.id}/activity/${activityId}`,
+      })
+      trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
+    }
+  }
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
@@ -637,7 +619,7 @@ const ActivityPage = () => {
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
-            <Tooltip title={nameActivity?.name} color="white">
+            <Tooltip title={nameActivity?.name}>
               <li className="responsive-truncate-container text-bw-1">
                 <Link
                   href={'#'}
@@ -708,7 +690,6 @@ const ActivityPage = () => {
                 <div className="text-2xl font-medium ">
                   <Tooltip
                     title={activity?.name?.length > 95 && activity?.name}
-                    color="white"
                   >
                     {activity?.name}
                   </Tooltip>
@@ -806,6 +787,7 @@ const ActivityPage = () => {
                               grading_method={e?.quiz?.grading_method}
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
+                              attemptId={e?.quiz?.attempt?.id}
                             />
                           </div>
                         )
@@ -878,7 +860,7 @@ const ActivityPage = () => {
                                   <div className="mr-2 flex self-center">
                                     <LinkIcon />
                                   </div>
-                                  <SappTooltip
+                                  <Tooltip
                                     title={
                                       isPreviewFile
                                         ? 'Preview File'
@@ -908,7 +890,7 @@ const ActivityPage = () => {
                                     >
                                       {e?.resource?.name}
                                     </p>
-                                  </SappTooltip>
+                                  </Tooltip>
                                 </div>
                                 <a
                                   className="cursor-pointer"
@@ -1027,12 +1009,13 @@ const ActivityPage = () => {
                       previousActivityIndex !== 0)) && (
                     <div className="w-1/2">
                       <div
-                        onClick={async () => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${idPreviousActivity}`,
-                          })
-                          trackGAEvent('Click Button Previous Activity')
-                        }}
+                        onClick={() =>
+                          handleActivityNavigation(
+                            isPreviousActivityLocked,
+                            idPreviousActivity,
+                            'Click Button Previous Activity',
+                          )
+                        }
                         className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Previous Activity
@@ -1043,8 +1026,9 @@ const ActivityPage = () => {
                             ? activity?.previous_activity?.display_icon
                             : findActivityByIndex(previousActivityIndex - 1)
                                 ?.display_icon,
+                          isPreviousActivityLocked,
                         )}
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.previous_activity
                               ? activity?.previous_activity?.name
@@ -1055,7 +1039,7 @@ const ActivityPage = () => {
                             activity?.previous_activity?.name?.length > 80
                           }
                         >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis">
+                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
                             {activity?.previous_activity
                               ? truncateString(
                                   activity?.previous_activity?.name,
@@ -1067,7 +1051,7 @@ const ActivityPage = () => {
                                   80,
                                 )}
                           </span>
-                        </SappTooltip>
+                        </Tooltip>
                       </div>
                     </div>
                   )}
@@ -1077,18 +1061,19 @@ const ActivityPage = () => {
                       nextActivityIndex !== sessionData?.length - 1)) && (
                     <div className="w-1/2">
                       <div
-                        onClick={async () => {
-                          router.push({
-                            pathname: `/courses/${router.query.id}/activity/${idNextActivity}`,
-                          })
-                          trackGAEvent('Click Button Next Activity')
-                        }}
+                        onClick={() =>
+                          handleActivityNavigation(
+                            isNextActivityLocked,
+                            idNextActivity,
+                            'Click Button Next Activity',
+                          )
+                        }
                         className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                       >
                         Next Activity
                       </div>
                       <div className="flex justify-end text-medium-sm text-gray-1">
-                        <SappTooltip
+                        <Tooltip
                           title={
                             activity?.next_activity
                               ? activity?.next_activity?.name
@@ -1098,7 +1083,7 @@ const ActivityPage = () => {
                             activity?.next_activity?.name?.length > 80
                           }
                         >
-                          <span className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
+                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
                             {activity?.next_activity
                               ? truncateString(activity?.next_activity.name, 80)
                               : truncateString(
@@ -1106,13 +1091,14 @@ const ActivityPage = () => {
                                     ?.name,
                                   80,
                                 )}
-                          </span>
-                        </SappTooltip>
+                          </div>
+                        </Tooltip>
                         {getCourseIcon(
                           activity?.next_activity
                             ? activity?.next_activity?.display_icon
                             : findActivityByIndex(nextActivityIndex + 1)
                                 ?.display_icon,
+                          isNextActivityLocked,
                         )}
                       </div>
                     </div>
@@ -1131,91 +1117,69 @@ const ActivityPage = () => {
           {openScratchPad.map((e, index: number) => {
             if (e.type === 'file') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '595px',
-                    height: '842px',
-                    top: 'calc(50% - 421px)',
-                    left: 'calc(50% - 300px)',
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                  fixed
-                  // not_resizable
-                  // className='pointer-events-none'
+                <ModalResizeable
+                  title={e.fileName}
+                  width={650}
+                  height={850}
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center"
                 >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                      <div className="truncate text-sm font-normal">
-                        {e?.fileName}
-                      </div>
-                      {/* <CloseIcon */}
-                      <button onClick={() => handleCloseScratchPad(e)}>
-                        <CloseIcon />
-                      </button>
-                    </div>
-                    <div
-                      // className="overflow-auto p-4 bg-white"
-                      style={{ height: 'calc(100% - 40px' }}
-                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
-                    >
-                      {/* <div className='flex flex-'> */}
-                      <PdfViewer file={e?.file} />
-                    </div>
-                    {/* </div> */}
+                  <div
+                    // className="overflow-auto p-4 bg-white"
+                    style={{ height: 'calc(100% - 40px' }}
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                  >
+                    {/* <div className='flex flex-'> */}
+                    <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             } else if (e.type === 'exhibits') {
               return (
-                <MovableWindow
-                  position={{
-                    width: '600px',
-                    height: '400px',
-                    top: exhibitsPopupPosition.top,
-                    left: exhibitsPopupPosition.left,
-                  }}
-                  key={e?.id}
-                  onClick={() => setOnFocusingPad(e?.id)}
-                  zIndex={
-                    onFocusingPad === e?.id
-                      ? openScratchPad?.length + 500
-                      : index + 500
-                  }
-                >
-                  <div className="absolute left-0 top-0  h-full w-full border">
-                    <div className="flex h-10 w-full items-center justify-between bg-white px-5">
-                      <div className="truncate">
-                        <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
-                          e?.index + 1
-                        }: `}</span>
-                        {e?.name}
+                <ModalResizeable
+                  key={e.id}
+                  dragHandleClassName="modal-header"
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="bottom left"
+                  header={
+                    <div className="relative">
+                      <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                        <div className="truncate">
+                          <span className="text-base font-semibold text-bw-1">{`${exhibitText} ${
+                            e?.index + 1
+                          }: `}</span>
+                          {e?.name}
+                        </div>
                       </div>
-                      <button onClick={() => handleCloseScratchPad(e)}>
+                      <button
+                        className="absolute right-3 top-2"
+                        onClick={() => handleCloseScratchPad(e)}
+                      >
                         <CloseIcon />
                       </button>
                     </div>
-                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                      <EditorReader
-                        text_editor_content={e?.description}
-                        className=" w-full "
-                      />
-                      {e?.files?.length > 0 &&
-                        e?.files.map((e: any, index: number) => {
-                          return (
-                            <div key={index} className="h-full cursor-pointer">
-                              <PdfViewer file={e?.resource?.url} />
-                            </div>
-                          )
-                        })}
-                    </div>
+                  }
+                >
+                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                    <EditorReader
+                      text_editor_content={e?.description}
+                      className=" w-full "
+                    />
+                    {e?.files?.length > 0 &&
+                      e?.files.map((e: any, index: number) => {
+                        return (
+                          <div key={index} className="h-full cursor-pointer">
+                            <FileViewer
+                              fileName={e?.resource?.name}
+                              fileUrl={e?.resource?.url}
+                            />
+                          </div>
+                        )
+                      })}
                   </div>
-                </MovableWindow>
+                </ModalResizeable>
               )
             }
           })}
@@ -1225,4 +1189,4 @@ const ActivityPage = () => {
   )
 }
 
-export default ActivityPage
+export default withAuthorization([UserType.STUDENT])(ActivityPage)

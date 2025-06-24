@@ -10,6 +10,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
+import { DragDropAnswerItem } from 'src/type'
 import { IExhibitData } from 'src/type/exhibit'
 
 interface IProps {
@@ -34,6 +35,7 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
+  handleGetData?: (data: DragDropAnswerItem) => void
 }
 let dragParentIdRef: string
 const DragNDropPreivew = forwardRef(
@@ -55,11 +57,13 @@ const DragNDropPreivew = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText,
+      handleGetData,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const storageId = uniqueId('storage')
     const [answered, setAnswered] = useState<any>([])
+    const [isDropEnd, setIsDopEnd] = useState<string>('')
     const isSelfReflection = data?.is_self_reflection
 
     useEffect(() => {
@@ -70,6 +74,13 @@ const DragNDropPreivew = forwardRef(
           : defaultAnswer
       setAnswered(filledAnswered)
     }, [defaultAnswer])
+
+    useEffect(() => {
+      if (isDropEnd) {
+        handleGetData?.(action())
+      } else {
+      }
+    }, [isDropEnd])
 
     function allowDrop(ev: any) {
       ev.preventDefault()
@@ -99,6 +110,7 @@ const DragNDropPreivew = forwardRef(
     }
     function drop(ev: any, dropId: string, dropItem?: boolean) {
       ev.preventDefault()
+      setIsDopEnd(crypto.randomUUID())
 
       const slotElement = ev?.target
 

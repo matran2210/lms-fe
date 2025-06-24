@@ -1,0 +1,41 @@
+.event-repeat {
+  .ant-input-number-input {
+    @apply h-full shadow-none;
+  }
+
+  .ant-checkbox-wrapper {
+    span.ant-checkbox {
+      @apply absolute left-0 top-0 !z-[10000] block h-full w-full opacity-0;
+    }
+
+    .ant-checkbox + span {
+      @apply block p-0;
+    }
+
+    & .custom-checkbox {
+      @apply bg-gray-4 text-gray-11;
+    }
+
+    &.ant-checkbox-wrapper-checked .custom-checkbox {
+      @apply bg-white text-primary;
+    }
+
+    &.current .custom-checkbox {
+      @apply bg-gray-16 text-bw-12;
+    }
+  }
+}
+
+.select-single {
+  &.rounded-0 .select__control {
+    @apply rounded-none;
+  }
+
+  &.placeholder\:text-gray-11 .select__placeholder {
+    @apply text-gray-12;
+  }
+}
+
+.h-full.w-full div.h-10 div input.h-10 {
+  height: 40px;
+}

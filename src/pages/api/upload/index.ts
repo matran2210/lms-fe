@@ -91,6 +91,22 @@ export class UploadAPI {
       }
     } catch (error) {}
   }
+  static getUrlFile = async (
+    file_key: string,
+  ): Promise<
+    IResponse<{
+      cloudflare_video_token: string | null
+      url_expired_in: string | null
+      url: string
+      sub_url: string | null
+    }>
+  > => {
+    return fetcher(`resource/pre-upload/url`, {
+      params: {
+        file_key,
+      },
+    })
+  }
 }
 
 const preUpload = async ({

@@ -7,7 +7,6 @@ import {
   UnHighLightIcon,
 } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import EditorReader from '@components/base/editor/EditorReader'
 import PDFViewer from '@components/base/pdf/pdf-viewer'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
@@ -52,7 +51,9 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-
+import ModalResizeable from '@components/base/modal/ModalResizeable'
+import { isPdfFile } from '@utils/helpers'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -914,7 +915,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       ></div> */}
           {/* Header */}
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
+            <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
               <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
@@ -1006,7 +1007,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 onMouseUp={() => setStartResize(false)}
               ></div>
               <div
-                className={` h-full overflow-auto bg-white py-6 `}
+                className={`h-full overflow-auto bg-white py-6`}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}
                 onScroll={(e) => {
                   const { target } = e
@@ -1105,7 +1106,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -1135,7 +1136,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Scratch Pad</div>
                         {/* <CloseIcon */}
@@ -1166,94 +1167,70 @@ const CaseStudyDetail = ({ questions }: any) => {
                   (exhibit) => exhibit?.id === e?.id,
                 )
                 return (
-                  <MovableWindow
-                    position={{
-                      width: '600px',
-                      height: '400px',
-                      top: 'calc(75% - 250px)',
-                      left: 'calc(0%)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-6-percent w-full items-center justify-between bg-white px-5">
-                        <div className="truncate">
-                          <span className="text-base font-semibold ">{`${exhibitText} ${
-                            (i ?? 0) + 1
-                          }: `}</span>
-                          {exhibitsDes?.name}
+                  <ModalResizeable
+                    key={e.id}
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="bottom left"
+                    header={
+                      <div className="relative">
+                        <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
+                          <div className="truncate">
+                            <span className="text-base font-semibold">{`${exhibitText} ${
+                              (i ?? 0) + 1
+                            }: `}</span>
+                            {exhibitsDes?.name}
+                          </div>
                         </div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
+                        <button
+                          className="absolute right-3 top-2"
+                          onClick={() => handleCloseScratchPad(e)}
+                        >
                           <CloseIcon />
                         </button>
                       </div>
-                      <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                        <EditorReader
-                          text_editor_content={exhibitsDes?.description}
-                          className=" w-full"
-                        />
-                        {exhibitsDes &&
-                          exhibitsDes?.files?.length > 0 &&
-                          exhibitsDes?.files?.map((e: any, index: number) => {
-                            return (
-                              <div
-                                key={index}
-                                className="overflow-auto bg-white"
-                              >
-                                <PDFViewer file={e?.resource?.url} />
-                              </div>
-                            )
-                          })}
-                      </div>
+                    }
+                  >
+                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                      <EditorReader
+                        text_editor_content={exhibitsDes?.description}
+                        className="w-full"
+                      />
+                      {exhibitsDes &&
+                        exhibitsDes?.files?.length > 0 &&
+                        exhibitsDes?.files?.map((e: any, index: number) => {
+                          return (
+                            <div key={index} className="overflow-auto bg-white">
+                              <FileViewer
+                                fileName={e?.resource?.name}
+                                fileUrl={e?.resource?.url}
+                              />
+                            </div>
+                          )
+                        })}
                     </div>
-                  </MovableWindow>
+                  </ModalResizeable>
                 )
               } else if (e.type === 'file') {
                 return (
-                  <MovableWindow
-                    className="-translate-x-1/2 -translate-y-1/2 transform 2xl:!h-[842px]"
-                    position={{
-                      width: '595px',
-                      height: '650px',
-                      top: 'calc(50%)',
-                      left: 'calc(50%)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id)}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
+                  <ModalResizeable
+                    title={e?.fileName}
+                    width={650}
+                    height={850}
+                    key={e.id}
+                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                    position="center"
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div className="truncate text-sm font-normal">
-                          {e?.fileName}
-                        </div>
-                        {/* <CloseIcon */}
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <div
-                        className="overflow-auto bg-white p-4"
-                        style={{ height: 'calc(100% - 40px' }}
-                      >
-                        <PDFViewer file={e?.file} />
-                      </div>
+                    <div
+                      className="overflow-auto bg-white p-4"
+                      style={{ height: 'calc(100% - 40px' }}
+                    >
+                      <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
                     </div>
-                  </MovableWindow>
+                  </ModalResizeable>
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1270,7 +1247,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     setAllowUnHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <HighlightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Highlight
@@ -1284,7 +1261,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       setAllowHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <UnHighLightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Unhighlight
@@ -1327,7 +1304,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       <ExhibitsIcon />
                       <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
-                          <span className="hidden  lg:inline-block 3xl:me-1">
+                          <span className="hidden lg:inline-block 3xl:me-1">
                             {`${exhibitText}s (${exhibits?.length})`}
                           </span>
                         </div>
@@ -1343,9 +1320,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return (
                               <button
                                 key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-gray-1'
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -1359,7 +1336,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div>
                 <SappButton
-                  className={`mr-2 h-full bg-slate-200 py-3`}
+                  className={`mr-2 h-full bg-primary py-3`}
                   title="View Answer"
                   onClick={() => {
                     setOpenScratchPad([])
@@ -1399,6 +1376,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             setOpen={setOpenQuit}
             handleQuit={() => backToPart()}
             handleCancel={() => setUnsavedChanges(true)}
+            content="If you quit at this time, the test results will not be saved."
           />
           <LimitQuizModal
             open={openLimit}

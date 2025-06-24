@@ -1,39 +1,10 @@
-import type { NextPage } from 'next'
-import ProfilePage from './[page]'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
-const Home: NextPage = () => {
+const IndexPage = () => {
   return <></>
 }
 
-export default Home
-
-// export async function getServerSideProps(context: any) {
-//   try {
-//     const { req, res, query } = context
-
-//     // Lấy accessToken từ cookie
-//     const accessToken = req.cookies.accessToken
-
-//     // Kiểm tra accessToken
-//     if (!accessToken) {
-//       // Nếu không có accessToken, chuyển hướng đến trang đăng nhập
-//       return {
-//         redirect: {
-//           destination: '/auth/login',
-//           permanent: false,
-//         },
-//       }
-//     }
-
-//     return {
-//       props: {},
-//     }
-//   } catch (err) {
-//     return {
-//       redirect: {
-//         destination: '/auth/login',
-//         permanent: false,
-//       },
-//     }
-//   }
-// }
+export default withAuthorization([UserType.TEACHER, UserType.STUDENT])(
+  IndexPage,
+)
