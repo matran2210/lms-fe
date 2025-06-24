@@ -63,9 +63,9 @@ const Page = () => {
     const { type, courseId } = filter
     if (event.is_holiday && type?.includes(CALENDAR_FILTER_TYPE.HOLIDAY))
       return true
-    const isOverdue = dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(
-      dayjs(),
-    )
+    const isOverdue =
+      dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(dayjs()) &&
+      event.mode === CALENDAR_FILTER_TYPE.ONLINE
     if (
       (!type?.includes(CALENDAR_FILTER_TYPE.OVERDUE) && isOverdue) ||
       (event.is_case_study &&
@@ -114,6 +114,10 @@ const Page = () => {
               showWeeklyNorm={false}
               events={
                 events?.map((item) => {
+                  const isOverDue =
+                    dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
+                      dayjs(),
+                    ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
                   return {
                     id: item.id,
                     title: item.name,
@@ -131,6 +135,7 @@ const Page = () => {
                     isTest: item?.is_test,
                     isKeyContentBefore: item?.is_key_before_content,
                     isKeyContentAfter: item?.is_key_after_content,
+                    isOverDue: isOverDue,
                   }
                 }) ?? []
               }
