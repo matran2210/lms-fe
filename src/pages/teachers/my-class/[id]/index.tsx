@@ -123,10 +123,11 @@ const ClassDetail = () => {
   const router = useRouter()
   const classId = router?.query?.id as string
   const tabId = router.query?.tabId as IProfilePages
+  const classProgress = router.query?.classProgress as string
   const [selected, setSelected] = useState<number>(tabs[0].id)
 
   const { data } = useQuery({
-    queryKey: ['class', classId],
+    queryKey: ['class', classId, classProgress],
     queryFn: () => TeacherAPI.getClassById(classId),
     enabled: !!classId,
     retry: false,

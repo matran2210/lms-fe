@@ -54,9 +54,11 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
         item?.name as PROGRAM,
       ),
     ) &&
-    [CONSTRUCTION.ONLINE, CONSTRUCTION.BLENDED, CONSTRUCTION.OFFLINE].includes(
-      classDetail.instruction_mode as CONSTRUCTION,
-    )
+    [
+      CONSTRUCTION.LIVE_ONLINE,
+      CONSTRUCTION.BLENDED,
+      CONSTRUCTION.OFFLINE,
+    ].includes(classDetail?.instruction_mode as CONSTRUCTION)
   const getValuesFilter = () => ({
     progress: getValues('progress'),
     fromDate: getValues('rangeDate')?.[0]?.toISOString(),
@@ -70,7 +72,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
     isLoading,
     handleChangeParams,
     setPagination,
-    other,
+    refetch,
   } = useSappPaging({
     uniqueKey: ProgressKey.ProgressList,
     queryFn: () =>
@@ -97,7 +99,7 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
     setOpenAddModal(true)
   }
   const handleRefetchData = () => {
-    other?.refetch()
+    refetch()
   }
   return (
     <div className="flex flex-col gap-6 p-8 pt-1">

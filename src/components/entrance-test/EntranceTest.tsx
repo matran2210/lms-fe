@@ -2,17 +2,19 @@ import { ClockIcon } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import HookFormSelect from '@components/base/select/HookFormSelect'
 import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { IEntranceTest } from 'src/type/entrance-test'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
 
 interface EntranceTestProps {
-  data: any
+  data: IEntranceTest
   test_id_default?: any | undefined
 }
 
@@ -25,6 +27,12 @@ enum EAttemptStatus {
 
 const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
+  const [selectedResult, setSelectedResult] = useState<{
+    label: string
+    value: string
+    ratio_score?: string
+    status: string
+  }>()
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
   const [isOpenPopupLastAttempt, setIsOpenPopupLastAttempt] =
@@ -163,7 +171,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         <div className="action relative mt-10 flex items-center justify-between">
           {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
           {!data?.attempt_status ||
-          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ||
+          data.attempts.length < data.limit_count ? (
             <ButtonSecondary
               title="Begin"
               full={false}
@@ -172,7 +181,6 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               onClick={handleClickBegin}
             />
           ) : (
-            // đã làm bài xong
             <>
               <ButtonSecondary
                 title="Retake"
@@ -180,18 +188,47 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 full={false}
                 onClick={() => setOpenExpired(true)}
               />
-              <SappButton
-                title="Result"
-                onClick={() =>
-                  router.push(
-                    `/entrance-test/test-result/${data?.quiz_attempt_id}`,
-                  )
-                }
-                isUnderLine
-                color="text"
-                className="!p-0 font-medium underline"
-                size="small"
-              />
+              <div className="group flex items-center gap-2 hover:text-primary">
+                {data.attempts.length > 1 ? (
+                  <>
+                    <div>Result:</div>
+                    <div className="flex gap-2">
+                      <HookFormSelect
+                        placeholder=""
+                        classParent="w-full md:max-w-full border-none"
+                        value={selectedResult}
+                        options={data.attempts.map((item, index) => ({
+                          name: item.number_of_attempts,
+                          id: item.id,
+                          label: item.number_of_attempts,
+                        }))}
+                        onChange={(selectedOption) => {
+                          setSelectedResult(selectedOption)
+                          router.push(
+                            `/entrance-test/test-result/${selectedOption.id}`,
+                          )
+                        }}
+                        isResultSelect
+                        maxMenuHeight={130}
+                        isSearchable={false}
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <SappButton
+                    title="Result"
+                    onClick={() =>
+                      router.push(
+                        `/entrance-test/test-result/${data?.quiz_attempt_id}`,
+                      )
+                    }
+                    isUnderLine
+                    color="text"
+                    className="!p-0 font-medium underline"
+                    size="small"
+                  />
+                )}
+              </div>
             </>
           )}
         </div>

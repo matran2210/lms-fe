@@ -13,6 +13,7 @@ import { IStudentTestResult } from 'src/type/classes'
 import { GradingMethod } from '@utils/constants'
 import { StudentKey } from '@pages/api/queryKey'
 import useSappPaging from 'src/hooks/useSappPaging'
+import DateActionCell from '@components/teacher/components/DateActionCell'
 
 interface FilterParams {
   quiz_name?: string
@@ -80,7 +81,7 @@ export default function StudentsTestResult() {
       render: (record: IStudentTestResult) => (
         <NameActionCell
           dataColumn={record?.quiz?.name}
-          linkView={`${PageLink.TEACHER_CHAPTER_TEST}?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
+          linkView={`${PageLink.TEACHER_CHAPTER_TEST}?studentId=${studentId}&chapterTestId=${record?.quiz?.id}&manualGrading=${record?.quiz?.grading_method === GradingMethod.MANUAL}`}
         />
       ),
       onCell: () => ({
@@ -112,11 +113,11 @@ export default function StudentsTestResult() {
     {
       title: 'Start time',
       render: (record: IStudentTestResult) => (
-        <NameNoActionCell
-          dataColumn={formatDateFromUTC(
-            record?.start_time as string,
-            DATE_FORMAT.DATE_TIME,
-          )}
+        <DateActionCell
+          dataColumn={{
+            startTime: record?.start_time as string,
+            endTime: record?.end_time as string,
+          }}
         />
       ),
     },
