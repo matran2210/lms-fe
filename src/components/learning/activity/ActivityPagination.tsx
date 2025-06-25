@@ -4,6 +4,7 @@ import {
   CollapseArrowIcon,
   LockClosedIcon,
 } from '@assets/icons'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
@@ -27,8 +28,7 @@ const ActivityPagination = ({
   const router = useRouter()
   const endActivityRef = useRef<HTMLDivElement>(null)
 
-  const { setOpenPopupCTA } = useCourseContext()
-
+  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   /**
    * Hàm xử lý điều hướng hoạt động.
    * @param isLocked - Trạng thái khóa của hoạt động (true nếu bị khóa).
@@ -159,8 +159,8 @@ const ActivityPagination = ({
                 <div
                   onClick={() =>
                     handleActivityNavigation(
-                      activity?.next_activity?.is_preview_locked || false,
-                      activity?.next_activity?.id || '',
+                      activity?.next_activity?.is_preview_locked,
+                      activity?.next_activity?.id,
                       'Click Button Next Activity',
                     )
                   }
@@ -194,6 +194,7 @@ const ActivityPagination = ({
           </div>
         </div>
       )}
+      <CtaTrial />
     </div>
   )
 }
