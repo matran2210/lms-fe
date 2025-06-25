@@ -511,23 +511,6 @@ const ActivityPage = () => {
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
 
-  useEffect(() => {
-    // Lấy giá trị từ sessionStorage với key 'activityId'
-    const storedValue = window.sessionStorage.getItem('activityId')
-
-    // Kiểm tra nếu storedValue không null và không phải là undefined
-    if (storedValue !== null && storedValue !== undefined) {
-      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
-      const parsedValue = JSON.parse(storedValue)
-
-      // Kiểm tra xem parsedValue có phải là một mảng hay không
-      if (Array.isArray(parsedValue)) {
-        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
-        setSessionData(parsedValue)
-      }
-    }
-  }, [])
-
   // Tạo một mảng chứa các id của các hoạt động từ sessionData
   const activityIds = sessionData?.map((activity: IActivity) => activity.id)
 
@@ -563,26 +546,6 @@ const ActivityPage = () => {
       ],
     })
   }
-
-  const idPreviousActivity =
-    activity?.previous_activity?.id || activityIds?.[previousActivityIndex - 1]
-
-  const idNextActivity = activity?.next_activity
-    ? activity?.next_activity?.id
-    : activityIds?.[nextActivityIndex + 1]
-
-  // Lấy danh sách trạng thái khóa của các hoạt động trong phiên làm việc
-  const activityPreviewLocks = sessionData?.map(
-    (activity: IActivity) => activity?.is_preview_locked,
-  )
-
-  // Kiểm tra xem hoạt động tiếp theo có bị khóa hay không
-  const isNextActivityLocked =
-    activityPreviewLocks?.[nextActivityIndex + 1] || false
-
-  // Kiểm tra xem hoạt động trước đó có bị khóa hay không
-  const isPreviousActivityLocked =
-    activityPreviewLocks?.[previousActivityIndex - 1] || false
 
   /**
    * Hàm xử lý điều hướng hoạt động.
@@ -987,127 +950,84 @@ const ActivityPage = () => {
           </div>
 
           {/* Next/Prev Activities */}
-          {(activity?.previous_activity ||
-            activity?.next_activity ||
-            (nextActivityIndex !== -1 &&
-              nextActivityIndex !== sessionData?.length - 1) ||
-            (previousActivityIndex !== -1 && previousActivityIndex !== 0)) && (
-            <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-              <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
-                <div
-                  ref={endActivityRef}
-                  className={`flex flex-nowrap gap-5 justify-${
-                    activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)
-                      ? 'between'
-                      : 'end'
-                  }`}
-                >
-                  {(activity?.previous_activity ||
-                    (previousActivityIndex !== -1 &&
-                      previousActivityIndex !== 0)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() =>
-                          handleActivityNavigation(
-                            isPreviousActivityLocked,
-                            idPreviousActivity,
-                            'Click Button Previous Activity',
-                          )
-                        }
-                        className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
-                      >
-                        Previous Activity
-                      </div>
-                      <div className="flex text-medium-sm text-gray-1">
-                        {getCourseIcon(
-                          activity?.previous_activity
-                            ? activity?.previous_activity?.display_icon
-                            : findActivityByIndex(previousActivityIndex - 1)
-                                ?.display_icon,
-                          isPreviousActivityLocked,
-                        )}
-                        <Tooltip
-                          title={
-                            activity?.previous_activity
-                              ? activity?.previous_activity?.name
-                              : findActivityByIndex(previousActivityIndex - 1)
-                                  ?.name
-                          }
-                          showTooltip={
-                            activity?.previous_activity?.name?.length > 80
-                          }
-                        >
-                          <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
-                            {activity?.previous_activity
-                              ? truncateString(
-                                  activity?.previous_activity?.name,
-                                  80,
-                                )
-                              : truncateString(
-                                  findActivityByIndex(previousActivityIndex - 1)
-                                    ?.name,
-                                  80,
-                                )}
-                          </span>
-                        </Tooltip>
-                      </div>
+          <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
+            <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+              <div
+                ref={endActivityRef}
+                className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ? 'between' : 'end'}`}
+              >
+                {activity?.previous_activity?.id && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={() =>
+                        handleActivityNavigation(
+                          activity?.previous_activity?.is_preview_locked,
+                          activity?.previous_activity?.id,
+                          'Click Button Previous Activity',
+                        )
+                      }
+                      className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
+                    >
+                      Previous Activity
                     </div>
-                  )}
-                  {!activity?.previous_activity && <></>}
-                  {(activity?.next_activity ||
-                    (nextActivityIndex !== -1 &&
-                      nextActivityIndex !== sessionData?.length - 1)) && (
-                    <div className="w-1/2">
-                      <div
-                        onClick={() =>
-                          handleActivityNavigation(
-                            isNextActivityLocked,
-                            idNextActivity,
-                            'Click Button Next Activity',
-                          )
+                    <div className="flex text-medium-sm text-gray-1">
+                      {getCourseIcon(
+                        activity?.previous_activity?.display_icon,
+                        activity?.previous_activity?.is_preview_locked,
+                      )}
+                      <Tooltip
+                        title={activity?.previous_activity?.name}
+                        showTooltip={
+                          activity?.previous_activity?.name?.length > 80
                         }
-                        className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
                       >
-                        Next Activity
-                      </div>
-                      <div className="flex justify-end text-medium-sm text-gray-1">
-                        <Tooltip
-                          title={
-                            activity?.next_activity
-                              ? activity?.next_activity?.name
-                              : findActivityByIndex(nextActivityIndex + 1)?.name
-                          }
-                          showTooltip={
-                            activity?.next_activity?.name?.length > 80
-                          }
-                        >
-                          <div className="mr-2 line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
-                            {activity?.next_activity
-                              ? truncateString(activity?.next_activity.name, 80)
-                              : truncateString(
-                                  findActivityByIndex(nextActivityIndex + 1)
-                                    ?.name,
-                                  80,
-                                )}
-                          </div>
-                        </Tooltip>
+                        <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                          {truncateString(
+                            activity?.previous_activity?.name,
+                            80,
+                          )}
+                        </span>
+                      </Tooltip>
+                    </div>
+                  </div>
+                )}
+                {!activity?.previous_activity && <></>}
+                {activity?.next_activity?.id && (
+                  <div className="w-1/2">
+                    <div
+                      onClick={() =>
+                        handleActivityNavigation(
+                          activity?.next_activity?.is_preview_locked,
+                          activity?.next_activity?.id,
+                          'Click Button Next Activity',
+                        )
+                      }
+                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                    >
+                      Next Activity
+                    </div>
+                    <div className="flex justify-end text-medium-sm text-gray-1">
+                      <Tooltip
+                        title={activity?.next_activity?.name}
+                        showTooltip={activity?.next_activity?.name?.length > 80}
+                      >
+                        <div className="line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                          {truncateString(activity?.next_activity?.name, 80)}
+                        </div>
+                      </Tooltip>
+                      <div className="ms-2">
                         {getCourseIcon(
-                          activity?.next_activity
-                            ? activity?.next_activity?.display_icon
-                            : findActivityByIndex(nextActivityIndex + 1)
-                                ?.display_icon,
-                          isNextActivityLocked,
+                          activity?.next_activity?.display_icon,
+                          activity?.next_activity?.is_preview_locked,
                         )}
                       </div>
                     </div>
-                  )}
-                  {!activity?.next_activity && <></>}
-                </div>
+                  </div>
+                )}
+                {!activity?.next_activity && <></>}
               </div>
             </div>
-          )}
+          </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
             <Discussion class_id={(router.query.id as string) || ''} />
