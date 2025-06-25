@@ -10,6 +10,7 @@ import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
 import { formatDateFromUTC } from '@utils/index'
 import { Avatar, List, Skeleton } from 'antd'
+import NoDataV2 from 'src/common/NodataV2'
 
 type Props = {
   open: boolean
@@ -55,7 +56,7 @@ const ExamDate = ({ data }: any) => (
 )
 const ExaminationInfo = ({ open, setOpen }: Props) => {
   const router = useRouter()
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, isError, isSuccess } = useQuery({
     queryKey: [ClassKey.ExamInfo],
     queryFn: () =>
       router.query.courseId
@@ -70,14 +71,9 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     data?.exam?.end_date ?? '',
   )}`
 
-  return (
-    <SappDrawerV3
-      open={open}
-      handleCancel={() => setOpen(false)}
-      title="Exam Infomation"
-      isShowBtnClose
-    >
-      {isLoading || isFetching ? (
+  const renderContent = () => {
+    if (isLoading || isFetching) {
+      return (
         <>
           {[...Array(6)].map((_, index) => (
             <Skeleton key={index} active avatar>
@@ -85,7 +81,17 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
             </Skeleton>
           ))}
         </>
-      ) : (
+      )
+    }
+    if (isError || !isSuccess) {
+      return (
+        <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
+          <NoDataV2 />
+        </div>
+      )
+    }
+    if (isSuccess) {
+      return (
         <div className="flex w-full flex-col gap-4 text-base">
           <InfoItem label="Program:" value={data?.program?.name ?? '-'} />
           <InfoItem label="Subject:" value={data?.subject?.name ?? '-'} />
@@ -96,7 +102,18 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
             value={<ExamDate data={data} />}
           />
         </div>
-      )}
+      )
+    }
+  }
+
+  return (
+    <SappDrawerV3
+      open={open}
+      handleCancel={() => setOpen(false)}
+      title="Exam Infomation"
+      isShowBtnClose
+    >
+      {renderContent()}
     </SappDrawerV3>
   )
 }
