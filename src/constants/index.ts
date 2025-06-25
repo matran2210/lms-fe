@@ -187,8 +187,12 @@ export const defaultStatusEnstraceTest = [
     value: 'SUBMITTED',
   },
   {
-    label: 'Unsubmitted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 

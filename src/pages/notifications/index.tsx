@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react'
 import { ANIMATION, LOCAL_STORAGE_KEYS } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
   getCountUnRead,
@@ -27,6 +28,10 @@ import {
 import { UserType } from 'src/redux/types/User/urser'
 
 const Notifications = () => {
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   const [openModel, setOpenModel] = useState<boolean>(false)
   const [openToolTip, setOpenToolTip] = useState<boolean>(false)
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)
@@ -162,7 +167,7 @@ const Notifications = () => {
   }, [])
 
   return (
-    <Layout title="Notifications">
+    <Layout title="Notifications" showSidebar={isAlwaysShowSidebar}>
       {/* {loadingRedirect && (
         <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
           Loading

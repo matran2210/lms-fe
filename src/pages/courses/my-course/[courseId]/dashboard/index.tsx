@@ -7,13 +7,17 @@ import CourseDashboard from '@components/dashboard/CourseDashboard'
 import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const Dashboard = () => {
   const router = useRouter()
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   return (
-    <Layout title="Dashboard">
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
       <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="flex w-full items-center justify-between pb-4 pt-6">

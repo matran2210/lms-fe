@@ -1,14 +1,15 @@
 import { CloseIcon } from '@assets/icons'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
+import Layout from '@components/layout'
+import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import { useGetDataQuery } from '@utils/index'
 import QuizResult from 'entrance-test-result-package'
-import 'entrance-test-result-package/dist/index.css'
 import { useRouter } from 'next/router'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from 'src/redux/types/User/urser'
+import { useState, useEffect } from 'react'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -21,29 +22,88 @@ const TestEntranceResult = () => {
     router.query.id !== undefined,
   )
 
+  const [showPinnedNotification, setShowPinnedNotification] = useState(true)
+  const [isVisible, setIsVisible] = useState(true)
+  const ANIMATION_DURATION = 500
+  const SHOW_DURATION = 5000
+
+  useEffect(() => {
+    const hideTimer = setTimeout(() => {
+      setIsVisible(false)
+    }, SHOW_DURATION)
+
+    const removeTimer = setTimeout(() => {
+      setShowPinnedNotification(false)
+    }, SHOW_DURATION + ANIMATION_DURATION)
+
+    return () => {
+      clearTimeout(hideTimer)
+      clearTimeout(removeTimer)
+    }
+  }, [])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <FullScreenLayout title="Entrance Test Detail">
-        <div className="bg-[#F9F9F9]" data-aos={ANIMATION.DATA_AOS}>
-          <div
-            className="absolute right-6 z-10 ml-auto cursor-pointer"
-            onClick={() => router.push(PageLink.ENTRANCE_TEST)}
-          >
-            <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-          </div>
-          <QuizResult
-            dataChart={chartData?.chart_data}
-            onClick={() =>
-              router.push(`/entrance-test/table-result/${router.query.id}`)
-            }
-            dataTable={chartData}
-            onPublish={() => {}}
-            id={undefined}
-            is_ops={false}
-            handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
-          />
+      <div className="relative">
+        <div
+          className="absolute right-10 top-10 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-2"
+          onClick={
+            () => router.push(PageLink.ENTRANCE_TEST)
+            // .then(() => window.location.reload())
+          }
+        >
+          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
-      </FullScreenLayout>
+        <Layout size="xl" title="Entrance Test Detail" showSidebar={false}>
+          <div className="relative mt-12" data-aos={ANIMATION.DATA_AOS}>
+            {chartData && (
+              <QuizResult
+                dataChart={chartData?.chart_data}
+                onClick={() =>
+                  router.push(`/entrance-test/table-result/${router.query.id}`)
+                }
+                dataTable={chartData}
+                onPublish={() => {}}
+                id={undefined}
+                is_ops={false}
+                handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
+              />
+            )}
+            {showPinnedNotification && (
+              <div
+                className={`sticky bottom-4 mt-10 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+              >
+                <PinnedNotificationsV2
+                  bgColor="bg-primary-200"
+                  borderColor="border-primary"
+                >
+                  <div className="text-sm">
+                    Đội ngũ chuyên viên của SAPP sẽ liên lạc lại với bạn trong
+                    vòng 24h (không kể Thứ 7, Chủ nhật) để tư vấn thiết kế lộ
+                    trình học tập cá nhân hóa phù hợp với kết quả bài đánh giá
+                    và mục tiêu của bạn. Mọi thắc mắc vui lòng liên hệ tới
+                    Hotline:{' '}
+                    <a href="tel:19002225" className="font-bold underline">
+                      19002225
+                    </a>{' '}
+                    hoặc{' '}
+                    <a
+                      href="https://www.facebook.com/sapp.edu.vn/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold underline"
+                    >
+                      Fanpage
+                    </a>{' '}
+                    để được hỗ trợ nhanh chóng nhất. SAPP Academy mong rằng sẽ
+                    được đồng hành cùng bạn trong lộ trình học tập sắp tới.
+                  </div>
+                </PinnedNotificationsV2>
+              </div>
+            )}
+          </div>
+        </Layout>
+      </div>
     </SappLoadingGlobal>
   )
 }

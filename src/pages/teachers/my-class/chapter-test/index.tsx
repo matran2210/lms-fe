@@ -33,6 +33,7 @@ const ChapterTest = () => {
   const router = useRouter()
   const studentId = router?.query?.studentId as string
   const chapterTestId = router?.query?.chapterTestId as string
+  const manualGrading = router?.query?.manualGrading as string
   const [params, setParams] = useState<FilterParams>(initialValues)
   const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
@@ -145,12 +146,16 @@ const ChapterTest = () => {
         <StudentCell dataColumn={record?.attempt?.score?.toString()} />
       ),
     },
-    {
-      title: 'Người chấm',
-      render: (record: IStudentClassDetail) => (
-        <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
-      ),
-    },
+    ...(manualGrading === 'true'
+      ? [
+          {
+            title: 'Người chấm',
+            render: (record: IStudentClassDetail) => (
+              <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (

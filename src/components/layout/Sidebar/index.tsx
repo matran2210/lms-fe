@@ -16,6 +16,7 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
+import { Divider } from 'antd'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -46,7 +47,6 @@ export default function Sidebar({
   }
 
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
-
   return (
     <div>
       <div
@@ -54,7 +54,7 @@ export default function Sidebar({
           className,
           isGuideActive ? 'z-50' : 'z-30',
           isOpened || (isGuideActive && 'w-[220px]'),
-          'mx-2 my-2 rounded-xl',
+          'm-4 rounded-xl',
         )}
       >
         <div
@@ -65,11 +65,11 @@ export default function Sidebar({
           }`}
         >
           <div
-            className="group-logos mx-auto h-[71px] px-5 pb-[21px]"
+            className="group-logos mx-auto px-5"
             onClick={() => closeSideBar()}
           >
             <div
-              className="flex h-[50px] items-end justify-start text-center"
+              className="flex h-[50px] items-end justify-center text-center"
               onClick={() => trackGAEvent('Click Logo SAPP Menu')}
             >
               <ExpandIcon type={'logo-default'} />
@@ -77,7 +77,9 @@ export default function Sidebar({
             </div>
           </div>
           {/* Divider */}
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center" />
+          <div className="mx-auto w-[calc(100%-48px)] text-center">
+            <Divider className="my-6 bg-[#DCDDDD]" />
+          </div>
           <MenuItemsList
             options={
               Number(localStorage.getItem('countEvent')) <= 0
@@ -103,7 +105,9 @@ export default function Sidebar({
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-[#DCDDDD] text-center"></div>
+          <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
+            <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+          </div>
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
@@ -128,7 +132,7 @@ export default function Sidebar({
       <div
         onClick={toggleDrawer}
         className={`sidebar-overlay ${
-          isOpened ? 'block md:hidden' : 'hidden'
+          isOpened ? 'block lg:hidden' : 'hidden'
         } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-[#00000080]`}
       />
       {openResource && (

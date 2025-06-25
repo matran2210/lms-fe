@@ -9,12 +9,16 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { TEST_AND_QUIZ_TITLE } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const DEFAULT_PAGESIZE = 10
 
 const Results = () => {
   const router = useRouter()
-
+  const screens = useTailwindBreakpoint()
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    screens,
+  )
   /**
    * @description config API course detail
    */
@@ -60,7 +64,7 @@ const Results = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title={TEST_AND_QUIZ_TITLE}>
+      <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
         <div className="mx-auto my-0 max-[1199px]:mx-6">
           {isLoading ? (
             <CourseSkeleton className="pt-6" />

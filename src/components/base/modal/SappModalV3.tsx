@@ -33,6 +33,7 @@ interface IProps {
   isUnderLine?: boolean
   customFooter?: ReactNode
   className?: string
+  gapContent?: number
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -66,6 +67,7 @@ const SappModalV3 = ({
   isUnderLine = false,
   className,
   customFooter,
+  gapContent = 10,
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel
@@ -85,7 +87,11 @@ const SappModalV3 = ({
           <div className="w-fit">{icon}</div>
         </div>
       )}
-      <div className={clsx('flex flex-col gap-10', { 'pb-10': showFooter })}>
+      <div
+        className={clsx(`flex flex-col gap-${gapContent}`, {
+          'pb-10': showFooter,
+        })}
+      >
         {header && (
           <div
             className={clsx(
@@ -126,7 +132,6 @@ const SappModalV3 = ({
               loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
-              isUnderLine: isUnderLine,
             }}
           />
         </div>
