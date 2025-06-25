@@ -48,11 +48,13 @@ export interface IActivity {
     id: string
     display_icon: string
     name: string
+    is_preview_locked?: boolean
   }
   previous_activity?: {
     id: string
     display_icon: string
     name: string
+    is_preview_locked?: boolean
   }
   breadcumb?: IBreadcrumb[]
   user_course_section_progress: {

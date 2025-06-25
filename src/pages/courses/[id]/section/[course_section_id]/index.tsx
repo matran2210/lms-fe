@@ -157,6 +157,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
+        router?.query?.id || undefined,
       )
       setLearningOutcome(res?.data)
     } catch (error) {
@@ -338,7 +339,7 @@ const CoursePartDetail = () => {
       course_section?.course_section_type === 'UNIT'
     ) {
       // Handle activity or unit section
-      lockSection
+      lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
             handleRouterActivity(course_section?.children?.[0]?.id, undefined),
@@ -434,15 +435,6 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-
-  // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
-  useEffect(() => {
-    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
-    window.sessionStorage.setItem(
-      'activityId',
-      JSON.stringify(transformedArray),
-    )
-  }, [loadingChapter])
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
