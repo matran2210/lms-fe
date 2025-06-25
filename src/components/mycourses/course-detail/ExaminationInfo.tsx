@@ -11,7 +11,6 @@ import { CheckCircleTwoTone } from '@ant-design/icons'
 import { formatDateFromUTC } from '@utils/index'
 import { Avatar, List, Skeleton } from 'antd'
 import NoDataV2 from 'src/common/NodataV2'
-import ExamEditDrawer from '@components/profile/ExamInformation/ExamEditDrawer'
 import { Data } from 'src/type/course'
 
 type Props = {
@@ -118,28 +117,18 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   }
 
   return (
-    <>
-      <SappDrawerV3
-        open={open}
-        handleCancel={() => setOpen(false)}
-        title="Exam Infomation"
-        isShowBtnClose
-      >
-        {renderContent()}
-      </SappDrawerV3>
-      <ExamEditDrawer
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        classId={router.query.courseId as string}
-        onSuccess={() => {
-          queryClient.invalidateQueries({
-            queryKey: [ClassKey.ExamInfo],
-          })
-        }}
-        remainingChanges={data?.remaining_changes}
-        currentValue={data?.exam?.id}
-      />
-    </>
+    <SappDrawerV3
+      open={open}
+      handleCancel={() => setOpen(false)}
+      title="Exam Infomation"
+      isShowBtnClose={!isOpen}
+      isShowFooter={isOpen}
+      btnSubmitTile={isOpen ? 'Confirm' : ''}
+      cancelButtonCaption={isOpen ? 'Cancel' : ''}
+      handleBack={() => setIsOpen(false)}
+    >
+      {renderContent()}
+    </SappDrawerV3>
   )
 }
 
