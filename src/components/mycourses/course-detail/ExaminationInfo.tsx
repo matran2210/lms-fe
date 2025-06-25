@@ -12,6 +12,7 @@ import { formatDateFromUTC } from '@utils/index'
 import { Avatar, List, Skeleton } from 'antd'
 import NoDataV2 from 'src/common/NodataV2'
 import { Data } from 'src/type/course'
+import ChangExamDate from '@components/mycourses/course-detail/ChangExamDate'
 
 type Props = {
   open: boolean
@@ -120,14 +121,21 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     <SappDrawerV3
       open={open}
       handleCancel={() => setOpen(false)}
-      title="Exam Infomation"
+      title={isOpen ? 'Change Exam Date' : 'Exam Information'}
       isShowBtnClose={!isOpen}
       isShowFooter={isOpen}
       btnSubmitTile={isOpen ? 'Confirm' : ''}
       cancelButtonCaption={isOpen ? 'Cancel' : ''}
       handleBack={() => setIsOpen(false)}
     >
-      {renderContent()}
+      {isOpen ? (
+        <ChangExamDate
+          classId={router.query.courseId as string}
+          remainingChanges={data?.remaining_changes}
+        />
+      ) : (
+        renderContent()
+      )}
     </SappDrawerV3>
   )
 }
