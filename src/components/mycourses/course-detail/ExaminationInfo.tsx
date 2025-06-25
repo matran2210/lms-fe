@@ -8,6 +8,8 @@ import { PencilV2Icon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
+import { formatDateFromUTC } from '@utils/index'
+import { Avatar, List, Skeleton } from 'antd'
 
 type Props = {
   open: boolean
@@ -20,18 +22,15 @@ interface InfoItemProps {
 }
 
 const InfoItem = ({ label, value }: InfoItemProps) => (
-  <div className="flex items-center justify-between py-1 text-sm">
-    <span className="text-gray-500">{label}</span>
-    <span className="flex items-center gap-2 font-medium text-gray-800">
-      {value}
-    </span>
+  <div className="flex items-center justify-between text-base text-secondary">
+    <div>{label}</div>
+    <div className="flex items-center gap-2 font-semibold">{value}</div>
   </div>
 )
+
 const ExamDate = ({ data }: any) => (
   <>
-    <p className="font-medium text-[#050505]">
-      {data?.exam?.examination?.name ?? '-'}
-    </p>
+    <div>{data?.exam?.examination?.name ?? '-'}</div>
     {data?.is_final_examination_subject === true ? (
       <Tooltip
         showTooltip={true}
@@ -56,7 +55,7 @@ const ExamDate = ({ data }: any) => (
 )
 const ExaminationInfo = ({ open, setOpen }: Props) => {
   const router = useRouter()
-  const { data, isSuccess, isLoading, isError, isFetching } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: [ClassKey.ExamInfo],
     queryFn: () =>
       router.query.courseId
@@ -67,6 +66,10 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     retry: false,
   })
 
+  const duration = `${formatDateFromUTC(data?.exam?.start_date ?? '')} - ${formatDateFromUTC(
+    data?.exam?.end_date ?? '',
+  )}`
+
   return (
     <SappDrawerV3
       open={open}
@@ -74,19 +77,26 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
       title="Exam Infomation"
       isShowBtnClose
     >
-      <div className="w-full p-4 text-sm">
-        <InfoItem label="Program:" value={data?.program?.name ?? '-'} />
-        <InfoItem label="Subject:" value={data?.subject?.name ?? '-'} />
-        <InfoItem
-          label="Class Code:"
-          value={data?.exam?.examination?.name ?? '-'}
-        />
-        {/* <InfoItem label="Duration:" value={data?.exam?.duration ?? '-'} /> */}
-        <InfoItem
-          label="Scheduled Exam Date:"
-          value={<ExamDate data={data} />}
-        />
-      </div>
+      {isLoading || isFetching ? (
+        <>
+          {[...Array(6)].map((_, index) => (
+            <Skeleton key={index} active avatar>
+              <List.Item.Meta avatar={<Avatar />} />
+            </Skeleton>
+          ))}
+        </>
+      ) : (
+        <div className="flex w-full flex-col gap-4 text-base">
+          <InfoItem label="Program:" value={data?.program?.name ?? '-'} />
+          <InfoItem label="Subject:" value={data?.subject?.name ?? '-'} />
+          <InfoItem label="Class Code:" value={data?.exam?.code_exam ?? '-'} />
+          <InfoItem label="Duration:" value={duration} />
+          <InfoItem
+            label="Scheduled Exam Date:"
+            value={<ExamDate data={data} />}
+          />
+        </div>
+      )}
     </SappDrawerV3>
   )
 }
