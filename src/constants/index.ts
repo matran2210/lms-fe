@@ -327,7 +327,6 @@ export const EVENT_TYPES = {
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
   LIVE_ONLINE: 'LIVE_ONLINE',
-  OVER_DUE: 'OVER_DUE',
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
