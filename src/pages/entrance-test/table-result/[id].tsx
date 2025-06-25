@@ -93,7 +93,7 @@ const TableEntranceResult = () => {
                     {totalCorrect}/{totalQuestion}
                   </strong>
                 ) : (
-                  <strong className="text-info">_ _ /{totalQuestion}</strong>
+                  <strong className="text-info">__ /{totalQuestion}</strong>
                 )
               })()}
             </span>
