@@ -11,6 +11,7 @@ import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
 import { TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
+import { buildQueryString } from '@utils/index'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -166,8 +167,18 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             : 'Review'
       }
       handleSubmit={() => {
+        const deadline = dayjs(
+          `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
+        )
+        const listCourseSectionIds = (data?.sections || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+        const searchParams = buildQueryString({
+          focusIds: listCourseSectionIds.join(','),
+          deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
+        })
         if (data?.link_study) {
-          router.push(data?.link_study)
+          router.push(`${data?.link_study}?${searchParams}`)
         }
       }}
       submitButtonClassName="rounded-none"

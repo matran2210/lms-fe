@@ -209,6 +209,10 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        focus:
+          '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
+        'focus-overdue':
+          '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
       },
       minWidth: {
         4: '16px',

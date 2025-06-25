@@ -6,6 +6,9 @@ import { IMyCourseDetail } from 'src/type/courses'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import { useRouter } from 'next/router'
+import { Badge } from 'antd'
+import dayjs from 'dayjs'
+import clsx from 'clsx'
 
 const CourseParts = ({
   courses,
@@ -19,7 +22,11 @@ const CourseParts = ({
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
   const router = useRouter()
-
+  // Get focusIds
+  const focusIds = router?.query?.focusIds as string | undefined
+  const deadline = router?.query?.deadline as string | undefined
+  const listFocusIds = focusIds?.split(',') || []
+  const isOverdue = dayjs(deadline).isBefore(new Date())
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
 
   // Scroll đến phần tử có id khớp với router.query.type
@@ -41,7 +48,10 @@ const CourseParts = ({
     >
       {!isEmpty(courses) ? (
         courses?.map((coursePart, index: number) => {
-          return (
+          // Kiểm tra xem phần tử có id thuộc listFocusIds hay không
+          const isFocusId = listFocusIds.includes(coursePart?.id)
+
+          const content = (
             <div
               key={coursePart?.id}
               ref={(el) => (cardRefs.current[coursePart.id] = el)}
@@ -71,7 +81,13 @@ const CourseParts = ({
               ) : (
                 <div
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
+                  className={clsx(
+                    `item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`,
+                    {
+                      'border-2 border-[#3E97FF] shadow-focus':
+                        isFocusId && !isOverdue,
+                    },
+                  )}
                   ref={lastElementRef}
                   data-aos={ANIMATION.DATA_AOS}
                   style={{ zIndex: courses?.length - index }}
@@ -93,6 +109,19 @@ const CourseParts = ({
                 </div>
               )}
             </div>
+          )
+
+          return isFocusId && !isOverdue ? (
+            <Badge.Ribbon
+              text={`Current Section`}
+              key={coursePart?.id}
+              color="#3E97FF"
+              className="top-0 z-10 flex h-6 flex-col justify-end font-medium"
+            >
+              {content}
+            </Badge.Ribbon>
+          ) : (
+            content
           )
         })
       ) : (
