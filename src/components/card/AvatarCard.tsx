@@ -9,8 +9,15 @@ import clsx from 'clsx'
 interface IProps {
   className?: string
   onClick?: () => void
+  description?: React.ReactNode
+  isShowType?: boolean
 }
-const AvatarCard = ({ className, onClick }: IProps) => {
+const AvatarCard = ({
+  className,
+  onClick,
+  description,
+  isShowType = true,
+}: IProps) => {
   const { user } = useAppSelector(userReducer)
   return (
     <div className={clsx('flex items-center', className)} onClick={onClick}>
@@ -40,9 +47,16 @@ const AvatarCard = ({ className, onClick }: IProps) => {
         <div className="line-clamp-1 text-base font-semibold text-[#050505] group-hover:text-white">
           {user?.detail?.full_name}
         </div>
-        <div className="line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1] group-hover:text-white">
-          {user?.type?.toLowerCase()}
-        </div>
+        {description && (
+          <div className="line-clamp-1 text-sm font-normal lowercase text-[#A1A1A1] group-hover:text-white">
+            {description}
+          </div>
+        )}
+        {isShowType && (
+          <div className="line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1] group-hover:text-white">
+            {user?.type?.toLowerCase()}
+          </div>
+        )}
       </div>
     </div>
   )

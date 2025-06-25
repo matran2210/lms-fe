@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { MouseEventHandler, useEffect, useRef, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -15,6 +15,8 @@ import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import AvatarCard from '@components/card/AvatarCard'
+import dayjs from 'dayjs'
+import { calculateTimeAgo } from '@utils/helpers'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100
@@ -23,6 +25,7 @@ export interface HighlightItem {
   id: string
   text: string
   note: string
+  noteTime: string
   startOffset: number
   endOffset: number
 }
@@ -41,6 +44,8 @@ export const HighlightableHTML: React.FC<Props> = ({
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
+
   const [html, setHtml] = useState<string>(initialHTML)
   const [highlights, setHighlights] = useState<HighlightItem[]>([])
   const [selection, setSelection] = useState<{
@@ -389,21 +394,34 @@ export const HighlightableHTML: React.FC<Props> = ({
     setHighlightRect(null)
   }
 
+  const highlightElementById = (id: string): HTMLElement | null => {
+    const container = containerRef.current
+    if (!container) return null
+
+    return (container.querySelector(`span.highlighted[data-id="${id}"]`) ||
+      container.querySelector(
+        `span.highlighted[data-timestamp="${id}"]`,
+      )) as HTMLElement | null
+  }
+
+  const applyHighlightEffect = (el: HTMLElement) => {
+    el.style.transition = 'all 0.3s ease'
+    el.style.boxShadow = '0 0 10px #60A5FA'
+    el.style.transform = 'scale(1.02)'
+  }
+
+  const clearHighlightEffect = (el: HTMLElement) => {
+    el.style.boxShadow = ''
+    el.style.transform = ''
+  }
+
   // Updated scrollToHighlight to work with span elements
   const scrollToHighlight = (id: string) => {
     const container = containerRef.current
     if (!container) return
 
     // Try multiple selectors to find the highlight
-    let highlightElement = container.querySelector(
-      `span.highlighted[data-id="${id}"]`,
-    ) as HTMLElement
-
-    if (!highlightElement) {
-      highlightElement = container.querySelector(
-        `span.highlighted[data-timestamp="${id}"]`,
-      ) as HTMLElement
-    }
+    let highlightElement = highlightElementById(id)
 
     // If still not found, try to match by text content
     if (!highlightElement) {
@@ -415,29 +433,47 @@ export const HighlightableHTML: React.FC<Props> = ({
         ) as HTMLElement
       }
     }
-
     if (!highlightElement) return
 
-    const elementRect = highlightElement.getBoundingClientRect()
-    const offset = 100
-    const targetScrollTop = window.scrollY + elementRect.top - offset
-
-    window.scrollTo({
-      top: targetScrollTop,
-      behavior: 'smooth',
-    })
+    highlightElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
     // Visual effect
-    highlightElement.style.transition = 'all 0.3s ease'
-    highlightElement.style.boxShadow = '0 0 10px #60A5FA'
-    highlightElement.style.transform = 'scale(1.02)'
-
+    applyHighlightEffect(highlightElement)
     setTimeout(() => {
-      highlightElement.style.boxShadow = ''
-      highlightElement.style.transform = ''
+      clearHighlightEffect(highlightElement)
     }, 1500)
 
     setOpen(false)
+  }
+
+  const handleMouseEnter = (
+    e: React.MouseEvent<HTMLDivElement>,
+    id: string,
+  ) => {
+    const el = highlightElementById(id)
+    if (!el) return
+
+    // Clear timeout nếu đang chờ remove highlight
+    const timer = highlightTimers.current.get(id)
+    if (timer) {
+      clearTimeout(timer)
+      highlightTimers.current.delete(id)
+    }
+
+    applyHighlightEffect(el)
+  }
+
+  const handleMouseLeave = (id: string) => {
+    const el = highlightElementById(id)
+    if (!el) return
+
+    // Đặt timeout để gỡ hiệu ứng sau 2 giây
+    const timeout = setTimeout(() => {
+      clearHighlightEffect(el)
+      highlightTimers.current.delete(id)
+    }, 500)
+
+    highlightTimers.current.set(id, timeout)
   }
 
   // Updated handleConfirmHighlight to properly track the created highlights
@@ -477,6 +513,7 @@ export const HighlightableHTML: React.FC<Props> = ({
             id: id,
             text: span.textContent || selection.text,
             note: noteInput,
+            noteTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
             startOffset: selection.startOffset,
             endOffset: selection.endOffset,
           }
@@ -513,6 +550,15 @@ export const HighlightableHTML: React.FC<Props> = ({
     }
   }, [])
 
+  useEffect(() => {
+    const timers = highlightTimers.current // copy current ref
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t))
+      timers.clear()
+    }
+  }, [])
+
   const saveNote = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault()
@@ -521,7 +567,13 @@ export const HighlightableHTML: React.FC<Props> = ({
     if (!selectedHighlightId) return
     setHighlights((prev) =>
       prev.map((h) =>
-        h.id === selectedHighlightId ? { ...h, note: noteInput } : h,
+        h.id === selectedHighlightId
+          ? {
+              ...h,
+              note: noteInput,
+              noteTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
+            }
+          : h,
       ),
     )
     setHighlightRect(null)
@@ -772,32 +824,49 @@ export const HighlightableHTML: React.FC<Props> = ({
           },
         )}
       >
-        <span onClick={showDrawer}>
+        <span onClick={showDrawer} className="cursor-pointer">
           <ShowCommentIcon className="h-8 w-8" />
         </span>
       </div>
 
       <Drawer
-        title="Highlights"
+        title={
+          <div className="flex items-center gap-2">
+            {' '}
+            <ShowCommentIcon /> Comment
+          </div>
+        }
         onClose={onClose}
         open={open}
         classNames={{
           header: 'highlight-drawer-header',
         }}
+        mask={false}
       >
         <List
           className="px-6 py-4"
           dataSource={highlights}
           renderItem={(item) => (
             <List.Item
-              className="hover:text-blue-600 cursor-pointer"
+              className="hover:text-blue-600 w-full cursor-pointer"
               onClick={() => scrollToHighlight(item.id)}
+              onMouseEnter={(e) => handleMouseEnter(e, item.id)}
+              onMouseLeave={() => handleMouseLeave(item.id)}
             >
-              <div>
-                <div className="font-medium">{item.text}</div>
-                {isShowNote && item.note && (
-                  <div className="text-gray-500 text-xs">Note: {item.note}</div>
-                )}
+              <div className="w-full">
+                <AvatarCard
+                  className="mb-2"
+                  description={calculateTimeAgo(item.noteTime)}
+                  isShowType={false}
+                />
+                <div className="border-blue-500 ml-5 border-l-2 pl-5">
+                  <div className="mb-3 rounded-lg bg-white px-4 py-3 font-medium shadow-card">
+                    {item.text}
+                  </div>
+                  {isShowNote && item.note && (
+                    <div className="text-gray-500 text-xs">{item.note}</div>
+                  )}
+                </div>
               </div>
             </List.Item>
           )}
