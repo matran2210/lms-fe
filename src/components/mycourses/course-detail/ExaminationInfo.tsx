@@ -2,8 +2,8 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { ClassAPI } from '@pages/api/class'
 import { ClassKey } from '@pages/api/queryKey'
 import { useRouter } from 'next/router'
-import { Dispatch, ReactNode, SetStateAction } from 'react'
-import { useQuery } from 'react-query'
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { useQuery, useQueryClient } from 'react-query'
 import { PencilV2Icon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
@@ -11,6 +11,8 @@ import { CheckCircleTwoTone } from '@ant-design/icons'
 import { formatDateFromUTC } from '@utils/index'
 import { Avatar, List, Skeleton } from 'antd'
 import NoDataV2 from 'src/common/NodataV2'
+import ExamEditDrawer from '@components/profile/ExamInformation/ExamEditDrawer'
+import { Data } from 'src/type/course'
 
 type Props = {
   open: boolean
@@ -29,7 +31,13 @@ const InfoItem = ({ label, value }: InfoItemProps) => (
   </div>
 )
 
-const ExamDate = ({ data }: any) => (
+const ExamDate = ({
+  data,
+  setIsOpen,
+}: {
+  data: Data
+  setIsOpen: (isOpen: boolean) => void
+}) => (
   <>
     <div>{data?.exam?.examination?.name ?? '-'}</div>
     {data?.is_final_examination_subject === true ? (
@@ -45,7 +53,7 @@ const ExamDate = ({ data }: any) => (
         <Tooltip showTooltip={true} title={'Change Exam Date'}>
           <div
             className="cursor-pointer hover:text-primary"
-            // onClick={() => setIsOpen(true)}
+            onClick={() => setIsOpen(true)}
           >
             <PencilV2Icon />
           </div>
@@ -54,6 +62,7 @@ const ExamDate = ({ data }: any) => (
     )}
   </>
 )
+
 const ExaminationInfo = ({ open, setOpen }: Props) => {
   const router = useRouter()
   const { data, isLoading, isFetching, isError, isSuccess } = useQuery({
@@ -66,6 +75,8 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     select: (data) => data.data,
     retry: false,
   })
+  const queryClient = useQueryClient()
+  const [isOpen, setIsOpen] = useState(false)
 
   const duration = `${formatDateFromUTC(data?.exam?.start_date ?? '')} - ${formatDateFromUTC(
     data?.exam?.end_date ?? '',
@@ -99,7 +110,7 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
           <InfoItem label="Duration:" value={duration} />
           <InfoItem
             label="Scheduled Exam Date:"
-            value={<ExamDate data={data} />}
+            value={<ExamDate data={data} setIsOpen={setIsOpen} />}
           />
         </div>
       )
@@ -107,14 +118,28 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   }
 
   return (
-    <SappDrawerV3
-      open={open}
-      handleCancel={() => setOpen(false)}
-      title="Exam Infomation"
-      isShowBtnClose
-    >
-      {renderContent()}
-    </SappDrawerV3>
+    <>
+      <SappDrawerV3
+        open={open}
+        handleCancel={() => setOpen(false)}
+        title="Exam Infomation"
+        isShowBtnClose
+      >
+        {renderContent()}
+      </SappDrawerV3>
+      <ExamEditDrawer
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        classId={router.query.courseId as string}
+        onSuccess={() => {
+          queryClient.invalidateQueries({
+            queryKey: [ClassKey.ExamInfo],
+          })
+        }}
+        remainingChanges={data?.remaining_changes}
+        currentValue={data?.exam?.id}
+      />
+    </>
   )
 }
 
