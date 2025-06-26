@@ -11308,18 +11308,11 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
-
-<<<<<<< HEAD
-sapp-common-package@^1.1.6-test:
-  version "1.1.6-test"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.1.6-test.tgz#0ca0b6cc550bd6fc747e99f18b6c4f7c5d7f4b06"
-  integrity sha512-dwWYLaISetkCKCi/vSv8ckC8wCFNjnzNwAw1+8yiOkz1JLcNt6PzHqUMVtEADC30Eqcki4+2h8g93zm8oS3c7g==
-=======
+  
 sapp-common-package@^1.1.7-test:
   version "1.1.7-test"
   resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.1.7-test.tgz#451db6596c1f3f7e1050bc0d3820572cc32724c9"
   integrity sha512-ZZVto9yKGhBoAnsbqHsLiFJP3oRi1ycqZuO9rgjnMbperP29f8173O6PnTrunFMo1fGlVetNyg1IF9nWpoPtng==
->>>>>>> e40db94145477f076a44b58158363b1da509a598
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
