@@ -697,7 +697,7 @@ export const ConfirmIcon = () => {
   )
 }
 
-export const CloseIconNote = () => {
+export const CloseIconNote = ({ color = '#1C274C' }: { color?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -708,14 +708,14 @@ export const CloseIconNote = () => {
     >
       <path
         d="M18 18L6 6"
-        stroke="#1C274C"
+        stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M6 18L18 6"
-        stroke="#1C274C"
+        stroke={color}
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
