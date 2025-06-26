@@ -134,26 +134,25 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       </div>
       <div className="mt-auto">
         <div className="info">
-          <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
-            {data?.is_attempt ? (
-              <>
-                <p>Time taken:</p>
-                {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
-                  <span>--</span>
-                ) : (
-                  <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
-                )}
-              </>
-            ) : (
+          {data?.attempts.length < data?.limit_count && (
+            <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
               <>
                 <p>Time allowed: </p>
                 <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
               </>
-            )}
-          </div>
+            </div>
+          )}
+          {data?.attempt_times > 0 && (
+            <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
+              <>
+                <p>Time taken: </p>
+                <p className="font-medium text-bw-1">{timeTakenFormatted}</p>
+              </>
+            </div>
+          )}
           <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
-            <p>Results:</p>
-            {data?.is_attempt ? (
+            <p>Latest result:</p>
+            {data?.attempts.length > 0 ? (
               <>
                 {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
                   <span>--</span>
@@ -172,7 +171,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
           {!data?.attempt_status ||
           data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ||
-          data.attempts.length < data.limit_count ? (
+          data.attempts.length === 0 ? (
             <ButtonSecondary
               title="Begin"
               full={false}
@@ -182,14 +181,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             />
           ) : (
             <>
-              <ButtonSecondary
-                title="Retake"
-                size="small"
-                full={false}
-                onClick={() => setOpenExpired(true)}
-              />
               <div className="group flex items-center gap-2 hover:text-primary">
-                {data.attempts.length > 1 ? (
+                {data.attempts.length > 0 ? (
                   <>
                     <div>Result:</div>
                     <div className="flex gap-2">
@@ -216,7 +209,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                   </>
                 ) : (
                   <SappButton
-                    title="Result"
+                    title="Results"
                     onClick={() =>
                       router.push(
                         `/entrance-test/test-result/${data?.quiz_attempt_id}`,
@@ -229,6 +222,16 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                   />
                 )}
               </div>
+              <ButtonSecondary
+                title="Retake"
+                size="small"
+                full={false}
+                onClick={() =>
+                  data?.attempt_times < data?.limit_count
+                    ? handleClickBegin()
+                    : setOpenExpired(true)
+                }
+              />
             </>
           )}
         </div>
