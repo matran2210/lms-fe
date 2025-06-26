@@ -1,48 +1,28 @@
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import { zodMsg } from 'src/constants/form'
+import { Controller, useFormContext } from 'react-hook-form'
 import useSelectExams from 'src/hooks/useSelectExams'
 import UploadSingleFileV2 from '@components/base/button/UploadSingleFileV2'
+import { useEffect } from 'react'
+import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
-interface Iprops {
+import { message, Upload, UploadProps } from 'antd'
+interface IProps {
   classId: string
-  onSuccess?: () => void
   remainingChanges?: number
   currentValue?: string
+  isOpen: boolean
 }
 
-const ChangExamDate = ({ classId, currentValue, remainingChanges }: Iprops) => {
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
-  const validationSchema = z.object({
-    note: z
-      .array(z.any(), { message: zodMsg.required })
-      .min(1, { message: zodMsg.required }),
-    examination_subject_id: z.object(
-      {
-        label: z
-          .string({ required_error: zodMsg.required })
-          .min(1, { message: zodMsg.required }),
-        value: z
-          .string({ required_error: zodMsg.required })
-          .min(1, { message: zodMsg.required }),
-      },
-      { message: zodMsg.required },
-    ),
-  })
+const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<ExaminationForm>({
-    resolver: zodResolver(validationSchema),
-  })
+const ChangExamDate = ({
+  classId,
+  currentValue,
+  remainingChanges,
+  isOpen,
+}: IProps) => {
+  const { control, reset, setValue } = useFormContext()
+  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -52,6 +32,30 @@ const ChangExamDate = ({ classId, currentValue, remainingChanges }: Iprops) => {
     ?.filter((item) => {
       return item.value !== currentValue
     })
+
+  const getUploadProps = (onChange: (file: RcFile[]) => void): UploadProps => ({
+    beforeUpload: (file) => {
+      const isValidType = allowedTypes.includes(file.type)
+
+      if (!isValidType) {
+        message.error(
+          `${file.name} is not a valid image file (only PNG, JPG, and JPEG allowed).`,
+        )
+        return Upload.LIST_IGNORE
+      }
+      onChange([file]) // Manually update form state
+      return false // Prevent default upload behavior
+    },
+    onRemove: () => {
+      setValue('note', [])
+    },
+  })
+  useEffect(() => {
+    if (isOpen) {
+      reset({})
+      refetch()
+    }
+  }, [isOpen, refetch, reset])
 
   return (
     <div className="flex flex-col justify-start">
@@ -76,15 +80,21 @@ const ChangExamDate = ({ classId, currentValue, remainingChanges }: Iprops) => {
         <div className="text-base font-semibold leading-normal text-gray-800">
           Registration evidence:
         </div>
-        <div>
-          <UploadSingleFileV2
-            fileList={watch('note') as RcFile[]}
-            beforeUpload={(file) => {
-              setValue('note', [file])
-              return false
-            }}
-          />
-        </div>
+        <Controller
+          name="note"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div>
+              <UploadSingleFileV2
+                fileList={field.value || []}
+                {...getUploadProps(field.onChange)}
+              />
+              {fieldState.error && (
+                <ErrorMessage>{fieldState.error.message}</ErrorMessage>
+              )}
+            </div>
+          )}
+        />
       </div>
     </div>
   )
