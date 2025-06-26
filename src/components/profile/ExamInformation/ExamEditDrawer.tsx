@@ -126,7 +126,7 @@ const ExamEditDrawer = ({
 
   const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
     mutate({
-      examination_subject_id: data.examination_subject_id?.value,
+      examination_subject_id: data.examination_subject_id,
       note: data.note,
     })
   }
