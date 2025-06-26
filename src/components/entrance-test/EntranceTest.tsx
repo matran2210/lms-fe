@@ -134,14 +134,14 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       </div>
       <div className="mt-auto">
         <div className="info">
-          <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
-            {data?.attempt_times < data?.limit_count && (
+          {data?.attempt_times < data?.limit_count && (
+            <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
               <>
                 <p>Time allowed: </p>
                 <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
               </>
-            )}
-          </div>
+            </div>
+          )}
           <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
             {data?.attempt_times > 0 && (
               <>
@@ -151,7 +151,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             )}
           </div>
           <div className="flex justify-between pt-4 text-base capitalize text-gray-1">
-            <p>Latest results:</p>
+            <p>Latest result:</p>
             {data?.attempts.length > 0 ? (
               <>
                 {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
