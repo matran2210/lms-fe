@@ -37,7 +37,7 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
         <AlertIcon />
       </div>
       <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        Expired Test
+        Test Expired
       </div>
       <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
         <span className="text-gray-1">
