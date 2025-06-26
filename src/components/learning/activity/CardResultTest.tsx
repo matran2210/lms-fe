@@ -25,7 +25,7 @@ const CardResultTest = ({
             placement="topLeft"
           >
             <div
-              className="text-lg font-semibold leading-[27px] text-gray-800"
+              className="cursor-pointer text-lg font-semibold leading-[27px] text-gray-800"
               onClick={() => handleViewResult(resultData)}
             >
               {resultData?.name}
