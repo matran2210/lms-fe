@@ -121,6 +121,7 @@ const TableEntranceResult = () => {
               }
               loading={loading}
               showTotal={false}
+              is_lms_v2={true}
             />
           )}
         </div>

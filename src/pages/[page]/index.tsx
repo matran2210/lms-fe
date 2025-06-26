@@ -76,7 +76,7 @@ const ProfilePage = () => {
         }
       })
       const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
     } catch (error) {}
   }
   let breadcrumbs: ITabs[] = [

@@ -66,7 +66,6 @@ const TestEntranceResult = () => {
                 onPublish={() => {}}
                 id={undefined}
                 is_ops={false}
-                is_lms_v2={true}
                 handleClose={() => router.push(PageLink.ENTRANCE_TEST)}
               />
             )}
