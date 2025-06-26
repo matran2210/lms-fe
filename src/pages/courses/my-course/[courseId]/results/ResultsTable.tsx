@@ -26,11 +26,7 @@ const ResultsTable = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const {
-    data: resultData,
-    isLoading,
-    isFetching,
-  } = useQuery<IResultsList>({
+  const { data: resultData, isLoading } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
     queryKey: [CourseKey.ResultsList, currentPage, pageSize, params],
     queryFn: () => {
@@ -141,7 +137,7 @@ const ResultsTable = () => {
       <div className="my-6">
         <FilterCourseSection setParams={setParams} />
       </div>
-      {isLoading || isFetching ? (
+      {isLoading ? (
         <>
           {[...Array(6)].map((_, index) => (
             <Skeleton key={index} active avatar>
@@ -182,7 +178,7 @@ const ResultsTable = () => {
         </div>
       )}
 
-      {resultData && !isLoading && !isFetching && (
+      {resultData && (
         <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
           pageSize={resultData.metadata?.page_size}

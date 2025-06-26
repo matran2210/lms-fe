@@ -141,12 +141,11 @@ export default function Sidebar({
           setOpenResource={setOpenResource}
         />
       )}
-      {openExaminationInfo && (
-        <ExaminationInfo
-          open={openExaminationInfo}
-          setOpen={setOpenExaminationInfo}
-        />
-      )}
+
+      <ExaminationInfo
+        open={openExaminationInfo}
+        setOpen={setOpenExaminationInfo}
+      />
     </div>
   )
 }

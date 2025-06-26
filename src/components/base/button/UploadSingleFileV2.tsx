@@ -14,7 +14,7 @@ const UploadSingleFileV2 = ({
   fileList = [],
   ...props
 }: IProps) => {
-  const uploadRef = useRef<any>(null)
+  const uploadRef = useRef<HTMLDivElement>(null)
 
   const hasFile = fileList?.length || 0
 

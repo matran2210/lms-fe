@@ -4,7 +4,7 @@ import { ClassKey } from '@pages/api/queryKey'
 import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
-import { PencilV2Icon, AlertTriagle } from '@assets/icons'
+import { PencilV2Icon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
@@ -20,7 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm, FormProvider } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
-import SappModalV3 from '@components/base/modal/SappModalV3'
+import { isEmpty } from 'lodash'
+import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
 
 type Props = {
   open: boolean
@@ -33,12 +34,15 @@ interface InfoItemProps {
 }
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-const InfoItem = ({ label, value }: InfoItemProps) => (
-  <div className="flex items-center justify-between text-base text-secondary">
-    <div>{label}</div>
-    <div className="flex items-center gap-2 font-semibold">{value}</div>
-  </div>
-)
+const InfoItem = ({ label, value }: InfoItemProps) => {
+  if (isEmpty(value)) return '-'
+  return (
+    <div className="flex items-center justify-between text-base text-secondary">
+      <div>{label}</div>
+      <div className="flex items-center gap-2 font-semibold">{value}</div>
+    </div>
+  )
+}
 
 const ExamDate = ({
   data,
@@ -76,11 +80,11 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   const router = useRouter()
   const classId = router.query.courseId as string
 
-  const { data, isLoading, isFetching, isError, isSuccess } = useQuery({
+  const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: [ClassKey.ExamInfo],
     queryFn: () =>
-      router.query.courseId
-        ? ClassAPI.getExamInfo(router.query.courseId as string)
+      classId
+        ? ClassAPI.getExamInfo(classId as string)
         : Promise.reject('courseId is undefined'),
     refetchOnWindowFocus: false,
     select: (data) => data.data,
@@ -99,7 +103,7 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
 
   const validationSchema = z.object({
     note: z
-      .array(z.any(), { message: zodMsg.required })
+      .array(z.instanceof(File), { message: zodMsg.required })
       .min(1, { message: zodMsg.required }),
     examination_subject_id: z
       .string({ required_error: zodMsg.required })
@@ -128,13 +132,12 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
       formData.append('examination_subject_id', examination_subject_id)
       note && formData.append('note', note[0] as FileType)
 
-      return ClassAPI.changeExamDate(router.query.courseId as string, formData)
+      return ClassAPI.changeExamDate(classId as string, formData)
     },
     onSuccess: (res) => {
       if (res.data.success) {
         toast.success(res.data.data.message)
         handleSuccess()
-        handleBack()
         handleCancel()
       }
       setOpenConfirmModal(false)
@@ -153,10 +156,11 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   }
   const handleCancel = () => {
     setOpen(false)
+    handleBack()
   }
   const { exams } = useSelectExams(classId)
   const handleChangeExamDate = () => {
-    if (exams?.current_exam_name === '') {
+    if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
       setOpenConfirmModal(true)
@@ -164,7 +168,7 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   }
 
   const renderContent = () => {
-    if (isLoading || isFetching) {
+    if (isLoading) {
       return (
         <>
           {[...Array(6)].map((_, index) => (
@@ -175,7 +179,7 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
         </>
       )
     }
-    if (isError || !isSuccess) {
+    if (isError) {
       return (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
           <NoDataV2 />
@@ -185,9 +189,9 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     if (isSuccess) {
       return (
         <div className="flex w-full flex-col gap-4 text-base">
-          <InfoItem label="Program:" value={data?.program?.name ?? '-'} />
-          <InfoItem label="Subject:" value={data?.subject?.name ?? '-'} />
-          <InfoItem label="Class Code:" value={data?.exam?.code_exam ?? '-'} />
+          <InfoItem label="Program:" value={data?.program?.name} />
+          <InfoItem label="Subject:" value={data?.subject?.name} />
+          <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
           <InfoItem label="Duration:" value={duration} />
           <InfoItem
             label="Scheduled Exam Date:"
@@ -225,28 +229,14 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
           renderContent()
         )}
       </SappDrawerV3>
-      <SappModalV3
-        open={openConfirmModal}
-        cancelButtonCaption="No"
-        okButtonCaption="Change Anyway"
-        handleCancel={() => setOpenConfirmModal(false)}
-        onOk={methods.handleSubmit(onSubmit, (errors) => {
-          if (errors) {
-            setOpenConfirmModal(false)
-          }
-        })}
-        fullWidthBtn={true}
-        buttonSize="extra"
-        icon={<AlertTriagle />}
-        header="Are you sure?"
-        loading={isChangingLoad}
-      >
-        Your learning progress in the Revision class for the{' '}
-        <span className="text-sm font-medium text-[#050505]">
-          {exams?.current_exam_name}
-        </span>{' '}
-        exam cannot be saved. Do you want to continue making changes?
-      </SappModalV3>
+      <ChangeAnywayModal
+        openConfirmModal={openConfirmModal}
+        setOpenConfirmModal={setOpenConfirmModal}
+        methods={methods}
+        onSubmit={onSubmit}
+        isChangingLoad={isChangingLoad}
+        exams={exams}
+      />
     </>
   )
 }

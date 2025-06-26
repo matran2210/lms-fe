@@ -1,5 +1,5 @@
 import { Pagination, Select } from 'antd'
-import { Dispatch, SetStateAction, ReactNode } from 'react'
+import { Dispatch, ReactNode, SetStateAction, useCallback } from 'react'
 import clsx from 'clsx'
 import { RightOutlined, AntSelectIcon } from '@assets/icons'
 
@@ -25,10 +25,43 @@ const PaginationSappV2 = ({
     { value: 25, label: '25' },
     { value: 50, label: '50' },
   ]
-  const handlePageChange = (page: number, newSize: number) => {
-    const size = newSize || pageSize
-    setPageSize && setPageSize(size)
-    setCurrentPage && setCurrentPage(page)
+  const handlePageChange = useCallback(
+    (page: number, newSize?: number) => {
+      const size = newSize || pageSize
+      setPageSize?.(size)
+      setCurrentPage?.(page)
+    },
+    [pageSize, setPageSize, setCurrentPage],
+  )
+
+  const renderItem = (
+    page: number,
+    type: 'page' | 'prev' | 'next' | 'jump-prev' | 'jump-next',
+    originalElement: ReactNode,
+  ) => {
+    if (type === 'next') {
+      return (
+        <div className="flex items-center gap-1 ">
+          <div className="font-medium text-gray-600">Next</div>
+          <div>
+            <RightOutlined />
+          </div>
+        </div>
+      )
+    }
+    if (type === 'prev') {
+      if (currentPage < 2) return null
+      return (
+        <div className="flex items-center gap-1 ">
+          <div>
+            <RightOutlined className="rotate-180" />
+          </div>
+          <div className="font-medium text-gray-600">Previous</div>
+        </div>
+      )
+    }
+
+    return <div>{originalElement}</div>
   }
 
   return (
@@ -56,29 +89,7 @@ const PaginationSappV2 = ({
           onChange={handlePageChange}
           showSizeChanger={false}
           itemRender={(page, type, originalElement) => {
-            if (type === 'next') {
-              return (
-                <div className="flex items-center gap-1 ">
-                  <div className="font-medium text-gray-600">Next</div>
-                  <div>
-                    <RightOutlined />
-                  </div>
-                </div>
-              )
-            }
-            if (type === 'prev') {
-              if (currentPage < 2) return null
-              return (
-                <div className="flex items-center gap-1 ">
-                  <div>
-                    <RightOutlined className="rotate-180" />
-                  </div>
-                  <div className="font-medium text-gray-600">Previous</div>
-                </div>
-              )
-            }
-
-            return <div>{originalElement}</div>
+            return renderItem(page, type, originalElement)
           }}
         />
       </div>
