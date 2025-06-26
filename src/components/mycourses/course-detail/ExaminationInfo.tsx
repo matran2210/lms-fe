@@ -35,11 +35,12 @@ interface InfoItemProps {
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const InfoItem = ({ label, value }: InfoItemProps) => {
-  if (isEmpty(value)) return '-'
   return (
     <div className="flex items-center justify-between text-base text-secondary">
       <div>{label}</div>
-      <div className="flex items-center gap-2 font-semibold">{value}</div>
+      <div className="flex items-center gap-2 font-semibold">
+        {value || '-'}
+      </div>
     </div>
   )
 }
