@@ -44,6 +44,7 @@ import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import 'sapp-common-package/dist/index.css'
+import 'preview-part/dist/index.css'
 
 type MyAppProps = AppProps & {
   Component: {
