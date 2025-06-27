@@ -106,14 +106,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
       const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
     } catch (error) {}
   }
 
@@ -139,7 +133,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
   }
   const handleChildClick = (childLabel: string) => {
     // Check if the clicked label is "Security"
-    if (childLabel.toLowerCase() === 'security') {
+    if (childLabel?.toLowerCase() === 'security') {
       // Set both the "Security" page and the first child to active
       setChildActivationStates({
         security: true,
@@ -155,7 +149,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
     handleSetStatusActiveChild(childLabel)
     // Chuyển trang
-    let formattedChildLabel = childLabel.toLowerCase()
+    let formattedChildLabel = childLabel?.toLowerCase()
 
     router.push(`/${formattedChildLabel}`)
   }

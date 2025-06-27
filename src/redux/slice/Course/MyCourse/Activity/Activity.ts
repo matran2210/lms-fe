@@ -60,6 +60,19 @@ const initialState: ICourseActivityState = {
   discussion: undefined,
   breadcumb: [] as IBreadcrumb[],
   user_course_section_progress: [],
+  next_activity: {
+    id: '',
+    display_icon: '',
+    name: '',
+    is_preview_locked: false,
+  },
+  previous_activity: {
+    id: '',
+    display_icon: '',
+    name: '',
+    is_preview_locked: false,
+  },
+  is_preview_locked: false,
 }
 
 export const getCourseActivityTapById = createAsyncThunk(

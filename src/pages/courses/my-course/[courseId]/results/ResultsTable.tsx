@@ -1,15 +1,12 @@
-import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
+import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { GradingMethod } from '@utils/constants'
-import { Modal } from 'antd'
-import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { GRADE_STATUS } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import ResultQuizModal from './ResultQuizModal'
+import { IResultsList, Results } from 'src/type/results'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
@@ -17,6 +14,7 @@ import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import CollapseActivity from '@components/learning/activity/CollapseActivity'
 import { isEmpty } from 'lodash'
 import CardResultTest from '@components/learning/activity/CardResultTest'
+import { Avatar, List, Skeleton } from 'antd'
 
 const ResultsTable = () => {
   const router = useRouter()
@@ -28,7 +26,7 @@ const ResultsTable = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data: resultData } = useQuery<IResultsList>({
+  const { data: resultData, isLoading } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
     queryKey: [CourseKey.ResultsList, currentPage, pageSize, params],
     queryFn: () => {
@@ -64,6 +62,7 @@ const ResultsTable = () => {
     }
     return '-'
   }
+
   const handleGetLink = (row: Results): string => {
     if (row.course_section_type === TEST_TYPE.ACTIVITY) {
       return `/courses/${router?.query?.courseId}/activity/${row?.id}`
@@ -75,6 +74,7 @@ const ResultsTable = () => {
 
     return `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
   }
+
   const getNameTooltipContent = (row: Results) => {
     const link = handleGetLink(row)
     return (
@@ -137,45 +137,54 @@ const ResultsTable = () => {
       <div className="my-6">
         <FilterCourseSection setParams={setParams} />
       </div>
-      <div className="flex flex-col gap-6">
-        {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
-          <div className="flex flex-col gap-6">
-            {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-              <CollapseActivity
-                key={item?.id}
-                resultData={item}
-                handleViewResult={handleViewResult}
-                getScore={getScore}
-              />
-            ))}
-          </div>
-        )}
-        {Object.entries(groupedDataByType)
-          ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
-          ?.map(([type, data]) =>
-            !isEmpty(data) ? (
-              <div key={type} className="flex flex-col gap-6">
-                {data.map((item) => (
-                  <CardResultTest
-                    key={item.id}
-                    resultData={item}
-                    handleViewResult={handleViewResult}
-                    getNameTooltipContent={getNameTooltipContent}
-                  />
-                ))}
-              </div>
-            ) : null,
+      {isLoading ? (
+        <>
+          {[...Array(6)].map((_, index) => (
+            <Skeleton key={index} active avatar>
+              <List.Item.Meta avatar={<Avatar />} />
+            </Skeleton>
+          ))}
+        </>
+      ) : (
+        <div className="flex flex-col gap-6">
+          {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
+            <div className="flex flex-col gap-6">
+              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
+                <CollapseActivity
+                  key={item?.id}
+                  resultData={item}
+                  handleViewResult={handleViewResult}
+                  getScore={getScore}
+                />
+              ))}
+            </div>
           )}
-      </div>
+          {Object.entries(groupedDataByType)
+            ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
+            ?.map(([type, data]) =>
+              !isEmpty(data) ? (
+                <div key={type} className="flex flex-col gap-6">
+                  {data.map((item) => (
+                    <CardResultTest
+                      key={item.id}
+                      resultData={item}
+                      handleViewResult={handleViewResult}
+                      getNameTooltipContent={getNameTooltipContent}
+                    />
+                  ))}
+                </div>
+              ) : null,
+            )}
+        </div>
+      )}
+
       {resultData && (
-        <PaginationSAPP
+        <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
           pageSize={resultData.metadata?.page_size}
           totalItems={resultData.metadata?.total_records}
           setCurrentPage={setCurrentPage}
           setPageSize={setPageSize}
-          type={'table'}
-          classname="mt-3"
         />
       )}
       <SappModalV3

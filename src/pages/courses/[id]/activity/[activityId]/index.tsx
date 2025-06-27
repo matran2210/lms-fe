@@ -420,25 +420,6 @@ const ActivityPage = () => {
     (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
-  const [sessionData, setSessionData] = useState<Array<any>>([])
-
-  useEffect(() => {
-    // Lấy giá trị từ sessionStorage với key 'activityId'
-    const storedValue = window.sessionStorage.getItem('activityId')
-
-    // Kiểm tra nếu storedValue không null và không phải là undefined
-    if (storedValue !== null && storedValue !== undefined) {
-      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
-      const parsedValue = JSON.parse(storedValue)
-
-      // Kiểm tra xem parsedValue có phải là một mảng hay không
-      if (Array.isArray(parsedValue)) {
-        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
-        setSessionData(parsedValue)
-      }
-    }
-  }, [])
-
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity" showSidebar={isAlwaysShowSidebar}>
@@ -522,7 +503,7 @@ const ActivityPage = () => {
             >
               <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
                 <ActivityPagination
-                  {...{ activity, sessionData }}
+                  {...{ activity }}
                   focusOnlyQuiz={focusOnlyQuiz.open}
                   isArrowTitle
                 />
@@ -580,7 +561,7 @@ const ActivityPage = () => {
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
-              {...{ activity, sessionData }}
+              {...{ activity }}
               focusOnlyQuiz={focusOnlyQuiz.open}
             />
 
