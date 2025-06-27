@@ -142,7 +142,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <span className="leading-4.5 w-full overflow-hidden text-ellipsis">
+                    <span className="w-full overflow-hidden text-ellipsis leading-4.5">
                       {truncateString(activity?.previous_activity?.name, 80)}
                     </span>
                   </Tooltip>
@@ -179,7 +179,7 @@ const ActivityPagination = ({
                       )
                     }
                   >
-                    <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
+                    <div className="line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
                       {truncateString(activity?.next_activity.name, 80)}
                     </div>
                   </Tooltip>

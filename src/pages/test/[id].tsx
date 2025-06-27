@@ -2705,7 +2705,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
+                        className="absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}
