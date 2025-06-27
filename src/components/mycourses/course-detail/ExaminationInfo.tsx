@@ -8,7 +8,7 @@ import { PencilV2Icon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
-import { formatDateFromUTC } from '@utils/index'
+import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadProps, UploadFile } from 'antd'
 import NoDataV2 from 'src/common/NodataV2'
 import { Data } from 'src/type/course'
@@ -95,12 +95,6 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState(false)
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
-
-  const start = data?.exam?.start_date
-    ? formatDateFromUTC(data.exam.start_date)
-    : ''
-  const end = data?.exam?.end_date ? formatDateFromUTC(data.exam.end_date) : ''
-  const duration = [start, end].filter(Boolean).join(' - ') || '-'
 
   const validationSchema = z.object({
     note: z
@@ -193,7 +187,10 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
           <InfoItem label="Program:" value={data?.program?.name} />
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
-          <InfoItem label="Duration:" value={duration} />
+          <InfoItem
+            label="Duration:"
+            value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
+          />
           <InfoItem
             label="Scheduled Exam Date:"
             value={<ExamDate data={data} setIsOpen={setIsOpen} />}

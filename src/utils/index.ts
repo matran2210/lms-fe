@@ -406,7 +406,12 @@ export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
   }
   return '-'
 }
-
+export const getDuration = (started_at: string, finished_at: string) => {
+  const start = started_at ? formatDateFromUTC(started_at) : ''
+  const end = finished_at ? formatDateFromUTC(finished_at) : ''
+  const duration = [start, end].filter(Boolean).join(' - ') || '-'
+  return duration
+}
 /**
  * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
  * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
