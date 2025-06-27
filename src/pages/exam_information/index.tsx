@@ -12,8 +12,9 @@ import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { isEmpty } from 'lodash'
 import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { getDuration } from '@utils/index'
-import ExamEditDrawer from '@components/profile/ExamInformation/ExamEditDrawer'
-import ExamInfoActionCell from '@components/profile/ExamInformation/ExamInfoActionCell'
+import ActionCellV2 from '@components/base/action/ActionCellV2'
+import { PencilV2Icon } from '@assets/icons'
+import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
 const ExamInformation = () => {
   const screens = useTailwindBreakpoint()
@@ -67,6 +68,7 @@ const ExamInformation = () => {
           className={textStyle}
         />
       ),
+      width: 250,
     },
     {
       title: 'Duration',
@@ -85,17 +87,14 @@ const ExamInformation = () => {
           <>
             {!record?.is_final_examination_subject &&
               record?.remaining_changes > 0 && (
-                <ExamInfoActionCell>
-                  <p
-                    className="hover:bg-primary-light cursor-pointer rounded-md p-1 pl-2 transition-colors hover:text-primary"
-                    onClick={() => {
-                      setIsDrawerOpen(true)
-                      setCurrentRow(record)
-                    }}
-                  >
-                    Edit
-                  </p>
-                </ExamInfoActionCell>
+                <ActionCellV2
+                  icon={<PencilV2Icon className="h-4 w-4" />}
+                  nameAction="Edit"
+                  action={() => {
+                    setIsDrawerOpen(true)
+                    setCurrentRow(record)
+                  }}
+                />
               )}
           </>
         )
@@ -124,6 +123,7 @@ const ExamInformation = () => {
             }}
             loading={isLoading || isFetching}
             isShowPagination={false}
+            className="style-table-v2"
           />
           {!isEmpty(data?.data) && (
             <PaginationSappV2
@@ -136,16 +136,17 @@ const ExamInformation = () => {
           )}
         </div>
       </div>
-      {currentRow && (
-        <ExamEditDrawer
-          isOpen={isDrawerOpen}
-          setIsOpen={setIsDrawerOpen}
-          classId={currentRow.class.id}
+      {currentRow && isDrawerOpen && currentRow?.class?.id && (
+        <ExaminationInfo
+          open={isDrawerOpen}
+          setOpen={setIsDrawerOpen}
+          classIdProps={currentRow.class.id}
+          currentValue={currentRow.examination_subject_id}
           onSuccess={() => {
             refetch()
           }}
-          currentValue={currentRow.examination_subject_id}
-          remainingChanges={currentRow.remaining_changes}
+          isEditProps
+          isExamList
         />
       )}
     </Layout>
