@@ -14,6 +14,7 @@ interface IProps extends DrawerProps {
   title: string
   isShowBtnClose?: boolean
   isShowFooter?: boolean
+  isShowHeader?: boolean
   children: ReactNode
   loading?: boolean
   btnSubmitTile?: string
@@ -34,6 +35,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   children,
   isShowBtnClose = true,
   isShowFooter = false,
+  isShowHeader = true,
   loading = false,
   className,
   btnSubmitTile,
@@ -43,6 +45,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   classNameBody,
   cancelButtonCaption,
   cancelButtonClassName,
+  closable,
   ...props
 }) => {
   return (
@@ -58,31 +61,33 @@ const SappDrawerV3: React.FC<IProps> = ({
         className={clsx('relative h-full w-full bg-white p-8', classNameBody)}
       >
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {!isShowBtnClose && (
-              <div
-                onClick={handleBack}
+        {isShowHeader && (
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {!isShowBtnClose && (
+                <div
+                  onClick={handleBack}
+                  className="cursor-pointer"
+                  aria-label="Go back"
+                >
+                  <CollapseArrowIcon className="rotate-90" />
+                </div>
+              )}
+              <span className="text-2xl font-semibold leading-loose text-secondary">
+                {title}
+              </span>
+            </div>
+            {closable && isShowBtnClose && (
+              <button
+                onClick={handleCancel}
                 className="cursor-pointer"
-                aria-label="Go back"
+                aria-label="Close"
               >
-                <CollapseArrowIcon className="rotate-90" />
-              </div>
+                <CloseIconV2 />
+              </button>
             )}
-            <span className="text-2xl font-semibold leading-loose text-secondary">
-              {title}
-            </span>
           </div>
-          {isShowBtnClose && (
-            <button
-              onClick={handleCancel}
-              className="cursor-pointer"
-              aria-label="Close"
-            >
-              <CloseIconV2 />
-            </button>
-          )}
-        </div>
+        )}
 
         {/* Content */}
         <>{children}</>

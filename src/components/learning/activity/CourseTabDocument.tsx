@@ -20,6 +20,7 @@ import {
   courseActivityReducer,
   getCourseActivityTapById,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { IVideo } from 'src/type/course'
 import { IActivity } from 'src/type/course/my-course/Activity'
 
 interface IProps {
@@ -38,6 +39,7 @@ interface IProps {
   handleFinishedCourseSectionProgress: () => Promise<void>
   focusOnlyQuiz: IFocusQuiz
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
+  handleSetCurrentVideo: (video: IVideo) => void
 }
 const CourseTabDocument = ({
   activity,
@@ -50,6 +52,7 @@ const CourseTabDocument = ({
   handleFinishedCourseSectionProgress,
   focusOnlyQuiz,
   setFocusOnlyQuiz,
+  handleSetCurrentVideo,
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -253,6 +256,9 @@ const CourseTabDocument = ({
                               'AFTER_EACH_QUESTION'
                             }
                             class_user_id={activity?.class_user_id}
+                            handleSetCurrentVideoCallback={
+                              handleSetCurrentVideo
+                            }
                           ></VideoDocument>
                         </div>
                       )

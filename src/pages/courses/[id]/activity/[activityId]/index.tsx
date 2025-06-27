@@ -67,6 +67,9 @@ import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { DiscussionIcon } from '../../../../../assets/icons'
+import VideoTimelineMobile from '@components/learning/activity/modal/VideoTimelineMobile'
+import { IVideo } from 'src/type/course'
+import BottomMenu from '@components/layout/BottomMenu'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -116,14 +119,8 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
-  /**
-   * Giá trị được memoized cho course_tab_documents.
-   */
-  const course_tab_documents = useMemo(() => {
-    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
-      ?.course_tab_documents
-  }, [selector?.tabs])
-
+  const [openVideoTimeline, setOpenVideoTimeline] = useState(false)
+  const [currentVideo, setCurrentVideo] = useState<IVideo>({} as IVideo)
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
@@ -144,6 +141,15 @@ const ActivityPage = () => {
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
 
+  const onOpenVideoTimeline = () => {
+    setOpenVideoTimeline(true)
+  }
+  const onCloseVideoTimeline = () => {
+    setOpenVideoTimeline(false)
+  }
+  const handleSetCurrentVideo = (video: IVideo) => {
+    setCurrentVideo(video)
+  }
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
     setIsDoneActivity(false)
@@ -591,6 +597,7 @@ const ActivityPage = () => {
                 handleFinishedCourseSectionProgress,
                 focusOnlyQuiz,
                 setFocusOnlyQuiz,
+                handleSetCurrentVideo,
               }}
             />
             {/* Next/Prev Activities */}
@@ -613,55 +620,56 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-xs -translate-x-1/2 transform lg:hidden">
-            <div className="flex justify-center gap-5 rounded-xl bg-primary px-4 py-2 shadow-card md:gap-0 md:px-6">
-              <div className="flex items-center justify-center gap-5">
-                <CardMenuItem
-                  title="Note List"
-                  icon={<DocumentTextIcon className="h-6 w-6" />}
-                  onClick={handleOpenNotesList}
-                />
-                <CardMenuItem
-                  title="Resource"
-                  icon={<ResourceIcon className="h-6 w-6" />}
-                  onClick={() => setOpenResource(true)}
-                />
-              </div>
-              <Divider
-                type="vertical"
-                className="mx-6 my-auto hidden h-6 border-white text-white md:block"
-                orientation="center"
+          <BottomMenu>
+            <div className="flex items-center justify-center gap-5">
+              <CardMenuItem
+                title="Note List"
+                icon={<DocumentTextIcon className="h-6 w-6" />}
+                onClick={handleOpenNotesList}
               />
-              <div className="hidden items-center justify-center gap-5 md:flex">
-                <CardMenuItem
-                  title="Calculator"
-                  icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
-                  onClick={() => {
-                    handleOpenScratchPad({
-                      type: 'calculator',
-                    })
-                  }}
-                />
-                <CardMenuItem
-                  title="New Note"
-                  icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
-                  onClick={handleAddNote}
-                />
-              </div>
-              <div className="flex items-center justify-center gap-5 md:hidden">
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={() => setOpenResource(true)}
+              />
+            </div>
+            <Divider
+              type="vertical"
+              className="mx-6 my-auto hidden h-6 border-white text-white md:block"
+              orientation="center"
+            />
+            <div className="hidden items-center justify-center gap-5 md:flex">
+              <CardMenuItem
+                title="Calculator"
+                icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                onClick={() => {
+                  handleOpenScratchPad({
+                    type: 'calculator',
+                  })
+                }}
+              />
+              <CardMenuItem
+                title="New Note"
+                icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                onClick={handleAddNote}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-5 md:hidden">
+              {(currentVideo?.file?.resource?.time_line?.length as number) >
+                0 && (
                 <CardMenuItem
                   title="Timeline"
                   icon={<TimeLineIcon />}
-                  onClick={() => {}}
+                  onClick={onOpenVideoTimeline}
                 />
-                <CardMenuItem
-                  title="Discussion"
-                  icon={<DiscussionIcon className="h-6 w-6" />}
-                  onClick={() => {}}
-                />
-              </div>
+              )}
+              <CardMenuItem
+                title="Discussion"
+                icon={<DiscussionIcon className="h-6 w-6" />}
+                onClick={() => {}}
+              />
             </div>
-          </div>
+          </BottomMenu>
 
           {/* Sratchpad */}
           {openScratchPad.map((e) => {
@@ -760,6 +768,14 @@ const ActivityPage = () => {
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
+        />
+      )}
+
+      {openVideoTimeline && (
+        <VideoTimelineMobile
+          open={openVideoTimeline}
+          onClose={onCloseVideoTimeline}
+          currentVideo={currentVideo}
         />
       )}
     </SappLoadingGlobal>
