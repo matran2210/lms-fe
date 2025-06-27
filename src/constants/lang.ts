@@ -17,13 +17,16 @@ export const LANG_SIGNIN = {
   terms: 'Terms',
   plans: 'Plans',
   contactUs: 'Contact Us',
-  eventTest: 'Futurewards',
+  eventTest: 'Event Test',
 }
 
 export const MY_COURSES = {
   explanations: 'Explanations',
+  correctAnswer: 'Correct Answer',
+  solution: 'Solution',
   hotline: '19002225',
   placeholderSearch: 'Search for your course here',
+  placeholderSearchV2: 'Enter name of course...',
 }
 
 export const DESCRIPTION_POPUPCONFIRM = 'Bạn có chắc chắn muốn hủy không?'

@@ -10,8 +10,10 @@ import {
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
 } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
 const Page = () => {
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<ICalendarList>()
   const [filter, setFilter] = useState<IFilter>()
@@ -63,9 +65,9 @@ const Page = () => {
     const { type, courseId } = filter
     if (event.is_holiday && type?.includes(CALENDAR_FILTER_TYPE.HOLIDAY))
       return true
-    const isOverdue = dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(
-      dayjs(),
-    )
+    const isOverdue =
+      dayjs(`${event.end_date}T${event.end_time}Z`).isBefore(dayjs()) &&
+      event.mode === CALENDAR_FILTER_TYPE.ONLINE
     if (
       (!type?.includes(CALENDAR_FILTER_TYPE.OVERDUE) && isOverdue) ||
       (event.is_case_study &&
@@ -103,8 +105,8 @@ const Page = () => {
   }, [filter, data])
 
   return (
-    <Layout title="Course Detail">
-      <div className="mx-auto my-0 max-w-[1570px] pt-6 xl-max:mx-6">
+    <Layout title="Course Detail" showSidebar={isAlwaysShowSidebar}>
+      <div className="mx-auto my-0 max-w-[1570px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="font-normal text-[#050505]">Calendar</div>
@@ -114,6 +116,10 @@ const Page = () => {
               showWeeklyNorm={false}
               events={
                 events?.map((item) => {
+                  const isOverDue =
+                    dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
+                      dayjs(),
+                    ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
                   return {
                     id: item.id,
                     title: item.name,
@@ -131,6 +137,7 @@ const Page = () => {
                     isTest: item?.is_test,
                     isKeyContentBefore: item?.is_key_before_content,
                     isKeyContentAfter: item?.is_key_after_content,
+                    isOverDue: isOverDue,
                   }
                 }) ?? []
               }

@@ -22,7 +22,7 @@ import DiscussionElement from './DiscussionElement'
 import SappModalImage from '@components/base/modal/SappModalImage'
 import toast from 'react-hot-toast'
 import { Skeleton } from 'antd'
-import { IconSend } from '@assets/icons'
+import { CameraIcon, IconSend } from '@assets/icons'
 import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappButton from '@components/base/button/SappButton'
 import clsx from 'clsx'
@@ -320,8 +320,8 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   return (
-    <div className="mb-15 bg-white p-6">
-      <div className="mb-4 text-xl font-bold">Discussion</div>
+    <div className="mb-15 bg-white">
+      <div className="mb-6 text-lg font-medium">Discussion</div>
       <Skeleton loading={loading}>
         {selector?.discussion?.map((e, i) => {
           return (
@@ -342,7 +342,7 @@ const Discussion = ({ class_id }: Props) => {
               <div
                 className={`${
                   e?.children?.[0] ? 'mt-6' : ''
-                } ' relative ml-13 overflow-hidden pl-5`}
+                } relative ml-[52px] overflow-hidden pl-5`}
               >
                 {e?.children?.[0] && (
                   <div>
@@ -378,7 +378,7 @@ const Discussion = ({ class_id }: Props) => {
                     idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                   }`}
                 >
-                  <div className="flex-none leading-0">
+                  <div className="leading-0 flex-none">
                     <Image
                       width={50}
                       height={50}
@@ -406,9 +406,9 @@ const Discussion = ({ class_id }: Props) => {
                       <div>
                         <ul className="flex flex-wrap gap-4">
                           {selectedFiles.map((file, index) => (
-                            <li key={index} className="relative mb-2 leading-0">
+                            <li key={index} className="leading-0 relative mb-2">
                               <div
-                                className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
+                                className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                                 role="button"
                                 onClick={() => handleRemoveSelectedFiles(index)}
                               >
@@ -448,32 +448,38 @@ const Discussion = ({ class_id }: Props) => {
                       <HookFormTextArea
                         control={control}
                         name={idReply === e?.id ? 'comment' : ''}
-                        placeholder="Your comment..."
+                        placeholder="Input Text..."
                         handleKeyDown={handleKeyDown}
+                        className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
+                        actions={
+                          <div className="flex items-center gap-x-3">
+                            <SappButtonIcon
+                              type="submit"
+                              ishover={false}
+                              className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                              classTitle="!m-0"
+                            >
+                              <SendComment />
+                            </SappButtonIcon>
+                            <div
+                              className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: selectedFiles?.length > 0 })}`}
+                            >
+                              <CameraIcon />
+                              <input
+                                type="file"
+                                className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0 "
+                                accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                                onChange={handleFileChange}
+                                ref={fileInputRef}
+                              />
+                            </div>
+                          </div>
+                        }
                       />
                       <ActionDiscussion
                         titlePrimary={'reply this comment'}
                         onClick={() => handleChangeIdReply('')}
                       />
-                      <div
-                        className={`absolute bottom-10 right-12 cursor-pointer ${clsx({ hidden: selectedFiles?.length > 0 })}`}
-                      >
-                        <SappIcon icon="camera" />
-                        <input
-                          type="file"
-                          className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
-                          accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
-                          onChange={handleFileChange}
-                          ref={fileInputRef}
-                        />
-                      </div>
-                      <SappButtonIcon
-                        type="submit"
-                        ishover={false}
-                        className="sapp-custom-hover absolute bottom-10 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-                      >
-                        <SendComment />
-                      </SappButtonIcon>
                     </div>
                     <SappButton
                       title=""
@@ -490,7 +496,7 @@ const Discussion = ({ class_id }: Props) => {
       <div
         className={`transition-max-height mt-6 flex items-start gap-3 overflow-visible duration-300`}
       >
-        <div className="flex-none leading-0">
+        <div className="leading-0 flex-none">
           <Image
             width={50}
             height={50}
@@ -519,9 +525,9 @@ const Discussion = ({ class_id }: Props) => {
             <div>
               <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="relative mb-2 leading-0">
+                  <li key={index} className="leading-0 relative mb-2">
                     <div
-                      className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-state-error"
+                      className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"
                       onClick={() => handleRemoveSelectedFiles(index, true)}
                     >
@@ -561,30 +567,40 @@ const Discussion = ({ class_id }: Props) => {
             <HookFormTextArea
               control={control}
               name={'commentRoot'}
-              placeholder="Your comment..."
+              placeholder="Input Text1..."
               handleKeyDown={(e: any) => handleKeyDown(e, true)}
+              className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
+              actions={
+                <div className="flex items-center gap-x-3">
+                  <SappButtonIcon
+                    type="submit"
+                    ishover={false}
+                    className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                    classTitle="!m-0"
+                  >
+                    <SendComment />
+                  </SappButtonIcon>
+                  <div
+                    className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
+                  >
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => rootFileInputRef?.current?.click()}
+                    >
+                      <CameraIcon />
+                    </span>
+                    <input
+                      type="file"
+                      className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0"
+                      accept="image/jpeg, image/png, image/gif"
+                      multiple
+                      onChange={(e) => handleFileChange(e, true)}
+                      ref={rootFileInputRef}
+                    />
+                  </div>
+                </div>
+              }
             />
-            <SappButton title="" type="submit" className="hidden" />
-            <div
-              className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
-            >
-              <SappIcon icon="camera" />
-              <input
-                type="file"
-                className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
-                accept="image/jpeg, image/png, image/gif"
-                multiple
-                onChange={(e) => handleFileChange(e, true)}
-                ref={rootFileInputRef}
-              />
-            </div>
-            <SappButtonIcon
-              type="submit"
-              ishover={false}
-              className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-            >
-              <SendComment />
-            </SappButtonIcon>
           </div>
         </form>
       </div>

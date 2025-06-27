@@ -11,15 +11,16 @@ import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const Dashboard = () => {
   const router = useRouter()
   const { user } = useAppSelector(userReducer)
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
-    <Layout title="Dashboard">
-      <div className="border-b border-default bg-white px-4 lg:px-20">
-        <div className="mx-auto my-0 flex max-w-xxl py-4.5">
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
+      <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
+        <div className="py-4.5 mx-auto my-0 flex max-w-[1144px]">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
@@ -28,28 +29,28 @@ const Dashboard = () => {
       </div>
       <div className="lg:px-20" data-aos={ANIMATION.DATA_AOS}>
         <div
-          className="main mx-auto my-0 max-w-xxl px-4 pt-6 lg:px-0"
+          className="main mx-auto my-0 max-w-[1144px] px-4 pt-6 lg:px-0"
           data-aos={ANIMATION.DATA_AOS}
         >
-          <h2 className="pb-4 text-medium-sm font-medium text-bw-1">
-            Dashboard
-          </h2>
+          <h2 className="pb-4 text-sm font-medium text-[#050505]">Dashboard</h2>
         </div>
       </div>
       <div
-        className="mx-auto min-h-[calc(100vh-9rem)] max-w-xxl bg-white shadow-activity"
+        className="mx-auto min-h-[calc(100vh-9rem)] max-w-[1144px] bg-white shadow-activity"
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="boxShadow-activity relative flex min-h-[calc(100vh-9rem)] flex-col justify-center">
           <div className="flex flex-col">
             <div className="mb-2.5 flex justify-center">
-              <div className="text-xl font-light text-gray-1">Hi,</div>
-              <div className="ms-2 text-xl font-semibold text-bw-1">
+              <div className="text-xl font-light text-[#A1A1A1]">Hi,</div>
+              <div className="ms-2 text-xl font-semibold text-[#050505]">
                 {user?.detail?.full_name}
               </div>
-              <div className="text-xl font-light text-gray-1">. Welcome!</div>
+              <div className="text-xl font-light text-[#A1A1A1]">
+                . Welcome!
+              </div>
             </div>
-            <div className="flex justify-center text-xl font-light text-gray-1">
+            <div className="flex justify-center text-xl font-light text-[#A1A1A1]">
               We are launching this site very soon. Please come back later.
             </div>
             <div className="mt-10 flex justify-center">

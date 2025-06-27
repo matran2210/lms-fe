@@ -1,23 +1,26 @@
-import SappDrawer from '@components/base/SappDrawer'
+import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
+import { StarCircleIcon } from '@components/icons'
 import Layout from '@components/layout'
-import { Skeleton } from 'antd'
+import { useCourseContext } from '@contexts/index'
+import { buildQueryString, formatDate } from '@utils/index'
+import { Alert, Skeleton } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
-import 'preview-part/dist/index.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import TestModal from 'src/pages/courses/test'
+import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { truncateBySpace } from '@utils/index'
-import Tooltip from 'src/common/Tooltip'
-import { useCourseContext } from '@contexts/index'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 
 interface IProps {
   course_section_type: string
@@ -52,6 +55,7 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -86,6 +90,14 @@ const CoursePartDetail = () => {
     })
   }
 
+  const focusSubSectionIds = router?.query?.focusSubSectionIds as
+    | string
+    | undefined
+  const focusUnitIds = router?.query?.focusUnitIds as string | undefined
+  const deadline = router?.query?.deadline as string | undefined
+  const isOverdue = dayjs(deadline).isBefore(new Date())
+  const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
+  const listFocusUnitIds = focusUnitIds?.split(',') || []
   const { data: previewPart, isLoading } = useGetData('course-part-detail', {})
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
@@ -118,7 +130,13 @@ const CoursePartDetail = () => {
       setLoadingChapter(true)
       try {
         if (course_section_id !== router.query.chapter) {
-          router.push(`${location.pathname}?chapter=${course_section_id}`)
+          const searchParams = buildQueryString({
+            focusSubSectionIds,
+            focusUnitIds,
+            deadline,
+            chapter: course_section_id,
+          })
+          router.push(`${location.pathname}?${searchParams}`)
         }
         const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
@@ -153,6 +171,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
+        router?.query?.id || undefined,
       )
       setLearningOutcome(res?.data)
     } catch (error) {
@@ -334,7 +353,7 @@ const CoursePartDetail = () => {
       course_section?.course_section_type === 'UNIT'
     ) {
       // Handle activity or unit section
-      lockSection
+      lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
             handleRouterActivity(course_section?.children?.[0]?.id, undefined),
@@ -431,28 +450,88 @@ const CoursePartDetail = () => {
     }
   })
 
-  // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
-  useEffect(() => {
-    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
-    window.sessionStorage.setItem(
-      'activityId',
-      JSON.stringify(transformedArray),
-    )
-  }, [loadingChapter])
-
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
   }, [courseChapterId])
 
+  const listFocusSubsectionNames = useMemo(() => {
+    if (listFocusSubSectionIds?.length && partDetail?.children?.length) {
+      return listFocusSubSectionIds.map((id) => {
+        const section = partDetail.children.find((item: any) => item.id === id)
+        return section?.short_name || section?.name
+      })
+    }
+
+    if (listFocusUnitIds.length && chapterDetail?.children?.length) {
+      const hasUnits = chapterDetail.children.some((item: any) =>
+        listFocusUnitIds.includes(item.id),
+      )
+      return hasUnits
+        ? [chapterDetail?.chapterDetail || chapterDetail.name]
+        : []
+    }
+
+    return []
+  }, [partDetail, chapterDetail])
+
   return (
-    <Layout title="Course Part Detail">
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
+      {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
+        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+          <Alert
+            message={
+              <div className="flex items-center gap-2">
+                <span className="shrink-0">You are now learning</span>{' '}
+                <span className="line-clamp-1 font-medium">
+                  {listFocusSubsectionNames?.join(', ')}
+                </span>
+              </div>
+            }
+            type={isOverdue ? 'error' : 'info'}
+            showIcon
+            className="w-full max-w-3xl rounded-none px-[14px]"
+            closable
+            closeIcon={
+              <span className="text-[#99A1B7]">
+                <CloseIconPreview />
+              </span>
+            }
+            icon={
+              <div
+                className={clsx('!mr-4', {
+                  'flex items-center gap-2': isOverdue,
+                })}
+              >
+                <AlertInfoIcon />{' '}
+                {isOverdue && (
+                  <span>Overdue: {formatDate(deadline || '')}</span>
+                )}
+              </div>
+            }
+          />
+        </div>
+      ) : null}
+
       <div className="main default-content-editor mx-auto my-0 max-w-xxl">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
-          <BreadCrumbPartDetail
-            previewPart={previewPart}
-            partDetail={partDetail}
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: '/courses',
+              },
+              {
+                title: previewPart?.name,
+                link: `/courses/my-course/${router.query.id}`,
+              },
+              {
+                title: partDetail?.name,
+                link: '',
+              },
+            ]}
           />
         )}
         <PreviewPartDetail
@@ -474,18 +553,19 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
+          listFocusSubSectionIds={listFocusSubSectionIds}
+          listFocusUnitIds={listFocusUnitIds}
+          deadline={deadline}
           // handleShowToast={handleShowToast}
         />
-        <SappDrawer
-          isOpen={openLearningOutcome}
+        <SappDrawerV3
+          open={openLearningOutcome}
           onClose={handleCancel}
-          title={learningOutcome?.name}
-          message="Bạn có chắc chắn muốn hủy không?"
-          widthDrawer="w-6/12"
+          title={learningOutcome?.name ?? 'Learning Outcome'}
+          handleCancel={handleCancel}
+          btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
-          confirmOnClose={false}
-          heightBody="h-[calc(100vh-186px)] pb-6"
-          sizeTextBtn="medium"
+          isShowFooter
         >
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -495,34 +575,39 @@ const CoursePartDetail = () => {
           >
             <div
               style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-6 text-bw-1"
+              className="learningOutcome-description pb-8 text-base font-normal leading-normal text-secondary"
               dangerouslySetInnerHTML={{
                 __html: learningOutcome?.description ?? '',
               }}
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            <div className="mb-2 mt-4 h-px w-full bg-[#DCDDDD]"></div>
           )}
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            className="mt-4 last:mb-4"
-            classChild="rounded"
-            widths={['70', '100', '100', '50', '100']}
-          >
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div className="mr-3 mt-6 flex" key={outcome.id}>
-                <div className="me-1 text-base font-medium leading-5 text-bw-1">
-                  LO{index + 1}:
+          <div className="mt-8 flex flex-col gap-6">
+            <TextSkeleton
+              loading={loadingLearningOutcome}
+              className="mt-3 last:mb-4"
+              classChild="rounded"
+              widths={['70', '100', '100', '50', '100']}
+            >
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div key={outcome.id} className="flex items-start gap-2">
+                  <div>
+                    <StarCircleIcon />
+                  </div>
+                  <div className="flex items-center text-base font-normal leading-normal text-gray-800">
+                    <div className="me-1">LO{index + 1}:</div>
+                    <div
+                      className="learningOutcome-description"
+                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                    />
+                  </div>
                 </div>
-                <div
-                  className="learningOutcome-description text-bw-1"
-                  dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                />
-              </div>
-            ))}
-          </TextSkeleton>
-        </SappDrawer>
+              ))}
+            </TextSkeleton>
+          </div>
+        </SappDrawerV3>
         {open && (
           <TestModal
             open={open}
@@ -535,45 +620,6 @@ const CoursePartDetail = () => {
         )}
       </div>
     </Layout>
-  )
-}
-
-const BreadCrumbPartDetail = ({
-  previewPart,
-  partDetail,
-}: {
-  previewPart: { name: string }
-  partDetail: { name: string }
-}) => {
-  const router = useRouter()
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
-        <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
-          onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
-        >
-          <div className="mx-0.5 inline-block w-full">
-            <Tooltip
-              title={previewPart?.name}
-              showTooltip={previewPart?.name?.length > 4}
-              placement={'bottomLeft'}
-            >
-              {truncateBySpace(previewPart?.name, 2, true)}
-            </Tooltip>
-          </div>
-        </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
-          <ResponsiveTextTruncate
-            placementTooltip="bottomLeft"
-            textTooltip={partDetail?.name}
-            text={partDetail?.name}
-            isShowTooltip
-          />
-        </div>
-      </div>
-    </div>
   )
 }
 

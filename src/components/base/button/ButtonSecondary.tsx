@@ -1,57 +1,70 @@
 import React from 'react'
-import { IButtonProps } from 'src/type'
-import SpinIcon from './SpinIcon'
+import BaseButton from './BaseButton'
+import { IButtonBaseProps } from 'src/type'
 
-interface IButtonSecondaryProps extends IButtonProps {
-  isSecondaryButton?: boolean
-}
 const ButtonSecondary = ({
   title,
   onClick,
   className = '',
   link,
   size = 'small',
-  full = false,
-  loading = false,
   disabled = false,
-  isSecondaryButton = true,
-}: IButtonSecondaryProps) => {
+  startIcon,
+  endIcon,
+  full = false,
+  children,
+  ...props
+}: IButtonBaseProps) => {
   let textSizeClass =
     size === 'small'
-      ? 'text-[0.875rem] leading-4'
+      ? 'text-sm'
       : size === 'medium'
-        ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
-  let paddingVerticalClass =
-    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
-  let paddingHorizontalClass =
-    size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-medium bg-gray-3 ${
-    disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'
-  } ${className}`
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
+  let padding =
+    size === 'small'
+      ? 'py-[7px] px-[15px]'
+      : size === 'medium'
+        ? 'py-[7px] px-[15px] md:py-[11px] md:px-[23px]'
+        : 'py-[7px] px-[15px] md:py-[15px] md:px-[31px]'
 
-  if (link)
-    return (
-      <a href={link} className={componentClass}>
-        {title}
-      </a>
-    )
+  let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  let disabledClass = disabled
+    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+    : 'cursor-pointer'
+
+  let componentClass = `
+    text-center
+    text-secondary
+    hover:!text-secondary
+    bg-transparent
+    rounded-lg
+    border border-secondary
+    hover:!border-secondary
+    hover:!bg-gray-100
+    box-border
+    font-medium
+    ${padding}
+    ${textSizeClass}
+    ${fullWidthClass}
+    ${disabledClass} 
+    ${className}
+  `
 
   return (
-    <button
-      className={`${isSecondaryButton ? 'secondary' : ''} ${componentClass}`}
+    <BaseButton
+      className={`${componentClass}`}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {!loading ? (
-        title
-      ) : (
-        <>
-          <SpinIcon /> Loading...
-        </>
-      )}
-    </button>
+      <div className="flex items-center gap-2.5">
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
+      </div>
+    </BaseButton>
   )
 }
 

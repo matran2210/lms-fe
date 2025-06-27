@@ -1,14 +1,14 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import Pagination from '../pagination/Pagination'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import PageLink from '../pagination/PageLink'
-import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
+import clsx from 'clsx'
+import { ArrowIconV2 } from '../pagination/ArrowIconV2'
+import { Grid } from 'antd'
 
 interface IProps {
   data: Array<any>
   setCurrentTab?: any
-  optionShowAll?: ReactNode
   currentTab: string
   handleChangeTab?: any
   activeShowAll: boolean
@@ -16,22 +16,30 @@ interface IProps {
   setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
   answerSubmitted?: Array<any>
+  hasScrollBar: boolean
+  setHasScrollBar: any
 }
 
 const TabSlide = ({
   data,
   setCurrentTab,
-  optionShowAll,
   currentTab,
   handleChangeTab,
   activeShowAll,
   setActiveShowAll,
   setValueFilter,
   isScrollCenter = true,
+  hasScrollBar,
+  setHasScrollBar,
 }: IProps) => {
+  const { useBreakpoint } = Grid
+  const screens = useBreakpoint()
+  const NUMBER_DISPLAY_DATA_DESKTOP = 25
+  const NUMBER_DISPLAY_DATA_TABLET = 14
+  const numberDisplayData = screens?.lg
+    ? NUMBER_DISPLAY_DATA_DESKTOP
+    : NUMBER_DISPLAY_DATA_TABLET
   const elementRef = useRef(null) as any
-  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
-
   useEffect(() => {
     if (elementRef?.current && !activeShowAll && isScrollCenter) {
       elementRef.current.scrollTo(
@@ -62,6 +70,7 @@ const TabSlide = ({
     window.addEventListener('resize', updateState)
     return () => window.removeEventListener('resize', updateState)
   }, [hasScrollBar])
+
   useEffect(() => {
     if (elementRef?.current && data.length > 0) {
       const el = elementRef.current
@@ -70,7 +79,8 @@ const TabSlide = ({
           el.scrollWidth > el.getBoundingClientRect().width && data?.length > 0,
         )
     }
-  }, [elementRef?.current])
+  }, [elementRef?.current, data?.length])
+
   const renderTab = useMemo(() => {
     let arr = [] as any
     let i = 1
@@ -155,37 +165,50 @@ const TabSlide = ({
    */
   const [scrollLeft, setScrollLeft] = useState(0)
 
-  const handleMouseDown = (event: React.MouseEvent<any>) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
-    setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
-    setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
+    setStartX(event.pageX - elementRef?.current?.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
+    setScrollLeft(elementRef?.current?.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
   }
 
-  const handleMouseMove = (event: React.MouseEvent<any>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
-    const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
+    const x = event?.pageX - elementRef?.current?.offsetLeft // Tính toán vị trí x mới của chuột
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event?.touches[0]
+    setIsDragging(true)
+    setStartX(touch?.pageX - elementRef?.current?.offsetLeft)
+    setScrollLeft(elementRef?.current?.scrollLeft)
+  }
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging) return
+    const touch = event?.touches[0]
+    const x = touch?.pageX - elementRef?.current?.offsetLeft
+    const distance = (x - startX) * 2
+    elementRef.current.scrollLeft = scrollLeft - distance
+  }
+
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] max-w-[calc(100vw-88px-32px)]'}`}
       aria-label="Pagination"
     >
       <div
-        className={`${
+        className={`gap-4 ${
           !activeShowAll
-            ? `relative ${
-                hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
-              } mx-7`
-            : 'flex w-full items-center gap-6'
+            ? `relative mx-7 w-full`
+            : 'flex w-full items-center justify-between'
         }`}
       >
         {hasScrollBar && (
           <div
             className={`${
-              !activeShowAll && 'absolute -left-3 top-0.5 -translate-x-full'
+              !activeShowAll && 'absolute -left-3 top-1 -translate-x-full'
             }`}
           >
             <PageLink
@@ -199,20 +222,31 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIcon iconType={'teeny'}></ArrowIcon>
+              <ArrowIconV2 />
             </PageLink>
           </div>
         )}
         <div
-          className={'flex w-full select-none gap-2 overflow-hidden'}
+          className={clsx(
+            'flex w-full select-none gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
+            {
+              'justify-center': !hasScrollBar,
+              '!w-fit': activeShowAll,
+              'h-[88px]': activeShowAll && data?.length > numberDisplayData,
+              'h-[44px]': !activeShowAll,
+            },
+          )}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={() => setIsDragging(false)}
         >
           {data.length > 0 ? (
-            !activeShowAll ? (
+            !activeShowAll || data?.length <= numberDisplayData ? (
               data.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
@@ -314,7 +348,7 @@ const TabSlide = ({
               })
             )
           ) : (
-            <div className="flex w-full justify-center">
+            <div className="flex w-full items-center justify-center">
               Your search did not match any questions
             </div>
           )}
@@ -322,7 +356,7 @@ const TabSlide = ({
         {hasScrollBar && (
           <div
             className={`${
-              !activeShowAll && 'absolute -right-3 top-0.5 translate-x-full'
+              !activeShowAll && 'absolute -right-3 top-1 translate-x-full'
             }`}
           >
             <PageLink
@@ -339,24 +373,8 @@ const TabSlide = ({
               }}
               // type={type}
             >
-              <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
+              <ArrowIconV2 right={true} />
             </PageLink>
-          </div>
-        )}
-        {hasScrollBar && (
-          <div className="flex items-center">
-            {activeShowAll && optionShowAll}
-            <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
-                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2'
-              }`}
-              onClick={() => {
-                // setPageNums(activeShowAll ? arrPage : getPagination)
-                setActiveShowAll(!activeShowAll)
-              }}
-            >
-              {!activeShowAll ? 'Show All' : 'Show Less'}
-            </div>
           </div>
         )}
       </div>

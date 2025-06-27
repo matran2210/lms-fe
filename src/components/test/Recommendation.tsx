@@ -1,8 +1,9 @@
+import { AltArrowIcon } from '@assets/icons'
+import ButtonText from '@components/base/button/ButtonText'
+import EditorReader from '@components/base/editor/EditorReader'
 import React, { useState } from 'react'
 import { IQuizAttempComment } from 'src/type'
-import EditorReader from '@components/base/editor/EditorReader'
 import ModalRecomment from './ModalRecomment'
-import SappIcon from 'src/common/SappIcon'
 
 interface IProps {
   data: IQuizAttempComment
@@ -38,12 +39,11 @@ const Recommendation = ({ data, key }: IProps) => {
 
   return (
     <React.Fragment>
-      <div key={key} className="text-bw-1">
+      <div key={key} className="flex flex-col gap-6">
         {data?.comment && (
           <CommentModal
             title="Examiner’s Comment:"
             content={data?.comment}
-            className="mt-5"
             onSeeMore={() => handleOpenModal('comment')}
           />
         )}
@@ -72,22 +72,19 @@ const CommentModal = ({
   onSeeMore,
 }: ICommentModal) => {
   return (
-    <div className={`mb-6 bg-gray-4 p-4 ${className ?? ''}`}>
-      <div className="mb-1.5 flex items-center justify-between">
-        <div className="text-base font-medium">{title}</div>
-        <div
-          className="cursor-pointer text-sm text-state-info"
+    <div
+      className={`rounded-xl bg-white p-6 shadow-small ${className ?? ''} text-gray-800`}
+    >
+      <div className="mb-4 flex items-center justify-between">
+        <div className="text-xl font-semibold">{title}</div>
+
+        <ButtonText
+          title="See more"
           onClick={onSeeMore}
-        >
-          <div className="group flex items-center group-hover:cursor-pointer group-hover:fill-primary">
-            <div className="group-hover:text-primary">See more</div>
-            <SappIcon icon="seemore" />
-          </div>
-        </div>
+          endIcon={<AltArrowIcon />}
+        />
       </div>
-      <div
-        className={`max-h-[210px] overflow-y-auto break-words transition-all`}
-      >
+      <div className={`h-[175px] overflow-hidden`}>
         <EditorReader text_editor_content={content} className="mr-2" />
       </div>
     </div>

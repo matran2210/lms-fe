@@ -26,16 +26,18 @@ import StatusItem from './StatusItem'
 import { ColumnsType } from 'antd/es/table'
 import Tooltip from 'src/common/Tooltip'
 import TooltipParagraph from 'src/common/TooltipParagraph'
+import useSappPaging from 'src/hooks/useSappPaging'
+import { TeacherKey } from '@pages/api/queryKey'
 
 export const statusColor = (data: IScheduleRequestItem) => {
   switch (data?.status) {
     case StatusRequestSchedule.PENDING:
-      return 'bg-orange-1 text-accent-warning'
+      return 'bg-[#F897070D] text-warning'
     case StatusRequestSchedule.APPROVED:
-      return 'bg-green-5 text-green-1'
+      return 'bg-[#07AF170D] text-[#07af17]'
     case StatusRequestSchedule.REJECT:
     case StatusRequestSchedule.CANCEL:
-      return 'bg-danger-5 text-danger-3'
+      return 'bg-[#F019190D] text-[#f01919]'
     default:
       return ''
   }
@@ -70,29 +72,22 @@ export default function TableContainer({ params }: IProps) {
   const [selectedRequest, setSelectedRequest] = useState<
     IScheduleRequestItem | undefined
   >()
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: Number(router.query.page_index) || DEFAULT_PAGE_NUMBER,
-    pageSize: Number(router.query.page_size) || DEFAULT_PAGE_SIZE,
-    total: 10,
-    showSizeChanger: true,
-    showQuickJumper: true,
-  })
-
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [pagination, params],
-    queryFn: async () => {
-      try {
-        const payload: RequestScheduleParams = {
-          page_index: pagination.current ?? DEFAULT_PAGE_NUMBER,
-          page_size: pagination.pageSize ?? DEFAULT_PAGE_SIZE,
-          ...params,
-        }
-        return await TeacherAPI.getListRequestSchedule(payload)
-      } catch (error) {
-        return null
-      }
-    },
-    retry: false,
+  const {
+    data,
+    pagination,
+    isLoading,
+    handleChangeParams,
+    setPagination,
+    refetch,
+  } = useSappPaging({
+    uniqueKey: TeacherKey.ScheduleRequest,
+    queryFn: () =>
+      TeacherAPI.getListRequestSchedule({
+        page_index: pagination.current ?? DEFAULT_PAGE_NUMBER,
+        page_size: pagination.pageSize ?? DEFAULT_PAGE_SIZE,
+        ...params,
+      }),
+    params,
   })
 
   useEffect(() => {
@@ -111,13 +106,6 @@ export default function TableContainer({ params }: IProps) {
     )
   }, [pagination, params])
 
-  const handleChangeParams = (currentPage: number, pageSize: number) => {
-    setPagination((prev) => ({
-      ...prev,
-      current: currentPage,
-      pageSize: pageSize,
-    }))
-  }
   const Action = (data: IScheduleRequestItem) => {
     setOpenDetail(true)
     setSelectedRequest(data)
@@ -133,14 +121,14 @@ export default function TableContainer({ params }: IProps) {
             ((pagination?.current || 1) - DEFAULT_PAGE_NUMBER) *
               (pagination?.pageSize || DEFAULT_PAGE_SIZE)
           }
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
     {
       title: 'Class code',
       render: (_, record: IScheduleRequestItem) => (
-        <TableCell data={record?.class?.code} className="!text-gray-400" />
+        <TableCell data={record?.class?.code} className="!text-[#a1a1aa]" />
       ),
     },
     {
@@ -189,7 +177,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.created_at)}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
@@ -198,7 +186,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={record?.staff_detail?.full_name}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
@@ -207,7 +195,7 @@ export default function TableContainer({ params }: IProps) {
       render: (_, record: IScheduleRequestItem) => (
         <TableCell
           data={formatDateFromUTC(record?.updated_at)}
-          className="!text-gray-400"
+          className="!text-[#a1a1aa]"
         />
       ),
     },
@@ -285,6 +273,13 @@ export default function TableContainer({ params }: IProps) {
     } finally {
     }
   }
+
+  useEffect(() => {
+    if (router.query.showRequestDetail === 'true') {
+      setOpenDetail(true)
+    }
+  }, [])
+
   return (
     <>
       <SappTable
@@ -297,7 +292,7 @@ export default function TableContainer({ params }: IProps) {
         emptyText="No matching records found"
       />
 
-      {openDetail && selectedRequest && (
+      {openDetail && (selectedRequest || router.query.request_id) && (
         <DetailRequestModal
           open={openDetail}
           setOpen={setOpenDetail}

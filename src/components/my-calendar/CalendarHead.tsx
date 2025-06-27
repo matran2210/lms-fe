@@ -87,7 +87,7 @@ const CalendarHead = ({ onSearch, onOpenCreate, loading }: IProps) => {
           />
         </div>
       </div>
-      <div className="h-[1px] border-b border-b-gray-5"></div>
+      <div className="h-[1px] border-b border-b-[#7E8299]"></div>
     </div>
   )
 }

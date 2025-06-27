@@ -128,8 +128,10 @@ export const UserGuide = {
   CONTENT_STEP_4:
     'This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.',
   CONTENT_STEP_5:
-    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+    'Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.',
   CONTENT_STEP_6:
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+  CONTENT_STEP_7:
     'The filter section allows you to filter courses by curriculum and course status.',
 }
 
@@ -185,8 +187,12 @@ export const defaultStatusEnstraceTest = [
     value: 'SUBMITTED',
   },
   {
-    label: 'Unsubmitted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -533,6 +539,15 @@ export enum QUIZ_ATTEMPT_STATUS {
   UN_SUBMITTED = 'UN_SUBMITTED',
   IN_PROGRESS = 'IN_PROGRESS',
 }
+
+export enum QUIZ_ATTEMPT_GRADING_STATUS {
+  DRAFT = 'DRAFT',
+  FINISHED = 'FINISHED',
+  UN_FINISHED = 'UN_FINISHED',
+  AWAITING_GRADING = 'AWAITING_GRADING',
+  FINISHED_GRADING = 'FINISHED_GRADING',
+}
+
 export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
@@ -542,6 +557,10 @@ export enum DATE_FORMAT {
 export const LABEL_MAX_LENGTH = 12
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+export const CLASS_TYPE = {
+  TRIAL: 'TRIAL',
+}
+export const TEST_AND_QUIZ_TITLE = 'Test & Quiz'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

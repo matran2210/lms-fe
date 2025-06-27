@@ -1,11 +1,11 @@
-import { CloseIconNote, CursorIcon } from '@assets/icons'
-import { Col, Row } from 'antd'
+import { CloseIconNote } from '@assets/icons'
 import { useRouter } from 'next/router'
 import React, { useLayoutEffect } from 'react'
 import { PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const ENABLED_PINNED_PAGES = [
   PageLink.COURSE_DETAIL,
@@ -55,50 +55,34 @@ function CtaTrial() {
   return (
     <>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
-      <div
-        className={`fixed z-50 h-[54px] w-full bg-primary text-white ${
-          isEnablePinnedNotiPages &&
-          openPinned &&
-          pinnedNotifications?.data?.content
-            ? 'top-12'
-            : ''
-        }`}
-      >
-        <Row className="flex h-[54px] w-[225px] flex-row content-center items-center justify-center lg:w-full">
-          <Col span={1} />
-          <Col
-            span={22}
-            className="flex h-full items-center justify-center font-sans"
-          >
-            <span className="text-base">
-              You have{' '}
-              <span className="text-base font-semibold">
-                {localStorage.getItem('daysDifference')}
-              </span>{' '}
-              days left on your free trial.{' '}
-              <span className="text-lg font-semibold">Upgrade</span> today to
-              unlock the full course.
-            </span>
-            <button
-              className="ms-8 h-[32px] bg-white px-4 text-[14px] font-medium leading-[17px] text-primary"
+      {openPopupCTA && (
+        <PinnedNotificationsV2
+          bgColor="bg-info-100"
+          borderColor="border-info"
+          classPinned="md:items-start lg:items-center"
+          heightPinned="h-[86px]"
+        >
+          <div className="md:hidden lg:block" />
+          <div className="h- flex gap-2 leading-normal text-gray-800 md:flex-col md:text-base lg:flex-row lg:text-lg">
+            <div>
+              You have&nbsp;
+              <span className="font-semibold">
+                {localStorage.getItem('daysDifference')}&nbsp;days left&nbsp;
+              </span>
+              on your free trial. Upgrade today to unlock the full course.
+            </div>
+            <div
+              className="cursor-pointer font-semibold underline"
               onClick={handleUpgrade}
             >
               Upgrade Now
-            </button>
-            <div className="ms-1.5 mt-5 flex h-full items-center">
-              <CursorIcon />
             </div>
-          </Col>
-          <Col span={1}>
-            <div
-              onClick={handleClose}
-              className="float-right flex h-full cursor-pointer content-center items-center pr-6"
-            >
-              <CloseIconNote />
-            </div>
-          </Col>
-        </Row>
-      </div>
+          </div>
+          <div className="cursor-pointer" onClick={handleClose}>
+            <CloseIconNote />
+          </div>
+        </PinnedNotificationsV2>
+      )}
     </>
   )
 }

@@ -21,7 +21,7 @@ function SappModalVideo({ src, setSrc }: Props) {
         handleCancel={handleClose}
         handleSubmit={handleClose}
         setOpen={handleClose}
-        size="max-w-xxl"
+        size="max-w-[1144px]"
         position="center"
         showFooter={false}
       >

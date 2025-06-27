@@ -1,0 +1,105 @@
+import React, { forwardRef } from 'react'
+import { EAttemptStatus } from 'src/constants/attempt'
+import Badge from '../Badge/Badge'
+import Tooltip from 'src/common/Tooltip'
+import { truncateString } from '@utils/index'
+import clsx from 'clsx'
+import { ANIMATION } from 'src/constants'
+
+const mappingBadgeFromStatus: Partial<
+  Record<EAttemptStatus, { badge: string; className: string }>
+> = {
+  [EAttemptStatus.NOT_STARTED]: {
+    badge: 'Not started',
+    className: 'bg-info-50 text-info',
+  },
+  [EAttemptStatus.IN_PROGRESS]: {
+    badge: 'In Progress',
+    className: 'bg-warning-50 text-warning',
+  },
+  [EAttemptStatus.SUBMITTED]: {
+    badge: 'Submitted',
+    className: 'bg-success-50 text-success',
+  },
+}
+
+const CardCourse = forwardRef<
+  HTMLDivElement,
+  {
+    children: React.ReactNode
+    title: string
+    attemptStatus?: EAttemptStatus
+    footer?: React.ReactNode
+    disabledTitle?: boolean
+    handleClickTitle?: () => void
+    hideBadge?: boolean
+    badgeCode?: {
+      badge: string
+      className: string
+    }
+    classNameTitle?: string
+    classNameCard?: string
+  }
+>(
+  (
+    {
+      children,
+      title,
+      attemptStatus,
+      footer,
+      disabledTitle = false,
+      handleClickTitle,
+      hideBadge = false,
+      badgeCode,
+      classNameTitle = 'mt-2 mb-4 md:mb-6 md:mt-3',
+      classNameCard = '',
+    },
+    ref,
+  ) => {
+    return (
+      <div
+        className={clsx(
+          'relative rounded-xl bg-white p-4 shadow-card md:p-6 lg:p-8',
+          classNameCard,
+        )}
+        ref={ref}
+        data-aos={ANIMATION.DATA_AOS}
+      >
+        {!hideBadge && (
+          <Badge
+            {...(attemptStatus
+              ? mappingBadgeFromStatus[attemptStatus]!
+              : badgeCode
+                ? badgeCode
+                : {
+                    badge: 'Not started',
+                    className: 'bg-info-50 text-info',
+                  })}
+          />
+        )}
+        <h2
+          className={clsx(
+            classNameTitle,
+            'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
+            {
+              'text-gray-300': disabledTitle,
+              'text-gray-800': !disabledTitle,
+            },
+          )}
+          onClick={handleClickTitle}
+        >
+          <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
+            {truncateString(title, 60)}
+          </Tooltip>
+        </h2>
+        {children}
+        {/* card footer */}
+        {footer}
+        {/* card footer */}
+      </div>
+    )
+  },
+)
+
+CardCourse.displayName = 'CardCourse'
+export default CardCourse

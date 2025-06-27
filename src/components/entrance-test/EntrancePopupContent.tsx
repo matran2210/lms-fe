@@ -25,36 +25,36 @@ const EntrancePopupContent = ({
   return (
     <>
       <div className="content">
-        <div className="info">
-          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
+        <div className="info flex flex-col gap-4 pt-10">
+          <div className="flex justify-between text-base capitalize text-gray">
             <p>Name:</p>
-            <p className="line-clamp-2 font-medium text-bw-1">{name}</p>
+            <p className="line-clamp-2 font-medium text-gray-800">{name}</p>
           </div>
-          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
+          <div className="flex justify-between text-base capitalize text-gray">
             <p>Number of Questions:</p>
-            <p className="font-medium text-bw-1">{total_question || 0}</p>
+            <p className="font-medium text-gray-800">{total_question || 0}</p>
           </div>
-          {/* <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
+          {/* <div className="flex justify-between text-base capitalize text-gray">
             <p>Score:</p>
-            <p className="font-medium text-bw-1">
+            <p className="font-medium text-gray-800">
               {score && score !== null ? score : '--'}
             </p>
           </div> */}
-          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
+          <div className="flex justify-between text-base capitalize text-gray">
             <p>Time Allowed:</p>
-            <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
+            <p className="font-medium text-gray-800">{timeAllowFormatted}</p>
           </div>
-          <div className="flex justify-between border-b border-gray-2 py-6 text-base capitalize text-gray-1">
+          {/* <div className="flex justify-between text-base capitalize text-gray">
             <p>No of Attempts:</p>
-            <p className="font-medium text-bw-1">
+            <p className="font-medium text-gray-800">
               {attemps}/{limit_count}
             </p>
-          </div>
-          {/* <div className="flex justify-between py-6 text-base capitalize text-gray-1">
+          </div> */}
+          {/* <div className="flex justify-between text-base capitalize text-gray">
             <p>Status:</p>
             <div
               className={`${
-                status ? 'text-state-success' : 'text-danger'
+                status ? 'text-success-600' : 'text-[#d35563]'
               } font-medium`}
             >
               {status ? 'Finished' : 'Unfinished'}

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
+import React from 'react'
 import NoData from 'src/common/NoData'
-// import { ANIMATION } from 'src/constants'
+import { IEntranceTest } from 'src/type/entrance-test'
+import EntranceTest from './EntranceTest'
 
 interface EntranceTestListProps {
-  entranceTestLists: any[]
+  entranceTestLists: IEntranceTest[]
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
@@ -15,24 +15,20 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
     <div
       className={`${
         !isEmpty(entranceTestLists)
-          ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'
+          ? 'grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3'
           : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
       {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e, index) => (
-          <div
+        entranceTestLists?.map((e: IEntranceTest, index) => (
+          <EntranceTest
             key={index}
-            className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
-          >
-            <EntranceTest
-              data={e}
-              test_id_default={entranceTestLists.find(
-                (entrance) => entrance.is_attempt === false,
-              )}
-            />
-          </div>
+            data={e}
+            test_id_default={entranceTestLists.find(
+              (entrance) => entrance.is_attempt === false,
+            )}
+          />
         ))
       ) : (
         <NoData />

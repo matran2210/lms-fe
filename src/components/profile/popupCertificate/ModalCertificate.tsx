@@ -19,7 +19,7 @@ function SappModalCertificate({ src, setSrc }: Props) {
         okButtonCaption={'Yes'}
         cancelButtonCaption={'No'}
         handleCancel={handleClose}
-        size="max-w-xxl"
+        size="max-w-[1144px]"
         position="center"
         showFooter={false}
         isContentFull={false}

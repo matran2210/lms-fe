@@ -1,14 +1,13 @@
 import { CloseIcon } from '@assets/icons'
+import Layout from '@components/layout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI } from '../../api/courses/index'
 
 const TableEntranceResult = () => {
   const router = useRouter()
@@ -18,6 +17,10 @@ const TableEntranceResult = () => {
     status?: boolean
     questions?: any
     id?: string
+    result_answer?: {
+      total_correct_answers: number
+      total_question: number
+    }
   }>()
   const getTable = async ({
     id,
@@ -57,6 +60,7 @@ const TableEntranceResult = () => {
         id: id || e?.id,
         status: true,
         questions: newQuestionResponse,
+        result_answer: response.data.result_answer,
       }))
     } catch (error) {
     } finally {
@@ -68,32 +72,61 @@ const TableEntranceResult = () => {
       getTable({ id: id as string, page_index: 1, page_size: 10 })
     }
   }, [id])
+
   return (
-    <FullScreenLayout title="Entrance Test Result">
-      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
+    <>
+      <div className="relative">
+        <div className="flex flex-col items-center justify-between bg-white p-2.5">
+          <h2 className="text-2xl font-semibold">Entrance Test</h2>
+          <div className="mt-1">
+            <span className="text-gray-800">
+              Result:{' '}
+              {(() => {
+                const totalCorrect =
+                  modalResult?.result_answer?.total_correct_answers
+                const totalQuestion = modalResult?.result_answer?.total_question
+                const hasValidData =
+                  (totalCorrect || totalCorrect === 0) && totalQuestion
+
+                return hasValidData ? (
+                  <strong className="text-info">
+                    {totalCorrect}/{totalQuestion}
+                  </strong>
+                ) : (
+                  <strong className="text-info">__ /{totalQuestion}</strong>
+                )
+              })()}
+            </span>
+          </div>
+        </div>
         <div
-          className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
+          className="absolute right-8 top-5 z-10 cursor-pointer rounded-md bg-progress-active p-2"
           onClick={() => {
             router.push(`/entrance-test/test-result/${id}`)
           }}
         >
-          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
-        {modalResult?.questions?.data?.length > 0 && (
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={(e) =>
-              router
-                .push(`/explanation/${e.id}?title=Entrance Test`)
-                .then(() => window.location.reload())
-            }
-            loading={loading}
-            showTotal={false}
-          />
-        )}
       </div>
-    </FullScreenLayout>
+      <Layout size="sm" title="Entrance Test Result" showSidebar={false}>
+        <div className="m-autooverflow-x-auto overflow-y-hidden">
+          {modalResult?.questions?.data?.length > 0 && (
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={(e) =>
+                router
+                  .push(`/explanation/${e.id}?title=Entrance Test`)
+                  .then(() => window.location.reload())
+              }
+              loading={loading}
+              showTotal={false}
+              is_lms_v2={true}
+            />
+          )}
+        </div>
+      </Layout>
+    </>
   )
 }
 export default withAuthorization([UserType.STUDENT])(TableEntranceResult)

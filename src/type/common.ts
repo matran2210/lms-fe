@@ -1,3 +1,4 @@
+import { ButtonProps } from 'antd'
 import { FixedType } from 'rc-table/lib/interface'
 import { Control, FieldValues } from 'react-hook-form'
 
@@ -59,4 +60,33 @@ export interface IBaseFormFieldProps<T extends FieldValues = any> {
   defaultValue?: any
   skeleton?: boolean
   // More common props can be added here
+}
+export type DayOfWeek =
+  | 'MONDAY'
+  | 'TUESDAY'
+  | 'WEDNESDAY'
+  | 'THURSDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY'
+
+export const NumberToDayOfWeekMap: Record<number, DayOfWeek> = {
+  1: 'MONDAY',
+  2: 'TUESDAY',
+  3: 'WEDNESDAY',
+  4: 'THURSDAY',
+  5: 'FRIDAY',
+  6: 'SATURDAY',
+  7: 'SUNDAY',
+}
+
+export interface IButtonBaseProps extends Omit<ButtonProps, 'size'> {
+  size?: 'small' | 'medium' | 'large' | 'extra'
+  link?: string
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  full?: boolean
+  title?: string
+  children?: React.ReactNode
+  isUnderLine?: boolean
 }

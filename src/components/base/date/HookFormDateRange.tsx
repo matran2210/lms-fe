@@ -37,7 +37,7 @@ const HookFormDateRange = ({
   showTime = { format: 'HH:mm' },
   format = 'DD/MM/YYYY | HH:mm',
   required,
-  inputClassName = 'h-12.5 w-full rounded-none',
+  inputClassName = 'h-[50px] w-full rounded-none',
   suffixIcon = <SappIcon icon="input_calendar" />,
   disabledDate,
   disabledTime,

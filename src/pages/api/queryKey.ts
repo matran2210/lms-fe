@@ -20,6 +20,7 @@ export const UserKey = {
 
 export const TeacherKey = {
   MyClass: 'myClass',
+  ScheduleRequest: 'teacherScheduleRequest',
 }
 
 export const StudentKey = {

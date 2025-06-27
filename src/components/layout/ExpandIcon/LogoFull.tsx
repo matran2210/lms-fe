@@ -10,7 +10,7 @@ const LogoFull = () => {
         height="37"
         fill="none"
         viewBox="0 0 57 37"
-        className="logo-full invisible shrink-0 cursor-pointer opacity-0 transition-all duration-150"
+        className="logo-full invisible hidden shrink-0 cursor-pointer opacity-0 transition-all duration-150"
       >
         <path
           fill="#404041"

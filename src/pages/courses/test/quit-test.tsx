@@ -1,4 +1,5 @@
 import { AlertTriagle } from '@assets/icons'
+import QuizIcon from '@assets/icons/QuitIcon'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { trackGAEvent } from '@utils/google-analytics'
 import { Dispatch, SetStateAction } from 'react'
@@ -33,15 +34,16 @@ const QuitTestModal = ({
   return (
     <SappModalV3
       open={open}
-      cancelButtonCaption="Cancel"
-      okButtonCaption="Quit"
-      handleCancel={onCancel}
-      onOk={onSubmit}
+      cancelButtonCaption="Quit Anyway"
+      okButtonCaption="Cancel"
+      handleCancel={onSubmit}
+      onOk={onCancel}
       fullWidthBtn={true}
-      buttonSize="extra"
-      icon={<AlertTriagle />}
+      buttonSize="medium"
+      icon={<QuizIcon />}
       header="Are you sure?"
       content={content}
+      cancelButtonClass="underline !p-0 !w-fit hover:text-primary"
     />
   )
 }

@@ -14,6 +14,9 @@ export interface ILearningOutcome {
   name: string
   updated_at: Date
   course_outcomes: ICourseOutcome[]
+  next_section: {
+    is_preview_locked: boolean
+  }
 }
 
 export interface ICourseSection {
@@ -268,5 +271,14 @@ export type IQuizAttemptChartType =
   | 'ACCA'
   | 'CMA'
   | 'OTHER'
+
+export type SectionDropdownFormValues = {
+  section: string | null
+  subsection: string | null
+  unit: string | null
+  activity: string | null
+}
+
+export type SectionField = 'section' | 'subsection' | 'unit' | 'activity'
 
 export * from './test'

@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { DeserializeHighlight, runHighlight } from '@utils/index'
+import clsx from 'clsx'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -37,6 +38,8 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 
 interface ChangeEvent extends Event {
@@ -60,13 +63,15 @@ const SelectWord = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText,
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
-    const str = data?.question_content
+    const str = replaceWhiteSpacePreWrapToNormal(data?.question_content || '')
     const [key, setKey] = useState<string>(uniqueId('key'))
     const isSelfReflection = data?.is_self_reflection
 
@@ -121,7 +126,7 @@ const SelectWord = forwardRef(
               answer?.id === defaultAnswer?.[index],
           )?.answer || ''
         tooltip.innerHTML = `
-          <div class="tooltip-text ${!!answer && answer.length > 7 ? 'block' : 'hidden'}">${answer}</div>
+          <div class="tooltip-text ${!!answer && answer.length > 10 ? 'block' : 'hidden'}">${answer}</div>
         `
         tooltip.appendChild(selectElement)
 
@@ -137,11 +142,9 @@ const SelectWord = forwardRef(
           )
           optionClass =
             isCorrect || isSelfReflection === true
-              ? '!border-success'
-              : '!border-danger'
-          const textClass = isCorrect
-            ? 'text-state-success'
-            : 'text-state-error'
+              ? '!border-[#397839]'
+              : '!border-[#d35563]'
+          const textClass = isCorrect ? 'text-success-600' : 'text-error'
           selectElement?.classList?.add(optionClass)
           selectElement?.classList?.add('sapp-select-confirmed')
           selectElement?.classList?.add(textClass)
@@ -150,10 +153,11 @@ const SelectWord = forwardRef(
         <option value="" disabled selected ></option>
         ${answerObj?.[+index + 1]?.map((e: any) => {
           const isSelected = e?.value === defaultAnswerValue
-
+          const shortLabel =
+            e?.label?.length > 10 ? e.label.slice(0, 10) + '...' : e?.label
           return `<option value="${e?.value}" ${
             isSelected ? 'selected' : ''
-          } >${e?.label}</option>`
+          } >${shortLabel}</option>`
         })}
       `
         } else {
@@ -216,7 +220,7 @@ const SelectWord = forwardRef(
             (ans: any) => ans?.answer_position === index + 1 && ans?.is_correct,
           )
           if (correctAnswer) {
-            inputClass = 'text-base font-semibold text-state-success'
+            inputClass = 'text-base font-semibold text-success-600'
             // }
 
             element.outerHTML = `
@@ -285,7 +289,7 @@ const SelectWord = forwardRef(
           data?.question_topic?.exhibits?.length > 0 && (
             <>
               {data?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2">
+                <div className="my-6 border border-b-[#DCDDDD]">
                   {data?.question_topic?.id}
                 </div>
               )}
@@ -295,8 +299,8 @@ const SelectWord = forwardRef(
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -326,7 +330,7 @@ const SelectWord = forwardRef(
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             </>
           )}
         <EditorReader
@@ -365,10 +369,8 @@ const SelectWord = forwardRef(
           highlighted={highlighted}
         />
         {answerContent && (
-          <>
-            <div className="pt-[18px] text-base font-semibold">
-              Correct Answer
-            </div>
+          <div className={clsx('pt-4.5', correctAnswerClass)}>
+            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
               className="questions mt-2"
               text_editor_content={
@@ -376,11 +378,11 @@ const SelectWord = forwardRef(
                   ?.innerHTML || ''
               }
             />
-          </>
+          </div>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6 ">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

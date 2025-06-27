@@ -1,91 +1,95 @@
+import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonText from '@components/base/button/ButtonText'
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { Radio, RadioChangeEvent } from 'antd'
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 
 interface IProps {
   open: boolean
   handleContinue: () => Promise<void>
   setOpen: Dispatch<SetStateAction<boolean>>
   handleRetake: () => Promise<void>
+  handleSubmit: () => Promise<void>
   title: ReactNode
+  time: ReactNode | null
 }
+
 const PopupSelectRetakeOrContinueAttempt = ({
   open,
   handleContinue,
   setOpen,
   handleRetake,
+  handleSubmit,
   title,
+  time,
 }: IProps) => {
-  const [value, setValue] = useState('continue')
-
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value)
-  }
-
-  const handleOK = async () => {
-    switch (value) {
+  const handleOK = async (type: 'continue' | 'retake' | 'submit') => {
+    switch (type) {
       case 'continue':
-        await handleContinue().then(() => {
-          setOpen(false)
-        })
-
+        await handleContinue()
         break
       case 'retake':
-        await handleRetake().then(() => {
-          setOpen(false)
-        })
+        await handleRetake()
+        break
+      case 'submit':
       default:
-        setOpen(false)
+        await handleSubmit()
         break
     }
+    setOpen(false)
   }
+
   return (
     <SappModalV3
       open={open}
-      okButtonCaption="Continue"
-      cancelButtonCaption={'Cancel'}
-      onOk={handleOK}
-      handleCancel={() => {
-        setOpen(false)
-      }}
-      footerButtonClassName="flex justify-between item-center mt-6"
+      isClosable={true}
+      onOk={() => handleOK('continue')}
+      handleCancel={() => setOpen(false)}
+      footerButtonClassName="flex flex-col w-full justify-center items-center gap-3"
       buttonSize="medium"
-      title={title}
+      header={title}
       icon={undefined}
-      header=""
-      classNameModal={'sapp-modal sapp-modal__opt-continue-test'}
-      cancelButtonClass={'!px-0'}
-    >
-      <div>
-        <div className="mt-10 text-center text-base text-gray-1">
-          <div>Your last attempt was unexpectedly ended. </div>
-          <div>
-            Do you want to continue from where you left off in the previous one?
-          </div>
-        </div>
-        <div className={`relative pt-5 md:pt-8`}>
-          {/* Select Option */}
-          <Radio.Group
-            className="sapp-group-radio-wrapper flex flex-col gap-6"
-            onChange={onChange}
-            value={value}
-            options={[
-              {
-                value: 'continue',
-                label: (
-                  <span className="text-base">
-                    Continue the previous attempt
-                  </span>
-                ),
-              },
-              {
-                value: 'retake',
-                label: <span className="text-base">Start a new attempt</span>,
-              },
-            ]}
+      showFooter={false}
+      classNameModal="sapp-modal sapp-modal__opt-continue-test"
+      okButtonClass="w-full"
+      cancelButtonClass="!px-0 w-full border rounded-lg border-[#404041] text-[#404041]"
+      customFooter={
+        <div className="flex w-full flex-col items-center justify-center gap-3">
+          <ButtonPrimary
+            title="Continue the previous attempt"
+            size="medium"
+            full
+            onClick={() => handleOK('continue')}
+          />
+          <ButtonSecondary
+            title="Submit now"
+            full
+            size="medium"
+            onClick={() => handleOK('submit')}
+          />
+          <ButtonText
+            title="Start a new attempt"
+            size="medium"
+            full
+            onClick={() => handleOK('retake')}
           />
         </div>
+      }
+    >
+      <div className="pb-6 text-center text-base text-gray-800">
+        <div>Your last attempt was unexpectedly ended.</div>
+        <div>Please click &apos;Continue&apos; to proceed with the test.</div>
       </div>
+      {time && (
+        <div className="flex justify-center gap-4 pb-10">
+          <div className="flex items-center gap-2 text-base font-semibold">
+            <RemainingTimeIcon />
+            Your remaining time:
+          </div>
+          {time}
+        </div>
+      )}
     </SappModalV3>
   )
 }

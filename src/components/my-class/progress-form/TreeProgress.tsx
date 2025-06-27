@@ -38,7 +38,7 @@ const convertToTreeData = (
         <>
           {schedule.class_schedule_name || schedule.schedule_name}
           {isMain && (
-            <span className="badge ml-3 rounded-md bg-blue-100 px-2 px-4 py-1 text-sm font-medium text-blue-500">
+            <span className="badge ml-3 rounded-md bg-[#ECF0FD] px-2 px-4 py-1 text-sm font-medium text-[#3964EA]">
               Main
             </span>
           )}

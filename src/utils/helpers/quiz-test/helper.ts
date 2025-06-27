@@ -92,21 +92,6 @@ export const getValueSelectText = () => {
 }
 
 /**
- * @description Get matching question answers from DOM elements
- * @return {Array<Object>} Array of objects containing question_id and answer_id
- */
-export const getAnswerMatching = () => {
-  let value = [] as any
-  const inputs = document.querySelectorAll('.sapp-match-result') as any
-  for (let e of inputs) {
-    const childId = e.querySelector('.sapp-notched-container')
-    value.push({ question_id: e.id, answer_id: childId?.id || undefined })
-  }
-
-  return value
-}
-
-/**
  * @description Get drag and drop answers from DOM elements
  * @return {Array<Object>} Array of objects containing id, value and idAnswer
  */
@@ -195,7 +180,7 @@ export const isValuesEqual = async (
         newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.MATCHING:
-        newValue = getAnswerMatching()
+        newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.DRAG_DROP:
         newValue = getAnswerDragNDrop()

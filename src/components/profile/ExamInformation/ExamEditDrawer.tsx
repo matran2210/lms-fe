@@ -126,7 +126,7 @@ const ExamEditDrawer = ({
 
   const onSubmit: SubmitHandler<ExaminationForm> = (data) => {
     mutate({
-      examination_subject_id: data.examination_subject_id?.value,
+      examination_subject_id: data.examination_subject_id,
       note: data.note,
     })
   }
@@ -158,10 +158,10 @@ const ExamEditDrawer = ({
               <div>
                 <label className="mb-2 block text-base font-medium">
                   <span>{'New Exam Date'}</span>
-                  <span className="ml-2 text-red-500">*</span>
+                  <span className="text-red-500 ml-2">*</span>
                 </label>
                 {errors.examination_subject_id && (
-                  <p className="mb-2 text-red-500">
+                  <p className="text-red-500 mb-2">
                     {errors.examination_subject_id?.message}
                   </p>
                 )}
@@ -193,10 +193,10 @@ const ExamEditDrawer = ({
         <div>
           <label className="mb-2 block text-base font-medium">
             <span>{'Note'}</span>
-            <span className="ml-2 text-red-500">*</span>
+            <span className="text-red-500 ml-2">*</span>
           </label>
           {errors.note && (
-            <p className="mb-2 text-red-500">{errors.note.message}</p>
+            <p className="text-red-500 mb-2">{errors.note.message}</p>
           )}
           <Controller
             control={control}
@@ -253,7 +253,7 @@ const ExamEditDrawer = ({
         loading={isChangingLoad}
       >
         Your learning progress in the Revision class for the{' '}
-        <span className="text-sm font-medium text-bw-1">
+        <span className="text-sm font-medium text-[#050505]">
           {exams?.current_exam_name}
         </span>{' '}
         exam cannot be saved. Do you want to continue making changes?

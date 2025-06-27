@@ -66,7 +66,7 @@ const Pagination = ({
       <div
         className={`${
           type === 'row' && activeShowAll
-            ? 'relative mx-7 w-[calc(100%-141px)]'
+            ? 'relative mx-7'
             : ' flex items-center gap-6'
         }`}
       >
@@ -147,7 +147,7 @@ const Pagination = ({
           <div className="flex items-center">
             {!activeShowAll && optionShowAll}
             <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
+              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-[17px] text-[#050505] underline ${
                 activeShowAll && 'absolute -right-28 top-0 translate-y-1/2 '
               }`}
               onClick={() => {

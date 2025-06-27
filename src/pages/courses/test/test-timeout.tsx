@@ -1,5 +1,5 @@
 import SappModalV3 from '@components/base/modal/SappModalV3'
-import { TimeIcon } from '@components/icons'
+import { TimeOutIcon } from '@components/icons'
 
 interface IProps {
   open: boolean
@@ -7,12 +7,14 @@ interface IProps {
   handleSubmit: any
   handleQuit: any
   okButtonCaption?: string
+  type: string | string[] | undefined
 }
 const TestTimeOutModal = ({
   open,
   setOpen,
   handleSubmit,
   handleQuit,
+  type,
   okButtonCaption = 'View Results',
 }: IProps) => {
   // const dispatch = useAppDispatch()
@@ -29,6 +31,17 @@ const TestTimeOutModal = ({
     setOpen(false)
     handleQuit()
   }
+
+  const content =
+    type === 'event-test' ? (
+      <span>
+        The test has timed out and has been submitted automatically. Your test
+        result will <strong>be emailed to you on June 28, 2025.</strong> Please
+        check your email regularly to receive the earliest update.
+      </span>
+    ) : (
+      'The test has timed out and has been submitted automatically.'
+    )
   return (
     <SappModalV3
       open={open}
@@ -38,10 +51,10 @@ const TestTimeOutModal = ({
       handleCancel={onCancel}
       onOk={onSubmit}
       fullWidthBtn={true}
-      buttonSize="extra"
-      icon={<TimeIcon />}
+      buttonSize="medium"
+      icon={<TimeOutIcon />}
       header="Time Out"
-      content="The test has timed out and has been submitted automatically."
+      content={content}
       isMaskClosable={false}
     />
   )

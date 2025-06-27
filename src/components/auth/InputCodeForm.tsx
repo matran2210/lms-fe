@@ -141,9 +141,9 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
             type="text"
             value={otp}
             onChange={(event) => onEnterDigit(index, event)}
-            inputClassName={`text-center h-16.75 w-16.75 ${
-              errorMessage ? 'border-state-error' : 'border-gray-2'
-            } pt-5.25 pb-5 px-0`}
+            inputClassName={`text-center h-[4.188rem] w-[4.188rem] ${
+              errorMessage ? 'border-[#B90E0A]' : 'border-[#DCDDDD]'
+            } pt-[25PX] pb-5 px-0`}
             onPaste={(e: any) =>
               code?.every((data) => data === '') && handlePaste(index, e)
             }
@@ -151,10 +151,10 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         ))}
       </div>
       <div className="mb-8 flex justify-between">
-        <span className="text-medium-sm text-state-error">{errorMessage}</span>
+        <span className="text-sm text-error">{errorMessage}</span>
         <span
-          className={`min-w-fit text-right text-medium-sm ${
-            timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
+          className={`min-w-fit text-right text-sm ${
+            timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'
           }`}
         >
           {timeCountDown}
@@ -164,7 +164,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         title="Verify Code"
         full={true}
         className="mb-5 !font-semibold"
-        size="lager"
+        size="large"
         loading={loading}
         onClick={handleVerifyCode}
         disabled={code.some((e) => e === '') || time <= 0}

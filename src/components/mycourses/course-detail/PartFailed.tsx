@@ -4,11 +4,14 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { roundNumber } from '@utils/helpers'
 import { truncateString } from '@utils/index'
 import { useEffect, useMemo, useState } from 'react'
+import router from 'next/router'
 import Tooltip from 'src/common/Tooltip'
 import {
   ANIMATION,
   GRADE_STATUS,
   GRADING_METHOD,
+  QUIZ_ATTEMPT_GRADING_STATUS,
+  QUIZ_ATTEMPT_STATUS,
   TEST_TYPE,
 } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
@@ -17,6 +20,8 @@ import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon, LockClosedIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
+import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
+import ButtonText from '@components/base/button/ButtonText'
 
 const PartFailed = ({
   coursePart,
@@ -41,6 +46,13 @@ const PartFailed = ({
   const [open, setOpen] = useState(false)
   const [isRunoutAttemp, setIsRunoutAttemp] = useState<boolean>(true)
   const [openReport, setOpenReport] = useState<boolean>(false)
+  const [selectedResult, setSelectedResult] = useState<{
+    label: string
+    value: string
+    ratio_score?: string
+    status: string
+    score: number
+  }>()
 
   const isManualGradingAndAwaitGrading =
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
@@ -108,6 +120,7 @@ const PartFailed = ({
     }
     return false
   }
+
   const renderOkButtonCaption = () => {
     // // Case: Unlimited time attempt and submitted
     if (!coursePart?.quiz?.is_limited && (isSubmitted || isUnsubmitted))
@@ -134,16 +147,93 @@ const PartFailed = ({
     }
     return ''
   }
+
+  const isManualGradingAndNotFinishedGrading =
+    coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
+    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+
+  const handleRedirectResult = () => {
+    if (
+      isManualGradingAndNotFinishedGrading &&
+      coursePart?.quiz?.attempt?.grading_status ===
+        GRADE_STATUS.AWAITING_GRADING
+    ) {
+      router.push(
+        `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
+      )
+    } else if (
+      isManualGradingAndNotFinishedGrading &&
+      coursePart?.quiz?.attempt?.grading_status !==
+        GRADE_STATUS.AWAITING_GRADING
+    ) {
+      if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
+        router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+      }
+    } else {
+      router.push({
+        pathname: `/courses/test/test-result/${selectedResult?.value}`,
+        query: { attempt: selectedResult?.label },
+      })
+    }
+    trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
+  }
+
+  const titleButtonViewResult = () => {
+    return coursePart?.quiz?.attempt?.grading_status ===
+      GRADE_STATUS.AWAITING_GRADING
+      ? 'Your Answers'
+      : 'Result'
+  }
+
   return (
     <>
       <div data-aos={ANIMATION.DATA_AOS}>
-        {coursePart?.course_section_link_parents?.[0]?.is_preview_locked ? (
-          <div className="flex justify-between">
+        <div className="flex flex-col gap-3">
+          <StatusQuizTag
+            status={
+              (coursePart?.quiz?.attempt?.status || 'UN_SUBMITTED') as
+                | QUIZ_ATTEMPT_GRADING_STATUS
+                | QUIZ_ATTEMPT_STATUS
+            }
+          />
+          {coursePart?.course_section_link_parents?.[0]?.is_preview_locked ? (
+            <div className="flex justify-between">
+              <div
+                className={`name-part line-clamp-2 cursor-pointer text-2xl font-medium`}
+                onClick={() => {
+                  // setOpen(true)
+                  // trackGAEvent(`Click Title ${showTitleFinalTest}`)
+                }}
+              >
+                <Tooltip
+                  title={coursePart?.name}
+                  showTooltip={(coursePart?.name as string)?.length > 40}
+                >
+                  {truncateString(coursePart?.name, 40)}
+                </Tooltip>
+              </div>
+              <div>
+                <LockClosedIcon />
+              </div>
+            </div>
+          ) : (
             <div
-              className={`name-part line-clamp-2 h-[60px] cursor-pointer text-2xl font-medium`}
+              className={`name-part line-clamp-2 cursor-pointer text-2xl font-medium`}
               onClick={() => {
-                // setOpen(true)
-                // trackGAEvent(`Click Title ${showTitleFinalTest}`)
+                if (
+                  coursePart?.course_section_link_parents?.[0]
+                    ?.is_preview_locked
+                ) {
+                  setOpenPopupCTA({
+                    lockSection: true,
+                    ctaUpgrade: false,
+                    thankYou: false,
+                    thankYouLater: false,
+                  })
+                } else {
+                  setOpen(true)
+                }
+                trackGAEvent(`Click Title ${showTitleFinalTest}`)
               }}
             >
               <Tooltip
@@ -153,44 +243,23 @@ const PartFailed = ({
                 {truncateString(coursePart?.name, 40)}
               </Tooltip>
             </div>
-            <div>
-              <LockClosedIcon />
-            </div>
-          </div>
-        ) : (
-          <div
-            className={`name-part line-clamp-2 h-[60px] cursor-pointer text-2xl font-medium`}
-            onClick={() => {
-              if (
-                coursePart?.course_section_link_parents?.[0]?.is_preview_locked
-              ) {
-                setOpenPopupCTA({
-                  lockSection: true,
-                  ctaUpgrade: false,
-                  thankYou: false,
-                  thankYouLater: false,
-                })
-              } else {
-                setOpen(true)
-              }
-              trackGAEvent(`Click Title ${showTitleFinalTest}`)
-            }}
-          >
-            <Tooltip
-              title={coursePart?.name}
-              showTooltip={(coursePart?.name as string)?.length > 40}
-            >
-              {truncateString(coursePart?.name, 40)}
-            </Tooltip>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="info mt-6">
+        <div className="info mt-6 border-l border-[#DCDDDD] pl-4">
           {checkFinished && (
             <>
-              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
-                <p className="text-base text-gray-1">Latest Results:</p>
-                <p className="text-base font-medium text-bw-1">
+              <div className="time-allow mb-4 flex justify-between">
+                <p className="text-base text-gray">Time Spent:</p>
+                <p className="text-base font-medium text-[#050505]">
+                  {!!coursePart?.quiz?.attempt?.total_attempt_time
+                    ? formatTime(coursePart?.quiz?.attempt?.total_attempt_time)
+                    : '--'}
+                </p>
+              </div>
+              <div className="time-allow mb-4 flex justify-between">
+                <p className="text-base text-gray">Latest Results:</p>
+                <p className="text-base font-medium text-[#050505]">
                   {isManualGradingAndAwaitGrading
                     ? '--'
                     : coursePart?.quiz?.attempt?.score !== undefined &&
@@ -199,29 +268,29 @@ const PartFailed = ({
                       : '--'}
                 </p>
               </div>
-              <div className="time-allow mb-4 flex justify-between border-b border-gray-2 pb-4">
-                <p className="text-base text-gray-1">Time Spent:</p>
-                <p className="text-base font-medium text-bw-1">
-                  {!!coursePart?.quiz?.attempt?.total_attempt_time
-                    ? formatTime(coursePart?.quiz?.attempt?.total_attempt_time)
-                    : '--'}
-                </p>
-              </div>
             </>
           )}
-          <div className="time-allow flex justify-between border-b border-gray-2 pb-4">
-            <p className="text-base text-gray-1">Time Allowed:</p>
-            <p className="text-base font-medium text-bw-1">{formattedTime}</p>
-          </div>
-          <div className="time-allow flex justify-between pt-4">
-            <p className="text-base text-gray-1">Attempt:</p>
-            <p className="text-base font-medium text-bw-1">
-              {`${quizAttempt?.attempt?.number_of_attempts || 0} / ${
-                quizAttempt?.limit_count !== 0
-                  ? quizAttempt?.limit_count
-                  : 'Unlimited'
-              }`}
+          <div className="time-allow  mb-4 flex justify-between">
+            <p className="text-base text-gray">Time Allowed:</p>
+            <p className="text-base font-medium text-[#050505]">
+              {formattedTime}
             </p>
+          </div>
+          <div className="time-allow flex items-center justify-between">
+            <p className="text-base text-gray-800">
+              <ResultCourse
+                class_user_id={class_user_id}
+                coursePart={coursePart}
+                setOpenReport={setOpenReport}
+                selectedResult={selectedResult}
+                setSelectedResult={setSelectedResult}
+              />
+            </p>
+            {
+              <p className="text-base font-medium text-[#050505]">
+                {selectedResult?.score || 0}%
+              </p>
+            }
           </div>
         </div>
       </div>
@@ -233,14 +302,13 @@ const PartFailed = ({
               coursePart?.quiz?.limit_count &&
               isRunoutAttemp) ? (
               <ButtonSecondary
+                size="medium"
                 disabled={
                   coursePart?.quiz?.is_limited &&
                   coursePart?.quiz?.attempt?.number_of_attempts ===
                     coursePart?.quiz?.limit_count
                 }
                 title={`Start`}
-                full={false}
-                size={'small'}
                 className={`${
                   coursePart?.quiz?.attempt?.number_of_attempts !==
                     coursePart?.quiz?.limit_count && ''
@@ -266,26 +334,19 @@ const PartFailed = ({
               <></>
             )
           ) : (
-            <div className="flex flex-1 justify-between">
+            <div className="flex flex-1 items-center justify-end gap-4">
               {quizAttempt.id && (
-                <ResultCourse
-                  class_user_id={class_user_id}
-                  coursePart={coursePart}
-                  quizAttempt={quizAttempt}
-                  setOpenReport={setOpenReport}
-                  trackGA={() => {
-                    trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
-                  }}
+                <ButtonText
+                  size="medium"
+                  title={titleButtonViewResult()}
+                  onClick={handleRedirectResult}
                 />
               )}
 
               {isShowButtonAction() && (
                 <ButtonSecondary
+                  size="medium"
                   title={renderOkButtonCaption()}
-                  full={false}
-                  size="small"
-                  color="quizActivity"
-                  className="ml-auto max-h-8"
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

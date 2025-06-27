@@ -113,7 +113,9 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
 
   return words.join(' ')
 }
-
+export function convertHumanReadableToSnakeCase(text: string) {
+  return text.trim().toLowerCase().split(/\s+/).join('_')
+}
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
@@ -164,7 +166,11 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     'text-align: -webkit-center',
   )
 }
-
+// Hàm thay thế style white-space: pre-wrap thành style white-space: normal trong chuỗi HTML
+export const replaceWhiteSpacePreWrapToNormal = (htmlString: string) => {
+  // Sử dụng biểu thức chính quy để thay thế
+  return htmlString.replace(/white-space:\s*pre-wrap/g, 'white-space: normal')
+}
 export const useGetData = (
   queryKey: string,
   params: Object,
@@ -460,4 +466,33 @@ export function convertSlugToTitle(slug: string): string {
     .split(' ') // tách từ
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
     .join(' ') // ghép lại
+}
+
+export function setCookie(name: string, value: string, days = 7) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`
+}
+
+export function getCookie(name: string): string | null {
+  return (
+    document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(name + '='))
+      ?.split('=')[1] || null
+  )
+}
+
+export function deleteCookie(name: string) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+
+export function convertMinutesToHourFormat(minutes: number): string {
+  const hrs = Math.floor(minutes / 60)
+  const mins = minutes % 60
+
+  const hourStr = hrs > 0 ? `${hrs} hour${hrs > 1 ? 's' : ''}` : ''
+  const minStr = mins > 0 ? `${mins} min${mins > 1 ? 's' : ''}` : ''
+
+  if (hourStr && minStr) return `${hourStr} ${minStr}`
+  return hourStr || minStr || '0 min'
 }

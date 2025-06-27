@@ -9,8 +9,8 @@ type IProps = {
 function CollapseItem({ title, body, className }: IProps) {
   return (
     <div className={`grid grid-cols-3 ${className}`}>
-      <div className="text-sm text-txt-secondary">{title}</div>
-      <div className="col-span-2 text-sm text-txt-primary">{body}</div>
+      <div className="text-sm text-gray-400">{title}</div>
+      <div className="col-span-2 text-sm text-gray-800">{body}</div>
     </div>
   )
 }

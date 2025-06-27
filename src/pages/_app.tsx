@@ -16,14 +16,17 @@ import '@styles/globals.scss'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
+import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+import 'entrance-test-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import 'sapp-common-package/dist/index.css'
 import { io } from 'socket.io-client'
 import {
   ANIMATION,
@@ -43,8 +46,11 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-common-package/dist/index.css'
 import 'sapp-notification/dist/index.css'
+import '@xyflow/react/dist/style.css'
+import 'preview-part/dist/index.css'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -308,7 +314,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                   <>
                     <div className="relative">
                       <PinnedNotifications />
-                      <CtaTrial />
                       <Component {...pageProps} />
                     </div>
                     <BackToTop />

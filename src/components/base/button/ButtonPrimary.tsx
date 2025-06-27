@@ -1,4 +1,5 @@
-import { IButtonProps } from 'src/type'
+import BaseButton from './BaseButton'
+import { IButtonBaseProps } from 'src/type'
 
 const ButtonPrimary = ({
   title,
@@ -6,52 +7,45 @@ const ButtonPrimary = ({
   className = '',
   link,
   size = 'small',
-  full = false,
   disabled = false,
-  loading = false,
-  type,
-  icon,
-}: IButtonProps) => {
+  startIcon,
+  endIcon,
+  full = false,
+  children,
+  ...props
+}: IButtonBaseProps) => {
   let textSizeClass =
     size === 'small'
-      ? 'text-[0.875rem] leading-4'
+      ? 'text-sm'
       : size === 'medium'
-        ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
-  let paddingVerticalClass =
-    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
-  let paddingHorizontalClass =
-    size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
+  let padding =
+    size === 'small'
+      ? 'py-2 px-4'
+      : size === 'medium'
+        ? 'py-1 px-4 md:py-3 md:px-6'
+        : 'py-2 px-4 md:py-4 md:px-8'
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
-  let disabledClass =
-    disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-primary-2'
-      : 'cursor-pointer'
-  let componentClass = `${className} relative text-center text-white ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} ${disabledClass} ${textSizeClass} font-medium bg-primary hover:bg-primary-2`
-  if (link)
-    return (
-      <a href={link} className={componentClass} aria-disabled={disabled}>
-        {title}
-      </a>
-    )
+  let disabledClass = disabled
+    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+    : 'cursor-pointer'
+  let componentClass = `text-center text-white font-medium bg-secondary-600 hover:!text-white hover:!bg-secondary border-none ${fullWidthClass} ${padding} ${disabledClass} ${textSizeClass} ${className}`
+
   return (
-    <button
-      className={componentClass}
-      type={type ?? 'button'}
+    <BaseButton
+      className={`${componentClass}`}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {icon && <div className="mr-2">{icon}</div>}
-      <span className={loading ? 'invisible' : ''}> {title}</span>
-      {loading && (
-        <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">
-          <span className="sr-only">Loading...</span>
-          <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]"></div>
-          <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]"></div>
-          <div className="h-2 w-2 animate-bounce rounded-full bg-white"></div>
-        </div>
-      )}
-    </button>
+      <div className="flex items-center gap-2.5">
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
+      </div>
+    </BaseButton>
   )
 }
 

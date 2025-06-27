@@ -175,7 +175,11 @@ export class CoursesAPI {
 
   static getQuizAttemptsTable(
     id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
   ): Promise<{
     success: boolean
     data: IScoreDetails
@@ -184,6 +188,7 @@ export class CoursesAPI {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
+        ...(no_group_view && { no_group_view }),
       },
     })
   }
@@ -221,7 +226,7 @@ export class CoursesAPI {
     })
   }
 
-  static submitAllQuestion(id: string, data: any): Promise<any> {
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
     //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
@@ -317,8 +322,11 @@ export class CoursesAPI {
     return fetcher(`question/results?question_ids=${id}`)
   }
 
-  static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`course_learning_outcomes/${id}`)
+  static getCourseLearningOutcome(
+    id: string,
+    class_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`course_learning_outcomes/${id}/class/${class_id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {
@@ -346,7 +354,7 @@ export class CoursesAPI {
     return fetcher(
       `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
-      }&type=${type}&parentId=${parentId ?? ''}${
+      }&type=${type}${parentId ? `&parentId=${parentId}` : ''}${
         classId ? `&classId=${classId}` : ''
       }`,
       { params: params },
