@@ -45,6 +45,7 @@ import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-common-package/dist/index.css'
+import 'preview-part/dist/index.css'
 
 type MyAppProps = AppProps & {
   Component: {
