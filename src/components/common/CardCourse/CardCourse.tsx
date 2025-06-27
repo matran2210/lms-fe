@@ -51,7 +51,7 @@ const CardCourse = forwardRef<
       handleClickTitle,
       hideBadge = false,
       badgeCode,
-      classNameTitle = 'mb-6 mt-3',
+      classNameTitle = 'mt-2 mb-4 md:mb-6 md:mt-3',
       classNameCard = '',
     },
     ref,
@@ -59,7 +59,7 @@ const CardCourse = forwardRef<
     return (
       <div
         className={clsx(
-          'relative rounded-xl bg-white p-6 shadow-card lg:p-8',
+          'relative rounded-xl bg-white p-4 shadow-card md:p-6 lg:p-8',
           classNameCard,
         )}
         ref={ref}
@@ -80,7 +80,7 @@ const CardCourse = forwardRef<
         <h2
           className={clsx(
             classNameTitle,
-            'line-clamp-2 cursor-pointer text-2xl font-medium',
+            'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
             {
               'text-gray-300': disabledTitle,
               'text-gray-800': !disabledTitle,
