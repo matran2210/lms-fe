@@ -29,7 +29,7 @@ const useSelectExams = (courseId: string | undefined) => {
     })
 
   return {
-    exams: data?.pages?.[0] ?? undefined,
+    exams: data?.pages?.[0],
     hasNextPage,
     fetchNextPage,
     isLoading,

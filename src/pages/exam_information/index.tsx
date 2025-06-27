@@ -104,13 +104,10 @@ const ExamInformation = () => {
   ]
 
   return (
-    <Layout
-      title={TitleSidebar.EXAM_INFORMATION}
-      showSidebar={isAlwaysShowSidebar}
-    >
+    <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
       <div className="mt-10">
         <div className="text-3xl font-semibold leading-[46px] text-gray-800">
-          {TitleSidebar.EXAM_INFORMATION}
+          {TitleSidebar.EXAM_LIST}
         </div>
         <div className="mt-8">
           <SappTable
