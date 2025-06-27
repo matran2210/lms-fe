@@ -35,10 +35,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()

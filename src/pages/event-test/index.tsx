@@ -15,10 +15,7 @@ import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const EventTest = () => {
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await EventTestAPI.get(params)

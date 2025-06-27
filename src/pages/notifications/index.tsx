@@ -28,10 +28,7 @@ import {
 import { UserType } from 'src/redux/types/User/urser'
 
 const Notifications = () => {
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [openModel, setOpenModel] = useState<boolean>(false)
   const [openToolTip, setOpenToolTip] = useState<boolean>(false)
   const [loadingRedirect, setLoadingRedirect] = useState<boolean>(false)

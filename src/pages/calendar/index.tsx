@@ -13,10 +13,7 @@ import {
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
 const Page = () => {
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<ICalendarList>()
   const [filter, setFilter] = useState<IFilter>()

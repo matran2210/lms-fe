@@ -21,10 +21,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const EntranceTest = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const {
     data: entranceTestLists,
     isLoading,

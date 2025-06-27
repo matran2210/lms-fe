@@ -34,5 +34,9 @@ export const useTailwindBreakpoint = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  return breakpoint
+  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
+    breakpoint,
+  )
+  const isShowMenuContent = ['base', 'sm', 'md'].includes(breakpoint)
+  return { isAlwaysShowSidebar, isShowMenuContent, breakpoint }
 }

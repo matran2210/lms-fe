@@ -6,6 +6,7 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
+  TimeLineIcon,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -27,7 +28,13 @@ import {
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
@@ -59,6 +66,10 @@ import LearningResource from '@components/mycourses/LearningResource'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { DiscussionIcon } from '../../../../../assets/icons'
+import VideoTimelineMobile from '@components/learning/activity/modal/VideoTimelineMobile'
+import { IVideo } from 'src/type/course'
+import BottomMenu from '@components/layout/BottomMenu'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -79,10 +90,8 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -110,6 +119,8 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
+  const [openVideoTimeline, setOpenVideoTimeline] = useState(false)
+  const [currentVideo, setCurrentVideo] = useState<IVideo>({} as IVideo)
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
@@ -130,6 +141,15 @@ const ActivityPage = () => {
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
 
+  const onOpenVideoTimeline = () => {
+    setOpenVideoTimeline(true)
+  }
+  const onCloseVideoTimeline = () => {
+    setOpenVideoTimeline(false)
+  }
+  const handleSetCurrentVideo = (video: IVideo) => {
+    setCurrentVideo(video)
+  }
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
     setIsDoneActivity(false)
@@ -421,6 +441,25 @@ const ActivityPage = () => {
     (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
+  const [sessionData, setSessionData] = useState<Array<any>>([])
+
+  useEffect(() => {
+    // Lấy giá trị từ sessionStorage với key 'activityId'
+    const storedValue = window.sessionStorage.getItem('activityId')
+
+    // Kiểm tra nếu storedValue không null và không phải là undefined
+    if (storedValue !== null && storedValue !== undefined) {
+      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+      const parsedValue = JSON.parse(storedValue)
+
+      // Kiểm tra xem parsedValue có phải là một mảng hay không
+      if (Array.isArray(parsedValue)) {
+        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
+        setSessionData(parsedValue)
+      }
+    }
+  }, [])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity" showSidebar={isAlwaysShowSidebar}>
@@ -504,7 +543,7 @@ const ActivityPage = () => {
             >
               <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
                 <ActivityPagination
-                  {...{ activity }}
+                  {...{ activity, sessionData }}
                   focusOnlyQuiz={focusOnlyQuiz.open}
                   isArrowTitle
                 />
@@ -558,18 +597,22 @@ const ActivityPage = () => {
                 handleFinishedCourseSectionProgress,
                 focusOnlyQuiz,
                 setFocusOnlyQuiz,
+                handleSetCurrentVideo,
               }}
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
-              {...{ activity }}
+              {...{ activity, sessionData }}
               focusOnlyQuiz={focusOnlyQuiz.open}
             />
 
             <div
               className={clsx(
                 'rounded-xl bg-white p-6 shadow-learning-activity',
-                { hidden: focusOnlyQuiz.open },
+                {
+                  hidden: focusOnlyQuiz.open,
+                  'hidden md:block': !focusOnlyQuiz.open,
+                },
               )}
               data-aos={ANIMATION.DATA_AOS}
             >
@@ -577,43 +620,56 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-sm -translate-x-1/2 transform lg:hidden">
-            <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
-              <div className="flex items-center justify-center gap-5">
-                <CardMenuItem
-                  title="Note List"
-                  icon={<DocumentTextIcon className="h-6 w-6" />}
-                  onClick={handleOpenNotesList}
-                />
-                <CardMenuItem
-                  title="Resource"
-                  icon={<ResourceIcon className="h-6 w-6" />}
-                  onClick={() => setOpenResource(true)}
-                />
-              </div>
-              <Divider
-                type="vertical"
-                className="mx-6 my-auto h-6 border-white text-white"
-                orientation="center"
+          <BottomMenu>
+            <div className="flex items-center justify-center gap-5">
+              <CardMenuItem
+                title="Note List"
+                icon={<DocumentTextIcon className="h-6 w-6" />}
+                onClick={handleOpenNotesList}
               />
-              <div className="flex items-center justify-center gap-5">
-                <CardMenuItem
-                  title="Calculator"
-                  icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
-                  onClick={() => {
-                    handleOpenScratchPad({
-                      type: 'calculator',
-                    })
-                  }}
-                />
-                <CardMenuItem
-                  title="New Note"
-                  icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
-                  onClick={handleAddNote}
-                />
-              </div>
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={() => setOpenResource(true)}
+              />
             </div>
-          </div>
+            <Divider
+              type="vertical"
+              className="mx-6 my-auto hidden h-6 border-white text-white md:block"
+              orientation="center"
+            />
+            <div className="hidden items-center justify-center gap-5 md:flex">
+              <CardMenuItem
+                title="Calculator"
+                icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                onClick={() => {
+                  handleOpenScratchPad({
+                    type: 'calculator',
+                  })
+                }}
+              />
+              <CardMenuItem
+                title="New Note"
+                icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                onClick={handleAddNote}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-5 md:hidden">
+              {(currentVideo?.file?.resource?.time_line?.length as number) >
+                0 && (
+                <CardMenuItem
+                  title="Timeline"
+                  icon={<TimeLineIcon />}
+                  onClick={onOpenVideoTimeline}
+                />
+              )}
+              <CardMenuItem
+                title="Discussion"
+                icon={<DiscussionIcon className="h-6 w-6" />}
+                onClick={() => {}}
+              />
+            </div>
+          </BottomMenu>
 
           {/* Sratchpad */}
           {openScratchPad.map((e) => {
@@ -712,6 +768,14 @@ const ActivityPage = () => {
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
+        />
+      )}
+
+      {openVideoTimeline && (
+        <VideoTimelineMobile
+          open={openVideoTimeline}
+          onClose={onCloseVideoTimeline}
+          currentVideo={currentVideo}
         />
       )}
     </SappLoadingGlobal>
