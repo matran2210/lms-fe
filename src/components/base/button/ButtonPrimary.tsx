@@ -15,13 +15,17 @@ const ButtonPrimary = ({
   ...props
 }: IButtonBaseProps) => {
   let textSizeClass =
-    size === 'small' ? 'text-sm' : size === 'medium' ? 'text-base' : 'text-lg'
+    size === 'small'
+      ? 'text-sm'
+      : size === 'medium'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
   let padding =
     size === 'small'
       ? 'py-2 px-4'
       : size === 'medium'
-        ? 'py-3 px-6'
-        : 'py-4 px-8'
+        ? 'py-1 px-4 md:py-3 md:px-6'
+        : 'py-2 px-4 md:py-4 md:px-8'
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass = disabled
     ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'

@@ -223,7 +223,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   }
 
   const cardFooter = (
-    <div className="action relative mt-10 flex items-center justify-end">
+    <div className="action relative mt-6 flex items-center justify-end md:mt-10">
       {renderButton()}
     </div>
   )
@@ -236,11 +236,11 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         footer={cardFooter}
       >
         <div>
-          <div className="info border-l border-[#DCDDDD] px-4">
-            <div className="flex justify-between text-base capitalize text-gray">
+          <div className="info border-l border-[#DCDDDD] px-2 md:px-4">
+            <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
             </div>
-            <div className="flex justify-between pt-4 text-base capitalize text-gray">
+            <div className="flex justify-between pt-2 text-sm capitalize text-gray md:pt-4 md:text-base">
               <p>No of Attemps:</p>
               {data?.attempts && data.attempts.length > 0 ? (
                 <>
@@ -259,7 +259,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                 <span className="text-gray-800">--</span>
               )}
             </div>
-            <div className="flex justify-between pt-4 text-base capitalize text-gray-800">
+            <div className="flex justify-between pt-2 text-sm capitalize text-gray-800 md:pt-4 md:text-base">
               <div className="flex items-center">
                 {data?.attempts?.length && data?.attempts?.length > 0 ? (
                   <>

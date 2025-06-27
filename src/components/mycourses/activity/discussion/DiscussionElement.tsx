@@ -304,8 +304,8 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'leading-0 flex-none',
-                  'leading-0 flex-none',
+                  'flex-none leading-0',
+                  'flex-none leading-0',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >

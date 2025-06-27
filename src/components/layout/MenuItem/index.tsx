@@ -3,8 +3,8 @@ import { trackGAEvent } from '@utils/google-analytics'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { PageLink, TitleSidebar } from 'src/constants'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { LOCAL_STORAGE_KEYS, PageLink, TitleSidebar } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
@@ -14,6 +14,13 @@ import { MenuItem as MenuItemType } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { LANG_SIGNIN } from 'src/constants/lang'
+import { isEmpty } from 'lodash'
+import {
+  getCountUnRead,
+  loadMoreNotification,
+} from 'src/redux/slice/Notification/Notification'
+import SappNotificationComponent from 'sapp-notification'
+import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 
 type MenuItemProps = {
@@ -29,13 +36,48 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
+  const [notificationUnread, setNotificationUnread] = useState(() => {
+    return parseInt(storedCount ?? '0', 10)
+  })
+  const storedCount = localStorage.getItem(
+    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+  )
+  const {
+    isViewDetail,
+    openNotification,
+    setOpenNotification,
+    selectedTab,
+    setSelectedTab,
+    notifyDetail,
+    notifyLists,
+    scrollRef,
+    handleMarkAll,
+    handleMarkById,
+    handleUnMarkById,
+    handleViewDetail,
+    handleBack,
+    refreshNotification,
+  } = useNotification()
+
+  const tabs = [
+    {
+      id: 1,
+      title: 'All Notifications',
+    },
+    {
+      id: 2,
+      title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
+    },
+  ]
+
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer)
   const router = useRouter()
-
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
+  const isFetching = useRef(false)
+  const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
   const onClick = () => {
     toggleExpanded((prev) => !prev)
@@ -76,6 +118,12 @@ export default function MenuItem({
   }
 
   const handleActive = () => {
+    if (isEmpty(url)) {
+      setOpenNotification(true)
+      if (isEmpty(notifyLists)) {
+        refreshNotification(false)
+      }
+    }
     if (router?.query?.courseId || router.query.id) {
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
@@ -95,6 +143,61 @@ export default function MenuItem({
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info
   }
+  const countNotificationsUnRead = async () => {
+    try {
+      await dispatch(getCountUnRead())
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    if (openNotification) refreshNotification(false)
+  }, [selectedTab])
+
+  useEffect(() => {
+    const handleScroll = async () => {
+      const scrollEl = scrollRef.current
+      if (scrollEl) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollEl
+        if (scrollTop + clientHeight + 200 >= scrollHeight) {
+          const { page_index, page_size, total_pages } = pagination
+          // Kiểm tra đã load hết chưa
+          if (page_index >= total_pages || isFetching.current) return
+          try {
+            isFetching.current = true
+            await dispatch(
+              loadMoreNotification({
+                page_index: page_index + 1,
+                page_size,
+                ...(selectedTab === 2 && {
+                  is_read: false,
+                }),
+              }),
+            )
+            await countNotificationsUnRead()
+          } catch (err) {
+          } finally {
+            isFetching.current = false
+          }
+        }
+      }
+    }
+
+    const scrollEl = scrollRef.current
+    scrollEl?.addEventListener('scroll', handleScroll)
+
+    return () => {
+      scrollEl?.removeEventListener('scroll', handleScroll)
+    }
+  }, [pagination])
+
+  useEffect(() => {
+    window.addEventListener('storage', (e) => {
+      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
+      setNotificationUnread(parseInt(count ?? '0', 10))
+    })
+
+    return () => window.removeEventListener('storage', () => {})
+  }, [])
 
   const renderMenuContent = () => {
     return (
@@ -245,7 +348,7 @@ export default function MenuItem({
           }`}
           onClick={() => closeSideBar()}
         >
-          {url !== '#' ? (
+          {url !== '#' && !isEmpty(url) ? (
             <Link
               href={
                 url === PageLink.RESULTS
@@ -289,6 +392,28 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
+      {openNotification && (
+        <SappNotificationComponent
+          notifyDetail={{
+            ...notifyDetail,
+            send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
+          }}
+          tabs={tabs}
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+          handleMarkAll={handleMarkAll}
+          handleMarkById={handleMarkById}
+          handleUnMarkById={handleUnMarkById}
+          handleBack={handleBack}
+          isViewDetail={isViewDetail}
+          setOpenNotification={setOpenNotification}
+          openNotification={openNotification}
+          handleViewDetail={handleViewDetail}
+          notifyLists={notifyLists}
+          notificationUnread={notificationUnread}
+          scrollRef={scrollRef}
+        />
+      )}
     </>
   )
 }

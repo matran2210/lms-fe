@@ -3518,6 +3518,11 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
+"@tailwindcss/line-clamp@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@tailwindcss/line-clamp/-/line-clamp-0.4.4.tgz#767cf8e5d528a5d90c9740ca66eb079f5e87d423"
+  integrity sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==
+
 "@tinymce/tinymce-react@^4.3.0":
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/@tinymce/tinymce-react/-/tinymce-react-4.3.2.tgz#fbe05e35e948b0e577eddf639bfe7ee2158fdc10"
@@ -4017,6 +4022,11 @@
     "@types/node" "*"
     pg-protocol "*"
     pg-types "^2.2.0"
+
+"@types/prismjs@^1.26.0":
+  version "1.26.5"
+  resolved "https://registry.yarnpkg.com/@types/prismjs/-/prismjs-1.26.5.tgz#72499abbb4c4ec9982446509d2f14fb8483869d6"
+  integrity sha512-AUZTa7hQ2KY5L7AmtSiqxlhWxb4ina0yd8hNbl4TWuqnv/pFP0nDMb3YrfSBf4hJVGLh2YEIBfKaBW/9UEl6IQ==
 
 "@types/prop-types@*", "@types/prop-types@^15.7.12":
   version "15.7.14"
@@ -5858,7 +5868,7 @@ date-fns@^3.0.6:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
   integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
-dayjs@^1.11.0, dayjs@^1.11.11, dayjs@^1.11.12, dayjs@^1.11.7:
+dayjs@^1.11.0, dayjs@^1.11.11, dayjs@^1.11.12, dayjs@^1.11.13, dayjs@^1.11.7:
   version "1.11.13"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
   integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
@@ -9936,10 +9946,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.62:
-  version "1.3.62"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.62.tgz#1f859e75174ebc99f7ea0810afc82d0cbc50446c"
-  integrity sha512-edGIPJdN2eTOfDmA1dKKQG8xKFNX0W2HBqU7aqA8Kty3D0/C183NvdZey5vRodoQVidDseNWAwR1vhPIeZrekg==
+preview-part@^1.3.1-test:
+  version "1.3.1-test"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.1-test.tgz#39b228bfb18e3a79c97c3dbde0843bf11737bda2"
+  integrity sha512-ZQ1UbXuKBP/ukba/2Fy9pXC/J5M9d682DkVB1eKssczuc6+RSDLhSP9VulGnKau55nSgOA08QqxMdx2/Dz9xEg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -9948,6 +9958,7 @@ preview-part@^1.3.62:
     "@types/react-lines-ellipsis" "^0.15.6"
     antd "^5.22.2"
     aos "^2.3.4"
+    dayjs "^1.11.13"
     lodash "^4.17.21"
 
 preview-question-bank@^1.1.20:
@@ -9968,6 +9979,14 @@ preview-question-bank@^1.1.20:
     sass "^1.67.0"
     video.js "^8.5.2"
     x-data-spreadsheet "^1.1.9"
+
+prism-react-renderer@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/prism-react-renderer/-/prism-react-renderer-2.4.1.tgz#ac63b7f78e56c8f2b5e76e823a976d5ede77e35f"
+  integrity sha512-ey8Ls/+Di31eqzUxC46h8MksNuGx/n0AAC8uKpwFau4RPDYLuE3EXTp8N8G2vX2N7UC/+IXeNUnlWBGGcAG+Ig==
+  dependencies:
+    "@types/prismjs" "^1.26.0"
+    clsx "^2.0.0"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -11345,13 +11364,6 @@ sapp-common-package@^1.1.7-test:
     sass-loader "^13"
     tailwindcss "^3"
 
-sass-loader@^13:
-  version "13.3.3"
-  resolved "https://registry.yarnpkg.com/sass-loader/-/sass-loader-13.3.3.tgz#60df5e858788cffb1a3215e5b92e9cba61e7e133"
-  integrity sha512-mt5YN2F1MOZr3d/wBRcZxeFgwgkH44wVc2zohO2YF6JiOMkiXe4BYRZpSu2sO1g71mo/j16txzUhsKZlqjVGzA==
-  dependencies:
-    neo-async "^2.6.2"
-
 sass@1.50.1:
   version "1.50.1"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.50.1.tgz#e9b078a1748863013c4712d2466ce8ca4e4ed292"
@@ -12049,7 +12061,7 @@ table@^6.0.9:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
-tailwindcss@3.4.17, tailwindcss@^3, tailwindcss@^3.3.5:
+tailwindcss@^3, tailwindcss@^3.3.5:
   version "3.4.17"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.4.17.tgz#ae8406c0f96696a631c790768ff319d46d5e5a63"
   integrity sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==
