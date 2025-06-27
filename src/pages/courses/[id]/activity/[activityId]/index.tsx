@@ -28,7 +28,13 @@ import {
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
@@ -82,6 +88,7 @@ export interface VideoStateClicked {
 const ActivityPage = () => {
   const router = useRouter()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -109,6 +116,14 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
+  /**
+   * Giá trị được memoized cho course_tab_documents.
+   */
+  const course_tab_documents = useMemo(() => {
+    return selector?.tabs?.find((e) => e?.id === selector?.currentTabId)
+      ?.course_tab_documents
+  }, [selector?.tabs])
+
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
@@ -420,6 +435,25 @@ const ActivityPage = () => {
     (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
   )
 
+  const [sessionData, setSessionData] = useState<Array<any>>([])
+
+  useEffect(() => {
+    // Lấy giá trị từ sessionStorage với key 'activityId'
+    const storedValue = window.sessionStorage.getItem('activityId')
+
+    // Kiểm tra nếu storedValue không null và không phải là undefined
+    if (storedValue !== null && storedValue !== undefined) {
+      // Chuyển đổi chuỗi JSON thành đối tượng JavaScript
+      const parsedValue = JSON.parse(storedValue)
+
+      // Kiểm tra xem parsedValue có phải là một mảng hay không
+      if (Array.isArray(parsedValue)) {
+        // Nếu parsedValue là một mảng, cập nhật state sessionData với giá trị từ sessionStorage
+        setSessionData(parsedValue)
+      }
+    }
+  }, [])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity" showSidebar={isAlwaysShowSidebar}>
@@ -503,7 +537,7 @@ const ActivityPage = () => {
             >
               <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
                 <ActivityPagination
-                  {...{ activity }}
+                  {...{ activity, sessionData }}
                   focusOnlyQuiz={focusOnlyQuiz.open}
                   isArrowTitle
                 />
@@ -561,7 +595,7 @@ const ActivityPage = () => {
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
-              {...{ activity }}
+              {...{ activity, sessionData }}
               focusOnlyQuiz={focusOnlyQuiz.open}
             />
 
