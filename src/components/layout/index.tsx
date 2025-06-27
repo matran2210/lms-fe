@@ -16,6 +16,7 @@ interface LayoutProps {
   showSidebar?: boolean
   fullWidth?: boolean
   handleToggleSidebar?: () => void
+  className?: string
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -27,6 +28,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     showSidebar = true,
     fullWidth = false,
     handleToggleSidebar,
+    className,
   } = props
   const router = useRouter()
   const { isShowMenuContent } = useTailwindBreakpoint()
@@ -108,7 +110,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-full p-0': fullWidth,
           })}
         >
-          <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
+          <div className={clsx(`${paddingTop} h-full bg-[#F9F9F9]`, className)}>
             <div className={clsx('ml-0 h-full')}>{children}</div>
           </div>
         </div>

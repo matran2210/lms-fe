@@ -17,12 +17,12 @@ import { ANIMATION } from 'src/constants'
 import { IActivity } from 'src/type/course/my-course/Activity'
 interface IProps {
   activity: IActivity
-  focusOnlyQuiz: boolean
+  focusOnly: boolean
   isArrowTitle?: boolean
 }
 const ActivityPagination = ({
   activity,
-  focusOnlyQuiz,
+  focusOnly,
   isArrowTitle = false,
 }: IProps) => {
   const router = useRouter()
@@ -86,7 +86,7 @@ const ActivityPagination = ({
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
             'learning-activity-collapse rounded-xl',
-            { hidden: focusOnlyQuiz },
+            { hidden: focusOnly },
             {
               'bg-transparent p-0 shadow-none': isArrowTitle,
               'bg-white p-6 shadow-learning-activity': !isArrowTitle,
