@@ -19,10 +19,7 @@ import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
   const router = useRouter()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
 

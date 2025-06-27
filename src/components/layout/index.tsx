@@ -29,8 +29,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     handleToggleSidebar,
   } = props
   const router = useRouter()
-  const screens = useTailwindBreakpoint()
-  const isShowMenuContent = ['base', 'sm', 'md'].includes(screens)
+  const { isShowMenuContent } = useTailwindBreakpoint()
 
   const { isOpenSidebar, setOpenSidebar } = useCourseContext()
   const toggleDrawer = () => {

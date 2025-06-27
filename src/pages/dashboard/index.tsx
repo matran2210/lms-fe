@@ -16,10 +16,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const Dashboard = () => {
   const router = useRouter()
   const { user } = useAppSelector(userReducer)
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
       <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">

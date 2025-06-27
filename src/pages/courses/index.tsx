@@ -44,10 +44,7 @@ const MyCourse = () => {
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setshowSidebar] = useState(false)
   const router = useRouter()

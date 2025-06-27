@@ -6,6 +6,7 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
+  TimeLineIcon,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -59,6 +60,7 @@ import LearningResource from '@components/mycourses/LearningResource'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { DiscussionIcon } from '../../../../../assets/icons'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -79,10 +81,7 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -588,7 +587,10 @@ const ActivityPage = () => {
             <div
               className={clsx(
                 'rounded-xl bg-white p-6 shadow-learning-activity',
-                { hidden: focusOnlyQuiz.open },
+                {
+                  hidden: focusOnlyQuiz.open,
+                  'hidden md:block': !focusOnlyQuiz.open,
+                },
               )}
               data-aos={ANIMATION.DATA_AOS}
             >
@@ -596,8 +598,8 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-sm -translate-x-1/2 transform lg:hidden">
-            <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
+          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-xs -translate-x-1/2 transform lg:hidden">
+            <div className="flex justify-center gap-5 rounded-xl bg-primary px-4 py-2 shadow-card md:gap-0 md:px-6">
               <div className="flex items-center justify-center gap-5">
                 <CardMenuItem
                   title="Note List"
@@ -612,10 +614,10 @@ const ActivityPage = () => {
               </div>
               <Divider
                 type="vertical"
-                className="mx-6 my-auto h-6 border-white text-white"
+                className="mx-6 my-auto hidden h-6 border-white text-white md:block"
                 orientation="center"
               />
-              <div className="flex items-center justify-center gap-5">
+              <div className="hidden items-center justify-center gap-5 md:flex">
                 <CardMenuItem
                   title="Calculator"
                   icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
@@ -629,6 +631,18 @@ const ActivityPage = () => {
                   title="New Note"
                   icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
                   onClick={handleAddNote}
+                />
+              </div>
+              <div className="flex items-center justify-center gap-5 md:hidden">
+                <CardMenuItem
+                  title="Timeline"
+                  icon={<TimeLineIcon />}
+                  onClick={() => {}}
+                />
+                <CardMenuItem
+                  title="Discussion"
+                  icon={<DiscussionIcon className="h-6 w-6" />}
+                  onClick={() => {}}
                 />
               </div>
             </div>
