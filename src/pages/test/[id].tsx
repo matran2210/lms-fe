@@ -94,6 +94,9 @@ import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import Layout from '@components/layout'
 import BackToTop from '@components/BackToTop'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 
 declare global {
   interface Window {
@@ -285,23 +288,31 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
+          // <DragNDropPreview
+          //   data={data}
+          //   action={getAnswerDragNDrop}
+          //   ref={ref}
+          //   extenalRef={dragNDropRef}
+          //   handleSaveHighLight={handleSaveHighLight}
+          //   highlighted={highlighted}
+          //   removeHighlight={removeHighlight}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   corrects={corrects?.corrects}
+          //   solution={solution}
+          //   handleGetData={(data: DragDropAnswerItem) => {
+          //     setValue(`${currentTabID}_drag_drop_answer`, data)
+          //   }}
+          //   explainClassname="!mt-8 !p-0 !bg-transparent"
+          // />
+          <DragDropQuestion
             data={data}
-            action={getAnswerDragNDrop}
-            ref={ref}
-            extenalRef={dragNDropRef}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            solution={solution}
-            handleGetData={(data: DragDropAnswerItem) => {
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
+            corrects={corrects?.corrects}
           />
         )
       case QUESTION_TYPES.SELECT_WORD:

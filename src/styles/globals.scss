@@ -1434,3 +1434,20 @@ mark {
   cursor: pointer;
   pointer-events: auto;
 }
+
+.dragNdrop-question {
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #ccc !important;
+    padding: 8px;
+  }
+
+  col {
+    background-color: #f9f9f9 !important;
+  }
+}
