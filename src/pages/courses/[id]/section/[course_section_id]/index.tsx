@@ -449,11 +449,11 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-  const handleGoBack = () => {
-    router.push({
-      pathname: `/courses/my-course/${router.query.id}`,
-    })
-  }
+  // const handleGoBack = () => {
+  //   router.push({
+  //     pathname: `/courses/my-course/${router.query.id}`,
+  //   })
+  // }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -558,7 +558,7 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
-          handleGoBack={handleGoBack}
+          // handleGoBack={handleGoBack}
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
