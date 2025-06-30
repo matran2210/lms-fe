@@ -15,10 +15,7 @@ const DEFAULT_PAGESIZE = 10
 
 const Results = () => {
   const router = useRouter()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   /**
    * @description config API course detail
    */

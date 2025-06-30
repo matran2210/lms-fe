@@ -30,10 +30,7 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setshowSidebar] = useState(false)
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)

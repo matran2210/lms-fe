@@ -23,4 +23,14 @@ export class NotificationAPI {
       method: 'POST',
     })
   }
+
+  static markById(ids: string[], markRead: boolean): Promise<any> {
+    return fetcher(`${apiURL}/notifications/mark-read`, {
+      method: 'POST',
+      data: {
+        notification_ids: ids,
+        mark_read: markRead,
+      },
+    })
+  }
 }

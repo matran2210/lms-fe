@@ -4,11 +4,30 @@ import { NotificationAPI } from 'src/pages/api/notification'
 import { RootState } from 'src/redux/store'
 
 // Tạo một đối tượng Notification với giá trị mặc định
+export interface INotifications {
+  id: string
+  created_at: Date | string
+  updated_at: string
+  deleted_at?: Date | string
+  title: string
+  content?: string
+  notification_user_instances: {
+    is_read: boolean
+  }
+  notifications: any
+  meta: Object
+  created_by?: string | null
+  avatar: { [key: string]: string }
+}
 export interface NotificationState {
   loading: boolean
-  list_notifications: any[]
-  meta: any
-  id: string | number
+  list_notifications: INotifications[]
+  meta: {
+    total_pages: number
+    page_index: number
+    page_size: number
+  }
+  id: string
   created_at: string
   updated_at: string
   deleted_at?: null
@@ -18,9 +37,10 @@ export interface NotificationState {
   status: string
   action: string
   content: string
-  send_time?: any
-  created_by: any
-  created_from: any
+  send_time?: string
+  created_by: string
+  avatar: { [key: string]: string }
+  created_from: string
   files: any
   total_records: number
   notification_status: boolean
@@ -44,12 +64,13 @@ const initialState: NotificationState = {
   status: '',
   action: '',
   content: '',
-  send_time: null,
-  created_by: null,
-  created_from: null,
+  send_time: '',
+  created_by: '',
+  created_from: '',
   files: [],
   total_records: 0,
   notification_status: false,
+  avatar: {},
 }
 
 export const getCountUnRead = createAsyncThunk(

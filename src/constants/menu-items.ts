@@ -84,7 +84,7 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
   {
     name: `${TitleSidebar.NOTIFICATION}`,
     icon: 'notification',
-    url: `${PageLink.NOTIFICATION}`,
+    url: '',
     type: 'level-1',
   },
   {

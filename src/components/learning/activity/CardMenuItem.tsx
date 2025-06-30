@@ -12,7 +12,7 @@ const CardMenuItem = ({ title, onClick, icon }: IProps) => {
       onClick={onClick}
     >
       <div>{icon}</div>
-      <div className="text-sm font-normal">{title}</div>
+      <div className="text-xs font-normal md:text-sm">{title}</div>
     </div>
   )
 }
