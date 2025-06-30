@@ -113,6 +113,12 @@ export default function MenuItem({
     })
   }
 
+  const handleViewNotification = (link: string) => {
+    router.push({
+      pathname: link,
+    })
+  }
+
   const handleOpenExaminationInfoPage = () => {
     setOpenExaminationInfo && setOpenExaminationInfo(true)
   }
@@ -412,6 +418,7 @@ export default function MenuItem({
           notifyLists={notifyLists}
           notificationUnread={notificationUnread}
           scrollRef={scrollRef}
+          handleViewNotification={(link) => handleViewNotification(link)}
         />
       )}
     </>
