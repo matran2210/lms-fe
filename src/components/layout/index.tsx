@@ -80,7 +80,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           className={clsx(
             'menu-sidebar-left transition-all duration-150 ease-in-out',
             'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] w-0 rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
+            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
             {
               'overflow-hidden': !guideStatus,
               'menu-sidebar-left--hover':

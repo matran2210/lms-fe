@@ -40,6 +40,7 @@ export default function Sidebar({
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
 
   const closeSideBar = () => {
+    toggleDrawer()
     document.body.classList.add('no-hover')
     setTimeout(() => {
       document.body.classList.remove('no-hover')
