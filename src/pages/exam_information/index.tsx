@@ -150,4 +150,5 @@ const ExamInformation = () => {
   )
 }
 
+ExamInformation.displayName = 'ExamInformation'
 export default ExamInformation

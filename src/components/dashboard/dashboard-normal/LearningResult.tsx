@@ -6,16 +6,16 @@ import { useEffect, useState } from 'react'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
-import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
+import useIsMobile from 'src/hooks/useIsMobile'
 
 const LearningResult = () => {
   const router = useRouter()
   const [option, setOption] = useState<any>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
+  const isMobile = useIsMobile()
 
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
   const handleLearningResults = (
@@ -175,8 +175,6 @@ const LearningResult = () => {
       if (res && res.success) handleLearningResults(res.data)
     } catch (error) {
       setOption(null)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -191,12 +189,12 @@ const LearningResult = () => {
       : '%Results = Module test (40%) + Topic test (60%)'
 
   return (
-    <div className="shadow-matchingquiz flex h-[48px] w-full rounded-2xl bg-white p-8 xl:h-[55vh]">
+    <div className="shadow-matchingquiz flex h-auto w-full rounded-2xl bg-white p-8 xl:h-[55vh]">
       <div className="w-full">
-        <div className="mb-5 flex items-center justify-between pb-3">
-          <div className="flex w-full justify-between">
+        <div className="mb-6 flex items-center justify-between md:mb-5 md:pb-3">
+          <div className="w-full justify-between md:flex">
             <div className="flex">
-              <div className="min-w-fit text-xl font-semibold">
+              <div className="mb-2 min-w-fit text-lg font-semibold md:mb-0 md:text-xl">
                 Your Learning Results
               </div>
               <Tooltip
@@ -208,7 +206,7 @@ const LearningResult = () => {
                 </div>
               </Tooltip>
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="text-xs text-gray-400 md:text-sm">
               {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
             </div>
           </div>
@@ -218,12 +216,16 @@ const LearningResult = () => {
           {option && (
             <div className={`flex grow flex-col`}>
               <div className="grow">
-                <EChart option={option} height="420px" minHeight="420px" />
+                <EChart
+                  option={option}
+                  height={isMobile ? '350px' : '420px'}
+                  minHeight={isMobile ? '350px' : '420px'}
+                />
               </div>
               {isNormal && (
                 <div className="flex items-center justify-center gap-2.5">
                   <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
-                  <span className="min-w-fit text-base font-medium text-gray-800">
+                  <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                     Learning results
                   </span>
                 </div>
