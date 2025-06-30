@@ -1,7 +1,8 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IScoreDetails } from 'src/type'
+import { IResponse, IScoreDetails } from 'src/type'
+import { CourseDetail } from 'src/type/course'
 
 export class CoursesAPI {
   static getNoteDetail(
@@ -71,7 +72,7 @@ export class CoursesAPI {
     page_index: number,
     page_size: number,
     params: Object,
-  ): Promise<any> {
+  ): Promise<IResponse<CourseDetail>> {
     return fetcher(
       `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {
