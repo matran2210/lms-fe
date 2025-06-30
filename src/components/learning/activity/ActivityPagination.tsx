@@ -18,13 +18,8 @@ import { IActivity } from 'src/type/course/my-course/Activity'
 interface IProps {
   activity: IActivity
   focusOnly: boolean
-  isArrowTitle?: boolean
 }
-const ActivityPagination = ({
-  activity,
-  focusOnly,
-  isArrowTitle = false,
-}: IProps) => {
+const ActivityPagination = ({ activity, focusOnly }: IProps) => {
   const router = useRouter()
   const endActivityRef = useRef<HTMLDivElement>(null)
 
@@ -85,12 +80,8 @@ const ActivityPagination = ({
         <div
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
-            'learning-activity-collapse rounded-xl',
+            'learning-activity-collapse rounded-xl md:bg-white md:p-6 md:shadow-learning-activity',
             { hidden: focusOnly },
-            {
-              'bg-transparent p-0 shadow-none': isArrowTitle,
-              'bg-white p-6 shadow-learning-activity': !isArrowTitle,
-            },
           )}
         >
           <div
@@ -98,7 +89,7 @@ const ActivityPagination = ({
             className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity?.id ? 'between' : 'end'}`}
           >
             {activity?.previous_activity?.id && (
-              <div className={clsx('w-1/2', { 'w-full': isArrowTitle })}>
+              <div className={clsx('w-1/2')}>
                 <div
                   onClick={() =>
                     handleActivityNavigation(
@@ -107,26 +98,13 @@ const ActivityPagination = ({
                       'Click Button Previous Activity',
                     )
                   }
-                  className={clsx(
-                    'flex cursor-pointer select-none items-center gap-2 whitespace-nowrap text-sm font-semibold underline hover:text-primary',
-                    {
-                      'text-bw-13': isArrowTitle,
-                      'text-bw-1 mb-3': !isArrowTitle,
-                    },
-                  )}
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 text-xs font-semibold underline hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
                 >
-                  {isArrowTitle ? (
-                    <CollapseArrowIcon className="rotate-90" />
-                  ) : (
-                    <>
-                      <ArrowLeft /> Previous Activity
-                    </>
-                  )}
+                  <ArrowLeft /> Previous Activity
                 </div>
                 <div
                   className={clsx(
-                    'flex items-center gap-2 text-sm text-[#6b7280]',
-                    { hidden: isArrowTitle },
+                    'hidden items-center gap-2 text-sm text-[#6b7280] md:flex',
                   )}
                 >
                   {getCourseIcon(
@@ -146,15 +124,16 @@ const ActivityPagination = ({
                       {truncateString(activity?.previous_activity?.name, 80)}
                     </span>
                   </Tooltip>
-                  {getCourseIcon(
-                    activity?.previous_activity?.display_icon,
-                    activity?.previous_activity?.is_preview_locked || false,
-                  )}
+                  {activity?.previous_activity?.is_preview_locked &&
+                    getCourseIcon(
+                      activity?.previous_activity?.display_icon,
+                      activity?.previous_activity?.is_preview_locked || false,
+                    )}
                 </div>
               </div>
             )}
             {!activity?.previous_activity?.id && <></>}
-            {!isArrowTitle && activity?.next_activity?.id && (
+            {activity?.next_activity?.id && (
               <div className="w-1/2">
                 <div
                   onClick={() =>
@@ -164,11 +143,11 @@ const ActivityPagination = ({
                       'Click Button Next Activity',
                     )
                   }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 text-sm font-semibold underline hover:text-primary"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 rounded-lg py-2 text-xs font-semibold underline hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
                 >
                   Next Activity <ArrowRight />
                 </div>
-                <div className="flex items-center justify-end gap-2 text-sm text-[#6b7280]">
+                <div className="hidden items-center justify-end gap-2 text-sm text-[#6b7280] md:flex">
                   {getCourseIcon(activity?.next_activity?.display_icon, false)}
                   <Tooltip
                     title={activity?.next_activity?.name}
@@ -183,10 +162,11 @@ const ActivityPagination = ({
                       {truncateString(activity?.next_activity.name, 80)}
                     </div>
                   </Tooltip>
-                  {getCourseIcon(
-                    activity?.next_activity?.display_icon,
-                    activity?.next_activity?.is_preview_locked || false,
-                  )}
+                  {activity?.next_activity?.is_preview_locked &&
+                    getCourseIcon(
+                      activity?.next_activity?.display_icon,
+                      activity?.next_activity?.is_preview_locked || false,
+                    )}
                 </div>
               </div>
             )}

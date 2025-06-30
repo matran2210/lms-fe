@@ -71,6 +71,7 @@ import VideoTimelineMobile from '@components/learning/activity/modal/VideoTimeli
 import { IVideo } from 'src/type/course'
 import BottomMenu from '@components/layout/BottomMenu'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import ActivityResourceMobile from '@components/learning/activity/modal/ActivityResourceMobile'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -121,6 +122,7 @@ const ActivityPage = () => {
     (state) => state.notesListReducer?.note_data,
   )
   const [openVideoTimeline, setOpenVideoTimeline] = useState(false)
+  const [openActivityResource, setOpenActivityResource] = useState(false)
   const [currentVideo, setCurrentVideo] = useState<IVideo>({} as IVideo)
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
@@ -157,6 +159,12 @@ const ActivityPage = () => {
   }
   const handleSetCurrentVideo = (video: IVideo) => {
     setCurrentVideo(video)
+  }
+  const onOpenActivityResource = () => {
+    setOpenActivityResource(true)
+  }
+  const onCloseActivityResource = () => {
+    setOpenActivityResource(false)
   }
 
   const settingDoneProcessActivity = (activity: IActivity) => {
@@ -485,13 +493,10 @@ const ActivityPage = () => {
         >
           {/* Breadcrumbs */}
           <ul
-            className={clsx(
-              'line-clamp-1 overflow-x-auto py-6 pb-8 text-sm font-medium',
-              {
-                hidden: focusOnlyQuiz.open,
-                'hidden md:flex': !focusOnlyQuiz.open,
-              },
-            )}
+            className={clsx('overflow-x-auto py-6 pb-8 text-sm font-medium', {
+              hidden: focusOnlyQuiz.open,
+              'hidden md:flex': !focusOnlyQuiz.open,
+            })}
           >
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
@@ -592,8 +597,8 @@ const ActivityPage = () => {
 
             {/* Activity Resource */}
             <div
-              className={clsx({
-                hidden:
+              className={clsx('hidden md:block', {
+                '!hidden':
                   focusOnlyQuiz.open ||
                   focusOnlyDiscussion ||
                   !(activity?.files && activity?.files?.length > 0),
@@ -651,7 +656,14 @@ const ActivityPage = () => {
               <CardMenuItem
                 title="Resource"
                 icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={onOpenActivityResource}
+                className="md:hidden"
+              />
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
                 onClick={() => setOpenResource(true)}
+                className="hidden md:flex"
               />
             </div>
             <Divider
@@ -797,6 +809,14 @@ const ActivityPage = () => {
           open={openVideoTimeline}
           onClose={onCloseVideoTimeline}
           currentVideo={currentVideo}
+        />
+      )}
+      {openActivityResource && (
+        <ActivityResourceMobile
+          open={openActivityResource}
+          onClose={onCloseActivityResource}
+          activity={activity}
+          handleOpenScratchPad={handleOpenScratchPad}
         />
       )}
     </SappLoadingGlobal>
