@@ -17,11 +17,7 @@ import { PencilV2Icon } from '@assets/icons'
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
 const ExamInformation = () => {
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = useMemo(
-    () => ['lg', 'xl', '2xl', '3xl', '4xl'].includes(screens),
-    [screens],
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
@@ -29,7 +25,7 @@ const ExamInformation = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: [UserKey.ExamList, pageIndex, pageSize],
     queryFn: () => {
       return UserApi.getExamination(pageIndex || 1, pageSize)

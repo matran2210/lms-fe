@@ -326,6 +326,7 @@ export default function MenuItem({
             name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.EXAM_INFORMATION ||
             name === TitleSidebar.DASHBOARD ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
@@ -335,6 +336,7 @@ export default function MenuItem({
         ${
           isInCourse &&
           (name === TitleSidebar.COURSES ||
+            name === TitleSidebar.EXAM_LIST ||
             name === TitleSidebar.ENTRANCE_TEST ||
             // hidden when not in course
             name === LANG_SIGNIN.eventTest ||
