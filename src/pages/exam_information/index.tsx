@@ -4,7 +4,7 @@ import Layout from '@components/layout'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { TitleSidebar } from 'src/constants'
 import { UserApi } from '@pages/api/user'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { IExamInformation } from '@components/profile/ExamInformation/type'
 import { useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
@@ -18,8 +18,9 @@ import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo
 
 const ExamInformation = () => {
   const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
+  const isAlwaysShowSidebar = useMemo(
+    () => ['lg', 'xl', '2xl', '3xl', '4xl'].includes(screens),
+    [screens],
   )
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
@@ -28,7 +29,7 @@ const ExamInformation = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, isFetching, isSuccess, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: [UserKey.ExamList, pageIndex, pageSize],
     queryFn: () => {
       return UserApi.getExamination(pageIndex || 1, pageSize)

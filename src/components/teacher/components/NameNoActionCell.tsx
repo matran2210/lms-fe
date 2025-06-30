@@ -7,11 +7,11 @@ type Props = {
 
 const NameNoActionCell: FC<Props> = ({
   dataColumn,
-  className = 'text-sm font-normal text-[#a1a1aa]',
+  className = 'text-sm font-normal text-gray-400',
 }) => (
   <div className="flex items-center">
     <div className="flex flex-col">
-      <span className={`${className}`}>{dataColumn ?? '-'}</span>
+      <span className={className}>{dataColumn ?? '-'}</span>
     </div>
   </div>
 )

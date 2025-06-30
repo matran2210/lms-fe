@@ -406,12 +406,28 @@ export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
   }
   return '-'
 }
+
+/**
+ * Trả về chuỗi thời gian biểu diễn khoảng thời gian từ lúc bắt đầu đến lúc kết thúc.
+ *
+ * @param started_at - Thời gian bắt đầu (UTC dạng string, ví dụ: '2025-06-27T03:00:00Z')
+ * @param finished_at - Thời gian kết thúc (UTC dạng string)
+ * @returns Chuỗi dạng "start - end", hoặc "-" nếu không có dữ liệu
+ *
+ * @example
+ * getDuration('2025-06-26T03:00:00Z', '2025-06-27T05:00:00Z')
+ * // 👉 "26/06/2025 - 27/06/2025"
+ *
+ * getDuration('', '')
+ * // 👉 "-"
+ */
 export const getDuration = (started_at: string, finished_at: string) => {
   const start = started_at ? formatDateFromUTC(started_at) : ''
   const end = finished_at ? formatDateFromUTC(finished_at) : ''
   const duration = [start, end].filter(Boolean).join(' - ') || '-'
   return duration
 }
+
 /**
  * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
  * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
