@@ -1,3 +1,6 @@
+import { Dayjs } from 'dayjs'
+import { Control } from 'react-hook-form'
+
 export type IButtonColors =
   | 'primary'
   | 'info'
@@ -12,6 +15,8 @@ export type IButtonColors =
   | 'text'
   | 'textUnderline'
   | 'quizActivity'
+  | 'okPopup'
+  | 'cancelPopup'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -49,6 +54,7 @@ export interface ITabs {
 export interface ITabsTeacher {
   id: number
   title: string
+  urlTitle?: string
 }
 export type IButtonCancelSubmitProps = {
   submit: IButtonProps
@@ -114,7 +120,21 @@ export enum EDateTime {
   monthFormat = 'MM/YYYY',
   fullDate = 'DD/MM/YYYY HH:mm',
   backendFormat = 'yyyy-MM-dd',
+  timepicker = 'HH:mm',
 }
+export interface IHookFormProps {
+  name: string
+  control: Control<any>
+  className?: string
+  disabled?: boolean
+  skeleton?: boolean
+  style?: React.CSSProperties
+}
+
+export interface IHookFormDateRangePicker extends IHookFormProps {
+  defaultValue?: [Dayjs, Dayjs]
+}
+
 export * from './common'
 export * from './courses'
 // export * from './exhibit'

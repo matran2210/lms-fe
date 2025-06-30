@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { ITopicProgress } from 'src/type/dashboard'
 import NoData from 'src/common/NoData'
+import { LABEL_MAX_LENGTH } from 'src/constants'
 
 const TopicProgress = () => {
   const router = useRouter()
@@ -23,13 +24,39 @@ const TopicProgress = () => {
           bottom: 10,
           containLabel: true,
         },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+          },
+          textStyle: {
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: 'Roboto',
+            color: '#374151',
+          },
+          formatter: (params: any) => {
+            const index = params[0]?.dataIndex
+            const fullLabel = data[index]?.short_name || data[index]?.name
+            return fullLabel || ''
+          },
+        },
         xAxis: {
           type: 'category',
           data: data.map((e: ITopicProgress) => e.short_name || e.name),
           axisLabel: {
             rotate: 40,
             fontFamily: 'Roboto',
-            color: '#374151',
+            formatter: function (value) {
+              return value.length > LABEL_MAX_LENGTH
+                ? value.slice(0, LABEL_MAX_LENGTH) + '…'
+                : value
+            },
+            rich: {
+              tooltip: {
+                color: '#374151',
+              },
+            },
             fontSize: 14,
             margin: 20,
           },
@@ -65,18 +92,18 @@ const TopicProgress = () => {
                 : 0
             }),
             type: 'bar',
+            barMaxWidth: 48,
             label: {
               show: true,
               formatter: '{c}%',
               fontWeight: 600,
               fontFamily: 'Roboto',
-              position: 'insideTop',
+              position: 'top',
             },
             showBackground: true,
             backgroundStyle: {
               color: 'rgba(255, 174, 76, 0.2)',
             },
-            barWidth: '50%',
           },
         ],
       }

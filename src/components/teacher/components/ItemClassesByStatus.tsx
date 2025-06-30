@@ -2,7 +2,6 @@ import ButtonIconSapp from '@components/base/button/ButtonIconSapp'
 import Icon from '@components/icons'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { truncateString } from '@utils/index'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import {
   ANIMATION,
@@ -14,7 +13,9 @@ import {
 } from 'src/constants'
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
 import { IMyClass } from 'src/type/classes'
-import { CLASS_TEACHER_STATUS } from '@utils/constants'
+import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@utils/constants'
+import Tooltip from 'src/common/Tooltip'
+import { isEmpty } from 'lodash'
 
 const statusMap = {
   [CLASS_TEACHER_STATUS.NOT_STARTED]: 'Not Started',
@@ -33,25 +34,43 @@ const ItemClassesByStatus = ({
   lastElementRef?: (node: HTMLDivElement) => void
   refetch?: () => void
 }) => {
-  const router = useRouter()
   const student = classes?.classes?.[0]?.class_user_instances?.[0]
   const classInstance = classes?.classes?.[0]
   const [daysDifference, setDaysDifference] = useState(0)
 
   useEffect(() => {
-    if (student?.finished_at) {
-      const currentLocalDate = new Date()
-      const currentUTCDate = convertLocalTimeToUTC(currentLocalDate)
-      const finishDate = new Date(student?.finished_at)
-      const finishUTCDate = convertLocalTimeToUTC(finishDate)
-      const currentTime = currentUTCDate.getTime()
-      const finishTime = finishUTCDate.getTime()
-      const theRestHours = (finishTime - currentTime) / 3600000
-      const dayLefts = convertHourToDayLeft(theRestHours)
-      // Update state with the difference
-      setDaysDifference(dayLefts)
+    if (isEmpty(classes)) return
+
+    let daysLeft = 0
+
+    const { duration_type, flexible_days, status, started_at, finished_at } =
+      classes
+
+    if (duration_type === FLEXIBLE && flexible_days) {
+      daysLeft = flexible_days
+    } else if (
+      status === CLASS_TEACHER_STATUS.NOT_STARTED &&
+      started_at &&
+      finished_at
+    ) {
+      const startTime = convertLocalTimeToUTC(new Date(started_at)).getTime()
+      const finishTime = convertLocalTimeToUTC(new Date(finished_at)).getTime()
+      const hoursDiff = (finishTime - startTime) / 3600000
+      daysLeft = convertHourToDayLeft(hoursDiff)
+    } else if (finished_at) {
+      const nowUTC = convertLocalTimeToUTC(new Date())
+      const finishUTC = convertLocalTimeToUTC(new Date(finished_at))
+
+      if (finishUTC < nowUTC) {
+        daysLeft = 0
+      } else {
+        const hoursDiff = (finishUTC.getTime() - nowUTC.getTime()) / 3600000
+        daysLeft = convertHourToDayLeft(hoursDiff)
+      }
     }
-  }, [classes, student?.finished_at])
+
+    setDaysDifference(daysLeft)
+  }, [classes])
 
   const disabledCourseByClassType = [
     CLASS_USER_TYPES.RESERVED,
@@ -172,7 +191,12 @@ const ItemClassesByStatus = ({
           {enableCourse ? (
             <span className="flex items-center gap-2 text-sm text-gray-400">
               <BookInClassIcon />
-              {truncateString(classes?.code, 15)}
+              <Tooltip
+                title={classes?.code}
+                showTooltip={classes?.code?.length > 15}
+              >
+                {truncateString(classes?.code, 15)}
+              </Tooltip>
             </span>
           ) : (
             <div className="name-class text-medium-sm text-gray-400">
@@ -188,11 +212,7 @@ const ItemClassesByStatus = ({
                     enableCourse ? 'text-bw-1' : 'text-gray-400'
                   } ml-2`}
                 >
-                  {daysDifference > 0
-                    ? daysDifference
-                    : enableCourse
-                      ? 1
-                      : 0}{' '}
+                  {daysDifference}{' '}
                 </span>
                 &nbsp;{daysDifference > 1 ? 'days left' : 'day left'}
               </span>
@@ -239,7 +259,7 @@ const ItemClassesByStatus = ({
           <div className="progressbar h-1.5 bg-gray-3">
             <div
               className={`progress-percentage ${
-                enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                enableCourse ? 'bg-primary' : 'bg-gray-2'
               } h-1.5`}
               style={{ width: `${classes?.progress}%` }}
             ></div>
@@ -257,13 +277,13 @@ const ItemClassesByStatus = ({
               iconColorProps={isProgress ? '#ffb800' : '#374151'}
               className={
                 isProgress
-                  ? 'border border-primary text-primary'
+                  ? 'text- border border-primary text-orange-3'
                   : 'border border-gray-800'
               }
               link={`${PageLink.TEACHER_MY_CLASS}/${classes?.id}`}
             />
           ) : (
-            <div className="action relative flex h-8 items-center justify-end"></div>
+            <div className="action relative flex h-8 items-center justify-end" />
           )}
         </div>
       </div>

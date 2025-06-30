@@ -9,10 +9,11 @@ import { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import NoData from 'src/common/NoData'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
+import { COURSE_TYPE } from 'src/constants'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
 const ExamInformation = () => {
@@ -77,17 +78,19 @@ const ExamInformation = () => {
                           {data.data?.exam?.examination?.name ?? '-'}
                         </p>
                         {data.data?.is_final_examination_subject === true ? (
-                          <SappTooltip
+                          <Tooltip
                             showTooltip={true}
                             title={
                               'This is your official exam date and can not be changed'
                             }
                           >
                             <CheckCircleTwoTone twoToneColor={'#52c41a'} />
-                          </SappTooltip>
+                          </Tooltip>
                         ) : (
-                          data?.data?.remaining_changes > 0 && (
-                            <SappTooltip
+                          data?.data?.remaining_changes > 0 &&
+                          data?.data.course.course_type ===
+                            COURSE_TYPE.NORMAL_COURSE && (
+                            <Tooltip
                               showTooltip={true}
                               title={'Change Exam Date'}
                             >
@@ -97,7 +100,7 @@ const ExamInformation = () => {
                               >
                                 <EditIcon />
                               </div>
-                            </SappTooltip>
+                            </Tooltip>
                           )
                         )}
                       </div>

@@ -1,7 +1,7 @@
 import useResizeObserver from '@react-hook/resize-observer'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { useEffect, useRef, useState } from 'react'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 
 interface ResponsiveTextTruncateProps {
   text: string
@@ -129,13 +129,13 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
       }}
     >
       {isShowTooltip && textTooltip ? (
-        <SappTooltip
+        <Tooltip
           title={textTooltip}
           showTooltip={textTooltip?.length > (maxLength ?? 60)}
           placement={placementTooltip}
         >
           {visibleText}
-        </SappTooltip>
+        </Tooltip>
       ) : (
         visibleText
       )}

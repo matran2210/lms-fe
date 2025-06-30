@@ -39,7 +39,7 @@ const SAPPButtonV2 = ({
       colorClass = 'bg-primary text-white hover:!bg-primary-2 hover:!text-white'
       break
     case 'secondary':
-      colorClass = 'bg-gray-4 text-gray-12 hover:!bg-gray-3 hover:!text-gray-12'
+      colorClass = 'bg-gray-4 text-gray-13 hover:!bg-gray-3 hover:!text-gray-13'
       break
   }
 

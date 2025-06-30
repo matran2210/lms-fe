@@ -114,6 +114,14 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
   return words.join(' ')
 }
 
+export const convertHumanReadableToSnakeCase = (str: string) => {
+  const words = str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  return words.join('_')
+}
+
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
@@ -164,7 +172,11 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     'text-align: -webkit-center',
   )
 }
-
+// Hàm thay thế style white-space: pre-wrap thành style white-space: normal trong chuỗi HTML
+export const replaceWhiteSpacePreWrapToNormal = (htmlString: string) => {
+  // Sử dụng biểu thức chính quy để thay thế
+  return htmlString.replace(/white-space:\s*pre-wrap/g, 'white-space: normal')
+}
 export const useGetData = (
   queryKey: string,
   params: Object,
@@ -380,6 +392,15 @@ export const removeHtmlTags = (htmlString?: string) => {
 }
 
 /**
+ * @description Chuyển đổi một chuỗi ngày thành chuỗi ngày được định dạng.
+ * @param {string} date - Chuỗi ngày cần chuyển đổi.
+ * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày trả về.
+ * @return {string} - Chuỗi ngày đã được định dạng.
+ */
+export const sappFormatDate = (date?: string, format = 'DD/MM/YYYY') =>
+  date ? dayjs(date).format(format) : undefined
+
+/**
  * @description Chuyển đổi một chuỗi ngày UTC thành chuỗi ngày địa phương được định dạng.
  * @param {string} date - Chuỗi ngày UTC cần chuyển đổi.
  * @param {string} [format='DD/MM/YYYY'] - Định dạng của chuỗi ngày địa phương trả về.
@@ -439,4 +460,34 @@ export const clearStylesHtml = (htmlContent: string) => {
       .replace(/\sstyle=".*?"/gi, '') // Xóa các thuộc tính inline style
   }
   return ''
+}
+
+export function convertSlugToTitle(slug: string): string {
+  if (!slug) return ''
+
+  return slug
+    .replace(/-/g, ' ') // thay dấu - thành dấu cách
+    .replace(/\s+/g, ' ') // gộp các khoảng trắng thừa
+    .trim() // xoá khoảng trắng 2 đầu
+    .split(' ') // tách từ
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
+    .join(' ') // ghép lại
+}
+
+export function setCookie(name: string, value: string, days = 7) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`
+}
+
+export function getCookie(name: string): string | null {
+  return (
+    document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(name + '='))
+      ?.split('=')[1] || null
+  )
+}
+
+export function deleteCookie(name: string) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }

@@ -1,0 +1,45 @@
+import { ActionIcon } from '@assets/icons'
+import { Dropdown, Tooltip } from 'antd'
+import { ReactNode, useState } from 'react'
+interface TableActionCellProps {
+  children: (closeDropdown: () => void) => ReactNode
+  customWidth?: string
+}
+
+const TableActionCell: React.FC<TableActionCellProps> = ({
+  children,
+  customWidth,
+}) => {
+  const [openDropdown, setOpenDropdown] = useState(false)
+  const closeDropdown = () => setOpenDropdown(false)
+
+  return (
+    <Dropdown
+      open={openDropdown}
+      onOpenChange={setOpenDropdown}
+      trigger={['click']}
+      placement="bottomRight"
+      overlayClassName="custom-dropdown"
+      dropdownRender={() => (
+        <div
+          className={`${
+            customWidth ?? 'w-45'
+          } flex flex-col rounded-lg bg-white text-sm font-semibold text-white shadow-lg`}
+        >
+          {children(closeDropdown)}
+        </div>
+      )}
+    >
+      <Tooltip title="Action" classNames={{ root: 'tooltip-action' }}>
+        <span
+          className="h-[${height}] flex w-9 cursor-pointer items-center justify-center rounded-full bg-transparent text-gray-500"
+          onClick={() => setOpenDropdown(!openDropdown)}
+        >
+          <ActionIcon />
+        </span>
+      </Tooltip>
+    </Dropdown>
+  )
+}
+
+export default TableActionCell

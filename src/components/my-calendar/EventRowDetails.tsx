@@ -63,6 +63,8 @@ const EventRowDetails = ({ event }: { event: IEvent }) => {
         </div>,
       )}
 
+      {renderDetail(POPUP_EVENT_DETAILS.REPEAT, event?.repeat || '')}
+
       {/* Meeting link */}
       {event.meetingLink &&
         renderDetail(

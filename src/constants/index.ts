@@ -7,7 +7,8 @@ export const PageLink = {
   TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
-  TEACHER_CHAPTER_TEST: '/teacherss/my-class/chapter-test',
+  TEACHER_MY_REQUEST: '/teachers/my-request',
+  TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -24,10 +25,12 @@ export const PageLink = {
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
   RESULTS: '/courses/my-course/[courseId]/results',
-  MY_CALENDAR: '/my-calendar',
+  MY_CALENDAR: '/teachers/my-calendar',
   REQUEST: '/request',
-  MY_REQUEST: '/my-request',
+  MY_REQUEST: '/teachers/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
+  COURSE_CONTENT: '/courses/my-course',
+  CALENDAR: '/calendar',
 }
 
 export const TitleSidebar = {
@@ -43,12 +46,22 @@ export const TitleSidebar = {
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
   EXAM_INFORMATION: 'Exam Information',
+  COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
+  CALENDAR: 'Calendar',
+}
+
+export const TitleTeacherSidebar = {
+  DASHBOARD: 'Dashboard',
+  MYCLASS: 'My Class',
+  MYCALENDAR: 'My Calendar',
+  MYREQUEST: 'My Request',
+  NOTIFICATIONS: 'Notifications',
 }
 
 export const GUIDELINE_PASSWORD = [
@@ -95,6 +108,8 @@ export enum RESPONSE_OPTION {
 }
 export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024
 export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024
+export const DEFAULT_PAGE_SIZE = 10
+export const DEFAULT_PAGE_NUMBER = 1
 export const VALID_UPLOAD_EDITOR = [
   { type: 'image/*', size: MAX_UPLOAD_SIZE },
   { type: 'video/*', size: MAX_UPLOAD_VIDEO_SIZE },
@@ -290,6 +305,7 @@ export const POPUP_EVENT_DETAILS = {
   TITLE: 'Event name',
   TIME: 'Time',
   TYPE: 'Event type',
+  REPEAT: 'Repeat',
   CLASSROOM_NAME: 'Classroom name',
   CLASSROOM_ADDRESS: 'Classroom address',
   MEETING_LINK: 'Meeting link',
@@ -310,13 +326,15 @@ export const EVENT_TYPES = {
   BUSY: 'BUSY',
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
   TEACHING: 'TEACHING',
   BUSY: 'BUSY',
-  TIME_OFF: 'TIME_OFF',
+  HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
+  LIVE_ONLINE: 'LIVE_ONLINE',
 } as const
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
@@ -326,11 +344,12 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.BUSY]: 'Busy schedule',
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
+  [EVENT_TYPES.LIVE_ONLINE]: '',
 }
 
-export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL).map(
-  ([key, value]) => ({ value: key, label: value }),
-)
+export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
+  .filter(([key, label]) => key !== EVENT_TYPES.LIVE_ONLINE)
+  .map(([key, value]) => ({ value: key, label: value }))
 
 export const EVENT_REPEAT_TYPES = {
   NO_REPEAT: 'NO_REPEAT',
@@ -347,6 +366,9 @@ export const EVENT_REPEAT_LABEL = {
   [EVENT_REPEAT_TYPES.DAILY]: 'Daily',
   [EVENT_REPEAT_TYPES.EVERY_WEEKDAY]: 'Every weekday (Monday to Friday)',
   [EVENT_REPEAT_TYPES.CUSTOM]: 'Custom',
+  [EVENT_REPEAT_TYPES.WEEKLY]: 'Weekly',
+  [EVENT_REPEAT_TYPES.MONTHLY]: 'Monthly',
+  [EVENT_REPEAT_TYPES.ANNUALLY]: 'Annually',
 }
 
 export enum FREQUENCY_UNITS {
@@ -460,6 +482,46 @@ export enum TEST_ATTEMPT_TYPE {
   CHAPTER_TEST = 'CHAPTER_TEST',
   ENTRANCE_TEST = 'ENTRANCE_TEST',
 }
+export enum CALENDAR_COLOR_TYPES {
+  BLUE_COLOR = 'TEACHING', // màu xanh dương
+  RED_COLOR = 'BUSY', // màu đỏ
+  YELLOW_COLOR = 'HOLIDAY', // màu vàng
+  GREEN_COLOR = 'OTHER', // màu xanh lá
+  PURPLE_COLOR = 'LIVE_ONLINE', // màu xanh lá
+}
+
+export enum CALENDAR_FILTER_TYPE {
+  HOLIDAY = 'HOLIDAY',
+  OVERDUE = 'OVERDUE',
+  ONLINE = 'ONLINE',
+  LIVE_ONLINE = 'LIVE_ONLINE',
+  OFFLINE = 'OFFLINE',
+  CASE_STUDY = 'CASE_STUDY',
+  KEY_BEFORE_CONTENT = 'KEY_BEFORE_CONTENT',
+  TEST = 'TEST',
+}
+
+export const CALENDAR_FILTER_TYPE_LABEL = {
+  [CALENDAR_FILTER_TYPE.HOLIDAY]: 'Holiday',
+  [CALENDAR_FILTER_TYPE.OVERDUE]: 'Overdue',
+  [CALENDAR_FILTER_TYPE.ONLINE]: 'Online',
+  [CALENDAR_FILTER_TYPE.LIVE_ONLINE]: 'Live Online',
+  [CALENDAR_FILTER_TYPE.OFFLINE]: 'Offline',
+  [CALENDAR_FILTER_TYPE.CASE_STUDY]: 'Case Study',
+  [CALENDAR_FILTER_TYPE.KEY_BEFORE_CONTENT]: 'Key Before Content',
+  [CALENDAR_FILTER_TYPE.TEST]: 'Test',
+}
+
+export const LEARNING_USER_STATUS = {
+  READY_TO_LEARN: 'READY_TO_LEARN', // Chưa học
+  IN_PROGRESS: 'IN_PROGRESS', // Đang học
+  COMPLETED: 'COMPLETED', // Đã học xong
+}
+
+export const CALENDAR_TYPE = {
+  LMS: 'LMS',
+  OPS: 'OPS',
+}
 
 export const PDF_VIEWER_URL = 'https://mozilla.github.io/pdf.js/web/viewer.html'
 export const OFFICE_VIEWER_URL =
@@ -471,10 +533,25 @@ export enum QUIZ_ATTEMPT_STATUS {
   UN_SUBMITTED = 'UN_SUBMITTED',
   IN_PROGRESS = 'IN_PROGRESS',
 }
+
+export enum QUIZ_ATTEMPT_GRADING_STATUS {
+  DRAFT = 'DRAFT',
+  FINISHED = 'FINISHED',
+  UN_FINISHED = 'UN_FINISHED',
+  AWAITING_GRADING = 'AWAITING_GRADING',
+  FINISHED_GRADING = 'FINISHED_GRADING',
+}
+
 export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
+  DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
+
+export const LABEL_MAX_LENGTH = 12
+
+export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+
 export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'

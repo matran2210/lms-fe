@@ -9,13 +9,13 @@ interface UsePagingProps {
   params: Record<string, any>
 }
 
-interface UsePagingResultSapp<TData = any> {
+interface UsePagingResultSapp<TData = any, TError = unknown>
+  extends Omit<UseQueryResult<TData, TError>, 'data' | 'isLoading'> {
   data: TData
   pagination: TablePaginationConfig
   setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
   isLoading: boolean
   handleChangeParams: (currentPage: number, pageSize: number) => void
-  other?: Omit<UseQueryResult<TData, unknown>, 'data' | 'isLoading'>
 }
 
 const useSappPaging = ({
@@ -48,10 +48,19 @@ const useSappPaging = ({
   }
 
   useEffect(() => {
-    if (data?.meta?.total_records || data?.metadata?.total_records) {
+    if (
+      data?.meta?.total_records ||
+      data?.metadata?.total_records ||
+      data?.data?.metadata?.total_records ||
+      data?.data?.meta?.total_records
+    ) {
       setPagination((prev) => ({
         ...prev,
-        total: data?.meta?.total_records || data?.metadata?.total_records,
+        total:
+          data?.meta?.total_records ||
+          data?.metadata?.total_records ||
+          data?.data?.metadata?.total_records ||
+          data?.data?.meta?.total_records,
       }))
     }
   }, [data])
@@ -62,7 +71,7 @@ const useSappPaging = ({
     setPagination, // Hàm cho phép cập nhật state phân trang thủ công nếu cần
     isLoading, // Trạng thái loading từ react-query (đang fetch dữ liệu hay không)
     handleChangeParams, // Hàm dùng để cập nhật current page và page size khi user thao tác với bảng
-    other, // Các thuộc tính khác còn lại từ useQuery như error, refetch, isError, isSuccess, etc.
+    ...other, // Các thuộc tính khác còn lại từ useQuery như error, refetch, isError, isSuccess, etc.
   }
 }
 

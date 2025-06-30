@@ -1,30 +1,34 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
+import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
-import { Tooltip } from 'antd'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round } from 'lodash'
+import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import {
   ANIMATION,
   BUTTON_STATUS,
   CLASS_STATUS,
   CLASS_USER_TYPES,
   COURSE_STATUS,
+  COURSE_TYPE,
+  LEARNING_USER_STATUS,
+  PROGRAM,
 } from 'src/constants'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
 import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
-import { CoursesAPI } from 'src/pages/api/courses'
-import { useCourseContext } from '@contexts/index'
+import ModalFoundationCompleted from './ModalFoundationCompleted'
+import dayjs from 'dayjs'
 
 const Course = ({
   course,
@@ -128,6 +132,7 @@ const Course = ({
             return BUTTON_STATUS.Active
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
+
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
@@ -142,6 +147,16 @@ const Course = ({
             if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
           } else return BUTTON_STATUS.Disabled
         }
+
+        if (startedAt && isNull(finishedAt)) {
+          if (studentStatus === LEARNING_USER_STATUS.READY_TO_LEARN)
+            return BUTTON_STATUS.Begin
+          if (studentStatus === LEARNING_USER_STATUS.IN_PROGRESS)
+            return BUTTON_STATUS.Resume
+          if (studentStatus === LEARNING_USER_STATUS.COMPLETED)
+            return BUTTON_STATUS.Review
+        }
+
         return BUTTON_STATUS.Disabled
       }
       if (
@@ -179,15 +194,19 @@ const Course = ({
   }
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
-  async function activeCourse() {
+  async function activeCourse(foundation_class_id?: string) {
     try {
       const params = {
-        classId: `${classInstance?.id}`,
+        classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       }
-      await CoursesAPI.activeCourse(params)
-      // await fetchCourseList()
-      refetch()
-      toast.success('Active thành công!')
+      const res = await CoursesAPI.activeCourse(params)
+      if (res?.success) {
+        router.push(`/courses/my-course/${foundation_class_id}`)
+        refetch()
+        if (course?.course_categories?.[0]?.name !== 'ACCA') {
+          toast.success('Active thành công!')
+        }
+      }
     } catch (error) {}
   }
   async function extendCourse() {
@@ -211,10 +230,15 @@ const Course = ({
   }, [courseType])
 
   const handleCourseDetail = () => {
+    const category = course?.course_categories[0]?.name || ''
     const isRedirectDashboard =
-      course?.course_type == 'NORMAL_COURSE' ||
-      course?.course_type == 'PRACTICE_COURSE'
+      (course?.course_type == COURSE_TYPE.NORMAL_COURSE ||
+        course?.course_type == COURSE_TYPE.PRACTICE_COURSE) &&
+      (category == PROGRAM.ACCA ||
+        category == PROGRAM.CFA ||
+        category == PROGRAM.CMA)
 
+    // Redirect to dashboard if the course type is practice, normal
     if (
       isRedirectDashboard &&
       (determineButtonToShow == BUTTON_STATUS.Review ||
@@ -225,13 +249,15 @@ const Course = ({
       router.push(`/courses/my-course/${classInstance?.id}`)
     }
 
+    router.push(`/courses/my-course/${classInstance?.id}`)
+
     if (isRedirectDashboard) {
       localStorage.setItem(
         'courseInfo',
         JSON.stringify({
           name: course.name,
           courseType: course.course_type,
-          category: course.course_categories[0]?.name,
+          category: category,
         }),
       )
     } else {
@@ -251,11 +277,46 @@ const Course = ({
     }
   }
 
+  /**
+   * @description Trạng thái điều khiển việc hiển thị modal hoặc giao diện tiếp tục học lớp nền tảng.
+   *
+   * @type {boolean}
+   * @default false - Mặc định đóng modal.
+   */
+  const [openContinue, setOpenContinue] = useState(false)
+
+  const utcNow = dayjs().utc()
+  const isPendingLesson =
+    classInstance?.type === 'LESSON' && !student?.is_passed
+  const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+  const isFixedDuration =
+    classInstance?.duration_type === 'FIXED' ||
+    classInstance?.duration_type === 'FLEXIBLE'
+  const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
+  const hasNotStarted = dayjs(utcNow).isBefore(
+    classInstance?.class_user_instances?.[0]?.started_at,
+  )
+  const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
+  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
+
   const courseAction = () => {
-    if (classInstance?.type === 'LESSON' && student?.is_passed === false) {
+    // Handle pending lesson cases
+    if (isPendingLesson) {
+      if (isAccaCourse) {
+        if (hasNotStarted) {
+          setOpenClass(true)
+          return
+        }
+        setOpenContinue(true)
+        return
+      }
       setOpenLesson(true)
-    } else if (determineButtonToShow === 'Active') {
-      if (classInstance?.duration_type === 'FLEXIBLE') {
+      return
+    }
+
+    // Handle active course case
+    if (determineButtonToShow === 'Active') {
+      if (isFlexibleDuration) {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
         const classFinishedAt = parseISO(
@@ -268,12 +329,24 @@ const Course = ({
         setTimeActive(Number(getDateActive + 1))
       }
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Extend') {
+      return
+    }
+
+    // Handle extend case
+    if (determineButtonToShow === 'Extend') {
       setOpenExtend(true)
-    } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
+      return
+    }
+
+    // Handle not opened case
+    if (isNotOpened) {
       setOpenClass(true)
-    } else {
-      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
+      return
+    }
+
+    // Handle default case
+    if (!isCanceled) {
+      handleCourseDetail()
     }
   }
 
@@ -307,6 +380,38 @@ const Course = ({
 
   const progressPart = percentProgress > 100 ? 100 : percentProgress
 
+  /**
+   * @description Xử lý điều hướng người dùng đến lớp học nền tảng (foundation class) đầu tiên của khóa học.
+   * URL sẽ được tạo từ `foundation_class_id` nằm trong kết nối lớp học thường.
+   *
+   * @remarks
+   * - Hàm sử dụng `router.push` để điều hướng.
+   * - Nếu không có `course` hoặc dữ liệu lớp học chưa sẵn sàng, đường dẫn có thể không chính xác.
+   */
+  const handleContinueFoundation = () => {
+    router.push(
+      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+    )
+  }
+
+  /**
+   * @description Gửi yêu cầu bỏ qua (skip) lớp học nền tảng hiện tại cho khóa học.
+   *
+   * @remarks
+   * - Gọi API `CoursesAPI.skipFoundation` với `classId` đầu tiên trong danh sách lớp học.
+   * - Sau khi thao tác thành công, gọi lại `refetch()` để cập nhật lại dữ liệu giao diện.
+   *
+   * @returns {Promise<void>}
+   */
+  const handleSkipCourse = async () => {
+    try {
+      await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
+    } finally {
+      setOpenContinue(false)
+      handleCourseDetail()
+    }
+  }
+
   return (
     <>
       {determineButtonToShow !== 'Hidden' && (
@@ -331,12 +436,12 @@ const Course = ({
                   trackGAEvent('Click Title Course Item')
                 }}
               >
-                <SappTooltip
+                <Tooltip
                   title={course?.name}
-                  showTooltip={(course?.name as string)?.length > 50}
+                  showTooltip={(course?.name as string)?.length > 60}
                 >
-                  {truncateString(course?.name, 50)}
-                </SappTooltip>
+                  {truncateString(course?.name, 60)}
+                </Tooltip>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -344,12 +449,12 @@ const Course = ({
                 <div className="name-class text-medium-sm text-gray-1">
                   Class:
                   <span className="ml-1 font-medium text-bw-1">
-                    <SappTooltip
+                    <Tooltip
                       title={course?.classes?.[0]?.code}
-                      showTooltip={course?.classes?.[0]?.code?.length > 15}
+                      showTooltip={course?.classes?.[0]?.code?.length > 20}
                     >
-                      {truncateString(course?.classes?.[0]?.code, 15)}
-                    </SappTooltip>
+                      {truncateString(course?.classes?.[0]?.code, 20)}
+                    </Tooltip>
                   </span>
                 </div>
               ) : (
@@ -386,7 +491,6 @@ const Course = ({
                       }}
                     />
                   }
-                  color="#ffffff"
                   placement="bottom"
                 >
                   <p
@@ -394,7 +498,7 @@ const Course = ({
                       __html: clearStylesHtml(course?.description),
                     }}
                     className={`text-bas h-24 ${
-                      enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                      enableCourse ? 'text-bw-1' : 'text-gray-2'
                     }`}
                   />
                 </Tooltip>
@@ -404,7 +508,7 @@ const Course = ({
                     __html: clearStylesHtml(course?.description),
                   }}
                   className={`text-bas h-24 ${
-                    enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                    enableCourse ? 'text-bw-1' : 'text-gray-2'
                   }`}
                 />
               )}
@@ -421,7 +525,7 @@ const Course = ({
                     />
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       } ml-px pl-2`}
                     >
                       {enableCourse ? showStatus : 'Expired'}
@@ -430,7 +534,7 @@ const Course = ({
                   <div className="number">
                     <p
                       className={`text-medium-sm font-medium ${
-                        enableCourse ? 'text-bw-1' : 'text-gray-2 '
+                        enableCourse ? 'text-bw-1' : 'text-gray-2'
                       }`}
                     >
                       {progressPart}%
@@ -440,7 +544,7 @@ const Course = ({
                 <div className="progressbar h-1.5 bg-gray-3">
                   <div
                     className={`progress-percentage ${
-                      enableCourse ? 'bg-primary ' : 'bg-gray-2'
+                      enableCourse ? 'bg-primary' : 'bg-gray-2'
                     } h-1.5`}
                     style={{ width: `${progressPart}%` }}
                   ></div>
@@ -491,6 +595,20 @@ const Course = ({
         open={openClass}
         setOpen={setOpenClass}
         started_at={classInstance?.class_user_instances?.[0]?.started_at}
+      />
+      <ModalFoundationCompleted
+        openContinue={openContinue}
+        handleSkipCourse={handleSkipCourse}
+        handleClose={() => setOpenContinue(false)}
+        handleContinueFoundation={
+          classInstance?.duration_type === 'FLEXIBLE'
+            ? () =>
+                activeCourse(
+                  classInstance?.normal_class_connections?.[0]
+                    ?.foundation_class_id,
+                )
+            : handleContinueFoundation
+        }
       />
     </>
   )

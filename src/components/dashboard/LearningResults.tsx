@@ -1,29 +1,46 @@
-import EChart, { EChartsProps } from '@components/base/chart/Chart'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import infoIcon from '@assets/images/info-icon.svg'
-import Image from 'next/image'
+import EChart, { EChartsProps } from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ILearningResult } from 'src/type/dashboard'
-import NoData from 'src/common/NoData'
 import dayjs from 'dayjs'
-import { Tooltip } from 'antd'
-import { COURSE_TYPE } from 'src/constants'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import NoData from 'src/common/NoData'
+import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
+
+import Tooltip from 'src/common/Tooltip'
+import { COURSE_TYPE, DATE_FORMAT, LABEL_MAX_LENGTH } from 'src/constants'
 
 const LearningResults = () => {
   const router = useRouter()
   const [option, setOption] = useState<any>()
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [hasLearning, setHasLearning] = useState<boolean>(false)
+  const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
 
-  const handleLearningResults = (data: ILearningResult[]) => {
-    if (data.length) {
+  const shortName = (name: string) => {
+    return name.length < LABEL_MAX_LENGTH
+      ? name
+      : `${name.slice(0, LABEL_MAX_LENGTH)}...`
+  }
+
+  const handleLearningResults = (
+    data: ILearningResult[] | IMockTestResult | any,
+  ) => {
+    const results = isNormal ? data : data.reports
+
+    if (!isNormal && data.mock_tests?.length == 1)
+      setMockTestId(data.mock_tests[0].id)
+
+    if (results.length) {
       let total = 0
-      const hasLearning = data.some((e: ILearningResult) => e.score)
-      const indicator = data.map((e: ILearningResult, index: number) => {
+      const hasLearning = results.some((e: ILearningResult) => e.score)
+      const indicator = results.map((e: ILearningResult, index: number) => {
         total += e.score
-        const name = `${e.short_name || e.name}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
+        let newName = e.short_name ? shortName(e.short_name) : shortName(e.name)
+        const name = `${newName}\n${hasLearning ? e.score : e.mock_test_score || 0}%`
         if (index) return { name: name, max: 100 }
 
         return {
@@ -31,7 +48,6 @@ const LearningResults = () => {
           max: 100,
           axisLabel: {
             show: true,
-            align: '',
             fontSize: 10,
           },
         }
@@ -49,19 +65,34 @@ const LearningResults = () => {
           axisName: {
             fontSize: 12,
             color: '#374151',
-            lineHeight: 16,
+            lineHeight: 14,
             fontFamily: 'Roboto',
           },
           z: 1,
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: function (params: any) {
+            const values = params.value
+            const indicators = results.map((e: ILearningResult) => e.name)
+            let tooltipText = `<strong>${params.name}</strong><br/>`
+            values.forEach((val: any, i: number) => {
+              tooltipText += `<span class='text-blue-5'>●</span> ${indicators[i]}: ${val}%<br/>`
+            })
+            return tooltipText
+          },
         },
         series: [
           {
             name: 'Learning Results',
             type: 'radar',
+            tooltip: {
+              show: isNormal,
+            },
             data: [
               {
-                value: data.map((e: ILearningResult) => e.score),
-                name: 'Learning results',
+                value: results.map((e: ILearningResult) => e.score),
+                name: 'Your Learning results',
                 lineStyle: {
                   color: '#7086FD',
                 },
@@ -73,8 +104,8 @@ const LearningResults = () => {
               {
                 value: isNormal
                   ? []
-                  : data.map((e: ILearningResult) => e.mock_test_score),
-                name: 'Learning results',
+                  : results.map((e: ILearningResult) => e.mock_test_score),
+                name: 'Mock test results',
                 lineStyle: {
                   color: '#6FD195',
                 },
@@ -97,7 +128,7 @@ const LearningResults = () => {
               type: 'rect',
               invisible: !isNormal,
               shape: {
-                width: 60,
+                width: total ? 60 : 50,
                 height: 30,
               },
               style: {
@@ -107,7 +138,7 @@ const LearningResults = () => {
                 shadowColor: 'rgba(0, 0, 0, 0.1)',
                 shadowBlur: 10,
               },
-              x: -30,
+              x: total ? -30 : -25,
               y: -15,
               z: 3,
             },
@@ -115,10 +146,10 @@ const LearningResults = () => {
               type: 'text',
               invisible: !isNormal,
               style: {
-                text: `${parseFloat((total / data.length).toFixed(2))}%`,
+                text: `${parseFloat((total / results.length).toFixed(2))}%`,
                 fontSize: 16,
                 fontWeight: 'bold',
-                fill: '#7086FD',
+                fill: !total ? '#252F4A' : '#7086FD',
                 align: 'center',
                 verticalAlign: 'middle',
               },
@@ -130,6 +161,7 @@ const LearningResults = () => {
         },
       }
 
+      setHasLearning(hasLearning)
       setOption(option)
     } else {
       setOption(null)
@@ -160,7 +192,6 @@ const LearningResults = () => {
       <div className="mb-5 flex items-center justify-between border-b pb-3">
         {isNormal ? (
           <Tooltip
-            arrow
             title={
               <div className="text-support-1">
                 {courseInfo?.category == 'ACCA'
@@ -168,10 +199,7 @@ const LearningResults = () => {
                   : '%Results = Module test (40%) + Topic test (60%)'}
               </div>
             }
-            color="white"
-            placement="top"
-            mouseEnterDelay={0}
-            mouseLeaveDelay={0}
+            className="dashboard_tooltip"
           >
             <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
               Your Learning Results
@@ -184,19 +212,42 @@ const LearningResults = () => {
           </div>
         )}
         <div className="text-xsm text-gray-11 4xl:text-sm">
-          {`Last Update: ${dayjs().format('HH:mm - DD/MM/YY')}`}
+          {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
       {option && (
         <div
-          className={`flex grow gap-5 ${isNormal ? 'flex-col' : 'flex-row'}`}
+          className={`flex grow ${isNormal ? 'flex-col' : 'flex-row gap-5 px-5 2xl:px-12'}`}
         >
           <div className="grow">
             <EChart option={option} />
           </div>
-          <div className="flex items-center justify-center gap-2.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-blue-5"></span>
-            <span className="font-medium">Learning results</span>
+          <div
+            className={`${isNormal ? '' : 'flex flex-col items-start justify-center gap-4'}`}
+          >
+            {!isNormal && (
+              <div className="flex items-center justify-center gap-2.5">
+                <span className="min-h-3 min-w-3 rounded-full bg-green-4"></span>
+                <a
+                  href={
+                    mockTestId
+                      ? `${window.location.origin}/courses/test/test-result/${mockTestId}`
+                      : ''
+                  }
+                  target="_blank"
+                  className={`inline-block min-w-fit font-medium ${!mockTestId ? 'pointer-events-none' : 'hover:text-green-4'}`}
+                  rel="noreferrer"
+                >
+                  Mock test results
+                </a>
+              </div>
+            )}
+            {isNormal || hasLearning ? (
+              <div className="flex items-center justify-center gap-2.5">
+                <span className="min-h-3 min-w-3 rounded-full bg-blue-5"></span>
+                <span className="min-w-fit font-medium">Learning results</span>
+              </div>
+            ) : null}
           </div>
         </div>
       )}

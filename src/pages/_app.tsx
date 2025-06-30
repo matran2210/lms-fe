@@ -20,7 +20,7 @@ import Aos from 'aos'
 import 'aos/dist/aos.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -43,6 +43,9 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import 'sapp-common-package/dist/sapp-editor.css'
+import 'sapp-common-package/dist/index.css'
+import 'preview-part/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 
@@ -66,6 +69,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       },
     },
   })
+
+  // Check if URL contains '/teachers'
+  const isTeacherPage = router.asPath.includes('/teachers')
 
   useEffect(() => {
     onMessageListener().then((data: any) => {
@@ -145,27 +151,110 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     '/case-study/[id]',
     '/certificates/[id]',
     '/case-study/result/[id]',
+    '/teachers',
   ]
 
-  const showHelp = !excludedPathsHelp.some((path) =>
-    router.pathname.includes(path),
-  )
+  const showHelp =
+    !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
+    !isTeacherPage // Add condition to hide help on teacher pages
 
+  // Handle HubSpot widget visibility based on URL
   useEffect(() => {
-    const container = document.getElementById('hubspot-conversations-iframe')
-    const message = document.getElementById(
-      'hubspot-messages-iframe-container',
-    ) as HTMLElement
-    if (container) {
-      if (!showHelp) {
-        container.classList.add('visible-icon')
-        message.classList.add('visible-icon')
+    const hideHubspotWidget = () => {
+      // Target specific elements from the DOM structure we observed
+      const container = document.getElementById(
+        'hubspot-messages-iframe-container',
+      )
+      const chatFrame = document.getElementById('hubspot-messages-iframe')
+      const widgetContainer = document.querySelector('.hs-shadow-container')
+
+      if (isTeacherPage) {
+        // Hide HubSpot chat widget on teacher pages
+        if (container) {
+          container.classList.add('visible-icon')
+          // Add additional inline styles for redundancy
+          container.style.display = 'none'
+        }
+
+        if (chatFrame) {
+          chatFrame.style.display = 'none'
+        }
+
+        if (widgetContainer) {
+          widgetContainer.classList.add('visible-icon')
+        }
+
+        // Add CSS rule to ensure it stays hidden
+        const style = document.createElement('style')
+        style.id = 'hubspot-hide-style'
+        style.innerHTML = `
+          #hubspot-messages-iframe-container, 
+          #hubspot-messages-iframe,
+          .hs-shadow-container { 
+            display: none !important; 
+            visibility: hidden !important; 
+          }
+        `
+        // Only add if it doesn't exist already
+        if (!document.getElementById('hubspot-hide-style')) {
+          document.head.appendChild(style)
+        }
       } else {
-        container.classList.remove('visible-icon')
-        message.classList.remove('visible-icon')
+        // Remove the style tag if path doesn't contain '/teachers'
+        const styleTag = document.getElementById('hubspot-hide-style')
+        if (styleTag) {
+          document.head.removeChild(styleTag)
+        }
+
+        // Only show if not in excluded paths
+        if (showHelp) {
+          if (container) {
+            container.classList.remove('visible-icon')
+            container.style.display = ''
+          }
+
+          if (chatFrame) {
+            chatFrame.style.display = ''
+          }
+
+          if (widgetContainer) {
+            widgetContainer.classList.remove('visible-icon')
+          }
+        }
       }
     }
-  }, [showHelp])
+
+    // Initial run
+    hideHubspotWidget()
+
+    // Set up an observer to handle dynamically loaded HubSpot elements
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          // If HubSpot elements are dynamically added, hide them if needed
+          hideHubspotWidget()
+        }
+      }
+    })
+
+    // Start observing the document body for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+
+    // Also listen for route changes
+    const handleRouteChange = () => {
+      setTimeout(hideHubspotWidget, 300) // Short delay to ensure DOM is updated
+    }
+
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    return () => {
+      observer.disconnect()
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [isTeacherPage, router, showHelp])
 
   useEffect(() => {
     if (
@@ -185,6 +274,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     const handleRouteChange = () => {
       // Lưu URL hiện tại vào localStorage trước khi đổi sang URL mới
       localStorage.setItem('previousUrl', router.asPath)
+      if (
+        router.asPath.includes('courses') &&
+        !router.asPath.includes('your-answers-detail')
+      ) {
+        localStorage.setItem('previousCourseUrl', router.asPath)
+      }
     }
 
     // Lắng nghe sự kiện chuyển route
@@ -220,12 +315,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                         <CtaTrial />
                         <Component {...pageProps} />
                       </div>
-                      {showHelp && (
-                        <>
-                          <BackToTop />
-                          <Help showHelp={showHelp} />
-                        </>
-                      )}
+                      <BackToTop />
+                      <Help showHelp={showHelp} />
                       <LearningNotesList />
                       <PopupCompletedCourse />
                     </>

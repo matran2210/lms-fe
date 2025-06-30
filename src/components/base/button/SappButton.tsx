@@ -1,4 +1,4 @@
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
 const SIZES = {
@@ -25,6 +25,8 @@ const COLORS = {
   textUnderline:
     'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
   quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
+  okPopup: 'bg-accent-error text-white',
+  cancelPopup: 'bg-gray-4 text-accent-default',
 }
 
 const PADDINGS = {
@@ -49,6 +51,8 @@ const COLOR_LOADING = {
   text: 'bg-none',
   textUnderline: 'bg-none',
   quizActivity: 'bg-white',
+  okPopup: 'bg-white',
+  cancelPopup: 'bg-white',
 }
 
 const SappButton = ({
@@ -101,11 +105,11 @@ const SappButton = ({
           ></div>
         </div>
       ) : (
-        <SappTooltip title={toolTipTitle} showTooltip={showTooltip}>
+        <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
           <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
             {title}
           </span>
-        </SappTooltip>
+        </Tooltip>
       )}
     </button>
   )

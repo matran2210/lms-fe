@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Tooltip } from 'antd'
 import Image from 'next/image'
 import { userReducer } from 'src/redux/slice/User/User'
 
@@ -11,6 +11,7 @@ import {
   BellIcon,
   HelpMenuIcon,
   LogOutMenuIcon,
+  MyCalendarMenuIcon,
 } from 'src/assets/icons/index'
 
 import blankAvatar from '@assets/images/blank_avatar.webp'
@@ -21,7 +22,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import { NOTIFICATION_STATUS } from 'src/type'
 import Link from 'next/link'
-import { PageLink } from 'src/constants'
+import { PageLink, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon/index'
 
 const { Sider } = Layout
@@ -46,6 +47,7 @@ export default function TeacherMenu() {
         icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
         link: PageLink.TEACHERS,
         active: router.pathname === PageLink.TEACHERS,
+        title: TitleTeacherSidebar?.DASHBOARD,
       },
       {
         key: 'Book',
@@ -56,24 +58,35 @@ export default function TeacherMenu() {
           `${PageLink.TEACHER_MY_CLASS}/[id]`,
           PageLink.TEACHER_CHAPTER_TEST,
         ].includes(router.pathname),
+        title: TitleTeacherSidebar?.MYCLASS,
       },
+      // {
+      //   key: 'Calender',
+      //   icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
+      //   link: PageLink.TEACHERS,
+      //   active: router.pathname === PageLink.TEACHERS,
+      //   title: TitleTeacherSidebar?.CALENDAR,
+      // },
       {
-        key: 'Calender',
-        icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
-        link: PageLink.TEACHERS,
-        active: router.pathname === PageLink.TEACHERS,
+        key: 'MyCalendar',
+        icon: <MyCalendarMenuIcon selected={selectedKey === 'MyCalendar'} />,
+        link: PageLink.MY_CALENDAR,
+        active: router.pathname === PageLink.MY_CALENDAR,
+        title: TitleTeacherSidebar?.MYCALENDAR,
       },
       {
         key: 'File',
         icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-        link: PageLink.TEACHERS,
-        active: router.pathname === PageLink.TEACHERS,
+        link: PageLink.TEACHER_MY_REQUEST,
+        active: router.pathname === PageLink.TEACHER_MY_REQUEST,
+        title: TitleTeacherSidebar?.MYREQUEST,
       },
       {
         key: 'Bell',
         icon: <BellIcon selected={selectedKey === 'Bell'} />,
         link: PageLink.TEACHERS,
         active: router.pathname === PageLink.TEACHERS,
+        title: TitleTeacherSidebar?.NOTIFICATIONS,
       },
     ],
     [selectedKey, router.pathname],
@@ -93,17 +106,9 @@ export default function TeacherMenu() {
   const handleLogout = async () => {
     // Hàm đăng xuất
     try {
-      // Gửi action `getLogoutUser()` để đăng xuất người dùng
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        // Nếu trạng thái thông báo đang hiển thị, xóa `pinnedId` khỏi LocalStorage
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
-      const authenticationManager = new AuthenticationManager()
       // Gọi phương thức `logout()` của AuthenticationManager, chuyển hướng về trang gốc sau khi đăng xuất
-      await authenticationManager.logout(window.location.origin)
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout()
     } catch (error) {}
   }
 
@@ -142,14 +147,24 @@ export default function TeacherMenu() {
         theme="dark"
         mode="inline"
         selectedKeys={[selectedKey]}
-        onSelect={(item) => handleMenuClick(item)}
-        items={menuItems.map((item) => ({
-          key: item.key,
-          icon: item.icon,
-          title: '', // Ẩn tooltip khi hover vào icon
-        }))}
         className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
-      />
+      >
+        {menuItems.map((item) => (
+          <Tooltip
+            key={item.key}
+            title={item.title}
+            overlayClassName="teacher-sidebar-tooltip"
+            placement="right"
+          >
+            <Menu.Item
+              key={item.key}
+              icon={item.icon}
+              className="p-3"
+              onClick={() => handleMenuClick(item)}
+            />
+          </Tooltip>
+        ))}
+      </Menu>
     </div>
   )
 

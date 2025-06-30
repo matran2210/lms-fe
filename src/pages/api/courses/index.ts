@@ -175,7 +175,11 @@ export class CoursesAPI {
 
   static getQuizAttemptsTable(
     id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
   ): Promise<{
     success: boolean
     data: IScoreDetails
@@ -184,6 +188,7 @@ export class CoursesAPI {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
+        ...(no_group_view && { no_group_view }),
       },
     })
   }
@@ -207,7 +212,22 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/${id}`)
   }
 
-  static submitQuestion(id: string, data: any): Promise<any> {
+  //get answer a question
+  static getAnswersSubmitted(id: string): Promise<any> {
+    return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
+  }
+
+  //submit a question
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+    return fetcher(`${uri}`, {
+      data: data,
+      method: 'POST',
+    })
+  }
+
+  static submitAllQuestion(id: string, data: any): Promise<any> {
+    //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
@@ -302,8 +322,11 @@ export class CoursesAPI {
     return fetcher(`question/results?question_ids=${id}`)
   }
 
-  static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`course_learning_outcomes/${id}`)
+  static getCourseLearningOutcome(
+    id: string,
+    class_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`course_learning_outcomes/${id}/class/${class_id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {
@@ -423,6 +446,31 @@ export class CoursesAPI {
       data: data,
     })
   }
+
+  static skipFoundation(
+    class_id: string | undefined,
+  ): Promise<{ success: boolean }> {
+    return fetcher(`courses/${class_id}/skip-foundation`, {
+      method: 'PUT',
+    })
+  }
+
+  static updateFlagInQuestion(
+    quiz_attempt_id: string,
+    payload: {
+      question_id: string
+      flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
+    },
+  ) {
+    return fetcher(`quiz/${quiz_attempt_id}/flag`, {
+      data: payload,
+      method: 'PUT',
+    })
+  }
 }
 
 /**
@@ -450,6 +498,7 @@ export const getQuestionsById = async (
   }
 }
 
+//Hiện đang dùng để submit cho bài test trong activity
 export const submitQuizTest = async (
   id: string,
   data: any,
@@ -462,7 +511,7 @@ export const submitQuizTest = async (
 
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
-    const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
+    const uri = '/quiz' + `/${quizAttemptId}` + '/submit-with-all-answer'
     const response = await fetcher(`${uri}`, {
       data: data,
       method: 'POST',

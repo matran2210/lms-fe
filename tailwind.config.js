@@ -67,11 +67,13 @@ module.exports = {
           2: '#dd4339',
           3: '#f01919',
           4: '#0Df01919',
+          5: '#F019190D',
         },
         state: {
           info: '#3964EA',
           success: '#397839',
           error: '#B90E0A',
+          cancel: '#D20306',
         },
         bw: {
           1: '#050505',
@@ -99,12 +101,26 @@ module.exports = {
           9: '#374151',
           10: '#F2F4F7',
           11: '#99A1B7',
-          12: '#78829D',
+          12: '#9CA3AF',
+          13: '#78829D',
+          14: '#404041',
+          15: '#D1D5DB',
+          16: '#DADFE5',
+          100: '#99A1B70D',
           900: '#181C32',
         },
         green: {
           1: '#07af17',
           2: '#01711f0D',
+          3: '#37C78C',
+          4: '#6FD195',
+          5: '#07AF170D',
+        },
+        orange: {
+          1: '#F897070D',
+          2: '#FFFDF6',
+          3: '#FFB800',
+          4: '#F89707',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -121,6 +137,11 @@ module.exports = {
           4: '#025eff0D',
           5: '#7086FD',
           6: '#607FE9',
+          7: '#176CDD',
+          900: '#176CDD0D',
+        },
+        yellow: {
+          1: '#FFB800',
         },
         pinned: {
           1: '#18355D',
@@ -142,11 +163,15 @@ module.exports = {
           error: '#F01919',
           default: '#99A1B7',
         },
-        green: {
-          1: '#37C78C',
-        },
         red: {
           1: '#FF524E',
+        },
+        purple: {
+          1: '#8F6FEA',
+        },
+        txt: {
+          primary: '#1F2937',
+          secondary: '#9CA3AF',
         },
       },
       borderColor: {
@@ -187,11 +212,16 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        focus:
+          '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
+        'focus-overdue':
+          '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
       },
       minWidth: {
         4: '16px',
         6: '24px',
         8: '30px',
+        11.25: '45px',
         120: '120px',
         small: '36px',
         default: '40px',
@@ -199,12 +229,16 @@ module.exports = {
         large: '56px',
         '62px': '62px',
         '78px': '78px',
+        80: '80px',
         '132px': '132px',
         '165px': '165px',
         42.5: '170px',
         45: '180px',
         '190px': '190px',
         '400px': '400px',
+        '20px': '20px',
+        '50px': '50px',
+        '150px': '150px',
       },
       minHeight: {
         4: '16px',
@@ -215,6 +249,7 @@ module.exports = {
         default: '40px',
         medium: '48px',
         large: '56px',
+        '237px': '237px',
         352: '352px',
       },
       maxHeight: {
@@ -235,6 +270,7 @@ module.exports = {
         '2xl': '1440px',
         1729: '1729px',
         '8xl': '1920px',
+        1570: '1570px',
       },
       lineHeight: {
         0: '0',
@@ -274,6 +310,7 @@ module.exports = {
       },
       padding: {
         1.25: '0.3125rem', // 5px
+        1.5: '0.375rem', // 6px
         1.75: '0.4375rem', // 7px
         1.8: '0.47rem', // 7.5px
         2.75: '0.688rem', // 11px
@@ -369,8 +406,6 @@ module.exports = {
         'repeat-label': 'minmax(113px, auto) minmax(0, 1fr)',
       },
       textColor: {
-        primary: '#1F2937',
-        secondary: '#9CA3AF',
         heading: '#374151',
       },
     },
