@@ -1,4 +1,5 @@
 import {
+  AlertInfoIcon,
   CircleCheckIcon,
   CircleInfoIcon,
   DownloadIcon,
@@ -19,7 +20,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { Divider, Tabs } from 'antd'
+import { Alert, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -608,8 +609,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ),
                 children: (
                   <div className="mt-6">
+                    <Alert
+                      message={
+                        <div className="text-xs text-gray-800">
+                          This feature is only available on desktop or tablet.
+                        </div>
+                      }
+                      type={'info'}
+                      showIcon
+                      className="w-full rounded-md px-[14px] md:hidden"
+                      icon={
+                        <div className={'!mr-4'}>
+                          <AlertInfoIcon />
+                        </div>
+                      }
+                    />
                     <EssayQuestionPreview
-                      className="!bg-transparent !p-0"
+                      className="hidden !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={

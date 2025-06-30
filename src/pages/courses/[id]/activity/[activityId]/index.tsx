@@ -70,6 +70,8 @@ import { DiscussionIcon } from '../../../../../assets/icons'
 import VideoTimelineMobile from '@components/learning/activity/modal/VideoTimelineMobile'
 import { IVideo } from 'src/type/course'
 import BottomMenu from '@components/layout/BottomMenu'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import ActivityResourceMobile from '@components/learning/activity/modal/ActivityResourceMobile'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -120,6 +122,7 @@ const ActivityPage = () => {
     (state) => state.notesListReducer?.note_data,
   )
   const [openVideoTimeline, setOpenVideoTimeline] = useState(false)
+  const [openActivityResource, setOpenActivityResource] = useState(false)
   const [currentVideo, setCurrentVideo] = useState<IVideo>({} as IVideo)
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
@@ -129,6 +132,7 @@ const ActivityPage = () => {
     open: false,
     id: '',
   })
+  const [focusOnlyDiscussion, setFocusOnlyDiscussion] = useState(false)
 
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -141,6 +145,12 @@ const ActivityPage = () => {
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
 
+  const onFocusDiscussion = () => {
+    setFocusOnlyDiscussion(true)
+  }
+  const onUnFocusDiscussion = () => {
+    setFocusOnlyDiscussion(false)
+  }
   const onOpenVideoTimeline = () => {
     setOpenVideoTimeline(true)
   }
@@ -150,6 +160,13 @@ const ActivityPage = () => {
   const handleSetCurrentVideo = (video: IVideo) => {
     setCurrentVideo(video)
   }
+  const onOpenActivityResource = () => {
+    setOpenActivityResource(true)
+  }
+  const onCloseActivityResource = () => {
+    setOpenActivityResource(false)
+  }
+
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
     setIsDoneActivity(false)
@@ -462,14 +479,24 @@ const ActivityPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Activity" showSidebar={isAlwaysShowSidebar}>
-        <div className={`my-0 text-[#050505]`}>
+      <Layout
+        title="Activity"
+        showSidebar={isAlwaysShowSidebar}
+        fullWidth={focusOnlyDiscussion}
+        className={focusOnlyDiscussion ? '!bg-white' : ''}
+      >
+        <div
+          className={clsx({
+            'my-2': !focusOnlyDiscussion,
+            'py-2': focusOnlyDiscussion,
+          })}
+        >
           {/* Breadcrumbs */}
           <ul
-            className={clsx(
-              'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-sm font-medium',
-              { hidden: focusOnlyQuiz.open },
-            )}
+            className={clsx('overflow-x-auto py-6 pb-8 text-sm font-medium', {
+              hidden: focusOnlyQuiz.open,
+              'hidden md:flex': !focusOnlyQuiz.open,
+            })}
           >
             <BreadCrumbs />
             <Tooltip title={nameActivity?.name}>
@@ -532,30 +559,27 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={ANIMATION.DATA_AOS}
-            className="mb-[122px] flex flex-col gap-6 lg:mb-6"
+            className={clsx('mb-[120px] flex flex-col gap-6 lg:mb-6', {
+              'mb-0': focusOnlyDiscussion,
+            })}
           >
             {/* Header */}
-            <div
-              className={clsx(
-                `flex w-full select-none flex-wrap items-center justify-between gap-4`,
-                { hidden: focusOnlyQuiz.open },
-              )}
-            >
-              <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
-                <ActivityPagination
-                  {...{ activity, sessionData }}
-                  focusOnlyQuiz={focusOnlyQuiz.open}
-                  isArrowTitle
-                />
-                <Tooltip title={activity?.name?.length > 95 && activity?.name}>
-                  {truncateString(activity?.name, 91)}
-                </Tooltip>
-              </div>
-              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
-                <HourglassIcon />
-                <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
-              </div>
-            </div>
+            <HeaderMobile
+              title={focusOnlyDiscussion ? 'Discussion' : activity?.name || ''}
+              isHidden={focusOnlyQuiz.open}
+              extraActions={
+                focusOnlyDiscussion ? null : (
+                  <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
+                    <HourglassIcon />
+                    <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
+                  </div>
+                )
+              }
+              onBack={focusOnlyDiscussion ? onUnFocusDiscussion : router.back}
+              className={clsx({
+                'px-4': focusOnlyDiscussion,
+              })}
+            />
 
             {/* Learning Outcome */}
             <div
@@ -573,9 +597,10 @@ const ActivityPage = () => {
 
             {/* Activity Resource */}
             <div
-              className={clsx({
-                hidden:
+              className={clsx('hidden md:block', {
+                '!hidden':
                   focusOnlyQuiz.open ||
+                  focusOnlyDiscussion ||
                   !(activity?.files && activity?.files?.length > 0),
               })}
             >
@@ -598,12 +623,13 @@ const ActivityPage = () => {
                 focusOnlyQuiz,
                 setFocusOnlyQuiz,
                 handleSetCurrentVideo,
+                focusOnlyDiscussion,
               }}
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
               {...{ activity, sessionData }}
-              focusOnlyQuiz={focusOnlyQuiz.open}
+              focusOnly={focusOnlyQuiz.open || focusOnlyDiscussion}
             />
 
             <div
@@ -620,7 +646,7 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <BottomMenu>
+          <BottomMenu className={focusOnlyDiscussion ? 'hidden' : ''}>
             <div className="flex items-center justify-center gap-5">
               <CardMenuItem
                 title="Note List"
@@ -630,7 +656,14 @@ const ActivityPage = () => {
               <CardMenuItem
                 title="Resource"
                 icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={onOpenActivityResource}
+                className="md:hidden"
+              />
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
                 onClick={() => setOpenResource(true)}
+                className="hidden md:flex"
               />
             </div>
             <Divider
@@ -666,7 +699,7 @@ const ActivityPage = () => {
               <CardMenuItem
                 title="Discussion"
                 icon={<DiscussionIcon className="h-6 w-6" />}
-                onClick={() => {}}
+                onClick={onFocusDiscussion}
               />
             </div>
           </BottomMenu>
@@ -776,6 +809,14 @@ const ActivityPage = () => {
           open={openVideoTimeline}
           onClose={onCloseVideoTimeline}
           currentVideo={currentVideo}
+        />
+      )}
+      {openActivityResource && (
+        <ActivityResourceMobile
+          open={openActivityResource}
+          onClose={onCloseActivityResource}
+          activity={activity}
+          handleOpenScratchPad={handleOpenScratchPad}
         />
       )}
     </SappLoadingGlobal>
