@@ -40,7 +40,7 @@ const CourseDashboard = () => {
         <div className="order-2 xl:order-1">
           <TopicProgress />
         </div>
-        <div className="shadow-matchingquiz order-1 mb-6 flex rounded-2xl bg-white xl:order-2 xl:my-0">
+        <div className="shadow-matchingquiz order-1 mb-6 flex h-auto rounded-2xl bg-white xl:order-2 xl:my-0 xl:h-[55vh]">
           <LearningResult />
         </div>
       </div>

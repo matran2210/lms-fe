@@ -421,7 +421,7 @@ export default function ExpandIcon({
           />
         </svg>
       )}
-      {type === 'exam_information' && (
+      {type === 'exam-information' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"

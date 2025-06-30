@@ -2,18 +2,18 @@ import EChart from '@components/base/chart/Chart'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
-import NoData from 'src/common/NoData'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IOverProgress, IExamPrediction } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 import { IconEssentional } from '@assets/icons/Dashboard'
+import useIsMobile from 'src/hooks/useIsMobile'
 
 const OverProgress = () => {
   const router = useRouter()
   const [option, setOption] = useState<any>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
+  const isMobile = useIsMobile()
 
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | any,
@@ -27,6 +27,10 @@ const OverProgress = () => {
         : 100 - parseFloat(data.exam_prediction.toFixed(2)),
     }
 
+    // Responsive radius for mobile and desktop
+    const radius = isMobile ? ['80%', '60%'] : ['83%', '63%']
+    const innerRadius = isMobile ? ['79%', '60%'] : ['84%', '63%']
+
     const option = {
       title: {
         text: `${values.completed}%`,
@@ -34,13 +38,13 @@ const OverProgress = () => {
         left: 'center',
         top: '42%',
         textStyle: {
-          fontSize: 24,
+          fontSize: isMobile ? 18 : 24,
           fontWeight: '600',
           color: '#1F2937',
-          lineHeight: 32,
+          lineHeight: isMobile ? 28 : 32,
         },
         subtextStyle: {
-          fontSize: 14,
+          fontSize: isMobile ? 12 : 14,
           color: '#666',
         },
       },
@@ -51,7 +55,7 @@ const OverProgress = () => {
         {
           name: 'Pass Rate',
           type: 'pie',
-          radius: ['87%', '63%'],
+          radius: radius,
           avoidLabelOverlap: false,
           labelLine: { show: false },
           legend: { show: false },
@@ -67,7 +71,9 @@ const OverProgress = () => {
               name: '',
               itemStyle: {
                 color: '#FFF1CC',
-                borderRadius: [-20, -20, -20, -20],
+                borderRadius: isMobile
+                  ? [-15, -15, -15, -15]
+                  : [-20, -20, -20, -20],
               },
             },
           ],
@@ -75,7 +81,7 @@ const OverProgress = () => {
         {
           name: 'Completed',
           type: 'pie',
-          radius: ['90%', '65%'],
+          radius: innerRadius,
           avoidLabelOverlap: false,
           labelLine: { show: false },
           legend: { show: false },
@@ -86,7 +92,7 @@ const OverProgress = () => {
               name: '',
               itemStyle: {
                 color: '#FFB700',
-                borderRadius: [25, 25, 25, 25],
+                borderRadius: isMobile ? [20, 20, 20, 20] : [25, 25, 25, 25],
               },
             },
             {
@@ -111,8 +117,6 @@ const OverProgress = () => {
       if (res && res.success) handlePieChartOption(res.data)
     } catch (error) {
       setOption(null)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -122,21 +126,19 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="shadow-matchingquiz mb-5 mt-6 flex h-[47vh] w-full flex-col rounded-2xl bg-white p-6 text-gray-700 xl:mb-0 xl:mt-0 xl:h-auto xl:w-[566px] 3xl:px-6">
-      <div className="mb-5 flex items-center justify-between pb-3">
-        <div className="min-w-fit text-xl font-semibold text-gray-800 4xl:text-xl">
-          {isNormal ? 'Overall Progress' : 'Your Exam Prediction'}
+    <div className="shadow-matchingquiz mb-5 mt-6 flex w-full flex-col rounded-2xl bg-white p-4 text-gray-700 lg:h-[47vh] lg:p-6 xl:mb-0 xl:mt-0 xl:h-auto xl:w-[566px] 3xl:px-6">
+      <div className="mb-5 items-center justify-between pb-3 xl:flex">
+        <div className="min-w-fit text-lg font-semibold text-gray-800 xl:text-xl">
+          Your Exam Prediction
         </div>
-        <div className="text-sm text-gray-400 4xl:text-sm">
+        <div className="mt-2 text-sm text-gray-400 xl:mt-0 4xl:text-sm">
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
       {option && (
         <>
-          <div
-            className={`flex flex-row justify-center gap-2 4xl:gap-8 ${isNormal ? '' : 'mb-2 mt-3'}`}
-          >
-            <EChart option={option} />
+          <div className="mb-2 mt-3 flex flex-row justify-center gap-2 4xl:gap-8">
+            <EChart option={option} minHeight={isMobile ? '300px' : '400px'} />
             {isNormal && (
               <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
                 <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
@@ -150,7 +152,7 @@ const OverProgress = () => {
               </div>
             )}
           </div>
-          <div className="mt-4 flex items-center justify-center self-center text-center text-gray-800">
+          <div className="xl mt-4 flex items-center justify-center self-center text-center text-sm text-gray-800 xl:text-base">
             <div className="me-2">
               <IconEssentional />
             </div>
