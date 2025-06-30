@@ -119,7 +119,7 @@ const ExamInformation = () => {
               pageSize: pageSize,
               total: data?.metadata?.total_records,
             }}
-            loading={isLoading || isFetching}
+            loading={isLoading}
             isShowPagination={false}
             className="style-table-v2"
           />
