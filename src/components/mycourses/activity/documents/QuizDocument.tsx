@@ -788,7 +788,12 @@ const QuizDocument = ({
           )}
       </div>
       {/* Confirm Button */}
-      <div className="flex justify-end">
+      <div
+        className={clsx('justify-end', {
+          'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+          flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
+        })}
+      >
         <Tooltip
           title={
             isQuestionConfirmed ||
