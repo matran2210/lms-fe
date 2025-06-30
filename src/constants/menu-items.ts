@@ -64,6 +64,12 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
+    name: TitleSidebar.EXAM_LIST,
+    icon: 'exam_list',
+    url: `/${ProfilePages.ExamList}`,
+    type: 'level-1',
+  },
+  {
     name: TitleSidebar.EXAM_INFORMATION,
     icon: 'exam-information',
     url: `/${ProfilePages.ExamInformation}`,
@@ -84,7 +90,7 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
   {
     name: `${TitleSidebar.NOTIFICATION}`,
     icon: 'notification',
-    url: `${PageLink.NOTIFICATION}`,
+    url: '',
     type: 'level-1',
   },
   {

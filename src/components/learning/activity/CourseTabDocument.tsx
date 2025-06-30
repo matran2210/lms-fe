@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, PaginationDotIcon } from '@assets/icons'
 import ActivitySkeleton from '@components/base/skeleton/ActivitySkeleton'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import QuizDocument from '@components/mycourses/activity/documents/QuizDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
 import { CoursesAPI } from '@pages/api/courses'
@@ -20,6 +21,7 @@ import {
   courseActivityReducer,
   getCourseActivityTapById,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { IVideo } from 'src/type/course'
 import { IActivity } from 'src/type/course/my-course/Activity'
 
 interface IProps {
@@ -38,6 +40,8 @@ interface IProps {
   handleFinishedCourseSectionProgress: () => Promise<void>
   focusOnlyQuiz: IFocusQuiz
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
+  handleSetCurrentVideo: (video: IVideo) => void
+  focusOnlyDiscussion: boolean
 }
 const CourseTabDocument = ({
   activity,
@@ -50,6 +54,8 @@ const CourseTabDocument = ({
   handleFinishedCourseSectionProgress,
   focusOnlyQuiz,
   setFocusOnlyQuiz,
+  handleSetCurrentVideo,
+  focusOnlyDiscussion,
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -156,113 +162,126 @@ const CourseTabDocument = ({
           </div>
         ),
         children: (
-          <ActivitySkeleton length={1} loading={selector.loading}>
-            <div>
-              <div>
-                <div
-                  className={clsx(
-                    'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
-                    { '!mt-0': focusOnlyQuiz.open },
-                  )}
-                >
-                  {course_tab_documents?.map((e, i) => {
-                    const gradeStatus = e?.quiz?.attempt?.grading_status
-                    const questions = [
-                      ...(e?.quiz?.multiple_choice_questions || []),
-                      ...(e?.quiz?.constructed_questions || []),
-                    ]
-                    if (e?.type === 'QUIZ') {
-                      return (
-                        <div
-                          key={e?.id + '_' + i + '_' + selector?.currentTabId}
-                          ref={quizDocumentRef}
-                          className={clsx({
-                            hidden:
-                              (focusOnlyQuiz.open &&
-                                e?.quiz?.id !== focusOnlyQuiz.id) ||
-                              questions?.length === 0,
-                          })}
-                        >
-                          <QuizDocument
-                            questions={questions}
-                            activityId={activity?.id as string}
-                            tabId={selector?.currentTabId || ''}
-                            quizId={e?.quiz?.id || ''}
-                            grading_preference={
-                              e.quiz?.grading_preference ||
-                              'AFTER_EACH_QUESTION'
-                            }
-                            document_id={e?.id}
-                            is_graded={e?.quiz?.is_graded}
-                            setOpenFile={handleOpenScratchPad}
-                            class_user_id={activity?.class_user_id}
-                            quizSetting={e?.quiz?.quiz_setting}
-                            reload={refetch}
-                            gradeStatus={gradeStatus}
-                            quizName={e?.quiz?.name}
-                            grading_method={e?.quiz?.grading_method}
-                            refreshTab={() => handleRefreshCurrentTab()}
-                            exhibitText={exhibitText}
-                            attemptId={e?.quiz?.attempt?.id}
-                            focusOnlyQuiz={focusOnlyQuiz}
-                            setFocusOnlyQuiz={setFocusOnlyQuiz}
-                          />
-                        </div>
-                      )
-                    }
-                    if (e.type === 'TEXT') {
-                      return (
-                        <div
-                          className={clsx(``, {
-                            hidden: focusOnlyQuiz.open,
-                          })}
-                          key={i + '_' + selector?.currentTabId}
-                        >
-                          {e?.text_editor_content && (
-                            <HighlightableHTML
-                              initialHTML={e?.text_editor_content || ''}
-                              storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
-                              className="course-tab-text"
+          <>
+            <div className={clsx({ hidden: focusOnlyDiscussion })}>
+              <ActivitySkeleton length={1} loading={selector.loading}>
+                <div>
+                  <div
+                    className={clsx(
+                      'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
+                      { '!mt-0': focusOnlyQuiz.open },
+                    )}
+                  >
+                    {course_tab_documents?.map((e, i) => {
+                      const gradeStatus = e?.quiz?.attempt?.grading_status
+                      const questions = [
+                        ...(e?.quiz?.multiple_choice_questions || []),
+                        ...(e?.quiz?.constructed_questions || []),
+                      ]
+                      if (e?.type === 'QUIZ') {
+                        return (
+                          <div
+                            key={e?.id + '_' + i + '_' + selector?.currentTabId}
+                            ref={quizDocumentRef}
+                            className={clsx({
+                              hidden:
+                                (focusOnlyQuiz.open &&
+                                  e?.quiz?.id !== focusOnlyQuiz.id) ||
+                                questions?.length === 0,
+                            })}
+                          >
+                            <QuizDocument
+                              questions={questions}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              document_id={e?.id}
+                              is_graded={e?.quiz?.is_graded}
+                              setOpenFile={handleOpenScratchPad}
+                              class_user_id={activity?.class_user_id}
+                              quizSetting={e?.quiz?.quiz_setting}
+                              reload={refetch}
+                              gradeStatus={gradeStatus}
+                              quizName={e?.quiz?.name}
+                              grading_method={e?.quiz?.grading_method}
+                              refreshTab={() => handleRefreshCurrentTab()}
+                              exhibitText={exhibitText}
+                              attemptId={e?.quiz?.attempt?.id}
+                              focusOnlyQuiz={focusOnlyQuiz}
+                              setFocusOnlyQuiz={setFocusOnlyQuiz}
                             />
-                          )}
-                          {/* <TextDocument
+                          </div>
+                        )
+                      }
+                      if (e.type === 'TEXT') {
+                        return (
+                          <div
+                            className={clsx(``, {
+                              hidden: focusOnlyQuiz.open,
+                            })}
+                            key={i + '_' + selector?.currentTabId}
+                          >
+                            {e?.text_editor_content && (
+                              <HighlightableHTML
+                                initialHTML={e?.text_editor_content || ''}
+                                storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
+                                className="course-tab-text"
+                              />
+                            )}
+                            {/* <TextDocument
                             text_editor_content={e?.text_editor_content}
                             className="course-tab-text"
                           ></TextDocument> */}
-                        </div>
-                      )
-                    }
-                    if (e.type === 'VIDEO') {
-                      return (
-                        <div
-                          key={i + '_' + selector?.currentTabId}
-                          className={clsx({ hidden: focusOnlyQuiz.open })}
-                        >
-                          <VideoDocument
-                            videos={e?.videos}
-                            activityId={activity?.id as string}
-                            tabId={selector?.currentTabId || ''}
-                            streamRefProp={(el: any) =>
-                              (videoRef.current[i || 0] = el)
-                            }
-                            handleProcess={onVideoStart}
-                            document_id={e?.id}
-                            quizId={e?.quiz?.id || ''}
-                            grading_preference={
-                              e.quiz?.grading_preference ||
-                              'AFTER_EACH_QUESTION'
-                            }
-                            class_user_id={activity?.class_user_id}
-                          ></VideoDocument>
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
+                          </div>
+                        )
+                      }
+                      if (e.type === 'VIDEO') {
+                        return (
+                          <div
+                            key={i + '_' + selector?.currentTabId}
+                            className={clsx({ hidden: focusOnlyQuiz.open })}
+                          >
+                            <VideoDocument
+                              videos={e?.videos}
+                              activityId={activity?.id as string}
+                              tabId={selector?.currentTabId || ''}
+                              streamRefProp={(el: any) =>
+                                (videoRef.current[i || 0] = el)
+                              }
+                              handleProcess={onVideoStart}
+                              document_id={e?.id}
+                              quizId={e?.quiz?.id || ''}
+                              grading_preference={
+                                e.quiz?.grading_preference ||
+                                'AFTER_EACH_QUESTION'
+                              }
+                              class_user_id={activity?.class_user_id}
+                              handleSetCurrentVideoCallback={
+                                handleSetCurrentVideo
+                              }
+                            ></VideoDocument>
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                  </div>
                 </div>
-              </div>
+              </ActivitySkeleton>
             </div>
-          </ActivitySkeleton>
+            <div
+              className={clsx('mt-4 h-[calc(100vh-150px)]', {
+                'block md:hidden': focusOnlyDiscussion,
+                hidden: !focusOnlyDiscussion,
+              })}
+            >
+              <Discussion class_id={(router.query.id as string) || ''} />
+            </div>
+          </>
         ),
       }
     }) ?? []
@@ -273,8 +292,10 @@ const CourseTabDocument = ({
 
   return (
     <div
-      className={clsx('rounded-xl bg-white p-6 shadow-learning-activity', {
+      className={clsx('rounded-xl bg-white', {
         'my-6': focusOnlyQuiz.open,
+        'px-4': focusOnlyDiscussion,
+        'p-6 shadow-learning-activity': !focusOnlyDiscussion,
       })}
     >
       <Tabs

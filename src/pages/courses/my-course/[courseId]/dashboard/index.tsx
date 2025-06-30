@@ -12,13 +12,10 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const Dashboard = () => {
   const router = useRouter()
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
-      <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
+      <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="flex w-full items-center justify-between pb-4 pt-6">
             <BreadcrumbFilter
@@ -30,7 +27,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="3xl:px-13.75 text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5"
+        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5 3xl:px-13.75"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

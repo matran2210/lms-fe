@@ -15,10 +15,7 @@ import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const EventTest = () => {
-  const screens = useTailwindBreakpoint()
-  const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
-    screens,
-  )
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await EventTestAPI.get(params)
@@ -40,7 +37,7 @@ const EventTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title={LANG_SIGNIN.eventTest} showSidebar={isAlwaysShowSidebar}>
         <div className="border-b border-[#DCDDDD] bg-white">
-          <div className="py-5.75 relative mx-auto my-0 flex max-w-[1144px] max-[1199px]:mx-6 ">
+          <div className="relative mx-auto my-0 flex max-w-[1144px] py-5.75 max-[1199px]:mx-6 ">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"

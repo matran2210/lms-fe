@@ -4,12 +4,12 @@ import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/Pinned
 import { useGetDataQuery } from '@utils/index'
 import QuizResult from 'entrance-test-result-package'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { UserType } from 'src/redux/types/User/urser'
-import { useState, useEffect } from 'react'
 
 const TestEntranceResult = () => {
   const router = useRouter()
@@ -71,7 +71,7 @@ const TestEntranceResult = () => {
             )}
             {showPinnedNotification && (
               <div
-                className={`sticky bottom-4 mt-10 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                className={`sticky bottom-4 z-10 mt-10 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
               >
                 <PinnedNotificationsV2
                   bgColor="bg-primary-200"

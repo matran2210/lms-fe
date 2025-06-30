@@ -9,7 +9,7 @@
     @apply pl-2 !important;
 
     .ant-select-selection-item {
-      @apply mr-2 text-base font-normal;
+      @apply mr-2 text-sm font-normal md:text-base;
     }
   }
 

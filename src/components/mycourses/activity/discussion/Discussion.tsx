@@ -320,8 +320,8 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   return (
-    <div className="mb-15 bg-white">
-      <div className="mb-6 text-lg font-medium">Discussion</div>
+    <div className="mb-15 flex h-full flex-col justify-between bg-white">
+      <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
       <Skeleton loading={loading}>
         {selector?.discussion?.map((e, i) => {
           return (
@@ -342,7 +342,7 @@ const Discussion = ({ class_id }: Props) => {
               <div
                 className={`${
                   e?.children?.[0] ? 'mt-6' : ''
-                } relative ml-[52px] overflow-hidden pl-5`}
+                } relative overflow-hidden pl-5 md:ml-[52px]`}
               >
                 {e?.children?.[0] && (
                   <div>
@@ -378,7 +378,7 @@ const Discussion = ({ class_id }: Props) => {
                     idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                   }`}
                 >
-                  <div className="leading-0 flex-none">
+                  <div className="flex-none leading-0">
                     <Image
                       width={50}
                       height={50}
@@ -406,7 +406,7 @@ const Discussion = ({ class_id }: Props) => {
                       <div>
                         <ul className="flex flex-wrap gap-4">
                           {selectedFiles.map((file, index) => (
-                            <li key={index} className="leading-0 relative mb-2">
+                            <li key={index} className="relative mb-2 leading-0">
                               <div
                                 className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                                 role="button"
@@ -496,7 +496,7 @@ const Discussion = ({ class_id }: Props) => {
       <div
         className={`transition-max-height mt-6 flex items-start gap-3 overflow-visible duration-300`}
       >
-        <div className="leading-0 flex-none">
+        <div className="flex-none leading-0">
           <Image
             width={50}
             height={50}
@@ -525,7 +525,7 @@ const Discussion = ({ class_id }: Props) => {
             <div>
               <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="leading-0 relative mb-2">
+                  <li key={index} className="relative mb-2 leading-0">
                     <div
                       className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"

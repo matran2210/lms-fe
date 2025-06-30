@@ -6,6 +6,7 @@ export const ProfilePages = {
   Devices: 'devices',
   LoginHistory: 'login_history',
   ExamInformation: 'exam-information',
+  ExamList: 'exam_list',
   ChangePassword: 'change_password',
   OVERVIEW: 'overview',
   STUDENTS: 'students',
