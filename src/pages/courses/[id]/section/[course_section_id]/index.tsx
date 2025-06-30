@@ -434,7 +434,11 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-
+  const handleGoBack = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.id}`,
+    })
+  }
   // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
   useEffect(() => {
     // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
@@ -491,6 +495,7 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
+          handleGoBack={handleGoBack}
           // handleShowToast={handleShowToast}
         />
         <SappDrawerV3
