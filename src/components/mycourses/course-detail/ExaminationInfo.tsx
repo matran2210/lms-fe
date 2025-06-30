@@ -2,13 +2,13 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { ClassAPI } from '@pages/api/class'
 import { ClassKey } from '@pages/api/queryKey'
 import { useRouter } from 'next/router'
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
+import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
 import { useQuery, useQueryClient, useMutation } from 'react-query'
 import { PencilV2Icon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
-import { formatDateFromUTC } from '@utils/index'
+import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadProps, UploadFile } from 'antd'
 import NoDataV2 from 'src/common/NodataV2'
 import { Data } from 'src/type/course'
@@ -26,6 +26,11 @@ import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnyw
 type Props = {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
+  isEditProps?: boolean
+  classIdProps?: string
+  isExamList?: boolean
+  currentValue?: string
+  onSuccess?: () => void
 }
 
 interface InfoItemProps {
@@ -47,10 +52,10 @@ const InfoItem = ({ label, value }: InfoItemProps) => {
 
 const ExamDate = ({
   data,
-  setIsOpen,
+  setIsEdit,
 }: {
   data: Data
-  setIsOpen: (isOpen: boolean) => void
+  setIsEdit: (isEdit: boolean) => void
 }) => (
   <>
     <div>{data?.exam?.examination?.name ?? '-'}</div>
@@ -66,8 +71,8 @@ const ExamDate = ({
       data?.course.course_type === COURSE_TYPE.NORMAL_COURSE && (
         <Tooltip showTooltip={true} title={'Change Exam Date'}>
           <div
-            className="cursor-pointer hover:text-primary"
-            onClick={() => setIsOpen(true)}
+            className="cursor-pointer text-primary"
+            onClick={() => setIsEdit(true)}
           >
             <PencilV2Icon />
           </div>
@@ -77,30 +82,32 @@ const ExamDate = ({
   </>
 )
 
-const ExaminationInfo = ({ open, setOpen }: Props) => {
+const ExaminationInfo = ({
+  open,
+  setOpen,
+  isEditProps = false,
+  classIdProps = '',
+  isExamList = false,
+  currentValue,
+  onSuccess,
+}: Props) => {
   const router = useRouter()
-  const classId = router.query.courseId as string
-
+  const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: [ClassKey.ExamInfo],
+    queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () =>
-      classId
-        ? ClassAPI.getExamInfo(classId as string)
+      classId && !isExamList
+        ? ClassAPI.getExamInfo(classId)
         : Promise.reject('courseId is undefined'),
     refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,
+    enabled: !!classId,
   })
 
   const queryClient = useQueryClient()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isEdit, setIsEdit] = useState(isEditProps)
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
-
-  const start = data?.exam?.start_date
-    ? formatDateFromUTC(data.exam.start_date)
-    : ''
-  const end = data?.exam?.end_date ? formatDateFromUTC(data.exam.end_date) : ''
-  const duration = [start, end].filter(Boolean).join(' - ') || '-'
 
   const validationSchema = z.object({
     note: z
@@ -133,13 +140,14 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
       formData.append('examination_subject_id', examination_subject_id)
       note && formData.append('note', note[0] as FileType)
 
-      return ClassAPI.changeExamDate(classId as string, formData)
+      return ClassAPI.changeExamDate(classId, formData)
     },
     onSuccess: (res) => {
       if (res.data.success) {
         toast.success(res.data.data.message)
         handleSuccess()
         handleCancel()
+        onSuccess && onSuccess()
       }
       setOpenConfirmModal(false)
     },
@@ -152,7 +160,7 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
     })
   }
   const handleBack = () => {
-    setIsOpen(false)
+    setIsEdit(false)
     methods.reset()
   }
   const handleCancel = () => {
@@ -167,6 +175,13 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
       setOpenConfirmModal(true)
     }
   }
+
+  useEffect(() => {
+    if (classIdProps && isEditProps) {
+      setClassId(classIdProps)
+      setIsEdit(isEditProps)
+    }
+  }, [classIdProps, isEditProps])
 
   const renderContent = () => {
     if (isLoading) {
@@ -193,10 +208,13 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
           <InfoItem label="Program:" value={data?.program?.name} />
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
-          <InfoItem label="Duration:" value={duration} />
+          <InfoItem
+            label="Duration:"
+            value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
+          />
           <InfoItem
             label="Scheduled Exam Date:"
-            value={<ExamDate data={data} setIsOpen={setIsOpen} />}
+            value={<ExamDate data={data} setIsEdit={setIsEdit} />}
           />
         </div>
       )
@@ -208,22 +226,22 @@ const ExaminationInfo = ({ open, setOpen }: Props) => {
       <SappDrawerV3
         open={open}
         handleCancel={handleCancel}
-        title={isOpen ? 'Change Exam Date' : 'Exam Information'}
-        isShowBtnClose={!isOpen}
-        isShowFooter={isOpen}
-        btnSubmitTile={isOpen ? 'Confirm' : ''}
-        cancelButtonCaption={isOpen ? 'Cancel' : ''}
+        title={isEdit ? 'Change Exam Date' : 'Exam Information'}
+        isShowBtnClose={!isEdit || isExamList}
+        isShowFooter={isEdit}
+        btnSubmitTile={isEdit ? 'Confirm' : ''}
+        cancelButtonCaption={isEdit ? 'Cancel' : ''}
         handleBack={handleBack}
         handleSubmit={handleChangeExamDate}
         loading={isChangingLoad}
       >
-        {isOpen ? (
+        {isEdit ? (
           <FormProvider {...methods}>
             <ChangExamDate
-              isOpen={isOpen}
+              isOpen={isEdit}
               classId={classId}
               remainingChanges={data?.remaining_changes}
-              currentValue={data?.exam?.id}
+              currentValue={data?.exam?.id || currentValue}
             />
           </FormProvider>
         ) : (

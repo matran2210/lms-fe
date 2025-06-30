@@ -320,7 +320,6 @@ export default function MenuItem({
             name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
-            name === TitleSidebar.EXAM_INFORMATION ||
             name === TitleSidebar.DASHBOARD ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')
