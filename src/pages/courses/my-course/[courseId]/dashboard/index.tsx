@@ -8,6 +8,7 @@ import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -17,11 +18,17 @@ const Dashboard = () => {
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
       <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
-          <div className="flex w-full items-center justify-between pb-4 pt-6">
+          <div className="hidden w-full items-center justify-between pb-4 pt-6 md:flex">
             <BreadcrumbFilter
               name={courseInfo?.name || ''}
               subpath="Dashboard"
               courseId={router.query.courseId}
+            />
+          </div>
+          <div className="grid pb-4 pt-6 md:hidden">
+            <HeaderMobile
+              title="Student Dashboard"
+              onBack={() => router.back()}
             />
           </div>
         </div>

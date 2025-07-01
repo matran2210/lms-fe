@@ -16,6 +16,24 @@ import { EChartsOption } from 'echarts'
 import Tooltip from 'src/common/Tooltip'
 import useIsMobile from 'src/hooks/useIsMobile'
 
+interface CourseInfo {
+  courseType: string
+  category: string
+}
+
+interface MockTestResponse {
+  success: boolean
+  data: {
+    reports: ILearningResult[]
+    mock_tests: Array<{ id: string }>
+  }
+}
+
+interface TooltipParams {
+  value: number[]
+  name: string
+}
+
 const LearningResults = () => {
   const router = useRouter()
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
@@ -25,7 +43,8 @@ const LearningResults = () => {
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = useMemo(
-    () => JSON.parse(localStorage.getItem('courseInfo') as any),
+    () =>
+      JSON.parse(localStorage.getItem('courseInfo') as string) as CourseInfo,
     [],
   )
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
@@ -39,7 +58,9 @@ const LearningResults = () => {
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
-        const res = (await DashboardAPI.getMockTestResults(id)) as any
+        const res = (await DashboardAPI.getMockTestResults(
+          id,
+        )) as MockTestResponse
         if (res && res.success) {
           const data = res.data.reports
           setResults(data)
@@ -60,29 +81,39 @@ const LearningResults = () => {
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null
-    const maxValues = results.map((result: any) => {
-      const learning = result?.score || 0
-      const mock = result?.mock_test_score || 0
-      return Math.max(learning, mock, 100)
-    })
-    const indicator = results.map((result: any, idx: any) => ({
-      text: result?.short_name || result?.name,
-      max: maxValues[idx],
-    }))
+    const maxValues = results.map(
+      (result: ILearningResult | IMockTestResult) => {
+        const learning = 'score' in result ? result.score : 0
+        const mock =
+          'mock_test_score' in result ? result.mock_test_score || 0 : 0
+        return Math.max(learning, mock, 100)
+      },
+    )
+    const indicator = results.map(
+      (result: ILearningResult | IMockTestResult, idx: number) => ({
+        text:
+          'short_name' in result
+            ? result.short_name || ''
+            : 'name' in result
+              ? (result as IMockTestResult)?.name
+              : '',
+        max: maxValues[idx],
+      }),
+    )
     return {
       title: { text: '' },
       responsive: true,
       tooltip: {
         borderWidth: 0,
         trigger: 'item',
-        formatter: function (params: any) {
+        formatter: function (params: TooltipParams) {
           const values = params.value
           const indicators = results.map(
             (e: ILearningResult | IMockTestResult) =>
-              'name' in e ? e.name : e.short_name,
+              'name' in e ? e.name : (e as ILearningResult)?.short_name,
           )
           let tooltipText = `<strong>${params.name}</strong><br/>`
-          values.forEach((val: any, i: number) => {
+          values.forEach((val: number, i: number) => {
             tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
           })
           return tooltipText
@@ -116,14 +147,20 @@ const LearningResults = () => {
           data: [
             {
               name: 'Learning results',
-              value: results?.map((result: any) => result?.score),
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  'score' in result ? result.score : 0,
+              ),
               areaStyle: { color: 'rgba(111, 211, 176, 0.45)' },
               lineStyle: { color: '#6FD3B0', width: 1 },
               itemStyle: { color: '#6FD3B0' },
             },
             {
               name: 'Mock test results',
-              value: results?.map((result: any) => result?.mock_test_score),
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  'mock_test_score' in result ? result.mock_test_score || 0 : 0,
+              ),
               areaStyle: { color: 'rgba(251, 140, 91, 0.45)' },
               lineStyle: { color: '#FB8C5B', width: 1 },
               itemStyle: { color: '#FB8C5B' },
@@ -163,8 +200,9 @@ const LearningResults = () => {
               <div className="grow">
                 <EChart
                   option={option as EChartsOption}
-                  height={isMobile ? '350px' : '420px'}
-                  minHeight={isMobile ? '350px' : '420px'}
+                  height={isMobile ? '350px' : '400px'}
+                  minHeight={isMobile ? '350px' : '400px'}
+                  width={isMobile ? '366px' : '665px'}
                 />
               </div>
               <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
@@ -231,7 +269,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               key={result?.id}
               className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:px-4"
             >
-              <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg xl:font-medium">
+              <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg">
                 {result?.short_name || result?.name}
               </div>
 
@@ -247,7 +285,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                       <MatchFailIcon />
                     )}
                     <div
-                      className={`ms-1 text-lg font-semibold ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
+                      className={`ms-1 text-sm font-semibold md:text-lg ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
                     >
                       {differenceResult > 0 ? '+' : ''}
                       {differenceResult}%
@@ -261,7 +299,9 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                   Mock test: {result?.mock_test_score}%
                 </div>
                 {hasBothScores && (
-                  <div className="mt-2 text-base text-gray-400">difference</div>
+                  <div className="mt-2 text-sm text-gray-400 md:text-base">
+                    difference
+                  </div>
                 )}
               </div>
               {hasBothScores && (
