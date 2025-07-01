@@ -16,6 +16,7 @@ interface LayoutProps {
   showSidebar?: boolean
   fullWidth?: boolean
   handleToggleSidebar?: () => void
+  className?: string
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -27,6 +28,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     showSidebar = true,
     fullWidth = false,
     handleToggleSidebar,
+    className,
   } = props
   const router = useRouter()
   const { isShowMenuContent } = useTailwindBreakpoint()
@@ -80,7 +82,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           className={clsx(
             'menu-sidebar-left transition-all duration-150 ease-in-out',
             'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] w-0 rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
+            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
             {
               'overflow-hidden': !guideStatus,
               'menu-sidebar-left--hover':
@@ -108,7 +110,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-full p-0': fullWidth,
           })}
         >
-          <div className={`${paddingTop} h-full bg-[#F9F9F9]`}>
+          <div className={clsx(`${paddingTop} h-full bg-[#F9F9F9]`, className)}>
             <div className={clsx('ml-0 h-full')}>{children}</div>
           </div>
         </div>

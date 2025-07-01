@@ -113,6 +113,12 @@ export default function MenuItem({
     })
   }
 
+  const handleViewNotification = (link: string) => {
+    router.push({
+      pathname: link,
+    })
+  }
+
   const handleOpenExaminationInfoPage = () => {
     setOpenExaminationInfo && setOpenExaminationInfo(true)
   }
@@ -330,6 +336,7 @@ export default function MenuItem({
         ${
           isInCourse &&
           (name === TitleSidebar.COURSES ||
+            name === TitleSidebar.EXAM_LIST ||
             name === TitleSidebar.ENTRANCE_TEST ||
             // hidden when not in course
             name === LANG_SIGNIN.eventTest ||
@@ -412,6 +419,7 @@ export default function MenuItem({
           notifyLists={notifyLists}
           notificationUnread={notificationUnread}
           scrollRef={scrollRef}
+          handleViewNotification={(link) => handleViewNotification(link)}
         />
       )}
     </>

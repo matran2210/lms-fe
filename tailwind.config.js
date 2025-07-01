@@ -392,7 +392,6 @@ module.exports = {
         DEFAULT: '1rem',
         sm: '2rem',
       },
-      // screens: {},
     },
   },
   plugins: [

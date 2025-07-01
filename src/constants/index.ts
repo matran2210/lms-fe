@@ -46,6 +46,7 @@ export const TitleSidebar = {
   NOTIFICATION: 'Notifications',
   RESULTS: 'Results',
   EXAM_INFORMATION: 'Exam Information',
+  EXAM_LIST: 'Exam List',
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',

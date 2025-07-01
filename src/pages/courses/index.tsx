@@ -46,7 +46,7 @@ const MyCourse = () => {
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
-  const [showSidebar, setshowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
@@ -61,11 +61,11 @@ const MyCourse = () => {
    * @description handle open and close sidebar
    */
   const handleOpenSidebar = () => {
-    setshowSidebar(true)
+    setShowSidebar(true)
     setOpenSidebar(true)
   }
   const handleCloseSidebar = () => {
-    setshowSidebar(false)
+    setShowSidebar(false)
     setOpenSidebar(false)
   }
   const closeUserGuide = () => {

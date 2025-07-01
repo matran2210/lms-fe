@@ -14,6 +14,7 @@ import {
 import Link from 'next/link'
 import { EChartsOption } from 'echarts'
 import Tooltip from 'src/common/Tooltip'
+import useIsMobile from 'src/hooks/useIsMobile'
 
 const LearningResults = () => {
   const router = useRouter()
@@ -32,6 +33,8 @@ const LearningResults = () => {
     courseInfo?.category === 'ACCA'
       ? '%Results = Graded activities (70%) + Final test (30%)'
       : '%Results = Module test (40%) + Topic test (60%)'
+
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const getLearningResults = async (id: string) => {
@@ -68,6 +71,7 @@ const LearningResults = () => {
     }))
     return {
       title: { text: '' },
+      responsive: true,
       tooltip: {
         borderWidth: 0,
         trigger: 'item',
@@ -94,9 +98,9 @@ const LearningResults = () => {
           splitArea: { areaStyle: { color: 'transparent' } },
           name: {
             color: '#374151',
-            fontSize: 14,
+            fontSize: isMobile ? 12 : 14,
             fontWeight: '500',
-            lineHeight: 22,
+            lineHeight: isMobile ? 20 : 22,
             formatter: function (name: string) {
               const maxLength = 16
               return name.length > maxLength
@@ -131,12 +135,12 @@ const LearningResults = () => {
   }, [results])
 
   return (
-    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-8 xl:flex xl:h-[53vh]">
+    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-4 xl:flex xl:h-[53vh] xl:p-8">
       <div className="w-full">
         <div className="mb-5 flex items-center justify-between pb-3">
-          <div className="flex w-full flex-row justify-between xl:flex-col">
+          <div className="w-full flex-row justify-between xl:flex xl:flex-col">
             <div className="flex">
-              <div className="min-w-fit text-xl font-semibold">
+              <div className="min-w-fit text-lg font-semibold xl:text-xl">
                 Your Learning Results
               </div>
               <Tooltip
@@ -148,20 +152,24 @@ const LearningResults = () => {
                 </div>
               </Tooltip>
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="mt-2 text-xs text-gray-400 xl:mt-0 xl:text-sm">
               {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
             </div>
           </div>
         </div>
         <div className="flex">
           {option && (
-            <div className="flex grow flex-col gap-5 px-5 xl:flex-row 2xl:px-12">
+            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:px-5 2xl:pl-0 2xl:pr-12">
               <div className="grow">
-                <EChart option={option as EChartsOption} />
+                <EChart
+                  option={option as EChartsOption}
+                  height={isMobile ? '350px' : '420px'}
+                  minHeight={isMobile ? '350px' : '420px'}
+                />
               </div>
-              <div className="flex flex-row items-start justify-center gap-10 xl:flex-col xl:gap-4">
+              <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
                 {!isNormal && (
-                  <div className="flex items-center justify-center gap-2.5 font-medium">
+                  <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
                     <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
                     <Link
                       href={
@@ -180,7 +188,7 @@ const LearningResults = () => {
 
                 <div className="flex items-center justify-center gap-2.5">
                   <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
-                  <span className="min-w-fit text-base font-medium text-gray-800">
+                  <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                     Learning results
                   </span>
                 </div>
@@ -204,7 +212,7 @@ const LearningResults = () => {
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
     <div className="w-full flex-col xl:w-[515px]">
-      <div className="mb-6 mt-10 flex text-xl font-semibold text-gray-800 xl:mb-10 xl:mt-0">
+      <div className="mb-6 mt-8 flex text-lg font-semibold text-gray-800 lg:mb-6 lg:mt-10 xl:mb-10 xl:mt-0 xl:text-xl">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
@@ -221,14 +229,14 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           return (
             <div
               key={result?.id}
-              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-4 py-2"
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:px-4"
             >
-              <div className="mb-2 text-lg font-semibold text-gray-800 xl:font-medium">
+              <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg xl:font-medium">
                 {result?.short_name || result?.name}
               </div>
 
               <div className="items-cente mb-1 flex justify-between">
-                <div className="text-sm text-gray-800">
+                <div className="text-xs text-gray-800 xl:text-sm">
                   Learning result: {result?.score}%
                 </div>
                 {hasBothScores && (
@@ -249,7 +257,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-800">
+                <div className="text-xs text-gray-800 xl:text-sm">
                   Mock test: {result?.mock_test_score}%
                 </div>
                 {hasBothScores && (

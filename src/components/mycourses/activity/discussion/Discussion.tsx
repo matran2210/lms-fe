@@ -320,8 +320,8 @@ const Discussion = ({ class_id }: Props) => {
   }
 
   return (
-    <div className="mb-15 bg-white">
-      <div className="mb-6 text-lg font-medium">Discussion</div>
+    <div className="mb-15 flex h-full flex-col justify-between bg-white">
+      <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
       <Skeleton loading={loading}>
         {selector?.discussion?.map((e, i) => {
           return (
@@ -342,7 +342,7 @@ const Discussion = ({ class_id }: Props) => {
               <div
                 className={`${
                   e?.children?.[0] ? 'mt-6' : ''
-                } relative ml-[52px] overflow-hidden pl-5`}
+                } relative overflow-hidden pl-5 md:ml-[52px]`}
               >
                 {e?.children?.[0] && (
                   <div>
