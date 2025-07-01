@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
@@ -21,11 +21,13 @@ const Part = ({
   focusSubSectionIds,
   focusUnitIds,
   deadline,
+  isClickTitle,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
   focusUnitIds?: string
   deadline?: string
+  isClickTitle?: boolean
 }) => {
   const router = useRouter()
 
@@ -116,65 +118,40 @@ const Part = ({
     }
   }
 
+  useEffect(() => {
+    if (isClickTitle) {
+      handleRouterPartDetail()
+    }
+  }, [isClickTitle])
+
   return (
-    <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
-      <div
-        className="name-course text-2xl font-medium text-[#050505] xl:h-[60px]"
-        onClick={handleRouterPartDetail}
-      >
-        {course?.course_section_link_parents?.[0]?.is_preview_locked ||
-        course?.course_section_link_parents?.[0]?.is_showing_locked ? (
-          <div className="flex justify-between">
-            <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-              <Tooltip
-                title={course?.name}
-                showTooltip={(course?.name as string)?.length > 40}
-              >
-                {truncateBySpace(course?.name, 40) ?? ''}
-              </Tooltip>
-            </div>
-            <div>
-              <LockClosedIcon />
-            </div>
-          </div>
-        ) : (
-          <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-            <Tooltip
-              title={course?.name}
-              showTooltip={(course?.name as string)?.length > 40}
-            >
-              {truncateBySpace(course?.name, 40) ?? ''}
-            </Tooltip>
-          </div>
-        )}
-      </div>
-      <div className="des mb-15 mt-6">
-        <div className="h-[120px]">
-          <Tooltip
-            title={
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: course?.description,
-                }}
-              />
-            }
-            showTooltip={(course?.description as string)?.length > 200}
-          >
+    <div className="flex h-full flex-1 flex-col">
+      <div className="des my-6 line-clamp-3 h-[72px] text-ellipsis">
+        <Tooltip
+          title={
             <p
               dangerouslySetInnerHTML={{
-                __html: truncateHTML(25, course?.description) ?? '',
+                __html: course?.description,
               }}
-              className="h-[120px] text-base text-[#050505]"
             />
-          </Tooltip>
-        </div>
+          }
+          showTooltip={(course?.description as string)?.length > 200}
+        >
+          <p
+            dangerouslySetInnerHTML={{
+              __html: truncateHTML(25, course?.description) ?? '',
+            }}
+            className="text-base font-normal text-gray-800"
+          />
+        </Tooltip>
       </div>
+
       <div className="mt-auto">
-        <div className="progress mb-7">
+        <div className="progress mb-6">
           <div className="info mb-2 flex justify-between">
             <div className="text flex items-end">
               <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-sm font-medium leading-[14px] text-[#050505]">
+              <p className="ml-px pl-1 text-sm font-normal text-gray-800">
                 {showStatus}
               </p>
               <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
@@ -182,7 +159,7 @@ const Part = ({
               </span>
             </div>
             <div className="number">
-              <p className="text-sm font-medium text-[#050505]">
+              <p className="text-sm font-normal text-gray-800">
                 {progressPart}%
               </p>
             </div>
@@ -194,7 +171,7 @@ const Part = ({
             ></div>
           </div>
         </div>
-        <div className="action jusity-end relative flex items-center">
+        <div className="action flex items-center justify-end">
           <ButtonSecondary
             size="medium"
             title={
@@ -214,9 +191,6 @@ const Part = ({
           />
         </div>
       </div>
-      {/* Solution test modal */}
-      {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      {/* <TestModal open={open} setOpen={setOpen} title={''} /> */}
     </div>
   )
 }

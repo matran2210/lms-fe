@@ -5,6 +5,7 @@ import Tooltip from 'src/common/Tooltip'
 import { truncateString } from '@utils/index'
 import clsx from 'clsx'
 import { ANIMATION } from 'src/constants'
+import { LockClosedIcon } from '@assets/icons'
 
 const mappingBadgeFromStatus: Partial<
   Record<EAttemptStatus, { badge: string; className: string }>
@@ -39,6 +40,7 @@ const CardCourse = forwardRef<
     }
     classNameTitle?: string
     classNameCard?: string
+    isLock?: boolean
   }
 >(
   (
@@ -53,13 +55,14 @@ const CardCourse = forwardRef<
       badgeCode,
       classNameTitle = 'mt-2 mb-4 md:mb-6 md:mt-3',
       classNameCard = '',
+      isLock = false,
     },
     ref,
   ) => {
     return (
       <div
         className={clsx(
-          'relative rounded-xl bg-white p-4 shadow-card md:p-6 lg:p-8',
+          'relative flex flex-col rounded-xl bg-white p-4 shadow-card md:p-6 lg:p-8',
           classNameCard,
         )}
         ref={ref}
@@ -77,21 +80,28 @@ const CardCourse = forwardRef<
                   })}
           />
         )}
-        <h2
-          className={clsx(
-            classNameTitle,
-            'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
-            {
-              'text-gray-300': disabledTitle,
-              'text-gray-800': !disabledTitle,
-            },
+        <div className={clsx('flex justify-between', classNameTitle)}>
+          <h2
+            className={clsx(
+              'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
+              {
+                'text-gray-300': disabledTitle,
+                'text-gray-800': !disabledTitle,
+              },
+            )}
+            onClick={handleClickTitle}
+          >
+            <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
+              {truncateString(title, 60)}
+            </Tooltip>
+          </h2>
+          {isLock && (
+            <div>
+              <LockClosedIcon />
+            </div>
           )}
-          onClick={handleClickTitle}
-        >
-          <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
-            {truncateString(title, 60)}
-          </Tooltip>
-        </h2>
+        </div>
+
         {children}
         {/* card footer */}
         {footer}

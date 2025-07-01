@@ -27,10 +27,12 @@ const PartFailed = ({
   coursePart,
   class_user_id,
   is_passed_course,
+  isClickTitle,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
   is_passed_course: boolean
+  isClickTitle: boolean
 }) => {
   const isSubmitted =
     coursePart?.quiz?.attempt &&
@@ -185,67 +187,29 @@ const PartFailed = ({
       : 'Result'
   }
 
+  const handleClickTitle = () => {
+    if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
+      setOpenPopupCTA({
+        lockSection: true,
+        ctaUpgrade: false,
+        thankYou: false,
+        thankYouLater: false,
+      })
+    } else {
+      setOpen(true)
+    }
+    trackGAEvent(`Click Title ${showTitleFinalTest}`)
+  }
+
+  useEffect(() => {
+    if (isClickTitle) {
+      handleClickTitle()
+    }
+  }, [isClickTitle])
+
   return (
     <>
-      <div data-aos={ANIMATION.DATA_AOS}>
-        <div className="flex flex-col gap-3">
-          <StatusQuizTag
-            status={
-              (coursePart?.quiz?.attempt?.status || 'UN_SUBMITTED') as
-                | QUIZ_ATTEMPT_GRADING_STATUS
-                | QUIZ_ATTEMPT_STATUS
-            }
-          />
-          {coursePart?.course_section_link_parents?.[0]?.is_preview_locked ? (
-            <div className="flex justify-between">
-              <div
-                className={`name-part line-clamp-2 cursor-pointer text-2xl font-medium`}
-                onClick={() => {
-                  // setOpen(true)
-                  // trackGAEvent(`Click Title ${showTitleFinalTest}`)
-                }}
-              >
-                <Tooltip
-                  title={coursePart?.name}
-                  showTooltip={(coursePart?.name as string)?.length > 40}
-                >
-                  {truncateString(coursePart?.name, 40)}
-                </Tooltip>
-              </div>
-              <div>
-                <LockClosedIcon />
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`name-part line-clamp-2 cursor-pointer text-2xl font-medium`}
-              onClick={() => {
-                if (
-                  coursePart?.course_section_link_parents?.[0]
-                    ?.is_preview_locked
-                ) {
-                  setOpenPopupCTA({
-                    lockSection: true,
-                    ctaUpgrade: false,
-                    thankYou: false,
-                    thankYouLater: false,
-                  })
-                } else {
-                  setOpen(true)
-                }
-                trackGAEvent(`Click Title ${showTitleFinalTest}`)
-              }}
-            >
-              <Tooltip
-                title={coursePart?.name}
-                showTooltip={(coursePart?.name as string)?.length > 40}
-              >
-                {truncateString(coursePart?.name, 40)}
-              </Tooltip>
-            </div>
-          )}
-        </div>
-
+      <div className="flex h-full flex-1 flex-col justify-between">
         <div className="info mt-6 border-l border-[#DCDDDD] pl-4">
           {checkFinished && (
             <>
@@ -293,9 +257,8 @@ const PartFailed = ({
             }
           </div>
         </div>
-      </div>
-      <div className="mt-7">
-        <div className="action jusity-end relative flex items-center">
+
+        <div className="action flex items-center justify-end">
           {!checkFinished ? (
             !coursePart?.quiz?.is_limited ||
             (coursePart?.quiz?.attempt?.number_of_attempts !==
@@ -369,6 +332,7 @@ const PartFailed = ({
           )}
         </div>
       </div>
+
       <TestModal
         open={open}
         setOpen={setOpen}

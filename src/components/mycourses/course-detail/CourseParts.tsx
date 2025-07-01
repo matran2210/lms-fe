@@ -3,12 +3,13 @@ import { Badge, Divider, Tag } from 'antd'
 import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import NoData from 'src/common/NoData'
-import { ANIMATION, TEST_TYPE } from 'src/constants'
+import { TEST_TYPE } from 'src/constants'
 import { IMyCourseDetail } from 'src/type/courses'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 
 const CourseParts = ({
   courses,
@@ -25,6 +26,13 @@ const CourseParts = ({
 }) => {
   const router = useRouter()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
+  const [isClickTitle, setIsClickTitle] = useState(false)
+  const handleLock = (coursePart: IMyCourseDetail) => {
+    return (
+      coursePart?.course_section_link_parents?.[0]?.is_preview_locked ||
+      coursePart?.course_section_link_parents?.[0]?.is_showing_locked
+    )
+  }
 
   // Scroll đến phần tử có id khớp với router.query.type
   useEffect(() => {
@@ -62,34 +70,15 @@ const CourseParts = ({
                 ref={(el) => (cardRefs.current[coursePart.id] = el)}
               >
                 {router?.query?.focus_id === coursePart.id ? (
-                  <div
-                    className={`item card active-section aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
-                    data-aos={ANIMATION.DATA_AOS}
-                    style={{ zIndex: courses?.length - index }}
-                    ref={lastElementRef}
-                  >
-                    {[
-                      TEST_TYPE.MID_TERM_TEST,
-                      TEST_TYPE.FINAL_TEST,
-                      TEST_TYPE.MOCK_TEST,
-                    ].includes(coursePart?.course_section_type as TEST_TYPE) ? (
-                      <PartMiddleTest
-                        key={index}
-                        coursePart={coursePart}
-                        is_passed_course={is_passed_course}
-                        class_user_id={class_user_id}
-                      />
-                    ) : (
-                      <Part key={index} course={coursePart} />
-                    )}
-                  </div>
-                ) : (
-                  <div
+                  <CardCourse
+                    hideBadge
+                    title={coursePart?.name}
                     key={coursePart?.id}
-                    className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between rounded-xl bg-white p-[30px] shadow-sidebar`}
                     ref={lastElementRef}
-                    data-aos={ANIMATION.DATA_AOS}
-                    style={{ zIndex: courses?.length - index }}
+                    classNameTitle={`h-16 font-medium`}
+                    classNameCard="lg:min-h-[444px] min-h-[428px]"
+                    handleClickTitle={() => setIsClickTitle(true)}
+                    isLock={handleLock(coursePart)}
                   >
                     {[
                       TEST_TYPE.MID_TERM_TEST,
@@ -101,11 +90,47 @@ const CourseParts = ({
                         coursePart={coursePart}
                         is_passed_course={is_passed_course}
                         class_user_id={class_user_id}
+                        isClickTitle={isClickTitle}
                       />
                     ) : (
-                      <Part key={index} course={coursePart} />
+                      <Part
+                        key={index}
+                        course={coursePart}
+                        isClickTitle={isClickTitle}
+                      />
                     )}
-                  </div>
+                  </CardCourse>
+                ) : (
+                  <CardCourse
+                    title={coursePart?.name}
+                    key={coursePart?.id}
+                    hideBadge
+                    ref={lastElementRef}
+                    classNameTitle={`h-16 font-medium`}
+                    classNameCard="lg:min-h-[444px] min-h-[428px]"
+                    handleClickTitle={() => setIsClickTitle(true)}
+                    isLock={handleLock(coursePart)}
+                  >
+                    {[
+                      TEST_TYPE.MID_TERM_TEST,
+                      TEST_TYPE.FINAL_TEST,
+                      TEST_TYPE.MOCK_TEST,
+                    ].includes(coursePart?.course_section_type as TEST_TYPE) ? (
+                      <PartMiddleTest
+                        key={index}
+                        coursePart={coursePart}
+                        is_passed_course={is_passed_course}
+                        class_user_id={class_user_id}
+                        isClickTitle={isClickTitle}
+                      />
+                    ) : (
+                      <Part
+                        key={index}
+                        course={coursePart}
+                        isClickTitle={isClickTitle}
+                      />
+                    )}
+                  </CardCourse>
                 )}
               </div>
             )
@@ -162,12 +187,15 @@ const CourseParts = ({
                 key={coursePart?.id}
                 ref={(el) => (cardRefs.current[coursePart.id] = el)}
               >
-                <div
+                <CardCourse
+                  hideBadge
+                  title={coursePart?.name}
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between border-2 border-[#3E97FF] bg-white p-[30px] shadow-focus`}
                   ref={lastElementRef}
-                  data-aos={ANIMATION.DATA_AOS}
-                  style={{ zIndex: listCourseSectionFocus?.length - index }}
+                  classNameTitle={`h-16 font-medium`}
+                  classNameCard="lg:min-h-[444px] min-h-[428px]"
+                  handleClickTitle={() => setIsClickTitle(true)}
+                  isLock={handleLock(coursePart)}
                 >
                   {[
                     TEST_TYPE.MID_TERM_TEST,
@@ -179,6 +207,7 @@ const CourseParts = ({
                       coursePart={coursePart}
                       is_passed_course={is_passed_course}
                       class_user_id={class_user_id}
+                      isClickTitle={isClickTitle}
                     />
                   ) : (
                     <Part
@@ -187,9 +216,10 @@ const CourseParts = ({
                       focusSubSectionIds={focusSubSectionIds}
                       focusUnitIds={focusUnitIds}
                       deadline={deadline}
+                      isClickTitle={isClickTitle}
                     />
                   )}
-                </div>
+                </CardCourse>
               </div>
             )
 
@@ -214,12 +244,15 @@ const CourseParts = ({
                 key={coursePart?.id}
                 ref={(el) => (cardRefs.current[coursePart.id] = el)}
               >
-                <div
+                <CardCourse
+                  hideBadge
+                  title={coursePart?.name}
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
                   ref={lastElementRef}
-                  data-aos={ANIMATION.DATA_AOS}
-                  style={{ zIndex: listCourseSectionOther?.length - index }}
+                  classNameTitle={`h-16 font-medium`}
+                  classNameCard="lg:min-h-[444px] min-h-[428px]"
+                  handleClickTitle={() => setIsClickTitle(true)}
+                  isLock={handleLock(coursePart)}
                 >
                   {[
                     TEST_TYPE.MID_TERM_TEST,
@@ -231,11 +264,16 @@ const CourseParts = ({
                       coursePart={coursePart}
                       is_passed_course={is_passed_course}
                       class_user_id={class_user_id}
+                      isClickTitle={isClickTitle}
                     />
                   ) : (
-                    <Part key={index} course={coursePart} />
+                    <Part
+                      key={index}
+                      course={coursePart}
+                      isClickTitle={isClickTitle}
+                    />
                   )}
-                </div>
+                </CardCourse>
               </div>
             )
           })}
