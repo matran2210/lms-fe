@@ -149,12 +149,12 @@ const Part = ({
         <div className="mt-auto">
           <div className="progress mb-6">
             <div className="info mb-2 flex justify-between">
-              <div className="text flex items-end">
+              <div className="text flex items-center">
                 <Icon type={`${iconType}`} />
                 <p className="ml-px pl-1 text-sm font-normal text-gray-800">
                   {showStatus}
                 </p>
-                <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
+                <span className="ml-px pl-1 text-sm font-medium text-gray-400">
                   {formattedTime > 0 ? `${formattedTime} left` : ''}
                 </span>
               </div>

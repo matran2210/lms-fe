@@ -1,8 +1,14 @@
-import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { StarCircleIcon } from '@components/icons'
+import {
+  AlertInfoIcon,
+  CloseIconPreview,
+  DocumentTextIcon,
+  ResourceIcon,
+  ChapterIcon,
+} from '@assets/icons'
 import Layout from '@components/layout'
 import { useCourseContext } from '@contexts/index'
 import { buildQueryString, formatDate } from '@utils/index'
@@ -21,6 +27,9 @@ import TestModal from 'src/pages/courses/test'
 import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import BottomMenu from '@components/layout/BottomMenu'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import { Divider } from 'antd'
 
 interface IProps {
   course_section_type: string
@@ -68,6 +77,7 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
+  const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
@@ -449,11 +459,11 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-  // const handleGoBack = () => {
-  //   router.push({
-  //     pathname: `/courses/my-course/${router.query.id}`,
-  //   })
-  // }
+  const handleGoBack = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.id}`,
+    })
+  }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -563,7 +573,34 @@ const CoursePartDetail = () => {
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
           // handleShowToast={handleShowToast}
+          // setIsOpenChapter={setIsOpenChapter}
+          // isOpenChapter={isOpenChapter}
         />
+        <BottomMenu>
+          <div className="flex items-center justify-center gap-5">
+            <CardMenuItem
+              title="Note List"
+              icon={<DocumentTextIcon className="h-6 w-6" />}
+              // onClick={handleOpenNotesList}
+            />
+            <CardMenuItem
+              title="Resource"
+              icon={<ResourceIcon className="h-6 w-6" />}
+              // onClick={onOpenActivityResource}
+            />
+            <Divider
+              type="vertical"
+              className="my-auto h-6 border-white text-white"
+              orientation="center"
+            />
+            <CardMenuItem
+              title="Chapter"
+              icon={<ChapterIcon />}
+              onClick={() => setIsOpenChapter(true)}
+              className="md:flex"
+            />
+          </div>
+        </BottomMenu>
         <SappDrawerV3
           open={openLearningOutcome}
           onClose={handleCancel}
