@@ -40,7 +40,6 @@ const LearningResult = () => {
           max: maxValues[index],
         }
       })
-
       const option = {
         title: {
           text: '',
@@ -70,7 +69,7 @@ const LearningResult = () => {
                     type: 'rect',
                     invisible: false,
                     shape: {
-                      width: total ? 60 : 50,
+                      width: total ? 86 : 50,
                       height: 30,
                       r: 8,
                     },
@@ -80,9 +79,11 @@ const LearningResult = () => {
                       lineWidth: 2,
                       shadowColor: 'rgba(0, 0, 0, 0.1)',
                       shadowBlur: 10,
+                      align: 'center',
+                      verticalAlign: 'middle',
                     },
-                    x: total ? -30 : -25,
-                    y: -15,
+                    x: 0 - (total ? 43 : 25), // Half the width of the rectangle to center it
+                    y: 0 - 15, // Y position is still -15, to place it vertically centered
                     z: 3,
                   },
                   {
@@ -189,7 +190,7 @@ const LearningResult = () => {
       : '%Results = Module test (40%) + Topic test (60%)'
 
   return (
-    <div className="shadow-matchingquiz flex h-auto w-full rounded-2xl bg-white p-8 xl:h-[55vh]">
+    <div className="shadow-matchingquiz flex h-auto w-full rounded-2xl bg-white p-8 xl:h-[60vh]">
       <div className="w-full">
         <div className="mb-6 flex items-center justify-between md:mb-5 md:pb-3">
           <div className="w-full justify-between md:flex">
