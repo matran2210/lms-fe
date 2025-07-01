@@ -77,6 +77,7 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
+  const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
 
@@ -458,11 +459,11 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-  // const handleGoBack = () => {
-  //   router.push({
-  //     pathname: `/courses/my-course/${router.query.id}`,
-  //   })
-  // }
+  const handleGoBack = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.id}`,
+    })
+  }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -567,11 +568,13 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
-          // handleGoBack={handleGoBack}
+          handleGoBack={handleGoBack}
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
           // handleShowToast={handleShowToast}
+          setIsOpenChapter={setIsOpenChapter}
+          isOpenChapter={isOpenChapter}
         />
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
@@ -593,7 +596,7 @@ const CoursePartDetail = () => {
             <CardMenuItem
               title="Chapter"
               icon={<ChapterIcon />}
-              // onClick={() => setOpenResource(true)}
+              onClick={() => setIsOpenChapter(true)}
               className="md:flex"
             />
           </div>
