@@ -270,6 +270,7 @@ module.exports = {
       borderRadius: {
         none: '0px',
         full: '9999px',
+        2.5: '6px',
       },
       content: {
         empty: '""',
