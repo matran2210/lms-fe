@@ -317,7 +317,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                     <>
                       <div className="relative">
                         <PinnedNotifications />
-                        <CtaTrial />
                         <Component {...pageProps} />
                       </div>
                       <BackToTop />
