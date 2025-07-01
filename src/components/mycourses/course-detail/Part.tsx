@@ -1,33 +1,29 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import {
-  buildQueryString,
-  formatTime,
-  truncateBySpace,
-  truncateHTML,
-} from '@utils/index'
+import { buildQueryString, formatTime, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
-import { ANIMATION } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
-import { LockClosedIcon } from '@assets/icons'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 
 const Part = ({
   course,
   focusSubSectionIds,
   focusUnitIds,
   deadline,
-  isClickTitle,
+  isLock,
+  lastElementRef,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
   focusUnitIds?: string
   deadline?: string
-  isClickTitle?: boolean
+  isLock?: boolean
+  lastElementRef: (node: HTMLDivElement) => void
 }) => {
   const router = useRouter()
 
@@ -118,80 +114,85 @@ const Part = ({
     }
   }
 
-  useEffect(() => {
-    if (isClickTitle) {
-      handleRouterPartDetail()
-    }
-  }, [isClickTitle])
-
   return (
-    <div className="flex h-full flex-1 flex-col">
-      <div className="des my-6 line-clamp-3 h-[72px] text-ellipsis">
-        <Tooltip
-          title={
+    <CardCourse
+      hideBadge
+      title={course?.name}
+      key={course?.id}
+      ref={lastElementRef}
+      classNameTitle={`h-16 font-medium`}
+      classNameCard="lg:min-h-[444px] min-h-[428px]"
+      handleClickTitle={handleRouterPartDetail}
+      isLock={isLock}
+    >
+      <div className="flex h-full flex-1 flex-col">
+        <div className="des my-6 line-clamp-3 h-[72px] text-ellipsis">
+          <Tooltip
+            title={
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: course?.description,
+                }}
+              />
+            }
+            showTooltip={(course?.description as string)?.length > 200}
+          >
             <p
               dangerouslySetInnerHTML={{
-                __html: course?.description,
+                __html: truncateHTML(25, course?.description) ?? '',
+              }}
+              className="text-base font-normal text-gray-800"
+            />
+          </Tooltip>
+        </div>
+
+        <div className="mt-auto">
+          <div className="progress mb-6">
+            <div className="info mb-2 flex justify-between">
+              <div className="text flex items-end">
+                <Icon type={`${iconType}`} />
+                <p className="ml-px pl-1 text-sm font-normal text-gray-800">
+                  {showStatus}
+                </p>
+                <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
+                  {formattedTime > 0 ? `${formattedTime} left` : ''}
+                </span>
+              </div>
+              <div className="number">
+                <p className="text-sm font-normal text-gray-800">
+                  {progressPart}%
+                </p>
+              </div>
+            </div>
+            <div className="progressbar h-[6px] rounded-[100px] bg-[#F1F1F1]">
+              <div
+                className="progress-percentage h-[6px] rounded-[100px] bg-primary"
+                style={{ width: `${progressPart}%` }}
+              ></div>
+            </div>
+          </div>
+          <div className="action flex items-center justify-end">
+            <ButtonSecondary
+              size="medium"
+              title={
+                course?.cta_status === 'PREVIEW'
+                  ? 'Preview'
+                  : percentProgress === 0
+                    ? 'Begin'
+                    : percentProgress === 100
+                      ? 'Review'
+                      : 'Resume'
+              }
+              className="ml-auto"
+              onClick={() => {
+                handleRouterPartDetail()
+                trackGAEventBasedOnProgress(percentProgress)
               }}
             />
-          }
-          showTooltip={(course?.description as string)?.length > 200}
-        >
-          <p
-            dangerouslySetInnerHTML={{
-              __html: truncateHTML(25, course?.description) ?? '',
-            }}
-            className="text-base font-normal text-gray-800"
-          />
-        </Tooltip>
-      </div>
-
-      <div className="mt-auto">
-        <div className="progress mb-6">
-          <div className="info mb-2 flex justify-between">
-            <div className="text flex items-end">
-              <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-sm font-normal text-gray-800">
-                {showStatus}
-              </p>
-              <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
-                {formattedTime > 0 ? `${formattedTime} left` : ''}
-              </span>
-            </div>
-            <div className="number">
-              <p className="text-sm font-normal text-gray-800">
-                {progressPart}%
-              </p>
-            </div>
-          </div>
-          <div className="progressbar h-[6px] rounded-[100px] bg-[#F1F1F1]">
-            <div
-              className="progress-percentage h-[6px] rounded-[100px] bg-primary"
-              style={{ width: `${progressPart}%` }}
-            ></div>
           </div>
         </div>
-        <div className="action flex items-center justify-end">
-          <ButtonSecondary
-            size="medium"
-            title={
-              course?.cta_status === 'PREVIEW'
-                ? 'Preview'
-                : percentProgress === 0
-                  ? 'Begin'
-                  : percentProgress === 100
-                    ? 'Review'
-                    : 'Resume'
-            }
-            className="ml-auto"
-            onClick={() => {
-              handleRouterPartDetail()
-              trackGAEventBasedOnProgress(percentProgress)
-            }}
-          />
-        </div>
       </div>
-    </div>
+    </CardCourse>
   )
 }
 
