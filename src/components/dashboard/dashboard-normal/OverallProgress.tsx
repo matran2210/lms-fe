@@ -1,6 +1,7 @@
 import { AwardIcon, IconEssentional } from '@assets/icons/Dashboard'
 import EChart from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
+import { EChartsOption } from 'echarts'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
@@ -12,9 +13,15 @@ interface PieChartData {
   total_activities: number
 }
 
+interface ActivitiesData {
+  completed_activities: number
+  uncompleted_activities: number
+  total_activities: number
+}
+
 const OverallProgress = () => {
   const router = useRouter()
-  const [option, setOption] = useState<any>()
+  const [option, setOption] = useState<EChartsOption | null>()
   const isMobile = useIsMobile()
 
   const handlePieChartOption = (data: PieChartData) => {
@@ -53,6 +60,7 @@ const OverallProgress = () => {
           labelLine: { show: false },
           legend: { show: false },
           emphasis: { disabled: true },
+          clockwise: false,
           data: [
             {
               value: 0,
@@ -77,6 +85,7 @@ const OverallProgress = () => {
           labelLine: { show: false },
           legend: { show: false },
           emphasis: { disabled: true },
+          clockwise: false,
           data: [
             {
               value: values.completed,
@@ -87,7 +96,7 @@ const OverallProgress = () => {
               },
             },
             {
-              value: values.total_activities,
+              value: values.uncompleted,
               name: '',
               itemStyle: { color: 'transparent' },
             },
@@ -96,10 +105,10 @@ const OverallProgress = () => {
       ],
     }
 
-    setOption(option)
+    setOption(option as EChartsOption)
   }
 
-  const [activities, setActivities] = useState<any>()
+  const [activities, setActivities] = useState<ActivitiesData>()
 
   const getOverProgress = async (id: string) => {
     try {

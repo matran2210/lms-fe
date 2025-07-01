@@ -627,9 +627,12 @@ const QuizDocument = ({
 
   return (
     <div
-      className={clsx('flex flex-col gap-8 rounded-xl bg-gray-100 p-8', {
-        'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
-      })}
+      className={clsx(
+        'flex flex-col gap-4 rounded-xl bg-gray-100 p-4 md:gap-8 md:p-8',
+        {
+          'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
+        },
+      )}
     >
       <ConFirmSubmit
         open={openFinishQuiz}

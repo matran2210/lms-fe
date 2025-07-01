@@ -19,7 +19,7 @@ const PulsingExclamation = (props: React.SVGProps<SVGSVGElement>) => {
             {`
           @keyframes pulseAnim {
             0%   { transform: scale(1);   opacity: 1; }
-            50%  { transform: scale(1.3); opacity: 0.7; }
+            50%  { transform: scale(1.25); opacity: 0.7; }
             100% { transform: scale(1);   opacity: 1; }
           }
         `}
