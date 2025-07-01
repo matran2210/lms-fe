@@ -10,7 +10,7 @@ interface IProps extends DrawerProps {
   open: boolean
   handleCancel?: () => void
   handleBack?: () => void
-  width?: number
+  width?: string | number
   title: string
   isShowBtnClose?: boolean
   isShowFooter?: boolean
@@ -80,7 +80,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-2xl font-semibold leading-loose text-secondary">
+              <span className="text-xl font-semibold leading-loose text-secondary md:text-2xl">
                 {title}
               </span>
             </div>

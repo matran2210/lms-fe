@@ -7,7 +7,7 @@ import { userReducer } from 'src/redux/slice/User/User'
 
 interface IProps {
   data: SubjectOptionItem
-  index: number
+  className?: string
   isEdit: boolean
   setMakeDefaultDrawer: React.Dispatch<
     React.SetStateAction<
@@ -20,14 +20,25 @@ interface IProps {
   >
 }
 
-const SubjectItem = ({ data, index, isEdit, setMakeDefaultDrawer }: IProps) => {
+const SubjectItem = ({
+  data,
+  className,
+  isEdit,
+  setMakeDefaultDrawer,
+}: IProps) => {
   const { user } = useAppSelector(userReducer)
   return (
-    <div className="mb-4">
+    <div className={className}>
       <div
         className={clsx(
-          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] px-6 py-4 hover:bg-[#FFFBF2]',
+          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 hover:bg-[#FFFBF2] md:px-6 md:py-4',
         )}
+        onClick={() =>
+          setMakeDefaultDrawer({
+            status: true,
+            course_category_name: data.course_category_name,
+          })
+        }
       >
         <div className="flex items-center">
           <div>
@@ -45,15 +56,7 @@ const SubjectItem = ({ data, index, isEdit, setMakeDefaultDrawer }: IProps) => {
             </div>
           </div>
           {!isEdit && (
-            <div
-              className="group ml-auto flex w-fit cursor-pointer select-none items-center gap-2"
-              onClick={() =>
-                setMakeDefaultDrawer({
-                  status: true,
-                  course_category_name: data.course_category_name,
-                })
-              }
-            >
+            <div className="group ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={24}

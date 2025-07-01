@@ -38,7 +38,7 @@ const SappDrawerV2 = ({
       <div className={clsx(`w-full bg-white`, className)}>
         <div
           className={clsx(
-            'relative bg-[#050505] px-8 py-6 text-white',
+            'relative bg-[#050505] p-4 text-white md:px-8 md:py-6',
             classNameHeader,
           )}
         >
@@ -50,7 +50,9 @@ const SappDrawerV2 = ({
             <CloseModalIcon />
           </div>
         </div>
-        <div className={clsx(`px-8 py-6`, classNameBody)}>{children}</div>
+        <div className={clsx(`p-4 md:px-8 md:py-6`, classNameBody)}>
+          {children}
+        </div>
       </div>
     </Drawer>
   )

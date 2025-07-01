@@ -136,14 +136,16 @@ const Certificate = () => {
   ]
 
   return (
-    <div className="mt-8 lg:mt-10">
+    <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       <Table<ICertificate>
         className="profile-certificate-table hidden lg:block"
         columns={columns}
         dataSource={certificateData}
       />
-      <div className="flex flex-col gap-6 lg:hidden">
-        <div className="text-xl font-semibold text-secondary">Certificate</div>
+      <div className="flex flex-col gap-4 md:gap-6 lg:hidden">
+        <div className="hidden text-xl font-semibold text-secondary md:block">
+          Certificate
+        </div>
         {certificateData.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem
@@ -183,9 +185,12 @@ const CertificateItem = ({
 
   return (
     <div
-      className={clsx('flex flex-col gap-6', {
-        'border-b border-b-gray-300 pb-6': !isLastItem,
-      })}
+      className={clsx(
+        'flex flex-col gap-4 rounded-xl bg-white p-4 shadow-small md:gap-6 md:rounded-none md:bg-transparent md:p-0 md:shadow-none',
+        {
+          'md:border-b md:border-b-gray-300 md:pb-6': !isLastItem,
+        },
+      )}
     >
       <div
         className="group flex cursor-pointer items-center gap-4"
@@ -206,9 +211,12 @@ const CertificateItem = ({
             priority
           />
         ) : (
-          <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
+          <CertificateImg
+            size={80}
+            className="border-none text-[#A1A1A1] group-hover:text-primary"
+          />
         )}
-        <span className="text-lg font-semibold group-hover:text-primary">
+        <span className="text-base font-medium group-hover:text-primary md:text-lg md:font-semibold">
           {record?.course?.name}
         </span>
       </div>
@@ -260,7 +268,7 @@ const InfoWrapper = ({
   value: React.ReactNode
 }) => {
   return (
-    <div className="flex items-center justify-between text-base ">
+    <div className="flex items-center justify-between text-sm md:text-base">
       <div className="font-normal">{title}</div>
       <div className="font-semibold text-gray-800">{value}</div>
     </div>

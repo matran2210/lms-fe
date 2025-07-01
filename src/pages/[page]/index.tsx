@@ -9,16 +9,20 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { Tabs } from 'antd'
+import { Card, Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { useRef, useState } from 'react'
+import { CSSProperties, useRef, useState } from 'react'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'
 import { ProfilePages } from 'src/type/Profile'
 
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import {
+  convertSlugToTitle,
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from '@utils/index'
 
 import { useAppDispatch } from 'src/redux/hook'
 
@@ -32,10 +36,20 @@ import Footer from '@components/layout/Footer'
 import ButtonDanger from '@components/base/button/ButtonDanger'
 import clsx from 'clsx'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { CollapseArrowIcon } from '@assets/icons'
+import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
+import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
+
+interface IFullScreenMobile {
+  open: boolean
+  title: string
+  children: React.ReactNode
+}
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
@@ -43,6 +57,27 @@ const ProfilePage = () => {
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
+  const [openFullScreenMobile, setOpenFullScreenMobile] =
+    useState<IFullScreenMobile>({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+
+  const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
+    setOpenFullScreenMobile({
+      open: true,
+      title,
+      children,
+    })
+  }
+  const onCloseFullScreenMobile = () => {
+    setOpenFullScreenMobile({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+  }
 
   const NotFound = () => (
     <div className="grid h-full place-items-center p-6">
@@ -142,10 +177,102 @@ const ProfilePage = () => {
     },
   ]
 
+  const myProfileItems: CollapseProps['items'] = [
+    {
+      key: 'overview',
+      label: <p className="text-base font-semibold">Overview</p>,
+      children: (
+        <MyProfile
+          isEdit={isEdit}
+          setIsEdit={setIsEdit}
+          avatar={avatar}
+          handleSetAvatar={handleSetAvatar}
+          setReViewImageSrc={setReViewImageSrc}
+        />
+      ),
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'exam-id',
+      label: <p className="text-base font-semibold">Exam ID</p>,
+      children: <SubjectList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'profile',
+      label: <p className="text-base font-semibold">Profile</p>,
+      children: <ProfileList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
+  const mobileItems = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
+      ),
+      children: (
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['overview', 'exam-id', 'profile']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
+          )}
+          items={myProfileItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
+        />
+      ),
+    },
+    {
+      key: 'certificates',
+      label: (
+        <TabHeaderItem
+          icon={<Icon type="certificates" />}
+          title="Certificates"
+        />
+      ),
+      children: <Certificate />,
+    },
+    {
+      key: 'setting',
+      label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
+      children: <Settings onBack={() => {}} />,
+    },
+    {
+      key: 'sercurity',
+      label: (
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+      ),
+      children: (
+        <>
+          {isChangePassword ? (
+            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+          ) : (
+            <div className="flex flex-col gap-0 lg:gap-10">
+              <MyPasword setIsChangePassword={setIsChangePassword} />
+              <DeviceList />
+              <LoginHistoryList />
+            </div>
+          )}
+        </>
+      ),
+    },
+  ]
+
   return (
-    <Layout title="My Profile" size="sm" showSidebar={isAlwaysShowSidebar}>
-      <div className="flex h-full w-full flex-col">
-        <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
+    <Layout
+      title="My Profile"
+      size="sm"
+      showSidebar={isAlwaysShowSidebar}
+      fullWidth={isMobileView}
+    >
+      <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
+        <div className="hidden border-b border-[#DCDDDD] bg-white px-4 md:block lg:px-20">
           <div className="mx-auto my-0 flex h-full py-4.5">
             <SearchForm
               placeholder="Enter name of course..."
@@ -154,11 +281,12 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="mx-auto my-0 flex w-full grow flex-col">
-          <div className="main sm:mx-4 lg:mx-0 ">
+          <div className="main hidden sm:mx-4 md:block lg:mx-0">
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-            <div className="flex flex-col gap-16 bg-white px-10 py-8 shadow-box">
+            <HeaderMobile title="Student Profile" className="mb-4 md:hidden" />
+            <div className="flex flex-col gap-8 bg-transparent md:gap-16 md:bg-white md:px-10 md:py-8 md:shadow-box">
               <ProfileHeader
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}
@@ -177,13 +305,30 @@ const ProfilePage = () => {
                       <div>Logout</div>
                     </div>
                   }
-                  className="sapp-tabs-profile"
+                  className="sapp-tabs-profile hidden md:block"
                   defaultActiveKey="my-profile"
                   items={items}
                 />
+
+                <div className="flex flex-col gap-3 md:hidden">
+                  {mobileItems.map((item, index) => (
+                    <OverviewItemCard
+                      key={index}
+                      title={item.label}
+                      onClick={() =>
+                        onOpenFullScreenMobile(
+                          convertSlugToTitle(item.key),
+                          item.children,
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+
+                <Divider className="md:hidden" />
                 <div
                   className={clsx(
-                    'hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden',
+                    'hover-transition-font-weight flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:mt-8 lg:hidden',
                     {
                       '!hidden': isEdit || isChangePassword,
                     },
@@ -199,6 +344,16 @@ const ProfilePage = () => {
         </div>
         <Footer />
       </div>
+      {isMobileView && openFullScreenMobile.open && (
+        <FullScreenMobile
+          className="bg-gray-canvas px-4 pb-4"
+          title={openFullScreenMobile.title}
+          open={openFullScreenMobile.open}
+          onClose={onCloseFullScreenMobile}
+        >
+          {openFullScreenMobile.children}
+        </FullScreenMobile>
+      )}
     </Layout>
   )
 }

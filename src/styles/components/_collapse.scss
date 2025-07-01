@@ -17,3 +17,12 @@
     }
   }
 }
+.mobile-collapse {
+  .profile-collapse-item {
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}

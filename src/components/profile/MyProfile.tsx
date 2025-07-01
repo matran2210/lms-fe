@@ -17,7 +17,7 @@ import {
 import { convertHumanReadableToSnakeCase } from '@utils/index'
 import clsx from 'clsx'
 import { StaticImageData } from 'next/image'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
@@ -28,6 +28,10 @@ import {
   userReducer,
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
+import FullScreenMobile from './Modal/FullScreenMobile'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { Card } from 'antd'
+import { InputType } from 'zlib'
 
 interface IProps {
   isEdit: boolean
@@ -53,6 +57,9 @@ const MyProfile = ({
   handleSetAvatar,
   setReViewImageSrc,
 }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
+
+  const [openEditProfile, setOpenEditProfile] = useState(false)
   const dispatch = useAppDispatch()
   const { user, loading, loadingEditName } = useAppSelector(userReducer)
   // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
@@ -70,6 +77,7 @@ const MyProfile = ({
     setValue('full_name', user?.detail?.full_name)
     // Đặt trạng thái isEdit thành true
     setIsEdit(true)
+    setOpenEditProfile(true)
   }
   /**
    * Hàm để chuyển sang chế độ view
@@ -77,6 +85,7 @@ const MyProfile = ({
   const handleChangeToPreview = () => {
     // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
     setIsEdit(false)
+    setOpenEditProfile(false)
     // Đặt lại giá trị của form về ban đầu
     handleSetAvatar(undefined)
     setReViewImageSrc(undefined)
@@ -113,6 +122,7 @@ const MyProfile = ({
         dispatch(getMe())
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
+        setOpenEditProfile(false)
         return
       }
       // Gọi hành động thunk updateUser để cập nhật tên của người dùng
@@ -128,8 +138,10 @@ const MyProfile = ({
       dispatch(getMe())
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
+      setOpenEditProfile(false)
     } catch (error: any) {
       setIsEdit(false)
+      setOpenEditProfile(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
         await dispatch(getLogoutUser())
@@ -237,6 +249,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                type="date"
               />
               <TextWrapper
                 title="Email"
@@ -314,6 +327,15 @@ const MyProfile = ({
                 />
               )}
             </ul>
+            <div className="cursor-pointer rounded-lg bg-warning-50 p-4 text-warning md:hidden">
+              <div
+                className="flex items-center justify-between gap-2"
+                onClick={handleChangeToEditForm}
+              >
+                <div>Edit Profile</div>
+                <Icon type="edit" />
+              </div>
+            </div>
             {isEdit && (
               <div className="flex items-center justify-between gap-2 lg:hidden">
                 <ButtonSecondary
@@ -335,6 +357,118 @@ const MyProfile = ({
           </>
         </ProfileCard>
       </form>
+      {isMobileView && openEditProfile && (
+        <FullScreenMobile
+          className="bg-gray-canvas px-4 pb-4"
+          title={'My Profile'}
+          open={openEditProfile}
+          onClose={handleChangeToPreview}
+        >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="rounded-lg bg-white p-4 shadow-small">
+              <div className="mb-6 text-base font-semibold text-gray-800">
+                Edit Profile
+              </div>
+              <>
+                <ul>
+                  <TextWrapper
+                    title="Full Name"
+                    value={user?.detail?.full_name}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Username"
+                    value={user?.username}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Role"
+                    value={USER_TYPE[user?.type]?.label}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="D.O.B"
+                    value={
+                      user?.detail?.dob
+                        ? formatDate(user?.detail?.dob, true)
+                        : ''
+                    }
+                    loading={loading}
+                    control={control}
+                    isEdit
+                    type="date"
+                  />
+                  <TextWrapper
+                    title="Email"
+                    value={user?.user_contacts?.[0]?.email}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Phone"
+                    value={user?.user_contacts?.[0]?.phone}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="University"
+                    value={user?.detail?.university?.name ?? ''}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Major"
+                    value={user?.detail?.major?.name}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Field of work"
+                    value={user?.detail?.company_type ?? ''}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                  <TextWrapper
+                    title="Position"
+                    value={user?.detail?.company_position ?? ''}
+                    loading={loading}
+                    control={control}
+                    isEdit
+                  />
+                </ul>
+
+                <div className="flex items-center justify-between gap-2">
+                  <ButtonSecondary
+                    className="w-full"
+                    size="medium"
+                    title="Cancel"
+                    onClick={handleChangeToPreview}
+                    disabled={loading || loadingEditName}
+                  />
+                  <ButtonPrimary
+                    className="w-full px-4 py-2"
+                    size="medium"
+                    title="Confirm"
+                    htmlType="submit"
+                    disabled={loading || loadingEditName}
+                  />
+                </div>
+              </>
+            </div>
+          </form>
+        </FullScreenMobile>
+      )}
     </div>
   )
 }
@@ -349,6 +483,7 @@ const TextWrapper = ({
   showEditIcon = false,
   control,
   isInForm = false,
+  type,
 }: {
   title: string
   children?: React.ReactNode
@@ -364,6 +499,7 @@ const TextWrapper = ({
     any
   >
   isInForm?: boolean
+  type?: 'number' | 'email' | 'password' | 'text' | 'date'
 }) => {
   return (
     <li
@@ -387,12 +523,13 @@ const TextWrapper = ({
           className="h-full w-full flex-1 rounded-lg px-4 py-3"
           textSize="sm"
           defaultValue={value}
+          type={type}
         ></HookFormTextFieldV2>
       </div>
 
       <div
         className={clsx(
-          'w-[17.43rem] max-w-[200px] flex-none text-[#A1A1A1] lg:max-w-[50%]',
+          'max-w-[200px] flex-none text-gray-800 md:w-[17.43rem] lg:max-w-[50%]',
           { 'hidden lg:block': isEdit },
         )}
       >

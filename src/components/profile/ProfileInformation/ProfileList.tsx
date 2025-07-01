@@ -103,6 +103,7 @@ const ProfileList = ({ isEdit }: IProps) => {
             key={e.id}
             data={e}
             index={i}
+            className={clsx({ 'mb-4': i < profileOptions.length - 1 })}
             isEdit={isEdit}
             setMakeDefaultDrawer={setMakeDefaultDrawer}
           />
@@ -135,8 +136,8 @@ const ProfileList = ({ isEdit }: IProps) => {
             />
           }
           handleCancel={closeMakeDefault}
-          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
-          classNameBody="md:px-0 lg:px-8"
+          classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
+          classNameBody="md:!px-0 lg:!px-8"
           rootClassName={'profile-subject-drawer'}
           classNames={{
             content: 'md:rounded-2xl',
