@@ -207,7 +207,7 @@ const PartFailed = ({
         isLock={isLock}
       >
         <div className="flex h-full flex-1 flex-col justify-between">
-          <div className="info mt-6 border-l border-[#DCDDDD] pl-4">
+          <div className="info mt-6 border-l border-gray-2 pl-4">
             {checkFinished && (
               <>
                 <div className="time-allow mb-4 flex justify-between">
