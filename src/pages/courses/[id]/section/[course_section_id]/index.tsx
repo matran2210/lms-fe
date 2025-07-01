@@ -568,13 +568,13 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
-          handleGoBack={handleGoBack}
+          // handleGoBack={handleGoBack}
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
           // handleShowToast={handleShowToast}
-          setIsOpenChapter={setIsOpenChapter}
-          isOpenChapter={isOpenChapter}
+          // setIsOpenChapter={setIsOpenChapter}
+          // isOpenChapter={isOpenChapter}
         />
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
