@@ -208,7 +208,31 @@ const ProfilePage = () => {
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
     },
   ]
-  const mobileItems = [
+  const mySecurityItems: CollapseProps['items'] = [
+    {
+      key: 'password',
+      label: <p className="text-base font-semibold">Password</p>,
+      children: <MyPasword setIsChangePassword={setIsChangePassword} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'device-list',
+      label: <p className="text-base font-semibold">Browser</p>,
+      children: <DeviceList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'login-history',
+      label: <p className="text-base font-semibold">Log in History</p>,
+      children: <LoginHistoryList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
+
+  const mobileOverviewItems = [
     {
       key: 'my-profile',
       label: (
@@ -249,17 +273,17 @@ const ProfilePage = () => {
         <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
       ),
       children: (
-        <>
-          {isChangePassword ? (
-            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
-          ) : (
-            <div className="flex flex-col gap-0 lg:gap-10">
-              <MyPasword setIsChangePassword={setIsChangePassword} />
-              <DeviceList />
-              <LoginHistoryList />
-            </div>
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['password', 'device-list', 'login-history']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
           )}
-        </>
+          items={mySecurityItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
+        />
       ),
     },
   ]
@@ -311,7 +335,7 @@ const ProfilePage = () => {
                 />
 
                 <div className="flex flex-col gap-3 md:hidden">
-                  {mobileItems.map((item, index) => (
+                  {mobileOverviewItems.map((item, index) => (
                     <OverviewItemCard
                       key={index}
                       title={item.label}
