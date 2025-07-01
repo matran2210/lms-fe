@@ -1,3 +1,4 @@
+import { ProfilePages } from 'src/type/Profile'
 import { PageLink, TitleSidebar } from './index'
 import { LANG_SIGNIN } from './lang'
 
@@ -45,12 +46,6 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-2',
   },
   {
-    name: `${TitleSidebar.EXAM_INFORMATION}`,
-    icon: 'exam_information',
-    url: '#',
-    type: 'level-2',
-  },
-  {
     name: `${TitleSidebar.NEW_NOTE}`,
     icon: 'create-note',
     url: '#',
@@ -68,6 +63,18 @@ const MENU_OPTIONS: MenuOption[] = [
     url: PageLink.CALENDAR,
     type: 'level-1',
   },
+  {
+    name: TitleSidebar.EXAM_LIST,
+    icon: 'exam_list',
+    url: `/${ProfilePages.ExamList}`,
+    type: 'level-1',
+  },
+  {
+    name: TitleSidebar.EXAM_INFORMATION,
+    icon: 'exam-information',
+    url: `/${ProfilePages.ExamInformation}`,
+    type: 'level-1',
+  },
 ]
 
 const MENU_OPTIONS_EVENTTEST: MenuOption[] = [
@@ -83,7 +90,7 @@ const MENU_OPTIONS_BOTTOM: MenuOption[] = [
   {
     name: `${TitleSidebar.NOTIFICATION}`,
     icon: 'notification',
-    url: `${PageLink.NOTIFICATION}`,
+    url: '',
     type: 'level-1',
   },
   {

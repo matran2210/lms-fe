@@ -1,22 +1,26 @@
+import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { StarCircleIcon } from '@components/icons'
 import Layout from '@components/layout'
-import { Skeleton } from 'antd'
+import { useCourseContext } from '@contexts/index'
+import { buildQueryString, formatDate } from '@utils/index'
+import { Alert, Skeleton } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
-
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import TestModal from 'src/pages/courses/test'
+import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { useCourseContext } from '@contexts/index'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import { StarCircleIcon } from '@components/icons'
 
 interface IProps {
   course_section_type: string
@@ -51,6 +55,7 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -85,6 +90,14 @@ const CoursePartDetail = () => {
     })
   }
 
+  const focusSubSectionIds = router?.query?.focusSubSectionIds as
+    | string
+    | undefined
+  const focusUnitIds = router?.query?.focusUnitIds as string | undefined
+  const deadline = router?.query?.deadline as string | undefined
+  const isOverdue = dayjs(deadline).isBefore(new Date())
+  const listFocusSubSectionIds = focusSubSectionIds?.split(',') || []
+  const listFocusUnitIds = focusUnitIds?.split(',') || []
   const { data: previewPart, isLoading } = useGetData('course-part-detail', {})
 
   const tree = TreeHelper.convertFromArray(previewPart?.course_section_tree)
@@ -117,7 +130,13 @@ const CoursePartDetail = () => {
       setLoadingChapter(true)
       try {
         if (course_section_id !== router.query.chapter) {
-          router.push(`${location.pathname}?chapter=${course_section_id}`)
+          const searchParams = buildQueryString({
+            focusSubSectionIds,
+            focusUnitIds,
+            deadline,
+            chapter: course_section_id,
+          })
+          router.push(`${location.pathname}?${searchParams}`)
         }
         const res = await CoursesAPI.getPartDetail(id, course_section_id)
 
@@ -152,6 +171,7 @@ const CoursePartDetail = () => {
     try {
       const res = await CoursesAPI.getCourseLearningOutcome(
         chapterDetail?.course_learning_outcome?.id,
+        router?.query?.id || undefined,
       )
       setLearningOutcome(res?.data)
     } catch (error) {
@@ -333,7 +353,7 @@ const CoursePartDetail = () => {
       course_section?.course_section_type === 'UNIT'
     ) {
       // Handle activity or unit section
-      lockSection
+      lockSection || learningOutcome?.next_section?.is_preview_locked
         ? handleLockedSection()
         : handleUnlockedSection(() =>
             handleRouterActivity(course_section?.children?.[0]?.id, undefined),
@@ -429,23 +449,75 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-
-  // Lưu trữ mảng đã được biến đổi vào sessionStorage khi loadingChapter thay đổi
-  useEffect(() => {
-    // Chuyển đổi mảng thành chuỗi JSON và lưu vào sessionStorage với key 'aaaa'
-    window.sessionStorage.setItem(
-      'activityId',
-      JSON.stringify(transformedArray),
-    )
-  }, [loadingChapter])
+  // const handleGoBack = () => {
+  //   router.push({
+  //     pathname: `/courses/my-course/${router.query.id}`,
+  //   })
+  // }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
   }, [courseChapterId])
 
+  const listFocusSubsectionNames = useMemo(() => {
+    if (listFocusSubSectionIds?.length && partDetail?.children?.length) {
+      return listFocusSubSectionIds.map((id) => {
+        const section = partDetail.children.find((item: any) => item.id === id)
+        return section?.short_name || section?.name
+      })
+    }
+
+    if (listFocusUnitIds.length && chapterDetail?.children?.length) {
+      const hasUnits = chapterDetail.children.some((item: any) =>
+        listFocusUnitIds.includes(item.id),
+      )
+      return hasUnits
+        ? [chapterDetail?.chapterDetail || chapterDetail.name]
+        : []
+    }
+
+    return []
+  }, [partDetail, chapterDetail])
+
   return (
-    <Layout title="Course Part Detail">
-      <div className="mt-10">
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
+      {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
+        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+          <Alert
+            message={
+              <div className="flex items-center gap-2">
+                <span className="shrink-0">You are now learning</span>{' '}
+                <span className="line-clamp-1 font-medium">
+                  {listFocusSubsectionNames?.join(', ')}
+                </span>
+              </div>
+            }
+            type={isOverdue ? 'error' : 'info'}
+            showIcon
+            className="w-full max-w-3xl rounded-none px-[14px]"
+            closable
+            closeIcon={
+              <span className="text-[#99A1B7]">
+                <CloseIconPreview />
+              </span>
+            }
+            icon={
+              <div
+                className={clsx('!mr-4', {
+                  'flex items-center gap-2': isOverdue,
+                })}
+              >
+                <AlertInfoIcon />{' '}
+                {isOverdue && (
+                  <span>Overdue: {formatDate(deadline || '')}</span>
+                )}
+              </div>
+            }
+          />
+        </div>
+      ) : null}
+
+      <div className="mt-4">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -486,6 +558,10 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
+          // handleGoBack={handleGoBack}
+          listFocusSubSectionIds={listFocusSubSectionIds}
+          listFocusUnitIds={listFocusUnitIds}
+          deadline={deadline}
           // handleShowToast={handleShowToast}
         />
         <SappDrawerV3

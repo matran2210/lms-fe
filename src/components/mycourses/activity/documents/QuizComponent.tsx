@@ -1,8 +1,11 @@
 import {
+  AlertInfoIcon,
+  CalculatorIconV2,
   CircleCheckIcon,
   CircleInfoIcon,
   DownloadIcon,
   FileTextIcon,
+  ScratchPadIconV2,
 } from '@assets/icons'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
@@ -19,7 +22,7 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectWordQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import { Divider, Tabs } from 'antd'
+import { Alert, Divider, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -46,6 +49,7 @@ import {
   confirmQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
+import { pushNotes } from 'src/redux/slice/Course/NotesList'
 
 import { IEssayAnswer } from 'src/type/answer'
 import { IFile } from 'src/type/course'
@@ -608,8 +612,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ),
                 children: (
                   <div className="mt-6">
+                    <Alert
+                      message={
+                        <div className="text-xs text-gray-800">
+                          This feature is only available on desktop or tablet.
+                        </div>
+                      }
+                      type={'info'}
+                      showIcon
+                      className="w-full rounded-md px-[14px] md:hidden"
+                      icon={
+                        <div className={'!mr-4'}>
+                          <AlertInfoIcon />
+                        </div>
+                      }
+                    />
                     <EssayQuestionPreview
-                      className="!bg-transparent !p-0"
+                      className="hidden !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={
@@ -860,6 +879,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setOpenFile &&
         setOpenFile({ type: 'file' }, e?.resource?.url, e?.resource?.name)
     }
+    const handleAddNote = () => {
+      const note = {
+        uuid: uuidv4(),
+        id: '',
+        name: 'Note',
+        description: '',
+      }
+      dispatch(pushNotes(note))
+    }
+
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
@@ -888,131 +917,150 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           )}
 
           {activeQuestion?.question_topic?.description && (
-            <Divider className="my-8" />
+            <Divider className="my-4 md:my-8" />
           )}
           <div className="relative">
             {renderQuestion()}
 
-            {exhibitData && exhibitData?.length > 0 && (
-              <Popover
-                placement="leftTop"
-                trigger="click"
-                getPopupContainer={() => document.body}
-                content={
-                  <div className="flex flex-col gap-2">
-                    {exhibitData?.map((e: any, index: number) => {
-                      return (
-                        <div
-                          key={e?.value}
-                          className={clsx(
-                            'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
-                          )}
-                          onClick={(event) =>
-                            handleOpenExhibit(event, e, index)
-                          }
-                        >
-                          {exhibitText} {index + 1}
-                        </div>
-                      )
-                    })}
-                  </div>
-                }
-                zIndex={1050}
-              >
-                <div
-                  className={clsx(
-                    'group absolute right-0  z-[1050] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
-                    {
-                      'top-[12px]':
-                        (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                          !activeQuestion?.requirements?.length) ||
-                        !isShowIconButtonInBottom,
-                      'top-[142px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                        !!activeQuestion?.requirements?.length,
-                      'bottom-[62px]': isShowIconButtonInBottom,
-                    },
-                  )}
-                >
-                  <NotesOutline className="h-8 w-8" />
-                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-                  {showWarning && (
-                    <PulsingExclamation
-                      className="absolute -right-3 -top-4"
-                      style={{
-                        animation: 'pulseAnim 1.2s infinite ease-in-out',
-                        transformOrigin: 'center',
-                      }}
-                    />
-                  )}
-                </div>
-              </Popover>
-            )}
-            {activeQuestion?.question_topic?.files?.length > 0 && (
-              <Popover
-                className=""
-                placement="leftTop"
-                trigger="click"
-                getPopupContainer={() => document.body}
-                content={
-                  <div className="flex flex-col gap-2">
-                    {activeQuestion?.question_topic?.files?.map(
-                      (e: any, index: number) => {
+            <div className="absolute bottom-0 right-0 z-[1050] flex w-12 flex-col gap-2">
+              {exhibitData && exhibitData?.length > 0 && (
+                <Popover
+                  placement="leftTop"
+                  trigger="click"
+                  getPopupContainer={() => document.body}
+                  content={
+                    <div className="flex flex-col gap-2">
+                      {exhibitData?.map((e: any, index: number) => {
                         return (
                           <div
-                            className={clsx(
-                              `flex items-start justify-between gap-8 p-2`,
-                            )}
                             key={e?.value}
+                            className={clsx(
+                              'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
+                            )}
+                            onClick={(event) =>
+                              handleOpenExhibit(event, e, index)
+                            }
                           >
-                            <div
-                              key={e?.value}
-                              className={clsx(
-                                'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
-                              )}
-                              onClick={() => handleOpenFile(e)}
-                            >
-                              {e?.resource?.name}
-                            </div>
-                            <div
-                              className="cursor-pointer text-white"
-                              onClick={() => {
-                                download(
-                                  e?.resource?.name,
-                                  e?.resource?.file_key,
-                                )
-                              }}
-                            >
-                              <DownloadIcon color="currentColor" />
-                            </div>
+                            {exhibitText} {index + 1}
                           </div>
                         )
+                      })}
+                    </div>
+                  }
+                  zIndex={1050}
+                >
+                  <div
+                    className={clsx(
+                      'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                      {
+                        'top-[12px]':
+                          (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                            !activeQuestion?.requirements?.length) ||
+                          !isShowIconButtonInBottom,
+                        'top-[142px]':
+                          activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                          !!activeQuestion?.requirements?.length,
+                        'bottom-[62px]': isShowIconButtonInBottom,
                       },
                     )}
+                  >
+                    <NotesOutline className="h-8 w-8" />
+                    <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                    {showWarning && (
+                      <PulsingExclamation
+                        className="absolute -right-3 -top-4"
+                        style={{
+                          animation: 'pulseAnim 1.2s infinite ease-in-out',
+                          transformOrigin: 'center',
+                        }}
+                      />
+                    )}
                   </div>
-                }
-                zIndex={1050}
-              >
-                <div
-                  className={clsx(
-                    'group absolute right-0 z-[1050] grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-                    {
-                      'top-[74px]':
-                        (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                          !activeQuestion?.requirements?.length) ||
-                        !isShowIconButtonInBottom,
-                      'top-[214px]':
-                        activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                        !!activeQuestion?.requirements?.length,
-                      'bottom-0': isShowIconButtonInBottom,
-                    },
-                  )}
+                </Popover>
+              )}
+              {activeQuestion?.question_topic?.files?.length > 0 && (
+                <Popover
+                  className=""
+                  placement="leftTop"
+                  trigger="click"
+                  getPopupContainer={() => document.body}
+                  content={
+                    <div className="flex flex-col gap-2">
+                      {activeQuestion?.question_topic?.files?.map(
+                        (e: any, index: number) => {
+                          return (
+                            <div
+                              className={clsx(
+                                `flex items-start justify-between gap-8 p-2`,
+                              )}
+                              key={e?.value}
+                            >
+                              <div
+                                key={e?.value}
+                                className={clsx(
+                                  'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
+                                )}
+                                onClick={() => handleOpenFile(e)}
+                              >
+                                {e?.resource?.name}
+                              </div>
+                              <div
+                                className="cursor-pointer text-white"
+                                onClick={() => {
+                                  download(
+                                    e?.resource?.name,
+                                    e?.resource?.file_key,
+                                  )
+                                }}
+                              >
+                                <DownloadIcon color="currentColor" />
+                              </div>
+                            </div>
+                          )
+                        },
+                      )}
+                    </div>
+                  }
+                  zIndex={1050}
                 >
-                  <FileTextIcon />
-                  <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-                </div>
-              </Popover>
-            )}
+                  <div
+                    className={clsx(
+                      'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                      {
+                        'top-[74px]':
+                          (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                            !activeQuestion?.requirements?.length) ||
+                          !isShowIconButtonInBottom,
+                        'top-[214px]':
+                          activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                          !!activeQuestion?.requirements?.length,
+                        'bottom-0': isShowIconButtonInBottom,
+                      },
+                    )}
+                  >
+                    <FileTextIcon />
+                    <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                  </div>
+                </Popover>
+              )}
+              <Divider className="my-0 border-primary text-primary md:hidden" />
+              <div
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay md:hidden"
+                onClick={() => {
+                  setOpenFile?.({
+                    type: 'calculator',
+                  })
+                }}
+              >
+                <CalculatorIconV2 isActive className="h-8 w-8" />
+              </div>
+              <div
+                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay md:hidden"
+                onClick={handleAddNote}
+              >
+                <ScratchPadIconV2 isActive className="h-8 w-8" />
+              </div>
+            </div>
           </div>
         </div>
 

@@ -70,7 +70,7 @@ function PinnedNotifications() {
                     onClick={handleClosePinned}
                     className="float-right flex h-full cursor-pointer content-center items-center pr-6"
                   >
-                    <CloseIconNote />
+                    <CloseIconNote color="#FFFFFF" />
                   </div>
                 </Col>
               </Row>

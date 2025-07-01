@@ -14,6 +14,25 @@ import {
 import Link from 'next/link'
 import { EChartsOption } from 'echarts'
 import Tooltip from 'src/common/Tooltip'
+import useIsMobile from 'src/hooks/useIsMobile'
+
+interface CourseInfo {
+  courseType: string
+  category: string
+}
+
+interface MockTestResponse {
+  success: boolean
+  data: {
+    reports: ILearningResult[]
+    mock_tests: Array<{ id: string }>
+  }
+}
+
+interface TooltipParams {
+  value: number[]
+  name: string
+}
 
 const LearningResults = () => {
   const router = useRouter()
@@ -24,7 +43,8 @@ const LearningResults = () => {
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = useMemo(
-    () => JSON.parse(localStorage.getItem('courseInfo') as any),
+    () =>
+      JSON.parse(localStorage.getItem('courseInfo') as string) as CourseInfo,
     [],
   )
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
@@ -33,10 +53,14 @@ const LearningResults = () => {
       ? '%Results = Graded activities (70%) + Final test (30%)'
       : '%Results = Module test (40%) + Topic test (60%)'
 
+  const isMobile = useIsMobile()
+
   useEffect(() => {
     const getLearningResults = async (id: string) => {
       try {
-        const res = (await DashboardAPI.getMockTestResults(id)) as any
+        const res = (await DashboardAPI.getMockTestResults(
+          id,
+        )) as MockTestResponse
         if (res && res.success) {
           const data = res.data.reports
           setResults(data)
@@ -57,28 +81,39 @@ const LearningResults = () => {
 
   const option = useMemo(() => {
     if (!results || results.length === 0) return null
-    const maxValues = results.map((result: any) => {
-      const learning = result?.score || 0
-      const mock = result?.mock_test_score || 0
-      return Math.max(learning, mock, 100)
-    })
-    const indicator = results.map((result: any, idx: any) => ({
-      text: result?.short_name || result?.name,
-      max: maxValues[idx],
-    }))
+    const maxValues = results.map(
+      (result: ILearningResult | IMockTestResult) => {
+        const learning = 'score' in result ? result.score : 0
+        const mock =
+          'mock_test_score' in result ? result.mock_test_score || 0 : 0
+        return Math.max(learning, mock, 100)
+      },
+    )
+    const indicator = results.map(
+      (result: ILearningResult | IMockTestResult, idx: number) => ({
+        text:
+          'short_name' in result
+            ? result.short_name || ''
+            : 'name' in result
+              ? (result as IMockTestResult)?.name
+              : '',
+        max: maxValues[idx],
+      }),
+    )
     return {
       title: { text: '' },
+      responsive: true,
       tooltip: {
         borderWidth: 0,
         trigger: 'item',
-        formatter: function (params: any) {
+        formatter: function (params: TooltipParams) {
           const values = params.value
           const indicators = results.map(
             (e: ILearningResult | IMockTestResult) =>
-              'name' in e ? e.name : e.short_name,
+              'name' in e ? e.name : (e as ILearningResult)?.short_name,
           )
           let tooltipText = `<strong>${params.name}</strong><br/>`
-          values.forEach((val: any, i: number) => {
+          values.forEach((val: number, i: number) => {
             tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
           })
           return tooltipText
@@ -94,9 +129,9 @@ const LearningResults = () => {
           splitArea: { areaStyle: { color: 'transparent' } },
           name: {
             color: '#374151',
-            fontSize: 14,
+            fontSize: isMobile ? 12 : 14,
             fontWeight: '500',
-            lineHeight: 22,
+            lineHeight: isMobile ? 20 : 22,
             formatter: function (name: string) {
               const maxLength = 16
               return name.length > maxLength
@@ -112,14 +147,20 @@ const LearningResults = () => {
           data: [
             {
               name: 'Learning results',
-              value: results?.map((result: any) => result?.score),
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  'score' in result ? result.score : 0,
+              ),
               areaStyle: { color: 'rgba(111, 211, 176, 0.45)' },
               lineStyle: { color: '#6FD3B0', width: 1 },
               itemStyle: { color: '#6FD3B0' },
             },
             {
               name: 'Mock test results',
-              value: results?.map((result: any) => result?.mock_test_score),
+              value: results?.map(
+                (result: ILearningResult | IMockTestResult) =>
+                  'mock_test_score' in result ? result.mock_test_score || 0 : 0,
+              ),
               areaStyle: { color: 'rgba(251, 140, 91, 0.45)' },
               lineStyle: { color: '#FB8C5B', width: 1 },
               itemStyle: { color: '#FB8C5B' },
@@ -131,12 +172,12 @@ const LearningResults = () => {
   }, [results])
 
   return (
-    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-8 xl:flex xl:h-[53vh]">
+    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-4 xl:flex xl:h-[53vh] xl:p-8">
       <div className="w-full">
         <div className="mb-5 flex items-center justify-between pb-3">
-          <div className="flex w-full flex-row justify-between xl:flex-col">
+          <div className="w-full flex-row justify-between xl:flex xl:flex-col">
             <div className="flex">
-              <div className="min-w-fit text-xl font-semibold">
+              <div className="min-w-fit text-lg font-semibold xl:text-xl">
                 Your Learning Results
               </div>
               <Tooltip
@@ -148,20 +189,25 @@ const LearningResults = () => {
                 </div>
               </Tooltip>
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="mt-2 text-xs text-gray-400 xl:mt-0 xl:text-sm">
               {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
             </div>
           </div>
         </div>
         <div className="flex">
           {option && (
-            <div className="flex grow flex-col gap-5 px-5 xl:flex-row 2xl:px-12">
+            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:px-5 2xl:pl-0 2xl:pr-12">
               <div className="grow">
-                <EChart option={option as EChartsOption} />
+                <EChart
+                  option={option as EChartsOption}
+                  height={isMobile ? '350px' : '400px'}
+                  minHeight={isMobile ? '350px' : '400px'}
+                  width={isMobile ? '366px' : '665px'}
+                />
               </div>
-              <div className="flex flex-row items-start justify-center gap-10 xl:flex-col xl:gap-4">
+              <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
                 {!isNormal && (
-                  <div className="flex items-center justify-center gap-2.5 font-medium">
+                  <div className="flex items-center justify-center gap-2.5 text-sm font-medium xl:text-base">
                     <span className="min-h-3 min-w-3 rounded-full bg-dashboard-mock-test"></span>
                     <Link
                       href={
@@ -180,7 +226,7 @@ const LearningResults = () => {
 
                 <div className="flex items-center justify-center gap-2.5">
                   <span className="min-h-3 min-w-3 rounded-full bg-dashboard-learing"></span>
-                  <span className="min-w-fit text-base font-medium text-gray-800">
+                  <span className="min-w-fit text-sm font-medium text-gray-800 xl:text-base">
                     Learning results
                   </span>
                 </div>
@@ -204,7 +250,7 @@ const LearningResults = () => {
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
     <div className="w-full flex-col xl:w-[515px]">
-      <div className="mb-6 mt-10 flex text-xl font-semibold text-gray-800 xl:mb-10 xl:mt-0">
+      <div className="mb-6 mt-8 flex text-lg font-semibold text-gray-800 lg:mb-6 lg:mt-10 xl:mb-10 xl:mt-0 xl:text-xl">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
@@ -221,14 +267,14 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           return (
             <div
               key={result?.id}
-              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-4 py-2"
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:px-4"
             >
-              <div className="mb-2 text-lg font-semibold text-gray-800 xl:font-medium">
+              <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg">
                 {result?.short_name || result?.name}
               </div>
 
               <div className="items-cente mb-1 flex justify-between">
-                <div className="text-sm text-gray-800">
+                <div className="text-xs text-gray-800 xl:text-sm">
                   Learning result: {result?.score}%
                 </div>
                 {hasBothScores && (
@@ -239,7 +285,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
                       <MatchFailIcon />
                     )}
                     <div
-                      className={`ms-1 text-lg font-semibold ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
+                      className={`ms-1 text-sm font-semibold md:text-lg ${differenceResult > 0 ? 'text-success' : 'text-error'}`}
                     >
                       {differenceResult > 0 ? '+' : ''}
                       {differenceResult}%
@@ -249,11 +295,13 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-800">
+                <div className="text-xs text-gray-800 xl:text-sm">
                   Mock test: {result?.mock_test_score}%
                 </div>
                 {hasBothScores && (
-                  <div className="mt-2 text-base text-gray-400">difference</div>
+                  <div className="mt-2 text-sm text-gray-400 md:text-base">
+                    difference
+                  </div>
                 )}
               </div>
               {hasBothScores && (

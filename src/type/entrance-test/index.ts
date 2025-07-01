@@ -1,3 +1,5 @@
+import { EAttemptStatus } from 'src/constants/attempt'
+
 export interface IEntranceTest {
   id: string
   name: string
@@ -9,46 +11,28 @@ export interface IEntranceTest {
   quiz_timed: number
   course_category_id: string
   subject_id: string
-  attempts: Attempt[]
+  attempts: IEntranceTestAttempt[]
   is_attempt: boolean
   total_question: number
   created_at: string
   attempt_times: number
   total_attempt_time?: number
-  attempt_status: string
+  attempt_status: EAttemptStatus
   quiz_attempt_id: string
   score?: number
   total_correct_answer: number
 }
 
-export interface Attempt {
-  id: string
-  created_at: string
-  updated_at: string
-  deleted_at: any
-  user_id: string
-  quiz_id: string
-  description: any
+export interface IEntranceTestAttempt {
+  answers?: []
+  created_at?: string
+  id?: string
+  is_graded?: boolean
+  number_of_attempts?: number
+  status?: string
+  ratio_score?: string
   total_attempt_time?: number
-  is_graded: boolean
-  score?: number
-  major_score: any
-  english_score?: number
-  ratio_score: string
-  multiple_choice_score?: number
-  constructed_score?: number
-  feed_back: any
-  status: string
-  grading_status: any
-  feedback_user_id: any
-  quiz_position_mapping?: QuizPositionMapping[]
-  class_user_id: any
-  number_of_attempts: number
-  started_at: string
-  finished_at?: string
-  major_classification?: string
-  english_classification?: string
-  answers: Answer[]
+  started_at?: string
 }
 
 export interface QuizPositionMapping {

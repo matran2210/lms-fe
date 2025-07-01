@@ -50,7 +50,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   return (
     <>
       {!isEmpty(courses) && !guideIsActive ? (
-        <div className="mb-6 grid gap-6  md:grid-cols-2 2xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
           {courses?.map((course, index: number) => (
             <Course
               key={index}

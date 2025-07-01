@@ -14,16 +14,18 @@ interface IProps {
   numberOfAttempt?: number
   customFooter?: ReactNode
   otherContent?: ReactNode
+  gapContent?: number
 }
 
 const TestPopup = ({
   open,
   title,
-  time,
+  time, // seconds
   numberOfAttempt = 1,
   customFooter,
   otherContent,
   setOpen,
+  gapContent = 10,
 }: IProps) => {
   const timeFormated = formatTime(time, 'HH:mm:ss')
   const isTimeOut = timeFormated === '00:00:00'
@@ -40,23 +42,24 @@ const TestPopup = ({
       header={title}
       showFooter={false}
       customFooter={customFooter}
+      gapContent={gapContent}
     >
       {otherContent ? (
         <div className="pb-10">{otherContent}</div>
       ) : (
         <div className="text-center text-base font-normal text-gray-800">
-          <div className="pb-6">
+          <div>
             {isFinalAttemptTimeout ? (
-              <div>
+              <div className="pb-2">
                 The test has timed out and has been submitted automatically.
               </div>
             ) : (
-              <>
+              <div className="pb-6">
                 <div>Your last attempt was unexpectedly ended. </div>
                 <div>
                   Please click &apos;Continue&apos; to proceed with the test.
                 </div>
-              </>
+              </div>
             )}
           </div>
           {time && (

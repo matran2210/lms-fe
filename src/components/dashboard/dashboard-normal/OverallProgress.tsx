@@ -1,9 +1,11 @@
 import { AwardIcon, IconEssentional } from '@assets/icons/Dashboard'
 import EChart from '@components/base/chart/Chart'
 import { DashboardAPI } from '@pages/api/dashboard'
+import { EChartsOption } from 'echarts'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
+import useIsMobile from 'src/hooks/useIsMobile'
 
 interface PieChartData {
   completed_activities: number
@@ -11,10 +13,16 @@ interface PieChartData {
   total_activities: number
 }
 
+interface ActivitiesData {
+  completed_activities: number
+  uncompleted_activities: number
+  total_activities: number
+}
+
 const OverallProgress = () => {
   const router = useRouter()
-  const [option, setOption] = useState<any>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [option, setOption] = useState<EChartsOption | null>()
+  const isMobile = useIsMobile()
 
   const handlePieChartOption = (data: PieChartData) => {
     const values = {
@@ -52,6 +60,7 @@ const OverallProgress = () => {
           labelLine: { show: false },
           legend: { show: false },
           emphasis: { disabled: true },
+          clockwise: false,
           data: [
             {
               value: 0,
@@ -76,6 +85,7 @@ const OverallProgress = () => {
           labelLine: { show: false },
           legend: { show: false },
           emphasis: { disabled: true },
+          clockwise: false,
           data: [
             {
               value: values.completed,
@@ -86,7 +96,7 @@ const OverallProgress = () => {
               },
             },
             {
-              value: values.total_activities,
+              value: values.uncompleted,
               name: '',
               itemStyle: { color: 'transparent' },
             },
@@ -95,10 +105,10 @@ const OverallProgress = () => {
       ],
     }
 
-    setOption(option)
+    setOption(option as EChartsOption)
   }
 
-  const [activities, setActivities] = useState<any>()
+  const [activities, setActivities] = useState<ActivitiesData>()
 
   const getOverProgress = async (id: string) => {
     try {
@@ -110,8 +120,6 @@ const OverallProgress = () => {
       }
     } catch (error) {
       setOption(null)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -124,7 +132,7 @@ const OverallProgress = () => {
     <div className="shadow-matchingquiz rounded-2xl bg-white p-6">
       <div className="flex-col">
         <div className="flex">
-          <div className="min-w-fit text-xl font-semibold">
+          <div className="mb-6 min-w-fit text-lg font-semibold md:text-xl xl:mb-0">
             Overall Progress
           </div>
           <Tooltip
@@ -143,42 +151,49 @@ const OverallProgress = () => {
       </div>
       {option && (
         <>
-          <div className="flex flex-row justify-around gap-2 4xl:gap-8">
+          <div className="flex-row justify-around gap-2 md:flex 4xl:gap-8">
             <EChart
               option={option}
-              width="250px"
-              height="250px"
-              minHeight="270px"
+              width={isMobile ? '350px' : '250px'}
+              height={isMobile ? '240px' : '250px'}
+              minHeight={isMobile ? '240px' : '270px'}
             />
             <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
-              <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <div className="h-3 w-3 rounded-full bg-primary" />
-                </div>
-                <span className="text-base font-medium">
-                  <span className="text-gray-800">Completed</span>{' '}
-                  <span className="text-gray">
-                    ({activities?.completed_activities})
+              {/* Responsive wrapper for top 2 items */}
+              <div className="mt-7 grid grid-cols-2 gap-x-4 gap-y-1 md:mt-0 md:flex md:flex-col md:gap-1 3xl:gap-3">
+                {/* Item 1 - Completed */}
+                <div className="flex items-center gap-0.5 2xl:gap-[5px]">
+                  <div className="flex h-6 w-6 items-center justify-center">
+                    <div className="h-3 w-3 rounded-full bg-primary" />
+                  </div>
+                  <span className="text-sm font-medium md:text-base">
+                    <span className="text-gray-800">Completed</span>{' '}
+                    <span className="text-gray">
+                      ({activities?.completed_activities})
+                    </span>
                   </span>
-                </span>
-              </div>
-              <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                <div className="flex h-6 w-6 items-center justify-center">
-                  <span className="h-3 w-3 rounded-full bg-primary-100" />
                 </div>
-                <span className="text-base font-medium">
-                  <span className="text-gray-800">Not completed</span>{' '}
-                  <span className="text-gray">
-                    ({activities?.uncompleted_activities})
+
+                {/* Item 2 - Not Completed */}
+                <div className="flex items-center gap-0.5 2xl:gap-[5px]">
+                  <div className="flex h-6 w-6 items-center justify-center">
+                    <span className="h-3 w-3 rounded-full bg-primary-100" />
+                  </div>
+                  <span className="text-sm font-medium md:text-base">
+                    <span className="text-gray-800">Not completed</span>{' '}
+                    <span className="text-gray">
+                      ({activities?.uncompleted_activities})
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
 
-              <div className="mt-10 flex flex-row items-center">
+              {/* Item 3 - Award message (full width always) */}
+              <div className="mt-4 flex flex-row items-center justify-center md:mt-10 md:justify-start">
                 <div className="flex h-6 w-6 items-center justify-center">
                   <AwardIcon />
                 </div>
-                <span className="ms-1 text-base text-gray-800">
+                <span className="ms-1 text-sm text-gray-800 md:text-base">
                   Complete your learning to win the exam
                 </span>
               </div>

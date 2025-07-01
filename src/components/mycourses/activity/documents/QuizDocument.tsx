@@ -536,7 +536,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -627,9 +627,12 @@ const QuizDocument = ({
 
   return (
     <div
-      className={clsx('flex flex-col gap-8 rounded-xl bg-gray-100 p-8', {
-        'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
-      })}
+      className={clsx(
+        'flex flex-col gap-4 rounded-xl bg-gray-100 p-4 md:gap-8 md:p-8',
+        {
+          'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
+        },
+      )}
     >
       <ConFirmSubmit
         open={openFinishQuiz}
@@ -638,7 +641,7 @@ const QuizDocument = ({
         handleCancel={handleCancelConfirmSubmit}
       />
       <div className="grid min-h-[50px] grid-cols-4 items-center gap-3 rounded-md bg-white px-6 py-2 ">
-        <div className="col-span-1 flex flex-wrap items-center gap-2">
+        <div className="col-span-1 hidden flex-wrap items-center gap-2 md:flex">
           <div
             className={`${
               is_graded || 'invisible'
@@ -654,7 +657,7 @@ const QuizDocument = ({
         {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
           isNull(quizSetting)) && (
           <>
-            <div className="col-span-2 mx-auto flex w-fit items-center gap-3">
+            <div className="col-span-4 mx-auto flex w-fit items-center gap-3 md:col-span-2">
               <button
                 disabled={activeQuestionIndex === 0 || loading}
                 className={`cursor-pointer select-none  ${
@@ -672,7 +675,7 @@ const QuizDocument = ({
                   <CircleArrowLeftIcon />
                 </span>
               </button>
-              <div className="text-bw-13 text-base">
+              <div className="text-bw-13 text-sm md:text-base">
                 Question: {activeQuestionIndex + 1} of {questions?.length || 0}
               </div>
               <button
@@ -694,7 +697,7 @@ const QuizDocument = ({
               </button>
             </div>
             <div
-              className="col-span-1 flex cursor-pointer justify-end text-[#1C274C]"
+              className="col-span-1 hidden cursor-pointer justify-end text-[#1C274C] md:flex"
               onClick={() =>
                 setFocusOnlyQuiz({
                   open: !focusOnlyQuiz.open,
@@ -788,7 +791,12 @@ const QuizDocument = ({
           )}
       </div>
       {/* Confirm Button */}
-      <div className="flex justify-end">
+      <div
+        className={clsx('justify-end', {
+          'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+          flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
+        })}
+      >
         <Tooltip
           title={
             isQuestionConfirmed ||
