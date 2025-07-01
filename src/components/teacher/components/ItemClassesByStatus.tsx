@@ -252,7 +252,7 @@ const ItemClassesByStatus = ({
                   enableCourse ? 'text-bw-1' : 'text-gray-2 '
                 }`}
               >
-                {classes?.progress}%
+                {classes?.progress?.toFixed(2)}%
               </p>
             </div>
           </div>
@@ -262,7 +262,7 @@ const ItemClassesByStatus = ({
                 enableCourse ? 'bg-primary' : 'bg-gray-2'
               } h-1.5`}
               style={{ width: `${classes?.progress}%` }}
-            ></div>
+            />
           </div>
         </div>
 
