@@ -2213,8 +2213,8 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements &&
-      !essayData
+      currentTabContent?.data?.requirements
+      // && !essayData
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
@@ -2376,7 +2376,7 @@ const TestDetail = () => {
                     if (id) {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      setEssayData(undefined)
+                      // setEssayData(undefined)
                       handleChangeTab(id)
                     }
                   }}
@@ -2823,7 +2823,7 @@ const TestDetail = () => {
                       if (filteredTabs[index + 1].id) {
                         setScratchPads('')
                         handleSubmitAnswer('change-tab')
-                        setEssayData(undefined)
+                        // setEssayData(undefined)
                         handleChangeTab(filteredTabs[index + 1].id)
                       }
                     }}
