@@ -284,18 +284,15 @@ const CourseDetail = () => {
         program={data?.pages?.[0]?.courseDetail?.data?.program}
         data={data?.pages?.[0]?.courseDetail}
       />
-      {pinnedCompletedCourse.isOpen && (
-        <div className="fixed inset-x-0 bottom-4 z-50 lg:container md:px-8 lg:max-w-[1524px]">
-          <div className="w-full">
-            <PinnedCompletedCourse
-              pinnedCompletedCourse={pinnedCompletedCourse}
-            />
-          </div>
-        </div>
-      )}
+
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
           <CtaTrial />
+          {pinnedCompletedCourse.isOpen && (
+            <PinnedCompletedCourse
+              pinnedCompletedCourse={pinnedCompletedCourse}
+            />
+          )}
         </div>
       </div>
     </Layout>

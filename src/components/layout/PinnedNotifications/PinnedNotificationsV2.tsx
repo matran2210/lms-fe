@@ -4,7 +4,7 @@ const PinnedNotificationsV2 = ({
   children,
   bgColor = 'bg-primary-200',
   borderColor = 'border-primary',
-  classPinned = 'items-center',
+  classPinned = 'justify-between items-center',
   heightPinned = 'h-auto',
 }: {
   children: React.ReactNode
@@ -16,7 +16,7 @@ const PinnedNotificationsV2 = ({
   return (
     <div
       className={clsx(
-        'flex w-full justify-between rounded-lg border px-6 py-5',
+        'flex w-full rounded-lg border px-6 py-4 lg:py-5',
         heightPinned,
         classPinned,
         borderColor,
