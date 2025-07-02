@@ -1,8 +1,14 @@
-import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { StarCircleIcon } from '@components/icons'
+import {
+  AlertInfoIcon,
+  CloseIconPreview,
+  DocumentTextIcon,
+  ResourceIcon,
+  ChapterIcon,
+} from '@assets/icons'
 import Layout from '@components/layout'
 import { useCourseContext } from '@contexts/index'
 import { buildQueryString, formatDate } from '@utils/index'
@@ -21,6 +27,12 @@ import TestModal from 'src/pages/courses/test'
 import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import BottomMenu from '@components/layout/BottomMenu'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import { Divider } from 'antd'
+import LearningResource from '@components/mycourses/LearningResource'
+import { useAppDispatch } from 'src/redux/hook'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
 
 interface IProps {
   course_section_type: string
@@ -55,6 +67,7 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
@@ -68,9 +81,10 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
+  const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
+  const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
@@ -180,6 +194,11 @@ const CoursePartDetail = () => {
         setLoadingLearningOutcome(false)
       }, 500)
     }
+  }
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
   }
 
   useEffect(() => {
@@ -449,11 +468,11 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-  // const handleGoBack = () => {
-  //   router.push({
-  //     pathname: `/courses/my-course/${router.query.id}`,
-  //   })
-  // }
+  const handleGoBack = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.id}`,
+    })
+  }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -517,7 +536,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="mt-8 lg:mt-10">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -558,12 +577,39 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
-          // handleGoBack={handleGoBack}
+          handleGoBack={handleGoBack}
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
           // handleShowToast={handleShowToast}
+          setIsOpenChapter={setIsOpenChapter}
+          isOpenChapter={isOpenChapter}
         />
+        <BottomMenu>
+          <div className="flex items-center justify-center gap-5">
+            <CardMenuItem
+              title="Note List"
+              icon={<DocumentTextIcon className="h-6 w-6" />}
+              onClick={handleOpenNotesList}
+            />
+            <CardMenuItem
+              title="Resource"
+              icon={<ResourceIcon className="h-6 w-6" />}
+              onClick={() => setOpenResource(true)}
+            />
+            <Divider
+              type="vertical"
+              className="my-auto h-6 border-white text-white"
+              orientation="center"
+            />
+            <CardMenuItem
+              title="Chapter"
+              icon={<ChapterIcon />}
+              onClick={() => setIsOpenChapter(true)}
+              className="md:flex"
+            />
+          </div>
+        </BottomMenu>
         <SappDrawerV3
           open={openLearningOutcome}
           onClose={handleCancel}
@@ -572,6 +618,9 @@ const CoursePartDetail = () => {
           btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
           isShowFooter
+          closable
+          isShowBtnClose
+          rootClassName={'responsive-drawer-center'}
         >
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -622,6 +671,12 @@ const CoursePartDetail = () => {
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
             is_passed_course={isPassedCourse}
+          />
+        )}
+        {openResource && (
+          <LearningResource
+            open={openResource}
+            setOpenResource={setOpenResource}
           />
         )}
       </div>

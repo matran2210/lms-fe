@@ -196,7 +196,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
           ))}
         </TextSkeleton>
       ) : (
-        <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
+        <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
           <NoDataV2 />
         </div>
       )}

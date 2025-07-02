@@ -36,7 +36,7 @@ const CourseDashboard = () => {
 
       </div> */}
 
-      <div className="grid xl:grid-cols-2 xl:gap-8">
+      <div className="grid xl:grid-cols-2 xl:gap-8 2xl:mb-8">
         <div className="order-2 xl:order-1">
           <TopicProgress />
         </div>
