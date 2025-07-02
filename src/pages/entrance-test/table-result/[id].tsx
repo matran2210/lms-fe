@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons/entranceTest'
+import { CloseIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
