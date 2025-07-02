@@ -16,7 +16,7 @@ const PinnedNotificationsV2 = ({
   return (
     <div
       className={clsx(
-        'flex w-full justify-between rounded-lg border px-6 py-5',
+        'flex w-full justify-between rounded-lg border p-3 md:px-6 md:py-5',
         heightPinned,
         classPinned,
         borderColor,
