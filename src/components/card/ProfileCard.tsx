@@ -33,7 +33,7 @@ const ProfileCard = ({
       }
       variant="borderless"
       className={clsx(
-        'profile-card w-full !shadow-none md:mt-8 lg:mt-0',
+        'profile-card w-full !shadow-none md:mt-8 lg:mt-10',
         className,
       )}
       extra={extra}
