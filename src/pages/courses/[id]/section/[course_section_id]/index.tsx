@@ -609,6 +609,9 @@ const CoursePartDetail = () => {
           btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
           isShowFooter
+          closable
+          isShowBtnClose
+          rootClassName={'responsive-drawer-center'}
         >
           <TextSkeleton
             loading={loadingLearningOutcome}
