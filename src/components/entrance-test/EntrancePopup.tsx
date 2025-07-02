@@ -72,7 +72,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         title={undefined}
         fullWidthBtn={true}
       >
-        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
+        <h2 className="mb-4 max-w-screen-sm text-2xl font-bold text-gray-800 md:text-4xl">
           Test Information
         </h2>
         <div className="text-sm text-gray-800">
