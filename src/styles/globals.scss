@@ -774,7 +774,7 @@ textarea.is-invalid:focus {
 // }
 .sapp-profile-modal {
   .ant-modal-content {
-    @apply rounded-2xl p-10;
+    @apply rounded-2xl p-6 md:p-10;
   }
 }
 .sapp-custom-modal.success-modal {

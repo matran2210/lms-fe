@@ -11,12 +11,17 @@ import TabHeaderItem from '@components/tab/TabHeaderItem'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { Card, Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { CSSProperties, useRef, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ANIMATION,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  PageLink,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'
-import { ProfilePages } from 'src/type/Profile'
+import { IDeviceItem, ProfilePages } from 'src/type/Profile'
 
 import {
   convertSlugToTitle,
@@ -24,7 +29,7 @@ import {
   removeLocalStorageItem,
 } from '@utils/index'
 
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 import DeviceList from '@components/profile/DeviceInformation/DeviceList'
 import MyProfile from '@components/profile/MyProfile'
@@ -37,9 +42,13 @@ import ButtonDanger from '@components/base/button/ButtonDanger'
 import clsx from 'clsx'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import { CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon, HamburgerMenuLargeIcon } from '@assets/icons'
 import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
 import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
+import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
+import UserApi from 'src/redux/services/User/user'
+import { useRouter } from 'next/router'
+import { useCourseContext } from '@contexts/index'
 
 interface IFullScreenMobile {
   open: boolean
@@ -48,12 +57,15 @@ interface IFullScreenMobile {
 }
 
 const ProfilePage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
+  const { loginHistory } = useAppSelector(userReducer)
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
+  const [listDevices, setListDevices] = useState<IDeviceItem[]>()
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
@@ -63,7 +75,8 @@ const ProfilePage = () => {
       title: '',
       children: <></>,
     })
-
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
   const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
     setOpenFullScreenMobile({
       open: true,
@@ -94,7 +107,17 @@ const ProfilePage = () => {
       </div>
     </div>
   )
-
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
@@ -111,6 +134,21 @@ const ProfilePage = () => {
       await authenticationManager.logout()
     } catch (error) {}
   }
+  const getListDevices = async () => {
+    const res = await UserApi.getListDevices()
+    setListDevices(res)
+  }
+
+  useEffect(() => {
+    dispatch(
+      getLoginHistory({
+        page_index: DEFAULT_PAGE_NUMBER,
+        page_size: DEFAULT_PAGE_SIZE,
+        type: 'login',
+      }),
+    )
+    getListDevices()
+  }, [])
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -213,19 +251,33 @@ const ProfilePage = () => {
       key: 'password',
       label: <p className="text-base font-semibold">Password</p>,
       children: <MyPasword setIsChangePassword={setIsChangePassword} />,
+      showArrow: false,
+      collapsible: 'icon',
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
     },
     {
       key: 'device-list',
-      label: <p className="text-base font-semibold">Browser</p>,
+      label: (
+        <CollapseListLabel
+          title="Browser"
+          subtitle="These are browsers that you logged on"
+          count={listDevices?.length || 0}
+        />
+      ),
       children: <DeviceList />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
     },
     {
       key: 'login-history',
-      label: <p className="text-base font-semibold">Log in History</p>,
+      label: (
+        <CollapseListLabel
+          title="Log in History"
+          subtitle="These are IP adresses that logged in"
+          count={loginHistory?.meta?.total_records || 0}
+        />
+      ),
       children: <LoginHistoryList />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
@@ -272,7 +324,7 @@ const ProfilePage = () => {
       label: (
         <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
       ),
-      children: (
+      children: loginHistory && (
         <Collapse
           bordered={false}
           expandIconPosition="end"
@@ -292,12 +344,19 @@ const ProfilePage = () => {
     <Layout
       title="My Profile"
       size="sm"
-      showSidebar={isAlwaysShowSidebar}
+      showSidebar={showSidebar || isAlwaysShowSidebar}
+      handleToggleSidebar={handleCloseSidebar}
       fullWidth={isMobileView}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
-        <div className="hidden border-b border-[#DCDDDD] bg-white px-4 md:block lg:px-20">
-          <div className="mx-auto my-0 flex h-full py-4.5">
+        <div className="mb-4 mt-2 hidden items-center justify-between gap-6 md:flex lg:mb-6">
+          <div
+            className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
+            onClick={handleOpenSidebar}
+          >
+            <HamburgerMenuLargeIcon />
+          </div>
+          <div className="w-full rounded-lg bg-white px-8 py-4">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
@@ -309,7 +368,11 @@ const ProfilePage = () => {
             <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-            <HeaderMobile title="Student Profile" className="mb-4 md:hidden" />
+            <HeaderMobile
+              title="Student Profile"
+              className="mb-4 md:hidden"
+              onBack={() => router.push(`${PageLink.COURSES}`)}
+            />
             <div className="flex flex-col gap-8 bg-transparent md:gap-16 md:bg-white md:px-10 md:py-8 md:shadow-box">
               <ProfileHeader
                 reViewImageSrc={reViewImageSrc}
@@ -381,5 +444,25 @@ const ProfilePage = () => {
     </Layout>
   )
 }
+
+const CollapseListLabel = ({
+  title,
+  subtitle,
+  count,
+}: {
+  title: string
+  subtitle: string
+  count: number
+}) => (
+  <div>
+    <p className="mb-2 text-base font-semibold">
+      {title}{' '}
+      <span className="text-base font-normal text-secondary-300">
+        ({count})
+      </span>
+    </p>
+    <p className="text-sm">{subtitle}</p>
+  </div>
+)
 
 export default withAuthorization([UserType.STUDENT])(ProfilePage)

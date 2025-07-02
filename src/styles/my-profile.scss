@@ -68,7 +68,8 @@
   @apply flex justify-between gap-3;
   .ant-otp-input-wrapper {
     input {
-      @apply h-[67px] w-[70px] rounded-md border border-[#DCDDDD] text-center text-2xl font-medium shadow-0 outline-none;
+      padding-inline: 1rem !important;
+      @apply rounded-md border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:px-5 md:py-4 md:text-2xl;
       @apply focus:border-primary focus:shadow-0 focus:outline-none;
 
       &.ant-input-status-error {

@@ -38,13 +38,13 @@ const SappDrawerV2 = ({
       <div className={clsx(`w-full bg-white`, className)}>
         <div
           className={clsx(
-            'relative bg-[#050505] p-4 text-white md:px-8 md:py-6',
+            'relative bg-[#050505] p-4 text-2xl text-white md:px-8 md:py-6',
             classNameHeader,
           )}
         >
-          <div className="pr-10 text-2xl font-medium">{title}</div>
+          <div className="pr-0 font-medium md:pr-10">{title}</div>
           <div
-            className="absolute right-8 top-1/2 -translate-y-2/4 cursor-pointer md:right-0 lg:right-8"
+            className="absolute right-4 top-1/2 -translate-y-2/4 cursor-pointer md:right-0 lg:right-8"
             onClick={handleCancel}
           >
             <CloseModalIcon />

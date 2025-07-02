@@ -177,7 +177,7 @@ const MyProfile = ({
                 value={user?.code?.toString() ?? user?.key?.toString()}
                 loading={loading}
                 control={control}
-                isEdit={isEdit}
+                hiddenOnEdit={isEdit}
               />
               <TextWrapper
                 title="Full Name"
@@ -298,20 +298,20 @@ const MyProfile = ({
                 value={user?.main_class?.join(',') ?? ''}
                 loading={loading}
                 control={control}
-                isEdit={isEdit}
+                hiddenOnEdit={isEdit}
               />
               <TextWrapper
                 title="Deferred/Retake class"
                 value={user?.reserve_retook_class?.join(', ') ?? ''}
                 loading={loading}
                 control={control}
-                isEdit={isEdit}
+                hiddenOnEdit={isEdit}
               />
               <TextWrapper
                 title="Status"
                 loading={loading}
                 control={control}
-                isEdit={isEdit}
+                hiddenOnEdit={isEdit}
               >
                 <span className={`${USER_STATUS[user?.status]?.color}`}>
                   {USER_STATUS[user.status]?.label}
@@ -484,6 +484,7 @@ const TextWrapper = ({
   control,
   isInForm = false,
   type,
+  hiddenOnEdit = false,
 }: {
   title: string
   children?: React.ReactNode
@@ -500,12 +501,14 @@ const TextWrapper = ({
   >
   isInForm?: boolean
   type?: 'number' | 'email' | 'password' | 'text' | 'date'
+  hiddenOnEdit?: boolean
 }) => {
   return (
     <li
       className={clsx('group mb-4 flex gap-[1.4rem]', {
         'transition-[margin]': isEdit,
         '!block': isInForm && isEdit,
+        hidden: hiddenOnEdit,
       })}
     >
       <div
