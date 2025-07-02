@@ -47,7 +47,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   return (
     <div>
       <div>
-        <div className="grid grid-cols-2">
+        <div>
           <div className="w-fit">
             <div className="flex items-center gap-2 text-base">
               <Icon type="contact" />
@@ -62,7 +62,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
           </div>
         </div>
       </div>
-      <Divider className="my-6" />
+      <Divider className="my-4 md:my-6" />
       <div>
         {subjects?.map((subject: ISubjectItem, index: number) => {
           const courseTabData = user.course_tab_groups?.[
@@ -80,7 +80,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
                   {
                     key: '1',
                     label: (
-                      <div className="flex flex-none items-center text-xl font-semibold text-[#374151] ">
+                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-xl ">
                         {subject?.name}
                       </div>
                     ),

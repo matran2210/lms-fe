@@ -742,8 +742,23 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   />
                 ) : (
                   <div className="mt-6">
+                    <Alert
+                      message={
+                        <div className="text-xs text-gray-800">
+                          This feature is only available on desktop or tablet.
+                        </div>
+                      }
+                      type={'info'}
+                      showIcon
+                      className="w-full rounded-md px-[14px] md:hidden"
+                      icon={
+                        <div className={'!mr-4'}>
+                          <AlertInfoIcon />
+                        </div>
+                      }
+                    />
                     <EssayQuestionPreview
-                      className="!bg-transparent !p-0"
+                      className="hidden !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={
@@ -1043,7 +1058,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 </Popover>
               )}
-              <Divider className="my-0 border-primary text-primary md:hidden" />
+              {((exhibitData && exhibitData?.length > 0) ||
+                activeQuestion?.question_topic?.files?.length > 0) && (
+                <Divider className="my-0 border-primary text-primary md:hidden" />
+              )}
               <div
                 className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay md:hidden"
                 onClick={() => {

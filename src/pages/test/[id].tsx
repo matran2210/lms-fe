@@ -2899,7 +2899,6 @@ const TestDetail = () => {
                             }
                             storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                             className="sapp-questions mb-6"
-                            isShowNote
                           />
                         )}
                         {/* <EditorReader
@@ -3022,7 +3021,6 @@ const TestDetail = () => {
                           }
                           storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                           className="mb-4"
-                          isShowNote
                         />
                       )}
                       {/* <EditorReader

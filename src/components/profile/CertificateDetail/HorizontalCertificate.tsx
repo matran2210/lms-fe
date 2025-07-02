@@ -25,9 +25,9 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
       bodyClassName="flex h-screen justify-center container mx-auto"
       className="lg:hidden"
     >
-      <div className="flex max-w-[90%] flex-col items-center gap-10 py-[56px]">
+      <div className="flex max-w-[90%] flex-col items-center py-[84px] md:gap-10 md:py-[56px]">
         <div
-          className="flex w-full flex-shrink-0 cursor-pointer items-end"
+          className="mb-10 flex w-full flex-shrink-0 cursor-pointer items-end md:mb-0"
           onClick={() => window.open('https://sapp.edu.vn', '_blank')}
         >
           <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
@@ -40,7 +40,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           </div>
         </div>
 
-        <div className="flex w-full flex-1 items-center justify-center overflow-hidden">
+        <div className="mb-6 flex w-full items-center justify-center overflow-hidden md:mb-0 md:flex-1">
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -57,12 +57,12 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
         </div>
 
         <div className="flex h-[200px] flex-shrink-0 flex-col items-center gap-12">
-          <div className="flex flex-col items-center gap-8">
+          <div className="flex flex-col items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center gap-4">
-              <div className="text-5xl font-bold text-primary">
+              <div className="text-2xl font-bold text-primary md:text-5xl">
                 Congratulation!
               </div>
-              <div className="text-center ">
+              <div className="text-center text-sm md:text-base">
                 Congratulations, you have achieved the{' '}
                 <span className="font-bold">{certificate?.course.name}</span>{' '}
                 issued by {issuedBy}!

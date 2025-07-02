@@ -314,7 +314,7 @@ const CourseTabDocument = ({
           className={clsx(
             'learning-act-tab-pagination flex items-center justify-center gap-8',
             {
-              hidden: focusOnlyQuiz.open,
+              hidden: focusOnlyQuiz.open || focusOnlyDiscussion,
             },
           )}
         >
