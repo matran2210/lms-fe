@@ -60,7 +60,10 @@ const SappDrawerV3: React.FC<IProps> = ({
       {...props}
     >
       <div
-        className={clsx('relative h-full w-full bg-white p-8', classNameBody)}
+        className={clsx(
+          'relative h-full w-full bg-white p-6 lg:p-8',
+          classNameBody,
+        )}
       >
         {/* Header */}
         {isShowHeader && (
@@ -101,7 +104,7 @@ const SappDrawerV3: React.FC<IProps> = ({
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-8 pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
             {cancelButtonCaption && (
               <ButtonText
                 title={cancelButtonCaption}

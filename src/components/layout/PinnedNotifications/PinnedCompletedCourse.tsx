@@ -42,7 +42,10 @@ CertificateImage.displayName = 'CertificateImage'
 
 const SeeCertificateButton = React.memo(
   ({ onClick }: { onClick: () => void }) => (
-    <div className="flex cursor-pointer items-center gap-2" onClick={onClick}>
+    <div
+      className="flex cursor-pointer items-center justify-end gap-2"
+      onClick={onClick}
+    >
       <div className="text-base font-semibold text-gray-800 underline">
         See Certificate
       </div>
@@ -75,7 +78,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
       <PinnedNotificationsV2
         bgColor="bg-primary-200"
         borderColor="border-primary"
-        heightPinned="h-[86px]"
+        classPinned="lg:flex-row lg:justify-between lg:items-center flex-col gap-4"
       >
         <div className="flex items-center gap-4">
           <CertificateImage url={userCertificateUrl} />

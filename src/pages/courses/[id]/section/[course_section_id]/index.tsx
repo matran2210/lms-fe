@@ -30,6 +30,9 @@ import { CoursesAPI } from '../../../../api/courses/index'
 import BottomMenu from '@components/layout/BottomMenu'
 import CardMenuItem from '@components/learning/activity/CardMenuItem'
 import { Divider } from 'antd'
+import LearningResource from '@components/mycourses/LearningResource'
+import { useAppDispatch } from 'src/redux/hook'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
 
 interface IProps {
   course_section_type: string
@@ -64,6 +67,7 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
@@ -80,7 +84,7 @@ const CoursePartDetail = () => {
   const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
+  const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
@@ -190,6 +194,11 @@ const CoursePartDetail = () => {
         setLoadingLearningOutcome(false)
       }, 500)
     }
+  }
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
   }
 
   useEffect(() => {
@@ -527,7 +536,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4">
+      <div className="mt-8 lg:mt-10">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -581,12 +590,12 @@ const CoursePartDetail = () => {
             <CardMenuItem
               title="Note List"
               icon={<DocumentTextIcon className="h-6 w-6" />}
-              // onClick={handleOpenNotesList}
+              onClick={handleOpenNotesList}
             />
             <CardMenuItem
               title="Resource"
               icon={<ResourceIcon className="h-6 w-6" />}
-              // onClick={onOpenActivityResource}
+              onClick={() => setOpenResource(true)}
             />
             <Divider
               type="vertical"
@@ -609,6 +618,9 @@ const CoursePartDetail = () => {
           btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
           isShowFooter
+          closable
+          isShowBtnClose
+          rootClassName={'responsive-drawer-center'}
         >
           <TextSkeleton
             loading={loadingLearningOutcome}
@@ -659,6 +671,12 @@ const CoursePartDetail = () => {
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
             is_passed_course={isPassedCourse}
+          />
+        )}
+        {openResource && (
+          <LearningResource
+            open={openResource}
+            setOpenResource={setOpenResource}
           />
         )}
       </div>
