@@ -214,7 +214,7 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
+      <div className="mb-4 mt-2 flex items-center justify-between gap-6 lg:mb-6 lg:mt-4">
         <div
           className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
           onClick={handleOpenSidebar}
@@ -246,7 +246,7 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
+            className="mt-8 flex items-start justify-between gap-6 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
             <div className="line-clamp-2 w-[60%] text-3xl font-semibold text-gray-800">
@@ -284,18 +284,15 @@ const CourseDetail = () => {
         program={data?.pages?.[0]?.courseDetail?.data?.program}
         data={data?.pages?.[0]?.courseDetail}
       />
-      {pinnedCompletedCourse.isOpen && (
-        <div className="fixed inset-x-0 bottom-4 z-50 lg:container md:px-8 lg:max-w-[1524px]">
-          <div className="w-full">
-            <PinnedCompletedCourse
-              pinnedCompletedCourse={pinnedCompletedCourse}
-            />
-          </div>
-        </div>
-      )}
+
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
           <CtaTrial />
+          {pinnedCompletedCourse.isOpen && (
+            <PinnedCompletedCourse
+              pinnedCompletedCourse={pinnedCompletedCourse}
+            />
+          )}
         </div>
       </div>
     </Layout>

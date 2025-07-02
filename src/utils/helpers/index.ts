@@ -146,6 +146,7 @@ export const calculateTimeAgo = (date: string): string => {
 }
 
 export function formatDateToLongString(isoDateString: string): string {
+  if (!isoDateString) return ''
   const date = new Date(isoDateString)
   return new Intl.DateTimeFormat('en-US', {
     month: 'long',
