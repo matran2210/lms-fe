@@ -4,7 +4,7 @@ const PinnedNotificationsV2 = ({
   children,
   bgColor = 'bg-primary-200',
   borderColor = 'border-primary',
-  classPinned = 'justify-between items-center',
+  classPinned = 'items-center justify-between',
   heightPinned = 'h-auto',
 }: {
   children: React.ReactNode

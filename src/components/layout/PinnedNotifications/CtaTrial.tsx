@@ -59,11 +59,10 @@ function CtaTrial() {
         <PinnedNotificationsV2
           bgColor="bg-info-100"
           borderColor="border-info"
-          classPinned="md:items-start lg:items-center"
-          heightPinned="h-[86px]"
+          classPinned="items-start justify-between lg:items-center"
         >
-          <div className="md:hidden lg:block" />
-          <div className="h- flex gap-2 leading-normal text-gray-800 md:flex-col md:text-base lg:flex-row lg:text-lg">
+          <div className="hidden lg:block" />
+          <div className="flex flex-col gap-2 text-base leading-normal text-gray-800 lg:flex-row lg:text-lg">
             <div>
               You have&nbsp;
               <span className="font-semibold">

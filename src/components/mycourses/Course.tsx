@@ -467,7 +467,11 @@ const Course = ({
 
             {determineButtonToShow !== 'Active' && (
               <div className="flex items-center gap-1">
-                <div className="mr-1">
+                <div
+                  className={`mr-1 ${
+                    enableCourse ? 'text-icon' : 'text-gray-300'
+                  }`}
+                >
                   <CourseTimeIcon />
                 </div>
                 <div
