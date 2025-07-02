@@ -373,7 +373,7 @@ const ProfilePage = () => {
               className="mb-4 md:hidden"
               onBack={() => router.push(`${PageLink.COURSES}`)}
             />
-            <div className="flex flex-col gap-8 bg-transparent md:gap-16 md:bg-white md:px-10 md:py-8 md:shadow-box">
+            <div className="flex flex-col gap-8 rounded-2xl bg-transparent md:gap-16 md:bg-white md:px-10 md:py-8 md:shadow-card">
               <ProfileHeader
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}
