@@ -1283,7 +1283,7 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
-    setEssayData(undefined)
+    // setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     const doAfterSetState = () => {
@@ -2261,8 +2261,8 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements &&
-      !essayData
+      currentTabContent?.data?.requirements
+      // && !essayData
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
@@ -2673,7 +2673,7 @@ const TestDetail = () => {
                     handleChangeTab={async (id?: string) => {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      setEssayData(undefined)
+                      // setEssayData(undefined)
                       handleChangeTab(id)
                     }}
                     hasScrollBar={hasScrollBar}
@@ -3118,7 +3118,7 @@ const TestDetail = () => {
                       )
                     } else if (type === 'event-test') {
                       router.replace(`/event-test`)
-                      setSubmitEventTest(true)
+                      // setSubmitEventTest(true)
                     } else {
                       if (
                         type !== 'entrance' &&

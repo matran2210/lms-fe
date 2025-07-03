@@ -41,6 +41,7 @@ export interface IProps {
 
 function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
   const router = useRouter()
+  const currentQuery = { ...router.query }
   const params = router.query?.id
   const dispatch = useAppDispatch()
   const { id } = router.query
@@ -174,11 +175,25 @@ function FormAddProgress({ open, setOpen, refresh, allowSection }: IProps) {
     }
     setLoading(true)
     try {
-      await ProgressAPI.createProgress(payload)
-      toast.success('Update successful')
-      setOpen(false)
-      refresh?.()
-      reset()
+      const data = await ProgressAPI.createProgress(payload)
+      if (data?.success) {
+        const updatedQuery = {
+          ...currentQuery,
+          classProgress: data?.data?.progress || 0,
+        }
+        router.push(
+          {
+            pathname: router.pathname,
+            query: updatedQuery,
+          },
+          undefined,
+          { shallow: true },
+        )
+        toast.success('Update successful')
+        setOpen(false)
+        refresh?.()
+        reset()
+      }
     } catch (err) {
     } finally {
       setLoading(false)
