@@ -49,6 +49,7 @@ import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
 import UserApi from 'src/redux/services/User/user'
 import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 interface IFullScreenMobile {
   open: boolean
@@ -349,14 +350,14 @@ const ProfilePage = () => {
       fullWidth={isMobileView}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
-        <div className="mb-4 mt-2 hidden items-center justify-between gap-6 md:flex lg:mb-6">
+        <div className="mb-4 mt-2 hidden items-center justify-between gap-6 md:mb-8 md:flex">
           <div
             className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
             onClick={handleOpenSidebar}
           >
             <HamburgerMenuLargeIcon />
           </div>
-          <div className="w-full rounded-lg bg-white px-8 py-4">
+          <div className="w-full rounded-lg bg-white px-8 py-4 shadow-small">
             <SearchForm
               placeholder="Enter name of course..."
               formStyle="w-full flex items-center"
@@ -364,8 +365,11 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="mx-auto my-0 flex w-full grow flex-col">
-          <div className="main hidden sm:mx-4 md:block lg:mx-0">
-            <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
+          <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
+            <div className="hidden text-2xl font-medium md:block lg:hidden">
+              Student Profile
+            </div>
+            <SappBreadCrumbs isTeacher={false} breadcrumbs={breadcrumbs} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
             <HeaderMobile
@@ -373,7 +377,7 @@ const ProfilePage = () => {
               className="mb-4 md:hidden"
               onBack={() => router.push(`${PageLink.COURSES}`)}
             />
-            <div className="flex flex-col gap-8 rounded-2xl bg-transparent md:gap-16 md:bg-white md:px-10 md:py-8 md:shadow-card">
+            <div className="flex flex-col gap-8 rounded-2xl bg-transparent md:gap-12 md:bg-white md:p-6 md:shadow-card lg:gap-16 lg:px-10 lg:py-8">
               <ProfileHeader
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}

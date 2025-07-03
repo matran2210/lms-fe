@@ -1,6 +1,6 @@
 .sapp-tabs-profile {
   .ant-tabs-nav {
-    @apply my-0 px-0;
+    @apply my-0 px-0 pt-0;
     .ant-tabs-nav-wrap {
       .ant-tabs-nav-list {
         @apply flex w-full justify-between lg:w-auto;
@@ -68,8 +68,7 @@
   @apply flex justify-between gap-3;
   .ant-otp-input-wrapper {
     input {
-      padding-inline: 1rem !important;
-      @apply rounded-md border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:px-5 md:py-4 md:text-2xl;
+      @apply rounded-md border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:!px-5 md:py-4 md:text-2xl;
       @apply focus:border-primary focus:shadow-0 focus:outline-none;
 
       &.ant-input-status-error {
