@@ -143,7 +143,7 @@ export default function MenuItem({
       name === TitleSidebar.NEW_NOTE && handleAddNote()
       name === TitleSidebar.CALCULATOR && handleOpenCalculator()
       name === TitleSidebar.RESULTS && handleOpenResultsPage()
-      name === TitleSidebar.EXAM_INFORMATION && handleOpenExaminationInfoPage()
+      name === TitleSidebar.EXAM && handleOpenExaminationInfoPage()
     }
   }
 
@@ -368,7 +368,7 @@ export default function MenuItem({
             name === TitleSidebar.NOTES_LIST ||
             name === TitleSidebar.RESOURCES ||
             name === TitleSidebar.RESULTS ||
-            name === TitleSidebar.EXAM_INFORMATION ||
+            name === TitleSidebar.EXAM ||
             name === TitleSidebar.DASHBOARD ||
             Icon === 'stats-chart-sharp' ||
             Icon === 'profile-detail')

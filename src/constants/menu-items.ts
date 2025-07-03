@@ -70,9 +70,9 @@ const MENU_OPTIONS: MenuOption[] = [
     type: 'level-1',
   },
   {
-    name: TitleSidebar.EXAM_INFORMATION,
+    name: TitleSidebar.EXAM,
     icon: 'exam-information',
-    url: `/${ProfilePages.ExamInformation}`,
+    url: '#',
     type: 'level-1',
   },
 ]
