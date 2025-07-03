@@ -584,6 +584,7 @@ const CoursePartDetail = () => {
           // handleShowToast={handleShowToast}
           setIsOpenChapter={setIsOpenChapter}
           isOpenChapter={isOpenChapter}
+          isLMSV2
         />
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
