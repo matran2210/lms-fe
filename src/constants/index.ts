@@ -55,6 +55,7 @@ export const TitleSidebar = {
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
+  EXAM: 'Exam',
 }
 
 export const TitleTeacherSidebar = {

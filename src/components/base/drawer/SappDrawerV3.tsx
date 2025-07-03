@@ -25,6 +25,7 @@ interface IProps extends DrawerProps {
   classNameHeader?: string
   cancelButtonCaption?: string
   cancelButtonClassName?: string
+  isShowBtnBack?: boolean
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -48,6 +49,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
+  isShowBtnBack = false,
   ...props
 }) => {
   return (
@@ -74,7 +76,7 @@ const SappDrawerV3: React.FC<IProps> = ({
             )}
           >
             <div className="flex items-center gap-2">
-              {!isShowBtnClose && (
+              {(!isShowBtnClose || isShowBtnBack) && (
                 <div
                   onClick={handleBack}
                   className="cursor-pointer"
