@@ -22,6 +22,8 @@ import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { isEmpty } from 'lodash'
 import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
+import { TitleSidebar } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   open: boolean
@@ -91,6 +93,7 @@ const ExaminationInfo = ({
   currentValue,
   onSuccess,
 }: Props) => {
+  const { isTabletView } = useTailwindBreakpoint()
   const router = useRouter()
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
@@ -221,19 +224,32 @@ const ExaminationInfo = ({
     }
   }
 
+  const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
+  const isShowCloseBtn = !isEdit || isExamList || isTabletView
+  const isClosable = isTabletView && !isEdit
+  const isShowBackBtn = isTabletView && isEdit && !isExamList
+  const btnSubmitTile = isEdit ? 'Confirm' : ''
+  const cancelButtonCaption = isEdit ? 'Cancel' : ''
+  const placement = isTabletView ? 'bottom' : 'right'
+  const height = isTabletView ? 'auto' : isEdit ? 386 : '100%'
+
   return (
     <>
       <SappDrawerV3
         open={open}
         handleCancel={handleCancel}
-        title={isEdit ? 'Change Exam Date' : 'Exam Information'}
-        isShowBtnClose={!isEdit || isExamList}
+        title={title}
+        isShowBtnClose={isShowCloseBtn}
+        closable={isClosable}
+        isShowBtnBack={isShowBackBtn}
         isShowFooter={isEdit}
-        btnSubmitTile={isEdit ? 'Confirm' : ''}
-        cancelButtonCaption={isEdit ? 'Cancel' : ''}
+        btnSubmitTile={btnSubmitTile}
+        cancelButtonCaption={cancelButtonCaption}
         handleBack={handleBack}
         handleSubmit={handleChangeExamDate}
         loading={isChangingLoad}
+        placement={placement}
+        height={height}
       >
         {isEdit ? (
           <FormProvider {...methods}>
