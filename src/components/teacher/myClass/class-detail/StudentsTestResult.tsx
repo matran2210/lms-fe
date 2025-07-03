@@ -111,7 +111,7 @@ export default function StudentsTestResult() {
       ),
     },
     {
-      title: 'Start time',
+      title: 'Access Period',
       render: (record: IStudentTestResult) => (
         <DateActionCell
           dataColumn={{
