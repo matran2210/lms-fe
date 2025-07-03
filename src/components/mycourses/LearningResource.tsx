@@ -171,17 +171,17 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
       {!isEmpty(resources?.resources) ? (
         <TextSkeleton loading={loading} length={10}>
-          {resources?.resources?.map((resource) => (
-            <div key={resource.id}>
+          <div className="mt-8 flex flex-col gap-4">
+            {resources?.resources?.map((resource) => (
               <div
-                className="mt-6 flex h-[92px] items-center justify-between p-6 last:mb-6"
-                style={{ border: '1px solid #DCDDDD' }}
+                key={resource.id}
+                className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
               >
                 <div>
-                  <div className="text-base font-normal text-[#050505]">
+                  <div className="text-base font-medium text-gray-800">
                     {resource?.name}
                   </div>
-                  <div className="text-base font-normal text-[#A1A1A1]">
+                  <div className="text-gray-500 text-sm font-normal">
                     {bytesToKilobyte(resource?.size)}
                   </div>
                 </div>
@@ -189,11 +189,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   className="cursor-pointer"
                   onClick={() => download(resource.name, resource.file_key)}
                 >
-                  <DownloadIcon />
+                  <DownloadIcon color="#1C274C" />
                 </a>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </TextSkeleton>
       ) : (
         <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
