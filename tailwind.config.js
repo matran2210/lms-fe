@@ -88,7 +88,6 @@ module.exports = {
           11: '#252F4A',
           12: '#374151',
           13: '#1F2937',
-          14: '#374151',
         },
         gray: {
           1: '#A1A1A1',
@@ -107,6 +106,7 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#DADFE5',
+          100: '#99A1B70D',
           900: '#181C32',
         },
         green: {
@@ -120,6 +120,7 @@ module.exports = {
           1: '#F897070D',
           2: '#FFFDF6',
           3: '#FFB800',
+          4: '#F89707',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -136,6 +137,8 @@ module.exports = {
           4: '#025eff0D',
           5: '#7086FD',
           6: '#607FE9',
+          7: '#176CDD',
+          900: '#176CDD0D',
         },
         yellow: {
           1: '#FFB800',
@@ -209,6 +212,10 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        focus:
+          '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
+        'focus-overdue':
+          '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
       },
       minWidth: {
         4: '16px',
@@ -280,6 +287,7 @@ module.exports = {
       borderRadius: {
         none: '0px',
         full: '9999px',
+        2.5: '6px',
       },
       content: {
         empty: '""',

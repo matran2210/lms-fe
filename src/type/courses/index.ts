@@ -14,6 +14,9 @@ export interface ILearningOutcome {
   name: string
   updated_at: Date
   course_outcomes: ICourseOutcome[]
+  next_section: {
+    is_preview_locked: boolean
+  }
 }
 
 export interface ICourseSection {

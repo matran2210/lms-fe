@@ -17,6 +17,7 @@ import StatusActionCell from '@components/teacher/components/StatusActionCell'
 import useSappPaging from 'src/hooks/useSappPaging'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { ProfilePages } from 'src/type/Profile'
 
 interface FilterParams {
   status?: string
@@ -32,6 +33,7 @@ const ChapterTest = () => {
   const router = useRouter()
   const studentId = router?.query?.studentId as string
   const chapterTestId = router?.query?.chapterTestId as string
+  const manualGrading = router?.query?.manualGrading as string
   const [params, setParams] = useState<FilterParams>(initialValues)
   const { control, getValues, reset } = useForm({
     mode: 'onSubmit',
@@ -59,7 +61,7 @@ const ChapterTest = () => {
       title: 'Class Detail',
     },
     {
-      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}?tabId=students-test-result`,
+      link: `${PageLink.TEACHER_MY_CLASS}/${studentId}?tabId=${ProfilePages.STUDENTS_TEST_RESULT}`,
       title: 'Test/Quiz List',
     },
     { link: '', title: 'Chapter Test' },
@@ -131,7 +133,11 @@ const ChapterTest = () => {
     {
       title: 'Status',
       render: (record: IStudentClassDetail) => (
-        <StatusActionCell dataColumn={record?.attempt?.status} />
+        <StatusActionCell
+          dataColumn={
+            record?.attempt?.grading_status || record?.attempt?.status
+          }
+        />
       ),
     },
     {
@@ -140,12 +146,16 @@ const ChapterTest = () => {
         <StudentCell dataColumn={record?.attempt?.score?.toString()} />
       ),
     },
-    {
-      title: 'Người chấm',
-      render: (record: IStudentClassDetail) => (
-        <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
-      ),
-    },
+    ...(manualGrading === 'true'
+      ? [
+          {
+            title: 'Người chấm',
+            render: (record: IStudentClassDetail) => (
+              <NameNoActionCell dataColumn={record?.staff?.detail?.full_name} />
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (

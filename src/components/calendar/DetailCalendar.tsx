@@ -9,8 +9,9 @@ import SappIcon from 'src/common/SappIcon'
 import dayjs from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
-import { TEST_TYPE_ENUM } from '@utils/constants'
+import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
+import { buildQueryString } from '@utils/index'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -59,7 +60,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const getKeyContent = () => {
-    return data?.key_before_contents?.map((item) => {
+    return data?.key_after_contents?.map((item) => {
       return (
         <div
           key={item.id}
@@ -132,15 +133,23 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const dateNow = dayjs().add(7, 'hour')
-  const dateOpenSection = dayjs(
-    `${data?.schedule?.start_date} ${data?.schedule?.start_time}`,
-  )
+  const dateOpenSection = data?.class?.opening_at
+    ? dayjs(data?.class?.opening_at)
+    : dayjs(data?.class?.started_at)
 
   useEffect(() => {
     if (open.isOpen) {
       fetchData()
     }
   }, [open])
+
+  const isOfflineOrLiveOnlineWithReview =
+    [LearningMode.OFFLINE, LearningMode.LIVE_ONLINE].includes(
+      data?.mode as LearningMode,
+    ) && data?.is_review_allowed
+
+  const isOnlineAndOpen =
+    data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
 
   return (
     <SappDrawer
@@ -155,9 +164,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       drawerSubId={'-notes-list'}
       heightBody={'h-[calc(100vh-112px)]'}
       showCancelButton={false}
-      showSubmitButton={
-        data?.mode === LearningMode?.ONLINE && dateOpenSection.isBefore(dateNow)
-      }
+      showSubmitButton={isOfflineOrLiveOnlineWithReview || isOnlineAndOpen}
       btnSubmitTile={
         LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
           ? 'Start'
@@ -166,8 +173,49 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             : 'Review'
       }
       handleSubmit={() => {
+        const deadline = dayjs(
+          `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
+        )
+
+        const listFilteredSections = data?.sections?.filter((item) =>
+          [
+            TEST_TYPE_ENUM.MID_TERM_TEST,
+            TEST_TYPE_ENUM.FINAL_TEST,
+            CourseSectionType.PART,
+          ].includes(
+            item?.course_section?.course_section_type as TEST_TYPE_ENUM,
+          ),
+        )
+        const listSectionIds = (listFilteredSections || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const listFilteredSubSections = data?.sections?.filter((item) =>
+          [CourseSectionType.CHAPTER].includes(
+            item?.course_section?.course_section_type as CourseSectionType,
+          ),
+        )
+        const listSubSectionIds = (listFilteredSubSections || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const listFilteredUnits = data?.sections?.filter((item) =>
+          [CourseSectionType.UNIT].includes(
+            item?.course_section?.course_section_type as CourseSectionType,
+          ),
+        )
+        const listUnitIds = (listFilteredUnits || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const searchParams = buildQueryString({
+          focusSectionIds: listSectionIds.join(','),
+          focusSubSectionIds: listSubSectionIds.join(','),
+          focusUnitIds: listUnitIds.join(','),
+          deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
+        })
         if (data?.link_study) {
-          router.push(data?.link_study)
+          router.push(`${data?.link_study}?${searchParams}`)
         }
       }}
       submitButtonClassName="rounded-none"

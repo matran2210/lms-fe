@@ -13,15 +13,16 @@ import { IStudentTestResult } from 'src/type/classes'
 import { GradingMethod } from '@utils/constants'
 import { StudentKey } from '@pages/api/queryKey'
 import useSappPaging from 'src/hooks/useSappPaging'
+import DateActionCell from '@components/teacher/components/DateActionCell'
 
 interface FilterParams {
-  text?: string
+  quiz_name?: string
   grading_method?: string
   quiz_type?: string
 }
 
 const initialValues: FilterParams = {
-  text: undefined,
+  quiz_name: undefined,
   quiz_type: undefined,
   grading_method: undefined,
 }
@@ -46,13 +47,13 @@ export default function StudentsTestResult() {
     })
 
   const handleResetFilter = () => {
-    reset({ text: '', quiz_type: '', grading_method: '' })
+    reset({ quiz_name: '', quiz_type: '', grading_method: '' })
     setParams(initialValues)
   }
 
   const onSubmit = () => {
     setParams({
-      text: getValues('text') || undefined,
+      quiz_name: getValues('quiz_name') || undefined,
       quiz_type: getValues('quiz_type')?.value || undefined,
       grading_method: getValues('grading_method')?.value || undefined,
     })
@@ -80,7 +81,7 @@ export default function StudentsTestResult() {
       render: (record: IStudentTestResult) => (
         <NameActionCell
           dataColumn={record?.quiz?.name}
-          linkView={`${PageLink.TEACHER_CHAPTER_TEST}?studentId=${studentId}&chapterTestId=${record?.quiz?.id}`}
+          linkView={`${PageLink.TEACHER_CHAPTER_TEST}?studentId=${studentId}&chapterTestId=${record?.quiz?.id}&manualGrading=${record?.quiz?.grading_method === GradingMethod.MANUAL}`}
         />
       ),
       onCell: () => ({
@@ -110,13 +111,13 @@ export default function StudentsTestResult() {
       ),
     },
     {
-      title: 'Start time',
+      title: 'Access Period',
       render: (record: IStudentTestResult) => (
-        <NameNoActionCell
-          dataColumn={formatDateFromUTC(
-            record?.start_time as string,
-            DATE_FORMAT.DATE_TIME,
-          )}
+        <DateActionCell
+          dataColumn={{
+            startTime: record?.start_time as string,
+            endTime: record?.end_time as string,
+          }}
         />
       ),
     },

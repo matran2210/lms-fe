@@ -175,9 +175,9 @@ export const makeContactDefault = createAsyncThunk(
 )
 export const getLoginHistory = createAsyncThunk(
   'userReducer/getListHistory',
-  async ({ page_index, page_size }: any, thunkApi) => {
+  async ({ page_index, page_size, type }: any, thunkApi) => {
     try {
-      const res = await UserApi.getListHistory({ page_index, page_size })
+      const res = await UserApi.getListHistory({ page_index, page_size, type })
       return res
     } catch (err) {
       thunkApi.rejectWithValue(err)
@@ -186,9 +186,9 @@ export const getLoginHistory = createAsyncThunk(
 )
 export const loadMoreLoginHistory = createAsyncThunk(
   'userReducer/loadMoreHistory',
-  async ({ page_index, page_size }: any, thunkApi) => {
+  async ({ page_index, page_size, type }: any, thunkApi) => {
     try {
-      const res = await UserApi.getListHistory({ page_index, page_size })
+      const res = await UserApi.getListHistory({ page_index, page_size, type })
       return res
     } catch (err) {
       thunkApi.rejectWithValue(err)
