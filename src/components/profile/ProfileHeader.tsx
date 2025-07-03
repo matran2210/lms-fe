@@ -110,7 +110,7 @@ const ProfileHeader = ({
   return (
     <div className="flex flex-col items-center justify-start gap-4 md:flex-row md:gap-6">
       <div className="relative pb-3 md:pb-0">
-        <div className="relative h-[100px] w-[100px] shrink rounded-full border-2 border-primary md:my-6 lg:my-0">
+        <div className="relative h-[100px] w-[100px] shrink rounded-full border-2 border-primary">
           <div
             className={`${
               loading ? 'animate-pulse' : ''
@@ -231,7 +231,7 @@ const ProfileHeader = ({
             <PencilV2Icon />
           </div>
         </div>
-        <div className="flex items-center justify-start gap-4 text-gray-400 md:gap-8">
+        <div className="flex items-center justify-start gap-4 text-sm text-gray-400 md:gap-6">
           <div className="flex items-center justify-center gap-[5px] md:mb-0 md:justify-start">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -249,7 +249,7 @@ const ProfileHeader = ({
             </svg>
             {user.courses} Enrolled Courses
           </div>
-          <Divider type="vertical" className="m-0" />
+          <Divider type="vertical" className="m-0 bg-gray-300" />
           <div className="flex items-center justify-start gap-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"

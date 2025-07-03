@@ -128,9 +128,12 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     >
       <div className="flex flex-col items-center justify-between gap-6 md:gap-10">
         <div className="text-primary">
-          <Icon type="mail-box" className="h-12 w-12 md:h-[88px] md:w-[88px]" />
+          <Icon
+            type="mail-box"
+            className="h-12 w-12 md:!h-[88px] md:!w-[88px]"
+          />
         </div>
-        <div className="flex flex-col items-center justify-between gap-4 md:gap-8">
+        <div className="flex w-full flex-col items-center justify-between gap-4 md:gap-8">
           <div className="text-center text-sm md:text-xl">
             <div>Please enter the code we sent to</div>
             <div>
@@ -139,7 +142,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               </span>
             </div>
           </div>
-          <div>
+          <div className="w-full">
             <div className="mb-2">
               <Input.OTP
                 length={otpLength}
