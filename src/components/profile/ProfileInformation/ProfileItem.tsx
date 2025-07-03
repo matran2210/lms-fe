@@ -6,6 +6,7 @@ import { IUserContact } from 'src/redux/types/User/urser'
 interface IProps {
   data: IUserContact
   index: number
+  className?: string
   isEdit: boolean
   setMakeDefaultDrawer: React.Dispatch<
     React.SetStateAction<
@@ -26,39 +27,52 @@ interface IProps {
 const ProfileItem = ({
   data: e,
   index,
+  className,
   isEdit,
   setMakeDefaultDrawer,
 }: IProps) => {
   return (
-    <div className="mb-4">
+    <div className={className}>
       <div
         className={clsx(
-          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] px-6 py-4 hover:bg-[#FFFBF2]',
+          'rounded-md border border-[#F1F1F1] p-3 hover:bg-[#FFFBF2] md:px-6 md:py-4',
           {
             'bg-[#FFFBF2]': e?.is_default,
+            'bg-gray-100': !e?.is_default,
           },
         )}
+        onClick={() =>
+          setMakeDefaultDrawer({
+            status: true,
+            email: e?.email,
+            phone: e?.phone,
+            address: e?.address,
+            index: index + 1,
+            id: e?.id,
+            is_default: e?.is_default,
+          })
+        }
       >
         <div className="flex items-center">
           <div>
             <div>
-              <span className="text-base font-bold text-secondary">
+              <span className="text-sm font-bold text-secondary md:text-base">
                 Profile {index + 1}
               </span>
               {e?.is_default && (
-                <span className="text-medium-sm ml-[10px] inline-block select-none bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
+                <span className="text-medium-sm ml-[10px] inline-block select-none rounded bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
                   Default
                 </span>
               )}
             </div>
-            <div className="mt-4 font-medium text-[#050505]">
-              <div className="flex w-fit gap-2">
+            <div className="mt-4 font-normal text-secondary">
+              <div className="flex w-fit flex-col gap-2 md:flex-row">
                 <div className="flex">
                   <Icon type="phone-ring" className="mr-2" />{' '}
                   {e?.phone && e?.phone}
                 </div>
                 {e?.email && e?.phone && (
-                  <span className="mx-3 text-[#A1A1A1]">|</span>
+                  <span className="mx-3 hidden text-[#A1A1A1] md:block">|</span>
                 )}
                 <div className="flex">
                   <Icon type="email" className="mr-2" /> {e?.email && e?.email}
@@ -67,20 +81,7 @@ const ProfileItem = ({
             </div>
           </div>
           {!isEdit && (
-            <div
-              className="group ml-auto flex w-fit cursor-pointer select-none items-center gap-2"
-              onClick={() =>
-                setMakeDefaultDrawer({
-                  status: true,
-                  email: e?.email,
-                  phone: e?.phone,
-                  address: e?.address,
-                  index: index + 1,
-                  id: e?.id,
-                  is_default: e?.is_default,
-                })
-              }
-            >
+            <div className="group ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
               {e?.is_default && (
                 <span className="text-base font-bold text-[#6b7280] transition-colors duration-300 group-hover:text-primary">
                   Xem Thêm

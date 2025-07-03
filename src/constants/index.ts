@@ -29,7 +29,7 @@ export const PageLink = {
   REQUEST: '/request',
   MY_REQUEST: '/teachers/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
-  COURSE_CONTENT: '/courses/my-course',
+  COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
 }
 

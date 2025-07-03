@@ -38,5 +38,6 @@ export const useTailwindBreakpoint = () => {
     breakpoint,
   )
   const isShowMenuContent = ['base', 'sm', 'md'].includes(breakpoint)
-  return { isAlwaysShowSidebar, isShowMenuContent, breakpoint }
+  const isMobileView = ['base', 'sm'].includes(breakpoint)
+  return { isAlwaysShowSidebar, isShowMenuContent, breakpoint, isMobileView }
 }

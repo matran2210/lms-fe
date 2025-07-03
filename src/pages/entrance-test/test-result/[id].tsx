@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons/entranceTest'
+import { CloseIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import { useGetDataQuery } from '@utils/index'

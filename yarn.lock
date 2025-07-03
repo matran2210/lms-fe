@@ -10297,10 +10297,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.2.40-test:
-  version "1.2.40-test"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.40-test.tgz#d7798d5b22dffe216d2d23a498cb7d94df758f0f"
-  integrity sha512-27t1z0hEfompq+b+HRbkC3/lZrGrpvthWxw8Rim2fVNUg9u4riieHH27Vtl41lu9nW8NbwBM3U+GzsePvbp5Qg==
+quiz-result-package@^1.2.41-test:
+  version "1.2.41-test"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.41-test.tgz#cf9402b604ae707fcb6fd90217663bb6aa3e745c"
+  integrity sha512-U6dcs/+3oOmjjdO3BOOYobtANK9bivaweje2XSJxO45m8334aBjlBHyphTcFzDf5tofcOMeUddh1/mt4J2w8qQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"

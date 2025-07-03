@@ -22,6 +22,7 @@ import {
 import SappNotificationComponent from 'sapp-notification'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
+import clsx from 'clsx'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -107,6 +108,11 @@ export default function MenuItem({
     dispatch(openCalculator())
   }
 
+  const handleOpenCourseContentPage = () => {
+    router.push({
+      pathname: `/courses/my-course/${router.query.courseId || router.query.id}`,
+    })
+  }
   const handleOpenResultsPage = () => {
     router.push({
       pathname: `/courses/my-course/${router.query.courseId || router.query.id}/results`,
@@ -131,6 +137,7 @@ export default function MenuItem({
       }
     }
     if (router?.query?.courseId || router.query.id) {
+      name === TitleSidebar.COURSE_CONTENT && handleOpenCourseContentPage()
       name === TitleSidebar.RESOURCES && handleOpenResource()
       name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
       name === TitleSidebar.NEW_NOTE && handleAddNote()
@@ -251,24 +258,47 @@ export default function MenuItem({
             ) : (
               <ExpandIcon
                 type={Icon}
-                className={`before-icon min-h-6 min-w-6 shrink-0 ${
-                  selected ? 'bg-primary text-white' : 'text-gray-800'
-                } group-hover:text-white 
-                `}
+                className={clsx(
+                  `before-icon min-h-6 min-w-6 shrink-0 ${
+                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  }`,
+                  {
+                    'group-hover:text-gray-800': !selected,
+                  },
+                )}
               />
             )}
           </>
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-              selected ? 'bg-primary text-white' : 'text-gray-800'
-            } group-hover:text-white`}
+            className={clsx(
+              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                selected ? 'bg-primary text-white' : 'text-gray-800'
+              }`,
+              {
+                'group-hover:text-gray-800': !selected,
+              },
+            )}
           >
-            <div className="line-clamp-1 text-base font-semibold text-[#050505] group-hover:text-white">
+            <div
+              className={clsx(
+                'line-clamp-1 text-base font-semibold text-[#050505]',
+                {
+                  'group-hover:text-gray-800': !selected,
+                },
+              )}
+            >
               {user?.detail?.full_name}
             </div>
-            <div className="line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1] group-hover:text-white">
+            <div
+              className={clsx(
+                'line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1]',
+                {
+                  'group-hover:text-gray-800': !selected,
+                },
+              )}
+            >
               {user?.type?.toLowerCase()}
             </div>
           </div>
@@ -276,17 +306,27 @@ export default function MenuItem({
           <>
             {Icon === 'profile-detail' ? (
               <span
-                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                  selected ? 'bg-primary text-white' : 'text-gray-800'
-                } group-hover:text-white`}
+                className={clsx(
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  }`,
+                  {
+                    'group-hover:text-gray-800': !selected,
+                  },
+                )}
               >
                 {user?.detail?.full_name}
               </span>
             ) : (
               <span
-                className={`label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
-                  selected ? 'bg-primary text-white' : 'text-gray-800'
-                } group-hover:text-white`}
+                className={clsx(
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                    selected ? 'bg-primary text-white' : 'text-gray-800'
+                  }`,
+                  {
+                    'group-hover:text-gray-800': !selected,
+                  },
+                )}
                 onClick={() => trackGAEvent(`Click Button ${name} Menu `)}
               >
                 {name}
@@ -306,20 +346,22 @@ export default function MenuItem({
         </div>
       )}
       <div
-        className={`group cursor-pointer rounded hover:bg-primary ${
-          selected &&
-          ((type === 'level-1' &&
-            Icon !== 'avatar' &&
-            Icon !== 'profile-detail') ||
-            (type === 'level-2' && Icon === 'result'))
-            ? 'bg-primary text-white'
-            : ''
-        } sidebar-list-items relative px-4 py-2 last:mb-0 ${
-          !isActivity &&
-          (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
-            ? 'hidden'
-            : ''
-        }
+        className={clsx(
+          `group cursor-pointer rounded ${
+            selected &&
+            ((type === 'level-1' &&
+              Icon !== 'avatar' &&
+              Icon !== 'profile-detail') ||
+              (type === 'level-2' &&
+                (Icon === 'result' || Icon === 'bookmark')))
+              ? 'bg-primary text-white'
+              : ''
+          } sidebar-list-items relative px-4 py-2 last:mb-0 ${
+            !isActivity &&
+            (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
+              ? 'hidden'
+              : ''
+          }
         ${
           !isInCourse &&
           (name === TitleSidebar.COURSE_CONTENT ||
@@ -347,7 +389,11 @@ export default function MenuItem({
             ? 'hidden'
             : ''
         }
-        `}
+        `,
+          {
+            'hover:bg-gray-100': !selected,
+          },
+        )}
       >
         <div
           className={`sidebar-item flex items-center ${
@@ -363,7 +409,7 @@ export default function MenuItem({
                   : url === PageLink.DASHBOARD
                     ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
                     : name === TitleSidebar.COURSE_CONTENT
-                      ? `${url}/${router?.query?.courseId || router?.query?.id}`
+                      ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
                       : url
               }
               passHref
@@ -378,9 +424,9 @@ export default function MenuItem({
               isExpanded={isExpanded}
               handleClick={onClick}
               type={'ontoggle'}
-              className={`${
-                selected ? 'bg-primary text-white' : ''
-              } group-hover:text-white`}
+              className={clsx(`${selected ? 'bg-primary text-white' : ''}`, {
+                'group-hover:text-gray-800': !selected,
+              })}
             />
           ) : null}
         </div>
