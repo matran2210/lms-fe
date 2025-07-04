@@ -17,6 +17,10 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import AvatarCard from '@components/card/AvatarCard'
 import dayjs from 'dayjs'
 import { calculateTimeAgo } from '@utils/helpers'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+import { CoursesAPI } from '@pages/api/courses'
+import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100
@@ -43,9 +47,11 @@ export const HighlightableHTML: React.FC<Props> = ({
   isShowNote = false,
   className,
 }) => {
+  const router = useRouter()
+  const activityId = router.query.activityId
   const containerRef = useRef<HTMLDivElement>(null)
   const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
-
+  const [loading, setLoading] = useState<boolean>(false)
   const [html, setHtml] = useState<string>(initialHTML)
   const [highlights, setHighlights] = useState<HighlightItem[]>([])
   const [selection, setSelection] = useState<{
@@ -56,24 +62,33 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(
     null,
   )
-  const [open, setOpen] = useState(false)
+  const {
+    openNote,
+    setOpenNote,
+    setNoteData,
+    noteData,
+    modalPosition,
+    setModalPosition,
+    noteInput,
+    setNoteInput,
+    notesListData,
+    refetchNotesList,
+  } = useCourseNoteContext()
   // Thêm state để track khi nào DOM đã được cập nhật
   const [isDOMReady, setIsDOMReady] = useState(false)
   const prevStorageKeyRef = useRef<string>(storageKey)
 
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
-  const [noteInput, setNoteInput] = useState<string>('')
-  const [showNoteEditor, setShowNoteEditor] = useState<boolean>(false)
   const [selectedHighlightId, setSelectedHighlightId] = useState<string | null>(
     null,
   )
+  const [editingHighlightId, setEditingHighlightId] = useState<string | null>(
+    null,
+  )
+
   const [highlightRect, setHighlightRect] = useState<DOMRect | null>(null)
   const [lastRect, setLastRect] = useState<DOMRect | null>(null)
   const [isProtectingSelection, setIsProtectingSelection] = useState(false)
-  const [modalPosition, setModalPosition] = useState<{
-    top: number
-    left: number
-  } | null>(null)
 
   // Debounce setSelectionRect để tránh scroll nháy
   const updateSelectionRect = (rect: DOMRect | null) => {
@@ -107,7 +122,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setSelectionRect(null)
     setSelectedHighlightId(null)
     setHighlightRect(null)
-    setShowNoteEditor(false)
+    setOpenNote(false)
     setNoteInput('')
     setIsDOMReady(false)
 
@@ -203,7 +218,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     })
 
     setNoteInput('')
-    setShowNoteEditor(false)
+    setOpenNote(false)
     updateSelectionRect(rect)
   }
 
@@ -262,17 +277,17 @@ export const HighlightableHTML: React.FC<Props> = ({
         return
 
       // CHỈ clear selectedHighlightId nếu KHÔNG phải đang trong quá trình edit note
-      if (!showNoteEditor) {
-        setSelectedHighlightId(null)
-        setHighlightRect(null)
-      }
+      // if (!openNote) {
+      //   setSelectedHighlightId(null)
+      //   setHighlightRect(null)
+      // }
     }
 
     document.addEventListener('mousedown', handleClickOutside, true)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside, true)
     }
-  }, [selectedHighlightId, showNoteEditor, isProtectingSelection])
+  }, [selectedHighlightId, openNote, isProtectingSelection])
 
   // Handle click outside for text selection
   useEffect(() => {
@@ -338,7 +353,10 @@ export const HighlightableHTML: React.FC<Props> = ({
     // Prevent event from bubbling
     e.stopPropagation()
 
-    const rect = highlightSpan.getBoundingClientRect()
+    // 👉 Lấy rect của từ đầu tiên (ở dòng đầu tiên)
+    const rects = highlightSpan.getClientRects()
+    const firstRect = rects[0] ?? highlightSpan.getBoundingClientRect()
+    setHighlightRect(firstRect)
 
     // Use timestamp as ID or create new one
     let id =
@@ -351,7 +369,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     }
 
     setSelectedHighlightId(id)
-    setHighlightRect(rect)
   }
 
   // Updated handleRemoveHighlight to work with span elements
@@ -392,88 +409,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     setHighlights(updatedHighlights)
     setSelectedHighlightId(null)
     setHighlightRect(null)
-  }
-
-  const highlightElementById = (id: string): HTMLElement | null => {
-    const container = containerRef.current
-    if (!container) return null
-
-    return (container.querySelector(`span.highlighted[data-id="${id}"]`) ||
-      container.querySelector(
-        `span.highlighted[data-timestamp="${id}"]`,
-      )) as HTMLElement | null
-  }
-
-  const applyHighlightEffect = (el: HTMLElement) => {
-    el.style.transition = 'all 0.3s ease'
-    el.style.boxShadow = '0 0 10px #60A5FA'
-    el.style.transform = 'scale(1.02)'
-  }
-
-  const clearHighlightEffect = (el: HTMLElement) => {
-    el.style.boxShadow = ''
-    el.style.transform = ''
-  }
-
-  // Updated scrollToHighlight to work with span elements
-  const scrollToHighlight = (id: string) => {
-    const container = containerRef.current
-    if (!container) return
-
-    // Try multiple selectors to find the highlight
-    let highlightElement = highlightElementById(id)
-
-    // If still not found, try to match by text content
-    if (!highlightElement) {
-      const highlight = highlights.find((h) => h.id === id)
-      if (highlight) {
-        const allHighlights = container.querySelectorAll('span.highlighted')
-        highlightElement = Array.from(allHighlights).find(
-          (el) => el.textContent?.trim() === highlight.text.trim(),
-        ) as HTMLElement
-      }
-    }
-    if (!highlightElement) return
-
-    highlightElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
-
-    // Visual effect
-    applyHighlightEffect(highlightElement)
-    setTimeout(() => {
-      clearHighlightEffect(highlightElement)
-    }, 1500)
-
-    setOpen(false)
-  }
-
-  const handleMouseEnter = (
-    e: React.MouseEvent<HTMLDivElement>,
-    id: string,
-  ) => {
-    const el = highlightElementById(id)
-    if (!el) return
-
-    // Clear timeout nếu đang chờ remove highlight
-    const timer = highlightTimers.current.get(id)
-    if (timer) {
-      clearTimeout(timer)
-      highlightTimers.current.delete(id)
-    }
-
-    applyHighlightEffect(el)
-  }
-
-  const handleMouseLeave = (id: string) => {
-    const el = highlightElementById(id)
-    if (!el) return
-
-    // Đặt timeout để gỡ hiệu ứng sau 2 giây
-    const timeout = setTimeout(() => {
-      clearHighlightEffect(el)
-      highlightTimers.current.delete(id)
-    }, 500)
-
-    highlightTimers.current.set(id, timeout)
   }
 
   // Updated handleConfirmHighlight to properly track the created highlights
@@ -526,7 +461,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setSelection(null)
     setSelectionRect(null)
     setNoteInput('')
-    setShowNoteEditor(false)
+    setOpenNote(false)
   }
 
   // Add CSS to make highlight spans clickable
@@ -559,28 +494,74 @@ export const HighlightableHTML: React.FC<Props> = ({
     }
   }, [])
 
+  const closeCourseNote = () => {
+    setLoading(false)
+    refetchNotesList()
+    setHighlightRect(null)
+    setSelectedHighlightId(null)
+    setNoteInput('')
+    setOpenNote(false)
+    setModalPosition(null)
+    setNoteData(undefined)
+    setEditingHighlightId(null)
+  }
+  const createNewNote = async (data: string, highlightId: string) => {
+    try {
+      setLoading(true)
+      const params = {
+        course_section_id: activityId,
+        name: `Note-${highlightId}`,
+        description: data,
+      }
+      const res = await CoursesAPI.createNote(params)
+      toast.success('Tạo thành công!')
+    } catch (error) {
+      toast.error('Tạo không thành công!')
+    } finally {
+      closeCourseNote()
+    }
+  }
+  const updateNote = async (data: string, noteId: string) => {
+    try {
+      setLoading(true)
+      const params = {
+        name: noteData?.name,
+        description: data,
+      }
+      await CoursesAPI.updateCourseNotesList(noteId, params)
+      toast.success('Cập nhật thành công!')
+    } catch (error) {
+      toast.error('Cập nhật không thành công!')
+    } finally {
+      closeCourseNote()
+    }
+  }
+
   const saveNote = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault()
       e.stopPropagation()
     }
-    if (!selectedHighlightId) return
-    setHighlights((prev) =>
-      prev.map((h) =>
-        h.id === selectedHighlightId
-          ? {
-              ...h,
-              note: noteInput,
-              noteTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
-            }
-          : h,
-      ),
-    )
-    setHighlightRect(null)
-    setSelectedHighlightId(null)
-    setNoteInput('')
-    setShowNoteEditor(false)
-    setModalPosition(null)
+    if (noteData?.id) updateNote(noteInput, noteData.id)
+    else {
+      const currentHighlightId = editingHighlightId
+      // if (!selectedHighlightId) return
+      setHighlights((prev) =>
+        prev.map((h) =>
+          h.id === currentHighlightId
+            ? {
+                ...h,
+                note: noteInput,
+                noteTime: dayjs().format('YYYY-MM-DDTHH:mm:ssZ'),
+              }
+            : h,
+        ),
+      )
+
+      if (currentHighlightId) {
+        createNewNote(noteInput, currentHighlightId)
+      }
+    }
   }
 
   // Function để mở note editor và load existing note
@@ -590,80 +571,95 @@ export const HighlightableHTML: React.FC<Props> = ({
       e.preventDefault()
       e.stopPropagation()
     }
-
     if (!selectedHighlightId) return
 
     // Bảo vệ selection trong một khoảng thời gian ngắn
     setIsProtectingSelection(true)
     setTimeout(() => setIsProtectingSelection(false), 100)
-
+    if (selectedHighlightId) {
+      setEditingHighlightId(selectedHighlightId)
+    }
     // Load existing note nếu có
-    const existingHighlight = highlights.find(
-      (h) => h.id === selectedHighlightId,
-    )
-    if (existingHighlight && existingHighlight.note) {
-      setNoteInput(existingHighlight.note)
+    const existingHighlight = notesListData?.find((h) => {
+      const highlightId = h.name.split('-')[1]
+      if (highlightId) return highlightId === selectedHighlightId
+      else return false
+    })
+
+    if (existingHighlight && existingHighlight.description) {
+      setNoteInput(existingHighlight.description)
     }
     // Tính toán vị trí modal dựa trên highlightRect
     if (highlightRect) {
-      const modalWidth = 400 // Ước tính width của modal
-      const modalHeight = 200 // Ước tính height của modal
+      const modalWidth = 400
+      const modalHeight = 200
       const padding = 20
 
-      let top =
-        highlightRect.top + window.scrollY + highlightRect.height + padding
-      let left = highlightRect.left + window.scrollX
+      // ❌ KHÔNG cộng window.scrollY (vì fixed theo viewport)
+      let top = highlightRect.top + highlightRect.height + padding
+      let left = highlightRect.left
 
-      // Kiểm tra boundary để modal không bị ra ngoài viewport
       const viewportWidth = window.innerWidth
       const viewportHeight = window.innerHeight
 
-      // Điều chỉnh left nếu modal bị tràn bên phải
+      // Nếu modal tràn xuống dưới màn hình
+      if (top + modalHeight > viewportHeight - padding) {
+        top = highlightRect.top - modalHeight - padding
+      }
+
+      // Nếu modal tràn lên trên
+      if (top < padding) {
+        top = padding
+      }
+
+      // Nếu modal tràn phải
       if (left + modalWidth > viewportWidth - padding) {
         left = viewportWidth - modalWidth - padding
       }
 
-      // Điều chỉnh left nếu modal bị tràn bên trái
+      // Nếu modal tràn trái
       if (left < padding) {
         left = padding
       }
 
-      // Điều chỉnh top nếu modal bị tràn xuống dưới
-      if (top + modalHeight > viewportHeight + window.scrollY - padding) {
-        // Hiển thị modal phía trên text thay vì phía dưới
-        top = highlightRect.top + window.scrollY - modalHeight - padding
-      }
-
-      // Điều chỉnh top nếu modal bị tràn lên trên
-      if (top < window.scrollY + padding) {
-        top = window.scrollY + padding
-      }
-
       setModalPosition({ top, left })
     }
-    setShowNoteEditor(true)
+
+    setOpenNote(true)
     setHighlightRect(null)
   }
   const onCancelAddNote = () => {
-    setShowNoteEditor(false)
+    setOpenNote(false)
     setNoteInput('')
     setModalPosition(null)
     // Không clear selectedHighlightId khi cancel
   }
-  const showDrawer = () => {
-    setOpen(true)
-  }
 
-  const onClose = () => {
-    setOpen(false)
-  }
+  // Function để tính vị trí popover selection
+  const getPopoverPositionFromStart = () => {
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return null
 
-  const calcdimensions = (width: number) => {
-    if (width > 900) {
-      return width / 2 + 330
+    const range = selection.getRangeAt(0)
+    const rects = Array.from(range.getClientRects())
+
+    if (rects.length === 0) return null
+
+    const startRect = rects[0] // từ đầu tiên được chọn
+
+    return {
+      top: startRect.bottom + window.scrollY,
+      left: startRect.left + startRect.width / 2 + window.scrollX - 65, // canh giữa từ đầu tiên
     }
-    return width / 2 - 65
   }
+  const popoverPosition = getPopoverPositionFromStart()
+
+  // Function để tính vị trí popover highlighted bên trái
+  const calcPopoverLeft = (rect: DOMRect, popoverWidth = 130) => {
+    const centerOffset = rect.width / 2 - popoverWidth / 2
+    return Math.max(0, rect.left + window.scrollX + centerOffset)
+  }
+
   return (
     <div
       onMouseUp={handleMouseUp}
@@ -690,11 +686,8 @@ export const HighlightableHTML: React.FC<Props> = ({
           placement="bottom"
           overlayStyle={{
             position: 'absolute',
-            top: selectionRect.top + window.scrollY + 28,
-            left:
-              selectionRect.left +
-              window.scrollX +
-              calcdimensions(selectionRect.width),
+            top: popoverPosition?.top,
+            left: popoverPosition?.left,
             zIndex: 9999,
           }}
         >
@@ -752,10 +745,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           overlayStyle={{
             position: 'absolute',
             top: highlightRect.top + window.scrollY + 28,
-            left:
-              highlightRect.left +
-              window.scrollX +
-              calcdimensions(highlightRect.width),
+            left: calcPopoverLeft(highlightRect, isShowNote ? 283 : 130),
             zIndex: 9999,
           }}
           open={true}
@@ -766,9 +756,9 @@ export const HighlightableHTML: React.FC<Props> = ({
         </Popover>
       )}
 
-      {showNoteEditor && isShowNote && (
+      {openNote && isShowNote && modalPosition && (
         <Modal
-          open={showNoteEditor && isShowNote}
+          open={openNote && isShowNote}
           onCancel={onCancelAddNote}
           footer={null}
           // Thêm các props này để tránh auto close
@@ -776,7 +766,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           keyboard={false}
           mask={false}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             top: modalPosition?.top || 'auto',
             right: 50,
             margin: 0, // Remove default margin
@@ -805,6 +795,8 @@ export const HighlightableHTML: React.FC<Props> = ({
                 Cancel
               </ButtonSecondary>
               <ButtonPrimary
+                loading={loading}
+                disabled={!noteInput}
                 onClick={saveNote}
                 onMouseDown={(e) => e.stopPropagation()}
                 type="primary"
@@ -817,67 +809,12 @@ export const HighlightableHTML: React.FC<Props> = ({
       )}
 
       <div
-        className={clsx(
-          'fixed bottom-5 right-4 z-50 flex h-14 w-10 items-center justify-center rounded-full bg-white shadow-learning-activity',
-          {
-            hidden: !isShowNote,
-          },
-        )}
-      >
-        <span onClick={showDrawer} className="cursor-pointer">
-          <ShowCommentIcon className="h-8 w-8" />
-        </span>
-      </div>
-
-      <Drawer
-        title={
-          <div className="flex items-center gap-2">
-            {' '}
-            <ShowCommentIcon /> Comment
-          </div>
-        }
-        onClose={onClose}
-        open={open}
-        classNames={{
-          header: 'highlight-drawer-header',
-        }}
-        mask={false}
-      >
-        <List
-          className="px-6 py-4"
-          dataSource={highlights}
-          renderItem={(item) => (
-            <List.Item
-              className="hover:text-blue-600 w-full cursor-pointer"
-              onClick={() => scrollToHighlight(item.id)}
-              onMouseEnter={(e) => handleMouseEnter(e, item.id)}
-              onMouseLeave={() => handleMouseLeave(item.id)}
-            >
-              <div className="w-full">
-                <AvatarCard
-                  className="mb-2"
-                  description={calculateTimeAgo(item.noteTime)}
-                  isShowType={false}
-                />
-                <div className="border-blue-500 ml-5 border-l-2 pl-5">
-                  <div className="mb-3 rounded-lg bg-white px-4 py-3 font-medium shadow-card">
-                    {item.text}
-                  </div>
-                  {isShowNote && item.note && (
-                    <div className="text-gray-500 text-xs">{item.note}</div>
-                  )}
-                </div>
-              </div>
-            </List.Item>
-          )}
-        />
-      </Drawer>
-
-      <div
         id={storageKey}
         ref={containerRef}
         className={className}
         dangerouslySetInnerHTML={{ __html: html }}
+        onCopy={(e) => e.preventDefault()}
+        onContextMenu={(e) => e.preventDefault()}
       />
     </div>
   )
