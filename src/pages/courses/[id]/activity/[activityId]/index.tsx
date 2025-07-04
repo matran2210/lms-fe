@@ -72,6 +72,7 @@ import { IVideo } from 'src/type/course'
 import BottomMenu from '@components/layout/BottomMenu'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import ActivityResourceMobile from '@components/learning/activity/modal/ActivityResourceMobile'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -795,6 +796,11 @@ const ActivityPage = () => {
               )
             }
           })}
+        </div>
+        <div className="sticky inset-x-0 bottom-4 z-50">
+          <div className="w-full">
+            <CtaTrial />
+          </div>
         </div>
       </Layout>
       {openResource && (
