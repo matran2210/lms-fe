@@ -13,6 +13,7 @@ import {
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
+  PageLink,
 } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import SelectExamPopup from './popups/SelectExamPopup'
@@ -237,7 +238,7 @@ const CourseDetail = () => {
             breadcrumbs={[
               {
                 title: 'My Course',
-                link: '/courses',
+                link: PageLink.COURSES,
               },
               {
                 title: courseNameDetail,

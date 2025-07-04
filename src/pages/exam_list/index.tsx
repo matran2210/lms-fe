@@ -2,9 +2,9 @@ import { ColumnsType } from 'antd/es/table'
 import SappTable from '@components/table/SappTable'
 import Layout from '@components/layout'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { TitleSidebar } from 'src/constants'
+import { PageLink, TitleSidebar } from 'src/constants'
 import { UserApi } from '@pages/api/user'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { IExamInformation } from '@components/profile/ExamInformation/type'
 import { useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
@@ -15,13 +15,21 @@ import { getDuration } from '@utils/index'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
 import { PencilV2Icon } from '@assets/icons'
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { useRouter } from 'next/router'
 
 const ExamInformation = () => {
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView } = useTailwindBreakpoint()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
+  const router = useRouter()
+
+  const handleBack = () => {
+    router.push(PageLink.COURSES)
+  }
+
   /**
    * @description sử dụng react-query để lấy data
    */
@@ -79,9 +87,11 @@ const ExamInformation = () => {
     {
       title: '',
       key: 'actions',
+      align: 'center',
+      width: 80,
       render: (record) => {
         return (
-          <>
+          <div className="flex justify-end">
             {!record?.is_final_examination_subject &&
               record?.remaining_changes > 0 && (
                 <ActionCellV2
@@ -93,19 +103,20 @@ const ExamInformation = () => {
                   }}
                 />
               )}
-          </>
+          </div>
         )
       },
-      fixed: 'right',
     },
   ]
 
   return (
     <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
       <div className="mt-10">
-        <div className="text-3xl font-semibold leading-[46px] text-gray-800">
-          {TitleSidebar.EXAM_LIST}
-        </div>
+        <HeaderMobile
+          title={TitleSidebar.EXAM_LIST}
+          showIcon={isTabletView}
+          onBack={handleBack}
+        />
         <div className="mt-8">
           <SappTable
             columns={columnsValue}

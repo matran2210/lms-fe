@@ -30,9 +30,9 @@ const HeaderMobile = ({
         { hidden: isHidden },
       )}
     >
-      <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
+      <div className="flex items-center gap-2 text-2xl font-medium text-gray-800 lg:text-3xl lg:font-semibold">
         {showIcon && (
-          <div className="cursor-pointer md:hidden" onClick={onBack}>
+          <div className="cursor-pointer lg:hidden" onClick={onBack}>
             {icon ?? <CollapseArrowIcon className="rotate-90" />}
           </div>
         )}
