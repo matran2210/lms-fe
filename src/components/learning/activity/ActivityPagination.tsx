@@ -4,7 +4,6 @@ import {
   CollapseArrowIcon,
   LockClosedIcon,
 } from '@assets/icons'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
 import { truncateString } from '@utils/index'
@@ -174,7 +173,6 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
           </div>
         </div>
       )}
-      <CtaTrial />
     </div>
   )
 }
