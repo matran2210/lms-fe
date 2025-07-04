@@ -231,7 +231,7 @@ const ExaminationInfo = ({
   const btnSubmitTile = isEdit ? 'Confirm' : ''
   const cancelButtonCaption = isEdit ? 'Cancel' : ''
   const placement = isTabletView ? 'bottom' : 'right'
-  const height = isTabletView ? 'auto' : isEdit ? 386 : '100%'
+  const height = isTabletView && isEdit ? 386 : isTabletView ? 'auto' : '100%'
 
   return (
     <>

@@ -8,14 +8,21 @@ import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import { TEST_AND_QUIZ_TITLE } from 'src/constants'
+import { PageLink, TEST_AND_QUIZ_TITLE } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
 
 const DEFAULT_PAGESIZE = 10
 
 const Results = () => {
   const router = useRouter()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView } = useTailwindBreakpoint()
+
+  const handleBack = () => {
+    if (router.query.courseId)
+      router.push(`/courses/my-course/${router.query.courseId}`)
+  }
+
   /**
    * @description config API course detail
    */
@@ -74,11 +81,14 @@ const Results = () => {
                     breadcrumbs={[
                       {
                         title: 'My Course',
-                        link: '/courses',
+                        link: PageLink.COURSES,
                       },
                       {
                         title: courseNameDetail,
-                        link: `/courses/my-course/${router.query.courseId}`,
+                        link: PageLink.COURSE_DETAIL.replace(
+                          '[courseId]',
+                          router.query.courseId as string,
+                        ),
                       },
                       {
                         title: TEST_AND_QUIZ_TITLE,
@@ -89,9 +99,11 @@ const Results = () => {
                 )}
               </div>
 
-              <h1 className="text-3xl font-semibold text-gray-800">
-                {TEST_AND_QUIZ_TITLE}
-              </h1>
+              <HeaderMobile
+                title={TEST_AND_QUIZ_TITLE}
+                showIcon={isTabletView}
+                onBack={handleBack}
+              />
 
               {isSuccess && <ResultsTable />}
             </>

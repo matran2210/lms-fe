@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { TEST_TYPE } from 'src/constants'
+import { PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
@@ -470,7 +470,10 @@ const CoursePartDetail = () => {
   })
   const handleGoBack = () => {
     router.push({
-      pathname: `/courses/my-course/${router.query.id}`,
+      pathname: PageLink.COURSE_DETAIL.replace(
+        '[courseId]',
+        router.query.id as string,
+      ),
     })
   }
 
@@ -545,11 +548,14 @@ const CoursePartDetail = () => {
             breadcrumbs={[
               {
                 title: 'My Course',
-                link: '/courses',
+                link: PageLink.COURSES,
               },
               {
                 title: previewPart?.name,
-                link: `/courses/my-course/${router.query.id}`,
+                link: PageLink.COURSE_DETAIL.replace(
+                  '[courseId]',
+                  router.query.id as string,
+                ),
               },
               {
                 title: partDetail?.name,
