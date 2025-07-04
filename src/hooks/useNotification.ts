@@ -12,6 +12,7 @@ import {
   markAllNotifications,
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export const useNotification = () => {
   const router = useRouter()
@@ -21,7 +22,8 @@ export const useNotification = () => {
     (state) => state.notificationReducer.list_notifications,
   )
   const pagination = useAppSelector((state) => state.notificationReducer.meta)
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const [isDesktopView, setIsDesktopView] = useState(false)
   const [isViewDetail, setIsViewDetail] = useState(false)
   const [openNotification, setOpenNotification] = useState(false)
   const [selectedTab, setSelectedTab] = useState<number>(1)
@@ -123,8 +125,16 @@ export const useNotification = () => {
   }
 
   const handleBack = () => {
-    setIsViewDetail(false)
-    refreshNotification(true)
+    if (isDesktopView) {
+      setIsViewDetail(false)
+      refreshNotification(true)
+    } else {
+      if (isViewDetail) {
+        setIsViewDetail(false)
+      } else {
+        setOpenNotification(false)
+      }
+    }
   }
 
   useEffect(() => {
@@ -168,6 +178,10 @@ export const useNotification = () => {
   }, [pagination])
 
   useEffect(() => {
+    if (isAlwaysShowSidebar) setIsDesktopView(true)
+  }, [isAlwaysShowSidebar])
+
+  useEffect(() => {
     window.addEventListener('storage', (e) => {
       const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
       setNotificationUnread(parseInt(count ?? '0', 10))
@@ -192,5 +206,6 @@ export const useNotification = () => {
     handleViewDetail,
     handleBack,
     refreshNotification,
+    isDesktopView,
   }
 }

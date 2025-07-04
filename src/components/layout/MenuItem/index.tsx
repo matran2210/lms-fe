@@ -58,6 +58,7 @@ export default function MenuItem({
     handleViewDetail,
     handleBack,
     refreshNotification,
+    isDesktopView,
   } = useNotification()
 
   const tabs = [
@@ -466,6 +467,7 @@ export default function MenuItem({
           notificationUnread={notificationUnread}
           scrollRef={scrollRef}
           handleViewNotification={(link) => handleViewNotification(link)}
+          isDesktopView={isDesktopView}
         />
       )}
     </>
