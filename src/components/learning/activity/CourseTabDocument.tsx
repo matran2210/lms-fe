@@ -42,7 +42,6 @@ interface IProps {
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
   handleSetCurrentVideo: (video: IVideo) => void
   focusOnlyDiscussion: boolean
-  partId?: string
 }
 const CourseTabDocument = ({
   activity,
@@ -57,7 +56,6 @@ const CourseTabDocument = ({
   setFocusOnlyQuiz,
   handleSetCurrentVideo,
   focusOnlyDiscussion,
-  partId,
 }: IProps) => {
   const selector = useAppSelector(courseActivityReducer)
   const quizDocumentRef = useRef<HTMLDivElement>(null)
@@ -233,7 +231,6 @@ const CourseTabDocument = ({
                                 storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
                                 className="course-tab-text"
                                 isShowNote
-                                partId={partId}
                               />
                             )}
                             {/* <TextDocument
