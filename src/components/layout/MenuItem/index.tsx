@@ -19,7 +19,7 @@ import {
   getCountUnRead,
   loadMoreNotification,
 } from 'src/redux/slice/Notification/Notification'
-import SappNotificationComponent from 'sapp-notification'
+import SappNotificationComponent from 'sapp-notification-test'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
