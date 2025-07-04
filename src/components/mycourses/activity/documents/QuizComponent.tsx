@@ -928,6 +928,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               initialHTML={activeQuestion?.question_topic?.description ?? ''}
               storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
               className="sapp-questions"
+              isShowNote
             />
           )}
 

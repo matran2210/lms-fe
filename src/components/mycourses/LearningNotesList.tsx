@@ -21,6 +21,7 @@ import NoData from 'src/common/NoData'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
+import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -32,6 +33,13 @@ const LearningNotesList = () => {
     (state) => state.notesListReducer?.note_data,
   )
 
+  const {
+    setOpenNote,
+    setNoteData,
+    setModalPosition,
+    setNoteInput,
+    refetchNotesList,
+  } = useCourseNoteContext()
   const dispatch = useAppDispatch()
   const [notesListData, setNotesListData] = useState<any>()
   const router = useRouter()
@@ -196,6 +204,7 @@ const LearningNotesList = () => {
     try {
       const res = await CoursesAPI.deleteCourseNoteList(id)
       fetchData(params)
+      refetchNotesList()
       toast.success('Xóa thành công!')
     } catch (error) {}
   }
@@ -288,6 +297,10 @@ const LearningNotesList = () => {
                                   item.id.includes(note?.id),
                                 )
                               ) {
+                                setOpenNote(true)
+                                setNoteData(note)
+                                setModalPosition({ top: 300, left: 0 })
+                                setNoteInput(note?.description)
                                 handleEditNote(
                                   note?.id,
                                   note?.description,
