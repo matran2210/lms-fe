@@ -62,7 +62,7 @@ function CtaTrial() {
           classPinned="items-start justify-between lg:items-center"
         >
           <div className="hidden lg:block" />
-          <div className="flex w-[90%] flex-col gap-2 text-sm leading-normal text-gray-800 md:text-base lg:flex-row">
+          <div className="flex w-[90%] flex-col gap-2 text-sm leading-normal text-gray-800 md:text-base lg:flex-row lg:text-lg">
             <div>
               You have&nbsp;
               <span className="font-semibold">

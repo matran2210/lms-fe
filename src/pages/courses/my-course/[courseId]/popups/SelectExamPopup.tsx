@@ -67,7 +67,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   const ContentChoosingExam = () => {
     return (
       <>
-        <div className="mb-6 justify-center self-stretch text-center text-base font-normal leading-normal text-gray-800">
+        <div className="mb-6 justify-center self-stretch text-center text-sm font-normal leading-normal text-gray-800 md:text-base">
           Lorem ipsum dolor sit amet consectetur, et in quis elementum risus
           dolor sit amet consectetur amet consectetur.
         </div>

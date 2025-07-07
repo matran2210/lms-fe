@@ -20,13 +20,13 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
   const ContentActiveCourse = () => {
     return (
       <div className="justify-center self-stretch text-center">
-        <span className="text-base font-normal leading-normal text-gray-800">
+        <span className="text-sm font-normal leading-normal text-gray-800 md:text-base">
           You will have{' '}
         </span>
-        <span className="text-base font-bold leading-normal text-primary">
+        <span className="text-sm font-bold leading-normal text-primary md:text-base">
           {time} {time > 1 ? 'days' : 'day'}
         </span>
-        <span className="text-base font-normal leading-normal text-gray-800">
+        <span className="text-sm font-normal leading-normal text-gray-800 md:text-base">
           {' '}
           from the activation date to study this course
         </span>
