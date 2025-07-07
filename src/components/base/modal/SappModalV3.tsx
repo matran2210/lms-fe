@@ -34,6 +34,7 @@ interface IProps {
   customFooter?: ReactNode
   className?: string
   gapContent?: number
+  showCloseIcon?: boolean
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -68,6 +69,7 @@ const SappModalV3 = ({
   className,
   customFooter,
   gapContent = 10,
+  showCloseIcon = false,
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel
@@ -76,7 +78,7 @@ const SappModalV3 = ({
       className={clsx('sapp-modal', className)}
       footer={false}
       centered
-      closeIcon={false}
+      closeIcon={showCloseIcon}
       onCancel={onCancel}
       maskClosable={true}
       closable={isClosable}
