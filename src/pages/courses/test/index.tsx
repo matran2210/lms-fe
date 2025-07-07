@@ -523,7 +523,7 @@ const TestModal = ({
               onClick={handleContinueLastAttempt}
             />
             <ButtonSecondary
-              title="Submit now"
+              title="Submit now hihihi"
               full
               onClick={handleSubmitNow}
             />
@@ -564,7 +564,7 @@ const TestModal = ({
       return (
         <>
           <ButtonPrimary
-            title="Continue the previous attempt"
+            title="Continue the previous attempt123"
             full
             onClick={handleContinueLastAttempt}
           />
@@ -583,8 +583,16 @@ const TestModal = ({
   }
 
   const handleContinueLastAttempt = async () => {
-    if (remainingTimeLastAttempt.current === null) return
-    if (remainingTimeLastAttempt.current <= 0) {
+    if (
+      remainingTimeLastAttempt.current === null &&
+      quiz.is_limited &&
+      quiz.quiz_timed > 0
+    )
+      return
+    if (
+      remainingTimeLastAttempt.current !== null &&
+      remainingTimeLastAttempt?.current <= 0
+    ) {
       handleFinishTest()
     } else {
       handleStartANewAttempt()
