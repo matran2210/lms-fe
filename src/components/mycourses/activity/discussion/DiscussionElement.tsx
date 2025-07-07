@@ -27,6 +27,8 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SappDisplayText from 'src/common/SappDisplayText'
 import SendComment from './SendComment'
+import { Popover } from 'antd'
+import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
 
 type Props = {
@@ -39,6 +41,13 @@ type Props = {
   classId?: string
   profile?: IUser
   setLoading: (isLoading: boolean) => void
+  isSappSupporterUserCurrent?: boolean
+}
+type UserInfo = {
+  name: string
+  email: string
+  phone: string
+  avatar: string
 }
 
 type IEventData = {
@@ -53,6 +62,7 @@ function DiscussionElement({
   classId,
   profile,
   setLoading,
+  isSappSupporterUserCurrent = false,
 }: Props) {
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
@@ -66,7 +76,8 @@ function DiscussionElement({
   const [selectFile, setSelectFile] = useState<File[]>([])
   const [discussionFile, setDiscussionFile] = useState<IDiscussionFile[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-
+  const [isOpenUserInfo, setIsOpenUserInfo] = useState<boolean>(false)
+  const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
   const canEdit = profile?.username === discussion?.username
 
   const { control, handleSubmit } = useForm<IEventData>({})
@@ -204,103 +215,185 @@ function DiscussionElement({
     }
   }
 
+  const contentPopover = (
+    <div className="flex w-72 items-start">
+      <div className="w-10">
+        <Image
+          width={40}
+          height={40}
+          className="rounded-full"
+          src={userInfo?.avatar}
+          loading="eager"
+          blurDataURL={blankAvatar.src}
+          priority={true}
+          alt="avatar user"
+        />
+      </div>
+      <div className="w-4" />
+      <div className="w-45">
+        <div className="mb-1 text-base font-semibold text-bw-1">
+          {userInfo?.name}
+        </div>
+        <div className="text-xs text-gray-1">{userInfo?.email}</div>
+        <div className="text-xs text-gray-1">{userInfo?.phone}</div>
+      </div>
+    </div>
+  )
+  const fetchDiscussionStudentInfo = async () => {
+    try {
+      const res = await CoursesAPI.getDiscussionStudentInfo(
+        discussion?.course_section_id,
+        classId as string,
+        discussion?.user_id,
+      )
+      const { data } = res
+      if (isEmpty(data)) return
+      setUserInfo({
+        name: data?.student_info?.detail?.full_name,
+        email: data?.student_info?.user_contacts?.[0]?.email,
+        phone: data?.student_info?.user_contacts?.[0]?.phone,
+        avatar: data?.student_info?.detail.avatar?.['50x50'] || blankAvatar,
+      })
+    } catch (error: any) {}
+  }
+
+  const handleMouseEnter = () => {
+    if (!isEmpty(userInfo)) {
+      setIsOpenUserInfo(true)
+    } else {
+      if (!discussion.is_sapp_supporter && isSappSupporterUserCurrent) {
+        fetchDiscussionStudentInfo()
+      }
+    }
+  }
+
+  const handleMouseLeave = () => {
+    setIsOpenUserInfo(false)
+  }
+
+  useEffect(() => {
+    if (!isEmpty(userInfo)) {
+      setIsOpenUserInfo(true)
+    }
+  }, [userInfo])
+
   return (
     <div className="flex gap-3 text-bw-1">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row gap-3">
-          <div className="flex-none leading-0">
-            <Image
-              width={50}
-              height={50}
-              className="rounded-full"
-              src={
-                discussion.is_sapp_supporter
-                  ? discussion?.avatar?.['50x50'] ||
-                    discussion?.avatar?.['ORIGIN'] ||
-                    sappAvatar
-                  : discussion?.avatar?.['50x50'] ||
-                    discussion?.avatar?.['ORIGIN'] ||
-                    blankAvatar
-              }
-              loading="eager"
-              blurDataURL={blankAvatar.src}
-              priority={true}
-              alt="avatar"
-            />
-          </div>
-          <div className="w-full">
-            <div className="flex flex-row">
-              <div className="mb-1 text-base font-semibold">
-                {discussion?.is_sapp_supporter
-                  ? discussion?.supporter_display_name
-                  : discussion?.full_name}
+        <div className="flex flex-col">
+          <div
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="w-fit"
+          >
+            <Popover
+              content={contentPopover}
+              placement="right"
+              trigger="hover"
+              open={isOpenUserInfo}
+              overlayInnerStyle={{ maxWidth: 280 }}
+              className="flex flex-row gap-3"
+            >
+              <div
+                className={clsx(
+                  'flex-none leading-0',
+                  !isEmpty(userInfo) && 'cursor-pointer',
+                )}
+              >
+                <Image
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                  src={
+                    discussion.is_sapp_supporter
+                      ? discussion?.avatar?.['50x50'] ||
+                        discussion?.avatar?.['ORIGIN'] ||
+                        sappAvatar
+                      : discussion?.avatar?.['50x50'] ||
+                        discussion?.avatar?.['ORIGIN'] ||
+                        blankAvatar
+                  }
+                  loading="eager"
+                  blurDataURL={blankAvatar.src}
+                  priority={true}
+                  alt="avatar"
+                />
               </div>
-              {discussion?.is_sapp_supporter && (
-                <div className="ml-2 h-6 w-fit content-center bg-secondary pl-2 font-semibold text-primary">
-                  <div className="flex flex-row">
-                    <div className="content-center">
-                      <VerifiedIcon />
-                    </div>
-                    <div className="w-fit content-center px-2 text-ssm">
-                      SAPP
+              <div
+                className={clsx('flex', !isEmpty(userInfo) && 'cursor-pointer')}
+              >
+                <div className="mb-1 text-base font-semibold">
+                  {discussion?.is_sapp_supporter
+                    ? discussion?.supporter_display_name
+                    : discussion?.full_name}
+                </div>
+                {discussion?.is_sapp_supporter && (
+                  <div className="ml-2 h-6 w-fit content-center bg-secondary pl-2 font-semibold text-primary">
+                    <div className="flex flex-row">
+                      <div className="content-center">
+                        <VerifiedIcon />
+                      </div>
+                      <div className="w-fit content-center px-2 text-ssm">
+                        SAPP
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <div className="mb-3 flex flex-wrap gap-3">
-              {discussionFile?.map((e) => (
-                <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
-                  <Image
-                    width={100}
-                    height={100}
-                    src={e.url}
-                    loading="eager"
-                    blurDataURL={blankAvatar.src}
-                    objectFit="contain"
-                    onClick={() => setImageSrc(e.url)}
-                    priority={true}
-                    alt="file"
-                  />
-                  {isEdit && (
-                    <div
-                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
-                      onClick={() => handleDeleteFile(e.id, false)}
-                    >
-                      <CloseIconPreview width={12} height={12} />
-                    </div>
-                  )}
-                </div>
-              ))}
-              {selectFile.map((file: File, index: number) => (
-                <div
-                  key={`comemnt-${index}`}
-                  className={`relative bg-cover bg-no-repeat `}
-                >
-                  <Image
-                    width={100}
-                    height={100}
-                    src={URL.createObjectURL(file)}
-                    loading="eager"
-                    blurDataURL={blankAvatar.src}
-                    objectFit="contain"
-                    onClick={() => setImageSrc(URL.createObjectURL(file))}
-                    priority={true}
-                    alt="file"
-                  ></Image>
-                  {isEdit && (
-                    <div
-                      className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
-                      onClick={() => {
-                        handleDeleteFile(index, true)
-                      }}
-                    >
-                      <CloseIconPreview width={12} height={12} />
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+                )}
+              </div>
+            </Popover>
+          </div>
+          <div className="-mt-3 ml-14 w-fit">
+            {discussionFile?.map((e) => (
+              <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
+                <Image
+                  width={100}
+                  height={100}
+                  src={e.url}
+                  loading="eager"
+                  blurDataURL={blankAvatar.src}
+                  objectFit="contain"
+                  onClick={() => setImageSrc(e.url)}
+                  priority={true}
+                  alt="file"
+                />
+                {isEdit && (
+                  <div
+                    className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
+                    onClick={() => handleDeleteFile(e.id, false)}
+                  >
+                    <CloseIconPreview width={12} height={12} />
+                  </div>
+                )}
+              </div>
+            ))}
+            {selectFile.map((file: File, index: number) => (
+              <div
+                key={`comemnt-${index}`}
+                className={`relative bg-cover bg-no-repeat `}
+              >
+                <Image
+                  width={100}
+                  height={100}
+                  src={URL.createObjectURL(file)}
+                  loading="eager"
+                  blurDataURL={blankAvatar.src}
+                  objectFit="contain"
+                  onClick={() => setImageSrc(URL.createObjectURL(file))}
+                  priority={true}
+                  alt="file"
+                ></Image>
+                {isEdit && (
+                  <div
+                    className="absolute right-[-10px] top-[-10px] rounded-[80px] bg-white p-[5px] shadow-md"
+                    onClick={() => {
+                      handleDeleteFile(index, true)
+                    }}
+                  >
+                    <CloseIconPreview width={12} height={12} />
+                  </div>
+                )}
+              </div>
+            ))}
 
             {!isEdit && discussionContent && (
               <SappDisplayText text={discussionContent} />

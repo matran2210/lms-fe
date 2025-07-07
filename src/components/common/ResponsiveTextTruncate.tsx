@@ -1,7 +1,7 @@
 import useResizeObserver from '@react-hook/resize-observer'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import React, { useEffect, useRef, useState } from 'react'
-import SappTooltip from 'src/common/SappTooltip'
+import Tooltip from 'src/common/Tooltip'
 
 interface ResponsiveTextTruncateProps {
   text: string
@@ -35,14 +35,26 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     text: string,
     width: number,
     fontSize: number,
+    isSlash: boolean = false,
   ): string => {
-    const words = text?.split(' ')
+    if (!text || width <= 0 || fontSize <= 0) return ''
+
+    const words = text.split(' ')
     let truncatedText = ''
+
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return text
+    }
+
     const tempElement = document.createElement('span')
     tempElement.style.position = 'absolute'
     tempElement.style.visibility = 'hidden'
     tempElement.style.fontSize = `${fontSize}px`
     tempElement.style.whiteSpace = 'nowrap'
+    tempElement.style.lineHeight = '1'
+    tempElement.style.padding = '0'
+    tempElement.style.margin = '0'
+
     document.body.appendChild(tempElement)
 
     const ellipsisWidth = getEllipsisWidth(fontSize)
@@ -50,20 +62,21 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
     for (const word of words) {
       const testText = truncatedText ? `${truncatedText} ${word}` : word
       tempElement.textContent = testText
-      if (tempElement.offsetWidth + ellipsisWidth > width) {
+      const totalWidth = tempElement.offsetWidth + ellipsisWidth
+
+      if (totalWidth > width) {
         break
       }
+
       truncatedText = testText
     }
 
     document.body.removeChild(tempElement)
 
-    // If the text was truncated, add ellipsis
-    return truncatedText === text
-      ? truncatedText
-      : isSlash
-        ? `${truncatedText.trim()}.../`
-        : `${truncatedText.trim()}...`
+    const finalText = truncatedText.trim()
+    if (finalText === text.trim()) return finalText
+
+    return isSlash ? `${finalText}.../` : `${finalText}...`
   }
 
   /**
@@ -116,13 +129,13 @@ const ResponsiveTextTruncate: React.FC<ResponsiveTextTruncateProps> = ({
       }}
     >
       {isShowTooltip && textTooltip ? (
-        <SappTooltip
+        <Tooltip
           title={textTooltip}
           showTooltip={textTooltip?.length > (maxLength ?? 60)}
           placement={placementTooltip}
         >
           {visibleText}
-        </SappTooltip>
+        </Tooltip>
       ) : (
         visibleText
       )}

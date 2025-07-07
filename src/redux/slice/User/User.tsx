@@ -3,7 +3,7 @@ import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
 import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
 import { RootState } from 'src/redux/store'
-import { IUserStatus, IUserType, UserState } from 'src/redux/types/User/urser'
+import { IUserStatus, UserType, UserState } from 'src/redux/types/User/urser'
 import { AuthAPI } from '../../../pages/api/profile/index'
 
 const initialState: UserState = {
@@ -21,7 +21,7 @@ const initialState: UserState = {
     code: '',
     username: '',
     nick_name: '',
-    type: USER_TYPE.STUDENT.key as IUserType,
+    type: USER_TYPE.STUDENT.key as UserType,
     status: USER_STATUS.ACTIVE.key as IUserStatus,
     ekyc_status: '',
     approved_date: '',
@@ -175,9 +175,9 @@ export const makeContactDefault = createAsyncThunk(
 )
 export const getLoginHistory = createAsyncThunk(
   'userReducer/getListHistory',
-  async ({ page_index, page_size }: any, thunkApi) => {
+  async ({ page_index, page_size, type }: any, thunkApi) => {
     try {
-      const res = await UserApi.getListHistory({ page_index, page_size })
+      const res = await UserApi.getListHistory({ page_index, page_size, type })
       return res
     } catch (err) {
       thunkApi.rejectWithValue(err)
@@ -186,9 +186,9 @@ export const getLoginHistory = createAsyncThunk(
 )
 export const loadMoreLoginHistory = createAsyncThunk(
   'userReducer/loadMoreHistory',
-  async ({ page_index, page_size }: any, thunkApi) => {
+  async ({ page_index, page_size, type }: any, thunkApi) => {
     try {
-      const res = await UserApi.getListHistory({ page_index, page_size })
+      const res = await UserApi.getListHistory({ page_index, page_size, type })
       return res
     } catch (err) {
       thunkApi.rejectWithValue(err)

@@ -9,6 +9,8 @@ import dashboard from 'src/assets/images/dashboard.png'
 import Image from 'next/image'
 import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const Dashboard = () => {
   const router = useRouter()
@@ -67,4 +69,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default withAuthorization([UserType.STUDENT])(Dashboard)

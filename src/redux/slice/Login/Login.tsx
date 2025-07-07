@@ -20,24 +20,12 @@ const initialState: LoginState = {
   unsavedChange: false,
 }
 
-export const createAuthenticationManager = createAsyncThunk(
-  'loginReducer/handleInitKeyCloak',
-  async (authenticationManager: AuthenticationManager, thunkAPI) => {
-    try {
-      return authenticationManager
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error)
-    }
-  },
-)
-
 export const getLogoutUser = createAsyncThunk(
   'loginReducer/handleLogout',
   async ({}, thunkAPI) => {
     try {
       const authenticationManager = new AuthenticationManager()
-      localStorage.clear()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
       return {}
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error)

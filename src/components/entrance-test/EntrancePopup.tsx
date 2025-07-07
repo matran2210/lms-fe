@@ -1,17 +1,25 @@
-import { Dispatch, FC, SetStateAction, useMemo } from 'react'
-import EntrancePopupContent from './EntrancePopupContent'
-import EntranceTestFillForm from './EntranceTestFillForm'
-import { useAppSelector } from 'src/redux/hook'
-import { userReducer } from 'src/redux/slice/User/User'
-import { useRouter } from 'next/router'
 import SappModalV2 from '@components/base/modal/SappModalV2'
+import { useRouter } from 'next/router'
+import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react'
+import { useAppSelector } from 'src/redux/hook'
 import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
+import EntrancePopupContent from './EntrancePopupContent'
+import dayjs from 'dayjs'
+
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
+}
 
 // define the props for the confirm dialog component
 export type EntrancePopupProps = {
   open: boolean
   setOpen?: Dispatch<SetStateAction<boolean>>
-  entrancePopupContent?: any
+  data?: any
   setOpenFillForm: Dispatch<SetStateAction<boolean>>
   openFillForn: boolean
   entranceTest?: Record<any, any> | undefined
@@ -21,30 +29,26 @@ export type EntrancePopupProps = {
 const EntrancePopup: FC<EntrancePopupProps> = ({
   open,
   setOpen,
-  entrancePopupContent,
-  openFillForn,
-  setOpenFillForm,
+  data,
+  // openFillForn,
+  // setOpenFillForm,
   entranceTest,
 }) => {
   const handleOnClick = () => {
     setOpen && setOpen(false)
-    // setOpenFillForm(true)
   }
 
   const { count } = useAppSelector(entranceTestReducer)
   const router = useRouter()
 
   const checkLimit = useMemo(() => {
-    if (entrancePopupContent?.is_limited) {
-      if (
-        entrancePopupContent?.attempt_times ===
-        entrancePopupContent?.limit_count
-      ) {
+    if (data?.is_limited) {
+      if (data?.attempt_times === data?.limit_count) {
         return true
       }
     }
     return false
-  }, [entrancePopupContent])
+  }, [data])
 
   return (
     <>
@@ -55,7 +59,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         handleCancel={handleOnClick}
         onOk={() => {
           router.push({
-            pathname: `/test/${count === 1 ? entranceTest?.id : entrancePopupContent?.id}`,
+            pathname: `/test/${count === 1 ? entranceTest?.id : data?.id}`,
             query: {
               type: 'entrance',
             },
@@ -71,33 +75,23 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         </h2>
         <div className="text-sm text-gray-1">Let’s start!</div>
         <EntrancePopupContent
-          name={
-            count === 1 ? entranceTest?.name : entrancePopupContent?.name || ''
-          }
-          timeAllow={
-            count === 1
-              ? entranceTest?.quiz_timed
-              : entrancePopupContent?.quiz_timed
-          }
-          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : entrancePopupContent?.attempt_times || '0'}`}
+          name={count === 1 ? entranceTest?.name : data?.name || ''}
+          timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}
+          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || '0'}`}
           limit_count={
-            count === 1
-              ? entranceTest?.limit_count
-              : entrancePopupContent?.limit_count
+            count === 1 ? entranceTest?.limit_count : data?.limit_count
           }
           total_question={
-            count === 1
-              ? entranceTest?.total_question
-              : entrancePopupContent?.total_question
+            count === 1 ? entranceTest?.total_question : data?.total_question
           }
         />
       </SappModalV2>
-      <EntranceTestFillForm
+      {/* <EntranceTestFillForm
         open={openFillForn}
         setOpen={setOpenFillForm}
-        entrancePopupContent={entrancePopupContent}
+        entrancePopupContent={data}
         setOpenTestInfo={setOpen}
-      />
+      /> */}
     </>
   )
 }

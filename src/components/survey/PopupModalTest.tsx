@@ -25,16 +25,16 @@ interface SurveyState {
 }
 
 const SURVEY_URLS = {
-  ACCA: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
-  CFA: 'https://survey.hsforms.com/1EmIZK95sTWqhk1G3ozRyIw120xb',
-  CMA: 'https://survey.hsforms.com/1jlTMbpPsTaai6oKwrjEv1g120xb',
+  ACCA: 'https://survey.hsforms.com/1qDp92jBgQceLUHWjcZ6fxg120xb',
+  CFA: 'https://survey.hsforms.com/11oHaCszKRTiIQSsnErE57g120xb',
+  CMA: 'https://survey.hsforms.com/1g3K5gl5hSFeJCtVFfFfc2g120xb',
   CERT_DIP: 'https://survey.hsforms.com/1jWWomyiBS4OBiaDF7rG4CQ120xb',
 }
 
 const SURVEY_URLS_COMPLETE = {
-  ACCA: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
-  CFA: 'https://survey.hsforms.com/13S3QNf3rSEScA7mlwjPzjw120xb',
-  CMA: 'https://survey.hsforms.com/1szRbvrk9S6SgcE9WsHpFZw120xb',
+  ACCA: 'https://survey.hsforms.com/19aFy9lTvSs6rISvymAngCw120xb',
+  CFA: 'https://survey.hsforms.com/1JUWK7CYAQc-_dkACNB-NnQ120xb',
+  CMA: 'https://survey.hsforms.com/1hqLZ4gS-Rh-5Vv1Nig3QJA120xb',
   CERT_DIP: 'https://survey.hsforms.com/140B1nhjYSmaP0uQ-A7oFKQ120xb',
 }
 
@@ -175,7 +175,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     middtermCourse: (
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
-        <span className="text-sm font-medium text-bw-1">50%</span> khóa học{' '}
+        <span className="text-sm font-medium text-bw-1">50%</span> lớp học{' '}
         <span className="text-sm font-medium text-bw-1">{class_code}</span>. Tại
         SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
         nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
@@ -185,7 +185,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     ),
     finalCourse: (
       <span>
-        Bạn đã đi đến chặng đường cuối cùng của khóa học{' '}
+        Bạn đã đi đến chặng đường cuối cùng của lớp học{' '}
         <span className="text-sm font-medium text-bw-1">{class_code}</span>!
         Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
         nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu

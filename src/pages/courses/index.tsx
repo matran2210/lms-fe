@@ -8,7 +8,7 @@ import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
@@ -16,6 +16,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
 import { CoursesAPI } from '../api/courses'
 import { MY_COURSES } from 'src/constants/lang'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -273,4 +275,4 @@ const MyCourse = () => {
   )
 }
 
-export default MyCourse
+export default withAuthorization([UserType.STUDENT])(MyCourse)

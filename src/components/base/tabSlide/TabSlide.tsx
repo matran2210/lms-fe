@@ -15,6 +15,7 @@ interface IProps {
   setActiveShowAll: any
   setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
+  answerSubmitted?: Array<any>
 }
 
 const TabSlide = ({
@@ -178,7 +179,7 @@ const TabSlide = ({
             ? `relative ${
                 hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
               } mx-7`
-            : ' flex w-full items-center gap-6'
+            : 'flex w-full items-center gap-6'
         }`}
       >
         {hasScrollBar && (
@@ -226,8 +227,10 @@ const TabSlide = ({
                           handleChangeTab(pageNum.id)
                         }
                       }}
-                      isViewedProp={pageNum.attempted || pageNum.done}
-                      isFlagedProp={pageNum.flaged}
+                      isViewedProp={
+                        pageNum.attempted || pageNum.is_viewed_answer
+                      }
+                      isFlagedProp={pageNum.flag}
                       //   type={type}
                     >
                       {pageNum.index + 1}
@@ -244,7 +247,7 @@ const TabSlide = ({
                       }
                     }}
                     isViewedProp={pageNum.attempted}
-                    isFlagedProp={pageNum.flaged}
+                    isFlagedProp={pageNum.flag}
                     //   type={type}
                   >
                     {pageNum.index + 1}
@@ -253,7 +256,6 @@ const TabSlide = ({
               )
             ) : (
               renderTab.map((pageNum: any, idx: number) => {
-                // if (pageNum) {
                 return (
                   <div className="flex flex-col gap-2" key={idx}>
                     {pageNum[0] ? (
@@ -268,7 +270,7 @@ const TabSlide = ({
                             }
                           }}
                           isViewedProp={pageNum[0].attempted}
-                          isFlagedProp={pageNum[0].flaged}
+                          isFlagedProp={pageNum[0].flag}
                           //   type={type}
                         >
                           {pageNum[0].index + 1}
@@ -293,7 +295,7 @@ const TabSlide = ({
                             }
                           }}
                           isViewedProp={pageNum[1].attempted}
-                          isFlagedProp={pageNum[1].flaged}
+                          isFlagedProp={pageNum[1].flag}
                           //   type={type}
                         >
                           {pageNum[1].index + 1}
@@ -346,7 +348,7 @@ const TabSlide = ({
             {activeShowAll && optionShowAll}
             <div
               className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
-                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2 '
+                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2'
               }`}
               onClick={() => {
                 // setPageNums(activeShowAll ? arrPage : getPagination)

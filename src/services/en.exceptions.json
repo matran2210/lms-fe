@@ -548,6 +548,10 @@
     "message": "Create Class Course Id Not Found"
   },
   {
+    "code": "400|101905",
+    "message": "Room status cannot be updated when the room has a calendar"
+  },
+  {
     "code": "404|110004",
     "message": "Certificate Not Found"
   },
@@ -782,6 +786,10 @@
   {
     "code": "400|450035",
     "message": "Event Expired"
+  },
+  {
+    "code": "400|450050",
+    "message": "This promotion code can't be modified, because it has been attached to some Orders."
   },
   {
     "code": "400|340001",
@@ -1113,7 +1121,7 @@
   },
   {
     "code": "400|470005",
-    "message": "Facility Cannot Delete"
+    "message": "Facility Required For Offline Or Blended Class"
   },
   {
     "code": "400|470022",
@@ -1226,6 +1234,10 @@
   {
     "code": "400|480008",
     "message": "Department With Child Department"
+  },
+  {
+    "code": "400|480016",
+    "message": "Unable to edit the receptionist as they are assigned to a shift in an existing request. Please check the related request"
   },
   {
     "code": "400|480024",
@@ -1356,6 +1368,154 @@
     "message": "Class Schedule Version Not Found"
   },
   {
+    "code": "404|450009",
+    "message": "Product Not Found"
+  },
+  {
+    "code": "404|450005",
+    "message": "Promotion Not Found"
+  },
+  {
+    "code": "400|450006",
+    "message": "Promotion Can Not Combine"
+  },
+  {
+    "code": "400|450007",
+    "message": "Secure Hash Does Not Match"
+  },
+  {
+    "code": "404|450008",
+    "message": "Order Not Found"
+  },
+  {
+    "code": "400|450031",
+    "message": "Order Expired"
+  },
+  {
+    "code": "400|450036",
+    "message": "Invalid Payment Option"
+  },
+  {
+    "code": "400|450037",
+    "message": "Product Existed"
+  },
+  {
+    "code": "400|450038",
+    "message": "Product Code Existed"
+  },
+  {
+    "code": "400|450039",
+    "message": "Promotion Discount Invalid"
+  },
+  {
+    "code": "400|450040",
+    "message": "Invalid Start Date or End Date, please check again"
+  },
+  {
+    "code": "400|450046",
+    "message": "The Combo's name existed"
+  },
+  {
+    "code": "400|450049",
+    "message": "The Promotion's code existed"
+  },
+  {
+    "code": "400|600004",
+    "message": "Teacher Schedule Not Found"
+  },
+  {
+    "code": "400|600005",
+    "message": "Teacher Schedule Already Passed"
+  },
+  {
+    "code": "400|600007",
+    "message": "Can Not Delete Teacher Schedule"
+  },
+  {
+    "code": "400|450001",
+    "message": "Busy Schedule Existed"
+  },
+  {
+    "code": "400|460001",
+    "message": "Request Schedule Existed"
+  },
+  {
+    "code": "400|460004",
+    "message": "Request Schedule Not Found"
+  },
+  {
+    "code": "400|460005",
+    "message": "Weekly Norm Existed"
+  },
+  {
+    "code": "400|460006",
+    "message": "Can Not Delete Request"
+  },
+  {
+    "code": "400|460007",
+    "message": "Weekly Norm Invalid Data"
+  },
+  {
+    "code": "400|460009",
+    "message": "Invalid Status Transition"
+  },
+  {
+    "code": "400|460010",
+    "message": "Can Not Update Request"
+  },
+  {
+    "code": "400|490104",
+    "message": "Schedule start date is less than end date."
+  },
+  {
+    "code": "400|490204",
+    "message": "The schedule end date must be after the repeat end date."
+  },
+  {
+    "code": "400|490304",
+    "message": "The start date must be on or before today"
+  },
+  {
+    "code": "400|480204",
+    "message": "Room schedule duplicate calendar {TOTAL_DATE}, such as {DATE_MESSAGE}"
+  },
+  {
+    "code": "400|480304",
+    "message": "The room schedule contains multiple duplicate entries in the calendar."
+  },
+  {
+    "code": "400|480404",
+    "message": "The start date exceeds the allowed repeat range."
+  },
+  {
+    "code": "400|480504",
+    "message": "The old room schedule could not be found."
+  },
+  {
+    "code": "400|480604",
+    "message": "The old room schedule cannot be modified."
+  },
+  {
+    "code": "400|480704",
+    "message": "The repeat end date cannot be more than 2 years away."
+  },
+  {
+    "code": "400|480804",
+    "message": "Room schedule not found."
+  },
+  {
+    "code": "400|480904",
+    "message": "Invalid input for room rental schedule update."
+  },
+  {
+    "code": "400|481904",
+    "message": "Scheduled time is outside the allowed loop interval."
+  },
+  {
+    "code": "400|482904",
+    "message": "Failed to clear the room schedule due to an exception."
+  },
+  {
     "code": "400|100312",
     "message": "Empty Examination Change Reason"
   },
@@ -1370,5 +1530,609 @@
   {
     "code": "400|480104",
     "message": "Lessee Tag Not Found"
+  },
+  {
+    "code": "400|490011",
+    "message": "Number of parts is out of bounds"
+  },
+  {
+    "code": "400|071206",
+    "message": "Course section link nested within two course sections"
+  },
+  {
+    "code": "400|490016",
+    "message": "Invalid date in course section link"
+  },
+  {
+    "code": "400|490007",
+    "message": "Course section parent not added to class"
+  },
+  {
+    "code": "400|490006",
+    "message": "Course section already exists in class"
+  },
+  {
+    "code": "400|490005",
+    "message": "Can Not Delete Past Schedule"
+  },
+  {
+    "code": "400|490015",
+    "message": "Invalid Class Standard Schedules"
+  },
+  {
+    "code": "400|490012",
+    "message": "Class Schedule Has Been Started"
+  },
+  {
+    "code": "400|490013",
+    "message": "Cannot Edit Past Schedules"
+  },
+  {
+    "code": "400|490014",
+    "message": "Invalid Learning Mode Switch"
+  },
+  {
+    "code": "400|490023",
+    "message": "Link Meeting Required"
+  },
+  {
+    "code": "400|490024",
+    "message": "Lesson date is in the past"
+  },
+  {
+    "code": "400|490017",
+    "message": "Invalid Time Range"
+  },
+  {
+    "code": "400|490010",
+    "message": "Maximum Schedule Per Day"
+  },
+  {
+    "code": "400|490019",
+    "message": "Class schedule is conflicted"
+  },
+  {
+    "code": "400|490018",
+    "message": "Schedule Conflict"
+  },
+  {
+    "code": "400|490020",
+    "message": "Teacher schedule is conflicted"
+  },
+  {
+    "code": "400|490021",
+    "message": "Deadline In Past"
+  },
+  {
+    "code": "400|530003",
+    "message": "Invalid Date Format"
+  },
+  {
+    "code": "400|530002",
+    "message": "Invalid Custom Price"
+  },
+  {
+    "code": "400|530000",
+    "message": "Class schedule not found"
+  },
+  {
+    "code": "400|530005",
+    "message": "Cannot delete past schedule exception"
+  },
+  {
+    "code": "400|490005",
+    "message": "Schedule not found"
+  },
+  {
+    "code": "400|100609",
+    "message": "Please Add Learning Schedule Before Choosing Teacher"
+  },
+  {
+    "code": "400|100709",
+    "message": "Teacher Schedule Has More Than 3 Overlapping Lessions"
+  },
+  {
+    "code": "400|041305",
+    "message": "Teacher cannot change the featured section by assigning a course section."
+  },
+  {
+    "code": "400|011905",
+    "message": "Teacher Does Not Belong To This Facility"
+  },
+  {
+    "code": "400|020938",
+    "message": "Facility Manager cannot be deleted."
+  },
+  {
+    "code": "400|020901",
+    "message": "Staff Assigned To Facility"
+  },
+  {
+    "code": "400|020916",
+    "message": "Facility is not active."
+  },
+  {
+    "code": "400|020934",
+    "message": "Part-time receptionist belongs to another facility."
+  },
+  {
+    "code": "400|020918",
+    "message": "Part-time receptionist cannot be a Facility Manager."
+  },
+  {
+    "code": "400|020904",
+    "message": "Trying to transfer or remove, but staff is not in the facility."
+  },
+  {
+    "code": "400|530001",
+    "message": "The Payment Option is invalid."
+  },
+  {
+    "code": "400|530002",
+    "message": "The Custom Price is invalid."
+  },
+  {
+    "code": "400|530003",
+    "message": "The Date Format is invalid."
+  },
+  {
+    "code": "400|530004",
+    "message": "The length of text must be less or equal than 200 Characters"
+  },
+  {
+    "code": "400|530101",
+    "message": "The Product has existed."
+  },
+  {
+    "code": "400|530102",
+    "message": "The Product Code has existed."
+  },
+  {
+    "code": "400|530103",
+    "message": "The Product is not found or inactive."
+  },
+  {
+    "code": "404|530104",
+    "message": "The Product is not found."
+  },
+  {
+    "code": "404|530201",
+    "message": "The Promotion is not found."
+  },
+  {
+    "code": "400|530202",
+    "message": "The Promotion is unable to combine."
+  },
+  {
+    "code": "400|530203",
+    "message": "The Promotion Dicount is invalid."
+  },
+  {
+    "code": "400|530204",
+    "message": "The Promotion Code's Start Date or End Date is invalid."
+  },
+  {
+    "code": "400|530205",
+    "message": "The Promotion is out of Quantity."
+  },
+  {
+    "code": "400|530206",
+    "message": "Some Promotions are invalid."
+  },
+  {
+    "code": "400|530207",
+    "message": "The Promotion has existed."
+  },
+  {
+    "code": "400|530208",
+    "message": "The Promotion can not be edited."
+  },
+  {
+    "code": "400|530209",
+    "message": "The Promotion is non-editable because it has been attached or redeemed."
+  },
+  {
+    "code": "400|530210",
+    "message": "The new quantity must be larger or equal the original quantity."
+  },
+  {
+    "code": "400|530211",
+    "message": "The new start date can not be before the first time that this promotion is attached to an order."
+  },
+  {
+    "code": "400|530212",
+    "message": "The new end date can not be before the last time that this promotion is attached to an order."
+  },
+  {
+    "code": "400|530301",
+    "message": "The Deal ID has existed."
+  },
+  {
+    "code": "404|530302",
+    "message": "The Order is not found."
+  },
+  {
+    "code": "400|530303",
+    "message": "The Order has expired."
+  },
+  {
+    "code": "400|530304",
+    "message": "The Order is non-editable."
+  },
+  {
+    "code": "400|530305",
+    "message": "The Order Price is mis-calculated. Please contact the Admin, or select another Products, Combos, Promotions."
+  },
+  {
+    "code": "400|530306",
+    "message": "The installment option requires the final price is larger or equal 3 000 000 VND."
+  },
+  {
+    "code": "400|530307",
+    "message": "The same promotion cannot be used for both a product and a combo containing that product"
+  },
+  {
+    "code": "400|530401",
+    "message": "The Combo is not found."
+  },
+  {
+    "code": "400|530402",
+    "message": "The Combo has existed."
+  },
+  {
+    "code": "401|530501",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "404|530502",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "400|530503",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "400|530504",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "400|530505",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "400|530506",
+    "message": "VNPay gets an error. Please contact the staff or Admin."
+  },
+  {
+    "code": "400|50001",
+    "message": "All class schedules have already assigned!"
+  },
+  {
+    "code": "400|460021",
+    "message": "Registered the maximum allowed number of requests"
+  },
+  {
+    "code": "400|020039",
+    "message": "Staff Block Not Allowed"
+  },
+  {
+    "code": "400|010908",
+    "message": "Invalid User Facility"
+  },
+  {
+    "code": "400|020139",
+    "message": "Invalid Staff Department Facility Manager"
+  },
+  {
+    "code": "400|020939",
+    "message": "Staff Facility Can Not Add All Receptionist Parttime"
+  },
+  {
+    "code": "400|021005",
+    "message": "Staff Course Category Invalid With Department"
+  },
+  {
+    "code": "400|021104",
+    "message": "Staff Position Not Found"
+  },
+  {
+    "code": "400|021133",
+    "message": "Staff Position Incorrect With Department"
+  },
+  {
+    "code": "400|021139",
+    "message": "Invalid Staff Position Facility Manager"
+  },
+  {
+    "code": "400|021204",
+    "message": "Staff Level Not Found"
+  },
+  {
+    "code": "400|071305",
+    "message": "Course Learning Outcome Invalid"
+  },
+  {
+    "code": "403|071838",
+    "message": "Course Discussion Supporter Not Permission"
+  },
+  {
+    "code": "400|072204",
+    "message": "Course Copy Content Log Not Found"
+  },
+  {
+    "code": "422|072205",
+    "message": "Course Section Id Not Suitable"
+  },
+  {
+    "code": "400|073907",
+    "message": "Course Section Not Change Feature Section"
+  },
+  {
+    "code": "400|100509",
+    "message": "Class Lecturer Duplicate Course Section"
+  },
+  {
+    "code": "400|100809",
+    "message": "Class Hybrid Not Add Teacher"
+  },
+  {
+    "code": "400|101805",
+    "message": "Room Not Active"
+  },
+  {
+    "code": "400|102005",
+    "message": "Class Link Meeting Required When Update Classroom"
+  },
+  {
+    "code": "400|102007",
+    "message": "Facility And Room Mismatch"
+  },
+  {
+    "code": "400|230005",
+    "message": "Category Cycle Exist"
+  },
+  {
+    "code": "400|290035",
+    "message": "Shop Event Invalid Date"
+  },
+  {
+    "code": "404|360010",
+    "message": "Staff Details Not Found"
+  },
+  {
+    "code": "400|360011",
+    "message": "Invalid Business Unit"
+  },
+  {
+    "code": "400|360012",
+    "message": "Pipeline Is Not Existed"
+  },
+  {
+    "code": "400|360013",
+    "message": "Cannot Determine Staff Owner"
+  },
+  {
+    "code": "500|360015",
+    "message": "Failed To Save Ticket"
+  },
+  {
+    "code": "404|360016",
+    "message": "Ticket Not Found"
+  },
+  {
+    "code": "404|360017",
+    "message": "No Matching Records"
+  },
+  {
+    "code": "422|360017",
+    "message": "Owner Not In Facility"
+  },
+  {
+    "code": "404|360018",
+    "message": "No Classes Found"
+  },
+  {
+    "code": "404|360019",
+    "message": "No Class Schedule Course Section Found"
+  },
+  {
+    "code": "404|360020",
+    "message": "Course Section Not Found"
+  },
+  {
+    "code": "500|360021",
+    "message": "Failed To Save Class Teaching Progress"
+  },
+  {
+    "code": "404|360021",
+    "message": "Base Class Schedule Not Found"
+  },
+  {
+    "code": "404|360022",
+    "message": "No Uncompensated Course Sections Found"
+  },
+  {
+    "code": "404|360023",
+    "message": "No Class Teaching Progress Found"
+  },
+  {
+    "code": "500|360099",
+    "message": "Failed To Save Class Teaching Progress Compensation"
+  },
+  {
+    "code": "400|460000",
+    "message": "Class Schedule Not Found"
+  },
+  {
+    "code": "404|460004",
+    "message": "Request Schedule Not Found"
+  },
+  {
+    "code": "400|460008",
+    "message": "Weekly Norm Not Found"
+  },
+  {
+    "code": "400|460012",
+    "message": "Request Instances Not Found"
+  },
+  {
+    "code": "400|460013",
+    "message": "Not Found Weekly Norm"
+  },
+  {
+    "code": "400|460015",
+    "message": "Cannot Delete Request With Invalid Status"
+  },
+  {
+    "code": "400|460016",
+    "message": "Can Not Create Request"
+  },
+  {
+    "code": "400|460018",
+    "message": "Schedules Not In Same Class"
+  },
+  {
+    "code": "400|460019",
+    "message": "Staff Assignee Not Found"
+  },
+  {
+    "code": "400|460020",
+    "message": "Can Not Upload Attachment File"
+  },
+  {
+    "code": "400|460022",
+    "message": "Max Attachment Files Per Request Exceeded"
+  },
+  {
+    "code": "400|460023",
+    "message": "All Receptionist Schedules Already Assigned"
+  },
+  {
+    "code": "400|460024",
+    "message": "Dates Must Be Greater Than Or Equal To Today"
+  },
+  {
+    "code": "400|460105",
+    "message": "Room schedule is conflicted"
+  },
+  {
+    "code": "400|460404",
+    "message": "Class Schedule Teacher Not Found"
+  },
+  {
+    "code": "400|470025",
+    "message": "Facility Cannot Delete"
+  },
+  {
+    "code": "400|470122",
+    "message": "Teacher Lms Has Not Permission For This Class"
+  },
+  {
+    "code": "400|471122",
+    "message": "Teacher Lms Has Not Permission"
+  },
+  {
+    "code": "400|480001",
+    "message": "Department Existed"
+  },
+  {
+    "code": "400|480010",
+    "message": "Receptionist Schedule Has Been Fully Booked"
+  },
+  {
+    "code": "404|480011",
+    "message": "Receptionist Schedule Not Found"
+  },
+  {
+    "code": "400|480012",
+    "message": "Receptionist Schedules Not In Same Week"
+  },
+  {
+    "code": "400|480013",
+    "message": "Max Shift Registration Exceeded"
+  },
+  {
+    "code": "400|480014",
+    "message": "Cannot Register Receptionist Schedule"
+  },
+  {
+    "code": "400|480015",
+    "message": "Cannot Cancel Receptionist Schedule Registration"
+  },
+  {
+    "code": "400|480016",
+    "message": "Unable to edit the receptionist as they are assigned to a shift in an existing request. Please check the related request"
+  },
+  {
+    "code": "400|480017",
+    "message": "Cannot Update Receptionist Schedule"
+  },
+  {
+    "code": "400|481104",
+    "message": "Lessee Contact Not Found"
+  },
+  {
+    "code": "400|482104",
+    "message": "Lessee Contact Phone Exist"
+  },
+  {
+    "code": "400|490003",
+    "message": "Class Schedule Change Empty Reason"
+  },
+  {
+    "code": "400|490408",
+    "message": "Teacher Not Authorized To Teach Course Section"
+  },
+  {
+    "code": "400|491005",
+    "message": "Holiday schedule exists"
+  },
+  {
+    "code": "400|500004",
+    "message": "Calendar Student Not Found"
+  },
+  {
+    "code": "400|520105",
+    "message": "Class Not Met Condition"
+  },
+  {
+    "code": "400|520106",
+    "message": "Link Meeting Is Required For Live Online Mode"
+  },
+  {
+    "code": "400|530014",
+    "message": "Request Schedule Is Due"
+  },
+  {
+    "code": "400|530015",
+    "message": "Cannot Update Because Arrange Type Is Not Auto"
+  },
+  {
+    "code": "400|530400",
+    "message": "Request Schedule Status Invalid"
+  },
+  {
+    "code": "400|600006",
+    "message": "Teacher Schedule Overlaps"
+  },
+  {
+    "code": "400|530016",
+    "message": "Invalid Class Code"
+  },
+  {
+    "code": "403|071909",
+    "message": "Locked Course Content"
+  },
+  {
+    "code": "400|100909",
+    "message": "The Maximum Number Of Lessons The Teacher Can Take Has Been Reached"
+  },
+  {
+    "code": "404|550400",
+    "message": "Enrollment Rules Not Found"
+  },
+  {
+    "code": "400|540000",
+    "message": "Enrollment Time Range Overlaps"
   }
 ]

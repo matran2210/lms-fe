@@ -5,7 +5,7 @@ import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import clsx from 'clsx'
 
 interface IProps {
-  title?: string | undefined
+  title?: React.ReactNode
   open: boolean | undefined
   handleCancel: () => void
   showFooter?: boolean
@@ -32,10 +32,12 @@ interface IProps {
   width?: number | undefined | string
   handleClose?: () => void
   icon: ReactNode
-  header: string
-  content?: string | undefined
+  header?: ReactNode
+  content?: string | undefined | ReactNode
   children?: ReactNode
   isMaskClosable?: boolean
+  headerClassName?: string
+  isClosable?: boolean
 }
 
 const SappModalV3 = ({
@@ -67,6 +69,8 @@ const SappModalV3 = ({
   content,
   children,
   isMaskClosable = true,
+  headerClassName,
+  isClosable = false,
 }: IProps) => {
   return (
     <Modal
@@ -76,18 +80,22 @@ const SappModalV3 = ({
       open={open}
       closeIcon={false}
       className={classNameModal ?? 'sapp-modal'}
-      onCancel={handleClose || handleCancel}
+      onCancel={isClosable ? handleClose : handleClose || handleCancel}
       width={width}
       maskClosable={isMaskClosable}
+      closable={isClosable}
     >
       {icon && (
         <div className="flex justify-center">
-          <div className="w-fit rounded-full bg-secondary p-8">{icon}</div>
+          <div className="w-fit rounded-full bg-secondary">{icon}</div>
         </div>
       )}
       {header && (
         <div
-          className={`mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`}
+          className={clsx(
+            `mt-6 flex justify-center text-3xl font-semibold text-bw-1 ${clsx({ 'mb-4': !content || !children })}`,
+            headerClassName,
+          )}
         >
           {header}
         </div>

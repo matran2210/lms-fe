@@ -54,8 +54,12 @@ const UserApi = {
   getListDevices: async (): Promise<IResponse<any>> => {
     return AuthAPI.getListDevices()
   },
-  getListHistory: async ({ page_index, page_size }: any): Promise<any> => {
-    return AuthAPI.getListHistory({ page_index, page_size })
+  getListHistory: async ({
+    page_index,
+    page_size,
+    type,
+  }: any): Promise<any> => {
+    return AuthAPI.getListHistory({ page_index, page_size, type })
   },
 
   /**
