@@ -303,7 +303,7 @@ const MyCourse = () => {
           </div>
         </div>
         <div className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11">
-          <h1 className="text-lg font-semibold text-gray-800 md:text-2xl">
+          <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
             My Courses
           </h1>
           <div className={`relative`}>
