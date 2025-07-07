@@ -73,6 +73,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setNoteInput,
     notesListData,
     refetchNotesList,
+    isViewOnly,
   } = useCourseNoteContext()
   // Thêm state để track khi nào DOM đã được cập nhật
   const [isDOMReady, setIsDOMReady] = useState(false)
@@ -780,6 +781,7 @@ export const HighlightableHTML: React.FC<Props> = ({
           >
             <AvatarCard className="mb-3" />
             <TextArea
+              disabled={loading || isViewOnly}
               value={noteInput}
               onChange={(e) => setNoteInput(e.target.value)}
               onMouseDown={(e) => e.stopPropagation()}
@@ -796,7 +798,7 @@ export const HighlightableHTML: React.FC<Props> = ({
               </ButtonSecondary>
               <ButtonPrimary
                 loading={loading}
-                disabled={!noteInput}
+                disabled={!noteInput || isViewOnly}
                 onClick={saveNote}
                 onMouseDown={(e) => e.stopPropagation()}
                 type="primary"
