@@ -250,7 +250,7 @@ const CourseDetail = () => {
             className="mt-8 flex items-start justify-between gap-6 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="line-clamp-2 w-[60%] text-lg font-semibold text-gray-800 sm:text-xl md:text-2xl lg:text-3xl">
+            <div className="line-clamp-2 w-[60%] text-xl font-semibold text-gray-800 md:text-2xl lg:text-3xl">
               {courseNameDetail}
             </div>
             <FilterCourse
@@ -289,7 +289,7 @@ const CourseDetail = () => {
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
           <CtaTrial />
-          {pinnedCompletedCourse.isOpen && (
+          {!pinnedCompletedCourse.isOpen && (
             <PinnedCompletedCourse
               pinnedCompletedCourse={pinnedCompletedCourse}
             />
