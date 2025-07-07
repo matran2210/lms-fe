@@ -73,6 +73,9 @@ import BottomMenu from '@components/layout/BottomMenu'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import ActivityResourceMobile from '@components/learning/activity/modal/ActivityResourceMobile'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { ITabs } from 'src/type'
+import { title } from 'process'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -389,75 +392,31 @@ const ActivityPage = () => {
     (e: IBreadCrumbs) => e?.course_section_type === 'PART',
   )?.id
 
-  const chapterId = breadcrumbsMenu?.data?.find(
-    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
-  )?.id
-
-  /**
-   * @description config menu breadcrumbs trong activity
-   */
-  const BreadCrumbs = () => (
-    <>
-      {breadcrumbsMenu?.data &&
-        breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-          let url = ''
-          const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
-          switch (e.course_section_type) {
-            case 'PART':
-              url = urlCourseDetail
-              break
-            case 'CHAPTER':
-              url = urlCourseDetail
-              break
-            case 'UNIT':
-              url = urlCourseDetail
-              break
-            case 'ACTIVITY':
-              url = '#'
-              break
-            default:
-              url = `/courses/my-course/${router.query.id}`
-              break
-          }
-
-          return (
-            <React.Fragment key={e?.id}>
-              {e?.course_section_type !== 'ACTIVITY' ? (
-                <li
-                  title={e?.name}
-                  onClick={() => {
-                    ;['CHAPTER', 'UNIT', 'PART'].includes(
-                      e.course_section_type,
-                    ) && localStorage.setItem('course_chapter_id', chapterId)
-                    router.push(url)
-
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }}
-                >
-                  <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
-                    <li
-                      className={
-                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#A1A1A1] hover:text-primary'
-                      }
-                      title={e?.name}
-                    >
-                      {truncateBySpace(e.name, 3) + '/'}
-                    </li>
-                  </Tooltip>
-                </li>
-              ) : null}
-            </React.Fragment>
-          )
-        })}
-    </>
-  )
-
-  /**
-   * @description biến này để lấy name của activity
-   */
-  const nameActivity = breadcrumbsMenu?.data?.find(
-    (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
-  )
+  const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
+    ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
+        let url = ''
+        const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
+        switch (e.course_section_type) {
+          case 'PART':
+          case 'CHAPTER':
+          case 'UNIT':
+            return {
+              title: e?.name,
+              link: urlCourseDetail,
+            }
+          case 'ACTIVITY':
+            return {
+              title: e?.name,
+              link: '#',
+            }
+          default:
+            return {
+              title: e?.name,
+              link: urlCourseDetail,
+            }
+        }
+      })
+    : []
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
 
@@ -488,33 +447,19 @@ const ActivityPage = () => {
       >
         <div
           className={clsx({
-            'my-2': !focusOnlyDiscussion,
+            'my-2 md:mt-6 lg:mt-2': !focusOnlyDiscussion,
             'py-2': focusOnlyDiscussion,
           })}
         >
           {/* Breadcrumbs */}
-          <ul
-            className={clsx('overflow-x-auto py-6 pb-8 text-sm font-medium', {
+          <div
+            className={clsx('overflow-x-auto pb-8 pt-4 text-sm font-medium', {
               hidden: focusOnlyQuiz.open,
-              'hidden md:flex': !focusOnlyQuiz.open,
+              'hidden lg:flex': !focusOnlyQuiz.open,
             })}
           >
-            <BreadCrumbs />
-            <Tooltip title={nameActivity?.name}>
-              <li className="responsive-truncate-container text-[#050505]">
-                <Link
-                  href={'#'}
-                  className="breadcrumbs__link"
-                  scroll={false}
-                  onClick={() =>
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }
-                >
-                  <ResponsiveTextTruncate text={nameActivity?.name ?? ''} />
-                </Link>
-              </li>
-            </Tooltip>
-          </ul>
+            <SappBreadCrumbs breadcrumbs={breadcrumbsData} />
+          </div>
           {/* Notes */}
           <>
             {getNotesData?.map((e: any, index: number) => {
@@ -560,7 +505,7 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={ANIMATION.DATA_AOS}
-            className={clsx('mb-[120px] flex flex-col gap-6 lg:mb-6', {
+            className={clsx('mb-[120px] flex flex-col gap-4 md:gap-6 lg:mb-6', {
               'mb-0': focusOnlyDiscussion,
             })}
           >
@@ -570,14 +515,14 @@ const ActivityPage = () => {
               isHidden={focusOnlyQuiz.open}
               extraActions={
                 focusOnlyDiscussion ? null : (
-                  <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
-                    <HourglassIcon />
+                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-1 text-xs text-gray-800 md:py-[6px] md:text-sm">
+                    <HourglassIcon className="shrink-0" />
                     <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                   </div>
                 )
               }
               onBack={focusOnlyDiscussion ? onUnFocusDiscussion : router.back}
-              className={clsx({
+              className={clsx('mb-0 md:mb-2 lg:mb-0', {
                 'px-4': focusOnlyDiscussion,
               })}
             />
@@ -587,6 +532,7 @@ const ActivityPage = () => {
               className={clsx({
                 hidden:
                   focusOnlyQuiz.open ||
+                  focusOnlyDiscussion ||
                   !(
                     activity?.course_outcomes &&
                     activity?.course_outcomes?.length > 0
@@ -734,7 +680,6 @@ const ActivityPage = () => {
                   height={850}
                   key={e.id}
                   className="!z-40"
-                  dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
                 >
@@ -753,7 +698,6 @@ const ActivityPage = () => {
                 <ModalResizeable
                   key={e.id}
                   className="!z-40"
-                  dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
                   header={

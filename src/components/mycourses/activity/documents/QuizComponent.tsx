@@ -938,7 +938,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           <div className="relative">
             {renderQuestion()}
 
-            <div className="absolute bottom-0 right-0 z-[1050] flex w-12 flex-col gap-2">
+            <div className="absolute bottom-[10px] right-0 z-[1050] flex w-12 flex-col gap-2">
               {exhibitData && exhibitData?.length > 0 && (
                 <Popover
                   placement="leftTop"
