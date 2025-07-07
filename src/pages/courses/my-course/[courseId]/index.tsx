@@ -289,7 +289,7 @@ const CourseDetail = () => {
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
           <CtaTrial />
-          {!pinnedCompletedCourse.isOpen && (
+          {pinnedCompletedCourse.isOpen && (
             <PinnedCompletedCourse
               pinnedCompletedCourse={pinnedCompletedCourse}
             />

@@ -72,7 +72,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
       router.push(`/certificates/${userCertificateId}`)
     }, [router, userCertificateId])
 
-    if (isOpen) return null
+    if (!isOpen) return null
 
     return (
       <PinnedNotificationsV2
