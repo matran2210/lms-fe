@@ -311,7 +311,6 @@ const PartFailed = ({
                   <ButtonSecondary
                     size="medium"
                     title={renderOkButtonCaption()}
-                    className="w-full md:w-auto"
                     onClick={() => {
                       if (
                         coursePart?.course_section_link_parents?.[0]
