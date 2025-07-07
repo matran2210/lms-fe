@@ -26,10 +26,9 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
   const noExtensions = extend_count === 0
 
   // CSS classes to avoid duplication
-  const textBaseClasses =
-    'text-sm font-normal leading-normal text-gray-800 md:text-base'
+  const textBaseClasses = 'text-base font-normal leading-normal text-gray-800'
   const linkClasses =
-    'text-primary cursor-pointer text-sm font-bold leading-normal md:text-base'
+    'text-primary cursor-pointer text-base font-bold leading-normal'
 
   const modalIcon = noExtensions ? <AlertIcon /> : <LockIcon />
   const okButtonCaption = noExtensions ? 'Confirm' : 'Back to my course'
@@ -67,7 +66,7 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
 
   return (
     <SappModalV3
-      open={!open}
+      open={open}
       handleCancel={() => setOpen(false)}
       onOk={handleOk}
       icon={modalIcon}
