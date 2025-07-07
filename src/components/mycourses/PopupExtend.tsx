@@ -66,7 +66,7 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
 
   return (
     <SappModalV3
-      open={!open}
+      open={open}
       handleCancel={() => setOpen(false)}
       onOk={handleOk}
       icon={modalIcon}

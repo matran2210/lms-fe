@@ -121,7 +121,7 @@ const Part = ({
       key={course?.id}
       ref={lastElementRef}
       classNameTitle={`h-12 md:h-16 font-medium`}
-      classNameCard="lg:min-h-[444px] md:min-h-[428px] sm:min-h-[250px]"
+      classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
       handleClickTitle={handleRouterPartDetail}
       isLock={isLock}
     >
