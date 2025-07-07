@@ -336,7 +336,7 @@ const VideoDocument = ({
   }, [atLastQuestion, isConfirmQuestion])
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex items-center justify-between gap-x-10 gap-y-2 text-primary">
         <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
           {(videos as IVideo[])?.length > 1 &&

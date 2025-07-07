@@ -97,7 +97,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       'Click Button Previous Activity',
                     )
                   }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 text-xs font-semibold underline hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 text-xs font-semibold underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
                 >
                   <ArrowLeft /> Previous Activity
                 </div>
@@ -142,7 +142,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       'Click Button Next Activity',
                     )
                   }
-                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 rounded-lg py-2 text-xs font-semibold underline hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
+                  className="text-bw-1 mb-3 flex cursor-pointer select-none items-center justify-end gap-2 rounded-lg py-2 text-xs font-semibold underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline md:p-0 md:text-sm md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
                 >
                   Next Activity <ArrowRight />
                 </div>
