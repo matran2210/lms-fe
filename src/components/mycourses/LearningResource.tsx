@@ -27,6 +27,7 @@ import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SortBy from '@components/common/SortBy'
+import ListFilterMobile from '@components/common/ListFilterMobile'
 
 interface IProps {
   open: boolean
@@ -41,10 +42,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
+  const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
   const [paramsSubId, setParamsSubId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
     useState<boolean>(false)
-  const { setValue } = useForm<SectionDropdownFormValues>({
+  const { setValue, watch } = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
       subsection: null,
@@ -157,56 +159,70 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     })
   }
 
-  return (
-    <SappDrawerV3
-      open={open}
-      handleCancel={onClose}
-      title="Course Resource"
-      isShowBtnClose
-      rootClassName={'responsive-drawer-center'}
-    >
-      {isMobileView ? (
-        <SortBy action={() => {}} />
-      ) : (
-        <FilterCourseSection
-          setParams={setParamsSubId}
-          heightCustom="h-10"
-          isPageStateVariables={isPageStateVariables}
-        />
-      )}
+  const title = isOpenFilter ? 'Filter' : 'Course Resource'
 
-      {!isEmpty(resources?.resources) ? (
-        <TextSkeleton loading={loading} length={10}>
-          <div className="mt-6 flex flex-col gap-4 md:mt-8">
-            {resources?.resources?.map((resource) => (
-              <div
-                key={resource.id}
-                className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
-              >
-                <div>
-                  <div className="text-base font-medium text-gray-800">
-                    {resource?.name}
-                  </div>
-                  <div className="text-gray-500 text-sm font-normal">
-                    {bytesToKilobyte(resource?.size)}
-                  </div>
-                </div>
-                <a
-                  className="cursor-pointer"
-                  onClick={() => download(resource.name, resource.file_key)}
+  const ListResource = () => {
+    return (
+      <>
+        {isMobileView ? (
+          <SortBy action={() => setIsOpenFilter(true)} />
+        ) : (
+          <FilterCourseSection
+            setParams={setParamsSubId}
+            heightCustom="h-10"
+            isPageStateVariables={isPageStateVariables}
+          />
+        )}
+
+        {!isEmpty(resources?.resources) ? (
+          <TextSkeleton loading={loading} length={10}>
+            <div className="mt-6 flex flex-col gap-4 md:mt-8">
+              {resources?.resources?.map((resource) => (
+                <div
+                  key={resource.id}
+                  className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                 >
-                  <DownloadIcon color="#1C274C" />
-                </a>
-              </div>
-            ))}
+                  <div>
+                    <div className="text-base font-medium text-gray-800">
+                      {resource?.name}
+                    </div>
+                    <div className="text-gray-500 text-sm font-normal">
+                      {bytesToKilobyte(resource?.size)}
+                    </div>
+                  </div>
+                  <a
+                    className="cursor-pointer"
+                    onClick={() => download(resource.name, resource.file_key)}
+                  >
+                    <DownloadIcon color="#1C274C" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </TextSkeleton>
+        ) : (
+          <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
+            <NoDataV2 />
           </div>
-        </TextSkeleton>
-      ) : (
-        <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
-          <NoDataV2 />
-        </div>
-      )}
-    </SappDrawerV3>
+        )}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <SappDrawerV3
+        open={open}
+        handleCancel={onClose}
+        title={title}
+        isShowBtnClose
+        isShowBtnBack={isOpenFilter}
+        handleBack={() => setIsOpenFilter(false)}
+        rootClassName={'responsive-drawer-center'}
+      >
+        {!isOpenFilter ? <ListResource /> : <ListFilterMobile watch={watch} />}
+      </SappDrawerV3>
+    </>
   )
 }
 
