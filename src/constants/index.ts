@@ -556,6 +556,13 @@ export enum DATE_FORMAT {
   DATE = 'DD/MM/YYYY',
 }
 
+export const COOKIE_INFO = {
+  SESSION_ID: 'sessionId',
+  KEYCLOAK_USER_ID: 'keycloakUserId',
+  KEYCLOAK_TOKEN: 'keycloakToken',
+  KEYCLOAK_REFRESH_TOKEN: 'keycloakRefreshToken',
+}
+
 export const LABEL_MAX_LENGTH = 12
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s

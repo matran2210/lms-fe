@@ -22,6 +22,7 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
+import { ICourseSectionNoteItem } from 'src/type/course/activity'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -39,6 +40,7 @@ const LearningNotesList = () => {
     setModalPosition,
     setNoteInput,
     refetchNotesList,
+    setIsViewOnly,
   } = useCourseNoteContext()
   const dispatch = useAppDispatch()
   const [notesListData, setNotesListData] = useState<any>()
@@ -219,6 +221,16 @@ const LearningNotesList = () => {
     dispatch(pushNotes(note))
   }
 
+  const handleOpenNote = (
+    note: ICourseSectionNoteItem,
+    isViewOnly: boolean,
+  ) => {
+    setOpenNote(true)
+    setNoteData(note)
+    setModalPosition({ top: 300, left: 0 })
+    setNoteInput(note?.description)
+    setIsViewOnly(isViewOnly)
+  }
   return (
     <SappDrawerV3
       open={notesListStatus}
@@ -297,15 +309,12 @@ const LearningNotesList = () => {
                                   item.id.includes(note?.id),
                                 )
                               ) {
-                                setOpenNote(true)
-                                setNoteData(note)
-                                setModalPosition({ top: 300, left: 0 })
-                                setNoteInput(note?.description)
-                                handleEditNote(
-                                  note?.id,
-                                  note?.description,
-                                  index,
-                                )
+                                handleOpenNote(note, false)
+                                // handleEditNote(
+                                //   note?.id,
+                                //   note?.description,
+                                //   index,
+                                // )
                                 onClose()
                               }
                             }}
@@ -314,7 +323,7 @@ const LearningNotesList = () => {
                           </span>
                         ) : (
                           <>
-                            <Link
+                            {/* <Link
                               href={
                                 queryId || courseId
                                   ? `/courses/${
@@ -322,11 +331,23 @@ const LearningNotesList = () => {
                                     }/activity/${note?.course_section_id}?note_id=${note?.id}`
                                   : '#'
                               }
+                            > */}
+                            <div
+                              onClick={async () => {
+                                await router.push({
+                                  pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                                  query: {
+                                    note_id: note?.id,
+                                  },
+                                })
+                                handleOpenNote(note, true)
+                                onClose()
+                              }}
                             >
                               <span className="notes-list-icon">
                                 <ViewIcon />
                               </span>
-                            </Link>
+                            </div>
                           </>
                         )}
                       </div>

@@ -6,29 +6,44 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
 import useIsMobile from 'src/hooks/useIsMobile'
+import { IActivities, IActivityProgress } from '../CourseDashboard'
 
-interface PieChartData {
-  completed_activities: number
-  uncompleted_activities: number
-  total_activities: number
+interface OverallProgressProps {
+  setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>
 }
 
-interface ActivitiesData {
-  completed_activities: number
-  uncompleted_activities: number
-  total_activities: number
+interface IPieChartOption {
+  section?: IActivityProgress
+  time?: IActivityProgress
+  test?: IActivityProgress
+  activity?: IActivityProgress
 }
 
-const OverallProgress = () => {
+const OverallProgress = ({ setActivities }: OverallProgressProps) => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption | null>()
   const isMobile = useIsMobile()
+  const [activities, setActivitiesState] = useState<IActivities>()
 
-  const handlePieChartOption = (data: PieChartData) => {
+  const handlePieChartOption = (data: IPieChartOption) => {
+    const activities: IActivities = {
+      section: data.section,
+      time: data.time,
+      test: data.test,
+      activity: data.activity,
+    }
+    setActivities(activities)
+    setActivitiesState(activities)
+
     const values = {
-      completed: data.completed_activities,
-      uncompleted: data.uncompleted_activities,
-      total_activities: data?.total_activities,
+      completed: data.activity?.completed ?? 0,
+      uncompleted:
+        data.activity &&
+        typeof data.activity.total === 'number' &&
+        typeof data.activity.completed === 'number'
+          ? data.activity.total - data.activity.completed
+          : 0,
+      total_activities: data.activity?.total ?? 0,
     }
 
     const option = {
@@ -108,15 +123,11 @@ const OverallProgress = () => {
     setOption(option as EChartsOption)
   }
 
-  const [activities, setActivities] = useState<ActivitiesData>()
-
   const getOverProgress = async (id: string) => {
     try {
       const res = await DashboardAPI.getOverProgress(id)
-
       if (res && res.success) {
-        setActivities(res?.data)
-        handlePieChartOption(res.data)
+        handlePieChartOption(res.data as IPieChartOption)
       }
     } catch (error) {
       setOption(null)
@@ -169,7 +180,7 @@ const OverallProgress = () => {
                   <span className="text-sm font-medium md:text-base">
                     <span className="text-gray-800">Completed</span>{' '}
                     <span className="text-gray">
-                      ({activities?.completed_activities})
+                      ({activities?.activity?.completed})
                     </span>
                   </span>
                 </div>
@@ -182,7 +193,13 @@ const OverallProgress = () => {
                   <span className="text-sm font-medium md:text-base">
                     <span className="text-gray-800">Not completed</span>{' '}
                     <span className="text-gray">
-                      ({activities?.uncompleted_activities})
+                      (
+                      {typeof activities?.activity?.total === 'number' &&
+                      typeof activities?.activity?.completed === 'number'
+                        ? activities.activity.total -
+                          activities.activity.completed
+                        : '-'}
+                      )
                     </span>
                   </span>
                 </div>

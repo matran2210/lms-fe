@@ -41,3 +41,26 @@ export const reverseDaysOfWeek = (startDate: Date, daysOfWeek: number[]) => {
   const dayIndex = daysOfWeek.indexOf(dayOfWeek)
   return [...daysOfWeek.slice(dayIndex), ...daysOfWeek.slice(0, dayIndex)]
 }
+
+/**
+ *
+ * @param date - Don't use formatDateTimeWithTimeZone(new Date('DD/MM/YYYY'), 'HH:mm') instead of formatDateTimeWithTimeZone('DD/MM/YYYY', 'HH:mm')
+ * @param time
+ * @returns
+ */
+export const formatDateTimeWithTimeZone = (
+  date: Date | string | undefined,
+  time: string,
+): Date => {
+  if (typeof date === 'string') {
+    return new Date(`${date}T${time}Z`)
+  }
+
+  const startDayjs = dayjs(date).startOf('day')
+  const formattedDate = startDayjs.format('YYYY-MM-DD')
+  const tmpStartDate = dayjs(formattedDate + 'T' + time + 'Z')
+  return startDayjs
+    .set('hour', tmpStartDate.get('hour')) // Avoid time has UTC issue
+    .set('minute', tmpStartDate.get('minute'))
+    .toDate()
+}

@@ -9,6 +9,7 @@ import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
 import { ConfigProvider, Drawer } from 'antd'
 import { Dayjs } from 'dayjs'
+import { isInteger } from 'lodash'
 import { memo, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -105,6 +106,7 @@ const NewEventSidebar = ({
       ),
     ) as ICreateSchedulePayload
 
+    // Start validate
     if (
       formValues.repeat?.recurring_schedule &&
       formValues.repeat.recurring_schedule.type !==
@@ -115,6 +117,14 @@ const NewEventSidebar = ({
         message: 'End on is required',
       })
     }
+
+    if (
+      formValues.repeat?.recurring_schedule?.type === REPEAT_TYPE.CUSTOM &&
+      !isInteger(formValues.repeat?.recurring_schedule?.interval)
+    ) {
+      return toast.error('Repeat interval must be a number')
+    }
+    // End validate
 
     setIsLoading(true)
     try {

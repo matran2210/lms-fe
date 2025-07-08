@@ -27,6 +27,8 @@ type Context = {
   setNoteInput: (data: string) => void
   notesListData: ICourseSectionNoteItem[] | undefined
   refetchNotesList: () => void
+  isViewOnly: boolean
+  setIsViewOnly: (flag: boolean) => void
 }
 
 // initContext
@@ -41,6 +43,8 @@ const initContext: Context = {
   setNoteInput: () => {},
   notesListData: undefined,
   refetchNotesList: () => {},
+  isViewOnly: false,
+  setIsViewOnly: () => {},
 }
 
 const CourseNoteContext = createContext<Context>(initContext)
@@ -60,6 +64,8 @@ export function CourseNoteProvider(props: PropsWithChildren<{}>) {
   const [notesListData, setNotesListData] = useState<
     ICourseSectionNoteItem[] | undefined
   >()
+
+  const [isViewOnly, setIsViewOnly] = useState<boolean>(false)
 
   const refetchNotesList = async () => {
     if (!activityId) return
@@ -88,6 +94,8 @@ export function CourseNoteProvider(props: PropsWithChildren<{}>) {
         setNoteInput,
         notesListData,
         refetchNotesList,
+        isViewOnly,
+        setIsViewOnly,
       }}
       {...props}
     />
