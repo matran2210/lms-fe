@@ -138,7 +138,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             placement="topLeft"
             arrow={false}
             classNames={{
-              body: 'max-w-[360px] !rounded-2xl bg-white shadow-card',
+              body: 'max-w-[312px] md:max-w-[360px] !rounded-2xl bg-white shadow-card',
             }}
           >
             {visible ? (
