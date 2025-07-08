@@ -31,11 +31,15 @@ export class UserApi {
    *   .then(response => console.log(response.user_id_init))
    *   .catch(error => console.error(error));
    */
-  static logout(refresh_token: string): Promise<{ user_id_init: string }> {
+  static logout(
+    session_id: string,
+    keycloak_user_id: string,
+  ): Promise<{ success: boolean }> {
     return fetcher('auth/logout', {
       method: 'POST',
       data: {
-        refresh_token: refresh_token,
+        session_id: session_id,
+        keycloak_user_id: keycloak_user_id,
       },
     })
   }

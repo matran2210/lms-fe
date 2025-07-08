@@ -78,7 +78,7 @@ const Results = () => {
             <>
               <div className="main relative mx-auto my-0 max-w-xxl">
                 <div className="flex w-full items-center justify-between pb-4 pt-6">
-                  {isSuccess && (
+                  {isSuccess && courseNameDetail && (
                     <BreadcrumbFilter
                       name={courseNameDetail}
                       subpath="Results"
