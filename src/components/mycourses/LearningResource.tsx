@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { CollapseArrowIcon, DownloadIcon, EssentialIcon } from '@assets/icons'
+import { DownloadIcon } from '@assets/icons'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -26,6 +26,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SortBy from '@components/common/SortBy'
 
 interface IProps {
   open: boolean
@@ -165,17 +166,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       rootClassName={'responsive-drawer-center'}
     >
       {isMobileView ? (
-        <div className="flex items-center justify-between rounded-lg px-3 py-2 outline outline-1 outline-offset-[-1px] outline-gray-300">
-          <div className="flex items-center gap-2">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
-              <EssentialIcon />
-            </div>
-            <div className="text-sm text-gray-400">Sort by...</div>
-          </div>
-          <div>
-            <CollapseArrowIcon className="rotate-[270deg]" />
-          </div>
-        </div>
+        <SortBy action={() => {}} />
       ) : (
         <FilterCourseSection
           setParams={setParamsSubId}
