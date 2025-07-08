@@ -507,6 +507,25 @@ export function deleteCookie(name: string) {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
 }
 
+function parseJwt<T extends object = Record<string, unknown>>(
+  token: string,
+): T | null {
+  try {
+    const base64Payload = token.split('.')[1]
+    const payload = atob(base64Payload) // decode base64
+    return JSON.parse(payload) as T
+  } catch (error) {
+    return null
+  }
+}
+
+export function getSessionIdFromToken(token: string): string | null {
+  const decoded = parseJwt(token)
+  return typeof decoded?.session_state === 'string'
+    ? decoded.session_state
+    : null
+}
+
 export function convertMinutesToHourFormat(minutes: number): string {
   const hrs = Math.floor(minutes / 60)
   const mins = minutes % 60
