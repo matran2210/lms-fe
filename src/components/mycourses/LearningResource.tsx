@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { DownloadIcon } from '@assets/icons'
+import { CollapseArrowIcon, DownloadIcon, EssentialIcon } from '@assets/icons'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -25,6 +25,7 @@ import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useForm } from 'react-hook-form'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProps {
   open: boolean
@@ -35,6 +36,7 @@ const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -160,18 +162,31 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       handleCancel={onClose}
       title="Course Resource"
       isShowBtnClose
-      classNameBody="md:p-0 lg:p-8"
-      rootClassName={'responsive-drawer-v3'}
+      rootClassName={'responsive-drawer-center'}
     >
-      <FilterCourseSection
-        setParams={setParamsSubId}
-        heightCustom="h-10"
-        isPageStateVariables={isPageStateVariables}
-      />
+      {isMobileView ? (
+        <div className="flex items-center justify-between rounded-lg px-3 py-2 outline outline-1 outline-offset-[-1px] outline-gray-300">
+          <div className="flex items-center gap-2">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
+              <EssentialIcon />
+            </div>
+            <div className="text-sm text-gray-400">Sort by...</div>
+          </div>
+          <div>
+            <CollapseArrowIcon className="rotate-[270deg]" />
+          </div>
+        </div>
+      ) : (
+        <FilterCourseSection
+          setParams={setParamsSubId}
+          heightCustom="h-10"
+          isPageStateVariables={isPageStateVariables}
+        />
+      )}
 
       {!isEmpty(resources?.resources) ? (
         <TextSkeleton loading={loading} length={10}>
-          <div className="mt-8 flex flex-col gap-4">
+          <div className="mt-6 flex flex-col gap-4 md:mt-8">
             {resources?.resources?.map((resource) => (
               <div
                 key={resource.id}

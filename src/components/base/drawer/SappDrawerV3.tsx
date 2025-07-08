@@ -71,7 +71,7 @@ const SappDrawerV3: React.FC<IProps> = ({
         {isShowHeader && (
           <div
             className={clsx(
-              'mb-8 flex items-center justify-between',
+              'mb-6 flex items-center justify-between lg:mb-8',
               classNameHeader,
             )}
           >
