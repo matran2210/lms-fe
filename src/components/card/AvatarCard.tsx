@@ -22,9 +22,9 @@ const AvatarCard = ({
   return (
     <div className={clsx('flex items-center', className)} onClick={onClick}>
       <div className="h-10 w-10 shrink-0">
-        {user?.detail?.avatar['40x40'] || user.detail.avatar['ORIGIN'] ? (
+        {user?.detail?.avatar?.['40x40'] || user.detail.avatar?.['ORIGIN'] ? (
           <Image
-            src={user.detail.avatar['40x40'] || user.detail.avatar['ORIGIN']}
+            src={user.detail.avatar?.['40x40'] || user.detail.avatar?.['ORIGIN']}
             alt="avatar"
             className="h-10 w-10 rounded-full object-cover"
             width={40}
