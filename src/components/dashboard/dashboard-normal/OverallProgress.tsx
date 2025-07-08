@@ -9,14 +9,14 @@ import useIsMobile from 'src/hooks/useIsMobile'
 import { IActivities, IActivityProgress } from '../CourseDashboard'
 
 interface OverallProgressProps {
-  setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>;
+  setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>
 }
 
 interface IPieChartOption {
-  section?: IActivityProgress;
-  time?: IActivityProgress;
-  test?: IActivityProgress;
-  activity?: IActivityProgress;
+  section?: IActivityProgress
+  time?: IActivityProgress
+  test?: IActivityProgress
+  activity?: IActivityProgress
 }
 
 const OverallProgress = ({ setActivities }: OverallProgressProps) => {
@@ -38,7 +38,9 @@ const OverallProgress = ({ setActivities }: OverallProgressProps) => {
     const values = {
       completed: data.activity?.completed ?? 0,
       uncompleted:
-        data.activity && typeof data.activity.total === 'number' && typeof data.activity.completed === 'number'
+        data.activity &&
+        typeof data.activity.total === 'number' &&
+        typeof data.activity.completed === 'number'
           ? data.activity.total - data.activity.completed
           : 0,
       total_activities: data.activity?.total ?? 0,
@@ -192,9 +194,11 @@ const OverallProgress = ({ setActivities }: OverallProgressProps) => {
                     <span className="text-gray-800">Not completed</span>{' '}
                     <span className="text-gray">
                       (
-                        {typeof activities?.activity?.total === 'number' && typeof activities?.activity?.completed === 'number'
-                          ? activities.activity.total - activities.activity.completed
-                          : '-'}
+                      {typeof activities?.activity?.total === 'number' &&
+                      typeof activities?.activity?.completed === 'number'
+                        ? activities.activity.total -
+                          activities.activity.completed
+                        : '-'}
                       )
                     </span>
                   </span>

@@ -25,6 +25,8 @@ import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useForm } from 'react-hook-form'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SortBy from '@components/common/SortBy'
 
 interface IProps {
   open: boolean
@@ -35,6 +37,7 @@ const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -160,18 +163,21 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       handleCancel={onClose}
       title="Course Resource"
       isShowBtnClose
-      classNameBody="md:p-0 lg:p-8"
-      rootClassName={'responsive-drawer-v3'}
+      rootClassName={'responsive-drawer-center'}
     >
-      <FilterCourseSection
-        setParams={setParamsSubId}
-        heightCustom="h-10"
-        isPageStateVariables={isPageStateVariables}
-      />
+      {isMobileView ? (
+        <SortBy action={() => {}} />
+      ) : (
+        <FilterCourseSection
+          setParams={setParamsSubId}
+          heightCustom="h-10"
+          isPageStateVariables={isPageStateVariables}
+        />
+      )}
 
       {!isEmpty(resources?.resources) ? (
         <TextSkeleton loading={loading} length={10}>
-          <div className="mt-8 flex flex-col gap-4">
+          <div className="mt-6 flex flex-col gap-4 md:mt-8">
             {resources?.resources?.map((resource) => (
               <div
                 key={resource.id}

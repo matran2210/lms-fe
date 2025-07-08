@@ -15,7 +15,7 @@ const Dashboard = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
-    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size='xl'>
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
       <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="hidden w-full items-center justify-between pb-4 pt-6 md:flex">

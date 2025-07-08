@@ -1,6 +1,5 @@
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { StarCircleIcon } from '@components/icons'
 import {
   AlertInfoIcon,
@@ -68,7 +67,7 @@ interface IProps {
 
 const CoursePartDetail = () => {
   const dispatch = useAppDispatch()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -591,6 +590,7 @@ const CoursePartDetail = () => {
           setIsOpenChapter={setIsOpenChapter}
           isOpenChapter={isOpenChapter}
           isLMSV2
+          isMobileView={isMobileView}
         />
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
@@ -627,47 +627,31 @@ const CoursePartDetail = () => {
           isShowFooter
           closable
           isShowBtnClose
+          submitButtonClassName={isMobileView ? 'w-full' : ''}
           rootClassName={'responsive-drawer-center'}
         >
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            widths={['70', '100', '100', '50', '100']}
-            className="mb-4"
-            classChild="rounded"
-          >
-            <div
-              style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-8 text-base font-normal leading-normal text-secondary"
-              dangerouslySetInnerHTML={{
-                __html: learningOutcome?.description ?? '',
-              }}
-            />
-          </TextSkeleton>
-          {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-[#DCDDDD]"></div>
-          )}
+          <div
+            style={{ borderBottom: '1px solid #DCDDDD' }}
+            className="learningOutcome-description pb-8 text-sm font-normal leading-normal text-secondary md:text-base"
+            dangerouslySetInnerHTML={{
+              __html: learningOutcome?.description ?? '',
+            }}
+          />
           <div className="mt-8 flex flex-col gap-6">
-            <TextSkeleton
-              loading={loadingLearningOutcome}
-              className="mt-3 last:mb-4"
-              classChild="rounded"
-              widths={['70', '100', '100', '50', '100']}
-            >
-              {learningOutcome?.course_outcomes?.map((outcome, index) => (
-                <div key={outcome.id} className="flex items-start gap-2">
-                  <div>
-                    <StarCircleIcon />
-                  </div>
-                  <div className="flex items-center text-base font-normal leading-normal text-gray-800">
-                    <div className="me-1">LO{index + 1}:</div>
-                    <div
-                      className="learningOutcome-description"
-                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                    />
-                  </div>
+            {learningOutcome?.course_outcomes?.map((outcome, index) => (
+              <div key={outcome.id} className="flex items-start gap-2">
+                <div>
+                  <StarCircleIcon />
                 </div>
-              ))}
-            </TextSkeleton>
+                <div className="flex items-center text-sm font-normal leading-normal text-gray-800 md:text-base">
+                  <div className="me-1">LO{index + 1}:</div>
+                  <div
+                    className="learningOutcome-description"
+                    dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </SappDrawerV3>
         {open && (
