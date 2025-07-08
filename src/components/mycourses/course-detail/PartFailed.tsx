@@ -201,18 +201,18 @@ const PartFailed = ({
         title={coursePart?.name}
         key={coursePart?.id}
         ref={lastElementRef}
-        classNameTitle={`h-16 font-medium`}
-        classNameCard="lg:min-h-[444px] min-h-[428px]"
+        classNameTitle={`h-12 md:h-16 font-medium`}
+        classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
         handleClickTitle={handleClickTitle}
         isLock={isLock}
       >
         <div className="flex h-full flex-1 flex-col justify-between">
-          <div className="info mt-6 border-l border-gray-2 pl-4">
+          <div className="info mb-6 mt-4 border-l border-gray-2 pl-4 md:mt-6">
             {checkFinished && (
               <>
-                <div className="time-allow mb-4 flex justify-between">
-                  <p className="text-base text-gray">Time Spent:</p>
-                  <p className="text-base font-medium text-[#050505]">
+                <div className="time-allow mb-2 flex justify-between md:mb-4">
+                  <p className="text-sm text-gray md:text-base">Time Spent:</p>
+                  <p className="text-sm font-medium text-gray-800 md:text-base">
                     {!!coursePart?.quiz?.attempt?.total_attempt_time
                       ? formatTime(
                           coursePart?.quiz?.attempt?.total_attempt_time,
@@ -221,8 +221,10 @@ const PartFailed = ({
                   </p>
                 </div>
                 <div className="time-allow mb-4 flex justify-between">
-                  <p className="text-base text-gray">Latest Results:</p>
-                  <p className="text-base font-medium text-[#050505]">
+                  <p className="text-sm text-gray md:text-base">
+                    Latest Results:
+                  </p>
+                  <p className="text-sm font-medium text-gray-800 md:text-base">
                     {isManualGradingAndAwaitGrading
                       ? '--'
                       : coursePart?.quiz?.attempt?.score !== undefined &&
@@ -233,14 +235,14 @@ const PartFailed = ({
                 </div>
               </>
             )}
-            <div className="time-allow  mb-4 flex justify-between">
-              <p className="text-base text-gray">Time Allowed:</p>
-              <p className="text-base font-medium text-[#050505]">
+            <div className="time-allow mb-2 flex justify-between md:mb-4">
+              <p className="text-sm text-gray md:text-base">Time Allowed:</p>
+              <p className="text-sm font-medium text-gray-800 md:text-base">
                 {formattedTime}
               </p>
             </div>
             <div className="time-allow flex items-center justify-between">
-              <p className="text-base text-gray-800">
+              <p className="text-sm text-gray-800 md:text-base">
                 <ResultCourse
                   class_user_id={class_user_id}
                   coursePart={coursePart}
@@ -250,7 +252,7 @@ const PartFailed = ({
                 />
               </p>
               {
-                <p className="text-base font-medium text-[#050505]">
+                <p className="text-sm font-medium text-gray-800 md:text-base">
                   {selectedResult?.score || 0}%
                 </p>
               }
@@ -274,7 +276,7 @@ const PartFailed = ({
                   className={`${
                     coursePart?.quiz?.attempt?.number_of_attempts !==
                       coursePart?.quiz?.limit_count && ''
-                  } ml-auto`}
+                  } ml-auto w-full md:w-auto`}
                   onClick={() => {
                     if (
                       coursePart?.course_section_link_parents?.[0]

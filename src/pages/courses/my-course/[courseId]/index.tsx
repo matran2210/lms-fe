@@ -215,14 +215,14 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <div className="mb-4 mt-2 flex items-center justify-between gap-6 lg:mb-6 lg:mt-4">
+      <div className="mb-4 mt-2 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4">
         <div
-          className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
           onClick={handleOpenSidebar}
         >
           <HamburgerMenuLargeIcon />
         </div>
-        <div className="w-full rounded-lg bg-white px-8 py-4">
+        <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearchV2}
             formStyle="w-full flex items-center"
@@ -250,7 +250,7 @@ const CourseDetail = () => {
             className="mt-8 flex items-start justify-between gap-6 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="line-clamp-2 w-[60%] text-3xl font-semibold text-gray-800">
+            <div className="line-clamp-2 w-[60%] text-xl font-semibold text-gray-800 md:text-2xl lg:text-3xl">
               {courseNameDetail}
             </div>
             <FilterCourse

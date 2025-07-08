@@ -120,13 +120,13 @@ const Part = ({
       title={course?.name}
       key={course?.id}
       ref={lastElementRef}
-      classNameTitle={`h-16 font-medium`}
-      classNameCard="lg:min-h-[444px] min-h-[428px]"
+      classNameTitle={`h-12 md:h-16 font-medium`}
+      classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
       handleClickTitle={handleRouterPartDetail}
       isLock={isLock}
     >
       <div className="flex h-full flex-1 flex-col">
-        <div className="des my-6 line-clamp-3 h-[72px] text-ellipsis">
+        <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[72px]">
           <Tooltip
             title={
               <p
@@ -141,7 +141,7 @@ const Part = ({
               dangerouslySetInnerHTML={{
                 __html: truncateHTML(25, course?.description) ?? '',
               }}
-              className="text-base font-normal text-gray-800"
+              className="text-sm font-normal text-gray-800 md:text-base"
             />
           </Tooltip>
         </div>
@@ -183,7 +183,7 @@ const Part = ({
                       ? 'Review'
                       : 'Resume'
               }
-              className="ml-auto"
+              className="ml-auto w-full md:w-auto"
               onClick={() => {
                 handleRouterPartDetail()
                 trackGAEventBasedOnProgress(percentProgress)

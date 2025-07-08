@@ -20,7 +20,7 @@ interface IProps {
 const NotificationMessage = React.memo(
   ({ courseName, passedAt }: { courseName: string; passedAt: string }) => (
     <div className="flex flex-col">
-      <div className="text-xl font-semibold text-gray-800">
+      <div className="text-base font-semibold text-gray-800 md:text-xl">
         Congratulations on getting your certificate!
       </div>
       <div className="text-sm font-normal text-gray-800">
@@ -34,7 +34,7 @@ const NotificationMessage = React.memo(
 NotificationMessage.displayName = 'NotificationMessage'
 
 const CertificateImage = React.memo(({ url }: { url: string }) => (
-  <div className="h-[50px] w-[77px]">
+  <div className="hidden h-[50px] w-[77px] md:block">
     <Image src={url} alt="pinned-completed-course" width={77} height={50} />
   </div>
 ))
@@ -43,10 +43,10 @@ CertificateImage.displayName = 'CertificateImage'
 const SeeCertificateButton = React.memo(
   ({ onClick }: { onClick: () => void }) => (
     <div
-      className="flex cursor-pointer items-center justify-end gap-2"
+      className="flex cursor-pointer items-center justify-start gap-2 md:justify-end"
       onClick={onClick}
     >
-      <div className="text-base font-semibold text-gray-800 underline">
+      <div className="text-sm font-semibold text-gray-800 underline md:text-base">
         See Certificate
       </div>
       <div>
@@ -78,7 +78,7 @@ const PinnedCompletedCourse: React.FC<IProps> = React.memo(
       <PinnedNotificationsV2
         bgColor="bg-primary-200"
         borderColor="border-primary"
-        classPinned="lg:flex-row lg:justify-between lg:items-center flex-col gap-4"
+        classPinned="lg:flex-row lg:justify-between lg:items-center flex-col gap-2 md:gap-4"
       >
         <div className="flex items-center gap-4">
           <CertificateImage url={userCertificateUrl} />
