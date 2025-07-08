@@ -137,6 +137,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             onOpenChange={handleVisibleChange}
             placement="topLeft"
             arrow={false}
+            classNames={{
+              body: 'max-w-[360px] !rounded-2xl bg-white shadow-card',
+            }}
           >
             {visible ? (
               <div
