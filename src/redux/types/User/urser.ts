@@ -27,11 +27,14 @@ export interface IUser {
   main_class?: string[]
   reserve_retook_class?: string[]
   user_hubspot_program_infos?: IUserHubspotProgramInfo[]
-  course_tab_groups?: {
-    CMA?: ICourseTabGroup
-    ACCA?: ICourseTabGroup
-    CFA?: ICourseTabGroup
-  }
+  course_tab_groups?:
+    | {
+        CMA?: ICourseTabGroup | undefined
+        ACCA?: ICourseTabGroup | undefined
+        CFA?: ICourseTabGroup | undefined
+      }
+    | undefined
+  course_category_id?: string | undefined
   keycloak_user_id: string
 }
 interface IUserContact {
