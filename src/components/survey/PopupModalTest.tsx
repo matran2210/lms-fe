@@ -4,13 +4,7 @@ import { CoursesAPI } from '@pages/api/courses'
 import { onLinkSocial } from '@utils/index'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-
-enum ECourseProgram {
-  CMA = 'CMA',
-  CFA = 'CFA',
-  ACCA = 'ACCA',
-  CERT_DIP = 'CERT_DIP',
-}
+import { ECourseProgram } from 'src/type/course'
 
 interface SurveyModalProps {
   class_code?: string
