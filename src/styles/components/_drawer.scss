@@ -26,6 +26,7 @@
 
 .responsive-drawer-center {
   .ant-drawer-content-wrapper {
+    @apply bottom-[129px] left-0 right-0 top-40 h-auto !w-auto rounded-2xl;
     @apply max-h-[667px] !w-auto rounded-lg md:bottom-[179px] md:left-6 md:right-6 md:top-40 md:rounded-2xl;
     @apply lg:bottom-0 lg:left-auto lg:right-0 lg:top-0 lg:max-h-full lg:!w-1/3;
   }
