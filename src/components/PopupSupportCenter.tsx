@@ -8,19 +8,14 @@ import {
   IconFAQ,
   IconRequestForm,
   IconSend,
-  IconSupportCenter,
-  LoginIcon,
-  LogOutMenuIcon,
   MessageDialogIcon,
   MessageLetterIcon,
   OutgoingCallIcon,
-  PhoneLogo,
   SearchIcon,
 } from '@assets/icons'
 import { onLinkSocial } from '@utils/index'
 import React, { Dispatch, PropsWithChildren, SetStateAction } from 'react'
 import { CloseIconV2 } from './icons'
-import SendComment from './mycourses/activity/discussion/SendComment'
 interface IInfomation {
   icon: React.ReactNode
   onClick?: () => void
