@@ -48,6 +48,7 @@ export const requestTypeToTitle = {
 
 export const formatRecurringSchedule = (
   recurringSchedule: IRecurringSchedule,
+  startDate: Date,
 ) => {
   let result = `Every ${recurringSchedule.interval} ${recurringSchedule.frequency}`
 
@@ -56,7 +57,12 @@ export const formatRecurringSchedule = (
     recurringSchedule.day_of_week.length > 0
   ) {
     const days = recurringSchedule.day_of_week
-      .map((day) => WEEKDAYS[day - 1])
+      .map((day) => {
+        const convertedDay = getDayIndex(
+          dayjs(startDate).startOf('week').add(day, 'day').toDate(),
+        )
+        return WEEKDAYS[convertedDay - 1] // -1 because day_of_week starts from 1 (Monday)
+      })
       .join(', ')
     result += ` on ${days}`
   }

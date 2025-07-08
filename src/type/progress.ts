@@ -64,6 +64,7 @@ export interface ICourseSections {
   parent_id: string | null
   children: ICourseSections[]
   type?: string
+  position: number
 }
 
 export interface IProgressFilterForm {

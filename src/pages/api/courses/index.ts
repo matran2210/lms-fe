@@ -176,7 +176,11 @@ export class CoursesAPI {
 
   static getQuizAttemptsTable(
     id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
   ): Promise<{
     success: boolean
     data: IScoreDetails
@@ -185,6 +189,7 @@ export class CoursesAPI {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
+        ...(no_group_view && { no_group_view }),
       },
     })
   }
@@ -318,8 +323,11 @@ export class CoursesAPI {
     return fetcher(`question/results?question_ids=${id}`)
   }
 
-  static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`course_learning_outcomes/${id}`)
+  static getCourseLearningOutcome(
+    id: string,
+    class_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`course_learning_outcomes/${id}/class/${class_id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {

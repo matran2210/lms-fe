@@ -2213,8 +2213,8 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements &&
-      !essayData
+      currentTabContent?.data?.requirements
+      // && !essayData
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
@@ -2325,7 +2325,6 @@ const TestDetail = () => {
                 setUnSubmitAnswer={setUnSubmitAnswer}
                 checkUnSubmitAnswer={checkUnSubmitAnswer}
                 setOpenQuit={setOpenQuit}
-                setSubmitEventTest={setSubmitEventTest}
                 type={type}
                 submited={submited}
                 setOpenSubmit={setOpenSubmit}
@@ -2377,7 +2376,7 @@ const TestDetail = () => {
                     if (id) {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      setEssayData(undefined)
+                      // setEssayData(undefined)
                       handleChangeTab(id)
                     }
                   }}
@@ -2824,7 +2823,7 @@ const TestDetail = () => {
                       if (filteredTabs[index + 1].id) {
                         setScratchPads('')
                         handleSubmitAnswer('change-tab')
-                        setEssayData(undefined)
+                        // setEssayData(undefined)
                         handleChangeTab(filteredTabs[index + 1].id)
                       }
                     }}
@@ -2854,6 +2853,7 @@ const TestDetail = () => {
           {/** End Scratchpads */}
 
           <TestTimeOutModal
+            type={type}
             okButtonCaption={
               quizDetail?.grading_method === GRADING_METHOD.MANUAL
                 ? 'Review Answers'
@@ -2869,7 +2869,7 @@ const TestDetail = () => {
                     router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else if (type === 'event-test') {
                     router.replace(`/event-test`)
-                    setSubmitEventTest(true)
+                    // setSubmitEventTest(true)
                   } else {
                     if (
                       type !== 'entrance' &&

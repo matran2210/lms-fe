@@ -40,11 +40,14 @@ export interface ICalendarDetail {
   is_test: boolean
   is_case_study: boolean
   status: string
+  is_review_allowed: boolean
   class: {
     id: string
     name: string
     code: string
     link_meeting: string
+    opening_at: Date
+    started_at: Date
   }
   subject: {
     id: string
@@ -90,7 +93,7 @@ export interface ICalendarDetail {
     mode: string
     virtual_metadata: string
   }
-  key_before_contents: [
+  key_after_contents: [
     {
       id: string
       name: string

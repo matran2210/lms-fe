@@ -3,7 +3,12 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
+import {
+  buildQueryString,
+  formatTime,
+  truncateBySpace,
+  truncateHTML,
+} from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import { ANIMATION } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
@@ -11,7 +16,17 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import { LockClosedIcon } from '@assets/icons'
 
-const Part = ({ course }: { course: IMyCourseDetail }) => {
+const Part = ({
+  course,
+  focusSubSectionIds,
+  focusUnitIds,
+  deadline,
+}: {
+  course: IMyCourseDetail
+  focusSubSectionIds?: string
+  focusUnitIds?: string
+  deadline?: string
+}) => {
   const router = useRouter()
 
   const percentProgress = round(
@@ -22,7 +37,14 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   )
 
   const onClickPart = (id: string) => {
-    router.push(`/courses/${router.query.courseId}/section/${id}`)
+    const searchParams = buildQueryString({
+      focusSubSectionIds,
+      focusUnitIds,
+      deadline,
+    })
+    router.push(
+      `/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+    )
   }
 
   const formattedTime = Number(

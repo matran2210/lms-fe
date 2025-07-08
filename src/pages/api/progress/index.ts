@@ -29,9 +29,16 @@ export class ProgressAPI {
     return fetcher(`class-teaching-progress/get-lesson/${classId}`)
   }
 
-  static getListSection(classId: string, scheduleId: string) {
+  static getListSection(
+    classId: string,
+    scheduleId: string,
+    params?: Record<string, any>,
+  ) {
     return fetcher(
       `class-teaching-progress/${classId}/get-course-section/${scheduleId}`,
+      {
+        params,
+      },
     )
   }
   static createProgress(data: IRequestCreateProgress) {

@@ -1,5 +1,6 @@
 import { FREQUENCY_UNITS, REPEAT_ON } from 'src/constants'
 import { RecurringScheduleType } from 'src/type/my-calendar'
+import { IRecurringSchedule } from 'src/type/my-request'
 
 export interface ICreateScheduleForm {
   event_name: string
@@ -58,6 +59,7 @@ export interface IResponseSchedule {
   classroom_name: string | null
   meeting_link: string | null
   repeat?: string
+  recurring_pattern: IRecurringSchedule
 }
 
 export interface IWeeklyNorm {
