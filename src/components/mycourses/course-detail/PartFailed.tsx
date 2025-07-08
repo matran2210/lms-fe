@@ -212,7 +212,7 @@ const PartFailed = ({
               <>
                 <div className="time-allow mb-2 flex justify-between md:mb-4">
                   <p className="text-sm text-gray md:text-base">Time Spent:</p>
-                  <p className="text-sm font-medium text-[#050505] md:text-base">
+                  <p className="text-sm font-medium text-gray-800 md:text-base">
                     {!!coursePart?.quiz?.attempt?.total_attempt_time
                       ? formatTime(
                           coursePart?.quiz?.attempt?.total_attempt_time,
@@ -224,7 +224,7 @@ const PartFailed = ({
                   <p className="text-sm text-gray md:text-base">
                     Latest Results:
                   </p>
-                  <p className="text-sm font-medium text-[#050505] md:text-base">
+                  <p className="text-sm font-medium text-gray-800 md:text-base">
                     {isManualGradingAndAwaitGrading
                       ? '--'
                       : coursePart?.quiz?.attempt?.score !== undefined &&
@@ -237,7 +237,7 @@ const PartFailed = ({
             )}
             <div className="time-allow mb-2 flex justify-between md:mb-4">
               <p className="text-sm text-gray md:text-base">Time Allowed:</p>
-              <p className="text-sm font-medium text-[#050505] md:text-base">
+              <p className="text-sm font-medium text-gray-800 md:text-base">
                 {formattedTime}
               </p>
             </div>
@@ -252,7 +252,7 @@ const PartFailed = ({
                 />
               </p>
               {
-                <p className="text-sm font-medium text-[#050505] md:text-base">
+                <p className="text-sm font-medium text-gray-800 md:text-base">
                   {selectedResult?.score || 0}%
                 </p>
               }
