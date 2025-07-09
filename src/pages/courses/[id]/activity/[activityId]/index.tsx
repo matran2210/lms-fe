@@ -485,7 +485,7 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0  h-full w-full">
+                  <div className="absolute left-0 top-0 h-full w-full">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
@@ -741,7 +741,7 @@ const ActivityPage = () => {
             }
           })}
         </div>
-        <div className="sticky inset-x-0 bottom-4 z-50">
+        <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
           <div className="w-full">
             <CtaTrial />
           </div>

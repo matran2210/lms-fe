@@ -707,8 +707,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     />
                   </div>
                   {!!activeQuestion?.requirements?.length && (
-                    <div className="mt-6 flex items-center gap-2 text-warning">
-                      <CircleInfoIcon />
+                    <div className="mt-6 flex items-start gap-2 text-warning">
+                      <CircleInfoIcon className="shrink-0" />
                       <div className="text-base font-normal">
                         You must finished{' '}
                         {activeQuestion?.requirements?.length || 0} requirements
