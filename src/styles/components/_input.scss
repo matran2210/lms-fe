@@ -46,12 +46,12 @@
   }
   .ant-input::placeholder {
     @apply text-[#99A1B7];
-    @apply font-medium;
+    @apply font-normal;
     @apply text-sm;
   }
   /* Căn chỉnh giá trị trong ô input */
   .ant-input,
   .ant-input-affix-wrapper {
-    @apply flex items-center px-3 py-3 text-sm font-medium;
+    @apply flex items-center px-3 py-3 text-sm font-normal;
   }
 }

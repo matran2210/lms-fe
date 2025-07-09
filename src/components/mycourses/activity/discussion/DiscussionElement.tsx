@@ -340,7 +340,7 @@ function DiscussionElement({
                     : discussion?.full_name}
                 </div>
                 {discussion?.is_sapp_supporter && (
-                  <div className="rounded bg-[#FFFBF2] px-3 py-1 font-medium text-primary">
+                  <div className="rounded bg-primary-50 px-3 py-1 font-medium text-primary">
                     <div className="flex items-center gap-1">
                       <div className="content-center">
                         <VerifiedIcon className="h-3 w-3" />
