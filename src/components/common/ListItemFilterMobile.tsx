@@ -8,27 +8,31 @@ import { isEmpty } from 'lodash'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
-import { SectionDropdownFormValues, SectionField } from 'src/type'
+import {
+  IOpenChooseItem,
+  getTypeName,
+  SectionDropdownFormValues,
+  SectionField,
+  nextTypeMap,
+  allTypes,
+} from 'src/type'
+import ItemFilterMobile from './ItemFilterMobile'
 
 interface IProps {
-  setOpenChooseItem: Dispatch<
-    SetStateAction<{
-      isOpen: boolean
-      listItem: any
-      name: string
-      params: string
-    }>
-  >
-  openChooseItem: {
-    isOpen: boolean
-    listItem: any
-    name: string
-    params: string
-  }
+  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
+  openChooseItem: IOpenChooseItem
   watch: UseFormWatch<SectionDropdownFormValues>
   setValue: UseFormSetValue<SectionDropdownFormValues>
   backFilter: string
   setBackFilter: Dispatch<SetStateAction<string>>
+  listSection: any[]
+  listSubsection: any[]
+  listUnit: any[]
+  listActivity: any[]
+  setListSection: Dispatch<SetStateAction<any[]>>
+  setListSubsection: Dispatch<SetStateAction<any[]>>
+  setListUnit: Dispatch<SetStateAction<any[]>>
+  setListActivity: Dispatch<SetStateAction<any[]>>
 }
 
 const ListItemFilterMobile = ({
@@ -38,118 +42,166 @@ const ListItemFilterMobile = ({
   setValue,
   backFilter,
   setBackFilter,
+  listSection,
+  listSubsection,
+  listUnit,
+  listActivity,
+  setListSection,
+  setListSubsection,
+  setListUnit,
+  setListActivity,
 }: IProps) => {
   const selectedSection = watch('section')
   const selectedSubsection = watch('subsection')
   const selectedUnit = watch('unit')
   const selectedActivity = watch('activity')
 
-  const { sections, fetchInitialSections } = useInitialSections()
-  const { sections: subSections, fetchSections: fetchSubsections } =
-    useSectionData(selectedSection, 'CHAPTER')
-  const { sections: units, fetchSections: fetchUnits } = useSectionData(
-    selectedSubsection,
-    'UNIT',
-  )
-  const { sections: activities, fetchSections: fetchActivities } =
-    useSectionData(selectedUnit, 'ACTIVITY')
-
-  const [selectedItem, setSelectedItem] = useState<{
-    id: string
-    type: string
-  }>()
+  const [list, setList] = useState<any[]>([])
+  const resetFormFields = (fields: SectionField[]) => {
+    fields.forEach((field) => setValue(field, null))
+  }
+  const handleChange = (
+    fieldName: SectionField,
+    selected: string | null,
+    fieldsToReset: SectionField[],
+  ) => {
+    setValue(fieldName, selected)
+    resetFormFields(fieldsToReset)
+    if (fieldName === 'section') {
+      setListSubsection([])
+      setListUnit([])
+      setListActivity([])
+    } else if (fieldName === 'subsection') {
+      setListUnit([])
+      setListActivity([])
+    } else if (fieldName === 'unit') {
+      setListActivity([])
+    }
+  }
+  const { sections, fetchInitialSections, isLoading } = useInitialSections()
+  const {
+    sections: subSections,
+    fetchSections: fetchSubsections,
+    isLoading: isLoadingSubsections,
+  } = useSectionData(selectedSection, 'CHAPTER')
+  const {
+    sections: units,
+    fetchSections: fetchUnits,
+    isLoading: isLoadingUnits,
+  } = useSectionData(selectedSubsection, 'UNIT')
+  const {
+    sections: activities,
+    fetchSections: fetchActivities,
+    isLoading: isLoadingActivities,
+  } = useSectionData(selectedUnit, 'ACTIVITY')
 
   useEffect(() => {
-    fetchSubsections(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(listSubsection)) return
+    if (selectedSection) fetchSubsections(DEFAULT_PAGE_SIZE)
+    else setListSubsection([])
   }, [selectedSection])
-
   useEffect(() => {
-    fetchUnits(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(listUnit)) return
+    if (selectedSubsection) fetchUnits(DEFAULT_PAGE_SIZE)
+    else setListUnit([])
   }, [selectedSubsection])
-
   useEffect(() => {
-    fetchActivities(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(listActivity)) return
+    if (selectedUnit) fetchActivities(DEFAULT_PAGE_SIZE)
+    else setListActivity([])
   }, [selectedUnit])
 
   useEffect(() => {
     if (isEmpty(subSections)) return
-    setOpenChooseItem({
-      ...openChooseItem,
-      listItem: subSections,
-      name: 'Subsection',
-    })
+    setListSubsection(subSections)
   }, [subSections])
-
   useEffect(() => {
     if (isEmpty(units)) return
-    setOpenChooseItem({ ...openChooseItem, listItem: units, name: 'Unit' })
+    setListUnit(units)
   }, [units])
-
   useEffect(() => {
     if (isEmpty(activities)) return
-    setOpenChooseItem({
-      ...openChooseItem,
-      listItem: activities,
-      name: 'Activity',
-    })
+    setListActivity(activities)
   }, [activities])
-
-  useEffect(() => {
-    if (backFilter && openChooseItem.isOpen) {
-      const listItem =
-        backFilter === 'Section'
-          ? sections
-          : backFilter === 'Subsection'
-            ? subSections
-            : units
-
-      setOpenChooseItem({
-        ...openChooseItem,
-        listItem: listItem,
-        name: backFilter,
-      })
-    }
-  }, [backFilter])
-
   useEffect(() => {
     if (isEmpty(sections)) return
-    setOpenChooseItem({ ...openChooseItem, listItem: sections })
+    setListSection(sections)
   }, [sections])
 
-  // useEffect(() => {
-  //   if (isEmpty(openChooseItem.listItem)) return
-  //   const listItem =
-  //     openChooseItem.name === 'Section'
-  //       ? sections
-  //       : openChooseItem.name === 'Subsection'
-  //         ? subSections
-  //         : units
-  //   setOpenChooseItem({ ...openChooseItem, listItem: listItem })
-  // }, [openChooseItem.listItem])
-
   useEffect(() => {
+    if (!isEmpty(listSection)) return
     fetchInitialSections(DEFAULT_PAGE_SIZE)
   }, [])
 
-  if (isEmpty(openChooseItem.listItem)) return null
+  useEffect(() => {
+    if (
+      isEmpty(listSection) &&
+      isEmpty(listSubsection) &&
+      isEmpty(listUnit) &&
+      isEmpty(listActivity)
+    )
+      return
+
+    switch (openChooseItem.type) {
+      case 'section':
+        setList(listSection)
+        break
+      case 'subsection':
+        setList(listSubsection)
+        break
+      case 'unit':
+        setList(listUnit)
+        break
+      case 'activity':
+        setList(listActivity)
+        break
+      default:
+        setList(listSection)
+        break
+    }
+  }, [listSection, listSubsection, listUnit, listActivity, openChooseItem.type])
+
+  if (
+    isEmpty(list) ||
+    isLoading ||
+    isLoadingSubsections ||
+    isLoadingUnits ||
+    isLoadingActivities
+  )
+    return null
   return (
     <>
-      {openChooseItem.listItem.map((item: any) => {
-        const isSelected = selectedItem?.id === item.id
+      {list.map((item: any) => {
+        const isSelected =
+          selectedSection === item.id ||
+          selectedSubsection === item.id ||
+          selectedUnit === item.id ||
+          selectedActivity === item.id
         return (
           <div
             key={item.id}
             className="mt-3 flex items-center justify-between py-2"
             onClick={() => {
-              setSelectedItem({ id: item.id, type: openChooseItem.name })
+              if (!isSelected) {
+                const currentIndex = allTypes.indexOf(
+                  openChooseItem.type as (typeof allTypes)[number],
+                )
+
+                const childTypes =
+                  currentIndex >= 0 ? allTypes.slice(currentIndex + 1) : []
+                handleChange(openChooseItem.type, item.id, childTypes)
+              }
+              const type =
+                openChooseItem.type === 'activity'
+                  ? openChooseItem.type
+                  : nextTypeMap[openChooseItem.type]
+              const name = getTypeName[type]
               setOpenChooseItem({
                 ...openChooseItem,
                 params: item.id,
+                type: type,
+                name: name,
               })
-              setValue(
-                openChooseItem.name.toLowerCase() as SectionField,
-                item.id,
-              )
             }}
           >
             <div

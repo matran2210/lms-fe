@@ -281,4 +281,32 @@ export type SectionDropdownFormValues = {
 
 export type SectionField = 'section' | 'subsection' | 'unit' | 'activity'
 
+export const allTypes = ['section', 'subsection', 'unit', 'activity'] as const
+
+export interface IOpenChooseItem {
+  isOpen: boolean
+  type: SectionField
+  name: string
+  params?: string
+}
+
+export const nextTypeMap = {
+  section: 'subsection',
+  subsection: 'unit',
+  unit: 'activity',
+} as Record<SectionField, SectionField>
+
+export const backTypeMap = {
+  activity: 'unit',
+  unit: 'subsection',
+  subsection: 'section',
+} as Record<SectionField, SectionField>
+
+export const getTypeName = {
+  section: 'Section',
+  subsection: 'Subsection',
+  unit: 'Unit',
+  activity: 'Activity',
+} as Record<SectionField, string>
+
 export * from './test'

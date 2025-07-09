@@ -2,18 +2,15 @@ import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import { UseFormWatch } from 'react-hook-form'
-import { SectionDropdownFormValues } from 'src/type'
+import {
+  IOpenChooseItem,
+  SectionDropdownFormValues,
+  SectionField,
+} from 'src/type'
 
 interface IProps {
   watch: UseFormWatch<SectionDropdownFormValues>
-  setOpenChooseItem: Dispatch<
-    SetStateAction<{
-      isOpen: boolean
-      listItem: any
-      name: string
-      params: string
-    }>
-  >
+  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
 }
 
 const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
@@ -22,21 +19,25 @@ const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
       id: 1,
       name: 'Section',
       isDisabled: false,
+      type: 'section',
     },
     {
       id: 2,
       name: 'Subsection',
       isDisabled: watch('section') === null,
+      type: 'subsection',
     },
     {
       id: 3,
       name: 'Unit',
       isDisabled: watch('activity') === null,
+      type: 'unit',
     },
     {
       id: 4,
       name: 'Activity',
       isDisabled: watch('unit') === null,
+      type: 'activity',
     },
   ]
 
@@ -53,9 +54,8 @@ const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
             if (item.isDisabled) return
             setOpenChooseItem({
               isOpen: true,
-              listItem: [],
+              type: item.type as SectionField,
               name: item.name,
-              params: '',
             })
           }}
         >

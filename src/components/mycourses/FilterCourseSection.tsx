@@ -23,11 +23,13 @@ interface FilterCourseSectionProps {
 export const useSectionData = (sectionId: string | null, type: string) => {
   const [sections, setSections] = useState<ISection[]>([])
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const fetchSections = async (page_size: number) => {
     try {
       if (sectionId) {
         const class_id = router.query.courseId || router.query.id
+        setIsLoading(true)
         const res = await CoursesAPI.getCourseSubsectionList(
           page_size,
           type as 'CHAPTER' | 'UNIT' | 'ACTIVITY',
@@ -36,10 +38,13 @@ export const useSectionData = (sectionId: string | null, type: string) => {
         )
         setSections([...res?.data?.sections].reverse())
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  return { sections, setSections, fetchSections }
+  return { sections, setSections, fetchSections, isLoading }
 }
 
 export const useInitialSections = () => {
@@ -69,7 +74,12 @@ export const useInitialSections = () => {
     }
   }
 
-  return { sections, setSections, fetchInitialSections }
+  return {
+    sections,
+    setSections,
+    fetchInitialSections,
+    isLoading: isFetchingRef.current,
+  }
 }
 
 const FilterCourseSection = ({

@@ -16,6 +16,9 @@ import {
   IResourceDetail,
   SectionDropdownFormValues,
   SectionField,
+  IOpenChooseItem,
+  backTypeMap,
+  getTypeName,
 } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -29,7 +32,6 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
@@ -45,17 +47,16 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
   const [backFilter, setBackFilter] = useState<string>('')
-  const [openChooseItem, setOpenChooseItem] = useState<{
-    isOpen: boolean
-    listItem: any
-    name: string
-    params: string
-  }>({
+  const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
-    listItem: [],
+    type: 'section',
     name: '',
     params: '',
   })
+  const [listSection, setListSection] = useState<any[]>([])
+  const [listSubsection, setListSubsection] = useState<any[]>([])
+  const [listUnit, setListUnit] = useState<any[]>([])
+  const [listActivity, setListActivity] = useState<any[]>([])
 
   const [paramsSubId, setParamsSubId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
@@ -183,36 +184,30 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     : 'mb-6'
 
   const handleBack = () => {
-    if (openChooseItem.isOpen && openChooseItem.name !== 'Section') {
-      const name =
-        openChooseItem.name === 'Subsection'
-          ? 'Section'
-          : openChooseItem.name === 'Unit'
-            ? 'Subsection'
-            : 'Unit'
-      setBackFilter(name)
+    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
+      const type = backTypeMap[openChooseItem.type]
+      setOpenChooseItem({
+        ...openChooseItem,
+        type: type,
+        name: getTypeName[type],
+      })
     } else {
       setIsOpenFilter(false)
       setOpenChooseItem({
+        ...openChooseItem,
         isOpen: false,
-        listItem: [],
-        name: '',
-        params: '',
       })
-      setValue('section', null)
-      setValue('subsection', null)
-      setValue('unit', null)
-      setValue('activity', null)
     }
   }
   const handleSubmit = () => {
     setIsOpenFilter(false)
-    setParamsSubId(openChooseItem.params)
+    setParamsSubId(openChooseItem.params || '')
     setOpenChooseItem({
       ...openChooseItem,
       isOpen: false,
     })
   }
+
   const ListResource = () => {
     return (
       <>
@@ -292,6 +287,14 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             setValue={setValue}
             setBackFilter={setBackFilter}
             backFilter={backFilter}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
           />
         )}
       </SappDrawerV3>
