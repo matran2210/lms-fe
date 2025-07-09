@@ -20,7 +20,7 @@ interface FilterCourseSectionProps {
   allowClear?: boolean
 }
 
-const useSectionData = (sectionId: string | null, type: string) => {
+export const useSectionData = (sectionId: string | null, type: string) => {
   const [sections, setSections] = useState<ISection[]>([])
   const router = useRouter()
 
@@ -42,7 +42,7 @@ const useSectionData = (sectionId: string | null, type: string) => {
   return { sections, setSections, fetchSections }
 }
 
-const useInitialSections = () => {
+export const useInitialSections = () => {
   const [sections, setSections] = useState<ISection[]>([])
   const isFetchingRef = useRef(false)
   const router = useRouter()

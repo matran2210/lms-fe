@@ -28,6 +28,7 @@ import { useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 
 interface IProps {
   open: boolean
@@ -43,6 +44,19 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
+  const [backFilter, setBackFilter] = useState<string>('')
+  const [openChooseItem, setOpenChooseItem] = useState<{
+    isOpen: boolean
+    listItem: any
+    name: string
+    params: string
+  }>({
+    isOpen: false,
+    listItem: [],
+    name: '',
+    params: '',
+  })
+
   const [paramsSubId, setParamsSubId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
     useState<boolean>(false)
@@ -159,8 +173,46 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     })
   }
 
-  const title = isOpenFilter ? 'Filter' : 'Course Resource'
+  const title = !openChooseItem.isOpen
+    ? isOpenFilter
+      ? 'Filter'
+      : 'Course Resource'
+    : openChooseItem.name
+  const classNameHeader = openChooseItem.isOpen
+    ? 'pb-4 border-b border-gray-200 '
+    : 'mb-6'
 
+  const handleBack = () => {
+    if (openChooseItem.isOpen && openChooseItem.name !== 'Section') {
+      const name =
+        openChooseItem.name === 'Subsection'
+          ? 'Section'
+          : openChooseItem.name === 'Unit'
+            ? 'Subsection'
+            : 'Unit'
+      setBackFilter(name)
+    } else {
+      setIsOpenFilter(false)
+      setOpenChooseItem({
+        isOpen: false,
+        listItem: [],
+        name: '',
+        params: '',
+      })
+      setValue('section', null)
+      setValue('subsection', null)
+      setValue('unit', null)
+      setValue('activity', null)
+    }
+  }
+  const handleSubmit = () => {
+    setIsOpenFilter(false)
+    setParamsSubId(openChooseItem.params)
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+  }
   const ListResource = () => {
     return (
       <>
@@ -217,10 +269,31 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         title={title}
         isShowBtnClose
         isShowBtnBack={isOpenFilter}
-        handleBack={() => setIsOpenFilter(false)}
+        handleBack={handleBack}
+        isShowFooter={isOpenFilter}
+        handleSubmit={handleSubmit}
+        classNameHeader={classNameHeader}
         rootClassName={'responsive-drawer-center'}
+        submitButtonClassName="w-full h-10"
+        btnSubmitTile="Confirm"
       >
-        {!isOpenFilter ? <ListResource /> : <ListFilterMobile watch={watch} />}
+        {!isOpenFilter ? (
+          <ListResource />
+        ) : !openChooseItem.isOpen ? (
+          <ListFilterMobile
+            watch={watch}
+            setOpenChooseItem={setOpenChooseItem}
+          />
+        ) : (
+          <ListItemFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            openChooseItem={openChooseItem}
+            watch={watch}
+            setValue={setValue}
+            setBackFilter={setBackFilter}
+            backFilter={backFilter}
+          />
+        )}
       </SappDrawerV3>
     </>
   )

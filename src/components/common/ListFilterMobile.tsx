@@ -1,13 +1,22 @@
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
+import { Dispatch, SetStateAction } from 'react'
 import { UseFormWatch } from 'react-hook-form'
 import { SectionDropdownFormValues } from 'src/type'
 
 interface IProps {
   watch: UseFormWatch<SectionDropdownFormValues>
+  setOpenChooseItem: Dispatch<
+    SetStateAction<{
+      isOpen: boolean
+      listItem: any
+      name: string
+      params: string
+    }>
+  >
 }
 
-const ListFilterMobile = ({ watch }: IProps) => {
+const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
   const list = [
     {
       id: 1,
@@ -17,17 +26,17 @@ const ListFilterMobile = ({ watch }: IProps) => {
     {
       id: 2,
       name: 'Subsection',
-      isDisabled: watch('subsection') === null,
+      isDisabled: watch('section') === null,
     },
     {
       id: 3,
       name: 'Unit',
-      isDisabled: watch('unit') === null,
+      isDisabled: watch('activity') === null,
     },
     {
       id: 4,
       name: 'Activity',
-      isDisabled: watch('activity') === null,
+      isDisabled: watch('unit') === null,
     },
   ]
 
@@ -40,6 +49,15 @@ const ListFilterMobile = ({ watch }: IProps) => {
             'flex items-center justify-between py-2',
             item.isDisabled ? 'text-gray-400' : 'text-gray-800',
           )}
+          onClick={() => {
+            if (item.isDisabled) return
+            setOpenChooseItem({
+              isOpen: true,
+              listItem: [],
+              name: item.name,
+              params: '',
+            })
+          }}
         >
           <div className="text-sm font-normal">{item.name}</div>
           <div>
