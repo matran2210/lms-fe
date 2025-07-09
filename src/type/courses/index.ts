@@ -279,9 +279,9 @@ export type SectionDropdownFormValues = {
   activity: string | null
 }
 
-export type SectionField = 'section' | 'subsection' | 'unit' | 'activity'
-
 export const allTypes = ['section', 'subsection', 'unit', 'activity'] as const
+
+export type SectionField = (typeof allTypes)[number]
 
 export interface IOpenChooseItem {
   isOpen: boolean

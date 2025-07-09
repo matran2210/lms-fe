@@ -12,9 +12,15 @@ interface IProps {
   watch: UseFormWatch<SectionDropdownFormValues>
   setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
 }
+interface IList {
+  id: number
+  name: string
+  isDisabled: boolean
+  type: SectionField
+}
 
 const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
-  const list = [
+  const list: IList[] = [
     {
       id: 1,
       name: 'Section',
@@ -24,22 +30,31 @@ const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
     {
       id: 2,
       name: 'Subsection',
-      isDisabled: watch('section') === null,
+      isDisabled: !watch('section'),
       type: 'subsection',
     },
     {
       id: 3,
       name: 'Unit',
-      isDisabled: watch('activity') === null,
+      isDisabled: !watch('activity'),
       type: 'unit',
     },
     {
       id: 4,
       name: 'Activity',
-      isDisabled: watch('unit') === null,
+      isDisabled: !watch('unit'),
       type: 'activity',
     },
   ]
+
+  const handleClick = (item: IList) => {
+    if (item.isDisabled) return
+    setOpenChooseItem({
+      isOpen: true,
+      type: item.type as SectionField,
+      name: item.name,
+    })
+  }
 
   return (
     <div className="flex flex-col">
@@ -50,14 +65,7 @@ const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
             'flex items-center justify-between py-2',
             item.isDisabled ? 'text-gray-400' : 'text-gray-800',
           )}
-          onClick={() => {
-            if (item.isDisabled) return
-            setOpenChooseItem({
-              isOpen: true,
-              type: item.type as SectionField,
-              name: item.name,
-            })
-          }}
+          onClick={() => handleClick(item)}
         >
           <div className="text-sm font-normal">{item.name}</div>
           <div>
