@@ -222,36 +222,33 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             isPageStateVariables={isPageStateVariables}
           />
         )}
-
-        {!isEmpty(resources?.resources) ? (
-          <TextSkeleton loading={loading} length={10}>
-            <div className="mt-6 flex flex-col gap-4 md:mt-8">
-              {resources?.resources?.map((resource) => (
-                <div
-                  key={resource.id}
-                  className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
-                >
-                  <div>
-                    <div className="text-base font-medium text-gray-800">
-                      {resource?.name}
-                    </div>
-                    <div className="text-gray-500 text-sm font-normal">
-                      {bytesToKilobyte(resource?.size)}
-                    </div>
-                  </div>
-                  <a
-                    className="cursor-pointer"
-                    onClick={() => download(resource.name, resource.file_key)}
-                  >
-                    <DownloadIcon color="#1C274C" />
-                  </a>
-                </div>
-              ))}
-            </div>
-          </TextSkeleton>
-        ) : (
+        {isEmpty(resources?.resources) && !loading ? (
           <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
             <NoDataV2 />
+          </div>
+        ) : (
+          <div className="mt-6 flex flex-col gap-4 md:mt-8">
+            {resources?.resources?.map((resource) => (
+              <div
+                key={resource.id}
+                className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
+              >
+                <div>
+                  <div className="text-base font-medium text-gray-800">
+                    {resource?.name}
+                  </div>
+                  <div className="text-gray-500 text-sm font-normal">
+                    {bytesToKilobyte(resource?.size)}
+                  </div>
+                </div>
+                <a
+                  className="cursor-pointer"
+                  onClick={() => download(resource.name, resource.file_key)}
+                >
+                  <DownloadIcon color="#1C274C" />
+                </a>
+              </div>
+            ))}
           </div>
         )}
       </>
