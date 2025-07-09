@@ -26,6 +26,7 @@ interface ModalResizeableProps {
     | 'center'
   className?: string
   draggableFull?: boolean
+  modalIndex?: number
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -41,6 +42,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   position = 'center',
   className,
   draggableFull = false,
+  modalIndex = 0,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -49,31 +51,71 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     pos: string,
     modalWidth: number,
     modalHeight: number,
+    offset = 0,
   ) => {
     const windowWidth = window.innerWidth
     const windowHeight = window.innerHeight
-
+    const scrollX = window.scrollX
+    const scrollY = window.scrollY
+    const shift = offset * 20 // mỗi modal lệch 20px
+    // const positions = {
+    //   'top left': { x: 0, y: 0 },
+    //   'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
+    //   'bottom left': { x: 0, y: windowHeight - modalHeight },
+    //   'bottom middle': {
+    //     x: (windowWidth - modalWidth) / 2,
+    //     y: windowHeight - modalHeight,
+    //   },
+    //   'bottom right': {
+    //     x: windowWidth - modalWidth,
+    //     y: windowHeight - modalHeight,
+    //   },
+    //   'top right': { x: windowWidth - modalWidth, y: 0 },
+    //   'center left': { x: 0, y: (windowHeight - modalHeight) / 2 },
+    //   'center right': {
+    //     x: windowWidth - modalWidth,
+    //     y: (windowHeight - modalHeight) / 2,
+    //   },
+    //   center: {
+    //     x: (windowWidth - modalWidth) / 2,
+    //     y: (windowHeight - modalHeight) / 2,
+    //   },
+    // }
     const positions = {
-      'top left': { x: 0, y: 0 },
-      'top middle': { x: (windowWidth - modalWidth) / 2, y: 0 },
-      'bottom left': { x: 0, y: windowHeight - modalHeight },
-      'bottom middle': {
-        x: (windowWidth - modalWidth) / 2,
-        y: windowHeight - modalHeight,
+      'top left': { x: scrollX + shift, y: scrollY + shift },
+      'top middle': {
+        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
+        y: scrollY + shift,
       },
-      'bottom right': {
-        x: windowWidth - modalWidth,
-        y: windowHeight - modalHeight,
+      'top right': {
+        x: scrollX + windowWidth - modalWidth - shift,
+        y: scrollY + shift,
       },
-      'top right': { x: windowWidth - modalWidth, y: 0 },
-      'center left': { x: 0, y: (windowHeight - modalHeight) / 2 },
-      'center right': {
-        x: windowWidth - modalWidth,
-        y: (windowHeight - modalHeight) / 2,
+
+      'center left': {
+        x: scrollX + shift,
+        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
       },
       center: {
-        x: (windowWidth - modalWidth) / 2,
-        y: (windowHeight - modalHeight) / 2,
+        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
+        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
+      },
+      'center right': {
+        x: scrollX + windowWidth - modalWidth - shift,
+        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
+      },
+
+      'bottom left': {
+        x: scrollX + shift,
+        y: scrollY + windowHeight - modalHeight - shift,
+      },
+      'bottom middle': {
+        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
+        y: scrollY + windowHeight - modalHeight - shift,
+      },
+      'bottom right': {
+        x: scrollX + windowWidth - modalWidth - shift,
+        y: scrollY + windowHeight - modalHeight - shift,
       },
     }
 
@@ -81,11 +123,13 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   }
 
   const [modalPosition, setModalPosition] = useState(() =>
-    calculatePosition(position, width, height),
+    calculatePosition(position, width, height, modalIndex),
   )
 
   useEffect(() => {
-    setModalPosition(calculatePosition(position, size.width, size.height))
+    setModalPosition(
+      calculatePosition(position, size.width, size.height, modalIndex),
+    )
   }, [])
 
   return (

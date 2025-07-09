@@ -699,7 +699,7 @@ const ActivityPage = () => {
                   key={e.id}
                   className="!z-40"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center left"
                   header={
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
@@ -718,6 +718,7 @@ const ActivityPage = () => {
                     </div>
                   }
                   draggableFull
+                  modalIndex={e.index}
                 >
                   <div className="h-full bg-white">
                     <EditorReader
