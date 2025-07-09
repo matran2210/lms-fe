@@ -5,9 +5,9 @@ import {
 } from '@components/mycourses/FilterCourseSection'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
-import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_SIZE, DEFAULT_SELECT_SECTION } from 'src/constants'
 import {
   IOpenChooseItem,
   getTypeName,
@@ -15,24 +15,22 @@ import {
   SectionField,
   nextTypeMap,
   allTypes,
+  ISection,
 } from 'src/type'
-import ItemFilterMobile from './ItemFilterMobile'
 
 interface IProps {
   setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
   openChooseItem: IOpenChooseItem
   watch: UseFormWatch<SectionDropdownFormValues>
   setValue: UseFormSetValue<SectionDropdownFormValues>
-  backFilter: string
-  setBackFilter: Dispatch<SetStateAction<string>>
-  listSection: any[]
-  listSubsection: any[]
-  listUnit: any[]
-  listActivity: any[]
-  setListSection: Dispatch<SetStateAction<any[]>>
-  setListSubsection: Dispatch<SetStateAction<any[]>>
-  setListUnit: Dispatch<SetStateAction<any[]>>
-  setListActivity: Dispatch<SetStateAction<any[]>>
+  listSection: ISection[]
+  listSubsection: ISection[]
+  listUnit: ISection[]
+  listActivity: ISection[]
+  setListSection: Dispatch<SetStateAction<ISection[]>>
+  setListSubsection: Dispatch<SetStateAction<ISection[]>>
+  setListUnit: Dispatch<SetStateAction<ISection[]>>
+  setListActivity: Dispatch<SetStateAction<ISection[]>>
 }
 
 const ListItemFilterMobile = ({
@@ -40,8 +38,6 @@ const ListItemFilterMobile = ({
   openChooseItem,
   watch,
   setValue,
-  backFilter,
-  setBackFilter,
   listSection,
   listSubsection,
   listUnit,
@@ -51,158 +47,153 @@ const ListItemFilterMobile = ({
   setListUnit,
   setListActivity,
 }: IProps) => {
-  const selectedSection = watch('section')
-  const selectedSubsection = watch('subsection')
-  const selectedUnit = watch('unit')
-  const selectedActivity = watch('activity')
+  const selected = {
+    section: watch('section'),
+    subsection: watch('subsection'),
+    unit: watch('unit'),
+    activity: watch('activity'),
+  }
 
-  const [list, setList] = useState<any[]>([])
+  const [list, setList] = useState<ISection[]>([])
+
   const resetFormFields = (fields: SectionField[]) => {
     fields.forEach((field) => setValue(field, null))
   }
+
   const handleChange = (
     fieldName: SectionField,
-    selected: string | null,
+    selectedId: string | null,
     fieldsToReset: SectionField[],
   ) => {
-    setValue(fieldName, selected)
+    setValue(fieldName, selectedId)
     resetFormFields(fieldsToReset)
-    if (fieldName === 'section') {
-      setListSubsection([])
-      setListUnit([])
-      setListActivity([])
-    } else if (fieldName === 'subsection') {
-      setListUnit([])
-      setListActivity([])
-    } else if (fieldName === 'unit') {
-      setListActivity([])
+
+    const clearMap = {
+      section: () => {
+        setListSubsection([])
+        setListUnit([])
+        setListActivity([])
+      },
+      subsection: () => {
+        setListUnit([])
+        setListActivity([])
+      },
+      unit: () => setListActivity([]),
     }
+
+    clearMap[fieldName as keyof typeof clearMap]?.()
   }
+
+  const handleSelect = (item: ISection, isSelected: boolean) => {
+    if (!isSelected) {
+      const currentIndex = allTypes.indexOf(
+        openChooseItem.type as (typeof allTypes)[number],
+      )
+      const childTypes =
+        currentIndex >= 0 ? allTypes.slice(currentIndex + 1) : []
+      handleChange(openChooseItem.type, item.id, childTypes)
+    }
+
+    const type =
+      openChooseItem.type === 'activity'
+        ? 'activity'
+        : nextTypeMap[openChooseItem.type]
+    const name = getTypeName[type]
+
+    setOpenChooseItem({
+      ...openChooseItem,
+      params: item.id,
+      type,
+      name,
+    })
+  }
+
+  // SECTION FETCHING HOOKS
   const { sections, fetchInitialSections, isLoading } = useInitialSections()
-  const {
-    sections: subSections,
-    fetchSections: fetchSubsections,
-    isLoading: isLoadingSubsections,
-  } = useSectionData(selectedSection, 'CHAPTER')
-  const {
-    sections: units,
-    fetchSections: fetchUnits,
-    isLoading: isLoadingUnits,
-  } = useSectionData(selectedSubsection, 'UNIT')
-  const {
-    sections: activities,
-    fetchSections: fetchActivities,
-    isLoading: isLoadingActivities,
-  } = useSectionData(selectedUnit, 'ACTIVITY')
+  const subsectionData = useSectionData(selected.section, 'CHAPTER')
+  const unitData = useSectionData(selected.subsection, 'UNIT')
+  const activityData = useSectionData(selected.unit, 'ACTIVITY')
+
+  // FETCH section on mount
+  useEffect(() => {
+    if (isEmpty(listSection)) {
+      fetchInitialSections(DEFAULT_PAGE_SIZE)
+    }
+  }, [])
+
+  // FETCH dynamic based on selection
+  useEffect(() => {
+    if (selected.section && isEmpty(listSubsection)) {
+      subsectionData.fetchSections(DEFAULT_PAGE_SIZE)
+    }
+  }, [selected.section])
 
   useEffect(() => {
-    if (!isEmpty(listSubsection)) return
-    if (selectedSection) fetchSubsections(DEFAULT_PAGE_SIZE)
-    else setListSubsection([])
-  }, [selectedSection])
-  useEffect(() => {
-    if (!isEmpty(listUnit)) return
-    if (selectedSubsection) fetchUnits(DEFAULT_PAGE_SIZE)
-    else setListUnit([])
-  }, [selectedSubsection])
-  useEffect(() => {
-    if (!isEmpty(listActivity)) return
-    if (selectedUnit) fetchActivities(DEFAULT_PAGE_SIZE)
-    else setListActivity([])
-  }, [selectedUnit])
+    if (selected.subsection && isEmpty(listUnit)) {
+      unitData.fetchSections(DEFAULT_PAGE_SIZE)
+    }
+  }, [selected.subsection])
 
   useEffect(() => {
-    if (isEmpty(subSections)) return
-    setListSubsection(subSections)
-  }, [subSections])
+    if (selected.unit && isEmpty(listActivity)) {
+      activityData.fetchSections(DEFAULT_PAGE_SIZE)
+    }
+  }, [selected.unit])
+
+  // SET list after fetch
   useEffect(() => {
-    if (isEmpty(units)) return
-    setListUnit(units)
-  }, [units])
-  useEffect(() => {
-    if (isEmpty(activities)) return
-    setListActivity(activities)
-  }, [activities])
-  useEffect(() => {
-    if (isEmpty(sections)) return
-    setListSection(sections)
+    if (!isEmpty(sections)) setListSection(sections)
   }, [sections])
 
   useEffect(() => {
-    if (!isEmpty(listSection)) return
-    fetchInitialSections(DEFAULT_PAGE_SIZE)
-  }, [])
+    if (!isEmpty(subsectionData.sections))
+      setListSubsection(subsectionData.sections)
+  }, [subsectionData.sections])
 
   useEffect(() => {
-    if (
-      isEmpty(listSection) &&
-      isEmpty(listSubsection) &&
-      isEmpty(listUnit) &&
-      isEmpty(listActivity)
-    )
-      return
+    if (!isEmpty(unitData.sections)) setListUnit(unitData.sections)
+  }, [unitData.sections])
 
-    switch (openChooseItem.type) {
-      case 'section':
-        setList(listSection)
-        break
-      case 'subsection':
-        setList(listSubsection)
-        break
-      case 'unit':
-        setList(listUnit)
-        break
-      case 'activity':
-        setList(listActivity)
-        break
-      default:
-        setList(listSection)
-        break
+  useEffect(() => {
+    if (!isEmpty(activityData.sections)) setListActivity(activityData.sections)
+  }, [activityData.sections])
+
+  // SELECT list to render
+  useEffect(() => {
+    const map: Record<string, ISection[]> = {
+      section: (DEFAULT_SELECT_SECTION as unknown as ISection[]).concat(
+        listSection,
+      ),
+      subsection: listSubsection,
+      unit: listUnit,
+      activity: listActivity,
     }
-  }, [listSection, listSubsection, listUnit, listActivity, openChooseItem.type])
+    setList(map[openChooseItem.type] ?? [])
+  }, [openChooseItem.type, listSection, listSubsection, listUnit, listActivity])
 
-  if (
-    isEmpty(list) ||
+  // COMBINED loading check
+  const isAnyLoading =
     isLoading ||
-    isLoadingSubsections ||
-    isLoadingUnits ||
-    isLoadingActivities
-  )
-    return null
+    subsectionData.isLoading ||
+    unitData.isLoading ||
+    activityData.isLoading
+
+  if (isAnyLoading || isEmpty(list)) return null
+
   return (
     <>
-      {list.map((item: any) => {
+      {list.map((item) => {
         const isSelected =
-          selectedSection === item.id ||
-          selectedSubsection === item.id ||
-          selectedUnit === item.id ||
-          selectedActivity === item.id
+          selected.section === item.id ||
+          selected.subsection === item.id ||
+          selected.unit === item.id ||
+          selected.activity === item.id
+
         return (
           <div
             key={item.id}
             className="mt-3 flex items-center justify-between py-2"
-            onClick={() => {
-              if (!isSelected) {
-                const currentIndex = allTypes.indexOf(
-                  openChooseItem.type as (typeof allTypes)[number],
-                )
-
-                const childTypes =
-                  currentIndex >= 0 ? allTypes.slice(currentIndex + 1) : []
-                handleChange(openChooseItem.type, item.id, childTypes)
-              }
-              const type =
-                openChooseItem.type === 'activity'
-                  ? openChooseItem.type
-                  : nextTypeMap[openChooseItem.type]
-              const name = getTypeName[type]
-              setOpenChooseItem({
-                ...openChooseItem,
-                params: item.id,
-                type: type,
-                name: name,
-              })
-            }}
+            onClick={() => handleSelect(item, isSelected)}
           >
             <div
               className={clsx(

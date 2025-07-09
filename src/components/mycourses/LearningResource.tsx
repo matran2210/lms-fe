@@ -19,6 +19,7 @@ import {
   IOpenChooseItem,
   backTypeMap,
   getTypeName,
+  ISection,
 } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
@@ -46,17 +47,17 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
-  const [backFilter, setBackFilter] = useState<string>('')
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
     type: 'section',
     name: '',
     params: '',
   })
-  const [listSection, setListSection] = useState<any[]>([])
-  const [listSubsection, setListSubsection] = useState<any[]>([])
-  const [listUnit, setListUnit] = useState<any[]>([])
-  const [listActivity, setListActivity] = useState<any[]>([])
+
+  const [listSection, setListSection] = useState<ISection[]>([])
+  const [listSubsection, setListSubsection] = useState<ISection[]>([])
+  const [listUnit, setListUnit] = useState<ISection[]>([])
+  const [listActivity, setListActivity] = useState<ISection[]>([])
 
   const [paramsSubId, setParamsSubId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
@@ -199,6 +200,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       })
     }
   }
+
   const handleSubmit = () => {
     setIsOpenFilter(false)
     setParamsSubId(openChooseItem.params || '')
@@ -285,8 +287,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
             openChooseItem={openChooseItem}
             watch={watch}
             setValue={setValue}
-            setBackFilter={setBackFilter}
-            backFilter={backFilter}
             listSection={listSection}
             listSubsection={listSubsection}
             listUnit={listUnit}
