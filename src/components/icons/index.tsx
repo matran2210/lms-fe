@@ -1024,7 +1024,7 @@ export const TimeOutIcon = () => {
   )
 }
 
-export const VerifiedIcon = () => {
+export const VerifiedIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       width="14"
@@ -1032,6 +1032,7 @@ export const VerifiedIcon = () => {
       viewBox="0 0 14 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <g id="verified 1" clipPath="url(#clip0_12314_6902)">
         <g id="Group">
