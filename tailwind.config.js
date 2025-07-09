@@ -201,6 +201,7 @@ module.exports = {
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
+        modal: '0px 4px 12px 0px rgba(44, 48, 0, 0.04)',
       },
       minWidth: {
         4: '16px',

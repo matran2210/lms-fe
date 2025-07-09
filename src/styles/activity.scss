@@ -115,3 +115,45 @@
     @apply h-1.5 w-1.5 rounded-full bg-primary;
   }
 }
+
+.exhibit-modal-wrapper {
+  .ant-modal {
+    @apply max-w-[calc(100%-32px)];
+    .exhibit-modal-content {
+      .ant-modal-header {
+        .ant-modal-title {
+          @apply text-lg;
+        }
+      }
+      .ant-modal-body {
+        @apply max-h-[419px] overflow-y-auto;
+
+        &::-webkit-scrollbar {
+          @apply w-2;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          @apply rounded bg-primary;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: #ffb800; // giữ nguyên khi hover
+        }
+
+        &::-webkit-scrollbar-track {
+          @apply bg-white;
+        }
+
+        /* Firefox hỗ trợ */
+        scrollbar-color: #ffb800 white;
+        scrollbar-width: thin;
+        &::-webkit-scrollbar-button:single-button {
+          display: none;
+          background-color: transparent;
+          height: 0;
+          width: 0;
+        }
+      }
+    }
+  }
+}
