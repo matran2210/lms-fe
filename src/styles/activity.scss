@@ -91,7 +91,25 @@
     }
   }
 }
+.ant-tabs-dropdown {
+  @apply rounded-lg bg-white shadow-lg;
 
+  .ant-tabs-dropdown-menu {
+    @apply p-2;
+  }
+
+  .ant-tabs-dropdown-menu-item {
+    @apply p-2 text-sm text-gray-800 hover:bg-gray-100;
+    font-weight: 500;
+    &:not(:last-child) {
+      @apply mb-2;
+    }
+
+    &.ant-tabs-dropdown-menu-item-selected {
+      @apply bg-primary-100 text-primary-600;
+    }
+  }
+}
 .learning-act-tab-pagination {
   @apply mt-6;
   .tab-pagination {
