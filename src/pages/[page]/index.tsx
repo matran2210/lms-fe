@@ -205,7 +205,7 @@ const ProfilePage = () => {
           {isChangePassword ? (
             <ChangePassword handleCancel={() => setIsChangePassword(false)} />
           ) : (
-            <div className="flex flex-col gap-0 lg:gap-10">
+            <div className="flex flex-col">
               <MyPasword setIsChangePassword={setIsChangePassword} />
               <DeviceList />
               <LoginHistoryList />

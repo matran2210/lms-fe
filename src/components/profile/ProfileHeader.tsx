@@ -180,8 +180,8 @@ const ProfileHeader = ({
                 }
                 alt="avatar"
                 className=""
-                width={108}
-                height={108}
+                width={100}
+                height={100}
                 layout="fixed"
                 objectFit={'cover'}
                 priority={true}
@@ -190,7 +190,10 @@ const ProfileHeader = ({
           </div>
         </div>
         <div className="absolute bottom-0 left-[50%] z-10 translate-x-[-50%] md:hidden">
-          <Tag color="success" className="m-0 rounded px-2 py-[2px] text-sm">
+          <Tag
+            bordered={false}
+            className="m-0 rounded bg-success-50 px-2 py-[2px] text-sm font-normal text-success"
+          >
             Active
           </Tag>
         </div>
@@ -223,10 +226,21 @@ const ProfileHeader = ({
       </div>
 
       <div className="flex-1 md:my-6 lg:my-0">
-        <div className="mb-3 flex max-w-[600px] items-center justify-center gap-2 truncate text-lg font-bold text-[#050505] md:mb-4 md:block md:text-2xl">
-          <TextSkeleton loading={loading || loadingEditName}>
-            {user.detail.full_name}
-          </TextSkeleton>
+        <div className="mb-3 flex max-w-[600px] items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:text-2xl">
+          <div className="flex items-center gap-3">
+            <TextSkeleton loading={loading || loadingEditName}>
+              {user.detail.full_name}
+            </TextSkeleton>
+            <div className="hidden md:block">
+              <Tag
+                bordered={false}
+                className="m-0 rounded bg-success-50 px-2 py-[2px] text-base font-normal text-success"
+              >
+                Active
+              </Tag>
+            </div>
+          </div>
+
           <div className="md:hidden">
             <PencilV2Icon />
           </div>
