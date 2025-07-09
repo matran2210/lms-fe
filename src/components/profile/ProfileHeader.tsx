@@ -175,7 +175,7 @@ const ProfileHeader = ({
                 src={
                   reViewImageSrc ||
                   user.detail.avatar['150x150'] ||
-                  user.detail.avatar['ORIGIN'] ||
+                  user.detail.avatar?.['ORIGIN'] ||
                   blankAvatar
                 }
                 alt="avatar"
