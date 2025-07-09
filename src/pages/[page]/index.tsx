@@ -219,7 +219,7 @@ const ProfilePage = () => {
   const myProfileItems: CollapseProps['items'] = [
     {
       key: 'overview',
-      label: <p className="text-base font-semibold">Overview</p>,
+      label: <p className="text-base font-semibold text-gray-800">Overview</p>,
       children: (
         <MyProfile
           isEdit={isEdit}
@@ -234,14 +234,14 @@ const ProfilePage = () => {
     },
     {
       key: 'exam-id',
-      label: <p className="text-base font-semibold">Exam ID</p>,
+      label: <p className="text-base font-semibold text-gray-800">Exam ID</p>,
       children: <SubjectList isEdit={isEdit} />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
     },
     {
       key: 'profile',
-      label: <p className="text-base font-semibold">Profile</p>,
+      label: <p className="text-base font-semibold text-gray-800">Profile</p>,
       children: <ProfileList isEdit={isEdit} />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
@@ -250,7 +250,7 @@ const ProfilePage = () => {
   const mySecurityItems: CollapseProps['items'] = [
     {
       key: 'password',
-      label: <p className="text-base font-semibold">Password</p>,
+      label: <p className="text-base font-semibold text-gray-800">Password</p>,
       children: <MyPasword setIsChangePassword={setIsChangePassword} />,
       showArrow: false,
       collapsible: 'icon',
@@ -382,6 +382,7 @@ const ProfilePage = () => {
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}
                 setAvatar={handleSetAvatar}
+                avatar={avatar}
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
               />

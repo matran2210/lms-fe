@@ -218,7 +218,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="flex flex-auto justify-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
+                  <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -494,11 +494,14 @@ const TextWrapper = ({
 }) => {
   return (
     <li
-      className={clsx('group mb-4 flex gap-[1.4rem] text-sm md:text-base', {
-        'transition-[margin]': isEdit,
-        '!block': isInForm && isEdit,
-        hidden: hiddenOnEdit,
-      })}
+      className={clsx(
+        'group mb-6 flex gap-[1.4rem] text-sm md:mb-4 md:text-base',
+        {
+          'transition-[margin]': isEdit,
+          '!block': isInForm && isEdit,
+          hidden: hiddenOnEdit,
+        },
+      )}
     >
       <div
         className={clsx({
@@ -529,7 +532,7 @@ const TextWrapper = ({
       </div>
       <div
         className={clsx(
-          'flex flex-auto justify-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start',
+          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start',
           {
             '!hidden !max-w-full lg:!block': isEdit,
           },
