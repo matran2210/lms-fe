@@ -25,6 +25,7 @@ interface ModalResizeableProps {
     | 'center right'
     | 'center'
   className?: string
+  draggableFull?: boolean
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -39,6 +40,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   handleCloseScratchPad,
   position = 'center',
   className,
+  draggableFull = false,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -107,7 +109,11 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         border: '1px solid #DCDDDD',
       }}
       dragHandleClassName={
-        dragHandleClassName ? dragHandleClassName : 'modal-dragger'
+        draggableFull
+          ? undefined
+          : dragHandleClassName
+            ? dragHandleClassName
+            : 'modal-dragger'
       }
       className={clsx(styles.modalResizeable, 'rounded-xl', className)}
     >

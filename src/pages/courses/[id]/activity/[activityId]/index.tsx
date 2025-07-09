@@ -717,6 +717,7 @@ const ActivityPage = () => {
                       </button>
                     </div>
                   }
+                  draggableFull
                 >
                   <div className="h-full bg-white">
                     <EditorReader
