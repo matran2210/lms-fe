@@ -4,9 +4,9 @@ import Layout from '@components/layout'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { PageLink, TitleSidebar } from 'src/constants'
 import { UserApi } from '@pages/api/user'
-import { useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { IExamInformation } from '@components/profile/ExamInformation/type'
-import { useQuery } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
 import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { isEmpty } from 'lodash'
@@ -14,18 +14,22 @@ import NameNoActionCell from '@components/teacher/components/NameNoActionCell'
 import { getDuration } from '@utils/index'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
 import { PencilV2Icon } from '@assets/icons'
-import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
+import ExaminationInfo, {
+  InfoItemProps,
+} from '@components/mycourses/course-detail/ExaminationInfo'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { useRouter } from 'next/router'
 
 const ExamInformation = () => {
-  const { isAlwaysShowSidebar, isTabletView } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentRow, setCurrentRow] = useState<IExamInformation>()
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const router = useRouter()
 
+  const observer = useRef<IntersectionObserver>()
   const handleBack = () => {
     router.push(PageLink.COURSES)
   }
@@ -33,17 +37,49 @@ const ExamInformation = () => {
   /**
    * @description sử dụng react-query để lấy data
    */
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [UserKey.ExamList, pageIndex, pageSize],
-    queryFn: () => {
-      return UserApi.getExamination(pageIndex || 1, pageSize)
-    },
-    select: (data) => {
-      return data.data.data
-    },
-    staleTime: 0,
-  })
+  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
+    useInfiniteQuery({
+      queryKey: ['examList'],
+      queryFn: ({ pageParam }) =>
+        UserApi.getExamination(pageParam || 1, pageSize),
+      getNextPageParam: (lastPage, allPages) => {
+        console.log(allPages, 'allPages')
+        return lastPage?.data?.data?.data?.length &&
+          allPages?.length < lastPage?.data?.data?.metadata?.total_pages
+          ? allPages?.length + 1
+          : undefined
+      },
+      retry: false,
+    })
 
+  const dataTable = useMemo(() => {
+    return data?.pages.reduce((acc: IExamInformation[], page) => {
+      return [...acc, ...page?.data?.data?.data]
+    }, [])
+  }, [data])
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return
+
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          console.log('fetchNextPage')
+          fetchNextPage()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetching, isLoading],
+  )
+
+  const handleEdit = (record: IExamInformation) => {
+    setIsDrawerOpen(true)
+    setCurrentRow(record)
+  }
   const textStyle = 'text-base font-medium text-gray-800'
 
   const columnsValue: ColumnsType<IExamInformation> = [
@@ -99,10 +135,7 @@ const ExamInformation = () => {
                     {
                       icon: <PencilV2Icon className="h-5 w-5" />,
                       nameAction: 'Edit',
-                      action: () => {
-                        setIsDrawerOpen(true)
-                        setCurrentRow(record)
-                      },
+                      action: () => handleEdit(record),
                     },
                   ]}
                 />
@@ -113,35 +146,84 @@ const ExamInformation = () => {
     },
   ]
 
+  const InfoItem = ({ label, value }: InfoItemProps) => {
+    return (
+      <div className="flex justify-start gap-2 text-sm font-normal text-gray-400">
+        <div>{label}</div>
+        <div className="flex items-center gap-2 text-sm font-medium text-gray-800">
+          {value || '-'}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
-      <div className="mt-10">
+      <div className="mt-4 lg:mt-10">
         <HeaderMobile
           title={TitleSidebar.EXAM_LIST}
-          showIcon={isTabletView}
+          showIcon={isTabletView || isMobileView}
           onBack={handleBack}
         />
-        <div className="mt-8">
-          <SappTable
-            columns={columnsValue}
-            data={data?.data ?? []}
-            pagination={{
-              current: pageIndex,
-              pageSize: pageSize,
-              total: data?.metadata?.total_records,
-            }}
-            loading={isLoading}
-            isShowPagination={false}
-            className="style-table-v2"
-          />
-          {!isEmpty(data?.data) && (
-            <PaginationSappV2
-              currentPage={data?.metadata?.page_index || 1}
-              pageSize={data?.metadata?.page_size || 10}
-              totalItems={data?.metadata?.total_records || 0}
-              setCurrentPage={setPageIndex}
-              setPageSize={setPageSize}
-            />
+        <div className="mt-6 md:mt-8">
+          {isMobileView ? (
+            <div className="flex flex-col gap-4 overflow-y-auto">
+              {dataTable?.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex w-full flex-col rounded-xl bg-white p-4 text-sm shadow-small md:text-base"
+                  ref={lastElementRef}
+                >
+                  <div className="mb-4 text-base font-semibold text-gray-800">
+                    {item?.class?.course?.name}
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <InfoItem label="Class Code:" value={item?.class?.code} />
+                    <InfoItem
+                      label="Program:"
+                      value={item?.class?.course?.course_categories[0]?.name}
+                    />
+                    <InfoItem
+                      label="Duration:"
+                      value={getDuration(item?.started_at, item?.finished_at)}
+                    />
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <div className="text-sm font-medium text-gray-800 underline">
+                      Edit
+                    </div>
+                    <div onClick={() => handleEdit(item)}>
+                      <PencilV2Icon />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <SappTable
+                columns={columnsValue}
+                data={dataTable?.data ?? []}
+                pagination={{
+                  current: pageIndex,
+                  pageSize: pageSize,
+                  total: dataTable?.metadata?.total_records,
+                }}
+                loading={isLoading}
+                isShowPagination={false}
+                className="style-table-v2"
+              />
+              {!isEmpty(dataTable) && (
+                <PaginationSappV2
+                  currentPage={dataTable?.metadata?.page_index || 1}
+                  pageSize={dataTable?.metadata?.page_size || 10}
+                  totalItems={dataTable?.metadata?.total_records || 0}
+                  setCurrentPage={setPageIndex}
+                  setPageSize={setPageSize}
+                />
+              )}
+            </>
           )}
         </div>
       </div>
