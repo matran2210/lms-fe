@@ -33,7 +33,7 @@ interface IProps {
   isUnderLine?: boolean
   customFooter?: ReactNode
   className?: string
-  gapContent?: number
+  gapContent?: string
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -67,7 +67,7 @@ const SappModalV3 = ({
   isUnderLine = false,
   className,
   customFooter,
-  gapContent = 10,
+  gapContent = 'gap-4 md:gap-10',
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel
@@ -83,19 +83,19 @@ const SappModalV3 = ({
       {...otherProps}
     >
       {icon && (
-        <div className="flex justify-center">
+        <div className="mb-6 flex justify-center md:mb-10">
           <div className="w-fit">{icon}</div>
         </div>
       )}
       <div
-        className={clsx(`flex flex-col gap-${gapContent}`, {
-          'pb-10': showFooter,
+        className={clsx(`flex flex-col ${gapContent}`, {
+          'pb-6 md:pb-10': showFooter,
         })}
       >
         {header && (
           <div
             className={clsx(
-              'flex justify-center text-3xl font-semibold text-gray-800',
+              'flex justify-center text-2xl font-semibold text-gray-800 md:text-3xl',
               { 'mb-4': !content && !children },
               headerClassName,
             )}
@@ -104,7 +104,7 @@ const SappModalV3 = ({
           </div>
         )}
         {(content || children) && (
-          <div className="text-center text-base text-gray-800">
+          <div className="text-center text-sm text-gray-800 md:text-base">
             {content ?? children}
           </div>
         )}
