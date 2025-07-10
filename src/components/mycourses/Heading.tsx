@@ -13,7 +13,7 @@ interface IProps {
 const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
   return (
     <div
-      className={clsx('w-full rounded-md p-3 md:p-6 lg:px-8 lg:py-6', {
+      className={clsx('w-full rounded-xl p-3 md:p-6 lg:px-8 lg:py-6', {
         'shadow-sidebar': showShadow === true,
       })}
     >
