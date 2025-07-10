@@ -1,7 +1,8 @@
 import { ClockIcon } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import SappButton from '@components/base/button/SappButton'
+import ButtonText from '@components/base/button/ButtonText'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 import { formatTime } from '@components/common/timer'
 import PopUpRemindEntrance from '@components/popUpRemindEntrance'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -10,10 +11,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
-import CardCourse from '@components/common/CardCourse/CardCourse'
-import { AccessIcon } from '@assets/icons/entranceTest'
-import Link from 'next/link'
-import ButtonText from '@components/base/button/ButtonText'
 
 interface EntranceTestProps {
   data: {

@@ -12,16 +12,20 @@ const SappBreadCrumbs = ({
   isTeacher?: boolean
 }) => {
   const lastIndex = breadcrumbs.length - 1
-
+  const handleTitleDisplay = (title: string, length: number) => {
+    const isLong = title?.length > length
+    return isLong ? title.slice(0, length) + '...' : title
+  }
   return (
-    <nav aria-label="breadcrumb">
+    <nav aria-label="breadcrumb" className="hidden lg:block">
       <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
         {breadcrumbs.map((breadcrumb, index) => {
           const isLast = index === lastIndex
+          const titleDisplay = handleTitleDisplay(
+            breadcrumb.title,
+            isLast ? 60 : 30,
+          )
           const isLong = breadcrumb.title?.length > 30
-          const titleDisplay = isLong
-            ? breadcrumb.title.slice(0, 30) + '...'
-            : breadcrumb.title
 
           return (
             <React.Fragment key={breadcrumb.title}>
@@ -32,7 +36,7 @@ const SappBreadCrumbs = ({
                 )}
               >
                 {isLast ? (
-                  <span>{breadcrumb.title}</span>
+                  <span>{titleDisplay}</span>
                 ) : (
                   <Link href={breadcrumb.link}>
                     <div>

@@ -2933,7 +2933,7 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
                       onMouseDown={() => setStartResize(true)}
                       onTouchStart={(e) => {
                         e.preventDefault()
@@ -2943,7 +2943,7 @@ const TestDetail = () => {
                       onMouseUp={() => setStartResize(false)}
                       onTouchEnd={() => setStartResize(false)}
                     >
-                      <div className="z-10 h-8 w-8 rounded-full bg-white">
+                      <div className="h-8 w-8 rounded-full bg-white">
                         <ResizeIcon />
                       </div>
                     </div>
@@ -3013,7 +3013,7 @@ const TestDetail = () => {
                       }}
                       className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      {/* {currentTabContent?.topicDescription?.description && (
+                      {currentTabContent?.topicDescription?.description && (
                         <HighlightableHTML
                           initialHTML={
                             currentTabContent?.topicDescription?.description ||
@@ -3022,15 +3022,15 @@ const TestDetail = () => {
                           storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
                           className="mb-4"
                         />
-                      )} */}
-                      <EditorReader
+                      )}
+                      {/* <EditorReader
                         className="mb-4"
                         text_editor_content={
                           currentTabContent?.topicDescription?.description
                         }
                         highlighted={currentTabContent?.hightlightTopic}
                         highlighArea="hightlight_area_topic"
-                      />
+                      /> */}
                       {currentTabContent?.topicDescription?.files?.length > 0 &&
                         currentTabContent?.topicDescription?.files?.map(
                           (e: any, index: number) => {
