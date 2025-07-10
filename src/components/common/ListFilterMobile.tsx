@@ -32,7 +32,7 @@ const ListFilterMobile = ({ setOpenChooseItem }: IProps) => {
     {
       id: 3,
       name: 'Unit',
-      isDisabled: !watch('activity'),
+      isDisabled: !watch('subsection'),
       type: 'unit',
     },
     {
