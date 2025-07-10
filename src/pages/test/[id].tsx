@@ -132,7 +132,9 @@ const TestDetail = () => {
             label: (
               <span className="flex items-center gap-1 text-base font-normal">
                 Requirement {index + 1}
-                {hasAnswer && <CheckCircleOutlineYellow />}
+                {hasAnswer && (
+                  <CheckCircleOutlineYellow className="text-primary" />
+                )}
               </span>
             ),
             key: index,

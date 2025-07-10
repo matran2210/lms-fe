@@ -1,6 +1,10 @@
 import React from 'react'
 
-export const CheckCircleOutlineYellow = () => {
+export const CheckCircleOutlineYellow = ({
+  className,
+}: {
+  className?: string
+}) => {
   return (
     <svg
       width="16"
@@ -8,12 +12,13 @@ export const CheckCircleOutlineYellow = () => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M14.6693 8.00065C14.6693 11.6825 11.6845 14.6673 8.0026 14.6673C4.32071 14.6673 1.33594 11.6825 1.33594 8.00065C1.33594 4.31875 4.32071 1.33398 8.0026 1.33398C11.6845 1.33398 14.6693 4.31875 14.6693 8.00065ZM10.6895 5.98043C10.8848 6.17569 10.8848 6.49228 10.6895 6.68754L7.35616 10.0209C7.1609 10.2161 6.84431 10.2161 6.64905 10.0209L5.31572 8.68754C5.12046 8.49228 5.12046 8.17569 5.31572 7.98043C5.51098 7.78517 5.82756 7.78517 6.02282 7.98043L7.0026 8.96021L8.49249 7.47032L9.98238 5.98043C10.1776 5.78517 10.4942 5.78517 10.6895 5.98043Z"
-        fill="#FFB700"
+        fill="currentColor"
       />
     </svg>
   )

@@ -1,29 +1,13 @@
-import { EditIcon, PencilV2Icon } from '@assets/icons'
+import { ClockIcon, PencilV2Icon } from '@assets/icons'
+import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
-import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  VALIDATE_MAX,
-  VALIDATE_MIN,
-  VALIDATE_REQUIRED,
-} from '@utils/helpers/ValidateMessage'
+import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
-import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
-import { useForm } from 'react-hook-form'
+import { Dispatch, MutableRefObject, SetStateAction, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import profile from 'src/assets/images/bg_profile.svg'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
@@ -33,14 +17,6 @@ import {
   updateUserAvatar,
   userReducer,
 } from 'src/redux/slice/User/User'
-import { z } from 'zod'
-
-const schema = z.object({
-  full_name: z
-    .string({ required_error: VALIDATE_REQUIRED })
-    .min(3, { message: VALIDATE_MIN('Fullname', 3) })
-    .max(100, { message: VALIDATE_MAX('Fullname', 100) }),
-})
 interface IProps {
   isEdit: boolean
   avatar: File | undefined
@@ -50,6 +26,7 @@ interface IProps {
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
+  setIsEdit: (edit: boolean) => void
 }
 const ProfileHeader = ({
   isEdit,
@@ -58,51 +35,15 @@ const ProfileHeader = ({
   inputFileRef,
   reViewImageSrc,
   setReViewImageSrc,
+  setIsEdit,
 }: IProps) => {
   const dispatch = useAppDispatch()
-  const [openEditName, setOpenEditName] = useState(false)
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
-  // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
-  const { control, setValue, handleSubmit, reset } = useForm<{
-    full_name: string
-  }>({
-    resolver: zodResolver(schema),
-  })
+
   // Sử dụng state để lưu giá trị của hình ảnh xem trước
 
-  /**
-   * Hàm để chuyển sang chế độ chỉnh sửa form
-   */
-  const handleChangeToEditForm = () => {
-    // Đặt giá trị cho trường full_name bằng tên hiện tại của người dùng
-    setValue('full_name', user?.detail?.full_name)
-    // Đặt trạng thái isEdit thành true
-    setOpenEditName(true)
-  }
-  /**
-   * Hàm để chuyển sang chế độ view
-   */
-  const handleChangeToPreview = () => {
-    // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
-    setOpenEditName(false)
-    // Đặt lại giá trị của form về ban đầu
-    setAvatar(undefined)
-    setReViewImageSrc(undefined)
-    reset(
-      {
-        full_name: user.detail.full_name,
-      },
-      {
-        keepDirty: false,
-        keepErrors: false,
-        keepDirtyValues: false,
-        keepIsValid: false,
-        keepTouched: false,
-      },
-    )
-  }
   /**
    * Một hàm để xử lý khi người dùng thay đổi file ảnh tải lên
    * @param {any} e - Đối tượng sự kiện của input file
@@ -138,6 +79,12 @@ const ProfileHeader = ({
     setReViewImageSrc(blankAvatar)
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
+    setIsEdit(false)
+  }
+  const onCancelUploadAvatar = () => {
+    // Đặt giá trị cho state avatar thành undefined
+    setAvatar(undefined)
+    setIsEdit(false)
   }
 
   /**
@@ -186,11 +133,10 @@ const ProfileHeader = ({
         // Gọi hành động thunk getMe để lấy lại thông tin người dùng
         dispatch(getMe())
         // Đặt trạng thái isEdit thành false
-        setOpenEditName(false)
+        setIsEdit(false)
         return
       }
-      // Gọi hành động thunk updateUser để cập nhật tên của người dùng
-      await dispatch(updateUser({ full_name })).unwrap()
+
       // Nếu có avatar
       if (avatar) {
         // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
@@ -201,9 +147,9 @@ const ProfileHeader = ({
       }
       dispatch(getMe())
       // Đặt trạng thái isEdit thành false
-      setOpenEditName(false)
+      setIsEdit(false)
     } catch (error: any) {
-      setOpenEditName(false)
+      setIsEdit(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
         await dispatch(getLogoutUser())
@@ -217,7 +163,7 @@ const ProfileHeader = ({
   return (
     <div className="flex flex-col items-center justify-start gap-4 md:flex-row md:gap-6">
       <div className="relative pb-3 md:pb-0">
-        <div className="relative h-[100px] w-[100px] shrink rounded-full border-2 border-primary">
+        <div className="relative h-[100px] w-[100px] shrink rounded-full">
           <div
             className={`${
               loading ? 'animate-pulse' : ''
@@ -295,18 +241,44 @@ const ProfileHeader = ({
               />
             </div>
           </div>
+          {isEdit ? (
+            <div
+              className={clsx(
+                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-learning-activity md:hidden',
+                {
+                  'cursor-not-allowed': loadingEditAvatar,
+                  'cursor-pointer': !loadingEditAvatar,
+                },
+              )}
+              onClick={() =>
+                avatar
+                  ? onSubmit({ full_name: user.detail.full_name })
+                  : onCancelUploadAvatar()
+              }
+            >
+              {avatar ? (
+                <CheckCircleOutlineYellow
+                  className={clsx('h-5 w-5 text-primary', {
+                    'animate-spin': loadingEditAvatar,
+                  })}
+                />
+              ) : (
+                <CloseIconV2 className="h-5 w-5" />
+              )}
+            </div>
+          ) : (
+            <div
+              className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-learning-activity hover:text-primary md:hidden"
+              onClick={() => setIsEdit(true)}
+            >
+              <PencilV2Icon className="h-5 w-5" />
+            </div>
+          )}
         </div>
-        <div className="absolute bottom-0 left-[50%] z-10 translate-x-[-50%] md:hidden">
-          <Tag
-            bordered={false}
-            className="m-0 rounded bg-success-50 px-2 py-[2px] text-sm font-normal text-success"
-          >
-            Active
-          </Tag>
-        </div>
+
         {isEdit && (
           <div
-            className="opacity-1 absolute bottom-2 right-0 z-10 w-fit"
+            className="opacity-1 absolute bottom-2 right-0 z-10 hidden w-fit md:block"
             onClick={handlerCancelUploadAvatar}
           >
             <div
@@ -335,70 +307,22 @@ const ProfileHeader = ({
       <div className="w-full flex-1 md:my-6 lg:my-0">
         <div
           className={clsx(
-            'mb-3 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:text-2xl',
-            {
-              'max-w-[600px]': !openEditName,
-            },
+            'mb-3 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:max-w-[600px] md:text-2xl',
           )}
         >
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex w-full justify-center md:justify-start"
-          >
-            <div className="flex w-full items-center justify-center gap-3 md:justify-start">
-              {openEditName ? (
-                <div className="flex w-full flex-col items-center gap-2">
-                  <HookFormTextField
-                    placeholder="Enter Text..."
-                    control={control}
-                    name="full_name"
-                    skeleton={loadingEditName}
-                    className="h-full w-full"
-                    inputClassName="rounded-lg h-full !py-[10px] bg-white !border-gray-300"
-                    textSize="sm"
-                  ></HookFormTextField>
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <ButtonSecondary
-                      className="w-full !bg-white"
-                      full
-                      size="medium"
-                      title="Cancel"
-                      onClick={handleChangeToPreview}
-                      disabled={loading || loadingEditName}
-                    />
-                    <ButtonPrimary
-                      className="w-full px-4 py-2"
-                      full
-                      size="medium"
-                      title="Confirm"
-                      htmlType="submit"
-                      disabled={loading || loadingEditName}
-                    />
-                  </div>
-                </div>
-              ) : (
-                <TextSkeleton loading={loading || loadingEditName}>
-                  {user.detail.full_name}
-                </TextSkeleton>
-              )}
-              <div className="hidden md:block">
-                <Tag
-                  bordered={false}
-                  className="m-0 rounded bg-success-50 px-2 py-[2px] text-base font-normal text-success"
-                >
-                  Active
-                </Tag>
-              </div>
-              {!openEditName && (
-                <div
-                  className="cursor-pointer hover:text-primary md:hidden"
-                  onClick={handleChangeToEditForm}
-                >
-                  <PencilV2Icon />
-                </div>
-              )}
+          <div className="flex w-full items-center justify-center gap-3 md:justify-start">
+            <TextSkeleton loading={loading || loadingEditName}>
+              {user.detail.full_name}
+            </TextSkeleton>
+            <div>
+              <Tag
+                bordered={false}
+                className="m-0 rounded bg-success-50 px-2 py-[2px] text-sm font-normal text-success md:text-base"
+              >
+                Active
+              </Tag>
             </div>
-          </form>
+          </div>
         </div>
         <div className="flex items-center justify-center gap-4 text-sm text-gray-400 md:justify-start md:gap-6">
           <div className="flex items-center justify-center gap-[5px] md:mb-0 md:justify-start">
