@@ -1,4 +1,10 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@assets/icons'
+import {
+  DeleteIcon,
+  EditIcon,
+  EllipsisIconV2,
+  PencilV2Icon,
+  ViewIcon,
+} from '@assets/icons'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -30,6 +36,7 @@ import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
+import ActionCellV2 from '@components/base/action/ActionCellV2'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -304,25 +311,75 @@ const LearningNotesList = () => {
               />
             )}
 
-            <div>
+            <div className="result-scroll mt-4 h-[calc(100vh-10rem)] overflow-y-auto">
               {!isEmpty(notesListData?.notes) ? (
                 <>
                   {notesListData?.notes?.map((note: any, index: number) => {
                     const isExpanded = expandedNotes.includes(note?.id)
+                    const isEdit = activityId === note?.course_section_id
+                    const handleEdit = () => {
+                      if (
+                        !getNotesData.some((item) => item.id.includes(note?.id))
+                      ) {
+                        handleOpenNote(note, false)
+
+                        onClose()
+                      }
+                    }
+                    const handleView = async () => {
+                      await router.push({
+                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                        query: {
+                          note_id: note?.id,
+                        },
+                      })
+                      handleOpenNote(note, true)
+                      onClose()
+                    }
+
+                    const listAction = [
+                      ...(isEdit
+                        ? [
+                            {
+                              icon: <PencilV2Icon className="h-5 w-5" />,
+                              nameAction: 'Edit',
+                              action: handleEdit,
+                            },
+                          ]
+                        : []),
+                      {
+                        icon: <DeleteIcon />,
+                        nameAction: 'Delete',
+                        action: () => handleDelete(note?.id),
+                      },
+                    ]
+
                     return (
                       <div
-                        className="mt-6 border border-[#DCDDDD] p-6 last:mb-6"
+                        className="cursor-pointer rounded-2xl p-4 hover:bg-primary-50"
                         key={note?.id}
+                        onClick={handleView}
                       >
+                        <div className="flex justify-between">
+                          <div className="text-base font-semibold text-gray-800">
+                            {note?.name}
+                          </div>
+                          <div onClick={(e) => e.stopPropagation()}>
+                            <ActionCellV2
+                              icon={<EllipsisIconV2 />}
+                              listAction={listAction}
+                            />
+                          </div>
+                        </div>
                         <div
-                          className="mb-1.5 flex items-center pb-px"
+                          className="mt-1 flex items-center text-sm font-normal text-gray-400"
                           onClick={() => onClose()}
                         >
                           <SappBreadcrumbNotLink
                             paths={[...note?.course_section_path].reverse()}
                           />
                         </div>
-                        <div className="text-base font-normal text-[#050505]">
+                        <div className="mt-4 text-base font-normal text-gray-800">
                           <span
                             className={`whitespace-pre-wrap break-all ${
                               isExpanded ? '' : 'line-clamp-3'
@@ -332,7 +389,7 @@ const LearningNotesList = () => {
                           </span>
                           {!isExpanded && note?.description?.length > 230 ? (
                             <button
-                              className="block text-base font-normal text-[#A1A1A1]"
+                              className="block text-base font-normal text-gray-400"
                               onClick={() => toggleExpand(note?.id)}
                             >
                               Show more
@@ -352,59 +409,9 @@ const LearningNotesList = () => {
                             </>
                           )}
                         </div>
-                        <div className="mt-5 flex justify-between">
-                          <div className="text-sm font-normal text-[#A1A1A1]">
+                        <div className="mt-4 flex">
+                          <div className="text-sm font-normal text-gray-400">
                             {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
-                          </div>
-                          <div className="flex">
-                            <div className="relative cursor-pointer">
-                              {activityId === note?.course_section_id ? (
-                                <span
-                                  className="notes-list-icon"
-                                  onClick={() => {
-                                    if (
-                                      !getNotesData.some((item) =>
-                                        item.id.includes(note?.id),
-                                      )
-                                    ) {
-                                      handleOpenNote(note, false)
-
-                                      onClose()
-                                    }
-                                  }}
-                                >
-                                  <EditIcon />
-                                </span>
-                              ) : (
-                                <>
-                                  <div
-                                    onClick={async () => {
-                                      await router.push({
-                                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                                        query: {
-                                          note_id: note?.id,
-                                        },
-                                      })
-                                      handleOpenNote(note, true)
-                                      onClose()
-                                    }}
-                                  >
-                                    <span className="notes-list-icon">
-                                      <ViewIcon />
-                                    </span>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                            <div className="ms-4 cursor-pointer">
-                              <span
-                                onClick={() => {
-                                  handleDelete(note?.id)
-                                }}
-                              >
-                                <DeleteIcon />
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>

@@ -95,12 +95,16 @@ const ExamInformation = () => {
             {!record?.is_final_examination_subject &&
               record?.remaining_changes > 0 && (
                 <ActionCellV2
-                  icon={<PencilV2Icon className="h-4 w-4" />}
-                  nameAction="Edit"
-                  action={() => {
-                    setIsDrawerOpen(true)
-                    setCurrentRow(record)
-                  }}
+                  listAction={[
+                    {
+                      icon: <PencilV2Icon className="h-5 w-5" />,
+                      nameAction: 'Edit',
+                      action: () => {
+                        setIsDrawerOpen(true)
+                        setCurrentRow(record)
+                      },
+                    },
+                  ]}
                 />
               )}
           </div>
