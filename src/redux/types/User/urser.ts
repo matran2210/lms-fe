@@ -32,6 +32,7 @@ export interface IUser {
     ACCA?: ICourseTabGroup
     CFA?: ICourseTabGroup
   }
+  keycloak_user_id: string
 }
 interface IUserContact {
   id: string
