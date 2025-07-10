@@ -28,6 +28,7 @@ type Props = {
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   class_user_id?: string
+  handleSetCurrentVideoCallback: (video: IVideo) => void
 }
 
 /**
@@ -45,6 +46,7 @@ const VideoDocument = ({
   document_id,
   quizId,
   grading_preference,
+  handleSetCurrentVideoCallback,
 }: Props) => {
   const {
     control: controlAnswer,
@@ -126,6 +128,7 @@ const VideoDocument = ({
     }
     // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
+    handleSetCurrentVideoCallback(v)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
         if (e?.time !== undefined && e?.id !== undefined) {
@@ -333,7 +336,7 @@ const VideoDocument = ({
   }, [atLastQuestion, isConfirmQuestion])
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex items-center justify-between gap-x-10 gap-y-2 text-primary">
         <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
           {(videos as IVideo[])?.length > 1 &&
@@ -367,7 +370,7 @@ const VideoDocument = ({
               )
             })}
         </div>
-        <div className="group relative z-30 flex cursor-pointer select-none items-center">
+        <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <div className="flex items-center gap-2">
               <TimeLineIcon />

@@ -33,10 +33,7 @@ export interface Class {
 }
 
 export interface ExaminationForm {
-  examination_subject_id: {
-    label: string
-    value: string
-  }
+  examination_subject_id: string
   note: UploadFile[]
 }
 

@@ -1,0 +1,11 @@
+.custom-ant-pagination {
+  .ant-pagination-item,
+  .ant-pagination-item-active,
+  .ant-pagination-item:focus-visible {
+    @apply border-0 bg-gray-canvas text-gray-600 shadow-none;
+  }
+
+  .ant-pagination-item-active a {
+    @apply text-gray-600;
+  }
+}

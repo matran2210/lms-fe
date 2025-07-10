@@ -29,42 +29,44 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-4 hover:bg-[#FFFBF2]',
+          'cursor-pointer rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 hover:bg-primary-50 md:p-4',
           {
-            'bg-[#FFFBF2]': data.is_current,
+            'bg-primary-50': data.is_current,
           },
         )}
       >
-        <div className="flex items-center">
-          <div className="flex flex-1 justify-between gap-4">
+        <div
+          className="flex items-center"
+          onClick={() =>
+            setSelectedDrawer({
+              status: true,
+              data,
+            })
+          }
+        >
+          <div className="flex flex-1 flex-col justify-between gap-[10px] md:flex-row md:gap-4">
             <div>
-              <span className="text-base font-bold text-secondary">
+              <span className="text-sm font-bold text-gray-800 md:text-base">
                 {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
               </span>
               {data.is_current && (
-                <span className="text-medium-sm ml-[10px] inline-block select-none bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
+                <span className="ml-[10px] inline-block select-none bg-success-50 bg-opacity-5 px-2 py-1 text-sm leading-4 text-success">
                   This device
                 </span>
               )}
             </div>
             <div>
-              <div className="text-right">
-                <span className="text-base font-bold text-secondary">
+              <div className="text-left md:text-right">
+                <span className="text-sm font-bold text-gray-800 md:text-base">
                   Logged in
                 </span>
               </div>
-              <div className="text-sm text-[#A1A1A1]">{formattedDate}</div>
+              <div className="text-xs text-gray-400 md:text-sm">
+                {formattedDate}
+              </div>
             </div>
           </div>
-          <div
-            className="group ml-auto flex w-fit flex-1 cursor-pointer select-none items-center justify-end"
-            onClick={() =>
-              setSelectedDrawer({
-                status: true,
-                data,
-              })
-            }
-          >
+          <div className="group ml-auto hidden w-fit flex-1 cursor-pointer select-none items-center justify-end md:flex">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={24}

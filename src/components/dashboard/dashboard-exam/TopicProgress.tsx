@@ -4,11 +4,12 @@ import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { ITopicProgress } from 'src/type/dashboard'
 import { EChartsOption } from 'echarts'
+import useIsMobile from 'src/hooks/useIsMobile'
 
 const TopicProgress = () => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
-  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const isMobile = useIsMobile()
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -34,9 +35,9 @@ const TopicProgress = () => {
           axisLabel: {
             show: true,
             color: '#374151', // Màu chữ (blue-600)
-            fontSize: 14, // Cỡ chữ
+            fontSize: isMobile ? 12 : 14, // Cỡ chữ
             fontWeight: 500, // Đậm
-            lineHeight: 22,
+            lineHeight: isMobile ? 20 : 22,
             formatter: function (value: string) {
               const maxLength = 10 // số ký tự tối đa muốn hiển thị
               return value.length > maxLength
@@ -97,7 +98,7 @@ const TopicProgress = () => {
               },
             })),
             type: 'bar',
-            barWidth: 66,
+            barWidth: isMobile ? 50 : 66,
           },
         ],
       }
@@ -115,8 +116,6 @@ const TopicProgress = () => {
       if (res && res.success) handleTopicProgress(res.data)
     } catch (error) {
       setOption(undefined)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -126,12 +125,14 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="shadow-matchingquiz flex h-[48vh] flex-col rounded-2xl bg-white p-8 xl:h-auto">
-      <div className="mb-5 pb-3 text-lg font-bold text-gray-800 4xl:text-xl">
+    <div className="shadow-matchingquiz flex flex-col rounded-2xl bg-white p-4 lg:h-[48vh] xl:h-auto xl:p-8">
+      <div className="mb-6 text-lg font-bold text-gray-800 md:mb-5 md:pb-3 xl:text-xl">
         Topic Progress
       </div>
 
-      {option && <EChart option={option} minHeight="450px" />}
+      {option && (
+        <EChart option={option} minHeight={isMobile ? '350px' : '450px'} />
+      )}
     </div>
   )
 }

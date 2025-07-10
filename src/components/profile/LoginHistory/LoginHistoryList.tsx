@@ -14,7 +14,13 @@ const LoginHistoryList = () => {
   const [pageIndex, setPageIndex] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   useEffect(() => {
-    dispatch(getLoginHistory({ page_index: pageIndex, page_size: pageSize }))
+    dispatch(
+      getLoginHistory({
+        page_index: pageIndex,
+        page_size: pageSize,
+        type: 'login',
+      }),
+    )
   }, [])
 
   const handleLoadMoreHistory = () => {

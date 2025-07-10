@@ -3,6 +3,8 @@ import { useForm, useWatch } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { DefaultOptionType } from 'antd/es/select'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { FilterCourseIcon } from 'src/assets/icons'
 
 const FilterCourse = ({
   totalResult,
@@ -17,7 +19,7 @@ const FilterCourse = ({
 }) => {
   const { control, setValue } = useForm()
   const router = useRouter()
-
+  const { isMobileView } = useTailwindBreakpoint()
   const filterValues = useWatch({ control })
 
   useEffect(() => {
@@ -43,26 +45,39 @@ const FilterCourse = ({
   }, [filterValues])
 
   return (
-    <div className="flex items-center md:gap-2 lg:gap-4">
-      <div className="text-base font-medium text-gray-800">
-        {totalResult} Results
-      </div>
-      <div className="flex md:gap-2 lg:gap-4">
-        {listFilter?.map((item, index) => (
-          <SAPPSelectV2
-            key={index}
-            control={control}
-            name={item.name}
-            placeholder={item.placeholder}
-            required
-            onChange={(e) => setValue(item.name, e)}
-            options={item.options ?? []}
-            className="min-w-36"
-            heightCustom="h-10"
-          />
-        ))}
-      </div>
-    </div>
+    <>
+      {isMobileView ? (
+        <>
+          <div className="flex items-center justify-end gap-2">
+            <div>
+              <FilterCourseIcon />
+            </div>
+            <div className="text-base font-normal text-gray-800">Filter</div>
+          </div>
+        </>
+      ) : (
+        <div className="flex items-center md:gap-2 lg:gap-4">
+          <div className="text-base font-medium text-gray-800">
+            {totalResult} Results
+          </div>
+          <div className="flex md:gap-2 lg:gap-4">
+            {listFilter?.map((item, index) => (
+              <SAPPSelectV2
+                key={index}
+                control={control}
+                name={item.name}
+                placeholder={item.placeholder}
+                required
+                onChange={(e) => setValue(item.name, e)}
+                options={item.options ?? []}
+                className="min-w-36"
+                heightCustom="h-10"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

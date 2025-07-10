@@ -5,6 +5,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import React from 'react'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { IActivity } from 'src/type/course/my-course/Activity'
 
 export const download = async (name: string, file_key: string) => {
@@ -27,6 +28,7 @@ interface IProps {
   ) => void
 }
 const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const getItemsActivityResource = [
     {
       key: 'activity_resource',
@@ -41,12 +43,13 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
             <div className="mt-4 select-none text-sm">
               {activity?.files.map((e: any, index: number) => {
                 const isPreviewFile =
+                  isAlwaysShowSidebar &&
                   e.resource.suffix_type !== SUFFIX_TYPE.GENERAL_FILE &&
                   e.resource.name.slice(-4) !== '.csv'
 
                 return (
                   <div
-                    className={clsx(`flex items-start gap-8`, {
+                    className={clsx(`flex items-center gap-8`, {
                       'mb-3': index < activity?.files?.length - 1,
                     })}
                     key={index}
@@ -72,7 +75,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                       </p>
                     </div>
                     <div
-                      className="cursor-pointer text-[#1C274C]"
+                      className="cursor-pointer text-icon hover:text-primary"
                       onClick={() => {
                         download(e?.resource?.name, e?.resource?.file_key)
                         trackGAEvent('Click Button Download Resource Activity')

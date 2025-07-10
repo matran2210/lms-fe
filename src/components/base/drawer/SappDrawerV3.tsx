@@ -3,15 +3,18 @@ import { Drawer, DrawerProps } from 'antd'
 import React, { ReactNode } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
+import ButtonText from '@components/base/button/ButtonText'
+import { CollapseArrowIcon } from '@assets/icons'
 
 interface IProps extends DrawerProps {
   open: boolean
   handleCancel?: () => void
   handleBack?: () => void
-  width?: number
+  width?: string | number
   title: string
   isShowBtnClose?: boolean
   isShowFooter?: boolean
+  isShowHeader?: boolean
   children: ReactNode
   loading?: boolean
   btnSubmitTile?: string
@@ -19,6 +22,10 @@ interface IProps extends DrawerProps {
   sizeTextBtn?: 'small' | 'medium' | 'large' | 'extra'
   submitButtonClassName?: string
   classNameBody?: string
+  classNameHeader?: string
+  cancelButtonCaption?: string
+  cancelButtonClassName?: string
+  isShowBtnBack?: boolean
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -30,6 +37,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   children,
   isShowBtnClose = true,
   isShowFooter = false,
+  isShowHeader = true,
   loading = false,
   className,
   btnSubmitTile,
@@ -37,6 +45,11 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
+  classNameHeader,
+  cancelButtonCaption,
+  cancelButtonClassName,
+  closable,
+  isShowBtnBack = false,
   ...props
 }) => {
   return (
@@ -49,32 +62,59 @@ const SappDrawerV3: React.FC<IProps> = ({
       {...props}
     >
       <div
-        className={clsx('relative h-full w-full bg-white p-8', classNameBody)}
+        className={clsx(
+          'relative h-full w-full bg-white p-4 md:p-6 lg:p-8',
+          classNameBody,
+        )}
       >
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-semibold leading-loose text-secondary">
-              {title}
-            </span>
+        {isShowHeader && (
+          <div
+            className={clsx(
+              'flex items-center justify-between lg:mb-8',
+              classNameHeader,
+            )}
+          >
+            <div className="flex items-center gap-2">
+              {(!isShowBtnClose || isShowBtnBack) && (
+                <div
+                  onClick={handleBack}
+                  className="cursor-pointer"
+                  aria-label="Go back"
+                >
+                  <CollapseArrowIcon className="rotate-90" />
+                </div>
+              )}
+              <span className="text-base font-semibold leading-loose text-secondary md:text-2xl">
+                {title}
+              </span>
+            </div>
+            {closable && isShowBtnClose && (
+              <button
+                onClick={handleCancel}
+                className="cursor-pointer"
+                aria-label="Close"
+              >
+                <CloseIconV2 />
+              </button>
+            )}
           </div>
-          {isShowBtnClose && (
-            <button
-              onClick={handleCancel}
-              className="cursor-pointer"
-              aria-label="Close"
-            >
-              <CloseIconV2 />
-            </button>
-          )}
-        </div>
+        )}
 
         {/* Content */}
         <>{children}</>
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex justify-end px-8 pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
+            {cancelButtonCaption && (
+              <ButtonText
+                title={cancelButtonCaption}
+                className={cancelButtonClassName}
+                onClick={handleCancel}
+                size={sizeTextBtn}
+              />
+            )}
             <ButtonPrimary
               title={btnSubmitTile}
               className={submitButtonClassName}

@@ -11,15 +11,16 @@ import Layout from '@components/layout'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const Dashboard = () => {
   const router = useRouter()
   const { user } = useAppSelector(userReducer)
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
-    <Layout title="Dashboard">
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
       <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-        <div className="py-4.5 mx-auto my-0 flex max-w-[1144px]">
+        <div className="mx-auto my-0 flex max-w-[1144px] py-4.5">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"

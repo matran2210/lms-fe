@@ -16,14 +16,18 @@ import '@styles/globals.scss'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
+import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+import 'entrance-test-result-package/dist/index.css'
+import 'quiz-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import 'sapp-common-package/dist/index.css'
 import { io } from 'socket.io-client'
 import {
   ANIMATION,
@@ -45,8 +49,12 @@ import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-common-package/dist/index.css'
+import 'sapp-notification-test/dist/index.css'
 import '@xyflow/react/dist/style.css'
 import 'preview-part/dist/index.css'
+import { ErrorBoundary } from '@sentry/nextjs'
+import ErrorRedirectPage from './error-redirect'
+import { CourseNoteProvider } from '@contexts/CourseNoteContext'
 
 type MyAppProps = AppProps & {
   Component: {
@@ -291,39 +299,43 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   }, [router])
 
   return (
-    <main>
-      <Metadata />
-      <AntConfigProvider>
-        <PinnedNotifyProvider>
-          <CourseProvider>
-            <QueryClientProvider client={queryClient}>
-              <SocketContext.Provider value={socket}>
-                <Toaster
-                  toastOptions={{
-                    style: {
-                      maxWidth: '400px', // Tăng chiều rộng của toast
-                    },
-                  }}
-                />
-                <SappConfirmDialogContainer />
-                <RouteGuard>
-                  <>
-                    <div className="relative">
-                      <PinnedNotifications />
-                      <Component {...pageProps} />
-                    </div>
-                    <BackToTop />
-                    <Help showHelp={showHelp} />
-                    <LearningNotesList />
-                    <PopupCompletedCourse />
-                  </>
-                </RouteGuard>
-              </SocketContext.Provider>
-            </QueryClientProvider>
-          </CourseProvider>
-        </PinnedNotifyProvider>
-      </AntConfigProvider>
-    </main>
+    <ErrorBoundary fallback={<ErrorRedirectPage />}>
+      <main>
+        <Metadata />
+        <AntConfigProvider>
+          <PinnedNotifyProvider>
+            <CourseProvider>
+              <CourseNoteProvider>
+                <QueryClientProvider client={queryClient}>
+                  <SocketContext.Provider value={socket}>
+                    <Toaster
+                      toastOptions={{
+                        style: {
+                          maxWidth: '400px', // Tăng chiều rộng của toast
+                        },
+                      }}
+                    />
+                    <SappConfirmDialogContainer />
+                    <RouteGuard>
+                      <>
+                        <div className="relative">
+                          <PinnedNotifications />
+                          <Component {...pageProps} />
+                        </div>
+                        <BackToTop />
+                        <Help showHelp={showHelp} />
+                        <LearningNotesList />
+                        <PopupCompletedCourse />
+                      </>
+                    </RouteGuard>
+                  </SocketContext.Provider>
+                </QueryClientProvider>
+              </CourseNoteProvider>
+            </CourseProvider>
+          </PinnedNotifyProvider>
+        </AntConfigProvider>
+      </main>
+    </ErrorBoundary>
   )
 }
 

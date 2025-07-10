@@ -17,7 +17,11 @@ const ButtonText = ({
   ...props
 }: IButtonBaseProps) => {
   let textSizeClass =
-    size === 'small' ? 'text-sm' : size === 'medium' ? 'text-base' : 'text-lg'
+    size === 'small'
+      ? 'text-sm'
+      : size === 'medium'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled

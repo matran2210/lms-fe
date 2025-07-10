@@ -24,6 +24,8 @@ import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../api/courses'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import { HamburgerMenuLargeIcon } from 'src/assets/icons'
+import { useCourseContext } from '@contexts/index'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const DEFAULT_PAGESIZE = 9
 const MASTER = 'Master Finance'
@@ -42,7 +44,9 @@ const MyCourse = () => {
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
@@ -53,6 +57,17 @@ const MyCourse = () => {
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
 
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   const closeUserGuide = () => {
     if (confirmDialogOverLayRef.current) {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
@@ -192,12 +207,19 @@ const MyCourse = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="My Course">
-        <div className="mb-4 mt-2 flex items-center justify-between gap-6 lg:mb-6">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden">
+      <Layout
+        title="My Course"
+        showSidebar={showSidebar || isAlwaysShowSidebar}
+        handleToggleSidebar={handleCloseSidebar}
+      >
+        <div className="mb-4 mt-2 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4">
+          <div
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
+            onClick={handleOpenSidebar}
+          >
             <HamburgerMenuLargeIcon />
           </div>
-          <div className="w-full rounded-lg bg-white px-8 py-4">
+          <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
             <SearchForm
               placeholder={MY_COURSES.placeholderSearchV2}
               formStyle="w-full flex items-center"
@@ -216,7 +238,7 @@ const MyCourse = () => {
           </div>
         </div>
 
-        <div className="mx-auto my-0 flex justify-between rounded-md bg-white shadow-sidebar">
+        <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">
           <div
             className={`heading relative rounded-md bg-white 
         ${guideStatus && guideStep === 4 ? 'z-50' : ''}
@@ -242,7 +264,7 @@ const MyCourse = () => {
             )}
           </div>
           <div
-            className={`mr-6 grid place-items-center rounded-md bg-white lg:mr-8
+            className={`mr-6 hidden items-center rounded-md bg-white md:flex lg:mr-8
         ${guideStatus && guideStep === 5 ? 'z-50' : ''}
       `}
             data-aos={ANIMATION.DATA_AOS}
@@ -281,7 +303,9 @@ const MyCourse = () => {
           </div>
         </div>
         <div className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11">
-          <h1 className="text-2xl font-semibold text-gray-800">My Courses</h1>
+          <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
+            My Courses
+          </h1>
           <div className={`relative`}>
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
             {guideStatus && guideStep === 7 && (

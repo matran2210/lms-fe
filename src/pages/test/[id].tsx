@@ -132,7 +132,9 @@ const TestDetail = () => {
             label: (
               <span className="flex items-center gap-1 text-base font-normal">
                 Requirement {index + 1}
-                {hasAnswer && <CheckCircleOutlineYellow />}
+                {hasAnswer && (
+                  <CheckCircleOutlineYellow className="text-primary" />
+                )}
               </span>
             ),
             key: index,
@@ -1283,7 +1285,7 @@ const TestDetail = () => {
 
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
-    setEssayData(undefined)
+    // setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     const doAfterSetState = () => {
@@ -2261,8 +2263,8 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements &&
-      !essayData
+      currentTabContent?.data?.requirements
+      // && !essayData
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
@@ -2673,7 +2675,7 @@ const TestDetail = () => {
                     handleChangeTab={async (id?: string) => {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      setEssayData(undefined)
+                      // setEssayData(undefined)
                       handleChangeTab(id)
                     }}
                     hasScrollBar={hasScrollBar}
@@ -2705,7 +2707,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
+                        className="absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}
@@ -3118,7 +3120,7 @@ const TestDetail = () => {
                       )
                     } else if (type === 'event-test') {
                       router.replace(`/event-test`)
-                      setSubmitEventTest(true)
+                      // setSubmitEventTest(true)
                     } else {
                       if (
                         type !== 'entrance' &&
@@ -3264,7 +3266,7 @@ const TestDetail = () => {
           }
         >
           <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
-            <NotesOutline className="h-8 w-8" />
+            <NotesOutline className="h-8 w-8 text-white" />
             <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
             {showWarning && (
               <PulsingExclamation

@@ -8,6 +8,11 @@ interface LearningRadarChartProps {
   isNormal: boolean
 }
 
+interface TooltipParams {
+  value: number[]
+  name: string
+}
+
 const LearningRadarChart: React.FC<LearningRadarChartProps> = ({
   results,
   isNormal,
@@ -15,24 +20,37 @@ const LearningRadarChart: React.FC<LearningRadarChartProps> = ({
   const option = useMemo(() => {
     if (!results || results.length === 0) return {}
 
-    const maxValues = results.map((result: any) => {
-      const learning = result?.score || 0
-      const mock = result?.mock_test_score || 0
-      return Math.max(learning, mock, 100)
-    })
-    const indicator = results.map((result: any, idx: number) => ({
-      text: result?.short_name || result?.name,
-      max: maxValues[idx],
-    }))
+    const maxValues = results.map(
+      (result: ILearningResult | IMockTestResult) => {
+        const learning = 'score' in result ? result.score : 0
+        const mock =
+          'mock_test_score' in result ? result.mock_test_score || 0 : 0
+        return Math.max(learning, mock, 100)
+      },
+    )
+    const indicator = results.map(
+      (result: ILearningResult | IMockTestResult, idx: number) => ({
+        text:
+          'short_name' in result
+            ? result.short_name || ''
+            : 'name' in result
+              ? (result as IMockTestResult)?.name
+              : '',
+        max: maxValues[idx],
+      }),
+    )
 
     return {
       tooltip: {
         trigger: 'item',
-        formatter: function (params: any) {
+        formatter: function (params: TooltipParams) {
           const values = params.value
-          const indicators = results.map((e: any) => e.name)
+          const indicators = results.map(
+            (e: ILearningResult | IMockTestResult) =>
+              'name' in e ? e.name : '',
+          )
           let tooltipText = `<strong>${params.name}</strong><br/>`
-          values.forEach((val: any, i: number) => {
+          values.forEach((val: number, i: number) => {
             tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
           })
           return tooltipText

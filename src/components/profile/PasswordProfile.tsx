@@ -126,20 +126,23 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       showFooter={false}
       classNameModal="sapp-profile-modal"
     >
-      <div className="flex flex-col items-center justify-between gap-10">
+      <div className="flex flex-col items-center justify-between gap-6 md:gap-10">
         <div className="text-primary">
-          <Icon type="mail-box" />
+          <Icon
+            type="mail-box"
+            className="h-12 w-12 md:!h-[88px] md:!w-[88px]"
+          />
         </div>
-        <div className="flex flex-col items-center justify-between gap-8">
-          <div className="text-center text-xl">
+        <div className="flex w-full flex-col items-center justify-between gap-4 md:gap-8">
+          <div className="text-center text-sm md:text-xl">
             <div>Please enter the code we sent to</div>
             <div>
-              <span className="font-semibold">
+              <span className="text-xl font-semibold">
                 {user?.user_contacts?.[0]?.email || ''}
               </span>
             </div>
           </div>
-          <div>
+          <div className="w-full">
             <div className="mb-2">
               <Input.OTP
                 length={otpLength}
@@ -147,6 +150,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
                 size="large"
                 rootClassName="profile-change-password"
                 status={errorMessage ? 'error' : undefined}
+                className="profile-change-password"
               />
             </div>
             <div className="flex justify-between">
@@ -168,7 +172,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
           <ButtonPrimary
             title="Verify Code"
             full={true}
-            className="mb-4 rounded-lg font-semibold"
+            className="mb-4 rounded-lg py-2 font-semibold"
             size="medium"
             loading={loading}
             onClick={verifyCode}

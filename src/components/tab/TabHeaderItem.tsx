@@ -6,7 +6,7 @@ interface IProps {
 }
 const TabHeaderItem = ({ icon, title }: IProps) => {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-3 text-base font-normal md:gap-2">
       {icon}
       <span>{title}</span>
     </div>

@@ -1,14 +1,25 @@
 import ProfileCard from '@components/card/ProfileCard'
 import Icon from '@components/icons'
-import React from 'react'
+import React, { useState } from 'react'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import FullScreenMobile from '../Modal/FullScreenMobile'
+import ChangePassword from '../ChangePassword'
 
 interface IProps {
   setIsChangePassword: (isChangePassword: boolean) => void
 }
 const MyPasword = ({ setIsChangePassword }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
+  const [openChangePassword, setOpenChangePassword] = useState(false)
+  const onCloseChangePassword = () => {
+    setOpenChangePassword(false)
+    setIsChangePassword(false)
+  }
   const handleClickEdit = () => {
     setIsChangePassword(true)
+    setOpenChangePassword(true)
   }
+
   return (
     <ProfileCard title="Pasword">
       <div className="flex items-center justify-between gap-2">
@@ -23,6 +34,24 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
           </div>
         </div>
       </div>
+      {isMobileView && openChangePassword && (
+        <FullScreenMobile
+          className="bg-gray-canvas px-4 pb-4"
+          title={'Security'}
+          open={openChangePassword}
+          onClose={onCloseChangePassword}
+        >
+          <div className="rounded-lg bg-white p-4">
+            <div className="text-base font-semibold">Change Password</div>
+            <ChangePassword
+              handleCancel={() => {
+                setIsChangePassword(false)
+                onCloseChangePassword()
+              }}
+            />
+          </div>
+        </FullScreenMobile>
+      )}
     </ProfileCard>
   )
 }
