@@ -45,7 +45,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
-  classNameHeader,
+  classNameHeader = 'mb-4',
   cancelButtonCaption,
   cancelButtonClassName,
   closable,

@@ -311,7 +311,7 @@ const LearningNotesList = () => {
               />
             )}
 
-            <div className="result-scroll mt-4 h-[calc(100vh-10rem)] overflow-y-auto">
+            <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
               {!isEmpty(notesListData?.notes) ? (
                 <>
                   {notesListData?.notes?.map((note: any, index: number) => {
@@ -356,12 +356,12 @@ const LearningNotesList = () => {
 
                     return (
                       <div
-                        className="cursor-pointer rounded-2xl p-4 hover:bg-primary-50"
+                        className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
                         key={note?.id}
                         onClick={handleView}
                       >
                         <div className="flex justify-between">
-                          <div className="text-base font-semibold text-gray-800">
+                          <div className="text-sm font-semibold text-gray-800 md:text-base">
                             {note?.name}
                           </div>
                           <div onClick={(e) => e.stopPropagation()}>
@@ -372,14 +372,14 @@ const LearningNotesList = () => {
                           </div>
                         </div>
                         <div
-                          className="mt-1 flex items-center text-sm font-normal text-gray-400"
+                          className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
                           onClick={() => onClose()}
                         >
                           <SappBreadcrumbNotLink
                             paths={[...note?.course_section_path].reverse()}
                           />
                         </div>
-                        <div className="mt-4 text-base font-normal text-gray-800">
+                        <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
                           <span
                             className={`whitespace-pre-wrap break-all ${
                               isExpanded ? '' : 'line-clamp-3'
@@ -389,7 +389,7 @@ const LearningNotesList = () => {
                           </span>
                           {!isExpanded && note?.description?.length > 230 ? (
                             <button
-                              className="block text-base font-normal text-gray-400"
+                              className="block text-sm font-normal text-gray-400 md:text-base"
                               onClick={() => toggleExpand(note?.id)}
                             >
                               Show more
@@ -398,7 +398,7 @@ const LearningNotesList = () => {
                             <>
                               {note?.description?.length > 230 ? (
                                 <button
-                                  className="block text-base font-normal text-[#A1A1A1]"
+                                  className="block text-sm font-normal text-[#A1A1A1] md:text-base"
                                   onClick={() => toggleExpand(note?.id)}
                                 >
                                   Show less
@@ -409,7 +409,7 @@ const LearningNotesList = () => {
                             </>
                           )}
                         </div>
-                        <div className="mt-4 flex">
+                        <div className="mt-2 flex md:mt-4">
                           <div className="text-sm font-normal text-gray-400">
                             {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                           </div>
