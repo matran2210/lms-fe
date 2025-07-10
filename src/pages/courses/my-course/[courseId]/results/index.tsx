@@ -84,7 +84,7 @@ const Results = () => {
                         link: PageLink.COURSES,
                       },
                       {
-                        title: courseNameDetail,
+                        title: courseNameDetail || '',
                         link: PageLink.COURSE_DETAIL.replace(
                           '[courseId]',
                           router.query.courseId as string,
