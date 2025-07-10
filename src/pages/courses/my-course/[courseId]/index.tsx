@@ -15,9 +15,8 @@ import {
   DELAY_TIME_DISPLAY_POPUP,
   PageLink,
 } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
-import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
@@ -25,6 +24,8 @@ import PinnedCompletedCourse from '@components/layout/PinnedNotifications/Pinned
 import { HamburgerMenuLargeIcon } from '@assets/icons'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { RemindChoosingExam } from 'src/type/course'
+import SelectExamPopup from './popups/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -42,6 +43,7 @@ const CourseDetail = () => {
     userCertificateId: '',
     courseName: '',
   })
+  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -167,15 +169,26 @@ const CourseDetail = () => {
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
-    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+    isSuccess &&
+      setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
   })
+
+  const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
+    return (
+      remindChoosingExam.remind_by_progress ||
+      remindChoosingExam.remind_by_duration
+    )
+  }
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (isSuccess && data?.pages?.[0]?.courseDetail?.remind_choosing_exam) {
+    if (
+      isSuccess &&
+      canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
+    ) {
       timeout = setTimeout(() => {
-        setShowSelectExamPopup(true)
+        setShowSelectExam(true)
       }, DELAY_TIME_DISPLAY_POPUP)
     }
 
@@ -204,7 +217,7 @@ const CourseDetail = () => {
         passedAt,
         userCertificateUrl,
         userCertificateId,
-        courseName: courseNameDetail,
+        courseName: courseNameDetail || '',
       })
     }
   }, [data])
@@ -241,7 +254,7 @@ const CourseDetail = () => {
                 link: PageLink.COURSES,
               },
               {
-                title: courseNameDetail,
+                title: courseNameDetail || '',
                 link: '',
               },
             ]}
@@ -268,7 +281,7 @@ const CourseDetail = () => {
             <CourseParts
               isTrial={isTrial}
               courses={courses}
-              is_passed_course={is_passed_course}
+              is_passed_course={is_passed_course || false}
               class_user_id={class_user_id}
               lastElementRef={lastElementRef}
             />
@@ -280,11 +293,13 @@ const CourseDetail = () => {
         data.pages[0].courseDetail.remind_choosing_exam &&
         showSelectExamPopup && <SelectExamPopup courseData={data} />}
 
-      <PopupModalTest
-        class_code={data?.pages?.[0]?.courseDetail?.code}
-        program={data?.pages?.[0]?.courseDetail?.data?.program}
-        data={data?.pages?.[0]?.courseDetail}
-      />
+      {data?.pages?.[0]?.courseDetail?.data?.program && (
+        <PopupModalTest
+          class_code={data?.pages?.[0]?.courseDetail?.code}
+          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          data={data?.pages?.[0]?.courseDetail || {}}
+        />
+      )}
 
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
