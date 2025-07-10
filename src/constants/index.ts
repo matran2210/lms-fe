@@ -226,7 +226,7 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
+export const DEFAULT_SELECT_SECTION = [{ name: 'All Section', id: '' }]
 
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
