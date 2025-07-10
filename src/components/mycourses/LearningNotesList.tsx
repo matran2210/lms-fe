@@ -244,7 +244,7 @@ const LearningNotesList = () => {
   const title = !openChooseItem.isOpen
     ? isOpenFilter
       ? 'Filter'
-      : 'Course Resource'
+      : 'Note List'
     : openChooseItem.name
   const classNameHeader = openChooseItem.isOpen
     ? 'pb-4 border-b border-gray-200 '
