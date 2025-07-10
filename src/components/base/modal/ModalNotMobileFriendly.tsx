@@ -25,8 +25,8 @@ const ModalNotMobileFriendly = ({ open, onClose }: IProps) => {
             Sorry, page is no mobile friendly
           </div>
           <p className="text-center text-base">
-            LMS Pro’s Testing can be difficult on a mobile device. You can use
-            tablet or desktop device for better experience.
+            LMS Pro&rsquo;s Testing can be difficult on a mobile device. You can
+            use tablet or desktop device for better experience.
           </p>
         </div>
         <ButtonPrimary title={'Back'} className="" onClick={onClose} full />
