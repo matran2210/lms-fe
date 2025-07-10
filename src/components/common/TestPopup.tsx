@@ -14,7 +14,7 @@ interface IProps {
   numberOfAttempt?: number
   customFooter?: ReactNode
   otherContent?: ReactNode
-  gapContent?: number
+  gapContent?: string
 }
 
 const TestPopup = ({
@@ -25,7 +25,7 @@ const TestPopup = ({
   customFooter,
   otherContent,
   setOpen,
-  gapContent = 10,
+  gapContent = 'gap-4 md:gap-10',
 }: IProps) => {
   const timeFormated = formatTime(time, 'HH:mm:ss')
   const isTimeOut = timeFormated === '00:00:00'

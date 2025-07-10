@@ -385,6 +385,7 @@ const ProfilePage = () => {
                 avatar={avatar}
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
+                setIsEdit={setIsEdit}
               />
               <div>
                 <Tabs

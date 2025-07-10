@@ -326,7 +326,7 @@ const MyProfile = ({
               </div>
             </div>
             {isEdit && (
-              <div className="flex items-center justify-between gap-2 lg:hidden">
+              <div className="hidden items-center justify-between gap-2 md:flex lg:hidden">
                 <ButtonSecondary
                   className="w-full"
                   size="medium"
