@@ -51,7 +51,7 @@ const EntranceTest = () => {
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Entrance Test" showSidebar={isAlwaysShowSidebar}>
         <div
-          className="mt-4 rounded-lg bg-white px-8 py-4"
+          className="mt-4 rounded-xl bg-white px-8 py-4"
           style={{ boxShadow: '0px 4px 12px 0px #2C30000A' }}
         >
           <SearchForm
@@ -64,7 +64,10 @@ const EntranceTest = () => {
             <CourseSkeleton />
           ) : (
             <>
-              <div className="mb-8 flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+              <div
+                className="mb-8 flex overflow-hidden rounded-xl bg-white"
+                data-aos={ANIMATION.DATA_AOS}
+              >
                 <Heading
                   greeting="Welcome to"
                   title="Entrance Test"
@@ -80,7 +83,10 @@ const EntranceTest = () => {
                 </div>
               </div>
               <div className="my-0 pt-7" data-aos={ANIMATION.DATA_AOS}>
-                <EntranceTestList entranceTestLists={entranceTestLists || []} />
+                <EntranceTestList
+                  entranceTestLists={entranceTestLists || []}
+                  onRefetch={refetch}
+                />
               </div>
             </>
           )}
