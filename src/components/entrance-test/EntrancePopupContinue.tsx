@@ -155,7 +155,7 @@ const EntrancePopupContinue = ({
           {renderFooter()}
         </div>
       }
-      gapContent={8}
+      gapContent={'gap-8'}
     />
   )
 }

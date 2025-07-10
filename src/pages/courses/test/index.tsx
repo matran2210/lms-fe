@@ -239,10 +239,10 @@ const TestModal = ({
   }
 
   useEffect(() => {
-    if (isFinalAttemptTimeout) {
+    if (isTimeOut) {
       handleSubmitNow()
     }
-  }, [isFinalAttemptTimeout])
+  }, [isTimeOut])
 
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
