@@ -4,7 +4,7 @@ import Layout from '@components/layout'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { PageLink, TitleSidebar } from 'src/constants'
 import { UserApi } from '@pages/api/user'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { IExamInformation } from '@components/profile/ExamInformation/type'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { UserKey } from '@pages/api/queryKey'
@@ -35,45 +35,61 @@ const ExamInformation = () => {
   }
 
   /**
-   * @description sử dụng react-query để lấy data
+   * @description sử dụng react-query và infinite query để lấy data
    */
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, refetch } =
-    useInfiniteQuery({
-      queryKey: ['examList'],
-      queryFn: ({ pageParam }) =>
-        UserApi.getExamination(pageParam || 1, pageSize),
-      getNextPageParam: (lastPage, allPages) => {
-        console.log(allPages, 'allPages')
-        return lastPage?.data?.data?.data?.length &&
-          allPages?.length < lastPage?.data?.data?.metadata?.total_pages
-          ? allPages?.length + 1
-          : undefined
-      },
-      retry: false,
-    })
+  const {
+    data: mobileData,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading: isMobileLoading,
+  } = useInfiniteQuery({
+    queryKey: ['examListMobile'],
+    queryFn: ({ pageParam }) =>
+      UserApi.getExamination(pageParam || 1, pageSize),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage?.data?.data?.data?.length &&
+        allPages?.length < lastPage?.data?.data?.metadata?.total_pages
+        ? allPages?.length + 1
+        : undefined
+    },
+    enabled: isMobileView, // ❗ Chỉ gọi khi là mobile view
+    retry: false,
+  })
 
-  const dataTable = useMemo(() => {
-    return data?.pages.reduce((acc: IExamInformation[], page) => {
+  const dataMobile = useMemo(() => {
+    return mobileData?.pages.reduce((acc: IExamInformation[], page) => {
       return [...acc, ...page?.data?.data?.data]
     }, [])
-  }, [data])
+  }, [mobileData])
+
+  const {
+    data: normalData,
+    isLoading: isNormalLoading,
+    refetch: refetchNormal,
+  } = useQuery({
+    queryKey: [UserKey.ExamList, pageIndex, pageSize],
+    queryFn: () => UserApi.getExamination(pageIndex, pageSize),
+    select: (data) => data?.data?.data,
+    retry: false,
+    enabled: !isMobileView, // ❗ Chỉ gọi khi Tablet or Desktop
+  })
 
   const lastElementRef = useCallback(
     (node: HTMLDivElement) => {
-      if (isLoading) return
+      if (isMobileLoading) return
 
       if (observer.current) observer.current.disconnect()
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
-          console.log('fetchNextPage')
+        if (entries?.[0]?.isIntersecting && hasNextPage && !isFetching) {
           fetchNextPage()
         }
       })
 
       if (node) observer.current.observe(node)
     },
-    [fetchNextPage, hasNextPage, isFetching, isLoading],
+    [fetchNextPage, hasNextPage, isFetching, isMobileLoading],
   )
 
   const handleEdit = (record: IExamInformation) => {
@@ -156,7 +172,43 @@ const ExamInformation = () => {
       </div>
     )
   }
+  const contentMobile = () => {
+    return (
+      <div className="flex flex-col gap-4 overflow-y-auto">
+        {dataMobile?.map((item) => (
+          <div
+            key={item.id}
+            className="flex w-full flex-col rounded-xl bg-white p-4 text-sm shadow-small md:text-base"
+            ref={lastElementRef}
+          >
+            <div className="mb-4 text-base font-semibold text-gray-800">
+              {item?.class?.course?.name}
+            </div>
 
+            <div className="flex flex-col gap-2">
+              <InfoItem label="Class Code:" value={item?.class?.code} />
+              <InfoItem
+                label="Program:"
+                value={item?.class?.course?.course_categories[0]?.name}
+              />
+              <InfoItem
+                label="Duration:"
+                value={getDuration(item?.started_at, item?.finished_at)}
+              />
+            </div>
+            <div className="flex items-end gap-2">
+              <div className="text-sm font-medium text-gray-800 underline">
+                Edit
+              </div>
+              <div onClick={() => handleEdit(item)}>
+                <PencilV2Icon />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
   return (
     <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
       <div className="mt-4 lg:mt-10">
@@ -167,58 +219,26 @@ const ExamInformation = () => {
         />
         <div className="mt-6 md:mt-8">
           {isMobileView ? (
-            <div className="flex flex-col gap-4 overflow-y-auto">
-              {dataTable?.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex w-full flex-col rounded-xl bg-white p-4 text-sm shadow-small md:text-base"
-                  ref={lastElementRef}
-                >
-                  <div className="mb-4 text-base font-semibold text-gray-800">
-                    {item?.class?.course?.name}
-                  </div>
-
-                  <div className="flex flex-col gap-2">
-                    <InfoItem label="Class Code:" value={item?.class?.code} />
-                    <InfoItem
-                      label="Program:"
-                      value={item?.class?.course?.course_categories[0]?.name}
-                    />
-                    <InfoItem
-                      label="Duration:"
-                      value={getDuration(item?.started_at, item?.finished_at)}
-                    />
-                  </div>
-                  <div className="flex items-end gap-2">
-                    <div className="text-sm font-medium text-gray-800 underline">
-                      Edit
-                    </div>
-                    <div onClick={() => handleEdit(item)}>
-                      <PencilV2Icon />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            contentMobile()
           ) : (
             <>
               <SappTable
                 columns={columnsValue}
-                data={dataTable?.data ?? []}
+                data={normalData?.data ?? []}
                 pagination={{
                   current: pageIndex,
                   pageSize: pageSize,
-                  total: dataTable?.metadata?.total_records,
+                  total: normalData?.metadata?.total_records,
                 }}
-                loading={isLoading}
+                loading={isNormalLoading}
                 isShowPagination={false}
                 className="style-table-v2"
               />
-              {!isEmpty(dataTable) && (
+              {!isEmpty(normalData) && (
                 <PaginationSappV2
-                  currentPage={dataTable?.metadata?.page_index || 1}
-                  pageSize={dataTable?.metadata?.page_size || 10}
-                  totalItems={dataTable?.metadata?.total_records || 0}
+                  currentPage={normalData?.metadata?.page_index || 1}
+                  pageSize={normalData?.metadata?.page_size || 10}
+                  totalItems={normalData?.metadata?.total_records || 0}
                   setCurrentPage={setPageIndex}
                   setPageSize={setPageSize}
                 />
@@ -231,11 +251,9 @@ const ExamInformation = () => {
         <ExaminationInfo
           open={isDrawerOpen}
           setOpen={setIsDrawerOpen}
-          classIdProps={currentRow.class.id}
-          currentValue={currentRow.examination_subject_id}
-          onSuccess={() => {
-            refetch()
-          }}
+          classIdProps={currentRow?.class?.id}
+          currentValue={currentRow?.examination_subject_id}
+          onSuccess={refetchNormal}
           isEditProps
           isExamList
         />
