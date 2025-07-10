@@ -1,15 +1,10 @@
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
-import { UseFormWatch } from 'react-hook-form'
-import {
-  IOpenChooseItem,
-  SectionDropdownFormValues,
-  SectionField,
-} from 'src/type'
+import { useFormContext } from 'react-hook-form'
+import { IOpenChooseItem, SectionField } from 'src/type'
 
 interface IProps {
-  watch: UseFormWatch<SectionDropdownFormValues>
   setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
 }
 interface IList {
@@ -19,7 +14,8 @@ interface IList {
   type: SectionField
 }
 
-const ListFilterMobile = ({ watch, setOpenChooseItem }: IProps) => {
+const ListFilterMobile = ({ setOpenChooseItem }: IProps) => {
+  const { watch } = useFormContext()
   const list: IList[] = [
     {
       id: 1,

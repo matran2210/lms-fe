@@ -23,12 +23,11 @@ import {
 } from 'src/type/courses'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { isEmpty } from 'lodash'
 import NoDataV2 from 'src/common/NodataV2'
 import { UploadAPI } from 'src/pages/api/upload'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
@@ -62,7 +61,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [paramsSubId, setParamsSubId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
     useState<boolean>(false)
-  const { setValue, watch } = useForm<SectionDropdownFormValues>({
+  const methods = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
       subsection: null,
@@ -72,14 +71,14 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   })
 
   const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => setValue(field, null))
+    fields.forEach((field) => methods.setValue(field, null))
   }
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
     setOpenResource(false)
     resetFormFields(['section', 'subsection', 'unit', 'activity'])
-    setValue('section', null)
+    methods.setValue('section', null)
     setPageIndex(DEFAULT_PAGE_INDEX)
     setResources(undefined)
     setIsPageStateVariables(true)
@@ -210,51 +209,6 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
     })
   }
 
-  const ListResource = () => {
-    return (
-      <>
-        {isMobileView ? (
-          <SortBy action={() => setIsOpenFilter(true)} />
-        ) : (
-          <FilterCourseSection
-            setParams={setParamsSubId}
-            heightCustom="h-10"
-            isPageStateVariables={isPageStateVariables}
-          />
-        )}
-        {isEmpty(resources?.resources) && !loading ? (
-          <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
-            <NoDataV2 />
-          </div>
-        ) : (
-          <div className="mt-6 flex flex-col gap-4 md:mt-8">
-            {resources?.resources?.map((resource) => (
-              <div
-                key={resource.id}
-                className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
-              >
-                <div>
-                  <div className="text-base font-medium text-gray-800">
-                    {resource?.name}
-                  </div>
-                  <div className="text-gray-500 text-sm font-normal">
-                    {bytesToKilobyte(resource?.size)}
-                  </div>
-                </div>
-                <a
-                  className="cursor-pointer"
-                  onClick={() => download(resource.name, resource.file_key)}
-                >
-                  <DownloadIcon color="#1C274C" />
-                </a>
-              </div>
-            ))}
-          </div>
-        )}
-      </>
-    )
-  }
-
   return (
     <>
       <SappDrawerV3
@@ -271,29 +225,67 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
       >
-        {!isOpenFilter ? (
-          <ListResource />
-        ) : !openChooseItem.isOpen ? (
-          <ListFilterMobile
-            watch={watch}
-            setOpenChooseItem={setOpenChooseItem}
-          />
-        ) : (
-          <ListItemFilterMobile
-            setOpenChooseItem={setOpenChooseItem}
-            openChooseItem={openChooseItem}
-            watch={watch}
-            setValue={setValue}
-            listSection={listSection}
-            listSubsection={listSubsection}
-            listUnit={listUnit}
-            listActivity={listActivity}
-            setListSection={setListSection}
-            setListSubsection={setListSubsection}
-            setListUnit={setListUnit}
-            setListActivity={setListActivity}
-          />
-        )}
+        <FormProvider {...methods}>
+          {!isOpenFilter ? (
+            <>
+              {isMobileView ? (
+                <SortBy action={() => setIsOpenFilter(true)} />
+              ) : (
+                <FilterCourseSection
+                  setParams={setParamsSubId}
+                  heightCustom="h-10"
+                  isPageStateVariables={isPageStateVariables}
+                />
+              )}
+              {isEmpty(resources?.resources) && !loading ? (
+                <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
+                  <NoDataV2 />
+                </div>
+              ) : (
+                <div className="mt-6 flex flex-col gap-4 md:mt-8">
+                  {resources?.resources?.map((resource) => (
+                    <div
+                      key={resource.id}
+                      className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
+                    >
+                      <div>
+                        <div className="text-base font-medium text-gray-800">
+                          {resource?.name}
+                        </div>
+                        <div className="text-gray-500 text-sm font-normal">
+                          {bytesToKilobyte(resource?.size)}
+                        </div>
+                      </div>
+                      <a
+                        className="cursor-pointer"
+                        onClick={() =>
+                          download(resource.name, resource.file_key)
+                        }
+                      >
+                        <DownloadIcon color="#1C274C" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : !openChooseItem.isOpen ? (
+            <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+          ) : (
+            <ListItemFilterMobile
+              setOpenChooseItem={setOpenChooseItem}
+              openChooseItem={openChooseItem}
+              listSection={listSection}
+              listSubsection={listSubsection}
+              listUnit={listUnit}
+              listActivity={listActivity}
+              setListSection={setListSection}
+              setListSubsection={setListSubsection}
+              setListUnit={setListUnit}
+              setListActivity={setListActivity}
+            />
+          )}
+        </FormProvider>
       </SappDrawerV3>
     </>
   )

@@ -1,15 +1,14 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { isEmpty } from 'lodash'
 import clsx from 'clsx'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
 import { SectionField, SectionDropdownFormValues } from 'src/type/courses'
-import { ISection } from 'src/type'
-import { CoursesAPI } from 'src/pages/api/courses'
 import useDynamicLoading from 'src/hooks/use-dynamic'
+import { useInitialSections } from 'src/hooks/useInitialSections'
+import { useSectionData } from 'src/hooks/useSectionData'
+import { isEmpty } from 'lodash'
 
 const DEFAULT_SELECT = [{ label: 'All Section', value: '' }]
 
@@ -18,68 +17,6 @@ interface FilterCourseSectionProps {
   heightCustom?: string
   isPageStateVariables?: boolean
   allowClear?: boolean
-}
-
-export const useSectionData = (sectionId: string | null, type: string) => {
-  const [sections, setSections] = useState<ISection[]>([])
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const fetchSections = async (page_size: number) => {
-    try {
-      if (sectionId) {
-        const class_id = router.query.courseId || router.query.id
-        setIsLoading(true)
-        const res = await CoursesAPI.getCourseSubsectionList(
-          page_size,
-          type as 'CHAPTER' | 'UNIT' | 'ACTIVITY',
-          sectionId,
-          class_id as string,
-        )
-        setSections([...res?.data?.sections].reverse())
-      }
-    } catch (error) {
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  return { sections, setSections, fetchSections, isLoading }
-}
-
-export const useInitialSections = () => {
-  const [sections, setSections] = useState<ISection[]>([])
-  const isFetchingRef = useRef(false)
-  const router = useRouter()
-
-  const fetchInitialSections = async (page_size: number) => {
-    try {
-      if (
-        isEmpty(sections) &&
-        (router.query.courseId || router.query.id) &&
-        !isFetchingRef.current
-      ) {
-        isFetchingRef.current = true
-        const { data } = await CoursesAPI.getCourseSectionList(
-          router.query.courseId || router.query.id,
-          page_size || DEFAULT_PAGE_SIZE,
-        )
-        if (!isEmpty(data?.sections)) {
-          setSections([...data?.sections].reverse())
-        }
-      }
-    } catch (error) {
-    } finally {
-      isFetchingRef.current = false
-    }
-  }
-
-  return {
-    sections,
-    setSections,
-    fetchInitialSections,
-    isLoading: isFetchingRef.current,
-  }
 }
 
 const FilterCourseSection = ({
@@ -132,19 +69,27 @@ const FilterCourseSection = ({
   }, [selectedSection])
 
   useEffect(() => {
-    fetchInitialSections(DEFAULT_PAGE_SIZE)
+    if (isEmpty(sections)) {
+      fetchInitialSections(DEFAULT_PAGE_SIZE)
+    }
   }, [])
 
   useEffect(() => {
-    fetchSubsections(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(selectedSection)) {
+      fetchSubsections(DEFAULT_PAGE_SIZE)
+    }
   }, [selectedSection])
 
   useEffect(() => {
-    fetchUnits(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(selectedSubsection)) {
+      fetchUnits(DEFAULT_PAGE_SIZE)
+    }
   }, [selectedSubsection])
 
   useEffect(() => {
-    fetchActivities(DEFAULT_PAGE_SIZE)
+    if (!isEmpty(selectedUnit)) {
+      fetchActivities(DEFAULT_PAGE_SIZE)
+    }
   }, [selectedUnit])
 
   useEffect(() => {

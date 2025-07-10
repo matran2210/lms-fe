@@ -1,28 +1,23 @@
 import { CheckIconV2 } from '@assets/icons'
-import {
-  useInitialSections,
-  useSectionData,
-} from '@components/mycourses/FilterCourseSection'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { DEFAULT_PAGE_SIZE, DEFAULT_SELECT_SECTION } from 'src/constants'
 import {
   IOpenChooseItem,
   getTypeName,
-  SectionDropdownFormValues,
   SectionField,
   nextTypeMap,
   allTypes,
   ISection,
 } from 'src/type'
+import { useInitialSections } from 'src/hooks/useInitialSections'
+import { useSectionData } from 'src/hooks/useSectionData'
 
 interface IProps {
   setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
   openChooseItem: IOpenChooseItem
-  watch: UseFormWatch<SectionDropdownFormValues>
-  setValue: UseFormSetValue<SectionDropdownFormValues>
   listSection: ISection[]
   listSubsection: ISection[]
   listUnit: ISection[]
@@ -36,8 +31,6 @@ interface IProps {
 const ListItemFilterMobile = ({
   setOpenChooseItem,
   openChooseItem,
-  watch,
-  setValue,
   listSection,
   listSubsection,
   listUnit,
@@ -47,6 +40,7 @@ const ListItemFilterMobile = ({
   setListUnit,
   setListActivity,
 }: IProps) => {
+  const { watch, setValue } = useFormContext()
   const selected = {
     section: watch('section'),
     subsection: watch('subsection'),
