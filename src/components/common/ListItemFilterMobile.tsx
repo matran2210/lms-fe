@@ -1,13 +1,9 @@
 import { CheckIconV2 } from '@assets/icons'
-import {
-  useInitialSections,
-  useSectionData,
-} from '@components/mycourses/FilterCourseSection'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
-import { DEFAULT_PAGE_SIZE, DEFAULT_SELECT_SECTION } from 'src/constants'
+import { DEFAULT_SELECT_SECTION } from 'src/constants'
 import {
   IOpenChooseItem,
   getTypeName,
@@ -17,6 +13,8 @@ import {
   allTypes,
   ISection,
 } from 'src/type'
+import { useSectionData } from 'src/hooks/useSelectSection'
+import { useInitialSections } from 'src/hooks/useInitialSections'
 
 interface IProps {
   setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
@@ -109,7 +107,7 @@ const ListItemFilterMobile = ({
   }
 
   // SECTION FETCHING HOOKS
-  const { sections, fetchInitialSections, isLoading } = useInitialSections()
+  const { sections, refetch: refetchSections, isLoading } = useInitialSections()
   const subsectionData = useSectionData(selected.section, 'CHAPTER')
   const unitData = useSectionData(selected.subsection, 'UNIT')
   const activityData = useSectionData(selected.unit, 'ACTIVITY')
@@ -117,28 +115,9 @@ const ListItemFilterMobile = ({
   // FETCH section on mount
   useEffect(() => {
     if (isEmpty(listSection)) {
-      fetchInitialSections(DEFAULT_PAGE_SIZE)
+      refetchSections()
     }
   }, [])
-
-  // FETCH dynamic based on selection
-  useEffect(() => {
-    if (selected.section && isEmpty(listSubsection)) {
-      subsectionData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.section])
-
-  useEffect(() => {
-    if (selected.subsection && isEmpty(listUnit)) {
-      unitData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.subsection])
-
-  useEffect(() => {
-    if (selected.unit && isEmpty(listActivity)) {
-      activityData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.unit])
 
   // SET list after fetch
   useEffect(() => {
