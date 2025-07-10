@@ -1,20 +1,49 @@
 import { EditIcon, PencilV2Icon } from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
+import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  VALIDATE_MAX,
+  VALIDATE_MIN,
+  VALIDATE_REQUIRED,
+} from '@utils/helpers/ValidateMessage'
 import { Divider, Tag } from 'antd'
+import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
-import { Dispatch, MutableRefObject, SetStateAction, useEffect } from 'react'
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
+import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import profile from 'src/assets/images/bg_profile.svg'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
   getUserInformation,
+  updateUser,
+  updateUserAvatar,
   userReducer,
 } from 'src/redux/slice/User/User'
+import { z } from 'zod'
 
+const schema = z.object({
+  full_name: z
+    .string({ required_error: VALIDATE_REQUIRED })
+    .min(3, { message: VALIDATE_MIN('Fullname', 3) })
+    .max(100, { message: VALIDATE_MAX('Fullname', 100) }),
+})
 interface IProps {
   isEdit: boolean
+  avatar: File | undefined
   setAvatar: (avatar?: File) => void
   inputFileRef: MutableRefObject<HTMLInputElement | null>
   reViewImageSrc: string | StaticImageData | undefined
@@ -24,19 +53,56 @@ interface IProps {
 }
 const ProfileHeader = ({
   isEdit,
+  avatar,
   setAvatar,
   inputFileRef,
   reViewImageSrc,
   setReViewImageSrc,
 }: IProps) => {
   const dispatch = useAppDispatch()
-
+  const [openEditName, setOpenEditName] = useState(false)
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
-
+  // Sử dụng hook useForm để quản lý form và xác thực dữ liệu
+  const { control, setValue, handleSubmit, reset } = useForm<{
+    full_name: string
+  }>({
+    resolver: zodResolver(schema),
+  })
   // Sử dụng state để lưu giá trị của hình ảnh xem trước
 
+  /**
+   * Hàm để chuyển sang chế độ chỉnh sửa form
+   */
+  const handleChangeToEditForm = () => {
+    // Đặt giá trị cho trường full_name bằng tên hiện tại của người dùng
+    setValue('full_name', user?.detail?.full_name)
+    // Đặt trạng thái isEdit thành true
+    setOpenEditName(true)
+  }
+  /**
+   * Hàm để chuyển sang chế độ view
+   */
+  const handleChangeToPreview = () => {
+    // Gọi hành động thunk open của confirmDialogThunk và chờ kết quả
+    setOpenEditName(false)
+    // Đặt lại giá trị của form về ban đầu
+    setAvatar(undefined)
+    setReViewImageSrc(undefined)
+    reset(
+      {
+        full_name: user.detail.full_name,
+      },
+      {
+        keepDirty: false,
+        keepErrors: false,
+        keepDirtyValues: false,
+        keepIsValid: false,
+        keepTouched: false,
+      },
+    )
+  }
   /**
    * Một hàm để xử lý khi người dùng thay đổi file ảnh tải lên
    * @param {any} e - Đối tượng sự kiện của input file
@@ -102,7 +168,48 @@ const ProfileHeader = ({
     // Trả về true
     return true
   }
-
+  /**
+   * Hàm để xử lý khi người dùng submit form
+   * @param {{full_name: string}} data - Đối tượng chứa dữ liệu của form
+   * @returns {Promise<void>} Một promise không có giá trị trả về
+   */
+  const onSubmit = async ({
+    full_name,
+  }: {
+    full_name: string
+  }): Promise<void> => {
+    try {
+      // Nếu không có avatar và người dùng có avatar hiện tại
+      if (!avatar && user?.detail?.avatar) {
+        // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
+        await dispatch(updateUser({ full_name, avatar: null })).unwrap()
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
+        dispatch(getMe())
+        // Đặt trạng thái isEdit thành false
+        setOpenEditName(false)
+        return
+      }
+      // Gọi hành động thunk updateUser để cập nhật tên của người dùng
+      await dispatch(updateUser({ full_name })).unwrap()
+      // Nếu có avatar
+      if (avatar) {
+        // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
+        await dispatch(updateUserAvatar(avatar)).unwrap()
+        // Đặt lại giá trị của avatar
+        setAvatar(undefined)
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
+      }
+      dispatch(getMe())
+      // Đặt trạng thái isEdit thành false
+      setOpenEditName(false)
+    } catch (error: any) {
+      setOpenEditName(false)
+      setReViewImageSrc(undefined)
+      if (error?.response?.data?.error?.code === '403|1002') {
+        await dispatch(getLogoutUser())
+      }
+    }
+  }
   useEffect(() => {
     dispatch(getUserInformation())
   }, [])
@@ -180,8 +287,8 @@ const ProfileHeader = ({
                 }
                 alt="avatar"
                 className=""
-                width={108}
-                height={108}
+                width={100}
+                height={100}
                 layout="fixed"
                 objectFit={'cover'}
                 priority={true}
@@ -190,7 +297,10 @@ const ProfileHeader = ({
           </div>
         </div>
         <div className="absolute bottom-0 left-[50%] z-10 translate-x-[-50%] md:hidden">
-          <Tag color="success" className="m-0 rounded px-2 py-[2px] text-sm">
+          <Tag
+            bordered={false}
+            className="m-0 rounded bg-success-50 px-2 py-[2px] text-sm font-normal text-success"
+          >
             Active
           </Tag>
         </div>
@@ -222,16 +332,75 @@ const ProfileHeader = ({
         )}
       </div>
 
-      <div className="flex-1 md:my-6 lg:my-0">
-        <div className="mb-3 flex max-w-[600px] items-center justify-center gap-2 truncate text-lg font-bold text-[#050505] md:mb-4 md:block md:text-2xl">
-          <TextSkeleton loading={loading || loadingEditName}>
-            {user.detail.full_name}
-          </TextSkeleton>
-          <div className="md:hidden">
-            <PencilV2Icon />
-          </div>
+      <div className="w-full flex-1 md:my-6 lg:my-0">
+        <div
+          className={clsx(
+            'mb-3 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:text-2xl',
+            {
+              'max-w-[600px]': !openEditName,
+            },
+          )}
+        >
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex w-full justify-center md:justify-start"
+          >
+            <div className="flex w-full items-center justify-center gap-3 md:justify-start">
+              {openEditName ? (
+                <div className="flex w-full flex-col items-center gap-2">
+                  <HookFormTextField
+                    placeholder="Enter Text..."
+                    control={control}
+                    name="full_name"
+                    skeleton={loadingEditName}
+                    className="h-full w-full"
+                    inputClassName="rounded-lg h-full !py-[10px] bg-white !border-gray-300"
+                    textSize="sm"
+                  ></HookFormTextField>
+                  <div className="flex w-full items-center justify-between gap-2">
+                    <ButtonSecondary
+                      className="w-full !bg-white"
+                      full
+                      size="medium"
+                      title="Cancel"
+                      onClick={handleChangeToPreview}
+                      disabled={loading || loadingEditName}
+                    />
+                    <ButtonPrimary
+                      className="w-full px-4 py-2"
+                      full
+                      size="medium"
+                      title="Confirm"
+                      htmlType="submit"
+                      disabled={loading || loadingEditName}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <TextSkeleton loading={loading || loadingEditName}>
+                  {user.detail.full_name}
+                </TextSkeleton>
+              )}
+              <div className="hidden md:block">
+                <Tag
+                  bordered={false}
+                  className="m-0 rounded bg-success-50 px-2 py-[2px] text-base font-normal text-success"
+                >
+                  Active
+                </Tag>
+              </div>
+              {!openEditName && (
+                <div
+                  className="cursor-pointer hover:text-primary md:hidden"
+                  onClick={handleChangeToEditForm}
+                >
+                  <PencilV2Icon />
+                </div>
+              )}
+            </div>
+          </form>
         </div>
-        <div className="flex items-center justify-start gap-4 text-sm text-gray-400 md:gap-6">
+        <div className="flex items-center justify-center gap-4 text-sm text-gray-400 md:justify-start md:gap-6">
           <div className="flex items-center justify-center gap-[5px] md:mb-0 md:justify-start">
             <svg
               xmlns="http://www.w3.org/2000/svg"

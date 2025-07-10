@@ -1,15 +1,11 @@
 import React from 'react'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import { formatTime, htmlToRaw } from '@components/common/timer'
 import NoData from 'src/common/NoData'
 import { IActivity } from 'src/type/course/my-course/Activity'
-import { SUFFIX_TYPE } from '@components/uploadFile/ModalUploadFile/UploadFileInterface'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
 import { trackGAEvent } from '@utils/google-analytics'
 import { DocumentTextIcon, DownloadIcon } from '@assets/icons'
-import { NotesOutline } from '@components/icons/Notes'
-import { truncateString } from '@utils/index'
 
 interface IProps {
   open: boolean

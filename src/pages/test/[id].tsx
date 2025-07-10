@@ -3264,7 +3264,7 @@ const TestDetail = () => {
           }
         >
           <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
-            <NotesOutline className="h-8 w-8" />
+            <NotesOutline className="h-8 w-8 text-white" />
             <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
             {showWarning && (
               <PulsingExclamation

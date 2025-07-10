@@ -43,7 +43,12 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
         >
           <div className="rounded-lg bg-white p-4">
             <div className="text-base font-semibold">Change Password</div>
-            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+            <ChangePassword
+              handleCancel={() => {
+                setIsChangePassword(false)
+                onCloseChangePassword()
+              }}
+            />
           </div>
         </FullScreenMobile>
       )}
