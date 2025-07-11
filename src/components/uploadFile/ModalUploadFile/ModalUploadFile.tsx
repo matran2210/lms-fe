@@ -177,7 +177,7 @@ const ModalUploadFile = ({
           `Add ${capitalize(UPLOAD_TYPE[fileType].type.toLocaleLowerCase())}`
         }
         cancelButtonCaption="Cancel"
-        okButtonCaption={'Save'}
+        okButtonCaption={'Upload'}
         handleCancel={handleCancel}
         externalLoading={disabled}
         size="max-w-xl"

@@ -23,4 +23,7 @@ export interface IEventTest {
     name: string
   }
   spend_time: number
+  created_at: Date
+  quiz_attempt_id: string
+  attempt_times: number
 }

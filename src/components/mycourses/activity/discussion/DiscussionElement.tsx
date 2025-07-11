@@ -296,7 +296,7 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'flex-none leading-0',
+                  'leading-0 flex-none',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -342,7 +342,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="-mt-3 ml-14 w-full">
+          <div className="-mt-3 ml-14 w-fit">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image

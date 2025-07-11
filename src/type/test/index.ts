@@ -140,3 +140,11 @@ export interface ExhibitQuestion {
   description: string
   files: FileQuestion[]
 }
+
+export interface Sheet {
+  name: string
+  id: string
+  status: number
+  data: (any | null)[][]
+  celldata: any[]
+}

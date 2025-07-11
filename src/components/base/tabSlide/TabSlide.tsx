@@ -179,7 +179,7 @@ const TabSlide = ({
             ? `relative ${
                 hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
               } mx-7`
-            : ' flex w-full items-center gap-6'
+            : 'flex w-full items-center gap-6'
         }`}
       >
         {hasScrollBar && (
@@ -347,8 +347,8 @@ const TabSlide = ({
           <div className="flex items-center">
             {activeShowAll && optionShowAll}
             <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
-                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2 '
+              className={`leading-4.5 ml-6 w-max cursor-pointer text-sm font-semibold text-bw-1 underline ${
+                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2'
               }`}
               onClick={() => {
                 // setPageNums(activeShowAll ? arrPage : getPagination)

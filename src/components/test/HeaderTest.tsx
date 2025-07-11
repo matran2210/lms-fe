@@ -25,7 +25,6 @@ interface IProps {
   setUnSubmitAnswer: Dispatch<SetStateAction<boolean>>
   checkUnSubmitAnswer: () => number[]
   setOpenQuit: Dispatch<SetStateAction<boolean>>
-  setSubmitEventTest: Dispatch<SetStateAction<boolean>>
   type: string | string[] | undefined
   submited: boolean
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
@@ -48,7 +47,6 @@ const HeaderTest = ({
   quizAttempt,
   quizDetail,
   setOpenQuit,
-  setSubmitEventTest,
   setUnSubmitAnswer,
   timeRef,
   type,
@@ -59,7 +57,6 @@ const HeaderTest = ({
 }: IProps) => {
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
-  // console.log(remainingTime)
   const remainingTimeinSeconds = quizDetail?.quiz_timed
     ? (dayjs(
         dayjs(new Date(quizAttempt.created_at ?? '')).add(
@@ -119,9 +116,9 @@ const HeaderTest = ({
             onClick: () => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
-              if (type === 'event-test') {
-                setSubmitEventTest(true)
-              }
+              // if (type === 'event-test') {
+              //   setSubmitEventTest(true)
+              // }
             },
             loading: false,
             //   full: fullWidthBtn,

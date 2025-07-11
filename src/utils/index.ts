@@ -114,6 +114,14 @@ export const convertSnakeCaseToHumanReadable = (str: string) => {
   return words.join(' ')
 }
 
+export const convertHumanReadableToSnakeCase = (str: string) => {
+  const words = str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  return words.join('_')
+}
+
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
@@ -164,7 +172,11 @@ export const replaceTextAlignCenterToWebKitCenter = (htmlString: string) => {
     'text-align: -webkit-center',
   )
 }
-
+// Hàm thay thế style white-space: pre-wrap thành style white-space: normal trong chuỗi HTML
+export const replaceWhiteSpacePreWrapToNormal = (htmlString: string) => {
+  // Sử dụng biểu thức chính quy để thay thế
+  return htmlString.replace(/white-space:\s*pre-wrap/g, 'white-space: normal')
+}
 export const useGetData = (
   queryKey: string,
   params: Object,
@@ -460,4 +472,41 @@ export function convertSlugToTitle(slug: string): string {
     .split(' ') // tách từ
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // viết hoa chữ cái đầu
     .join(' ') // ghép lại
+}
+
+export function setCookie(name: string, value: string, days = 7) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`
+}
+
+export function getCookie(name: string): string | null {
+  return (
+    document.cookie
+      .split('; ')
+      .find((row) => row.startsWith(name + '='))
+      ?.split('=')[1] || null
+  )
+}
+
+export function deleteCookie(name: string) {
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+
+function parseJwt<T extends object = Record<string, unknown>>(
+  token: string,
+): T | null {
+  try {
+    const base64Payload = token.split('.')[1]
+    const payload = atob(base64Payload) // decode base64
+    return JSON.parse(payload) as T
+  } catch (error) {
+    return null
+  }
+}
+
+export function getSessionIdFromToken(token: string): string | null {
+  const decoded = parseJwt(token)
+  return typeof decoded?.session_state === 'string'
+    ? decoded.session_state
+    : null
 }

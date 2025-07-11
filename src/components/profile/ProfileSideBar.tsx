@@ -106,14 +106,8 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   const handleLogout = async () => {
     try {
-      await dispatch(getLogoutUser()).then(() => {
-        const pinnedStatus = getLocalStorageItem('pinnedStatus')
-        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
-          removeLocalStorageItem('pinnedId')
-        }
-      })
       const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
     } catch (error) {}
   }
 
@@ -139,7 +133,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
   }
   const handleChildClick = (childLabel: string) => {
     // Check if the clicked label is "Security"
-    if (childLabel.toLowerCase() === 'security') {
+    if (childLabel?.toLowerCase() === 'security') {
       // Set both the "Security" page and the first child to active
       setChildActivationStates({
         security: true,
@@ -155,7 +149,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
     handleSetStatusActiveChild(childLabel)
     // Chuyển trang
-    let formattedChildLabel = childLabel.toLowerCase()
+    let formattedChildLabel = childLabel?.toLowerCase()
 
     router.push(`/${formattedChildLabel}`)
   }
@@ -319,7 +313,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   return (
     <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
-      <div className="w-full shadow-box" data-aos={ANIMATION.DATA_AOS}>
+      <div className="shadow-box w-full" data-aos={ANIMATION.DATA_AOS}>
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
             {Object.entries(PROFILE_PAGES).map(([key, value]) => {
@@ -427,11 +421,11 @@ const ProfileSideBar = ({ page, children }: IProps) => {
             </li>
           </div>
           <div className="text-center text-sm font-normal text-gray-1">
-            LMS Pro Version 2.7.0
+            LMS Pro Version 2.8.0
           </div>
         </ul>
       </div>
-      <div className="col-span-3 mb-6 hidden bg-white shadow-box lg:mb-0 lg:block">
+      <div className="shadow-box col-span-3 mb-6 hidden bg-white lg:mb-0 lg:block">
         {children}
       </div>
     </div>

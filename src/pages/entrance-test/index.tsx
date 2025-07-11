@@ -3,17 +3,17 @@ import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import Layout from '@components/layout'
 import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
-import { EntranceTestAPI } from '../api/entrance-test'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { MY_COURSES } from 'src/constants/lang'
-import { useEffect } from 'react'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { EntranceTestAPI } from '../api/entrance-test'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -40,15 +40,15 @@ const EntranceTest = () => {
 
   return (
     <Layout title="Entrance Test">
-      <div className="border-b border-default bg-white">
-        <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6">
+      <div className="border-default border-b bg-white">
+        <div className="max-w-xxl py-5.75 relative mx-auto my-0 flex xl-max:mx-6">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
           />
         </div>
       </div>
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
+      <div className="max-w-xxl mx-auto my-0 pt-6 xl-max:mx-6">
         {isLoading ? (
           <CourseSkeleton />
         ) : (
@@ -69,10 +69,10 @@ const EntranceTest = () => {
               />
             </div>
             <div
-              className="my-0 max-w-xxl pt-6 xl:mx-auto"
+              className="max-w-xxl my-0 pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
-              <EntranceTestList entranceTestLists={entranceTestLists} />
+              <EntranceTestList entranceTestLists={entranceTestLists ?? []} />
             </div>
           </>
         )}

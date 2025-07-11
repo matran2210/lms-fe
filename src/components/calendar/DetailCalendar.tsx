@@ -9,7 +9,9 @@ import SappIcon from 'src/common/SappIcon'
 import dayjs from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
-import { TEST_TYPE_ENUM } from '@utils/constants'
+import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
+import { LearningMode } from 'src/type/progress'
+import { buildQueryString } from '@utils/index'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -58,11 +60,11 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   }
 
   const getKeyContent = () => {
-    return data?.key_before_contents?.map((item) => {
+    return data?.key_after_contents?.map((item) => {
       return (
         <div
           key={item.id}
-          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
+          className="text-gray-14 max-w-[111px] bg-gray-4 px-2 py-1 text-sm"
         >
           {item.name}
         </div>
@@ -97,7 +99,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         </>
       )
     }
-    if (data?.mode === 'ONLINE') {
+    if (data?.mode === LearningMode?.ONLINE) {
       return (
         <>
           <div className="col-span-1 text-gray-1">Lesson Date</div>
@@ -130,11 +132,24 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     }
   }
 
+  const dateNow = dayjs().add(7, 'hour')
+  const dateOpenSection = data?.class?.opening_at
+    ? dayjs(data?.class?.opening_at)
+    : dayjs(data?.class?.started_at)
+
   useEffect(() => {
     if (open.isOpen) {
       fetchData()
     }
   }, [open])
+
+  const isOfflineOrLiveOnlineWithReview =
+    [LearningMode.OFFLINE, LearningMode.LIVE_ONLINE].includes(
+      data?.mode as LearningMode,
+    ) && data?.is_review_allowed
+
+  const isOnlineAndOpen =
+    data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
 
   return (
     <SappDrawer
@@ -145,11 +160,11 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       }}
       title="Event Infomation"
       confirmOnClose={false}
-      footer={data?.mode === 'ONLINE'}
+      footer={data?.mode === LearningMode?.ONLINE}
       drawerSubId={'-notes-list'}
       heightBody={'h-[calc(100vh-112px)]'}
       showCancelButton={false}
-      showSubmitButton={data?.mode === 'ONLINE'}
+      showSubmitButton={isOfflineOrLiveOnlineWithReview || isOnlineAndOpen}
       btnSubmitTile={
         LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
           ? 'Start'
@@ -158,8 +173,49 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             : 'Review'
       }
       handleSubmit={() => {
+        const deadline = dayjs(
+          `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
+        )
+
+        const listFilteredSections = data?.sections?.filter((item) =>
+          [
+            TEST_TYPE_ENUM.MID_TERM_TEST,
+            TEST_TYPE_ENUM.FINAL_TEST,
+            CourseSectionType.PART,
+          ].includes(
+            item?.course_section?.course_section_type as TEST_TYPE_ENUM,
+          ),
+        )
+        const listSectionIds = (listFilteredSections || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const listFilteredSubSections = data?.sections?.filter((item) =>
+          [CourseSectionType.CHAPTER].includes(
+            item?.course_section?.course_section_type as CourseSectionType,
+          ),
+        )
+        const listSubSectionIds = (listFilteredSubSections || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const listFilteredUnits = data?.sections?.filter((item) =>
+          [CourseSectionType.UNIT].includes(
+            item?.course_section?.course_section_type as CourseSectionType,
+          ),
+        )
+        const listUnitIds = (listFilteredUnits || []).map(
+          (item) => item?.course_section_id || item?.course_section.id,
+        )
+
+        const searchParams = buildQueryString({
+          focusSectionIds: listSectionIds.join(','),
+          focusSubSectionIds: listSubSectionIds.join(','),
+          focusUnitIds: listUnitIds.join(','),
+          deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
+        })
         if (data?.link_study) {
-          router.push(data?.link_study)
+          router.push(`${data?.link_study}?${searchParams}`)
         }
       }}
       submitButtonClassName="rounded-none"
@@ -168,7 +224,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     >
       <div>
         <div className="border border-solid border-gray-2 px-7 py-4">
-          <div className="flex items-center justify-between border-b pb-4 text-base  font-semibold text-gray-14">
+          <div className="text-gray-14 flex items-center justify-between border-b pb-4  text-base font-semibold">
             <div>Primary Information</div>
             <div
               className="hover:cursor-pointer"
@@ -197,9 +253,12 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                 {!data?.schedule.is_holiday &&
                   dayjs(
                     `${data?.schedule.end_date}T${data?.schedule.end_time}`,
-                  ).isBefore(new Date()) && (
+                  ).isBefore(new Date()) &&
+                  ![LearningMode.OFFLINE, LearningMode?.LIVE_ONLINE]?.includes(
+                    data?.mode as LearningMode,
+                  ) && (
                     <div className="flex max-w-fit items-center gap-x-2 px-[19px] py-[4.5px]">
-                      <SappIcon icon={'warningIcon'}></SappIcon>
+                      <SappIcon icon={'warningIcon'} />
                       <div className="font-medium text-accent-error">
                         Overdue
                       </div>
@@ -221,7 +280,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   <div className="col-span-1 break-words">{data?.name}</div>
                 </>
               )}
-              {data?.mode === 'OFFLINE' && (
+              {data?.mode === LearningMode.OFFLINE && (
                 <>
                   <div className="col-span-1 text-gray-1">Classroom</div>
                   <div className="col-span-1 break-words">
@@ -235,19 +294,24 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   </div>
                 </>
               )}
-              {data?.mode && ['LIVE_ONLIVE'].includes(data?.mode) && (
-                <>
-                  <div className="col-span-1 text-gray-1">Link meeting</div>
-                  <div className="col-span-1">{data?.class?.link_meeting}</div>
-                </>
-              )}
+              {data?.mode &&
+                [LearningMode?.LIVE_ONLINE].includes(
+                  data?.mode as LearningMode,
+                ) && (
+                  <>
+                    <div className="col-span-1 text-gray-1">Link meeting</div>
+                    <div className="col-span-1">
+                      {data?.class?.link_meeting}
+                    </div>
+                  </>
+                )}
             </div>
           )}
         </div>
         {!(data?.is_case_study || data?.schedule?.is_holiday) &&
           !isOnlyMidTermOrFinalTest && (
             <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
-              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
+              <div className="text-gray-14 flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold">
                 <div>Course Content</div>
                 <div
                   className="hover:cursor-pointer"

@@ -6,7 +6,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
-import { round } from 'lodash'
+import { isNull, round } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -18,6 +18,7 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
   COURSE_TYPE,
+  LEARNING_USER_STATUS,
   PROGRAM,
 } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -27,6 +28,7 @@ import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'
 import PopupOpenClass from './PopupOpenClass'
 import ModalFoundationCompleted from './ModalFoundationCompleted'
+import dayjs from 'dayjs'
 
 const Course = ({
   course,
@@ -130,6 +132,7 @@ const Course = ({
             return BUTTON_STATUS.Active
           else return BUTTON_STATUS.Disabled // Thông báo lỗi học viên không có trong lớp
         }
+
         if (startedAt && finishedAt) {
           const finishedAtDate = new Date(student?.finished_at as any)
           if (
@@ -144,6 +147,16 @@ const Course = ({
             if (studentStatus === 'COMPLETED') return BUTTON_STATUS.Review
           } else return BUTTON_STATUS.Disabled
         }
+
+        if (startedAt && isNull(finishedAt)) {
+          if (studentStatus === LEARNING_USER_STATUS.READY_TO_LEARN)
+            return BUTTON_STATUS.Begin
+          if (studentStatus === LEARNING_USER_STATUS.IN_PROGRESS)
+            return BUTTON_STATUS.Resume
+          if (studentStatus === LEARNING_USER_STATUS.COMPLETED)
+            return BUTTON_STATUS.Review
+        }
+
         return BUTTON_STATUS.Disabled
       }
       if (
@@ -181,15 +194,19 @@ const Course = ({
   }
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
-  async function activeCourse() {
+  async function activeCourse(foundation_class_id?: string) {
     try {
       const params = {
-        classId: `${classInstance?.id}`,
+        classId: foundation_class_id ? foundation_class_id : classInstance?.id,
       }
-      await CoursesAPI.activeCourse(params)
-      // await fetchCourseList()
-      refetch()
-      toast.success('Active thành công!')
+      const res = await CoursesAPI.activeCourse(params)
+      if (res?.success) {
+        router.push(`/courses/my-course/${foundation_class_id}`)
+        refetch()
+        if (course?.course_categories?.[0]?.name !== 'ACCA') {
+          toast.success('Active thành công!')
+        }
+      }
     } catch (error) {}
   }
   async function extendCourse() {
@@ -268,19 +285,38 @@ const Course = ({
    */
   const [openContinue, setOpenContinue] = useState(false)
 
-  const courseAction = () => {
-    const isPendingLesson =
-      classInstance?.type === 'LESSON' && !student?.is_passed
+  const utcNow = dayjs().utc()
+  const isPendingLesson =
+    classInstance?.type === 'LESSON' && !student?.is_passed
+  const isAccaCourse = course?.course_categories?.[0]?.name === 'ACCA'
+  const isFixedDuration =
+    classInstance?.duration_type === 'FIXED' ||
+    classInstance?.duration_type === 'FLEXIBLE'
+  const isFlexibleDuration = classInstance?.duration_type === 'FLEXIBLE'
+  const hasNotStarted = dayjs(utcNow).isBefore(
+    classInstance?.class_user_instances?.[0]?.started_at,
+  )
+  const isNotOpened = !classInstance?.class_user_instances?.[0]?.is_opened
+  const isCanceled = course.status === CLASS_USER_STATUS.CANCELED
 
-    if (isPendingLesson && course?.course_categories?.[0]?.name !== 'ACCA') {
+  const courseAction = () => {
+    // Handle pending lesson cases
+    if (isPendingLesson) {
+      if (isAccaCourse) {
+        if (hasNotStarted) {
+          setOpenClass(true)
+          return
+        }
+        setOpenContinue(true)
+        return
+      }
       setOpenLesson(true)
-    } else if (
-      isPendingLesson &&
-      course?.course_categories?.[0]?.name === 'ACCA'
-    ) {
-      setOpenContinue(true)
-    } else if (determineButtonToShow === 'Active') {
-      if (classInstance?.duration_type === 'FLEXIBLE') {
+      return
+    }
+
+    // Handle active course case
+    if (determineButtonToShow === 'Active') {
+      if (isFlexibleDuration) {
         setTimeActive(Number(classInstance?.flexible_days))
       } else {
         const classFinishedAt = parseISO(
@@ -293,12 +329,24 @@ const Course = ({
         setTimeActive(Number(getDateActive + 1))
       }
       setOpenActive(true)
-    } else if (determineButtonToShow === 'Extend') {
+      return
+    }
+
+    // Handle extend case
+    if (determineButtonToShow === 'Extend') {
       setOpenExtend(true)
-    } else if (!classInstance?.class_user_instances?.[0]?.is_opened) {
+      return
+    }
+
+    // Handle not opened case
+    if (isNotOpened) {
       setOpenClass(true)
-    } else {
-      course.status !== CLASS_USER_STATUS.CANCELED ? handleCourseDetail() : {}
+      return
+    }
+
+    // Handle default case
+    if (!isCanceled) {
+      handleCourseDetail()
     }
   }
 
@@ -360,7 +408,7 @@ const Course = ({
       await CoursesAPI.skipFoundation(course?.classes?.[0]?.id)
     } finally {
       setOpenContinue(false)
-      refetch()
+      handleCourseDetail()
     }
   }
 
@@ -369,11 +417,11 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+          className={`item p-7.5 shadow-sidebar flex flex-col bg-white`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`flex min-h-352 flex-col`}>
+          <div className={`min-h-352 flex flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'
@@ -551,7 +599,16 @@ const Course = ({
       <ModalFoundationCompleted
         openContinue={openContinue}
         handleSkipCourse={handleSkipCourse}
-        handleContinueFoundation={handleContinueFoundation}
+        handleClose={() => setOpenContinue(false)}
+        handleContinueFoundation={
+          classInstance?.duration_type === 'FLEXIBLE'
+            ? () =>
+                activeCourse(
+                  classInstance?.normal_class_connections?.[0]
+                    ?.foundation_class_id,
+                )
+            : handleContinueFoundation
+        }
       />
     </>
   )

@@ -22,13 +22,13 @@ export enum TEST_TYPE_ENUM {
   MID_TERM_TEST = 'MID_TERM_TEST',
   FINAL_TEST = 'FINAL_TEST',
   MOCK_TEST = 'MOCK_TEST',
-  ENTRANCE_TEST = 'ENTRANCE_TEST',
+  // ENTRANCE_TEST = 'ENTRANCE_TEST',
   // STORY = 'STORY',
   TOPIC_TEST = 'TOPIC_TEST',
   CHAPTER_TEST = 'CHAPTER_TEST',
   PART_TEST = 'PART_TEST',
-  EVENT_TEST = 'EVENT_TEST',
-  ACTIVITY = 'ACTIVITY',
+  // EVENT_TEST = 'EVENT_TEST',
+  // ACTIVITY = 'ACTIVITY',
 }
 export const QUIZ_GRADING_METHOD = [
   {
@@ -46,6 +46,7 @@ export const CLASS_TEACHER_STATUS = {
   IN_PROGRESS: 'IN_PROGRESS', // Đang học
   COMPLETED: 'COMPLETED', // Đã học xong
 }
+export const FLEXIBLE = 'FLEXIBLE'
 // Danh sách F thấp (< F4)
 export const F_LOW_CODES = ['F1', 'F2', 'F3', 'F4']
 export const F_HIGH_CODES = ['F5', 'F6']

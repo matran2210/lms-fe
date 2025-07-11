@@ -1,11 +1,11 @@
-import React from 'react'
-import EntranceTest from './EntranceTest'
 import { isEmpty } from 'lodash'
+import React from 'react'
 import NoData from 'src/common/NoData'
-// import { ANIMATION } from 'src/constants'
+import { IEntranceTest } from 'src/type/entrance-test'
+import EntranceTest from './EntranceTest'
 
 interface EntranceTestListProps {
-  entranceTestLists: any[]
+  entranceTestLists: IEntranceTest[]
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
@@ -24,7 +24,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
         entranceTestLists?.map((e, index) => (
           <div
             key={index}
-            className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+            className={`item p-7.5 shadow-sidebar flex flex-col bg-white`}
           >
             <EntranceTest
               data={e}

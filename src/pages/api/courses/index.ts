@@ -1,7 +1,8 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IScoreDetails } from 'src/type'
+import { IResponse, IScoreDetails } from 'src/type'
+import { CourseDetail } from 'src/type/course'
 
 export class CoursesAPI {
   static getNoteDetail(
@@ -71,7 +72,7 @@ export class CoursesAPI {
     page_index: number,
     page_size: number,
     params: Object,
-  ): Promise<any> {
+  ): Promise<IResponse<CourseDetail>> {
     return fetcher(
       `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {
@@ -175,7 +176,11 @@ export class CoursesAPI {
 
   static getQuizAttemptsTable(
     id: string,
-    { page_index, page_size }: { page_index: number; page_size: number },
+    {
+      page_index,
+      page_size,
+      no_group_view,
+    }: { page_index: number; page_size: number; no_group_view?: boolean },
   ): Promise<{
     success: boolean
     data: IScoreDetails
@@ -184,6 +189,7 @@ export class CoursesAPI {
       params: {
         page_index: page_index || 1,
         page_size: page_size || 10,
+        ...(no_group_view && { no_group_view }),
       },
     })
   }
@@ -317,8 +323,11 @@ export class CoursesAPI {
     return fetcher(`question/results?question_ids=${id}`)
   }
 
-  static getCourseLearningOutcome(id: string): Promise<any> {
-    return fetcher(`course_learning_outcomes/${id}`)
+  static getCourseLearningOutcome(
+    id: string,
+    class_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(`course_learning_outcomes/${id}/class/${class_id}`)
   }
 
   static getCourse(page_size: number, queryString?: string): Promise<any> {
@@ -452,6 +461,10 @@ export class CoursesAPI {
     payload: {
       question_id: string
       flag: boolean
+      answer?: {
+        question_id: string
+        requirement_id: string
+      }[]
     },
   ) {
     return fetcher(`quiz/${quiz_attempt_id}/flag`, {
@@ -486,6 +499,7 @@ export const getQuestionsById = async (
   }
 }
 
+//Hiện đang dùng để submit cho bài test trong activity
 export const submitQuizTest = async (
   id: string,
   data: any,
@@ -498,7 +512,7 @@ export const submitQuizTest = async (
 
   const quizAttemptId = quizAttemptResponse.data?.id
   if (quizAttemptId) {
-    const uri = '/quiz' + `/${quizAttemptId}` + '/submit'
+    const uri = '/quiz' + `/${quizAttemptId}` + '/submit-with-all-answer'
     const response = await fetcher(`${uri}`, {
       data: data,
       method: 'POST',

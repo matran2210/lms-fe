@@ -18,13 +18,13 @@ import { TeacherAPI } from '@pages/api/teacher'
 import clsx from 'clsx'
 import { sappFormatDate } from '@utils/index'
 import InfoItem from './InfoItem'
-import { isNull } from 'lodash'
 import StatusItem from './StatusItem'
+import { useRouter } from 'next/router'
 
 interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
-  selectedRequest: IScheduleRequestItem
+  selectedRequest: IScheduleRequestItem | undefined
   setOpenReasonModal: React.Dispatch<React.SetStateAction<IOpenReasonModal>>
   handleUpdateStatus: ({
     requestId,
@@ -41,14 +41,14 @@ const DetailRequestModal = ({
   setOpenReasonModal,
   handleUpdateStatus,
 }: IProps) => {
-  const requestId = selectedRequest.id
+  const router = useRouter()
+  const requestId = selectedRequest?.id
   const isPending = selectedRequest?.status === StatusRequestSchedule.PENDING
-  const isCancel = selectedRequest?.status === StatusRequestSchedule.CANCEL
-  const isReject = selectedRequest?.status === StatusRequestSchedule.REJECT
   const isApproved = selectedRequest?.status === StatusRequestSchedule.APPROVED
   const isOverdue = dayjs(selectedRequest?.due_date).isBefore(
     dayjs(selectedRequest?.updated_at),
   )
+
   const onClose = () => {
     setOpen(false)
   }
@@ -60,7 +60,7 @@ const DetailRequestModal = ({
    *
    * @returns {object} - Dữ liệu lịch trình yêu cầu của giáo viên.
    */
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [requestId],
     queryFn: async () => {
       try {
@@ -69,7 +69,9 @@ const DetailRequestModal = ({
          *
          * @returns {object} - Dữ liệu lịch trình yêu cầu của giáo viên.
          */
-        return await TeacherAPI.getRequestScheduleById(requestId)
+        const id = requestId || (router.query.request_id as string)
+        if (!id) throw new Error('Request ID is required')
+        return await TeacherAPI.getRequestScheduleById(id)
       } catch (error) {
         /**
          * Xử lý lỗi khi gọi API.
@@ -130,8 +132,9 @@ const DetailRequestModal = ({
      * @param {string} options.reason - Lý do cập nhật trạng thái (APPROVED).
      * @param {function} options.callback - Hàm callback sẽ được gọi sau khi cập nhật trạng thái thành công.
      */
+    if (!requestId) return
     handleUpdateStatus({
-      requestId: requestId,
+      requestId,
       type: StatusRequestSchedule.APPROVED,
       reason: StatusRequestSchedule.APPROVED,
       callback: onClose,
@@ -165,10 +168,10 @@ const DetailRequestModal = ({
       <div>
         <div className="mb-6 flex flex-col gap-4">
           <div className="text-lg font-medium">
-            {selectedRequest?.class?.code}
+            {selectedRequest?.class?.code || data?.data?.class?.code}
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm text-gray-12">Processing deadline:</div>
+            <div className="text-gray-12 text-sm">Processing deadline:</div>
             <div
               className={clsx('flex items-center gap-2 text-sm', {
                 'text-state-cancel': isOverdue,
@@ -185,21 +188,33 @@ const DetailRequestModal = ({
                   <div>Overdue</div>
                 </div>
               )}
-              {sappFormatDate(selectedRequest?.due_date, 'HH:mm | DD/MM/YYYY')}
+              {sappFormatDate(
+                selectedRequest?.due_date || data?.data?.due_date,
+                'HH:mm | DD/MM/YYYY',
+              )}
             </div>
           </div>
           <InfoItem
             title="Status:"
             value={
               <StatusItem
-                status={selectedRequest?.status?.toLowerCase()}
-                className={statusColor(selectedRequest)}
+                status={(
+                  selectedRequest?.status ||
+                  data?.data?.status ||
+                  ''
+                ).toLowerCase()}
+                className={statusColor(
+                  (selectedRequest as IScheduleRequestItem) ||
+                    (data?.data as unknown as IScheduleRequestItem),
+                )}
               />
             }
           />
         </div>
         <PrimaryInformation
-          selectedRequest={selectedRequest}
+          selectedRequest={
+            selectedRequest || (data?.data as unknown as IScheduleRequestItem)
+          }
           dataDetail={data?.data}
           isLoading={isLoading}
         />

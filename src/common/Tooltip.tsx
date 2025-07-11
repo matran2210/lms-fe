@@ -25,7 +25,7 @@ const Tooltip: React.FC<ITooltip> = ({
   arrow,
 }) => {
   if (!showTooltip) {
-    return <div>{children}</div>
+    return <span className={className}>{children}</span>
   }
 
   return (

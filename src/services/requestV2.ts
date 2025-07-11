@@ -10,9 +10,13 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
 import {
   CERTIFICATE_DETAIL,
+  COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
+  PageLink,
 } from 'src/constants'
+import { apiURL } from 'src/redux/services/httpService'
+import { deleteCookie, getCookie, setCookie } from '@utils/index'
 
 export const getBaseUrl = () => {
   if (typeof window !== 'undefined') {
@@ -69,6 +73,9 @@ request.interceptors.request.use(async (config: any) => {
 
   return config
 })
+// Variable to track whether the refresh token API has been called
+let isRefreshing = false
+let refreshSubscribers: ((token: string) => void)[] = []
 
 // Response Interceptor
 request.interceptors.response.use(
@@ -77,16 +84,66 @@ request.interceptors.response.use(
     const originalRequest = error.config
 
     // Handle token expiration (401 error)
-    if (error.response?.status === 401) {
-      const authenticationManager = new AuthenticationManager()
+    if (error.response && error.response.status === 401) {
+      if (!isRefreshing) {
+        isRefreshing = true
 
-      try {
-        await authenticationManager.refreshToken()
-        originalRequest.headers.Authorization = `Bearer ${authenticationManager.getToken()}`
-        return axios(originalRequest)
-      } catch (refreshError) {
-        return Promise.reject(refreshError)
+        axios(`${apiURL}/auth/refresh-token`, {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + getCookie(COOKIE_INFO.KEYCLOAK_TOKEN),
+          },
+          data: {
+            refresh_token: getCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN) ?? '',
+          },
+        })
+          .then(
+            (
+              res: AxiosResponse<{
+                access_token: string
+                refresh_token: string
+                session_state: string
+              }>,
+            ) => {
+              const userInfo = res?.data
+              setCookie(COOKIE_INFO.KEYCLOAK_TOKEN, userInfo?.access_token)
+              setCookie(
+                COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN,
+                userInfo?.refresh_token,
+              )
+              setCookie(COOKIE_INFO.SESSION_ID, userInfo?.session_state ?? '')
+
+              // update new token to axios
+              request.defaults.headers.common['Authorization'] =
+                `Bearer ${getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? ''}`
+
+              // Callback to unauth API calls
+              refreshSubscribers.forEach((callback) =>
+                callback(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? ''),
+              )
+              refreshSubscribers = []
+              isRefreshing = false
+            },
+          )
+          .catch(() => {
+            deleteCookie(COOKIE_INFO.KEYCLOAK_TOKEN)
+            deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
+            deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
+            deleteCookie(COOKIE_INFO.SESSION_ID)
+            window.location.href = PageLink.AUTH_LOGIN
+          })
       }
+
+      // Return a Promise to wait for the initial API callback
+      const retryOriginalRequest = new Promise((resolve) => {
+        const subscribeTokenRefresh = (token: string) => {
+          originalRequest.headers['Authorization'] = `Bearer ${token}`
+          resolve(axios(originalRequest))
+        }
+        refreshSubscribers.push(subscribeTokenRefresh)
+      })
+
+      return retryOriginalRequest
     }
 
     // Handle other errors
@@ -126,6 +183,11 @@ request.interceptors.response.use(
 
     if (!toastExceptions.includes(errorCode)) {
       toast.error(errorMessage)
+    }
+    if (
+      errorCode?.startsWith('403') // Forbidden các loại
+    ) {
+      Router.replace('/')
     }
 
     return Promise.reject(error)
