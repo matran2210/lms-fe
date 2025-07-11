@@ -30,7 +30,11 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { ICourseSectionNoteItem } from 'src/type/course/activity'
+import {
+  ICourseSectionNoteItem,
+  INotesListResponse,
+  ICourseSectionPathItem,
+} from 'src/type/course/activity'
 import NoDataV2 from 'src/common/NodataV2'
 import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
@@ -70,7 +74,9 @@ const LearningNotesList = () => {
     setIsViewOnly,
   } = useCourseNoteContext()
   const dispatch = useAppDispatch()
-  const [notesListData, setNotesListData] = useState<any>()
+  const [notesListData, setNotesListData] = useState<
+    INotesListResponse | undefined
+  >()
   const router = useRouter()
   const courseId = router.query.courseId
   const queryId = router.query.id
@@ -78,7 +84,7 @@ const LearningNotesList = () => {
   const courseSectionId = router.query.course_section_id
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
-  const [expandedNotes, setExpandedNotes] = useState<any>([])
+  const [expandedNotes, setExpandedNotes] = useState<string[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
@@ -95,10 +101,10 @@ const LearningNotesList = () => {
     fields.forEach((field) => methods.setValue(field, null))
   }
   const toggleExpand = (noteId: string) => {
-    setExpandedNotes((prevExpanded: any) => {
-      if (prevExpanded?.includes(noteId)) {
+    setExpandedNotes((prevExpanded: string[]) => {
+      if (prevExpanded.includes(noteId)) {
         // Nếu noteId đã trong mảng, loại bỏ nó
-        return prevExpanded?.filter((id: string) => id !== noteId)
+        return prevExpanded.filter((id: string) => id !== noteId)
       } else {
         // Nếu noteId chưa có trong mảng, thêm nó vào
         return [...prevExpanded, noteId]
@@ -191,7 +197,8 @@ const LearningNotesList = () => {
         (courseId || queryId) &&
         notesListStatus
       ) {
-        notesListData?.meta?.total_records > pageIndex && fetchData(params)
+        ;(notesListData?.meta?.total_records ?? 0) > pageIndex &&
+          fetchData(params)
       }
     }
 
@@ -208,8 +215,12 @@ const LearningNotesList = () => {
     setFirstLoadActity(false)
   }
 
-  const defaultValueActivity = (course_section_path: any, type: string) => {
-    const value = course_section_path.find((item: any) => item?.type === type)
+  const defaultValueActivity = (
+    course_section_path: ICourseSectionPathItem[],
+    type: string,
+  ) => {
+    const value = course_section_path.find((item) => item?.type === type)
+    if (!value) return { value: '', label: '' }
     const responce = { value: value.id, label: value.name }
     return responce
   }
@@ -314,7 +325,7 @@ const LearningNotesList = () => {
             <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
               {!isEmpty(notesListData?.notes) ? (
                 <>
-                  {notesListData?.notes?.map((note: any, index: number) => {
+                  {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
                     const isExpanded = expandedNotes.includes(note?.id)
                     const isEdit = activityId === note?.course_section_id
                     const handleEdit = () => {
