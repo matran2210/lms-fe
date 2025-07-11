@@ -30,19 +30,19 @@ const SearchWithMenuToggle = ({
   return (
     <div
       className={clsx(
-        'my-4 hidden items-center justify-between gap-6 md:mb-8 md:flex',
+        'my-4 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4',
         className,
       )}
     >
       {isShowToggle && (
         <div
-          className="inline-flex h-14 w-14 cursor-pointer items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
           onClick={handleOpenSidebar}
         >
           <HamburgerMenuLargeIcon />
         </div>
       )}
-      <div className="w-full rounded-lg bg-white px-8 py-4 shadow-small">
+      <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
         <SearchForm
           placeholder={MY_COURSES.placeholderSearchV2}
           formStyle="w-full flex items-center"
