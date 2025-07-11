@@ -62,7 +62,7 @@ const CourseParts = ({
               >
                 {router?.query?.focus_id === coursePart.id ? (
                   <div
-                    className={`item card active-section aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
+                    className={`item card active-section aspect-h-16 shadow-sidebar relative flex h-[412px] flex-col justify-between bg-white p-[30px]`}
                     data-aos={ANIMATION.DATA_AOS}
                     style={{ zIndex: courses?.length - index }}
                     ref={lastElementRef}
@@ -85,7 +85,7 @@ const CourseParts = ({
                 ) : (
                   <div
                     key={coursePart?.id}
-                    className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
+                    className={`item aspect-h-16 shadow-sidebar relative flex h-[412px] flex-col justify-between bg-white p-[30px]`}
                     ref={lastElementRef}
                     data-aos={ANIMATION.DATA_AOS}
                     style={{ zIndex: courses?.length - index }}
@@ -163,7 +163,7 @@ const CourseParts = ({
               >
                 <div
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between border-2 border-[#3E97FF] bg-white p-[30px] shadow-focus`}
+                  className={`item aspect-h-16 shadow-focus relative flex h-[412px] flex-col justify-between border-2 border-[#3E97FF] bg-white p-[30px]`}
                   ref={lastElementRef}
                   data-aos={ANIMATION.DATA_AOS}
                   style={{ zIndex: listCourseSectionFocus?.length - index }}
@@ -215,7 +215,7 @@ const CourseParts = ({
               >
                 <div
                   key={coursePart?.id}
-                  className={`item aspect-h-16 relative flex h-[412px] flex-col justify-between bg-white p-[30px] shadow-sidebar`}
+                  className={`item aspect-h-16 shadow-sidebar relative flex h-[412px] flex-col justify-between bg-white p-[30px]`}
                   ref={lastElementRef}
                   data-aos={ANIMATION.DATA_AOS}
                   style={{ zIndex: listCourseSectionOther?.length - index }}

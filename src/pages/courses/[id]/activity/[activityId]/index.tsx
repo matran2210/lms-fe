@@ -578,7 +578,7 @@ const ActivityPage = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout title="Activity">
-        <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
+        <div className={`max-w-xxl mx-auto my-0 text-bw-1`}>
           {/* Breadcrumbs */}
           <ul className="line-clamp-1 flex overflow-x-auto py-6 text-medium-sm font-medium">
             <BreadCrumbs />
@@ -951,7 +951,7 @@ const ActivityPage = () => {
 
           {/* Next/Prev Activities */}
           <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-            <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+            <div className="shadow-activity relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3">
               <div
                 ref={endActivityRef}
                 className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ? 'between' : 'end'}`}
@@ -981,7 +981,7 @@ const ActivityPage = () => {
                           activity?.previous_activity?.name?.length > 80
                         }
                       >
-                        <span className="ml-2 w-full overflow-hidden text-ellipsis leading-4.5">
+                        <span className="leading-4.5 ml-2 w-full overflow-hidden text-ellipsis">
                           {truncateString(
                             activity?.previous_activity?.name,
                             80,
@@ -1011,7 +1011,7 @@ const ActivityPage = () => {
                         title={activity?.next_activity?.name}
                         showTooltip={activity?.next_activity?.name?.length > 80}
                       >
-                        <div className="line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                        <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                           {truncateString(activity?.next_activity?.name, 80)}
                         </div>
                       </Tooltip>
@@ -1029,7 +1029,7 @@ const ActivityPage = () => {
             </div>
           </div>
           <div></div>
-          <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
+          <div className="shadow-activity mt-6" data-aos={ANIMATION.DATA_AOS}>
             <Discussion class_id={(router.query.id as string) || ''} />
           </div>
 

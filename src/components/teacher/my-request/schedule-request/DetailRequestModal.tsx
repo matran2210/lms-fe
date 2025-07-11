@@ -171,7 +171,7 @@ const DetailRequestModal = ({
             {selectedRequest?.class?.code || data?.data?.class?.code}
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm text-gray-12">Processing deadline:</div>
+            <div className="text-gray-12 text-sm">Processing deadline:</div>
             <div
               className={clsx('flex items-center gap-2 text-sm', {
                 'text-state-cancel': isOverdue,

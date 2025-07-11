@@ -114,7 +114,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
             size="medium"
             title={'Back'}
             color="textUnderline"
-            className="block min-w-120 pr-0 text-base lg:hidden"
+            className="min-w-120 block pr-0 text-base lg:hidden"
           ></SappButton>
         </div>
       }

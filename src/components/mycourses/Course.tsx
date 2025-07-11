@@ -417,11 +417,11 @@ const Course = ({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
+          className={`item p-7.5 shadow-sidebar flex flex-col bg-white`}
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >
-          <div className={`flex min-h-352 flex-col`}>
+          <div className={`min-h-352 flex flex-col`}>
             <div
               className={`name-course mb-4 text-2xl font-medium xl:h-[60px] ${
                 !enableCourse ? 'text-gray-2' : 'text-bw-1'

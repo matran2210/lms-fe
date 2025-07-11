@@ -347,7 +347,7 @@ const TabSlide = ({
           <div className="flex items-center">
             {activeShowAll && optionShowAll}
             <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
+              className={`leading-4.5 ml-6 w-max cursor-pointer text-sm font-semibold text-bw-1 underline ${
                 !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2'
               }`}
               onClick={() => {

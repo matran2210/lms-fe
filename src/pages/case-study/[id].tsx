@@ -19,7 +19,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
@@ -492,12 +492,12 @@ const CaseStudyDetail = ({ questions }: any) => {
   const getValueSelectText = (index: number) => {
     let value = [] as any
     if (valueRef?.current?.[index]) {
-      const inputs = valueRef?.current?.[index]?.querySelectorAll(
-        'select.sapp-select--selectword-preview',
+      const inputs = document.querySelectorAll(
+        'div.sapp-select--question',
       ) as any
 
       for (let e of inputs) {
-        value.push(e.value)
+        value.push(e?.dataset.value)
       }
     } else {
       value.push('')
@@ -1230,7 +1230,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="shadow-question-footer relative flex h-[48px] items-center justify-between bg-gray-3">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1311,7 +1311,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine shadow-questions-exhibits absolute bottom-full h-fit justify-center bg-gray-3 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },

@@ -514,7 +514,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="main default-content-editor max-w-xxl mx-auto my-0">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (

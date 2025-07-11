@@ -313,7 +313,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
 
   return (
     <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-4">
-      <div className="w-full shadow-box" data-aos={ANIMATION.DATA_AOS}>
+      <div className="shadow-box w-full" data-aos={ANIMATION.DATA_AOS}>
         <ul className="flex h-full flex-col justify-between bg-white px-3 py-4">
           <div>
             {Object.entries(PROFILE_PAGES).map(([key, value]) => {
@@ -425,7 +425,7 @@ const ProfileSideBar = ({ page, children }: IProps) => {
           </div>
         </ul>
       </div>
-      <div className="col-span-3 mb-6 hidden bg-white shadow-box lg:mb-0 lg:block">
+      <div className="shadow-box col-span-3 mb-6 hidden bg-white lg:mb-0 lg:block">
         {children}
       </div>
     </div>
