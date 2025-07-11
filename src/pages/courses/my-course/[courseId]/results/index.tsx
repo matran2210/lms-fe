@@ -10,6 +10,7 @@ import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from '@pages/api/courses'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import clsx from 'clsx'
 
 const Results = () => {
   const router = useRouter()
@@ -89,7 +90,7 @@ const Results = () => {
         title={TEST_AND_QUIZ_TITLE}
         showIcon={isTabletView || isMobileView}
         onBack={handleBack}
-        className={isMobileView ? 'mt-4' : ''}
+        className={clsx({ 'mt-4': isMobileView })}
       />
 
       <ResultsTable />

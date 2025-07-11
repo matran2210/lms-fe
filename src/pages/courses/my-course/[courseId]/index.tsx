@@ -25,6 +25,7 @@ import { RemindChoosingExam } from 'src/type/course'
 import SelectExamPopup from './popups/SelectExamPopup'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -256,7 +257,7 @@ const CourseDetail = () => {
             <HeaderMobile
               showIcon={false}
               title={courseNameDetail || ''}
-              className={isMobileView ? 'mt-4' : ''}
+              className={clsx({ 'mt-4': isMobileView })}
               extraActions={
                 <FilterCourse
                   totalResult={courses?.length || 0}

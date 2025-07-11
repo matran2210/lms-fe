@@ -191,9 +191,11 @@ const ResultsTable = () => {
 
   return (
     <>
-      <div className="my-6">
-        {!isMobileView && <FilterCourseSection setParams={setParams} />}
-      </div>
+      {!isMobileView && (
+        <div className="my-6">
+          <FilterCourseSection setParams={setParams} />
+        </div>
+      )}
       {isLoading ? (
         <>
           {[...Array(6)].map((_, index) => (
@@ -203,7 +205,7 @@ const ResultsTable = () => {
           ))}
         </>
       ) : (
-        <div className="flex flex-col gap-6">
+        <div className="mt-6 flex flex-col gap-6 md:mt-0">
           {!isEmpty(groupedDataByType?.[TEST_TYPE.ACTIVITY]) && (
             <div className="flex flex-col gap-6">
               {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
