@@ -11,7 +11,7 @@ interface IProps extends DrawerProps {
   handleCancel?: () => void
   handleBack?: () => void
   width?: string | number
-  title: string
+  title: React.ReactNode
   isShowBtnClose?: boolean
   isShowFooter?: boolean
   isShowHeader?: boolean
