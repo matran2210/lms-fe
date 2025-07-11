@@ -64,6 +64,18 @@ const RepeatFrequency = ({
     onChange(frequency)
   }, [frequency])
 
+  const handleKeyDownInterval = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    const key = event.key
+    if (
+      !/^\d$/.test(key) &&
+      !['Backspace', 'Delete', 'Tab', 'ArrowLeft', 'ArrowRight'].includes(key)
+    ) {
+      event.preventDefault()
+    }
+  }
+
   return (
     <div className={clsx('flex flex-row items-center gap-x-3', className)}>
       <Input
@@ -79,6 +91,7 @@ const RepeatFrequency = ({
         className="flex h-11.25 min-w-[80px] max-w-[80px] rounded border-default focus:border-primary"
         name="repeat_every"
         disabled={disabled}
+        onKeyDown={handleKeyDownInterval}
       />
       <HookFormSelect
         isSearchable={false}
