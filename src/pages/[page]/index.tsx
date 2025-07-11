@@ -50,6 +50,8 @@ import UserApi from 'src/redux/services/User/user'
 import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { MY_COURSES } from 'src/constants/lang'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 interface IFullScreenMobile {
   open: boolean
@@ -350,20 +352,10 @@ const ProfilePage = () => {
       fullWidth={isMobileView}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
-        <div className="mb-4 mt-2 hidden items-center justify-between gap-6 md:mb-8 md:flex">
-          <div
-            className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
-            onClick={handleOpenSidebar}
-          >
-            <HamburgerMenuLargeIcon />
-          </div>
-          <div className="w-full rounded-lg bg-white px-8 py-4 shadow-small">
-            <SearchForm
-              placeholder="Enter name of course..."
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+        />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
             <div className="hidden text-2xl font-medium md:block lg:hidden">
