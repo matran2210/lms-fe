@@ -1,5 +1,4 @@
 import Layout from '@components/layout'
-import SearchForm from '@components/mycourses/Search'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -16,25 +15,24 @@ import {
   PageLink,
 } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
-import { HamburgerMenuLargeIcon } from '@assets/icons'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { RemindChoosingExam } from 'src/type/course'
 import SelectExamPopup from './popups/SelectExamPopup'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
-  const { setOpenSidebar } = useCourseContext()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+  const { setOpenSidebar, setCourseName } = useCourseContext()
   const [showSidebar, setshowSidebar] = useState(false)
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
   const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
@@ -223,6 +221,10 @@ const CourseDetail = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if (courseNameDetail) setCourseName(courseNameDetail)
+  }, [courseNameDetail])
+
   return (
     <Layout
       title="Course Detail"
@@ -252,21 +254,25 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="mt-8 flex items-start justify-between gap-6 lg:my-4"
+            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="line-clamp-2 w-[60%] text-xl font-semibold text-gray-800 md:text-2xl lg:text-3xl">
-              {courseNameDetail}
-            </div>
-            <FilterCourse
-              totalResult={courses?.length || 0}
-              listFilter={[
-                {
-                  name: 'user_section_learning_status',
-                  placeholder: 'Status',
-                  options: defaultStatusDetail,
-                },
-              ]}
+            <HeaderMobile
+              showIcon={false}
+              title={courseNameDetail || ''}
+              className={isMobileView ? 'mt-4' : ''}
+              extraActions={
+                <FilterCourse
+                  totalResult={courses?.length || 0}
+                  listFilter={[
+                    {
+                      name: 'user_section_learning_status',
+                      placeholder: 'Status',
+                      options: defaultStatusDetail,
+                    },
+                  ]}
+                />
+              }
             />
           </div>
           <div className="h-full pt-6" data-aos={ANIMATION.DATA_AOS}>
