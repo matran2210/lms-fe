@@ -124,44 +124,51 @@ const FilterCourse = ({
           closable
           classNameHeader="mb-4"
         >
-          <div className="relative">
-            {listFilter?.map((item, index) => (
-              <div key={index}>
-                <div>
-                  <div className="mb-2 text-base font-semibold text-gray-800">
-                    {item.placeholder}
-                  </div>
+          <div className="relative flex h-full flex-col justify-between">
+            <div>
+              {listFilter?.map((item, index) => (
+                <div key={index}>
                   <div>
-                    {(item.options ?? []).map((el) => {
-                      const isSelected = filters?.[item.name] === el.value
-                      const defaultSelected = !filters?.[item.name] && !el.value
-                      return (
-                        <div
-                          key={el.id}
-                          className="flex items-center justify-between py-2"
-                          onClick={() => handleSelect(el, item.name)}
-                        >
+                    <div className="mb-2 text-base font-semibold text-gray-800">
+                      {item.placeholder}
+                    </div>
+                    <div>
+                      {(item.options ?? []).map((el) => {
+                        const isSelected = filters?.[item.name] === el.value
+                        const defaultSelected =
+                          !filters?.[item.name] && !el.value
+                        return (
                           <div
-                            className={clsx(
-                              'text-sm text-gray-800',
-                              (isSelected || defaultSelected) && 'text-primary',
-                            )}
+                            key={el.id}
+                            className="flex items-center justify-between py-2"
+                            onClick={() => handleSelect(el, item.name)}
                           >
-                            {el.label}
+                            <div
+                              className={clsx(
+                                'text-sm text-gray-800',
+                                (isSelected || defaultSelected) &&
+                                  'text-primary',
+                              )}
+                            >
+                              {el.label}
+                            </div>
+                            <div>
+                              {(isSelected || defaultSelected) && (
+                                <CheckIconV2 />
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            {(isSelected || defaultSelected) && <CheckIconV2 />}
-                          </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
+                    </div>
                   </div>
+                  {index < listFilter.length - 1 && (
+                    <Divider className="my-4 bg-gray-200" />
+                  )}
                 </div>
-                {index < listFilter.length - 1 && (
-                  <Divider className="my-4 bg-gray-200" />
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
+
             <div className="sticky bottom-0 bg-white py-4">
               <ButtonPrimary title="Confirm" full onClick={onConfirm} />
             </div>
