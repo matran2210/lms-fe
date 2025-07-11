@@ -75,7 +75,7 @@ const CardResultTest = ({
               </div>
               {!isMobileView && <div className="mx-3 text-gray-300">|</div>}
               <div className="flex">
-                <div className="text-sm font-normal leading-normal text-gray-400 md:mr-2 md:text-base">
+                <div className="mr-2 text-sm font-normal leading-normal text-gray-400 md:text-base">
                   Time spent:
                 </div>
                 <div className="text-sm font-medium leading-normal text-gray-800 md:text-base">

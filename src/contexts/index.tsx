@@ -32,8 +32,6 @@ type Context = {
   setOpenPopupCTA: React.Dispatch<React.SetStateAction<IPopupFormState>>
   isOpenSidebar: boolean
   setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>
-  courseName: string
-  setCourseName: React.Dispatch<React.SetStateAction<string>>
 }
 
 // initContext
@@ -59,8 +57,6 @@ const initContext: Context = {
   setOpenPopupCTA: () => {},
   isOpenSidebar: false,
   setOpenSidebar: () => {},
-  courseName: '',
-  setCourseName: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -109,12 +105,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    * @description state này bằng true khi hiển thị sidebar
    */
   const [isOpenSidebar, setOpenSidebar] = useState(false)
-
-  /**
-   * @description state này lưu tên của khóa học
-   */
-  const [courseName, setCourseName] = useState('')
-
   const router = useRouter()
 
   async function fetchEventTest() {
@@ -154,8 +144,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       setOpenPopupCTA,
       isOpenSidebar,
       setOpenSidebar,
-      courseName,
-      setCourseName,
     }),
     [
       openPopupCongrats,
@@ -174,8 +162,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       setOpenPopupCTA,
       isOpenSidebar,
       setOpenSidebar,
-      courseName,
-      setCourseName,
     ],
   )
 

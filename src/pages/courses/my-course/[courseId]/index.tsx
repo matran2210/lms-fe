@@ -32,7 +32,7 @@ const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
-  const { setOpenSidebar, setCourseName } = useCourseContext()
+  const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setshowSidebar] = useState(false)
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
   const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
@@ -221,10 +221,6 @@ const CourseDetail = () => {
     }
   }, [data])
 
-  useEffect(() => {
-    if (courseNameDetail) setCourseName(courseNameDetail)
-  }, [courseNameDetail])
-
   return (
     <Layout
       title="Course Detail"
@@ -300,7 +296,7 @@ const CourseDetail = () => {
       )}
 
       <div className="sticky inset-x-0 bottom-4 z-50">
-        <div className="w-full">
+        <div className="flex w-full flex-col gap-4">
           <CtaTrial />
           {pinnedCompletedCourse.isOpen && (
             <PinnedCompletedCourse

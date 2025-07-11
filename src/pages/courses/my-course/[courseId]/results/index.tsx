@@ -7,20 +7,57 @@ import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { PageLink, TEST_AND_QUIZ_TITLE } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import { useCourseContext } from '@contexts/index'
+import { useQuery } from 'react-query'
+import { CoursesAPI } from '@pages/api/courses'
+import { DEFAULT_PAGE_SIZE } from 'src/constants'
 
 const Results = () => {
   const router = useRouter()
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
-  const { courseName } = useCourseContext()
-
   const handleBack = () => {
     if (router.query.courseId)
       router.push(`/courses/my-course/${router.query.courseId}`)
   }
 
-  const courseNameDetail = courseName
+  /**
+   * @description config API course detail
+   */
+  const fetchCourseDetail = async ({
+    pageParam,
+    params,
+  }: {
+    pageParam: number
+    params: Object
+  }) => {
+    const { data } = await CoursesAPI.getCourseDetail(
+      router.query.courseId,
+      pageParam || 1,
+      DEFAULT_PAGE_SIZE,
+      params,
+    )
+    return {
+      data: data?.data?.course_sections_with_progress || [],
+      courseDetail: data,
+    }
+  }
+
+  const params = {
+    user_section_learning_status:
+      router.query.user_section_learning_status || undefined,
+  }
+
+  const { data: courseData } = useQuery({
+    queryKey: ['courseDetail'],
+    queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
+    refetchOnWindowFocus: true,
+    retry: false,
+  })
+
+  /**
+   * @description biến này lấy name của course
+   */
+  const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
