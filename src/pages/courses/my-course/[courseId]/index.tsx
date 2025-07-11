@@ -26,6 +26,7 @@ import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { RemindChoosingExam } from 'src/type/course'
 import SelectExamPopup from './popups/SelectExamPopup'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -228,20 +229,11 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <div className="mb-4 mt-2 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4">
-        <div
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
-          onClick={handleOpenSidebar}
-        >
-          <HamburgerMenuLargeIcon />
-        </div>
-        <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearchV2}
-            formStyle="w-full flex items-center"
-          />
-        </div>
-      </div>
+      <SearchWithMenuToggle
+        handleOpenSidebar={handleOpenSidebar}
+        isShowToggle
+      />
+
       {isLoading ? (
         <CourseSkeleton />
       ) : (
