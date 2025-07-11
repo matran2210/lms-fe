@@ -1,0 +1,1 @@
+// Contstants for the application
