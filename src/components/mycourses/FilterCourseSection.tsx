@@ -1,10 +1,10 @@
 import { Dispatch, SetStateAction } from 'react'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import clsx from 'clsx'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
-import { SectionField, SectionDropdownFormValues } from 'src/type/courses'
+import { SectionField } from 'src/type/courses'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
@@ -25,14 +25,7 @@ const FilterCourseSection = ({
   isPageStateVariables,
   allowClear = false,
 }: FilterCourseSectionProps) => {
-  const { control, watch, setValue } = useForm<SectionDropdownFormValues>({
-    defaultValues: {
-      section: null,
-      subsection: null,
-      unit: null,
-      activity: null,
-    },
-  })
+  const { control, watch, setValue } = useFormContext()
 
   const selectedSection = watch('section')
   const selectedSubsection = watch('subsection')

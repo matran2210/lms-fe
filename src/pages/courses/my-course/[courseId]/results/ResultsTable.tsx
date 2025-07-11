@@ -1,7 +1,14 @@
 import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { GradingMethod } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import {
+  SetStateAction,
+  Dispatch,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useQuery, useInfiniteQuery } from 'react-query'
 import { GRADE_STATUS } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -16,8 +23,22 @@ import { isEmpty } from 'lodash'
 import CardResultTest from '@components/learning/activity/CardResultTest'
 import { Avatar, List, Skeleton } from 'antd'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import {
+  IOpenChooseItem,
+  ISection,
+  SectionDropdownFormValues,
+} from 'src/type/courses'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { FormProvider, useForm } from 'react-hook-form'
 
-const ResultsTable = () => {
+const ResultsTable = ({
+  openFilter,
+  setOpenFilter,
+}: {
+  openFilter: boolean
+  setOpenFilter: Dispatch<SetStateAction<boolean>>
+}) => {
   const router = useRouter()
   const { isMobileView } = useTailwindBreakpoint()
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -25,6 +46,24 @@ const ResultsTable = () => {
   const [openReport, setOpenReport] = useState<boolean>(false)
   const [params, setParams] = useState<any>({})
   const observer = useRef<IntersectionObserver>()
+  const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
+    isOpen: false,
+    type: 'section',
+    name: '',
+    params: '',
+  })
+  const [listSection, setListSection] = useState<ISection[]>([])
+  const [listSubsection, setListSubsection] = useState<ISection[]>([])
+  const [listUnit, setListUnit] = useState<ISection[]>([])
+  const [listActivity, setListActivity] = useState<ISection[]>([])
+  const methods = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
   /**
    * @description sử dụng react-query và infinite query để lấy data
    */
@@ -189,8 +228,17 @@ const ResultsTable = () => {
     router.push(link)
   }
 
+  const handleSubmit = () => {
+    setOpenFilter(false)
+    setParams(openChooseItem.params || '')
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+  }
+
   return (
-    <>
+    <FormProvider {...methods}>
       {!isMobileView && (
         <div className="my-6">
           <FilterCourseSection setParams={setParams} />
@@ -259,7 +307,32 @@ const ResultsTable = () => {
         header="Awating Grading"
         content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
-    </>
+      <SappDrawerV3
+        open={openFilter}
+        handleCancel={() => setOpenFilter(false)}
+        isShowBtnClose
+        title={'Sort'}
+        isShowFooter={openFilter}
+        handleSubmit={handleSubmit}
+        classNameHeader="pb-4 border-b border-gray-200"
+        rootClassName={'responsive-drawer-center'}
+        submitButtonClassName="w-full h-10"
+        btnSubmitTile="Confirm"
+      >
+        <ListItemFilterMobile
+          setOpenChooseItem={setOpenChooseItem}
+          openChooseItem={openChooseItem}
+          listSection={listSection}
+          listSubsection={listSubsection}
+          listUnit={listUnit}
+          listActivity={listActivity}
+          setListSection={setListSection}
+          setListSubsection={setListSubsection}
+          setListUnit={setListUnit}
+          setListActivity={setListActivity}
+        />
+      </SappDrawerV3>
+    </FormProvider>
   )
 }
 
