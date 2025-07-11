@@ -13,9 +13,14 @@ import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import { useCourseContext } from '@contexts/index'
+import { useState } from 'react'
 
 const EventTest = () => {
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
       const { data } = await EventTestAPI.get(params)
@@ -32,18 +37,28 @@ const EventTest = () => {
   const { data: eventTestLists, isLoading } = useGetData('event-test', {
     attempt_status: router?.query?.attempt_status,
   })
-
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title={LANG_SIGNIN.eventTest} showSidebar={isAlwaysShowSidebar}>
-        <div className="border-b border-[#DCDDDD] bg-white">
-          <div className="relative mx-auto my-0 flex max-w-[1144px] py-5.75 max-[1199px]:mx-6 ">
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
+      <Layout
+        title={LANG_SIGNIN.eventTest}
+        showSidebar={showSidebar || isAlwaysShowSidebar}
+        handleToggleSidebar={handleCloseSidebar}
+      >
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+        />
         <div className="main mx-8 my-0 max-w-[1144px] xl:mx-auto">
           <div className="flex flex-col justify-between gap-3 pb-4 pt-6 sm:flex-row">
             <h2 className="text-sm font-medium text-[#050505] ">
