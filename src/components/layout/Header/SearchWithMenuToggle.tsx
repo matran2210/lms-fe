@@ -20,7 +20,7 @@ const SearchWithMenuToggle = ({
   disabledSearch,
   isShowUserGuide = false,
   isShowToggle = false,
-  className = 'hidden',
+  className,
 }: IProps) => {
   const {
     status: guideStatus,
@@ -30,7 +30,7 @@ const SearchWithMenuToggle = ({
   return (
     <div
       className={clsx(
-        'my-4 items-center justify-between gap-6 md:mb-8 md:flex',
+        'my-4 hidden items-center justify-between gap-6 md:mb-8 md:flex',
         className,
       )}
     >
