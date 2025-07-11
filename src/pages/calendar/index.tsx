@@ -105,63 +105,65 @@ const Page = () => {
   }, [filter, data])
 
   return (
-    <Layout title="Course Detail" showSidebar={isAlwaysShowSidebar}>
-      <div className="mx-auto my-0 max-w-[1570px] pt-6 max-[1199px]:mx-6">
+    <Layout title="Course Detail" fullWidth showSidebar={isAlwaysShowSidebar}>
+      <div className="mx-auto my-0 max-w-[1644px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-            <div className="font-normal text-[#050505]">Calendar</div>
+            <div className="text-3xl font-bold text-gray-800">Calendar</div>
           </div>
-          <div className="pb-5">
-            <SAPPCalendar
-              showWeeklyNorm={false}
-              events={
-                events?.map((item) => {
-                  const isOverDue =
-                    dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
-                      dayjs(),
-                    ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
-                  return {
-                    id: item.id,
-                    title: item.name,
-                    startDate: new Date(
-                      `${item.start_date}T${item.start_time}Z`,
-                    ),
-                    endDate: new Date(`${item.end_date}T${item.end_time}Z`),
-                    type: getType(item),
-                    description: item.description,
-                    isRepeat: false,
-                    courseId: item?.course_id,
-                    source: CALENDAR_TYPE.LMS,
-                    isHoliday: item?.is_holiday,
-                    isCaseStudy: item?.is_case_study,
-                    isTest: item?.is_test,
-                    isKeyContentBefore: item?.is_key_before_content,
-                    isKeyContentAfter: item?.is_key_after_content,
-                    isOverDue: isOverDue,
-                  }
-                }) ?? []
-              }
-              onEventDetail={(event) => {
-                setOpen({ isOpen: true, data: event })
-              }}
-              type={CALENDAR_TYPE.LMS}
-              hasFilter
-              onRefetchAPI={async (startDate: Date, endDate: Date) => {
-                setCurrentTime({ startDate, endDate })
-                await fetchCalendar({
-                  start_date: startDate.toISOString(),
-                  end_date: endDate.toISOString(),
-                })
-              }}
-              onfilter={handleFilter}
-              courses={data?.courses}
-              loading={loading}
-              headerType={CALENDAR_TYPE.LMS}
-            />
+          <div className="flex h-fit items-stretch justify-between gap-6 pb-5">
+            <div className="flex-1">
+              <SAPPCalendar
+                showWeeklyNorm={false}
+                events={
+                  events?.map((item) => {
+                    const isOverDue =
+                      dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
+                        dayjs(),
+                      ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
+                    return {
+                      id: item.id,
+                      title: item.name,
+                      startDate: new Date(
+                        `${item.start_date}T${item.start_time}Z`,
+                      ),
+                      endDate: new Date(`${item.end_date}T${item.end_time}Z`),
+                      type: getType(item),
+                      description: item.description,
+                      isRepeat: false,
+                      courseId: item?.course_id,
+                      source: CALENDAR_TYPE.LMS,
+                      isHoliday: item?.is_holiday,
+                      isCaseStudy: item?.is_case_study,
+                      isTest: item?.is_test,
+                      isKeyContentBefore: item?.is_key_before_content,
+                      isKeyContentAfter: item?.is_key_after_content,
+                      isOverDue: isOverDue,
+                    }
+                  }) ?? []
+                }
+                onEventDetail={(event) => {
+                  setOpen({ isOpen: true, data: event })
+                }}
+                type={CALENDAR_TYPE.LMS}
+                hasFilter
+                onRefetchAPI={async (startDate: Date, endDate: Date) => {
+                  setCurrentTime({ startDate, endDate })
+                  await fetchCalendar({
+                    start_date: startDate.toISOString(),
+                    end_date: endDate.toISOString(),
+                  })
+                }}
+                onfilter={handleFilter}
+                courses={data?.courses}
+                loading={loading}
+                headerType={CALENDAR_TYPE.LMS}
+              />
+            </div>
+            <DetailCalendar open={open} setOpen={setOpen} />
           </div>
         </div>
       </div>
-      <DetailCalendar open={open} setOpen={setOpen} />
     </Layout>
   )
 }

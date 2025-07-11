@@ -95,8 +95,7 @@
 .learning-act-tab-pagination {
   @apply mt-6;
   .tab-pagination {
-    @apply rounded-full p-2 text-[#1C274C];
-    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+    @apply rounded-full p-2 text-[#1C274C] shadow-card;
     &:hover {
       @apply bg-primary text-white;
     }
