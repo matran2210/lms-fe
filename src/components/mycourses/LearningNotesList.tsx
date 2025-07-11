@@ -1,4 +1,10 @@
-import { DeleteIcon, EditIcon, ViewIcon } from '@assets/icons'
+import {
+  DeleteIcon,
+  EditIcon,
+  EllipsisIconV2,
+  PencilV2Icon,
+  ViewIcon,
+} from '@assets/icons'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -24,12 +30,17 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/mycourses/FilterCourseSection'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
-import { ICourseSectionNoteItem } from 'src/type/course/activity'
+import {
+  ICourseSectionNoteItem,
+  INotesListResponse,
+  ICourseSectionPathItem,
+} from 'src/type/course/activity'
 import NoDataV2 from 'src/common/NodataV2'
 import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
+import ActionCellV2 from '@components/base/action/ActionCellV2'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -63,7 +74,9 @@ const LearningNotesList = () => {
     setIsViewOnly,
   } = useCourseNoteContext()
   const dispatch = useAppDispatch()
-  const [notesListData, setNotesListData] = useState<any>()
+  const [notesListData, setNotesListData] = useState<
+    INotesListResponse | undefined
+  >()
   const router = useRouter()
   const courseId = router.query.courseId
   const queryId = router.query.id
@@ -71,7 +84,7 @@ const LearningNotesList = () => {
   const courseSectionId = router.query.course_section_id
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
-  const [expandedNotes, setExpandedNotes] = useState<any>([])
+  const [expandedNotes, setExpandedNotes] = useState<string[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
@@ -88,10 +101,10 @@ const LearningNotesList = () => {
     fields.forEach((field) => methods.setValue(field, null))
   }
   const toggleExpand = (noteId: string) => {
-    setExpandedNotes((prevExpanded: any) => {
-      if (prevExpanded?.includes(noteId)) {
+    setExpandedNotes((prevExpanded: string[]) => {
+      if (prevExpanded.includes(noteId)) {
         // Nếu noteId đã trong mảng, loại bỏ nó
-        return prevExpanded?.filter((id: string) => id !== noteId)
+        return prevExpanded.filter((id: string) => id !== noteId)
       } else {
         // Nếu noteId chưa có trong mảng, thêm nó vào
         return [...prevExpanded, noteId]
@@ -184,7 +197,8 @@ const LearningNotesList = () => {
         (courseId || queryId) &&
         notesListStatus
       ) {
-        notesListData?.meta?.total_records > pageIndex && fetchData(params)
+        ;(notesListData?.meta?.total_records ?? 0) > pageIndex &&
+          fetchData(params)
       }
     }
 
@@ -201,8 +215,12 @@ const LearningNotesList = () => {
     setFirstLoadActity(false)
   }
 
-  const defaultValueActivity = (course_section_path: any, type: string) => {
-    const value = course_section_path.find((item: any) => item?.type === type)
+  const defaultValueActivity = (
+    course_section_path: ICourseSectionPathItem[],
+    type: string,
+  ) => {
+    const value = course_section_path.find((item) => item?.type === type)
+    if (!value) return { value: '', label: '' }
     const responce = { value: value.id, label: value.name }
     return responce
   }
@@ -304,25 +322,75 @@ const LearningNotesList = () => {
               />
             )}
 
-            <div>
+            <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
               {!isEmpty(notesListData?.notes) ? (
                 <>
-                  {notesListData?.notes?.map((note: any, index: number) => {
+                  {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
                     const isExpanded = expandedNotes.includes(note?.id)
+                    const isEdit = activityId === note?.course_section_id
+                    const handleEdit = () => {
+                      if (
+                        !getNotesData.some((item) => item.id.includes(note?.id))
+                      ) {
+                        handleOpenNote(note, false)
+
+                        onClose()
+                      }
+                    }
+                    const handleView = async () => {
+                      await router.push({
+                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                        query: {
+                          note_id: note?.id,
+                        },
+                      })
+                      handleOpenNote(note, true)
+                      onClose()
+                    }
+
+                    const listAction = [
+                      ...(isEdit
+                        ? [
+                            {
+                              icon: <PencilV2Icon className="h-5 w-5" />,
+                              nameAction: 'Edit',
+                              action: handleEdit,
+                            },
+                          ]
+                        : []),
+                      {
+                        icon: <DeleteIcon />,
+                        nameAction: 'Delete',
+                        action: () => handleDelete(note?.id),
+                      },
+                    ]
+
                     return (
                       <div
-                        className="mt-6 border border-[#DCDDDD] p-6 last:mb-6"
+                        className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
                         key={note?.id}
+                        onClick={handleView}
                       >
+                        <div className="flex justify-between">
+                          <div className="text-sm font-semibold text-gray-800 md:text-base">
+                            {note?.name}
+                          </div>
+                          <div onClick={(e) => e.stopPropagation()}>
+                            <ActionCellV2
+                              icon={<EllipsisIconV2 />}
+                              listAction={listAction}
+                            />
+                          </div>
+                        </div>
                         <div
-                          className="mb-1.5 flex items-center pb-px"
+                          className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
                           onClick={() => onClose()}
                         >
                           <SappBreadcrumbNotLink
                             paths={[...note?.course_section_path].reverse()}
                           />
                         </div>
-                        <div className="text-base font-normal text-[#050505]">
+                        <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
                           <span
                             className={`whitespace-pre-wrap break-all ${
                               isExpanded ? '' : 'line-clamp-3'
@@ -332,7 +400,7 @@ const LearningNotesList = () => {
                           </span>
                           {!isExpanded && note?.description?.length > 230 ? (
                             <button
-                              className="block text-base font-normal text-[#A1A1A1]"
+                              className="block text-sm font-normal text-gray-400 md:text-base"
                               onClick={() => toggleExpand(note?.id)}
                             >
                               Show more
@@ -341,7 +409,7 @@ const LearningNotesList = () => {
                             <>
                               {note?.description?.length > 230 ? (
                                 <button
-                                  className="block text-base font-normal text-[#A1A1A1]"
+                                  className="block text-sm font-normal text-[#A1A1A1] md:text-base"
                                   onClick={() => toggleExpand(note?.id)}
                                 >
                                   Show less
@@ -352,59 +420,9 @@ const LearningNotesList = () => {
                             </>
                           )}
                         </div>
-                        <div className="mt-5 flex justify-between">
-                          <div className="text-sm font-normal text-[#A1A1A1]">
+                        <div className="mt-2 flex md:mt-4">
+                          <div className="text-sm font-normal text-gray-400">
                             {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
-                          </div>
-                          <div className="flex">
-                            <div className="relative cursor-pointer">
-                              {activityId === note?.course_section_id ? (
-                                <span
-                                  className="notes-list-icon"
-                                  onClick={() => {
-                                    if (
-                                      !getNotesData.some((item) =>
-                                        item.id.includes(note?.id),
-                                      )
-                                    ) {
-                                      handleOpenNote(note, false)
-
-                                      onClose()
-                                    }
-                                  }}
-                                >
-                                  <EditIcon />
-                                </span>
-                              ) : (
-                                <>
-                                  <div
-                                    onClick={async () => {
-                                      await router.push({
-                                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                                        query: {
-                                          note_id: note?.id,
-                                        },
-                                      })
-                                      handleOpenNote(note, true)
-                                      onClose()
-                                    }}
-                                  >
-                                    <span className="notes-list-icon">
-                                      <ViewIcon />
-                                    </span>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                            <div className="ms-4 cursor-pointer">
-                              <span
-                                onClick={() => {
-                                  handleDelete(note?.id)
-                                }}
-                              >
-                                <DeleteIcon />
-                              </span>
-                            </div>
                           </div>
                         </div>
                       </div>

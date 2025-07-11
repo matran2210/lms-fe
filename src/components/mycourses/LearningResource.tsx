@@ -180,7 +180,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       : 'Course Resource'
     : openChooseItem.name
   const classNameHeader = openChooseItem.isOpen
-    ? 'pb-4 border-b border-gray-200 '
+    ? 'pb-4 border-b border-gray-200'
     : 'mb-6'
 
   const handleBack = () => {
