@@ -352,7 +352,8 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                             ? formatRecurringSchedule(
                                 item.schedule?.recurring_pattern_schedule,
                                 formatDateTimeWithTimeZone(
-                                  item.schedule?.start_date,
+                                  item.schedule?.recurring_pattern_schedule
+                                    .start_date,
                                   item.schedule?.start_time,
                                 ),
                               )
