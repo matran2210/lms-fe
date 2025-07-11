@@ -27,7 +27,12 @@ export const useNotification = () => {
   const [isViewDetail, setIsViewDetail] = useState(false)
   const [openNotification, setOpenNotification] = useState(false)
   const [selectedTab, setSelectedTab] = useState<number>(1)
-  const [notificationUnread, setNotificationUnread] = useState(0)
+  const storedCount = localStorage.getItem(
+    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
+  )
+  const [notificationUnread, setNotificationUnread] = useState(() => {
+    return parseInt(storedCount ?? '0', 10)
+  })
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const isFetching = useRef(false)

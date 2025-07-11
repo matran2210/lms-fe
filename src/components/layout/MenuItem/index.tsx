@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { LOCAL_STORAGE_KEYS, PageLink, TitleSidebar } from 'src/constants'
+import { PageLink, TitleSidebar } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
@@ -37,12 +37,6 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const [notificationUnread, setNotificationUnread] = useState(() => {
-    return parseInt(storedCount ?? '0', 10)
-  })
-  const storedCount = localStorage.getItem(
-    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
-  )
   const {
     isViewDetail,
     openNotification,
@@ -59,6 +53,7 @@ export default function MenuItem({
     handleBack,
     refreshNotification,
     isDesktopView,
+    notificationUnread,
   } = useNotification()
 
   const tabs = [
@@ -203,15 +198,6 @@ export default function MenuItem({
       scrollEl?.removeEventListener('scroll', handleScroll)
     }
   }, [pagination])
-
-  useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-      setNotificationUnread(parseInt(count ?? '0', 10))
-    })
-
-    return () => window.removeEventListener('storage', () => {})
-  }, [])
 
   const renderMenuContent = () => {
     return (
