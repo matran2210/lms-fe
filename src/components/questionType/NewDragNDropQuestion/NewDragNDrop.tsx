@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core'
-import parse, { Element, domToReact } from 'html-react-parser'
+import parse, { Element } from 'html-react-parser'
 import DroppableSlot from './DroppableSlot'
 import DraggableItem from './DraggableItem'
 
@@ -27,21 +27,20 @@ interface DragDropQuestionProps {
 
 // Component cho bank area
 const BankArea: React.FC<{ items: Answer[] }> = ({ items }) => {
-  const { setNodeRef, isOver } = useDroppable({ id: 'bank' })
+  const { setNodeRef } = useDroppable({ id: 'bank' })
 
   return (
-    <div
-      ref={setNodeRef}
-      id="bank"
-      className="flex flex-wrap gap-2 rounded-lg border border-gray-100 p-3"
-      style={{
-        background: isOver ? '#f0f8ff' : 'transparent',
-        borderColor: isOver ? '#3b82f6' : '#e5e7eb',
-      }}
-    >
-      {items.map((item) => (
-        <DraggableItem key={item.id} id={item.id} answer={item.answer} />
-      ))}
+    <div className="flex items-center gap-4">
+      <div className="text-base font-medium">Drag your answer:</div>
+      <div
+        ref={setNodeRef}
+        id="bank"
+        className="flex flex-wrap gap-5 border-gray-100"
+      >
+        {items.map((item) => (
+          <DraggableItem key={item.id} id={item.id} answer={item.answer} />
+        ))}
+      </div>
     </div>
   )
 }
@@ -51,24 +50,11 @@ const SlotWithValue: React.FC<{ id: string; value: string }> = ({
   id,
   value,
 }) => {
-  const { isOver, setNodeRef: setDropRef } = useDroppable({ id })
+  const { setNodeRef: setDropRef } = useDroppable({ id })
 
   return (
-    <div ref={setDropRef} style={{ display: 'inline-block', margin: '0 4px' }}>
-      <DraggableItem
-        id={`slot-${id}`}
-        answer={value}
-        fromSlotId={id}
-        style={{
-          minWidth: 100,
-          minHeight: 30,
-          padding: '8px 12px',
-          border: '2px dashed #aaa',
-          background: isOver ? '#f0f0f0' : '#fafafa',
-          textAlign: 'center',
-          borderRadius: 4,
-        }}
-      />
+    <div ref={setDropRef} className="mx-1 inline-block">
+      <DraggableItem id={`slot-${id}`} answer={value} fromSlotId={id} />
     </div>
   )
 }
@@ -118,7 +104,14 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
           if (value) {
             return <SlotWithValue key={id} id={id} value={value} />
           } else {
-            return <DroppableSlot key={id} id={id} value="" />
+            return (
+              <DroppableSlot
+                key={id}
+                id={id}
+                value=""
+                index={slot?.position || 0}
+              />
+            )
           }
         }
         return undefined
@@ -134,7 +127,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
     const fromSlotId = active.data.current?.fromSlotId
     const rawId = active.id as string
 
-    // Kéo từ slot về bank
+    // Kéo từ slot về bank (chỉ xử lý khi thả vào bank)
     if (over.id === 'bank' && fromSlotId && draggedAnswer) {
       const slot = slots.find((s) => s.id === fromSlotId)
 
@@ -182,6 +175,11 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
       })
 
       onChange?.(newSlots)
+      return
+    }
+
+    // Kéo từ slot ra ngoài (không thả vào bank) - không làm gì cả
+    if (fromSlotId && draggedAnswer && over.id !== 'bank') {
       return
     }
 
@@ -244,12 +242,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div
-        style={{ fontSize: '18px', lineHeight: '32px', marginBottom: '1rem' }}
-      >
-        <div className="dragNdrop-question">{renderedContent}</div>
-      </div>
-
+      <div className="dragNdrop-question">{renderedContent}</div>
       <BankArea items={items} />
     </DndContext>
   )

@@ -1,19 +1,18 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
+import { DragNDropIcon } from '@assets/icons/test'
 
 interface DraggableItemProps {
   id: string
   answer: string
   fromSlotId?: string
-  style?: React.CSSProperties
 }
 
 const DraggableItem: React.FC<DraggableItemProps> = ({
   id,
   answer,
   fromSlotId,
-  style,
 }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -24,21 +23,21 @@ const DraggableItem: React.FC<DraggableItemProps> = ({
       },
     })
 
-  const defaultStyle: React.CSSProperties = {
-    padding: '8px 12px',
-    background: '#e0f0ff',
-    border: '1px solid #ccc',
-    borderRadius: 4,
-    cursor: 'grab',
-    touchAction: 'none',
+  const transformStyle = {
     transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
   }
 
-  const finalStyle = { ...defaultStyle, ...style }
-
   return (
-    <div ref={setNodeRef} style={finalStyle} {...listeners} {...attributes}>
+    <div
+      ref={setNodeRef}
+      className={`draggable-item flex touch-none items-center gap-1 rounded-md border border-gray-200 bg-white px-2 py-1 ${
+        isDragging ? 'opacity-50' : 'opacity-100'
+      } cursor-grab`}
+      style={transformStyle}
+      {...listeners}
+      {...attributes}
+    >
+      <DragNDropIcon />
       {answer}
     </div>
   )

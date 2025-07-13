@@ -1093,12 +1093,12 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
-        getAnswerDragNDrop()) {
-        if (e.idAnswer && e.idAnswer !== '') {
+      for (let e of getValues(`${currentPage}_drag_drop_answer`)) {
+        if (e.id && e.value !== '') {
           return true
         }
       }
+
       return false
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       for (let e of getValueSelectText()) {
@@ -1247,10 +1247,11 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       const answers = handleSaveAnswer(
-        getValues(`${currentPage}_drag_drop_answer`) ?? getAnswerDragNDrop(),
+        getValues(`${currentPage?.id}_drag_drop_answer`),
         currentContent,
         tabs,
       )
+
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       const answers = handleSaveAnswer(
@@ -1727,9 +1728,9 @@ const TestDetail = () => {
       return {
         ...baseAnswer,
         answer: (question.answer ?? [])
-          .filter((item: any) => item?.idAnswer)
+          .filter((item: any) => item?.id)
           .map((item: any, index: number) => ({
-            answer_id: item.idAnswer,
+            answer_id: item.id,
             answer_position: index + 1,
           })),
       }

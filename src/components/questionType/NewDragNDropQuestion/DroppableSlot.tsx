@@ -1,20 +1,19 @@
 import React from 'react'
 import { useDroppable, useDraggable } from '@dnd-kit/core'
-import { CSS } from '@dnd-kit/utilities'
 
 interface DroppableSlotProps {
   id: string
   value: string
+  index: number
 }
 
-const DroppableSlot: React.FC<DroppableSlotProps> = ({ id, value }) => {
-  const { isOver, setNodeRef: setDropRef } = useDroppable({ id })
+const DroppableSlot: React.FC<DroppableSlotProps> = ({ id, value, index }) => {
+  const { setNodeRef: setDropRef } = useDroppable({ id })
 
   const {
     attributes,
     listeners,
     setNodeRef: setDragRef,
-    transform,
     isDragging,
   } = useDraggable({
     id: `slot-${id}`,
@@ -26,43 +25,36 @@ const DroppableSlot: React.FC<DroppableSlotProps> = ({ id, value }) => {
     disabled: !value,
   })
 
-  const containerStyle: React.CSSProperties = {
-    display: 'inline-block',
-    minWidth: 100,
-    minHeight: 30,
-    margin: '0 4px',
-  }
+  const slotBaseClass =
+    'min-w-[100px] min-h-[22px] px-3 py-2 text-center touch-none relative border-b border-[#71717a] w-[100px]'
 
-  const slotStyle: React.CSSProperties = {
-    minWidth: 100,
-    minHeight: 30,
-    padding: '8px 12px',
-    border: '2px dashed #aaa',
-    background: isOver ? '#f0f0f0' : '#fafafa',
-    textAlign: 'center',
-    borderRadius: 4,
-    touchAction: 'none',
-    transform: CSS.Translate.toString(transform),
-    opacity: isDragging ? 0.5 : 1,
-    cursor: value ? 'grab' : 'default',
-  }
+  const draggingClass = isDragging ? 'opacity-50' : 'opacity-100'
+  const cursorClass = value ? 'cursor-grab' : 'cursor-default'
 
-  // Nếu có giá trị, sử dụng wrapper với cả droppable và draggable
   if (value) {
     return (
-      <div ref={setDropRef} style={containerStyle}>
-        <span ref={setDragRef} style={slotStyle} {...listeners} {...attributes}>
+      <div
+        ref={setDropRef}
+        className="mx-1 inline-block min-h-[30px] min-w-[100px]"
+      >
+        <span
+          ref={setDragRef}
+          className={`${slotBaseClass} ${draggingClass} ${cursorClass}`}
+          {...listeners}
+          {...attributes}
+        >
           {value}
         </span>
       </div>
     )
   }
 
-  // Nếu không có giá trị, chỉ sử dụng droppable
   return (
-    <span ref={setDropRef} style={slotStyle}>
-      _______
-    </span>
+    <div
+      ref={setDropRef}
+      className={`${slotBaseClass} dragNdrop-question__slot`}
+      data-slot-index={`(${index + 1})`}
+    ></div>
   )
 }
 
