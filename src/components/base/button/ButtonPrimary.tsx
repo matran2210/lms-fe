@@ -25,7 +25,7 @@ const ButtonPrimary = ({
     size === 'small'
       ? 'py-2 px-4'
       : size === 'medium'
-        ? 'py-1 px-4 md:py-3 md:px-6'
+        ? 'py-2 px-4 md:py-3 md:px-6'
         : 'py-2 px-4 md:py-4 md:px-8'
   // let fullWidthClass = full ? 'block w-full' : 'inline-block'
   // let disabledClass = disabled

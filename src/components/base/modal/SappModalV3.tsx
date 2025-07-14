@@ -67,7 +67,7 @@ const SappModalV3 = ({
   isUnderLine = false,
   className,
   customFooter,
-  gapContent = 'gap-4 md:gap-10',
+  gapContent = 'gap-4 md:gap-8',
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel

@@ -45,7 +45,7 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
       showFooter
       okButtonCaption="Confirm"
       fullWidthBtn
-      buttonSize="extra"
+      buttonSize="medium"
       cancelButtonCaption="I will begin later"
       isUnderLine
     />
