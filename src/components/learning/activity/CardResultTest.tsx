@@ -4,6 +4,7 @@ import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
 import Tooltip from 'src/common/Tooltip'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { EDateTime } from 'src/type'
 import { ITestQuizProps } from 'src/type/results'
 
@@ -11,13 +12,33 @@ const CardResultTest = ({
   resultData,
   handleViewResult,
   getNameTooltipContent,
+  lastElementRef,
 }: ITestQuizProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   if (!resultData) return null
+
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
   const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
+  const btnViewResult = () => (
+    <div
+      className="flex cursor-pointer items-center"
+      onClick={() => handleViewResult(resultData)}
+    >
+      <div className="mr-2 block text-sm font-medium text-gray-800 underline md:hidden">
+        View Result
+      </div>
+      <div>
+        <ArrowRight />
+      </div>
+    </div>
+  )
+
   return (
-    <div className="flex items-center justify-between rounded-xl bg-white p-6 shadow-small">
-      <div className="flex flex-col gap-3">
+    <div
+      className="flex items-center justify-between rounded-xl bg-white p-4 shadow-small md:p-6"
+      ref={lastElementRef}
+    >
+      <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <Tooltip
             title={getNameTooltipContent?.(resultData)}
@@ -25,7 +46,7 @@ const CardResultTest = ({
             placement="topLeft"
           >
             <div
-              className="cursor-pointer text-lg font-semibold leading-[27px] text-gray-800"
+              className="cursor-pointer text-base font-semibold leading-[27px] text-gray-800 md:text-lg"
               onClick={() => handleViewResult(resultData)}
             >
               {resultData?.name}
@@ -39,35 +60,34 @@ const CardResultTest = ({
             }
           />
         </div>
-
         {dateSubmitted && timeSpent ? (
-          <div className="flex items-center">
-            <div className="flex items-center">
-              <div className="mr-2 text-base font-normal leading-normal text-gray-400">
-                Last submission:
+          <div className="flex">
+            <div className="flex flex-col gap-2 md:flex-row">
+              <div className="flex">
+                <div className="mr-2 text-sm font-normal leading-normal text-gray-400 md:text-base">
+                  Last submission:
+                </div>
+                <div className="text-sm font-medium leading-normal text-gray-800 md:text-base">
+                  {dateSubmitted
+                    ? dayjs(dateSubmitted).format(EDateTime.fullDate)
+                    : '-'}
+                </div>
               </div>
-              <div className="text-base font-medium leading-normal text-gray-800">
-                {dateSubmitted
-                  ? dayjs(dateSubmitted).format(EDateTime.fullDate)
-                  : '-'}
-              </div>
-              <div className="mx-3 text-gray-300">|</div>
-              <div className="mr-2 text-base font-normal leading-normal text-gray-400">
-                Time spent:
-              </div>
-              <div className="text-base font-medium leading-normal text-gray-800">
-                {getTimeFromInput(timeSpent)}
+              {!isMobileView && <div className="mx-3 text-gray-300">|</div>}
+              <div className="flex">
+                <div className="mr-2 text-sm font-normal leading-normal text-gray-400 md:text-base">
+                  Time spent:
+                </div>
+                <div className="text-sm font-medium leading-normal text-gray-800 md:text-base">
+                  {getTimeFromInput(timeSpent)}
+                </div>
               </div>
             </div>
           </div>
         ) : null}
+        {isMobileView && btnViewResult()}
       </div>
-      <div
-        className="flex cursor-pointer items-center"
-        onClick={() => handleViewResult(resultData)}
-      >
-        <ArrowRight />
-      </div>
+      {!isMobileView && btnViewResult()}
     </div>
   )
 }

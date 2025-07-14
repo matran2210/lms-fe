@@ -6,10 +6,12 @@ import EntranceTest from './EntranceTest'
 
 interface EntranceTestListProps {
   entranceTestLists: IEntranceTest[]
+  onRefetch: () => void
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
+  onRefetch,
 }) => {
   return (
     <div
@@ -28,6 +30,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
             test_id_default={entranceTestLists.find(
               (entrance) => entrance.is_attempt === false,
             )}
+            onRefetch={onRefetch}
           />
         ))
       ) : (

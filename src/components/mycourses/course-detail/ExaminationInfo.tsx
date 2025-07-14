@@ -35,7 +35,7 @@ type Props = {
   onSuccess?: () => void
 }
 
-interface InfoItemProps {
+export interface InfoItemProps {
   label: string
   value: ReactNode
 }

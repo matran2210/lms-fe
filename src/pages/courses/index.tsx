@@ -26,6 +26,7 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import { HamburgerMenuLargeIcon } from 'src/assets/icons'
 import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 const DEFAULT_PAGESIZE = 9
 const MASTER = 'Master Finance'
@@ -212,31 +213,12 @@ const MyCourse = () => {
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
       >
-        <div className="mb-4 mt-2 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4">
-          <div
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
-            onClick={handleOpenSidebar}
-          >
-            <HamburgerMenuLargeIcon />
-          </div>
-          <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearchV2}
-              formStyle="w-full flex items-center"
-              disabled={guideIsActive}
-            />
-            {guideStatus && guideStep === 1 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3"
-                title={'Search box'}
-                index={1}
-                total={7}
-                imgSrc={TourGuideStart}
-              />
-            )}
-          </div>
-        </div>
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+          isShowUserGuide
+          disabledSearch={guideIsActive}
+        />
 
         <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">
           <div

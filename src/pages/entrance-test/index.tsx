@@ -6,7 +6,7 @@ import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { ANIMATION } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
@@ -17,11 +17,15 @@ import { UserType } from 'src/redux/types/User/urser'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EntranceTestAPI } from '../api/entrance-test'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import { useCourseContext } from '@contexts/index'
 
 const EntranceTest = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
   const {
     data: entranceTestLists,
     isLoading,
@@ -38,7 +42,17 @@ const EntranceTest = () => {
   )
 
   const getEntranceTestCount = async () => await dispatch(getEntranceCount())
-
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   useEffect(() => {
     getEntranceTestCount()
   }, [])
@@ -49,22 +63,24 @@ const EntranceTest = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Entrance Test" showSidebar={isAlwaysShowSidebar}>
-        <div
-          className="mt-4 rounded-lg bg-white px-8 py-4"
-          style={{ boxShadow: '0px 4px 12px 0px #2C30000A' }}
-        >
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearchV2}
-            formStyle="w-full flex items-center"
-          />
-        </div>
+      <Layout
+        title="Entrance Test"
+        showSidebar={showSidebar || isAlwaysShowSidebar}
+        handleToggleSidebar={handleCloseSidebar}
+      >
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+        />
         <div className="my-0 pt-6">
           {isLoading ? (
             <CourseSkeleton />
           ) : (
             <>
-              <div className="mb-8 flex bg-white" data-aos={ANIMATION.DATA_AOS}>
+              <div
+                className="mb-8 flex overflow-hidden rounded-xl bg-white"
+                data-aos={ANIMATION.DATA_AOS}
+              >
                 <Heading
                   greeting="Welcome to"
                   title="Entrance Test"
@@ -80,7 +96,10 @@ const EntranceTest = () => {
                 </div>
               </div>
               <div className="my-0 pt-7" data-aos={ANIMATION.DATA_AOS}>
-                <EntranceTestList entranceTestLists={entranceTestLists || []} />
+                <EntranceTestList
+                  entranceTestLists={entranceTestLists || []}
+                  onRefetch={refetch}
+                />
               </div>
             </>
           )}

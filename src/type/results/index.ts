@@ -81,4 +81,5 @@ export interface ITestQuizProps {
   handleViewResult: (row: Results) => void
   getNameTooltipContent?: (row: Results) => React.ReactNode
   getScore?: (row: Results, grading_method: GradingMethod) => string
+  lastElementRef: (node: HTMLDivElement) => void
 }

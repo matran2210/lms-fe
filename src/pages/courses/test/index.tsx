@@ -526,7 +526,7 @@ const TestModal = ({
               onClick={handleContinueLastAttempt}
             />
             <ButtonSecondary
-              title="Submit now hihihi"
+              title="Submit now"
               full
               onClick={handleSubmitNow}
             />
