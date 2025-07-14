@@ -1,4 +1,4 @@
-import { CloseIcon } from '@assets/icons'
+import { AltArrowLeft } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { ExplanationPackage } from 'explanation-package'
@@ -121,7 +121,7 @@ const Explanation = () => {
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
         <div
-          className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+          className="absolute left-8 top-5 z-10 cursor-pointer"
           onClick={() => {
             if (isUserViewAnswers) {
               router.push(
@@ -154,7 +154,9 @@ const Explanation = () => {
             }
           }}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300">
+            <AltArrowLeft />
+          </div>
         </div>
         <ExplanationPackage
           getActiveQuestion={getActiveQuestion}
