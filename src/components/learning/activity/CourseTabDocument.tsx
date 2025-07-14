@@ -168,7 +168,7 @@ const CourseTabDocument = ({
                 <div>
                   <div
                     className={clsx(
-                      'tab-content mt-6 flex flex-col gap-6 overflow-x-auto overflow-y-hidden',
+                      'tab-content mt-6 flex flex-col gap-4 overflow-x-auto overflow-y-hidden md:gap-6',
                       { '!mt-0': focusOnlyQuiz.open },
                     )}
                   >
@@ -230,6 +230,7 @@ const CourseTabDocument = ({
                                 initialHTML={e?.text_editor_content || ''}
                                 storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
                                 className="course-tab-text"
+                                isShowNote
                               />
                             )}
                             {/* <TextDocument
@@ -274,7 +275,7 @@ const CourseTabDocument = ({
               </ActivitySkeleton>
             </div>
             <div
-              className={clsx('mt-4 h-[calc(100vh-150px)]', {
+              className={clsx('mt-4', {
                 'block md:hidden': focusOnlyDiscussion,
                 hidden: !focusOnlyDiscussion,
               })}
@@ -314,7 +315,7 @@ const CourseTabDocument = ({
           className={clsx(
             'learning-act-tab-pagination flex items-center justify-center gap-8',
             {
-              hidden: focusOnlyQuiz.open,
+              hidden: focusOnlyQuiz.open || focusOnlyDiscussion,
             },
           )}
         >

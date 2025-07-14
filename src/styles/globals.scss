@@ -773,9 +773,10 @@ textarea.is-invalid:focus {
 // .ant-modal .ant-modal-content {
 //   @apply rounded-none;
 // }
-.sapp-profile-modal {
+.ant-modal.sapp-profile-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
-    @apply rounded-2xl p-10;
+    @apply rounded-2xl p-6 md:p-10;
   }
 }
 .sapp-custom-modal.success-modal {
@@ -783,6 +784,61 @@ textarea.is-invalid:focus {
     @apply p-8;
     @apply rounded-lg;
   }
+}
+.sapp-modal.ant-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
+  .ant-modal-content {
+    @apply rounded-2xl p-6 md:p-10;
+  }
+}
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
+}
+
+.sapp-modal--math .ant-modal-content {
+  width: fit-content;
+  padding: 20px !important;
+  margin: auto;
+}
+
+.sapp-modal--math.ant-modal {
+  width: fit-content !important;
+}
+
+.sapp-modal .ant-modal-content .ant-modal-header {
+  @apply mb-0;
+}
+
+.sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
+  @apply text-4xl font-semibold text-[#050505];
+}
+
+.ant-modal-root .ant-modal-mask {
+  @apply bg-[#000000cc];
+}
+
+.sapp-modal__opt-continue-test {
+  .ant-modal-content {
+    @apply p-10 !important;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        border-color: #ffb800;
+      }
+    }
+  }
+}
+
+.ant-modal-footer {
+  margin: 0 !important;
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .lf-player-container {

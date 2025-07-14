@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className="mb-6 mt-[100px] text-end text-base text-secondary-300">
+    <div className="mb-6 mt-[100px] text-center text-sm text-secondary-300 md:text-end md:text-base">
       LMS Pro Version 9.1.1
     </div>
   )

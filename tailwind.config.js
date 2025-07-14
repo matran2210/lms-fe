@@ -32,6 +32,7 @@ module.exports = {
         800: '#0E1214',
       },
       gray: {
+        2: '#DCDDDD',
         100: '#F6F6F6',
         200: '#E5E7EB',
         300: '#D1D5DB',
@@ -81,6 +82,7 @@ module.exports = {
         200: '#A7DDFF',
         300: '#7ACCFF',
         400: '#4EBBFF',
+        500: '#2AF',
         DEFAULT: '#22AAFF',
         600: '#1B88CC',
         700: '#146699',
@@ -199,6 +201,7 @@ module.exports = {
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
+        modal: '0px 4px 12px 0px rgba(44, 48, 0, 0.04)',
       },
       minWidth: {
         4: '16px',

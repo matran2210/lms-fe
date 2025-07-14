@@ -46,16 +46,16 @@ const TestEntranceResult = () => {
     <SappLoadingGlobal loading={isLoading}>
       <div className="relative">
         <div
-          className="absolute right-10 top-10 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-2"
+          className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-10 md:p-2"
           onClick={
             () => router.push(PageLink.ENTRANCE_TEST)
             // .then(() => window.location.reload())
           }
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
         <Layout size="xl" title="Entrance Test Detail" showSidebar={false}>
-          <div className="relative mt-12" data-aos={ANIMATION.DATA_AOS}>
+          <div className="relative mt-4 md:mt-12" data-aos={ANIMATION.DATA_AOS}>
             {chartData && (
               <QuizResult
                 dataChart={chartData?.chart_data}
@@ -77,7 +77,7 @@ const TestEntranceResult = () => {
                   bgColor="bg-primary-200"
                   borderColor="border-primary"
                 >
-                  <div className="text-sm">
+                  <div className="text-xs leading-5 md:text-sm">
                     Đội ngũ chuyên viên của SAPP sẽ liên lạc lại với bạn trong
                     vòng 24h (không kể Thứ 7, Chủ nhật) để tư vấn thiết kế lộ
                     trình học tập cá nhân hóa phù hợp với kết quả bài đánh giá

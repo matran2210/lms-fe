@@ -13,19 +13,20 @@ const LearningOutcome = ({ activity }: IProps) => {
     {
       key: 'learning_outcome',
       label: (
-        <div className={'text-bw-13 select-none text-lg font-medium'}>
+        <div className={'select-none text-lg font-medium text-gray-800'}>
           Learning Outcome
         </div>
       ),
       children: (
         <>
           {activity?.course_outcomes?.length > 0 && (
-            <div className="mt-6 select-none text-base">
+            <div className="mt-4 select-none text-base md:mt-6">
               {activity?.course_outcomes?.map((e: any, index: number) => {
                 return (
                   <div
                     className={clsx('flex items-start gap-2', {
-                      'mb-4': index < activity?.course_outcomes?.length - 1,
+                      'mb-3 md:mb-4':
+                        index < activity?.course_outcomes?.length - 1,
                     })}
                     key={e?.id}
                   >
@@ -52,7 +53,7 @@ const LearningOutcome = ({ activity }: IProps) => {
       defaultActiveKey={['learning_outcome']}
       expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
       items={getItemsLearningOutcome}
-      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-learning-activity md:p-6"
     />
   )
 }

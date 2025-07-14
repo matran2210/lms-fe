@@ -25,7 +25,7 @@ const EntrancePopupContent = ({
   return (
     <>
       <div className="content">
-        <div className="info flex flex-col gap-4 pt-10">
+        <div className="info flex flex-col gap-2 pt-6 md:gap-4 md:pt-10">
           <div className="flex justify-between text-base capitalize text-gray">
             <p>Name:</p>
             <p className="line-clamp-2 font-medium text-gray-800">{name}</p>

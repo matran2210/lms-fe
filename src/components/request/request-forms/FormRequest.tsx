@@ -9,12 +9,12 @@ import { MyRequestAPI } from '@pages/api/my-request'
 import { REPEAT_TYPE } from '@utils/constants/repeat'
 import { getSelectOptions } from '@utils/helpers'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import { capitalizeFirstLetter } from '@utils/index'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@utils/index'
 import { formatRecurringSchedule, getRecurringSchedule } from '@utils/request'
 import { requestValidationSchema } from '@utils/validation/my-request-validation'
 import { ConfigProvider, Drawer } from 'antd'
 import dayjs, { Dayjs } from 'dayjs'
-import { isEmpty } from 'lodash'
+import { isEmpty, isInteger } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -147,6 +147,21 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
     ) {
       setError('request_busy_schedule.0.repeat_schedule', {
         message: VALIDATE_REQUIRED,
+      })
+    }
+
+    if (
+      getValues(
+        'request_busy_schedule.0.repeat_schedule.recurring_schedule.type',
+      ) === REPEAT_TYPE.CUSTOM &&
+      !isInteger(
+        getValues(
+          'request_busy_schedule.0.repeat_schedule.recurring_schedule.interval',
+        ),
+      )
+    ) {
+      setError('request_busy_schedule.0.repeat_schedule', {
+        message: 'Interval must be a number',
       })
     }
   }
@@ -420,6 +435,10 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
               setOtherOption({
                 label: formatRecurringSchedule(
                   data.teacher_schedules[0].schedule.recurring_pattern_schedule,
+                  formatDateTimeWithTimeZone(
+                    data.teacher_schedules[0].schedule.start_date,
+                    data.teacher_schedules[0].schedule.start_time,
+                  ),
                 ),
                 value: REPEAT_TYPE.CHOSEN_PATTERN,
               })

@@ -37,7 +37,9 @@ const PopUpRemindEntrance = ({
       onOk={onOk}
       //   showCancelButton={true}
       fullWidthBtn={true}
-      icon={<AccessIcon fill="#FFB700" />}
+      icon={
+        <AccessIcon className="h-12 w-12 md:h-auto md:w-auto" fill="#FFB700" />
+      }
       header="Take Your Test"
       buttonSize="medium"
     >
@@ -48,9 +50,9 @@ const PopUpRemindEntrance = ({
         </span>
         <span>
           {' '}
-          entrance tests that haven’t been taken,
-          <br />
-          complete them now
+          entrance tests that haven’t been taken,{' '}
+          <br className="hidden md:block" />
+          complete them now.
         </span>
       </div>
     </SappModalV3>

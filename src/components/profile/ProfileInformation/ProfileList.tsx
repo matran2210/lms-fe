@@ -103,6 +103,7 @@ const ProfileList = ({ isEdit }: IProps) => {
             key={e.id}
             data={e}
             index={i}
+            className={clsx({ 'mb-4': i < profileOptions.length - 1 })}
             isEdit={isEdit}
             setMakeDefaultDrawer={setMakeDefaultDrawer}
           />
@@ -135,17 +136,17 @@ const ProfileList = ({ isEdit }: IProps) => {
             />
           }
           handleCancel={closeMakeDefault}
-          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
-          classNameBody="md:px-0 lg:px-8"
+          classNameHeader={'bg-white !text-gray-800 md:!p-0 lg:!px-8 lg:!py-6'}
+          classNameBody="pt-0 md:pt-4 md:!px-0 lg:!px-8"
           rootClassName={'profile-subject-drawer'}
           classNames={{
-            content: 'md:rounded-2xl',
+            content: 'rounded-2xl',
           }}
         >
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 md:gap-4">
             {makeDefaultDrawer?.phone && (
-              <div className="flex items-center justify-between text-[#050505]">
-                <span className="inline-block w-[302px] text-secondary">
+              <div className="flex items-center justify-between text-gray-800">
+                <span className="inline-block text-secondary md:w-[302px]">
                   <div className="flex">
                     <Icon type="phone-ring" className="mr-2" /> Phone Number:
                   </div>
@@ -155,8 +156,8 @@ const ProfileList = ({ isEdit }: IProps) => {
                 </span>
               </div>
             )}
-            <div className="flex items-center justify-between text-[#050505]">
-              <span className="inline-block w-[302px] text-secondary">
+            <div className="text-text-gray-800 flex items-center justify-between">
+              <span className="inline-block text-secondary md:w-[302px]">
                 <div className="flex">
                   <Icon type="email" className="mr-2" /> Email Adress:
                 </div>
@@ -166,8 +167,8 @@ const ProfileList = ({ isEdit }: IProps) => {
               </span>
             </div>
             {makeDefaultDrawer?.address && (
-              <div className="mt-5 text-[#050505]">
-                <span className="inline-block w-[302px] text-secondary">
+              <div className="text-text-gray-800 mt-5">
+                <span className="inline-block text-secondary md:w-[302px]">
                   {' '}
                   Address:{' '}
                 </span>
@@ -180,8 +181,8 @@ const ProfileList = ({ isEdit }: IProps) => {
           <Divider />
 
           <div>
-            <div className="flex items-center gap-4">
-              <span className="text-base font-semibold text-secondary">
+            <div className="flex items-center justify-between gap-4 md:justify-start">
+              <span className="text-sm font-semibold text-gray-800 md:text-base">
                 Set as default:
               </span>
               <Switch

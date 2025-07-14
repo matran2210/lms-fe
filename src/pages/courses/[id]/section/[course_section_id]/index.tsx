@@ -1,8 +1,13 @@
-import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { StarCircleIcon } from '@components/icons'
+import {
+  AlertInfoIcon,
+  CloseIconPreview,
+  DocumentTextIcon,
+  ResourceIcon,
+  ChapterIcon,
+} from '@assets/icons'
 import Layout from '@components/layout'
 import { useCourseContext } from '@contexts/index'
 import { buildQueryString, formatDate } from '@utils/index'
@@ -13,7 +18,7 @@ import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { TEST_TYPE } from 'src/constants'
+import { PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
@@ -21,6 +26,12 @@ import TestModal from 'src/pages/courses/test'
 import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
+import BottomMenu from '@components/layout/BottomMenu'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import { Divider } from 'antd'
+import LearningResource from '@components/mycourses/LearningResource'
+import { useAppDispatch } from 'src/redux/hook'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
 
 interface IProps {
   course_section_type: string
@@ -55,7 +66,8 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const dispatch = useAppDispatch()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -68,9 +80,10 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
+  const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
+  const [openResource, setOpenResource] = useState<boolean>(false)
   const { setOpenPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
@@ -180,6 +193,11 @@ const CoursePartDetail = () => {
         setLoadingLearningOutcome(false)
       }, 500)
     }
+  }
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
   }
 
   useEffect(() => {
@@ -449,11 +467,14 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
-  // const handleGoBack = () => {
-  //   router.push({
-  //     pathname: `/courses/my-course/${router.query.id}`,
-  //   })
-  // }
+  const handleGoBack = () => {
+    router.push({
+      pathname: PageLink.COURSE_DETAIL.replace(
+        '[courseId]',
+        router.query.id as string,
+      ),
+    })
+  }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -517,7 +538,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4">
+      <div className="mt-4 md:mt-8 lg:mt-10">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -526,11 +547,14 @@ const CoursePartDetail = () => {
             breadcrumbs={[
               {
                 title: 'My Course',
-                link: '/courses',
+                link: PageLink.COURSES,
               },
               {
                 title: previewPart?.name,
-                link: `/courses/my-course/${router.query.id}`,
+                link: PageLink.COURSE_DETAIL.replace(
+                  '[courseId]',
+                  router.query.id as string,
+                ),
               },
               {
                 title: partDetail?.name,
@@ -558,12 +582,41 @@ const CoursePartDetail = () => {
           defaultActive={router.query.chapter ?? defaultActive}
           focus_id={router?.query?.focus_id as string}
           handleGetItem={handleActive}
-          // handleGoBack={handleGoBack}
+          handleGoBack={handleGoBack}
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
           // handleShowToast={handleShowToast}
+          setIsOpenChapter={setIsOpenChapter}
+          isOpenChapter={isOpenChapter}
+          isLMSV2
+          isMobileView={isMobileView}
         />
+        <BottomMenu>
+          <div className="flex items-center justify-center gap-5">
+            <CardMenuItem
+              title="Note List"
+              icon={<DocumentTextIcon className="h-6 w-6" />}
+              onClick={handleOpenNotesList}
+            />
+            <CardMenuItem
+              title="Resource"
+              icon={<ResourceIcon className="h-6 w-6" />}
+              onClick={() => setOpenResource(true)}
+            />
+            <Divider
+              type="vertical"
+              className="my-auto h-6 border-white text-white"
+              orientation="center"
+            />
+            <CardMenuItem
+              title="Chapter"
+              icon={<ChapterIcon />}
+              onClick={() => setIsOpenChapter(true)}
+              className="md:flex"
+            />
+          </div>
+        </BottomMenu>
         <SappDrawerV3
           open={openLearningOutcome}
           onClose={handleCancel}
@@ -572,46 +625,33 @@ const CoursePartDetail = () => {
           btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
           isShowFooter
+          closable
+          isShowBtnClose
+          submitButtonClassName={isMobileView ? 'w-full' : ''}
+          rootClassName={'responsive-drawer-center'}
         >
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            widths={['70', '100', '100', '50', '100']}
-            className="mb-4"
-            classChild="rounded"
-          >
-            <div
-              style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-8 text-base font-normal leading-normal text-secondary"
-              dangerouslySetInnerHTML={{
-                __html: learningOutcome?.description ?? '',
-              }}
-            />
-          </TextSkeleton>
-          {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-[#DCDDDD]"></div>
-          )}
+          <div
+            style={{ borderBottom: '1px solid #DCDDDD' }}
+            className="learningOutcome-description pb-8 text-sm font-normal leading-normal text-secondary md:text-base"
+            dangerouslySetInnerHTML={{
+              __html: learningOutcome?.description ?? '',
+            }}
+          />
           <div className="mt-8 flex flex-col gap-6">
-            <TextSkeleton
-              loading={loadingLearningOutcome}
-              className="mt-3 last:mb-4"
-              classChild="rounded"
-              widths={['70', '100', '100', '50', '100']}
-            >
-              {learningOutcome?.course_outcomes?.map((outcome, index) => (
-                <div key={outcome.id} className="flex items-start gap-2">
-                  <div>
-                    <StarCircleIcon />
-                  </div>
-                  <div className="flex items-center text-base font-normal leading-normal text-gray-800">
-                    <div className="me-1">LO{index + 1}:</div>
-                    <div
-                      className="learningOutcome-description"
-                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                    />
-                  </div>
+            {learningOutcome?.course_outcomes?.map((outcome, index) => (
+              <div key={outcome.id} className="flex items-start gap-2">
+                <div>
+                  <StarCircleIcon />
                 </div>
-              ))}
-            </TextSkeleton>
+                <div className="flex items-center text-sm font-normal leading-normal text-gray-800 md:text-base">
+                  <div className="me-1">LO{index + 1}:</div>
+                  <div
+                    className="learningOutcome-description"
+                    dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </SappDrawerV3>
         {open && (
@@ -622,6 +662,12 @@ const CoursePartDetail = () => {
             class_user_id={previewPart?.class_user_id}
             activeCourse={() => {}}
             is_passed_course={isPassedCourse}
+          />
+        )}
+        {openResource && (
+          <LearningResource
+            open={openResource}
+            setOpenResource={setOpenResource}
           />
         )}
       </div>

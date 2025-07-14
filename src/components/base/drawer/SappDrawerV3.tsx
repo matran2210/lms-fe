@@ -10,7 +10,7 @@ interface IProps extends DrawerProps {
   open: boolean
   handleCancel?: () => void
   handleBack?: () => void
-  width?: number
+  width?: string | number
   title: string
   isShowBtnClose?: boolean
   isShowFooter?: boolean
@@ -25,6 +25,7 @@ interface IProps extends DrawerProps {
   classNameHeader?: string
   cancelButtonCaption?: string
   cancelButtonClassName?: string
+  isShowBtnBack?: boolean
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -48,6 +49,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
+  isShowBtnBack = false,
   ...props
 }) => {
   return (
@@ -60,18 +62,21 @@ const SappDrawerV3: React.FC<IProps> = ({
       {...props}
     >
       <div
-        className={clsx('relative h-full w-full bg-white p-8', classNameBody)}
+        className={clsx(
+          'relative h-full w-full bg-white p-4 md:p-6 lg:p-8',
+          classNameBody,
+        )}
       >
         {/* Header */}
         {isShowHeader && (
           <div
             className={clsx(
-              'mb-8 flex items-center justify-between',
+              'flex items-center justify-between lg:mb-8',
               classNameHeader,
             )}
           >
             <div className="flex items-center gap-2">
-              {!isShowBtnClose && (
+              {(!isShowBtnClose || isShowBtnBack) && (
                 <div
                   onClick={handleBack}
                   className="cursor-pointer"
@@ -80,7 +85,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-2xl font-semibold leading-loose text-secondary">
+              <span className="text-base font-semibold leading-loose text-secondary md:text-2xl">
                 {title}
               </span>
             </div>
@@ -101,7 +106,7 @@ const SappDrawerV3: React.FC<IProps> = ({
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-8 pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
             {cancelButtonCaption && (
               <ButtonText
                 title={cancelButtonCaption}

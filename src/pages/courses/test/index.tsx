@@ -27,6 +27,8 @@ import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
 import StatusTestQuizBadge, {
   STATUS_QUIZ_TEST,
 } from '@components/StatusTestQuizBadge'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
 
 enum StatusQuizAttempt {
   Passed = 'PASSED',
@@ -52,6 +54,7 @@ const TestModal = ({
   activeCourse,
   is_passed_course,
 }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
   const isSubmitted =
     data?.quiz?.attempt && data?.quiz?.attempt?.status === 'SUBMITTED'
@@ -622,176 +625,183 @@ const TestModal = ({
   }
 
   return (
-    <TestPopup
-      open={open}
-      setOpen={setOpen}
-      title={
-        <div className="flex items-center justify-center">
-          {TEST_TYPE[data?.course_section_type]}
-        </div>
-      }
-      time={displayTime}
-      otherContent={
-        !isContinue && (
-          <>
-            <div className="flex flex-col gap-6">
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">Name:</div>
-                <div className="line-clamp-2 pr-0.5 font-medium text-[#050505]">
-                  {data?.name}
-                </div>
-              </div>
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">Pass Point:</div>
-                <div className="pr-0.5 font-medium text-[#050505]">
-                  {data?.quiz?.is_graded ? (
-                    <>{data?.quiz?.required_percent_score ?? '_ _'}</>
-                  ) : (
-                    <>_ _</>
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">Time Allowed:</div>
-                <div className="pr-0.5 font-medium text-[#050505]">
-                  {data?.quiz?.quiz_timed
-                    ? formatTime(data?.quiz?.quiz_timed * 60)
-                    : 'Unlimited'}
-                </div>
-              </div>
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">Grading Method:</div>
-                <div className="pr-0.5 font-medium text-[#050505]">
-                  {capitalizeFirstLetter(selectedResult?.grading_method) ??
-                    capitalizeFirstLetter(data?.quiz?.grading_method)}
-                </div>
-              </div>
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">No of Attempts:</div>
-                <div className="pr-0.5 font-medium text-[#050505]">
-                  {data?.quiz?.attempt?.number_of_attempts || 0}/
-                  {data?.quiz?.is_limited
-                    ? data?.quiz?.limit_count
-                    : 'Unlimited'}
-                </div>
-              </div>
-              {data?.quiz && (
-                <div className="flex justify-between gap-8 text-base">
-                  <div className="flex items-center gap-2 hover:text-primary">
-                    <div
-                      className={`forcus-group:text-primary  text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
-                    >
-                      Result:
-                    </div>
-                    {resultList?.data?.length > 1 && (
-                      <div className="flex gap-2">
-                        <HookFormSelect
-                          classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-                          placeholder=""
-                          value={selectedResult}
-                          onChange={(selectedOption) => {
-                            setSelectedResult({
-                              ...selectedOption,
-                              number_of_attempt: Number(
-                                (selectedOption?.name ?? '').split('/').at(0) ??
-                                  0,
-                              ),
-                            })
-                            setIsFocus(false)
-                          }}
-                          options={resultList.data.map((item, index) => ({
-                            name: item.name,
-                            value: item.id,
-                            label: item.name,
-                            status: item.status,
-                            ratio_score: item.ratio_score,
-                            number_of_attempt: 3 - index,
-                          }))}
-                          onMenuScrollToBottom={(
-                            e: React.UIEvent<HTMLDivElement>,
-                          ) => {
-                            const { target } = e
-                            if (
-                              (target as HTMLDivElement).scrollTop +
-                                (target as HTMLDivElement).offsetHeight ===
-                              (target as HTMLDivElement).scrollHeight
-                            ) {
-                              handleNextPage()
-                            }
-                          }}
-                          isResultSelect
-                          maxMenuHeight={130}
-                          onFocus={(e) => {
-                            setIsFocus(true)
-                          }}
-                          onBlur={(e) => {
-                            setIsFocus(false)
-                          }}
-                          isSearchable={false}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-row items-center">
-                    <div className={`pr-0.5 font-medium`}>
-                      {getResultOfTest()}
-                    </div>
-                    {isShowDetail() && (
-                      <div
-                        className="ml-2 cursor-pointer font-semibold text-primary underline"
-                        onClick={() => {
-                          if (isManualGradingAndNotFinishedGrading) {
-                            router.push(
-                              `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
-                            )
-                          } else {
-                            router.push({
-                              pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
-                              query: { attempt: selectedResult?.label },
-                            })
-                          }
-
-                          trackGAEvent('Click Button View Modal Result')
-                        }}
-                      >
-                        {isManualGradingAndNotFinishedGrading
-                          ? 'Your Answers'
-                          : 'Detail'}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-              <div className="flex justify-between gap-8 text-base">
-                <div className="text-[#A1A1A1]">Status:</div>
-                {data?.quiz?.is_graded &&
-                data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
-                  <StatusTestQuizBadge
-                    status={data?.quiz?.attempt?.grading_status}
-                  />
-                ) : (
-                  <StatusTestQuizBadge
-                    status={
-                      status?.toUpperCase() as keyof typeof STATUS_QUIZ_TEST
-                    }
-                  />
-                )}
-              </div>
+    <>
+      {isMobileView ? (
+        <ModalNotMobileFriendly open={open} onClose={() => setOpen(false)} />
+      ) : (
+        <TestPopup
+          open={open}
+          setOpen={setOpen}
+          title={
+            <div className="flex items-center justify-center">
+              {TEST_TYPE[data?.course_section_type]}
             </div>
-            <PopupCanNotRetakeTest
-              open={openResource}
-              setOpen={setOpenPopup}
-              onCancel={() => onCancel()}
-            />
-          </>
-        )
-      }
-      customFooter={
-        <div className="flex w-full flex-col items-center justify-center gap-3">
-          {renderCustomFooter()}
-        </div>
-      }
-    />
+          }
+          time={displayTime}
+          otherContent={
+            !isContinue && (
+              <>
+                <div className="flex flex-col gap-6">
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">Name:</div>
+                    <div className="line-clamp-2 pr-0.5 font-medium text-[#050505]">
+                      {data?.name}
+                    </div>
+                  </div>
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">Pass Point:</div>
+                    <div className="pr-0.5 font-medium text-[#050505]">
+                      {data?.quiz?.is_graded ? (
+                        <>{data?.quiz?.required_percent_score ?? '_ _'}</>
+                      ) : (
+                        <>_ _</>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">Time Allowed:</div>
+                    <div className="pr-0.5 font-medium text-[#050505]">
+                      {data?.quiz?.quiz_timed
+                        ? formatTime(data?.quiz?.quiz_timed * 60)
+                        : 'Unlimited'}
+                    </div>
+                  </div>
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">Grading Method:</div>
+                    <div className="pr-0.5 font-medium text-[#050505]">
+                      {capitalizeFirstLetter(selectedResult?.grading_method) ??
+                        capitalizeFirstLetter(data?.quiz?.grading_method)}
+                    </div>
+                  </div>
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">No of Attempts:</div>
+                    <div className="pr-0.5 font-medium text-[#050505]">
+                      {data?.quiz?.attempt?.number_of_attempts || 0}/
+                      {data?.quiz?.is_limited
+                        ? data?.quiz?.limit_count
+                        : 'Unlimited'}
+                    </div>
+                  </div>
+                  {data?.quiz && (
+                    <div className="flex justify-between gap-8 text-base">
+                      <div className="flex items-center gap-2 hover:text-primary">
+                        <div
+                          className={`forcus-group:text-primary  text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
+                        >
+                          Result:
+                        </div>
+                        {resultList?.data?.length > 1 && (
+                          <div className="flex gap-2">
+                            <HookFormSelect
+                              classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
+                              placeholder=""
+                              value={selectedResult}
+                              onChange={(selectedOption) => {
+                                setSelectedResult({
+                                  ...selectedOption,
+                                  number_of_attempt: Number(
+                                    (selectedOption?.name ?? '')
+                                      .split('/')
+                                      .at(0) ?? 0,
+                                  ),
+                                })
+                                setIsFocus(false)
+                              }}
+                              options={resultList.data.map((item, index) => ({
+                                name: item.name,
+                                value: item.id,
+                                label: item.name,
+                                status: item.status,
+                                ratio_score: item.ratio_score,
+                                number_of_attempt: 3 - index,
+                              }))}
+                              onMenuScrollToBottom={(
+                                e: React.UIEvent<HTMLDivElement>,
+                              ) => {
+                                const { target } = e
+                                if (
+                                  (target as HTMLDivElement).scrollTop +
+                                    (target as HTMLDivElement).offsetHeight ===
+                                  (target as HTMLDivElement).scrollHeight
+                                ) {
+                                  handleNextPage()
+                                }
+                              }}
+                              isResultSelect
+                              maxMenuHeight={130}
+                              onFocus={(e) => {
+                                setIsFocus(true)
+                              }}
+                              onBlur={(e) => {
+                                setIsFocus(false)
+                              }}
+                              isSearchable={false}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-row items-center">
+                        <div className={`pr-0.5 font-medium`}>
+                          {getResultOfTest()}
+                        </div>
+                        {isShowDetail() && (
+                          <div
+                            className="ml-2 cursor-pointer font-semibold text-primary underline"
+                            onClick={() => {
+                              if (isManualGradingAndNotFinishedGrading) {
+                                router.push(
+                                  `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                                )
+                              } else {
+                                router.push({
+                                  pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                                  query: { attempt: selectedResult?.label },
+                                })
+                              }
+
+                              trackGAEvent('Click Button View Modal Result')
+                            }}
+                          >
+                            {isManualGradingAndNotFinishedGrading
+                              ? 'Your Answers'
+                              : 'Detail'}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-8 text-base">
+                    <div className="text-[#A1A1A1]">Status:</div>
+                    {data?.quiz?.is_graded &&
+                    data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
+                      <StatusTestQuizBadge
+                        status={data?.quiz?.attempt?.grading_status}
+                      />
+                    ) : (
+                      <StatusTestQuizBadge
+                        status={
+                          status?.toUpperCase() as keyof typeof STATUS_QUIZ_TEST
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+                <PopupCanNotRetakeTest
+                  open={openResource}
+                  setOpen={setOpenPopup}
+                  onCancel={() => onCancel()}
+                />
+              </>
+            )
+          }
+          customFooter={
+            <div className="flex w-full flex-col items-center justify-center gap-3">
+              {renderCustomFooter()}
+            </div>
+          }
+        />
+      )}
+    </>
   )
 }
 

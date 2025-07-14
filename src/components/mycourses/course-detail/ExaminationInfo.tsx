@@ -22,6 +22,8 @@ import toast from 'react-hot-toast'
 import useSelectExams from 'src/hooks/useSelectExams'
 import { isEmpty } from 'lodash'
 import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
+import { TitleSidebar } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   open: boolean
@@ -41,7 +43,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const InfoItem = ({ label, value }: InfoItemProps) => {
   return (
-    <div className="flex items-center justify-between text-base text-secondary">
+    <div className="flex justify-between gap-2 text-sm text-secondary md:text-base">
       <div>{label}</div>
       <div className="flex items-center gap-2 font-semibold">
         {value || '-'}
@@ -91,6 +93,7 @@ const ExaminationInfo = ({
   currentValue,
   onSuccess,
 }: Props) => {
+  const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
@@ -204,7 +207,7 @@ const ExaminationInfo = ({
     }
     if (isSuccess) {
       return (
-        <div className="flex w-full flex-col gap-4 text-base">
+        <div className="flex w-full flex-col gap-4 text-sm md:text-base">
           <InfoItem label="Program:" value={data?.program?.name} />
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
@@ -221,19 +224,38 @@ const ExaminationInfo = ({
     }
   }
 
+  const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
+  const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
+  const isClosable = (isTabletView || isMobileView) && !isEdit
+  const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
+  const btnSubmitTile = isEdit ? 'Confirm' : ''
+  const cancelButtonCaption = isEdit && !isMobileView ? 'Cancel' : ''
+  const placement = isTabletView || isMobileView ? 'bottom' : 'right'
+  const height =
+    (isTabletView || isMobileView) && isEdit
+      ? 386
+      : isTabletView || isMobileView
+        ? 'auto'
+        : '100%'
+
   return (
     <>
       <SappDrawerV3
         open={open}
         handleCancel={handleCancel}
-        title={isEdit ? 'Change Exam Date' : 'Exam Information'}
-        isShowBtnClose={!isEdit || isExamList}
+        title={title}
+        isShowBtnClose={isShowCloseBtn}
+        closable={isClosable}
+        isShowBtnBack={isShowBackBtn}
         isShowFooter={isEdit}
-        btnSubmitTile={isEdit ? 'Confirm' : ''}
-        cancelButtonCaption={isEdit ? 'Cancel' : ''}
+        btnSubmitTile={btnSubmitTile}
+        cancelButtonCaption={cancelButtonCaption}
         handleBack={handleBack}
         handleSubmit={handleChangeExamDate}
         loading={isChangingLoad}
+        placement={placement}
+        height={height}
+        submitButtonClassName="w-full md:w-auto"
       >
         {isEdit ? (
           <FormProvider {...methods}>

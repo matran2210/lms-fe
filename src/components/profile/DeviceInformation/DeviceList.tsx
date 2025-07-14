@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
 import DeviceItem from './DeviceItem'
@@ -55,11 +55,11 @@ const DeviceList = () => {
             </div>
           )
         })}
-        <div className="mt-4 flex items-center gap-2">
+        <div className="mt-6 flex items-start gap-2 md:mt-4">
           <div className="text-[#E68200]">
             <Icon type="shield-warning" />
           </div>
-          <div className="text-sm text-[#050505]">
+          <div className="text-sm text-gray-800">
             <span>Maximum limit of 3 browsers: </span>
             <span className="font-semibold">
               Please contact support team {MY_COURSES.hotline}
@@ -80,19 +80,21 @@ const DeviceList = () => {
           // classNameHeader="bg-white !text-black"
           // classNameBody="h-[calc(100%-78px)] overflow-y-auto"
           // className="h-full"
-          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
-          classNameBody="md:px-0 md:pb-0 lg:px-8 lg:pb-6 h-[calc(100%-80px)] overflow-y-auto"
+          classNameHeader={
+            'bg-white !text-gray-800 md:!p-0 lg:!px-8 lg:!py-6 !text-lg md:!text-2xl'
+          }
+          classNameBody="pt-0 md:pt-4 md:!px-0 md:!pb-0 lg:!px-8 lg:!pb-6 h-[calc(100%-80px)] overflow-y-auto"
           rootClassName={'profile-subject-drawer'}
           className="h-full"
           classNames={{
-            content: 'md:rounded-2xl',
+            content: 'rounded-2xl',
           }}
         >
-          <div className="items flex h-full flex-col justify-between gap-8 text-base">
-            <div className="flex flex-col gap-4">
+          <div className="items flex h-full flex-col justify-between gap-8 text-sm md:text-base">
+            <div className="flex flex-col gap-3 md:gap-4">
               {selectedDrawer.data?.user_agent.browserName && (
-                <div className="flex items-center justify-between text-[#050505]">
-                  <span className="inline-block w-[302px] text-secondary">
+                <div className="flex items-center justify-between text-gray-800">
+                  <span className="inline-block text-secondary md:w-[302px]">
                     Device Name:
                   </span>
                   <span className="font-semibold">
@@ -101,8 +103,8 @@ const DeviceList = () => {
                 </div>
               )}
               {selectedDrawer.data.user_agent.browserName && (
-                <div className="flex items-center justify-between text-[#050505]">
-                  <span className="inline-block w-[302px] text-secondary">
+                <div className="flex items-center justify-between text-gray-800">
+                  <span className="inline-block text-secondary md:w-[302px]">
                     Browser:
                   </span>
                   <span className="font-semibold">
@@ -111,8 +113,8 @@ const DeviceList = () => {
                 </div>
               )}
               {selectedDrawer.data.user_agent.osName && (
-                <div className="flex items-center justify-between text-[#050505]">
-                  <span className="inline-block w-[302px] text-secondary">
+                <div className="flex items-center justify-between text-gray-800">
+                  <span className="inline-block text-secondary md:w-[302px]">
                     OS:
                   </span>
                   <span className="font-semibold">
@@ -121,8 +123,8 @@ const DeviceList = () => {
                 </div>
               )}
               {formattedDate && (
-                <div className="flex items-center justify-between text-[#050505]">
-                  <span className="inline-block w-[302px] text-secondary">
+                <div className="flex items-center justify-between text-gray-800">
+                  <span className="inline-block md:w-[302px]">
                     {' '}
                     Logged At:{' '}
                   </span>
@@ -130,7 +132,7 @@ const DeviceList = () => {
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-[#FEEDED] px-4 py-3 text-[#F80903]">
+            <div className="flex items-center justify-between rounded-lg bg-error-50 px-4 py-3 text-error">
               <div className="font-medium">Remove Browser</div>
               <div className="cursor-pointer">
                 <Icon type="delete" />

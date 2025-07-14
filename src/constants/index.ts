@@ -29,7 +29,7 @@ export const PageLink = {
   REQUEST: '/request',
   MY_REQUEST: '/teachers/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
-  COURSE_CONTENT: '/courses/my-course',
+  COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
 }
 
@@ -55,6 +55,7 @@ export const TitleSidebar = {
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
+  EXAM: 'Exam',
 }
 
 export const TitleTeacherSidebar = {
@@ -225,7 +226,7 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
+export const DEFAULT_SELECT_SECTION = [{ name: 'All Section', id: '' }]
 
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
@@ -553,6 +554,13 @@ export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
+}
+
+export const COOKIE_INFO = {
+  SESSION_ID: 'sessionId',
+  KEYCLOAK_USER_ID: 'keycloakUserId',
+  KEYCLOAK_TOKEN: 'keycloakToken',
+  KEYCLOAK_REFRESH_TOKEN: 'keycloakRefreshToken',
 }
 
 export const LABEL_MAX_LENGTH = 12

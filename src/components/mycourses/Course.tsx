@@ -424,6 +424,10 @@ const Course = ({
   }
   const isDesktop = screens.lg
   const maxLengthTitle = isDesktop ? 25 : 15
+  const sizeIcon = 'h-5 w-5 md:h-6 md:w-6'
+  const classNameDes = `text-sm font-normal md:text-base ${
+    enableCourse ? 'text-gray-800' : 'text-gray-300'
+  }`
 
   return (
     <>
@@ -433,22 +437,22 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`h-16 font-medium mb-4 ${enableCourse && 'mt-3'}`}
+          classNameTitle={`h-12 mb-4 md:h-16 ${enableCourse && 'mt-3'}`}
           handleClickTitle={handleClickTitle}
           hideBadge={!enableCourse}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[444px] min-h-[428px]"
+          classNameCard="lg:min-h-[444px] min-h-[344px]"
         >
           <div className="flex items-center justify-between">
             {enableCourse ? (
               <div className="flex items-center gap-2">
                 <div>
-                  <GraduationCapIcon />
+                  <GraduationCapIcon className={sizeIcon} />
                 </div>
-                <div className="text-sm font-semibold text-icon">
+                <div className="text-xs font-semibold text-icon md:text-sm">
                   <Tooltip
                     title={course?.classes?.[0]?.code}
                     showTooltip={
@@ -467,11 +471,15 @@ const Course = ({
 
             {determineButtonToShow !== 'Active' && (
               <div className="flex items-center gap-1">
-                <div className="mr-1">
-                  <CourseTimeIcon />
+                <div
+                  className={`mr-1 ${
+                    enableCourse ? 'text-icon' : 'text-gray-300'
+                  }`}
+                >
+                  <CourseTimeIcon className={sizeIcon} />
                 </div>
                 <div
-                  className={`text-sm font-semibold ${
+                  className={`text-xs font-semibold md:text-sm ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
                   }`}
                 >
@@ -482,7 +490,7 @@ const Course = ({
                       : 0}{' '}
                 </div>
                 <div
-                  className={`text-sm font-normal ${
+                  className={`text-xs font-normal md:text-sm ${
                     enableCourse ? 'text-gray-500' : 'text-gray-300'
                   }`}
                 >
@@ -491,7 +499,7 @@ const Course = ({
               </div>
             )}
           </div>
-          <div className="des mb-6 mt-8 line-clamp-3 h-[72px] text-ellipsis">
+          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-6 md:mt-8 md:h-[72px]">
             {(course?.description as string)?.length > 250 ? (
               <Tooltip
                 title={
@@ -507,9 +515,7 @@ const Course = ({
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(course?.description),
                   }}
-                  className={`text-base font-normal ${
-                    enableCourse ? 'text-gray-800' : 'text-gray-300'
-                  }`}
+                  className={classNameDes}
                 />
               </Tooltip>
             ) : (
@@ -517,9 +523,7 @@ const Course = ({
                 dangerouslySetInnerHTML={{
                   __html: clearStylesHtml(course?.description),
                 }}
-                className={`text-base font-normal ${
-                  enableCourse ? 'text-gray-800' : 'text-gray-300'
-                }`}
+                className={classNameDes}
               />
             )}
           </div>
@@ -576,7 +580,7 @@ const Course = ({
                     ? 'Activate'
                     : determineButtonToShow
                 }
-                className="ml-auto"
+                className="ml-auto w-full md:w-auto"
                 onClick={() => {
                   if (isActiveStudent) {
                     courseAction()

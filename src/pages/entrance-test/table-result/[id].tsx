@@ -76,9 +76,9 @@ const TableEntranceResult = () => {
   return (
     <>
       <div className="relative">
-        <div className="flex flex-col items-center justify-between bg-white p-2.5">
-          <h2 className="text-2xl font-semibold">Entrance Test</h2>
-          <div className="mt-1">
+        <div className="flex flex-col items-center justify-between bg-white p-4 md:p-2.5">
+          <h2 className="text-base font-semibold md:text-2xl">Entrance Test</h2>
+          <div className="mt-1 hidden md:block">
             <span className="text-gray-800">
               Result:{' '}
               {(() => {
@@ -100,12 +100,12 @@ const TableEntranceResult = () => {
           </div>
         </div>
         <div
-          className="absolute right-8 top-5 z-10 cursor-pointer rounded-md bg-progress-active p-2"
+          className="absolute right-4 top-4 z-10 cursor-pointer rounded-md bg-progress-active p-1 md:right-8 md:top-5 md:p-2"
           onClick={() => {
             router.push(`/entrance-test/test-result/${id}`)
           }}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
       </div>
       <Layout size="sm" title="Entrance Test Result" showSidebar={false}>

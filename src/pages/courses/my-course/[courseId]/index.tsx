@@ -13,10 +13,10 @@ import {
   CLASS_TYPE,
   defaultStatusDetail,
   DELAY_TIME_DISPLAY_POPUP,
+  PageLink,
 } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
-import SelectExamPopup from './popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import FilterCourse from '@components/mycourses/FilterCourse'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
@@ -24,6 +24,8 @@ import PinnedCompletedCourse from '@components/layout/PinnedNotifications/Pinned
 import { HamburgerMenuLargeIcon } from '@assets/icons'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { RemindChoosingExam } from 'src/type/course'
+import SelectExamPopup from './popups/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -41,6 +43,7 @@ const CourseDetail = () => {
     userCertificateId: '',
     courseName: '',
   })
+  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -166,15 +169,26 @@ const CourseDetail = () => {
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
-    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+    isSuccess &&
+      setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
   })
+
+  const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
+    return (
+      remindChoosingExam.remind_by_progress ||
+      remindChoosingExam.remind_by_duration
+    )
+  }
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (isSuccess && data?.pages?.[0]?.courseDetail?.remind_choosing_exam) {
+    if (
+      isSuccess &&
+      canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
+    ) {
       timeout = setTimeout(() => {
-        setShowSelectExamPopup(true)
+        setShowSelectExam(true)
       }, DELAY_TIME_DISPLAY_POPUP)
     }
 
@@ -203,7 +217,7 @@ const CourseDetail = () => {
         passedAt,
         userCertificateUrl,
         userCertificateId,
-        courseName: courseNameDetail,
+        courseName: courseNameDetail || '',
       })
     }
   }, [data])
@@ -214,14 +228,14 @@ const CourseDetail = () => {
       showSidebar={showSidebar || isAlwaysShowSidebar}
       handleToggleSidebar={handleCloseSidebar}
     >
-      <div className="mt-2 flex items-center justify-between gap-6 md:mb-4 xl:mb-6">
+      <div className="mb-4 mt-2 flex items-center justify-between gap-2 md:gap-6 lg:mb-6 lg:mt-4">
         <div
-          className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-white p-2 shadow-small md:h-14 md:w-14 lg:hidden"
           onClick={handleOpenSidebar}
         >
           <HamburgerMenuLargeIcon />
         </div>
-        <div className="w-full rounded-lg bg-white px-8 py-4">
+        <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearchV2}
             formStyle="w-full flex items-center"
@@ -237,19 +251,19 @@ const CourseDetail = () => {
             breadcrumbs={[
               {
                 title: 'My Course',
-                link: '/courses',
+                link: PageLink.COURSES,
               },
               {
-                title: courseNameDetail,
+                title: courseNameDetail || '',
                 link: '',
               },
             ]}
           />
           <div
-            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
+            className="mt-8 flex items-start justify-between gap-6 lg:my-4"
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="line-clamp-2 w-[60%] text-3xl font-semibold text-gray-800">
+            <div className="line-clamp-2 w-[60%] text-xl font-semibold text-gray-800 md:text-2xl lg:text-3xl">
               {courseNameDetail}
             </div>
             <FilterCourse
@@ -263,11 +277,11 @@ const CourseDetail = () => {
               ]}
             />
           </div>
-          <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
+          <div className="h-full pt-6" data-aos={ANIMATION.DATA_AOS}>
             <CourseParts
               isTrial={isTrial}
               courses={courses}
-              is_passed_course={is_passed_course}
+              is_passed_course={is_passed_course || false}
               class_user_id={class_user_id}
               lastElementRef={lastElementRef}
             />
@@ -279,23 +293,22 @@ const CourseDetail = () => {
         data.pages[0].courseDetail.remind_choosing_exam &&
         showSelectExamPopup && <SelectExamPopup courseData={data} />}
 
-      <PopupModalTest
-        class_code={data?.pages?.[0]?.courseDetail?.code}
-        program={data?.pages?.[0]?.courseDetail?.data?.program}
-        data={data?.pages?.[0]?.courseDetail}
-      />
-      {pinnedCompletedCourse.isOpen && (
-        <div className="fixed inset-x-0 bottom-4 z-50 lg:container md:px-8 lg:max-w-[1524px]">
-          <div className="w-full">
-            <PinnedCompletedCourse
-              pinnedCompletedCourse={pinnedCompletedCourse}
-            />
-          </div>
-        </div>
+      {data?.pages?.[0]?.courseDetail?.data?.program && (
+        <PopupModalTest
+          class_code={data?.pages?.[0]?.courseDetail?.code}
+          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          data={data?.pages?.[0]?.courseDetail || {}}
+        />
       )}
+
       <div className="sticky inset-x-0 bottom-4 z-50">
         <div className="w-full">
           <CtaTrial />
+          {pinnedCompletedCourse.isOpen && (
+            <PinnedCompletedCourse
+              pinnedCompletedCourse={pinnedCompletedCourse}
+            />
+          )}
         </div>
       </div>
     </Layout>

@@ -1024,7 +1024,7 @@ export const TimeOutIcon = () => {
   )
 }
 
-export const VerifiedIcon = () => {
+export const VerifiedIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       width="14"
@@ -1032,6 +1032,7 @@ export const VerifiedIcon = () => {
       viewBox="0 0 14 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <g id="verified 1" clipPath="url(#clip0_12314_6902)">
         <g id="Group">
@@ -1100,13 +1101,14 @@ export const HandShake = () => (
     />
   </svg>
 )
-export const CloseIconV2 = () => (
+export const CloseIconV2 = ({ className }: { className?: string }) => (
   <svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M18 18L6 6"
@@ -1315,13 +1317,14 @@ export const StarCircleIcon = () => (
   </svg>
 )
 
-export const GraduationCapIcon = () => (
+export const GraduationCapIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
+    className={className}
   >
     <path
       fillRule="evenodd"
@@ -1332,19 +1335,20 @@ export const GraduationCapIcon = () => (
   </svg>
 )
 
-export const CourseTimeIcon = () => (
+export const CourseTimeIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="25"
     height="24"
     viewBox="0 0 25 24"
     fill="none"
+    className={className}
   >
     <path
       fillRule="evenodd"
       clipRule="evenodd"
       d="M8.84501 1.6026C9.06454 1.95386 8.95776 2.41657 8.60651 2.6361L4.60648 5.1361C4.25523 5.35563 3.79252 5.24885 3.57298 4.8976C3.35345 4.54634 3.46023 4.08363 3.81149 3.8641L7.81151 1.3641C8.16276 1.14457 8.62548 1.25135 8.84501 1.6026ZM16.573 1.6026C16.7925 1.25135 17.2552 1.14457 17.6065 1.3641L21.6065 3.8641C21.9577 4.08363 22.0645 4.54635 21.845 4.8976C21.6255 5.24885 21.1627 5.35563 20.8115 5.1361L16.8115 2.6361C16.4602 2.41657 16.3535 1.95385 16.573 1.6026ZM12.709 4.7501C8.15264 4.7501 4.45898 8.44375 4.45898 13.0001C4.45898 17.5564 8.15264 21.2501 12.709 21.2501C17.2653 21.2501 20.959 17.5564 20.959 13.0001C20.959 8.44375 17.2653 4.7501 12.709 4.7501ZM2.95898 13.0001C2.95898 7.61532 7.32421 3.2501 12.709 3.2501C18.0938 3.2501 22.459 7.61532 22.459 13.0001C22.459 18.3849 18.0938 22.7501 12.709 22.7501C7.32421 22.7501 2.95898 18.3849 2.95898 13.0001ZM12.709 8.2501C13.1232 8.2501 13.459 8.58589 13.459 9.0001V12.6894L15.7393 14.9698C16.0322 15.2627 16.0322 15.7375 15.7393 16.0304C15.4464 16.3233 14.9715 16.3233 14.6787 16.0304L12.1787 13.5304C12.038 13.3898 11.959 13.199 11.959 13.0001V9.0001C11.959 8.58589 12.2948 8.2501 12.709 8.2501Z"
-      fill="#1C274C"
+      fill="currentColor"
     />
   </svg>
 )

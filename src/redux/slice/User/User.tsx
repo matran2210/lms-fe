@@ -73,6 +73,7 @@ const initialState: UserState = {
     user_contacts: [],
     certificates: 0,
     courses: 0,
+    keycloak_user_id: '',
   },
   loginHistory: {
     meta: {},
