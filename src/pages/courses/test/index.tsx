@@ -586,8 +586,16 @@ const TestModal = ({
   }
 
   const handleContinueLastAttempt = async () => {
-    if (remainingTimeLastAttempt.current === null) return
-    if (remainingTimeLastAttempt.current <= 0) {
+    if (
+      remainingTimeLastAttempt.current === null &&
+      quiz.is_limited &&
+      quiz.quiz_timed > 0
+    )
+      return
+    if (
+      remainingTimeLastAttempt.current !== null &&
+      remainingTimeLastAttempt?.current <= 0
+    ) {
       handleFinishTest()
     } else {
       handleStartANewAttempt()

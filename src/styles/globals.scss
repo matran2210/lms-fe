@@ -25,6 +25,7 @@
 @import './components/drawer.scss';
 @import './pages/test';
 @import './pages/_entrance-test.scss';
+@import './components/sapp-modal-v3.scss';
 
 @tailwind base;
 @tailwind components;
@@ -1249,10 +1250,6 @@ td.py-5.px-3.sapp-table-quiz {
   width: 95%;
   min-width: 100px;
   max-width: 100%;
-}
-
-.sapp-modal--comment .ant-modal-content {
-  @apply max-h-[640px] min-h-[400px] p-0;
 }
 
 .pined-noti p {
