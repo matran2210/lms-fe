@@ -42,7 +42,14 @@ const SearchWithMenuToggle = ({
           <HamburgerMenuLargeIcon />
         </div>
       )}
-      <div className="w-full rounded-lg bg-white px-2 py-3 shadow-small md:px-8 md:py-4">
+      <div
+        className="w-full cursor-pointer rounded-lg border border-transparent bg-white px-2 py-3 shadow-small 
+  focus-within:border-primary 
+  focus-within:outline-none 
+  hover:border-gray
+  active:border-primary 
+  md:px-8 md:py-4"
+      >
         <SearchForm
           placeholder={MY_COURSES.placeholderSearchV2}
           formStyle="w-full flex items-center"
