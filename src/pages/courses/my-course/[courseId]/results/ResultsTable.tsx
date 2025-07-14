@@ -48,7 +48,7 @@ const ResultsTable = ({
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [openReport, setOpenReport] = useState<boolean>(false)
-  const [params, setParams] = useState<any>({})
+  const [params, setParams] = useState<string>('')
   const observer = useRef<IntersectionObserver>()
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
@@ -60,6 +60,7 @@ const ResultsTable = ({
   const [listSubsection, setListSubsection] = useState<ISection[]>([])
   const [listUnit, setListUnit] = useState<ISection[]>([])
   const [listActivity, setListActivity] = useState<ISection[]>([])
+  const queryParams = [params, pageSize, currentPage, router.query.courseId]
   const methods = useForm<SectionDropdownFormValues>({
     defaultValues: {
       section: null,
@@ -78,7 +79,7 @@ const ResultsTable = ({
     isFetching,
     isLoading: isMobileLoading,
   } = useInfiniteQuery({
-    queryKey: ['TestResultMobile', currentPage, pageSize, params],
+    queryKey: ['TestResultMobile', ...queryParams],
     queryFn: ({ pageParam }) =>
       CoursesAPI.getCourseResults(
         router.query.courseId as string,
@@ -110,7 +111,7 @@ const ResultsTable = ({
 
   const { data: resultData, isLoading } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
-    queryKey: [CourseKey.ResultsList, currentPage, pageSize, params],
+    queryKey: [CourseKey.ResultsList, ...queryParams],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
         router.query.courseId as string,
@@ -260,7 +261,14 @@ const ResultsTable = ({
   const title =
     !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
 
-  if (isEmpty(resultData) || isEmpty(dataMobile))
+  if (isLoading || isMobileLoading)
+    return [...Array(6)].map((_, index) => (
+      <Skeleton key={index} active avatar>
+        <List.Item.Meta avatar={<Avatar />} />
+      </Skeleton>
+    ))
+
+  if (isEmpty(groupedDataByType) && !openFilter)
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <NoDataV2 />
@@ -274,48 +282,39 @@ const ResultsTable = ({
           <FilterCourseSection setParams={setParams} />
         </div>
       )}
-      {isLoading ? (
-        <>
-          {[...Array(6)].map((_, index) => (
-            <Skeleton key={index} active avatar>
-              <List.Item.Meta avatar={<Avatar />} />
-            </Skeleton>
-          ))}
-        </>
-      ) : (
-        <div className="mt-6 flex flex-col gap-6 md:mt-0">
-          {!isEmpty(groupedDataByType?.[TEST_TYPE.ACTIVITY]) && (
-            <div className="flex flex-col gap-6">
-              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-                <CollapseActivity
-                  key={item?.id}
-                  resultData={item}
-                  handleViewResult={handleViewResult}
-                  getScore={getScore}
-                  lastElementRef={lastElementRef}
-                />
-              ))}
-            </div>
+
+      <div className="mt-6 flex flex-col gap-6 md:mt-0">
+        {!isEmpty(groupedDataByType?.[TEST_TYPE.ACTIVITY]) && (
+          <div className="flex flex-col gap-6">
+            {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
+              <CollapseActivity
+                key={item?.id}
+                resultData={item}
+                handleViewResult={handleViewResult}
+                getScore={getScore}
+                lastElementRef={lastElementRef}
+              />
+            ))}
+          </div>
+        )}
+        {Object.entries(groupedDataByType || {})
+          ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
+          ?.map(([type, data]) =>
+            !isEmpty(data) ? (
+              <div key={type} className="flex flex-col gap-6">
+                {data.map((item) => (
+                  <CardResultTest
+                    key={item.id}
+                    resultData={item}
+                    handleViewResult={handleViewResult}
+                    getNameTooltipContent={getNameTooltipContent}
+                    lastElementRef={lastElementRef}
+                  />
+                ))}
+              </div>
+            ) : null,
           )}
-          {Object.entries(groupedDataByType || {})
-            ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
-            ?.map(([type, data]) =>
-              !isEmpty(data) ? (
-                <div key={type} className="flex flex-col gap-6">
-                  {data.map((item) => (
-                    <CardResultTest
-                      key={item.id}
-                      resultData={item}
-                      handleViewResult={handleViewResult}
-                      getNameTooltipContent={getNameTooltipContent}
-                      lastElementRef={lastElementRef}
-                    />
-                  ))}
-                </div>
-              ) : null,
-            )}
-        </div>
-      )}
+      </div>
 
       {resultData && !isMobileView && (
         <PaginationSappV2
@@ -326,6 +325,7 @@ const ResultsTable = ({
           setPageSize={setPageSize}
         />
       )}
+
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
@@ -337,6 +337,7 @@ const ResultsTable = ({
         header="Awating Grading"
         content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
+
       <SappDrawerV3
         open={openFilter}
         handleCancel={() => setOpenFilter(false)}
