@@ -10,9 +10,13 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   const [visible, setVisible] = useState(false)
   const router = useRouter()
   const scriptRef = useRef<HTMLScriptElement | null>(null)
-
-  // Check if URL contains '/teachers'
-  const isTeacherPage = router.asPath.includes('/teachers')
+  const { asPath } = router
+  const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
+    '/teachers',
+    '/test',
+    '/case-study',
+    '/activity',
+  ].map((p) => asPath.includes(p))
 
   // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
@@ -116,7 +120,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }, [visible])
 
   // Early return after all hooks are declared
-  if (isTeacherPage) {
+  if (isTeacherPage || isTestPage || isCaseStudyPage || isActivityPage) {
     return null
   }
 
@@ -133,6 +137,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             onOpenChange={handleVisibleChange}
             placement="topLeft"
             arrow={false}
+            classNames={{
+              body: 'max-w-[312px] md:max-w-[360px] !rounded-2xl bg-white shadow-card',
+            }}
           >
             {visible ? (
               <div

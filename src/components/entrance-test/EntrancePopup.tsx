@@ -5,6 +5,7 @@ import { useAppSelector } from 'src/redux/hook'
 import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
 import EntrancePopupContent from './EntrancePopupContent'
 import dayjs from 'dayjs'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 
 const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
   return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
@@ -52,7 +53,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
 
   return (
     <>
-      <SappModalV2
+      <SappModalV3
         open={open}
         cancelButtonCaption="Back"
         okButtonCaption="Start"
@@ -69,11 +70,16 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         showHeader={false}
         buttonSize="medium"
         title={undefined}
+        fullWidthBtn={true}
       >
-        <h2 className="mb-4 max-w-screen-sm text-4xl font-bold text-[#050505]">
+        <h2 className="mb-4 max-w-screen-sm text-2xl font-bold text-gray-800 md:text-4xl">
           Test Information
         </h2>
-        <div className="text-sm text-[#A1A1A1]">Let’s start!</div>
+        <div className="text-sm text-gray-800">
+          Cảm ơn bạn đã hoàn thiện đầy đủ thông tin! Đây là bước quan trọng để
+          xác định lộ trình học tập cá nhân hóa dành riêng cho bạn. Hãy tin vào
+          bản thân và bắt đầu ngay nhé!
+        </div>
         <EntrancePopupContent
           name={count === 1 ? entranceTest?.name : data?.name || ''}
           timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}
@@ -85,7 +91,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
             count === 1 ? entranceTest?.total_question : data?.total_question
           }
         />
-      </SappModalV2>
+      </SappModalV3>
       {/* <EntranceTestFillForm
         open={openFillForn}
         setOpen={setOpenFillForm}

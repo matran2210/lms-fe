@@ -6,6 +6,7 @@ import {
   HourglassIcon,
   ResourceIcon,
   ScratchPadIconV2,
+  TimeLineIcon,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -27,7 +28,13 @@ import {
 import { uniqueId } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
@@ -58,6 +65,17 @@ import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import LearningResource from '@components/mycourses/LearningResource'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import { v4 as uuidv4 } from 'uuid'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { DiscussionIcon } from '../../../../../assets/icons'
+import VideoTimelineMobile from '@components/learning/activity/modal/VideoTimelineMobile'
+import { IVideo } from 'src/type/course'
+import BottomMenu from '@components/layout/BottomMenu'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import ActivityResourceMobile from '@components/learning/activity/modal/ActivityResourceMobile'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { ITabs } from 'src/type'
+import { title } from 'process'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -78,6 +96,7 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
 
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -106,6 +125,9 @@ const ActivityPage = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
+  const [openVideoTimeline, setOpenVideoTimeline] = useState(false)
+  const [openActivityResource, setOpenActivityResource] = useState(false)
+  const [currentVideo, setCurrentVideo] = useState<IVideo>({} as IVideo)
   const isFinishRef = useRef<boolean>(false)
   const [isHasQuizGrading, setIsHasQuizGrading] = useState(false)
   const [videoClicked, setVideoClicked] = useState<Array<VideoStateClicked>>([])
@@ -114,6 +136,7 @@ const ActivityPage = () => {
     open: false,
     id: '',
   })
+  const [focusOnlyDiscussion, setFocusOnlyDiscussion] = useState(false)
 
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -125,6 +148,28 @@ const ActivityPage = () => {
   })
   const [exhibitText, setExhibitText] = useState<string>('')
   const [openResource, setOpenResource] = useState(false)
+
+  const onFocusDiscussion = () => {
+    setFocusOnlyDiscussion(true)
+  }
+  const onUnFocusDiscussion = () => {
+    setFocusOnlyDiscussion(false)
+  }
+  const onOpenVideoTimeline = () => {
+    setOpenVideoTimeline(true)
+  }
+  const onCloseVideoTimeline = () => {
+    setOpenVideoTimeline(false)
+  }
+  const handleSetCurrentVideo = (video: IVideo) => {
+    setCurrentVideo(video)
+  }
+  const onOpenActivityResource = () => {
+    setOpenActivityResource(true)
+  }
+  const onCloseActivityResource = () => {
+    setOpenActivityResource(false)
+  }
 
   const settingDoneProcessActivity = (activity: IActivity) => {
     setIsHasQuizGrading(false)
@@ -347,75 +392,31 @@ const ActivityPage = () => {
     (e: IBreadCrumbs) => e?.course_section_type === 'PART',
   )?.id
 
-  const chapterId = breadcrumbsMenu?.data?.find(
-    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
-  )?.id
-
-  /**
-   * @description config menu breadcrumbs trong activity
-   */
-  const BreadCrumbs = () => (
-    <>
-      {breadcrumbsMenu?.data &&
-        breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-          let url = ''
-          const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
-          switch (e.course_section_type) {
-            case 'PART':
-              url = urlCourseDetail
-              break
-            case 'CHAPTER':
-              url = urlCourseDetail
-              break
-            case 'UNIT':
-              url = urlCourseDetail
-              break
-            case 'ACTIVITY':
-              url = '#'
-              break
-            default:
-              url = `/courses/my-course/${router.query.id}`
-              break
-          }
-
-          return (
-            <React.Fragment key={e?.id}>
-              {e?.course_section_type !== 'ACTIVITY' ? (
-                <li
-                  title={e?.name}
-                  onClick={() => {
-                    ;['CHAPTER', 'UNIT', 'PART'].includes(
-                      e.course_section_type,
-                    ) && localStorage.setItem('course_chapter_id', chapterId)
-                    router.push(url)
-
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }}
-                >
-                  <Tooltip title={e?.name} showTooltip={e?.name?.length > 45}>
-                    <li
-                      className={
-                        ' cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#A1A1A1] hover:text-primary'
-                      }
-                      title={e?.name}
-                    >
-                      {truncateBySpace(e.name, 3) + '/'}
-                    </li>
-                  </Tooltip>
-                </li>
-              ) : null}
-            </React.Fragment>
-          )
-        })}
-    </>
-  )
-
-  /**
-   * @description biến này để lấy name của activity
-   */
-  const nameActivity = breadcrumbsMenu?.data?.find(
-    (breadcumb: IBreadCrumbs) => breadcumb?.course_section_type === 'ACTIVITY',
-  )
+  const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
+    ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
+        let url = ''
+        const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
+        switch (e.course_section_type) {
+          case 'PART':
+          case 'CHAPTER':
+          case 'UNIT':
+            return {
+              title: e?.name,
+              link: urlCourseDetail,
+            }
+          case 'ACTIVITY':
+            return {
+              title: e?.name,
+              link: '#',
+            }
+          default:
+            return {
+              title: e?.name,
+              link: urlCourseDetail,
+            }
+        }
+      })
+    : []
 
   const [sessionData, setSessionData] = useState<Array<any>>([])
 
@@ -438,31 +439,27 @@ const ActivityPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Activity">
-        <div className={`my-0 text-[#050505]`}>
+      <Layout
+        title="Activity"
+        showSidebar={isAlwaysShowSidebar}
+        fullWidth={focusOnlyDiscussion}
+        className={focusOnlyDiscussion ? '!bg-white' : ''}
+      >
+        <div
+          className={clsx({
+            'my-2 md:mt-6 lg:mt-2': !focusOnlyDiscussion,
+            'py-2': focusOnlyDiscussion,
+          })}
+        >
           {/* Breadcrumbs */}
-          <ul
-            className={clsx(
-              'line-clamp-1 flex overflow-x-auto py-6 pb-8 text-sm font-medium',
-              { hidden: focusOnlyQuiz.open },
-            )}
+          <div
+            className={clsx('overflow-x-auto pb-8 pt-4 text-sm font-medium', {
+              hidden: focusOnlyQuiz.open,
+              'hidden lg:flex': !focusOnlyQuiz.open,
+            })}
           >
-            <BreadCrumbs />
-            <Tooltip title={nameActivity?.name}>
-              <li className="responsive-truncate-container text-[#050505]">
-                <Link
-                  href={'#'}
-                  className="breadcrumbs__link"
-                  scroll={false}
-                  onClick={() =>
-                    trackGAEvent(`Click Breadcrumb ${nameActivity?.name}`)
-                  }
-                >
-                  <ResponsiveTextTruncate text={nameActivity?.name ?? ''} />
-                </Link>
-              </li>
-            </Tooltip>
-          </ul>
+            <SappBreadCrumbs breadcrumbs={breadcrumbsData} />
+          </div>
           {/* Notes */}
           <>
             {getNotesData?.map((e: any, index: number) => {
@@ -488,7 +485,7 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0  h-full w-full">
+                  <div className="absolute left-0 top-0 h-full w-full">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
@@ -508,36 +505,34 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={ANIMATION.DATA_AOS}
-            className="mb-[122px] flex flex-col gap-6 lg:mb-6"
+            className={clsx('mb-[120px] flex flex-col gap-4 md:gap-6 lg:mb-6', {
+              'mb-0': focusOnlyDiscussion,
+            })}
           >
             {/* Header */}
-            <div
-              className={clsx(
-                `flex w-full select-none flex-wrap items-center justify-between gap-4`,
-                { hidden: focusOnlyQuiz.open },
-              )}
-            >
-              <div className="text-bw-13 flex items-center gap-2 text-2xl font-medium">
-                <ActivityPagination
-                  {...{ activity, sessionData }}
-                  focusOnlyQuiz={focusOnlyQuiz.open}
-                  isArrowTitle
-                />
-                <Tooltip title={activity?.name?.length > 95 && activity?.name}>
-                  {truncateString(activity?.name, 91)}
-                </Tooltip>
-              </div>
-              <div className="text-bw-13 flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-2 text-sm">
-                <HourglassIcon />
-                <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
-              </div>
-            </div>
+            <HeaderMobile
+              title={focusOnlyDiscussion ? 'Discussion' : activity?.name || ''}
+              isHidden={focusOnlyQuiz.open}
+              extraActions={
+                focusOnlyDiscussion ? null : (
+                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-1 text-xs text-gray-800 md:py-[6px] md:text-sm">
+                    <HourglassIcon className="shrink-0" />
+                    <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
+                  </div>
+                )
+              }
+              onBack={focusOnlyDiscussion ? onUnFocusDiscussion : router.back}
+              className={clsx('mb-0 md:mb-2 lg:mb-0', {
+                'px-4': focusOnlyDiscussion,
+              })}
+            />
 
             {/* Learning Outcome */}
             <div
               className={clsx({
                 hidden:
                   focusOnlyQuiz.open ||
+                  focusOnlyDiscussion ||
                   !(
                     activity?.course_outcomes &&
                     activity?.course_outcomes?.length > 0
@@ -549,9 +544,10 @@ const ActivityPage = () => {
 
             {/* Activity Resource */}
             <div
-              className={clsx({
-                hidden:
+              className={clsx('hidden md:block', {
+                '!hidden':
                   focusOnlyQuiz.open ||
+                  focusOnlyDiscussion ||
                   !(activity?.files && activity?.files?.length > 0),
               })}
             >
@@ -573,18 +569,23 @@ const ActivityPage = () => {
                 handleFinishedCourseSectionProgress,
                 focusOnlyQuiz,
                 setFocusOnlyQuiz,
+                handleSetCurrentVideo,
+                focusOnlyDiscussion,
               }}
             />
             {/* Next/Prev Activities */}
             <ActivityPagination
               {...{ activity, sessionData }}
-              focusOnlyQuiz={focusOnlyQuiz.open}
+              focusOnly={focusOnlyQuiz.open || focusOnlyDiscussion}
             />
 
             <div
               className={clsx(
                 'rounded-xl bg-white p-6 shadow-learning-activity',
-                { hidden: focusOnlyQuiz.open },
+                {
+                  hidden: focusOnlyQuiz.open,
+                  'hidden md:block': !focusOnlyQuiz.open,
+                },
               )}
               data-aos={ANIMATION.DATA_AOS}
             >
@@ -592,43 +593,63 @@ const ActivityPage = () => {
             </div>
           </div>
 
-          <div className="fixed bottom-8 left-1/2 mx-auto w-full max-w-sm -translate-x-1/2 transform lg:hidden">
-            <div className="flex rounded-xl bg-primary px-6 py-2 shadow-card">
-              <div className="flex items-center justify-center gap-5">
-                <CardMenuItem
-                  title="Note List"
-                  icon={<DocumentTextIcon className="h-6 w-6" />}
-                  onClick={handleOpenNotesList}
-                />
-                <CardMenuItem
-                  title="Resource"
-                  icon={<ResourceIcon className="h-6 w-6" />}
-                  onClick={() => setOpenResource(true)}
-                />
-              </div>
-              <Divider
-                type="vertical"
-                className="mx-6 my-auto h-6 border-white text-white"
-                orientation="center"
+          <BottomMenu className={focusOnlyDiscussion ? 'hidden' : ''}>
+            <div className="flex items-center justify-center gap-5">
+              <CardMenuItem
+                title="Note List"
+                icon={<DocumentTextIcon className="h-6 w-6" />}
+                onClick={handleOpenNotesList}
               />
-              <div className="flex items-center justify-center gap-5">
-                <CardMenuItem
-                  title="Calculator"
-                  icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
-                  onClick={() => {
-                    handleOpenScratchPad({
-                      type: 'calculator',
-                    })
-                  }}
-                />
-                <CardMenuItem
-                  title="New Note"
-                  icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
-                  onClick={handleAddNote}
-                />
-              </div>
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={onOpenActivityResource}
+                className="md:hidden"
+              />
+              <CardMenuItem
+                title="Resource"
+                icon={<ResourceIcon className="h-6 w-6" />}
+                onClick={() => setOpenResource(true)}
+                className="hidden md:flex"
+              />
             </div>
-          </div>
+            <Divider
+              type="vertical"
+              className="mx-6 my-auto hidden h-6 border-white text-white md:block"
+              orientation="center"
+            />
+            <div className="hidden items-center justify-center gap-5 md:flex">
+              <CardMenuItem
+                title="Calculator"
+                icon={<CalculatorIconV2 isActive className="h-6 w-6" />}
+                onClick={() => {
+                  handleOpenScratchPad({
+                    type: 'calculator',
+                  })
+                }}
+              />
+              <CardMenuItem
+                title="New Note"
+                icon={<ScratchPadIconV2 isActive className="h-6 w-6" />}
+                onClick={handleAddNote}
+              />
+            </div>
+            <div className="flex items-center justify-center gap-5 md:hidden">
+              {(currentVideo?.file?.resource?.time_line?.length as number) >
+                0 && (
+                <CardMenuItem
+                  title="Timeline"
+                  icon={<TimeLineIcon />}
+                  onClick={onOpenVideoTimeline}
+                />
+              )}
+              <CardMenuItem
+                title="Discussion"
+                icon={<DiscussionIcon className="h-6 w-6" />}
+                onClick={onFocusDiscussion}
+              />
+            </div>
+          </BottomMenu>
 
           {/* Sratchpad */}
           {openScratchPad.map((e) => {
@@ -659,7 +680,6 @@ const ActivityPage = () => {
                   height={850}
                   key={e.id}
                   className="!z-40"
-                  dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
                 >
@@ -678,9 +698,8 @@ const ActivityPage = () => {
                 <ModalResizeable
                   key={e.id}
                   className="!z-40"
-                  dragHandleClassName="modal-header"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center left"
                   header={
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
@@ -698,6 +717,8 @@ const ActivityPage = () => {
                       </button>
                     </div>
                   }
+                  draggableFull
+                  modalIndex={e.index}
                 >
                   <div className="h-full bg-white">
                     <EditorReader
@@ -722,11 +743,32 @@ const ActivityPage = () => {
             }
           })}
         </div>
+        <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
+          <div className="w-full">
+            <CtaTrial />
+          </div>
+        </div>
       </Layout>
       {openResource && (
         <LearningResource
           open={openResource}
           setOpenResource={setOpenResource}
+        />
+      )}
+
+      {openVideoTimeline && (
+        <VideoTimelineMobile
+          open={openVideoTimeline}
+          onClose={onCloseVideoTimeline}
+          currentVideo={currentVideo}
+        />
+      )}
+      {openActivityResource && (
+        <ActivityResourceMobile
+          open={openActivityResource}
+          onClose={onCloseActivityResource}
+          activity={activity}
+          handleOpenScratchPad={handleOpenScratchPad}
         />
       )}
     </SappLoadingGlobal>

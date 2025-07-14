@@ -3,6 +3,7 @@ import { Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React, { Dispatch, SetStateAction } from 'react'
 import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import clsx from 'clsx'
 
 const { Title } = Typography
 interface TablePaginationParams {
@@ -26,6 +27,7 @@ export interface ReusableTableProps<DataType, ParamType>
   showFooter?: boolean
   footerComponent?: React.ReactNode
   isShowPagination?: boolean
+  className?: string
 }
 
 const getIndexColumns = (
@@ -58,14 +60,15 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
   showFooter = false,
   footerComponent = undefined,
   isShowPagination = true,
+  className = '',
   ...props
 }: ReusableTableProps<DataType, ParamType>) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     if (setPagination) {
       setPagination(pagination)
     }
-    const currentPage = pagination.current ?? 1
-    const pageSize = pagination.pageSize ?? 10
+    const currentPage = pagination.current || DEFAULT_PAGE_NUMBER
+    const pageSize = pagination.pageSize || DEFAULT_PAGE_SIZE
     if (handleChangeParams) {
       handleChangeParams(currentPage, pageSize)
     }
@@ -85,7 +88,7 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
         loading={loading}
         rowKey={props.rowKey || 'id'}
         scroll={{ x: 'max-content' }}
-        className="sapp-table"
+        className={clsx('sapp-table', className)}
         locale={{ emptyText: emptyText }} // ← Customize here
         footer={showFooter ? () => footerComponent : undefined}
         {...props}

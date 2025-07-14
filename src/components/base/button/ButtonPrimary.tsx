@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import BaseButton from './BaseButton'
 import { IButtonBaseProps } from 'src/type'
 
@@ -15,22 +16,37 @@ const ButtonPrimary = ({
   ...props
 }: IButtonBaseProps) => {
   let textSizeClass =
-    size === 'small' ? 'text-sm' : size === 'medium' ? 'text-base' : 'text-lg'
+    size === 'small'
+      ? 'text-sm'
+      : size === 'medium'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
   let padding =
     size === 'small'
       ? 'py-2 px-4'
       : size === 'medium'
-        ? 'py-3 px-6'
-        : 'py-4 px-8'
-  let fullWidthClass = full ? 'block w-full' : 'inline-block'
-  let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
-    : 'cursor-pointer'
-  let componentClass = `text-center text-white font-medium bg-secondary-600 hover:!text-white hover:!bg-secondary border-none ${fullWidthClass} ${padding} ${disabledClass} ${textSizeClass} ${className}`
+        ? 'py-1 px-4 md:py-3 md:px-6'
+        : 'py-2 px-4 md:py-4 md:px-8'
+  // let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  // let disabledClass = disabled
+  //   ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+  //   : 'cursor-pointer'
+  let componentClass = clsx(
+    `text-center font-medium border-none ${padding} ${textSizeClass}`,
+    className,
+    {
+      'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100':
+        disabled,
+      'cursor-pointer text-white bg-secondary-600 hover:!text-white hover:!bg-secondary':
+        !disabled,
+      'block w-full': full,
+      'inline-block': !full,
+    },
+  )
 
   return (
     <BaseButton
-      className={`${componentClass}`}
+      className={componentClass}
       onClick={onClick}
       disabled={disabled}
       link={link}

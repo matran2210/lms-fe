@@ -286,7 +286,7 @@ function DiscussionElement({
   }, [userInfo])
 
   return (
-    <div className="flex gap-3 text-[#050505]">
+    <div className="flex gap-3 text-gray-800">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
           <div
@@ -300,12 +300,12 @@ function DiscussionElement({
               trigger="hover"
               open={isOpenUserInfo}
               overlayInnerStyle={{ maxWidth: 280 }}
-              className="flex flex-row gap-3"
+              className="flex gap-3"
             >
               <div
                 className={clsx(
-                  'leading-0 flex-none',
-                  'leading-0 flex-none',
+                  'flex-none leading-0',
+                  'flex-none leading-0',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -330,7 +330,7 @@ function DiscussionElement({
               </div>
               <div
                 className={clsx(
-                  'flex items-center gap-2',
+                  'flex h-fit items-center gap-2',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
@@ -340,10 +340,10 @@ function DiscussionElement({
                     : discussion?.full_name}
                 </div>
                 {discussion?.is_sapp_supporter && (
-                  <div className="w-fit content-center rounded bg-[#FFFBF2] px-3 py-1 font-medium text-primary">
-                    <div className="flex flex-row">
+                  <div className="rounded bg-primary-50 px-3 py-1 font-medium text-primary">
+                    <div className="flex items-center gap-1">
                       <div className="content-center">
-                        <VerifiedIcon />
+                        <VerifiedIcon className="h-3 w-3" />
                       </div>
                       <div className="w-fit content-center px-2 text-xs">
                         SAPP Supporter
@@ -354,7 +354,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="ml-14 mt-1.5">
+          <div className="mt-3 w-auto md:-mt-3 md:ml-13 md:w-fit">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image
@@ -408,7 +408,9 @@ function DiscussionElement({
             ))}
 
             {!isEdit && discussionContent && (
-              <SappDisplayText text={discussionContent} />
+              <div className="mb-2">
+                <SappDisplayText text={discussionContent} />
+              </div>
             )}
 
             {isEdit && (

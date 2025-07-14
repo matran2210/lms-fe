@@ -10,31 +10,7 @@ const Settings = ({ onBack }: IProp) => {
   return (
     <div className="relative h-full">
       <form className="flex h-full flex-col">
-        <TabLayout
-          title="Settings"
-          headerButtons={
-            null
-            // <div className=" flex gap-x-2">
-            //   <ButtonCancelSubmit
-            //     className="flex gap-12"
-            //     cancel={{
-            //       title: 'Cancel',
-            //       size: 'medium',
-            //       disabled: false,
-            //       className: 'min-w-fit !px-0 text-base w-[5rem]',
-            //       onClick: () => onBack(false), //chỗ này onBack đang là void nên fake tạm
-            //     }}
-            //     submit={{
-            //       title: 'Save',
-            //       size: 'medium',
-            //       className: 'min-w-fit px-0 text-sm w-[5rem]',
-            //       htmlType: 'submit',
-            //       disabled: true,
-            //     }}
-            //   />
-            // </div>
-          }
-        >
+        <TabLayout title="Settings" headerButtons={null}>
           <div className="flex h-full items-center justify-center">
             <div className="text-[#A1A1A1]">Coming soon</div>
           </div>

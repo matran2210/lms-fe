@@ -3,15 +3,28 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { formatTime, truncateBySpace, truncateHTML } from '@utils/index'
+import { buildQueryString, formatTime, truncateHTML } from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
-import { ANIMATION } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
-import { LockClosedIcon } from '@assets/icons'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 
-const Part = ({ course }: { course: IMyCourseDetail }) => {
+const Part = ({
+  course,
+  focusSubSectionIds,
+  focusUnitIds,
+  deadline,
+  isLock,
+  lastElementRef,
+}: {
+  course: IMyCourseDetail
+  focusSubSectionIds?: string
+  focusUnitIds?: string
+  deadline?: string
+  isLock?: boolean
+  lastElementRef: (node: HTMLDivElement) => void
+}) => {
   const router = useRouter()
 
   const percentProgress = round(
@@ -22,7 +35,14 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   )
 
   const onClickPart = (id: string) => {
-    router.push(`/courses/${router.query.courseId}/section/${id}`)
+    const searchParams = buildQueryString({
+      focusSubSectionIds,
+      focusUnitIds,
+      deadline,
+    })
+    router.push(
+      `/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+    )
   }
 
   const formattedTime = Number(
@@ -95,39 +115,18 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
   }
 
   return (
-    <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
-      <div
-        className="name-course text-2xl font-medium text-[#050505] xl:h-[60px]"
-        onClick={handleRouterPartDetail}
-      >
-        {course?.course_section_link_parents?.[0]?.is_preview_locked ||
-        course?.course_section_link_parents?.[0]?.is_showing_locked ? (
-          <div className="flex justify-between">
-            <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-              <Tooltip
-                title={course?.name}
-                showTooltip={(course?.name as string)?.length > 40}
-              >
-                {truncateBySpace(course?.name, 40) ?? ''}
-              </Tooltip>
-            </div>
-            <div>
-              <LockClosedIcon />
-            </div>
-          </div>
-        ) : (
-          <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-            <Tooltip
-              title={course?.name}
-              showTooltip={(course?.name as string)?.length > 40}
-            >
-              {truncateBySpace(course?.name, 40) ?? ''}
-            </Tooltip>
-          </div>
-        )}
-      </div>
-      <div className="des mb-15 mt-6">
-        <div className="h-[120px]">
+    <CardCourse
+      hideBadge
+      title={course?.name}
+      key={course?.id}
+      ref={lastElementRef}
+      classNameTitle={`h-12 md:h-16 font-medium`}
+      classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
+      handleClickTitle={handleRouterPartDetail}
+      isLock={isLock}
+    >
+      <div className="flex h-full flex-1 flex-col">
+        <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[72px]">
           <Tooltip
             title={
               <p
@@ -142,60 +141,58 @@ const Part = ({ course }: { course: IMyCourseDetail }) => {
               dangerouslySetInnerHTML={{
                 __html: truncateHTML(25, course?.description) ?? '',
               }}
-              className="h-[120px] text-base text-[#050505]"
+              className="text-sm font-normal text-gray-800 md:text-base"
             />
           </Tooltip>
         </div>
-      </div>
-      <div className="mt-auto">
-        <div className="progress mb-7">
-          <div className="info mb-2 flex justify-between">
-            <div className="text flex items-end">
-              <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-sm font-medium leading-[14px] text-[#050505]">
-                {showStatus}
-              </p>
-              <span className="ml-px pl-1 text-sm font-medium text-[#A1A1A1]">
-                {formattedTime > 0 ? `${formattedTime} left` : ''}
-              </span>
+
+        <div className="mt-auto">
+          <div className="progress mb-6">
+            <div className="info mb-2 flex justify-between">
+              <div className="text flex items-center">
+                <Icon type={`${iconType}`} />
+                <p className="ml-px pl-1 text-sm font-normal text-gray-800">
+                  {showStatus}
+                </p>
+                <span className="ml-px pl-1 text-sm font-medium text-gray-400">
+                  {formattedTime > 0 ? `${formattedTime} left` : ''}
+                </span>
+              </div>
+              <div className="number">
+                <p className="text-sm font-normal text-gray-800">
+                  {progressPart}%
+                </p>
+              </div>
             </div>
-            <div className="number">
-              <p className="text-sm font-medium text-[#050505]">
-                {progressPart}%
-              </p>
+            <div className="progressbar h-[6px] rounded-[100px] bg-[#F1F1F1]">
+              <div
+                className="progress-percentage h-[6px] rounded-[100px] bg-primary"
+                style={{ width: `${progressPart}%` }}
+              ></div>
             </div>
           </div>
-          <div className="progressbar h-[6px] rounded-[100px] bg-[#F1F1F1]">
-            <div
-              className="progress-percentage h-[6px] rounded-[100px] bg-primary"
-              style={{ width: `${progressPart}%` }}
-            ></div>
+          <div className="action flex items-center justify-end">
+            <ButtonSecondary
+              size="medium"
+              title={
+                course?.cta_status === 'PREVIEW'
+                  ? 'Preview'
+                  : percentProgress === 0
+                    ? 'Begin'
+                    : percentProgress === 100
+                      ? 'Review'
+                      : 'Resume'
+              }
+              className="ml-auto w-full md:w-auto"
+              onClick={() => {
+                handleRouterPartDetail()
+                trackGAEventBasedOnProgress(percentProgress)
+              }}
+            />
           </div>
         </div>
-        <div className="action jusity-end relative flex items-center">
-          <ButtonSecondary
-            size="medium"
-            title={
-              course?.cta_status === 'PREVIEW'
-                ? 'Preview'
-                : percentProgress === 0
-                  ? 'Begin'
-                  : percentProgress === 100
-                    ? 'Review'
-                    : 'Resume'
-            }
-            className="ml-auto"
-            onClick={() => {
-              handleRouterPartDetail()
-              trackGAEventBasedOnProgress(percentProgress)
-            }}
-          />
-        </div>
       </div>
-      {/* Solution test modal */}
-      {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      {/* <TestModal open={open} setOpen={setOpen} title={''} /> */}
-    </div>
+    </CardCourse>
   )
 }
 

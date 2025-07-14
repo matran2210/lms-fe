@@ -61,7 +61,7 @@ const SubjectList = ({ isEdit }: IProps) => {
           <SubjectItem
             key={e.course_category_name}
             data={e}
-            index={i}
+            className={clsx({ 'mb-4': i < subjectOptions.length - 1 })}
             isEdit={isEdit}
             setMakeDefaultDrawer={setMakeDefaultDrawer}
           />
@@ -87,11 +87,11 @@ const SubjectList = ({ isEdit }: IProps) => {
             />
           }
           handleCancel={closeMakeDefault}
-          classNameHeader={'bg-white !text-black md:p-0 lg:px-8 lg:py-6'}
-          classNameBody="md:px-0 lg:px-8"
+          classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
+          classNameBody="pt-0 md:pt-4 md:!px-0 lg:!px-8"
           rootClassName={'profile-subject-drawer'}
           classNames={{
-            content: 'md:rounded-2xl',
+            content: 'rounded-2xl',
           }}
         >
           <ProgramDetail

@@ -103,7 +103,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
 
   return (
     <React.Fragment>
-      <div className="mt-8 lg:mt-10">
+      <div className="mt-6 md:mt-8 lg:mt-10">
         <form onSubmit={handleSubmit(onSubmit)} className="block">
           <div className="mb-6 flex flex-col gap-6">
             <div className="relative">
@@ -156,7 +156,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                 title: 'Confirm',
                 size: 'medium',
                 className:
-                  'min-w-fit text-sm w-[5rem] !text-white !bg-[#29353C] hover:!bg-black rounded-lg py-2 px-4 !no-underline',
+                  'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
                 htmlType: 'submit',
                 disabled:
                   loading ||
@@ -175,7 +175,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
               disabled={loading}
             />
             <ButtonPrimary
-              className="w-full"
+              className="w-full py-2"
               size="medium"
               title="Confirm"
               htmlType="submit"

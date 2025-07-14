@@ -1,15 +1,21 @@
-import { QuizActivity } from 'src/type/results'
+import { QuizActivity, Results } from 'src/type/results'
 import { ColumnsType } from 'antd/es/table'
 import SappTable from '@components/table/SappTable'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
+import { EDateTime } from 'src/type'
+import { GradingMethod } from '@utils/constants'
 
 const TableListQuizInActivity = ({
-  activity,
+  data,
+  handleViewActivity,
+  getScore,
 }: {
-  activity: QuizActivity[]
+  data: Results
+  handleViewActivity: () => void
+  getScore: (row: Results, grading_method: GradingMethod) => string
 }) => {
   const columnsValue: ColumnsType<QuizActivity> = [
     {
@@ -34,7 +40,9 @@ const TableListQuizInActivity = ({
     },
     {
       title: 'Score',
-      render: (record) => <div>{record?.required_percent_score}</div>,
+      render: (record) => (
+        <div>{getScore(data, data?.quiz?.grading_method)}</div>
+      ),
     },
     {
       title: 'Time Spent',
@@ -47,7 +55,7 @@ const TableListQuizInActivity = ({
       render: (record) => (
         <div>
           {record?.attempts?.length > 0
-            ? dayjs(record?.attempts[0]?.updated_at).format('DD/MM/YYYY HH:mm')
+            ? dayjs(record?.attempts[0]?.updated_at).format(EDateTime.fullDate)
             : '-'}
         </div>
       ),
@@ -57,15 +65,19 @@ const TableListQuizInActivity = ({
   return (
     <SappTable
       columns={columnsValue}
-      data={activity ?? []}
+      data={data?.quiz_activity ?? []}
       pagination={{
         current: 1,
-        pageSize: activity?.length,
-        total: activity?.length,
+        pageSize: data?.quiz_activity?.length,
+        total: data?.quiz_activity?.length,
       }}
       loading={false}
       isShowIndex
       isShowPagination={false}
+      onRow={() => ({
+        onClick: () => handleViewActivity(),
+      })}
+      className="cursor-pointer"
     />
   )
 }

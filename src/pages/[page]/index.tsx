@@ -9,18 +9,27 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { Tabs } from 'antd'
+import { Card, Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { useRef, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ANIMATION,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  PageLink,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs, NOTIFICATION_STATUS } from 'src/type'
-import { ProfilePages } from 'src/type/Profile'
+import { IDeviceItem, ProfilePages } from 'src/type/Profile'
 
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
+import {
+  convertSlugToTitle,
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from '@utils/index'
 
-import { useAppDispatch } from 'src/redux/hook'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 
 import DeviceList from '@components/profile/DeviceInformation/DeviceList'
 import MyProfile from '@components/profile/MyProfile'
@@ -31,16 +40,60 @@ import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
 import ButtonDanger from '@components/base/button/ButtonDanger'
 import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { CollapseArrowIcon, HamburgerMenuLargeIcon } from '@assets/icons'
+import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
+import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
+import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
+import UserApi from 'src/redux/services/User/user'
+import { useRouter } from 'next/router'
+import { useCourseContext } from '@contexts/index'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { MY_COURSES } from 'src/constants/lang'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+
+interface IFullScreenMobile {
+  open: boolean
+  title: string
+  children: React.ReactNode
+}
 
 const ProfilePage = () => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
+  const { loginHistory } = useAppSelector(userReducer)
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [isEdit, setIsEdit] = useState<boolean>(false)
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
+  const [listDevices, setListDevices] = useState<IDeviceItem[]>()
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
+  const [openFullScreenMobile, setOpenFullScreenMobile] =
+    useState<IFullScreenMobile>({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
+  const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
+    setOpenFullScreenMobile({
+      open: true,
+      title,
+      children,
+    })
+  }
+  const onCloseFullScreenMobile = () => {
+    setOpenFullScreenMobile({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+  }
 
   const NotFound = () => (
     <div className="grid h-full place-items-center p-6">
@@ -57,7 +110,17 @@ const ProfilePage = () => {
       </div>
     </div>
   )
-
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
@@ -71,9 +134,24 @@ const ProfilePage = () => {
         }
       })
       const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout(window.location.origin)
+      await authenticationManager.logout()
     } catch (error) {}
   }
+  const getListDevices = async () => {
+    const res = await UserApi.getListDevices()
+    setListDevices(res)
+  }
+
+  useEffect(() => {
+    dispatch(
+      getLoginHistory({
+        page_index: DEFAULT_PAGE_NUMBER,
+        page_size: DEFAULT_PAGE_SIZE,
+        type: 'login',
+      }),
+    )
+    getListDevices()
+  }, [])
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -129,7 +207,7 @@ const ProfilePage = () => {
           {isChangePassword ? (
             <ChangePassword handleCancel={() => setIsChangePassword(false)} />
           ) : (
-            <div className="flex flex-col gap-0 lg:gap-10">
+            <div className="flex flex-col">
               <MyPasword setIsChangePassword={setIsChangePassword} />
               <DeviceList />
               <LoginHistoryList />
@@ -140,29 +218,167 @@ const ProfilePage = () => {
     },
   ]
 
+  const myProfileItems: CollapseProps['items'] = [
+    {
+      key: 'overview',
+      label: <p className="text-base font-semibold text-gray-800">Overview</p>,
+      children: (
+        <MyProfile
+          isEdit={isEdit}
+          setIsEdit={setIsEdit}
+          avatar={avatar}
+          handleSetAvatar={handleSetAvatar}
+          setReViewImageSrc={setReViewImageSrc}
+        />
+      ),
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'exam-id',
+      label: <p className="text-base font-semibold text-gray-800">Exam ID</p>,
+      children: <SubjectList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'profile',
+      label: <p className="text-base font-semibold text-gray-800">Profile</p>,
+      children: <ProfileList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
+  const mySecurityItems: CollapseProps['items'] = [
+    {
+      key: 'password',
+      label: <p className="text-base font-semibold text-gray-800">Password</p>,
+      children: <MyPasword setIsChangePassword={setIsChangePassword} />,
+      showArrow: false,
+      collapsible: 'icon',
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'device-list',
+      label: (
+        <CollapseListLabel
+          title="Browser"
+          subtitle="These are browsers that you logged on"
+          count={listDevices?.length || 0}
+        />
+      ),
+      children: <DeviceList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'login-history',
+      label: (
+        <CollapseListLabel
+          title="Log in History"
+          subtitle="These are IP adresses that logged in"
+          count={loginHistory?.meta?.total_records || 0}
+        />
+      ),
+      children: <LoginHistoryList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
+
+  const mobileOverviewItems = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
+      ),
+      children: (
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['overview', 'exam-id', 'profile']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
+          )}
+          items={myProfileItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
+        />
+      ),
+    },
+    {
+      key: 'certificates',
+      label: (
+        <TabHeaderItem
+          icon={<Icon type="certificates" />}
+          title="Certificates"
+        />
+      ),
+      children: <Certificate />,
+    },
+    {
+      key: 'setting',
+      label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
+      children: <Settings onBack={() => {}} />,
+    },
+    {
+      key: 'sercurity',
+      label: (
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+      ),
+      children: loginHistory && (
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['password', 'device-list', 'login-history']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
+          )}
+          items={mySecurityItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
+        />
+      ),
+    },
+  ]
+
   return (
-    <Layout title="My Profile" size="sm">
-      <div className="flex h-full w-full flex-col">
-        <div className="border-b border-[#DCDDDD] bg-white px-4 lg:px-20">
-          <div className="py-4.5 mx-auto my-0 flex h-full">
-            <SearchForm
-              placeholder="Enter name of course..."
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
+    <Layout
+      title="My Profile"
+      size="sm"
+      showSidebar={showSidebar || isAlwaysShowSidebar}
+      handleToggleSidebar={handleCloseSidebar}
+      fullWidth={isMobileView}
+    >
+      <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+          className={'hidden md:flex'}
+        />
         <div className="mx-auto my-0 flex w-full grow flex-col">
-          <div className="main sm:mx-4 lg:mx-0 ">
-            <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
+          <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
+            <div className="hidden text-2xl font-medium md:block lg:hidden">
+              Student Profile
+            </div>
+            <SappBreadCrumbs isTeacher={false} breadcrumbs={breadcrumbs} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-            <div className="flex flex-col gap-16 bg-white px-10 py-8 shadow-box">
+            <HeaderMobile
+              title="Student Profile"
+              className="mb-4 md:hidden"
+              onBack={() => router.push(`${PageLink.COURSES}`)}
+            />
+            <div className="flex flex-col gap-8 rounded-2xl bg-transparent md:gap-12 md:bg-white md:p-6 md:shadow-card lg:gap-16 lg:px-10 lg:py-8">
               <ProfileHeader
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}
                 setAvatar={handleSetAvatar}
+                avatar={avatar}
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
+                setIsEdit={setIsEdit}
               />
               <div>
                 <Tabs
@@ -175,13 +391,30 @@ const ProfilePage = () => {
                       <div>Logout</div>
                     </div>
                   }
-                  className="sapp-tabs-profile"
+                  className="sapp-tabs-profile hidden md:block"
                   defaultActiveKey="my-profile"
                   items={items}
                 />
+
+                <div className="flex flex-col gap-3 md:hidden">
+                  {mobileOverviewItems.map((item, index) => (
+                    <OverviewItemCard
+                      key={index}
+                      title={item.label}
+                      onClick={() =>
+                        onOpenFullScreenMobile(
+                          convertSlugToTitle(item.key),
+                          item.children,
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+
+                <Divider className="md:hidden" />
                 <div
                   className={clsx(
-                    'hover-transition-font-weight mt-8 flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:flex lg:hidden',
+                    'hover-transition-font-weight flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:mt-8 lg:hidden',
                     {
                       '!hidden': isEdit || isChangePassword,
                     },
@@ -197,8 +430,38 @@ const ProfilePage = () => {
         </div>
         <Footer />
       </div>
+      {isMobileView && openFullScreenMobile.open && (
+        <FullScreenMobile
+          className="bg-gray-canvas px-4 pb-4"
+          title={openFullScreenMobile.title}
+          open={openFullScreenMobile.open}
+          onClose={onCloseFullScreenMobile}
+        >
+          {openFullScreenMobile.children}
+        </FullScreenMobile>
+      )}
     </Layout>
   )
 }
+
+const CollapseListLabel = ({
+  title,
+  subtitle,
+  count,
+}: {
+  title: string
+  subtitle: string
+  count: number
+}) => (
+  <div>
+    <p className="mb-2 text-base font-semibold">
+      {title}{' '}
+      <span className="text-base font-normal text-secondary-300">
+        ({count})
+      </span>
+    </p>
+    <p className="text-sm">{subtitle}</p>
+  </div>
+)
 
 export default withAuthorization([UserType.STUDENT])(ProfilePage)

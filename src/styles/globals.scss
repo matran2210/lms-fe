@@ -18,12 +18,15 @@
 @import './components/_tabs.scss';
 @import './components/_container.scss';
 @import './components/_table.scss';
+@import './components/_pagination.scss';
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
 @import './components/drawer.scss';
 @import './pages/test';
 @import './components/drag-n-drop-question.scss';
+@import './pages/_entrance-test.scss';
+@import './components/sapp-modal-v3.scss';
 
 @tailwind base;
 @tailwind components;
@@ -771,9 +774,10 @@ textarea.is-invalid:focus {
 // .ant-modal .ant-modal-content {
 //   @apply rounded-none;
 // }
-.sapp-profile-modal {
+.ant-modal.sapp-profile-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
   .ant-modal-content {
-    @apply rounded-2xl p-10;
+    @apply rounded-2xl p-6 md:p-10;
   }
 }
 .sapp-custom-modal.success-modal {
@@ -782,8 +786,11 @@ textarea.is-invalid:focus {
     @apply rounded-lg;
   }
 }
-.sapp-modal .ant-modal-content {
-  @apply rounded-2xl p-10;
+.sapp-modal.ant-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
+  .ant-modal-content {
+    @apply rounded-2xl p-6 md:p-10;
+  }
 }
 .sapp-custom-modal.success-modal {
   .ant-modal-content {
@@ -1244,10 +1251,6 @@ td.py-5.px-3.sapp-table-quiz {
   width: 95%;
   min-width: 100px;
   max-width: 100%;
-}
-
-.sapp-modal--comment .ant-modal-content {
-  @apply max-h-[640px] min-h-[400px] p-0;
 }
 
 .pined-noti p {

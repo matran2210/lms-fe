@@ -178,7 +178,7 @@ const EventRepeatField = ({
     if (!data) return []
     return reverseDaysOfWeek(
       initDate,
-      data.map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2']),
+      data.map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2']).sort(),
     )
   }
 

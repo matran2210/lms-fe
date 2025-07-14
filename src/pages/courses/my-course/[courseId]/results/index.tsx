@@ -1,19 +1,29 @@
 import Layout from '@components/layout'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
-import { TEST_AND_QUIZ_TITLE } from 'src/constants'
-
-const DEFAULT_PAGESIZE = 10
+import { PageLink, TEST_AND_QUIZ_TITLE } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { useQuery } from 'react-query'
+import { CoursesAPI } from '@pages/api/courses'
+import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import clsx from 'clsx'
+import { FilterCourseIcon } from 'src/assets/icons'
+import { useState } from 'react'
+import { IOpenChooseItem } from 'src/type/courses'
 
 const Results = () => {
   const router = useRouter()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
+  const [openFilter, setOpenFilter] = useState(false)
+  const handleBack = () => {
+    if (router.query.courseId)
+      router.push(`/courses/my-course/${router.query.courseId}`)
+  }
 
   /**
    * @description config API course detail
@@ -28,7 +38,7 @@ const Results = () => {
     const { data } = await CoursesAPI.getCourseDetail(
       router.query.courseId,
       pageParam || 1,
-      DEFAULT_PAGESIZE,
+      DEFAULT_PAGE_SIZE,
       params,
     )
     return {
@@ -42,11 +52,7 @@ const Results = () => {
       router.query.user_section_learning_status || undefined,
   }
 
-  const {
-    data: courseData,
-    isSuccess,
-    isLoading,
-  } = useQuery({
+  const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     refetchOnWindowFocus: true,
@@ -59,45 +65,46 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout title={TEST_AND_QUIZ_TITLE}>
-        <div className="mx-auto my-0 max-[1199px]:mx-6">
-          {isLoading ? (
-            <CourseSkeleton className="pt-6" />
-          ) : (
-            <>
-              <div className="mb-8 mt-6 flex w-full">
-                {isSuccess && (
-                  <SappBreadCrumbs
-                    isTeacher={false}
-                    breadcrumbs={[
-                      {
-                        title: 'My Course',
-                        link: '/courses',
-                      },
-                      {
-                        title: courseNameDetail,
-                        link: `/courses/my-course/${router.query.courseId}`,
-                      },
-                      {
-                        title: TEST_AND_QUIZ_TITLE,
-                        link: '',
-                      },
-                    ]}
-                  />
-                )}
-              </div>
-
-              <h1 className="text-2xl font-semibold text-gray-800">
-                {TEST_AND_QUIZ_TITLE}
-              </h1>
-
-              {isSuccess && <ResultsTable />}
-            </>
-          )}
+    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
+      {!isMobileView && (
+        <div className="mb-8 mt-6 flex w-full">
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: PageLink.COURSES,
+              },
+              {
+                title: courseNameDetail || '',
+                link: PageLink.COURSE_DETAIL.replace(
+                  '[courseId]',
+                  router.query.courseId as string,
+                ),
+              },
+              {
+                title: TEST_AND_QUIZ_TITLE,
+                link: '',
+              },
+            ]}
+          />
         </div>
-      </Layout>
-    </SappLoadingGlobal>
+      )}
+      <HeaderMobile
+        title={TEST_AND_QUIZ_TITLE}
+        showIcon={isTabletView || isMobileView}
+        onBack={handleBack}
+        className={clsx({ 'mt-4': isMobileView })}
+        extraActions={
+          isMobileView && (
+            <div onClick={() => setOpenFilter((prev) => !prev)}>
+              <FilterCourseIcon />
+            </div>
+          )
+        }
+      />
+      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
+    </Layout>
   )
 }
 

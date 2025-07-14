@@ -43,4 +43,5 @@ export interface IMockTestResult {
   short_name: any
   reports: ILearningResult[] | []
   mock_tests: IMockTest[] | []
+  name: string
 }

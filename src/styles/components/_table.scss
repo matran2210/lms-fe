@@ -83,3 +83,22 @@
     }
   }
 }
+
+.style-table-v2 {
+  .ant-table {
+    @apply rounded-2xl;
+  }
+  .ant-table-thead > tr > th {
+    @apply bg-white px-0 pb-6 pt-0 text-base font-medium text-gray;
+
+    &::before {
+      display: none;
+    }
+  }
+  .ant-table-tbody > tr > td {
+    @apply px-0 pb-6 pt-8;
+  }
+  .ant-table-content {
+    @apply p-6 lg:p-8;
+  }
+}
