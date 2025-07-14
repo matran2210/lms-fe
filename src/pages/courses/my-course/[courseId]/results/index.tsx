@@ -96,9 +96,11 @@ const Results = () => {
         onBack={handleBack}
         className={clsx({ 'mt-4': isMobileView })}
         extraActions={
-          <div onClick={() => setOpenFilter((prev) => !prev)}>
-            <FilterCourseIcon />
-          </div>
+          isMobileView && (
+            <div onClick={() => setOpenFilter((prev) => !prev)}>
+              <FilterCourseIcon />
+            </div>
+          )
         }
       />
       <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
