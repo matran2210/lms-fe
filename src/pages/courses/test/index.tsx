@@ -567,7 +567,7 @@ const TestModal = ({
       return (
         <>
           <ButtonPrimary
-            title="Continue the previous attempt123"
+            title="Continue the previous attempt"
             full
             onClick={handleContinueLastAttempt}
           />
