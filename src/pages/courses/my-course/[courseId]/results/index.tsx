@@ -11,11 +11,15 @@ import { useQuery } from 'react-query'
 import { CoursesAPI } from '@pages/api/courses'
 import { DEFAULT_PAGE_SIZE } from 'src/constants'
 import clsx from 'clsx'
+import { FilterCourseIcon } from 'src/assets/icons'
+import { useState } from 'react'
+import { IOpenChooseItem } from 'src/type/courses'
 
 const Results = () => {
   const router = useRouter()
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
+  const [openFilter, setOpenFilter] = useState(false)
   const handleBack = () => {
     if (router.query.courseId)
       router.push(`/courses/my-course/${router.query.courseId}`)
@@ -91,9 +95,15 @@ const Results = () => {
         showIcon={isTabletView || isMobileView}
         onBack={handleBack}
         className={clsx({ 'mt-4': isMobileView })}
+        extraActions={
+          isMobileView && (
+            <div onClick={() => setOpenFilter((prev) => !prev)}>
+              <FilterCourseIcon />
+            </div>
+          )
+        }
       />
-
-      <ResultsTable />
+      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
     </Layout>
   )
 }
