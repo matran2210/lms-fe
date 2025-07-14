@@ -27,10 +27,14 @@ import {
   IOpenChooseItem,
   ISection,
   SectionDropdownFormValues,
+  backTypeMap,
+  getTypeName,
 } from 'src/type/courses'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
+import ListFilterMobile from '@components/common/ListFilterMobile'
+import NoDataV2 from 'src/common/NodataV2'
 
 const ResultsTable = ({
   openFilter,
@@ -74,7 +78,7 @@ const ResultsTable = ({
     isFetching,
     isLoading: isMobileLoading,
   } = useInfiniteQuery({
-    queryKey: ['TestResultMobile'],
+    queryKey: ['TestResultMobile', currentPage, pageSize, params],
     queryFn: ({ pageParam }) =>
       CoursesAPI.getCourseResults(
         router.query.courseId as string,
@@ -237,6 +241,32 @@ const ResultsTable = ({
     })
   }
 
+  const handleBack = () => {
+    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
+      const type = backTypeMap[openChooseItem.type]
+      setOpenChooseItem({
+        ...openChooseItem,
+        type: type,
+        name: getTypeName[type],
+      })
+    } else {
+      setOpenChooseItem({
+        ...openChooseItem,
+        isOpen: false,
+      })
+    }
+  }
+
+  const title =
+    !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
+
+  if (isEmpty(resultData) || isEmpty(dataMobile))
+    return (
+      <div className="flex h-full flex-col items-center justify-center">
+        <NoDataV2 />
+      </div>
+    )
+
   return (
     <FormProvider {...methods}>
       {!isMobileView && (
@@ -311,26 +341,32 @@ const ResultsTable = ({
         open={openFilter}
         handleCancel={() => setOpenFilter(false)}
         isShowBtnClose
-        title={'Sort'}
+        title={title}
         isShowFooter={openFilter}
+        isShowBtnBack={openChooseItem.isOpen}
+        handleBack={handleBack}
         handleSubmit={handleSubmit}
         classNameHeader="pb-4 border-b border-gray-200"
         rootClassName={'responsive-drawer-center'}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
       >
-        <ListItemFilterMobile
-          setOpenChooseItem={setOpenChooseItem}
-          openChooseItem={openChooseItem}
-          listSection={listSection}
-          listSubsection={listSubsection}
-          listUnit={listUnit}
-          listActivity={listActivity}
-          setListSection={setListSection}
-          setListSubsection={setListSubsection}
-          setListUnit={setListUnit}
-          setListActivity={setListActivity}
-        />
+        {openFilter && !openChooseItem.isOpen ? (
+          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+        ) : (
+          <ListItemFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            openChooseItem={openChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
+        )}
       </SappDrawerV3>
     </FormProvider>
   )
