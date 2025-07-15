@@ -222,7 +222,7 @@ const EssayQuestionPreview = ({
           }}
         >
           <EditorReader
-            className="sapp-questions"
+            className="sapp-questions sapp-editor-reader"
             text_editor_content={question_content}
             highlighted={highlighted}
           />

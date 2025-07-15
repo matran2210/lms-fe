@@ -19,7 +19,7 @@ const STATE = {
     'checked:bg-success-600 checked:hover:bg-success-600 checked:focus:bg-success-600',
   error: 'checked:bg-error checked:hover:bg-error checked:focus:bg-error',
   default:
-    'checked:bg-[#050505] checked:hover:bg-[#050505] checked:focus:bg-[#050505]',
+    'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
   primary:
     'checked:bg-primary checked:hover:bg-primary checked:focus:bg-primary',
 }
@@ -39,7 +39,7 @@ const SAPPCheckbox = ({
   state = 'default', // Gán giá trị mặc định cho prop state
   size = 'medium', // Gán giá trị mặc định cho prop size
   lowerOptions = false,
-  inputStyle = 'border-[#050505]',
+  inputStyle = 'border-gray-800',
 }: IProps) => {
   return (
     <div className={`inline-block ${className}`}>

@@ -566,7 +566,7 @@ const MatchQuiz = forwardRef(
               </>
             )}
           <EditorReader
-            className="sapp-questions !mb-[32px]"
+            className="sapp-questions sapp-editor-reader !mb-[32px]"
             text_editor_content={data?.question_content}
             highlighted={highlighted}
           />
