@@ -1,6 +1,5 @@
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Container from '@components/Container'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
@@ -82,7 +81,7 @@ const TestResultDetail = () => {
         </div>
         <ButtonSecondary title="Retake" size="small" />
       </div>
-      <div className="mx-auto mt-6 max-w-[1542px]">
+      <div className="container mx-auto mb-24 mt-6 max-w-[1542px] md:mb-20 xl:mb-0">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}

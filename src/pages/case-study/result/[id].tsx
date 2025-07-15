@@ -670,7 +670,7 @@ const CaseStudyResult = () => {
                   setCurrentMousePos(x || 0)
                 }}
                 onMouseUp={() => setStartResize(false)}
-              ></div>
+              />
               <div
                 className={` h-full overflow-auto bg-white py-6 `}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}
