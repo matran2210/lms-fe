@@ -88,6 +88,7 @@
     "react-select": "^5.8.0",
     "react-use-draggable-scroll": "^0.4.7",
     "sapp-common-package": "^1.1.8-test",
+    "sapp-common-package-ha-test": "^1.0.21-test",
     "sapp-notification-test": "^1.0.8-test",
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
