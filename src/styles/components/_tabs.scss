@@ -1,6 +1,9 @@
 .requirement-tabs {
   .ant-tabs-nav {
     @apply mb-6 p-0;
+    &::before {
+      @apply border-gray-300;
+    }
   }
 
   .ant-tabs-tab {
