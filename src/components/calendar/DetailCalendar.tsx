@@ -10,8 +10,14 @@ import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'
-import { CloseDetailIcon, SkeletonDetailIcon } from '@assets/icons/calendar'
+import {
+  CloseDetailIcon,
+  SkeletonDetailIcon,
+  StatusDotIcon,
+} from '@assets/icons/calendar'
 import { Divider } from 'antd'
+import clsx from 'clsx'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -32,31 +38,41 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const getMode = () => {
     if (data?.schedule.is_holiday) {
       return (
-        <div className="max-w-fit bg-warning/5 px-[19px] py-[4.5px] text-base font-normal text-warning">
+        <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-warning/5 px-[12px] py-[2px] text-sm font-normal text-warning">
+          <StatusDotIcon />
           Online
         </div>
       )
     }
-    switch (data?.mode) {
-      case CALENDAR_FILTER_TYPE.OFFLINE:
-        return (
-          <div className="max-w-fit bg-success/5 px-[19px] py-[4.5px] text-success">
-            Offline
-          </div>
-        )
-      case CALENDAR_FILTER_TYPE.ONLINE:
-        return (
-          <div className="max-w-fit bg-info/5  px-[19px] py-[4.5px] text-info">
-            Online
-          </div>
-        )
-      case CALENDAR_FILTER_TYPE.LIVE_ONLINE:
-        return (
-          <div className="max-w-fit bg-liveOnline/5 px-[19px] py-[4.5px] text-liveOnline">
-            Live Online
-          </div>
-        )
-    }
+
+    const modeMap = {
+      [CALENDAR_FILTER_TYPE.OFFLINE]: { text: 'Offline', color: 'success' },
+      [CALENDAR_FILTER_TYPE.ONLINE]: { text: 'Online', color: 'info' },
+      [CALENDAR_FILTER_TYPE.LIVE_ONLINE]: {
+        text: 'Live Online',
+        color: 'liveOnline',
+      },
+    } as const
+
+    const mode = data?.mode as keyof typeof modeMap
+
+    if (!mode || !modeMap[mode]) return null
+
+    const { text, color } = modeMap[mode]
+
+    return (
+      <div
+        className={clsx(
+          'max-w-fit',
+          `bg-${color}/5`,
+          `text-${color}`,
+          'flex items-center gap-1 rounded-[100px] px-[12px] py-[2px] text-sm font-normal',
+        )}
+      >
+        <StatusDotIcon />
+        {text}
+      </div>
+    )
   }
 
   const getKeyContent = () => {
@@ -64,7 +80,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <div
           key={item.id}
-          className="max-w-[111px] bg-[#F9F9F9] px-2 py-1 text-sm text-secondary"
+          className="max-w-[111px] rounded bg-[#F9F9F9] px-2 py-1 text-sm text-secondary"
         >
           {item.name}
         </div>
@@ -171,6 +187,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       </div>
     )
   }
+
   if (!open.isOpen) return null
 
   return (
@@ -184,7 +201,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         </button>
         {renderFormattedDate(data?.schedule?.start_date as string)}
       </div>
-      {data?.schedule ? (
+      {data?.schedule && !loading ? (
         <>
           <div>
             <div className="mb-5 text-lg font-semibold text-secondary">
@@ -201,7 +218,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                 {data?.schedule.is_holiday ? 'Type:' : 'Learning Mode:'}
               </div>
               <div className="col-span-1 flex justify-end gap-x-2">
-                <div>{getMode()}</div>
+                {getMode()}
                 {!data?.schedule.is_holiday &&
                   dayjs(
                     `${data?.schedule.end_date}T${data?.schedule.end_time}`,
@@ -216,31 +233,11 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   )}
               </div>
               {renderTime}
-              {!data?.schedule.is_holiday && (
-                <>
-                  <div className="col-span-1 ">Key Content Of:</div>
-                  <div className="col-span-1 flex flex-wrap gap-2 text-right font-semibold">
-                    {getKeyContent()}
-                  </div>
-                </>
-              )}
               {data?.is_test && isOnlyMidTermOrFinalTest && (
                 <>
                   <div className="col-span-1 ">Test Name:</div>
                   <div className="col-span-1 break-words text-right font-semibold">
                     {data?.name}
-                  </div>
-                </>
-              )}
-              {data?.mode === LearningMode.OFFLINE && (
-                <>
-                  <div className="col-span-1 ">Classroom:</div>
-                  <div className="col-span-1 break-words text-right font-semibold">
-                    {data?.room?.name}
-                  </div>
-                  <div className="col-span-1 ">Classroom Address:</div>
-                  <div className="col-span-1 break-words text-right font-semibold">
-                    {data?.room?.address}
                   </div>
                 </>
               )}
@@ -261,72 +258,118 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             !isOnlyMidTermOrFinalTest && (
               <>
                 <Divider />
-                <div className="mb-5 text-lg font-semibold">
-                  Course Content:
+                <div className="flex flex-col gap-5">
+                  <div className="text-lg font-semibold">Course Content</div>
+                  <CourseTree data={data?.sections ?? []} />
                 </div>
-                <CourseTree data={data?.sections ?? []} />
               </>
             )}
+
+          {!data?.schedule.is_holiday &&
+            data?.key_after_contents?.length > 0 && (
+              <>
+                <Divider />
+                <div className="flex flex-col gap-5">
+                  <div className="col-span-1 text-lg font-semibold">
+                    Key Content Before
+                  </div>
+                  <div className="col-span-1 flex flex-wrap gap-2 text-right font-semibold">
+                    {getKeyContent()}
+                  </div>
+                </div>
+              </>
+            )}
+
+          {data?.mode === LearningMode.OFFLINE && (
+            <>
+              <Divider />
+              <div className="flex flex-col gap-5">
+                <div className="text-lg font-semibold">Classroom Detail</div>
+
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-2">
+                    <div>Classroom:</div>
+                    <div className="break-words text-right font-semibold">
+                      {data?.room?.name}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2">
+                    <div>Classroom Address:</div>
+                    <div className="break-words text-right font-semibold">
+                      {data?.room?.address}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
           {/* Footer action button */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
-            <button
-              className="mt-auto w-full rounded-none bg-primary py-2 font-semibold text-white"
-              disabled={loading}
-              onClick={() => {
-                const deadline = dayjs(
-                  `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
-                )
+            <div className="mt-auto flex justify-end">
+              <ButtonPrimary
+                disabled={loading}
+                onClick={() => {
+                  const deadline = dayjs(
+                    `${data?.schedule?.end_date}T${data?.schedule?.end_time}Z`,
+                  )
 
-                const listFilteredSections = data?.sections?.filter((item) =>
-                  [
-                    TEST_TYPE_ENUM.MID_TERM_TEST,
-                    TEST_TYPE_ENUM.FINAL_TEST,
-                    CourseSectionType.PART,
-                  ].includes(
-                    item?.course_section?.course_section_type as TEST_TYPE_ENUM,
-                  ),
-                )
-                const listSectionIds = (listFilteredSections || []).map(
-                  (item) => item?.course_section_id || item?.course_section.id,
-                )
+                  const listFilteredSections = data?.sections?.filter((item) =>
+                    [
+                      TEST_TYPE_ENUM.MID_TERM_TEST,
+                      TEST_TYPE_ENUM.FINAL_TEST,
+                      CourseSectionType.PART,
+                    ].includes(
+                      item?.course_section
+                        ?.course_section_type as TEST_TYPE_ENUM,
+                    ),
+                  )
+                  const listSectionIds = (listFilteredSections || []).map(
+                    (item) =>
+                      item?.course_section_id || item?.course_section.id,
+                  )
 
-                const listFilteredSubSections = data?.sections?.filter((item) =>
-                  [CourseSectionType.CHAPTER].includes(
-                    item?.course_section
-                      ?.course_section_type as CourseSectionType,
-                  ),
-                )
-                const listSubSectionIds = (listFilteredSubSections || []).map(
-                  (item) => item?.course_section_id || item?.course_section.id,
-                )
+                  const listFilteredSubSections = data?.sections?.filter(
+                    (item) =>
+                      [CourseSectionType.CHAPTER].includes(
+                        item?.course_section
+                          ?.course_section_type as CourseSectionType,
+                      ),
+                  )
+                  const listSubSectionIds = (listFilteredSubSections || []).map(
+                    (item) =>
+                      item?.course_section_id || item?.course_section.id,
+                  )
 
-                const listFilteredUnits = data?.sections?.filter((item) =>
-                  [CourseSectionType.UNIT].includes(
-                    item?.course_section
-                      ?.course_section_type as CourseSectionType,
-                  ),
-                )
-                const listUnitIds = (listFilteredUnits || []).map(
-                  (item) => item?.course_section_id || item?.course_section.id,
-                )
+                  const listFilteredUnits = data?.sections?.filter((item) =>
+                    [CourseSectionType.UNIT].includes(
+                      item?.course_section
+                        ?.course_section_type as CourseSectionType,
+                    ),
+                  )
+                  const listUnitIds = (listFilteredUnits || []).map(
+                    (item) =>
+                      item?.course_section_id || item?.course_section.id,
+                  )
 
-                const searchParams = buildQueryString({
-                  focusSectionIds: listSectionIds.join(','),
-                  focusSubSectionIds: listSubSectionIds.join(','),
-                  focusUnitIds: listUnitIds.join(','),
-                  deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
-                })
-                if (data?.link_study) {
-                  router.push(`${data?.link_study}?${searchParams}`)
-                }
-              }}
-            >
-              {LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
-                ? 'Start'
-                : LEARNING_USER_STATUS.IN_PROGRESS === data?.status
-                  ? 'Continue'
-                  : 'Review'}
-            </button>
+                  const searchParams = buildQueryString({
+                    focusSectionIds: listSectionIds.join(','),
+                    focusSubSectionIds: listSubSectionIds.join(','),
+                    focusUnitIds: listUnitIds.join(','),
+                    deadline: deadline.format('YYYY-MM-DDTHH:mm:ssZ'),
+                  })
+                  if (data?.link_study) {
+                    router.push(`${data?.link_study}?${searchParams}`)
+                  }
+                }}
+              >
+                {LEARNING_USER_STATUS.READY_TO_LEARN === data?.status
+                  ? 'Start'
+                  : LEARNING_USER_STATUS.IN_PROGRESS === data?.status
+                    ? 'Continue'
+                    : 'Review'}
+              </ButtonPrimary>
+            </div>
           )}
         </>
       ) : (
