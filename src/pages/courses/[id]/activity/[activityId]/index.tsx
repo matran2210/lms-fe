@@ -683,7 +683,7 @@ const ActivityPage = () => {
                   <div
                     // className="overflow-auto p-4 bg-white"
                     style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-[#050505] hover:text-primary"
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -701,7 +701,7 @@ const ActivityPage = () => {
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-[#050505]">{`${exhibitText} ${
+                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
                             e?.index + 1
                           }: ${e?.name}`}</span>
                         </div>

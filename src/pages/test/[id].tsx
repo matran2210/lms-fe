@@ -160,7 +160,7 @@ const TestDetail = () => {
                     externalRef={refEditor}
                     fullData={currentTabContent}
                     isShowContent={false}
-                    openChooseFile={(e: any) =>
+                    openChooseFile={() =>
                       setOpenUpload({
                         status: true,
                         question_id: currentPage,
@@ -346,7 +346,7 @@ const TestDetail = () => {
         return (
           <>
             <EditorReader
-              className="sapp-questions"
+              className="sapp-questions sapp-editor-reader"
               text_editor_content={currentTabContent?.data?.question_content}
               highlighted={highlighted}
             />
@@ -387,7 +387,7 @@ const TestDetail = () => {
                 response_option_custom={currentTabContent.response_type}
                 externalRef={refEditor}
                 fullData={currentTabContent}
-                openChooseFile={(e: any) =>
+                openChooseFile={() =>
                   setOpenUpload({
                     status: true,
                     question_id: currentPage,
@@ -541,6 +541,8 @@ const TestDetail = () => {
     [],
   )
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false)
+
   const [openReportModal, setOpenReportModal] = useState({
     open: false,
     resultId: '',
@@ -1433,24 +1435,22 @@ const TestDetail = () => {
           ...item,
           data: {
             ...item?.data,
-            answers: (item?.data?.answers ?? []).map(
-              (answer: Answer, index: number) => {
-                if (typeof data === 'string') {
-                  return {
-                    ...answer,
-                    dropId: data,
-                  }
-                } else {
-                  const existAnswer = (data ?? []).find(
-                    (e: any) => e.idAnswer === answer.id,
-                  )
-                  return {
-                    ...answer,
-                    dropId: existAnswer?.id,
-                  }
+            answers: (item?.data?.answers ?? []).map((answer: Answer) => {
+              if (typeof data === 'string') {
+                return {
+                  ...answer,
+                  dropId: data,
                 }
-              },
-            ),
+              } else {
+                const existAnswer = (data ?? []).find(
+                  (e: any) => e.idAnswer === answer.id,
+                )
+                return {
+                  ...answer,
+                  dropId: existAnswer?.id,
+                }
+              }
+            }),
           },
           answer: data,
           attempted: item?.attempted || checkAnswered(item),
@@ -1561,29 +1561,6 @@ const TestDetail = () => {
           answer_file: {
             file_key: file?.file_key,
             file_name: file?.name,
-          },
-        }
-      }
-      return tab
-    })
-    setTabs(newTabs)
-  }
-
-  const handleChangeTypeEssay = (value: number) => {
-    const newTabs = tabs.map((tab: any) => {
-      if (tab.id === currentPage) {
-        return {
-          ...tab,
-          data: {
-            ...tab?.data,
-            requirements: currentTabContent?.data?.requirements?.map(
-              (req: any, idx: number) => {
-                return {
-                  ...req,
-                  response_type: value,
-                }
-              },
-            ),
           },
         }
       }
@@ -2225,6 +2202,7 @@ const TestDetail = () => {
         try {
           setLoading(true)
           const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          setExhibitText(EXHIBIT_TEXT_REPLACE.EXHIBIT)
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
@@ -2417,8 +2395,6 @@ const TestDetail = () => {
   }
   const isGradingAfterEachQuestion =
     quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
-  const isGradingAfterAllQuestion =
-    quizDetail?.grading_preference === GradingPreference.AFTER_ALL_QUESTIONS
   const groupAction = () => {
     const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
     return (
@@ -2448,10 +2424,14 @@ const TestDetail = () => {
                 ? null
                 : 'You should select an answer before click'
             }
-            classNames={{ root: 'max-w-72' }}
+            classNames={{
+              root: 'max-w-72 rounded-md',
+              body: 'text-sm !py-1 !px-2 flex items-center',
+            }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
             mouseEnterDelay={0.3}
             placement="left"
+            color={'#404041'}
           >
             <ButtonPrimary
               onClick={async () => {
@@ -3309,6 +3289,8 @@ const TestDetail = () => {
         <Popover
           placement="leftTop"
           trigger="click"
+          open={isClickExhibitOpen}
+          onOpenChange={(open) => setIsClickExhibitOpen(open)}
           content={
             <div className="flex flex-col gap-2">
               {exhibits?.map(
@@ -3330,21 +3312,36 @@ const TestDetail = () => {
             </div>
           }
         >
-          <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay ">
-            <NotesOutline className="h-8 w-8 text-white" />
-            <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-            {showWarning && (
-              <PulsingExclamation
-                className="absolute -right-3 -top-4"
-                style={{
-                  animation: 'pulseAnim 1.2s infinite ease-in-out',
-                  transformOrigin: 'center',
-                }}
-              />
-            )}
-          </div>
+          <Popover
+            content={
+              <div className="flex items-center gap-2 px-2 ">
+                <NotesOutline className="h-4 w-4 text-white" />
+                <div className="text-sm">
+                  {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}
+                </div>
+              </div>
+            }
+            trigger="hover"
+            open={!isClickExhibitOpen ? undefined : false}
+            placement="left"
+          >
+            <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
+              <NotesOutline className="h-8 w-8 text-white" />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+              {showWarning && (
+                <PulsingExclamation
+                  className="absolute -right-3 -top-4"
+                  style={{
+                    animation: 'pulseAnim 1.2s infinite ease-in-out',
+                    transformOrigin: 'center',
+                  }}
+                />
+              )}
+            </div>
+          </Popover>
         </Popover>
       )}
+
       <div
         onClick={() => {
           handleOpenScratchPad('scratch_pad')
@@ -3381,7 +3378,10 @@ const TestDetail = () => {
         <FlagIconV2 isActive={currentTabContent?.flag} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
-      <BackToTop scrollContainerRef={scrollRef} />
+      <BackToTop
+        scrollContainerRef={scrollRef}
+        className="!right-8 bottom-[482px] lg:bottom-[302px]"
+      />
     </Layout>
   )
 }
