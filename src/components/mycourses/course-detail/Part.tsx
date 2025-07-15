@@ -116,6 +116,7 @@ const Part = ({
   }
 
   const transformAllFontSize = (html: string = '') => {
+    if (!html) return ''
     return html.replace(
       /font-size\s*:\s*[^;"]+/gi,
       isMobileView ? 'font-size: 14px' : 'font-size: 16px',
