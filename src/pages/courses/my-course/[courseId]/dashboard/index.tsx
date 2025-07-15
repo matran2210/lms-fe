@@ -15,17 +15,17 @@ const Dashboard = () => {
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   return (
-    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar}>
-      <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
+      <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
-          <div className="hidden w-full items-center justify-between pb-4 pt-6 md:flex">
+          <div className="hidden w-full items-center justify-between pb-4 pt-6 xl:flex">
             <BreadcrumbFilter
               name={courseInfo?.name || ''}
               subpath="Dashboard"
               courseId={router.query.courseId}
             />
           </div>
-          <div className="grid pb-4 pt-6 md:hidden">
+          <div className="mb-6 mt-2 grid md:mb-7 md:mt-6 xl:mb-10 xl:mt-0">
             <HeaderMobile
               title="Student Dashboard"
               onBack={() => router.back()}
@@ -34,7 +34,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5 3xl:px-13.75"
+        className="text-ink-700 3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5"
         data-aos={ANIMATION.DATA_AOS}
       >
         {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (

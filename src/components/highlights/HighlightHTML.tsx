@@ -74,6 +74,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     notesListData,
     refetchNotesList,
     isViewOnly,
+    setIsViewOnly,
   } = useCourseNoteContext()
   // Thêm state để track khi nào DOM đã được cập nhật
   const [isDOMReady, setIsDOMReady] = useState(false)
@@ -633,6 +634,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setOpenNote(false)
     setNoteInput('')
     setModalPosition(null)
+    setIsViewOnly(false)
     // Không clear selectedHighlightId khi cancel
   }
 

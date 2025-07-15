@@ -20,7 +20,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
@@ -491,12 +491,12 @@ const CaseStudyDetail = ({ questions }: any) => {
   const getValueSelectText = (index: number) => {
     let value = [] as any
     if (valueRef?.current?.[index]) {
-      const inputs = valueRef?.current?.[index]?.querySelectorAll(
-        'select.sapp-select--selectword-preview',
+      const inputs = document.querySelectorAll(
+        'div.sapp-select--question',
       ) as any
 
       for (let e of inputs) {
-        value.push(e.value)
+        value.push(e?.dataset.value)
       }
     } else {
       value.push('')

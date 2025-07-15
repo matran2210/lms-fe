@@ -35,7 +35,7 @@ type Props = {
   onSuccess?: () => void
 }
 
-interface InfoItemProps {
+export interface InfoItemProps {
   label: string
   value: ReactNode
 }
@@ -43,7 +43,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const InfoItem = ({ label, value }: InfoItemProps) => {
   return (
-    <div className="flex items-center justify-between text-base text-secondary">
+    <div className="flex justify-between gap-2 text-sm text-secondary md:text-base">
       <div>{label}</div>
       <div className="flex items-center gap-2 font-semibold">
         {value || '-'}
@@ -93,7 +93,7 @@ const ExaminationInfo = ({
   currentValue,
   onSuccess,
 }: Props) => {
-  const { isTabletView } = useTailwindBreakpoint()
+  const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
@@ -207,7 +207,7 @@ const ExaminationInfo = ({
     }
     if (isSuccess) {
       return (
-        <div className="flex w-full flex-col gap-4 text-base">
+        <div className="flex w-full flex-col gap-4 text-sm md:text-base">
           <InfoItem label="Program:" value={data?.program?.name} />
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
@@ -225,13 +225,18 @@ const ExaminationInfo = ({
   }
 
   const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
-  const isShowCloseBtn = !isEdit || isExamList || isTabletView
-  const isClosable = isTabletView && !isEdit
-  const isShowBackBtn = isTabletView && isEdit && !isExamList
+  const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
+  const isClosable = (isTabletView || isMobileView) && !isEdit
+  const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
   const btnSubmitTile = isEdit ? 'Confirm' : ''
-  const cancelButtonCaption = isEdit ? 'Cancel' : ''
-  const placement = isTabletView ? 'bottom' : 'right'
-  const height = isTabletView && isEdit ? 386 : isTabletView ? 'auto' : '100%'
+  const cancelButtonCaption = isEdit && !isMobileView ? 'Cancel' : ''
+  const placement = isTabletView || isMobileView ? 'bottom' : 'right'
+  const height =
+    (isTabletView || isMobileView) && isEdit
+      ? 386
+      : isTabletView || isMobileView
+        ? 'auto'
+        : '100%'
 
   return (
     <>
@@ -250,6 +255,7 @@ const ExaminationInfo = ({
         loading={isChangingLoad}
         placement={placement}
         height={height}
+        submitButtonClassName="w-full md:w-auto"
       >
         {isEdit ? (
           <FormProvider {...methods}>

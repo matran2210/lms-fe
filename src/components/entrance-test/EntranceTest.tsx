@@ -32,9 +32,14 @@ interface EntranceTestProps {
     limit_count?: number
   }
   test_id_default?: any | undefined
+  onRefetch: () => void
 }
 
-const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
+const EntranceTest = ({
+  data,
+  test_id_default,
+  onRefetch,
+}: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
   const [open, setOpen] = useState<boolean>(false)
@@ -46,6 +51,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     data?.attempts?.[0] || ({} as IEntranceTestAttempt),
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setCurrentAttempt(data?.attempts?.[0] || ({} as IEntranceTestAttempt))
+  }, [data])
 
   useEffect(() => {
     if (data) {
@@ -60,12 +69,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
         const remainingTimeInterval = setInterval(() => {
           setRemainingTimeLastAttempt((prev) => {
-            if (prev <= 0) {
+            if (prev === 0) {
+              handleSubmitQuestion()
               clearInterval(remainingTimeInterval)
               return 0
-            }
-            if (prev === 1) {
-              handleSubmitQuestion()
             }
             return prev - 1
           })
@@ -110,6 +117,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
       if (res.success) {
         if (redirectToResult) {
           router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
+        } else {
+          await onRefetch()
         }
       }
     } catch (err) {
@@ -263,7 +272,11 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
               <div className="flex items-center">
                 {data?.attempts?.length && data?.attempts?.length > 0 ? (
                   <>
-                    <span>Result of Attemps:</span>
+                    <span
+                      className={`${data?.attempts?.length > 1 ? '' : 'text-gray'}`}
+                    >
+                      Result of Attemps:
+                    </span>
                     {data?.attempts?.length > 1 ? (
                       <Select
                         options={data?.attempts
@@ -287,11 +300,13 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
                         suffixIcon={<ArrowDownIcon />}
                       />
                     ) : (
-                      <span className="ml-1">{data?.attempts?.length}</span>
+                      <span className="ml-1 text-gray">
+                        {data?.attempts?.length}
+                      </span>
                     )}
                   </>
                 ) : (
-                  <span className="mr-1">Result of Attemps:</span>
+                  <span className="mr-1 text-gray">Result of Attemps:</span>
                 )}
               </div>
               {data?.attempts?.length && data?.attempts?.length > 0 ? (

@@ -56,6 +56,7 @@ export interface IRecurringSchedule {
   day_of_week?: number[]
   day_of_month?: number[]
   month_of_year?: number[]
+  start_date?: string
   end_date?: string
   type?: REPEAT_TYPE
 }

@@ -84,7 +84,10 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             repeat: item.is_schedule_recurring
               ? formatRecurringSchedule(
                   item.recurring_pattern,
-                  formatDateTimeWithTimeZone(item.start_date, item.start_time),
+                  formatDateTimeWithTimeZone(
+                    item.recurring_pattern.start_date,
+                    item.start_time,
+                  ),
                 )
               : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT],
           }) as IEvent,

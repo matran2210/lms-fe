@@ -62,9 +62,10 @@ const CardCourse = forwardRef<
     return (
       <div
         className={clsx(
-          'relative flex flex-col rounded-xl bg-white p-4 shadow-card md:p-6 lg:p-8',
+          'relative flex cursor-pointer flex-col rounded-xl border border-transparent bg-white p-4 shadow-card hover:border-primary md:p-6 lg:p-8',
           classNameCard,
         )}
+        onClick={handleClickTitle}
         ref={ref}
         data-aos={ANIMATION.DATA_AOS}
       >
@@ -89,7 +90,6 @@ const CardCourse = forwardRef<
                 'text-gray-800': !disabledTitle,
               },
             )}
-            onClick={handleClickTitle}
           >
             <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
               {truncateString(title, 60)}

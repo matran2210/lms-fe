@@ -328,7 +328,7 @@ export default function HighlightText({ text, isShowNote = false }: Props) {
       </div>
       <div
         className={clsx(
-          'fixed bottom-5 right-4 flex h-14 w-10 items-center justify-center rounded-full bg-white shadow-learning-activity',
+          'fixed bottom-5 right-4 flex h-14 w-10 items-center justify-center rounded-full bg-white shadow-small',
           {
             hidden: !isShowNote,
           },

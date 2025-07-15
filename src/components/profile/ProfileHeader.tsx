@@ -1,36 +1,43 @@
-import { EditIcon, PencilV2Icon } from '@assets/icons'
+import { ClockIcon, PencilV2Icon } from '@assets/icons'
+import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
+import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
 import { Dispatch, MutableRefObject, SetStateAction, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import profile from 'src/assets/images/bg_profile.svg'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import {
   getMe,
   getUserInformation,
+  updateUser,
+  updateUserAvatar,
   userReducer,
 } from 'src/redux/slice/User/User'
-
 interface IProps {
   isEdit: boolean
+  avatar: File | undefined
   setAvatar: (avatar?: File) => void
   inputFileRef: MutableRefObject<HTMLInputElement | null>
   reViewImageSrc: string | StaticImageData | undefined
   setReViewImageSrc: Dispatch<
     SetStateAction<string | StaticImageData | undefined>
   >
+  setIsEdit: (edit: boolean) => void
 }
 const ProfileHeader = ({
   isEdit,
+  avatar,
   setAvatar,
   inputFileRef,
   reViewImageSrc,
   setReViewImageSrc,
+  setIsEdit,
 }: IProps) => {
   const dispatch = useAppDispatch()
-
   // Sử dụng hook useAppSelector để lấy dữ liệu từ state redux
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
@@ -72,6 +79,12 @@ const ProfileHeader = ({
     setReViewImageSrc(blankAvatar)
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
+    setIsEdit(false)
+  }
+  const onCancelUploadAvatar = () => {
+    // Đặt giá trị cho state avatar thành undefined
+    setAvatar(undefined)
+    setIsEdit(false)
   }
 
   /**
@@ -102,7 +115,47 @@ const ProfileHeader = ({
     // Trả về true
     return true
   }
+  /**
+   * Hàm để xử lý khi người dùng submit form
+   * @param {{full_name: string}} data - Đối tượng chứa dữ liệu của form
+   * @returns {Promise<void>} Một promise không có giá trị trả về
+   */
+  const onSubmit = async ({
+    full_name,
+  }: {
+    full_name: string
+  }): Promise<void> => {
+    try {
+      // Nếu không có avatar và người dùng có avatar hiện tại
+      if (!avatar && user?.detail?.avatar) {
+        // Gọi hành động thunk updateUser để cập nhật tên và avatar của người dùng
+        await dispatch(updateUser({ full_name, avatar: null })).unwrap()
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
+        dispatch(getMe())
+        // Đặt trạng thái isEdit thành false
+        setIsEdit(false)
+        return
+      }
 
+      // Nếu có avatar
+      if (avatar) {
+        // Gọi hành động thunk updateUserAvatar để cập nhật avatar của người dùng
+        await dispatch(updateUserAvatar(avatar)).unwrap()
+        // Đặt lại giá trị của avatar
+        setAvatar(undefined)
+        // Gọi hành động thunk getMe để lấy lại thông tin người dùng
+      }
+      dispatch(getMe())
+      // Đặt trạng thái isEdit thành false
+      setIsEdit(false)
+    } catch (error: any) {
+      setIsEdit(false)
+      setReViewImageSrc(undefined)
+      if (error?.response?.data?.error?.code === '403|1002') {
+        await dispatch(getLogoutUser())
+      }
+    }
+  }
   useEffect(() => {
     dispatch(getUserInformation())
   }, [])
@@ -110,7 +163,7 @@ const ProfileHeader = ({
   return (
     <div className="flex flex-col items-center justify-start gap-4 md:flex-row md:gap-6">
       <div className="relative pb-3 md:pb-0">
-        <div className="relative h-[100px] w-[100px] shrink rounded-full border-2 border-primary">
+        <div className="relative h-[100px] w-[100px] shrink rounded-full">
           <div
             className={`${
               loading ? 'animate-pulse' : ''
@@ -175,28 +228,57 @@ const ProfileHeader = ({
                 src={
                   reViewImageSrc ||
                   user.detail.avatar['150x150'] ||
-                  user.detail.avatar['ORIGIN'] ||
+                  user.detail.avatar?.['ORIGIN'] ||
                   blankAvatar
                 }
                 alt="avatar"
                 className=""
-                width={108}
-                height={108}
+                width={100}
+                height={100}
                 layout="fixed"
                 objectFit={'cover'}
                 priority={true}
               />
             </div>
           </div>
+          {isEdit ? (
+            <div
+              className={clsx(
+                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-small md:hidden',
+                {
+                  'cursor-not-allowed': loadingEditAvatar,
+                  'cursor-pointer': !loadingEditAvatar,
+                },
+              )}
+              onClick={() =>
+                avatar
+                  ? onSubmit({ full_name: user.detail.full_name })
+                  : onCancelUploadAvatar()
+              }
+            >
+              {avatar ? (
+                <CheckCircleOutlineYellow
+                  className={clsx('h-5 w-5 text-primary', {
+                    'animate-spin': loadingEditAvatar,
+                  })}
+                />
+              ) : (
+                <CloseIconV2 className="h-5 w-5" />
+              )}
+            </div>
+          ) : (
+            <div
+              className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-small hover:text-primary md:hidden"
+              onClick={() => setIsEdit(true)}
+            >
+              <PencilV2Icon className="h-5 w-5" />
+            </div>
+          )}
         </div>
-        <div className="absolute bottom-0 left-[50%] z-10 translate-x-[-50%] md:hidden">
-          <Tag color="success" className="m-0 rounded px-2 py-[2px] text-sm">
-            Active
-          </Tag>
-        </div>
+
         {isEdit && (
           <div
-            className="opacity-1 absolute bottom-2 right-0 z-10 w-fit"
+            className="opacity-1 absolute bottom-2 right-0 z-10 hidden w-fit md:block"
             onClick={handlerCancelUploadAvatar}
           >
             <div
@@ -222,16 +304,27 @@ const ProfileHeader = ({
         )}
       </div>
 
-      <div className="flex-1 md:my-6 lg:my-0">
-        <div className="mb-3 flex max-w-[600px] items-center justify-center gap-2 truncate text-lg font-bold text-[#050505] md:mb-4 md:block md:text-2xl">
-          <TextSkeleton loading={loading || loadingEditName}>
-            {user.detail.full_name}
-          </TextSkeleton>
-          <div className="md:hidden">
-            <PencilV2Icon />
+      <div className="w-full flex-1 md:my-6 lg:my-0">
+        <div
+          className={clsx(
+            'mb-3 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:max-w-[600px] md:text-2xl',
+          )}
+        >
+          <div className="flex w-full items-center justify-center gap-3 md:justify-start">
+            <TextSkeleton loading={loading || loadingEditName}>
+              {user.detail.full_name}
+            </TextSkeleton>
+            <div>
+              <Tag
+                bordered={false}
+                className="m-0 rounded bg-success-50 px-2 py-[2px] text-sm font-normal text-success md:text-base"
+              >
+                Active
+              </Tag>
+            </div>
           </div>
         </div>
-        <div className="flex items-center justify-start gap-4 text-sm text-gray-400 md:gap-6">
+        <div className="flex items-center justify-center gap-4 text-sm text-gray-400 md:justify-start md:gap-6">
           <div className="flex items-center justify-center gap-[5px] md:mb-0 md:justify-start">
             <svg
               xmlns="http://www.w3.org/2000/svg"

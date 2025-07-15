@@ -1,7 +1,5 @@
 import Icon from '@components/icons'
 import Layout from '@components/layout'
-import SearchForm from '@components/mycourses/Search'
-import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
 import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
@@ -9,9 +7,9 @@ import ProfileHeader from '@components/profile/ProfileHeader'
 import Settings from '@components/profile/Settings'
 import TabHeaderItem from '@components/tab/TabHeaderItem'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { Card, Collapse, CollapseProps, Divider, Tabs } from 'antd'
+import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   ANIMATION,
   DEFAULT_PAGE_NUMBER,
@@ -38,11 +36,10 @@ import MyPasword from '@components/profile/Security/MyPasword'
 import SubjectList from '@components/profile/SubjectInformation/SubjectList'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
 import Footer from '@components/layout/Footer'
-import ButtonDanger from '@components/base/button/ButtonDanger'
 import clsx from 'clsx'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import { CollapseArrowIcon, HamburgerMenuLargeIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@assets/icons'
 import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
 import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
 import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
@@ -50,6 +47,7 @@ import UserApi from 'src/redux/services/User/user'
 import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 interface IFullScreenMobile {
   open: boolean
@@ -205,7 +203,7 @@ const ProfilePage = () => {
           {isChangePassword ? (
             <ChangePassword handleCancel={() => setIsChangePassword(false)} />
           ) : (
-            <div className="flex flex-col gap-0 lg:gap-10">
+            <div className="flex flex-col">
               <MyPasword setIsChangePassword={setIsChangePassword} />
               <DeviceList />
               <LoginHistoryList />
@@ -219,7 +217,7 @@ const ProfilePage = () => {
   const myProfileItems: CollapseProps['items'] = [
     {
       key: 'overview',
-      label: <p className="text-base font-semibold">Overview</p>,
+      label: <p className="text-base font-semibold text-gray-800">Overview</p>,
       children: (
         <MyProfile
           isEdit={isEdit}
@@ -234,14 +232,14 @@ const ProfilePage = () => {
     },
     {
       key: 'exam-id',
-      label: <p className="text-base font-semibold">Exam ID</p>,
+      label: <p className="text-base font-semibold text-gray-800">Exam ID</p>,
       children: <SubjectList isEdit={isEdit} />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
     },
     {
       key: 'profile',
-      label: <p className="text-base font-semibold">Profile</p>,
+      label: <p className="text-base font-semibold text-gray-800">Profile</p>,
       children: <ProfileList isEdit={isEdit} />,
       className:
         'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
@@ -250,7 +248,7 @@ const ProfilePage = () => {
   const mySecurityItems: CollapseProps['items'] = [
     {
       key: 'password',
-      label: <p className="text-base font-semibold">Password</p>,
+      label: <p className="text-base font-semibold text-gray-800">Password</p>,
       children: <MyPasword setIsChangePassword={setIsChangePassword} />,
       showArrow: false,
       collapsible: 'icon',
@@ -350,20 +348,11 @@ const ProfilePage = () => {
       fullWidth={isMobileView}
     >
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
-        <div className="mb-4 mt-2 hidden items-center justify-between gap-6 md:mb-8 md:flex">
-          <div
-            className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-white p-2 shadow-small lg:hidden"
-            onClick={handleOpenSidebar}
-          >
-            <HamburgerMenuLargeIcon />
-          </div>
-          <div className="w-full rounded-lg bg-white px-8 py-4 shadow-small">
-            <SearchForm
-              placeholder="Enter name of course..."
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+          className={'hidden md:flex'}
+        />
         <div className="mx-auto my-0 flex w-full grow flex-col">
           <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
             <div className="hidden text-2xl font-medium md:block lg:hidden">
@@ -382,8 +371,10 @@ const ProfilePage = () => {
                 reViewImageSrc={reViewImageSrc}
                 setReViewImageSrc={setReViewImageSrc}
                 setAvatar={handleSetAvatar}
+                avatar={avatar}
                 isEdit={isEdit}
                 inputFileRef={inputFileRef}
+                setIsEdit={setIsEdit}
               />
               <div>
                 <Tabs

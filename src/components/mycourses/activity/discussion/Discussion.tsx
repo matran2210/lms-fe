@@ -112,6 +112,22 @@ const Discussion = ({ class_id }: Props) => {
           return
         }
 
+        if (comment?.length > 2000) {
+          setError('comment', {
+            type: 'manual',
+            message: 'This field must be at least 2000 character',
+          })
+          return
+        }
+
+        if (commentRoot?.length > 2000) {
+          setError('commentRoot', {
+            type: 'manual',
+            message: 'This field must be at least 2000 character',
+          })
+          return
+        }
+
         const getSelectedFiles = selectedFiles
         const getRootSelectedFiles = rootSelectedFiles
 
@@ -382,7 +398,7 @@ const Discussion = ({ class_id }: Props) => {
                       idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                     }`}
                   >
-                    <div className="flex-none leading-0">
+                    <div className="leading-0 flex-none">
                       <Image
                         width={50}
                         height={50}
@@ -412,7 +428,7 @@ const Discussion = ({ class_id }: Props) => {
                             {selectedFiles.map((file, index) => (
                               <li
                                 key={index}
-                                className="relative mb-2 leading-0"
+                                className="leading-0 relative mb-2"
                               >
                                 <div
                                   className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
@@ -507,7 +523,7 @@ const Discussion = ({ class_id }: Props) => {
       <div
         className={`transition-max-height sticky bottom-0 mt-6 flex items-start gap-3 overflow-visible bg-white duration-300 md:relative`}
       >
-        <div className="flex-none leading-0">
+        <div className="leading-0 flex-none">
           <Image
             width={50}
             height={50}
@@ -536,7 +552,7 @@ const Discussion = ({ class_id }: Props) => {
             <div>
               <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="relative mb-2 leading-0">
+                  <li key={index} className="leading-0 relative mb-2">
                     <div
                       className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"

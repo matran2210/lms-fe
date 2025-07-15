@@ -218,7 +218,7 @@ const MyProfile = ({
                     ></ButtonCancelSubmit>
                   </div>
                 ) : (
-                  <div className="flex flex-auto justify-end font-medium text-[#050505] lg:max-w-[300px] lg:justify-start">
+                  <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
                     <TextSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
                     </TextSkeleton>
@@ -305,16 +305,7 @@ const MyProfile = ({
                 control={control}
                 hiddenOnEdit={isEdit}
               />
-              <TextWrapper
-                title="Status"
-                loading={loading}
-                control={control}
-                hiddenOnEdit={isEdit}
-              >
-                <span className={`${USER_STATUS[user?.status]?.color}`}>
-                  {USER_STATUS[user.status]?.label}
-                </span>
-              </TextWrapper>
+
               {!isEdit && (
                 <TextWrapper
                   title="Updated At"
@@ -335,7 +326,7 @@ const MyProfile = ({
               </div>
             </div>
             {isEdit && (
-              <div className="flex items-center justify-between gap-2 lg:hidden">
+              <div className="hidden items-center justify-between gap-2 md:flex lg:hidden">
                 <ButtonSecondary
                   className="w-full"
                   size="medium"
@@ -503,11 +494,14 @@ const TextWrapper = ({
 }) => {
   return (
     <li
-      className={clsx('group mb-4 flex gap-[1.4rem]', {
-        'transition-[margin]': isEdit,
-        '!block': isInForm && isEdit,
-        hidden: hiddenOnEdit,
-      })}
+      className={clsx(
+        'group mb-6 flex gap-[1.4rem] text-sm md:mb-4 md:text-base',
+        {
+          'transition-[margin]': isEdit,
+          '!block': isInForm && isEdit,
+          hidden: hiddenOnEdit,
+        },
+      )}
     >
       <div
         className={clsx({
@@ -531,14 +525,14 @@ const TextWrapper = ({
       <div
         className={clsx(
           'max-w-[200px] flex-none text-gray-800 md:w-[17.43rem] lg:max-w-[50%]',
-          { 'hidden lg:block': isEdit },
+          { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >
         {title}
       </div>
       <div
         className={clsx(
-          'flex flex-auto justify-end font-medium text-[#050505] lg:max-w-[300px] lg:justify-start',
+          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start',
           {
             '!hidden !max-w-full lg:!block': isEdit,
           },

@@ -11,7 +11,7 @@ interface IProps extends DrawerProps {
   handleCancel?: () => void
   handleBack?: () => void
   width?: string | number
-  title: string
+  title: React.ReactNode
   isShowBtnClose?: boolean
   isShowFooter?: boolean
   isShowHeader?: boolean
@@ -45,7 +45,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
-  classNameHeader,
+  classNameHeader = 'mb-4',
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
@@ -63,7 +63,7 @@ const SappDrawerV3: React.FC<IProps> = ({
     >
       <div
         className={clsx(
-          'relative h-full w-full bg-white p-6 lg:p-8',
+          'relative h-full w-full bg-white p-4 md:p-6 lg:p-8',
           classNameBody,
         )}
       >
@@ -71,7 +71,7 @@ const SappDrawerV3: React.FC<IProps> = ({
         {isShowHeader && (
           <div
             className={clsx(
-              'mb-8 flex items-center justify-between',
+              'flex items-center justify-between lg:mb-8',
               classNameHeader,
             )}
           >
@@ -85,7 +85,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-xl font-semibold leading-loose text-secondary md:text-2xl">
+              <span className="text-base font-semibold leading-loose text-secondary md:text-2xl">
                 {title}
               </span>
             </div>

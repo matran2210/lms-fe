@@ -93,44 +93,61 @@ const ResultCourse = ({
     }
   }
 
-  const fetchResult = async (pageIndex: number, pageSize: number) => {
-    if (class_user_id && coursePart?.quiz?.id) {
-      const response = await ClassAPI.getAllResultOfQuiz(
-        class_user_id,
-        coursePart?.quiz?.id,
-        { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
-      )
-      if (response?.data?.data && response?.data?.metadata?.total_records > 1) {
-        const results = response.data.data
-        setResultList((prev: IQuizResultList) => {
-          return {
-            metadata: response.data.metadata,
-            data: [...prev.data, ...results]?.filter(
-              (item, index, self) =>
-                index === self?.findIndex((t) => t.id === item.id),
-            ),
-          }
-        })
-        setSelectedResult({
-          label: results?.[0]?.name,
-          value: results?.[0]?.id,
-          ratio_score: results?.[0]?.ratio_score,
-          status: results?.[0]?.status,
-          score: results?.[0]?.score,
-        })
-      }
+  const fetchResult = async (pageIndex: number = 1, pageSize: number = 10) => {
+    if (!class_user_id || !coursePart?.quiz?.id) return
+
+    const response = await ClassAPI.getAllResultOfQuiz(
+      class_user_id,
+      coursePart.quiz.id,
+      {
+        page_index: pageIndex,
+        page_size: pageSize,
+      },
+    )
+
+    const results = response?.data?.data || []
+    const totalRecords = response?.data?.metadata?.total_records || 0
+
+    if (!results.length) return
+
+    // Set selected result (dùng chung ở cả 2 nhánh)
+    const firstResult = results[0]
+    setSelectedResult({
+      label: firstResult.name,
+      value: firstResult.id,
+      ratio_score: firstResult.ratio_score,
+      status: firstResult.status,
+      score: firstResult.score,
+    })
+
+    // Nếu nhiều hơn 1 kết quả thì gộp vào result list
+    if (totalRecords > 1) {
+      setResultList((prev: IQuizResultList) => ({
+        metadata: response.data.metadata,
+        data: [...prev.data, ...results].filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.id === item.id),
+        ),
+      }))
     }
   }
+
   useEffect(() => {
     fetchResult(1, 10)
   }, [])
 
+  const isAttempt = resultList?.data?.length <= 1
+
   return (
     <div className="flex h-8 items-center gap-2">
-      <div className={`forcus-group:text-primary text-gray-800`}>Attempt:</div>
+      <div
+        className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
+      >
+        Attempt:
+      </div>
       <div>
-        {resultList?.data?.length <= 1 ? (
-          <div className="text-base font-normal">1</div>
+        {isAttempt ? (
+          <div className="text-gray">1</div>
         ) : (
           <HookFormSelect
             classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"

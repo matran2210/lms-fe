@@ -32,14 +32,38 @@ export const cleanParams = <T extends Record<string, any>>(
   return result
 }
 
-export const getDayIndex = (startDate: Date) => {
-  return (dayjs(startDate).utc().day() + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
+/**
+ * Returns the index of the weekday for a given date, adjusted for UTC.
+ *
+ * @param {Date} startDate - The date for which the weekday index is calculated.
+ * @param {boolean} isUTC - Whether to use UTC time.
+ * @returns {number} - The index of the weekday, where 0 is Monday and 6 is Sunday.
+ */
+export const getDayIndex = (startDate: Date, isUTC = true) => {
+  const day = isUTC ? dayjs(startDate).utc().day() : dayjs(startDate).day()
+
+  return (day + DAYS_IN_WEEK - 1) % DAYS_IN_WEEK
 }
 
 export const reverseDaysOfWeek = (startDate: Date, daysOfWeek: number[]) => {
   const dayOfWeek = getDayIndex(startDate) + 1 // Convert start day of week from 0 to 1
   const dayIndex = daysOfWeek.indexOf(dayOfWeek)
   return [...daysOfWeek.slice(dayIndex), ...daysOfWeek.slice(0, dayIndex)]
+}
+
+export const convertLocalWeekDaysToUTC = (
+  startDate: Date,
+  localDaysOfWeek: number[],
+) => {
+  // start of week with startDate hour and minute
+  const startOfWeek = dayjs(startDate)
+    .startOf('week')
+    .hour(startDate.getHours())
+    .minute(startDate.getMinutes())
+
+  return localDaysOfWeek.map(
+    (num) => getDayIndex(startOfWeek.add(num, 'day').toDate()) + 1,
+  ) // Convert start day of week from 0 to 1
 }
 
 /**
