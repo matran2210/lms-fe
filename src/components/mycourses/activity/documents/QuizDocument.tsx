@@ -495,7 +495,7 @@ const QuizDocument = ({
       {/* Fake Question */}
       <div>
         <div>
-          <div className="sapp-questions editor-wrap mce-content-body">
+          <div className="sapp-questions sapp-editor-reader editor-wrap mce-content-body">
             <div>
               <p>Câu hỏi số 1</p>
             </div>
