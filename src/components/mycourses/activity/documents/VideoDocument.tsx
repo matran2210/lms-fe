@@ -404,7 +404,7 @@ const VideoDocument = ({
           </div>
         </div>
       </div>
-      <div className="relative overflow-hidden rounded-lg shadow-learning-activity">
+      <div className="relative overflow-hidden rounded-lg shadow-small">
         <SAPPVideo
           streamRef={streamRef}
           options={{

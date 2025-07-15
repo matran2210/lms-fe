@@ -1437,3 +1437,8 @@ mark {
   cursor: pointer;
   pointer-events: auto;
 }
+
+.echarts-tooltip {
+  background: white !important;
+  border: none !important;
+}

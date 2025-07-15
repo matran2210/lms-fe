@@ -54,7 +54,7 @@ const CollapseActivity = ({
         />
       )}
       items={getItemsActivity}
-      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-learning-activity md:p-6"
+      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6"
     />
   )
 }

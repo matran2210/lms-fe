@@ -79,7 +79,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
         <div
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
-            'learning-activity-collapse rounded-xl md:bg-white md:p-6 md:shadow-learning-activity',
+            'learning-activity-collapse rounded-xl md:bg-white md:p-6 md:shadow-small',
             { hidden: focusOnly },
           )}
         >

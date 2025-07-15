@@ -9,7 +9,7 @@ const ExamDashboard = () => {
         <LearningResults />
       </div>
       <div className="mb-10 mt-6 gap-6 xl:mt-8 xl:flex xl:gap-8">
-        <div className="w-full xl:w-8/12">
+        <div className="w-full xl:w-7/12">
           <TopicProgress />
         </div>
         <OverProgress />

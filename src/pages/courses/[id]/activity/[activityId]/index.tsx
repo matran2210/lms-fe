@@ -580,13 +580,10 @@ const ActivityPage = () => {
             />
 
             <div
-              className={clsx(
-                'rounded-xl bg-white p-6 shadow-learning-activity',
-                {
-                  hidden: focusOnlyQuiz.open,
-                  'hidden md:block': !focusOnlyQuiz.open,
-                },
-              )}
+              className={clsx('rounded-xl bg-white p-6 shadow-small', {
+                hidden: focusOnlyQuiz.open,
+                'hidden md:block': !focusOnlyQuiz.open,
+              })}
               data-aos={ANIMATION.DATA_AOS}
             >
               <Discussion class_id={(router.query.id as string) || ''} />

@@ -244,7 +244,7 @@ const ProfileHeader = ({
           {isEdit ? (
             <div
               className={clsx(
-                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-learning-activity md:hidden',
+                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-small md:hidden',
                 {
                   'cursor-not-allowed': loadingEditAvatar,
                   'cursor-pointer': !loadingEditAvatar,
@@ -268,7 +268,7 @@ const ProfileHeader = ({
             </div>
           ) : (
             <div
-              className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-learning-activity hover:text-primary md:hidden"
+              className="absolute -right-[0.5px] bottom-0 z-[1] cursor-pointer rounded-full bg-white p-1 shadow-small hover:text-primary md:hidden"
               onClick={() => setIsEdit(true)}
             >
               <PencilV2Icon className="h-5 w-5" />
