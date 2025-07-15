@@ -2383,10 +2383,14 @@ const TestDetail = () => {
                 ? null
                 : 'You should select an answer before click'
             }
-            classNames={{ root: 'max-w-72' }}
+            classNames={{
+              root: 'max-w-72 rounded-md',
+              body: 'text-sm !py-1 !px-2 flex items-center',
+            }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
             mouseEnterDelay={0.3}
             placement="left"
+            color={'#404041'}
           >
             <ButtonPrimary
               onClick={async () => {
