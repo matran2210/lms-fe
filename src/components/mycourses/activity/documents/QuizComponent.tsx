@@ -23,7 +23,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
 import clsx from 'clsx'
@@ -239,12 +239,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getValueSelectText = () => {
       let value = [] as any
-      const inputs = questionRef?.current?.querySelectorAll(
-        'select.sapp-select--selectword-preview',
+      const inputs = document.querySelectorAll(
+        'div.sapp-select--question',
       ) as any
 
       for (let e of inputs) {
-        value?.push(e?.value)
+        value.push(e?.dataset.value)
       }
       return value
     }
@@ -591,7 +591,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           return (
             <SelectWord
               data={activeQuestion}
-              action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
               corrects={showCorrect ? activeQuestion.corrects : undefined}

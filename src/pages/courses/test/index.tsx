@@ -259,6 +259,7 @@ const TestModal = ({
     attempt: { status: string; score: number },
     quiz: { is_graded: boolean; required_percent_score: number },
   ) => {
+    if (!attempt) return StatusQuizAttempt.Unsubmitted
     if (attempt?.status === 'SUBMITTED') {
       return StatusQuizAttempt.Submitted
     }

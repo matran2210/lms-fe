@@ -112,6 +112,22 @@ const Discussion = ({ class_id }: Props) => {
           return
         }
 
+        if (comment?.length > 2000) {
+          setError('comment', {
+            type: 'manual',
+            message: 'This field must be at least 2000 character',
+          })
+          return
+        }
+
+        if (commentRoot?.length > 2000) {
+          setError('commentRoot', {
+            type: 'manual',
+            message: 'This field must be at least 2000 character',
+          })
+          return
+        }
+
         const getSelectedFiles = selectedFiles
         const getRootSelectedFiles = rootSelectedFiles
 
