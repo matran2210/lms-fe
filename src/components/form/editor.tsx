@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Spin } from 'antd'
 import { VALID_UPLOAD_EDITOR } from 'src/constants'
 import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload'
-import { SAPPEditor, SAPPCalendar } from 'sapp-common-package'
+import { SAPPEditor } from 'sapp-common-package-ha-test'
 interface IProps {
   onChange: (event: any) => void
   valueText?: string
