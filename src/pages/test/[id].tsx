@@ -3284,6 +3284,7 @@ const TestDetail = () => {
           </div>
         </Popover>
       )}
+
       <div
         onClick={() => {
           handleOpenScratchPad('scratch_pad')
@@ -3320,7 +3321,10 @@ const TestDetail = () => {
         <FlagIconV2 isActive={currentTabContent?.flag} />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
-      <BackToTop scrollContainerRef={scrollRef} />
+      <BackToTop
+        scrollContainerRef={scrollRef}
+        className="!right-8 bottom-[482px] lg:bottom-[302px]"
+      />
     </Layout>
   )
 }
