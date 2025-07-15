@@ -280,7 +280,10 @@ const MyCourse = () => {
             )}
           </div>
         </div>
-        <div className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11">
+        <div
+          className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11"
+          data-aos={ANIMATION.DATA_AOS}
+        >
           <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
             My Courses
           </h1>

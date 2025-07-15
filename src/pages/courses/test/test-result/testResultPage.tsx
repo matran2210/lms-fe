@@ -74,7 +74,7 @@ const TestResultPage = ({
   const globalAverageNumber = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
   const commonMultipleScoreStyle =
-    'grid grid-cols-1 xl:[grid-template-columns:minmax(0,7fr)_minmax(0,3fr)] gap-x-6 w-full pb-6'
+    'grid grid-cols-1 xl:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-6 w-full pb-6'
 
   const renderDashboard = useMemo(() => {
     switch (type) {

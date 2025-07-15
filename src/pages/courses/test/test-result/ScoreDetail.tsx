@@ -1,7 +1,8 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { removeHtmlTags, truncateString } from '@utils/index'
+import { truncateString } from '@utils/index'
 
+import { htmlToRaw } from '@components/common/timer'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -21,7 +22,6 @@ import {
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
-import { htmlToRaw } from '@components/common/timer'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-6'
 
@@ -158,10 +158,10 @@ const ScoreDetail = ({
       ref={yourScoreDetailRef}
       className={`${className}`}
     >
-      <div className="flex items-center gap-x-3">
-        <div className="mb-4 text-xl font-semibold ">Score Details</div>
+      <div className="mb-4 flex items-center gap-x-3">
+        <div className="text-xl font-semibold ">Score Details</div>
         {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-400">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="text-base leading-7 text-gray-400">{`attempt: ${router?.query?.attempt}`}</div>
         )}
       </div>
       <div className="flex flex-col gap-4">

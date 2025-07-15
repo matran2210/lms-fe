@@ -2,21 +2,21 @@ import EntranceTestFilter from '@components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import Layout from '@components/layout'
 import Footer from '@components/layout/Footer'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import Heading from '@components/mycourses/Heading'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EntranceTestAPI } from '../api/entrance-test'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import { useCourseContext } from '@contexts/index'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -86,7 +86,10 @@ const EntranceTest = () => {
                 />
               </div>
               <div className="relative">
-                <div className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                <div
+                  className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center"
+                  data-aos={ANIMATION.DATA_AOS}
+                >
                   <h2 className="text-2xl font-semibold text-gray-800 ">
                     Entrance Test
                   </h2>

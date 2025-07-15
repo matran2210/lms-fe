@@ -1,6 +1,6 @@
 import SappModal from '@components/base/modal/SappModal'
 import dynamic from 'next/dynamic'
-import { memo } from 'react'
+import React, { memo } from 'react'
 
 interface IProps {
   open: boolean
@@ -11,10 +11,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
   const PDFViewer = dynamic(() => import('../pdf/pdf-viewer'), {
     ssr: false,
   })
-  // const onSubmit = () => {
-  //   setOpen({ status: false, url: undefined })
-  //   //to do: start test
-  // }
+
   const onCancel = () => {
     setOpen({ status: false, url: undefined })
   }
@@ -23,10 +20,7 @@ const PopupViewPdf = ({ open, setOpen, url }: IProps) => {
       open={open}
       setOpen={setOpen}
       isContentFull
-      //   cancelButtonCaption="Quit"
-      //   okButtonCaption="OK"
       handleCancel={onCancel}
-      //   handleSubmit={onSubmit}
       showCancelButton={false}
       showOkButton={false}
       showHeader={true}

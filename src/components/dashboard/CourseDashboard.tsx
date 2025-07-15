@@ -152,7 +152,7 @@ const CourseDashboard = () => {
                   {!isUndefined(data?.completed) &&
                     !isUndefined(data?.total) &&
                     data.total !== 0 && (
-                      <div className="mt-3 h-2 w-full rounded-full bg-gray-200 xl:mt-4.5">
+                      <div className="xl:mt-4.5 mt-3 h-2 w-full rounded-full bg-gray-200">
                         <div
                           className="bg-yellow-400 h-full rounded-full"
                           style={{
