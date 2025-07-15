@@ -120,8 +120,8 @@ module.exports = {
         500: '#08719D',
       },
       dashboard: {
-        learing: '#6FD3B0',
-        'mock-test': '#FB8C5B',
+        learing: '#059F9A',
+        'mock-test': '#FFB700',
       },
     },
     screens: {

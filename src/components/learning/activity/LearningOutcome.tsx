@@ -53,7 +53,7 @@ const LearningOutcome = ({ activity }: IProps) => {
       defaultActiveKey={['learning_outcome']}
       expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
       items={getItemsLearningOutcome}
-      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-learning-activity md:p-6"
+      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6"
     />
   )
 }
