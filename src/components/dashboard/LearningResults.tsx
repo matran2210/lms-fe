@@ -31,8 +31,11 @@ const LearningResults = () => {
   ) => {
     const results = isNormal ? data : data.reports
 
-    if (!isNormal && data.mock_tests?.length == 1)
+    if (!isNormal && data.mock_tests?.length == 1) {
       setMockTestId(data.mock_tests[0].id)
+    } else {
+      setMockTestId('')
+    }
 
     if (results.length) {
       let total = 0
