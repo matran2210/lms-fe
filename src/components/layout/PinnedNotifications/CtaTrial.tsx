@@ -62,16 +62,16 @@ function CtaTrial() {
           classPinned="items-start justify-between lg:items-center"
         >
           <div className="hidden lg:block" />
-          <div className="flex w-[90%] flex-col gap-2 text-sm leading-normal text-gray-800 md:text-base lg:flex-row">
+          <div className="flex w-[90%] flex-col gap-2 text-sm leading-normal text-gray-800 md:text-base lg:flex-row lg:justify-center">
             <div>
               You have&nbsp;
               <span className="font-semibold">
-                {localStorage.getItem('daysDifference')}&nbsp;days left&nbsp;
+                {localStorage.getItem('daysDifference')}&nbsp;days&nbsp;
               </span>
-              on your free trial. Upgrade today to unlock the full course.
+              left on your free trial. Upgrade today to unlock the full course.
             </div>
             <div
-              className="cursor-pointer font-semibold underline"
+              className="cursor-pointer font-semibold underline hover:text-primary"
               onClick={handleUpgrade}
             >
               Upgrade Now
