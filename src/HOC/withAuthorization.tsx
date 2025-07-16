@@ -13,16 +13,16 @@ const withAuthorization =
       const [isLoading, setIsLoading] = useState(true)
 
       useEffect(() => {
-        // Đợi một chút để Redux store được hydrate
         const timer = setTimeout(() => {
           setIsLoading(false)
         }, 100)
-
         return () => clearTimeout(timer)
       }, [])
 
       useEffect(() => {
-        if (isLoading || !userType) return
+        if (isLoading) return
+
+        if (!userType) return // Chưa có userType, không làm gì
 
         if (router.pathname === '/') {
           if (userType === UserType.TEACHER) router.push('/teachers')
@@ -32,10 +32,13 @@ const withAuthorization =
         }
       }, [router.pathname, userType, isLoading])
 
-      // Hiển thị loading hoặc null khi đang load
-      if (isLoading || !userType) return null
+      // Chỉ loading khi đang loading
+      if (isLoading) return null
 
-      // Kiểm tra lại một lần nữa trước khi render
+      // Nếu chưa có userType, có thể show loading hoặc null
+      if (!userType) return null
+
+      // Nếu userType không hợp lệ, không render component
       if (!allowedRoles.includes(userType)) return null
 
       return <WrappedComponent {...props} />
