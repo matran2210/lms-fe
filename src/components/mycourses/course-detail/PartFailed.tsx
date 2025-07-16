@@ -184,19 +184,19 @@ const PartFailed = ({
       : 'Result'
   }
 
-  const handleClickTitle = () => {
-    if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-        thankYou: false,
-        thankYouLater: false,
-      })
-    } else {
-      setOpen(true)
-    }
-    trackGAEvent(`Click Title ${showTitleFinalTest}`)
-  }
+  // const handleClickTitle = () => {
+  //   if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
+  //     setOpenPopupCTA({
+  //       lockSection: true,
+  //       ctaUpgrade: false,
+  //       thankYou: false,
+  //       thankYouLater: false,
+  //     })
+  //   } else {
+  //     setOpen(true)
+  //   }
+  //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
+  // }
 
   return (
     <>
@@ -210,7 +210,6 @@ const PartFailed = ({
         ref={lastElementRef}
         classNameTitle={`h-12 md:h-16 font-medium`}
         classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
-        handleClickTitle={handleClickTitle}
         isLock={isLock}
       >
         <div className="flex h-full flex-1 flex-col justify-between">

@@ -131,7 +131,6 @@ const Part = ({
       ref={lastElementRef}
       classNameTitle={`h-12 md:h-16 font-medium`}
       classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
-      handleClickTitle={handleRouterPartDetail}
       isLock={isLock}
     >
       <div className="flex h-full flex-1 flex-col">
