@@ -384,8 +384,8 @@ const TestModal = ({
 
   const renderBackButton = () => (
     <ButtonText
-      title="Back to My Course"
-      icon={<BackIcon />}
+      title="Cancel"
+      // icon={<BackIcon />}
       size="medium"
       onClick={() => {
         setOpen(false)
@@ -412,6 +412,7 @@ const TestModal = ({
             (currentAttemptNum === limitCount && !isSubmitted))))
 
     // 🟡 Trường hợp: chưa từng làm hoặc đã làm đủ số lượt cho phép
+
     if (isNoAttemptOrLimitReached) {
       if (!isLimited) {
         // 🔵 Quiz KHÔNG giới hạn số lượt làm
@@ -793,6 +794,13 @@ const TestModal = ({
             <div className="flex w-full flex-col items-center justify-center gap-3">
               {renderCustomFooter()}
             </div>
+          }
+          isClosable={
+            isNoAttemptOrLimitReached &&
+            (!isLimited ||
+              (isLimited && (isNoAttempt || isSubmitted || isUnsubmitted)))
+              ? false
+              : true
           }
         />
       )}
