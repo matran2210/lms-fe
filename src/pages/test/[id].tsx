@@ -2843,11 +2843,10 @@ const TestDetail = () => {
                     id={'preview-question'}
                   >
                     <div
-                      className="h-full overflow-auto bg-white p-6"
+                      className="h-full overflow-auto bg-white p-8"
                       style={{ width: `calc(50% - ${leftWidth}px)` }}
                     >
                       <div
-                        className="min-w-[700px]"
                         id="hightlight_area_topic"
                         onMouseUp={(e: any) => {
                           if (
@@ -2897,7 +2896,7 @@ const TestDetail = () => {
                             (e: any, index: number) => {
                               return (
                                 <div
-                                  className="w-fit cursor-pointer text-[#3964EA] hover:underline"
+                                  className="block cursor-pointer break-all text-[#3964EA] hover:underline"
                                   onClick={() =>
                                     handleOpenScratchPad(
                                       'file',
@@ -3018,7 +3017,7 @@ const TestDetail = () => {
                           (e: any, index: number) => {
                             return (
                               <div
-                                className="w-fit cursor-pointer text-[#3964EA] hover:underline"
+                                className="block w-fit max-w-full cursor-pointer break-all text-[#3964EA] hover:underline"
                                 onClick={() =>
                                   handleOpenScratchPad(
                                     'file',
