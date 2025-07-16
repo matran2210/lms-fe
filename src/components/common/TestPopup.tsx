@@ -49,8 +49,8 @@ const TestPopup = ({
       {otherContent ? (
         <div className="pb-10">{otherContent}</div>
       ) : (
-        <div className="text-center text-base font-normal text-gray-800">
-          <div>
+        <div className="text-center font-normal text-gray-800">
+          <div className="text-sm md:text-base">
             {isFinalAttemptTimeout ? (
               <div className="pb-2">
                 The test has timed out and has been submitted automatically.
