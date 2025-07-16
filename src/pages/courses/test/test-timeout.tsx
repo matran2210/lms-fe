@@ -40,7 +40,7 @@ const TestTimeOutModal = ({
         check your email regularly to receive the earliest update.
       </span>
     ) : (
-      'The test has timed out and has been submitted automatically.'
+      'You are running out of time to do your test'
     )
   return (
     <SappModalV3
