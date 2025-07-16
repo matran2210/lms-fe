@@ -26,7 +26,7 @@ const MODAL_CONTENT = {
   ctaUpgrade: {
     header: 'Unlock Your Learning Journey',
     content:
-      'Connect with our admissions consultant now to unlock your personalized learning pathway!',
+      "Click 'Upgrade Now' to receive a personalized learning consultation call from our admissions conslutant.",
     icon: <UnlockIcon />,
   },
   thankYou: {
@@ -106,13 +106,17 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
       }
       handleCancel={handleClose}
       onOk={handleUpgrade}
+      handleClose={showForm.ctaUpgrade ? handleClose : undefined}
       icon={icon}
       header={header}
       content={content}
       showFooter={showFooter}
       okButtonCaption="Upgrade Now"
+      cancelButtonCaption={'Skip'}
+      showCancelButton={showForm.ctaUpgrade}
       fullWidthBtn={true}
       buttonSize="extra"
+      isClosable={showForm.ctaUpgrade}
     />
   )
 }
