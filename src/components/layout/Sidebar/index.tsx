@@ -16,7 +16,9 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
-import { Divider } from 'antd'
+import { Button, Divider } from 'antd'
+import { ECourseType } from '@pages/courses'
+import { useCourseContext } from '@contexts/index'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -38,7 +40,10 @@ export default function Sidebar({
 }: SidebarProps) {
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
-
+  /**
+   * @description lấy state trong context
+   */
+  const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
   const closeSideBar = () => {
     toggleDrawer()
     document.body.classList.add('no-hover')
@@ -125,6 +130,40 @@ export default function Sidebar({
               total={7}
             />
           )}
+          <div className={`mx-2 mt-6 rounded-[7px] bg-gray-100 p-1 md:hidden`}>
+            <div className="flex items-center gap-1">
+              <Button
+                type={
+                  generalOrMasterCourse === ECourseType.GENERAL
+                    ? 'primary'
+                    : 'text'
+                }
+                block
+                onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
+                className={clsx('w-full px-1 py-2 text-xs outline-none', {
+                  'font-semibold':
+                    generalOrMasterCourse === ECourseType.GENERAL,
+                })}
+              >
+                General Course
+              </Button>
+              <Button
+                type={
+                  generalOrMasterCourse === ECourseType.MASTER
+                    ? 'primary'
+                    : 'text'
+                }
+                block
+                onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
+                className={clsx('w-full px-1 py-2 text-xs outline-none', {
+                  'font-semibold':
+                    generalOrMasterCourse === ECourseType.GENERAL,
+                })}
+              >
+                Master Finance
+              </Button>
+            </div>
+          </div>
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
           <div className="absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55] transition-opacity" />
