@@ -15,6 +15,7 @@ interface IProps {
   customFooter?: ReactNode
   otherContent?: ReactNode
   gapContent?: string
+  isClosable?: boolean
 }
 
 const TestPopup = ({
@@ -26,6 +27,7 @@ const TestPopup = ({
   otherContent,
   setOpen,
   gapContent = 'gap-4 md:gap-10',
+  isClosable = true,
 }: IProps) => {
   const timeFormated = formatTime(time, 'HH:mm:ss')
   const isTimeOut = timeFormated === '00:00:00'
@@ -35,7 +37,7 @@ const TestPopup = ({
   return (
     <SappModalV3
       open={open}
-      isClosable={true}
+      isClosable={isClosable}
       onOk={() => {}}
       handleCancel={() => setOpen(false)}
       icon={isTimeOut ? <TimeOutIcon /> : undefined}

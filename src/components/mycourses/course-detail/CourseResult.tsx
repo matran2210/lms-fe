@@ -143,7 +143,7 @@ const ResultCourse = ({
       <div
         className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
       >
-        Attempt:
+        Result of Attemps:
       </div>
       <div>
         {isAttempt ? (

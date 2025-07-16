@@ -28,6 +28,9 @@ const PartFailed = ({
   isLock?: boolean
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
+  const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
+    coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : 'Unlimited'
+  }`
   const isSubmitted =
     coursePart?.quiz?.attempt &&
     coursePart?.quiz?.attempt?.status === 'SUBMITTED'
@@ -214,37 +217,32 @@ const PartFailed = ({
           <div className="info border-gray-2 mb-6 mt-4 border-l pl-4 md:mt-6">
             {checkFinished && (
               <>
-                <div className="time-allow mb-2 flex justify-between md:mb-4">
-                  <p className="text-sm text-gray md:text-base">Time Spent:</p>
-                  <p className="text-sm font-medium text-gray-800 md:text-base">
-                    {!!coursePart?.quiz?.attempt?.total_attempt_time
+                <PartInfoItem
+                  label="Time Spent:"
+                  value={
+                    !!coursePart?.quiz?.attempt?.total_attempt_time
                       ? formatTime(
                           coursePart?.quiz?.attempt?.total_attempt_time,
                         )
-                      : '--'}
-                  </p>
-                </div>
-                <div className="time-allow mb-4 flex justify-between">
-                  <p className="text-sm text-gray md:text-base">
-                    Latest Results:
-                  </p>
-                  <p className="text-sm font-medium text-gray-800 md:text-base">
-                    {isManualGradingAndAwaitGrading
+                      : '--'
+                  }
+                />
+                <PartInfoItem
+                  label="Latest Results:"
+                  value={
+                    isManualGradingAndAwaitGrading
                       ? '--'
                       : coursePart?.quiz?.attempt?.score !== undefined &&
                           coursePart?.quiz?.attempt?.score !== null
                         ? `${coursePart?.quiz?.attempt?.score}%`
-                        : '--'}
-                  </p>
-                </div>
+                        : '--'
+                  }
+                />
               </>
             )}
-            <div className="time-allow mb-2 flex justify-between md:mb-4">
-              <p className="text-sm text-gray md:text-base">Time Allowed:</p>
-              <p className="text-sm font-medium text-gray-800 md:text-base">
-                {formattedTime}
-              </p>
-            </div>
+            <PartInfoItem label="Time Allowed:" value={formattedTime} />
+            <PartInfoItem label="No of Attempts:" value={noOfAttempts} />
+
             <div className="time-allow flex items-center justify-between">
               <p className="text-sm text-gray-800 md:text-base">
                 <ResultCourse
@@ -361,6 +359,21 @@ const PartFailed = ({
         content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
       />
     </>
+  )
+}
+
+const PartInfoItem = ({
+  label,
+  value,
+}: {
+  label: React.ReactNode
+  value: React.ReactNode
+}) => {
+  return (
+    <div className="time-allow mb-2 flex justify-between md:mb-4">
+      <p className="text-sm text-gray md:text-base">{label}</p>
+      <p className="text-sm font-medium text-gray-800 md:text-base">{value}</p>
+    </div>
   )
 }
 

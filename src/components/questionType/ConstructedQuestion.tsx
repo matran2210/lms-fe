@@ -279,7 +279,7 @@ const EssayQuestionPreview = ({
                 {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
-                      className="mb-1 w-fit cursor-pointer text-[#3964EA] hover:underline"
+                      className="mb-1 block w-fit max-w-full cursor-pointer break-all text-[#3964EA] hover:underline"
                       onClick={() => {
                         setOpenPdf &&
                           setOpenPdf(
