@@ -226,7 +226,7 @@ const ExaminationInfo = ({
 
   const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
   const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
-  const isClosable = !isEdit
+  const isClosable = !isEdit || isExamList
   const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
   const btnSubmitTile = isEdit ? 'Confirm' : ''
   const cancelButtonCaption = isEdit && !isMobileView ? 'Cancel' : ''
@@ -256,6 +256,7 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
+        rootClassName={'responsive-drawer-center'}
       >
         {isEdit ? (
           <FormProvider {...methods}>
