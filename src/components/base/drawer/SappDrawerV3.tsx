@@ -32,7 +32,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   open,
   handleCancel,
   handleBack,
-  width,
+  width = '33%',
   title,
   children,
   isShowBtnClose = true,
