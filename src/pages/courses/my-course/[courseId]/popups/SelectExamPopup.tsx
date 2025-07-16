@@ -97,7 +97,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       showFooter
       okButtonCaption="Confirm"
       fullWidthBtn
-      buttonSize="extra"
+      buttonSize="medium"
       cancelButtonCaption="Skip"
       isUnderLine
     />

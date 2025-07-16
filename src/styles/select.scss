@@ -176,12 +176,16 @@
   }
 }
 
-.sapp-disabled.ant-select-outlined.ant-select-disabled:not(
-    .ant-select-customize-input
-  )
+.sapp-disabled {
   .ant-select-selector {
-  @apply cursor-not-allowed bg-gray-100 text-gray-400;
+    @apply cursor-not-allowed bg-gray-100 text-gray-400;
+  }
+
+  .ant-select-selection-placeholder {
+    @apply text-left;
+  }
 }
+
 .custom-ant-select {
   .ant-select-selector {
     @apply flex h-auto w-12 border-none bg-gray-canvas p-0 text-base font-normal leading-normal text-gray-600 shadow-none !important;

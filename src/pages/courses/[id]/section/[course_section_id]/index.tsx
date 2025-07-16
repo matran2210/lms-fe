@@ -15,7 +15,7 @@ import { Alert, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import PreviewPartDetail from 'preview-part'
+import PreviewPartDetail from 'sapp-preview-part-test'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink, TEST_TYPE } from 'src/constants'
@@ -67,7 +67,8 @@ interface IProps {
 
 const CoursePartDetail = () => {
   const dispatch = useAppDispatch()
-  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView, isTabletView } =
+    useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -591,6 +592,7 @@ const CoursePartDetail = () => {
           isOpenChapter={isOpenChapter}
           isLMSV2
           isMobileView={isMobileView}
+          isTabletView={isTabletView}
         />
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
