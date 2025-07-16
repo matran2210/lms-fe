@@ -226,7 +226,7 @@ const ExaminationInfo = ({
 
   const title = isEdit ? 'Change Exam Date' : TitleSidebar.EXAM_INFORMATION
   const isShowCloseBtn = !isEdit || isExamList || isTabletView || isMobileView
-  const isClosable = (isTabletView || isMobileView) && !isEdit
+  const isClosable = !isEdit
   const isShowBackBtn = (isTabletView || isMobileView) && isEdit && !isExamList
   const btnSubmitTile = isEdit ? 'Confirm' : ''
   const cancelButtonCaption = isEdit && !isMobileView ? 'Cancel' : ''

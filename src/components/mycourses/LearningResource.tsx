@@ -216,6 +216,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         handleCancel={onClose}
         title={title}
         isShowBtnClose
+        closable
         isShowBtnBack={isOpenFilter}
         handleBack={handleBack}
         isShowFooter={isOpenFilter}
@@ -257,12 +258,12 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                         </div>
                       </div>
                       <a
-                        className="cursor-pointer"
+                        className="cursor-pointer hover:text-primary"
                         onClick={() =>
                           download(resource.name, resource.file_key)
                         }
                       >
-                        <DownloadIcon color="#1C274C" />
+                        <DownloadIcon />
                       </a>
                     </div>
                   ))}

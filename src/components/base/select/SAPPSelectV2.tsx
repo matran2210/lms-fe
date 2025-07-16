@@ -66,7 +66,7 @@ const SAPPSelectV2 = ({
                 <Select
                   {...field}
                   className={clsx(
-                    'sapp-disabled w-full font-normal',
+                    'custom-select-v2 w-full',
                     heightCustom,
                     className,
                   )}
