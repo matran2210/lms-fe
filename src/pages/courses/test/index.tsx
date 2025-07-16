@@ -642,51 +642,46 @@ const TestModal = ({
             !isContinue && (
               <>
                 <div className="flex flex-col gap-6">
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">Name:</div>
-                    <div className="line-clamp-2 pr-0.5 font-medium text-[#050505]">
-                      {data?.name}
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">Pass Point:</div>
-                    <div className="pr-0.5 font-medium text-[#050505]">
-                      {data?.quiz?.is_graded ? (
+                  <TestInfoItem label="Name:" value={data?.name} />
+                  <TestInfoItem
+                    label="Pass Point:"
+                    value={
+                      data?.quiz?.is_graded ? (
                         <>{data?.quiz?.required_percent_score ?? '_ _'}</>
                       ) : (
                         <>_ _</>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">Time Allowed:</div>
-                    <div className="pr-0.5 font-medium text-[#050505]">
-                      {data?.quiz?.quiz_timed
+                      )
+                    }
+                  />
+                  <TestInfoItem
+                    label="Time Allowed:"
+                    value={
+                      data?.quiz?.quiz_timed
                         ? formatTime(data?.quiz?.quiz_timed * 60)
-                        : 'Unlimited'}
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">Grading Method:</div>
-                    <div className="pr-0.5 font-medium text-[#050505]">
-                      {capitalizeFirstLetter(selectedResult?.grading_method) ??
-                        capitalizeFirstLetter(data?.quiz?.grading_method)}
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">No of Attempts:</div>
-                    <div className="pr-0.5 font-medium text-[#050505]">
-                      {data?.quiz?.attempt?.number_of_attempts || 0}/
-                      {data?.quiz?.is_limited
+                        : 'Unlimited'
+                    }
+                  />
+                  <TestInfoItem
+                    label="Grading Method:"
+                    value={
+                      capitalizeFirstLetter(selectedResult?.grading_method) ??
+                      capitalizeFirstLetter(data?.quiz?.grading_method)
+                    }
+                  />
+                  <TestInfoItem
+                    label="No of Attempts:"
+                    value={`${data?.quiz?.attempt?.number_of_attempts || 0}/${
+                      data?.quiz?.is_limited
                         ? data?.quiz?.limit_count
-                        : 'Unlimited'}
-                    </div>
-                  </div>
+                        : 'Unlimited'
+                    }`}
+                  />
+
                   {data?.quiz && (
                     <div className="flex justify-between gap-8 text-base">
                       <div className="flex items-center gap-2 hover:text-primary">
                         <div
-                          className={`forcus-group:text-primary  text-[#A1A1A1] ${isFocus ? 'text-primary' : ''}`}
+                          className={`forcus-group:text-primary text-gray ${isFocus ? 'text-primary' : ''}`}
                         >
                           Result:
                         </div>
@@ -771,7 +766,7 @@ const TestModal = ({
                     </div>
                   )}
                   <div className="flex justify-between gap-8 text-base">
-                    <div className="text-[#A1A1A1]">Status:</div>
+                    <div className="text-gray">Status:</div>
                     {data?.quiz?.is_graded &&
                     data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
                       <StatusTestQuizBadge
@@ -805,4 +800,18 @@ const TestModal = ({
   )
 }
 
+const TestInfoItem = ({
+  label,
+  value,
+}: {
+  label: React.ReactNode
+  value: React.ReactNode
+}) => {
+  return (
+    <div className="flex justify-between gap-8 text-base">
+      <div className="text-gray">{label}</div>
+      <div className="pr-0.5 font-medium text-gray-800">{value}</div>
+    </div>
+  )
+}
 export default TestModal
