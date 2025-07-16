@@ -2431,7 +2431,7 @@ const TestDetail = () => {
 
             {/** Tabs */}
             {tabs?.length > 0 && (
-              <div className="shadow-pagination relative z-10 w-full bg-gray-4 px-6 py-2">
+              <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
                 <TabSlide
                   data={filteredTabs}
                   currentTab={currentPage}
@@ -2633,7 +2633,7 @@ const TestDetail = () => {
           {/** End Question Content */}
 
           {/** Scratchpads */}
-          <div className="shadow-question-footer z-10 flex h-[48px] items-center justify-between bg-gray-3">
+          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
             <div className="flex h-full items-center">
               <button
                 className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -2698,7 +2698,7 @@ const TestDetail = () => {
                     </div>
                   </div>
                   {showListExhibits && (
-                    <div className="sapp-separateLine shadow-questions-exhibits absolute bottom-full h-fit justify-center bg-gray-3 3xl:w-full">
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
                       {exhibits?.map(
                         (
                           e: { label: string; value: string },
@@ -2740,7 +2740,7 @@ const TestDetail = () => {
                     </div>
                   </div>
                   {showListRequirement && (
-                    <div className="sapp-separateLine shadow-questions-exhibits absolute bottom-full h-fit justify-center bg-gray-3 3xl:w-full">
+                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
                       {currentTabContent?.data?.requirements?.map(
                         (e: any, indexReq: number) => {
                           return (
@@ -2858,7 +2858,7 @@ const TestDetail = () => {
               !currentTabContent?.is_viewed_answer &&
               quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                 <button
-                  className="w-45 flex items-center justify-center gap-3 border border-gray-1 px-3 py-2"
+                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                   onClick={async () => {
                     const data = await getResult(currentTabContent)
                     handleSubmitAnswer('view-answer')

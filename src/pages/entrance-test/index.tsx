@@ -40,15 +40,15 @@ const EntranceTest = () => {
 
   return (
     <Layout title="Entrance Test">
-      <div className="border-default border-b bg-white">
-        <div className="max-w-xxl py-5.75 relative mx-auto my-0 flex xl-max:mx-6">
+      <div className="border-b border-default bg-white">
+        <div className="relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6">
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}
             formStyle="w-full flex items-center"
           />
         </div>
       </div>
-      <div className="max-w-xxl mx-auto my-0 pt-6 xl-max:mx-6">
+      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
         {isLoading ? (
           <CourseSkeleton />
         ) : (
@@ -69,7 +69,7 @@ const EntranceTest = () => {
               />
             </div>
             <div
-              className="max-w-xxl my-0 pt-6 xl:mx-auto"
+              className="my-0 max-w-xxl pt-6 xl:mx-auto"
               data-aos={ANIMATION.DATA_AOS}
             >
               <EntranceTestList entranceTestLists={entranceTestLists ?? []} />

@@ -1230,7 +1230,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 )
               }
             })}
-            <div className="shadow-question-footer relative flex h-[48px] items-center justify-between bg-gray-3">
+            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
               <div className="flex h-full items-center">
                 {/* <button className="h-full">
                   <div className="flex items-center gap-3 px-4 3xl:ps-6 3xl:pe-6 ">
@@ -1311,7 +1311,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine shadow-questions-exhibits absolute bottom-full h-fit justify-center bg-gray-3 3xl:w-full">
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },

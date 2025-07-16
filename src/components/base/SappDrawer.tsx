@@ -118,7 +118,7 @@ const SappDrawer = ({
               headerClassName,
             )}
           >
-            <span className="text-heading line-clamp-3 pr-4">{title}</span>
+            <span className="line-clamp-3 pr-4 text-heading">{title}</span>
             <div className="shrink-0 cursor-pointer" onClick={handleOnClose}>
               <CloseIcon />
             </div>
@@ -144,7 +144,7 @@ const SappDrawer = ({
         {footer && (
           <div
             className={clsx(
-              'border-default absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t bg-white',
+              'absolute bottom-0 left-0 right-0 flex h-[66px] w-full items-center justify-end border-t border-default bg-white',
               footerClassName,
             )}
           >

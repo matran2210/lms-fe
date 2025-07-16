@@ -16,7 +16,7 @@ const ErrorRedirectPage = () => {
       <h1 className="text-center font-inter text-3xl font-semibold text-bw-11">
         Oops!
       </h1>
-      <p className="text-gray-9 text-center font-inter text-lg font-normal">
+      <p className="text-center font-inter text-lg font-normal text-gray-9">
         Something went wrong. Please try again.
       </p>
       <SappButton

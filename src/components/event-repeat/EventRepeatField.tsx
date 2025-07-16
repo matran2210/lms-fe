@@ -323,7 +323,7 @@ const EventRepeatField = ({
           disabled={disabled}
         />
         {is_repeat && (
-          <div className="grid-cols-repeat-label mt-2 grid gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
+          <div className="mt-2 grid grid-cols-repeat-label gap-y-6 rounded-lg border border-[#DBDFE9] px-[15px] py-5">
             {is_custom_repeat && (
               <>
                 <BlockLabelText text="Repeat every" required />

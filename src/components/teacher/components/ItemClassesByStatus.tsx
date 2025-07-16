@@ -182,7 +182,7 @@ const ItemClassesByStatus = ({
   return (
     <div
       key={index}
-      className={`item shadow-sidebar flex h-[345px] flex-col bg-white p-6`}
+      className={`item flex h-[345px] flex-col bg-white p-6 shadow-sidebar`}
       data-aos={ANIMATION.DATA_AOS}
       ref={lastElementRef}
     >

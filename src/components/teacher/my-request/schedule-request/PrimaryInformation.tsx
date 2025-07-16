@@ -120,7 +120,7 @@ const PrimaryInformation = ({
               TYPE_TEACHING_REQUEST.TEACHER_SECTION && (
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <span className="text-gray-12 text-sm">Schedule</span>
+                  <span className="text-sm text-gray-12">Schedule</span>
                 </div>
                 <div className="col-span-2">
                   {isLoading ? (

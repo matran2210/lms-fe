@@ -16,6 +16,7 @@ import PopupExtend from './PopupExtend'
 interface EntranceTestProps {
   data: IEntranceTest
   test_id_default?: any | undefined
+  isShowEntranceTestPopup: boolean
 }
 
 enum EAttemptStatus {
@@ -25,7 +26,11 @@ enum EAttemptStatus {
   IN_PROGRESS = 'IN_PROGRESS',
 }
 
-const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
+const EntranceTest = ({
+  data,
+  test_id_default,
+  isShowEntranceTestPopup,
+}: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const [selectedResult, setSelectedResult] = useState<{
     label: string
@@ -236,10 +241,16 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           )}
         </div>
       </div>
-      <PopUpRemindEntrance
-        setOpenFillForm={setOpenFillForm}
-        setOpenTest={setOpen}
-      />
+      {isShowEntranceTestPopup && (
+        <PopUpRemindEntrance
+          setOpenFillForm={setOpenFillForm}
+          setOpenTest={
+            data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+              ? setIsOpenPopupLastAttempt
+              : setOpen
+          }
+        />
+      )}
 
       {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
         <SappModalV3

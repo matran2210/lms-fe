@@ -333,7 +333,7 @@ body *::-webkit-scrollbar-thumb:hover {
 }
 
 .sapp-arrowed-container-corrects {
-  @apply border-success relative flex h-auto w-[48%] items-center justify-start break-words border border-solid bg-bw-6 p-5;
+  @apply relative flex h-auto w-[48%] items-center justify-start break-words border border-solid border-success bg-bw-6 p-5;
 }
 
 .sapp-arrowed-container-corrects:before {
@@ -345,11 +345,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply border-success absolute z-10 border border-r-0 border-t-0 border-solid bg-bw-6;
+  @apply absolute z-10 border border-r-0 border-t-0 border-solid border-success bg-bw-6;
 }
 
 .sapp-notched-container-corrects {
-  @apply border-success relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid bg-bw-6 p-5 ps-8;
+  @apply relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid border-success bg-bw-6 p-5 ps-8;
 }
 
 .sapp-notched-container-corrects:before {
@@ -360,11 +360,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply border-success absolute z-0 border-solid bg-bw-6;
+  @apply absolute z-0 border-solid border-success bg-bw-6;
 }
 
 .sapp-arrowed-container-incorrects {
-  @apply border-error relative flex h-auto w-[48%] items-center justify-start break-words border border-solid bg-bw-6 p-5;
+  @apply relative flex h-auto w-[48%] items-center justify-start break-words border border-solid border-error bg-bw-6 p-5;
 }
 
 .sapp-arrowed-container-incorrects:before {
@@ -376,11 +376,11 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 30px;
   transform: translate(50%, 0) rotate(-135deg);
   // clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply border-error absolute z-10 border border-r-0 border-t-0 border-solid bg-bw-6;
+  @apply absolute z-10 border border-r-0 border-t-0 border-solid border-error bg-bw-6;
 }
 
 .sapp-notched-container-incorrects {
-  @apply border-error relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid bg-bw-6 p-5 ps-8;
+  @apply relative flex h-full flex-1 items-center justify-start break-words border border-l-0 border-solid border-error bg-bw-6 p-5 ps-8;
 }
 
 .sapp-notched-container-incorrects:before {
@@ -392,7 +392,7 @@ body *::-webkit-scrollbar-thumb:hover {
   border: 0;
   transform: translate(-50%, 0) rotate(-135deg);
   clip-path: polygon(0px 0px, 0% 100%, 100% 100%);
-  @apply border-error absolute z-0 border-solid bg-bw-6;
+  @apply absolute z-0 border-solid border-error bg-bw-6;
 }
 
 .answer-area {

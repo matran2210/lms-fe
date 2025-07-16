@@ -64,7 +64,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <div
           key={item.id}
-          className="text-gray-14 max-w-[111px] bg-gray-4 px-2 py-1 text-sm"
+          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
         >
           {item.name}
         </div>
@@ -224,7 +224,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     >
       <div>
         <div className="border border-solid border-gray-2 px-7 py-4">
-          <div className="text-gray-14 flex items-center justify-between border-b pb-4  text-base font-semibold">
+          <div className="flex items-center justify-between border-b pb-4 text-base  font-semibold text-gray-14">
             <div>Primary Information</div>
             <div
               className="hover:cursor-pointer"
@@ -311,7 +311,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
         {!(data?.is_case_study || data?.schedule?.is_holiday) &&
           !isOnlyMidTermOrFinalTest && (
             <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
-              <div className="text-gray-14 flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold">
+              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
                 <div>Course Content</div>
                 <div
                   className="hover:cursor-pointer"

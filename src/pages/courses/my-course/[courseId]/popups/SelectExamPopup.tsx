@@ -132,7 +132,7 @@ const SelectExamPopup = ({
         )}
 
         <div
-          className={`md:mt-15 mt-5 flex ${remainingChanges > 0 ? 'justify-between' : 'justify-end'}`}
+          className={`mt-5 flex md:mt-15 ${remainingChanges > 0 ? 'justify-between' : 'justify-end'}`}
         >
           <ButtonText
             title={remainingChanges > 0 ? 'Skip' : 'Back'}
