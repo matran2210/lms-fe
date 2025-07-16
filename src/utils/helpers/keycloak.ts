@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { fetcher } from '@services/requestV2'
 import { CERTIFICATE } from '@utils/constants'
 import { getMessagingToken } from '@utils/firebase'
-import Keycloak, { KeycloakConfig } from 'keycloak-js'
+import Keycloak from 'keycloak-js'
 import { isNull } from 'lodash'
-import { PageLink } from 'src/constants'
+import { COOKIE_INFO, PageLink } from 'src/constants'
 import { EntranceTestAPI } from 'src/pages/api/entrance-test'
-import { deleteCookie, getCookie, setCookie } from '..'
+import { deleteCookie, getCookie, getSessionIdFromToken, setCookie } from '..'
 
 const handleFirebaseToken = async () => {
   const accessDeviceToken = await AsyncStorage.getItem('firebaseDeviceToken')
@@ -78,9 +78,9 @@ export class AuthenticationManager {
       if (authenticated) {
         const token = this.keyCloak.token
         const refreshToken = this.keyCloak.refreshToken
-
-        setCookie('keycloakToken', token ?? '')
-        setCookie('keycloakRefreshToken', refreshToken ?? '')
+        setCookie(COOKIE_INFO.KEYCLOAK_TOKEN, token ?? '')
+        setCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN, refreshToken ?? '')
+        setCookie(COOKIE_INFO.SESSION_ID, this.keyCloak.sessionId ?? '')
 
         if (!localStorage.getItem('hasLoggedInBefore')) {
           isFirstLogin = true
@@ -127,12 +127,20 @@ export class AuthenticationManager {
   }
 
   async logout() {
-    const res = await UserApi.logout(getCookie('keycloakRefreshToken') ?? '')
-    if (isNull(res?.user_id_init)) {
+    const sessionId = getSessionIdFromToken(
+      getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? '',
+    )
+    const res = await UserApi.logout(
+      sessionId ?? getCookie(COOKIE_INFO.SESSION_ID) ?? '',
+      getCookie(COOKIE_INFO.KEYCLOAK_USER_ID) ?? '',
+    )
+    if (res?.success) {
       localStorage.clear()
-      deleteCookie('keycloakToken')
-      deleteCookie('keycloakRefreshToken')
-      window.location.href = '/'
+      deleteCookie(COOKIE_INFO.KEYCLOAK_TOKEN)
+      deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
+      deleteCookie(COOKIE_INFO.SESSION_ID)
+      deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
+      window.location.reload()
     }
   }
 

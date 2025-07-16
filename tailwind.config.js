@@ -107,6 +107,7 @@ module.exports = {
           15: '#D1D5DB',
           16: '#DADFE5',
           100: '#99A1B70D',
+          200: '#6B7280',
           900: '#181C32',
         },
         green: {
@@ -172,6 +173,9 @@ module.exports = {
         txt: {
           primary: '#1F2937',
           secondary: '#9CA3AF',
+          yellow: {
+            900: '#FFFBF2',
+          },
         },
       },
       borderColor: {

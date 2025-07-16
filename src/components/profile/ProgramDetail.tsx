@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
-import { ISubjectItem } from 'src/redux/types/User/urser'
+import { ISubjectItem, IUser } from 'src/redux/types/User/urser'
 import TabLayout from './TabLayout'
+import { UserApi } from '@pages/api/user'
 import SappButton from '@components/base/button/SappButton'
 
 interface IProps {
@@ -13,35 +14,93 @@ interface IProps {
   onOpenTab?: () => void
 }
 
+interface ISubject {
+  subjects: Array<{
+    id: string
+    created_at: Date
+    updated_at: Date
+    course_category_id: string
+    name: string
+    code: string
+  }>
+  course_category_id: string
+}
+
 const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
-  const [subjects, setSubjects] = useState<ISubjectItem[]>()
+  const [subjects, setSubjects] = useState<ISubject>()
   const { user } = useAppSelector(userReducer)
   const [typeOfProgram, setTypeOfProgram] = useState<string>('')
+  const [userProgram, setUserProgram] = useState<IUser>()
 
-  const { setValue, control, getValues, resetField } = useForm({
+  const { setValue, control, resetField } = useForm({
     mode: 'onSubmit',
   })
 
-  useEffect(() => {
-    const fetchSubjectOfHub = async () => {
-      try {
-        const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
-        setSubjects(res.subjects)
-        setValue('course_category_id', res?.course_category_id ?? '')
-      } catch (err) {}
-    }
+  /**
+   * Hàm fetchSubjectOfHub dùng để lấy danh sách môn học từ API dựa trên loại chương trình (typeProgram).
+   * Sau khi lấy dữ liệu thành công, cập nhật danh sách môn học vào state và thiết lập giá trị cho trường 'course_category_id'.
+   */
+  const fetchSubjectOfHub = async () => {
+    try {
+      // Gọi API để lấy danh sách môn học dựa trên typeProgram
+      const res = await MyProfileAPI.getSubjectOfhubspot(typeProgram)
 
+      // Cập nhật danh sách môn học vào state
+      setSubjects(res)
+
+      // Thiết lập giá trị cho trường 'course_category_id' trong form
+      setValue('course_category_id', res?.course_category_id ?? '')
+    } catch (err) {
+      // Xử lý lỗi nếu có
+    }
+  }
+
+  /**
+   * Lấy thông tin chương trình học của người dùng dựa trên course_category_id.
+   * @returns Thông tin chương trình học phù hợp với course_category_id của môn học.
+   */
+  const programData = userProgram?.user_hubspot_program_infos?.find(
+    (item) => item?.course_category_id === subjects?.course_category_id,
+  )
+
+  /**
+   * useEffect để xử lý khi thông tin người dùng hoặc loại chương trình thay đổi.
+   * - Nếu typeProgram thay đổi và khác với typeOfProgram hiện tại, cập nhật typeOfProgram và gọi hàm fetchSubjectOfHub.
+   * - Thiết lập giá trị cho trường 'hubspot_account_info' trong form.
+   */
+  useEffect(() => {
     if (user) {
       if (typeProgram && typeProgram !== typeOfProgram) {
-        setTypeOfProgram(typeProgram)
-        fetchSubjectOfHub()
+        setTypeOfProgram(typeProgram) // Cập nhật loại chương trình
+        fetchSubjectOfHub() // Lấy danh sách môn học từ API
       }
-      const programData = user?.user_hubspot_program_infos?.find(
-        (item) => item?.course_category?.name === typeProgram,
-      )
+
+      // Thiết lập giá trị cho trường 'hubspot_account_info' trong form
       setValue('hubspot_account_info', programData?.hubspot_account_info ?? '')
     }
   }, [resetField, setValue, typeOfProgram, typeProgram, user])
+
+  /**
+   * Hàm getUserProgram dùng để lấy thông tin chương trình học của người dùng từ API.
+   * @returns Cập nhật thông tin chương trình học vào state userProgram.
+   */
+  async function getUserProgram() {
+    try {
+      // Gọi API để lấy thông tin chương trình học dựa trên course_category_id
+      const res = await UserApi.getUserPrograms(subjects?.course_category_id)
+      setUserProgram(res) // Cập nhật thông tin chương trình học vào state
+    } catch (err) {}
+  }
+
+  /**
+   * useEffect để gọi hàm getUserProgram khi course_category_id của môn học thay đổi.
+   * - Nếu course_category_id tồn tại, gọi hàm getUserProgram để lấy thông tin chương trình học.
+   */
+  useEffect(() => {
+    if (subjects?.course_category_id) {
+      getUserProgram() // Lấy thông tin chương trình học
+    }
+  }, [subjects?.course_category_id])
 
   return (
     <TabLayout
@@ -66,16 +125,25 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
             ACCOUNT ID:
           </div>
           <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
-            {getValues('hubspot_account_info')}
+            {programData?.hubspot_account_info}
           </div>
         </div>
       </div>
       <div className="m-6">
-        {subjects?.map((subject: ISubjectItem, index: number) => {
-          const courseTabData = user.course_tab_groups?.[
+        {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
+          const courseTabData = userProgram?.course_tab_groups?.[
             typeProgram
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,
+          )
+
+          setValue(
+            `user_hubspot_examination_subjects.[${index}].result`,
+            courseTabData?.result ?? '',
+          )
+          setValue(
+            `user_hubspot_examination_subjects.[${index}].examination_subject_id`,
+            courseTabData?.examination_subject?.examination?.name ?? '',
           )
 
           return (

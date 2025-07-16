@@ -445,13 +445,13 @@ export const REPEAT_ON_MAPPED = [
 ] as const
 
 export const REPEAT_ON_MAPPED_PAYLOAD = {
-  T2: 1,
-  T3: 2,
-  T4: 3,
-  T5: 4,
-  T6: 5,
-  T7: 6,
-  CN: 7,
+  T2: 0,
+  T3: 1,
+  T4: 2,
+  T5: 3,
+  T6: 4,
+  T7: 5,
+  CN: 6,
 } as const
 
 export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'
@@ -546,6 +546,13 @@ export enum DATE_FORMAT {
   DATE_TIME = 'HH:mm | DD/MM/YYYY',
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
+}
+
+export const COOKIE_INFO = {
+  SESSION_ID: 'sessionId',
+  KEYCLOAK_USER_ID: 'keycloakUserId',
+  KEYCLOAK_TOKEN: 'keycloakToken',
+  KEYCLOAK_REFRESH_TOKEN: 'keycloakRefreshToken',
 }
 
 export const LABEL_MAX_LENGTH = 12
