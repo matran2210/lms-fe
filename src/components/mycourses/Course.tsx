@@ -201,7 +201,9 @@ const Course = ({
       }
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
-        router.push(`/courses/my-course/${foundation_class_id}`)
+        router.push(
+          `/courses/my-course/${foundation_class_id || classInstance?.id}`,
+        )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
           toast.success('Active thành công!')
