@@ -1,10 +1,12 @@
+import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 
 interface Props {
   scrollContainerRef?: React.RefObject<HTMLElement>
+  className?: string
 }
 
-const BackToTop = ({ scrollContainerRef }: Props) => {
+const BackToTop = ({ scrollContainerRef, className }: Props) => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -33,9 +35,13 @@ const BackToTop = ({ scrollContainerRef }: Props) => {
 
   return (
     <div
-      className={`fixed bottom-[160px] right-[27px] z-50 ${
-        isVisible ? 'block' : 'hidden'
-      } cursor-pointer`}
+      className={clsx(
+        `fixed bottom-[160px] right-[27px] z-50 cursor-pointer`,
+        className,
+        {
+          hidden: !isVisible,
+        },
+      )}
       onClick={scrollToTop}
     >
       <div className="flex items-center justify-center rounded-full bg-white p-2 shadow-card">

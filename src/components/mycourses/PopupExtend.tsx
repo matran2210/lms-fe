@@ -75,7 +75,7 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
       showFooter
       okButtonCaption={okButtonCaption}
       fullWidthBtn
-      buttonSize="extra"
+      buttonSize="medium"
       cancelButtonCaption={cancelButtonCaption}
       isUnderLine
     />

@@ -136,14 +136,18 @@ const ResultCourse = ({
     fetchResult(1, 10)
   }, [])
 
+  const isAttempt = resultList?.data?.length <= 1
+
   return (
     <div className="flex h-8 items-center gap-2">
-      <div className={`forcus-group:text-primary text-gray-800`}>
-        Attempt 12211121212:
+      <div
+        className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
+      >
+        Result of Attemps:
       </div>
       <div>
-        {resultList?.data?.length <= 1 ? (
-          <div className="text-base font-normal">1</div>
+        {isAttempt ? (
+          <div className="text-gray">1</div>
         ) : (
           <HookFormSelect
             classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"

@@ -102,7 +102,7 @@ const MultiChoiceQuestion = ({
       >
         <EditorReader
           text_editor_content={data?.question_content}
-          className="sapp-questions mb-6"
+          className="sapp-questions sapp-editor-reader mb-6"
           highlighted={highlighted}
         />
         <WarningSection isShowWarning={isShowWarning} className="mb-4" />

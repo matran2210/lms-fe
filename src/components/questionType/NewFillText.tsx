@@ -225,7 +225,7 @@ const NewFilltext = forwardRef(
             }
           }}
           extenalRef={refEditor}
-          className="sapp-questions"
+          className="sapp-questions sapp-editor-reader"
           text_editor_content={
             questionContent?.documentElement?.querySelector('body')
               ?.innerHTML || ''

@@ -9,6 +9,7 @@ import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import CardCourse from '@components/common/CardCourse/CardCourse'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const Part = ({
   course,
@@ -26,7 +27,7 @@ const Part = ({
   lastElementRef: (node: HTMLDivElement) => void
 }) => {
   const router = useRouter()
-
+  const { isMobileView } = useTailwindBreakpoint()
   const percentProgress = round(
     (course?.learning_progress?.total_course_sections_completed /
       course?.learning_progress?.total_course_sections) *
@@ -114,6 +115,14 @@ const Part = ({
     }
   }
 
+  const transformAllFontSize = (html: string = '') => {
+    if (!html) return ''
+    return html.replace(
+      /font-size\s*:\s*[^;"]+/gi,
+      isMobileView ? 'font-size: 14px' : 'font-size: 16px',
+    )
+  }
+
   return (
     <CardCourse
       hideBadge
@@ -129,17 +138,19 @@ const Part = ({
         <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[72px]">
           <Tooltip
             title={
-              <p
+              <div
                 dangerouslySetInnerHTML={{
-                  __html: course?.description,
+                  __html: transformAllFontSize(course?.description),
                 }}
               />
             }
             showTooltip={(course?.description as string)?.length > 200}
           >
-            <p
+            <div
               dangerouslySetInnerHTML={{
-                __html: truncateHTML(25, course?.description) ?? '',
+                __html:
+                  truncateHTML(25, transformAllFontSize(course?.description)) ??
+                  '',
               }}
               className="text-sm font-normal text-gray-800 md:text-base"
             />

@@ -156,13 +156,19 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-lg text-gray-800;
+    @apply m-0 break-words text-gray-800;
   }
   span {
-    @apply bg-transparent text-lg text-gray-800;
+    @apply bg-transparent text-gray-800;
   }
   table {
     @apply max-w-fit;
+  }
+  &.sapp-editor-reader {
+    p,
+    span {
+      @apply text-lg;
+    }
   }
 }
 .sapp-explanation {

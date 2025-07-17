@@ -122,8 +122,11 @@ const MatchQuiz = forwardRef(
         const clickedNode = nodes.find((n) => n.id === nodeId)
         if (!clickedNode) return
 
-        // Nếu node đã được chọn thì bỏ qua
-        if (selectedNodes.includes(nodeId)) return
+        // Nếu node đã được chọn thì bỏ chọn (toggle)
+        if (selectedNodes.includes(nodeId)) {
+          setSelectedNodes(selectedNodes.filter((id) => id !== nodeId))
+          return
+        }
 
         // Nếu chưa chọn node nào hoặc mới chọn 1 node
         if (selectedNodes.length === 0) {
@@ -253,12 +256,16 @@ const MatchQuiz = forwardRef(
         custom: (props: any) => {
           const { id } = props
           const isSelected = selectedNodes.includes(id)
+          // Kiểm tra nếu là answer và đã được nối (có edge nối vào)
+          const isAnswer = props.data?.role === 'answer'
+          const isConnected = isAnswer && edges.some((e) => e.target === id)
           return (
             <CustomNode
               {...props}
               data={{
                 ...props.data,
                 isSelected,
+                isConnected,
                 onClick: (e: React.MouseEvent<HTMLDivElement>) => {
                   e.stopPropagation()
                   if (!corrects) handleNodeClick(id)
@@ -268,7 +275,7 @@ const MatchQuiz = forwardRef(
           )
         },
       }),
-      [selectedNodes, handleNodeClick, corrects],
+      [selectedNodes, handleNodeClick, corrects, edges],
     )
 
     const edgeTypes = {
@@ -490,16 +497,41 @@ const MatchQuiz = forwardRef(
       }
     }, [edges, nodes])
 
+    const correctNodeTypes = useMemo(
+      () => ({
+        custom: (props: any) => {
+          const { id } = props
+          // Kiểm tra nếu là answer và đã được nối (có edge nối vào)
+          const isAnswer = props.data?.role === 'answer'
+          const isConnected =
+            isAnswer && correctEdges.some((e) => e.target === id)
+          return (
+            <CustomNode
+              {...props}
+              data={{
+                ...props.data,
+                isConnected,
+              }}
+            />
+          )
+        },
+      }),
+      [correctEdges],
+    )
+
     return (
-      <div className="w-fit" key={key} ref={extenalRef}>
+      <div style={{ width: CONTAINER_WIDTH + 'px' }} key={key} ref={extenalRef}>
         <div
           id="hightlight_area"
+          className={clsx(
+            `max-w-[${CONTAINER_WIDTH}px]`,
+            'whitespace-normal break-words',
+          )}
           onMouseUp={(e: any) => {
             if (
               e?.target?.tagName?.charAt(0) !== 'm' &&
               e?.target?.firstChild?.tagName !== 'math'
             ) {
-              // if(e){
               if (allowHighLight) {
                 runHighlight(
                   handleSaveHighLight,
@@ -566,7 +598,7 @@ const MatchQuiz = forwardRef(
               </>
             )}
           <EditorReader
-            className="sapp-questions !mb-[32px]"
+            className="sapp-questions sapp-editor-reader !mb-[32px]"
             text_editor_content={data?.question_content}
             highlighted={highlighted}
           />
@@ -578,7 +610,6 @@ const MatchQuiz = forwardRef(
             style={{
               width: CONTAINER_WIDTH + 'px',
               height: `${(nodes?.length / 2 || 1) * 100}px`,
-              maxWidth: CONTAINER_WIDTH + 'px',
             }}
           >
             <ReactFlowProvider>
@@ -593,27 +624,31 @@ const MatchQuiz = forwardRef(
             </ReactFlowProvider>
           </div>
           {!!corrects && !!correctNodes?.length && (
-            <div className={clsx(correctAnswerClass)}>
-              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
-              <div
-                className={`relative mt-4 w-full min-w-[700px]`}
-                ref={flowRef}
-                style={{
-                  height: `${(correctNodes?.length / 2 || 1) * 100}px`,
-                }}
-              >
-                <ReactFlowProvider>
-                  <CustomFlow
-                    key={`correct-${key}`}
-                    nodes={correctNodes}
-                    edges={correctEdges}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    onConnect={onConnect}
-                  />
-                </ReactFlowProvider>
+            <>
+              <Divider className="my-8" />
+              <div className={clsx(correctAnswerClass)}>
+                <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
+                <div
+                  className={`relative mt-4 w-full min-w-[${CONTAINER_WIDTH}]`}
+                  ref={flowRef}
+                  style={{
+                    height: `${(correctNodes?.length / 2 || 1) * 100}px`,
+                    width: CONTAINER_WIDTH + 'px',
+                  }}
+                >
+                  <ReactFlowProvider>
+                    <CustomFlow
+                      key={`correct-${key}`}
+                      nodes={correctNodes}
+                      edges={correctEdges}
+                      nodeTypes={correctNodeTypes}
+                      edgeTypes={edgeTypes}
+                      onConnect={onConnect}
+                    />
+                  </ReactFlowProvider>
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
 
