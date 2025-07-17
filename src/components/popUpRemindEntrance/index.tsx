@@ -24,7 +24,7 @@ const PopUpRemindEntrance = ({
   }
 
   const onOk = () => {
-    count === 1 ? setOpenFillForm(true) : dispatch(closeShowRemind())
+    count === 1 ? setOpenTest(true) : dispatch(closeShowRemind())
     localStorage.setItem('enstranceTest', 'false')
   }
 
