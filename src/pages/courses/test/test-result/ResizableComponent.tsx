@@ -8,7 +8,7 @@ interface IProp {
   position?: any
   parentContentRef: MutableRefObject<HTMLElement | any>
 }
-export const ResizableComponent = ({
+const ResizableComponent = ({
   children,
   getResize,
   index,
@@ -51,3 +51,5 @@ export const ResizableComponent = ({
     </div>
   )
 }
+
+export default ResizableComponent
