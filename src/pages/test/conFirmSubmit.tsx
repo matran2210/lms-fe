@@ -44,16 +44,16 @@ const ConFirmSubmit = ({
       showFooter={false}
     >
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
-        <ConfirmIcon />
+        <ConfirmIcon className="md:w-22 md:h-22 h-12 w-12" />
       </div>
-      <div className="flex justify-center pb-8 pt-10 text-4xl font-semibold text-gray-800">
+      <div className="flex justify-center pb-4 pt-6 text-2xl font-semibold text-gray-800 md:pb-8 md:pt-10 md:text-3xl">
         Confirm Submission
       </div>
-      <div className="text-center text-base font-normal text-gray-800">
+      <div className="text-center text-sm font-normal text-gray-800 md:text-base">
         {message ??
           'Are you sure you are done here and ready to view the report?'}
       </div>
-      <div className="relative pt-5 md:pt-10">
+      <div className="relative pt-6 md:pt-10">
         <div className="flex flex-col gap-3">
           <ButtonPrimary
             title={'Submit'}

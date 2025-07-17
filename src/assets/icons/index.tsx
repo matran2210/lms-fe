@@ -592,7 +592,7 @@ export const AlertIcon = () => {
     </svg>
   )
 }
-export const AlertTriagle = () => {
+export const AlertTriagle = ({ className }: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -600,6 +600,7 @@ export const AlertTriagle = () => {
       height="88"
       viewBox="0 0 88 88"
       fill="none"
+      className={className}
     >
       <path
         d="M44.0025 26.5833C45.5213 26.5833 46.7525 27.8146 46.7525 29.3333V47.6667C46.7525 49.1854 45.5213 50.4167 44.0025 50.4167C42.4838 50.4167 41.2525 49.1854 41.2525 47.6667V29.3333C41.2525 27.8146 42.4838 26.5833 44.0025 26.5833Z"
@@ -654,7 +655,7 @@ export const ActiveIcon = () => {
     </svg>
   )
 }
-export const ConfirmIcon = () => {
+export const ConfirmIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       width="88"
@@ -662,6 +663,7 @@ export const ConfirmIcon = () => {
       viewBox="0 0 88 88"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"
