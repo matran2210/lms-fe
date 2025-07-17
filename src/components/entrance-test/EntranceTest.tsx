@@ -33,12 +33,14 @@ interface EntranceTestProps {
   }
   test_id_default?: any | undefined
   onRefetch: () => void
+  isShowEntranceTestPopup: boolean
 }
 
 const EntranceTest = ({
   data,
   test_id_default,
   onRefetch,
+  isShowEntranceTestPopup,
 }: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const router = useRouter()
@@ -327,10 +329,16 @@ const EntranceTest = ({
           </div>
         </div>
       </CardCourse>
-      <PopUpRemindEntrance
-        setOpenFillForm={setOpenFillForm}
-        setOpenTest={setOpen}
-      />
+      {isShowEntranceTestPopup && (
+        <PopUpRemindEntrance
+          setOpenFillForm={setOpenFillForm}
+          setOpenTest={
+            data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+              ? setIsOpenPopupLastAttempt
+              : setOpen
+          }
+        />
+      )}
 
       {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
         <EntrancePopupContinue

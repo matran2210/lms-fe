@@ -31,16 +31,21 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       // data-aos={ANIMATION.DATA_AOS}
     >
       {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e: IEntranceTest, index) => (
-          <EntranceTest
-            key={index}
-            data={e}
-            test_id_default={entranceTestLists.find(
-              (entrance) => entrance.is_attempt === false,
-            )}
-            onRefetch={onRefetch}
-          />
-        ))
+        entranceTestLists?.map((e: IEntranceTest, index) => {
+          const isShowEntranceTestPopup =
+            firstIndexToShowEntrancePopup === index
+          return (
+            <EntranceTest
+              key={index}
+              data={e}
+              test_id_default={entranceTestLists.find(
+                (entrance) => entrance.is_attempt === false,
+              )}
+              onRefetch={onRefetch}
+              isShowEntranceTestPopup={isShowEntranceTestPopup}
+            />
+          )
+        })
       ) : (
         <NoData />
       )}

@@ -76,7 +76,7 @@ const EntranceTest = () => {
           ) : (
             <>
               <div
-                className="mb-8 flex overflow-hidden rounded-xl bg-white"
+                className="mb-8 flex overflow-hidden rounded-xl bg-white shadow-sidebar"
                 data-aos={ANIMATION.DATA_AOS}
               >
                 <Heading

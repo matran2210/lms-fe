@@ -1,5 +1,8 @@
+import RemainingTimeIcon from '@assets/icons/RemainingTimeIcon'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { TimeOutIcon } from '@components/icons'
+import { TEST_TYPE } from '@utils/constants'
+import clsx from 'clsx'
 
 interface IProps {
   open: boolean
@@ -39,9 +42,29 @@ const TestTimeOutModal = ({
         result will <strong>be emailed to you on June 28, 2025.</strong> Please
         check your email regularly to receive the earliest update.
       </span>
+    ) : type === 'entrance' ? (
+      <div className="text-center font-normal text-gray-800">
+        <div className="text-sm md:text-base">
+          <div className="mb-2">
+            <div>
+              The test has timed out and has been submitted automatically.
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-center gap-4">
+          <div className="flex items-center gap-2 text-base font-semibold">
+            <RemainingTimeIcon />
+            Your remaining time:
+          </div>
+          <div className={clsx(`text-base font-bold text-error`)}>
+            <>{'00:00:00'}</>
+          </div>
+        </div>
+      </div>
     ) : (
-      'You are running out of time to do your test'
+      'You are running out of time to do your test.'
     )
+
   return (
     <SappModalV3
       open={open}
@@ -53,9 +76,10 @@ const TestTimeOutModal = ({
       fullWidthBtn={true}
       buttonSize="medium"
       icon={<TimeOutIcon />}
-      header="Time Out"
+      header={type === 'entrance' ? TEST_TYPE.ENTRANCE_TEST : 'Time Out'}
       content={content}
       isMaskClosable={false}
+      isClosable={type === 'entrance'}
     />
   )
 }
