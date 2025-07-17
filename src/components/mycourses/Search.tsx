@@ -1,83 +1,56 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import React, { useEffect, Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
 import { CourseSearchIcon } from '@components/icons'
-import { buildQueryString } from '@utils/index'
-import { Controller, useForm } from 'react-hook-form'
-import { debounce, isEmpty } from 'lodash'
+import { Controller, useFormContext } from 'react-hook-form'
+import { PageLink } from 'src/constants'
 
 interface IProps {
   placeholder: string
   formStyle: string
-  setPage?: Dispatch<SetStateAction<number>>
   disabled?: boolean
+  inputRef?: React.MutableRefObject<HTMLInputElement | null>
+  setIsFocused?: Dispatch<SetStateAction<boolean>>
+  isFocused?: boolean
+  handleSubmit: () => void
+  isCoursePage?: boolean
 }
 
-const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
+const SearchForm = ({
+  placeholder,
+  formStyle,
+  disabled,
+  inputRef,
+  setIsFocused,
+  isFocused,
+  handleSubmit,
+  isCoursePage,
+}: IProps) => {
   const router = useRouter()
-  const { control, watch, setValue } = useForm()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
-  const queryString = buildQueryString({
-    status: router.query.status || '',
-    type: router.query.type ?? '',
-  })
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
+  const { control, watch, setValue } = useFormContext()
 
   useEffect(() => {
-    let timerId: any
-
-    // Use useEffect to set up a timer to make the API call after 3 seconds
-    if (!isFirstRender && watch('name')?.length >= 3) {
-      timerId = setTimeout(() => {
-        !isSubmitting &&
-          router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
-        setPage && setPage(9)
-      }, 2000)
+    if (!isFocused && watch('name')?.trim()?.length) {
+      handleSubmit()
     }
-
-    // Clean up the timer when the component unmounts or when the input value changes
-    return () => {
-      clearTimeout(timerId)
+    if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
+      router.push(PageLink.COURSES)
     }
-  }, [watch('name'), isSubmitting])
+  }, [isFocused, watch('name'), isCoursePage])
 
   useEffect(() => {
-    setIsFirstRender(false)
-  }, [setIsFirstRender])
-
-  const handleReset = debounce((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    setIsFirstRender(false)
-    setIsSubmitting(false)
-    // Check if 'name' is empty and perform search immediately
-    if (!watch('name')) {
-      router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
-      setPage && setPage(9)
-    }
-  }, 500)
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    setIsSubmitting(true)
-    setIsFirstRender(false)
-    // Redirect to the search results page with the query as a query parameter
-    router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
-    setPage && setPage(9)
-  }
-
-  /**
-   * @description set lại value của name khi router query rỗng
-   */
-  useEffect(() => {
-    if (isEmpty(router?.query?.name)) {
-      setValue('name', '')
+    if (router?.query?.name) {
+      setValue('name', router?.query?.name)
     }
   }, [router?.query?.name, setValue])
 
   return (
-    <form className={formStyle} onSubmit={handleSubmit} onChange={handleReset}>
+    <form
+      className={formStyle}
+      onSubmit={(e) => {
+        e.preventDefault()
+        handleSubmit()
+      }}
+    >
       <button type="submit" className="flex">
         <CourseSearchIcon />
       </button>
@@ -89,8 +62,19 @@ const SearchForm = ({ placeholder, formStyle, setPage, disabled }: IProps) => {
           <input
             {...field}
             type="text"
+            ref={(el) => {
+              field.ref(el) // ← để react-hook-form hoạt động
+              if (inputRef) inputRef.current = el
+            }}
+            disabled={disabled}
             placeholder={placeholder}
             className="h-5 w-full border-0 text-sm font-normal placeholder:text-gray-400 focus:border-0 focus:outline-0 focus:ring-0 md:h-6 md:px-4 md:text-base"
+            onFocus={() => {
+              setIsFocused?.(true)
+            }}
+            onBlur={() => {
+              setIsFocused?.(false)
+            }}
           />
         )}
       />
