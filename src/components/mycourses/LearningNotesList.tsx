@@ -22,9 +22,10 @@ import { getTypeName } from 'src/type'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
-import { resetNotesList } from 'src/redux/slice/Course/NotesList'
+import { resetNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
 import { isEmpty } from 'lodash'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -248,6 +249,15 @@ const LearningNotesList = () => {
       toast.success('Xóa thành công!')
     } catch (error) {}
   }
+  const handleEditNote = (id: string, description: string, index: number) => {
+    const note = {
+      uuid: uuidv4(),
+      id: id,
+      name: 'Note',
+      description: description,
+    }
+    dispatch(pushNotes(note))
+  }
 
   const handleOpenNote = (
     note: ICourseSectionNoteItem,
@@ -325,109 +335,114 @@ const LearningNotesList = () => {
             <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
               {!isEmpty(notesListData?.notes) ? (
                 <>
-                  {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
-                    const isExpanded = expandedNotes.includes(note?.id)
-                    const isEdit = activityId === note?.course_section_id
-                    const handleEdit = () => {
-                      if (
-                        !getNotesData.some((item) => item.id.includes(note?.id))
-                      ) {
-                        handleOpenNote(note, false)
-
+                  {notesListData?.notes?.map(
+                    (note: ICourseSectionNoteItem, index) => {
+                      const isExpanded = expandedNotes.includes(note?.id)
+                      const isEdit = activityId === note?.course_section_id
+                      const handleEdit = () => {
+                        if (
+                          !getNotesData.some((item) =>
+                            item.id.includes(note?.id),
+                          )
+                        ) {
+                          handleOpenNote(note, false)
+                          handleEditNote(note?.id, note?.description, index)
+                          onClose()
+                        }
+                      }
+                      const handleView = async () => {
+                        await router.push({
+                          pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                          query: {
+                            note_id: note?.id,
+                          },
+                        })
+                        handleOpenNote(note, true)
+                        handleEditNote(note?.id, note?.description, index)
                         onClose()
                       }
-                    }
-                    const handleView = async () => {
-                      await router.push({
-                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                        query: {
-                          note_id: note?.id,
+
+                      const listAction = [
+                        ...(isEdit
+                          ? [
+                              {
+                                icon: <PencilV2Icon className="h-5 w-5" />,
+                                nameAction: 'Edit',
+                                action: handleEdit,
+                              },
+                            ]
+                          : []),
+                        {
+                          icon: <DeleteIcon />,
+                          nameAction: 'Delete',
+                          action: () => handleDelete(note?.id),
                         },
-                      })
-                      handleOpenNote(note, true)
-                      onClose()
-                    }
+                      ]
 
-                    const listAction = [
-                      ...(isEdit
-                        ? [
-                            {
-                              icon: <PencilV2Icon className="h-5 w-5" />,
-                              nameAction: 'Edit',
-                              action: handleEdit,
-                            },
-                          ]
-                        : []),
-                      {
-                        icon: <DeleteIcon />,
-                        nameAction: 'Delete',
-                        action: () => handleDelete(note?.id),
-                      },
-                    ]
-
-                    return (
-                      <div
-                        className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
-                        key={note?.id}
-                        onClick={handleView}
-                      >
-                        <div className="flex justify-between">
-                          <div className="text-sm font-semibold text-gray-800 md:text-base">
-                            {note?.name}
+                      return (
+                        <div
+                          className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
+                          key={note?.id}
+                          onClick={handleView}
+                        >
+                          <div className="flex justify-between">
+                            <div className="text-sm font-semibold text-gray-800 md:text-base">
+                              {note?.name}
+                            </div>
+                            <div onClick={(e) => e.stopPropagation()}>
+                              <ActionCellV2
+                                icon={<EllipsisIconV2 />}
+                                listAction={listAction}
+                              />
+                            </div>
                           </div>
-                          <div onClick={(e) => e.stopPropagation()}>
-                            <ActionCellV2
-                              icon={<EllipsisIconV2 />}
-                              listAction={listAction}
+                          <div
+                            className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
+                            onClick={() => onClose()}
+                          >
+                            <SappBreadcrumbNotLink
+                              paths={[...note?.course_section_path].reverse()}
                             />
                           </div>
-                        </div>
-                        <div
-                          className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
-                          onClick={() => onClose()}
-                        >
-                          <SappBreadcrumbNotLink
-                            paths={[...note?.course_section_path].reverse()}
-                          />
-                        </div>
-                        <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
-                          <span
-                            className={`whitespace-pre-wrap break-all ${
-                              isExpanded ? '' : 'line-clamp-3'
-                            }`}
-                          >
-                            {note?.description}
-                          </span>
-                          {!isExpanded && note?.description?.length > 230 ? (
-                            <button
-                              className="block text-sm font-normal text-gray-400 md:text-base"
-                              onClick={() => toggleExpand(note?.id)}
+                          <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
+                            <span
+                              className={`whitespace-pre-wrap break-all ${
+                                isExpanded ? '' : 'line-clamp-3'
+                              }`}
                             >
-                              Show more
-                            </button>
-                          ) : (
-                            <>
-                              {note?.description?.length > 230 ? (
-                                <button
-                                  className="block text-sm font-normal text-[#A1A1A1] md:text-base"
-                                  onClick={() => toggleExpand(note?.id)}
-                                >
-                                  Show less
-                                </button>
-                              ) : (
-                                <></>
-                              )}
-                            </>
-                          )}
-                        </div>
-                        <div className="mt-2 flex md:mt-4">
-                          <div className="text-sm font-normal text-gray-400">
-                            {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                              {note?.description}
+                            </span>
+                            {!isExpanded && note?.description?.length > 230 ? (
+                              <button
+                                className="block text-sm font-normal text-gray-400 md:text-base"
+                                onClick={() => toggleExpand(note?.id)}
+                              >
+                                Show more
+                              </button>
+                            ) : (
+                              <>
+                                {note?.description?.length > 230 ? (
+                                  <button
+                                    className="block text-sm font-normal text-[#A1A1A1] md:text-base"
+                                    onClick={() => toggleExpand(note?.id)}
+                                  >
+                                    Show less
+                                  </button>
+                                ) : (
+                                  <></>
+                                )}
+                              </>
+                            )}
+                          </div>
+                          <div className="mt-2 flex md:mt-4">
+                            <div className="text-sm font-normal text-gray-400">
+                              {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    },
+                  )}
                 </>
               ) : (
                 <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
