@@ -82,6 +82,14 @@ const ResultCourse = ({
     data: [],
   })
 
+  const handleNextPage = () => {
+    const pageIndex = resultList.metadata.page_index
+    const totalPage = resultList.metadata.total_pages
+    if (pageIndex < totalPage) {
+      fetchResult(pageIndex + 1, 10)
+    }
+  }
+
   const fetchResult = async (pageIndex: number = 1, pageSize: number = 10) => {
     if (!class_user_id || !coursePart?.quiz?.id) return
 
@@ -149,6 +157,15 @@ const ResultCourse = ({
             classNames={{
               root: 'select-result-attempt',
               popup: { root: 'select-result-attempt-option' },
+            }}
+            onPopupScroll={(e) => {
+              const target = e.target as HTMLDivElement
+              if (
+                target.scrollTop + target.offsetHeight >=
+                target.scrollHeight
+              ) {
+                handleNextPage()
+              }
             }}
             variant="borderless"
             value={selectedResult}

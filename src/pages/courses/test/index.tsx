@@ -701,6 +701,15 @@ const TestModal = ({
                               ratio_score: item.ratio_score,
                               number_of_attempt: 3 - index,
                             }))}
+                            onPopupScroll={(e) => {
+                              const target = e.target as HTMLDivElement
+                              if (
+                                target.scrollTop + target.offsetHeight >=
+                                target.scrollHeight
+                              ) {
+                                handleNextPage()
+                              }
+                            }}
                             suffixIcon={<ArrowDownIcon />}
                           />
                         )}
