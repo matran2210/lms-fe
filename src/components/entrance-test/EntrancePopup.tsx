@@ -60,7 +60,7 @@ const EntrancePopup: FC<EntrancePopupProps> = ({
         handleCancel={handleOnClick}
         onOk={() => {
           router.push({
-            pathname: `/test/${count === 1 ? entranceTest?.id : data?.id}`,
+            pathname: `/test/${data?.id}`,
             query: {
               type: 'entrance',
             },
