@@ -1,10 +1,8 @@
-import SappButton from '@components/base/button/SappButton'
-import HookFormSelect from '@components/base/select/HookFormSelect'
-import router from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
+import { Select } from 'antd'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 interface IQuizAttempt {
   attempt?: {
@@ -74,7 +72,6 @@ const ResultCourse = ({
   setSelectedResult,
   setOpenReport,
 }: IProps) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false)
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
       page_index: 1,
@@ -149,15 +146,7 @@ const ResultCourse = ({
         {isAttempt ? (
           <div className="text-gray">1</div>
         ) : (
-          <HookFormSelect
-            classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-            placeholder=""
-            className="right-top text-base"
-            value={selectedResult}
-            onChange={(selectedOption) => {
-              setSelectedResult(selectedOption)
-              setIsFocus(false)
-            }}
+          <Select
             options={resultList.data.map((item) => ({
               value: item.id,
               label: item.name,
@@ -165,25 +154,25 @@ const ResultCourse = ({
               ratio_score: item.ratio_score,
               score: item.score,
             }))}
-            onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
-              const { target } = e
+            classNames={{
+              root: 'select-result-attempt',
+              popup: { root: 'select-result-attempt-option' },
+            }}
+            onPopupScroll={(e) => {
+              const target = e.target as HTMLDivElement
               if (
-                (target as HTMLDivElement).scrollTop +
-                  (target as HTMLDivElement).offsetHeight ===
-                (target as HTMLDivElement).scrollHeight
+                target.scrollTop + target.offsetHeight >=
+                target.scrollHeight
               ) {
                 handleNextPage()
               }
             }}
-            isResultSelect
-            maxMenuHeight={130}
-            onFocus={(e) => {
-              setIsFocus(true)
+            variant="borderless"
+            value={selectedResult}
+            onChange={(selectedOption) => {
+              setSelectedResult(selectedOption)
             }}
-            onBlur={(e) => {
-              setIsFocus(false)
-            }}
-            isSearchable={false}
+            suffixIcon={<ArrowDownIcon />}
           />
         )}
       </div>
