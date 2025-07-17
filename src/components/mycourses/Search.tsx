@@ -1,5 +1,5 @@
 import React, { useEffect, Dispatch, SetStateAction } from 'react'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import { CourseSearchIcon } from '@components/icons'
 import { Controller, useFormContext } from 'react-hook-form'
 import { PageLink } from 'src/constants'
@@ -25,7 +25,7 @@ const SearchForm = ({
   handleSubmit,
   isCoursePage,
 }: IProps) => {
-  const router = useRouter()
+  const { query, push } = useRouter()
   const { control, watch, setValue } = useFormContext()
 
   useEffect(() => {
@@ -33,15 +33,13 @@ const SearchForm = ({
       handleSubmit()
     }
     if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
-      router.push(PageLink.COURSES)
+      push(PageLink.COURSES)
     }
   }, [isFocused, watch('name'), isCoursePage])
 
   useEffect(() => {
-    if (router?.query?.name) {
-      setValue('name', router?.query?.name)
-    }
-  }, [router?.query?.name, setValue])
+    setValue('name', query?.name ?? '')
+  }, [query?.name])
 
   return (
     <form
@@ -68,7 +66,8 @@ const SearchForm = ({
             }}
             disabled={disabled}
             placeholder={placeholder}
-            className="h-5 w-full border-0 text-sm font-normal placeholder:text-gray-400 focus:border-0 focus:outline-0 focus:ring-0 md:h-6 md:px-4 md:text-base"
+            className="h-5 w-full border-0 text-sm font-normal placeholder:text-gray-400 
+            focus:border-0 focus:outline-0 focus:ring-0 md:h-6 md:px-4 md:text-base"
             onFocus={() => {
               setIsFocused?.(true)
             }}

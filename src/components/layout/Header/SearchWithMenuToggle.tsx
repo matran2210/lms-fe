@@ -38,7 +38,7 @@ const SearchWithMenuToggle = ({
     isActive: guideIsActive,
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer)
-  const { query, pathname, push, replace } = useRouter()
+  const { query, push } = useRouter()
   const methods = useForm<{ name: string }>({
     defaultValues: {
       name: '',
@@ -81,8 +81,6 @@ const SearchWithMenuToggle = ({
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
-  const formStyle =
-    'flex w-full items-center justify-between rounded-lg border border-transparent bg-white px-2 py-3 shadow-small focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4'
 
   const renderIcon = ({ listIcon }: { listIcon: IListIcon[] }) => {
     return (
@@ -106,6 +104,7 @@ const SearchWithMenuToggle = ({
       </div>
     )
   }
+
   const ActionIcon = () => {
     return (
       <>
@@ -154,6 +153,7 @@ const SearchWithMenuToggle = ({
       </>
     )
   }
+
   return (
     <>
       <FormProvider {...methods}>
@@ -171,7 +171,10 @@ const SearchWithMenuToggle = ({
               <HamburgerMenuLargeIcon />
             </div>
           )}
-          <div className={formStyle}>
+          <div
+            className="flex w-full items-center justify-between rounded-lg border border-transparent bg-white px-2 py-3 shadow-small
+           focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4"
+          >
             <SearchForm
               placeholder={MY_COURSES.placeholderSearchV2}
               formStyle="w-full flex items-center"
