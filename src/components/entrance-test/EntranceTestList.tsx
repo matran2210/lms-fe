@@ -20,6 +20,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       (entrance.attempt_times < entrance.limit_count &&
         entrance.attempt_status === EAttemptStatus.IN_PROGRESS),
   )
+
   return (
     <div
       className={`${
