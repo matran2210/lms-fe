@@ -5,9 +5,15 @@ interface DroppableSlotProps {
   id: string
   value: string
   index: number
+  disabled?: boolean
 }
 
-const DroppableSlot: React.FC<DroppableSlotProps> = ({ id, value, index }) => {
+const DroppableSlot: React.FC<DroppableSlotProps> = ({
+  id,
+  value,
+  index,
+  disabled,
+}) => {
   const { setNodeRef: setDropRef } = useDroppable({ id })
 
   const {
@@ -22,39 +28,43 @@ const DroppableSlot: React.FC<DroppableSlotProps> = ({ id, value, index }) => {
           answer: value,
         }
       : undefined,
-    disabled: !value,
+    disabled: !value || disabled,
   })
 
   const slotBaseClass =
-    'min-w-[100px] min-h-[22px] px-3 py-2 text-center touch-none relative border-b border-[#71717a] w-[100px]'
+    'min-w-[100px] min-h-[22px] px-3 py-2 text-center touch-none relative border-b w-[100px]'
 
   const draggingClass = isDragging ? 'opacity-50' : 'opacity-100'
-  const cursorClass = value ? 'cursor-grab' : 'cursor-default'
+  const cursorClass = disabled
+    ? 'cursor-not-allowed'
+    : value
+      ? 'cursor-grab'
+      : 'cursor-default'
 
   if (value) {
     return (
-      <div
+      <span
         ref={setDropRef}
-        className="mx-1 inline-block min-h-[30px] min-w-[100px]"
+        className="mx-1 inline-block min-h-[30px] min-w-[100px] align-middle"
       >
         <span
           ref={setDragRef}
-          className={`${slotBaseClass} ${draggingClass} ${cursorClass}`}
+          className={`${slotBaseClass} border-[#71717a] ${draggingClass} ${cursorClass}`}
           {...listeners}
           {...attributes}
         >
           {value}
         </span>
-      </div>
+      </span>
     )
   }
 
   return (
-    <div
+    <span
       ref={setDropRef}
-      className={`${slotBaseClass} dragNdrop-question__slot`}
+      className={`${slotBaseClass} border-red-500 dragNdrop-question__slot inline-block align-middle`}
       data-slot-index={`(${index + 1})`}
-    ></div>
+    ></span>
   )
 }
 

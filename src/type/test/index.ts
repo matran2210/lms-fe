@@ -65,7 +65,7 @@ export type AnswerList = {
 }
 
 export interface DragDropAnswerItem {
-  id: string
+  id?: string
   idAnswer?: string
   value: string
   position: number

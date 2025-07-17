@@ -315,6 +315,8 @@ const TestDetail = () => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
             corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -512,6 +514,7 @@ const TestDetail = () => {
     getValues,
     setValue,
   } = useForm()
+
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -921,7 +924,6 @@ const TestDetail = () => {
                 )
 
                 objAnswer = {
-                  id: currentAnswer?.dropId,
                   idAnswer: savedData?.answer_id,
                   value: currentAnswer?.answer,
                   position: index + 1,
@@ -1095,9 +1097,11 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getValues(`${currentPage}_drag_drop_answer`)) {
-        if (e.id && e.value !== '') {
-          return true
+      if (getValues(`${currentContent?.id}_drag_drop_answer`)) {
+        for (let e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
+          if (e?.idAnswer && e?.value !== '') {
+            return true
+          }
         }
       }
 
@@ -1249,7 +1253,7 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       const answers = handleSaveAnswer(
-        getValues(`${currentPage?.id}_drag_drop_answer`),
+        getValues(`${currentPage}_drag_drop_answer`),
         currentContent,
         tabs,
       )
@@ -1388,13 +1392,7 @@ const TestDetail = () => {
                     dropId: data,
                   }
                 } else {
-                  const existAnswer = (data ?? []).find(
-                    (e: any) => e.idAnswer === answer.id,
-                  )
-                  return {
-                    ...answer,
-                    dropId: existAnswer?.id,
-                  }
+                  return answer
                 }
               },
             ),
@@ -1730,9 +1728,9 @@ const TestDetail = () => {
       return {
         ...baseAnswer,
         answer: (question.answer ?? [])
-          .filter((item: any) => item?.id)
+          .filter((item: any) => item?.idAnswer)
           .map((item: any, index: number) => ({
-            answer_id: item.id,
+            answer_id: item.idAnswer,
             answer_position: index + 1,
           })),
       }
@@ -2337,7 +2335,6 @@ const TestDetail = () => {
             return baseData
           }),
         )
-
         setTabs(arr)
       } else {
         router.push(PageLink.PAGE_NOT_FOUND)

@@ -11521,10 +11521,10 @@ sapp-common-package@^1.1.8-test:
     sass-loader "^13"
     tailwindcss "^3"
 
-sapp-notification-test@^1.0.6-test:
-  version "1.0.6-test"
-  resolved "https://registry.yarnpkg.com/sapp-notification-test/-/sapp-notification-test-1.0.6-test.tgz#cb7ed948103df430c44ac481a6ebc7fdd2ca65d2"
-  integrity sha512-eHKt2AsulhnslhzUJnvvv5UWufMJ96tbmSXsSc87s8bp5iucGO1p+OBrKf4HFBI9OUeCwi7BhS2IBAAI23jqOQ==
+sapp-notification-test@^1.0.8-test:
+  version "1.0.8-test"
+  resolved "https://registry.yarnpkg.com/sapp-notification-test/-/sapp-notification-test-1.0.8-test.tgz#bb7f739f4f048d44fe56125b6bbfc40ef3afa5bd"
+  integrity sha512-dKJeGKOTsdKsEjvXzziEE3H+vo2UTvdIkHJK7Pukxru87eYFmkifnzK6cOpD7O4JY00y980xk93bAu0ojYh9lQ==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
