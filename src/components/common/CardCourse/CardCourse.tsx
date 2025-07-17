@@ -14,6 +14,10 @@ const mappingBadgeFromStatus: Partial<
     badge: 'Not started',
     className: 'bg-info-50 text-info',
   },
+  [EAttemptStatus.UN_SUBMITTED]: {
+    badge: 'Not started',
+    className: 'bg-info-50 text-info',
+  },
   [EAttemptStatus.IN_PROGRESS]: {
     badge: 'In Progress',
     className: 'bg-warning-50 text-warning',
