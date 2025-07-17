@@ -6,27 +6,24 @@ import { IEventTest } from 'src/type/event-test'
 // import { ANIMATION } from 'src/constants'
 
 const EventTestList = ({
-  entranceTestLists,
+  eventTestLists,
+  onRefetch,
 }: {
-  entranceTestLists: IEventTest[]
+  eventTestLists: IEventTest[]
+  onRefetch: () => void
 }) => {
   return (
     <div
       className={`${
-        !isEmpty(entranceTestLists)
+        !isEmpty(eventTestLists)
           ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'
           : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
-      {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e, index) => (
-          <div
-            key={index}
-            className={`item flex flex-col bg-white p-[30px] shadow-sidebar`}
-          >
-            <EventTest data={e} />
-          </div>
+      {!isEmpty(eventTestLists) ? (
+        eventTestLists?.map((e: IEventTest, index) => (
+          <EventTest key={index} data={e} onRefetch={onRefetch} />
         ))
       ) : (
         <NoData />
