@@ -119,8 +119,8 @@ module.exports = {
         500: '#08719D',
       },
       dashboard: {
-        learing: '#059F9A',
-        'mock-test': '#FFB700',
+        learing: '#6FD3B0',
+        'mock-test': '#FB8C5B',
       },
     },
     screens: {
