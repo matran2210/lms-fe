@@ -54,13 +54,13 @@ export default function Sidebar({
 
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
   return (
-    <div>
+    <div className="group">
       <div
         className={clsx(
           className,
           isGuideActive ? 'z-50' : 'z-30',
           isOpened || (isGuideActive && 'w-[220px]'),
-          'm-4 rounded-xl',
+          'peer m-4 rounded-xl',
         )}
       >
         <div
@@ -172,8 +172,10 @@ export default function Sidebar({
       <div
         onClick={toggleDrawer}
         className={`sidebar-overlay ${
-          isOpened ? 'block lg:hidden' : 'hidden'
-        } h-ful fixed bottom-0 left-0 right-0 top-0 z-20 w-full cursor-pointer bg-[#00000080]`}
+          isOpened
+            ? 'block peer-hover:block lg:hidden'
+            : 'hidden peer-hover:block'
+        } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080]`}
       />
       {openResource && (
         <LearningResource
