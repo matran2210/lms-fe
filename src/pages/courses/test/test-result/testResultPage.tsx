@@ -1,7 +1,7 @@
 import Recommendation from '@components/test/Recommendation'
 import { F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
 import { GRADE_STATUS } from 'src/constants'
 import {
@@ -79,7 +79,7 @@ const TestResultPage = ({
   const renderDashboard = useMemo(() => {
     switch (type) {
       case QuizAttemptChartType.ACCA: {
-        if (!F_LOW_CODES.includes(subjectCode)) {
+        if (F_LOW_CODES.includes(subjectCode)) {
           return (
             <div className={commonMultipleScoreStyle}>
               <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
@@ -92,6 +92,7 @@ const TestResultPage = ({
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
                   gradingStatus={questions?.quizAttempt?.grading_status}
+                  quizAttempt={questions?.quizAttempt}
                 />
               </div>
               <MultipleChoiceScore
@@ -126,11 +127,13 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <MultipleQuestion
-                questions={questions}
-                className={'h-full'}
-                multipleQuestionRef={multipleQuestionRef}
-              />
+              <div className="hidden lg:block">
+                <MultipleQuestion
+                  questions={questions}
+                  className={'h-full'}
+                  multipleQuestionRef={multipleQuestionRef}
+                />
+              </div>
             </div>
           )
         }
@@ -139,7 +142,7 @@ const TestResultPage = ({
         return (
           <div className={commonMultipleScoreStyle}>
             <div className="max-h-ful flex flex-col gap-6">
-              <div className="items-start rounded-xl bg-white p-6 shadow-sidebar">
+              <div className="items-start rounded-xl bg-white p-4 shadow-sidebar md:p-6">
                 <ChartCFAScore data={chartData?.chart_data} />
               </div>
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
@@ -177,11 +180,11 @@ const TestResultPage = ({
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
                 <Recommendation data={item} key={index} />
               ))}
-              {/* <ScoreDetail
+              <ScoreDetail
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
-              /> */}
+              />
             </div>
             <MultipleChoiceScore
               questions={questions}

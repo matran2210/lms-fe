@@ -3418,6 +3418,32 @@ export const MobileNotFriendlyIcon = ({
   )
 }
 
+export const MenuDotsIcon = ({ className }: { className?: string }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      className={className}
+    >
+      <path
+        d="M12.5 15.8889C11.6716 15.8889 11 16.5853 11 17.4444C11 18.3036 11.6716 19 12.5 19C13.3284 19 14 18.3036 14 17.4444C14 16.5853 13.3284 15.8889 12.5 15.8889Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.5 10.4444C11.6716 10.4444 11 11.1409 11 12C11 12.8591 11.6716 13.5556 12.5 13.5556C13.3284 13.5556 14 12.8591 14 12C14 11.1409 13.3284 10.4444 12.5 10.4444Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.5 5C11.6716 5 11 5.69645 11 6.55556C11 7.41467 11.6716 8.11111 12.5 8.11111C13.3284 8.11111 14 7.41467 14 6.55556C14 5.69645 13.3284 5 12.5 5Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
 export const ArrowActionSearchIcon = () => {
   return (
     <svg
