@@ -62,10 +62,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const getKeyContent = () => {
     return data?.key_after_contents?.map((item) => {
       return (
-        <div
-          key={item.id}
-          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
-        >
+        <div key={item.id} className="bg-gray-4 px-2 py-1 text-sm text-gray-14">
           {item.name}
         </div>
       )
