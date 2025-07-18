@@ -121,16 +121,16 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
           <div className="col-span-1 ">Deadline</div>
-          <div className="col-span-1 font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
         <div className="col-span-1 ">Lesson Date:</div>
-        <div className="col-span-1 font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+        <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
   }, [data])
@@ -191,7 +191,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   if (!open.isOpen) return null
 
   return (
-    <div className="flex !w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 shadow-calendar">
+    <div className="hidden w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 shadow-calendar lg:flex">
       <div className="mb-8 flex items-center justify-start gap-2">
         <button
           className="text-gray-500 hover:text-gray-700"

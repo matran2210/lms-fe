@@ -7,7 +7,7 @@ import React, { ReactNode } from 'react'
 interface IProps extends DrawerProps {
   open: boolean
   handleCancel: () => void
-  width?: number
+  width?: number | string
   title: ReactNode
   children: ReactNode
   classNameHeader?: string

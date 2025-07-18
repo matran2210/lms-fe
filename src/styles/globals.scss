@@ -920,7 +920,7 @@ $focus: (
 }
 
 .ant-drawer {
-  @apply fixed;
+  @apply fixed z-[1100];
 }
 
 .ant-drawer .ant-drawer-mask,
@@ -1436,4 +1436,25 @@ select:focus {
 mark {
   cursor: pointer;
   pointer-events: auto;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile
+  .ant-drawer-content-wrapper {
+  @apply m-0 block md:hidden;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet
+  .ant-drawer-content-wrapper {
+  @apply m-0 hidden md:block lg:hidden;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet .ant-drawer-content {
+  @apply rounded-b-none;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile .ant-drawer-content {
+  @apply rounded-none;
+  z-index: 9999;
 }
