@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
 import { GRADE_STATUS } from 'src/constants'
 import {
+  IQuizAttempComment,
   IQuizAttempt,
   IQuizAttemptChartType,
   QuizAttemptChart,
@@ -142,7 +143,7 @@ const TestResultPage = ({
         return (
           <div className={commonMultipleScoreStyle}>
             <div className="max-h-ful flex flex-col gap-6">
-              <div className="items-start rounded-xl bg-white p-6 shadow-sidebar">
+              <div className="items-start rounded-xl bg-white p-4 shadow-sidebar md:p-6">
                 <ChartCFAScore data={chartData?.chart_data} />
               </div>
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
@@ -180,11 +181,11 @@ const TestResultPage = ({
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
                 <Recommendation data={item} key={index} />
               ))}
-              {/* <ScoreDetail
+              <ScoreDetail
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
-              /> */}
+              />
             </div>
             <MultipleChoiceScore
               questions={questions}

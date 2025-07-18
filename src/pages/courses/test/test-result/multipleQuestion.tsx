@@ -67,32 +67,30 @@ const MultipleQuestion = ({
     extra?: React.ReactNode,
     showMore?: boolean,
   ) => {
-    const renderBoxItems = [...data, ...data, ...data, ...data, ...data]?.map(
-      (item: IAnswer, index: number) => {
-        return (
-          <button
-            key={item?.id}
-            onClick={() => {
-              router.push(`/explanation/${item?.id}?title=My Course`)
-            }}
-            disabled={
-              questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
-            }
-            className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
+    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
+      return (
+        <button
+          key={item?.id}
+          onClick={() => {
+            router.push(`/explanation/${item?.id}?title=My Course`)
+          }}
+          disabled={
+            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
+          }
+          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
             ${renderBoxesAndLineClass(type, item)}
           `}
-          >
-            {index + totalBefore + 1}
-          </button>
-        )
-      },
-    )
+        >
+          {index + totalBefore + 1}
+        </button>
+      )
+    })
 
     return (
       data?.length > 0 && (
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl">
+            <div className="mb-6 text-lg font-semibold text-gray-800 xl:text-xl">
               {type}
             </div>
             <div className="mb-6">{extra}</div>
@@ -101,9 +99,14 @@ const MultipleQuestion = ({
             <div
               className={clsx('', {
                 'mb-10 grid grid-cols-6 gap-3': isLargeDesktopView,
-                'flex flex-wrap gap-5 gap-y-4': showMore && !isLargeDesktopView,
-                'grid min-w-max grid-flow-col grid-rows-2 gap-5 xl:flex xl:min-w-full xl:flex-wrap xl:gap-y-4':
-                  !showMore && !isLargeDesktopView,
+                'flex flex-wrap gap-5 gap-y-4':
+                  (showMore && !isLargeDesktopView) ||
+                  (!showMore && !isLargeDesktopView && data.length <= 10),
+                // 'grid min-w-max grid-flow-col gap-5':
+                //   !showMore && !isLargeDesktopView,
+                'grid min-w-max grid-flow-col grid-rows-2 gap-5':
+                  !showMore && !isLargeDesktopView && data.length > 10,
+                // 'grid-rows-2 sm:grid-rows-[auto]': ,
               })}
             >
               {renderBoxItems}
@@ -183,7 +186,7 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-8 shadow-sidebar-tablet xl:sticky xl:top-[104px] 
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-t-[20px] bg-white p-8 shadow-sidebar-tablet xl:sticky xl:top-[104px] 
         xl:!h-fit xl:rounded-xl xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
@@ -205,7 +208,7 @@ const MultipleQuestion = ({
                   Number(questions?.constructedResponseAnswers?.length || 0) >=
                   8 && (
                   <div
-                    className="block cursor-pointer text-sm font-medium underline xl:hidden"
+                    className=" cursor-pointer text-sm font-medium underline xl:hidden"
                     onClick={() => {
                       setShowMore(!showMore)
                       if (multipleQuestionRef?.current) {
@@ -228,11 +231,12 @@ const MultipleQuestion = ({
               showMore,
             )}
             <div
-              className={clsx('', {
+              className={clsx('text-xs md:text-base', {
+                'grid grid-cols-2 gap-x-14 gap-y-3': isLargeDesktopView,
                 'mx-auto flex items-center justify-center gap-12':
                   showMore && !isLargeDesktopView,
-                'grid grid-cols-4 gap-x-12 gap-y-3 xl:grid-cols-2 xl:gap-x-14':
-                  !showMore || isLargeDesktopView,
+                'grid grid-cols-4 gap-x-12 gap-y-3':
+                  !showMore && !isLargeDesktopView,
               })}
             >
               {annotations.map((annotation) => (
@@ -252,7 +256,7 @@ const MultipleQuestion = ({
               showMore ? 'items-center' : 'pt-0'
             }`}
           >
-            <div className="flex flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
+            <div className="flex w-full flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
                 ref={elementRef as React.LegacyRef<HTMLDivElement>}
                 onMouseDown={handleMouseDown}
@@ -283,13 +287,17 @@ const MultipleQuestion = ({
                           }
                         }}
                       >
-                        {showMore ? 'Show less' : 'Show more'}
+                        Show more
                       </div>
                     )}
                   </div>,
                   showMore,
                 )}
-                <div className="mt-3 flex items-center justify-center gap-12">
+                <div
+                  className={
+                    'mt-7 flex items-center justify-between text-xs md:justify-center md:gap-12 md:text-base'
+                  }
+                >
                   {annotations.map((annotation) => (
                     <div
                       key={annotation.text}
