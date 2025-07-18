@@ -9,7 +9,7 @@ import useReponsive from 'src/hooks/useReponsive'
 const TopicProgress = () => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
-  const { isMobile } = useReponsive()
+  const { isMobile, isTablet } = useReponsive()
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -17,14 +17,15 @@ const TopicProgress = () => {
         tooltip: {
           trigger: 'item',
           borderWidth: 0,
+          extraCssText: `
+              border-radius: 8px;
+              box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+              padding: 12px;
+              background: white;
+            `,
           formatter: function (params: { name: string; value: string }) {
             return `
-      <div style="
-        min-width: 120px;
-        background: #fff;
-        border-radius: 8px;
-        padding: 5px;
-      ">
+      <div style=" min-width: 120px;">
         <div style="font-weight: 600; color: #374151; margin-bottom: 4px; font-size: 16px; line-height: 24px">
           ${params.name}
         </div>
@@ -142,6 +143,7 @@ const TopicProgress = () => {
           option={option}
           minHeight={isMobile ? '350px' : '450px'}
           height={isMobile ? '350px' : '450px'}
+          width="100%"
         />
       )}
     </div>

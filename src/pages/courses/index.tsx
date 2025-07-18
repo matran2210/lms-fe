@@ -218,6 +218,7 @@ const MyCourse = () => {
           isShowToggle
           isShowUserGuide
           disabledSearch={guideIsActive}
+          isCoursePage
         />
 
         <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">

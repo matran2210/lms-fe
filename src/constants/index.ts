@@ -204,12 +204,16 @@ export const defaultStatusEventTest = [
     value: '',
   },
   {
-    label: 'Completed',
+    label: 'Submitted',
     value: 'SUBMITTED',
   },
   {
-    label: 'Uncompleted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
