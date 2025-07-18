@@ -1437,3 +1437,12 @@ mark {
   cursor: pointer;
   pointer-events: auto;
 }
+
+.drawer-calendar__detail .ant-drawer-content-wrapper {
+  @apply m-0 block lg:hidden;
+}
+
+.drawer-calendar__detail .ant-drawer-content {
+  @apply rounded-b-none;
+  z-index: 9999;
+}

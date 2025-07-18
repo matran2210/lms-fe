@@ -1,4 +1,5 @@
 import DetailCalendar from '@components/calendar/DetailCalendar'
+import DetailCalendarTablet from '@components/calendar/DetailCalendarTablet'
 import Layout from '@components/layout'
 import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
@@ -105,14 +106,18 @@ const Page = () => {
   }, [filter, data])
 
   return (
-    <Layout title="Course Detail" fullWidth showSidebar={isAlwaysShowSidebar}>
+    <Layout
+      title="Calendar"
+      fullWidth={isAlwaysShowSidebar}
+      showSidebar={isAlwaysShowSidebar}
+    >
       <div className="mx-auto my-0 max-w-[1644px] pt-6 max-[1199px]:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
             <div className="text-3xl font-bold text-gray-800">Calendar</div>
           </div>
           <div className="flex h-fit items-stretch justify-between gap-6 pb-5">
-            <div className="flex-1">
+            <div className="lg:flex-1">
               <SAPPCalendar
                 showWeeklyNorm={false}
                 events={
@@ -160,7 +165,12 @@ const Page = () => {
                 headerType={CALENDAR_TYPE.LMS}
               />
             </div>
-            <DetailCalendar open={open} setOpen={setOpen} />
+            {open.isOpen && (
+              <>
+                <DetailCalendar open={open} setOpen={setOpen} />
+                <DetailCalendarTablet open={open} setOpen={setOpen} />
+              </>
+            )}
           </div>
         </div>
       </div>
