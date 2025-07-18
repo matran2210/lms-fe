@@ -3,8 +3,8 @@ import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
-import { Tooltip } from 'antd'
 import { useRouter } from 'next/router'
+import Tooltip from 'src/common/Tooltip'
 import { GRADE_STATUS } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
@@ -93,7 +93,6 @@ const TestResultDetail = () => {
               Retake
             </span>
           }
-          trigger={'click'}
           className="block md:hidden"
         >
           <button className="text-icon">

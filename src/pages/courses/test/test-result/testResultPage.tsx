@@ -1,11 +1,10 @@
 import Recommendation from '@components/test/Recommendation'
 import { F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
 import { GRADE_STATUS } from 'src/constants'
 import {
-  IQuizAttempComment,
   IQuizAttempt,
   IQuizAttemptChartType,
   QuizAttemptChart,
