@@ -79,7 +79,7 @@ const TestResultPage = ({
   const renderDashboard = useMemo(() => {
     switch (type) {
       case QuizAttemptChartType.ACCA: {
-        if (!F_LOW_CODES.includes(subjectCode)) {
+        if (F_LOW_CODES.includes(subjectCode)) {
           return (
             <div className={commonMultipleScoreStyle}>
               <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
@@ -92,6 +92,7 @@ const TestResultPage = ({
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
                   gradingStatus={questions?.quizAttempt?.grading_status}
+                  quizAttempt={questions?.quizAttempt}
                 />
               </div>
               <MultipleChoiceScore
@@ -126,11 +127,13 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <MultipleQuestion
-                questions={questions}
-                className={'h-full'}
-                multipleQuestionRef={multipleQuestionRef}
-              />
+              <div className="hidden lg:block">
+                <MultipleQuestion
+                  questions={questions}
+                  className={'h-full'}
+                  multipleQuestionRef={multipleQuestionRef}
+                />
+              </div>
             </div>
           )
         }

@@ -20,7 +20,7 @@ import {
   GRADE_STATUS,
   QUESTION_TYPES,
 } from 'src/constants'
-import { IAnswer, IQuizAttemptChartType } from 'src/type'
+import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 
 const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-6'
@@ -32,6 +32,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  quizAttempt?: IQuizAttempt
 }
 
 const ScoreDetail = ({
@@ -39,6 +40,7 @@ const ScoreDetail = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  quizAttempt,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -159,7 +161,15 @@ const ScoreDetail = ({
       className={`${className}`}
     >
       <div className="mb-4 flex items-center gap-x-3">
-        <div className="text-xl font-semibold ">Score Details</div>
+        <div className="text-xl font-semibold ">
+          Score Details{' '}
+          <span className="text-base text-gray-400">
+            attempt:{' '}
+            {Number(quizAttempt?.total_attempt_time || 0) > 0
+              ? `${quizAttempt?.number_of_attempts}/${quizAttempt?.total_attempt_time}`
+              : quizAttempt?.number_of_attempts}
+          </span>
+        </div>
         {router?.query?.attempt && (
           <div className="text-base leading-7 text-gray-400">{`attempt: ${router?.query?.attempt}`}</div>
         )}
