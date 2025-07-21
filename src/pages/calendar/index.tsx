@@ -1,8 +1,10 @@
 import DetailCalendar from '@components/calendar/DetailCalendar'
 import DetailCalendarTablet from '@components/calendar/DetailCalendarTablet'
 import Layout from '@components/layout'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendar } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
@@ -10,11 +12,14 @@ import {
   CALENDAR_COLOR_TYPES,
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
+  PageLink,
+  TitleSidebar,
 } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
 const Page = () => {
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<ICalendarList>()
   const [filter, setFilter] = useState<IFilter>()
@@ -104,6 +109,11 @@ const Page = () => {
     )
     return results
   }, [filter, data])
+  const router = useRouter()
+
+  const handleBack = () => {
+    router.push(PageLink.DASHBOARD)
+  }
 
   return (
     <Layout
@@ -111,13 +121,22 @@ const Page = () => {
       fullWidth={isAlwaysShowSidebar}
       showSidebar={isAlwaysShowSidebar}
     >
-      <div className="mx-auto my-0 max-w-[1644px] pt-6 max-[1199px]:mx-6">
-        <div className="relative">
-          <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
+      <div className="mx-auto my-0 h-full max-w-[1644px]" id="calendar-root">
+        <div className="relative flex h-full flex-col">
+          {/* header mobile & tablet */}
+          <div className="mb-4 mt-2 block md:my-8 lg:hidden">
+            <HeaderMobile
+              title={TitleSidebar.CALENDAR}
+              showIcon={isTabletView || isMobileView}
+              onBack={handleBack}
+            />
+          </div>
+          {/* header desktop */}
+          <div className="hidden w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center lg:flex">
             <div className="text-3xl font-bold text-gray-800">Calendar</div>
           </div>
-          <div className="flex h-fit items-stretch justify-between gap-6 pb-5">
-            <div className="lg:flex-1">
+          <div className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between">
+            <div className="w-full lg:flex-1">
               <SAPPCalendar
                 showWeeklyNorm={false}
                 events={
