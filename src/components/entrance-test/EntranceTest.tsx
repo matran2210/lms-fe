@@ -77,8 +77,8 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     }
   }, [data, currentAttempt])
 
-  const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
+  const timeTakenFormatted = currentAttempt?.total_attempt_time
+    ? formatTime(currentAttempt?.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
@@ -151,10 +151,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           {data?.name}
         </h2>
       </div>
-      <div className="mt-auto">
+      <div className="flex h-full flex-col justify-between">
         <div className="info">
           {data?.attempts.length < data?.limit_count && (
-            <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
+            <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
               <>
                 <p>Time allowed: </p>
                 <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
@@ -186,7 +186,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             )}
           </div>
         </div>
-        <div className="action relative mt-10 flex items-center justify-between">
+        <div className="action mt-10 flex items-center justify-between">
           {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
           {!data?.attempts?.length ||
           currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
