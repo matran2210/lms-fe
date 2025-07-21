@@ -9,7 +9,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { IEntranceTest } from 'src/type/entrance-test'
+import { Attempt, IEntranceTest } from 'src/type/entrance-test'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
 
@@ -44,15 +44,24 @@ const EntranceTest = ({
     useState<boolean>(false)
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
     useState<number>(0)
+  const [currentAttempt, setCurrentAttempt] = useState<Attempt>(
+    data?.attempts?.[0] || ({} as Attempt),
+  )
+
+  useEffect(() => {
+    setCurrentAttempt(
+      data?.attempts?.[data?.attempts?.length - 1] || ({} as Attempt),
+    )
+  }, [data])
 
   useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&
-        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+        currentAttempt?.status === EAttemptStatus['IN_PROGRESS']
       ) {
         const calcTime = dayjs(
-          dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
+          dayjs(currentAttempt?.started_at).add(data?.quiz_timed, 'minutes'),
         ).diff(dayjs(), 'seconds')
 
         setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
@@ -71,7 +80,7 @@ const EntranceTest = ({
         }
       }
     }
-  }, [data])
+  }, [data, currentAttempt])
 
   const timeTakenFormatted = data?.total_attempt_time
     ? formatTime(data?.total_attempt_time)
@@ -98,6 +107,17 @@ const EntranceTest = ({
 
   const handleSubmit = async () => {
     //to do: start test
+    localStorage.removeItem('quizAttempt')
+    localStorage.setItem(
+      'quizAttempt',
+      JSON.stringify({
+        id: currentAttempt?.id,
+        number_of_attempts: data?.attempt_times,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz_timed,
+        created_at: data?.created_at,
+      }),
+    )
     try {
       router.push({
         pathname: `/test/${data?.id}`,
@@ -112,12 +132,11 @@ const EntranceTest = ({
   const handleClickBegin = () => {
     //reset local storage
     localStorage.removeItem('quizAttempt')
-
-    if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
       localStorage.setItem(
         'quizAttempt',
         JSON.stringify({
-          id: data?.quiz_attempt_id,
+          id: currentAttempt?.id,
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,
@@ -174,9 +193,8 @@ const EntranceTest = ({
         </div>
         <div className="action relative mt-10 flex items-center justify-between">
           {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
-          {!data?.attempt_status ||
-          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ||
-          data.attempts.length === 0 ? (
+          {!data?.attempts?.length ||
+          currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
             <ButtonSecondary
               title="Begin"
               full={false}
@@ -252,7 +270,7 @@ const EntranceTest = ({
         />
       )}
 
-      {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+      {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
         <SappModalV3
           title={
             <div className="flex items-center justify-between gap-2">
