@@ -113,7 +113,7 @@ const Page = () => {
   const router = useRouter()
 
   const handleBack = () => {
-    router.push(PageLink.DASHBOARD)
+    router.push(PageLink.HOME)
   }
 
   return (

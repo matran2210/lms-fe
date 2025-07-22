@@ -36,7 +36,7 @@ const FloatingCloseIcon: React.FC<FloatingCloseIconProps> = ({
         height: iconSize,
         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
       }}
-      className="fixed bottom-[388px] left-[48%] z-[9999] flex cursor-pointer items-center justify-center rounded-full border-none lg:hidden"
+      className="fixed bottom-[388px] left-1/2 z-[9999] flex -translate-x-1/2 cursor-pointer items-center justify-center rounded-full border-none lg:hidden"
       aria-label="Đóng"
     >
       <ShowLessIcon size={iconSize} color="#1C274C" />

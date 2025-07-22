@@ -10,7 +10,11 @@ import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'
-import { SkeletonDetailIcon, StatusDotIcon } from '@assets/icons/calendar'
+import {
+  SkeletonDetailIcon,
+  StatusDotIcon,
+  ZoomIcon,
+} from '@assets/icons/calendar'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
@@ -82,6 +86,13 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         </div>
       )
     })
+  }
+
+  const handleRedirectZoom = () => {
+    const url = data?.class?.link_meeting
+    if (url) {
+      window.open(url, '_blank')
+    }
   }
 
   const isOnlyMidTermOrFinalTest =
@@ -297,17 +308,6 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                         </div>
                       </>
                     )}
-                    {data?.mode &&
-                      [LearningMode?.LIVE_ONLINE].includes(
-                        data?.mode as LearningMode,
-                      ) && (
-                        <>
-                          <div className="col-span-1 ">Link meeting:</div>
-                          <div className="col-span-1 text-right font-semibold">
-                            {data?.class?.link_meeting}
-                          </div>
-                        </>
-                      )}
                   </div>
                 </div>
                 {!(data?.is_case_study || data?.schedule?.is_holiday) &&
@@ -374,6 +374,27 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
               </div>
             )}
           </div>
+
+          {data?.mode === LearningMode.LIVE_ONLINE &&
+            data.class.link_meeting && (
+              <>
+                <Divider />
+                <div className="flex flex-col gap-5">
+                  <div className="text-lg font-semibold">Classroom Detail</div>
+                  <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-2">
+                      <div>Platform:</div>
+                      <div
+                        className="flex cursor-pointer justify-end"
+                        onClick={handleRedirectZoom}
+                      >
+                        <ZoomIcon />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
           {/* Fixed Start button at bottom */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (

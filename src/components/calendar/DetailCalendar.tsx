@@ -14,6 +14,7 @@ import {
   CloseDetailIcon,
   SkeletonDetailIcon,
   StatusDotIcon,
+  ZoomIcon,
 } from '@assets/icons/calendar'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -168,6 +169,13 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const isOnlineAndOpen =
     data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
 
+  const handleRedirectZoom = () => {
+    const url = data?.class?.link_meeting
+    if (url) {
+      window.open(url, '_blank')
+    }
+  }
+
   const renderFormattedDate = (dateString: string) => {
     const parsedDate = new Date(dateString)
 
@@ -241,17 +249,6 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
                   </div>
                 </>
               )}
-              {data?.mode &&
-                [LearningMode?.LIVE_ONLINE].includes(
-                  data?.mode as LearningMode,
-                ) && (
-                  <>
-                    <div className="col-span-1 ">Link meeting:</div>
-                    <div className="col-span-1 text-right font-semibold">
-                      {data?.class?.link_meeting}
-                    </div>
-                  </>
-                )}
             </div>
           </div>
           {!(data?.is_case_study || data?.schedule?.is_holiday) &&
@@ -304,6 +301,26 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
               </div>
             </>
           )}
+          {data?.mode === LearningMode.LIVE_ONLINE &&
+            data.class.link_meeting && (
+              <>
+                <Divider />
+                <div className="flex flex-col gap-5">
+                  <div className="text-lg font-semibold">Classroom Detail</div>
+                  <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-2">
+                      <div>Platform:</div>
+                      <div
+                        className="flex cursor-pointer justify-end"
+                        onClick={handleRedirectZoom}
+                      >
+                        <ZoomIcon />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           {/* Footer action button */}
           {(isOfflineOrLiveOnlineWithReview || isOnlineAndOpen) && (
             <div className="mt-auto flex justify-end">
