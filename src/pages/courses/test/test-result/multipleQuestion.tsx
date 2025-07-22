@@ -30,12 +30,6 @@ const MultipleQuestion = ({
   const [scrollLeft, setScrollLeft] = useState(0)
   const elementRef = useRef<HTMLDivElement>()
   const [openRecommendation, setOpenRecommendation] = useState<boolean>(false)
-  const [componentPosition, setComponentPosition] = useState<object>({
-    top: 100,
-    left: '25%',
-    width: 1000,
-    height: 600,
-  })
 
   const isGradeFinish =
     questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
@@ -285,8 +279,6 @@ const MultipleQuestion = ({
         quizAttemptId={questions?.quizAttempt?.id ?? ''}
         openRecomendation={openRecommendation}
         setOpenRecomendation={setOpenRecommendation}
-        componentPosition={componentPosition}
-        setComponentPosition={setComponentPosition}
       />
     </div>
   )
