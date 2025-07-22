@@ -115,7 +115,7 @@ const EntranceTest = ({
         number_of_attempts: data?.attempt_times,
         is_limited: data?.is_limited,
         quiz_timed: data?.quiz_timed,
-        created_at: data?.created_at,
+        created_at: currentAttempt?.started_at,
       }),
     )
     try {
@@ -140,7 +140,7 @@ const EntranceTest = ({
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,
-          created_at: data?.created_at,
+          created_at: currentAttempt?.started_at,
         }),
       )
       setIsOpenPopupLastAttempt(true)
@@ -158,14 +158,12 @@ const EntranceTest = ({
       </div>
       <div className="flex h-full flex-col justify-between">
         <div className="info">
-          {data?.attempts.length < data?.limit_count && (
-            <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
-              <>
-                <p>Time allowed: </p>
-                <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
-              </>
-            </div>
-          )}
+          <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
+            <>
+              <p>Time allowed: </p>
+              <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
+            </>
+          </div>
           {data?.attempt_times > 0 && (
             <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
               <>
