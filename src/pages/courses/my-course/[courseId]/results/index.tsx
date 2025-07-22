@@ -66,7 +66,7 @@ const Results = () => {
 
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
-      {!isMobileView && (
+      {isAlwaysShowSidebar && (
         <div className="mb-8 mt-6 flex w-full">
           <SappBreadCrumbs
             isTeacher={false}
@@ -94,7 +94,7 @@ const Results = () => {
         title={TEST_AND_QUIZ_TITLE}
         showIcon={isTabletView || isMobileView}
         onBack={handleBack}
-        className={clsx({ 'mt-4': isMobileView })}
+        className={clsx({ 'mt-4': isMobileView, 'mt-8': isTabletView })}
         extraActions={
           isMobileView && (
             <div onClick={() => setOpenFilter((prev) => !prev)}>
