@@ -110,7 +110,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         number_of_attempts: data?.attempt_times,
         is_limited: data?.is_limited,
         quiz_timed: data?.quiz_timed,
-        created_at: data?.created_at,
+        created_at: currentAttempt?.started_at,
       }),
     )
     try {
@@ -135,7 +135,7 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,
-          created_at: data?.created_at,
+          created_at: currentAttempt?.started_at,
         }),
       )
       setIsOpenPopupLastAttempt(true)
