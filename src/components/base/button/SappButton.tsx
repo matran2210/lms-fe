@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
@@ -64,7 +65,7 @@ const SappButton = ({
   full = false,
   disabled = false,
   loading = false,
-  type,
+  type = 'button',
   color = 'primary',
   isUnderLine,
   isPadding = true,
@@ -73,44 +74,70 @@ const SappButton = ({
   showTooltip = false,
   toolTipTitle = '',
 }: IButtonProps) => {
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} cursor-pointer relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium  ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  const isDisabled = disabled || loading
+  const paddingClass = isPadding ? PADDINGS[size] : PADDINGS.none
+  const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
 
-  isUnderLine = isUnderLine ?? color === 'text'
-  componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
+  const underlineClass =
+    isUnderLine !== undefined
+      ? isUnderLine
+        ? 'hover:underline'
+        : ''
+      : color === 'text'
+        ? 'hover:underline'
+        : ''
 
-  if (link)
+  const componentClass = `
+    ${className}
+    ${COLORS[color]}
+    ${SIZES[size]}
+    ${paddingClass}
+    ${fullWidthClass}
+    ${underlineClass}
+    relative text-center font-medium
+    ${isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+  `.trim()
+
+  const loadingIndicator = (
+    <div className={`flex items-center justify-center ${classNameLoading}`}>
+      <span className="sr-only">Loading...</span>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
+      ></div>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
+      ></div>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
+      ></div>
+    </div>
+  )
+
+  const buttonContent = (
+    <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
+      <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+        {title}
+      </span>
+    </Tooltip>
+  )
+
+  // Use Next.js Link for better routing
+  if (link) {
     return (
-      <a href={link} className={componentClass} aria-disabled={disabled}></a>
+      <Link href={link} className={componentClass} aria-disabled={isDisabled}>
+        {loading ? loadingIndicator : buttonContent}
+      </Link>
     )
+  }
+
   return (
     <button
+      type={type}
       className={`${componentClass} ${classNameLoading}`}
-      type={type ?? 'button'}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={isDisabled}
     >
-      {loading ? (
-        <div className={`flex items-center justify-center ${classNameLoading}`}>
-          <span className="sr-only">Loading...</span>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
-          ></div>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
-          ></div>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
-          ></div>
-        </div>
-      ) : (
-        <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
-          <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
-            {title}
-          </span>
-        </Tooltip>
-      )}
+      {loading ? loadingIndicator : buttonContent}
     </button>
   )
 }

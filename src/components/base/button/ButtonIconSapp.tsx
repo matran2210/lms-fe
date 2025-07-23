@@ -15,6 +15,21 @@ const variantStyles: Record<IButtonVariant, string> = {
   secondary: 'hover:border-primary bg-white hover:bg-primary hover:text-white',
   custom: '',
 }
+
+const iconMap = (
+  icon: string | undefined,
+  iconColor: string,
+): JSX.Element | null => {
+  switch (icon) {
+    case 'plus':
+      return <PlusIcon />
+    case 'arrow':
+      return <ArrowIcon color={iconColor} />
+    default:
+      return null
+  }
+}
+
 const ButtonIconSapp = ({
   title,
   onClick,
@@ -27,45 +42,54 @@ const ButtonIconSapp = ({
   type = 'button',
   variant = 'primary',
   icon,
-  position,
+  position = 'start',
   iconColorProps = '#374151',
 }: IButtonIconProps) => {
-  const isPrimary = variant === 'primary'
-  const isSecondary = variant === 'secondary'
   const [iconColor, setIconColor] = useState<string>(iconColorProps)
+
+  const isDisabled = disabled || loading
+
   const btnClass = `
     relative text-center font-medium rounded-lg transition-all flex items-center justify-center h-10
-    ${isPrimary ? variantStyles.primary : ''}
-    ${isSecondary ? variantStyles.secondary : ''}
+    ${variantStyles[variant]}
     ${full ? 'w-full' : 'inline-flex'} 
-    ${size === 'small' ? sizeStyles.small : size === 'medium' ? sizeStyles.medium : sizeStyles.lager}
-    ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
+    ${sizeStyles[size]}
+    ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
     ${className}
-  `
-  const iconMap: Record<string, JSX.Element | null> = {
-    plus: <PlusIcon />,
-    search: null,
-    arrow: <ArrowIcon color={iconColor} />,
-  }
-  const IconComponent = iconMap[icon ?? 'plus']
-  const Button = () => (
-    <button
-      type={type}
-      className={btnClass}
-      onClick={onClick}
-      disabled={disabled || loading}
-      onMouseEnter={() => setIconColor('#fff')}
-      onMouseLeave={() => setIconColor(iconColorProps)}
-    >
-      {position === 'start' && IconComponent}
-      <span className="mx-2">{title}</span>
-      {position === 'end' && IconComponent}
-    </button>
+  `.trim()
+
+  const IconComponent = iconMap(icon, iconColor)
+
+  const buttonContent = (
+    <>
+      {position === 'start' && IconComponent && (
+        <span className="mr-2">{IconComponent}</span>
+      )}
+      <span>{title}</span>
+      {position === 'end' && IconComponent && (
+        <span className="ml-2">{IconComponent}</span>
+      )}
+    </>
   )
-  if (link) {
-    return <Link href={link}>{Button()}</Link>
+
+  const buttonProps = {
+    type,
+    className: btnClass,
+    onClick,
+    disabled: isDisabled,
+    onMouseEnter: () => setIconColor('#fff'),
+    onMouseLeave: () => setIconColor(iconColorProps),
   }
-  return Button()
+
+  if (link) {
+    return (
+      <Link href={link}>
+        <button {...buttonProps}>{buttonContent}</button>
+      </Link>
+    )
+  }
+
+  return <button {...buttonProps}>{buttonContent}</button>
 }
 
 export default ButtonIconSapp
