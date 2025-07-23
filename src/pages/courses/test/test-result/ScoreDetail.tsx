@@ -187,7 +187,7 @@ const ScoreDetail = ({
       <div className="flex flex-col gap-4">
         {Object.entries(groupedData).map(([program, rows]) => (
           <Collapse
-            className="test-collapse rounded-xl bg-white shadow-small"
+            className="test-collapse rounded-xl bg-white shadow-small lg:rounded-2xl"
             key={program}
             ghost
             expandIconPosition="end"
