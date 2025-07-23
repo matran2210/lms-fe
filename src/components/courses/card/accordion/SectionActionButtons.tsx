@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import { ICourseSectionButtonProps } from 'src/type/courses-3-level'
-import BaseButton from '@components/courses/buttons/BaseButton'
 import { useRouter } from 'next/router'
-import { ROUTES } from 'src/constants'
 import { TEST_TYPE_ENUM } from '@utils/constants'
-import ButtonIcon from '@components/courses/buttons/ButtonIcon'
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 
 export default function SectionActionButtons({
   section,
@@ -26,11 +26,10 @@ export default function SectionActionButtons({
       section?.course_section_type == TEST_TYPE_ENUM.MID_TERM_TEST)
   ) {
     return (
-      <BaseButton
-        variant="secondary"
+      <ButtonSecondaryV2
         title={'Start'}
         full={false}
-        size="medium"
+        size="large"
         onClick={(e) => {
           e.stopPropagation()
           setOpenTest(true)
@@ -46,8 +45,8 @@ export default function SectionActionButtons({
   ) {
     return (
       <div className="flex justify-end gap-4">
-        <ButtonIcon
-          className="text-base font-medium text-bw-15 hover:underline"
+        <ButtonTextV2
+          size="medium"
           onClick={() => {
             router.push(
               `/short-course/test-result/${section?.quiz?.attempt?.id}`,
@@ -55,11 +54,10 @@ export default function SectionActionButtons({
           }}
           title={'Results'}
         />
-        <BaseButton
-          variant="primary"
+        <ButtonPrimaryV2
           title={'Retake'}
           full={false}
-          size="medium"
+          size="large"
           onClick={(e) => {
             e.stopPropagation()
             setOpenTest(true)

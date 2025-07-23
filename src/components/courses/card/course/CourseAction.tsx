@@ -1,18 +1,16 @@
-import BaseButton from "@components/courses/buttons/BaseButton";
-import { trackGAEvent } from "@utils/google-analytics";
-import { ICourseAction } from "src/type/courses-3-level/course";
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import { trackGAEvent } from '@utils/google-analytics'
+import { ICourseAction } from 'src/type/courses-3-level/course'
 
 export default function CourseAction({
   determineButtonToShow,
   isActiveStudent,
-  courseAction
+  courseAction,
 }: ICourseAction) {
-
   return (
     <div className="action relative flex items-center justify-end">
       {determineButtonToShow !== 'Disabled' ? (
-        <BaseButton
-          variant="secondary"
+        <ButtonSecondaryV2
           title={
             determineButtonToShow === 'Active'
               ? 'Activate'
