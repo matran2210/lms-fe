@@ -63,7 +63,7 @@ const DroppableSlot: React.FC<DroppableSlotProps> = ({
     <span
       ref={setDropRef}
       className={`${slotBaseClass} border-red-500 dragNdrop-question__slot inline-block align-middle`}
-      data-slot-index={`(${index + 1})`}
+      data-slot-index={`(${index})`}
     ></span>
   )
 }

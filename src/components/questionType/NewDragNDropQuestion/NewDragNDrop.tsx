@@ -21,7 +21,7 @@ export interface SlotValue {
   id?: string
   value: string
   position: number
-  idAnswer: string
+  idAnswer?: string
 }
 
 export interface Correct {
@@ -125,7 +125,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
       return {
         id: el.id,
         value: defaultSlot?.value || '',
-        idAnswer: defaultSlot?.idAnswer || '',
+        idAnswer: defaultSlot?.idAnswer || undefined,
         position: idx + 1, // position bắt đầu từ 1
       }
     })
@@ -206,11 +206,29 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event
-    if (!over || !active) return
-
+    // eslint-disable-next-line no-console
+    console.log('[DND DEBUG] handleDragEnd', {
+      over,
+      active,
+      overId: over?.id,
+      activeId: active?.id,
+    })
+    if (!over || !active || !over.id) {
+      // eslint-disable-next-line no-console
+      console.log('[DND DEBUG] return early: !over || !active || !over.id', {
+        over,
+        active,
+      })
+      return
+    }
     const draggedAnswer = active.data.current?.answer
     const fromSlotId = active.data.current?.fromSlotId
     const rawId = active.id as string
+    const droppedSlotId = over.id as string
+    // Nếu chỉ click hoặc thả vào chính slot gốc thì không làm gì cả
+    if (fromSlotId && fromSlotId === droppedSlotId) {
+      return
+    }
 
     // Kéo từ slot về bank (chỉ xử lý khi thả vào bank)
     if (over.id === 'bank' && fromSlotId && draggedAnswer) {
@@ -224,7 +242,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
 
       // Clear slot
       newSlots[index].value = ''
-      newSlots[index].idAnswer = ''
+      newSlots[index].idAnswer = undefined
       setSlots(newSlots)
 
       // Thêm item vào bank
@@ -270,13 +288,17 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
       return
     }
 
-    // Kéo từ slot ra ngoài (không thả vào bank) - không làm gì cả
-    if (fromSlotId && draggedAnswer && over.id !== 'bank') {
+    // Kéo từ slot ra ngoài (không thả vào bank hoặc slot khác) - không làm gì cả
+    if (
+      fromSlotId &&
+      draggedAnswer &&
+      over.id !== 'bank' &&
+      !slots.some((slot) => slot.id === over.id)
+    ) {
       return
     }
 
     // Kéo từ bank vào slot
-    const droppedSlotId = over.id as string
     if (!draggedAnswer || !rawId || !droppedSlotId || droppedSlotId === 'bank')
       return
 
@@ -291,16 +313,18 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
       const sourceSlotIndex = newSlots.findIndex(
         (slot) => slot.id === fromSlotId,
       )
-      if (sourceSlotIndex === -1) return
-
       // Đổi chỗ 2 items
       const tempValue = newSlots[sourceSlotIndex].value
       const tempIdAnswer = newSlots[sourceSlotIndex].idAnswer
       newSlots[sourceSlotIndex].value = newSlots[targetSlotIndex].value
-      newSlots[sourceSlotIndex].idAnswer = newSlots[targetSlotIndex].idAnswer
+      newSlots[sourceSlotIndex].idAnswer =
+        newSlots[targetSlotIndex].idAnswer ?? undefined
       newSlots[targetSlotIndex].value = tempValue
-      newSlots[targetSlotIndex].idAnswer = tempIdAnswer
-
+      newSlots[targetSlotIndex].idAnswer = tempIdAnswer ?? undefined
+      // Cập nhật lại position cho từng slot
+      newSlots.forEach((slot, idx) => {
+        slot.position = idx + 1
+      })
       setSlots(newSlots)
       onChange?.(newSlots)
       return
@@ -332,7 +356,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
 
     // Tìm idAnswer của item được kéo
     const draggedItem = data.answers.find((a) => a.answer === draggedAnswer)
-    const draggedIdAnswer = draggedItem?.id || ''
+    const draggedIdAnswer = draggedItem?.id || undefined
 
     newSlots[targetSlotIndex].value = draggedAnswer
     newSlots[targetSlotIndex].idAnswer = draggedIdAnswer

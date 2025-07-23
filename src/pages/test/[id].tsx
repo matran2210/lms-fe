@@ -1777,9 +1777,9 @@ const TestDetail = () => {
         ...baseAnswer,
         answer: (question.answer ?? [])
           .filter((item: any) => item?.idAnswer)
-          .map((item: any, index: number) => ({
+          .map((item: any) => ({
             answer_id: item.idAnswer,
-            answer_position: index + 1,
+            answer_position: item.position,
           })),
       }
     }
