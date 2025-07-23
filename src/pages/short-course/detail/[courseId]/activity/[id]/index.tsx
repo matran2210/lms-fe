@@ -531,7 +531,7 @@ export default function ActivityDetail() {
               uuid={e?.uuid}
               count={index}
               key={e?.uuid}
-              activeTab={activeTab === ACTIVE_TABS.ADD_NOTE}
+              isActiveTab={activeTab === ACTIVE_TABS.ADD_NOTE}
               handleCloseTab={handleCloseTab}
               countNote={getNotesData?.length}
             />

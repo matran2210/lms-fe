@@ -12,13 +12,14 @@ import { IProps } from 'src/type/courses-3-level'
 import { NoteFormData } from 'src/type/courses-3-level'
 import CreateNoteDesktop from './CreateNoteDesktop'
 import CreateNoteMobile from './CreateNoteMobile'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const CreateNote = ({
   id,
   content,
   uuid,
   count,
-  activeTab,
+  isActiveTab,
   handleCloseTab,
   countNote,
 }: IProps) => {
@@ -27,6 +28,7 @@ const CreateNote = ({
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
+  const { isMobileView } = useTailwindBreakpoint()
 
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
@@ -73,14 +75,14 @@ const CreateNote = ({
   const removeNote = () => {
     dispatch(closeNote(uuid))
 
-    if (activeTab && countNote <= 1) {
+    if (isActiveTab && countNote <= 1) {
       handleCloseTab()
     }
   }
 
   return (
     <>
-      {activeTab ? (
+      {isMobileView ? (
         <CreateNoteMobile
           id={id}
           uuid={uuid}
@@ -90,7 +92,7 @@ const CreateNote = ({
           control={control}
           handleSubmit={handleSubmit}
           loading={loading}
-          visible={activeTab}
+          visible={isMobileView}
         />
       ) : (
         <CreateNoteDesktop

@@ -7,10 +7,15 @@ import { List } from '../icons/List'
 import { ActivityBarProps, IActivityTab } from 'src/type/courses-3-level'
 import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
-import { pushNotes } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
+import {
+  activeNotesList,
+  pushNotes,
+} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
+import { DocumentText } from '../icons/DocumentText'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
+  { key: 'note-list', icon: <DocumentText /> },
   { key: 'resource', icon: <Archive /> },
   { key: 'timeline', icon: <Soundwave /> },
 ]
@@ -25,14 +30,19 @@ export default function ActivityBar({
   const dispatch = useDispatch()
 
   const handleTabChange = (tabKey: string) => {
-    if (tabKey === 'add-note') {
-      const note = {
-        uuid: uuidv4(),
-        id: '',
-        name: 'Note',
-        description: '',
-      }
-      dispatch(pushNotes(note))
+    switch (tabKey) {
+      case 'add-note':
+        const note = {
+          uuid: uuidv4(),
+          id: '',
+          name: 'Note',
+          description: '',
+        }
+        dispatch(pushNotes(note))
+        break
+      case 'note-list':
+        dispatch(activeNotesList())
+        break
     }
 
     onTabChange(tabKey)

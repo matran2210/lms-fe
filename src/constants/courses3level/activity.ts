@@ -3,4 +3,5 @@ export const ACTIVE_TABS = {
   CONTENT: 'content',
   RESOURCE: 'resource',
   ADD_NOTE: 'add-note',
+  NOTE_LIST: 'note-list',
 }

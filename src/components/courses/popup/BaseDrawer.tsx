@@ -1,6 +1,6 @@
-import React from 'react';
-import { Drawer } from 'antd';
-import { BaseDrawerProps } from 'src/type/courses-3-level';
+import React from 'react'
+import { Drawer } from 'antd'
+import { BaseDrawerProps } from 'src/type/courses-3-level'
 
 export default function BaseDrawer({
   title = '',
@@ -9,12 +9,13 @@ export default function BaseDrawer({
   children,
   height = 'auto',
   className = '',
+  closable = true,
 }: BaseDrawerProps) {
   return (
     <Drawer
       title={title}
       placement="bottom"
-      closable={true}
+      closable={closable}
       onClose={onClose}
       open={open}
       height={height}
@@ -23,5 +24,5 @@ export default function BaseDrawer({
     >
       {children}
     </Drawer>
-  );
+  )
 }
