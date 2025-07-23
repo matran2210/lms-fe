@@ -143,6 +143,7 @@ export default function Sidebar({
                 className={clsx('w-full px-1 py-2 text-xs outline-none', {
                   'font-semibold':
                     generalOrMasterCourse === ECourseType.GENERAL,
+                  'text-gray-800': generalOrMasterCourse === ECourseType.MASTER,
                 })}
               >
                 General Course
@@ -156,7 +157,8 @@ export default function Sidebar({
                 block
                 onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
                 className={clsx('w-full px-1 py-2 text-xs outline-none', {
-                  'font-semibold':
+                  'font-semibold': generalOrMasterCourse === ECourseType.MASTER,
+                  'text-gray-800':
                     generalOrMasterCourse === ECourseType.GENERAL,
                 })}
               >

@@ -194,6 +194,7 @@ module.exports = {
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
         small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        medium: '0px 4px 12px 0px rgba(44, 48, 0, 0.04)',
         card: '0px 4px 16px 0px #00000014',
       },
       backgroundImage: {
