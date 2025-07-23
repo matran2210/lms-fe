@@ -29,7 +29,7 @@ export default function SectionActionButtons({
       <ButtonSecondaryV2
         title={'Start'}
         full={false}
-        size="large"
+        size="medium"
         onClick={(e) => {
           e.stopPropagation()
           setOpenTest(true)
@@ -44,7 +44,7 @@ export default function SectionActionButtons({
       section?.course_section_type == TEST_TYPE_ENUM.MID_TERM_TEST)
   ) {
     return (
-      <div className="flex justify-end gap-4">
+      <div className="flex items-center justify-end gap-4">
         <ButtonTextV2
           size="medium"
           onClick={() => {
@@ -57,7 +57,7 @@ export default function SectionActionButtons({
         <ButtonPrimaryV2
           title={'Retake'}
           full={false}
-          size="large"
+          size="medium"
           onClick={(e) => {
             e.stopPropagation()
             setOpenTest(true)

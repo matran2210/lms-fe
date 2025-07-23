@@ -181,7 +181,7 @@ export default function SubSectionItem({
               ) : (
                 <ButtonSecondaryV2
                   title={'Start'}
-                  size="large"
+                  size="medium"
                   onClick={(e) => {
                     e.stopPropagation()
                     if (sub?.quiz) {
@@ -333,7 +333,7 @@ export default function SubSectionItem({
                   ) : (
                     <ButtonSecondaryV2
                       title={'Start'}
-                      size="large"
+                      size="medium"
                       onClick={(e) => {
                         e.stopPropagation()
                         if (act?.quiz) {

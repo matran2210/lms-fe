@@ -124,6 +124,9 @@
 
     &.ant-collapse-item-active > .ant-collapse-header {
       @apply overflow-hidden rounded-md bg-primary text-white;
+      span {
+        @apply text-white;
+      }
     }
 
     > .ant-collapse-content > .ant-collapse-content-box {
