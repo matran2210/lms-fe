@@ -116,7 +116,7 @@ const CourseDashboard = () => {
         <div>
           <OverallProgress setActivities={setActivities} />
         </div>
-        <div className="shadow-matchingquiz mt-6 rounded-2xl bg-white xl:mt-0">
+        <div className="mt-6 rounded-2xl bg-white shadow-small xl:mt-0">
           <WeeklyReport />
         </div>
       </div>
@@ -131,7 +131,7 @@ const CourseDashboard = () => {
 
           return (
             <div
-              className="shadow-matchingquiz w-full rounded-2xl bg-white p-5 md:p-6"
+              className="w-full rounded-2xl bg-white p-5 shadow-small md:p-6"
               key={data.name}
             >
               <div className="flex">
@@ -152,7 +152,7 @@ const CourseDashboard = () => {
                   {!isUndefined(data?.completed) &&
                     !isUndefined(data?.total) &&
                     data.total !== 0 && (
-                      <div className="mt-3 h-2 w-full rounded-full bg-gray-200 xl:mt-4.5">
+                      <div className="xl:mt-4.5 mt-3 h-2 w-full rounded-full bg-gray-200">
                         <div
                           className="bg-yellow-400 h-full rounded-full"
                           style={{
@@ -172,7 +172,7 @@ const CourseDashboard = () => {
         <div className="order-2 xl:order-1">
           <TopicProgress />
         </div>
-        <div className="shadow-matchingquiz order-1 mb-6 flex h-auto rounded-2xl bg-white xl:order-2 xl:my-0 xl:h-[55vh]">
+        <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:h-[55vh]">
           <LearningResult />
         </div>
       </div>

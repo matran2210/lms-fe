@@ -9,6 +9,7 @@ import courseActivityQuizReducer from './slice/Course/MyCourse/Activity/Activity
 import userGuideReducer from './slice/Course/UserGuide'
 import caseStudyTestReducer from './slice/Course/MyCourse/Case-study/CaseStudy'
 import entranceTestReducer from './slice/EntranceTest/EntranceTest'
+import eventTestReducer from './slice/EventTest/EventTest'
 import notesListReducer from './slice/Course/NotesList'
 import popupReducer from './slice/Popup/Result-test'
 
@@ -24,6 +25,7 @@ export const store = configureStore({
     userGuideReducer,
     caseStudyTestReducer,
     entranceTestReducer,
+    eventTestReducer,
     notesListReducer,
   },
   middleware: (getDefaultMiddleware) =>

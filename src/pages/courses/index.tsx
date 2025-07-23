@@ -25,8 +25,10 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 
 const DEFAULT_PAGESIZE = 9
-const MASTER = 'Master Finance'
-const GENERAL = 'General Course'
+export enum ECourseType {
+  MASTER = 'Master Finance',
+  GENERAL = 'General Course',
+}
 const defaultCategory = [
   {
     label: `All`,
@@ -48,8 +50,10 @@ const MyCourse = () => {
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
   )
-
-  const [courseType, setCourseType] = useState(MASTER)
+  /**
+   * @description lấy state trong context
+   */
+  const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
@@ -214,6 +218,7 @@ const MyCourse = () => {
           isShowToggle
           isShowUserGuide
           disabledSearch={guideIsActive}
+          isCoursePage
         />
 
         <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">
@@ -225,7 +230,7 @@ const MyCourse = () => {
           >
             <Heading
               greeting="Welcome to"
-              title={courseType}
+              title={generalOrMasterCourse}
               showShadow={false}
             />
             {guideStatus && guideStep === 4 && (
@@ -249,18 +254,26 @@ const MyCourse = () => {
           >
             <div className="flex gap-2 rounded-md bg-[#F9F9F9]">
               <Button
-                type={courseType === MASTER ? 'primary' : 'text'}
+                type={
+                  generalOrMasterCourse === ECourseType.MASTER
+                    ? 'primary'
+                    : 'text'
+                }
                 block
-                onClick={() => setCourseType(MASTER)}
-                className="h-10"
+                onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
+                className="h-10 outline-none"
               >
                 Master Finance
               </Button>
               <Button
-                type={courseType === GENERAL ? 'primary' : 'text'}
+                type={
+                  generalOrMasterCourse === ECourseType.GENERAL
+                    ? 'primary'
+                    : 'text'
+                }
                 block
-                onClick={() => setCourseType(GENERAL)}
-                className="h-10"
+                onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
+                className="h-10 outline-none"
               >
                 General Course
               </Button>
@@ -280,7 +293,10 @@ const MyCourse = () => {
             )}
           </div>
         </div>
-        <div className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11">
+        <div
+          className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11"
+          data-aos={ANIMATION.DATA_AOS}
+        >
           <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
             My Courses
           </h1>

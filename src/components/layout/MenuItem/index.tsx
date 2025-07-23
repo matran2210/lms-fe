@@ -19,7 +19,7 @@ import {
   getCountUnRead,
   loadMoreNotification,
 } from 'src/redux/slice/Notification/Notification'
-import SappNotificationComponent from 'sapp-notification-test'
+import SappNotificationComponent from 'sapp-notification'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -141,6 +141,22 @@ export default function MenuItem({
       name === TitleSidebar.RESULTS && handleOpenResultsPage()
       name === TitleSidebar.EXAM && handleOpenExaminationInfoPage()
     }
+  }
+  const onClickMenuItem = () => {
+    if (url !== '#' && !isEmpty(url)) {
+      const targetUrl =
+        url === PageLink.RESULTS
+          ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+          : url === PageLink.DASHBOARD
+            ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+            : name === TitleSidebar.COURSE_CONTENT
+              ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
+              : url
+      router.push({
+        pathname: targetUrl,
+      })
+    }
+    closeSideBar()
   }
 
   const isActivity = router?.query?.activityId
@@ -383,12 +399,12 @@ export default function MenuItem({
             'hover:bg-gray-100': !selected,
           },
         )}
+        onClick={() => onClickMenuItem()}
       >
         <div
           className={`sidebar-item flex items-center ${
             Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
-          onClick={() => closeSideBar()}
         >
           {url !== '#' && !isEmpty(url) ? (
             <Link
@@ -401,7 +417,7 @@ export default function MenuItem({
                       ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
                       : url
               }
-              passHref
+              // passHref
             >
               {renderMenuContent()}
             </Link>

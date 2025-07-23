@@ -79,7 +79,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
         <div
           data-aos={ANIMATION.DATA_AOS}
           className={clsx(
-            'learning-activity-collapse rounded-xl md:bg-white md:p-6 md:shadow-learning-activity',
+            'learning-activity-collapse rounded-xl md:bg-white md:p-6 md:shadow-small',
             { hidden: focusOnly },
           )}
         >
@@ -119,7 +119,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       )
                     }
                   >
-                    <span className="w-full overflow-hidden text-ellipsis leading-4.5">
+                    <span className="leading-4.5 w-full overflow-hidden text-ellipsis">
                       {truncateString(activity?.previous_activity?.name, 80)}
                     </span>
                   </Tooltip>
@@ -157,7 +157,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
                       )
                     }
                   >
-                    <div className="line-clamp-1 w-full overflow-hidden text-ellipsis text-end leading-4.5">
+                    <div className="leading-4.5 line-clamp-1 w-full overflow-hidden text-ellipsis text-end">
                       {truncateString(activity?.next_activity.name, 80)}
                     </div>
                   </Tooltip>

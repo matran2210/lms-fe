@@ -296,7 +296,7 @@ const CourseTabDocument = ({
       className={clsx('rounded-xl bg-white', {
         'my-6': focusOnlyQuiz.open,
         'px-4': focusOnlyDiscussion,
-        'p-4 shadow-learning-activity md:p-6': !focusOnlyDiscussion,
+        'p-4 shadow-small md:p-6': !focusOnlyDiscussion,
       })}
     >
       <Tabs

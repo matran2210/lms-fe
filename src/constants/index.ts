@@ -204,12 +204,16 @@ export const defaultStatusEventTest = [
     value: '',
   },
   {
-    label: 'Completed',
+    label: 'Submitted',
     value: 'SUBMITTED',
   },
   {
-    label: 'Uncompleted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -453,13 +457,13 @@ export const REPEAT_ON_MAPPED = [
 ] as const
 
 export const REPEAT_ON_MAPPED_PAYLOAD = {
-  T2: 1,
-  T3: 2,
-  T4: 3,
-  T5: 4,
-  T6: 5,
-  T7: 6,
-  CN: 7,
+  T2: 0,
+  T3: 1,
+  T4: 2,
+  T5: 3,
+  T6: 4,
+  T7: 5,
+  CN: 6,
 } as const
 
 export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'

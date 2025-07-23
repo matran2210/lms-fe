@@ -73,19 +73,23 @@ const CommentModal = ({
 }: ICommentModal) => {
   return (
     <div
-      className={`rounded-xl bg-white p-6 shadow-small ${className ?? ''} text-gray-800`}
+      className={`rounded-xl bg-white p-4 shadow-small md:p-6 ${className ?? ''} text-gray-800`}
     >
       <div className="mb-4 flex items-center justify-between">
-        <div className="text-xl font-semibold">{title}</div>
+        <div className="text-lg font-semibold md:text-xl">{title}</div>
 
         <ButtonText
           title="See more"
           onClick={onSeeMore}
           endIcon={<AltArrowIcon />}
+          className="text-sm md:text-base"
         />
       </div>
       <div className={`h-[175px] overflow-hidden`}>
-        <EditorReader text_editor_content={content} className="mr-2" />
+        <EditorReader
+          text_editor_content={content}
+          className="mr-2 text-sm md:text-base"
+        />
       </div>
     </div>
   )

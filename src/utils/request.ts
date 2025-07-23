@@ -2,7 +2,11 @@ import dayjs from 'dayjs'
 import { UseFormGetValues } from 'react-hook-form'
 import { REQUEST_STATUS, REQUEST_TYPE } from 'src/constants'
 import { IRecurringSchedule } from 'src/type/my-request'
-import { getDayIndex, reverseDaysOfWeek } from './common'
+import {
+  convertLocalWeekDaysToUTC,
+  getDayIndex,
+  reverseDaysOfWeek,
+} from './common'
 import {
   REPEAT_FREQUENCY,
   REPEAT_FREQUENCY_LABEL,
@@ -48,7 +52,7 @@ export const requestTypeToTitle = {
 
 export const formatRecurringSchedule = (
   recurringSchedule: IRecurringSchedule,
-  startDate: Date,
+  firstDateOfRecurring: Date,
 ) => {
   let result = `Every ${recurringSchedule.interval} ${recurringSchedule.frequency}`
 
@@ -56,19 +60,29 @@ export const formatRecurringSchedule = (
     recurringSchedule.day_of_week &&
     recurringSchedule.day_of_week.length > 0
   ) {
-    const days = recurringSchedule.day_of_week
+    const dayOfWeek = getDayIndex(firstDateOfRecurring, false) + 1 // Convert start day of week from 0 to 1
+    const dayOfWeekUTC = recurringSchedule.day_of_week[0]
+    const inSameDay = dayOfWeek === dayOfWeekUTC
+    // Chỉ cần xét thứ tự các ngày trong tùân đầu tiên được lặp, các tuần tiếp theo sẽ tương tự
+    const convertedDays = recurringSchedule.day_of_week
       .map((day) => {
-        const convertedDay = getDayIndex(
-          dayjs(startDate).startOf('week').add(day, 'day').toDate(),
-        )
-        return WEEKDAYS[convertedDay - 1] // -1 because day_of_week starts from 1 (Monday)
+        if (inSameDay) return day - 1 // Convert start day of week from 1 to 0
+
+        const date = dayjs(firstDateOfRecurring)
+          .add(day - dayOfWeekUTC, 'day') // Xét chênh lệch ngày giữa ngày đầu tiên và ngày làm mảng bị đảo
+          .toDate()
+        return getDayIndex(date, false)
       })
-      .join(', ')
+      .sort()
+
+    const days = convertedDays.map((day) => WEEKDAYS[day]).join(', ')
     result += ` on ${days}`
   }
 
-  if (recurringSchedule.end_date) {
-    const endDate = dayjs(recurringSchedule.end_date).format('MMM DD, YYYY')
+  if (recurringSchedule.recurrence_end_date || recurringSchedule.end_date) {
+    const endDate = dayjs(
+      recurringSchedule.recurrence_end_date || recurringSchedule.end_date,
+    ).format('MMM DD, YYYY')
     result += `, until ${endDate}`
   }
 
@@ -105,7 +119,10 @@ const getRepeatAnnually = (startDate: Date): IRecurringSchedule => ({
 const getRepeatEveryWeekday = (startDate: Date): IRecurringSchedule => ({
   interval: 1,
   frequency: 'days',
-  day_of_week: reverseDaysOfWeek(startDate, [1, 2, 3, 4, 5]),
+  day_of_week: reverseDaysOfWeek(
+    startDate,
+    convertLocalWeekDaysToUTC(startDate, [0, 1, 2, 3, 4]),
+  ),
   type: REPEAT_TYPE.EVERY_WEEKDAY,
 })
 

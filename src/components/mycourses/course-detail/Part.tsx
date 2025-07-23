@@ -130,8 +130,7 @@ const Part = ({
       key={course?.id}
       ref={lastElementRef}
       classNameTitle={`h-12 md:h-16 font-medium`}
-      classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
-      handleClickTitle={handleRouterPartDetail}
+      classNameCard="lg:h-[456px] md:h-[428px] h-[328px]"
       isLock={isLock}
     >
       <div className="flex h-full flex-1 flex-col">

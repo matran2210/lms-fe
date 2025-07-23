@@ -18,7 +18,7 @@ import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
@@ -48,6 +48,7 @@ import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
+import BackToTop from '@components/BackToTop'
 import Popover from '@components/Popover'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
@@ -56,10 +57,12 @@ import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import Icon from '@components/icons'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
+import Layout from '@components/layout'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import RequirementsTab from '@components/test/RequirementsTab'
 import TestWrapper from '@components/test/layout/TestWrapper'
+import { TestAPI } from '@pages/api/test'
 import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
 import { TabsProps, Tooltip } from 'antd'
@@ -81,10 +84,6 @@ import { IRequirement } from 'src/type/case-study'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
-  getAnswerDragNDrop,
-  getResult,
-  getValueFillText,
-  getValueSelectText,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
@@ -92,8 +91,6 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import Layout from '@components/layout'
-import BackToTop from '@components/BackToTop'
 import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
@@ -322,18 +319,18 @@ const TestDetail = () => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(value: string[]) =>
+              setValue(`${currentTabID}_answer`, value)
+            }
             data={data}
-            action={getValueSelectText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
-            removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
             ref={ref}
             solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -1196,6 +1193,74 @@ const TestDetail = () => {
   const refEditor = useRef(null) as any
 
   // TODO: Implement this
+  const getValueFillText = () => {}
+
+  const getValueSelectText = () => {
+    const value = getValues(`${currentPage}_answer`) || []
+    return value.filter((e: string) => e && e !== '')
+  }
+
+  const getAnswerMatching = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-match-result') as any
+    for (let e of inputs) {
+      const childId = e.querySelector('.sapp-notched-container')
+      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
+    }
+
+    return value
+  }
+
+  const getAnswerDragNDrop = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+    for (let e of inputs) {
+      const idAnswer = e.querySelector('.answer-box')
+      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
+    }
+    return value
+  }
+
+  const getResult = async (currentTabContent: any) => {
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+    let corrects = {} as any
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      corrects = res?.data?.[0].answers?.reduce(
+        (previousValue: any, currentValue: any) => {
+          return {
+            ...previousValue,
+            [currentValue.id]: currentValue.is_correct,
+          }
+        },
+        {} as { [key: string]: boolean },
+      )
+    } else if (
+      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+    ) {
+      corrects = { corrects: [...res?.data?.[0]?.answers] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      corrects = { corrects: [...res?.data?.[0]?.question_matchings] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      corrects = {
+        corrects: [
+          ...res?.data?.[0]?.answers?.sort(
+            (a: any, b: any) => a?.answer_position - b?.answer_position,
+          ),
+        ],
+      }
+    }
+    return {
+      corrects: corrects,
+      solution: res?.data?.[0]?.solution,
+      isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
+    }
+  }
 
   const confirmAnswer = async (
     corrects: any,
@@ -2702,7 +2767,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className="absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
+                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}

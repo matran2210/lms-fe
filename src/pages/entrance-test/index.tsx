@@ -2,21 +2,21 @@ import EntranceTestFilter from '@components/entrance-test/EntranceTestFilter'
 import EntranceTestList from '@components/entrance-test/EntranceTestList'
 import Layout from '@components/layout'
 import Footer from '@components/layout/Footer'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import Heading from '@components/mycourses/Heading'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import { useCourseContext } from '@contexts/index'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
+import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { EntranceTestAPI } from '../api/entrance-test'
-import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import { useCourseContext } from '@contexts/index'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -70,13 +70,13 @@ const EntranceTest = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
         />
-        <div className="my-0 pt-6">
+        <div className="my-0">
           {isLoading ? (
             <CourseSkeleton />
           ) : (
             <>
               <div
-                className="mb-8 flex overflow-hidden rounded-xl bg-white"
+                className="mb-8 flex overflow-hidden rounded-xl bg-white shadow-sidebar"
                 data-aos={ANIMATION.DATA_AOS}
               >
                 <Heading
@@ -86,14 +86,17 @@ const EntranceTest = () => {
                 />
               </div>
               <div className="relative">
-                <div className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center">
-                  <h2 className="text-2xl font-semibold text-gray-800 ">
+                <div
+                  className="mx-auto mb-6 mt-8 flex items-center justify-between md:mb-7 md:mt-9"
+                  data-aos={ANIMATION.DATA_AOS}
+                >
+                  <h2 className="text-lg font-semibold text-gray-800 lg:text-2xl">
                     Entrance Test
                   </h2>
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />
                 </div>
               </div>
-              <div className="my-0 pt-7" data-aos={ANIMATION.DATA_AOS}>
+              <div className="my-0" data-aos={ANIMATION.DATA_AOS}>
                 <EntranceTestList
                   entranceTestLists={entranceTestLists || []}
                   onRefetch={refetch}

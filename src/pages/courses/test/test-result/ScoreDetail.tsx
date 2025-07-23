@@ -1,7 +1,8 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { removeHtmlTags, truncateString } from '@utils/index'
+import { truncateString } from '@utils/index'
 
+import { htmlToRaw } from '@components/common/timer'
 import { Collapse } from 'antd'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -19,11 +20,12 @@ import {
   GRADE_STATUS,
   QUESTION_TYPES,
 } from 'src/constants'
-import { IAnswer, IQuizAttemptChartType } from 'src/type'
+import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
-import { htmlToRaw } from '@components/common/timer'
+import { CollapseArrowIcon } from '@assets/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
-const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-6'
+const commonHeaderClass = 'font-medium leading-6 text-gray py-2 pb-4 md:pb-6'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -32,6 +34,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  quizAttempt?: IQuizAttempt
 }
 
 const ScoreDetail = ({
@@ -39,8 +42,11 @@ const ScoreDetail = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  quizAttempt,
 }: ScoreDetailProps) => {
   const router = useRouter()
+
+  const { isMobileView } = useTailwindBreakpoint()
 
   const headers = [
     {
@@ -51,18 +57,22 @@ const ScoreDetail = ({
       label: 'Question Name',
       className: clsx(commonHeaderClass, 'min-w-[120px] text-start'),
     },
-    {
-      label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
-    },
-    {
-      label: 'Result',
-      className: clsx(commonHeaderClass, 'text-center'),
-    },
-    {
-      label: 'Time Spent',
-      className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-end'),
-    },
+    ...(isMobileView
+      ? []
+      : [
+          {
+            label: 'Type',
+            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
+          },
+          {
+            label: 'Result',
+            className: clsx(commonHeaderClass, 'text-center'),
+          },
+          {
+            label: 'Time Spent',
+            className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-end'),
+          },
+        ]),
   ]
 
   const {
@@ -156,18 +166,28 @@ const ScoreDetail = ({
       id="sapp-drawer-test-result-list"
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
-      className={`${className}`}
+      className={`mb-[180px] lg:mb-[200px] xl:mb-0 ${className}`}
     >
-      <div className="flex items-center gap-x-3">
-        <div className="mb-4 text-xl font-semibold ">Score Details</div>
+      <div className="mb-4 flex items-center gap-x-3">
+        <div className="text-lg font-semibold md:text-xl ">
+          Score Details{' '}
+          {!router?.query?.attempt && quizAttempt?.number_of_attempts && (
+            <span className="text-sm text-gray-400 md:text-base">
+              attempt:{' '}
+              {Number(quizAttempt?.total_attempt_time || 0) > 0
+                ? `${quizAttempt?.number_of_attempts}/${quizAttempt?.total_attempt_time}`
+                : quizAttempt?.number_of_attempts}
+            </span>
+          )}
+        </div>
         {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-400">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="text-sm leading-7 text-gray-400 md:text-base">{`attempt: ${router?.query?.attempt}`}</div>
         )}
       </div>
       <div className="flex flex-col gap-4">
         {Object.entries(groupedData).map(([program, rows]) => (
           <Collapse
-            className="test-collapse rounded-xl bg-white shadow-small"
+            className="test-collapse rounded-xl bg-white shadow-small lg:rounded-2xl"
             key={program}
             ghost
             expandIconPosition="end"
@@ -214,7 +234,7 @@ const ScoreDetail = ({
                                     }
                                   >
                                     <div
-                                      className={`line-clamp-1 cursor-pointer`}
+                                      className={`line-clamp-1 cursor-pointer text-sm md:text-base`}
                                       onClick={() => {
                                         if (answer?.id) {
                                           router.push(
@@ -253,14 +273,16 @@ const ScoreDetail = ({
                               </td>
 
                               {/* Type */}
-                              <td className="pr-4">
+                              <td className="hidden pr-4 md:table-cell">
                                 <div className="text-center">
                                   {getTypeName(answer?.question?.qType)}
                                 </div>
                               </td>
 
                               {/* Result */}
-                              <td className={`pr-4 text-center`}>
+                              <td
+                                className={`hidden pr-4 text-center md:table-cell`}
+                              >
                                 <div className="flex w-full items-center justify-center gap-3">
                                   <div
                                     className={clsx(
@@ -310,7 +332,7 @@ const ScoreDetail = ({
                               </td>
 
                               {/* Time Spent */}
-                              <td className="m-6 p-0 text-end">
+                              <td className="m-6 hidden p-0 text-end md:table-cell">
                                 {(() => {
                                   if (answer?.time_spent !== null) {
                                     return convertSecondsToMinutesSeconds(
@@ -330,6 +352,9 @@ const ScoreDetail = ({
                 ),
               },
             ]}
+            expandIcon={({ isActive }) => (
+              <CollapseArrowIcon selected={isActive} />
+            )}
           />
         ))}
       </div>

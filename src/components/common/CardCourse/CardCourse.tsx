@@ -14,6 +14,10 @@ const mappingBadgeFromStatus: Partial<
     badge: 'Not started',
     className: 'bg-info-50 text-info',
   },
+  [EAttemptStatus.UN_SUBMITTED]: {
+    badge: 'Not started',
+    className: 'bg-info-50 text-info',
+  },
   [EAttemptStatus.IN_PROGRESS]: {
     badge: 'In Progress',
     className: 'bg-warning-50 text-warning',
@@ -32,7 +36,6 @@ const CardCourse = forwardRef<
     attemptStatus?: EAttemptStatus
     footer?: React.ReactNode
     disabledTitle?: boolean
-    handleClickTitle?: () => void
     hideBadge?: boolean
     badgeCode?: {
       badge: string
@@ -50,7 +53,6 @@ const CardCourse = forwardRef<
       attemptStatus,
       footer,
       disabledTitle = false,
-      handleClickTitle,
       hideBadge = false,
       badgeCode,
       classNameTitle = 'mt-2 mb-4 md:mb-6 md:mt-3',
@@ -62,10 +64,9 @@ const CardCourse = forwardRef<
     return (
       <div
         className={clsx(
-          'relative flex cursor-pointer flex-col rounded-xl border border-transparent bg-white p-4 shadow-card hover:border-primary md:p-6 lg:p-8',
+          'relative flex flex-col rounded-xl border border-transparent bg-white p-4 shadow-card transition-shadow duration-300 hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8',
           classNameCard,
         )}
-        onClick={handleClickTitle}
         ref={ref}
         data-aos={ANIMATION.DATA_AOS}
       >
@@ -83,13 +84,10 @@ const CardCourse = forwardRef<
         )}
         <div className={clsx('flex justify-between', classNameTitle)}>
           <h2
-            className={clsx(
-              'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
-              {
-                'text-gray-300': disabledTitle,
-                'text-gray-800': !disabledTitle,
-              },
-            )}
+            className={clsx('line-clamp-2 text-base font-medium md:text-2xl', {
+              'text-gray-300': disabledTitle,
+              'text-gray-800': !disabledTitle,
+            })}
           >
             <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
               {truncateString(title, 60)}

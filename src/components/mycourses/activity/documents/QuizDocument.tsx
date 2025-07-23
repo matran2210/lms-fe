@@ -539,7 +539,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -630,7 +630,7 @@ const QuizDocument = ({
 
   return (
     <div
-      className={clsx('rounded-xl bg-gray-100 p-4 md:p-8', {
+      className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
         'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
       })}
     >

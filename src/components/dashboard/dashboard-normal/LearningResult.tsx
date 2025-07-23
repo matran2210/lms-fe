@@ -7,7 +7,7 @@ import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
 import Tooltip from 'src/common/Tooltip'
-import useIsMobile from 'src/hooks/useIsMobile'
+import useReponsive from 'src/hooks/useReponsive'
 
 const LearningResult = () => {
   const router = useRouter()
@@ -15,7 +15,7 @@ const LearningResult = () => {
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
-  const isMobile = useIsMobile()
+  const { isMobile } = useReponsive()
 
   const isNormal = courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE
   const handleLearningResults = (
@@ -190,7 +190,7 @@ const LearningResult = () => {
       : '%Results = Module test (40%) + Topic test (60%)'
 
   return (
-    <div className="shadow-matchingquiz flex h-auto w-full rounded-2xl bg-white p-8 xl:h-[60vh]">
+    <div className="flex h-auto w-full rounded-2xl bg-white p-4 shadow-small md:p-6 xl:h-[60vh] xl:p-8">
       <div className="w-full">
         <div className="mb-6 flex items-center justify-between md:mb-5 md:pb-3">
           <div className="w-full justify-between md:flex">

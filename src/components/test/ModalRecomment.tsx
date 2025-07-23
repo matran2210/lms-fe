@@ -1,5 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import { CloseIconV2 } from '@components/icons'
 import { Modal } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProps {
   isOpen: boolean
@@ -14,6 +16,7 @@ const ModalRecomment = ({
   isComment,
   handleCloseRecomment,
 }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   return (
     <Modal
       width={1250}
@@ -22,13 +25,24 @@ const ModalRecomment = ({
       centered
       footer={false}
       onCancel={handleCloseRecomment}
+      closable={!isMobileView}
+      closeIcon={<CloseIconV2 />}
     >
-      <h1 className="mb-10 text-center text-3xl font-bold">
-        {isComment ? 'Examiner’s Comment' : 'Recommendation'}
-      </h1>
+      <div className="mb-6 flex items-center justify-between md:mb-10">
+        <h1 className="text-center text-xl font-bold text-gray-800 md:text-3xl">
+          {isComment ? 'Examiner’s Comment' : 'Recommendation'}
+        </h1>
+        <div className="block md:hidden" onClick={handleCloseRecomment}>
+          <CloseIconV2 />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-4">
         <div className="max-h-[570px] overflow-y-auto">
-          <EditorReader text_editor_content={currentContent ?? ''} />
+          <EditorReader
+            text_editor_content={currentContent ?? ''}
+            className="text-sm text-gray-800 md:text-base"
+          />
         </div>
       </div>
     </Modal>

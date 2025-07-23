@@ -79,18 +79,15 @@ export const getValueFillText = () => {}
  * @description Get select word answers from DOM elements
  * @return {Array} Array of selected values
  */
-export const getValueSelectText = () => {
+const getValueSelectText = () => {
   let value = [] as any
-  const inputs = document.querySelectorAll(
-    'select.sapp-select--selectword-preview',
-  ) as any
+  const inputs = document.querySelectorAll('div.sapp-select--question') as any
 
   for (let e of inputs) {
-    value.push(e?.value)
+    value.push(e?.dataset.value)
   }
   return value
 }
-
 /**
  * @description Get drag and drop answers from DOM elements
  * @return {Array<Object>} Array of objects containing id, value and idAnswer
@@ -186,7 +183,7 @@ export const isValuesEqual = async (
         newValue = getValues(`${currentTabContent?.id}_drag_drop_answer`)
         break
       case QUESTION_TYPES.SELECT_WORD:
-        newValue = getValueSelectText()
+        newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.FILL_WORD:
         newValue = getValues(`${currentTabContent?.id}_fillword`)

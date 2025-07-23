@@ -99,7 +99,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
       defaultActiveKey={['activity_resource']}
       expandIcon={({ isActive }) => <CollapseArrowIcon selected={isActive} />}
       items={getItemsActivityResource}
-      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-small"
     />
   )
 }

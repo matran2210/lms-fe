@@ -13,28 +13,35 @@ import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import { useCourseContext } from '@contexts/index'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import CourseSkeleton from '@components/skeleton/CourseSkeleton'
+import Footer from '@components/layout/Footer'
+import { getEventCount } from 'src/redux/slice/EventTest/EventTest'
+import { useAppDispatch } from 'src/redux/hook'
 
 const EventTest = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
-  const useGetData = (queryKey: string, params: Object) => {
-    const fetchData = async () => {
-      const { data } = await EventTestAPI.get(params)
+
+  const {
+    data: eventTestLists,
+    isLoading,
+    refetch,
+  } = useQuery(
+    ['event-test'],
+    async () => {
+      const { data } = await EventTestAPI.get({
+        attempt_status: router?.query?.attempt_status,
+      })
       return data
-    }
+    },
+    { retry: false },
+  )
 
-    return useQuery([queryKey, params], fetchData, {
-      enabled: !!params, // chỉ thực hiện khi có params,
-      retry: false,
-    })
-  }
-
-  const router = useRouter()
-  const { data: eventTestLists, isLoading } = useGetData('event-test', {
-    attempt_status: router?.query?.attempt_status,
-  })
+  const getEventTestCount = async () => await dispatch(getEventCount())
   /**
    * @description handle open and close sidebar
    */
@@ -46,6 +53,15 @@ const EventTest = () => {
     setShowSidebar(false)
     setOpenSidebar(false)
   }
+
+  useEffect(() => {
+    getEventTestCount()
+  }, [])
+
+  useEffect(() => {
+    refetch()
+  }, [refetch, router.query.attempt_status])
+
   return (
     <SappLoadingGlobal loading={isLoading}>
       <Layout
@@ -57,26 +73,42 @@ const EventTest = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
         />
-        <div className="main mx-8 my-0 max-w-[1144px] xl:mx-auto">
-          <div className="flex flex-col justify-between gap-3 pb-4 pt-6 sm:flex-row">
-            <h2 className="text-sm font-medium text-[#050505] ">
-              {LANG_SIGNIN.eventTest}
-            </h2>
-            <EventTestFilter count={eventTestLists?.length || 0} />
-          </div>
+        <div className="my-0">
+          {isLoading ? (
+            <CourseSkeleton />
+          ) : (
+            <>
+              <div
+                className="mb-8 flex overflow-hidden rounded-xl bg-white"
+                data-aos={ANIMATION.DATA_AOS}
+              >
+                <Heading
+                  greeting="Welcome to"
+                  title={LANG_SIGNIN.eventTest}
+                  des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
+                />
+              </div>
+              <div className="relative">
+                <div
+                  className="mx-auto mb-6 mt-8 flex items-center justify-between md:mb-7 md:mt-9"
+                  data-aos={ANIMATION.DATA_AOS}
+                >
+                  <h2 className="text-2xl font-semibold text-gray-800">
+                    {LANG_SIGNIN.eventTest}
+                  </h2>
+                  <EventTestFilter count={eventTestLists?.length || 0} />
+                </div>
+              </div>
+              <div className="my-0" data-aos={ANIMATION.DATA_AOS}>
+                <EventTestList
+                  eventTestLists={eventTestLists}
+                  onRefetch={refetch}
+                />
+              </div>
+            </>
+          )}
         </div>
-        <div
-          className="heading mx-8 my-0 flex max-w-[1144px] bg-white md:mx-8 lg:mx-8 xl:mx-auto"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading greeting="Welcome to" title={LANG_SIGNIN.eventTest} des="" />
-        </div>
-        <div
-          className="mx-8 my-0 max-w-[1144px] pt-6 lg:mx-8 xl:mx-auto"
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <EventTestList entranceTestLists={eventTestLists} />
-        </div>
+        <Footer />
         {/* <PopUpRemindEntrance /> */}
       </Layout>
     </SappLoadingGlobal>

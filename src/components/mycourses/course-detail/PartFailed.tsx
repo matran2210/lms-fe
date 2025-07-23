@@ -13,6 +13,7 @@ import { ConfirmIcon } from '@assets/icons'
 import { useCourseContext } from '@contexts/index'
 import ButtonText from '@components/base/button/ButtonText'
 import CardCourse from '@components/common/CardCourse/CardCourse'
+import { EAttemptStatus } from 'src/constants/attempt'
 
 const PartFailed = ({
   coursePart,
@@ -183,34 +184,36 @@ const PartFailed = ({
       : 'Result'
   }
 
-  const handleClickTitle = () => {
-    if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
-      setOpenPopupCTA({
-        lockSection: true,
-        ctaUpgrade: false,
-        thankYou: false,
-        thankYouLater: false,
-      })
-    } else {
-      setOpen(true)
-    }
-    trackGAEvent(`Click Title ${showTitleFinalTest}`)
-  }
+  // const handleClickTitle = () => {
+  //   if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
+  //     setOpenPopupCTA({
+  //       lockSection: true,
+  //       ctaUpgrade: false,
+  //       thankYou: false,
+  //       thankYouLater: false,
+  //     })
+  //   } else {
+  //     setOpen(true)
+  //   }
+  //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
+  // }
 
   return (
     <>
       <CardCourse
-        hideBadge
+        attemptStatus={
+          (coursePart?.quiz?.attempt?.status ||
+            'UN_SUBMITTED') as EAttemptStatus
+        }
         title={coursePart?.name}
         key={coursePart?.id}
         ref={lastElementRef}
         classNameTitle={`h-12 md:h-16 font-medium`}
-        classNameCard="lg:min-h-[444px] md:min-h-[428px] min-h-[250px]"
-        handleClickTitle={handleClickTitle}
+        classNameCard="lg:h-[456px] md:h-[428px] h-[328px]"
         isLock={isLock}
       >
         <div className="flex h-full flex-1 flex-col justify-between">
-          <div className="info mb-6 mt-4 border-l border-gray-2 pl-4 md:mt-6">
+          <div className="info border-gray-2 mb-6 mt-4 border-l pl-4 md:mt-6">
             {checkFinished && (
               <>
                 <PartInfoItem

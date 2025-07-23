@@ -931,15 +931,13 @@ $focus: (
 }
 
 .ant-drawer {
-  @apply fixed;
+  @apply fixed z-[1100];
 }
 
-.ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-content-wrapper {
-  position: fixed;
-  background-color: #000000cc;
+.ant-drawer .ant-drawer-mask {
+  @apply fixed bg-black opacity-60;
 }
+
 .ant-drawer-content {
   @apply rounded-2xl;
 }
@@ -1443,4 +1441,30 @@ select:focus {
 mark {
   cursor: pointer;
   pointer-events: auto;
+}
+
+.echarts-tooltip {
+  background: white !important;
+  border: none !important;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile
+  .ant-drawer-content-wrapper {
+  @apply m-0 block md:hidden;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet
+  .ant-drawer-content-wrapper {
+  @apply m-0 hidden md:block lg:hidden;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet .ant-drawer-content {
+  @apply rounded-b-none;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile .ant-drawer-content {
+  @apply rounded-none;
+  z-index: 9999;
 }
