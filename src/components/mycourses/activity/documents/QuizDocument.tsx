@@ -630,7 +630,7 @@ const QuizDocument = ({
 
   return (
     <div
-      className={clsx('rounded-xl bg-gray-100 p-4 md:p-8', {
+      className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
         'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
       })}
     >
