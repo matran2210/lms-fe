@@ -62,7 +62,7 @@ const EntranceTest = ({
     if (data) {
       if (
         data?.quiz_timed &&
-        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+        currentAttempt?.status === EAttemptStatus['IN_PROGRESS']
       ) {
         const calcTime = dayjs(
           dayjs(currentAttempt?.started_at).add(data?.quiz_timed, 'minutes'),
@@ -85,7 +85,7 @@ const EntranceTest = ({
         }
       }
     }
-  }, [data])
+  }, [data, currentAttempt])
 
   const timeTakenFormatted = currentAttempt?.total_attempt_time
     ? formatTime(currentAttempt?.total_attempt_time)
@@ -132,12 +132,11 @@ const EntranceTest = ({
   const handleClickBegin = () => {
     //reset local storage
     localStorage.removeItem('quizAttempt')
-
-    if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
       localStorage.setItem(
         'quizAttempt',
         JSON.stringify({
-          id: data?.quiz_attempt_id,
+          id: currentAttempt?.id,
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,

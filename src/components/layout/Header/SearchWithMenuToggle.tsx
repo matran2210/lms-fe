@@ -185,7 +185,9 @@ const SearchWithMenuToggle = ({
               handleSubmit={handleSubmit}
               isCoursePage={isCoursePage}
             />
-            <ActionIcon />
+            <div className="hidden lg:block">
+              <ActionIcon />
+            </div>
           </div>
         </div>
       </FormProvider>
