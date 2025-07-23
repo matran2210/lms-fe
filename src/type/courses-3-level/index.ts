@@ -385,7 +385,7 @@ export type Courses3LevelMenuProps = {
 }
 
 export interface BaseModalProps {
-  title?: string
+  title?: ReactNode
   visible: boolean
   onClose: (
     e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
@@ -682,6 +682,9 @@ export interface IProps {
   content: string
   uuid: string | number
   count: number
+  activeTab: boolean
+  handleCloseTab: () => void
+  countNote: number
 }
 
 export type CalcState = {

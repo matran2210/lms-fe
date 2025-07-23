@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import MovableWindow from '@components/base/window'
-import { SaveIcon, PlusIcon, CloseIconNote } from '@assets/icons'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { CoursesAPI } from 'src/pages/api/courses'
 import toast from 'react-hot-toast'
-import {
-  pushNotes,
-  closeNote,
-} from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
+import { closeNote } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { useAppDispatch } from 'src/redux/hook'
-import { v4 as uuidv4 } from 'uuid'
 import { IProps } from 'src/type/courses-3-level'
 import { NoteFormData } from 'src/type/courses-3-level'
+import CreateNoteDesktop from './CreateNoteDesktop'
+import CreateNoteMobile from './CreateNoteMobile'
 
-const CreateNote = ({ id, content, uuid, count }: IProps) => {
+const CreateNote = ({
+  id,
+  content,
+  uuid,
+  count,
+  activeTab,
+  handleCloseTab,
+  countNote,
+}: IProps) => {
   const router = useRouter()
   const activityId = router.query.id
   const [activeSectionId, setActiveSectionId] = useState<string>()
@@ -37,16 +40,6 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
-
-  const handleAddNote = () => {
-    const note = {
-      uuid: uuidv4(),
-      id: '',
-      name: 'Note',
-      description: '',
-    }
-    dispatch(pushNotes(note))
-  }
 
   // Type the data parameter everywhere
   const createNewNote = async (data: NoteFormData) => {
@@ -79,67 +72,38 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
 
   const removeNote = () => {
     dispatch(closeNote(uuid))
+
+    if (activeTab && countNote <= 1) {
+      handleCloseTab()
+    }
   }
 
   return (
     <>
-      <MovableWindow
-        position={{
-          width: '412px',
-          height: '350px',
-          top: 'calc(50% - 150px)',
-          left: `calc(${22 + count}% - 200px)`,
-        }}
-        key={'testtesttest'}
-        onClick={() => {}}
-        zIndex={40}
-        fixed
-      >
-        <div className="absolute left-0 top-0  h-full w-full border bg-white">
-          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-gray-3 px-2.5">
-            <button
-              className="text-gray-1"
-              onClick={() => {
-                handleAddNote()
-              }}
-            >
-              <PlusIcon />
-            </button>
-            <div className="flex items-center">
-              <button
-                className="text-gray-1"
-                onClick={() => {
-                  handleSubmit((data: NoteFormData) => {
-                    onSubmit(data)
-                  })()
-                }}
-                disabled={loading}
-              >
-                <SaveIcon />
-              </button>
-              <span className="mx-4 h-4 w-px bg-gray-1"></span>
-              <button
-                className="text-gray-1"
-                onClick={() => {
-                  removeNote()
-                }}
-                disabled={loading}
-              >
-                <CloseIconNote />
-              </button>
-            </div>
-          </div>
-          <div className="h-[calc(100%-30px)]">
-            <HookFormTextArea
-              placeholder="Take a note..."
-              control={control}
-              name={`description_${id ? id : uuid}`}
-              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
-              defaultValue={content}
-            />
-          </div>
-        </div>
-      </MovableWindow>
+      {activeTab ? (
+        <CreateNoteMobile
+          id={id}
+          uuid={uuid}
+          content={content}
+          onSubmit={onSubmit}
+          onRemove={removeNote}
+          control={control}
+          handleSubmit={handleSubmit}
+          loading={loading}
+          visible={activeTab}
+        />
+      ) : (
+        <CreateNoteDesktop
+          id={id}
+          uuid={uuid}
+          content={content}
+          onSubmit={onSubmit}
+          onRemove={removeNote}
+          control={control}
+          handleSubmit={handleSubmit}
+          loading={loading}
+        />
+      )}
     </>
   )
 }

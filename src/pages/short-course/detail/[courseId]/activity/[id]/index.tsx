@@ -64,7 +64,6 @@ export default function ActivityDetail() {
   const { setOpenPopupCTA } = useCourseContext()
   const dispatch = useAppDispatch()
   const selector = useAppSelector(shortCourseActivityReducer)
-  const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<Array<IntersectionObserver | null>>([])
   const observerRef = useRef<IntersectionObserver>()
@@ -73,7 +72,6 @@ export default function ActivityDetail() {
   const [isDoneActivity, setIsDoneActivity] = useState(false)
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
-  const [exhibitText, setExhibitText] = useState<string>('')
   const handleCloseTab = () => setActiveTab('')
   const getNotesData = useAppSelector(
     (state) => state.shortNotesListReducer?.note_data,
@@ -533,6 +531,9 @@ export default function ActivityDetail() {
               uuid={e?.uuid}
               count={index}
               key={e?.uuid}
+              activeTab={activeTab === ACTIVE_TABS.ADD_NOTE}
+              handleCloseTab={handleCloseTab}
+              countNote={getNotesData?.length}
             />
           )
         })}

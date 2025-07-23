@@ -203,6 +203,7 @@
   }
 }
 
+.add-note-modal,
 .activity-resource-modal {
   .ant-modal {
     @apply fixed !top-auto bottom-[100px] left-4 right-4 m-0 p-0;
@@ -299,5 +300,11 @@
     .select__indicator {
       @apply w-9 text-shade-icon;
     }
+  }
+}
+
+.add-note-modal {
+  .ant-modal-header {
+    @apply mb-4;
   }
 }
