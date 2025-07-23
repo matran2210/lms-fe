@@ -7,7 +7,7 @@ import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import { SAPPCalendar } from 'sapp-common-package'
+import { SAPPCalendarV2 } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
   CALENDAR_COLOR_TYPES,
@@ -129,7 +129,7 @@ const Page = () => {
           </div>
           <div className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between">
             <div className="flex w-full min-w-0 justify-center lg:flex-1">
-              <SAPPCalendar
+              <SAPPCalendarV2
                 showWeeklyNorm={false}
                 events={
                   events?.map((item) => {
