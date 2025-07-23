@@ -2753,11 +2753,11 @@ const TestDetail = () => {
                         <div className="flex items-center gap-2">
                           {activeShowAll ? (
                             <div className="rounded-full bg-white">
-                              <ShowLessIcon size={16} color="#404041" />
+                              <ShowMoreIcon size={16} color="#404041" />
                             </div>
                           ) : (
                             <div className="rounded-full bg-white">
-                              <ShowMoreIcon size={16} color="#404041" />
+                              <ShowLessIcon size={16} color="#404041" />
                             </div>
                           )}
                           <span>
