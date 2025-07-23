@@ -51,20 +51,20 @@ const UnSubmitAnswerModal = ({
       cancelButtonClass="!p-0 underline hover:text-primary"
     >
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
-        <AlertTriagle />
+        <AlertTriagle className="md:w-22 md:h-22 h-12 w-12" />
       </div>
-      <div className="py-8 pt-10 text-center text-3xl font-semibold text-[#050505] md:text-4xl">
+      <div className="pb-4 pt-6 text-center text-2xl font-semibold text-gray-800 md:py-8 md:pt-10 md:text-3xl">
         Are You Sure?
       </div>
-      <div className=" text-center">
-        <span className="text-medium-sm text-center font-normal text-[#A1A1A1]">
+      <div className="text-center text-sm md:text-base">
+        <span className="text-center font-normal text-gray-800">
           Oops look like you&apos;ve got a few unfinished questions:&nbsp;
         </span>
-        <span className="text-medium-sm text-center font-semibold text-[#050505]">
+        <span className="text-center font-semibold text-primary">
           {data?.length > 10 ? data?.slice(0, 10)?.join(', ') : data.join(', ')}{' '}
           {data?.length > 10 ? '...' : ''}
         </span>
-        <span className="text-medium-sm text-center font-normal text-[#050505]">
+        <span className="text-center font-normal text-gray-800">
           After you submit, you can&apos;t edit this assignment.
         </span>
       </div>

@@ -6,7 +6,7 @@ import { DATE_FORMAT } from 'src/constants'
 import { IOverProgress, IExamPrediction } from 'src/type/dashboard'
 import dayjs from 'dayjs'
 import { IconEssentional } from '@assets/icons/Dashboard'
-import useIsMobile from 'src/hooks/useIsMobile'
+import useReponsive from 'src/hooks/useReponsive'
 import { EChartsOption } from 'echarts'
 
 interface ChartData {
@@ -16,7 +16,7 @@ interface ChartData {
 const OverProgress = () => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption | null>()
-  const isMobile = useIsMobile()
+  const { isMobile } = useReponsive()
 
   const handlePieChartOption = (
     data: IOverProgress | IExamPrediction | ChartData,
@@ -128,7 +128,7 @@ const OverProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="shadow-matchingquiz mb-5 mt-6 flex w-full flex-col rounded-2xl bg-white p-4 text-gray-700 lg:h-auto lg:p-6 xl:mb-0 xl:mt-0 xl:h-auto xl:w-[566px] 3xl:px-6">
+    <div className="mb-5 mt-6 flex w-full flex-col rounded-2xl bg-white p-4 text-gray-700 shadow-small md:mb-0 md:p-6 lg:h-auto xl:mt-0 xl:h-auto xl:w-[566px] xl:p-8">
       <div className="mb-5 items-center justify-between pb-3 xl:flex">
         <div className="min-w-fit text-lg font-semibold text-gray-800 xl:text-xl">
           Your Exam Prediction
@@ -140,19 +140,7 @@ const OverProgress = () => {
       {option && (
         <>
           <div className="mb-2 mt-3 flex flex-row justify-center gap-2 4xl:gap-8">
-            <EChart option={option} minHeight={isMobile ? '300px' : '400px'} />
-            {/* {isNormal && (
-              <div className="flex min-w-[180px] flex-col justify-center gap-1 text-sm tracking-tight 2xl:tracking-normal 3xl:gap-3">
-                <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                  <span className="h-3 w-3 rounded-full bg-[#37C78C]"></span>
-                  <span className="font-medium">Activities completed</span>
-                </div>
-                <div className="flex flex-row items-center gap-0.5 2xl:gap-[5px]">
-                  <span className="h-3 w-3 rounded-full bg-gray-300"></span>
-                  <span className="font-medium">Activities not completed</span>
-                </div>
-              </div>
-            )} */}
+            <EChart option={option} minHeight={isMobile ? '300px' : '390px'} />
           </div>
           <div className="xl mt-4 flex items-center justify-center self-center text-center text-sm text-gray-800 xl:text-base">
             <div className="me-2">

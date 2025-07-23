@@ -485,7 +485,7 @@ const ActivityPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0  h-full w-full">
+                  <div className="absolute left-0 top-0 h-full w-full">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
@@ -580,13 +580,10 @@ const ActivityPage = () => {
             />
 
             <div
-              className={clsx(
-                'rounded-xl bg-white p-6 shadow-learning-activity',
-                {
-                  hidden: focusOnlyQuiz.open,
-                  'hidden md:block': !focusOnlyQuiz.open,
-                },
-              )}
+              className={clsx('rounded-xl bg-white p-6 shadow-small', {
+                hidden: focusOnlyQuiz.open,
+                'hidden md:block': !focusOnlyQuiz.open,
+              })}
               data-aos={ANIMATION.DATA_AOS}
             >
               <Discussion class_id={(router.query.id as string) || ''} />
@@ -686,7 +683,7 @@ const ActivityPage = () => {
                   <div
                     // className="overflow-auto p-4 bg-white"
                     style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-[#050505] hover:text-primary"
+                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
@@ -699,12 +696,12 @@ const ActivityPage = () => {
                   key={e.id}
                   className="!z-40"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center left"
                   header={
                     <div className="relative mb-3 px-6">
                       <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
                         <div className="truncate">
-                          <span className="text-base font-semibold text-[#050505]">{`${exhibitText} ${
+                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
                             e?.index + 1
                           }: ${e?.name}`}</span>
                         </div>
@@ -717,6 +714,8 @@ const ActivityPage = () => {
                       </button>
                     </div>
                   }
+                  draggableFull
+                  modalIndex={e.index}
                 >
                   <div className="h-full bg-white">
                     <EditorReader
@@ -741,7 +740,7 @@ const ActivityPage = () => {
             }
           })}
         </div>
-        <div className="sticky inset-x-0 bottom-4 z-50">
+        <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
           <div className="w-full">
             <CtaTrial />
           </div>

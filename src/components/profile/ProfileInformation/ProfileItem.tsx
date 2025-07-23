@@ -35,11 +35,7 @@ const ProfileItem = ({
     <div className={className}>
       <div
         className={clsx(
-          'rounded-md border border-[#F1F1F1] p-3 hover:bg-[#FFFBF2] md:px-6 md:py-4',
-          {
-            'bg-[#FFFBF2]': e?.is_default,
-            'bg-gray-100': !e?.is_default,
-          },
+          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base',
         )}
         onClick={() =>
           setMakeDefaultDrawer({
@@ -56,11 +52,11 @@ const ProfileItem = ({
         <div className="flex items-center">
           <div>
             <div>
-              <span className="text-sm font-bold text-secondary md:text-base">
+              <span className="font-bold text-secondary md:text-base">
                 Profile {index + 1}
               </span>
               {e?.is_default && (
-                <span className="text-medium-sm ml-[10px] inline-block select-none rounded bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
+                <span className="ml-[10px] inline-block select-none rounded bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
                   Default
                 </span>
               )}
@@ -81,12 +77,10 @@ const ProfileItem = ({
             </div>
           </div>
           {!isEdit && (
-            <div className="group ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
-              {e?.is_default && (
-                <span className="text-base font-bold text-[#6b7280] transition-colors duration-300 group-hover:text-primary">
-                  Xem Thêm
-                </span>
-              )}
+            <div className="ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
+              <span className="hidden font-bold transition-all group-hover:inline-block group-hover:text-primary">
+                Xem Thêm
+              </span>
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,7 +89,7 @@ const ProfileItem = ({
                 fill="none"
               >
                 <path
-                  className="fill-current text-[#6b7280] transition-colors duration-300 group-hover:text-primary"
+                  className="fill-current text-icon group-hover:text-primary"
                   d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                 />
               </svg>

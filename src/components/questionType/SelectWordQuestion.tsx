@@ -129,7 +129,6 @@ const SelectWord = forwardRef(
           <div class="tooltip-text ${!!answer && answer.length > 10 ? 'block' : 'hidden'}">${answer}</div>
         `
         tooltip.appendChild(selectElement)
-
         const defaultAnswerValue = defaultAnswer?.[index] || ''
         let optionClass = ''
 
@@ -336,7 +335,7 @@ const SelectWord = forwardRef(
         <EditorReader
           key={key}
           extenalRef={refEditor}
-          className="sapp-questions"
+          className="sapp-questions sapp-editor-reader"
           // style={{borderBottom: '1px solid  white'}}
           text_editor_content={
             questionContent?.documentElement?.querySelector('body')

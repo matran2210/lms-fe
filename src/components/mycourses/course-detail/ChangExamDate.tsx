@@ -59,7 +59,7 @@ const ChangExamDate = ({
 
   return (
     <div className="flex flex-col justify-start">
-      <div className="mb-2 text-base font-semibold leading-normal text-gray-800">
+      <div className="mb-2 text-sm font-semibold leading-normal text-gray-800 md:text-base">
         New Exam Date
       </div>
       <SAPPSelectV2
@@ -76,8 +76,8 @@ const ChangExamDate = ({
       <div className="mt-1 text-sm font-bold italic leading-snug text-gray-600">
         {remainingChanges} change remaining
       </div>
-      <div className="mt-6 flex items-center gap-6">
-        <div className="text-base font-semibold leading-normal text-gray-800">
+      <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
+        <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
           Registration evidence:
         </div>
         <Controller

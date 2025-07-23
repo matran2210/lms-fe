@@ -14,7 +14,7 @@ import {
 import Link from 'next/link'
 import { EChartsOption } from 'echarts'
 import Tooltip from 'src/common/Tooltip'
-import useIsMobile from 'src/hooks/useIsMobile'
+import useReponsive from 'src/hooks/useReponsive'
 
 interface CourseInfo {
   courseType: string
@@ -39,6 +39,7 @@ const LearningResults = () => {
   const [results, setResults] = useState<ILearningResult[] | IMockTestResult[]>(
     [],
   )
+
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
@@ -53,7 +54,7 @@ const LearningResults = () => {
       ? '%Results = Graded activities (70%) + Final test (30%)'
       : '%Results = Module test (40%) + Topic test (60%)'
 
-  const isMobile = useIsMobile()
+  const { isMobile, isTablet } = useReponsive()
 
   useEffect(() => {
     const getLearningResults = async (id: string) => {
@@ -172,9 +173,9 @@ const LearningResults = () => {
   }, [results])
 
   return (
-    <div className="shadow-matchingquiz w-full rounded-2xl bg-white p-4 xl:flex xl:h-[53vh] xl:p-8">
+    <div className="w-full rounded-2xl bg-white p-4 shadow-small md:p-6 xl:flex xl:h-[600px] xl:p-8">
       <div className="w-full">
-        <div className="mb-5 flex items-center justify-between pb-3">
+        <div className="mb-5 flex items-center justify-between">
           <div className="w-full flex-row justify-between xl:flex xl:flex-col">
             <div className="flex">
               <div className="min-w-fit text-lg font-semibold xl:text-xl">
@@ -189,21 +190,40 @@ const LearningResults = () => {
                 </div>
               </Tooltip>
             </div>
-            <div className="mt-2 text-xs text-gray-400 xl:mt-0 xl:text-sm">
+            <div className="mt-2 text-xs text-gray-400 xl:text-sm">
               {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
             </div>
           </div>
         </div>
         <div className="flex">
           {option && (
-            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:px-5 2xl:pl-0 2xl:pr-12">
-              <div className="grow">
-                <EChart
-                  option={option as EChartsOption}
-                  height={isMobile ? '350px' : '400px'}
-                  minHeight={isMobile ? '350px' : '400px'}
-                  width={isMobile ? '366px' : '665px'}
-                />
+            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
+              <div className="flex justify-center">
+                {(() => {
+                  const chartHeight = isMobile
+                    ? '350px'
+                    : isTablet
+                      ? '450px'
+                      : '500px'
+                  const chartMinHeight = isMobile
+                    ? '350px'
+                    : isTablet
+                      ? '450px'
+                      : '500px'
+                  const chartWidth = isMobile
+                    ? '300px'
+                    : isTablet
+                      ? '500px'
+                      : '550px'
+                  return (
+                    <EChart
+                      option={option as EChartsOption}
+                      height={chartHeight}
+                      minHeight={chartMinHeight}
+                      width={chartWidth}
+                    />
+                  )
+                })()}
               </div>
               <div className="flex flex-row items-start justify-center gap-5 xl:flex-col xl:gap-4">
                 {!isNormal && (
@@ -250,13 +270,13 @@ const LearningResults = () => {
 const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
   return (
     <div className="w-full flex-col xl:w-[515px]">
-      <div className="mb-6 mt-8 flex text-lg font-semibold text-gray-800 lg:mb-6 lg:mt-10 xl:mb-10 xl:mt-0 xl:text-xl">
+      <div className="mb-6 mt-8 flex justify-between text-lg font-semibold text-gray-800 md:justify-start lg:mb-6 lg:mt-10 xl:mb-10 xl:mt-0 xl:text-xl">
         <div>Learning & Mock test Comparision</div>
         <div className="ms-2">
           <IconEssentional />
         </div>
       </div>
-      <div className="h-96 overflow-y-auto">
+      <div className="overflow-y-auto md:h-[230px] xl:h-[450px]">
         {results?.map((result) => {
           const differenceResult =
             (result?.mock_test_score || 0) - (result?.score || 0)
@@ -267,7 +287,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           return (
             <div
               key={result?.id}
-              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:px-4"
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:p-4"
             >
               <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg">
                 {result?.short_name || result?.name}

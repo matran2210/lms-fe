@@ -10,8 +10,8 @@ import Icon from '@components/icons'
 import Countdown from '@pages/test/countdown'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
-import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import dayjs from 'dayjs'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 const { Header, Content, Footer } = Layout
 
@@ -89,15 +89,15 @@ const TestWrapper = ({
             onClick={() => {
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
-              if (type === 'event-test') {
-                setSubmitEventTest(true)
-              }
+              // if (type === 'event-test') {
+              //   setSubmitEventTest(true)
+              // }
             }}
           >
             <Icon type="close" />
           </div>
 
-          <div className="max-w-[448px]">
+          <div className="max-w-[448px] text-gray-800">
             <div className="truncate text-center text-base">
               {quizDetail?.name}
             </div>
@@ -110,11 +110,10 @@ const TestWrapper = ({
             )}
           </div>
           <div>
-            <SAPPButtonV2
+            <ButtonSecondary
               title="Finish"
-              type="text"
-              color="secondary"
-              className="rounded-lg border border-[#050505] bg-white px-4 py-2 text-sm !text-black"
+              size="small"
+              className="!bg-white !px-4 !py-2 font-semibold"
               onClick={() => {
                 onSubmitAnswer('finish')
                 if (checkUnSubmitAnswer()?.length > 0) {

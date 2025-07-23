@@ -24,7 +24,7 @@ const PopUpRemindEntrance = ({
   }
 
   const onOk = () => {
-    count === 1 ? setOpenFillForm(true) : dispatch(closeShowRemind())
+    count === 1 ? setOpenTest(true) : dispatch(closeShowRemind())
     localStorage.setItem('enstranceTest', 'false')
   }
 
@@ -43,14 +43,14 @@ const PopUpRemindEntrance = ({
       header="Take Your Test"
       buttonSize="medium"
     >
-      <div className="text-center text-base font-normal text-gray-800">
+      <div className="text-center text-sm font-normal text-gray-800 md:text-base">
         <span>
           You have
           <span className="font-semibold text-primary"> {count}</span>
         </span>
         <span>
           {' '}
-          entrance tests that haven’t been taken,{' '}
+          entrance tests that haven&rsquo;t been taken,{' '}
           <br className="hidden md:block" />
           complete them now.
         </span>

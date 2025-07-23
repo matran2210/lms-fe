@@ -1,4 +1,5 @@
 import { IPopupFormState } from '@components/mycourses/hubspot/PopupLockContent'
+import { ECourseType } from '@pages/courses'
 import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
@@ -32,6 +33,8 @@ type Context = {
   setOpenPopupCTA: React.Dispatch<React.SetStateAction<IPopupFormState>>
   isOpenSidebar: boolean
   setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>
+  generalOrMasterCourse: ECourseType
+  setGeneralOrMasterCourse: React.Dispatch<React.SetStateAction<ECourseType>>
 }
 
 // initContext
@@ -57,6 +60,8 @@ const initContext: Context = {
   setOpenPopupCTA: () => {},
   isOpenSidebar: false,
   setOpenSidebar: () => {},
+  generalOrMasterCourse: ECourseType.MASTER,
+  setGeneralOrMasterCourse: () => {},
 }
 
 const CourseContext = createContext<Context>(initContext)
@@ -105,6 +110,13 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    * @description state này bằng true khi hiển thị sidebar
    */
   const [isOpenSidebar, setOpenSidebar] = useState(false)
+
+  /**
+   * @description state này bằng true khi hiển thị form hubspot
+   */
+  const [generalOrMasterCourse, setGeneralOrMasterCourse] =
+    useState<ECourseType>(ECourseType.MASTER)
+
   const router = useRouter()
 
   async function fetchEventTest() {
@@ -144,6 +156,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       setOpenPopupCTA,
       isOpenSidebar,
       setOpenSidebar,
+      generalOrMasterCourse,
+      setGeneralOrMasterCourse,
     }),
     [
       openPopupCongrats,
@@ -162,6 +176,8 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
       setOpenPopupCTA,
       isOpenSidebar,
       setOpenSidebar,
+      generalOrMasterCourse,
+      setGeneralOrMasterCourse,
     ],
   )
 

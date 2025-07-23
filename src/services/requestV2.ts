@@ -130,7 +130,7 @@ request.interceptors.response.use(
             deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
             deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
             deleteCookie(COOKIE_INFO.SESSION_ID)
-            window.location.href = PageLink.AUTH_LOGIN
+            window.location.reload()
           })
       }
 

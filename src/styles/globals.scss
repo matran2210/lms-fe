@@ -25,6 +25,7 @@
 @import './components/drawer.scss';
 @import './pages/test';
 @import './pages/_entrance-test.scss';
+@import './components/sapp-modal-v3.scss';
 
 @tailwind base;
 @tailwind components;
@@ -154,13 +155,19 @@ body *::-webkit-scrollbar-thumb:hover {
 
 .sapp-questions {
   p {
-    @apply m-0 break-words text-lg text-gray-800;
+    @apply m-0 break-words text-gray-800;
   }
   span {
-    @apply bg-transparent text-lg text-gray-800;
+    @apply bg-transparent text-gray-800;
   }
   table {
     @apply max-w-fit;
+  }
+  &.sapp-editor-reader {
+    p,
+    span {
+      @apply text-lg;
+    }
   }
 }
 .sapp-explanation {
@@ -784,8 +791,11 @@ textarea.is-invalid:focus {
     @apply rounded-lg;
   }
 }
-.sapp-modal .ant-modal-content {
-  @apply rounded-2xl p-10;
+.sapp-modal.ant-modal {
+  @apply max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-1rem)];
+  .ant-modal-content {
+    @apply rounded-2xl p-6 md:p-10;
+  }
 }
 .sapp-custom-modal.success-modal {
   .ant-modal-content {
@@ -923,12 +933,10 @@ $focus: (
   @apply fixed z-[1100];
 }
 
-.ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-content-wrapper {
-  position: fixed;
-  background-color: #000000cc;
+.ant-drawer .ant-drawer-mask {
+  @apply fixed bg-black opacity-60;
 }
+
 .ant-drawer-content {
   @apply rounded-2xl;
 }
@@ -1248,10 +1256,6 @@ td.py-5.px-3.sapp-table-quiz {
   max-width: 100%;
 }
 
-.sapp-modal--comment .ant-modal-content {
-  @apply max-h-[640px] min-h-[400px] p-0;
-}
-
 .pined-noti p {
   @apply mb-0;
 }
@@ -1436,6 +1440,11 @@ select:focus {
 mark {
   cursor: pointer;
   pointer-events: auto;
+}
+
+.echarts-tooltip {
+  background: white !important;
+  border: none !important;
 }
 
 .drawer-calendar__detail.drawer-calendar__detail--mobile

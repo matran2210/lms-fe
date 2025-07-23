@@ -91,7 +91,25 @@
     }
   }
 }
+.ant-tabs-dropdown {
+  @apply rounded-lg bg-white shadow-lg;
 
+  .ant-tabs-dropdown-menu {
+    @apply p-2;
+  }
+
+  .ant-tabs-dropdown-menu-item {
+    @apply p-2 text-sm text-gray-800 hover:bg-gray-100;
+    font-weight: 500;
+    &:not(:last-child) {
+      @apply mb-2;
+    }
+
+    &.ant-tabs-dropdown-menu-item-selected {
+      @apply bg-primary-100 text-primary-600;
+    }
+  }
+}
 .learning-act-tab-pagination {
   @apply mt-6;
   .tab-pagination {
@@ -112,5 +130,47 @@
 
   .tab-pagination-dot {
     @apply h-1.5 w-1.5 rounded-full bg-primary;
+  }
+}
+
+.exhibit-modal-wrapper {
+  .ant-modal {
+    @apply max-w-[calc(100%-32px)];
+    .exhibit-modal-content {
+      .ant-modal-header {
+        .ant-modal-title {
+          @apply text-lg;
+        }
+      }
+      .ant-modal-body {
+        @apply max-h-[419px] overflow-y-auto;
+
+        &::-webkit-scrollbar {
+          @apply w-2;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          @apply rounded bg-primary;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: #ffb800; // giữ nguyên khi hover
+        }
+
+        &::-webkit-scrollbar-track {
+          @apply bg-white;
+        }
+
+        /* Firefox hỗ trợ */
+        scrollbar-color: #ffb800 white;
+        scrollbar-width: thin;
+        &::-webkit-scrollbar-button:single-button {
+          display: none;
+          background-color: transparent;
+          height: 0;
+          width: 0;
+        }
+      }
+    }
   }
 }

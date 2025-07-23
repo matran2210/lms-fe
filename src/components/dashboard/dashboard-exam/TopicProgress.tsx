@@ -4,12 +4,12 @@ import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { ITopicProgress } from 'src/type/dashboard'
 import { EChartsOption } from 'echarts'
-import useIsMobile from 'src/hooks/useIsMobile'
+import useReponsive from 'src/hooks/useReponsive'
 
 const TopicProgress = () => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
-  const isMobile = useIsMobile()
+  const { isMobile, isTablet } = useReponsive()
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -17,18 +17,26 @@ const TopicProgress = () => {
         tooltip: {
           trigger: 'item',
           borderWidth: 0,
+          extraCssText: `
+              border-radius: 8px;
+              box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.08);
+              padding: 12px;
+              background: white;
+            `,
           formatter: function (params: { name: string; value: string }) {
             return `
-              <div style="
-                min-width: 120px;
-                background: #fff;
-              ">
-                <div style="font-weight: 600; color: #374151; margin-bottom: 4px; font-size: 16px; line-height: 24px">${params.name}</div>
-                <div style="font-size: 14px; line-height: 22px; font-weight: 400; color: #374151">Progress: ${params.value}%</div>
-              </div>
-            `
+      <div style=" min-width: 120px;">
+        <div style="font-weight: 600; color: #374151; margin-bottom: 4px; font-size: 16px; line-height: 24px">
+          ${params.name}
+        </div>
+        <div style="font-size: 14px; line-height: 22px; font-weight: 400; color: #374151">
+          Progress: ${params.value}%
+        </div>
+      </div>
+    `
           },
         },
+
         xAxis: {
           type: 'category',
           data: data.map((e: ITopicProgress) => e.short_name || e.name),
@@ -98,7 +106,7 @@ const TopicProgress = () => {
               },
             })),
             type: 'bar',
-            barWidth: isMobile ? 50 : 66,
+            barWidth: isMobile ? 50 : 58,
           },
         ],
       }
@@ -125,13 +133,18 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="shadow-matchingquiz flex flex-col rounded-2xl bg-white p-4 lg:h-[48vh] xl:h-auto xl:p-8">
+    <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-[48vh] xl:h-auto xl:p-8">
       <div className="mb-6 text-lg font-bold text-gray-800 md:mb-5 md:pb-3 xl:text-xl">
         Topic Progress
       </div>
 
       {option && (
-        <EChart option={option} minHeight={isMobile ? '350px' : '450px'} />
+        <EChart
+          option={option}
+          minHeight={isMobile ? '350px' : '450px'}
+          height={isMobile ? '350px' : '450px'}
+          width="100%"
+        />
       )}
     </div>
   )

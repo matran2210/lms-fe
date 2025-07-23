@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { LOCAL_STORAGE_KEYS, PageLink, TitleSidebar } from 'src/constants'
+import { PageLink, TitleSidebar } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
@@ -19,7 +19,7 @@ import {
   getCountUnRead,
   loadMoreNotification,
 } from 'src/redux/slice/Notification/Notification'
-import SappNotificationComponent from 'sapp-notification-test'
+import SappNotificationComponent from 'sapp-notification'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -37,12 +37,6 @@ export default function MenuItem({
   closeSideBar,
   setOpenExaminationInfo,
 }: MenuItemProps) {
-  const [notificationUnread, setNotificationUnread] = useState(() => {
-    return parseInt(storedCount ?? '0', 10)
-  })
-  const storedCount = localStorage.getItem(
-    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
-  )
   const {
     isViewDetail,
     openNotification,
@@ -59,6 +53,7 @@ export default function MenuItem({
     handleBack,
     refreshNotification,
     isDesktopView,
+    notificationUnread,
   } = useNotification()
 
   const tabs = [
@@ -147,6 +142,22 @@ export default function MenuItem({
       name === TitleSidebar.EXAM && handleOpenExaminationInfoPage()
     }
   }
+  const onClickMenuItem = () => {
+    if (url !== '#' && !isEmpty(url)) {
+      const targetUrl =
+        url === PageLink.RESULTS
+          ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
+          : url === PageLink.DASHBOARD
+            ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
+            : name === TitleSidebar.COURSE_CONTENT
+              ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
+              : url
+      router.push({
+        pathname: targetUrl,
+      })
+    }
+    closeSideBar()
+  }
 
   const isActivity = router?.query?.activityId
   const isInCourse =
@@ -203,15 +214,6 @@ export default function MenuItem({
       scrollEl?.removeEventListener('scroll', handleScroll)
     }
   }, [pagination])
-
-  useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-      setNotificationUnread(parseInt(count ?? '0', 10))
-    })
-
-    return () => window.removeEventListener('storage', () => {})
-  }, [])
 
   const renderMenuContent = () => {
     return (
@@ -397,12 +399,12 @@ export default function MenuItem({
             'hover:bg-gray-100': !selected,
           },
         )}
+        onClick={() => onClickMenuItem()}
       >
         <div
           className={`sidebar-item flex items-center ${
             Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
           }`}
-          onClick={() => closeSideBar()}
         >
           {url !== '#' && !isEmpty(url) ? (
             <Link
@@ -415,7 +417,7 @@ export default function MenuItem({
                       ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
                       : url
               }
-              passHref
+              // passHref
             >
               {renderMenuContent()}
             </Link>

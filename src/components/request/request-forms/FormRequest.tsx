@@ -436,7 +436,8 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 label: formatRecurringSchedule(
                   data.teacher_schedules[0].schedule.recurring_pattern_schedule,
                   formatDateTimeWithTimeZone(
-                    data.teacher_schedules[0].schedule.start_date,
+                    data.teacher_schedules[0].schedule
+                      .recurring_pattern_schedule.start_date,
                     data.teacher_schedules[0].schedule.start_time,
                   ),
                 ),

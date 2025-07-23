@@ -3523,7 +3523,7 @@
   resolved "https://registry.yarnpkg.com/@tailwindcss/aspect-ratio/-/aspect-ratio-0.4.2.tgz#9ffd52fee8e3c8b20623ff0dcb29e5c21fb0a9ba"
   integrity sha512-8QPrypskfBa7QIMuKHg2TA7BqES6vhBrDLOv8Unb6FcFyd3TjKbc6lcmb9UPQHxfl24sXoJ41ux/H7qQQvfaSQ==
 
-"@tailwindcss/forms@^0.5.6", "@tailwindcss/forms@^0.5.7":
+"@tailwindcss/forms@^0.5.6":
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/@tailwindcss/forms/-/forms-0.5.10.tgz#0a1cd67b6933402f1985a04595bd24f9785aa302"
   integrity sha512-utI1ONF6uf/pPNO68kmN1b8rEwNXv3czukalo8VtJH8ksIkZXr3Q3VYudZLkCsDd4Wku120uF02hYK25XGPorw==
@@ -6904,22 +6904,21 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.1.21:
-  version "1.1.21"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.1.21.tgz#97f94a13b3913ec2b4dd2fd6c89948a84109db37"
-  integrity sha512-Z6N9Zym5MHtSxp2fg+PMo2LbpmSdFUZfaFaKtOxuNnAxft8dqxBzH6y5A9K77ALWhHN17x3BB6Fh73HWO0Kt0A==
+explanation-package@^1.1.13-test:
+  version "1.1.13-test"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.1.13-test.tgz#3b1be983e62b99eef74f0ce68825449822db595f"
+  integrity sha512-SUn1QE0lfMParAlEEL4K46G5tml6gJZgfk8J2GHZyMZyBruQ/pEm2RV4uN8YakH0gMTWlsnAcj7GfdKbg+pqjg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
     "@cyntler/react-doc-viewer" "1.10.4"
     "@fortune-sheet/react" "^0.19.1"
     "@funktechno/texthighlighter" "^2.1.2"
-    "@tailwindcss/aspect-ratio" "^0.4.2"
-    "@tailwindcss/forms" "^0.5.7"
     "@tinymce/tinymce-react" "^4.3.0"
     "@wiris/mathtype-tinymce6" "^8.5.0"
     antd "^5.22.7"
     autoprefixer "^10.4.16"
+    clsx "^2.1.1"
     css-loader "^6.8.1"
     dashjs "^4.7.4"
     html-react-parser "^5.1.10"
@@ -6927,7 +6926,6 @@ explanation-package@^1.1.21:
     react-hook-form "7.46.0"
     react-shadow "^20.4.0"
     sass "^1.53.0"
-    tailwindcss "^3.3.5"
     tinymce "^6.8.3"
 
 external-editor@^2.0.1:
@@ -10068,10 +10066,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.3.7-test:
-  version "1.3.7-test"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.7-test.tgz#03454f26828c04034e3dc842f3c1d5f16ac28061"
-  integrity sha512-2CzBI/Z3+PfbxhUoLNlXn8pYvjJCbM7HalSBX2IzWjECEmKC0qJTHua3CZOW9nhn+zQNghrg+nAJIYz+4XAaXg==
+preview-part@^1.3.8-test:
+  version "1.3.8-test"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.3.8-test.tgz#61bd37ca334d0f963fbf55cb14ad9217c25ba8ae"
+  integrity sha512-XJX+U8FTBTVbWx0l0COL0nbGPku06tQcKrq2JD0NQ/sQNuurktkDxIlHSYC4nTwzPX2ah3puD+P6H480AN5Z6Q==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -11462,6 +11460,42 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
+sapp-common-package-ha-test@^1.0.21-test:
+  version "1.0.21-test"
+  resolved "https://registry.yarnpkg.com/sapp-common-package-ha-test/-/sapp-common-package-ha-test-1.0.21-test.tgz#6ea2c0a997d8a96a4c34703945f888074da57137"
+  integrity sha512-+lpaBh7h+8qff1V5lGITsOh9Oxf7E70rT7rbW0O/gRhZcKkKpHc1wNSCA4I7mLQm/g1hPq3Xnwqrav/Yvgy5hQ==
+  dependencies:
+    "@_ueberdosis/prosemirror-tables" "^1.1.3"
+    "@floating-ui/react" "^0.27.8"
+    "@tippyjs/react" "^4.2.6"
+    "@tiptap/extension-color" "^2.12.0"
+    "@tiptap/extension-font-family" "^2.12.0"
+    "@tiptap/extension-highlight" "^2.12.0"
+    "@tiptap/extension-image" "^2.12.0"
+    "@tiptap/extension-link" "^2.12.0"
+    "@tiptap/extension-placeholder" "^2.12.0"
+    "@tiptap/extension-subscript" "^2.12.0"
+    "@tiptap/extension-superscript" "^2.12.0"
+    "@tiptap/extension-table" "^2.12.0"
+    "@tiptap/extension-table-cell" "^2.12.0"
+    "@tiptap/extension-table-header" "^2.12.0"
+    "@tiptap/extension-table-row" "^2.12.0"
+    "@tiptap/extension-task-item" "^2.12.0"
+    "@tiptap/extension-task-list" "^2.12.0"
+    "@tiptap/extension-text-align" "^2.12.0"
+    "@tiptap/extension-text-style" "^2.12.0"
+    "@tiptap/extension-typography" "^2.12.0"
+    "@tiptap/extension-underline" "^2.12.0"
+    "@tiptap/pm" "^2.12.0"
+    "@tiptap/react" "^2.12.0"
+    "@tiptap/starter-kit" "^2.12.0"
+    antd "^5.22.3"
+    clsx "^1.2.1"
+    dayjs "^1.11.7"
+    sass "^1.89.0"
+    sass-loader "^13"
+    tailwindcss "^3"
+
 sapp-common-package@^1.1.8-test:
   version "1.1.8-test"
   resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.1.8-test.tgz#d4e45acf8f12b01ff1a9c011598afab432c0e7ce"
@@ -11498,10 +11532,10 @@ sapp-common-package@^1.1.8-test:
     sass-loader "^13"
     tailwindcss "^3"
 
-sapp-notification-test@^1.0.6-test:
-  version "1.0.6-test"
-  resolved "https://registry.yarnpkg.com/sapp-notification-test/-/sapp-notification-test-1.0.6-test.tgz#cb7ed948103df430c44ac481a6ebc7fdd2ca65d2"
-  integrity sha512-eHKt2AsulhnslhzUJnvvv5UWufMJ96tbmSXsSc87s8bp5iucGO1p+OBrKf4HFBI9OUeCwi7BhS2IBAAI23jqOQ==
+sapp-notification-test@^1.0.8-test:
+  version "1.0.8-test"
+  resolved "https://registry.yarnpkg.com/sapp-notification-test/-/sapp-notification-test-1.0.8-test.tgz#bb7f739f4f048d44fe56125b6bbfc40ef3afa5bd"
+  integrity sha512-dKJeGKOTsdKsEjvXzziEE3H+vo2UTvdIkHJK7Pukxru87eYFmkifnzK6cOpD7O4JY00y980xk93bAu0ojYh9lQ==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
@@ -12213,6 +12247,11 @@ table@^6.0.9:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
+tailwind-merge@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/tailwind-merge/-/tailwind-merge-3.3.1.tgz#a7e7db7c714f6020319e626ecfb7e7dac8393a4b"
+  integrity sha512-gBXpgUm/3rp1lMZZrM/w7D8GKqshif0zAymAhbCyIt8KMe+0v9DQ7cdYLR4FHH/cKpdTXb+A/tKKU3eolfsI+g==
+
 tailwind-scrollbar@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/tailwind-scrollbar/-/tailwind-scrollbar-4.0.2.tgz#764dbc00aede9c8b885a2b8e8191f7785e05a92b"
@@ -12220,7 +12259,7 @@ tailwind-scrollbar@^4.0.2:
   dependencies:
     prism-react-renderer "^2.4.1"
 
-tailwindcss@3.4.17, tailwindcss@^3, tailwindcss@^3.3.5:
+tailwindcss@3.4.17, tailwindcss@^3:
   version "3.4.17"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.4.17.tgz#ae8406c0f96696a631c790768ff319d46d5e5a63"
   integrity sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==

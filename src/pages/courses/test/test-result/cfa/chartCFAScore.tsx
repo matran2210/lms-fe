@@ -34,7 +34,7 @@ const ChartCFAScore = ({ data }: IProps) => {
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">
-        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-sm font-normal">
+        <div className="absolute left-[-42px] top-[43%] shrink-0 -translate-y-1/2 -rotate-90 text-xs font-normal md:text-sm">
           Available Points
         </div>
         <div className="absolute left-[108px] top-1/2 h-full w-0.5 -translate-y-1/2 border-r border-gray-300" />
@@ -49,7 +49,7 @@ const ChartCFAScore = ({ data }: IProps) => {
               width: `${data?.length > 0 && 156 * data?.length + 54 + 14 + 24}px`,
             }}
           >
-            <span className="pr-7 text-sm font-normal">70%</span>
+            <span className="pr-7 text-xs font-normal md:text-sm">70%</span>
             <div className="w-full border-b border-gray-300"></div>
           </div>
           <div
@@ -62,16 +62,16 @@ const ChartCFAScore = ({ data }: IProps) => {
               width: `${data?.length > 0 && 156 * data?.length + 54 + 14 + 24}px`,
             }}
           >
-            <span className="pr-7 text-sm font-normal">50%</span>
+            <span className="pr-7 text-xs font-normal md:text-sm">50%</span>
             <div className="w-full border-b border-gray-300"></div>
           </div>
         </div>
       </div>
       <div className="block">
         <div className="flex w-full flex-row">
-          <div className="ml-11 flex shrink-0 flex-col justify-between bg-white py-4 pr-7">
-            <div className="text-sm">Topic</div>
-            <div className="text-sm">Weight</div>
+          <div className="ml-11 flex shrink-0 flex-col justify-between bg-white py-4 pr-7 text-xs md:text-sm">
+            <div>Topic</div>
+            <div>Weight</div>
           </div>
           <div className="flex-start top- flex flex-row gap-6 rounded-xl bg-gray-100 px-6 py-4">
             {data?.map((item, index: number) => (
@@ -102,10 +102,10 @@ const ChartCFAScore = ({ data }: IProps) => {
                     }}
                   />
                 </div>
-                <div className="w-full text-sm font-medium">
+                <div className="w-full text-xs font-medium md:text-sm">
                   Alternative Investment and Derivatives
                 </div>
-                <div className="text-sm font-normal">
+                <div className="text-xs font-normal md:text-sm">
                   {`${roundNumber(item?.max_section_score)}%`}
                 </div>
               </div>

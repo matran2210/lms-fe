@@ -1,9 +1,10 @@
+import { MenuDotsIcon, ShowMoreIcon } from '@assets/icons'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Container from '@components/Container'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
+import Tooltip from 'src/common/Tooltip'
 import { GRADE_STATUS } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
@@ -80,9 +81,26 @@ const TestResultDetail = () => {
         <div className="text-center text-xl font-bold">
           {questions?.quizAttempt?.quiz?.name}
         </div>
-        <ButtonSecondary title="Retake" size="small" />
+        <ButtonSecondary
+          title="Retake"
+          size="small"
+          className="hidden md:block"
+        />
+        <Tooltip
+          placement="left"
+          title={
+            <span className="text-sm" onClick={() => {}}>
+              Retake
+            </span>
+          }
+          className="block md:hidden"
+        >
+          <button className="text-icon">
+            <MenuDotsIcon />
+          </button>
+        </Tooltip>
       </div>
-      <div className="mx-auto mt-6 max-w-[1542px]">
+      <div className="container mx-auto mb-24 mt-6 max-w-[1542px] md:mb-20 xl:mb-0">
         <TestResultPage
           questions={questions}
           type={questions?.course?.course_categories?.[0]?.name}

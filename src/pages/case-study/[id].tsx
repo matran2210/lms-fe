@@ -8,7 +8,8 @@ import {
 } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import EditorReader from '@components/base/editor/EditorReader'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
+import FileViewer from '@components/base/fileViewer/FileViewer'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -16,10 +17,10 @@ import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
@@ -51,10 +52,6 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
-import ModalResizeable from '@components/base/modal/ModalResizeable'
-import { isPdfFile } from '@utils/helpers'
-import FileViewer from '@components/base/fileViewer/FileViewer'
-import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -494,12 +491,12 @@ const CaseStudyDetail = ({ questions }: any) => {
   const getValueSelectText = (index: number) => {
     let value = [] as any
     if (valueRef?.current?.[index]) {
-      const inputs = valueRef?.current?.[index]?.querySelectorAll(
-        'select.sapp-select--selectword-preview',
+      const inputs = document.querySelectorAll(
+        'div.sapp-select--question',
       ) as any
 
       for (let e of inputs) {
-        value.push(e.value)
+        value.push(e?.dataset.value)
       }
     } else {
       value.push('')
@@ -993,7 +990,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   setCurrentMousePos(x || 0)
                 }}
                 onMouseUp={() => setStartResize(false)}
-              ></div>
+              />
               <div
                 className={`h-full overflow-auto bg-white py-6`}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}

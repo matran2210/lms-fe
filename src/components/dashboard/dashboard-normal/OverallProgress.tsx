@@ -5,8 +5,8 @@ import { EChartsOption } from 'echarts'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
-import useIsMobile from 'src/hooks/useIsMobile'
 import { IActivities, IActivityProgress } from '../CourseDashboard'
+import useReponsive from 'src/hooks/useReponsive'
 
 interface OverallProgressProps {
   setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>
@@ -22,7 +22,7 @@ interface IPieChartOption {
 const OverallProgress = ({ setActivities }: OverallProgressProps) => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption | null>()
-  const isMobile = useIsMobile()
+  const { isMobile } = useReponsive()
   const [activities, setActivitiesState] = useState<IActivities>()
 
   const handlePieChartOption = (data: IPieChartOption) => {
@@ -140,7 +140,7 @@ const OverallProgress = ({ setActivities }: OverallProgressProps) => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="shadow-matchingquiz rounded-2xl bg-white p-6">
+    <div className="rounded-2xl bg-white p-6 shadow-small">
       <div className="flex-col">
         <div className="flex">
           <div className="mb-6 min-w-fit text-lg font-semibold md:text-xl xl:mb-0">

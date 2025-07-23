@@ -1,25 +1,11 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
-import { LOCAL_STORAGE_KEYS } from 'src/constants'
+import { useNotification } from 'src/hooks/useNotification'
 import { IIcon } from 'src/type'
 
 const NotificationIcon = ({ className }: IIcon) => {
   const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
-  const storedCount = localStorage.getItem(
-    LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
-  )
-
-  const [notificationUnread, setNotificationUnread] = useState(() => {
-    return parseInt(storedCount ?? '0', 10)
-  })
-  useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-      setNotificationUnread(parseInt(count ?? '0', 10))
-    })
-
-    return () => window.removeEventListener('storage', () => {})
-  }, [])
+  const { notificationUnread } = useNotification()
 
   useEffect(() => {
     if (notificationUnread > 9) {

@@ -1,18 +1,21 @@
+import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { LAYOUT } from '@utils/constants'
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { IRequirment, QUESTION_TYPES } from 'src/type/course/Question'
-import { LAYOUT } from '@utils/constants'
-import { CloseIcon } from '@assets/icons'
-import { UploadAPI } from 'src/pages/api/upload'
-import { CoursesAPI } from '../api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from 'src/constants'
-import { IAtempt } from 'src/type/results'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { UploadAPI } from 'src/pages/api/upload'
 import { UserType } from 'src/redux/types/User/urser'
 import { IRequirement } from 'src/type/case-study'
+import { QUESTION_TYPES } from 'src/type/course/Question'
+import { IAtempt } from 'src/type/results'
+import { CoursesAPI } from '../api/courses'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { CloseIconV2 } from '@components/icons'
+import Tooltip from 'src/common/Tooltip'
 
 const Explanation = () => {
   const router = useRouter()
@@ -121,7 +124,7 @@ const Explanation = () => {
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
         <div
-          className="absolute right-6 top-[14px] ml-auto cursor-pointer"
+          className="absolute left-8 top-5 z-10 cursor-pointer"
           onClick={() => {
             if (isUserViewAnswers) {
               router.push(
@@ -154,7 +157,27 @@ const Explanation = () => {
             }
           }}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <div className="hidden rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:block">
+            <AltArrowLeft />
+          </div>
+          <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:hidden">
+            <CloseIconV2 className="h-[18px] w-[18px]" />
+          </div>
+        </div>
+        <div className="absolute right-8 top-6 z-10 flex cursor-pointer items-center justify-center">
+          <Tooltip
+            placement="left"
+            title={
+              <span className="text-sm" onClick={() => {}}>
+                Show comment
+              </span>
+            }
+            className="block md:hidden"
+          >
+            <button className="text-icon">
+              <MenuDotsIcon />
+            </button>
+          </Tooltip>
         </div>
         <ExplanationPackage
           getActiveQuestion={getActiveQuestion}

@@ -22,18 +22,12 @@ export const RouteGuard = ({ children }: IProps) => {
   // First useEffect for getMe
   useEffect(() => {
     callGetMe()
-  }, [router.pathname])
-
-  useEffect(() => {
-    setCookie(
-      COOKIE_INFO.KEYCLOAK_USER_ID,
-      userSlice.user.keycloak_user_id ?? '',
-    )
-  }, [])
+  }, [router.pathname, userSlice.user.keycloak_user_id])
 
   const callGetMe = async () => {
     if (
       userSlice.user.id ||
+      userSlice.user.keycloak_user_id ||
       [
         CERTIFICATE_DETAIL,
         ENTRANCE_TEST_RESULT,
@@ -41,6 +35,10 @@ export const RouteGuard = ({ children }: IProps) => {
       ].includes(router.pathname)
     ) {
       setAuthorized(true)
+      setCookie(
+        COOKIE_INFO.KEYCLOAK_USER_ID,
+        userSlice.user.keycloak_user_id ?? '',
+      )
       return
     }
 

@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Handle, Position, NodeProps } from '@xyflow/react'
 import { Color } from './MatchQuiz'
-import { Grid } from 'antd'
+import { Grid, Tooltip } from 'antd'
 
 export const CustomNode: React.FC<NodeProps> = ({ data }) => {
   const handleStyle: React.CSSProperties = {
-    width: data.role === 'answer' ? '60px' : '15px',
-    height: data.role === 'answer' ? '60px' : '15px',
+    width: '15px',
+    height: '15px',
     background: '#fff',
     border: `2px solid ${data?.edgeColor || Color?.ArrowDefault}`,
     borderRadius: '50%',
@@ -17,6 +17,17 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
 
   // Thêm màu border vàng khi được chọn
   const borderColor = data?.isSelected ? '#FFB700' : 'none'
+
+  // Truncate + Tooltip logic
+  const labelRef = useRef<HTMLSpanElement>(null)
+  const [isTruncated, setIsTruncated] = useState(false)
+
+  useEffect(() => {
+    const el = labelRef.current
+    if (el) {
+      setIsTruncated(el.scrollHeight > el.clientHeight + 1) // +1 để tránh lỗi float
+    }
+  }, [data.label, lg])
 
   return (
     <div
@@ -30,7 +41,28 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
       className={`relative min-h-10 break-words rounded-lg bg-white p-4 text-start text-base shadow-small`}
       onClick={data?.onClick as React.MouseEventHandler<HTMLDivElement>}
     >
-      {data.label as any}
+      <Tooltip
+        title={isTruncated ? (data.label as React.ReactNode) : undefined}
+        placement="topLeft"
+      >
+        <span
+          ref={labelRef}
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-word',
+            lineHeight: '1.5',
+            maxHeight: '3em', // 2 lines * 1.5em
+            minHeight: '3em', // fix chiều cao đúng 2 dòng
+            height: '3em', // fix luôn height
+          }}
+        >
+          {data.label as string}
+        </span>
+      </Tooltip>
       {data.role === 'question' && (
         <Handle
           type="source"
@@ -47,10 +79,7 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
           position={Position.Left}
           style={{
             ...handleStyle,
-            borderWidth: 2,
-            left: -5,
-            transform: 'translateY(-50%)',
-            opacity: 0,
+            opacity: data.isConnected ? 0 : 1,
           }}
           id="left"
           isConnectable={!data?.isDisabled}

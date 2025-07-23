@@ -1024,7 +1024,7 @@ export const TimeOutIcon = () => {
   )
 }
 
-export const VerifiedIcon = () => {
+export const VerifiedIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       width="14"
@@ -1032,6 +1032,7 @@ export const VerifiedIcon = () => {
       viewBox="0 0 14 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <g id="verified 1" clipPath="url(#clip0_12314_6902)">
         <g id="Group">
@@ -1060,15 +1061,17 @@ export const VerifiedIcon = () => {
 
 export const ArrowDownIcon = () => (
   <svg
+    xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M11.8906 17.2401C11.759 17.2408 11.6285 17.2156 11.5067 17.1658C11.3848 17.1161 11.274 17.0427 11.1806 16.9501L5.18056 10.9501C5.08684 10.8571 5.01244 10.7465 4.96167 10.6246C4.9109 10.5028 4.88477 10.3721 4.88477 10.2401C4.88477 10.108 4.9109 9.97733 4.96167 9.85547C5.01244 9.73361 5.08684 9.62301 5.18056 9.53005C5.36793 9.3438 5.62138 9.23926 5.88556 9.23926C6.14975 9.23926 6.4032 9.3438 6.59056 9.53005L11.8906 14.8301L17.1806 9.53005C17.3679 9.3438 17.6214 9.23926 17.8856 9.23926C18.1498 9.23926 18.4032 9.3438 18.5906 9.53005C18.6843 9.62301 18.7587 9.73361 18.8095 9.85547C18.8602 9.97733 18.8864 10.108 18.8864 10.2401C18.8864 10.3721 18.8602 10.5028 18.8095 10.6246C18.7587 10.7465 18.6843 10.8571 18.5906 10.9501L12.5906 16.9501C12.4043 17.1348 12.1529 17.2389 11.8906 17.2401Z"
-      fill="#7E8299"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z"
+      fill="currentColor"
     />
   </svg>
 )
@@ -1100,13 +1103,14 @@ export const HandShake = () => (
     />
   </svg>
 )
-export const CloseIconV2 = () => (
+export const CloseIconV2 = ({ className }: { className?: string }) => (
   <svg
     width="24"
     height="24"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       d="M18 18L6 6"

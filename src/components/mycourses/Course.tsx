@@ -12,7 +12,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import Tooltip from 'src/common/Tooltip'
 import {
-  ANIMATION,
   BUTTON_STATUS,
   CLASS_STATUS,
   CLASS_USER_TYPES,
@@ -206,7 +205,9 @@ const Course = ({
       }
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
-        router.push(`/courses/my-course/${foundation_class_id}`)
+        router.push(
+          `/courses/my-course/${foundation_class_id || classInstance?.id}`,
+        )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
           toast.success('Active thành công!')
@@ -416,12 +417,12 @@ const Course = ({
       handleCourseDetail()
     }
   }
-  const handleClickTitle = () => {
-    if (isActiveStudent && enableCourse) {
-      courseAction()
-    }
-    trackGAEvent('Click Title Course Item')
-  }
+  // const handleClickTitle = () => {
+  //   if (isActiveStudent && enableCourse) {
+  //     courseAction()
+  //   }
+  //   trackGAEvent('Click Title Course Item')
+  // }
   const isDesktop = screens.lg
   const maxLengthTitle = isDesktop ? 25 : 15
   const sizeIcon = 'h-5 w-5 md:h-6 md:w-6'
@@ -437,8 +438,7 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`h-12 mb-4 md:h-16 ${enableCourse && 'mt-3'}`}
-          handleClickTitle={handleClickTitle}
+          classNameTitle={`h-12 mb-4 md:h-16`}
           hideBadge={!enableCourse}
           badgeCode={{
             badge: category,

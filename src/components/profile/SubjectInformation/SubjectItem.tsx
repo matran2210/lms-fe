@@ -31,7 +31,7 @@ const SubjectItem = ({
     <div className={className}>
       <div
         className={clsx(
-          'rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 hover:bg-[#FFFBF2] md:px-6 md:py-4',
+          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-50 md:px-6 md:py-4 md:text-base',
         )}
         onClick={() =>
           setMakeDefaultDrawer({
@@ -56,7 +56,7 @@ const SubjectItem = ({
             </div>
           </div>
           {!isEdit && (
-            <div className="group ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
+            <div className="ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={24}
@@ -64,7 +64,7 @@ const SubjectItem = ({
                 fill="none"
               >
                 <path
-                  className="fill-current text-[#6b7280] transition-colors duration-300 group-hover:text-primary"
+                  className="fill-current text-icon group-hover:text-primary"
                   d="M13.102 19.147a.562.562 0 0 1 0-.795l5.79-5.79H3.75a.562.562 0 1 1 0-1.125h15.142l-5.79-5.79a.563.563 0 0 1 .796-.795l6.75 6.75a.563.563 0 0 1 0 .795l-6.75 6.75a.562.562 0 0 1-.796 0Z"
                 />
               </svg>

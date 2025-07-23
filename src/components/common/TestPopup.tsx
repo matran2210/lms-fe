@@ -14,7 +14,8 @@ interface IProps {
   numberOfAttempt?: number
   customFooter?: ReactNode
   otherContent?: ReactNode
-  gapContent?: number
+  gapContent?: string
+  isClosable?: boolean
 }
 
 const TestPopup = ({
@@ -25,7 +26,8 @@ const TestPopup = ({
   customFooter,
   otherContent,
   setOpen,
-  gapContent = 10,
+  gapContent = 'gap-4 md:gap-10',
+  isClosable = true,
 }: IProps) => {
   const timeFormated = formatTime(time, 'HH:mm:ss')
   const isTimeOut = timeFormated === '00:00:00'
@@ -35,7 +37,7 @@ const TestPopup = ({
   return (
     <SappModalV3
       open={open}
-      isClosable={true}
+      isClosable={isClosable}
       onOk={() => {}}
       handleCancel={() => setOpen(false)}
       icon={isTimeOut ? <TimeOutIcon /> : undefined}
@@ -47,8 +49,8 @@ const TestPopup = ({
       {otherContent ? (
         <div className="pb-10">{otherContent}</div>
       ) : (
-        <div className="text-center text-base font-normal text-gray-800">
-          <div>
+        <div className="text-center font-normal text-gray-800">
+          <div className="text-sm md:text-base">
             {isFinalAttemptTimeout ? (
               <div className="pb-2">
                 The test has timed out and has been submitted automatically.

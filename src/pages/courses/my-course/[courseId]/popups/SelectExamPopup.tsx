@@ -68,8 +68,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     return (
       <>
         <div className="mb-6 justify-center self-stretch text-center text-base font-normal leading-normal text-gray-800">
-          Lorem ipsum dolor sit amet consectetur, et in quis elementum risus
-          dolor sit amet consectetur amet consectetur.
+          Select the exam you want to register for next.
         </div>
         <SAPPSelectV2
           placeholder="Exam Date"
@@ -97,7 +96,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       showFooter
       okButtonCaption="Confirm"
       fullWidthBtn
-      buttonSize="extra"
+      buttonSize="medium"
       cancelButtonCaption="Skip"
       isUnderLine
     />

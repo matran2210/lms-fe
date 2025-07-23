@@ -4,12 +4,15 @@ import React from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
 import { ITestQuizProps } from 'src/type/results'
 import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const CollapseActivity = ({
   resultData,
   handleViewResult,
   getScore,
+  lastElementRef,
 }: ITestQuizProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   if (!resultData) return null
   const handleViewActivity = () => {
     handleViewResult(resultData)
@@ -18,15 +21,17 @@ const CollapseActivity = ({
     {
       key: 'activity',
       label: (
-        <div className="text-lg font-semibold leading-[27px] text-gray-800">
+        <div className="text-base font-semibold leading-[27px] text-gray-800 md:text-lg">
           {resultData?.name}
         </div>
       ),
       children: (
         <>
-          <div className="mb-6 mt-2 text-base font-normal leading-normal text-gray-400">
-            {resultData?.path}
-          </div>
+          {!isMobileView && (
+            <div className="mb-6 mt-2 text-base font-normal leading-normal text-gray-400">
+              {resultData?.path}
+            </div>
+          )}
           <TableListQuizInActivity
             data={resultData}
             handleViewActivity={handleViewActivity}
@@ -38,6 +43,7 @@ const CollapseActivity = ({
   ]
   return (
     <Collapse
+      ref={lastElementRef}
       bordered={false}
       expandIconPosition="end"
       defaultActiveKey={['activity']}
@@ -48,7 +54,7 @@ const CollapseActivity = ({
         />
       )}
       items={getItemsActivity}
-      className="learning-activity-collapse rounded-xl bg-white p-6 shadow-learning-activity"
+      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6"
     />
   )
 }

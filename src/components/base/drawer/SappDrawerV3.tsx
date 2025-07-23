@@ -11,7 +11,7 @@ interface IProps extends DrawerProps {
   handleCancel?: () => void
   handleBack?: () => void
   width?: string | number
-  title: string
+  title: React.ReactNode
   isShowBtnClose?: boolean
   isShowFooter?: boolean
   isShowHeader?: boolean
@@ -45,7 +45,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
-  classNameHeader,
+  classNameHeader = 'mb-4',
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
@@ -71,7 +71,7 @@ const SappDrawerV3: React.FC<IProps> = ({
         {isShowHeader && (
           <div
             className={clsx(
-              'mb-6 flex items-center justify-between lg:mb-8',
+              'flex items-center justify-between lg:mb-8',
               classNameHeader,
             )}
           >
