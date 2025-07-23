@@ -88,6 +88,11 @@ module.exports = {
           11: '#252F4A',
           12: '#374151',
           13: '#1F2937',
+          14: '#374151',
+          15: '#3F3F3F',
+          16: '#212121',
+          17: '#29353C',
+          18: '#29353ce6',
         },
         gray: {
           1: '#A1A1A1',
@@ -106,6 +111,8 @@ module.exports = {
           14: '#404041',
           15: '#D1D5DB',
           16: '#DADFE5',
+          17: '#E5E7EB',
+          18: '#5D5D5D',
           100: '#99A1B70D',
           200: '#6B7280',
           900: '#181C32',
@@ -116,12 +123,16 @@ module.exports = {
           3: '#37C78C',
           4: '#6FD195',
           5: '#07AF170D',
+          6: '#10B367',
+          7: '#E7FCF2',
         },
         orange: {
           1: '#F897070D',
           2: '#FFFDF6',
           3: '#FFB800',
           4: '#F89707',
+          5: '#E68200',
+          6: '#FCF3E5',
         },
         overlay: {
           dark: 'rgba(0,0,0,0.5)',
@@ -177,6 +188,33 @@ module.exports = {
             900: '#FFFBF2',
           },
         },
+        badge: {
+          open: '#f89707',
+          pending: '#f89707',
+          finished: '#087051',
+          finished_bg: '#e9ffee',
+          reject: '#f80903',
+          reject_bg: '#ffdbda',
+          denied: '#f01919',
+          canceled: '#99a1b7',
+          accepted: '#07af17',
+          active: '#09719d',
+          active_bg: '#b4cee0',
+          learning: '#fe9800',
+          learning_bg: '#fff6e1',
+        },
+        shade: {
+          primary: {
+            50: '#FFFBF2',
+            500: '#FFB700',
+          },
+          text: {
+            100: '#F6F6F6',
+            500: '#6B7280',
+            800: '#1F2937',
+          },
+          icon: '#1C274C',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -193,6 +231,7 @@ module.exports = {
         active: '#FFB800',
         'graded-finish': '#4077E0',
         dark: '#1C2039',
+        'black-1': '#404041',
       },
       borderWidth: {
         1.5: '1.5px',
@@ -216,6 +255,9 @@ module.exports = {
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         livechat:
           'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
+        sidebar_menu: '0px 0px 16px 0px #00000014',
+        search: '0px 4px 12px 0px #2C30000A',
+        activity: '0px 4px 16px 0px #0000001A',
         focus:
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
@@ -282,6 +324,7 @@ module.exports = {
         4.8: '18px',
         4.9: '19.2px',
         5.2: '20.962px',
+        5.5: '22px',
         6.2: '25px',
         6.5: '27px',
         7.5: '30px',
@@ -307,9 +350,11 @@ module.exports = {
         4.5: '1.125rem',
         '6-percent': '6%',
         '7-percent': '7%',
-        18: '18%',
-        3.6: '36%',
         17: '17%',
+        18: '18%',
+        3.5: '35%',
+        3.6: '36%',
+        6.5: '65%',
         '624px': '624px',
       },
       padding: {
@@ -331,6 +376,7 @@ module.exports = {
         17.5: '4.375rem', // 70px
         19: '4.75rem', // 76px
         22: '5.375rem', //86px
+        25: '6rem', //96px
         29.2: '7.3rem',
       },
       margin: {

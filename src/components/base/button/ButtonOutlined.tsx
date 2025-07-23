@@ -1,5 +1,12 @@
-import React from 'react'
+import React, { memo } from 'react'
+import Link from 'next/link'
 import { IButtonProps } from 'src/type'
+import {
+  ButtonSize,
+  getPaddingHorizontalClass,
+  getPaddingVerticalClass,
+  getTextSizeClass,
+} from '@utils/helpers/button'
 
 const ButtonOutlined = ({
   title,
@@ -9,31 +16,35 @@ const ButtonOutlined = ({
   size = 'small',
   full = false,
 }: IButtonProps) => {
-  let textSizeClass =
-    size === 'small'
-      ? 'text-[0.875rem] leading-4'
-      : size === 'medium'
-        ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
-  let paddingVerticalClass =
-    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
-  let paddingHorizontalClass =
-    size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let componentClass = `${className} text-center ${fullWidthClass} ${paddingVerticalClass} ${paddingHorizontalClass} text-bw-1 ${textSizeClass} font-medium bg-white border border-bw-1 border-solid cursor-pointer hover:border-gray-1 hover:text-gray-1`
+  const textSizeClass = getTextSizeClass(size as ButtonSize)
+  const paddingVerticalClass = getPaddingVerticalClass(size as ButtonSize)
+  const paddingHorizontalClass = getPaddingHorizontalClass(size as ButtonSize)
+  const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
 
-  if (link)
+  const componentClass = [
+    className,
+    'text-center',
+    fullWidthClass,
+    paddingVerticalClass,
+    paddingHorizontalClass,
+    'text-bw-1',
+    textSizeClass,
+    'font-medium bg-white border border-bw-1 border-solid cursor-pointer hover:border-gray-1 hover:text-gray-1',
+  ].join(' ')
+
+  if (link) {
     return (
-      <a href={link} className={componentClass}>
-        {title}
-      </a>
+      <Link href={link} className={componentClass}>
+        <span>{title}</span>
+      </Link>
     )
+  }
 
   return (
-    <div className={componentClass} role="button" onClick={onClick}>
-      <span className="">{title}</span>
-    </div>
+    <button className={componentClass} onClick={onClick} type="button">
+      <span>{title}</span>
+    </button>
   )
 }
 
-export default ButtonOutlined
+export default memo(ButtonOutlined)
