@@ -4,6 +4,7 @@ import { MyRequestAPI } from '@pages/api/my-request'
 import { RequestAPI } from '@pages/api/request'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import {
   CONFIRM_CANCEL,
@@ -17,11 +18,12 @@ import { IRequest, IResponse } from 'src/type'
 
 interface Iprops {
   item: IRequest
+  reloadPage: () => void
 }
 
-const RequestActionCell = ({ item }: Iprops) => {
+const RequestActionCell = ({ item, reloadPage }: Iprops) => {
   const router = useRouter()
-  const { setIsOpenViewModal, setOpenAddModal, setIsReFetch } =
+  const { setIsOpenViewModal, setOpenAddModal, setIsReFetch, isReFetch } =
     useRequestContext()
   const dispatch = useAppDispatch()
 
@@ -35,6 +37,7 @@ const RequestActionCell = ({ item }: Iprops) => {
     try {
       const res = await RequestAPI.deleteRequest(item.id)
       if (res.success) {
+        reloadPage()
         toast.success('Delete request successfully')
         setIsReFetch(true)
       }
@@ -48,6 +51,11 @@ const RequestActionCell = ({ item }: Iprops) => {
       confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: onCancel }),
     )
   }
+
+  useEffect(() => {
+    if (!isReFetch) return
+    reloadPage()
+  }, [isReFetch])
 
   const onCancel = async () => {
     try {
