@@ -196,14 +196,13 @@ const PersonalScheduleTab = () => {
           reloadPage={handleFilter}
         />
       )}
-      {isOpenViewModal && (
-        <RequestDetail
-          open={isOpenViewModal}
-          setOpen={setIsOpenViewModal}
-          setOpenEdit={setOpenAddModal}
-          reloadPage={handleFilter}
-        />
-      )}
+
+      <RequestDetail
+        open={isOpenViewModal}
+        setOpen={setIsOpenViewModal}
+        setOpenEdit={setOpenAddModal}
+        reloadPage={handleFilter}
+      />
     </div>
   )
 }
