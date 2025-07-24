@@ -308,7 +308,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             </div>
           )}
         </div>
-        {data?.is_case_study && !isOnlyMidTermOrFinalTest && (
+        {!data?.schedule?.is_holiday && !isOnlyMidTermOrFinalTest && (
           <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
             <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
               <div>Course Content</div>
