@@ -16,7 +16,7 @@
 }
 
 .lessonFormTree :global(.ant-tree-switcher_close) {
-  color: var(--bs-[#181c32]);
+  @apply text-[#181c32];
 }
 
 .lessonFormTree :global(.ant-tree-switcher::before) {

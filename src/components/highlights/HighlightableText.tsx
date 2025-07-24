@@ -352,13 +352,13 @@ export default function HighlightText({ text, isShowNote = false }: Props) {
           dataSource={highlights}
           renderItem={(item) => (
             <List.Item
-              className="hover:text-blue-600 cursor-pointer"
+              className="cursor-pointer"
               onClick={() => scrollToHighlight(item.id)}
             >
               <div>
                 <div className="font-medium">{item.text}</div>
                 {isShowNote && item.note && (
-                  <div className="text-gray-500 text-xs">Note: {item.note}</div>
+                  <div className="text-xs text-gray">Note: {item.note}</div>
                 )}
               </div>
             </List.Item>

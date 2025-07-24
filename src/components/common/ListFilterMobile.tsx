@@ -4,9 +4,6 @@ import { Dispatch, SetStateAction } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { IOpenChooseItem, SectionField } from 'src/type'
 
-interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
-}
 interface IList {
   id: number
   name: string
@@ -14,7 +11,11 @@ interface IList {
   type: SectionField
 }
 
-const ListFilterMobile = ({ setOpenChooseItem }: IProps) => {
+const ListFilterMobile = ({
+  setOpenChooseItem,
+}: {
+  setOpenChooseItem: Dispatch<SetStateAction<any>>
+}) => {
   const { watch } = useFormContext()
   const list: IList[] = [
     {

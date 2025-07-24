@@ -1,7 +1,6 @@
 import { Button, ButtonProps } from 'antd'
 import Link from 'next/link'
 import { FC } from 'react'
-import SpinIcon from './SpinIcon'
 
 export interface BaseButtonProps extends ButtonProps {
   link?: string

@@ -116,7 +116,7 @@ const SappDrawerV3: React.FC<IProps> = ({
               />
             )}
             <ButtonPrimary
-              title={btnSubmitTile}
+              title={btnSubmitTile ?? ''}
               className={submitButtonClassName}
               onClick={handleSubmit}
               size={sizeTextBtn}

@@ -128,8 +128,8 @@ export const buildQueryString = (params: Object) => {
   return queryParams ? `&${queryParams}` : ''
 }
 
-export const bytesToKilobyte = (bytes: number) => {
-  return `${(bytes / 1024).toFixed(2)}Kb` // 1 kilobyte = 1024 bytes
+export const bytesToKilobyte = (bytes: number, suffix = 'Kb') => {
+  return `${(bytes / 1024).toFixed(2)}${suffix}` // 1 kilobyte = 1024 bytes
 }
 
 export const cleanParamsAPI = (params: Object) => {

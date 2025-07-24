@@ -37,7 +37,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
           <div>
             {isGraded && (
               <div
-                className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
+                className={`group-hover:border-info absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300`}
                 style={{
                   bottom: passingScore + '%',
                   width: data?.length * 150 - 12 + 'px',

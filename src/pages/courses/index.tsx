@@ -23,6 +23,7 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import GotoModal from '@components/courses/popup/GotoModal'
 import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 9
@@ -115,6 +116,7 @@ const MyCourse = () => {
     name: router.query.name || undefined,
     status: router.query.status || undefined,
     type: router.query.type || undefined,
+    template: '4',
   }
 
   /**
@@ -365,6 +367,7 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
+        <GotoModal />
       </Layout>
     </SappLoadingGlobal>
   )

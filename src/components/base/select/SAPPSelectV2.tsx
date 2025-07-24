@@ -93,7 +93,7 @@ const SAPPSelectV2 = ({
                       Math.ceil((target as HTMLElement).scrollHeight)
                     ) {
                       if (onMenuScrollToBottom) {
-                        onMenuScrollToBottom
+                        onMenuScrollToBottom(e)
                       }
                     }
                   }}
