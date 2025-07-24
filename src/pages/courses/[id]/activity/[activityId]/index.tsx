@@ -446,7 +446,7 @@ const ActivityPage = () => {
         className={focusOnlyDiscussion ? '!bg-white' : ''}
       >
         <div
-          className={clsx({
+          className={clsx('h-full', {
             'my-2 md:mt-6 lg:mt-2': !focusOnlyDiscussion,
             'py-2': focusOnlyDiscussion,
           })}
