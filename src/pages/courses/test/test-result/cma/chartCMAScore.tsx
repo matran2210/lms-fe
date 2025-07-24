@@ -19,7 +19,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
   const { events } = useDraggable(ref)
   return (
     <div
-      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 text-gray-800 shadow-sidebar md:p-6 md:pl-12"
+      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 !pl-12 text-gray-800 shadow-sidebar md:p-6"
       ref={ref}
       {...events}
     >
