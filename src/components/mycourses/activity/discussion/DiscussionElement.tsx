@@ -353,7 +353,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="md:ml-13 mt-3 w-auto md:-mt-3 md:w-fit">
+          <div className="mt-3 w-auto md:-mt-5 md:ml-[52px]">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image
