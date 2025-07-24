@@ -297,6 +297,7 @@ module.exports = {
         pagination: '0px 2px 7px 0px #00000021',
         pinned: '0 1px 3px rgba(0, 0, 0, .1)',
         small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        medium: '0px 4px 12px 0px rgba(44, 48, 0, 0.04)',
         card: '0px 4px 16px 0px #00000014',
         table: '0px 4px 16px 0px rgba(0,0,0,0.08)',
         sidebar_menu: '0px 0px 16px 0px #00000014',

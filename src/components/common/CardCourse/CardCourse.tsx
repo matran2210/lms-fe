@@ -64,7 +64,7 @@ const CardCourse = forwardRef<
     return (
       <div
         className={clsx(
-          'relative flex flex-col rounded-xl border border-transparent bg-white p-4 shadow-card transition-shadow duration-300 hover:border-primary hover:shadow-md md:p-6 lg:p-8',
+          'border-transparent relative flex flex-col rounded-xl border bg-white p-4 shadow-card transition-shadow duration-300 hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8',
           classNameCard,
         )}
         ref={ref}

@@ -186,8 +186,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-t-[20px] bg-white p-8 shadow-sidebar-tablet xl:sticky xl:top-[104px] 
-        xl:!h-fit xl:rounded-xl xl:p-6 xl:pl-7 xl:shadow-small`}
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-8 shadow-sidebar-tablet lg:rounded-2xl 
+        xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
         <div
