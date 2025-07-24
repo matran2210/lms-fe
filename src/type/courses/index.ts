@@ -272,4 +272,10 @@ export type IQuizAttemptChartType =
   | 'CMA'
   | 'OTHER'
 
+export interface ISelectOption {
+  label: string
+  value: string
+  name?: string
+}
+
 export * from './test'
