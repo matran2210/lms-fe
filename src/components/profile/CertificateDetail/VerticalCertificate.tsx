@@ -8,6 +8,7 @@ import { ICertificate } from '@pages/certificates/[id]'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { LinkedInShareButton } from './ButtonShareLinkedin'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -27,6 +28,10 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
     >
       <div className="flex h-full items-center gap-12 xl:gap-20">
         <div className="flex-2 flex h-full w-[55%] items-center justify-center">
+          <LinkedInShareButton
+            certificateUrl={certificate?.certificate_url || ''}
+          />
+
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
