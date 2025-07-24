@@ -1,6 +1,8 @@
 import _, { uniqBy } from 'lodash'
 import dayjs from 'dayjs'
 import { round } from 'lodash'
+import { MenuOption } from 'src/constants/courses3level/sidebar'
+import { MenuItem } from 'src/constants/menu-items'
 
 export function isMobile() {
   const toMatch = [
@@ -380,4 +382,16 @@ export const formatTimeOnlyHourMinute = (rawTime: string) => {
    * @returns {string} - Thời gian định dạng.
    */
   return dayjs(parseTime(rawTime)).format('HH:mm')
+}
+
+export function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
+  return options.map((option, idx) => ({
+    ...option,
+    id: depth === 0 ? idx.toString() : `${depth}.${idx}`,
+    depth,
+    subItems:
+      option.subItems && option.subItems.length > 0
+        ? makeMenuLevel(option.subItems, depth + 1)
+        : undefined,
+  }))
 }

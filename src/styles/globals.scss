@@ -7,6 +7,7 @@
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'my-profile.scss';
+@import 'course-3-level.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -823,7 +824,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-root .ant-modal-mask {
-  @apply bg-[#000000cc];
+  @apply bg-overlay-control;
 }
 
 .sapp-modal__opt-continue-test {
@@ -940,8 +941,16 @@ $focus: (
 .ant-drawer-content {
   @apply rounded-2xl;
 }
+
 .ant-drawer-content-wrapper {
   @apply m-4 rounded-2xl;
+}
+
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-content-wrapper {
+  position: fixed;
+  background-color: #00000099;
 }
 
 .shadow-activity.aos-init.aos-animate {
@@ -1427,6 +1436,10 @@ select:focus {
 
 .dashboard_tooltip {
   @apply max-w-max;
+}
+
+.sapp-tab-button .secondary {
+  @apply bg-gray-4 text-bw-15;
 }
 
 [type='search']:focus {

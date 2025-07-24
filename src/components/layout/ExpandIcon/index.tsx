@@ -1,8 +1,16 @@
-import { NotificationIcon } from '@assets/icons'
+import { NotificationIcon, OutlineArchive } from '@assets/icons'
 import ArrowUp from './ArrowUp'
 import LogoDefault from './LogoDefault'
 import LogoFull from './LogoFull'
 import TeacherLogoFull from '@components/layout/ExpandIcon/TeacherLogoFull'
+import {
+  AddNote,
+  BookMark,
+  Calculator,
+  CourseContent,
+  NoteList,
+  Union,
+} from '@components/courses/icons'
 
 type ExpandIconPros = {
   isExpanded?: boolean
@@ -504,6 +512,13 @@ export default function ExpandIcon({
           />
         </svg>
       )}
+      {type === 'outline-archive' && <OutlineArchive className={className} />}
+      {type === 'union' && <Union className={className} />}
+      {type === 'book-mark' && <BookMark className={className} />}
+      {type === 'course-content' && <CourseContent className={className} />}
+      {type === 'note-list' && <NoteList className={className} />}
+      {type === 'calculator' && <Calculator className={className} />}
+      {type === 'add-note' && <AddNote className={className} />}
     </>
   )
 }

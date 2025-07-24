@@ -1,22 +1,20 @@
-import { memo, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  IActivityStateQuestion,
-  courseActivityQuizReducer,
-  fetchQuestionById,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
-
+import { TimeLineIcon } from '@assets/icons'
+import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
-import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
+import TimeLineModal from '@components/courses/timeline/TimeLineModal'
+import { video_url } from '@utils/constants'
 import { debounce } from '@utils/helpers'
-import SappIcon from 'src/common/SappIcon'
+import { memo, useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAppDispatch } from 'src/redux/hook'
+import {
+  IActivityStateQuestion,
+  fetchQuestionById,
+} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { video_url } from '@utils/constants'
-import { TimeLineIcon } from '@assets/icons'
 
 type Props = {
   videos?: IVideo[]
@@ -28,7 +26,11 @@ type Props = {
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   class_user_id?: string
-  handleSetCurrentVideoCallback: (video: IVideo) => void
+  handleSetCurrentVideoCallback?: (video: IVideo) => void
+  activeTab?: string
+  activeVideo?: string
+  handleCloseTab?: (activeTab: string) => void
+  onUpdateActiveVideo?: (activeVideo: string) => void
 }
 
 /**
@@ -47,6 +49,10 @@ const VideoDocument = ({
   quizId,
   grading_preference,
   handleSetCurrentVideoCallback,
+  activeTab,
+  activeVideo,
+  handleCloseTab,
+  onUpdateActiveVideo,
 }: Props) => {
   const {
     control: controlAnswer,
@@ -70,7 +76,7 @@ const VideoDocument = ({
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
-  const internalRef = useRef<any>()
+  const internalRef = useRef<IntersectionObserver>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
 
@@ -128,7 +134,8 @@ const VideoDocument = ({
     }
     // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
-    handleSetCurrentVideoCallback(v)
+    handleSetCurrentVideoCallback?.(v)
+    onUpdateActiveVideo?.(v.file.id)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
         if (e?.time !== undefined && e?.id !== undefined) {
@@ -339,6 +346,9 @@ const VideoDocument = ({
     <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex items-center justify-between gap-x-10 gap-y-2 text-primary">
         <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
+          {(videos as IVideo[])?.length > 1 && (
+            <span className="font-semibold text-bw-1">Video mode:</span>
+          )}
           {(videos as IVideo[])?.length > 1 &&
             videos?.map((v, i) => {
               return (
@@ -347,25 +357,19 @@ const VideoDocument = ({
                   key={v?.file?.id ?? i}
                 >
                   {/* Radio button for video selection */}
-                  <SAPPRadio
-                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                  <SappButton
+                    key={v?.file?.id ?? i}
+                    size="small"
+                    className="rounded-md !px-3 py-2.5 text-medium-sm !font-normal"
+                    title={'Video ' + (i + 1)}
+                    toolTipTitle=""
+                    onClick={() => debouncedHandleSetCurrentVideo.current(v)}
                     {...(v?.file?.id === currentVideo?.file?.id
                       ? {
-                          checked: true,
+                          color: 'primary',
                         }
-                      : { checked: false })}
-                    size={'small'}
-                    // state="primary"
-                  ></SAPPRadio>
-                  <span
-                    className={`radio-item-label ${
-                      v?.file?.id === currentVideo?.file?.id
-                        ? 'font-medium text-primary'
-                        : 'text-secondary'
-                    }`}
-                  >
-                    Video {i + 1}
-                  </span>
+                      : { color: 'white' })}
+                  />
                 </label>
               )
             })}
@@ -379,14 +383,21 @@ const VideoDocument = ({
           ) : (
             <></>
           )}
-
+          <TimeLineModal
+            items={timeLine}
+            visible={
+              activeTab === 'timeline' && currentVideo?.file?.id === activeVideo
+            }
+            onClose={() => handleCloseTab?.('')}
+            onGoTimeline={handleGoTimeline}
+          />
           <div className="max-w-[100px]: absolute -right-[3px] bottom-0 hidden w-[412px] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
             <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
                     key={i}
-                    className="hover:text-primary-2 mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9]"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}

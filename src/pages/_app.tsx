@@ -47,10 +47,11 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import 'sapp-common-package-ha-test/dist/sapp-editor.css'
-import 'sapp-common-package/dist/index.css'
 import 'sapp-notification/dist/index.css'
 import '@xyflow/react/dist/style.css'
+import { StaticModalProvider } from '@contexts/StaticModalContext'
+import 'sapp-common-package/dist/sapp-editor.css'
+import 'sapp-common-package/dist/index.css'
 import 'sapp-preview-part-test/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
@@ -305,32 +306,34 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <AntConfigProvider>
           <PinnedNotifyProvider>
             <CourseProvider>
-              <CourseNoteProvider>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
-                    <RouteGuard>
-                      <>
-                        <div className="relative">
-                          <PinnedNotifications />
-                          <Component {...pageProps} />
-                        </div>
-                        <BackToTop />
-                        <Help showHelp={showHelp} />
-                        <LearningNotesList />
-                        <PopupCompletedCourse />
-                      </>
-                    </RouteGuard>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
+              <StaticModalProvider>
+                <CourseNoteProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <SocketContext.Provider value={socket}>
+                      <Toaster
+                        toastOptions={{
+                          style: {
+                            maxWidth: '400px', // Tăng chiều rộng của toast
+                          },
+                        }}
+                      />
+                      <SappConfirmDialogContainer />
+                      <RouteGuard>
+                        <>
+                          <div className="relative">
+                            <PinnedNotifications />
+                            <Component {...pageProps} />
+                          </div>
+                          <BackToTop />
+                          <Help showHelp={showHelp} />
+                          <LearningNotesList />
+                          <PopupCompletedCourse />
+                        </>
+                      </RouteGuard>
+                    </SocketContext.Provider>
+                  </QueryClientProvider>
+                </CourseNoteProvider>
+              </StaticModalProvider>
             </CourseProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>

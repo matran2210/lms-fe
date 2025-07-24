@@ -31,6 +31,8 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
+  SHORT_COURSE: '/short-course',
+  SHORT_COURSE_DETAIL: '/short-course/detail',
 }
 
 export const TitleSidebar = {
@@ -50,12 +52,14 @@ export const TitleSidebar = {
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
+  ADD_NOTE: 'Add Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
   EXAM: 'Exam',
+  COURSE_RESOURCES: 'Course Resource',
 }
 
 export const TitleTeacherSidebar = {
@@ -579,3 +583,5 @@ export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'
+export * from './courses3level/activity'
+export * from './courses3level/courses'
