@@ -272,13 +272,25 @@ export interface ITooltip {
 
 export interface IActivityResource {
   title: string
-  items: { title: string; download: () => void }[]
+  items: { title: string; download: () => void; url?: string }[]
+  setDataModal: (value: {
+    title: string
+    download: () => void
+    url?: string
+  }) => void
+  setIsOpen: (value: boolean) => void
 }
 export interface IActivityResourceProps {
   title: string
   items: { title: string; download: () => void }[]
   visible: boolean
   onClose: () => void
+  setDataModal: (value: {
+    title: string
+    download: () => void
+    url?: string
+  }) => void
+  setIsOpen: (value: boolean) => void
 }
 
 export interface BreadcrumbProps {
@@ -459,6 +471,7 @@ export interface BreadcrumbResponse {
 
 export interface ActivityFileResource {
   name: string
+  url: string
   file_key: string
 }
 
@@ -501,6 +514,16 @@ export interface IPdfModal {
   header?: ReactNode
   onClose: () => void
   fileUrl: string
+  position?:
+    | 'top left'
+    | 'top middle'
+    | 'top right'
+    | 'bottom left'
+    | 'bottom middle'
+    | 'bottom right'
+    | 'center left'
+    | 'center right'
+    | 'center'
 }
 
 export type ScratchPadItem = {
