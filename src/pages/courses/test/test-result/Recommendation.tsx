@@ -72,7 +72,7 @@ const Recommendation = ({
               {/* Header */}
               <div className="flex-shrink-0 border-b px-6 py-4">
                 <h3 className="text-lg font-semibold text-gray-900">
-                  {COMMENTS?.REQUEST_REGRADING}
+                  {COMMENTS?.STUDENT_COMMENT}
                 </h3>
               </div>
 
@@ -84,7 +84,6 @@ const Recommendation = ({
                       className="h-52 w-full "
                       control={control}
                       name="comment"
-                      placeholder={COMMENTS?.STUDENT_COMMENT + '...'}
                     />
                   </div>
                 </div>
@@ -92,15 +91,16 @@ const Recommendation = ({
 
               {/* Footer */}
               <div className="flex flex-shrink-0 items-center justify-between border-t bg-gray-50 px-6 py-4">
-                <ButtonPrimary
+                <button
                   type="button"
-                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center bg-slate-500 px-4 py-2 text-sm font-medium text-white transition-colors  duration-200 hover:bg-slate-400 focus:outline-none"
+                  className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium transition-colors  duration-200 focus:outline-none"
                   onClick={() => {
                     reset()
                     setOpenRecomendation(false)
                   }}
-                  title={COMMENTS?.CANCEL}
-                />
+                >
+                  {COMMENTS?.CANCEL}
+                </button>
                 <ButtonPrimary
                   type="submit"
                   title={COMMENTS?.SAVE}
