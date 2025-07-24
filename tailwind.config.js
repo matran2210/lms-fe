@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
@@ -31,6 +33,10 @@ module.exports = {
       xsm: ['13px', { lineHeight: '19.5px' }],
       ssm: ['12px', { lineHeight: '20px' }],
       action: ['0.8rem', { lineHeight: '17px' }],
+      'v2-xs': ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
+      'v2-sm': ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
+      'v2-base': ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
+      'v2-lg': ['1.125rem', { lineHeight: '1.6875rem' }] /* 18px, 27px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -50,6 +56,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        black: colors.black,
+        white: colors.white,
         primary: {
           DEFAULT: '#FFB800',
           2: '#FFC83A',
@@ -58,9 +66,13 @@ module.exports = {
           5: '#f57c000D',
           6: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
+          'v2-DEFAULT': '#FFB700',
         },
         secondary: {
           DEFAULT: '#FFFAF0',
+          'v2-100': '#B6B6B7',
+          'v2-DEFAULT': '#404041',
+          'v2-600': '#29353C',
         },
         danger: {
           DEFAULT: '#D35563',
@@ -116,6 +128,10 @@ module.exports = {
           100: '#99A1B70D',
           200: '#6B7280',
           900: '#181C32',
+          'v2-100': '#F6F6F6',
+          'v2-300': '#D1D5DB',
+          'v2-400': '#9CA3AF',
+          'v2-800': '#1F2937',
         },
         green: {
           1: '#07af17',

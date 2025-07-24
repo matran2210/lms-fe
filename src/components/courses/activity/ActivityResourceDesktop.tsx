@@ -13,13 +13,11 @@ export default function ActivityResourceDesktop({
       <div className="list-active">
         {items.map((item, index) => (
           <div className="item mb-4 last:mb-0" key={index}>
-            <div className="content flex gap-3 rounded-md bg-gray-4 px-3 py-2 hover:bg-secondary">
+            <div className="content flex gap-3 rounded-md bg-gray-4 px-3 py-2 text-bw-15 hover:bg-secondary hover:text-primary">
               <div>
                 <Docs />
               </div>
-              <div className="truncate text-ssm text-bw-15 md:text-base">
-                {item.title}
-              </div>
+              <div className="truncate text-ssm md:text-base">{item.title}</div>
               <div className="ml-auto cursor-pointer" onClick={item.download}>
                 <IconDownload />
               </div>

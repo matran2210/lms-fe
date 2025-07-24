@@ -2,9 +2,9 @@ import React from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import Countdown from './Countdown'
-import BaseButton from '../buttons/BaseButton'
 import { IHeaderTestProps } from 'src/type/courses-3-level'
 import { Close } from '../icons'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 
 export default function HeaderTest({
   checkUnSubmitAnswer,
@@ -54,10 +54,9 @@ export default function HeaderTest({
       </div>
 
       <div className="flex items-center justify-end">
-        <BaseButton
+        <ButtonPrimaryV2
           title="Finish"
           size="small"
-          variant="black-border"
           loading={false}
           disabled={submited}
           onClick={() => {

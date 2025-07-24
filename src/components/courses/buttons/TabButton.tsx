@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { IButtonTabProps } from 'src/type/courses-3-level/button'
 import BaseButton from './BaseButton'
 

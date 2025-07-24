@@ -18,14 +18,14 @@ const ButtonTextV2 = ({
 }: IButtonBaseProps) => {
   let textSizeClass =
     size === 'small'
-      ? 'text-sm'
+      ? 'text-v2-sm'
       : size === 'medium'
-        ? 'text-sm md:text-base'
-        : 'text-sm md:text-lg'
+        ? 'text-v2-sm md:text-v2-base'
+        : 'text-v2-sm md:text-v2-lg'
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-transparent !text-secondary-100 hover:!text-secondary-100'
+    ? 'cursor-not-allowed !bg-transparent !text-secondary-v2-100 hover:!text-secondary-v2-100'
     : 'cursor-pointer'
 
   let isUnderline = isUnderLine ? 'underline' : ''
@@ -35,8 +35,8 @@ const ButtonTextV2 = ({
     text-center 
     font-medium
     !border-none
-    text-gray-800
-    hover:text-primary
+    text-gray-v2-800
+    hover:text-primary-v2-DEFAULT
     ${isUnderline}
     ${fullWidthClass} 
     ${disabledClass} 

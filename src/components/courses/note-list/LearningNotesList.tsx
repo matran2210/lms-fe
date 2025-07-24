@@ -1,10 +1,4 @@
-import {
-  DeleteIcon,
-  EditIcon,
-  EllipsisIconV2,
-  PencilV2Icon,
-  ViewIcon,
-} from '@assets/icons'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -42,6 +36,9 @@ import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/courses/action/ActionCellV2'
 import { DEFAULT_PAGESIZE } from 'src/constants'
+import BaseModal from '@components/courses/popup/BaseModal'
+import ButtonIcon from '../buttons/ButtonIcon'
+import { AltArrowLeft } from '../icons/AltArrowLeft'
 
 export default function LearningNotesList({
   onClose,
@@ -260,11 +257,25 @@ export default function LearningNotesList({
     setNoteInput(note?.description)
     setIsViewOnly(isViewOnly)
   }
-  const title = !openChooseItem.isOpen
-    ? isOpenFilter
-      ? 'Filter'
-      : 'Note List'
-    : openChooseItem.name
+
+  const renderTitle = (title: string) => {
+    return (
+      <div className="flex items-center justify-between">
+        <div onClick={handleBack}>
+          <AltArrowLeft />
+        </div>
+        <h4 className="text-lg font-semibold">{title}</h4>
+        <div className="invisible h-6 w-6" />
+      </div>
+    )
+  }
+
+  const getTitle = () => {
+    if (openChooseItem.isOpen) return renderTitle(openChooseItem.name)
+
+    return isOpenFilter ? renderTitle('Filter') : 'Note List'
+  }
+
   const classNameHeader = openChooseItem.isOpen
     ? 'pb-4 border-b border-gray-200 '
     : 'mb-6'
@@ -295,163 +306,187 @@ export default function LearningNotesList({
     })
   }
 
-  return (
-    <SappDrawerV3
-      open={notesListStatus}
-      handleCancel={handleDrawerClose}
-      isShowBtnClose
-      title={title}
-      isShowBtnBack={isOpenFilter}
-      handleBack={handleBack}
-      isShowFooter={isOpenFilter}
-      handleSubmit={handleSubmit}
-      classNameHeader={classNameHeader}
-      rootClassName={'responsive-drawer-center'}
-      submitButtonClassName="w-full h-10"
-      btnSubmitTile="Confirm"
-    >
-      <FormProvider {...methods}>
-        {!isOpenFilter ? (
-          <>
-            {isMobileView ? (
-              <SortBy action={() => setIsOpenFilter(true)} />
-            ) : (
-              <FilterCourseSection
-                setParams={setCourseSectionId}
-                heightCustom="h-10"
-                isPageStateVariables={isPageStateVariables}
-              />
-            )}
+  // Common content for both desktop and mobile
+  const renderContent = () => (
+    <FormProvider {...methods}>
+      {!isOpenFilter ? (
+        <>
+          {isMobileView ? (
+            <SortBy action={() => setIsOpenFilter(true)} />
+          ) : (
+            <FilterCourseSection
+              setParams={setCourseSectionId}
+              heightCustom="h-10"
+              isPageStateVariables={isPageStateVariables}
+            />
+          )}
 
-            <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
-              {!isEmpty(notesListData?.notes) ? (
-                <>
-                  {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
-                    const isExpanded = expandedNotes.includes(note?.id)
-                    const isEdit = activityId === note?.course_section_id
-                    const handleEdit = () => {
-                      if (
-                        !getNotesData.some((item) => item.id.includes(note?.id))
-                      ) {
-                        handleOpenNote(note, false)
+          <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 md:mt-4 md:gap-0">
+            {!isEmpty(notesListData?.notes) ? (
+              <>
+                {notesListData?.notes?.map((note: ICourseSectionNoteItem) => {
+                  const isExpanded = expandedNotes.includes(note?.id)
+                  const isEdit = activityId === note?.course_section_id
+                  const handleEdit = () => {
+                    if (
+                      !getNotesData.some((item) => item.id.includes(note?.id))
+                    ) {
+                      handleOpenNote(note, false)
 
-                        handleDrawerClose()
-                      }
-                    }
-                    const handleView = async () => {
-                      await router.push({
-                        pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
-                        query: {
-                          note_id: note?.id,
-                        },
-                      })
-                      handleOpenNote(note, true)
                       handleDrawerClose()
                     }
-
-                    const listAction = [
-                      ...(isEdit
-                        ? [
-                            {
-                              icon: <PencilV2Icon className="h-5 w-5" />,
-                              nameAction: 'Edit',
-                              action: handleEdit,
-                            },
-                          ]
-                        : []),
-                      {
-                        icon: <DeleteIcon />,
-                        nameAction: 'Delete',
-                        action: () => handleDelete(note?.id),
+                  }
+                  const handleView = async () => {
+                    await router.push({
+                      pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                      query: {
+                        note_id: note?.id,
                       },
-                    ]
+                    })
+                    handleOpenNote(note, true)
+                    handleDrawerClose()
+                  }
 
-                    return (
-                      <div
-                        className="hover:bg-primary-50 cursor-pointer rounded-2xl md:p-4"
-                        key={note?.id}
-                        onClick={handleView}
-                      >
-                        <div className="flex justify-between">
-                          <div className="text-sm font-semibold text-gray-800 md:text-base">
-                            {note?.name}
-                          </div>
-                          <div onClick={(e) => e.stopPropagation()}>
-                            <ActionCellV2
-                              icon={<EllipsisIconV2 />}
-                              listAction={listAction}
-                            />
-                          </div>
+                  const listAction = [
+                    ...(isEdit
+                      ? [
+                          {
+                            icon: <PencilV2Icon className="h-5 w-5" />,
+                            nameAction: 'Edit',
+                            action: handleEdit,
+                          },
+                        ]
+                      : []),
+                    {
+                      icon: <DeleteIcon />,
+                      nameAction: 'Delete',
+                      action: () => handleDelete(note?.id),
+                    },
+                  ]
+
+                  return (
+                    <div
+                      className="hover:bg-primary-50 cursor-pointer rounded-2xl md:p-4"
+                      key={note?.id}
+                      onClick={handleView}
+                    >
+                      <div className="flex justify-between">
+                        <div className="text-sm font-semibold text-gray-800 md:text-base">
+                          {note?.name}
                         </div>
-                        <div
-                          className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
-                          onClick={() => handleDrawerClose()}
-                        >
-                          <SappBreadcrumbNotLink
-                            paths={[...note?.course_section_path].reverse()}
+                        <div onClick={(e) => e.stopPropagation()}>
+                          <ActionCellV2
+                            icon={<EllipsisIconV2 />}
+                            listAction={listAction}
                           />
                         </div>
-                        <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
-                          <span
-                            className={`whitespace-pre-wrap break-all ${
-                              isExpanded ? '' : 'line-clamp-3'
-                            }`}
+                      </div>
+                      <div
+                        className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
+                        onClick={() => handleDrawerClose()}
+                      >
+                        <SappBreadcrumbNotLink
+                          paths={[...note?.course_section_path].reverse()}
+                        />
+                      </div>
+                      <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
+                        <span
+                          className={`whitespace-pre-wrap break-all ${
+                            isExpanded ? '' : 'line-clamp-3'
+                          }`}
+                        >
+                          {note?.description}
+                        </span>
+                        {!isExpanded && note?.description?.length > 230 ? (
+                          <button
+                            className="block text-sm font-normal text-gray-400 md:text-base"
+                            onClick={() => toggleExpand(note?.id)}
                           >
-                            {note?.description}
-                          </span>
-                          {!isExpanded && note?.description?.length > 230 ? (
-                            <button
-                              className="block text-sm font-normal text-gray-400 md:text-base"
-                              onClick={() => toggleExpand(note?.id)}
-                            >
-                              Show more
-                            </button>
-                          ) : (
-                            <>
-                              {note?.description?.length > 230 ? (
-                                <button
-                                  className="block text-sm font-normal text-[#A1A1A1] md:text-base"
-                                  onClick={() => toggleExpand(note?.id)}
-                                >
-                                  Show less
-                                </button>
-                              ) : (
-                                <></>
-                              )}
-                            </>
-                          )}
-                        </div>
-                        <div className="mt-2 flex md:mt-4">
-                          <div className="text-sm font-normal text-gray-400">
-                            {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
-                          </div>
+                            Show more
+                          </button>
+                        ) : (
+                          <>
+                            {note?.description?.length > 230 ? (
+                              <button
+                                className="block text-sm font-normal text-[#A1A1A1] md:text-base"
+                                onClick={() => toggleExpand(note?.id)}
+                              >
+                                Show less
+                              </button>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <div className="mt-2 flex md:mt-4">
+                        <div className="text-sm font-normal text-gray-400">
+                          {format(note?.updated_at, 'dd/MM/yyyy HH:mm')}
                         </div>
                       </div>
-                    )
-                  })}
-                </>
-              ) : (
-                <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
-                  <NoDataV2 />
-                </div>
-              )}
-            </div>
-          </>
-        ) : !openChooseItem.isOpen ? (
-          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
-        ) : (
-          <ListItemFilterMobile
-            setOpenChooseItem={setOpenChooseItem}
-            openChooseItem={openChooseItem}
-            listSection={listSection}
-            listSubsection={listSubsection}
-            listActivity={listActivity}
-            setListSection={setListSection}
-            setListSubsection={setListSubsection}
-            setListActivity={setListActivity}
-          />
-        )}
-      </FormProvider>
-    </SappDrawerV3>
+                    </div>
+                  )
+                })}
+              </>
+            ) : (
+              <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
+                <NoDataV2 />
+              </div>
+            )}
+          </div>
+        </>
+      ) : !openChooseItem.isOpen ? (
+        <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+      ) : (
+        <ListItemFilterMobile
+          setOpenChooseItem={setOpenChooseItem}
+          openChooseItem={openChooseItem}
+          listSection={listSection}
+          listSubsection={listSubsection}
+          listActivity={listActivity}
+          setListSection={setListSection}
+          setListSubsection={setListSubsection}
+          setListActivity={setListActivity}
+        />
+      )}
+    </FormProvider>
+  )
+
+  return (
+    <>
+      {isMobileView ? (
+        <BaseModal
+          title={getTitle()}
+          visible={notesListStatus}
+          onClose={handleDrawerClose}
+          bodyStyle={{
+            maxHeight: '50vh',
+            overflowY: 'auto',
+          }}
+          wrapClassName="note-list-modal"
+          footer={isOpenFilter}
+          closable={!isOpenFilter}
+        >
+          {renderContent()}
+        </BaseModal>
+      ) : (
+        <SappDrawerV3
+          open={notesListStatus}
+          handleCancel={handleDrawerClose}
+          isShowBtnClose
+          title={getTitle()}
+          isShowBtnBack={isOpenFilter}
+          handleBack={handleBack}
+          isShowFooter={isOpenFilter}
+          handleSubmit={handleSubmit}
+          classNameHeader={classNameHeader}
+          rootClassName={'responsive-drawer-center'}
+          submitButtonClassName="w-full h-10"
+          btnSubmitTile="Confirm"
+        >
+          {renderContent()}
+        </SappDrawerV3>
+      )}
+    </>
   )
 }
