@@ -154,6 +154,8 @@ const SearchWithMenuToggle = ({
     )
   }
 
+  if (!isCoursePage) return <div className="h-4" />
+
   return (
     <>
       <FormProvider {...methods}>
@@ -172,7 +174,7 @@ const SearchWithMenuToggle = ({
             </div>
           )}
           <div
-            className="flex w-full items-center justify-between rounded-lg border border-transparent bg-white px-2 py-3 shadow-small
+            className="border-transparent flex w-full items-center justify-between rounded-lg border bg-white px-2 py-3 shadow-small
            focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4"
           >
             <SearchForm
