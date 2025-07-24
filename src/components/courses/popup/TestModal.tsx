@@ -8,8 +8,9 @@ import { IQuizResultList } from 'src/type'
 import { ClassAPI } from '@pages/api/class'
 import { capitalizeFirstLetter } from '@utils/index'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import BaseButton from '../buttons/BaseButton'
 import { IAttempt } from 'src/type/courses-3-level'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
 
 interface IProps {
   open: boolean
@@ -353,13 +354,12 @@ export default function TestModal({
               </div>
             )}
             <div className="flex flex-col gap-2">
-              <BaseButton
-                variant="black"
+              <ButtonPrimaryV2
                 title={
                   status === StatusQuizAttempt.Unsubmitted ? 'Start' : 'Retake'
                 }
                 full={true}
-                size="small"
+                size="medium"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push({
@@ -371,11 +371,10 @@ export default function TestModal({
                 }}
                 className="h-[38px]"
               />
-              <BaseButton
-                variant="black-border"
+              <ButtonSecondaryV2
                 title={'Cancel'}
                 full={true}
-                size="small"
+                size="medium"
                 onClick={(e) => {
                   e.stopPropagation()
                   setOpen(false)

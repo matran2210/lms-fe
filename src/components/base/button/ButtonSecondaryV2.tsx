@@ -17,10 +17,10 @@ const ButtonSecondaryV2 = ({
 }: IButtonBaseProps) => {
   let textSizeClass =
     size === 'small'
-      ? 'text-sm'
+      ? 'text-v2-sm'
       : size === 'medium'
-        ? 'text-sm md:text-base'
-        : 'text-sm md:text-lg'
+        ? 'text-v2-sm md:text-v2-base'
+        : 'text-v2-sm md:text-v2-lg'
   let padding =
     size === 'small'
       ? 'py-[7px] px-[15px]'
@@ -30,18 +30,18 @@ const ButtonSecondaryV2 = ({
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
   let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+    ? 'cursor-not-allowed !bg-gray-v2-100 b!text-gray-v2-400 hover:!bg-gray-v2-100 hover:b!text-gray-v2-400 hover:!border-gray-100'
     : 'cursor-pointer'
 
   let componentClass = `
     text-center
-    text-secondary
-    hover:!text-secondary
+    text-secondary-v2-DEFAULT
+    hover:!text-secondary-v2-DEFAULT
     bg-transparent
     rounded-lg
-    border border-secondary
-    hover:!border-secondary
-    hover:!bg-gray-100
+    border border-secondary-v2-DEFAULT
+    hover:!border-secondary-v2-DEFAULT
+    hover:!bg-gray-v2-100
     box-border
     font-medium
     ${padding}

@@ -9,12 +9,13 @@ export default function BaseDrawer({
   children,
   height = 'auto',
   className = '',
+  closable = true,
 }: BaseDrawerProps) {
   return (
     <Drawer
       title={title}
       placement="bottom"
-      closable={true}
+      closable={closable}
       onClose={onClose}
       open={open}
       height={height}

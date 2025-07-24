@@ -21,6 +21,7 @@ module.exports = {
         600: '#CC9300',
         700: '#996E00',
         800: '#664A00',
+        'v2-DEFAULT': '#FFB700',
       },
       secondary: {
         50: '#FFFAF0',
@@ -32,6 +33,9 @@ module.exports = {
         600: '#29353C',
         700: '#212B30',
         800: '#0E1214',
+        'v2-100': '#B6B6B7',
+        'v2-DEFAULT': '#404041',
+        'v2-600': '#29353C',
       },
       state: {
         info: '#3964EA',
@@ -69,6 +73,10 @@ module.exports = {
         800: '#1F2937',
         canvas: '#F9F9F9',
         4: '#F3F3F3',
+        'v2-100': '#F6F6F6',
+        'v2-300': '#D1D5DB',
+        'v2-400': '#9CA3AF',
+        'v2-800': '#1F2937',
       },
       green: {
         // 1: '#07af17',
@@ -202,7 +210,7 @@ module.exports = {
       },
     },
     borderColor: {
-      primary: '#DCDDDD',
+      primary: '#FFB700',
       DEFAULT: '#DCDDDD',
       focus: '#141414',
       success: '#397839',
@@ -220,6 +228,10 @@ module.exports = {
       'gray-17': '#E5E7EB',
       white: '#FFFFFF',
       'gray-300': '#D1D5DB',
+      'gray-v2-100': '#B6B6B7',
+      'gray-v2-DEFAULT': '#404041',
+      'gray-v2-600': '#29353C',
+      secondary: '#404041',
     },
     screens: {
       sm: '640px',
@@ -250,6 +262,11 @@ module.exports = {
       'lg-xl': ['18px', { lineHeight: '27px' }],
       'medium-sm': ['14px', { lineHeight: '16.9px' }],
       ssm: ['12px', { lineHeight: '20px' }],
+      action: ['0.8rem', { lineHeight: '17px' }],
+      'v2-xs': ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
+      'v2-sm': ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
+      'v2-base': ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
+      'v2-lg': ['1.125rem', { lineHeight: '1.6875rem' }] /* 18px, 27px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],

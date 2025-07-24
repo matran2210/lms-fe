@@ -9,6 +9,7 @@ import { Metadata } from 'src/type/results'
 import { RemindChoosingExam } from '../course/my-course'
 import { ExaminationSubject } from '@components/profile/ExamInformation/type'
 import { CourseProgram } from '../course'
+import { DrawerProps } from 'antd'
 
 export interface IActivity {
   id: string
@@ -385,7 +386,7 @@ export type Courses3LevelMenuProps = {
 }
 
 export interface BaseModalProps {
-  title?: string
+  title?: ReactNode
   visible: boolean
   onClose: (
     e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
@@ -400,7 +401,7 @@ export interface BaseModalProps {
   children: React.ReactNode
 }
 
-export interface BaseDrawerProps {
+export interface BaseDrawerProps extends DrawerProps {
   title?: string
   open: boolean
   onClose: () => void
@@ -682,6 +683,9 @@ export interface IProps {
   content: string
   uuid: string | number
   count: number
+  isActiveTab: boolean
+  handleCloseTab: () => void
+  countNote: number
 }
 
 export type CalcState = {

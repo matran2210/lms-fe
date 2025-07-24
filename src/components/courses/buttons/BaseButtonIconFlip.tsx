@@ -83,9 +83,7 @@ export default function BaseButtonIconFlip({
         )
       ) : (
         <>
-          {title && (
-            <div className="mr-2 inline-block align-middle">{title}</div>
-          )}
+          {title && <div className="inline-block align-middle">{title}</div>}
           {icon && (
             <div className="inline-block scale-x-[-1] align-middle lg:hidden">
               {icon}

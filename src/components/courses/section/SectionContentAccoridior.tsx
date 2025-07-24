@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import { TEST_TYPE_ENUM } from '@utils/constants'
 import { Collapse } from 'antd'
-import { IActivity, SectionContentProps } from 'src/type/courses-3-level'
-import { ArrowDownIcon } from '../icons'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { ROUTES } from 'src/constants'
+import { SectionContentProps } from 'src/type/courses-3-level'
 import {
-  renderBadge,
   formatDuration,
+  renderBadge,
   renderIconActivity,
 } from '../card/accordion/utils'
-import { useRouter } from 'next/router'
-import { ROUTES } from 'src/constants'
+import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
 
 const { Panel } = Collapse
@@ -45,12 +46,42 @@ export default function SectionContentAccoridior({
             return (
               <Panel
                 header={
-                  <span className="flex flex-col">
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (
+                        section?.course_section_type ==
+                        TEST_TYPE_ENUM.TOPIC_TEST
+                      ) {
+                        setDataTest({
+                          id: section.id,
+                          name: section.name,
+                          quiz: section.quiz,
+                        })
+                        setOpen(true)
+                      }
+                    }}
+                    className={`flex ${
+                      section?.course_section_type == TEST_TYPE_ENUM.TOPIC_TEST
+                        ? 'cursor-pointer'
+                        : ''
+                    } flex-col`}
+                  >
                     <span className="font-medium">{section.name}</span>
-                    <span className="text-gray-18 text-xs md:text-sm">
-                      {section.children.length} Activities | {totalDuration}
+                    <span className="text-xs md:text-ssm">
+                      {section.children.length} Activities{' '}
+                      {section?.course_section_type ===
+                      TEST_TYPE_ENUM.CHAPTER ? (
+                        <span className="text-gray-1 font-normal">
+                          ({totalDuration})
+                        </span>
+                      ) : (
+                        <span className="text-gray-1 font-normal">
+                          ({formatDuration(section?.quiz?.quiz_timed)})
+                        </span>
+                      )}
                     </span>
-                  </span>
+                  </div>
                 }
                 key={index}
                 className="border-none"
@@ -65,8 +96,11 @@ export default function SectionContentAccoridior({
               header={
                 <span className="flex flex-col">
                   <span className="font-medium">{section.name}</span>
-                  <span className="text-xs font-medium md:text-sm">
-                    {section.children.length} Activities ({totalDuration})
+                  <span className="text-xs font-medium md:text-ssm">
+                    {section.children.length} Activities{' '}
+                    <span className="text-gray-1 font-normal">
+                      ({totalDuration})
+                    </span>
                   </span>
                 </span>
               }
@@ -78,7 +112,7 @@ export default function SectionContentAccoridior({
                   <span className="text-gray-1 md:font-medium md:text-bw-15">
                     {section.children.length} Activities
                   </span>
-                  <span className="text-gray-1">|</span>
+                  <span className="text-gray-1 md:hidden">|</span>
                   <span className="text-gray-1 md:hidden">{totalDuration}</span>
                   <span className="text-gray-1 hidden md:inline-block">
                     ({totalDuration})
@@ -154,11 +188,14 @@ export default function SectionContentAccoridior({
                             </div>
                           </div>
                         </div>
-                        {activity?.course_section_type === 'ACTIVITY' && (
-                          <span className="text-gray-1 hidden text-xs group-hover:text-primary md:block">
-                            {formatDuration(activity.duration)}
-                          </span>
-                        )}
+                        <span className="text-gray-1 hidden text-xs group-hover:text-primary md:block">
+                          {formatDuration(
+                            activity?.course_section_type !==
+                              TEST_TYPE_ENUM.ACTIVITY
+                              ? activity?.quiz?.quiz_timed
+                              : activity?.duration,
+                          )}
+                        </span>
                       </div>
                     )
                   })}

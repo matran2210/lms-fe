@@ -6,9 +6,10 @@ import { renderBadge, formatDuration, renderIconActivity } from './utils'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants'
-import BaseButton from '@components/courses/buttons/BaseButton'
 import TestModal from '@components/courses/popup/TestModal'
 import { TEST_TYPE_ENUM } from '@utils/constants'
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 
 const { Panel } = Collapse
 type DataTestType = {
@@ -133,8 +134,9 @@ export default function SubSectionItem({
             {sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST ? (
               checkSubTestFinished ? (
                 <div className="topic_test_action invisible hidden gap-4 md:flex">
-                  <ButtonIcon
+                  <ButtonTextV2
                     title="Retake"
+                    size="medium"
                     className="text-primary"
                     onClick={() => {
                       setOpen(true)
@@ -157,21 +159,28 @@ export default function SubSectionItem({
                       }
                     }}
                   />
-                  <ButtonIcon
+                  <ButtonTextV2
                     title="Result"
+                    size="medium"
                     className="text-bw-15"
                     onClick={() => {
+                      let attempts: IAttempt[] = []
+                      const rawAttempt = sub?.quiz?.attempt
+                      if (Array.isArray(rawAttempt)) {
+                        attempts = rawAttempt
+                      } else if (rawAttempt) {
+                        attempts = [rawAttempt]
+                      }
+
                       router.push(
-                        `/short-course/test-result/${sub?.quiz?.attempt?.id}`,
+                        `/short-course/test-result/${attempts[0]?.id}`,
                       )
                     }}
                   />
                 </div>
               ) : (
-                <BaseButton
-                  variant="secondary"
+                <ButtonSecondaryV2
                   title={'Start'}
-                  full={false}
                   size="medium"
                   onClick={(e) => {
                     e.stopPropagation()
@@ -285,8 +294,9 @@ export default function SubSectionItem({
                 {act?.course_section_type === TEST_TYPE_ENUM.CHAPTER_TEST ? (
                   isActivityFinished ? (
                     <div className="invisible hidden gap-4 group-hover:visible md:flex">
-                      <ButtonIcon
+                      <ButtonTextV2
                         title="Retake"
+                        size="medium"
                         className="text-primary"
                         onClick={() => {
                           setOpen(true)
@@ -309,8 +319,9 @@ export default function SubSectionItem({
                           }
                         }}
                       />
-                      <ButtonIcon
+                      <ButtonTextV2
                         title="Result"
+                        size="medium"
                         className="text-bw-15 "
                         onClick={() => {
                           router.push(
@@ -320,10 +331,8 @@ export default function SubSectionItem({
                       />
                     </div>
                   ) : (
-                    <BaseButton
-                      variant="secondary"
+                    <ButtonSecondaryV2
                       title={'Start'}
-                      full={false}
                       size="medium"
                       onClick={(e) => {
                         e.stopPropagation()

@@ -64,7 +64,6 @@ export default function ActivityDetail() {
   const { setOpenPopupCTA } = useCourseContext()
   const dispatch = useAppDispatch()
   const selector = useAppSelector(shortCourseActivityReducer)
-  const [activeButtonId, setActiveButtonId] = useState<string>()
   const endActivityRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<Array<IntersectionObserver | null>>([])
   const observerRef = useRef<IntersectionObserver>()
@@ -73,7 +72,6 @@ export default function ActivityDetail() {
   const [isDoneActivity, setIsDoneActivity] = useState(false)
   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const [fetch_progress, setFetch_progress] = useState<string[]>([])
-  const [exhibitText, setExhibitText] = useState<string>('')
   const handleCloseTab = () => setActiveTab('')
   const getNotesData = useAppSelector(
     (state) => state.shortNotesListReducer?.note_data,
@@ -533,6 +531,9 @@ export default function ActivityDetail() {
               uuid={e?.uuid}
               count={index}
               key={e?.uuid}
+              isActiveTab={activeTab === ACTIVE_TABS.ADD_NOTE}
+              handleCloseTab={handleCloseTab}
+              countNote={getNotesData?.length}
             />
           )
         })}
@@ -547,7 +548,7 @@ export default function ActivityDetail() {
                 onClose={handleCloseTab}
               />
             )}
-            <div className="mb-0 bg-white bg-white pb-25 pt-6 shadow-search lg:mb-6 lg:block lg:rounded-xl lg:pb-6 lg:pl-6 lg:pr-6">
+            <div className="mb-0 bg-white pb-25 pt-6 shadow-search lg:mb-6 lg:block lg:rounded-xl lg:pb-6 lg:pl-6 lg:pr-6">
               <div className={`mx-auto my-0 w-full px-6 pt-6`}>
                 <div className="tab-content overflow-x-auto overflow-y-hidden">
                   {course_tab_documents?.map((e, i) => {

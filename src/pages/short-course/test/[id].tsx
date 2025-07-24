@@ -47,7 +47,6 @@ import ConFirmSubmit from '@pages/test/conFirmSubmit'
 import LimitQuizModal from '@pages/test/limitQuizModal'
 import SuccessSubmittedConstructorModal from '@pages/test/SuccessSubmittedConstructorModal'
 import HeaderTest from '@components/courses/test/HeaderTest'
-import BaseButton from '@components/courses/buttons/BaseButton'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import { Arrows, Calculator } from '@components/courses/icons'
 import { Flag } from '@components/courses/icons/Flag'
@@ -68,6 +67,8 @@ import {
 import TabSlide from '@components/courses/test/TabSlide'
 import { IQuestion } from 'src/type/course'
 import { NoMobile } from '@components/courses/icons/NoMobile'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
 
 const warningText =
   'You have unsaved changes - are you sure you wish to leave this page?'
@@ -1580,10 +1581,9 @@ const TestDetail = () => {
           LMS Pro’s Testing can be difficult on a mobile device. You can use
           tablet or desktop device for better experience.
         </p>
-        <BaseButton
+        <ButtonPrimaryV2
           title="Back to homepage"
-          size="small"
-          variant="primary"
+          size="medium"
           loading={false}
           disabled={false}
           className="bg-bw-17 text-white"
@@ -1726,10 +1726,9 @@ const TestDetail = () => {
                       quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                         <div className="flex gap-2 pt-6">
                           {!currentTabContent?.done && (
-                            <BaseButton
+                            <ButtonSecondaryV2
                               title="Clear Selection"
-                              size="small"
-                              variant="secondary"
+                              size="medium"
                               loading={false}
                               disabled={false}
                               onClick={() => {
@@ -1742,10 +1741,9 @@ const TestDetail = () => {
                             />
                           )}
 
-                          <BaseButton
+                          <ButtonPrimaryV2
                             title="Confirm"
-                            size="small"
-                            variant="primary"
+                            size="medium"
                             loading={false}
                             disabled={false}
                             onClick={async () => {
@@ -1867,10 +1865,9 @@ const TestDetail = () => {
                       quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                         <div className="flex gap-2 pt-6">
                           {!currentTabContent?.done && (
-                            <BaseButton
+                            <ButtonSecondaryV2
                               title="Clear Selection"
-                              size="small"
-                              variant="secondary"
+                              size="medium"
                               loading={false}
                               disabled={false}
                               onClick={() => {
@@ -1883,10 +1880,9 @@ const TestDetail = () => {
                             />
                           )}
 
-                          <BaseButton
+                          <ButtonPrimaryV2
                             title="Confirm"
-                            size="small"
-                            variant="primary"
+                            size="medium"
                             loading={false}
                             disabled={false}
                             onClick={async () => {

@@ -3,8 +3,8 @@ import { defaultStatusCourse } from 'src/constants'
 import { CheckIcon, FineTuninIcon } from '@components/courses/icons'
 import BaseDrawer from '@components/courses/popup/BaseDrawer'
 import { MobileFilter3LevelProps } from 'src/type/courses-3-level'
-import BaseButton from '@components/courses/buttons/BaseButton'
 import ButtonIcon from '../buttons/ButtonIcon'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 
 export default function MobileFilter3Level({
   courses,
@@ -101,11 +101,10 @@ export default function MobileFilter3Level({
           </div>
         </div>
 
-        <BaseButton
-          variant="primary"
+        <ButtonPrimaryV2
           title={'Confirm'}
           full={true}
-          size={'small'}
+          size={'medium'}
           onClick={confirmFilter}
         />
       </BaseDrawer>
