@@ -1,3 +1,5 @@
+import { ISelectOption } from 'src/type'
+
 export const PageLink = {
   HOME: '/',
   COURSES: '/courses',
@@ -222,7 +224,7 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [
+export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
   {
     label: 'All Section',
     value: '',
