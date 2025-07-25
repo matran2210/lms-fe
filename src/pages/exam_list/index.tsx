@@ -97,6 +97,8 @@ const ExamInformation = () => {
     setCurrentRow(record)
   }
   const textStyle = 'text-base font-medium text-gray-800'
+  const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap w-[418px]`
+  const className = 'custom-title-table custom-action-cell'
 
   const columnsValue: ColumnsType<IExamInformation> = [
     {
@@ -104,43 +106,51 @@ const ExamInformation = () => {
       render: (record) => (
         <NameNoActionCell
           dataColumn={record?.class?.course?.name}
-          className={textStyle}
+          className={textTruncateStyle}
         />
       ),
+      width: 450,
     },
     {
       title: 'Class Code',
+      className: className,
       render: (record) => (
         <NameNoActionCell
           dataColumn={record?.class?.code}
           className={textStyle}
-        />
-      ),
-    },
-    {
-      title: 'Program',
-      render: (record) => (
-        <NameNoActionCell
-          dataColumn={record?.class?.course?.course_categories[0].name}
-          className={textStyle}
+          isCenter
         />
       ),
       width: 250,
     },
     {
+      title: 'Program',
+      className: className,
+      render: (record) => (
+        <NameNoActionCell
+          dataColumn={record?.class?.course?.course_categories[0].name}
+          className={textStyle}
+          isCenter
+        />
+      ),
+      width: 200,
+    },
+    {
       title: 'Duration',
+      className: className,
       render: (record) => (
         <NameNoActionCell
           dataColumn={getDuration(record?.started_at, record?.finished_at)}
           className={textStyle}
+          isCenter
         />
       ),
+      width: 200,
     },
     {
       title: '',
       key: 'actions',
-      align: 'center',
-      width: 80,
+      className: className,
       render: (record) => {
         return (
           <div className="flex justify-end">
