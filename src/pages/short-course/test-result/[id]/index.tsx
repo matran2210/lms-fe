@@ -10,19 +10,7 @@ import { useInfiniteQuery, useQuery } from 'react-query'
 import { ResultAPI } from 'src/pages/api/short-course/test-result'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { DEFAULT_PAGESIZE } from 'src/constants'
-
-const breadcrumbs: ITabs[] = [
-  {
-    link: `/short-course`,
-    title: `My Course`,
-    disable: false,
-  },
-  {
-    link: '/',
-    title: 'Results',
-    disable: false,
-  },
-]
+import { TEST_TYPE } from '@utils/constants'
 
 export default function TestResult() {
   const router = useRouter()
@@ -83,6 +71,33 @@ export default function TestResult() {
   }
 
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
+
+  let linkTest = `/short-course/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+  const quiz = questions?.quizAttempt?.quiz
+  if (
+    quiz?.is_limited &&
+    quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
+  ) {
+    linkTest = `/short-course/test-result/${router.query.id}`
+  }
+
+  const breadcrumbs: ITabs[] = [
+    {
+      link: `/short-course/detail/${questions?.class_id ?? ''}`,
+      title: `${questions?.course?.name ?? 'Course Detail'}`,
+      disable: false,
+    },
+    {
+      link: linkTest,
+      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
+      disable: false,
+    },
+    {
+      link: '/',
+      title: 'Results',
+      disable: false,
+    },
+  ]
 
   const dashboard = useMemo(() => {
     if (!chartData) return <div>Loading...</div>

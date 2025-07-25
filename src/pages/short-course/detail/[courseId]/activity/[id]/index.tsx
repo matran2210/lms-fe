@@ -16,6 +16,7 @@ import {
   ISubSection,
   IActivity,
   NoteFormData,
+  IActivityResource,
 } from 'src/type/courses-3-level'
 import { useQuery } from 'react-query'
 import { CoursesAPI } from '@pages/api/courses'
@@ -46,6 +47,7 @@ import MovableWindow from '@components/base/window'
 import { CloseIcon } from '@assets/icons'
 import LearningNotesList from '@components/courses/note-list/LearningNotesList'
 import { CourseSectionsWithProgress } from 'src/type/course'
+import PdfModal from '@components/courses/popup/PdfModal'
 
 interface VideoStateClicked {
   course_tab_document_id: string
@@ -76,6 +78,10 @@ export default function ActivityDetail() {
   const getNotesData = useAppSelector(
     (state) => state.shortNotesListReducer?.note_data,
   )
+  const [dataModal, setDataModal] = useState<
+    IActivityResource['items'][number] | null
+  >(null)
+  const [isOpen, setIsOpen] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -230,6 +236,7 @@ export default function ActivityDetail() {
   const activityResourceItems = (activity?.files || []).map(
     (file: ActivityFile) => ({
       title: file.resource?.name,
+      url: file.resource?.url,
       download: async () => {
         try {
           await UploadAPI.downloadFile({
@@ -264,7 +271,7 @@ export default function ActivityDetail() {
     if (fetch_progress.find((id) => id === ACTIVITYID)) {
       return
     }
-    const response = await CoursesAPI.startCourseSectionProgress(
+    const response = await CoursesAPI.startShortCourseSectionProgress(
       COURSEID,
       ACTIVITYID,
     )
@@ -642,12 +649,28 @@ export default function ActivityDetail() {
 
             <SectionContent sections={filteredSubsections} />
 
-            <ActivityResource
-              title="Activity Resource"
-              items={activityResourceItems}
-              visible={activeTab === ACTIVE_TABS.RESOURCE}
-              onClose={handleCloseTab}
-            />
+            {activityResourceItems.length > 0 && (
+              <ActivityResource
+                title="Activity Resource"
+                items={activityResourceItems}
+                visible={activeTab === ACTIVE_TABS.RESOURCE}
+                onClose={handleCloseTab}
+                setDataModal={setDataModal}
+                setIsOpen={setIsOpen}
+              />
+            )}
+
+            {dataModal && (
+              <PdfModal
+                title={dataModal?.title}
+                open={isOpen}
+                fileUrl={dataModal.url || ''}
+                onClose={() => {
+                  setIsOpen(false)
+                }}
+                position="center"
+              ></PdfModal>
+            )}
           </section>
         </div>
       </div>
