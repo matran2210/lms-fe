@@ -477,15 +477,13 @@ const ActivityPage = () => {
               {selector?.calculator_status && (
                 <MovableWindow
                   position={{
-                    width: '400px',
-                    height: '300px',
                     top: 'calc(25% - 150px)',
                     left: 'calc(25% - 200px)',
                   }}
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0 h-full w-full">
+                  <div className="absolute left-0 top-0">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
@@ -654,18 +652,22 @@ const ActivityPage = () => {
               return (
                 <MovableWindow
                   key={e.id}
+                  position={{
+                    top: '30% - 150px',
+                    left: '10px',
+                  }}
                   className="lg:hidden"
-                  position="bottom left"
                   zIndex={40}
+                  fixed
                 >
-                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                  <div className="absolute left-0 top-0 h-full w-64 rounded-xl">
                     <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
                       <div className="text-sm font-bold">Calculator</div>
                       <button onClick={() => handleCloseScratchPad(e)}>
                         <CloseModalIcon />
                       </button>
                     </div>
-                    <Calculator />
+                    <Calculator isMobileCalc />
                   </div>
                 </MovableWindow>
               )

@@ -521,13 +521,13 @@ const Discussion = ({ class_id }: Props) => {
       </div>
 
       <div
-        className={`transition-max-height sticky bottom-0 mt-6 flex items-start gap-3 overflow-visible bg-white duration-300 md:relative`}
+        className={`transition-max-height sticky bottom-0 mt-6 flex items-center gap-3 overflow-visible bg-white duration-300 md:relative`}
       >
         <div className="leading-0 flex-none">
           <Image
-            width={50}
-            height={50}
-            className="rounded-full"
+            width={40}
+            height={40}
+            className="h-8 w-8 rounded-full md:h-10 md:w-10"
             src={
               selector.userInDiscussion?.is_sapp_supporter &&
               selector.userInDiscussion?.avatar
