@@ -2776,7 +2776,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className="leading-4.5 absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
+                        className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}
@@ -3357,7 +3357,7 @@ const TestDetail = () => {
                         <div
                           key={e?.value}
                           className={clsx(
-                            'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
+                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
                           )}
                           onClick={() =>
                             handleOpenScratchPad(
