@@ -96,7 +96,7 @@
       @apply hidden;
     }
 
-    &.custom-title-table {
+    &.custom-column-table {
       @apply text-center;
     }
   }
@@ -104,7 +104,7 @@
   .ant-table-tbody > tr > td {
     @apply pb-6 pl-0 pr-8 pt-8;
 
-    &.custom-title-table {
+    &.custom-column-table {
       @apply pr-0;
     }
   }

@@ -98,7 +98,7 @@ const ExamInformation = () => {
   }
   const textStyle = 'text-base font-medium text-gray-800'
   const textTruncateStyle = `${textStyle} overflow-hidden text-ellipsis whitespace-nowrap w-[418px]`
-  const className = 'custom-title-table custom-action-cell'
+  const className = 'custom-column-table'
 
   const columnsValue: ColumnsType<IExamInformation> = [
     {
