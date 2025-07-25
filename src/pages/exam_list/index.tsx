@@ -114,6 +114,7 @@ const ExamInformation = () => {
     {
       title: 'Class Code',
       className: className,
+      align: 'center',
       render: (record) => (
         <NameNoActionCell
           dataColumn={record?.class?.code}
@@ -121,11 +122,12 @@ const ExamInformation = () => {
           isCenter
         />
       ),
-      width: 250,
+      width: 350,
     },
     {
       title: 'Program',
       className: className,
+      align: 'center',
       render: (record) => (
         <NameNoActionCell
           dataColumn={record?.class?.course?.course_categories[0].name}
@@ -133,11 +135,12 @@ const ExamInformation = () => {
           isCenter
         />
       ),
-      width: 200,
+      width: 300,
     },
     {
       title: 'Duration',
       className: className,
+      align: 'center',
       render: (record) => (
         <NameNoActionCell
           dataColumn={getDuration(record?.started_at, record?.finished_at)}
@@ -145,7 +148,7 @@ const ExamInformation = () => {
           isCenter
         />
       ),
-      width: 200,
+      width: 300,
     },
     {
       title: '',
