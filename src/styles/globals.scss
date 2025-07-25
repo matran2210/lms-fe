@@ -116,14 +116,14 @@ body *::-webkit-scrollbar-track {
 }
 
 body *::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+  @apply bg-primary;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 body *::-webkit-scrollbar-thumb:hover {
-  background-color: #a8bbbf;
+  @apply bg-primary;
 }
 
 .menu-sub-dropdown {

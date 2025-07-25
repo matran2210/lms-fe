@@ -173,36 +173,37 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] max-w-[calc(100vw-88px-32px)]'}`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] lg:max-w-[calc(100vw-88px-32px)]'}`}
       aria-label="Pagination"
     >
-      <div className={`flex w-full items-center justify-between gap-4`}>
+      <div className={`flex w-full items-center justify-center gap-4`}>
         {/* Nút mũi tên trái */}
-        <div className="flex items-center">
-          <PageLink
-            disabled={sortedData.findIndex((e) => e.id === currentTab) === 0}
-            arrow={true}
-            onClick={() => {
-              const index = sortedData.findIndex((e) => e.id === currentTab)
-              if (index > 0 && setCurrentTab) {
-                handleChangeTab(sortedData[index - 1].id)
+        {data?.length > 0 && (
+          <div className="flex items-center">
+            <PageLink
+              disabled={sortedData.findIndex((e) => e.id === currentTab) === 0}
+              arrow={true}
+              onClick={() => {
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index > 0 && setCurrentTab) {
+                  handleChangeTab(sortedData[index - 1].id)
+                }
+              }}
+              className={
+                sortedData.findIndex((e) => e.id === currentTab) === 0
+                  ? 'pointer-events-none opacity-50'
+                  : ''
               }
-            }}
-            className={
-              sortedData.findIndex((e) => e.id === currentTab) === 0
-                ? 'pointer-events-none opacity-50'
-                : ''
-            }
-          >
-            <ArrowIconV2 />
-          </PageLink>
-        </div>
+            >
+              <ArrowIconV2 />
+            </PageLink>
+          </div>
+        )}
         {/* Phần render các số */}
         <div
           className={clsx(
-            'flex w-full select-none gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
+            'flex w-fit select-none justify-start gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
             {
-              'justify-center': false,
               '!w-fit': activeShowAll,
               'h-[88px]':
                 activeShowAll && sortedData?.length > numberDisplayData,
@@ -287,29 +288,31 @@ const TabSlide = ({
           )}
         </div>
         {/* Nút mũi tên phải */}
-        <div className="flex items-center">
-          <PageLink
-            disabled={
-              sortedData.findIndex((e) => e.id === currentTab) ===
-              sortedData.length - 1
-            }
-            arrow={true}
-            onClick={() => {
-              const index = sortedData.findIndex((e) => e.id === currentTab)
-              if (index < sortedData.length - 1 && setCurrentTab) {
-                handleChangeTab(sortedData[index + 1].id)
+        {data?.length > 0 && (
+          <div className="flex items-center">
+            <PageLink
+              disabled={
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                sortedData.length - 1
               }
-            }}
-            className={
-              sortedData.findIndex((e) => e.id === currentTab) ===
-              sortedData.length - 1
-                ? 'pointer-events-none opacity-50'
-                : ''
-            }
-          >
-            <ArrowIconV2 right={true} />
-          </PageLink>
-        </div>
+              arrow={true}
+              onClick={() => {
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index < sortedData.length - 1 && setCurrentTab) {
+                  handleChangeTab(sortedData[index + 1].id)
+                }
+              }}
+              className={
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                sortedData.length - 1
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              }
+            >
+              <ArrowIconV2 right={true} />
+            </PageLink>
+          </div>
+        )}
       </div>
     </ul>
   )
