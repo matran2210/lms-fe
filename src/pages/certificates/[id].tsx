@@ -16,6 +16,7 @@ export interface ICertificate {
   course: {
     name: string
   }
+  id: string
 }
 
 const Certificate = () => {

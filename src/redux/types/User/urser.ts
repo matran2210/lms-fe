@@ -36,8 +36,9 @@ export interface IUser {
     | undefined
   course_category_id?: string | undefined
   keycloak_user_id: string
+  hubspot_contact_id?: string
 }
-interface IUserContact {
+export interface IUserContact {
   id: string
   created_at: string
   updated_at: string

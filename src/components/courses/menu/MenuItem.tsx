@@ -274,6 +274,10 @@ export default function MenuItem({
     )
   }
 
+  const profileUrl = router.pathname?.startsWith(PageLink.SHORT_COURSE)
+    ? `${PageLink.SHORT_COURSE_PROFILE}`
+    : `${PageLink.MYPROFILE}`
+
   return (
     <>
       {isActivity && name === TitleSidebar.CALCULATOR && (
@@ -333,7 +337,9 @@ export default function MenuItem({
                   ? `${ROUTES.MY_COURSES}${router?.query?.courseId || router?.query?.id}/dashboard`
                   : name === TitleSidebar.COURSE_CONTENT
                     ? `${url}/${router?.query?.courseId || router?.query?.id}`
-                    : url
+                    : url === PageLink.MYPROFILE
+                      ? profileUrl
+                      : url
               }
               passHref
             >

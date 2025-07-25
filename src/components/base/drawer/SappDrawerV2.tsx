@@ -6,8 +6,11 @@ interface IProps extends DrawerProps {
   open: boolean
   handleCancel: () => void
   width?: number
-  title: string
+  title: ReactNode
   children: ReactNode
+  classNameHeader?: string
+  classNameBody?: string
+  className?: string
 }
 
 const SappDrawerV2 = ({

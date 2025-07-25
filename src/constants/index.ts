@@ -35,6 +35,7 @@ export const PageLink = {
   CALENDAR: '/calendar',
   SHORT_COURSE: '/short-course',
   SHORT_COURSE_DETAIL: '/short-course/detail',
+  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {

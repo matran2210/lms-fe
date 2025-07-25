@@ -1,0 +1,82 @@
+.sapp-tabs-profile {
+  .ant-tabs-nav {
+    @apply my-0 px-0 pt-0;
+    .ant-tabs-nav-wrap {
+      .ant-tabs-nav-list {
+        @apply flex w-full justify-between lg:w-auto;
+      }
+    }
+  }
+  .ant-tabs-tab + .ant-tabs-tab {
+    @apply ml-0 lg:ml-16;
+  }
+  .ant-tabs-tab {
+    @apply font-normal text-gray-v2-800;
+    &.ant-tabs-tab-active {
+      @apply font-semibold;
+      .ant-tabs-tab-btn {
+        @apply text-primary;
+        &:focus {
+          @apply text-primary;
+        }
+      }
+    }
+    .ant-tabs-tab-btn {
+      &:focus {
+        @apply text-primary;
+      }
+    }
+  }
+  .ant-tabs-ink-bar {
+    @apply bg-primary-v2-DEFAULT;
+  }
+}
+
+.ant-card.profile-card {
+  .ant-card-head {
+    @apply hidden border-b-0 p-0 md:block;
+    .ant-card-head-wrapper {
+      .ant-card-head-title {
+        @apply text-xl font-bold text-secondary-v2-DEFAULT;
+      }
+    }
+  }
+  .ant-card-body {
+    @apply px-4 pb-4 pt-3 md:p-0;
+  }
+}
+
+.sapp-profile-switch.ant-switch {
+  transition: background-color 0.3s;
+  &.ant-switch-checked {
+    background-color: $color-green;
+
+    &:hover:not(.ant-switch-disabled) {
+      background-color: $color-green;
+    }
+    .ant-switch-handle::before {
+      @apply bg-white;
+    }
+  }
+  // }
+}
+
+.certificate-card-wrapper {
+  @apply h-full w-full bg-cover bg-center bg-no-repeat;
+  background-image: url('../assets/v2/images/certificate-bg.png');
+}
+
+.ant-otp {
+  @apply flex justify-between gap-3;
+  .ant-otp-input-wrapper {
+    input {
+      @apply rounded-md border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:!px-5 md:py-4 md:text-2xl;
+      @apply focus:border-primary focus:shadow-0 focus:outline-none;
+
+      &.ant-input-status-error {
+        @apply border-[#C73B37] text-error-v2-400;
+        @apply hover:border-[#C73B37] focus:border-[#C73B37] focus:shadow-0 focus:outline-none;
+      }
+    }
+  }
+}
