@@ -23,6 +23,8 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import GotoModal from '@components/courses/popup/GotoModal'
+import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 9
 export enum ECourseType {
@@ -114,6 +116,7 @@ const MyCourse = () => {
     name: router.query.name || undefined,
     status: router.query.status || undefined,
     type: router.query.type || undefined,
+    template: '4',
   }
 
   /**
@@ -221,17 +224,16 @@ const MyCourse = () => {
           isCoursePage
         />
 
-        <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">
+        <div className="flex items-center justify-center rounded-md bg-white p-3 shadow-medium md:justify-between md:p-6 lg:px-8 lg:py-6">
           <div
-            className={`heading relative rounded-md bg-white 
-        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
-      `}
+            className={`heading relative rounded-md bg-white  ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
             <Heading
               greeting="Welcome to"
               title={generalOrMasterCourse}
               showShadow={false}
+              des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
             {guideStatus && guideStep === 4 && (
               <PopupStep
@@ -247,12 +249,10 @@ const MyCourse = () => {
             )}
           </div>
           <div
-            className={`mr-6 hidden items-center rounded-md bg-white md:flex lg:mr-8
-        ${guideStatus && guideStep === 5 ? 'z-50' : ''}
-      `}
+            className={`hidden items-center rounded-md bg-white md:flex ${guideStatus && guideStep === 5 ? 'z-50' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-[#F9F9F9]">
+            <div className="flex gap-2 rounded-[7px] bg-gray-canvas p-1 lg:gap-[10px]">
               <Button
                 type={
                   generalOrMasterCourse === ECourseType.MASTER
@@ -261,7 +261,15 @@ const MyCourse = () => {
                 }
                 block
                 onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
-                className="h-10 outline-none"
+                className={clsx(
+                  'text-sx w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                  },
+                )}
               >
                 Master Finance
               </Button>
@@ -273,7 +281,15 @@ const MyCourse = () => {
                 }
                 block
                 onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
-                className="h-10 outline-none"
+                className={clsx(
+                  'text-sx w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                  },
+                )}
               >
                 General Course
               </Button>
@@ -351,6 +367,7 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
+        <GotoModal />
       </Layout>
     </SappLoadingGlobal>
   )

@@ -8,13 +8,20 @@ interface IProps {
   title: string
   des?: string | React.ReactNode
   showShadow?: boolean
+  className?: string
 }
 
-const Heading = ({ greeting, title, des, showShadow = true }: IProps) => {
+const Heading = ({
+  greeting,
+  title,
+  des,
+  className,
+  showShadow = true,
+}: IProps) => {
   return (
     <div
-      className={clsx('w-full rounded-xl p-3 md:p-6 lg:px-8 lg:py-6', {
-        'shadow-sidebar': showShadow === true,
+      className={clsx('w-full rounded-xl', className, {
+        'shadow-medium': showShadow === true,
       })}
     >
       <div className="mb-1 text-xl font-medium md:text-[28px] lg:text-3xl">

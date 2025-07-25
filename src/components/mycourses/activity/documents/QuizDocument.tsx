@@ -539,7 +539,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -665,7 +665,7 @@ const QuizDocument = ({
                     </span>
                   </button>
                 )}
-                <div className="text-bw-13 text-sm md:text-base">
+                <div className="text-sm text-bw-13 md:text-base">
                   Question: {activeQuestionIndex + 1} of{' '}
                   {questions?.length || 0}
                 </div>
@@ -825,7 +825,6 @@ const QuizDocument = ({
                 : 'You should select an answer before click'
             }
             classNames={{ root: 'max-w-72' }}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
             trigger={'hover'}
           >
             <>

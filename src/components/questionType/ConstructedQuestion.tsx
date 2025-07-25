@@ -306,7 +306,7 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-bw-13 text-lg font-semibold">
+                <div className="text-lg font-semibold text-bw-13">
                   {fullData.done
                     ? 'Your Answer File:'
                     : 'Upload file to submit'}

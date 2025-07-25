@@ -19,7 +19,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
   const { events } = useDraggable(ref)
   return (
     <div
-      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 text-gray-800 shadow-sidebar md:p-6 md:pl-12"
+      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 !pl-12 text-gray-800 shadow-sidebar md:p-6"
       ref={ref}
       {...events}
     >
@@ -37,7 +37,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
           <div>
             {isGraded && (
               <div
-                className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
+                className={`group-hover:border-info absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300`}
                 style={{
                   bottom: passingScore + '%',
                   width: data?.length * 150 - 12 + 'px',

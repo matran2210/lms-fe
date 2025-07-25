@@ -114,11 +114,11 @@ type Props = {
   isHideExhibit?: boolean
   saveAnswer?: () => void
   exhibitText?: string
-  controlAnswer: Control<FieldValues, any>
-  setValue: UseFormSetValue<FieldValues>
-  reset: UseFormReset<FieldValues>
-  getValues: UseFormGetValues<FieldValues>
-  watch: UseFormWatch<FieldValues>
+  controlAnswer?: Control<FieldValues, any>
+  setValue?: UseFormSetValue<FieldValues>
+  reset?: UseFormReset<FieldValues>
+  getValues?: UseFormGetValues<FieldValues>
+  watch?: UseFormWatch<FieldValues>
 }
 
 type RefEditor = {
@@ -214,10 +214,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         refEditor?.current?.reset()
       }
       setShowRequirement(data)
-      setValue(
+      setValue?.(
         `${activeQuestion?.id}_${data?.id}_essay`,
         activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
-          getValues(`${activeQuestion?.id}_${data?.id}_essay`) ??
+          getValues?.(`${activeQuestion?.id}_${data?.id}_essay`) ??
           null,
       )
       setEssayData({
@@ -296,7 +296,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             case QUESTION_TYPES.ESSAY: {
               activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
                 ans?.short_answer &&
-                  setValue(
+                  setValue?.(
                     `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`,
                     ans?.short_answer,
                   )
@@ -310,7 +310,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     // Lift onSubmit using useImperativeHandle
     useImperativeHandle(ref, () => ({
       onSubmit: onSubmit,
-      reset: reset,
+      reset: reset ?? (() => {}),
       onSaveAnswer: handleGetAnswer,
     }))
 
@@ -318,9 +318,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       switch (activeQuestion?.qType as QUESTION_TYPES) {
         case QUESTION_TYPES.ONE_CHOICE:
         case QUESTION_TYPES.TRUE_FALSE:
-          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.MULTIPLE_CHOICE:
-          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.FILL_WORD:
           return getValueFillText()
         case QUESTION_TYPES.SELECT_WORD:
@@ -330,7 +330,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.DRAG_DROP:
           return getAnswerDragNDrop()
         case QUESTION_TYPES.ESSAY:
-          const value = getValues(`${activeQuestion?.id}_${document_id}_essay`)
+          const value = getValues?.(
+            `${activeQuestion?.id}_${document_id}_essay`,
+          )
           const isSubmitted = (() => {
             if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
               if (
@@ -366,7 +368,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           }
           if (activeQuestion?.requirements?.length) {
             const answers = activeQuestion?.requirements?.map((req) => {
-              const answer = getValues(`${activeQuestion?.id}_${req.id}_essay`)
+              const answer = getValues?.(
+                `${activeQuestion?.id}_${req.id}_essay`,
+              )
               return {
                 question_id: activeQuestion?.id,
                 answer_file: req?.answer_file,
@@ -384,7 +388,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             })
             return answers
           } else {
-            const answer = getValues(
+            const answer = getValues?.(
               `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? showRequirement?.id : document_id}_essay`,
             )
             return [
@@ -509,7 +513,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
               isShowWarning={
-                !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                !watch?.(`${activeQuestion?.id}_${document_id}_answer`)
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
@@ -528,9 +532,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               exhibitText={exhibitText}
               isShowWarning={
                 !(
-                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
-                    0
+                  watch?.(`${activeQuestion?.id}_${document_id}_answer`) &&
+                  watch?.(`${activeQuestion?.id}_${document_id}_answer`)
+                    .length > 0
                 )
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
@@ -604,7 +608,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.ESSAY:
           const items =
             activeQuestion?.requirements?.map((e, i: number) => {
-              const hasAnswer = !!watch(
+              const hasAnswer = !!watch?.(
                 `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[i]?.id : document_id}_essay`,
               )
 
@@ -1074,7 +1078,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               <div
                                 key={e?.value}
                                 className={clsx(
-                                  'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
+                                  'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
                                 )}
                                 onClick={() => handleOpenFile(e)}
                               >
@@ -1198,7 +1202,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   />
                 )}
                 items={exhibitItems}
-                className="p-0"
+                className="!bg-white p-0"
                 rootClassName="learning-activity-collapse"
               />
             </div>

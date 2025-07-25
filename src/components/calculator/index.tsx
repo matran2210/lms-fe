@@ -4,8 +4,12 @@ import { calculate, isNumber } from './logic/calculate'
 import ButtonsContainer from './ButtonsContainer'
 import Display from './display'
 import Warning from './warning'
+import clsx from 'clsx'
 
-const Calculator = () => {
+interface IProps {
+  isMobileCalc?: boolean
+}
+const Calculator = ({ isMobileCalc = false }: IProps) => {
   const [lastExpression, setLastExpression] = useState('')
   const [calc, setCalc] = useState({
     total: null,
@@ -63,7 +67,11 @@ const Calculator = () => {
   const { total, next, operation } = calc
 
   return (
-    <div className="calc">
+    <div
+      className={clsx('calc', {
+        '!w-64': isMobileCalc,
+      })}
+    >
       <Display
         total={total ?? ''}
         next={next ?? ''}
@@ -73,6 +81,7 @@ const Calculator = () => {
       <ButtonsContainer
         click={(e) => handleClick(calc, e)}
         keyDown={handleKeyDown}
+        isMobileCalc={isMobileCalc}
       />
       <Warning warning={badDivision} />
     </div>

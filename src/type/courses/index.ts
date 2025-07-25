@@ -309,4 +309,10 @@ export const getTypeName = {
   activity: 'Activity',
 } as Record<SectionField, string>
 
+export interface ISelectOption {
+  label: string
+  value: string
+  name?: string
+}
+
 export * from './test'

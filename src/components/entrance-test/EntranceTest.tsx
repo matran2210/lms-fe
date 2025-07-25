@@ -111,7 +111,18 @@ const EntranceTest = ({
   //   ].includes(data?.attempt_status)
 
   const handleSubmitQuestion = async (redirectToResult: boolean = false) => {
-    setIsLoading(true)
+    //to do: start test
+    localStorage.removeItem('quizAttempt')
+    localStorage.setItem(
+      'quizAttempt',
+      JSON.stringify({
+        id: currentAttempt?.id,
+        number_of_attempts: data?.attempt_times,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz_timed,
+        created_at: currentAttempt?.started_at,
+      }),
+    )
     try {
       const res = await CoursesAPI.submitAllQuestion(
         currentAttempt?.id as string,
