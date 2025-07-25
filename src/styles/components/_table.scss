@@ -89,24 +89,24 @@
     @apply rounded-2xl shadow-table;
   }
 
-  .ant-table-thead > tr > th,
-  .ant-table-thead > tr > th.custom-title-table {
+  .ant-table-thead > tr > th {
     @apply bg-white px-0 pb-6 pt-0 text-base font-medium text-gray;
+
     &::before {
       @apply hidden;
     }
-  }
 
-  .ant-table-thead > tr > th.custom-title-table {
-    @apply text-center;
+    &.custom-title-table {
+      @apply text-center;
+    }
   }
 
   .ant-table-tbody > tr > td {
     @apply pb-6 pl-0 pr-8 pt-8;
-  }
 
-  .ant-table-tbody > tr > td.custom-action-cell {
-    @apply pr-0;
+    &.custom-title-table {
+      @apply pr-0;
+    }
   }
 
   .ant-table-content {
