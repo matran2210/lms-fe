@@ -47,7 +47,7 @@ const DROPDOWN_STYLES = {
   container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
   options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
-  option: 'px-3 py-2 hover:bg-yellow-900 cursor-pointer rounded',
+  option: 'px-3 py-2 cursor-pointer rounded',
   icon: 'ml-2 text-gray-500',
 }
 

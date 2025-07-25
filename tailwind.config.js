@@ -200,9 +200,6 @@ module.exports = {
         txt: {
           primary: '#1F2937',
           secondary: '#9CA3AF',
-          yellow: {
-            900: '#FFFBF2',
-          },
         },
         badge: {
           open: '#f89707',
