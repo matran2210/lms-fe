@@ -36,7 +36,7 @@ const ButtonTextV2 = ({
     font-medium
     !border-none
     text-gray-v2-800
-    hover:text-primary-v2-DEFAULT
+    hover:text-primary
     ${isUnderline}
     ${fullWidthClass} 
     ${disabledClass} 
