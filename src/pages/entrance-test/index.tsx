@@ -70,16 +70,17 @@ const EntranceTest = () => {
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
         />
-        <div className="my-0 pt-6">
+        <div className="my-0">
           {isLoading ? (
             <CourseSkeleton />
           ) : (
             <>
               <div
-                className="mb-8 flex overflow-hidden rounded-xl bg-white shadow-sidebar"
+                className="mb-8 flex overflow-hidden rounded-xl bg-white p-3 shadow-medium md:p-6 lg:px-8 lg:py-6"
                 data-aos={ANIMATION.DATA_AOS}
               >
                 <Heading
+                  showShadow={false}
                   greeting="Welcome to"
                   title="Entrance Test"
                   des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
@@ -87,16 +88,16 @@ const EntranceTest = () => {
               </div>
               <div className="relative">
                 <div
-                  className="flex w-full flex-col justify-between gap-3 sm:flex-row sm:items-center"
+                  className="mx-auto mb-6 mt-8 flex items-center justify-between md:mb-7 md:mt-9"
                   data-aos={ANIMATION.DATA_AOS}
                 >
-                  <h2 className="text-2xl font-semibold text-gray-800 ">
+                  <h2 className="text-lg font-semibold text-gray-800 lg:text-2xl">
                     Entrance Test
                   </h2>
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />
                 </div>
               </div>
-              <div className="my-0 pt-7" data-aos={ANIMATION.DATA_AOS}>
+              <div className="my-0" data-aos={ANIMATION.DATA_AOS}>
                 <EntranceTestList
                   entranceTestLists={entranceTestLists || []}
                   onRefetch={refetch}

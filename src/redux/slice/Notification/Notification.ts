@@ -23,6 +23,7 @@ export interface NotificationState {
   loading: boolean
   list_notifications: INotifications[]
   meta: {
+    total_records: number
     total_pages: number
     page_index: number
     page_size: number
@@ -49,6 +50,7 @@ export interface NotificationState {
 const initialState: NotificationState = {
   loading: false,
   meta: {
+    total_records: 0,
     total_pages: 1,
     page_index: 1,
     page_size: 10,

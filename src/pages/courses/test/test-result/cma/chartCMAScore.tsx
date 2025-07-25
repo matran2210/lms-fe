@@ -19,7 +19,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
   const { events } = useDraggable(ref)
   return (
     <div
-      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-6 pl-12 text-gray-800 shadow-sidebar"
+      className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 !pl-12 text-gray-800 shadow-sidebar md:p-6"
       ref={ref}
       {...events}
     >
@@ -37,18 +37,18 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
           <div>
             {isGraded && (
               <div
-                className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
+                className={`group-hover:border-info absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300`}
                 style={{
                   bottom: passingScore + '%',
                   width: data?.length * 150 - 12 + 'px',
                 }}
               >
                 <div
-                  className={`relative -left-10 text-sm font-normal text-black`}
+                  className={`relative -left-10 text-xs font-normal text-black md:text-sm`}
                 >
                   <span className="relative">{passingScore}</span>
                 </div>
-                <p className="sticky right-0 mb-7 ml-auto hidden text-sm text-info group-hover:block">
+                <p className="sticky right-0 mb-7 ml-auto hidden text-xs text-info group-hover:block md:text-sm">
                   Passing Score
                 </p>
               </div>
@@ -62,7 +62,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
                   width: data?.length * 150 - 12 + 'px',
                 }}
               >
-                <div className="relative -left-9 bottom-[50%] text-sm font-normal">
+                <div className="relative -left-9 bottom-[50%] text-xs font-normal md:text-sm">
                   <span className="relative">50</span>
                 </div>
               </div>
@@ -70,8 +70,8 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
           </div>
           <div className="-ml-6 flex w-full flex-row">
             <div className="flex flex-col justify-between bg-white pt-4">
-              <div className="h-8 text-sm">Section</div>
-              <div className="text-sm">Weight </div>
+              <div className="h-8 text-xs md:text-sm">Section</div>
+              <div className="text-xs md:text-sm">Weight </div>
             </div>
             <div className="flex w-full flex-row">
               {data?.map((item) => (
@@ -93,10 +93,10 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
                     </Tooltip>
                     <div className="absolute -bottom-2.5 left-1/2 h-2.5 w-[1px] bg-gray-800" />
                   </div>
-                  <div className="mb-3 mt-2 line-clamp-2 h-8 w-full text-center text-sm">
+                  <div className="mb-3 mt-2 line-clamp-2 h-8 w-full text-center text-xs md:text-sm">
                     {item?.short_name ?? '-'}
                   </div>
-                  <div className="w-full text-center text-sm font-normal">
+                  <div className="w-full text-center text-xs font-normal md:text-sm">
                     {`${roundNumber(item?.max_section_score)}%`}
                   </div>
                 </div>

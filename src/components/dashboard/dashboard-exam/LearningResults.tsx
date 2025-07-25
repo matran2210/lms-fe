@@ -197,7 +197,7 @@ const LearningResults = () => {
         </div>
         <div className="flex">
           {option && (
-            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-end xl:px-5 2xl:pl-0 2xl:pr-12">
+            <div className="flex grow flex-col gap-5 px-0 xl:flex-row xl:justify-evenly xl:px-5 2xl:pl-0 2xl:pr-12">
               <div className="flex justify-center">
                 {(() => {
                   const chartHeight = isMobile
@@ -287,7 +287,7 @@ const LearningMockTest = ({ results }: { results: ILearningResult[] }) => {
           return (
             <div
               key={result?.id}
-              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:px-4"
+              className="mb-4 flex flex-col rounded-lg bg-gray-100 px-3 py-2 xl:p-4"
             >
               <div className="mb-3 text-base font-medium text-gray-800 lg:font-semibold xl:mb-2 xl:text-lg">
                 {result?.short_name || result?.name}

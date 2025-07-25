@@ -9,15 +9,9 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
-import HookFormSelect from '@components/base/select/HookFormSelect'
-import {
-  GRADING_METHOD,
-  GRADE_STATUS,
-  QUIZ_ATTEMPT_GRADING_STATUS,
-  QUIZ_ATTEMPT_STATUS,
-} from 'src/constants'
+import { Select } from 'antd'
+import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
-import BackIcon from '@assets/icons/BackIcon'
 import { CoursesAPI } from '@pages/api/courses'
 import TestPopup from '@components/common/TestPopup'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
@@ -29,6 +23,7 @@ import StatusTestQuizBadge, {
 } from '@components/StatusTestQuizBadge'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 enum StatusQuizAttempt {
   Passed = 'PASSED',
@@ -688,53 +683,35 @@ const TestModal = ({
                           Result:
                         </div>
                         {resultList?.data?.length > 1 && (
-                          <div className="flex gap-2">
-                            <HookFormSelect
-                              classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-                              placeholder=""
-                              value={selectedResult}
-                              onChange={(selectedOption) => {
-                                setSelectedResult({
-                                  ...selectedOption,
-                                  number_of_attempt: Number(
-                                    (selectedOption?.name ?? '')
-                                      .split('/')
-                                      .at(0) ?? 0,
-                                  ),
-                                })
-                                setIsFocus(false)
-                              }}
-                              options={resultList.data.map((item, index) => ({
-                                name: item.name,
-                                value: item.id,
-                                label: item.name,
-                                status: item.status,
-                                ratio_score: item.ratio_score,
-                                number_of_attempt: 3 - index,
-                              }))}
-                              onMenuScrollToBottom={(
-                                e: React.UIEvent<HTMLDivElement>,
-                              ) => {
-                                const { target } = e
-                                if (
-                                  (target as HTMLDivElement).scrollTop +
-                                    (target as HTMLDivElement).offsetHeight ===
-                                  (target as HTMLDivElement).scrollHeight
-                                ) {
-                                  handleNextPage()
-                                }
-                              }}
-                              isResultSelect
-                              maxMenuHeight={130}
-                              onFocus={(e) => {
-                                setIsFocus(true)
-                              }}
-                              onBlur={(e) => {
-                                setIsFocus(false)
-                              }}
-                              isSearchable={false}
-                            />
-                          </div>
+                          <Select
+                            classNames={{
+                              root: 'select-result-attempt',
+                              popup: { root: 'select-result-attempt-option' },
+                            }}
+                            variant="borderless"
+                            value={selectedResult}
+                            onChange={(selectedOption) => {
+                              setSelectedResult(selectedOption)
+                            }}
+                            options={resultList.data.map((item, index) => ({
+                              name: item.name,
+                              value: item.id,
+                              label: item.name,
+                              status: item.status,
+                              ratio_score: item.ratio_score,
+                              number_of_attempt: 3 - index,
+                            }))}
+                            onPopupScroll={(e) => {
+                              const target = e.target as HTMLDivElement
+                              if (
+                                target.scrollTop + target.offsetHeight >=
+                                target.scrollHeight
+                              ) {
+                                handleNextPage()
+                              }
+                            }}
+                            suffixIcon={<ArrowDownIcon />}
+                          />
                         )}
                       </div>
                       <div className="flex flex-row items-center">

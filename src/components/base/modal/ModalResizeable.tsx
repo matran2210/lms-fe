@@ -27,6 +27,7 @@ interface ModalResizeableProps {
   className?: string
   draggableFull?: boolean
   modalIndex?: number
+  rootClassName?: string
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -43,6 +44,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   className,
   draggableFull = false,
   modalIndex = 0,
+  rootClassName,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -159,7 +161,12 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             ? dragHandleClassName
             : 'modal-dragger'
       }
-      className={clsx(styles.modalResizeable, 'rounded-xl', className)}
+      className={clsx(
+        styles.modalResizeable,
+        'rounded-xl',
+        className,
+        rootClassName,
+      )}
     >
       <div className="absolute left-0 top-0 h-full w-full">
         <div className="modal-dragger h-6 cursor-move p-6 pb-0" />

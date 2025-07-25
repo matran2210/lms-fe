@@ -16,15 +16,15 @@ import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
 
 interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
+  setOpenChooseItem: Dispatch<SetStateAction<any>>
   openChooseItem: IOpenChooseItem
   listSection: ISection[]
   listSubsection: ISection[]
-  listUnit: ISection[]
+  listUnit?: ISection[]
   listActivity: ISection[]
   setListSection: Dispatch<SetStateAction<ISection[]>>
   setListSubsection: Dispatch<SetStateAction<ISection[]>>
-  setListUnit: Dispatch<SetStateAction<ISection[]>>
+  setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
 }
 
@@ -65,11 +65,11 @@ const ListItemFilterMobile = ({
     const clearMap = {
       section: () => {
         setListSubsection([])
-        setListUnit([])
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       subsection: () => {
-        setListUnit([])
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       unit: () => setListActivity([]),
@@ -145,7 +145,8 @@ const ListItemFilterMobile = ({
   }, [subsectionData.sections])
 
   useEffect(() => {
-    if (!isEmpty(unitData.sections)) setListUnit(unitData.sections)
+    if (!isEmpty(unitData.sections))
+      setListUnit && setListUnit(unitData.sections)
   }, [unitData.sections])
 
   useEffect(() => {
@@ -159,7 +160,7 @@ const ListItemFilterMobile = ({
         listSection,
       ),
       subsection: listSubsection,
-      unit: listUnit,
+      unit: listUnit ?? [],
       activity: listActivity,
     }
     setList(map[openChooseItem.type] ?? [])

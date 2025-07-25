@@ -12,7 +12,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface LayoutProps {
   children: ReactNode
   title: string
-  size?: 'sm' | 'md' | 'xl'
+  size?: 'sm' | 'md' | 'xl' | '2xl'
   showSidebar?: boolean
   fullWidth?: boolean
   handleToggleSidebar?: () => void
@@ -82,7 +82,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           className={clsx(
             'menu-sidebar-left transition-all duration-150 ease-in-out',
             'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] rounded-xl bg-white shadow-sidebar lg:block lg:w-20`,
+            `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] rounded-xl bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
             {
               'overflow-hidden': !guideStatus,
               'menu-sidebar-left--hover':
@@ -107,6 +107,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             'max-w-[calc(1179px+4rem)]': size === 'sm',
             'max-w-[calc(1444px+4rem)]': size === 'md',
             'max-w-[calc(1524px+4rem)]': size === 'xl',
+            'max-w-[calc(1580px+4rem)]': size === '2xl',
             'max-w-full p-0': fullWidth,
           })}
         >

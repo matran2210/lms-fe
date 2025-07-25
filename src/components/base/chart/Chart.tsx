@@ -26,10 +26,17 @@ export default function EChart({
 }: EChartsProps): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null)
 
+  // ResizeObserver để tự động resize chart khi container thay đổi kích thước
   useEffect(() => {
     let chart: ECharts | undefined
+    let resizeObserver: ResizeObserver | undefined
     if (chartRef.current) {
       chart = init(chartRef.current, theme)
+      // Resize khi container thay đổi kích thước
+      resizeObserver = new ResizeObserver(() => {
+        chart?.resize()
+      })
+      resizeObserver.observe(chartRef.current)
     }
 
     function resizeChart() {
@@ -40,6 +47,9 @@ export default function EChart({
     return () => {
       chart?.dispose()
       window.removeEventListener('resize', resizeChart)
+      if (resizeObserver && chartRef.current) {
+        resizeObserver.unobserve(chartRef.current)
+      }
     }
   }, [theme])
 

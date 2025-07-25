@@ -7,6 +7,7 @@
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'my-profile.scss';
+@import 'course-3-level.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -823,7 +824,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-root .ant-modal-mask {
-  @apply bg-[#000000cc];
+  @apply bg-overlay-control;
 }
 
 .sapp-modal__opt-continue-test {
@@ -930,7 +931,7 @@ $focus: (
 }
 
 .ant-drawer {
-  @apply fixed;
+  @apply fixed z-[1100];
 }
 
 .ant-drawer .ant-drawer-mask {
@@ -940,8 +941,16 @@ $focus: (
 .ant-drawer-content {
   @apply rounded-2xl;
 }
+
 .ant-drawer-content-wrapper {
   @apply m-4 rounded-2xl;
+}
+
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-content-wrapper {
+  position: fixed;
+  background-color: #00000099;
 }
 
 .shadow-activity.aos-init.aos-animate {
@@ -1429,6 +1438,10 @@ select:focus {
   @apply max-w-max;
 }
 
+.sapp-tab-button .secondary {
+  @apply bg-gray-4 text-bw-15;
+}
+
 [type='search']:focus {
   --tw-ring-color: none;
 }
@@ -1445,4 +1458,25 @@ mark {
 .echarts-tooltip {
   background: white !important;
   border: none !important;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile
+  .ant-drawer-content-wrapper {
+  @apply m-0 block md:hidden;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet
+  .ant-drawer-content-wrapper {
+  @apply m-0 hidden md:block lg:hidden;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--tablet .ant-drawer-content {
+  @apply rounded-b-none;
+  z-index: 9999;
+}
+
+.drawer-calendar__detail.drawer-calendar__detail--mobile .ant-drawer-content {
+  @apply rounded-none;
+  z-index: 9999;
 }

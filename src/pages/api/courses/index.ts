@@ -81,6 +81,29 @@ export class CoursesAPI {
     )
   }
 
+  static getShortCourseDetail(
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<IResponse<any>> {
+    return fetcher(
+      `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseDetailActivity(
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(
+      `/course-sections/learning-structure/${id}?course_section_id=${course_section_id}`,
+    )
+  }
+
   static getQuestionTabsById(id: string | string[] | undefined): Promise<any> {
     return fetcher(`${url.getQuestionTabs}/${id}/shuffle`)
   }
@@ -218,18 +241,17 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
   }
 
-  //submit a question
-  static submitAnswer(id: string, data: any): Promise<any> {
-    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
+    //is submit test
+    const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
     })
   }
 
-  static submitAllQuestion(id: string, data?: any): Promise<any> {
-    //is submit test
-    const uri = url.submitQuestion + `/${id}` + '/submit'
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',

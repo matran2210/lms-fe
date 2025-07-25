@@ -60,7 +60,11 @@ const UploadSingleFileV2 = ({
           </div>
         </div>
       ) : (
-        <ButtonSecondary title={title} size="small" icon={<UploadIcon />} />
+        <ButtonSecondary
+          title={title}
+          size="small"
+          startIcon={<UploadIcon />}
+        />
       )}
     </Upload>
   )

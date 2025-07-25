@@ -135,6 +135,11 @@ export interface IHookFormDateRangePicker extends IHookFormProps {
   defaultValue?: [Dayjs, Dayjs]
 }
 
+export interface OptionType {
+  label: string
+  value: string | number
+}
+
 export * from './common'
 export * from './courses'
 // export * from './exhibit'

@@ -292,7 +292,7 @@ export default function TableContainer({ params }: IProps) {
         emptyText="No matching records found"
       />
 
-      {openDetail && (selectedRequest || router.query.request_id) && (
+      {(selectedRequest || router.query.request_id) && (
         <DetailRequestModal
           open={openDetail}
           setOpen={setOpenDetail}

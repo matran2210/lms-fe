@@ -70,7 +70,7 @@
 // style css for result popup
 .select-result {
   .select__control {
-    @apply h-[50px] border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+    @apply h-[50px] border-none focus:text-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {

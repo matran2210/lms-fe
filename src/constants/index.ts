@@ -1,3 +1,5 @@
+import { ISelectOption } from 'src/type'
+
 export const PageLink = {
   HOME: '/',
   COURSES: '/courses',
@@ -31,6 +33,8 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
+  SHORT_COURSE: '/short-course',
+  SHORT_COURSE_DETAIL: '/short-course/detail',
 }
 
 export const TitleSidebar = {
@@ -50,12 +54,14 @@ export const TitleSidebar = {
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
+  ADD_NOTE: 'Add Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
   EXAM: 'Exam',
+  COURSE_RESOURCES: 'Course Resource',
 }
 
 export const TitleTeacherSidebar = {
@@ -204,12 +210,16 @@ export const defaultStatusEventTest = [
     value: '',
   },
   {
-    label: 'Completed',
+    label: 'Submitted',
     value: 'SUBMITTED',
   },
   {
-    label: 'Uncompleted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -226,7 +236,13 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [{ name: 'All Section', id: '' }]
+export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
+  {
+    label: 'All Section',
+    value: '',
+    name: 'All Section',
+  },
+]
 
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
@@ -575,3 +591,5 @@ export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'
+export * from './courses3level/activity'
+export * from './courses3level/courses'

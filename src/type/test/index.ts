@@ -33,7 +33,7 @@ export interface FileType {
 
 export interface Requirement {
   id: string | number
-  created_at: string
+  created_at?: string
   name: string
   description: string
   files: FileType[]

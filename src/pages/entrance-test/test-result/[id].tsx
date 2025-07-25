@@ -2,9 +2,9 @@ import { CloseIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import { useGetDataQuery } from '@utils/index'
-import QuizResult from 'entrance-test-result-package-ha-test'
+import QuizResult from 'entrance-test-result-package-test-v2'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -13,7 +13,8 @@ import { UserType } from 'src/redux/types/User/urser'
 
 const TestEntranceResult = () => {
   const router = useRouter()
-  //todo: call api, make UI
+  const [showPinnedNotification, setShowPinnedNotification] = useState(true)
+  const [isFading, setIsFading] = useState(false)
 
   const { data: chartData, isLoading } = useGetDataQuery(
     'QuizAttemptsChart',
@@ -22,25 +23,14 @@ const TestEntranceResult = () => {
     router.query.id !== undefined,
   )
 
-  const [showPinnedNotification, setShowPinnedNotification] = useState(true)
-  const [isVisible, setIsVisible] = useState(true)
-  const ANIMATION_DURATION = 500
-  const SHOW_DURATION = 5000
-
-  useEffect(() => {
-    const hideTimer = setTimeout(() => {
-      setIsVisible(false)
-    }, SHOW_DURATION)
-
-    const removeTimer = setTimeout(() => {
+  // Hàm xử lý khi bấm close
+  const handleClosePinnedNotification = () => {
+    setIsFading(true)
+    setTimeout(() => {
       setShowPinnedNotification(false)
-    }, SHOW_DURATION + ANIMATION_DURATION)
-
-    return () => {
-      clearTimeout(hideTimer)
-      clearTimeout(removeTimer)
-    }
-  }, [])
+      setIsFading(false)
+    }, 500) // 300ms trùng với thời gian transition
+  }
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -71,7 +61,7 @@ const TestEntranceResult = () => {
             )}
             {showPinnedNotification && (
               <div
-                className={`sticky bottom-4 z-10 mt-10 transition-opacity duration-500 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+                className={`sticky bottom-4 z-10 mt-10 transition-opacity duration-300 ${isFading ? 'opacity-0' : 'opacity-100'}`}
               >
                 <PinnedNotificationsV2
                   bgColor="bg-primary-200"
@@ -98,6 +88,12 @@ const TestEntranceResult = () => {
                     để được hỗ trợ nhanh chóng nhất. SAPP Academy mong rằng sẽ
                     được đồng hành cùng bạn trong lộ trình học tập sắp tới.
                   </div>
+                  <span
+                    className="cursor-pointer"
+                    onClick={handleClosePinnedNotification}
+                  >
+                    <CloseIcon />
+                  </span>
                 </PinnedNotificationsV2>
               </div>
             )}

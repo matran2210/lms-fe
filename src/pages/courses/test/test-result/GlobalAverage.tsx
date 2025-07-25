@@ -13,7 +13,7 @@ const GlobalAverage = ({ globalAverage, ...props }: IGlobalAverage) => {
         height={20}
         alt="Globe"
       />
-      <div className={`ml-2 text-gray-800`}>
+      <div className={`ml-2 text-sm text-gray-800 md:text-base`}>
         Global Average {globalAverage}%
       </div>
     </div>

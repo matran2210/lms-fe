@@ -1,6 +1,8 @@
 import React from 'react'
 import { IButtonBaseProps } from 'src/type'
 import BaseButton from './BaseButton'
+import Link from 'next/link'
+import { IButtonProps } from 'src/type'
 
 const ButtonText = ({
   title,
