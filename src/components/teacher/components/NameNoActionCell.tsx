@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { FC } from 'react'
 
 type Props = {
-  dataColumn?: string
+  dataColumn?: string | number
   className?: string
   isCenter?: boolean
 }
