@@ -1198,7 +1198,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   />
                 )}
                 items={exhibitItems}
-                className="p-0"
+                className="!bg-white p-0"
                 rootClassName="learning-activity-collapse"
               />
             </div>

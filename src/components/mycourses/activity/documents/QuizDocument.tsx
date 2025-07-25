@@ -825,7 +825,6 @@ const QuizDocument = ({
                 : 'You should select an answer before click'
             }
             classNames={{ root: 'max-w-72' }}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
             trigger={'hover'}
           >
             <>

@@ -487,7 +487,7 @@ const ActivityPage = () => {
                 >
                   <div className="absolute left-0 top-0 h-full w-full">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
-                      <div className="text-sm font-normal">Calculator</div>
+                      <div className="text-sm font-normal">Calculator1111</div>
                       <button
                         onClick={() => {
                           dispatch(closeCalculator())
@@ -658,14 +658,14 @@ const ActivityPage = () => {
                   position="bottom left"
                   zIndex={40}
                 >
-                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                  <div className="absolute left-0 top-0 h-full w-64 rounded-xl">
                     <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
                       <div className="text-sm font-bold">Calculator</div>
                       <button onClick={() => handleCloseScratchPad(e)}>
                         <CloseModalIcon />
                       </button>
                     </div>
-                    <Calculator />
+                    <Calculator isMobileCalc />
                   </div>
                 </MovableWindow>
               )
