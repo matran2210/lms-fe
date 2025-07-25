@@ -153,6 +153,14 @@ export class CoursesAPI {
     return fetcher(`${uri}`)
   }
 
+  static startShortCourseSectionProgress(
+    courseId: string | string[] | undefined,
+    sectionId: string | string[] | undefined,
+  ): Promise<any> {
+    const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress?is_progress_sc=true`
+    return fetcher(`${uri}`)
+  }
+
   static learningOutcomeProgress(
     course_id: string | string[] | undefined,
     section_id: string | string[] | undefined,

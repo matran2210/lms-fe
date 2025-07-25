@@ -1,4 +1,7 @@
-import { IActivityResourceProps } from 'src/type/courses-3-level'
+import {
+  IActivityResource,
+  IActivityResourceProps,
+} from 'src/type/courses-3-level'
 import { Docs, IconDownload } from '../icons'
 import BaseModal from '@components/courses/popup/BaseModal'
 
@@ -7,7 +10,13 @@ export default function ActivityResourcesMobile({
   items,
   visible,
   onClose,
+  setDataModal,
+  setIsOpen,
 }: IActivityResourceProps) {
+  const handleOpenModal = (item: IActivityResource['items'][number]) => {
+    setDataModal(item)
+    setIsOpen(true)
+  }
   return (
     <BaseModal
       title={title}
@@ -26,8 +35,13 @@ export default function ActivityResourcesMobile({
             <div>
               <Docs className="h-5 w-5" />
             </div>
-            <div className="truncate text-ssm text-bw-15">{item.title}</div>
-            <div className="ml-auto cursor-pointer" onClick={() => {}}>
+            <div
+              className="cursor-pointer truncate text-ssm md:text-base"
+              onClick={() => handleOpenModal(item)}
+            >
+              {item.title}
+            </div>
+            <div className="ml-auto cursor-pointer" onClick={item.download}>
               <IconDownload />
             </div>
           </div>
