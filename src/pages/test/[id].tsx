@@ -4,6 +4,8 @@ import {
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
   CalculatorIconV2,
+  DownloadIcon,
+  FileTextIcon,
   FlagIcon,
   ResizeIcon,
   ScratchPadIconV2,
@@ -91,6 +93,10 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
+import { download } from '@components/learning/activity/ActivityResource'
 
 declare global {
   interface Window {
@@ -103,7 +109,7 @@ const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const dragNDropRef = useRef<HTMLDivElement>(null)
+
   const checkType = (
     data: any,
     type: string,
@@ -284,22 +290,32 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
+          // <DragNDropPreview
+          //   data={data}
+          //   action={getAnswerDragNDrop}
+          //   ref={ref}
+          //   extenalRef={dragNDropRef}
+          //   handleSaveHighLight={handleSaveHighLight}
+          //   highlighted={highlighted}
+          //   removeHighlight={removeHighlight}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   corrects={corrects?.corrects}
+          //   solution={solution}
+          //   handleGetData={(data: DragDropAnswerItem) => {
+          //     setValue(`${currentTabID}_drag_drop_answer`, data)
+          //   }}
+          //   explainClassname="!mt-8 !p-0 !bg-transparent"
+          // />
+          <DragDropQuestion
             data={data}
-            action={getAnswerDragNDrop}
-            ref={ref}
-            extenalRef={dragNDropRef}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            solution={solution}
-            handleGetData={(data: DragDropAnswerItem) => {
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
               setValue(`${currentTabID}_drag_drop_answer`, data)
             }}
+            corrects={corrects?.corrects}
+            solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
@@ -498,6 +514,7 @@ const TestDetail = () => {
     getValues,
     setValue,
   } = useForm()
+
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -896,7 +913,7 @@ const TestDetail = () => {
                     id: answer?.id ?? '',
                     idAnswer: undefined,
                     value: '',
-                    position: index + 1,
+                    position: savedData?.answer_position,
                   }
                 }
               }
@@ -907,12 +924,10 @@ const TestDetail = () => {
                 const currentAnswer = (objTab?.data?.answers ?? []).find(
                   (el: any) => el.id === savedData?.answer_id,
                 )
-
                 objAnswer = {
-                  id: currentAnswer?.dropId,
                   idAnswer: savedData?.answer_id,
                   value: currentAnswer?.answer,
-                  position: index + 1,
+                  position: savedData?.answer_position,
                 }
               }
 
@@ -927,7 +942,7 @@ const TestDetail = () => {
                   id: currentAnswer?.dropId,
                   idAnswer: undefined,
                   value: '',
-                  position: index + 1,
+                  position: 0,
                 }
               }
               return objAnswer
@@ -962,6 +977,13 @@ const TestDetail = () => {
       }
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData])
+
+  const isShowIconButtonInBottom = [
+    QUESTION_TYPES.FILL_WORD,
+    QUESTION_TYPES.TRUE_FALSE,
+    QUESTION_TYPES.ONE_CHOICE,
+    QUESTION_TYPES.SELECT_WORD,
+  ].includes(currentTabContent?.topicDescription?.qType as QUESTION_TYPES)
 
   useEffect(() => {
     if (currentTabContent?.id) {
@@ -1083,12 +1105,14 @@ const TestDetail = () => {
       }
       return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
-        getAnswerDragNDrop()) {
-        if (e.idAnswer && e.idAnswer !== '') {
-          return true
+      if (getValues(`${currentContent?.id}_drag_drop_answer`)) {
+        for (let e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
+          if (e?.idAnswer && e?.value !== '') {
+            return true
+          }
         }
       }
+
       return false
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       for (let e of getValueSelectText()) {
@@ -1305,10 +1329,11 @@ const TestDetail = () => {
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       const answers = handleSaveAnswer(
-        getValues(`${currentPage}_drag_drop_answer`) ?? getAnswerDragNDrop(),
+        getValues(`${currentPage}_drag_drop_answer`),
         currentContent,
         tabs,
       )
+
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       const answers = handleSaveAnswer(
@@ -1761,9 +1786,9 @@ const TestDetail = () => {
         ...baseAnswer,
         answer: (question.answer ?? [])
           .filter((item: any) => item?.idAnswer)
-          .map((item: any, index: number) => ({
+          .map((item: any) => ({
             answer_id: item.idAnswer,
-            answer_position: index + 1,
+            answer_position: item.position,
           })),
       }
     }
@@ -2368,7 +2393,6 @@ const TestDetail = () => {
             return baseData
           }),
         )
-
         setTabs(arr)
       } else {
         router.push(PageLink.PAGE_NOT_FOUND)
@@ -2738,11 +2762,11 @@ const TestDetail = () => {
                         <div className="flex items-center gap-2">
                           {activeShowAll ? (
                             <div className="rounded-full bg-white">
-                              <ShowLessIcon size={16} color="#404041" />
+                              <ShowMoreIcon size={16} color="#404041" />
                             </div>
                           ) : (
                             <div className="rounded-full bg-white">
-                              <ShowMoreIcon size={16} color="#404041" />
+                              <ShowLessIcon size={16} color="#404041" />
                             </div>
                           )}
                           <span>
@@ -2752,7 +2776,7 @@ const TestDetail = () => {
                       }
                     >
                       <div
-                        className="leading-4.5 absolute -top-3 left-[50%] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
+                        className="leading-4.5 absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
                         }}
@@ -2767,6 +2791,7 @@ const TestDetail = () => {
                   </div>
                 </div>
               )}
+
               {/** End Tabs */}
               {/* {currentTabContent?.data?.response_option === null &&
                   currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
@@ -2947,35 +2972,6 @@ const TestDetail = () => {
                             className="sapp-questions mb-6"
                           />
                         )}
-                        {/* <EditorReader
-                          className="sapp-questions mb-6"
-                          text_editor_content={
-                            currentTabContent?.topicDescription?.description
-                          }
-                          highlighted={currentTabContent?.hightlightTopic}
-                          highlighArea="hightlight_area_topic"
-                        /> */}
-                        {currentTabContent?.topicDescription?.files?.length >
-                          0 &&
-                          currentTabContent?.topicDescription?.files?.map(
-                            (e: any, index: number) => {
-                              return (
-                                <div
-                                  className="block cursor-pointer break-all text-[#3964EA] hover:underline"
-                                  onClick={() =>
-                                    handleOpenScratchPad(
-                                      'file',
-                                      e?.resource?.url,
-                                      e?.resource?.name,
-                                    )
-                                  }
-                                  key={index}
-                                >
-                                  {e?.resource?.name}
-                                </div>
-                              )
-                            },
-                          )}
                       </div>
                     </div>
                     <div
@@ -3340,7 +3336,79 @@ const TestDetail = () => {
           </Popover>
         </Popover>
       )}
-
+      <div className="absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2">
+        {currentTabContent?.topicDescription?.files?.length > 0 && (
+          <Popover
+            className=""
+            placement="leftTop"
+            trigger="click"
+            getPopupContainer={() => document.body}
+            content={
+              <div className="flex flex-col gap-2">
+                {currentTabContent?.topicDescription?.files?.map(
+                  (e: any, index: number) => {
+                    return (
+                      <div
+                        className={clsx(
+                          `flex items-start justify-between gap-8 p-2`,
+                        )}
+                        key={e?.value}
+                      >
+                        <div
+                          key={e?.value}
+                          className={clsx(
+                            'text-blue-7 min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap underline hover:text-primary',
+                          )}
+                          onClick={() =>
+                            handleOpenScratchPad(
+                              'file',
+                              e?.resource?.url,
+                              e?.resource?.name,
+                            )
+                          }
+                        >
+                          {e?.resource?.name}
+                        </div>
+                        <div
+                          className="cursor-pointer text-white"
+                          onClick={() => {
+                            download(e?.resource?.name, e?.resource?.file_key)
+                          }}
+                        >
+                          <DownloadIcon color="currentColor" />
+                        </div>
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+            }
+            zIndex={1050}
+          >
+            <div
+              className={clsx(
+                'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                {
+                  'top-[74px]':
+                    (currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                      !currentTabContent?.topicDescription?.requirements
+                        ?.length) ||
+                    !isShowIconButtonInBottom,
+                  'top-[214px]':
+                    currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                    !!currentTabContent?.topicDescription?.requirements?.length,
+                  'bottom-0': isShowIconButtonInBottom,
+                },
+              )}
+            >
+              <FileTextIcon />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+            </div>
+          </Popover>
+        )}
+      </div>
       <div
         onClick={() => {
           handleOpenScratchPad('scratch_pad')

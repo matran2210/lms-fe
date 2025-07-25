@@ -53,81 +53,59 @@ const TabSlide = ({
     }
   }, [currentTab, elementRef?.current])
 
-  useEffect(() => {
-    function updateState(hasScrollBar: any) {
-      if (hasScrollBar !== undefined) {
-        setValueFilter('filter', undefined)
-        setActiveShowAll(false)
-        const el = elementRef.current
-        el &&
-          setHasScrollBar(
-            el.scrollWidth > el.getBoundingClientRect().width &&
-              data?.length > 0,
-          )
-      }
-    }
-    updateState(hasScrollBar)
-    window.addEventListener('resize', updateState)
-    return () => window.removeEventListener('resize', updateState)
-  }, [hasScrollBar])
+  // useEffect(() => {
+  //   function updateState(hasScrollBar: any) {
+  //     if (hasScrollBar !== undefined) {
+  //       setValueFilter('filter', undefined)
+  //       setActiveShowAll(false)
+  //       const el = elementRef.current
+  //       el &&
+  //         setHasScrollBar(
+  //           el.scrollWidth > el.getBoundingClientRect().width &&
+  //             data?.length > 0,
+  //         )
+  //     }
+  //   }
+  //   updateState(hasScrollBar)
+  //   window.addEventListener('resize', updateState)
+  //   return () => window.removeEventListener('resize', updateState)
+  // }, [hasScrollBar])
+
+  // Sắp xếp lại thứ tự các câu hỏi theo index tăng dần
+  const sortedData = useMemo(() => {
+    return [...data].sort((a, b) => a.index - b.index)
+  }, [data])
 
   useEffect(() => {
-    if (elementRef?.current && data.length > 0) {
+    if (elementRef?.current && sortedData.length > 0) {
       const el = elementRef.current
       el &&
         setHasScrollBar(
-          el.scrollWidth > el.getBoundingClientRect().width && data?.length > 0,
+          el.scrollWidth > el.getBoundingClientRect().width &&
+            sortedData?.length > 0,
         )
     }
-  }, [elementRef?.current, data?.length])
+  }, [elementRef?.current, sortedData?.length])
 
-  const renderTab = useMemo(() => {
-    let arr = [] as any
-    let i = 1
-    let splited = false
-    let splitedPosition
-    for (let e of data) {
-      if (e.qType === QUESTION_TYPES.ESSAY) {
-        splitedPosition = e.index
-        break
-      }
+  // Chia sortedData thành các dòng liên tiếp theo chiều ngang
+  const numberPerRow = numberDisplayData
+  const rows = useMemo(() => {
+    if (!activeShowAll || sortedData.length <= numberDisplayData) return []
+    const result = []
+    for (let i = 0; i < sortedData.length; i += numberPerRow) {
+      result.push(sortedData.slice(i, i + numberPerRow))
     }
-    while (i <= data.length) {
-      if (i === data.length) {
-        if (splited === false) {
-          arr.push([data[i - 1]])
-        } else {
-          arr.push([undefined, data[i - 1]])
-        }
-      } else {
-        if (data[i].index === splitedPosition && splited == false) {
-          arr.push([data[i - 1], 'split'])
-          i--
-          splited = true
-        } else {
-          if (splited === false) {
-            arr.push([data[i - 1], data[i]])
-          } else {
-            arr.push([data[i], data[i - 1]])
-          }
-        }
-      }
-      i += 2
-    }
-    // for (let i = 1; i <= data.length ; i += 2) {
-
-    // }
-    return arr
-  }, [data])
+    return result
+  }, [sortedData, activeShowAll, numberDisplayData])
 
   const firstEssayPosition = useMemo(() => {
-    for (let e of data) {
+    for (let e of sortedData) {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         return e.index
       }
     }
     return undefined
-  }, [data])
+  }, [sortedData])
 
   // const [arrowDisable, setArrowDisable] = useState(true);
 
@@ -195,44 +173,40 @@ const TabSlide = ({
 
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] max-w-[calc(100vw-88px-32px)]'}`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] lg:max-w-[calc(100vw-88px-32px)]'}`}
       aria-label="Pagination"
     >
-      <div
-        className={`gap-4 ${
-          !activeShowAll
-            ? `relative mx-7 w-full`
-            : 'flex w-full items-center justify-between'
-        }`}
-      >
-        {hasScrollBar && (
-          <div
-            className={`${
-              !activeShowAll && 'absolute -left-3 top-1 -translate-x-full'
-            }`}
-          >
+      <div className={`flex w-full items-center justify-center gap-4`}>
+        {/* Nút mũi tên trái */}
+        {data?.length > 0 && (
+          <div className="flex items-center">
             <PageLink
+              disabled={sortedData.findIndex((e) => e.id === currentTab) === 0}
               arrow={true}
               onClick={() => {
-                // if (setCurrentTab !== undefined) {
-                //   const index = data.findIndex((e) => e.id === currentTab)
-                //   handleChangeTab(data[index - 1].id)
-                // }
-                handleHorizantalScroll(elementRef.current, 25, 100, -10)
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index > 0 && setCurrentTab) {
+                  handleChangeTab(sortedData[index - 1].id)
+                }
               }}
-              // type={type}
+              className={
+                sortedData.findIndex((e) => e.id === currentTab) === 0
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              }
             >
               <ArrowIconV2 />
             </PageLink>
           </div>
         )}
+        {/* Phần render các số */}
         <div
           className={clsx(
-            'flex w-full select-none gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
+            'flex w-fit select-none justify-start gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
             {
-              'justify-center': !hasScrollBar,
               '!w-fit': activeShowAll,
-              'h-[88px]': activeShowAll && data?.length > numberDisplayData,
+              'h-[88px]':
+                activeShowAll && sortedData?.length > numberDisplayData,
               'h-[44px]': !activeShowAll,
             },
           )}
@@ -245,9 +219,9 @@ const TabSlide = ({
           onTouchMove={handleTouchMove}
           onTouchEnd={() => setIsDragging(false)}
         >
-          {data.length > 0 ? (
-            !activeShowAll || data?.length <= numberDisplayData ? (
-              data.map((pageNum: any, idx: any) =>
+          {sortedData.length > 0 ? (
+            !activeShowAll || sortedData?.length <= numberDisplayData ? (
+              sortedData.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
                   <div className="flex" key={pageNum.id}>
@@ -255,7 +229,6 @@ const TabSlide = ({
                     <PageLink
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
-                      // disabled={isNaN(pageNum)}
                       onClick={() => {
                         if (setCurrentTab !== undefined) {
                           handleChangeTab(pageNum.id)
@@ -265,7 +238,6 @@ const TabSlide = ({
                         pageNum.attempted || pageNum.is_viewed_answer
                       }
                       isFlagedProp={pageNum.flag}
-                      //   type={type}
                     >
                       {pageNum.index + 1}
                     </PageLink>
@@ -274,7 +246,6 @@ const TabSlide = ({
                   <PageLink
                     key={pageNum.id}
                     active={currentTab === pageNum.id}
-                    // disabled={isNaN(pageNum)}
                     onClick={() => {
                       if (setCurrentTab !== undefined) {
                         handleChangeTab(pageNum.id)
@@ -282,70 +253,33 @@ const TabSlide = ({
                     }}
                     isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flag}
-                    //   type={type}
                   >
                     {pageNum.index + 1}
                   </PageLink>
                 ),
               )
             ) : (
-              renderTab.map((pageNum: any, idx: number) => {
-                return (
-                  <div className="flex flex-col gap-2" key={idx}>
-                    {pageNum[0] ? (
-                      pageNum[0] !== 'split' ? (
-                        <PageLink
-                          key={pageNum[0].id}
-                          active={currentTab === pageNum[0].id}
-                          // disabled={isNaN(pageNum)}
-                          onClick={() => {
-                            if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[0].id)
-                            }
-                          }}
-                          isViewedProp={pageNum[0].attempted}
-                          isFlagedProp={pageNum[0].flag}
-                          //   type={type}
-                        >
-                          {pageNum[0].index + 1}
-                        </PageLink>
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[1px] border"></div>
-                        </div>
-                      )
-                    ) : (
-                      <div className="h-full w-[40px]"></div>
-                    )}
-                    {pageNum[1] ? (
-                      pageNum[1] !== 'split' ? (
-                        <PageLink
-                          key={pageNum[1].id}
-                          active={currentTab === pageNum[1].id}
-                          // disabled={isNaN(pageNum)}
-                          onClick={() => {
-                            if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[1].id)
-                            }
-                          }}
-                          isViewedProp={pageNum[1].attempted}
-                          isFlagedProp={pageNum[1].flag}
-                          //   type={type}
-                        >
-                          {pageNum[1].index + 1}
-                        </PageLink>
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[1px] border"></div>
-                        </div>
-                      )
-                    ) : (
-                      <div className="h-full w-[40px]"></div>
-                    )}
+              <div className="flex flex-col gap-2">
+                {rows.map((row, rowIdx) => (
+                  <div className="flex flex-row gap-2" key={rowIdx}>
+                    {row.map((pageNum: any) => (
+                      <PageLink
+                        key={pageNum.id}
+                        active={currentTab === pageNum.id}
+                        onClick={() => {
+                          if (setCurrentTab !== undefined) {
+                            handleChangeTab(pageNum.id)
+                          }
+                        }}
+                        isViewedProp={pageNum.attempted}
+                        isFlagedProp={pageNum.flag}
+                      >
+                        {pageNum.index + 1}
+                      </PageLink>
+                    ))}
                   </div>
-                )
-                // }
-              })
+                ))}
+              </div>
             )
           ) : (
             <div className="flex w-full items-center justify-center">
@@ -353,25 +287,27 @@ const TabSlide = ({
             </div>
           )}
         </div>
-        {hasScrollBar && (
-          <div
-            className={`${
-              !activeShowAll && 'absolute -right-3 top-1 translate-x-full'
-            }`}
-          >
+        {/* Nút mũi tên phải */}
+        {data?.length > 0 && (
+          <div className="flex items-center">
             <PageLink
               disabled={
-                data.findIndex((e) => e.id === currentTab) === data.length - 1
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                sortedData.length - 1
               }
               arrow={true}
               onClick={() => {
-                // if (setCurrentTab !== undefined) {
-                //   const index = data.findIndex((e) => e.id === currentTab)
-                //   handleChangeTab(data[index + 1].id)
-                // }
-                handleHorizantalScroll(elementRef.current, 25, 100, 10)
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index < sortedData.length - 1 && setCurrentTab) {
+                  handleChangeTab(sortedData[index + 1].id)
+                }
               }}
-              // type={type}
+              className={
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                sortedData.length - 1
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              }
             >
               <ArrowIconV2 right={true} />
             </PageLink>

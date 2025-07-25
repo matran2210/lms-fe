@@ -49,11 +49,8 @@ const FilterRadioGroup = ({
         return (
           <>
             <div
-              className={`flex ${
-                direction === 'horizontal'
-                  ? '_horizontal flex-row flex-wrap sm:flex-row md:flex-row lg:flex-col'
-                  : '_vertical flex-col sm:flex-row md:flex-row lg:flex-col'
-              } ${gap} ${
+              className={`_vertical flex flex-row lg:flex-col
+              ${gap} ${
                 justify === 'between'
                   ? 'justify-between'
                   : justify === 'center'

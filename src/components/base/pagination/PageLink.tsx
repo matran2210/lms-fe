@@ -34,7 +34,7 @@ const PageLink = ({
         className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
             ? 'min-h-8 min-w-8 text-[#D8D8E5]'
-            : 'min-h-9 text-[#A1A1A1]'
+            : 'min-h-9 text-[#A1A1A1] opacity-50'
         }`}
       >
         {children}
@@ -42,14 +42,18 @@ const PageLink = ({
     )
   } else if (arrow) {
     return (
-      <li
-        className={`${
-          type === 'table' ? 'min-h-8 min-w-8 text-[#7E8299]' : 'min-h-10'
-        } flex cursor-pointer items-center justify-center`}
-        {...otherProps}
-      >
-        {children}
-      </li>
+      <div className="cursor-pointer">
+        <li
+          className={`${
+            type === 'table'
+              ? 'min-h-8 min-w-8 text-[#7E8299]'
+              : 'min-h-10 cursor-pointer'
+          } flex cursor-pointer items-center justify-center`}
+          {...otherProps}
+        >
+          {children}
+        </li>
+      </div>
     )
   }
 

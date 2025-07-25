@@ -180,7 +180,7 @@ export const isValuesEqual = async (
         newValue = getValues(`${currentTabContent?.id}_answer`)
         break
       case QUESTION_TYPES.DRAG_DROP:
-        newValue = getAnswerDragNDrop()
+        newValue = getValues(`${currentTabContent?.id}_drag_drop_answer`)
         break
       case QUESTION_TYPES.SELECT_WORD:
         newValue = getValues(`${currentTabContent?.id}_answer`)
