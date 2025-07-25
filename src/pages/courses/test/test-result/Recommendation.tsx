@@ -51,22 +51,18 @@ const Recommendation = ({
             <form
               className="flex h-full flex-col overflow-hidden"
               onSubmit={handleSubmit(async (data) => {
-                try {
-                  const reason = data.comment?.trim() || ''
-                  if (!reason) {
-                    toast.error('Please enter a comment')
-                    return
-                  }
-                  await ClassAPI.sendMailRequestRegrading(
-                    classId,
-                    quizAttemptId,
-                    reason,
-                  )
-                  toast.success('Request sent successfully')
-                  setOpenRecomendation(false)
-                } catch (error) {
-                  toast.error('Failed to send request')
+                const reason = data.comment?.trim() || ''
+                if (!reason) {
+                  toast.error('Please enter a comment')
+                  return
                 }
+                await ClassAPI.sendMailRequestRegrading(
+                  classId,
+                  quizAttemptId,
+                  reason,
+                )
+                toast.success('Request sent successfully')
+                setOpenRecomendation(false)
               })}
             >
               {/* Header */}
