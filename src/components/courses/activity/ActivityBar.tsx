@@ -50,7 +50,7 @@ export default function ActivityBar({
 
   return (
     <div className="fixed bottom-8 left-4 z-[1010] flex w-[calc(100%-32px)] justify-between overflow-hidden rounded-lg bg-primary p-2 shadow-activity lg:hidden">
-      <div className="flex gap-3">
+      <div className="flex gap-1">
         {tabs.map((tab) => (
           <div
             key={tab.key}
@@ -65,6 +65,7 @@ export default function ActivityBar({
         title="Section content"
         onClick={() => onTabChange('content')}
         className={getButtonClass('content')}
+        classTitle="text-v2-sm font-normal"
       >
         <List />
       </ButtonIcon>

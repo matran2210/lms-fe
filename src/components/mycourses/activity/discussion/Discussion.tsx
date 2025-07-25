@@ -398,7 +398,7 @@ const Discussion = ({ class_id }: Props) => {
                       idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                     }`}
                   >
-                    <div className="leading-0 flex-none">
+                    <div className="flex-none leading-0">
                       <Image
                         width={50}
                         height={50}
@@ -428,7 +428,7 @@ const Discussion = ({ class_id }: Props) => {
                             {selectedFiles.map((file, index) => (
                               <li
                                 key={index}
-                                className="leading-0 relative mb-2"
+                                className="relative mb-2 leading-0"
                               >
                                 <div
                                   className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
@@ -521,13 +521,13 @@ const Discussion = ({ class_id }: Props) => {
       </div>
 
       <div
-        className={`transition-max-height sticky bottom-0 mt-6 flex items-start gap-3 overflow-visible bg-white duration-300 md:relative`}
+        className={`transition-max-height sticky bottom-0 mt-6 flex items-center gap-3 overflow-visible bg-white duration-300 md:relative`}
       >
-        <div className="leading-0 flex-none">
+        <div className="flex-none leading-0">
           <Image
-            width={50}
-            height={50}
-            className="rounded-full"
+            width={40}
+            height={40}
+            className="h-8 w-8 rounded-full md:h-10 md:w-10"
             src={
               selector.userInDiscussion?.is_sapp_supporter &&
               selector.userInDiscussion?.avatar
@@ -552,7 +552,7 @@ const Discussion = ({ class_id }: Props) => {
             <div>
               <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="leading-0 relative mb-2">
+                  <li key={index} className="relative mb-2 leading-0">
                     <div
                       className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"

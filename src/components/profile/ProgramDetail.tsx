@@ -8,12 +8,11 @@ import { Divider } from 'antd'
 import SappCollapse from '@components/collapse/SappCollapse'
 import AttempItem from './SubjectInformation/AttempItem'
 import { ISubjectItem, IUser } from 'src/redux/types/User/urser'
-import TabLayout from './TabLayout'
 import { UserApi } from '@pages/api/user'
-import SappButton from '@components/base/button/SappButton'
+import { PROGRAM } from 'src/constants'
 
 interface IProps {
-  typeProgram: 'CMA' | 'ACCA' | 'CFA'
+  typeProgram: PROGRAM
   onOpenTab?: () => void
 }
 

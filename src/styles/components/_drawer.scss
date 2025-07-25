@@ -5,7 +5,7 @@
 }
 .profile-subject-drawer {
   .ant-drawer-content-wrapper {
-    @apply bottom-8 left-4 right-4 top-auto m-0 !w-auto rounded-2xl md:left-8 md:right-8 lg:bottom-4 lg:left-auto lg:right-4 lg:top-4 lg:!w-[45%];
+    @apply bottom-8 left-4 right-4 top-auto m-0 !w-auto rounded-2xl md:left-8 md:right-8 lg:bottom-4 lg:left-auto lg:right-4 lg:top-4 lg:!w-[45%] lg:max-w-lg;
     .ant-drawer-body {
       @apply h-full max-h-[600px] min-h-[200px] md:m-6 lg:m-0 lg:max-h-full;
     }
