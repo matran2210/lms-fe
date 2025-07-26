@@ -1,5 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
@@ -20,7 +20,10 @@ interface IProps {
   handleSaveHighLight?: any
   highlighted?: any
   allowHighLight?: boolean
-  defaultAnswer?: any
+  defaultAnswer?: Array<{
+    answer_id: string
+    answer_position: number
+  }>
   corrects?: {
     id: string
     answer: string
@@ -38,7 +41,12 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
-  onChange?: (values: string[]) => void
+  onChange?: (
+    values: Array<{
+      answer_id: string
+      answer_position: number
+    }>,
+  ) => void
   correctAnswerClass?: string
   explainClassname?: string
 }
@@ -81,17 +89,21 @@ const SelectWord = forwardRef(
     const [answerContent, setAnswerContent] = useState<any>()
     const [key, setKey] = useState<string>(uniqueId('key'))
     const isSelfReflection = data?.is_self_reflection
-    const str = data?.question_content
+    const str = replaceWhiteSpacePreWrapToNormal(data?.question_content)
     const [selectedValues, setSelectedValues] = useState<
       Record<number, string>
     >({})
 
     useEffect(() => {
       if (onChange) {
-        // Lấy ra mảng id theo thứ tự index
+        // Lấy ra mảng với format mới: answer_id và answer_position
         const values = Object.keys(selectedValues)
           .sort((a, b) => Number(a) - Number(b))
-          .map((k) => selectedValues[Number(k)])
+          .map((k) => ({
+            answer_id: selectedValues[Number(k)],
+            answer_position: Number(k) + 1,
+          }))
+          .filter((item) => item.answer_id) // Chỉ lấy những item có answer_id
         onChange(values)
       }
     }, [selectedValues])
@@ -100,8 +112,10 @@ const SelectWord = forwardRef(
     useEffect(() => {
       if (defaultAnswer && Array.isArray(defaultAnswer)) {
         const newSelected: Record<number, string> = {}
-        defaultAnswer.forEach((id, idx) => {
-          newSelected[idx] = id
+        defaultAnswer.forEach((item) => {
+          if (item.answer_id && item.answer_position) {
+            newSelected[item.answer_position - 1] = item.answer_id
+          }
         })
         setSelectedValues(newSelected)
       }
@@ -228,7 +242,9 @@ const SelectWord = forwardRef(
         dropdownContainer.id = element?.id
         dropdownContainer.setAttribute('data-value', '')
 
-        const defaultAnswerValue = defaultAnswer?.[index] || ''
+        const defaultAnswerValue =
+          defaultAnswer?.find((item) => item.answer_position === index + 1)
+            ?.answer_id || ''
 
         if (corrects) {
           const isCorrect = corrects?.some(
@@ -267,9 +283,20 @@ const SelectWord = forwardRef(
         const answer =
           data.answers?.find(
             (answer: { id: string; value: string }) =>
-              !isUndefined(defaultAnswer?.[index]) &&
-              !isNull(defaultAnswer?.[index]) &&
-              answer?.id === defaultAnswer?.[index],
+              !isUndefined(
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
+              ) &&
+              !isNull(
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
+              ) &&
+              answer?.id ===
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
           )?.answer || ''
         const selectedAnswer = selectedValues[index]
           ? data.answers?.find(
@@ -558,7 +585,7 @@ const SelectWord = forwardRef(
           data?.question_topic?.exhibits?.length > 0 && (
             <>
               {data?.question_topic?.description && (
-                <div className="border-b-gray-2 my-6 border">
+                <div className="my-6 border border-b-gray-2">
                   {data?.question_topic?.id}
                 </div>
               )}
@@ -596,7 +623,7 @@ const SelectWord = forwardRef(
                   </div>
                 ))}
               </div>
-              <div className="border-b-gray-2 my-6 border"></div>
+              <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
 
