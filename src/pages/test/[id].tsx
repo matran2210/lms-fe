@@ -214,9 +214,12 @@ const TestDetail = () => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
-            onChange={(value: string[]) =>
-              setValue(`${currentTabID}_answer`, value)
-            }
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue(`${currentTabID}_answer`, value)}
             data={data}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
@@ -465,7 +468,6 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
-
       const index = scratchPadValues?.findIndex(
         (item: ScratchPadValue) => item.id === currentPage,
       )
@@ -847,7 +849,7 @@ const TestDetail = () => {
               }
               return objAnswer
             } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
-              return currentAnswer
+              return answer
             } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
               const savedData: AnswerItem =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
@@ -1097,7 +1099,7 @@ const TestDetail = () => {
 
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
-    return value.filter((e: string) => e && e !== '')
+    return value
   }
 
   const getAnswerMatching = () => {
@@ -1762,12 +1764,7 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question?.answer
-          ?.filter((item: string) => item && item !== '')
-          .map((item: string, index: number) => ({
-            answer_id: item,
-            answer_position: index + 1,
-          })),
+        answer: question?.answer,
       }
     }
 
