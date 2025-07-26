@@ -521,7 +521,6 @@ module.exports = {
         sm: '2rem',
         md: '24px',
         xl: '32px',
-        '4xl': '175px',
       },
       // screens: {},
     },
