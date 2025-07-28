@@ -26,7 +26,7 @@ function SappModalCertificate({ src, setSrc }: Props) {
         title="Preview image"
         refClass="md:px-6 w-full md:w-fit px-5 py-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
       >
-        <div className="mx-auto w-full min-w-[100%] max-w-full md:min-h-[350px]">
+        <div className="mx-auto w-full min-w-full max-w-full md:min-h-[350px]">
           {src && (
             <Image
               src={src}
