@@ -236,8 +236,9 @@ const NewFilltext = forwardRef(
 
         {answerContent && (
           <>
+            <Divider className="my-8" />
             <div className="mt-[38px] text-base font-semibold">
-              Correct Answer
+              Correct Answer:
             </div>
             <EditorReader
               className="questions mt-2"

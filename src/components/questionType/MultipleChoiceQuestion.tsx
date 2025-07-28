@@ -8,6 +8,7 @@ import WarningSection from './WarningSection'
 import clsx from 'clsx'
 import { IPreviewProp } from './OneChoiceQuestion'
 import { MY_COURSES } from 'src/constants/lang'
+import { Divider } from 'antd'
 
 interface IDataAnswer {
   data: {
@@ -171,7 +172,8 @@ const MultiChoiceQuestion = ({
       </div>
 
       {solution && (
-        <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+        <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+          <Divider className="my-8" />
           <SappTitleSolution title={`${MY_COURSES.solution}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>
