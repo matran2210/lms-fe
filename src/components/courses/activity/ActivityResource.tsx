@@ -7,15 +7,24 @@ export default function ActivityResources({
   items,
   visible,
   onClose,
+  setDataModal,
+  setIsOpen,
 }: IActivityResourceProps) {
   return (
     <>
-      <ActivityResourceDesktop title={title} items={items} />
+      <ActivityResourceDesktop
+        title={title}
+        items={items}
+        setDataModal={setDataModal}
+        setIsOpen={setIsOpen}
+      />
       <ActivityResourcesMobile
         title={title}
         items={items}
         visible={visible}
         onClose={onClose}
+        setDataModal={setDataModal}
+        setIsOpen={setIsOpen}
       />
     </>
   )

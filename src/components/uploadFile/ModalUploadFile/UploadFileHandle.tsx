@@ -89,12 +89,14 @@ const UploadFileHandle = ({
             <div className="sapp-upload-file-name">
               {_file?.name ?? _file?.originFileObj?.name}
             </div>
-            <Progress
-              percent={percent}
-              status={'active'}
-              strokeColor={strokeColor}
-              className="m-0"
-            />
+            {loading && (
+              <Progress
+                percent={percent}
+                status={'active'}
+                strokeColor={strokeColor}
+                className="m-0"
+              />
+            )}
           </div>
         </div>
       </>

@@ -68,19 +68,15 @@ export default function SectionContentAccoridior({
                     } flex-col`}
                   >
                     <span className="font-medium">{section.name}</span>
-                    <span className="text-xs md:text-ssm">
-                      {section.children.length} Activities{' '}
-                      {section?.course_section_type ===
-                      TEST_TYPE_ENUM.CHAPTER ? (
+                    {section?.course_section_type ===
+                      TEST_TYPE_ENUM.CHAPTER && (
+                      <span className="text-xs md:text-ssm">
+                        {section.activity_count} Activities{' '}
                         <span className="font-normal text-gray-1">
                           ({totalDuration})
                         </span>
-                      ) : (
-                        <span className="font-normal text-gray-1">
-                          ({formatDuration(section?.quiz?.quiz_timed)})
-                        </span>
-                      )}
-                    </span>
+                      </span>
+                    )}
                   </div>
                 }
                 key={index}
@@ -97,7 +93,7 @@ export default function SectionContentAccoridior({
                 <span className="flex flex-col">
                   <span className="font-medium">{section.name}</span>
                   <span className="text-xs font-medium md:text-ssm">
-                    {section.children.length} Activities{' '}
+                    {section.activity_count} Activities{' '}
                     <span className="font-normal text-gray-1">
                       ({totalDuration})
                     </span>
@@ -110,7 +106,7 @@ export default function SectionContentAccoridior({
               <div className="flex max-h-[310px] flex-col">
                 <div className="mb-2 flex items-center gap-2 text-ssm md:mb-4 md:text-sm md:leading-5.5">
                   <span className="text-gray-1 md:font-medium md:text-bw-15">
-                    {section.children.length} Activities
+                    {section.activity_count} Activities
                   </span>
                   <span className="text-gray-1 md:hidden">|</span>
                   <span className="text-gray-1 md:hidden">{totalDuration}</span>
@@ -188,14 +184,12 @@ export default function SectionContentAccoridior({
                             </div>
                           </div>
                         </div>
-                        <span className="text-xs hidden text-gray-1 group-hover:text-primary md:block">
-                          {formatDuration(
-                            activity?.course_section_type !==
-                              TEST_TYPE_ENUM.ACTIVITY
-                              ? activity?.quiz?.quiz_timed
-                              : activity?.duration,
-                          )}
-                        </span>
+                        {activity?.course_section_type ==
+                          TEST_TYPE_ENUM.ACTIVITY && (
+                          <span className="text-xs hidden text-gray-1 group-hover:text-primary md:block">
+                            {formatDuration(activity?.duration)}
+                          </span>
+                        )}
                       </div>
                     )
                   })}

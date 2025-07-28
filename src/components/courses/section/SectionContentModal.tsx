@@ -11,7 +11,8 @@ export default function SectionContentModal({
 }: SectionContentModalProp & { title?: string }) {
   return (
     <BaseModal
-      closable={false}
+      title={title}
+      closable={true}
       visible={visible}
       onClose={onClose}
       footer={false}
@@ -23,7 +24,6 @@ export default function SectionContentModal({
       }}
       wrapClassName="activity-resource-modal"
     >
-      <h2 className="mb-4 text-xl font-semibold text-bw-15">{title}</h2>
       <SectionContentAccoridior sections={sections} />
     </BaseModal>
   )

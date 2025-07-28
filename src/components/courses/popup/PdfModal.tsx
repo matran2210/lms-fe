@@ -13,6 +13,7 @@ export default function PdfModal({
   header,
   onClose,
   fileUrl,
+  position = 'center',
 }: IPdfModal) {
   if (!open) return null
 
@@ -26,7 +27,7 @@ export default function PdfModal({
       header={header}
       dragHandleClassName={dragHandleClassName}
       handleCloseScratchPad={onClose}
-      position="center"
+      position={position}
     >
       <div
         style={{ height: 'calc(100% - 40px' }}
