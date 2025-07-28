@@ -97,6 +97,8 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import { download } from '@components/learning/activity/ActivityResource'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 
 declare global {
   interface Window {
@@ -2455,7 +2457,8 @@ const TestDetail = () => {
             placement="left"
             color={'#404041'}
           >
-            <ButtonPrimary
+            {/* <ButtonPrimaryV2
+              className='bg-gray-100 hover:!bg-gray-100'
               onClick={async () => {
                 if (isGradingAfterEachQuestion) {
                   if (currentTabContent?.is_viewed_answer) {
@@ -2516,58 +2519,74 @@ const TestDetail = () => {
                   'Confirm'
                 )) as string
               }
-            />
-            {/* <SappButton
-              onClick={async () => {
-                if (isGradingAfterEachQuestion) {
-                  if (currentTabContent?.is_viewed_answer) {
-                    const index = filteredTabs.findIndex(
-                      (e: any) => e.id === currentPage,
-                    )
-                    handleChangeTab(filteredTabs[index + 1].id)
-                  } else {
-                    const data = await getResult(currentTabContent)
-                    handleSubmitAnswer('view-answer')
-                    confirmAnswer(
-                      data?.corrects,
-                      data?.solution,
-                      currentTabContent,
-                      data?.isSelfReflection,
-                      data?.requirements,
-                    )
-                  }
-                } else {
-                  const index = filteredTabs.findIndex(
-                    (e: any) => e.id === currentPage,
-                  )
-                  handleChangeTab(filteredTabs[index + 1].id)
-                  handleSubmitAnswer('change-tab')
-                }
-
-                trackGAEvent('Click Button Confirm Answer')
-              }}
-              title={
-                (isGradingAfterEachQuestion ? (
-                  currentTabContent?.is_viewed_answer ? (
-                    filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 ? (
-                      <div className="flex items-center gap-2">
-                        Next Question <Icon type="arrow-right" />
-                      </div>
-                    ) : (
-                      'Finish'
-                    )
-                  ) : (
-                    'Confirm'
-                  )
-                ) : filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1 ? (
-                  'Confirm & Next'
-                ) : (
-                  'Finish'
-                )) as string
-              }
             /> */}
+            {isGradingAfterEachQuestion &&
+            currentTabContent?.is_viewed_answer &&
+            indexTab < filteredTabs.length - 1 ? (
+              <ButtonTextV2
+                className="bg-gray-100 hover:!bg-gray-100"
+                onClick={() => {
+                  handleChangeTab(filteredTabs[indexTab + 1].id)
+                  trackGAEvent('Click Button Next Question')
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  Next Question <Icon type="arrow-right" />
+                </div>
+              </ButtonTextV2>
+            ) : (
+              <ButtonPrimaryV2
+                className="bg-gray-100 hover:!bg-gray-100"
+                onClick={async () => {
+                  if (isGradingAfterEachQuestion) {
+                    if (currentTabContent?.is_viewed_answer) {
+                      if (indexTab === filteredTabs.length - 1) {
+                        handleSubmitAnswer('finish')
+                        if (checkUnSubmitAnswer()?.length > 0) {
+                          setUnSubmitAnswer(true)
+                        } else {
+                          setOpenSubmit(true)
+                        }
+                        dispatch(disableUnsavedChange())
+                      }
+                    } else {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                      confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                    }
+                  } else {
+                    if (indexTab < filteredTabs.length - 1) {
+                      handleChangeTab(filteredTabs[indexTab + 1].id)
+                      handleSubmitAnswer('change-tab')
+                    } else if (indexTab === filteredTabs.length - 1) {
+                      handleSubmitAnswer('finish')
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    }
+                  }
+                  trackGAEvent('Click Button Confirm Answer')
+                }}
+                title={
+                  isGradingAfterEachQuestion
+                    ? currentTabContent?.is_viewed_answer
+                      ? 'Finish'
+                      : 'Confirm'
+                    : indexTab < filteredTabs.length - 1
+                      ? 'Confirm & Next'
+                      : 'Confirm'
+                }
+              />
+            )}
           </Tooltip>
         </div>
       </div>
@@ -3063,34 +3082,6 @@ const TestDetail = () => {
                           className="mb-4"
                         />
                       )}
-                      {/* <EditorReader
-                        className="mb-4"
-                        text_editor_content={
-                          currentTabContent?.topicDescription?.description
-                        }
-                        highlighted={currentTabContent?.hightlightTopic}
-                        highlighArea="hightlight_area_topic"
-                      /> */}
-                      {currentTabContent?.topicDescription?.files?.length > 0 &&
-                        currentTabContent?.topicDescription?.files?.map(
-                          (e: any, index: number) => {
-                            return (
-                              <div
-                                className="block w-fit max-w-full cursor-pointer break-all text-[#3964EA] hover:underline"
-                                onClick={() =>
-                                  handleOpenScratchPad(
-                                    'file',
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                                }
-                                key={index}
-                              >
-                                {e?.resource?.name}
-                              </div>
-                            )
-                          },
-                        )}
                     </div>
 
                     <div

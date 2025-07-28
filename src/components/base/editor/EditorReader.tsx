@@ -1,6 +1,7 @@
 import {
   DeserializeHighlight,
   replaceTextAlignCenterToWebKitCenter,
+  replaceWhiteSpacePreWrapToNormal,
 } from '@utils/index'
 import parseHTML, { Element } from 'html-react-parser'
 import { useEffect, useRef, useState } from 'react'
@@ -180,39 +181,44 @@ const EditorReader = ({
           onClick={handleOnclick}
           translate="no"
         >
-          {parseHTML(replaceTextAlignCenterToWebKitCenter(content || ''), {
-            replace: (domNode) => {
-              if (domNode.type === 'tag' && domNode.name === 'video') {
-                const sourceChild = (domNode.children as Element[]).find(
-                  (child) => child.name === 'source',
-                )
-                const videoToken = sourceChild?.attribs?.token
-                if (videoToken) {
-                  if (!videoRefs.current[videoToken]) {
-                    videoRefs.current[videoToken] =
-                      React.createRef<HTMLVideoElement>()
-                  }
-                  return (
-                    <SAPPVideo
-                      key={videoToken}
-                      options={{
-                        onTimeUpdate: () => {},
-                        src: videoToken,
-                      }}
-                      streamRef={videoRefs.current[videoToken]}
-                      pauseOnSeek={true}
-                      thumbnail={{
-                        '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
-                        '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
-                        '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
-                      }}
-                    />
+          {parseHTML(
+            replaceTextAlignCenterToWebKitCenter(
+              replaceWhiteSpacePreWrapToNormal(content || ''),
+            ),
+            {
+              replace: (domNode) => {
+                if (domNode.type === 'tag' && domNode.name === 'video') {
+                  const sourceChild = (domNode.children as Element[]).find(
+                    (child) => child.name === 'source',
                   )
+                  const videoToken = sourceChild?.attribs?.token
+                  if (videoToken) {
+                    if (!videoRefs.current[videoToken]) {
+                      videoRefs.current[videoToken] =
+                        React.createRef<HTMLVideoElement>()
+                    }
+                    return (
+                      <SAPPVideo
+                        key={videoToken}
+                        options={{
+                          onTimeUpdate: () => {},
+                          src: videoToken,
+                        }}
+                        streamRef={videoRefs.current[videoToken]}
+                        pauseOnSeek={true}
+                        thumbnail={{
+                          '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
+                          '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
+                          '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
+                        }}
+                      />
+                    )
+                  }
                 }
-              }
+              },
+              ...options,
             },
-            ...options,
-          })}
+          )}
         </div>
       </div>
       {type === 'IMG' && (

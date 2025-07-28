@@ -83,6 +83,7 @@ const SlotWithValue: React.FC<{
   } else {
     borderColor = ''
   }
+
   return (
     <span
       ref={setDropRef}
@@ -167,7 +168,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
               if (correct) {
                 if (
                   correct.is_correct &&
-                  correct.answer_position === (slot?.position ?? 0) + 1
+                  correct.answer_position === (slot?.position ?? 0)
                 ) {
                   status = 'success'
                 } else {
@@ -206,19 +207,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { over, active } = event
-    // eslint-disable-next-line no-console
-    console.log('[DND DEBUG] handleDragEnd', {
-      over,
-      active,
-      overId: over?.id,
-      activeId: active?.id,
-    })
     if (!over || !active || !over.id) {
-      // eslint-disable-next-line no-console
-      console.log('[DND DEBUG] return early: !over || !active || !over.id', {
-        over,
-        active,
-      })
       return
     }
     const draggedAnswer = active.data.current?.answer
