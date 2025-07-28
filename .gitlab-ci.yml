@@ -53,10 +53,12 @@ deploy_master:
     refs:
       - master
   script:
+    - chmod 600 "$SSH_KEY_PROD"
+    - cp "$SSH_KEY_PROD" key.pem
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - |
-      ssh -o StrictHostKeyChecking=no root@$PROD_IP "
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_IP "
       docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
       cd /var/www/lms-fe &&
       git fetch origin --prune &&
