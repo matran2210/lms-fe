@@ -3,7 +3,7 @@ import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNot
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
 import {
@@ -19,7 +19,7 @@ import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { resetNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
-import { isEmpty } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'
 import FilterCourseSection from '@components/courses/note-list/FilterCourseSection'
@@ -281,7 +281,12 @@ export default function LearningNotesList({
     : 'mb-6'
 
   const handleBack = () => {
-    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
+    if (openChooseItem.isOpen && openChooseItem.type === 'section') {
+      setOpenChooseItem({
+        ...openChooseItem,
+        isOpen: false,
+      })
+    } else if (openChooseItem.isOpen) {
       const type = backTypeMap[openChooseItem.type]
       setOpenChooseItem({
         ...openChooseItem,
@@ -297,14 +302,18 @@ export default function LearningNotesList({
     }
   }
 
-  const handleSubmit = () => {
-    setIsOpenFilter(false)
-    setCourseSectionId(openChooseItem.params || '')
-    setOpenChooseItem({
-      ...openChooseItem,
-      isOpen: false,
-    })
-  }
+  // Fetching note list after filter mobile was selected
+  useEffect(() => {
+    const debouncedSetCourseSectionId = debounce((value) => {
+      setCourseSectionId(value || '')
+    }, 500)
+
+    debouncedSetCourseSectionId(openChooseItem.params)
+
+    return () => {
+      debouncedSetCourseSectionId.cancel()
+    }
+  }, [openChooseItem.params])
 
   // Common content for both desktop and mobile
   const renderContent = () => (
@@ -477,8 +486,6 @@ export default function LearningNotesList({
           title={getTitle()}
           isShowBtnBack={isOpenFilter}
           handleBack={handleBack}
-          isShowFooter={isOpenFilter}
-          handleSubmit={handleSubmit}
           classNameHeader={classNameHeader}
           rootClassName={'responsive-drawer-center'}
           submitButtonClassName="w-full h-10"
