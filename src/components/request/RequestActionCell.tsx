@@ -4,7 +4,6 @@ import { MyRequestAPI } from '@pages/api/my-request'
 import { RequestAPI } from '@pages/api/request'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import {
   CONFIRM_CANCEL,
@@ -14,7 +13,7 @@ import {
 } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IRequest, IResponse } from 'src/type'
+import { IRequest } from 'src/type'
 
 interface Iprops {
   item: IRequest
@@ -23,7 +22,7 @@ interface Iprops {
 
 const RequestActionCell = ({ item, reloadPage }: Iprops) => {
   const router = useRouter()
-  const { setIsOpenViewModal, setOpenAddModal, setIsReFetch, isReFetch } =
+  const { setIsOpenViewModal, setOpenAddModal, setIsReFetch } =
     useRequestContext()
   const dispatch = useAppDispatch()
 
@@ -51,11 +50,6 @@ const RequestActionCell = ({ item, reloadPage }: Iprops) => {
       confirmDialog.open({ message: CONFIRM_CANCEL, onConfirm: onCancel }),
     )
   }
-
-  useEffect(() => {
-    if (!isReFetch) return
-    reloadPage()
-  }, [isReFetch])
 
   const onCancel = async () => {
     try {
