@@ -187,6 +187,7 @@ const TimeOffTab = () => {
         requests={requests}
         pagination={pagination}
         setPagination={setPagination}
+        reloadPage={handleFilter}
       />
 
       <FormRequest
