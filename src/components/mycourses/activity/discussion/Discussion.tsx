@@ -399,7 +399,7 @@ const Discussion = ({ class_id }: Props) => {
                       idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
                     }`}
                   >
-                    <div className="flex-none leading-0">
+                    <div className="flex-none leading-0 md:mt-1">
                       <Image
                         width={40}
                         height={40}
@@ -476,7 +476,7 @@ const Discussion = ({ class_id }: Props) => {
                           name={idReply === e?.id ? 'comment' : ''}
                           placeholder="Input Text..."
                           handleKeyDown={handleKeyDown}
-                          className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 md:py-3"
+                          className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 md:h-12 md:min-h-12 md:py-3"
                           actions={
                             <div className="flex items-center gap-x-3">
                               <SappButtonIcon
@@ -524,7 +524,7 @@ const Discussion = ({ class_id }: Props) => {
       <div
         className={`transition-max-height sticky bottom-0 mt-6 flex gap-3 overflow-visible bg-white duration-300 md:relative`}
       >
-        <div className="flex-none leading-0">
+        <div className="flex-none leading-0 md:mt-1">
           <Image
             width={40}
             height={40}
@@ -597,7 +597,7 @@ const Discussion = ({ class_id }: Props) => {
               name={'commentRoot'}
               placeholder="Input Text..."
               handleKeyDown={(e: any) => handleKeyDown(e, true)}
-              className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 text-gray-800 md:py-3"
+              className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 text-gray-800 md:h-12 md:min-h-12 md:py-3"
               actions={
                 <div className="flex items-center gap-x-3">
                   <SappButtonIcon
