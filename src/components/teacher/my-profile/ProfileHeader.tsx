@@ -254,19 +254,19 @@ const ProfileHeader = ({
           {isEdit || isEditAvatar ? (
             <div
               className={clsx(
-                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-small md:hidden',
+                'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-small',
                 {
                   'cursor-not-allowed': loadingEditAvatar,
                   'cursor-pointer': !loadingEditAvatar,
                 },
               )}
               onClick={() =>
-                avatar
+                !!avatar
                   ? onSubmit({ full_name: user.detail.full_name })
                   : onCancelUploadAvatar()
               }
             >
-              {avatar ? (
+              {!!avatar ? (
                 <CheckCircleOutlineYellow
                   className={clsx('h-5 w-5 text-primary', {
                     'animate-spin': loadingEditAvatar,
@@ -285,33 +285,6 @@ const ProfileHeader = ({
             </div>
           )}
         </div>
-
-        {(isEdit || isEditAvatar) && (
-          <div
-            className="opacity-1 absolute bottom-2 right-0 z-10 hidden w-fit md:block"
-            onClick={handlerCancelUploadAvatar}
-          >
-            <div
-              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-error"
-              role="button"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-4 w-4 "
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="w-full flex-1 md:my-6 lg:my-0">
