@@ -49,12 +49,12 @@ const BankArea: React.FC<{ items: Answer[] }> = ({ items }) => {
   const { setNodeRef, isOver } = useDroppable({ id: 'bank' })
 
   return (
-    <div className="flex w-full items-center gap-4">
+    <div className="flex w-full items-center gap-4 py-8 text-base">
       <div className="text-base font-medium">Drag your answer:</div>
       <div
         ref={setNodeRef}
         id="bank"
-        className={`flex min-h-10 flex-1 flex-wrap gap-5 rounded-lg p-2 transition-colors ${isOver ? 'bg-gray-300' : ''}`}
+        className={`flex min-h-10 flex-1 flex-wrap gap-5 rounded-lg transition-colors ${isOver ? 'bg-gray-300' : ''}`}
       >
         {items.map((item) => (
           <DraggableItem key={item.id} id={item.id} answer={item.answer} />
