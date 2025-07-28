@@ -191,7 +191,7 @@ const ProfilePage = () => {
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
-      children: <Settings onBack={() => {}} />,
+      children: <Settings />,
     },
     {
       key: 'sercurity',
@@ -316,7 +316,7 @@ const ProfilePage = () => {
     {
       key: 'setting',
       label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
-      children: <Settings onBack={() => {}} />,
+      children: <Settings />,
     },
     {
       key: 'sercurity',

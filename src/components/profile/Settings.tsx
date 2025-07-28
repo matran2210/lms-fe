@@ -1,21 +1,11 @@
-import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
+import { ComingSoonIcon } from '@assets/icons'
 import TabLayout from './TabLayout'
-import { SetStateAction } from 'react'
 
-interface IProp {
-  onBack: (value: SetStateAction<boolean>) => void
-}
-
-const Settings = ({ onBack }: IProp) => {
+const Settings = () => {
   return (
-    <div className="relative h-full">
-      <form className="flex h-full flex-col">
-        <TabLayout title="Settings" headerButtons={null}>
-          <div className="flex h-full items-center justify-center">
-            <div className="text-[#A1A1A1]">Coming soon</div>
-          </div>
-        </TabLayout>
-      </form>
+    <div className="flex min-h-352 flex-col items-center justify-center gap-8">
+      <ComingSoonIcon />
+      <div className="text-xl text-gray-800">Coming Soon!</div>
     </div>
   )
 }
