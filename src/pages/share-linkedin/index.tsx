@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import Image from 'next/image'
+import { Image } from 'antd'
 
 export default function ShareLinkedInPage() {
   const router = useRouter()
