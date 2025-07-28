@@ -118,7 +118,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   }
   return (
     <SappModalV2
-      title={undefined}
+      title={''}
       open={open}
       handleCancel={() => setOpen(false)}
       onOk={() => {}}

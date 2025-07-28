@@ -111,7 +111,7 @@ const PopupStep = ({
             {Array.from({ length: total }, (_, i) => (
               <div
                 key={i}
-                className={`aspect-square h-[6px] w-[6px] rounded-full ${
+                className={`aspect-square h-1.5 w-1.5 rounded-full ${
                   i + 1 === index ? 'bg-primary' : 'bg-gray-300'
                 }`}
               />

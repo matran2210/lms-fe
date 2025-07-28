@@ -15,15 +15,16 @@
     &.ant-tabs-tab-active {
       @apply font-semibold;
       .ant-tabs-tab-btn {
-        @apply text-primary;
+        @apply block !text-primary;
         &:focus {
-          @apply text-primary;
+          @apply block !text-primary;
         }
       }
     }
     .ant-tabs-tab-btn {
-      &:focus {
-        @apply text-primary;
+      &:focus,
+      &:hover {
+        @apply block !text-primary;
       }
     }
   }
