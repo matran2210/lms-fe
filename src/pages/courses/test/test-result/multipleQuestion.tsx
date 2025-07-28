@@ -90,7 +90,7 @@ const MultipleQuestion = ({
       data?.length > 0 && (
         <div className="w-full">
           <div className="flex items-center justify-between">
-            <div className="mb-6 text-lg font-semibold text-gray-800 xl:text-xl">
+            <div className="mb-6 text-base font-semibold text-gray-800 md:text-xl">
               {type}
             </div>
             <div className="mb-6">{extra}</div>
@@ -104,7 +104,7 @@ const MultipleQuestion = ({
                   (!showMore && !isLargeDesktopView && data.length <= 10),
                 // 'grid min-w-max grid-flow-col gap-5':
                 //   !showMore && !isLargeDesktopView,
-                'grid min-w-max grid-flow-col grid-rows-2 gap-5':
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4':
                   !showMore && !isLargeDesktopView && data.length > 10,
                 // 'grid-rows-2 sm:grid-rows-[auto]': ,
               })}
@@ -170,10 +170,6 @@ const MultipleQuestion = ({
       color: 'bg-success',
     },
     {
-      text: 'Incorrect',
-      color: 'bg-error',
-    },
-    {
       text: 'Completed',
       color: 'bg-info',
     },
@@ -181,12 +177,16 @@ const MultipleQuestion = ({
       text: 'Not Completed',
       color: 'bg-warning',
     },
+    {
+      text: 'Incorrect',
+      color: 'bg-error',
+    },
   ]
 
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-8 shadow-sidebar-tablet lg:rounded-2xl 
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet lg:rounded-2xl 
         xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
@@ -278,7 +278,7 @@ const MultipleQuestion = ({
                       ) >=
                       8 && (
                       <div
-                        className="mr-6 block cursor-pointer text-sm font-medium underline xl:hidden"
+                        className="block cursor-pointer text-sm font-medium underline xl:hidden"
                         onClick={() => {
                           setShowMore(!showMore)
                           if (multipleQuestionRef?.current) {
@@ -295,7 +295,7 @@ const MultipleQuestion = ({
                 )}
                 <div
                   className={
-                    'mt-7 flex items-center justify-between text-xs md:justify-center md:gap-12 md:text-base'
+                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-4 md:text-base'
                   }
                 >
                   {annotations.map((annotation) => (
@@ -304,7 +304,7 @@ const MultipleQuestion = ({
                       className="flex items-center gap-2"
                     >
                       <div
-                        className={`aspect-square h-5 w-5 rounded-full ${annotation.color}`}
+                        className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}
                       />
                       <p>{annotation.text}</p>
                     </div>
