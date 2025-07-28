@@ -49,12 +49,6 @@ const EntranceTest = ({
   )
 
   useEffect(() => {
-    setCurrentAttempt(
-      data?.attempts?.[data?.attempts?.length - 1] || ({} as Attempt),
-    )
-  }, [data])
-
-  useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&
