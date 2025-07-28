@@ -25,6 +25,8 @@ interface IProps {
   inputClassName?: string
   style?: React.CSSProperties
   placeholderIcon?: React.ReactNode
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
 
 const HookFormTextField = ({
@@ -45,6 +47,8 @@ const HookFormTextField = ({
   inputClassName,
   style,
   placeholderIcon,
+  onBlur,
+  onFocus,
 }: IProps) => {
   return (
     <Controller
@@ -81,6 +85,8 @@ const HookFormTextField = ({
                   isError={!!error?.message}
                   inputClassName={inputClassName}
                   placeholderIcon={placeholderIcon}
+                  onBlur={onBlur}
+                  onFocus={onFocus}
                 />
 
                 <>

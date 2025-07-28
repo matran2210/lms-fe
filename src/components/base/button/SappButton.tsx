@@ -28,6 +28,7 @@ const COLORS = {
   quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
   okPopup: 'bg-accent-error text-white',
   cancelPopup: 'bg-gray-4 text-accent-default',
+  gray: 'bg-white hover:bg-primary-2 disabled:bg-white text-bw-15 hover:text-white',
 }
 
 const PADDINGS = {
@@ -54,6 +55,7 @@ const COLOR_LOADING = {
   quizActivity: 'bg-white',
   okPopup: 'bg-white',
   cancelPopup: 'bg-white',
+  gray: 'bg-transparent',
 }
 
 const SappButton = ({

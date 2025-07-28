@@ -659,23 +659,22 @@ export default function ActivityDetail() {
                 setIsOpen={setIsOpen}
               />
             )}
-
-            {dataModal && (
-              <PdfModal
-                title={dataModal?.title}
-                open={isOpen}
-                fileUrl={dataModal.url || ''}
-                onClose={() => {
-                  setIsOpen(false)
-                }}
-                position="center"
-              ></PdfModal>
-            )}
           </section>
         </div>
       </div>
 
       <ActivityBar activeTab={activeTab} onTabChange={setActiveTab} />
+      {dataModal && (
+        <PdfModal
+          title={dataModal?.title}
+          open={isOpen}
+          fileUrl={dataModal.url || ''}
+          onClose={() => {
+            setIsOpen(false)
+          }}
+          position="center"
+        ></PdfModal>
+      )}
     </LayoutCourses3Level>
   )
 }

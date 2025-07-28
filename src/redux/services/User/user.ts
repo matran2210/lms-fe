@@ -5,6 +5,7 @@ import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
 import { PinnedNotifications } from 'src/type'
 import { fetchFormData } from '@services/requestV2'
+import { IDeviceItem } from 'src/type/v2'
 
 const UserApi = {
   /**
@@ -52,6 +53,9 @@ const UserApi = {
     return fetchFormData({ url: `${apiURL}/users/avatar`, formData })
   },
   getListDevices: async (): Promise<IResponse<any>> => {
+    return AuthAPI.getListDevices()
+  },
+  getListDevicesV2: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
   getListHistory: async ({
