@@ -17,8 +17,8 @@ export default async function handler(
         grant_type: 'authorization_code',
         code: code as string,
         redirect_uri: redirectUri,
-        client_id: process.env.LINKEDIN_CLIENT_ID!,
-        client_secret: process.env.LINKEDIN_CLIENT_SECRET!,
+        client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!,
+        client_secret: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET!,
       }),
       {
         headers: {
@@ -80,43 +80,16 @@ export default async function handler(
       },
     })
 
-    // 6. Create post with uploaded image
-    await axios.post(
-      'https://api.linkedin.com/v2/ugcPosts',
-      {
-        author: urn,
-        lifecycleState: 'PUBLISHED',
-        specificContent: {
-          'com.linkedin.ugc.ShareContent': {
-            shareCommentary: {
-              text: `🎓 I’ve just earned a new certificate! Check it out: ${shareUrl}`,
-            },
-            shareMediaCategory: 'IMAGE',
-            media: [
-              {
-                status: 'READY',
-                media: asset,
-              },
-            ],
-          },
-        },
-        visibility: {
-          'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-          'X-Restli-Protocol-Version': '2.0.0',
-        },
-      },
-    )
-
-    return res.send(`<script>
-        window.opener.postMessage({ status: 'success' }, "${process.env.NEXT_PUBLIC_BASE_URL}");
-        window.close();
-      </script>`)
+    res.setHeader('Content-Type', 'text/html')
+    return res.send(`
+      <html>
+        <head>
+          <script>
+            window.location.href = '${process.env.NEXT_PUBLIC_BASE_URL}/share-linkedin?accessToken=${accessToken}&urn=${urn}&asset=${encodeURIComponent(asset)}&shareUrl=${encodeURIComponent(shareUrl as string)}';
+          </script>
+        </head>
+      </html>
+    `)
   } catch (err) {
     return res.send(`<script>
       window.opener.postMessage({ status: 'error' }, "${process.env.NEXT_PUBLIC_BASE_URL}");

@@ -1,14 +1,14 @@
-import React from 'react'
-import { Button } from 'antd'
-import CertificateCard from './CertificateCard'
-import Image from 'next/image'
-import Icon from '@components/icons'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import { ICertificate } from '@pages/certificates/[id]'
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import Icon from '@components/icons'
+import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
+import { ICertificate } from '@pages/certificates/[id]'
+import { Button } from 'antd'
+import Image from 'next/image'
+import React from 'react'
+import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { LinkedInShareButton } from './ButtonShareLinkedin'
+import CertificateCard from './CertificateCard'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate

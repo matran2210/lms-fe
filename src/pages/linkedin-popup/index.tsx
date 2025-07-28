@@ -12,6 +12,4 @@ export default function LinkedInPopupPage() {
     )}`
     window.location.href = url
   }, [shareUrl])
-
-  return <p>Loading LinkedIn login...</p>
 }
