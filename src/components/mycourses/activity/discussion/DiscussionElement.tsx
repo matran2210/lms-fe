@@ -38,6 +38,7 @@ import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   rank?: number
@@ -72,6 +73,7 @@ function DiscussionElement({
   setLoading,
   isSappSupporterUserCurrent = false,
 }: Props) {
+  const { isMobileView } = useTailwindBreakpoint()
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
   const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -304,14 +306,14 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'leading-0 flex-none',
+                  'flex-none leading-0',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
                 <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full"
+                  width={isMobileView ? 32 : 40}
+                  height={isMobileView ? 32 : 40}
+                  className="h-8 w-8 rounded-full md:h-10 md:w-10"
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
@@ -353,7 +355,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="mt-3 w-auto md:-mt-5 md:ml-[52px]">
+          <div className="mt-3 w-auto md:-mt-3 md:ml-[52px]">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image
@@ -420,7 +422,7 @@ function DiscussionElement({
                     name="editData"
                     defaultValue={editValue}
                     handleKeyDown={handleKeyDown}
-                    className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
+                    className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 md:h-12 md:min-h-12 md:py-3"
                     actions={
                       <div className="flex items-center gap-x-3">
                         <SappButtonIcon
@@ -483,7 +485,7 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="text-bw-1 flex cursor-pointer items-center gap-2 pr-8 font-medium hover:underline"
+                          className="flex cursor-pointer items-center gap-2 pr-8 font-medium text-bw-1 hover:underline"
                           onClick={handleEdit}
                         >
                           <EditMessageIcon /> Edit
