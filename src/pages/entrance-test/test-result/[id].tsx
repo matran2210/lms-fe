@@ -36,7 +36,7 @@ const TestEntranceResult = () => {
     <SappLoadingGlobal loading={isLoading}>
       <div className="relative">
         <div
-          className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-10 md:p-2"
+          className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-12 md:p-2"
           onClick={
             () => router.push(PageLink.ENTRANCE_TEST)
             // .then(() => window.location.reload())
