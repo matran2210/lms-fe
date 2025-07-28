@@ -63,7 +63,7 @@ const HookFormTextArea = ({
                 disabled={disabled}
                 onKeyDown={handleKeyDown}
               />
-              <div className="absolute right-4 top-1/2 translate-y-[-50%]">
+              <div className="absolute right-4 top-[45%] translate-y-[-55%]">
                 {actions}
               </div>
             </div>

@@ -2847,7 +2847,7 @@ export const ArrowRight = ({ className }: IIconProps) => {
     </svg>
   )
 }
-export const PaginationDotIcon = () => {
+export const PaginationDotIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -2855,6 +2855,7 @@ export const PaginationDotIcon = () => {
       height="16"
       viewBox="0 0 16 16"
       fill="none"
+      className={className}
     >
       <circle cx="8" cy="8" r="7.5" fill="currentColor" />
     </svg>
