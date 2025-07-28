@@ -225,6 +225,7 @@ module.exports = {
       },
       txt: {
         primary: '#1F2937',
+        heading: '#374151',
         secondary: '#9CA3AF',
       },
       shade: {

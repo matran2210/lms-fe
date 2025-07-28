@@ -170,7 +170,7 @@ export default function TeacherMenu() {
 
   const BottomMenu = () => (
     <div className="mb-6 flex flex-col items-center gap-6">
-      <Link href={PageLink.MYPROFILE}>
+      <Link href={PageLink.TEACHER_MY_PROFILE}>
         <Image
           alt="avatar"
           src={
