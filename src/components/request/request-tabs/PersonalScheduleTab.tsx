@@ -130,6 +130,7 @@ const PersonalScheduleTab = () => {
   const handleOpenAddModal = () => {
     setOpenAddModal(true)
   }
+
   return (
     <div className="flex flex-col gap-6 pt-6">
       <div className="flex flex-col gap-4">
@@ -188,6 +189,7 @@ const PersonalScheduleTab = () => {
         setPagination={setPagination}
         setIsEdit={setOpenAddModal}
         setIsInspect={setIsOpenViewModal}
+        reloadPage={handleFilter}
       />
       {isOpenAddModal && (
         <FormRequest

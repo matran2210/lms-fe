@@ -71,6 +71,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
+        900: '#181C32',
         canvas: '#F9F9F9',
         4: '#F3F3F3',
         'v2-100': '#F6F6F6',
@@ -188,6 +189,19 @@ module.exports = {
       badge: {
         200: '#B3CEE0',
         500: '#08719D',
+        open: '#f89707',
+        pending: '#f89707',
+        finished: '#087051',
+        finished_bg: '#e9ffee',
+        reject: '#f80903',
+        reject_bg: '#ffdbda',
+        denied: '#f01919',
+        canceled: '#99a1b7',
+        accepted: '#07af17',
+        active: '#09719d',
+        active_bg: '#b4cee0',
+        learning: '#fe9800',
+        learning_bg: '#fff6e1',
       },
       dashboard: {
         learing: '#6FD3B0',
@@ -195,6 +209,23 @@ module.exports = {
       },
       pinned: {
         1: '#18355D',
+      },
+      support: {
+        1: '#33475B',
+      },
+      graded: {
+        finish: '#4077E0',
+      },
+      accent: {
+        success: '#07AF17',
+        info: '#176CDD',
+        warning: '#F89707',
+        error: '#F01919',
+        default: '#99A1B7',
+      },
+      txt: {
+        primary: '#1F2937',
+        secondary: '#9CA3AF',
       },
       shade: {
         primary: {

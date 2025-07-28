@@ -251,6 +251,7 @@ const Course = ({
         determineButtonToShow == BUTTON_STATUS.Resume)
     ) {
       router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+      return
     } else {
       router.push(`/courses/my-course/${classInstance?.id}`)
     }
