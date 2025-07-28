@@ -219,7 +219,7 @@ const SelectWord = forwardRef(
             (ans: any) => ans?.answer_position === index + 1 && ans?.is_correct,
           )
           if (correctAnswer) {
-            inputClass = 'text-base font-semibold text-success-600'
+            inputClass = 'text-success-600'
             // }
 
             element.outerHTML = `
