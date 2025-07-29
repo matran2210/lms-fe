@@ -316,7 +316,7 @@ const SelectWord = forwardRef(
           if (correctAnswer) {
             element.outerHTML = `
               <span>
-                <span id="${element?.id}" class="text-state-success">
+                <span id="${element?.id}" class="font-semibold text-state-success">
                   ${correctAnswer?.answer}
                 </span>
               </span>
