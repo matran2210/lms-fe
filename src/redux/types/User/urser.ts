@@ -17,6 +17,7 @@ export interface IUser {
   confirmation_status: null | string
   detail_id: string
   detail: IUserDetail
+  facilities: IFacility[]
   user_contacts: IUserContact[]
   certificates: number
   courses: number
@@ -58,6 +59,12 @@ export interface IUserContact {
   province: string
   district: string
   ward: string
+}
+
+export interface IFacility {
+  code: string
+  id: string
+  name: string
 }
 
 export enum UserType {

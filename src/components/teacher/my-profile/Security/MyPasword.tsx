@@ -23,7 +23,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
   }
 
   return (
-    <TeacherProfileCard title="Pasword">
+    <TeacherProfileCard title="Password">
       <div className="flex items-center justify-between gap-2">
         <div className="text-lg text-[#6C6C6C]">*********************</div>
         <div className=" grow cursor-pointer hover:block hover:text-primary">
