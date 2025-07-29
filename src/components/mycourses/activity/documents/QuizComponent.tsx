@@ -578,7 +578,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         {showListRequirement && (
                           <div
                             ref={listRequirementRef}
-                            className="text-over absolute bottom-0  left-0 z-50 w-max max-w-md translate-y-full bg-white py-1 shadow-md"
+                            className="text-over absolute bottom-0 left-0 z-[201] w-max max-w-md translate-y-full bg-white py-1 shadow-md"
                           >
                             {activeQuestion?.requirements?.map((e, i) => {
                               return (
