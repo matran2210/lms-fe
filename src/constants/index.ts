@@ -7,6 +7,7 @@ export const PageLink = {
   TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
+  TEACHER_MY_COURSE: '/teachers/my-course',
   TEACHER_MY_REQUEST: '/teachers/my-request',
   TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
   AUTH_LOGIN: '/auth/login',

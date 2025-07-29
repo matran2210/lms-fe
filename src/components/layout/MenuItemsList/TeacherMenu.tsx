@@ -6,38 +6,28 @@ import { userReducer } from 'src/redux/slice/User/User'
 import {
   HomeMenuIcon,
   BookMenuIcon,
-  CalenderMenuIcon,
   FileMenuIcon,
   BellIcon,
   HelpMenuIcon,
   LogOutMenuIcon,
   MyCalendarMenuIcon,
+  MyCourseTeacherIcon,
 } from 'src/assets/icons/index'
 
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { getLocalStorageItem, removeLocalStorageItem } from '@utils/index'
 import { useRouter } from 'next/router'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import { NOTIFICATION_STATUS } from 'src/type'
+import { useAppSelector } from 'src/redux/hook'
+
 import Link from 'next/link'
-import { PageLink, TitleTeacherSidebar } from 'src/constants'
+import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon/index'
 
 const { Sider } = Layout
 
-interface MenuItem {
-  key: string
-  icon: React.ReactNode
-  link: string
-  active: boolean
-}
-
 export default function TeacherMenu() {
   const [selectedKey, setSelectedKey] = useState<string>('Home')
   const router = useRouter()
-  const dispatch = useAppDispatch()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
 
   const menuItems = useMemo(
@@ -50,6 +40,13 @@ export default function TeacherMenu() {
         title: TitleTeacherSidebar?.DASHBOARD,
       },
       {
+        key: 'MyCourse',
+        icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
+        link: PageLink.TEACHER_MY_COURSE,
+        active: router.pathname === PageLink.TEACHER_MY_COURSE,
+        title: TitleSidebar.COURSES,
+      },
+      {
         key: 'Book',
         icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
         link: PageLink.TEACHER_MY_CLASS,
@@ -60,13 +57,6 @@ export default function TeacherMenu() {
         ].includes(router.pathname),
         title: TitleTeacherSidebar?.MYCLASS,
       },
-      // {
-      //   key: 'Calender',
-      //   icon: <CalenderMenuIcon selected={selectedKey === 'Calender'} />,
-      //   link: PageLink.TEACHERS,
-      //   active: router.pathname === PageLink.TEACHERS,
-      //   title: TitleTeacherSidebar?.CALENDAR,
-      // },
       {
         key: 'MyCalendar',
         icon: <MyCalendarMenuIcon selected={selectedKey === 'MyCalendar'} />,

@@ -6,16 +6,17 @@ import { buildQueryString } from '@utils/index'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import { useForm } from 'react-hook-form'
 import { ICourseAll } from 'src/type/courses'
-import { defaultStatusCourse } from 'src/constants'
+import { defaultStatusCourse, PageLink } from 'src/constants'
 import TotalResullt from 'src/common/TotalResullt'
 import { isEmpty } from 'lodash'
 
 interface IProps {
   courses: ICourseAll
   setPage?: Dispatch<SetStateAction<number>>
+  isTeacher?: boolean
 }
 
-const Filter = ({ courses, setPage }: IProps) => {
+const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
@@ -28,7 +29,7 @@ const Filter = ({ courses, setPage }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = `/courses`
+  let apiUrl = isTeacher ? PageLink.TEACHER_MY_COURSE : `/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',
