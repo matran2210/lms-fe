@@ -171,6 +171,12 @@ const CaseStudyDetail = ({ questions }: any) => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
             handleSaveHighLight={() => {}}
@@ -574,7 +580,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.SELECT_WORD) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValueSelectText(i),
+          answer: getValues(`${i}_answer`),
           id: question?.id,
           answers: question?.answers,
         })
@@ -642,16 +648,7 @@ const CaseStudyDetail = ({ questions }: any) => {
           }
           answers.push({ question_id: e?.id, answer })
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
-          let answer = []
-          for (let i in e?.answer) {
-            if (e?.answer[i] && e?.answer[i] !== '') {
-              answer.push({
-                answer_id: e?.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({ question_id: e?.id, answer })
+          answers.push({ question_id: e?.id, answer: e?.answer || [] })
         } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e?.answer) {
