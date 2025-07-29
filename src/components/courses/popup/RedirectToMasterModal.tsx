@@ -1,39 +1,44 @@
 import { useRouter } from 'next/router'
 import Image from 'next/image'
-import SAPP_Logo from '@assets/images/sapp_logo.svg'
+import GotoImage from '@assets/images/goto-image.png'
 import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import clsx from 'clsx'
+import { PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
 import { ECourseType } from '@pages/courses'
 
 const destinations = [
   {
-    image: SAPP_Logo,
-    title: 'General Course',
+    image: GotoImage,
+    title: 'Master Finance',
     path: undefined,
   },
 ]
 
-export default function RedirectModal() {
-  const { isVisibleRedirectModal, setVisibleRedirectModal } =
+export default function RedirectToMasterModal() {
+  const { isVisibleRedirectToMasterModal, setVisibleRedirectToMasterModal } =
     useStaticModalContext()
   const { setGeneralOrMasterCourse } = useCourseContext()
   const router = useRouter()
 
   const handleRedirect = () => {
-    setVisibleRedirectModal(false)
-    setGeneralOrMasterCourse(ECourseType.GENERAL)
-    router.push('/courses')
+    setVisibleRedirectToMasterModal(false)
+    setGeneralOrMasterCourse(ECourseType.MASTER)
+    router.push(PageLink.SHORT_COURSE)
   }
 
   const handleCancel = () => {
-    setVisibleRedirectModal(false)
+    setVisibleRedirectToMasterModal(false)
+    setGeneralOrMasterCourse(ECourseType.GENERAL)
   }
 
   return (
-    <BaseStaticModal visible={isVisibleRedirectModal} title="Redirect to">
+    <BaseStaticModal
+      visible={isVisibleRedirectToMasterModal}
+      title="Redirect to"
+    >
       <div className="mb-4 mt-4 md:mb-6 md:mt-10">
         {destinations.map((destination, index) => (
           <div
@@ -69,7 +74,7 @@ export default function RedirectModal() {
           className="cursor-pointer hover:text-primary"
           onClick={handleCancel}
         >
-          Stay at Master Finance
+          Stay at General Course
         </div>
       </div>
     </BaseStaticModal>
