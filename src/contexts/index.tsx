@@ -60,7 +60,7 @@ const initContext: Context = {
   setOpenPopupCTA: () => {},
   isOpenSidebar: false,
   setOpenSidebar: () => {},
-  generalOrMasterCourse: ECourseType.MASTER,
+  generalOrMasterCourse: ECourseType.GENERAL,
   setGeneralOrMasterCourse: () => {},
 }
 
@@ -116,12 +116,6 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    */
   const [generalOrMasterCourse, setGeneralOrMasterCourse] =
     useState<ECourseType>(ECourseType.MASTER)
-
-  /**
-   * @description state này bằng true khi hiển thị form hubspot
-   */
-  const [isOpenSidebar, setOpenSidebar] = useState(false)
-
   const router = useRouter()
 
   async function fetchEventTest() {

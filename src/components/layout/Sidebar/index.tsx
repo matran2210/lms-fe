@@ -19,6 +19,8 @@ import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo
 import { Button, Divider } from 'antd'
 import { ECourseType } from '@pages/courses'
 import { useCourseContext } from '@contexts/index'
+import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
+import { useStaticModalContext } from '@contexts/StaticModalContext'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -44,12 +46,27 @@ export default function Sidebar({
    * @description lấy state trong context
    */
   const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
+  const { setVisibleRedirectToMasterModal } = useStaticModalContext()
   const closeSideBar = () => {
     toggleDrawer()
     document.body.classList.add('no-hover')
     setTimeout(() => {
       document.body.classList.remove('no-hover')
     }, 1000)
+  }
+
+  const handleRedirect = (type: ECourseType) => {
+    setGeneralOrMasterCourse(type)
+    switch (type) {
+      case ECourseType.MASTER:
+        setVisibleRedirectToMasterModal(true)
+        break
+      case ECourseType.GENERAL:
+        setVisibleRedirectToMasterModal(false)
+        break
+      default:
+        break
+    }
   }
 
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
@@ -139,7 +156,7 @@ export default function Sidebar({
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
+                onClick={() => handleRedirect(ECourseType.GENERAL)}
                 className={clsx('w-full px-1 py-2 text-xs outline-none', {
                   'font-semibold':
                     generalOrMasterCourse === ECourseType.GENERAL,
@@ -155,7 +172,7 @@ export default function Sidebar({
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
+                onClick={() => handleRedirect(ECourseType.MASTER)}
                 className={clsx('w-full px-1 py-2 text-xs outline-none', {
                   'font-semibold': generalOrMasterCourse === ECourseType.MASTER,
                   'text-gray-800':
@@ -190,6 +207,7 @@ export default function Sidebar({
         open={openExaminationInfo}
         setOpen={setOpenExaminationInfo}
       />
+      <RedirectToMasterModal />
     </div>
   )
 }

@@ -7,7 +7,7 @@ import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import { PageLink } from 'src/constants'
 import clsx from 'clsx'
 
-const destinations = [
+export const destinations = [
   {
     image: GotoImage,
     title: 'Master Finance',

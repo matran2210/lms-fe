@@ -5,6 +5,8 @@ interface Context {
   setVisibleGotoModal: React.Dispatch<React.SetStateAction<boolean>>
   isVisibleRedirectModal: boolean
   setVisibleRedirectModal: React.Dispatch<React.SetStateAction<boolean>>
+  isVisibleRedirectToMasterModal: boolean
+  setVisibleRedirectToMasterModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const StaticModalContext = createContext<Context | null>(null)
@@ -12,6 +14,8 @@ const StaticModalContext = createContext<Context | null>(null)
 export const StaticModalProvider = (props: PropsWithChildren) => {
   const [isVisibleGotoModal, setVisibleGotoModal] = useState(true)
   const [isVisibleRedirectModal, setVisibleRedirectModal] = useState(false)
+  const [isVisibleRedirectToMasterModal, setVisibleRedirectToMasterModal] =
+    useState(false)
   return (
     <StaticModalContext.Provider
       value={{
@@ -19,6 +23,8 @@ export const StaticModalProvider = (props: PropsWithChildren) => {
         setVisibleGotoModal,
         isVisibleRedirectModal,
         setVisibleRedirectModal,
+        isVisibleRedirectToMasterModal,
+        setVisibleRedirectToMasterModal,
       }}
       {...props}
     />
