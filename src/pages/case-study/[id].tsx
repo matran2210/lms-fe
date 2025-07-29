@@ -927,7 +927,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                 {topics?.case_study_name} - {topics?.name}
               </div>
               <SappButton
-                title="Quit111"
+                title="Quit"
                 onClick={() => {
                   setOpenQuit(true)
                   setUnsavedChanges(false)
