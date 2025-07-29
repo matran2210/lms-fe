@@ -30,7 +30,7 @@ const ChartCFAScore = ({ data }: IProps) => {
       {...events}
       ref={ref}
     >
-      <div className="sticky left-0 mb-8 text-lg font-semibold">
+      <div className="sticky left-0 mb-8 text-lg font-semibold md:text-xl">
         Multiple Choice Score by Topic
       </div>
       <div className="relative mb-4 flex w-full">
