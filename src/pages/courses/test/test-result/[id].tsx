@@ -69,7 +69,7 @@ const TestResultDetail = () => {
 
   return (
     <div>
-      <div className="sticky top-0 z-20 grid h-20 w-full grid-cols-[auto_1fr_auto] items-center bg-white px-8 py-3 shadow-[0_4px_16px_0_rgba(44,48,0,0.05)]">
+      <div className="sticky top-0 z-20 grid h-20 w-full grid-cols-[auto_1fr_auto] items-center bg-white p-4 shadow-[0_4px_16px_0_rgba(44,48,0,0.05)] md:px-8 md:py-3">
         <div
           className="grid h-10 w-10 cursor-pointer place-items-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {

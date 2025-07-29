@@ -1,7 +1,7 @@
 .test-collapse {
   // Target only closed items
   .ant-collapse-item:not(.ant-collapse-item-active):hover {
-    @apply bg-primary-50;
+    @apply rounded-xl bg-primary-50 lg:rounded-2xl;
   }
 
   .ant-collapse-item {
