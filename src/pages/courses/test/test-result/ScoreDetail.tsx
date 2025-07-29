@@ -195,7 +195,7 @@ const ScoreDetail = ({
               {
                 key: 0,
                 label: (
-                  <span className="text-base font-semibold">
+                  <span className="text-base font-semibold text-gray-800">
                     {rows[0]?.belong_to?.name}
                   </span>
                 ),

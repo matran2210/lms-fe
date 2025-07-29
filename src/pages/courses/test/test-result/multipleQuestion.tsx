@@ -99,7 +99,7 @@ const MultipleQuestion = ({
             <div
               className={clsx('', {
                 'mb-10 grid grid-cols-6 gap-3': isLargeDesktopView,
-                'flex flex-wrap gap-5 gap-y-4':
+                'flex flex-wrap gap-4':
                   (showMore && !isLargeDesktopView) ||
                   (!showMore && !isLargeDesktopView && data.length <= 10),
                 // 'grid min-w-max grid-flow-col gap-5':
@@ -233,7 +233,7 @@ const MultipleQuestion = ({
             <div
               className={clsx('text-xs md:text-base', {
                 'grid grid-cols-2 gap-x-14 gap-y-3': isLargeDesktopView,
-                'mx-auto flex items-center justify-center gap-12':
+                'mx-auto flex items-center justify-center gap-3 md:gap-12':
                   showMore && !isLargeDesktopView,
                 'grid grid-cols-4 gap-x-12 gap-y-3':
                   !showMore && !isLargeDesktopView,
