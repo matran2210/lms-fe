@@ -36,6 +36,7 @@ export const PageLink = {
   CALENDAR: '/calendar',
   SHORT_COURSE: '/short-course',
   SHORT_COURSE_DETAIL: '/short-course/detail',
+  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {
@@ -237,11 +238,13 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
+export const DEFAULT_SELECT_SECTION_NAME = 'All Section'
+
 export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
   {
     label: 'All Section',
     value: '',
-    name: 'All Section',
+    name: DEFAULT_SELECT_SECTION_NAME,
   },
 ]
 

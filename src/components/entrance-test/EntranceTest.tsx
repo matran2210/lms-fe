@@ -55,10 +55,6 @@ const EntranceTest = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setCurrentAttempt(data?.attempts?.[0] || ({} as IEntranceTestAttempt))
-  }, [data])
-
-  useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&

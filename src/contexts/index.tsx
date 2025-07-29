@@ -117,6 +117,11 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
   const [generalOrMasterCourse, setGeneralOrMasterCourse] =
     useState<ECourseType>(ECourseType.MASTER)
 
+  /**
+   * @description state này bằng true khi hiển thị form hubspot
+   */
+  const [isOpenSidebar, setOpenSidebar] = useState(false)
+
   const router = useRouter()
 
   async function fetchEventTest() {

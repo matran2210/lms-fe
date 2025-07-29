@@ -19,6 +19,7 @@ export type IButtonColors =
   | 'okPopup'
   | 'cancelPopup'
   | 'light-dark'
+  | 'gray'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void

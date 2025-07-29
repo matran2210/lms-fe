@@ -15,6 +15,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import { Soundwave } from '@components/courses/icons'
 
 type Props = {
   videos?: IVideo[]
@@ -345,41 +346,46 @@ const VideoDocument = ({
   return (
     <div className="flex flex-col gap-4 md:gap-6">
       <div className="flex items-center justify-between gap-x-10 gap-y-2 text-primary">
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-2">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
           {(videos as IVideo[])?.length > 1 && (
             <span className="font-semibold text-bw-1">Video mode:</span>
           )}
-          {(videos as IVideo[])?.length > 1 &&
-            videos?.map((v, i) => {
-              return (
-                <label
-                  className=" flex cursor-pointer select-none items-center gap-2"
-                  key={v?.file?.id ?? i}
-                >
-                  {/* Radio button for video selection */}
-                  <SappButton
+          <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
+            {(videos as IVideo[])?.length > 1 &&
+              videos?.map((v, i) => {
+                return (
+                  <label
+                    className=" flex cursor-pointer select-none items-center gap-2"
                     key={v?.file?.id ?? i}
-                    size="small"
-                    className="rounded-md !px-3 py-2.5 text-medium-sm !font-normal"
-                    title={'Video ' + (i + 1)}
-                    toolTipTitle=""
-                    onClick={() => debouncedHandleSetCurrentVideo.current(v)}
-                    {...(v?.file?.id === currentVideo?.file?.id
-                      ? {
-                          color: 'primary',
-                        }
-                      : { color: 'white' })}
-                  />
-                </label>
-              )
-            })}
+                  >
+                    {/* Radio button for video selection */}
+                    <SappButton
+                      key={v?.file?.id ?? i}
+                      size="small"
+                      className="rounded-md !px-3 py-2 text-medium-sm !font-normal"
+                      title={'Video ' + (i + 1)}
+                      toolTipTitle=""
+                      onClick={() => debouncedHandleSetCurrentVideo.current(v)}
+                      {...(v?.file?.id === currentVideo?.file?.id
+                        ? {
+                            color: 'primary',
+                          }
+                        : { color: 'gray' })}
+                    />
+                  </label>
+                )
+              })}
+          </div>
         </div>
         <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
-            <div className="flex items-center gap-2">
-              <TimeLineIcon />
-              <span className="text-lg font-medium text-primary">Timeline</span>
-            </div>
+            <>
+              <span className="mr-2 text-bw-15 group-hover:text-primary">
+                Timeline
+              </span>
+              {/* Icon for course video timeline */}
+              <Soundwave className="text-bw-15 group-hover:text-primary" />
+            </>
           ) : (
             <></>
           )}
