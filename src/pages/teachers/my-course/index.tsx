@@ -170,7 +170,7 @@ const MyCourseTeacher = () => {
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
-              // setPage={setPage}
+              isTeacher
             />
             {guideStatus && guideStep === 1 && (
               <PopupStep
