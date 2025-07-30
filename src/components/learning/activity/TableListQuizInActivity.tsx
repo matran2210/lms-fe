@@ -20,14 +20,18 @@ const TableListQuizInActivity = ({
   const columnsValue: ColumnsType<QuizActivity> = [
     {
       title: 'Type',
+      align: 'center',
       render: (record) => <div>{record?.quiz_type}</div>,
     },
     {
       title: 'Graded Activity',
+      align: 'center',
       render: (record) => <div> {record?.is_graded ? 'Yes' : 'No'}</div>,
     },
     {
       title: 'Status',
+      align: 'center',
+      className: 'column-center',
       render: (record) => (
         <StatusQuizTag
           status={
@@ -40,18 +44,21 @@ const TableListQuizInActivity = ({
     },
     {
       title: 'Score',
+      align: 'center',
       render: (record) => (
         <div>{getScore(data, data?.quiz?.grading_method)}</div>
       ),
     },
     {
       title: 'Time Spent',
+      align: 'center',
       render: (record) => (
         <div>{getTimeFromInput(record?.attempts?.[0]?.total_attempt_time)}</div>
       ),
     },
     {
-      title: 'Last submission',
+      title: 'Last Submission',
+      align: 'center',
       render: (record) => (
         <div>
           {record?.attempts?.length > 0
@@ -77,7 +84,7 @@ const TableListQuizInActivity = ({
       onRow={() => ({
         onClick: () => handleViewActivity(),
       })}
-      className="cursor-pointer"
+      className="style-table-quiz cursor-pointer"
     />
   )
 }
