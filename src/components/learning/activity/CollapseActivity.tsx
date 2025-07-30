@@ -1,6 +1,6 @@
 import { CollapseArrowIcon } from '@assets/icons'
 import { Collapse } from 'antd'
-import React from 'react'
+import React, { useState } from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
 import { ITestQuizProps } from 'src/type/results'
 import clsx from 'clsx'
@@ -13,7 +13,13 @@ const CollapseActivity = ({
   lastElementRef,
 }: ITestQuizProps) => {
   const { isMobileView } = useTailwindBreakpoint()
+  const [activeKey, setActiveKey] = useState<string | string[]>(['activity'])
+
   if (!resultData) return null
+
+  const handleChange = (key: string | string[]) => {
+    setActiveKey(key)
+  }
   const handleViewActivity = () => {
     handleViewResult(resultData)
   }
@@ -28,7 +34,7 @@ const CollapseActivity = ({
       children: (
         <>
           {!isMobileView && (
-            <div className="mb-6 mt-2 text-base font-normal leading-normal text-gray-400">
+            <div className="mb-4 mt-2 text-base font-normal leading-normal text-gray-400">
               {resultData?.path}
             </div>
           )}
@@ -46,7 +52,8 @@ const CollapseActivity = ({
       ref={lastElementRef}
       bordered={false}
       expandIconPosition="end"
-      defaultActiveKey={['activity']}
+      activeKey={activeKey}
+      onChange={handleChange}
       expandIcon={({ isActive }) => (
         <CollapseArrowIcon
           className={clsx({ '-rotate-180': isActive })}
@@ -54,7 +61,11 @@ const CollapseActivity = ({
         />
       )}
       items={getItemsActivity}
-      className="learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6"
+      className={`learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6 hover:${
+        Array.isArray(activeKey) && activeKey.includes('activity')
+          ? 'bg-white'
+          : 'bg-primary-50'
+      }`}
     />
   )
 }
