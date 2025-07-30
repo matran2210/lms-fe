@@ -17,7 +17,7 @@ export interface IUser {
   confirmation_status: null | string
   detail_id: string
   detail: IUserDetail
-  facilities: IFacility[]
+  facilities?: IFacility[]
   user_contacts: IUserContact[]
   certificates: number
   courses: number
