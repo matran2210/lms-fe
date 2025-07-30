@@ -7,7 +7,6 @@ import {
   UnHighLightIcon,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -18,7 +17,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
@@ -337,10 +336,7 @@ const CaseStudyResult = () => {
       )
     }
     if (data.question.qType === QUESTION_TYPES.SELECT_WORD) {
-      return data.answer?.map(
-        (item: { answer_position: number; answer_id: string }) =>
-          item.answer_id,
-      )
+      return data.answer
     }
     if (data.question.qType === QUESTION_TYPES.DRAG_DROP) {
       return data.answer?.map(

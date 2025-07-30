@@ -530,10 +530,6 @@ const TestDetail = () => {
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
-  const [isCompletedCourse, setIsCompletedCourse] = useState({
-    status: false,
-    content: '',
-  })
   const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
@@ -1888,10 +1884,14 @@ const TestDetail = () => {
             is_submitted: true,
           }),
         )
+
+        const isCompletedCourse = res?.data?.progress
         if (typeSubmit === 'submit') {
-          if (isCompletedCourse.status) {
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
 
@@ -1927,9 +1927,11 @@ const TestDetail = () => {
             }
           }
         } else {
-          if (isCompletedCourse.status) {
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
           setScoreFinalTest(res?.data?.score)
@@ -2265,12 +2267,6 @@ const TestDetail = () => {
                 ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
                 : EXHIBIT_TEXT_REPLACE.EXHIBIT,
             )
-            if (res?.data?.progress?.is_completed) {
-              setIsCompletedCourse({
-                status: res?.data?.progress?.is_completed,
-                content: res?.data?.progress?.content,
-              })
-            }
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
           } catch (err: any) {

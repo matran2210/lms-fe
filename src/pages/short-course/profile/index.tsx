@@ -134,7 +134,7 @@ const ProfilePage = () => {
   }
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
-    setListDevices(res.data)
+    setListDevices(res)
   }
 
   useEffect(() => {
