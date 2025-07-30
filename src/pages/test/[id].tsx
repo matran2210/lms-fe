@@ -16,7 +16,6 @@ import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreview from '@components/questionType/DragNDrop'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
@@ -52,7 +51,6 @@ import LimitQuizModal from './limitQuizModal'
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
 import BackToTop from '@components/BackToTop'
 import Popover from '@components/Popover'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
 import { HighlightableHTML } from '@components/highlights/HighlightHTML'
@@ -105,405 +103,23 @@ declare global {
     userAgreed: any
   }
 }
-
+interface Tab {
+  id: string
+  flag?: boolean
+  is_viewed_answer?: boolean
+  [key: string]: any
+}
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
+  const answerListRef = useRef<AnswerList>({})
+  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
+    useCourseContext()
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  const checkType = (
-    data: any,
-    type: string,
-    currentTabID: string,
-    defaultValue: any,
-    corrects?: any,
-    highlighted?: any,
-    solution?: any,
-    done?: boolean,
-  ) => {
-    const handleEssayChange = (id: string) => {
-      setAnswerListValue(id as unknown as number)
-    }
-
-    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
-      return (
-        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
-          const hasAnswer =
-            currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-              ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
-              : getValues(`${currentTabID}_${index}_answer`)
-          return {
-            label: (
-              <span className="flex items-center gap-1 text-base font-normal">
-                Requirement {index + 1}
-                {hasAnswer && (
-                  <CheckCircleOutlineYellow className="text-primary" />
-                )}
-              </span>
-            ),
-            key: index,
-            children: (
-              <>
-                {editorReady && (
-                  <EssayQuestionPreview
-                    data={{
-                      ...currentTabContent?.data?.requirements?.[index],
-                      ...essayData?.req,
-                    }}
-                    question_content={currentTabContent?.data?.question_content}
-                    index={index}
-                    question_data={currentTabContent?.data}
-                    control={control}
-                    handleSaveHighLight={handleSaveHighLight}
-                    highlighted={highlighted}
-                    removeHighlight={removeHighlight}
-                    allowHighLight={allowHighLight}
-                    allowUnHighLight={allowUnHighLight}
-                    solution={solution}
-                    name={`${currentTabID}_${index}_answer`}
-                    setValue={setValue}
-                    defaultValue={defaultValue}
-                    response_option_custom={currentTabContent.response_type}
-                    externalRef={refEditor}
-                    fullData={currentTabContent}
-                    isShowContent={false}
-                    openChooseFile={() =>
-                      setOpenUpload({
-                        status: true,
-                        question_id: currentPage,
-                        requirementIndex: index,
-                      })
-                    }
-                    handleClearFile={handleClearFile}
-                    setOpenPdf={handleOpenScratchPad}
-                    handleSaveHighLightRequirement={
-                      handleSaveHighLightRequirement
-                    }
-                    showRequiment={showListRequirement}
-                    handleChange={handleEssayChange}
-                    explainClassname="!mt-8 !p-0 !bg-transparent"
-                  />
-                )}
-              </>
-            ),
-          }
-        }) ?? []
-      )
-    }
-
-    switch (type) {
-      case QUESTION_TYPES.TRUE_FALSE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.ONE_CHOICE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.MULTIPLE_CHOICE:
-        return (
-          <MultiChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            corrects={corrects}
-            solution={solution}
-            getValue={getValues}
-            tabs={tabs}
-            currentPage={currentPage}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.MATCHING:
-        return (
-          <MatchQuizComponent
-            onChangeMatchedPairs={(pairs) =>
-              setValue(`${currentTabID}_answer`, pairs)
-            }
-            data={data}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            done={done}
-            corrects={corrects?.corrects}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.FILL_WORD:
-        return (
-          <NewFilltext
-            control={control}
-            name={`${currentTabID}_fillword`}
-            data={data}
-            setValue={setValue}
-            action={getValueFillText}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-            watch={watch}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.DRAG_DROP:
-        return (
-          // <DragNDropPreview
-          //   data={data}
-          //   action={getAnswerDragNDrop}
-          //   ref={ref}
-          //   extenalRef={dragNDropRef}
-          //   handleSaveHighLight={handleSaveHighLight}
-          //   highlighted={highlighted}
-          //   removeHighlight={removeHighlight}
-          //   allowHighLight={allowHighLight}
-          //   allowUnHighLight={allowUnHighLight}
-          //   defaultAnswer={defaultValue}
-          //   corrects={corrects?.corrects}
-          //   solution={solution}
-          //   handleGetData={(data: DragDropAnswerItem) => {
-          //     setValue(`${currentTabID}_drag_drop_answer`, data)
-          //   }}
-          //   explainClassname="!mt-8 !p-0 !bg-transparent"
-          // />
-          <DragDropQuestion
-            data={data}
-            defaultValue={defaultValue}
-            onChange={(data: SlotValue[]) => {
-              setValue(`${currentTabID}_drag_drop_answer`, data)
-            }}
-            corrects={corrects?.corrects}
-            solution={solution}
-            explainClassname="!mt-8 !p-0 !bg-transparent"
-          />
-        )
-      case QUESTION_TYPES.SELECT_WORD:
-        return (
-          <SelectWord
-            onChange={(
-              value: Array<{
-                answer_id: string
-                answer_position: number
-              }>,
-            ) => setValue(`${currentTabID}_answer`, value)}
-            data={data}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.ESSAY:
-        const defaultValueEssay = () => {
-          const key = `${currentTabID}_${essayData?.index}_answer`
-          const valueFromForm = getValues(key)
-
-          if (valueFromForm) {
-            return valueFromForm
-          }
-
-          const requirement =
-            currentTabContent?.data?.requirements?.[essayData?.index]
-
-          if (requirement?.short_answer) {
-            return requirement.short_answer
-          }
-
-          if (requirement?.answer_text) {
-            return requirement.answer_text
-          }
-
-          return currentTabContent.answer
-        }
-
-        return (
-          <>
-            <EditorReader
-              className="sapp-questions sapp-editor-reader"
-              text_editor_content={currentTabContent?.data?.question_content}
-              highlighted={highlighted}
-            />
-            {currentTabContent?.data?.requirements?.length > 0 ? (
-              <RequirementsTab
-                destroyInactiveTabPane={true}
-                items={essayRequirementsItem(defaultValueEssay())}
-                activeKey={essayData?.index ?? '0'}
-                defaultActiveKey="1"
-                onChange={(key) => {
-                  setEssayData({
-                    req: getValues(`${currentTabID}_${key}_answer`),
-                    index: key,
-                  })
-                  refEditor.current.reset()
-                }}
-              />
-            ) : (
-              <EssayQuestionPreview
-                isShowContent={false}
-                data={{
-                  ...currentTabContent?.data?.requirements?.[essayData?.index],
-                  ...essayData?.req,
-                }}
-                question_content={currentTabContent?.data?.question_content}
-                index={essayData?.index}
-                question_data={currentTabContent?.data}
-                control={control}
-                handleSaveHighLight={handleSaveHighLight}
-                highlighted={highlighted}
-                removeHighlight={removeHighlight}
-                allowHighLight={allowHighLight}
-                allowUnHighLight={allowUnHighLight}
-                solution={solution}
-                name={`${currentTabID}_${essayData?.index}_answer`}
-                setValue={setValue}
-                defaultValue={defaultValueEssay()}
-                response_option_custom={currentTabContent.response_type}
-                externalRef={refEditor}
-                fullData={currentTabContent}
-                openChooseFile={() =>
-                  setOpenUpload({
-                    status: true,
-                    question_id: currentPage,
-                    requirementIndex: essayData?.index,
-                  })
-                }
-                handleClearFile={handleClearFile}
-                setOpenPdf={handleOpenScratchPad}
-                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-                showRequiment={showListRequirement}
-                handleChange={handleEssayChange}
-              />
-            )}
-          </>
-        )
-      default:
-        return <div></div>
-    }
-  }
-
-  /**
-   * DES: confirm unfinished questions before submitting
-   */
-  const checkUnSubmitAnswer = (): number[] => {
-    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let result: number[] = []
-    answers?.map((item: Answer, index: number) => {
-      if (!item.attempted) {
-        result.push(index + 1)
-      } else {
-        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
-          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
-            result.push(index + 1)
-          }
-        } else {
-          if (
-            !item.done &&
-            !validateAnswer({
-              answer: item.answer,
-              answer_file: item?.answer_file,
-            })
-          ) {
-            result.push(index + 1)
-          }
-        }
-      }
-    })
-    setUnSubmitAnswerData(result)
-    return result
-  }
-
-  // Validate các câu hỏi xem đã trả lời chưa
-  const validateAnswer = (item: {
-    answer: string | Object[] | string[]
-    answer_file?: { file_key?: string; file_name?: string }
-  }) => {
-    if (item?.answer_file?.file_key) return true
-    if (typeof item?.answer === 'string' && !item?.answer) {
-      return false
-    }
-    if (!item?.answer?.length) return false
-    if (Array.isArray(item?.answer)) {
-      const emptyAnswer = item?.answer?.filter(
-        (el: { idAnswer?: string; answer_id?: string }) => {
-          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
-            return el
-          }
-          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
-            return el
-          }
-        },
-      )
-      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
-      if (emptyAnswer?.length || emptyEl.length) {
-        return false
-      }
-    }
-    return true
-  }
-  // validate essay question with requirement
-  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
-    if (data?.requirements?.length > 0) {
-      return data?.requirements?.some(
-        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
-      )
-    } else {
-      return false
-    }
-  }
-
   const router = useRouter()
-
   const { quizDetail } = useGetQuizDetail(router.query.id as string)
   const { questions } = useGetQuestionTabs(router.query.id as string)
-
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const {
@@ -519,7 +135,10 @@ const TestDetail = () => {
     getValues,
     setValue,
   } = useForm()
-
+  const timeRef = useRef(null) as any
+  const ref = useRef(null) as any
+  const refEditor = useRef(null) as any
+  const dispatch = useAppDispatch()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
@@ -533,9 +152,6 @@ const TestDetail = () => {
   const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const timeRef = useRef(null) as any
-  const dispatch = useAppDispatch()
-
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
   const [QuizResultId, setQuizResultId] = useState('')
@@ -566,7 +182,9 @@ const TestDetail = () => {
     resultId: '',
   })
   const [oldCurrentTabData, setOldCurrentTabData] = useState<any>()
-
+  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
+    [],
+  )
   const [scoreFinalTest, setScoreFinalTest] = useState(0)
   const [scratchPads, setScratchPads] = useState<string>('')
   // const [listQuestionDone, setListQuestionDone] = useState<string[]>([])
@@ -581,6 +199,8 @@ const TestDetail = () => {
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
   const [showWarning, setShowWarning] = useState(true)
+  const [filteredTabs, setFilterTabs] = useState<any[]>([])
+  const [trigger, setTrigger] = useState(false)
 
   useClickOutside({
     ref: dropUpRequire,
@@ -1022,6 +642,373 @@ const TestDetail = () => {
     return openScratchPad.some((item) => item.type === 'scratch_pad') || false
   }, [openScratchPad])
 
+  const checkType = (
+    data: any,
+    type: string,
+    currentTabID: string,
+    defaultValue: any,
+    corrects?: any,
+    highlighted?: any,
+    solution?: any,
+    done?: boolean,
+  ) => {
+    const handleEssayChange = (id: string) => {
+      setAnswerListValue(id as unknown as number)
+    }
+
+    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
+      return (
+        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
+          const hasAnswer =
+            currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+              ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
+              : getValues(`${currentTabID}_${index}_answer`)
+          return {
+            label: (
+              <span className="flex items-center gap-1 text-base font-normal">
+                Requirement {index + 1}
+                {hasAnswer && (
+                  <CheckCircleOutlineYellow className="text-primary" />
+                )}
+              </span>
+            ),
+            key: index,
+            children: (
+              <>
+                {editorReady && (
+                  <EssayQuestionPreview
+                    data={{
+                      ...currentTabContent?.data?.requirements?.[index],
+                      ...essayData?.req,
+                    }}
+                    question_content={currentTabContent?.data?.question_content}
+                    index={index}
+                    question_data={currentTabContent?.data}
+                    control={control}
+                    handleSaveHighLight={handleSaveHighLight}
+                    highlighted={highlighted}
+                    removeHighlight={removeHighlight}
+                    allowHighLight={allowHighLight}
+                    allowUnHighLight={allowUnHighLight}
+                    solution={solution}
+                    name={`${currentTabID}_${index}_answer`}
+                    setValue={setValue}
+                    defaultValue={defaultValue}
+                    response_option_custom={currentTabContent.response_type}
+                    externalRef={refEditor}
+                    fullData={currentTabContent}
+                    isShowContent={false}
+                    openChooseFile={() =>
+                      setOpenUpload({
+                        status: true,
+                        question_id: currentPage,
+                        requirementIndex: index,
+                      })
+                    }
+                    handleClearFile={handleClearFile}
+                    setOpenPdf={handleOpenScratchPad}
+                    handleSaveHighLightRequirement={
+                      handleSaveHighLightRequirement
+                    }
+                    showRequiment={showListRequirement}
+                    handleChange={handleEssayChange}
+                    explainClassname="!mt-8 !p-0 !bg-transparent"
+                  />
+                )}
+              </>
+            ),
+          }
+        }) ?? []
+      )
+    }
+
+    switch (type) {
+      case QUESTION_TYPES.TRUE_FALSE:
+        return (
+          <OneChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.ONE_CHOICE:
+        return (
+          <OneChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return (
+          <MultiChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            corrects={corrects}
+            solution={solution}
+            getValue={getValues}
+            tabs={tabs}
+            currentPage={currentPage}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.MATCHING:
+        return (
+          <MatchQuizComponent
+            onChangeMatchedPairs={(pairs) =>
+              setValue(`${currentTabID}_answer`, pairs)
+            }
+            data={data}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            done={done}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.FILL_WORD:
+        return (
+          <NewFilltext
+            control={control}
+            name={`${currentTabID}_fillword`}
+            data={data}
+            setValue={setValue}
+            action={getValueFillText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
+            solution={solution}
+            watch={watch}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.DRAG_DROP:
+        return (
+          <DragDropQuestion
+            data={data}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue(`${currentTabID}_drag_drop_answer`, data)
+            }}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.SELECT_WORD:
+        return (
+          <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue(`${currentTabID}_answer`, value)}
+            data={data}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
+            solution={solution}
+          />
+        )
+      case QUESTION_TYPES.ESSAY:
+        const defaultValueEssay = () => {
+          const key = `${currentTabID}_${essayData?.index}_answer`
+          const valueFromForm = getValues(key)
+
+          if (valueFromForm) {
+            return valueFromForm
+          }
+
+          const requirement =
+            currentTabContent?.data?.requirements?.[essayData?.index]
+
+          if (requirement?.short_answer) {
+            return requirement.short_answer
+          }
+
+          if (requirement?.answer_text) {
+            return requirement.answer_text
+          }
+
+          return currentTabContent.answer
+        }
+
+        return (
+          <>
+            <EditorReader
+              className="sapp-questions sapp-editor-reader"
+              text_editor_content={currentTabContent?.data?.question_content}
+              highlighted={highlighted}
+            />
+            {currentTabContent?.data?.requirements?.length > 0 ? (
+              <RequirementsTab
+                destroyInactiveTabPane={true}
+                items={essayRequirementsItem(defaultValueEssay())}
+                activeKey={essayData?.index ?? '0'}
+                defaultActiveKey="1"
+                onChange={(key) => {
+                  setEssayData({
+                    req: getValues(`${currentTabID}_${key}_answer`),
+                    index: key,
+                  })
+                  refEditor.current.reset()
+                }}
+              />
+            ) : (
+              <EssayQuestionPreview
+                isShowContent={false}
+                data={{
+                  ...currentTabContent?.data?.requirements?.[essayData?.index],
+                  ...essayData?.req,
+                }}
+                question_content={currentTabContent?.data?.question_content}
+                index={essayData?.index}
+                question_data={currentTabContent?.data}
+                control={control}
+                handleSaveHighLight={handleSaveHighLight}
+                highlighted={highlighted}
+                removeHighlight={removeHighlight}
+                allowHighLight={allowHighLight}
+                allowUnHighLight={allowUnHighLight}
+                solution={solution}
+                name={`${currentTabID}_${essayData?.index}_answer`}
+                setValue={setValue}
+                defaultValue={defaultValueEssay()}
+                response_option_custom={currentTabContent.response_type}
+                externalRef={refEditor}
+                fullData={currentTabContent}
+                openChooseFile={() =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: currentPage,
+                    requirementIndex: essayData?.index,
+                  })
+                }
+                handleClearFile={handleClearFile}
+                setOpenPdf={handleOpenScratchPad}
+                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+                showRequiment={showListRequirement}
+                handleChange={handleEssayChange}
+              />
+            )}
+          </>
+        )
+      default:
+        return <div></div>
+    }
+  }
+
+  /**
+   * DES: confirm unfinished questions before submitting
+   */
+  const checkUnSubmitAnswer = (): number[] => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let result: number[] = []
+    answers?.map((item: Answer, index: number) => {
+      if (!item.attempted) {
+        result.push(index + 1)
+      } else {
+        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
+          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
+            result.push(index + 1)
+          }
+        } else {
+          if (
+            !item.done &&
+            !validateAnswer({
+              answer: item.answer,
+              answer_file: item?.answer_file,
+            })
+          ) {
+            result.push(index + 1)
+          }
+        }
+      }
+    })
+    setUnSubmitAnswerData(result)
+    return result
+  }
+  // Validate các câu hỏi xem đã trả lời chưa
+  const validateAnswer = (item: {
+    answer: string | Object[] | string[]
+    answer_file?: { file_key?: string; file_name?: string }
+  }) => {
+    if (item?.answer_file?.file_key) return true
+    if (typeof item?.answer === 'string' && !item?.answer) {
+      return false
+    }
+    if (!item?.answer?.length) return false
+    if (Array.isArray(item?.answer)) {
+      const emptyAnswer = item?.answer?.filter(
+        (el: { idAnswer?: string; answer_id?: string }) => {
+          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+            return el
+          }
+          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+            return el
+          }
+        },
+      )
+      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
+      if (emptyAnswer?.length || emptyEl.length) {
+        return false
+      }
+    }
+    return true
+  }
+  // validate essay question with requirement
+  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
+    if (data?.requirements?.length > 0) {
+      return data?.requirements?.some(
+        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
+      )
+    } else {
+      return false
+    }
+  }
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -1051,14 +1038,6 @@ const TestDetail = () => {
       return arr
     })
   }
-
-  interface Tab {
-    id: string
-    flag?: boolean
-    is_viewed_answer?: boolean
-    [key: string]: any
-  }
-
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -1072,17 +1051,11 @@ const TestDetail = () => {
       return newArr
     })
   }
-
-  const [scratchPadValues, setScratchPadValues] = useState<ScratchPadValue[]>(
-    [],
-  )
-
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
     removeHighlights(domEle as any)
     handleSaveHighLight(serializeHighlights(domEle))
   }
-
   const OptionShowAll = () => {
     return (
       <div className="w-max">
@@ -1098,7 +1071,6 @@ const TestDetail = () => {
       </div>
     )
   }
-
   const checkAnswered = (currentContent: any, isSubmit = false) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -1211,41 +1183,12 @@ const TestDetail = () => {
       }
     }
   }
-  const [filteredTabs, setFilterTabs] = useState<any[]>([])
-  const [trigger, setTrigger] = useState(false)
-
-  const ref = useRef(null) as any
-  const refEditor = useRef(null) as any
-
   // TODO: Implement this
   const getValueFillText = () => {}
-
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
     return value
   }
-
-  const getAnswerMatching = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
-      const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
-    }
-
-    return value
-  }
-
-  const getAnswerDragNDrop = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
-      const idAnswer = e.querySelector('.answer-box')
-      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-    }
-    return value
-  }
-
   const getResult = async (currentTabContent: any) => {
     const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
@@ -1286,7 +1229,6 @@ const TestDetail = () => {
       requirements: res?.data?.[0]?.requirements,
     }
   }
-
   const confirmAnswer = async (
     corrects: any,
     solution: any,
@@ -1329,7 +1271,6 @@ const TestDetail = () => {
     setTabs(newTabs)
     setLoading(false)
   }
-
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
@@ -1390,7 +1331,6 @@ const TestDetail = () => {
       }
     }
   }
-
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
     // setEssayData(undefined)
@@ -1508,7 +1448,6 @@ const TestDetail = () => {
     })
     return newData
   }
-
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1569,7 +1508,6 @@ const TestDetail = () => {
     })
     return newData
   }
-
   const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -1609,17 +1547,10 @@ const TestDetail = () => {
     })
     setTabs(newTabs)
   }
-
-  const answerListRef = useRef<AnswerList>({})
-
   const setAnswerListValue = debounce((requirementId: number) => {
     answerListRef.current[requirementId] =
       getValues(`${currentPage}_${essayData?.index}_answer`) || ''
   }, 200)
-
-  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
-    useCourseContext()
-
   const handleSubmitAnswer = async (action?: string) => {
     if (!currentTabContent) return
     if (currentTabContent?.is_viewed_answer) return
@@ -1684,7 +1615,6 @@ const TestDetail = () => {
       return false
     }
   }
-
   const handleFlagQuestion = async (question_id: string) => {
     try {
       const payload = {
@@ -1699,7 +1629,6 @@ const TestDetail = () => {
       )
     } catch (error) {}
   }
-
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
     const baseAnswer = {
@@ -1832,7 +1761,6 @@ const TestDetail = () => {
 
     return null
   }
-
   // Helper function to handle submission errors
   const handleSubmissionError = (payload: any) => {
     setListSubmitError((prev) => {
@@ -1847,7 +1775,6 @@ const TestDetail = () => {
       return [...prev, payload]
     })
   }
-
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
     if (currentTabContent) {
       const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
@@ -1944,7 +1871,6 @@ const TestDetail = () => {
       setLoading(false)
     }
   }
-
   const handleClearSelection = (currentTabContent: any) => {
     const data = currentTabContent.data
 
@@ -2001,7 +1927,6 @@ const TestDetail = () => {
       }
     }
   }
-
   const handleClearFile = (requirementIndex: number) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -2057,7 +1982,6 @@ const TestDetail = () => {
       return newData
     })
   }
-
   const handleSaveHighLightTopic = (e: any) => {
     setTabs((prev: any) => {
       const newData = prev?.map((item: any) => {
@@ -3196,12 +3120,28 @@ const TestDetail = () => {
               open={openQuit}
               setOpen={setOpenQuit}
               handleQuit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  // setSubmitEventTest(true)
-                } else {
-                  router.back()
+                switch (type) {
+                  case 'event-test':
+                    router.replace(`/event-test`)
+                    break
+                  case 'entrance':
+                    router.replace(`/entrance-test`)
+                    break
+                  default:
+                    const class_id = router.query.class_id
+                    if (class_id) {
+                      router.push(`/courses/my-course/${class_id}`)
+                    } else {
+                      router.back()
+                    }
+                    break
                 }
+                // if (type === 'event-test') {
+                //
+                //   // setSubmitEventTest(true)
+                // } else {
+                //   router.back()
+                // }
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
