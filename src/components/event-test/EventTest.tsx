@@ -296,7 +296,7 @@ const EventTest = ({
             <div className="flex justify-between pt-2 text-sm capitalize text-gray-800 md:pt-4 md:text-base">
               <div className="flex items-center">
                 <>
-                  <span className={`text-gray`}>Result of Attemps:</span>
+                  <span className={`text-gray`}>Result of Attempts:</span>
                   <span className="ml-1 text-gray">
                     {data?.attempt_times || ''}
                   </span>
