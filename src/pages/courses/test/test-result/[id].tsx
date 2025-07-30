@@ -3,6 +3,7 @@ import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import Tooltip from 'src/common/Tooltip'
 import { GRADE_STATUS } from 'src/constants'
@@ -38,8 +39,12 @@ const TestResultDetail = () => {
   // Sử dụng hook useGetQuestionTabs trong component
   const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
-  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   const quiz = questions?.quizAttempt?.quiz
+  const isShowRetakeButton =
+    !quiz?.limit_count ||
+    (quiz?.is_limited &&
+      questions?.quizAttempt?.number_of_attempts < quiz?.limit_count)
+  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}&class_id=${questions?.class_id}`
   if (
     quiz?.is_limited &&
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
@@ -48,25 +53,10 @@ const TestResultDetail = () => {
     linkTest = `/courses/test/test-result/${router.query.id}`
   }
 
-  // Config Courses
-  const breadcrumbs: ITabs[] = [
-    {
-      link: `/courses/my-course/${questions?.class_id ?? ''}`,
-      title: `${questions?.course?.name ?? 'Course Detail'}`,
-      disable: false,
-    },
-    {
-      link: linkTest,
-      title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
-      disable: true,
-    },
-    {
-      link: '/',
-      title: 'Results',
-      disable: false,
-    },
-  ]
-
+  const handleRetake = () => {
+    localStorage.removeItem('quizAttempt')
+    router.push(linkTest)
+  }
   return (
     <div>
       <div className="sticky top-0 z-20 grid h-20 w-full grid-cols-[auto_1fr_auto] items-center bg-white p-4 shadow-[0_4px_16px_0_rgba(44,48,0,0.05)] md:px-8 md:py-3">
@@ -84,16 +74,17 @@ const TestResultDetail = () => {
         <ButtonSecondary
           title="Retake"
           size="small"
-          className="hidden md:block"
+          onClick={handleRetake}
+          className={clsx('hidden md:block', { hidden: !isShowRetakeButton })}
         />
         <Tooltip
           placement="left"
           title={
-            <span className="text-sm" onClick={() => {}}>
+            <span className="text-sm" onClick={handleRetake}>
               Retake
             </span>
           }
-          className="block md:hidden"
+          className={clsx('block md:hidden', { hidden: !isShowRetakeButton })}
         >
           <button className="text-icon">
             <MenuDotsIcon />
