@@ -718,7 +718,10 @@ const SAPPVideo = ({
         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
-              src={thumbnail?.['950x535'] ?? ''}
+              src={
+                thumbnail?.['950x535'] ??
+                '/assets/images/default_thumbnail_video.png'
+              }
               alt={'Thumbnail image'}
               className="h-full w-full object-contain"
               width={952}
@@ -794,7 +797,10 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 className={`${styles.content}`}
-                poster={thumbnail?.['950x535'] ?? ''}
+                poster={
+                  thumbnail?.['950x535'] ??
+                  '/assets/images/default_thumbnail_video.png'
+                }
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
                     streamRef.current.pause()
