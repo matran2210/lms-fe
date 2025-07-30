@@ -575,7 +575,10 @@ export enum DATE_FORMAT {
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
-
+export enum ECourseType {
+  MASTER = 'Master Finance',
+  GENERAL = 'General Course',
+}
 export const COOKIE_INFO = {
   SESSION_ID: 'sessionId',
   KEYCLOAK_USER_ID: 'keycloakUserId',

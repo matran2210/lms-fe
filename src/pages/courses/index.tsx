@@ -16,6 +16,7 @@ import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import {
   ANIMATION,
   defaultStatusCourse,
+  ECourseType,
   PageLink,
   UserGuide,
 } from 'src/constants'
@@ -34,10 +35,6 @@ import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterMod
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
-export enum ECourseType {
-  MASTER = 'Master Finance',
-  GENERAL = 'General Course',
-}
 const defaultCategory = [
   {
     label: `All`,

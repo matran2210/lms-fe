@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { UserGuide } from 'src/constants'
+import { ECourseType, UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,
@@ -17,7 +17,6 @@ import MenuItemsList from '../MenuItemsList'
 import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
 import { Button, Divider } from 'antd'
-import { ECourseType } from '@pages/courses'
 import { useCourseContext } from '@contexts/index'
 import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
 import { useStaticModalContext } from '@contexts/StaticModalContext'

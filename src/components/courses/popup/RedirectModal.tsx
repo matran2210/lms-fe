@@ -6,7 +6,7 @@ import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import clsx from 'clsx'
 import { useCourseContext } from '@contexts/index'
-import { ECourseType } from '@pages/courses'
+import { ECourseType } from 'src/constants'
 
 const destinations = [
   {
@@ -30,6 +30,7 @@ export default function RedirectModal() {
 
   const handleCancel = () => {
     setVisibleRedirectModal(false)
+    setGeneralOrMasterCourse(ECourseType.MASTER)
   }
 
   return (
