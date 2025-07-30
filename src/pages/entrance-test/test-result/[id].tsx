@@ -66,6 +66,7 @@ const TestEntranceResult = () => {
                 <PinnedNotificationsV2
                   bgColor="bg-primary-200"
                   borderColor="border-primary"
+                  classPinned="items-start justify-between lg:items-center"
                 >
                   <div className="text-xs leading-5 md:text-sm">
                     Đội ngũ chuyên viên của SAPP sẽ liên lạc lại với bạn trong
