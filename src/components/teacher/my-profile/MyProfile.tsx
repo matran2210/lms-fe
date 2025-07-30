@@ -67,24 +67,7 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
-  // const facilities = user?.facilities
-  const facilities = [
-    {
-      id: '5fe649c0-9e99-42f9-aaa2-097db955bc55',
-      name: 'IT test',
-      code: 'it test',
-    },
-    {
-      id: '310fee87-9b50-4eb4-86a7-8fcdcac4c545',
-      name: 'Tôi là cơ sở 2 nè',
-      code: 'ToiLaCoSoNe',
-    },
-    {
-      id: 'fecbc7b7-30f2-4b42-9558-140dbab6a4e6',
-      name: 'NEU',
-      code: 'NEU',
-    },
-  ]
+  const facilities = user?.facilities || []
   /**
    * Hàm để chuyển sang chế độ chỉnh sửa form
    */
@@ -168,7 +151,7 @@ const MyProfile = ({
     if (!facilities?.length) return
     return (
       <div className="flex flex-wrap items-center gap-[10px]">
-        {facilities.map((facility) => (
+        {facilities?.map((facility) => (
           <Tag
             key={facility.id}
             bordered={false}
