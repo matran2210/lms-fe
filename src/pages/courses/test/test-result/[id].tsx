@@ -1,19 +1,23 @@
 import { MenuDotsIcon, ShowMoreIcon } from '@assets/icons'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
 import { GRADE_STATUS } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CoursesAPI } from 'src/pages/api/courses'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
 import { ITabs } from 'src/type'
 
 const TestResultDetail = () => {
   const router = useRouter()
-
+  const { isMobileView } = useTailwindBreakpoint()
+  const [open, setOpen] = useState(false)
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
     return useGetDataQuery(
       queryKey,
@@ -80,7 +84,10 @@ const TestResultDetail = () => {
         <Tooltip
           placement="left"
           title={
-            <span className="text-sm" onClick={handleRetake}>
+            <span
+              className="cursor-pointer text-sm"
+              onClick={() => setOpen(true)}
+            >
               Retake
             </span>
           }
@@ -105,6 +112,9 @@ const TestResultDetail = () => {
           }
         />
       </div>
+      {isMobileView && (
+        <ModalNotMobileFriendly open={open} onClose={() => setOpen(false)} />
+      )}
     </div>
   )
 }
