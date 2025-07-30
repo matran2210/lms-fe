@@ -47,17 +47,6 @@
       }
     ]
   },
-  "exclude": [
-    "./out/**/*",
-    "./node_modules/**/*",
-    "**/*.spec.ts",
-    "**/*.e2e.ts"
-  ],
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "**/*.mts"
-  ]
+  "exclude": ["./out/**/*", "./node_modules/**/*", "**/*.spec.ts", "**/*.e2e.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "**/*.mts"]
 }

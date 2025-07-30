@@ -3,7 +3,6 @@ import { withSentryConfig } from '@sentry/nextjs'
 import removeImports from 'next-remove-imports'
 import path from 'path'
 
-
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
@@ -58,4 +57,3 @@ export default withSentryConfig(nextConfig, {
   automaticVercelMonitors: true,
   telemetry: false,
 })
-
