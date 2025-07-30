@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
+import { excludedPathsHelp } from '@pages/_app'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false)
@@ -17,6 +18,9 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     '/case-study',
     '/activity',
   ].map((p) => asPath.includes(p))
+  const hiddenChatbot =
+    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
+    isTeacherPage
 
   // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
@@ -31,7 +35,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
 
   // Effect for teacher pages cleanup
   useEffect(() => {
-    if (isTeacherPage) {
+    if (hiddenChatbot) {
       const hsScript = document.getElementById('hs-script-loader')
       if (hsScript) document?.head?.removeChild(hsScript)
 
@@ -51,7 +55,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       )
       if (conversationsContainer) conversationsContainer.style.display = 'none'
     }
-  }, [isTeacherPage])
+  }, [hiddenChatbot])
 
   // Effect for script creation
   useEffect(() => {
@@ -59,7 +63,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       'hs-script-loader',
     ) as HTMLScriptElement
 
-    if (showHelp && !isTeacherPage) {
+    if (showHelp && !hiddenChatbot) {
       if (!scriptElement) {
         scriptElement = document.createElement('script')
         scriptElement.type = 'text/javascript'
@@ -103,7 +107,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
       )
       if (conversationsContainer) conversationsContainer.style.display = 'none'
     }
-  }, [showHelp, isTeacherPage])
+  }, [showHelp, hiddenChatbot])
 
   // Effect for container visibility
   useEffect(() => {
