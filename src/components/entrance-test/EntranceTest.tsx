@@ -283,7 +283,7 @@ const EntranceTest = ({
                     <span
                       className={`${data?.attempts?.length > 1 ? '' : 'text-gray'}`}
                     >
-                      Result of Attemps:
+                      Result of Attempts:
                     </span>
                     {data?.attempts?.length > 1 ? (
                       <Select
@@ -314,7 +314,7 @@ const EntranceTest = ({
                     )}
                   </>
                 ) : (
-                  <span className="mr-1 text-gray">Result of Attemps:</span>
+                  <span className="mr-1 text-gray">Result of Attempts:</span>
                 )}
               </div>
               {data?.attempts?.length && data?.attempts?.length > 0 ? (
