@@ -240,7 +240,7 @@ const EntranceTest = ({
   }
 
   const cardFooter = (
-    <div className="action relative mt-6 flex items-center justify-end md:mt-10">
+    <div className="action relative mt-auto flex items-center justify-end">
       {renderButton()}
     </div>
   )
@@ -252,7 +252,7 @@ const EntranceTest = ({
         attemptStatus={currentAttempt?.status as EAttemptStatus}
         footer={cardFooter}
       >
-        <div>
+        <div className="mb-6 md:mb-10">
           <div className="info border-l border-[#DCDDDD] px-2 md:px-4">
             <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
