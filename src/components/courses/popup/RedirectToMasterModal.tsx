@@ -5,9 +5,8 @@ import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import clsx from 'clsx'
-import { PageLink } from 'src/constants'
+import { ECourseType, PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
-import { ECourseType } from '@pages/courses'
 
 const destinations = [
   {

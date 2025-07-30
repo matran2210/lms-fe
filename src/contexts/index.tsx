@@ -1,5 +1,4 @@
 import { IPopupFormState } from '@components/mycourses/hubspot/PopupLockContent'
-import { ECourseType } from '@pages/courses'
 import { useRouter } from 'next/router'
 import React, {
   PropsWithChildren,
@@ -10,6 +9,7 @@ import React, {
 } from 'react'
 import {
   CERTIFICATE_DETAIL,
+  ECourseType,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
 } from 'src/constants'
@@ -115,7 +115,7 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
    * @description state này bằng true khi hiển thị form hubspot
    */
   const [generalOrMasterCourse, setGeneralOrMasterCourse] =
-    useState<ECourseType>(ECourseType.MASTER)
+    useState<ECourseType>(ECourseType.GENERAL)
   const router = useRouter()
 
   async function fetchEventTest() {
