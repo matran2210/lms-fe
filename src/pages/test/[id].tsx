@@ -3120,12 +3120,28 @@ const TestDetail = () => {
               open={openQuit}
               setOpen={setOpenQuit}
               handleQuit={() => {
-                if (type === 'event-test') {
-                  router.replace(`/event-test`)
-                  // setSubmitEventTest(true)
-                } else {
-                  router.back()
+                switch (type) {
+                  case 'event-test':
+                    router.replace(`/event-test`)
+                    break
+                  case 'entrance':
+                    router.replace(`/entrance-test`)
+                    break
+                  default:
+                    const class_id = router.query.class_id
+                    if (class_id) {
+                      router.push(`/courses/my-course/${class_id}`)
+                    } else {
+                      router.back()
+                    }
+                    break
                 }
+                // if (type === 'event-test') {
+                //
+                //   // setSubmitEventTest(true)
+                // } else {
+                //   router.back()
+                // }
               }}
               handleCancel={() =>
                 dispatch(loginSlice.actions.enableUnsavedChange())
