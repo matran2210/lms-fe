@@ -56,7 +56,7 @@ const MultipleQuestion = ({
           : ' text-warning border-warning hover:bg-warning-50'
     }
     return data?.is_correct
-      ? ' text-success border-success hover:bg-success-50'
+      ? 'text-success border-success hover:bg-success-50'
       : ' text-error border-error hover:bg-error-50'
   }
 
@@ -67,27 +67,30 @@ const MultipleQuestion = ({
     extra?: React.ReactNode,
     showMore?: boolean,
   ) => {
-    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
-      return (
-        <button
-          key={item?.id}
-          onClick={() => {
-            router.push(`/explanation/${item?.id}?title=My Course`)
-          }}
-          disabled={
-            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
-          }
-          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
+    const data1 = [...data, ...data, ...data].slice(0, 21)
+    const renderBoxItems = (data1 || [])?.map(
+      (item: IAnswer, index: number) => {
+        return (
+          <button
+            key={item?.id}
+            onClick={() => {
+              router.push(`/explanation/${item?.id}?title=My Course`)
+            }}
+            disabled={
+              questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
+            }
+            className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
             ${renderBoxesAndLineClass(type, item)}
           `}
-        >
-          {index + totalBefore + 1}
-        </button>
-      )
-    })
+          >
+            {index + totalBefore + 1}
+          </button>
+        )
+      },
+    )
 
     return (
-      data?.length > 0 && (
+      data1?.length > 0 && (
         <div className="w-full">
           <div className="flex items-center justify-between">
             <div className="mb-6 text-base font-semibold text-gray-800 md:text-xl">
@@ -98,14 +101,14 @@ const MultipleQuestion = ({
           <div className="w-full overflow-x-auto">
             <div
               className={clsx('', {
-                'mb-10 grid grid-cols-6 gap-3': isLargeDesktopView,
-                'flex flex-wrap gap-4':
+                'grid grid-cols-7 gap-3': isLargeDesktopView,
+                'grid min-w-max grid-flow-col grid-rows-2 gap-3 md:flex md:flex-wrap md:gap-4':
                   (showMore && !isLargeDesktopView) ||
-                  (!showMore && !isLargeDesktopView && data.length <= 10),
+                  (!showMore && !isLargeDesktopView && data1.length <= 20),
                 // 'grid min-w-max grid-flow-col gap-5':
                 //   !showMore && !isLargeDesktopView,
                 'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4':
-                  !showMore && !isLargeDesktopView && data.length > 10,
+                  !showMore && !isLargeDesktopView && data1.length > 20,
                 // 'grid-rows-2 sm:grid-rows-[auto]': ,
               })}
             >
@@ -170,6 +173,10 @@ const MultipleQuestion = ({
       color: 'bg-success',
     },
     {
+      text: 'Incorrect',
+      color: 'bg-error',
+    },
+    {
       text: 'Completed',
       color: 'bg-info',
     },
@@ -177,16 +184,12 @@ const MultipleQuestion = ({
       text: 'Not Completed',
       color: 'bg-warning',
     },
-    {
-      text: 'Incorrect',
-      color: 'bg-error',
-    },
   ]
 
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet lg:rounded-2xl 
+        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 lg:rounded-2xl 
         xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
@@ -295,7 +298,7 @@ const MultipleQuestion = ({
                 )}
                 <div
                   className={
-                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-4 md:text-base'
+                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-12 md:text-base'
                   }
                 >
                   {annotations.map((annotation) => (

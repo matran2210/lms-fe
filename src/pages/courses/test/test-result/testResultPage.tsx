@@ -127,7 +127,7 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <div className="hidden lg:block">
+              <div className="">
                 <MultipleQuestion
                   questions={questions}
                   className={'h-full'}
