@@ -99,9 +99,14 @@ const MultipleQuestion = ({
             <div
               className={clsx('', {
                 'grid grid-cols-7 gap-3': isLargeDesktopView,
-                'flex flex-wrap gap-4': showMore && !isLargeDesktopView,
+                'flex flex-wrap gap-4':
+                  (showMore && !isLargeDesktopView) ||
+                  (!showMore && !isLargeDesktopView && data.length <= 10),
                 'grid min-w-max grid-flow-col grid-rows-2 gap-3 sm:min-w-0 sm:grid-flow-row sm:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] sm:grid-rows-none md:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] md:gap-4':
-                  !showMore && !isLargeDesktopView && data.length <= 20,
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 10 &&
+                  data.length <= 20,
                 // 'grid min-w-max grid-flow-col gap-5':
                 //   !showMore && !isLargeDesktopView,
 
@@ -191,8 +196,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 lg:rounded-2xl 
-        xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
+        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
+        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
         <div
