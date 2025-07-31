@@ -52,6 +52,10 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -153,17 +157,27 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
+          // <DragNDropPreview
+          //   data={data}
+          //   // action={getAnswerDragNDrop}
+          //   // ref={ref}
+          //   handleSaveHighLight={() => {}}
+          //   // highlighted={highlighted}
+          //   // removeHighlight={removeHighlight}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+          // />
+          <DragDropQuestion
             data={data}
-            // action={getAnswerDragNDrop}
-            // ref={ref}
-            handleSaveHighLight={() => {}}
-            // highlighted={highlighted}
-            // removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue?.(`${index}_answer`, data)
+            }}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -552,7 +566,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.DRAG_DROP) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getAnswerDragNDrop(i),
+          answer: getValues(`${i}_answer`),
           id: question?.id,
           answers: question?.answers,
         })
@@ -616,15 +630,12 @@ const CaseStudyDetail = ({ questions }: any) => {
         } else if (e?.qType === QUESTION_TYPES.MATCHING) {
           answers.push({ question_id: e?.id, answer: e?.answer })
         } else if (e?.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
-          for (let i in e?.answer) {
-            if (e?.answer[i].idAnswer) {
-              answer.push({
-                answer_id: e?.answer[i].idAnswer,
-                answer_position: +i + 1,
-              })
-            }
-          }
+          const answer = (e?.answer || [])
+            .filter((item: SlotValue) => item?.idAnswer)
+            .map((item: SlotValue) => ({
+              answer_id: item.idAnswer,
+              answer_position: item.position,
+            }))
           answers.push({ question_id: e?.id, answer })
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
           let answer = []

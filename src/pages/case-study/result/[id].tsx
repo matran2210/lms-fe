@@ -46,6 +46,9 @@ import clsx from 'clsx'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 
 const CaseStudyResult = () => {
   const router = useRouter()
@@ -178,11 +181,20 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
-            data={data}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
+          // <DragNDropPreview
+          //   data={data}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   corrects={corrects?.corrects}
+          //   solution={solution}
+          // />
+          <DragDropQuestion
+            data={data as any}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue?.(`${index}_answer`, data)
+            }}
             corrects={corrects?.corrects}
             solution={solution}
           />
@@ -346,8 +358,8 @@ const CaseStudyResult = () => {
       return data.answer?.map(
         (item: { answer_position: number; answer_id: string }) => {
           return {
-            id: item.answer_id,
             idAnswer: item.answer_id,
+            position: item.answer_position,
             value: data?.question?.answers?.find(
               (ans: {
                 id: string
@@ -360,7 +372,6 @@ const CaseStudyResult = () => {
         },
       )
     }
-
     if (data.question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       return data.answer?.map((item: { answer_id: string }) => item.answer_id)
     }

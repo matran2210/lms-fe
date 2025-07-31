@@ -22,6 +22,9 @@ import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
@@ -254,17 +257,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       return value || []
     }
 
-    const getAnswerDragNDrop = () => {
-      let value = [] as any
-      const inputs = questionRef?.current?.querySelectorAll(
-        '.sapp-input-dragNDrop',
-      ) as any
-      for (let e of inputs) {
-        const idAnswer = e?.querySelector('span')
-        value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-      }
-      return value
-    }
+    // const getAnswerDragNDrop = () => {
+    //   let value = [] as any
+    //   const inputs = questionRef?.current?.querySelectorAll(
+    //     '.sapp-input-dragNDrop',
+    //   ) as any
+    //   for (let e of inputs) {
+    //     const idAnswer = e?.querySelector('span')
+    //     value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
+    //   }
+    //   return value
+    // }
 
     const handleResponseResults = () => {
       if (activeQuestion) {
@@ -328,7 +331,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.MATCHING:
           return getAnswerMatching()
         case QUESTION_TYPES.DRAG_DROP:
-          return getAnswerDragNDrop()
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.ESSAY:
           const value = getValues?.(
             `${activeQuestion?.id}_${document_id}_essay`,
@@ -433,7 +436,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       if (activeQuestion) {
         let myAnswers = handleGetAnswer(activeQuestion)
 
-        DragDropRef?.current?.handleReset()
+        // DragDropRef?.current?.handleReset()
         try {
           dispatch(
             confirmQuestion({
@@ -575,19 +578,29 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
         case QUESTION_TYPES.DRAG_DROP:
           return (
-            <DragNDropPreview
-              data={activeQuestion}
-              action={getAnswerDragNDrop}
-              defaultAnswer={activeQuestion?.defaultValue}
-              corrects={showCorrect ? activeQuestion?.corrects : undefined}
-              resetDefaultAnswer={false}
-              setOpenFile={setOpenFile}
-              ref={DragDropRef}
-              uuid={'_' + uuidv4().replaceAll('-', '_')}
+            // <DragNDropPreview
+            //   data={activeQuestion}
+            //   action={getAnswerDragNDrop}
+            //   defaultAnswer={activeQuestion?.defaultValue}
+            //   corrects={showCorrect ? activeQuestion?.corrects : undefined}
+            //   resetDefaultAnswer={false}
+            //   setOpenFile={setOpenFile}
+            //   ref={DragDropRef}
+            //   uuid={'_' + uuidv4().replaceAll('-', '_')}
+            //   solution={activeQuestion?.solution}
+            //   exhibitText={exhibitText}
+            //   explainClassname="!mt-8 !p-0 !bg-transparent"
+            //   correctAnswerClass="!mt-8 !pt-0"
+            // />
+            <DragDropQuestion
+              data={activeQuestion as any}
+              defaultValue={activeQuestion?.defaultValue}
+              onChange={(data: SlotValue[]) => {
+                setValue?.(`${activeQuestion?.id}_${document_id}_answer`, data)
+              }}
+              corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
-              exhibitText={exhibitText}
               explainClassname="!mt-8 !p-0 !bg-transparent"
-              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 

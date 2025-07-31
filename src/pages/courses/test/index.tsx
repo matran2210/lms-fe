@@ -449,6 +449,7 @@ const TestModal = ({
             {shouldShowButtonStartOrRetake && (
               <ButtonPrimary
                 title="Retake"
+                size="medium"
                 full
                 onClick={handleRetakeNewAttempt}
               />
