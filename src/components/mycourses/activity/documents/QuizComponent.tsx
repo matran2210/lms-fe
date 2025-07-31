@@ -312,9 +312,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.FILL_WORD:
           return getValueFillText()
         case QUESTION_TYPES.SELECT_WORD:
-          return (
-            getValues?.(`${activeQuestion?.id}_${document_id}_answer`) || []
-          )
+          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.MATCHING:
           return getAnswerMatching()
         case QUESTION_TYPES.DRAG_DROP:

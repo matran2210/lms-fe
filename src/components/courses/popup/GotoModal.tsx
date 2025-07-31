@@ -44,7 +44,7 @@ export default function GotoModal() {
   }
 
   return (
-    <BaseStaticModal visible={isVisibleGotoModal} title="Where you want to go?">
+    <BaseStaticModal visible={false} title="Where you want to go?">
       <div className="mt-6 flex flex-col gap-y-4 md:mt-10 md:gap-y-6">
         {destinations.map((destination, index) => (
           <div
