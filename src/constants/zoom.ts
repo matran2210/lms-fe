@@ -17,6 +17,7 @@ export const ZOOM_CONFIG = {
     PATCH_JS_MEDIA: true,
     LEAVE_ON_PAGE_UNLOAD: true,
     VIDEO_WEB_RTC_MODE: 1,
+    LEAVE_URL: '/',
   } as const,
 
   // API Endpoints
@@ -26,7 +27,7 @@ export const ZOOM_CONFIG = {
   } as const,
 
   // Meeting container
-  MEETING_CONTAINER_ID: 'zmmtg-root',
+  MEETING_CONTAINER_ID: 'zmmtg-root', // Default by zoom-sdk
 
   // Success messages
   SUCCESS_MESSAGES: {

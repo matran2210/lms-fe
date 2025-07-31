@@ -6,9 +6,6 @@ import { ZoomMeetingConfig } from '@/types/zoom'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
-// Dynamic import type for Zoom SDK
-let ZoomMtg: any = null
-
 export const useZoomSDK = () => {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false)
   const [isJoining, setIsJoining] = useState(false)
@@ -18,16 +15,13 @@ export const useZoomSDK = () => {
   useEffect(() => {
     const loadZoomSDK = async () => {
       try {
-        // Only run on client side
         if (typeof window === 'undefined') return
 
-        // Dynamically import Zoom SDK to avoid SSR issues
-        const { ZoomMtg: ZoomMtgModule } = await import('@zoom/meetingsdk')
-        ZoomMtg = ZoomMtgModule
+        await import('@zoom/meetingsdk')
 
-        // Initialize SDK
-        ZoomMtg.preLoadWasm()
-        ZoomMtg.prepareWebSDK()
+        // Initialize SDK using window.ZoomMtg
+        window.ZoomMtg.preLoadWasm()
+        window.ZoomMtg.prepareWebSDK()
 
         setIsSDKLoaded(true)
       } catch (err) {
@@ -38,9 +32,7 @@ export const useZoomSDK = () => {
     loadZoomSDK()
   }, [])
 
-  // Get signature from server action (server-side)
   const getSignature = useCallback(async (meetingNumber: string) => {
-    // Use server action instead of client-side fetch
     const result = await getZoomSignatureAction(meetingNumber)
 
     return {
@@ -52,33 +44,27 @@ export const useZoomSDK = () => {
   // Join meeting
   const joinMeeting = useCallback(
     async (config: ZoomMeetingConfig) => {
-      if (!isSDKLoaded || !ZoomMtg) {
+      if (!isSDKLoaded || !window.ZoomMtg) {
         throw new Error(ZOOM_CONFIG.ERROR_MESSAGES.SDK_NOT_LOADED)
       }
 
       setIsJoining(true)
       setError(null)
 
+      const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
+      zoomContainer!.style!.display = 'block'
+
       try {
-        // Get signature and sdkKey
-        const { signature, sdkKey } = await getSignature(config.meetingNumber)
-
-        // Show Zoom meeting container
-        const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
-        if (zoomContainer) {
-          zoomContainer.style.display = 'block'
-        }
-
-        // Initialize Zoom SDK
-        ZoomMtg.init({
-          leaveUrl: config.leaveUrl,
+        window.ZoomMtg.i18n.load('vi-VN')
+        window.ZoomMtg.init({
+          leaveUrl: ZOOM_CONFIG.SDK_CONFIG.LEAVE_URL,
           patchJsMedia: ZOOM_CONFIG.SDK_CONFIG.PATCH_JS_MEDIA,
           leaveOnPageUnload: ZOOM_CONFIG.SDK_CONFIG.LEAVE_ON_PAGE_UNLOAD,
           success: () => {
             // Join the meeting
-            ZoomMtg.join({
-              signature,
-              sdkKey,
+            window.ZoomMtg.join({
+              signature: config.signature,
+              sdkKey: config.sdkKey,
               meetingNumber: config.meetingNumber,
               passWord: config.passWord,
               userName: config.userName,
@@ -100,6 +86,7 @@ export const useZoomSDK = () => {
           },
         })
       } catch (err) {
+        zoomContainer!.style!.display = 'none'
         setError(err instanceof Error ? err.message : ZOOM_CONFIG.ERROR_MESSAGES.FAILED_TO_JOIN_MEETING)
         setIsJoining(false)
       }
@@ -107,7 +94,6 @@ export const useZoomSDK = () => {
     [isSDKLoaded, getSignature]
   )
 
-  // Leave meeting
   const leaveMeeting = useCallback(() => {
     const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
     if (zoomContainer) {

@@ -1,10 +1,29 @@
-'use server'
-
 import { BaseResponse } from '@/types'
 import { DecryptedZoomUserInfo, ZoomSignature } from '@/types/zoom'
 import axios from 'axios'
 
-export async function processZoomTokenAction(token: string): Promise<DecryptedZoomUserInfo> {
+export async function processZoomMeetingAction(token: string): Promise<{
+  userInfo: DecryptedZoomUserInfo
+  signature: ZoomSignature
+}> {
+  try {
+    if (!token) {
+      throw new Error('Token is required')
+    }
+
+    const userInfo = await getZoomTokenAction(token)
+    const signature = await getZoomSignatureAction(userInfo.meeting_id)
+
+    return {
+      userInfo,
+      signature,
+    }
+  } catch (error) {
+    throw new Error(error instanceof Error ? error.message : 'Failed to process meeting data')
+  }
+}
+
+export async function getZoomTokenAction(token: string): Promise<DecryptedZoomUserInfo> {
   try {
     if (!token) {
       throw new Error('Token is required')
@@ -18,7 +37,6 @@ export async function processZoomTokenAction(token: string): Promise<DecryptedZo
 
     const url = `${BACKEND_URL}/secure/decrypt-token?token=${encodeURIComponent(token)}`
 
-    // Call external backend to process token (server-side)
     const response = await axios.get<BaseResponse<DecryptedZoomUserInfo>>(url)
 
     const tokenData = response.data
@@ -43,7 +61,6 @@ export async function getZoomSignatureAction(meetingNumber: string): Promise<Zoo
 
     const url = `${BACKEND_URL}/secure/signature?meeting_number=${meetingNumber}`
 
-    // Call external backend to get signature (server-side)
     const response = await axios.get<BaseResponse<ZoomSignature>>(url)
 
     const signatureData = response.data

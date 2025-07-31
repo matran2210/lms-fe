@@ -1,27 +1,92 @@
 'use client'
 
+import { processZoomMeetingAction } from '@/actions/zoom-actions'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
+import { useEffect, useState } from 'react'
 
 interface ZoomMeetingProps {
-  config: ZoomMeetingConfig
+  token: string
   className?: string
 }
 
-export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ config, className = '' }) => {
-  const { isSDKLoaded, isJoining, error, joinMeeting, leaveMeeting } = useZoomSDK()
+export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' }) => {
+  const { isSDKLoaded, isJoining, error, joinMeeting } = useZoomSDK()
+  const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
+  const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
+  const [hasJoined, setHasJoined] = useState(false)
+
+  // Process token and prepare meeting data
+  useEffect(() => {
+    const processMeetingToken = async () => {
+      if (!token) {
+        setIsLoadingMeetingData(false)
+        return
+      }
+
+      try {
+        setIsLoadingMeetingData(true)
+
+        const decodedToken = decodeURIComponent(token)
+        const meetingData = await processZoomMeetingAction(decodedToken)
+
+        const config: ZoomMeetingConfig = {
+          meetingNumber: meetingData.userInfo.meeting_id,
+          passWord: meetingData.userInfo.password,
+          userName: meetingData.userInfo.full_name || meetingData.userInfo.first_name || 'Guest',
+          userEmail: meetingData.userInfo.email || '',
+          tkToken: meetingData.userInfo.token,
+          signature: meetingData.signature.signature,
+          sdkKey: meetingData.signature.sdk_key,
+        }
+
+        setMeetingConfig(config)
+        setIsLoadingMeetingData(false)
+      } catch (err) {
+        setIsLoadingMeetingData(false)
+      }
+    }
+
+    processMeetingToken()
+  }, [token])
+
+  // Auto join meeting when SDK is loaded and meeting config is ready
+  useEffect(() => {
+    if (isSDKLoaded && meetingConfig && !isJoining && !error && !hasJoined) {
+      handleJoinMeeting()
+    }
+  }, [isSDKLoaded, meetingConfig, isJoining, error, hasJoined])
 
   const handleJoinMeeting = async () => {
+    if (!meetingConfig) return
+
     try {
-      await joinMeeting(config)
+      setHasJoined(true)
+      await joinMeeting(meetingConfig)
     } catch (err) {
-      console.error('Failed to join meeting:', err)
+      setHasJoined(false)
     }
   }
 
-  const handleLeaveMeeting = () => {
-    leaveMeeting()
+  // Show loading state for meeting data
+  if (isLoadingMeetingData) {
+    return (
+      <div className={`zoom-meeting-container ${className}`}>
+        <div className="flex items-center justify-center p-8 bg-blue-50 rounded-lg">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-4"></div>
+          <span className="text-blue-700 font-medium text-lg">Đang tải thông tin cuộc họp...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (!meetingConfig) {
+    return (
+      <div className={`zoom-meeting-container ${className}`}>
+        <p className="text-gray-600 text-center p-8">Không có thông tin cuộc họp</p>
+      </div>
+    )
   }
 
   return (
@@ -30,7 +95,14 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ config, className = ''
         {!isSDKLoaded && (
           <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
-            <span className="text-blue-700 font-medium">Loading Zoom SDK...</span>
+            <span className="text-blue-700 font-medium">Đang tải Zoom SDK...</span>
+          </div>
+        )}
+
+        {isJoining && (
+          <div className="flex items-center justify-center p-4 bg-green-50 rounded-lg">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mr-3"></div>
+            <span className="text-green-700 font-medium">Đang tham gia cuộc họp...</span>
           </div>
         )}
 
@@ -47,56 +119,20 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ config, className = ''
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Meeting Error</h3>
+                <h3 className="text-sm font-medium text-red-800">Lỗi cuộc họp</h3>
                 <div className="mt-2 text-sm text-red-700">
                   <p>{error}</p>
                 </div>
+                <div className="mt-3">
+                  <button
+                    onClick={handleJoinMeeting}
+                    className="text-sm bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded"
+                  >
+                    Thử lại
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {isSDKLoaded && (
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button
-              onClick={handleJoinMeeting}
-              disabled={isJoining}
-              className="flex items-center justify-center px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors shadow-md"
-            >
-              {isJoining ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Joining Meeting...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
-                  Join Meeting
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={handleLeaveMeeting}
-              className="flex items-center justify-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors shadow-md"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-              Leave Meeting
-            </button>
           </div>
         )}
       </div>

@@ -1,11 +1,13 @@
+import { ZoomMtgLang } from '@zoom/meetingsdk'
+
 export interface ZoomMeetingConfig {
   meetingNumber: string
   passWord: string
-  role: number
   userName: string
   userEmail: string
   tkToken: string
-  leaveUrl: string
+  signature: string
+  sdkKey: string
 }
 
 export interface ZoomSignature {
@@ -41,11 +43,11 @@ export interface ZoomMeetingSDK {
   prepareWebSDK: () => void
   init: (config: ZoomInitConfig) => void
   join: (config: ZoomJoinConfig) => void
+  i18n: typeof ZoomMtgLang
 }
 
 export interface ZoomInitConfig {
   leaveUrl: string
-  sdkKey: string
   patchJsMedia?: boolean
   leaveOnPageUnload?: boolean
   success: (success: unknown) => void
@@ -54,6 +56,7 @@ export interface ZoomInitConfig {
 
 export interface ZoomJoinConfig {
   signature: string
+  sdkKey: string
   meetingNumber: string
   passWord: string
   userName: string
