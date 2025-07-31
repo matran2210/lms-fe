@@ -1,19 +1,14 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import CoursesList from '@components/mycourses/CoursesList'
 import Filter from '@components/mycourses/Filter'
-import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import PopupStep from '@components/user-guide/PopupStep'
-import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, PageLink, UserGuide } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
+import { ANIMATION, PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -26,41 +21,8 @@ const breadcrumbs: ITabs[] = [
   { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
 ]
 const MyCourseTeacher = () => {
-  const dispatch = useAppDispatch()
-  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
-  const guideIsActive = useAppSelector(
-    (state) => state.userGuideReducer?.isActive,
-  )
-  const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   const router = useRouter()
-  const userGuideLine = useAppSelector(
-    (state) => state.userReducer.user.detail.settings?.course_guide,
-  )
-
-  const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
-
-  const nextStep = () => {
-    dispatch(increment())
-  }
-
-  const closeUserGuide = () => {
-    if (confirmDialogOverLayRef.current) {
-      confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
-      confirmDialogOverLayRef.current.classList.add('pointer-events-none')
-    }
-    // Remove hidden scroll when close user guide
-    document.body.style.removeProperty('padding-right')
-    document.body.classList.remove('overflow-hidden')
-    setTimeout(() => {
-      dispatch(reset())
-    }, 50)
-  }
-  useEffect(() => {
-    if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
-      dispatch(active())
-    }
-  }, [userGuideLine])
 
   /**
    * @description Gọi API My Course
@@ -164,45 +126,18 @@ const MyCourseTeacher = () => {
     <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs}>
         <div className="header border-b border-default bg-white">
-          <div
-            className={`relative my-0 flex ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
-          >
+          <div className={`relative my-0 flex`}>
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}
               formStyle="w-full flex items-center"
               isTeacher
             />
-            {guideStatus && guideStep === 1 && (
-              <PopupStep
-                content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3 w-full max-w-[365px]"
-                index={1}
-                total={6}
-                handleNext={nextStep}
-                handleCancel={closeUserGuide}
-              />
-            )}
           </div>
         </div>
         <div className="main my-0">
           <div className="flex justify-end">
-            <div
-              className={`relative pb-4 pt-6 ${
-                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
-              }`}
-            >
+            <div className={`relative pb-4 pt-6`}>
               <Filter courses={data?.pages?.[0]?.category} isTeacher />
-              {guideStatus && guideStep === 6 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_6}
-                  className="right-full top-full mt-3 w-screen max-w-365px"
-                  index={6}
-                  total={6}
-                  handleNext={closeUserGuide}
-                  showCancel={false}
-                  titleButtonNext="Done"
-                />
-              )}
             </div>
           </div>
         </div>
@@ -212,18 +147,8 @@ const MyCourseTeacher = () => {
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
+          }`}
         >
-          {guideStatus && guideStep === 5 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_5}
-              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
-              index={5}
-              total={6}
-              handleNext={nextStep}
-              handleCancel={closeUserGuide}
-            />
-          )}
           <CoursesList
             courses={courses}
             lastElementRef={lastElementRef}
@@ -232,13 +157,6 @@ const MyCourseTeacher = () => {
             isFetchingNextPage={isFetchingNextPage}
           />
         </div>
-        {guideStatus && guideStep == 0 && <PopupWelcome />}
-        {guideStatus && (
-          <div
-            ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
-          ></div>
-        )}
       </LayoutTeacher>
     </SappLoadingGlobal>
   )
