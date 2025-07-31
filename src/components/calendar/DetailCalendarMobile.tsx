@@ -18,10 +18,9 @@ import {
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import FloatingCloseIcon from './FloatingCloseIcon'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { CollapseArrowIcon } from '@assets/icons'
+import { SpinIcon } from '@components/courses/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -114,7 +113,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">
+          <div className="col-span-1 text-right font-semibold ">
             {start.format('MMM DD, YYYY')}
           </div>
         </>
@@ -124,16 +123,16 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold ">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
           <div className="col-span-1 ">Deadline</div>
-          <div className="col-span-1 text-right font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold ">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
         <div className="col-span-1 ">Lesson Date:</div>
-        <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+        <div className="col-span-1 text-right font-semibold ">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
   }, [data])
@@ -250,7 +249,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         }
         title={''}
       >
-        <div className="relative flex h-full flex-col bg-white">
+        <div className="relative flex h-full flex-col bg-white !text-bw-13">
           <div className="mb-4 flex items-center gap-2">
             <div onClick={() => setOpen({ isOpen: false, data: null })}>
               <CollapseArrowIcon className="rotate-90" />
@@ -264,16 +263,16 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
             {data?.schedule && !loading ? (
               <>
                 <div>
-                  <div className="mb-5 text-base font-semibold text-secondary">
+                  <div className="mb-5 text-base font-semibold">
                     <div>Primary Information</div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
                     <div className="col-span-1 ">
                       {data?.schedule.is_holiday
                         ? 'Event Name:'
                         : 'Class Code:'}
                     </div>
-                    <div className="col-span-1 text-right font-semibold">
+                    <div className="col-span-1 text-right font-semibold ">
                       {data?.schedule.is_holiday
                         ? data?.name
                         : data?.class?.code}
@@ -315,7 +314,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                     <>
                       <Divider />
                       <div className="flex flex-col gap-5">
-                        <div className="text-base font-semibold">
+                        <div className="text-base font-semibold ">
                           Course Content
                         </div>
                         <CourseTree data={data?.sections ?? []} />
@@ -342,11 +341,11 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   <>
                     <Divider />
                     <div className="flex flex-col gap-5">
-                      <div className="text-lg font-semibold">
+                      <div className="text-lg font-semibold ">
                         Classroom Detail
                       </div>
 
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-2">
                           <div>Classroom:</div>
                           <div className="break-words text-right font-semibold">
@@ -366,11 +365,8 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                 )}
               </>
             ) : (
-              <div className="flex h-full flex-col items-center justify-center">
-                <SkeletonDetailIcon />
-                <div className="text-xl font-normal">
-                  You dont have any schedule today!
-                </div>
+              <div className="flex h-full flex-col items-center justify-center ">
+                <SpinIcon />
               </div>
             )}
           </div>
@@ -381,7 +377,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                 <Divider />
                 <div className="flex flex-col gap-5">
                   <div className="text-lg font-semibold">Classroom Detail</div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2">
                       <div>Platform:</div>
                       <div
