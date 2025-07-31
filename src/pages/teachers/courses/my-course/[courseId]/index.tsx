@@ -1,8 +1,5 @@
-import LayoutTeacher from '@components/layout/Teacher'
 import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import Heading from '@components/mycourses/Heading'
 import SearchForm from '@components/mycourses/Search'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -11,18 +8,21 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
-import SelectExamPopupTeacher from 'src/pages/teachers/courses/my-course/[courseId]/popups/SelectExamPopup'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { ANIMATION, DELAY_TIME_DISPLAY_POPUP, PageLink } from 'src/constants'
+import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
+import { RemindChoosingExam } from 'src/type/course'
+import SelectExamPopupTeacher from 'src/pages/teachers/courses/my-course/[courseId]/popups/SelectExamPopupTeacher'
+import LayoutTeacher from '@components/layout/Teacher'
+import { ITabs } from 'src/type'
 
 const DEFAULT_PAGESIZE = 18
 
-const CourseDetailTeacher = () => {
+const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
+  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -134,15 +134,26 @@ const CourseDetailTeacher = () => {
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
-    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+    isSuccess &&
+      setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
   })
+
+  const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
+    return (
+      remindChoosingExam.remind_by_progress ||
+      remindChoosingExam.remind_by_duration
+    )
+  }
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (isSuccess && data?.pages?.[0]?.courseDetail?.remind_choosing_exam) {
+    if (
+      isSuccess &&
+      canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
+    ) {
       timeout = setTimeout(() => {
-        setShowSelectExamPopup(true)
+        setShowSelectExam(true)
       }, DELAY_TIME_DISPLAY_POPUP)
     }
 
@@ -151,8 +162,14 @@ const CourseDetailTeacher = () => {
     }
   }, [isSuccess, data])
 
+  const breadcrumbs: ITabs[] = [
+    { link: PageLink.TEACHERS, title: 'LMS' },
+    { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
+    { link: '', title: courseNameDetail || '' },
+  ]
+
   return (
-    <LayoutTeacher title="Course Detail">
+    <LayoutTeacher title="Course Detail" breadcrumbs={breadcrumbs}>
       <div className="header border-b border-default bg-white">
         <div className={`relative my-0 flex`}>
           <SearchForm
@@ -176,13 +193,10 @@ const CourseDetailTeacher = () => {
                 />
               </div>
             </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail} />
-            </div>
             <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
                 courses={courses}
-                is_passed_course={is_passed_course}
+                is_passed_course={is_passed_course ?? false}
                 class_user_id={class_user_id}
                 lastElementRef={lastElementRef}
                 isTeacher
@@ -191,17 +205,22 @@ const CourseDetailTeacher = () => {
           </>
         )}
       </div>
-      {isSuccess &&
-        data.pages[0].courseDetail.remind_choosing_exam &&
-        showSelectExamPopup && <SelectExamPopupTeacher courseData={data} />}
-
-      <PopupModalTest
-        class_code={data?.pages?.[0]?.courseDetail?.code}
-        program={data?.pages?.[0]?.courseDetail?.data?.program}
-        data={data?.pages?.[0]?.courseDetail}
-      />
+      {isSuccess && (
+        <>
+          <SelectExamPopupTeacher
+            showSelectExam={showSelectExam}
+            setShowSelectExam={setShowSelectExam}
+            courseData={data?.pages?.[0]?.courseDetail}
+          />
+          <PopupModalTest
+            class_code={data?.pages?.[0]?.courseDetail?.code}
+            program={data?.pages?.[0]?.courseDetail?.data?.program}
+            data={data?.pages?.[0]?.courseDetail}
+          />
+        </>
+      )}
     </LayoutTeacher>
   )
 }
 
-export default withAuthorization([UserType.TEACHER])(CourseDetailTeacher)
+export default withAuthorization([UserType.TEACHER])(CourseDetail)
