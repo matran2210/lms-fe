@@ -5,6 +5,8 @@ import { useQuery } from 'react-query'
 import { SAPPCalendar } from 'sapp-common-package'
 import { IEvent } from 'sapp-common-package/dist/types'
 import {
+  EVENT_REPEAT_LABEL,
+  EVENT_REPEAT_TYPES,
   EVENT_TYPES,
   EVENT_TYPES_ARRAY,
   EVENT_TYPES_RESPONSE,
@@ -13,6 +15,8 @@ import { SchedulesAPI } from 'src/pages/api/schedules'
 import { IResponseSchedule } from 'src/redux/types/Schedule/schedule'
 import CalendarHead from './CalendarHead'
 import { pick } from 'lodash'
+import { formatRecurringSchedule } from '@utils/request'
+import { formatDateTimeWithTimeZone } from '@utils/common'
 
 interface IProps {
   onOpenDetail: (date: Date, events: IEvent[]) => void
@@ -77,7 +81,15 @@ const Calendar = ({ onOpenDetail, onOpenCreate }: IProps) => {
             classroomAddress: item.classroom_address,
             classroomName: item.classroom_name,
             meetingLink: item.meeting_link,
-            repeat: item.repeat,
+            repeat: item.is_schedule_recurring
+              ? formatRecurringSchedule(
+                  item.recurring_pattern,
+                  formatDateTimeWithTimeZone(
+                    item.recurring_pattern.start_date,
+                    item.start_time,
+                  ),
+                )
+              : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT],
           }) as IEvent,
       ) || []
     const norms =

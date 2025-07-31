@@ -1,5 +1,7 @@
 import { FixedType } from 'rc-table/lib/interface'
 import { Control, FieldValues } from 'react-hook-form'
+import { IMetaData } from '.'
+import { ButtonProps } from 'antd'
 
 export interface ITabs {
   link: string
@@ -60,6 +62,21 @@ export interface IBaseFormFieldProps<T extends FieldValues = any> {
   skeleton?: boolean
   // More common props can be added here
 }
+
+export interface IResponseData {
+  id: string | number
+  name: string
+}
+
+export type QueryKey = 'sections'
+
+export type SearchField = keyof IResponseData | 'search'
+
+export interface IResponseDataWithMetadata
+  extends Record<QueryKey, IResponseData[]> {
+  metadata: IMetaData
+}
+
 export type DayOfWeek =
   | 'MONDAY'
   | 'TUESDAY'
@@ -77,4 +94,15 @@ export const NumberToDayOfWeekMap: Record<number, DayOfWeek> = {
   5: 'FRIDAY',
   6: 'SATURDAY',
   7: 'SUNDAY',
+}
+
+export interface IButtonBaseProps extends Omit<ButtonProps, 'size'> {
+  size?: 'small' | 'medium' | 'large' | 'extra'
+  link?: string
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
+  full?: boolean
+  title?: string
+  children?: React.ReactNode
+  isUnderLine?: boolean
 }

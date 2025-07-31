@@ -6,7 +6,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -187,18 +187,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       return value
     }
 
-    const getValueSelectText = () => {
-      let value = [] as any
-      const inputs = questionRef?.current?.querySelectorAll(
-        'select.sapp-select--selectword-preview',
-      ) as any
-
-      for (let e of inputs) {
-        value?.push(e?.value)
-      }
-      return value
-    }
-
     const getAnswerMatching = () => {
       let value = [] as any
       const inputs = questionRef?.current?.querySelectorAll(
@@ -281,7 +269,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.FILL_WORD:
           return getValueFillText()
         case QUESTION_TYPES.SELECT_WORD:
-          return getValueSelectText()
+          return getValues(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.MATCHING:
           return getAnswerMatching()
         case QUESTION_TYPES.DRAG_DROP:
@@ -533,8 +521,15 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.SELECT_WORD:
           return (
             <SelectWord
+              onChange={(
+                value: Array<{
+                  answer_id: string
+                  answer_position: number
+                }>,
+              ) =>
+                setValue?.(`${activeQuestion?.id}_${document_id}_answer`, value)
+              }
               data={activeQuestion}
-              action={getValueSelectText}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}
               isHideExhibit={isHideExhibit}
@@ -579,7 +574,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         {showListRequirement && (
                           <div
                             ref={listRequirementRef}
-                            className="text-over absolute bottom-0  left-0 z-50 w-max max-w-md translate-y-full bg-white py-1 shadow-md"
+                            className="text-over absolute bottom-0 left-0 z-[201] w-max max-w-md translate-y-full bg-white py-1 shadow-md"
                           >
                             {activeQuestion?.requirements?.map((e, i) => {
                               return (

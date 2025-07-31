@@ -7,11 +7,10 @@ stages:
   variables:
     GIT_DEPTH: 10
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: ''
   services:
     - name: docker:dind
       alias: docker_in_docker
-  
 
 build_master:
   stage: build
@@ -30,8 +29,8 @@ build_master:
     - echo "$IMAGE_NAME:lms-fe-$CI_PIPELINE_IID build success"
   environment: production
   tags:
-    - shell-docker-lms
-
+    - shell-docker
+  resource_group: lms-fe
 
 deploy_staging:
   stage: deploy
@@ -40,11 +39,11 @@ deploy_staging:
     - staging
   script:
     - yarn global add vercel
-    - yarn install
     - vercel deploy --prod --token=$VERCEL_TOKEN
   environment: staging
   tags:
-    - shell-docker-lms
+    - shell-docker
+  resource_group: lms-fe
 
 deploy_master:
   stage: deploy
@@ -54,10 +53,12 @@ deploy_master:
     refs:
       - master
   script:
+    - chmod 600 "$SSH_KEY_PROD"
+    - cp "$SSH_KEY_PROD" key.pem
     - cp $ENV_PRODUCT_FILE .env
     - source .env
     - |
-      ssh -o StrictHostKeyChecking=no root@$PROD_IP "
+      ssh -o StrictHostKeyChecking=no -i key.pem root@$PROD_IP "
       docker login -u $REGISTRY_USER --password $REGISTRY_PASSWORD &&
       cd /var/www/lms-fe &&
       git fetch origin --prune &&
@@ -66,10 +67,10 @@ deploy_master:
       docker compose -f docker-compose.prod.yml pull next-app && 
       docker compose -f docker-compose.prod.yml up -d"
 
-  environment: production 
+  environment: production
   tags:
     - shell
-
+  resource_group: lms-fe
 # Old CI-CD
 # stages:
 #   - deploy
@@ -86,7 +87,6 @@ deploy_master:
 #     - yarn install
 #     - vercel deploy --prod --token=$VERCEL_TOKEN
 #   environment: staging
-
 
 # deploy_master:
 #   stage: deploy

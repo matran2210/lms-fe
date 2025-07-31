@@ -10,6 +10,7 @@ import { AuthenticationManager } from '@utils/helpers/keycloak'
 import Router from 'next/router'
 import {
   CERTIFICATE_DETAIL,
+  COOKIE_INFO,
   ENTRANCE_TEST_RESULT,
   ENTRANCE_TEST_TABLE_RESULT,
   PageLink,
@@ -90,10 +91,10 @@ request.interceptors.response.use(
         axios(`${apiURL}/auth/refresh-token`, {
           method: 'POST',
           headers: {
-            Authorization: 'Bearer ' + getCookie('keycloakToken'),
+            Authorization: 'Bearer ' + getCookie(COOKIE_INFO.KEYCLOAK_TOKEN),
           },
           data: {
-            refresh_token: getCookie('keycloakRefreshToken'),
+            refresh_token: getCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN) ?? '',
           },
         })
           .then(
@@ -101,28 +102,35 @@ request.interceptors.response.use(
               res: AxiosResponse<{
                 access_token: string
                 refresh_token: string
+                session_state: string
               }>,
             ) => {
               const userInfo = res?.data
-              setCookie('keycloakToken', userInfo?.access_token)
-              setCookie('keycloakRefreshToken', userInfo?.refresh_token)
+              setCookie(COOKIE_INFO.KEYCLOAK_TOKEN, userInfo?.access_token)
+              setCookie(
+                COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN,
+                userInfo?.refresh_token,
+              )
+              setCookie(COOKIE_INFO.SESSION_ID, userInfo?.session_state ?? '')
 
               // update new token to axios
               request.defaults.headers.common['Authorization'] =
-                `Bearer ${getCookie('keycloakToken') ?? ''}`
+                `Bearer ${getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? ''}`
 
               // Callback to unauth API calls
               refreshSubscribers.forEach((callback) =>
-                callback(getCookie('keycloakToken') ?? ''),
+                callback(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? ''),
               )
               refreshSubscribers = []
               isRefreshing = false
             },
           )
           .catch(() => {
-            deleteCookie('keycloakToken')
-            deleteCookie('keycloakRefreshToken')
-            window.location.href = PageLink.AUTH_LOGIN
+            deleteCookie(COOKIE_INFO.KEYCLOAK_TOKEN)
+            deleteCookie(COOKIE_INFO.KEYCLOAK_REFRESH_TOKEN)
+            deleteCookie(COOKIE_INFO.KEYCLOAK_USER_ID)
+            deleteCookie(COOKIE_INFO.SESSION_ID)
+            window.location.reload()
           })
       }
 

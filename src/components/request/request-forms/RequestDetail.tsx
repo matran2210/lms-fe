@@ -4,7 +4,7 @@ import SappDrawer from '../../base/SappDrawer'
 import CollapseBox from '@components/layout/CollapseBox'
 import CollapseItem from '@components/layout/CollapseBox/CollapseItem'
 import { MyRequestAPI } from '@pages/api/my-request'
-import { capitalizeFirstLetter } from '@utils/index'
+import { capitalizeFirstLetter, formatDateTimeWithTimeZone } from '@utils/index'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -351,6 +351,11 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                           item.schedule?.recurring_pattern_schedule
                             ? formatRecurringSchedule(
                                 item.schedule?.recurring_pattern_schedule,
+                                formatDateTimeWithTimeZone(
+                                  item.schedule?.recurring_pattern_schedule
+                                    .start_date,
+                                  item.schedule?.start_time,
+                                ),
                               )
                             : EVENT_REPEAT_LABEL[EVENT_REPEAT_TYPES.NO_REPEAT]
                         }

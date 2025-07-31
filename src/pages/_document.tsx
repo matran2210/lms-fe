@@ -54,10 +54,10 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
             rel="stylesheet"
           />
-          <script
+          {/* <script
             src={`https://cdn.tiny.cloud/1/${process.env.NEXT_PUBLIC_TINY_EDITDER_API_KEY}/tinymce/6/tinymce.min.js`}
             referrerPolicy="origin"
-          ></script>
+          ></script> */}
           <script src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"></script>
         </Head>
         <body id="lms-pro">

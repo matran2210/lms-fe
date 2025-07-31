@@ -1,5 +1,5 @@
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
-import { reverseDaysOfWeek } from '@utils/common'
+import { convertLocalWeekDaysToUTC, reverseDaysOfWeek } from '@utils/common'
 import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
@@ -176,10 +176,12 @@ const EventRepeatField = ({
     data: ((typeof REPEAT_ON)[number] | undefined)[] | undefined,
   ) => {
     if (!data) return []
-    return reverseDaysOfWeek(
-      initDate,
-      data.map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2']),
-    )
+    const numberDay = data
+      .map((day) => REPEAT_ON_MAPPED_PAYLOAD[day || 'T2'])
+      .sort()
+
+    const convertDay = convertLocalWeekDaysToUTC(initDate, numberDay)
+    return reverseDaysOfWeek(initDate, convertDay)
   }
 
   const cleanObject = useCallback((params: Object) => {

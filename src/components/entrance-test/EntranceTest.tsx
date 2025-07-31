@@ -9,13 +9,14 @@ import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { IEntranceTest } from 'src/type/entrance-test'
+import { Attempt, IEntranceTest } from 'src/type/entrance-test'
 import EntrancePopup from './EntrancePopup'
 import PopupExtend from './PopupExtend'
 
 interface EntranceTestProps {
   data: IEntranceTest
   test_id_default?: any | undefined
+  isShowEntranceTestPopup: boolean
 }
 
 enum EAttemptStatus {
@@ -25,7 +26,11 @@ enum EAttemptStatus {
   IN_PROGRESS = 'IN_PROGRESS',
 }
 
-const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
+const EntranceTest = ({
+  data,
+  test_id_default,
+  isShowEntranceTestPopup,
+}: EntranceTestProps) => {
   const [openFillForn, setOpenFillForm] = useState(false)
   const [selectedResult, setSelectedResult] = useState<{
     label: string
@@ -39,15 +44,18 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
     useState<boolean>(false)
   const [remainingTimeLastAttempt, setRemainingTimeLastAttempt] =
     useState<number>(0)
+  const [currentAttempt, setCurrentAttempt] = useState<Attempt>(
+    data?.attempts?.[0] || ({} as Attempt),
+  )
 
   useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&
-        data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+        currentAttempt?.status === EAttemptStatus['IN_PROGRESS']
       ) {
         const calcTime = dayjs(
-          dayjs(data?.created_at).add(data?.quiz_timed, 'minutes'),
+          dayjs(currentAttempt?.started_at).add(data?.quiz_timed, 'minutes'),
         ).diff(dayjs(), 'seconds')
 
         setRemainingTimeLastAttempt(calcTime >= 0 ? calcTime : 0)
@@ -66,10 +74,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
         }
       }
     }
-  }, [data])
+  }, [data, currentAttempt])
 
-  const timeTakenFormatted = data?.total_attempt_time
-    ? formatTime(data?.total_attempt_time)
+  const timeTakenFormatted = currentAttempt?.total_attempt_time
+    ? formatTime(currentAttempt?.total_attempt_time)
     : 0
   const timeAllowFormatted = data?.quiz_timed
     ? formatTime(data?.quiz_timed * 60)
@@ -93,6 +101,17 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
 
   const handleSubmit = async () => {
     //to do: start test
+    localStorage.removeItem('quizAttempt')
+    localStorage.setItem(
+      'quizAttempt',
+      JSON.stringify({
+        id: currentAttempt?.id,
+        number_of_attempts: data?.attempt_times,
+        is_limited: data?.is_limited,
+        quiz_timed: data?.quiz_timed,
+        created_at: currentAttempt?.started_at,
+      }),
+    )
     try {
       router.push({
         pathname: `/test/${data?.id}`,
@@ -107,16 +126,15 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
   const handleClickBegin = () => {
     //reset local storage
     localStorage.removeItem('quizAttempt')
-
-    if (data?.attempt_status === EAttemptStatus['IN_PROGRESS']) {
+    if (currentAttempt?.status === EAttemptStatus['IN_PROGRESS']) {
       localStorage.setItem(
         'quizAttempt',
         JSON.stringify({
-          id: data?.quiz_attempt_id,
+          id: currentAttempt?.id,
           number_of_attempts: data?.attempt_times,
           is_limited: data?.is_limited,
           quiz_timed: data?.quiz_timed,
-          created_at: data?.created_at,
+          created_at: currentAttempt?.started_at,
         }),
       )
       setIsOpenPopupLastAttempt(true)
@@ -132,16 +150,14 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           {data?.name}
         </h2>
       </div>
-      <div className="mt-auto">
+      <div className="flex h-full flex-col justify-between">
         <div className="info">
-          {data?.attempts.length < data?.limit_count && (
-            <div className="flex justify-between border-b border-gray-2 pb-4 text-base capitalize text-gray-1">
-              <>
-                <p>Time allowed: </p>
-                <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
-              </>
-            </div>
-          )}
+          <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
+            <>
+              <p>Time allowed: </p>
+              <p className="font-medium text-bw-1">{timeAllowFormatted}</p>
+            </>
+          </div>
           {data?.attempt_times > 0 && (
             <div className="flex justify-between border-b border-gray-2 py-4 text-base capitalize text-gray-1">
               <>
@@ -167,11 +183,10 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
             )}
           </div>
         </div>
-        <div className="action relative mt-10 flex items-center justify-between">
+        <div className="action mt-10 flex items-center justify-between">
           {/* chưa làm bài hoặc đang làm bài thì button sẽ là begin */}
-          {!data?.attempt_status ||
-          data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ||
-          data.attempts.length === 0 ? (
+          {!data?.attempts?.length ||
+          currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
             <ButtonSecondary
               title="Begin"
               full={false}
@@ -236,12 +251,18 @@ const EntranceTest = ({ data, test_id_default }: EntranceTestProps) => {
           )}
         </div>
       </div>
-      <PopUpRemindEntrance
-        setOpenFillForm={setOpenFillForm}
-        setOpenTest={setOpen}
-      />
+      {isShowEntranceTestPopup && (
+        <PopUpRemindEntrance
+          setOpenFillForm={setOpenFillForm}
+          setOpenTest={
+            data?.attempt_status === EAttemptStatus['IN_PROGRESS']
+              ? setIsOpenPopupLastAttempt
+              : setOpen
+          }
+        />
+      )}
 
-      {data?.attempt_status === EAttemptStatus['IN_PROGRESS'] ? (
+      {currentAttempt?.status === EAttemptStatus['IN_PROGRESS'] ? (
         <SappModalV3
           title={
             <div className="flex items-center justify-between gap-2">

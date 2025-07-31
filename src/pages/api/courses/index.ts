@@ -1,7 +1,8 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IScoreDetails } from 'src/type'
+import { IResponse, IScoreDetails } from 'src/type'
+import { CourseDetail } from 'src/type/course'
 
 export class CoursesAPI {
   static getNoteDetail(
@@ -71,12 +72,35 @@ export class CoursesAPI {
     page_index: number,
     page_size: number,
     params: Object,
-  ): Promise<any> {
+  ): Promise<IResponse<CourseDetail>> {
     return fetcher(
       `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
       {
         params: params,
       },
+    )
+  }
+
+  static getShortCourseDetail(
+    id: string | string[] | undefined,
+    page_index: number,
+    page_size: number,
+    params: Object,
+  ): Promise<IResponse<any>> {
+    return fetcher(
+      `courses/${id}?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
+  }
+
+  static getCourseDetailActivity(
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ): Promise<any> {
+    return fetcher(
+      `/course-sections/learning-structure/${id}?course_section_id=${course_section_id}`,
     )
   }
 
@@ -126,6 +150,14 @@ export class CoursesAPI {
     sectionId: string | string[] | undefined,
   ): Promise<any> {
     const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress`
+    return fetcher(`${uri}`)
+  }
+
+  static startShortCourseSectionProgress(
+    courseId: string | string[] | undefined,
+    sectionId: string | string[] | undefined,
+  ): Promise<any> {
+    const uri = `/course-sections/course/${courseId}/section/${sectionId}/progress?is_progress_sc=true`
     return fetcher(`${uri}`)
   }
 
@@ -217,18 +249,17 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
   }
 
-  //submit a question
-  static submitAnswer(id: string, data: any): Promise<any> {
-    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
+  static submitAllQuestion(id: string, data: any): Promise<any> {
+    //is submit test
+    const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',
     })
   }
 
-  static submitAllQuestion(id: string, data: any): Promise<any> {
-    //is submit test
-    const uri = url.submitQuestion + `/${id}` + '/submit'
+  static submitAnswer(id: string, data: any): Promise<any> {
+    const uri = url.submitQuestion + `/${id}` + '/submit-answer'
     return fetcher(`${uri}`, {
       data: data,
       method: 'POST',

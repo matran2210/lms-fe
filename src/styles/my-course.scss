@@ -30,6 +30,23 @@
   .select__placeholder {
     @apply text-gray-1;
   }
+
+  .select-3lv {
+    .select__placeholder {
+      @apply font-normal text-bw-2;
+    }
+
+    &.select-single.status-course .select__value-container {
+      @apply pr-1;
+    }
+
+    &.select-single .select__indicator {
+      @apply text-bw-2;
+    }
+    &.select-single .select__single-value {
+      @apply font-normal text-bw-2;
+    }
+  }
 }
 
 .sapp-drawer .ant-drawer-wrapper-body .ant-drawer-body {

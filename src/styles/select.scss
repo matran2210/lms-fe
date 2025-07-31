@@ -159,3 +159,19 @@
     @apply text-sm font-medium text-gray-11;
   }
 }
+
+.profile-subject-select {
+  .ant-select-selector {
+    @apply flex items-center justify-between gap-2 !pl-0;
+    .ant-select-selection-item {
+      @apply text-lg md:text-2xl;
+    }
+  }
+
+  .ant-select-arrow {
+    @apply ml-2;
+  }
+  .ant-select-selection-item {
+    @apply flex-1 pr-2 text-2xl font-bold;
+  }
+}

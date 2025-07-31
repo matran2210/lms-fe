@@ -344,9 +344,12 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
-          if (e?.progress?.is_completed) {
+          const isCompletedCourse = e?.data?.progress
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(e?.progress?.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })

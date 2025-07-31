@@ -204,7 +204,7 @@ const Course = ({
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
         router.push(
-          `${isTeacher ? '/teachers' : ''}/courses/my-course/${foundation_class_id}`,
+          `${isTeacher ? '/teachers' : ''}/courses/my-course/${foundation_class_id || classInstance?.id}`,
         )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
@@ -251,6 +251,7 @@ const Course = ({
       router.push(
         `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}/dashboard`,
       )
+      return
     } else {
       router.push(
         `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
