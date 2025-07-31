@@ -183,6 +183,12 @@ const CaseStudyDetail = ({ questions }: any) => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
             handleSaveHighLight={() => {}}
@@ -573,7 +579,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.SELECT_WORD) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValueSelectText(i),
+          answer: getValues(`${i}_answer`),
           id: question?.id,
           answers: question?.answers,
         })
@@ -638,16 +644,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             }))
           answers.push({ question_id: e?.id, answer })
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
-          let answer = []
-          for (let i in e?.answer) {
-            if (e?.answer[i] && e?.answer[i] !== '') {
-              answer.push({
-                answer_id: e?.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({ question_id: e?.id, answer })
+          answers.push({ question_id: e?.id, answer: e?.answer || [] })
         } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e?.answer) {
@@ -741,13 +738,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        await CoursesAPI.submitCaseStudy(quizAttempId as string, {
+        const res = await CoursesAPI.submitCaseStudy(quizAttempId as string, {
           answers: answers,
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
           topic_scratch_pad: scratchPadValues.value,
         })
         toast.success('Submission successful')
+        const isCompletedCourse = res?.data?.progress
+        if (!!isCompletedCourse?.is_completed) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse?.content || ''))
+          }, 2000)
+        }
+
         router.replace(
           `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )

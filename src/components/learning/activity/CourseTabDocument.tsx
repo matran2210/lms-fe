@@ -313,7 +313,7 @@ const CourseTabDocument = ({
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div
           className={clsx(
-            'learning-act-tab-pagination flex items-center justify-center gap-8',
+            'learning-act-tab-pagination flex items-center justify-center gap-4 md:gap-8',
             {
               hidden: focusOnlyQuiz.open || focusOnlyDiscussion,
             },
@@ -343,7 +343,7 @@ const CourseTabDocument = ({
                 })}
                 onClick={() => handleChangeTab(courseId as string, tab.id)}
               >
-                <PaginationDotIcon />
+                <PaginationDotIcon className="h-3 w-3 shrink-0 md:h-[15px] md:w-[15px]" />
               </span>
             ))}
           </div>

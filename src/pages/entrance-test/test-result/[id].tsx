@@ -36,7 +36,7 @@ const TestEntranceResult = () => {
     <SappLoadingGlobal loading={isLoading}>
       <div className="relative">
         <div
-          className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-10 md:p-2"
+          className="absolute right-4 top-4 z-10 ml-auto cursor-pointer rounded-md bg-gray-200 p-1 md:right-10 md:top-12 md:p-2"
           onClick={
             () => router.push(PageLink.ENTRANCE_TEST)
             // .then(() => window.location.reload())
@@ -66,6 +66,7 @@ const TestEntranceResult = () => {
                 <PinnedNotificationsV2
                   bgColor="bg-primary-200"
                   borderColor="border-primary"
+                  classPinned="items-start justify-between lg:items-center"
                 >
                   <div className="text-xs leading-5 md:text-sm">
                     Đội ngũ chuyên viên của SAPP sẽ liên lạc lại với bạn trong

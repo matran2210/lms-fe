@@ -96,7 +96,7 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
 
   const useGetActivityById = (
     id: string | string[] | undefined,
@@ -297,9 +297,12 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.progress?.is_completed) {
+
+    if (!!response?.data?.progress?.is_completed) {
       setTimeout(() => {
-        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+        dispatch(
+          showPopupCompletedCourse(response?.data?.progress?.content || ''),
+        )
       }, 2000)
     }
   }
@@ -502,7 +505,7 @@ const ActivityPage = () => {
           </>
           {/* Main Activity */}
           <div
-            data-aos={ANIMATION.DATA_AOS}
+            data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             className={clsx('mb-[120px] flex flex-col gap-4 md:gap-6 lg:mb-6', {
               'mb-0': focusOnlyDiscussion,
             })}
@@ -582,7 +585,7 @@ const ActivityPage = () => {
                 hidden: focusOnlyQuiz.open,
                 'hidden md:block': !focusOnlyQuiz.open,
               })}
-              data-aos={ANIMATION.DATA_AOS}
+              data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             >
               <Discussion class_id={(router.query.id as string) || ''} />
             </div>

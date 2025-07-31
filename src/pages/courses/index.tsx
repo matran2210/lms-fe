@@ -13,7 +13,13 @@ import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, defaultStatusCourse, UserGuide } from 'src/constants'
+import {
+  ANIMATION,
+  defaultStatusCourse,
+  ECourseType,
+  PageLink,
+  UserGuide,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
@@ -25,12 +31,10 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import GotoModal from '@components/courses/popup/GotoModal'
 import clsx from 'clsx'
+import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
+import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
-export enum ECourseType {
-  MASTER = 'Master Finance',
-  GENERAL = 'General Course',
-}
 const defaultCategory = [
   {
     label: `All`,
@@ -56,6 +60,7 @@ const MyCourse = () => {
    * @description lấy state trong context
    */
   const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
+  const { setVisibleRedirectToMasterModal } = useStaticModalContext()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
@@ -83,7 +88,19 @@ const MyCourse = () => {
       dispatch(clearGuideState())
     }, 50)
   }
-
+  const handleRedirect = (type: ECourseType) => {
+    setGeneralOrMasterCourse(type)
+    switch (type) {
+      case ECourseType.MASTER:
+        setVisibleRedirectToMasterModal(true)
+        break
+      case ECourseType.GENERAL:
+        setVisibleRedirectToMasterModal(false)
+        break
+      default:
+        break
+    }
+  }
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
@@ -260,9 +277,9 @@ const MyCourse = () => {
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
+                onClick={() => handleRedirect(ECourseType.MASTER)}
                 className={clsx(
-                  'text-sx w-full p-2 outline-none lg:px-4 lg:text-base',
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
                   {
                     'font-semibold':
                       generalOrMasterCourse === ECourseType.MASTER,
@@ -280,9 +297,9 @@ const MyCourse = () => {
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
+                onClick={() => handleRedirect(ECourseType.GENERAL)}
                 className={clsx(
-                  'text-sx w-full p-2 outline-none lg:px-4 lg:text-base',
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
                   {
                     'font-semibold':
                       generalOrMasterCourse === ECourseType.GENERAL,
@@ -368,6 +385,7 @@ const MyCourse = () => {
           />
         )}
         <GotoModal />
+        <RedirectToMasterModal />
       </Layout>
     </SappLoadingGlobal>
   )

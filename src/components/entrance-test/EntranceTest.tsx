@@ -55,10 +55,6 @@ const EntranceTest = ({
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
-    setCurrentAttempt(data?.attempts?.[0] || ({} as IEntranceTestAttempt))
-  }, [data])
-
-  useEffect(() => {
     if (data) {
       if (
         data?.quiz_timed &&
@@ -244,7 +240,7 @@ const EntranceTest = ({
   }
 
   const cardFooter = (
-    <div className="action relative mt-6 flex items-center justify-end md:mt-10">
+    <div className="action relative mt-auto flex items-center justify-end">
       {renderButton()}
     </div>
   )
@@ -256,7 +252,7 @@ const EntranceTest = ({
         attemptStatus={currentAttempt?.status as EAttemptStatus}
         footer={cardFooter}
       >
-        <div>
+        <div className="mb-6 md:mb-10">
           <div className="info border-l border-[#DCDDDD] px-2 md:px-4">
             <div className="flex justify-between text-sm capitalize text-gray md:text-base">
               {renderTimeContent()}
@@ -287,16 +283,22 @@ const EntranceTest = ({
                     <span
                       className={`${data?.attempts?.length > 1 ? '' : 'text-gray'}`}
                     >
-                      Result of Attemps:
+                      Result of Attempts:
                     </span>
                     {data?.attempts?.length > 1 ? (
                       <Select
-                        options={data?.attempts
-                          ?.map((item, index) => ({
-                            value: item.id,
-                            label: `${(data?.attempts?.length ?? 0) - index}`,
-                          }))
-                          .reverse()}
+                        options={
+                          data?.attempts
+                            ? Array.from({ length: 10 }, () =>
+                                data
+                                  .attempts!.map((item, index) => ({
+                                    value: item.id || '',
+                                    label: `${data.attempts!.length - index}`,
+                                  }))
+                                  .reverse(),
+                              ).flat()
+                            : []
+                        }
                         classNames={{
                           root: 'select-result-attempt',
                           popup: { root: 'select-result-attempt-option' },
@@ -318,7 +320,7 @@ const EntranceTest = ({
                     )}
                   </>
                 ) : (
-                  <span className="mr-1 text-gray">Result of Attemps:</span>
+                  <span className="mr-1 text-gray">Result of Attempts:</span>
                 )}
               </div>
               {data?.attempts?.length && data?.attempts?.length > 0 ? (

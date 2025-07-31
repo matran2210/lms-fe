@@ -3,7 +3,11 @@ import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { DEFAULT_PAGE_SIZE, DEFAULT_SELECT_SECTION } from 'src/constants'
+import {
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_SELECT_SECTION,
+  DEFAULT_SELECT_SECTION_NAME,
+} from 'src/constants'
 import {
   IOpenChooseItem,
   getTypeName,
@@ -106,7 +110,7 @@ const ListItemFilterMobile = ({
   const { sections, fetchInitialSections, isLoading } = useInitialSections()
   const subsectionData = useSectionData(selected.section, 'CHAPTER')
   const unitData = useSectionData(selected.subsection, 'UNIT')
-  const activityData = useSectionData(selected.unit, 'ACTIVITY')
+  const activityData = useSectionData(selected.subsection, 'ACTIVITY')
 
   // FETCH section on mount
   useEffect(() => {
@@ -129,10 +133,11 @@ const ListItemFilterMobile = ({
   }, [selected.subsection])
 
   useEffect(() => {
-    if (selected.unit && isEmpty(listActivity)) {
+    if (selected.subsection && isEmpty(listActivity)) {
+      //Đạt check
       activityData.fetchSections(DEFAULT_PAGE_SIZE)
     }
-  }, [selected.unit])
+  }, [selected.subsection])
 
   // SET list after fetch
   useEffect(() => {
@@ -166,23 +171,26 @@ const ListItemFilterMobile = ({
     setList(map[openChooseItem.type] ?? [])
   }, [openChooseItem.type, listSection, listSubsection, listUnit, listActivity])
 
+  const hasSelectedOption = Object.values(selected).some((value) => !!value)
+
   // COMBINED loading check
   const isAnyLoading =
-    isLoading ||
-    subsectionData.isLoading ||
-    unitData.isLoading ||
-    activityData.isLoading
+    isLoading || subsectionData.isLoading || activityData.isLoading
 
   if (isAnyLoading || isEmpty(list)) return null
 
   return (
     <>
       {list.map((item) => {
-        const isSelected =
+        const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
-          selected.unit === item.id ||
           selected.activity === item.id
+
+        const isSelected =
+          item.name === DEFAULT_SELECT_SECTION_NAME
+            ? !hasSelectedOption
+            : isSelectedValue
 
         return (
           <div

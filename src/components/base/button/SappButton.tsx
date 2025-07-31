@@ -26,13 +26,13 @@ const COLORS = {
     'bg-white border-[#050505] hover:border-[#A1A1A1] hover:text-[#A1A1A1] text-[#050505]',
   text: 'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 font-medium',
   textUnderline:
-    'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 underline font-medium',
-  quizActivity:
-    'bg-[#A1A1A1] hover:bg-[#DCDDDD] disabled:bg-[#DCDDDD] text-white',
-  okPopup: 'bg-error text-white',
-  cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
+    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
+  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
+  okPopup: 'bg-accent-error text-white',
+  cancelPopup: 'bg-gray-4 text-accent-default',
   'light-dark':
-    'bg-[#29353C] hover:bg-secondary disabled:bg-gray-100 text-white',
+    'bg-secondary-600 hover:bg-secondary disabled:bg-gray-100 text-white',
+  gray: 'bg-white hover:bg-primary-2 disabled:bg-white text-bw-15 hover:text-white',
 }
 
 const PADDINGS = {
@@ -59,6 +59,7 @@ const COLOR_LOADING = {
   quizActivity: 'bg-white',
   okPopup: 'bg-white',
   cancelPopup: 'bg-white',
+  gray: 'bg-transparent',
   'light-dark': 'bg-white',
 }
 

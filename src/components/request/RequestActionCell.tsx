@@ -13,13 +13,14 @@ import {
 } from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IRequest, IResponse } from 'src/type'
+import { IRequest } from 'src/type'
 
 interface Iprops {
   item: IRequest
+  reloadPage: () => void
 }
 
-const RequestActionCell = ({ item }: Iprops) => {
+const RequestActionCell = ({ item, reloadPage }: Iprops) => {
   const router = useRouter()
   const { setIsOpenViewModal, setOpenAddModal, setIsReFetch } =
     useRequestContext()
@@ -35,6 +36,7 @@ const RequestActionCell = ({ item }: Iprops) => {
     try {
       const res = await RequestAPI.deleteRequest(item.id)
       if (res.success) {
+        reloadPage()
         toast.success('Delete request successfully')
         setIsReFetch(true)
       }

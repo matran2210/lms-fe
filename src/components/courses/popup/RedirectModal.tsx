@@ -5,6 +5,8 @@ import SAPPButtonV2 from '@components/base/button/SAPPButtonV2'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import clsx from 'clsx'
+import { useCourseContext } from '@contexts/index'
+import { ECourseType } from 'src/constants'
 
 const destinations = [
   {
@@ -17,17 +19,18 @@ const destinations = [
 export default function RedirectModal() {
   const { isVisibleRedirectModal, setVisibleRedirectModal } =
     useStaticModalContext()
-
+  const { setGeneralOrMasterCourse } = useCourseContext()
   const router = useRouter()
 
   const handleRedirect = () => {
     setVisibleRedirectModal(false)
-
+    setGeneralOrMasterCourse(ECourseType.GENERAL)
     router.push('/courses')
   }
 
   const handleCancel = () => {
     setVisibleRedirectModal(false)
+    setGeneralOrMasterCourse(ECourseType.MASTER)
   }
 
   return (

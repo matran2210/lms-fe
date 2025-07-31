@@ -240,18 +240,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       return value
     }
 
-    const getValueSelectText = () => {
-      let value = [] as any
-      const inputs = document.querySelectorAll(
-        'div.sapp-select--question',
-      ) as any
-
-      for (let e of inputs) {
-        value.push(e?.dataset.value)
-      }
-      return value
-    }
-
     const getAnswerMatching = () => {
       const value = MatchQuizRef?.current?.getMatchedPairs?.()
       return value || []
@@ -327,7 +315,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.FILL_WORD:
           return getValueFillText()
         case QUESTION_TYPES.SELECT_WORD:
-          return getValueSelectText()
+          return getValues?.(`${activeQuestion?.id}_${document_id}_answer`)
         case QUESTION_TYPES.MATCHING:
           return getAnswerMatching()
         case QUESTION_TYPES.DRAG_DROP:
@@ -607,6 +595,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.SELECT_WORD:
           return (
             <SelectWord
+              onChange={(
+                value: Array<{
+                  answer_id: string
+                  answer_position: number
+                }>,
+              ) =>
+                setValue?.(`${activeQuestion?.id}_${document_id}_answer`, value)
+              }
               data={activeQuestion}
               defaultAnswer={activeQuestion?.defaultValue}
               setOpenFile={setOpenFile}

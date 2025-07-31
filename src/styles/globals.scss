@@ -23,12 +23,11 @@
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
-@import './components/drawer.scss';
 @import './pages/test';
 @import './components/drag-n-drop-question.scss';
 @import './pages/_entrance-test.scss';
 @import './components/sapp-modal-v3.scss';
-
+@import './components/_drawer.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -1302,6 +1301,7 @@ td.sapp-border {
   left: 0;
   white-space: normal;
   word-wrap: break-word;
+  border: none;
 }
 
 .tooltip-text::after {

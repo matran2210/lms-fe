@@ -71,6 +71,7 @@ module.exports = {
         600: '#4B5563',
         700: '#374151',
         800: '#1F2937',
+        900: '#181C32',
         canvas: '#F9F9F9',
         4: '#F3F3F3',
         'v2-100': '#F6F6F6',
@@ -188,6 +189,19 @@ module.exports = {
       badge: {
         200: '#B3CEE0',
         500: '#08719D',
+        open: '#f89707',
+        pending: '#f89707',
+        finished: '#087051',
+        finished_bg: '#e9ffee',
+        reject: '#f80903',
+        reject_bg: '#ffdbda',
+        denied: '#f01919',
+        canceled: '#99a1b7',
+        accepted: '#07af17',
+        active: '#09719d',
+        active_bg: '#b4cee0',
+        learning: '#fe9800',
+        learning_bg: '#fff6e1',
       },
       dashboard: {
         learing: '#6FD3B0',
@@ -195,6 +209,24 @@ module.exports = {
       },
       pinned: {
         1: '#18355D',
+      },
+      support: {
+        1: '#33475B',
+      },
+      graded: {
+        finish: '#4077E0',
+      },
+      accent: {
+        success: '#07AF17',
+        info: '#176CDD',
+        warning: '#F89707',
+        error: '#F01919',
+        default: '#99A1B7',
+      },
+      txt: {
+        primary: '#1F2937',
+        heading: '#374151',
+        secondary: '#9CA3AF',
       },
       shade: {
         primary: {
@@ -267,6 +299,7 @@ module.exports = {
       'v2-sm': ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
       'v2-base': ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
       'v2-lg': ['1.125rem', { lineHeight: '1.6875rem' }] /* 18px, 27px */,
+      'v2-tiny': ['0.5rem', { lineHeight: '0.75rem' }] /* 8px, 12px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -323,6 +356,8 @@ module.exports = {
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
+        small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        card: '0px 4px 16px 0px #00000014',
       },
       minWidth: {
         4: '16px',

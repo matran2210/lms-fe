@@ -22,8 +22,9 @@
       }
     }
     .ant-tabs-tab-btn {
-      &:focus {
-        @apply text-primary;
+      &:focus,
+      &:hover {
+        @apply block !text-primary;
       }
     }
   }

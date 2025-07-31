@@ -8,6 +8,7 @@ import useDownloadImage from 'src/hooks/useDownloadImage'
 import Image from 'next/image'
 import { sappFormatDate } from '@utils/index'
 import clsx from 'clsx'
+import { NoCertificationIcon } from '@assets/icons'
 
 interface ICertificate {
   certificate: {
@@ -30,8 +31,9 @@ interface ICertificate {
 
 const Certificate = () => {
   const { downloadImage } = useDownloadImage()
-  const [certificateData, setCertificateData] = useState<ICertificate[]>([])
-  const [totalCertificateData, setTotalCertificateData] = useState<string>('0')
+  const [certificateData, setCertificateData] = useState<
+    ICertificate[] | undefined
+  >(undefined)
   const [modalOpen, setOpenModal] = useState(false)
   const [userDetail, setUserDetail] = useState('')
 
@@ -39,9 +41,7 @@ const Certificate = () => {
     try {
       const res = await AuthAPI.getCertificate(1, 10)
       const certificate = res.data.certificates
-      const totalCertificate = res.data.meta.total_records
       const userDetail = res.username
-      setTotalCertificateData(totalCertificate)
       setCertificateData(certificate)
       setUserDetail(userDetail)
     } catch (error) {}
@@ -137,16 +137,27 @@ const Certificate = () => {
 
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
-      <Table<ICertificate>
-        className="profile-certificate-table hidden lg:block"
-        columns={columns}
-        dataSource={certificateData}
-      />
+      {certificateData && !certificateData?.length ? (
+        <div className="flex min-h-352 flex-col items-center justify-center gap-8">
+          <NoCertificationIcon />
+          <div className="text-xl text-gray-800">
+            You don&rsquo;t have any certificate!
+          </div>
+        </div>
+      ) : null}
+      {certificateData?.length ? (
+        <Table<ICertificate>
+          className="profile-certificate-table hidden lg:block"
+          columns={columns}
+          dataSource={certificateData}
+        />
+      ) : null}
+
       <div className="flex flex-col gap-4 md:gap-6 lg:hidden">
         <div className="hidden text-xl font-semibold text-secondary md:block">
           Certificate
         </div>
-        {certificateData.length
+        {certificateData?.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem
                 key={item?.id}

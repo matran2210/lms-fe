@@ -28,7 +28,7 @@ const withAuthorization =
           if (userType === UserType.TEACHER) router.push('/teachers')
           else if (userType === UserType.STUDENT) router.push('/courses')
         } else if (!allowedRoles.includes(userType)) {
-          router.replace('/404')
+          router.replace('/courses')
         }
       }, [router.pathname, userType, isLoading])
 

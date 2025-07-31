@@ -11,6 +11,7 @@ export const PageLink = {
   TEACHER_MY_CLASS: '/teachers/my-class',
   TEACHER_MY_REQUEST: '/teachers/my-request',
   TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
+  TEACHER_MY_PROFILE: '/teachers/overview',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -35,6 +36,7 @@ export const PageLink = {
   CALENDAR: '/calendar',
   SHORT_COURSE: '/short-course',
   SHORT_COURSE_DETAIL: '/short-course/detail',
+  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {
@@ -236,11 +238,13 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
+export const DEFAULT_SELECT_SECTION_NAME = 'All Section'
+
 export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
   {
     label: 'All Section',
     value: '',
-    name: 'All Section',
+    name: DEFAULT_SELECT_SECTION_NAME,
   },
 ]
 
@@ -571,7 +575,10 @@ export enum DATE_FORMAT {
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
-
+export enum ECourseType {
+  MASTER = 'Master Finance',
+  GENERAL = 'General Course',
+}
 export const COOKIE_INFO = {
   SESSION_ID: 'sessionId',
   KEYCLOAK_USER_ID: 'keycloakUserId',
