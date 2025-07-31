@@ -62,10 +62,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   const getKeyContent = () => {
     return data?.key_after_contents?.map((item) => {
       return (
-        <div
-          key={item.id}
-          className="max-w-[111px] bg-gray-4 px-2 py-1 text-sm text-gray-14"
-        >
+        <div key={item.id} className="bg-gray-4 px-2 py-1 text-sm text-gray-14">
           {item.name}
         </div>
       )
@@ -308,25 +305,24 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
             </div>
           )}
         </div>
-        {!(data?.is_case_study || data?.schedule?.is_holiday) &&
-          !isOnlyMidTermOrFinalTest && (
-            <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
-              <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
-                <div>Course Content</div>
-                <div
-                  className="hover:cursor-pointer"
-                  onClick={() => togglePopup('bottom')}
-                >
-                  <SappIcon icon={collapse.bottom ? 'arrowDown' : 'arrowUp'} />
-                </div>
+        {!data?.schedule?.is_holiday && !isOnlyMidTermOrFinalTest && (
+          <div className="mt-4 border border-solid border-gray-2 px-7 py-4">
+            <div className="flex items-center justify-between border-b-[1px] pb-4 text-base font-semibold text-gray-14">
+              <div>Course Content</div>
+              <div
+                className="hover:cursor-pointer"
+                onClick={() => togglePopup('bottom')}
+              >
+                <SappIcon icon={collapse.bottom ? 'arrowDown' : 'arrowUp'} />
               </div>
-              {collapse.bottom && (
-                <div className="pt-4">
-                  <CourseTree data={data?.sections ?? []} />
-                </div>
-              )}
             </div>
-          )}
+            {collapse.bottom && (
+              <div className="pt-4">
+                <CourseTree data={data?.sections ?? []} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </SappDrawer>
   )

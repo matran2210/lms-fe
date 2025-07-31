@@ -12,6 +12,10 @@ export class UserApi {
     )
   }
 
+  static getUserPrograms(course_category_id: string | undefined): Promise<any> {
+    return fetcher(`users/programs?course_category_id=${course_category_id}`)
+  }
+
   /**
    * Gửi yêu cầu đăng xuất người dùng thông qua refresh token.
    *

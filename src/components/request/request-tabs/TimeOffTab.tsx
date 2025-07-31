@@ -187,22 +187,21 @@ const TimeOffTab = () => {
         requests={requests}
         pagination={pagination}
         setPagination={setPagination}
+        reloadPage={handleFilter}
       />
-      {isOpenAddModal && (
-        <FormRequest
-          open={isOpenAddModal}
-          setOpen={setOpenAddModal}
-          reloadPage={handleFilter}
-        />
-      )}
-      {isOpenViewModal && (
-        <RequestDetail
-          open={isOpenViewModal}
-          setOpen={setIsOpenViewModal}
-          setOpenEdit={setOpenAddModal}
-          reloadPage={handleFilter}
-        />
-      )}
+
+      <FormRequest
+        open={isOpenAddModal}
+        setOpen={setOpenAddModal}
+        reloadPage={handleFilter}
+      />
+
+      <RequestDetail
+        open={isOpenViewModal}
+        setOpen={setIsOpenViewModal}
+        setOpenEdit={setOpenAddModal}
+        reloadPage={handleFilter}
+      />
     </div>
   )
 }

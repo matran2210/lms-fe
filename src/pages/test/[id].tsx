@@ -25,7 +25,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import NewFiltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
@@ -74,11 +74,6 @@ import { IRequirement } from 'src/type/case-study'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
-  getAnswerDragNDrop,
-  getAnswerMatching,
-  getResult,
-  getValueFillText,
-  getValueSelectText,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
@@ -86,6 +81,7 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
+import { TestAPI } from '@pages/api/test'
 
 declare global {
   interface Window {
@@ -218,11 +214,15 @@ const TestDetail = () => {
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue(`${currentTabID}_answer`, value)}
             data={data}
-            action={getValueSelectText}
             handleSaveHighLight={handleSaveHighLight}
             highlighted={highlighted}
-            removeHighlight={removeHighlight}
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
@@ -399,10 +399,6 @@ const TestDetail = () => {
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
-  const [isCompletedCourse, setIsCompletedCourse] = useState({
-    status: false,
-    content: '',
-  })
   const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
@@ -468,7 +464,6 @@ const TestDetail = () => {
         (e: any) => e.questionId === currentPage,
       )
       const objTab = tabs.find((e: any) => e.id === currentPage)
-
       const index = scratchPadValues?.findIndex(
         (item: ScratchPadValue) => item.id === currentPage,
       )
@@ -850,7 +845,7 @@ const TestDetail = () => {
               }
               return objAnswer
             } else if (objTab?.data?.qType === QUESTION_TYPES.SELECT_WORD) {
-              return currentAnswer
+              return answer
             } else if (objTab?.data?.qType === QUESTION_TYPES.FILL_WORD) {
               const savedData: AnswerItem =
                 answersSubmitted.answer && answersSubmitted?.answer.length > 0
@@ -1096,6 +1091,74 @@ const TestDetail = () => {
   const refEditor = useRef(null) as any
 
   // TODO: Implement this
+  const getValueFillText = () => {}
+
+  const getValueSelectText = () => {
+    const value = getValues(`${currentPage}_answer`) || []
+    return value
+  }
+
+  const getAnswerMatching = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-match-result') as any
+    for (let e of inputs) {
+      const childId = e.querySelector('.sapp-notched-container')
+      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
+    }
+
+    return value
+  }
+
+  const getAnswerDragNDrop = () => {
+    let value = [] as any
+    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
+    for (let e of inputs) {
+      const idAnswer = e.querySelector('.answer-box')
+      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
+    }
+    return value
+  }
+
+  const getResult = async (currentTabContent: any) => {
+    const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
+    let corrects = {} as any
+    if (
+      currentTabContent.qType === QUESTION_TYPES.ONE_CHOICE ||
+      currentTabContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentTabContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+    ) {
+      corrects = res?.data?.[0].answers?.reduce(
+        (previousValue: any, currentValue: any) => {
+          return {
+            ...previousValue,
+            [currentValue.id]: currentValue.is_correct,
+          }
+        },
+        {} as { [key: string]: boolean },
+      )
+    } else if (
+      currentTabContent.qType === QUESTION_TYPES.FILL_WORD ||
+      currentTabContent.qType === QUESTION_TYPES.SELECT_WORD
+    ) {
+      corrects = { corrects: [...res?.data?.[0]?.answers] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.MATCHING) {
+      corrects = { corrects: [...res?.data?.[0]?.question_matchings] }
+    } else if (currentTabContent.qType === QUESTION_TYPES.DRAG_DROP) {
+      corrects = {
+        corrects: [
+          ...res?.data?.[0]?.answers?.sort(
+            (a: any, b: any) => a?.answer_position - b?.answer_position,
+          ),
+        ],
+      }
+    }
+    return {
+      corrects: corrects,
+      solution: res?.data?.[0]?.solution,
+      isSelfReflection: res?.data?.[0]?.is_self_reflection,
+      requirements: res?.data?.[0]?.requirements,
+    }
+  }
 
   const confirmAnswer = async (
     corrects: any,
@@ -1697,12 +1760,7 @@ const TestDetail = () => {
     if (question.qType === QUESTION_TYPES.SELECT_WORD) {
       return {
         ...baseAnswer,
-        answer: question?.answer
-          ?.filter((item: string) => item && item !== '')
-          .map((item: string, index: number) => ({
-            answer_id: item,
-            answer_position: index + 1,
-          })),
+        answer: question?.answer,
       }
     }
 
@@ -1773,10 +1831,14 @@ const TestDetail = () => {
             is_submitted: true,
           }),
         )
+
+        const isCompletedCourse = res?.data?.progress
         if (typeSubmit === 'submit') {
-          if (isCompletedCourse.status) {
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
 
@@ -1812,9 +1874,11 @@ const TestDetail = () => {
             }
           }
         } else {
-          if (isCompletedCourse.status) {
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(isCompletedCourse.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
           setScoreFinalTest(res?.data?.score)
@@ -2126,12 +2190,6 @@ const TestDetail = () => {
                 ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
                 : EXHIBIT_TEXT_REPLACE.EXHIBIT,
             )
-            if (res?.data?.progress?.is_completed) {
-              setIsCompletedCourse({
-                status: res?.data?.progress?.is_completed,
-                content: res?.data?.progress?.content,
-              })
-            }
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
           } catch (err: any) {

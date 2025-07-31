@@ -22,9 +22,11 @@ interface SAPPSelectProps {
   isSearchable?: boolean
   onSearch?: (value: string) => Promise<void> | any
   isLoading?: boolean
-  onMenuScrollToBottom?: () => void
+  onMenuScrollToBottom?: (e: React.UIEvent<HTMLElement>) => void
   onChange?: (select: any) => void
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
+  heightCustom?: string
+  allowClear?: boolean
 }
 
 const SAPPSelectV2 = ({
@@ -84,7 +86,7 @@ const SAPPSelectV2 = ({
                       Math.ceil((target as HTMLElement).scrollHeight)
                     ) {
                       if (onMenuScrollToBottom) {
-                        onMenuScrollToBottom
+                        onMenuScrollToBottom(e)
                       }
                     }
                   }}

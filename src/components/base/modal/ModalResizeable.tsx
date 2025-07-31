@@ -1,5 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import styles from '@styles/components/ModalResizeable.module.scss'
+import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { Rnd } from 'react-rnd'
 
@@ -23,6 +24,7 @@ interface ModalResizeableProps {
     | 'center left'
     | 'center right'
     | 'center'
+  rootClassName?: string
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -36,6 +38,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   dragHandleClassName, //Determine the drag handle class name
   handleCloseScratchPad,
   position = 'center',
+  rootClassName,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -106,7 +109,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       dragHandleClassName={
         dragHandleClassName ? dragHandleClassName : 'modal-header'
       }
-      className={styles.modalResizeable}
+      className={clsx(styles.modalResizeable, rootClassName)}
     >
       <div className="absolute left-0 top-0 h-full w-full">
         {header ? (

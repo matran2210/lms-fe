@@ -1,3 +1,5 @@
+import { ISelectOption } from 'src/type'
+
 export const PageLink = {
   HOME: '/',
   COURSES: '/courses',
@@ -31,6 +33,9 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course',
   CALENDAR: '/calendar',
+  SHORT_COURSE: '/short-course',
+  SHORT_COURSE_DETAIL: '/short-course/detail',
+  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {
@@ -49,11 +54,13 @@ export const TitleSidebar = {
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
+  ADD_NOTE: 'Add Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
+  COURSE_RESOURCES: 'Course Resource',
 }
 
 export const TitleTeacherSidebar = {
@@ -218,7 +225,15 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [{ label: 'All Section', value: '' }]
+export const DEFAULT_SELECT_SECTION_NAME = 'All Section'
+
+export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
+  {
+    label: 'All Section',
+    value: '',
+    name: DEFAULT_SELECT_SECTION_NAME,
+  },
+]
 
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
@@ -445,13 +460,13 @@ export const REPEAT_ON_MAPPED = [
 ] as const
 
 export const REPEAT_ON_MAPPED_PAYLOAD = {
-  T2: 1,
-  T3: 2,
-  T4: 3,
-  T5: 4,
-  T6: 5,
-  T7: 6,
-  CN: 7,
+  T2: 0,
+  T3: 1,
+  T4: 2,
+  T5: 3,
+  T6: 4,
+  T7: 5,
+  CN: 6,
 } as const
 
 export const CONFIRM_CANCEL = 'Are you sure you want to cancel?'
@@ -563,3 +578,5 @@ export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'
+export * from './courses3level/activity'
+export * from './courses3level/courses'

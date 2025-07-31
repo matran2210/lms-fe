@@ -265,9 +265,12 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.progress?.is_completed) {
+
+    if (!!response?.data?.progress?.is_completed) {
       setTimeout(() => {
-        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+        dispatch(
+          showPopupCompletedCourse(response?.data?.progress?.content || ''),
+        )
       }, 2000)
     }
   }
@@ -788,6 +791,8 @@ const ActivityPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
+                              activeTab=""
+                              activeVideo=""
                             ></VideoDocument>
                           </div>
                         )

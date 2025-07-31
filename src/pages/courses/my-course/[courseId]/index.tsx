@@ -11,18 +11,19 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import withAuthorization from 'src/HOC/withAuthorization'
 import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
-import SelectExamPopup from './popups/SelectExamPopup'
-import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { RemindChoosingExam } from 'src/type/course'
+import SelectExamPopup from './popups/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
 
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
+  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -134,15 +135,26 @@ const CourseDetail = () => {
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
-    setCourseType(data?.pages?.[0]?.courseDetail?.data?.course_type)
+    isSuccess &&
+      setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
   })
+
+  const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
+    return (
+      remindChoosingExam.remind_by_progress ||
+      remindChoosingExam.remind_by_duration
+    )
+  }
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
 
-    if (isSuccess && data?.pages?.[0]?.courseDetail?.remind_choosing_exam) {
+    if (
+      isSuccess &&
+      canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
+    ) {
       timeout = setTimeout(() => {
-        setShowSelectExamPopup(true)
+        setShowSelectExam(true)
       }, DELAY_TIME_DISPLAY_POPUP)
     }
 
@@ -169,17 +181,17 @@ const CourseDetail = () => {
           <>
             <div className="main relative">
               <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <BreadcrumbFilter name={courseNameDetail} />
+                <BreadcrumbFilter name={courseNameDetail ?? ''} />
                 <FilterCourseDetail totalResult={courses?.length || 0} />
               </div>
             </div>
             <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail} />
+              <Heading greeting="Welcome to" title={courseNameDetail ?? ''} />
             </div>
             <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
               <CourseParts
                 courses={courses}
-                is_passed_course={is_passed_course}
+                is_passed_course={is_passed_course ?? false}
                 class_user_id={class_user_id}
                 lastElementRef={lastElementRef}
               />
@@ -187,15 +199,20 @@ const CourseDetail = () => {
           </>
         )}
       </div>
-      {isSuccess &&
-        data.pages[0].courseDetail.remind_choosing_exam &&
-        showSelectExamPopup && <SelectExamPopup courseData={data} />}
-
-      <PopupModalTest
-        class_code={data?.pages?.[0]?.courseDetail?.code}
-        program={data?.pages?.[0]?.courseDetail?.data?.program}
-        data={data?.pages?.[0]?.courseDetail}
-      />
+      {isSuccess && (
+        <>
+          <SelectExamPopup
+            showSelectExam={showSelectExam}
+            setShowSelectExam={setShowSelectExam}
+            courseData={data?.pages?.[0]?.courseDetail}
+          />
+          <PopupModalTest
+            class_code={data?.pages?.[0]?.courseDetail?.code}
+            program={data?.pages?.[0]?.courseDetail?.data?.program}
+            data={data?.pages?.[0]?.courseDetail}
+          />
+        </>
+      )}
     </Layout>
   )
 }

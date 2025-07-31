@@ -1,7 +1,7 @@
 body:not(.no-hover) {
   .menu-sidebar-left {
     &:hover {
-      @apply w-[230px];
+      @apply w-[230px] min-w-[220px];
 
       .group-logos {
         @apply pb-5;
@@ -24,7 +24,7 @@ body:not(.no-hover) {
 }
 
 .menu-sidebar-left {
-  transition: width 0.2s linear;
+  transition: all 0.2s linear;
   -webkit-transform: translateZ(0) scale(1, 1);
 }
 
