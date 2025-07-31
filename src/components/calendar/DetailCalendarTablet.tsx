@@ -23,6 +23,7 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { ShowLessIcon } from '@assets/icons'
 import FloatingCloseIcon from './FloatingCloseIcon'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { SpinIcon } from '@components/courses/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -259,7 +260,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
           iconSize={24}
         />
       }
-      <div className="relative flex h-full flex-col bg-white">
+      <div className="relative flex h-full flex-col bg-white !text-bw-13">
         <div className="mb-4 flex items-center justify-between">
           {data?.schedule?.start_date &&
             renderFormattedDate(data.schedule.start_date)}
@@ -270,7 +271,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
           {data?.schedule && !loading ? (
             <>
               <div>
-                <div className="mb-5 text-lg font-semibold text-secondary">
+                <div className="mb-5 text-lg font-semibold">
                   <div>Primary Information</div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-base">
@@ -367,10 +368,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
             </>
           ) : (
             <div className="flex h-full flex-col items-center justify-center">
-              <SkeletonDetailIcon />
-              <div className="text-xl font-normal">
-                You dont have any schedule today!
-              </div>
+              <SpinIcon />
             </div>
           )}
         </div>
