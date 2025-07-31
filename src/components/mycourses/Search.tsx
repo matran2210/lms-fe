@@ -32,7 +32,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
       timerId = setTimeout(() => {
         !isSubmitting &&
           router.push(
-            `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}?name=${watch('name') ?? ''}${queryString}`,
+            `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
           )
         setPage && setPage(9)
       }, 2000)
@@ -56,7 +56,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
       router.push(
-        `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}?name=${watch('name') ?? ''}${queryString}`,
+        `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
       )
       setPage && setPage(9)
     }
@@ -69,7 +69,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
     setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
     router.push(
-      `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}?name=${watch('name') ?? ''}${queryString}`,
+      `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
     )
     setPage && setPage(9)
   }

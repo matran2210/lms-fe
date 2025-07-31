@@ -29,7 +29,7 @@ const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = isTeacher ? PageLink.TEACHER_MY_COURSE : `/courses`
+  let apiUrl = `${isTeacher ? '/teachers' : ''}/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',

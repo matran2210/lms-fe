@@ -16,11 +16,13 @@ const CourseParts = ({
   class_user_id,
   is_passed_course,
   lastElementRef,
+  isTeacher = false,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
   is_passed_course: boolean
   lastElementRef: (node: HTMLDivElement) => void
+  isTeacher?: boolean
 }) => {
   const router = useRouter()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
@@ -186,6 +188,7 @@ const CourseParts = ({
                       focusSubSectionIds={focusSubSectionIds}
                       focusUnitIds={focusUnitIds}
                       deadline={deadline}
+                      isTeacher={isTeacher}
                     />
                   )}
                 </div>
@@ -232,7 +235,11 @@ const CourseParts = ({
                       class_user_id={class_user_id}
                     />
                   ) : (
-                    <Part key={index} course={coursePart} />
+                    <Part
+                      key={index}
+                      course={coursePart}
+                      isTeacher={isTeacher}
+                    />
                   )}
                 </div>
               </div>

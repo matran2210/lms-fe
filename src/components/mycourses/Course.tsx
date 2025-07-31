@@ -35,11 +35,13 @@ const Course = ({
   index,
   lastElementRef,
   refetch,
+  isTeacher = false,
 }: {
   course: ICourse
   index: number
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
+  isTeacher?: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(false)
   const [openExtend, setOpenExtend] = useState<boolean>(false)
@@ -201,7 +203,9 @@ const Course = ({
       }
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
-        router.push(`/courses/my-course/${foundation_class_id}`)
+        router.push(
+          `${isTeacher ? '/teachers' : ''}/courses/my-course/${foundation_class_id}`,
+        )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
           toast.success('Active thành công!')
@@ -244,12 +248,18 @@ const Course = ({
       (determineButtonToShow == BUTTON_STATUS.Review ||
         determineButtonToShow == BUTTON_STATUS.Resume)
     ) {
-      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+      router.push(
+        `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}/dashboard`,
+      )
     } else {
-      router.push(`/courses/my-course/${classInstance?.id}`)
+      router.push(
+        `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
+      )
     }
 
-    router.push(`/courses/my-course/${classInstance?.id}`)
+    router.push(
+      `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
+    )
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -266,7 +276,7 @@ const Course = ({
 
     localStorage.setItem(
       'courseDetail',
-      `/courses/my-course/${classInstance?.id}`,
+      `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
     )
     if (course?.course_type === 'TRIAL_COURSE') {
       localStorage.setItem('daysDifference', daysDifference as any)
@@ -390,7 +400,7 @@ const Course = ({
    */
   const handleContinueFoundation = () => {
     router.push(
-      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+      `${isTeacher ? '/teachers' : ''}/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
     )
   }
 

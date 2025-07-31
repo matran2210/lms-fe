@@ -21,11 +21,13 @@ const Part = ({
   focusSubSectionIds,
   focusUnitIds,
   deadline,
+  isTeacher = false,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
   focusUnitIds?: string
   deadline?: string
+  isTeacher?: boolean
 }) => {
   const router = useRouter()
 
@@ -43,7 +45,7 @@ const Part = ({
       deadline,
     })
     router.push(
-      `/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${isTeacher ? '/teachers' : ''}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
     )
   }
 
