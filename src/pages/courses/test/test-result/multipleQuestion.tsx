@@ -67,30 +67,27 @@ const MultipleQuestion = ({
     extra?: React.ReactNode,
     showMore?: boolean,
   ) => {
-    const data1 = [...data, ...data, ...data].slice(0, 21)
-    const renderBoxItems = (data1 || [])?.map(
-      (item: IAnswer, index: number) => {
-        return (
-          <button
-            key={item?.id}
-            onClick={() => {
-              router.push(`/explanation/${item?.id}?title=My Course`)
-            }}
-            disabled={
-              questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
-            }
-            className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
+    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
+      return (
+        <button
+          key={item?.id}
+          onClick={() => {
+            router.push(`/explanation/${item?.id}?title=My Course`)
+          }}
+          disabled={
+            questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
+          }
+          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
             ${renderBoxesAndLineClass(type, item)}
           `}
-          >
-            {index + totalBefore + 1}
-          </button>
-        )
-      },
-    )
+        >
+          {index + totalBefore + 1}
+        </button>
+      )
+    })
 
     return (
-      data1?.length > 0 && (
+      data?.length > 0 && (
         <div className="w-full">
           <div className="flex items-center justify-between">
             <div className="mb-6 text-base font-semibold text-gray-800 md:text-xl">
@@ -102,14 +99,19 @@ const MultipleQuestion = ({
             <div
               className={clsx('', {
                 'grid grid-cols-7 gap-3': isLargeDesktopView,
-                'grid min-w-max grid-flow-col grid-rows-2 gap-3 md:flex md:flex-wrap md:gap-4':
-                  (showMore && !isLargeDesktopView) ||
-                  (!showMore && !isLargeDesktopView && data1.length <= 20),
+                'flex flex-wrap gap-4': showMore && !isLargeDesktopView,
+                'grid min-w-max grid-flow-col grid-rows-2 gap-3 sm:min-w-0 sm:grid-flow-row sm:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] sm:grid-rows-none md:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] md:gap-4':
+                  !showMore && !isLargeDesktopView && data.length <= 20,
                 // 'grid min-w-max grid-flow-col gap-5':
                 //   !showMore && !isLargeDesktopView,
-                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4':
-                  !showMore && !isLargeDesktopView && data1.length > 20,
-                // 'grid-rows-2 sm:grid-rows-[auto]': ,
+
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 lg:min-w-0 lg:grid-flow-row lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] lg:grid-rows-none':
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 20 &&
+                  data.length <= 35,
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4 lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))]':
+                  !showMore && !isLargeDesktopView && data.length > 35,
               })}
             >
               {renderBoxItems}
