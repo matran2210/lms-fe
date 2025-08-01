@@ -39,7 +39,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-warning/5 px-[12px] py-[2px] text-sm font-normal text-warning">
           <StatusDotIcon />
-          Online
+          Holiday
         </div>
       )
     }
@@ -263,7 +263,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
             {data?.schedule && !loading ? (
               <>
                 <div>
-                  <div className="mb-5 text-base font-semibold">
+                  <div className="mb-3 text-base font-semibold">
                     <div>Primary Information</div>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm">
@@ -313,7 +313,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   !isOnlyMidTermOrFinalTest && (
                     <>
                       <Divider />
-                      <div className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-3">
                         <div className="text-base font-semibold ">
                           Course Content
                         </div>
@@ -326,7 +326,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   data?.key_after_contents?.length > 0 && (
                     <>
                       <Divider />
-                      <div className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-3">
                         <div className="col-span-1 text-base font-semibold">
                           Key Content Before
                         </div>
@@ -340,7 +340,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                 {data?.mode === LearningMode.OFFLINE && (
                   <>
                     <Divider />
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-3">
                       <div className="text-lg font-semibold ">
                         Classroom Detail
                       </div>
@@ -375,7 +375,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
             data.class.link_meeting && (
               <>
                 <Divider />
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-3">
                   <div className="text-lg font-semibold">Classroom Detail</div>
                   <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2">
