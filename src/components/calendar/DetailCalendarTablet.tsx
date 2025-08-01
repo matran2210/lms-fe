@@ -44,7 +44,7 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
       return (
         <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-warning/5 px-[12px] py-[2px] text-sm font-normal text-warning">
           <StatusDotIcon />
-          Online
+          Holiday
         </div>
       )
     }
