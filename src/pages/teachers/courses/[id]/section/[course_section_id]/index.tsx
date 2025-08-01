@@ -1,6 +1,5 @@
 import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import LayoutTeacher from '@components/layout/Teacher'
 import { Alert } from 'antd'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
@@ -10,7 +9,8 @@ import { PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import TestModal from 'src/pages/courses/test'
 import { ILearningOutcome } from 'src/type/courses'
-import { CoursesAPI } from 'src/pages/api/courses'
+import LayoutTeacher from '@components/layout/Teacher'
+import { CoursesAPI } from 'src/pages/api/courses/index'
 import { buildQueryString, formatDate } from '@utils/index'
 import { useCourseContext } from '@contexts/index'
 import withAuthorization from 'src/HOC/withAuthorization'
@@ -60,6 +60,7 @@ const CoursePartDetailTeacher = () => {
   const [readMore, setReadMore] = useState<boolean>(false)
   const [open, setOpen] = useState<boolean>(false)
   const [chapterData, setChapterData] = useState<any>({})
+  const [chapterTestId, setChapterTestId] = useState<string>()
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
@@ -193,7 +194,7 @@ const CoursePartDetailTeacher = () => {
       })
     } else {
       router.push({
-        pathname: `teachers/courses/${router.query.id}/activity/${id}`,
+        pathname: `/courses/${router.query.id}/activity/${id}`,
       })
     }
   }
@@ -273,8 +274,10 @@ const CoursePartDetailTeacher = () => {
     )
     if (partData?.length > 0) {
       setChapterData(partData?.[0])
+      setChapterTestId(partData?.[0]?.id)
     } else {
       setChapterData(filteredData?.[0])
+      setChapterTestId(filteredData?.[0]?.id)
     }
 
     if (
@@ -366,7 +369,10 @@ const CoursePartDetailTeacher = () => {
     }
   }
 
-  const handleLearningOutCome = async () => {
+  const handleLearningOutCome = async (
+    id: string | string[] | undefined,
+    course_section_id: string | string[] | undefined,
+  ) => {
     const res = await CoursesAPI.learningOutcomeProgress(
       router.query.id,
       chapterDetail?.id,
@@ -446,7 +452,7 @@ const CoursePartDetailTeacher = () => {
       title: previewPart?.name,
     },
     {
-      link: '',
+      link: '#',
       title: partDetail?.name,
     },
   ]
