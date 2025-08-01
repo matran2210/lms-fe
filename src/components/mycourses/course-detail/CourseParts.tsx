@@ -81,7 +81,11 @@ const CourseParts = ({
                         class_user_id={class_user_id}
                       />
                     ) : (
-                      <Part key={index} course={coursePart} />
+                      <Part
+                        key={index}
+                        course={coursePart}
+                        isTeacher={isTeacher}
+                      />
                     )}
                   </div>
                 ) : (
@@ -104,7 +108,11 @@ const CourseParts = ({
                         class_user_id={class_user_id}
                       />
                     ) : (
-                      <Part key={index} course={coursePart} />
+                      <Part
+                        key={index}
+                        course={coursePart}
+                        isTeacher={isTeacher}
+                      />
                     )}
                   </div>
                 )}
