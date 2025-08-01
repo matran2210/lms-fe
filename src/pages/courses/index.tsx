@@ -241,7 +241,7 @@ const MyCourse = () => {
           isCoursePage
         />
 
-        <div className="flex items-center justify-center rounded-md bg-white p-3 shadow-medium md:justify-between md:p-6 lg:px-8 lg:py-6">
+        <div className="flex items-center justify-center rounded-md bg-white p-3 shadow-medium md:justify-between md:p-6 lg:rounded-xl lg:px-8 lg:py-6">
           <div
             className={`heading relative rounded-md bg-white  ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
