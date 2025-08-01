@@ -142,7 +142,7 @@ export const UserGuide = {
   CONTENT_STEP_6:
     'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
   CONTENT_STEP_7:
-    'The filter section allows you to filter courses by curriculum and course status.',
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
 }
 
 export const defaultStatusCourse = [

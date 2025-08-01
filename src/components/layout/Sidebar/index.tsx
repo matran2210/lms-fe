@@ -189,11 +189,16 @@ export default function Sidebar({
       </div>
       <div
         onClick={toggleDrawer}
-        className={`sidebar-overlay ${
-          isOpened
-            ? 'block peer-hover:block lg:hidden'
-            : 'hidden peer-hover:block'
-        } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080]`}
+        className={clsx(
+          `sidebar-overlay ${
+            isOpened
+              ? 'block peer-hover:block lg:hidden'
+              : 'hidden peer-hover:block'
+          } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080]`,
+          {
+            '!hidden': guideStatus && (guideStep === 2 || guideStep === 3),
+          },
+        )}
       />
       {openResource && (
         <LearningResource

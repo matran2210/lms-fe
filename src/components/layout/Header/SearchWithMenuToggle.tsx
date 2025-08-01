@@ -176,6 +176,9 @@ const SearchWithMenuToggle = ({
           <div
             className={clsx(
               'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+              {
+                'z-50': isShowUserGuide && guideStatus && guideStep === 1,
+              },
             )}
           >
             <SearchForm
@@ -197,7 +200,7 @@ const SearchWithMenuToggle = ({
       {isShowUserGuide && guideStatus && guideStep === 1 && (
         <PopupStep
           content={UserGuide.CONTENT_STEP_1}
-          className="left-0 top-full mt-3"
+          className="left-0"
           title={'Search box'}
           index={1}
           total={7}
