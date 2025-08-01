@@ -106,7 +106,7 @@ const SappDrawerV3: React.FC<IProps> = ({
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-4 pb-4 lg:px-8 lg:pb-8">
             {cancelButtonCaption && (
               <ButtonText
                 title={cancelButtonCaption}

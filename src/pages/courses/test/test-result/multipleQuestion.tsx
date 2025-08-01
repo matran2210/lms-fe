@@ -311,7 +311,7 @@ const MultipleQuestion = ({
                   {annotations.map((annotation) => (
                     <div
                       key={annotation.text}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-1 lg:gap-2"
                     >
                       <div
                         className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}
