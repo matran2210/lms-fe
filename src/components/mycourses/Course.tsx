@@ -243,24 +243,15 @@ const Course = ({
         category == PROGRAM.CMA)
 
     // Redirect to dashboard if the course type is practice, normal
-    if (
+    const basePath = `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`
+    const path =
       isRedirectDashboard &&
-      (determineButtonToShow == BUTTON_STATUS.Review ||
-        determineButtonToShow == BUTTON_STATUS.Resume)
-    ) {
-      router.push(
-        `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}/dashboard`,
-      )
-      return
-    } else {
-      router.push(
-        `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
-      )
-    }
+      (determineButtonToShow === BUTTON_STATUS.Review ||
+        determineButtonToShow === BUTTON_STATUS.Resume)
+        ? `${basePath}/dashboard`
+        : basePath
 
-    router.push(
-      `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
-    )
+    router.push(path)
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -275,10 +266,7 @@ const Course = ({
       localStorage.removeItem('courseInfo')
     }
 
-    localStorage.setItem(
-      'courseDetail',
-      `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`,
-    )
+    localStorage.setItem('courseDetail', basePath)
     if (course?.course_type === 'TRIAL_COURSE') {
       localStorage.setItem('daysDifference', daysDifference as any)
       localStorage.setItem('showPinTrial', 'true')
