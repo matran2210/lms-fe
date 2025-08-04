@@ -194,7 +194,7 @@ const CoursePartDetailTeacher = () => {
       })
     } else {
       router.push({
-        pathname: `/courses/${router.query.id}/activity/${id}`,
+        pathname: `/teachers/courses/${router.query.id}/activity/${id}`,
       })
     }
   }
