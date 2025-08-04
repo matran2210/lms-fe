@@ -36,7 +36,7 @@ const LayoutCourses3Level = ({ children, openDrawer }: Courses3LevelProps) => {
     <>
       <div className="flex flex-col flex-nowrap bg-gray-4 md:flex-row">
         <Courses3LevelMenu />
-        <div className="ml-auto mr-[50px] min-h-screen w-full bg-gray-4 md:max-w-[calc(100%-280px)]">
+        <div className="ml-auto mr-[50px] min-h-screen w-full bg-gray-4 lg:max-w-[calc(100%-280px)]">
           {children}
         </div>
       </div>

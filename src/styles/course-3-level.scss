@@ -37,13 +37,17 @@
     @apply overflow-hidden !rounded-lg border-0 bg-white p-4 shadow-search;
 
     &.ant-collapse-item-active {
+      & > .ant-collapse-header {
+        @apply border-b border-gray-v2-200 pb-4 lg:border-b-0 lg:pb-0;
+      }
+
       .collapse-button {
         @apply hidden md:flex;
       }
     }
 
     > .ant-collapse-header {
-      @apply flex-row-reverse px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
+      @apply flex-row-reverse border-solid border-gray-v2-200 px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
     }
 
     > .ant-collapse-content > .ant-collapse-content-box {
@@ -57,7 +61,7 @@
 
     &.course-finished {
       > .ant-collapse-content > .ant-collapse-content-box {
-        @apply mt-2 border-0 pt-0 md:mt-1;
+        @apply border-0 pt-0;
       }
 
       .ant-select {
@@ -115,6 +119,10 @@
 }
 
 .section-content-3lv {
+  .ant-collapse {
+    @apply bg-white;
+  }
+
   .ant-collapse > .ant-collapse-item {
     @apply mb-2 border-0 last:mb-0;
 
@@ -291,13 +299,17 @@
 
 .course-test-modal {
   .ant-modal-title {
-    @apply text-center text-2xl leading-8 text-bw-13;
+    @apply text-center text-2xl leading-8 text-bw-13 lg:text-3xl;
   }
   .ant-modal-content {
-    @apply min-w-[343px] rounded-2xl p-6;
+    @apply min-w-[343px] !rounded-2xl p-6 lg:min-w-[520px] lg:p-10;
   }
 
   .select-result {
+    .select__control {
+      @apply h-6;
+    }
+
     .select__value-container {
       @apply pr-0;
     }

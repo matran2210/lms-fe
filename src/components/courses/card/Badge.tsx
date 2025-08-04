@@ -18,7 +18,7 @@ export default function Badge({ label, badgeType, isBold = false }: IBadge) {
   return (
     <div className="flex items-center">
       <span
-        className={`inline-block h-[26px] min-w-[50px] text-center rounded-sm px-2 py-0.5 text-sm ${isBold ? 'font-medium' : 'font-normal'} leading-5.5 ${typeClass}`}
+        className={`inline-block h-[26px] min-w-[50px] rounded px-2 py-0.5 text-center text-sm ${isBold ? 'font-medium' : 'font-normal'} leading-5.5 ${typeClass}`}
       >
         {label}
       </span>

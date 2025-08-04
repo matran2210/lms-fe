@@ -13,6 +13,7 @@ import { useQuery } from 'react-query'
 export * from './common'
 import utc from 'dayjs/plugin/utc'
 import { DATE_FORMAT } from 'src/constants'
+import { cleanParams } from './common'
 
 dayjs.extend(utc)
 
@@ -509,4 +510,13 @@ export function getSessionIdFromToken(token: string): string | null {
   return typeof decoded?.session_state === 'string'
     ? decoded.session_state
     : null
+}
+
+export const formatPathWithQueryParams = (
+  pathname: string,
+  params: Record<string, string>,
+): string => {
+  const cleanedParams = cleanParams(params)
+  const queryString = new URLSearchParams(cleanedParams).toString()
+  return queryString ? `${pathname}?${queryString}` : pathname
 }

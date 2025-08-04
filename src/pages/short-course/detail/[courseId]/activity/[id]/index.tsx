@@ -483,14 +483,14 @@ export default function ActivityDetail() {
           className="mx-3 md:mx-0 2xl-max:py-4"
         />
 
-        <h1 className="mx-3 my-7 text-2xl font-bold text-bw-15 md:mx-0 md:my-3">
+        <h1 className="mx-3 mb-1 mt-7 text-[18px] font-bold text-bw-15 lg:mx-0 lg:mb-6 lg:text-2xl">
           {activity?.name || 'Loading...'}
         </h1>
 
         {(activity?.course_outcomes?.length ?? 0) > 0 && (
           <ButtonIcon
             title="View Learning Outcome"
-            className="mx-3 text-primary md:mx-0 lg:hidden"
+            className="mx-3 text-primary lg:mx-0 lg:hidden"
             onClick={() => {
               setActiveTab(ACTIVE_TABS.LEARNING)
             }}
@@ -555,8 +555,8 @@ export default function ActivityDetail() {
                 onClose={handleCloseTab}
               />
             )}
-            <div className="mb-0 bg-white bg-white pb-25 pt-6 shadow-search lg:mb-6 lg:block lg:rounded-xl lg:pb-6 lg:pl-6 lg:pr-6">
-              <div className={`mx-auto my-0 w-full px-6 pt-6`}>
+            <div className="mx-4 mb-24 rounded-lg bg-white pb-4 shadow-search lg:mx-0 lg:mb-10 lg:block lg:rounded-xl">
+              <div className="mx-auto my-0 w-full px-4 pt-1.5 lg:px-6">
                 <div className="tab-content overflow-x-auto overflow-y-hidden">
                   {course_tab_documents?.map((e, i) => {
                     const marginBottom =
@@ -609,7 +609,7 @@ export default function ActivityDetail() {
                   })}
                 </div>
 
-                <div className="float-left w-full md:px-6 md:pt-6 lg:float-right lg:w-auto lg:max-w-max">
+                <div className="float-right w-full justify-end md:pt-6 lg:max-w-max">
                   <NextPrevActivityButton
                     nextClick={() =>
                       handleActivityNavigation(

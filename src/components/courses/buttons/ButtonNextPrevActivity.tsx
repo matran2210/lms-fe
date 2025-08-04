@@ -17,10 +17,10 @@ export default function NextPrevActivityButton({
   classNamePrev,
 }: IButtonNextPrevProps) {
   return (
-    <div className="flex w-full justify-between lg:w-auto lg:justify-start">
+    <div className="flex w-full justify-between lg:w-auto lg:justify-end">
       {showPrev && (
         <button
-          className={`mr-4 rounded-md text-center text-[0.875rem] font-medium leading-4 ${classNamePrev}`}
+          className={`mr-4 rounded-md text-center text-[0.875rem] font-medium leading-4 lg:mr-6 ${classNamePrev}`}
           onClick={prevClick}
           disabled={disabled || loading}
         >

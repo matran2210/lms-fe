@@ -186,7 +186,7 @@ export default function CourseCard({
       {determineButtonToShow !== 'Hidden' && (
         <div
           key={index}
-          className={`item flex flex-col rounded-xl bg-white p-8 shadow-search`}
+          className="item flex flex-col rounded-2xl border bg-white p-4 shadow-search hover:border-primary lg:p-8"
           data-aos={ANIMATION.DATA_AOS}
           ref={lastElementRef}
         >

@@ -26,7 +26,7 @@ export default function DesktopFilter3Level({
       <div className="pr-4 text-base font-medium text-bw-15">
         {`${totalResults} ${totalResults > 1 ? 'Results' : 'Result'}`}
       </div>
-      <div className="flex items-center rounded-md bg-white px-3 py-2 text-black">
+      <div className="flex items-center rounded-lg border border-gray-v2-300 bg-white px-3 py-2 text-black">
         <SappHookFormSelect
           control={control}
           name="type"
@@ -44,7 +44,7 @@ export default function DesktopFilter3Level({
           isSearchable={false}
         />
       </div>
-      <div className="ml-2 flex items-center rounded-md bg-white px-3 py-2">
+      <div className="ml-2 flex items-center rounded-lg border border-gray-v2-300 bg-white px-3 py-2">
         <SappHookFormSelect
           control={control}
           name="status"
