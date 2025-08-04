@@ -7,9 +7,7 @@ import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
 import useSelectExams from 'src/hooks/useSelectExams'
-import { UserType } from 'src/redux/types/User/urser'
 import { CourseDetail, RemindChoosingExam } from 'src/type/course'
 
 interface ISelectExamPopup {
@@ -18,7 +16,7 @@ interface ISelectExamPopup {
   courseData: CourseDetail
 }
 
-const SelectExamPopupTeacher = ({
+const SelectExamPopup = ({
   showSelectExam,
   setShowSelectExam,
   courseData,
@@ -153,6 +151,4 @@ const SelectExamPopupTeacher = ({
   )
 }
 
-export default withAuthorization<ISelectExamPopup>([UserType.TEACHER])(
-  SelectExamPopupTeacher,
-)
+export default SelectExamPopup

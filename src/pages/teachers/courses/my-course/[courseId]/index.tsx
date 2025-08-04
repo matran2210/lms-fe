@@ -13,7 +13,7 @@ import { ANIMATION, DELAY_TIME_DISPLAY_POPUP, PageLink } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import { RemindChoosingExam } from 'src/type/course'
-import SelectExamPopupTeacher from '@components/mycourses/course-detail/SelectExamPopupTeacher'
+import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 import LayoutTeacher from '@components/layout/Teacher'
 import { ITabs } from 'src/type'
 
@@ -207,7 +207,7 @@ const CourseDetail = () => {
       </div>
       {isSuccess && (
         <>
-          <SelectExamPopupTeacher
+          <SelectExamPopup
             showSelectExam={showSelectExam}
             setShowSelectExam={setShowSelectExam}
             courseData={data?.pages?.[0]?.courseDetail}
