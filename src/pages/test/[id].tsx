@@ -113,6 +113,7 @@ const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
   const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
   const [editorReady, setEditorReady] = useState(true)
+  const [tooltipOpen, setTooltipOpen] = useState(false)
   const answerListRef = useRef<AnswerList>({})
   const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
     useCourseContext()
@@ -2359,11 +2360,10 @@ const TestDetail = () => {
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
-          {[QUESTION_TYPES.TRUE_FALSE, QUESTION_TYPES.ONE_CHOICE].includes(
-            currentTabContent?.qType,
-          ) &&
+          {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
+                disabled={!watch(`${currentPage}_answer`)}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
@@ -2589,7 +2589,7 @@ const TestDetail = () => {
                 activeShowAll ? 'lg:h-[124px]' : 'lg:h-[80px]',
               )}
             >
-              <div className="hidden h-full w-[100px] items-center gap-1 lg:flex">
+              <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
                 {/* <button
                  className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
                   onClick={() => {
@@ -2710,6 +2710,8 @@ const TestDetail = () => {
                     {activeShowAll && <OptionShowAll />}
                     <Tooltip
                       className="tooltip-show-all"
+                      open={tooltipOpen}
+                      onOpenChange={(visible) => setTooltipOpen(visible)}
                       title={
                         <div className="flex items-center gap-2">
                           {activeShowAll ? (
@@ -2731,7 +2733,9 @@ const TestDetail = () => {
                         className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
                         onClick={() => {
                           setActiveShowAll(!activeShowAll)
+                          setTooltipOpen(false)
                         }}
+                        // onMouseUp={() => setTooltipOpen(true)}
                       >
                         {!activeShowAll ? (
                           <ShowLessIcon size={24} />
@@ -2797,7 +2801,7 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="hidden min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline lg:flex"
+                className="hidden min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
