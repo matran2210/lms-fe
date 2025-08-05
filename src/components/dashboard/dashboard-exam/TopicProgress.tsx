@@ -133,7 +133,7 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-[48vh] xl:h-auto xl:p-8">
+    <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-[48vh] xl:h-full xl:p-8">
       <div className="mb-6 text-lg font-bold text-gray-800 md:mb-5 md:pb-3 xl:text-xl">
         Topic Progress
       </div>

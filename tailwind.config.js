@@ -358,7 +358,6 @@ module.exports = {
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
-        small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
         card: '0px 4px 16px 0px #00000014',
       },
       minWidth: {
