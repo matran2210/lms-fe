@@ -250,7 +250,7 @@ const MyCourse = () => {
           }
         >
           <div
-            className={`heading relative h-full rounded-md bg-white p-3 md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
+            className={`heading relative h-full rounded-md bg-white p-3 md:p-6 lg:rounded-xl lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
             <Heading
