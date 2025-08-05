@@ -206,11 +206,12 @@ export default function Sidebar({
           setOpenResource={setOpenResource}
         />
       )}
-
-      <ExaminationInfo
-        open={openExaminationInfo}
-        setOpen={setOpenExaminationInfo}
-      />
+      {openExaminationInfo && (
+        <ExaminationInfo
+          open={openExaminationInfo}
+          setOpen={setOpenExaminationInfo}
+        />
+      )}
       <RedirectToMasterModal />
     </div>
   )
