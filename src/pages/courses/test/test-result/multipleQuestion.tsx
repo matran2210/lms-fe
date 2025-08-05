@@ -56,7 +56,7 @@ const MultipleQuestion = ({
           : ' text-warning border-warning hover:bg-warning-50'
     }
     return data?.is_correct
-      ? ' text-success border-success hover:bg-success-50'
+      ? 'text-success border-success hover:bg-success-50'
       : ' text-error border-error hover:bg-error-50'
   }
 
@@ -98,15 +98,25 @@ const MultipleQuestion = ({
           <div className="w-full overflow-x-auto">
             <div
               className={clsx('', {
-                'mb-10 grid grid-cols-6 gap-3': isLargeDesktopView,
+                'grid grid-cols-7 gap-3': isLargeDesktopView,
                 'flex flex-wrap gap-4':
                   (showMore && !isLargeDesktopView) ||
                   (!showMore && !isLargeDesktopView && data.length <= 10),
+                'grid min-w-max grid-flow-col grid-rows-2 gap-3 sm:min-w-0 sm:grid-flow-row sm:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] sm:grid-rows-none md:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] md:gap-4':
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 10 &&
+                  data.length <= 20,
                 // 'grid min-w-max grid-flow-col gap-5':
                 //   !showMore && !isLargeDesktopView,
-                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4':
-                  !showMore && !isLargeDesktopView && data.length > 10,
-                // 'grid-rows-2 sm:grid-rows-[auto]': ,
+
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 lg:min-w-0 lg:grid-flow-row lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] lg:grid-rows-none':
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 20 &&
+                  data.length <= 35,
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4 lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))]':
+                  !showMore && !isLargeDesktopView && data.length > 35,
               })}
             >
               {renderBoxItems}
@@ -170,6 +180,10 @@ const MultipleQuestion = ({
       color: 'bg-success',
     },
     {
+      text: 'Incorrect',
+      color: 'bg-error',
+    },
+    {
       text: 'Completed',
       color: 'bg-info',
     },
@@ -177,17 +191,13 @@ const MultipleQuestion = ({
       text: 'Not Completed',
       color: 'bg-warning',
     },
-    {
-      text: 'Incorrect',
-      color: 'bg-error',
-    },
   ]
 
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet lg:rounded-2xl 
-        xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
+        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
+        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
         <div
@@ -295,13 +305,13 @@ const MultipleQuestion = ({
                 )}
                 <div
                   className={
-                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-4 md:text-base'
+                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-12 md:text-base'
                   }
                 >
                   {annotations.map((annotation) => (
                     <div
                       key={annotation.text}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-1 lg:gap-2"
                     >
                       <div
                         className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}

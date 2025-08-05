@@ -85,7 +85,7 @@ export default function Layout(props: LayoutProps): ReactElement {
             `fixed left-0 h-[calc(100vh-32px)] max-h-[1080px] rounded-xl bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
             {
               'overflow-hidden': !guideStatus,
-              'menu-sidebar-left--hover':
+              'menu-sidebar-left--hover !w-[220px]':
                 (guideStatus && (guideStep === 2 || guideStep === 3)) ||
                 isShowMenuContent,
               'h-[calc(100vh-32px-60px)]': !openPinned,
@@ -116,7 +116,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           </div>
         </div>
       </div>
-      <ModalMobile />
+      {/* <ModalMobile /> */}
     </>
   )
 }
