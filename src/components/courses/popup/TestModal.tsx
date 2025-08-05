@@ -7,10 +7,11 @@ import { useRouter } from 'next/router'
 import { IQuizResultList } from 'src/type'
 import { ClassAPI } from '@pages/api/class'
 import { capitalizeFirstLetter } from '@utils/index'
-import HookFormSelect from '@components/base/select/HookFormSelect'
 import { IAttempt } from 'src/type/courses-3-level'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
+import { useForm } from 'react-hook-form'
 
 interface IProps {
   open: boolean
@@ -66,6 +67,8 @@ export default function TestModal({
     number_of_attempt?: number
   }>()
   const [isFocus, setIsFocus] = useState<boolean>(false)
+
+  const { control } = useForm()
 
   const fetchResult = async (pageIndex: number, pageSize: number) => {
     if (class_user_id && data?.quiz?.id) {
@@ -286,10 +289,10 @@ export default function TestModal({
                   </div>
                   {resultList.data.length > 1 && (
                     <div className="flex gap-2">
-                      <HookFormSelect
-                        classParent="w-full md:max-w-full border-none forcus:text-primary"
-                        placeholder=""
-                        value={selectedResult}
+                      <SAPPSelectV2
+                        control={control}
+                        name="attempt"
+                        className="!h-10 min-w-[40px] border-none focus:text-primary"
                         onChange={(selectedOption) => {
                           setSelectedResult(selectedOption)
                           setIsFocus(false)
@@ -301,7 +304,7 @@ export default function TestModal({
                           ratio_score: item.ratio_score,
                         }))}
                         onMenuScrollToBottom={(
-                          e: React.UIEvent<HTMLDivElement>,
+                          e: React.UIEvent<HTMLElement>,
                         ) => {
                           const { target } = e
                           if (
@@ -311,14 +314,6 @@ export default function TestModal({
                           ) {
                             handleNextPage()
                           }
-                        }}
-                        isResultSelect
-                        maxMenuHeight={130}
-                        onFocus={(e) => {
-                          setIsFocus(true)
-                        }}
-                        onBlur={(e) => {
-                          setIsFocus(false)
                         }}
                       />
                     </div>

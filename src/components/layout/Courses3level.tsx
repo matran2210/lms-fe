@@ -4,7 +4,7 @@ import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { useCourseContext } from '@contexts/index'
 import { PageLink } from 'src/constants'
 import { Courses3LevelMenu } from '@components/courses'
-import { MasterFinanceProvider } from '@contexts/MasterFinance'
+import { withMasterFinanceProvider } from '@contexts/MasterFinance'
 
 type Courses3LevelProps = {
   children: React.ReactNode
@@ -36,7 +36,7 @@ const LayoutCourses3Level = ({ children, openDrawer }: Courses3LevelProps) => {
     <>
       <div className="flex flex-col flex-nowrap bg-gray-4 md:flex-row">
         <Courses3LevelMenu />
-        <div className="ml-auto mr-[50px] min-h-screen w-full bg-gray-4 lg:max-w-[calc(100%-280px)]">
+        <div className="ml-auto min-h-screen w-full bg-gray-4 lg:mr-[50px] lg:max-w-[calc(100%-280px)]">
           {children}
         </div>
       </div>
@@ -44,15 +44,4 @@ const LayoutCourses3Level = ({ children, openDrawer }: Courses3LevelProps) => {
   )
 }
 
-const Courses3LevelWithProvider = ({
-  children,
-  ...props
-}: PropsWithChildren) => {
-  return (
-    <MasterFinanceProvider>
-      <LayoutCourses3Level {...props}>{children}</LayoutCourses3Level>
-    </MasterFinanceProvider>
-  )
-}
-
-export default memo(Courses3LevelWithProvider)
+export default memo(withMasterFinanceProvider(LayoutCourses3Level))

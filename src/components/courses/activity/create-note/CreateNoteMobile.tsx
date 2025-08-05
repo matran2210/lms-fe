@@ -67,6 +67,7 @@ export default function CreateNoteMobile({
           <ButtonIcon
             title="Save"
             className="flex-row-reverse gap-2 rounded-md bg-bw-13 px-4 py-2 text-sm text-white"
+            classTitle="text-sm font-semibold"
             onClick={handleSubmit(onSubmit)}
             loading={loading}
           >
