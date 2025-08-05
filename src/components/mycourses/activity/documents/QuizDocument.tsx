@@ -211,8 +211,7 @@ const QuizDocument = ({
           setStartWorkTime(Date.now())
         } catch (error) {}
       }
-
-      questionRef?.current?.reset()
+      // questionRef?.current?.reset()
     }
   }
 
@@ -282,7 +281,7 @@ const QuizDocument = ({
         } catch (error) {}
       }
 
-      questionRef.current?.reset()
+      // questionRef.current?.reset()
     }
   }
 

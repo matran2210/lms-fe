@@ -264,6 +264,8 @@ const SelectWord = forwardRef(
           dropdownContainer?.classList?.add(
             isCorrect || isSelfReflection ? '!border-success' : '!border-error',
             'sapp-select-confirmed',
+            '!w-fit',
+            '!min-w-fit',
           )
           dropdownContainer?.setAttribute('disabled', 'true')
         }
@@ -467,7 +469,7 @@ const SelectWord = forwardRef(
                         `.option[data-component-id="${componentId.current}"]`,
                       )
                       .forEach((option) => {
-                        option.classList.remove('bg-[#e5e7eb]', 'selected')
+                        option.classList.remove('bg-gray-100', 'selected')
                       })
 
                     options.style.display = 'block'
@@ -476,7 +478,7 @@ const SelectWord = forwardRef(
                   }
 
                   // Toggle UI styles
-                  dropdown.classList.toggle('border-gray-200', isNowOpen)
+                  dropdown.classList.toggle('border-primary', isNowOpen)
                   iconDropDown?.classList.toggle('rotate-180', isNowOpen)
                 }
               }
@@ -494,9 +496,9 @@ const SelectWord = forwardRef(
                       `.option[data-component-id="${componentId.current}"]`,
                     )
                     .forEach((opt) =>
-                      opt.classList.remove('bg-[#e5e7eb]', 'selected'),
+                      opt.classList.remove('bg-gray-100', 'selected'),
                     )
-                  option.classList.add('bg-[#e5e7eb]', 'selected')
+                  option.classList.add('bg-gray-100', 'selected')
                 })
               })
 
@@ -538,7 +540,7 @@ const SelectWord = forwardRef(
                       )
                       .forEach((opt) => {
                         opt.classList.toggle(
-                          'bg-[#e5e7eb]',
+                          'bg-gray-100',
                           opt.getAttribute('data-value') === value,
                         )
                       })
@@ -546,7 +548,7 @@ const SelectWord = forwardRef(
                     options.style.display = 'none'
                     dropdown.setAttribute('data-open', 'false')
                     iconDropDown?.classList.remove('rotate-180')
-                    dropdown.classList.remove('border-gray-200')
+                    dropdown.classList.remove('border-primary')
                   }
                 })
               })
@@ -566,13 +568,14 @@ const SelectWord = forwardRef(
                     )
                     .forEach((option) => {
                       option.classList.toggle(
-                        'bg-[#e5e7eb]',
+                        'bg-gray-100',
                         option.getAttribute('data-value') === selectedValue,
                       )
                     })
                 }
                 iconDropDown?.classList.remove('rotate-180')
-                dropdown.classList.remove('border-gray-200')
+                // dropdown.classList.remove('border-gray-200')
+                dropdown.classList.remove('border-primary')
               }
             })
 
