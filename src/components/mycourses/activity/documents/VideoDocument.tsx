@@ -338,13 +338,11 @@ const VideoDocument = ({
   return (
     <div>
       <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-          {(videos as IVideo[])?.length > 1 && (
+        {(videos as IVideo[])?.length > 1 && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
             <span className="font-semibold text-bw-1">Video mode:</span>
-          )}
-          <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
-            {(videos as IVideo[])?.length > 1 &&
-              videos?.map((v, i) => {
+            <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
+              {videos?.map((v, i) => {
                 return (
                   <label
                     className=" flex cursor-pointer select-none items-center gap-2"
@@ -367,8 +365,9 @@ const VideoDocument = ({
                   </label>
                 )
               })}
+            </div>
           </div>
-        </div>
+        )}
         <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>

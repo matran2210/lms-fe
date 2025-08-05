@@ -12,6 +12,7 @@ import {
   pushNotes,
 } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 import { DocumentText } from '../icons/DocumentText'
+import clsx from 'clsx'
 
 const tabs: IActivityTab[] = [
   { key: 'add-note', icon: <DocumentAdd /> },
@@ -49,7 +50,7 @@ export default function ActivityBar({
   }
 
   return (
-    <div className="fixed bottom-8 left-4 z-[1010] flex w-[calc(100%-32px)] justify-between overflow-hidden rounded-lg bg-primary p-2 shadow-activity lg:hidden">
+    <div className="fixed bottom-8 left-4 z-[1010] flex w-[calc(100%-32px)] justify-between overflow-hidden rounded-lg bg-primary px-4 py-2 shadow-activity lg:hidden">
       <div className="flex gap-1">
         {tabs.map((tab) => (
           <div
@@ -64,7 +65,7 @@ export default function ActivityBar({
       <ButtonIcon
         title="Section content"
         onClick={() => onTabChange('content')}
-        className={getButtonClass('content')}
+        className={clsx(getButtonClass('content'), 'gap-2')}
         classTitle="text-v2-sm font-normal"
       >
         <List />
