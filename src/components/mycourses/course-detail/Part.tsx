@@ -15,6 +15,7 @@ import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import { LockClosedIcon } from '@assets/icons'
+import { getUserPrefix } from '@utils/helpers'
 
 const Part = ({
   course,
@@ -45,7 +46,7 @@ const Part = ({
       deadline,
     })
     router.push(
-      `${isTeacher ? '/teachers' : ''}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${getUserPrefix(isTeacher)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
     )
   }
 

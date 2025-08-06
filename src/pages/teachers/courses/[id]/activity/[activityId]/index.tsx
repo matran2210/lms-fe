@@ -30,7 +30,12 @@ import SAPPBorder from 'src/common/SAPPBorder'
 import SappIcon from 'src/common/SappIcon'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import Tooltip from 'src/common/Tooltip'
-import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
+import {
+  ANIMATION,
+  EXHIBIT_TEXT_REPLACE,
+  PageLink,
+  PROGRAM,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
 import { UploadAPI } from 'src/pages/api/upload'
@@ -434,7 +439,7 @@ const ActivityTeacherPage = () => {
 
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
-        const urlCourseDetail = `/teachers/courses/${router.query.id}/section/${partId}`
+        const urlCourseDetail = `${PageLink.TEACHER_MY_COURSE}/${router.query.id}/section/${partId}`
         switch (e.course_section_type) {
           case 'PART':
           case 'CHAPTER':
@@ -451,7 +456,7 @@ const ActivityTeacherPage = () => {
           default:
             return {
               title: e?.name,
-              link: `/teachers/courses/my-course/${router.query.id}`,
+              link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id}`,
             }
         }
       })

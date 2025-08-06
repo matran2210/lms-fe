@@ -194,7 +194,7 @@ const CoursePartDetailTeacher = () => {
       })
     } else {
       router.push({
-        pathname: `/teachers/courses/${router.query.id}/activity/${id}`,
+        pathname: `${PageLink.TEACHER_MY_COURSE}/${router.query.id}/activity/${id}`,
       })
     }
   }
@@ -231,7 +231,7 @@ const CoursePartDetailTeacher = () => {
         })
       } else {
         router.push({
-          pathname: `/teachers/case-study/result/${getCaseStudy?.attempt?.id}`,
+          pathname: `${PageLink.TEACHER_CASE_STUDY}/result/${getCaseStudy?.attempt?.id}`,
           query: {
             class_user_id: previewPart.class_user_id,
             class_id: router?.query?.id,
@@ -252,7 +252,7 @@ const CoursePartDetailTeacher = () => {
         })
       } else {
         router.push({
-          pathname: `/teachers/case-study/${topicId}`,
+          pathname: `${PageLink.TEACHER_CASE_STUDY}/${topicId}`,
           query: {
             quiz_id: quizId,
             class_user_id: previewPart.class_user_id,
@@ -448,7 +448,7 @@ const CoursePartDetailTeacher = () => {
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
     {
-      link: `/teachers/courses/my-course/${router.query.id}`,
+      link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id}`,
       title: previewPart?.name,
     },
     {

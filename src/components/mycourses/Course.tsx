@@ -3,7 +3,11 @@ import Icon from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import {
+  convertHourToDayLeft,
+  convertLocalTimeToUTC,
+  getUserPrefix,
+} from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { isNull, round } from 'lodash'
@@ -54,7 +58,7 @@ const Course = ({
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = useMemo(() => new Date(), [])
-
+  const userPrefix = getUserPrefix(isTeacher)
   useEffect(() => {
     if (student?.finished_at) {
       const currentLocalDate = new Date()
@@ -204,7 +208,7 @@ const Course = ({
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
         router.push(
-          `${isTeacher ? '/teachers' : ''}/courses/my-course/${foundation_class_id || classInstance?.id}`,
+          `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
         )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
@@ -243,7 +247,7 @@ const Course = ({
         category == PROGRAM.CMA)
 
     // Redirect to dashboard if the course type is practice, normal
-    const basePath = `${isTeacher ? '/teachers' : ''}/courses/my-course/${classInstance?.id}`
+    const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`
     const path =
       isRedirectDashboard &&
       (determineButtonToShow === BUTTON_STATUS.Review ||
@@ -389,7 +393,7 @@ const Course = ({
    */
   const handleContinueFoundation = () => {
     router.push(
-      `${isTeacher ? '/teachers' : ''}/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+      `${userPrefix}/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
     )
   }
 

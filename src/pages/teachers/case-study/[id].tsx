@@ -33,6 +33,7 @@ import UnSubmitAnswerModal from 'src/components/UnSubmitAnswerModal'
 import {
   ESSAY_TYPE,
   EXHIBIT_TEXT_REPLACE,
+  PageLink,
   PROGRAM,
   QUESTION_TYPES,
 } from 'src/constants'
@@ -479,7 +480,7 @@ const CaseStudyDetail = () => {
 
   const backToPart = () => {
     router.replace(
-      `/teachers/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
+      `${PageLink.TEACHER_MY_COURSE}/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
     )
   }
 
@@ -759,7 +760,7 @@ const CaseStudyDetail = () => {
         }
 
         router.replace(
-          `/teachers/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
+          `${PageLink.TEACHER_CASE_STUDY}/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )
       } catch (err) {
         toast.error('Submission failed. Please try again.')

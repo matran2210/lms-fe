@@ -9,7 +9,7 @@ import { ICourseAll } from 'src/type/courses'
 import { defaultStatusCourse, PageLink } from 'src/constants'
 import TotalResullt from 'src/common/TotalResullt'
 import { isEmpty } from 'lodash'
-
+import { getUserPrefix } from '@utils/helpers'
 interface IProps {
   courses: ICourseAll
   setPage?: Dispatch<SetStateAction<number>>
@@ -29,7 +29,7 @@ const Filter = ({ courses, setPage, isTeacher = false }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = `${isTeacher ? '/teachers' : ''}/courses`
+  let apiUrl = `${getUserPrefix(isTeacher)}/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',

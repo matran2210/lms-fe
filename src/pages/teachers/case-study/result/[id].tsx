@@ -25,7 +25,12 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { EXHIBIT_TEXT_REPLACE, PROGRAM, QUESTION_TYPES } from 'src/constants'
+import {
+  EXHIBIT_TEXT_REPLACE,
+  PageLink,
+  PROGRAM,
+  QUESTION_TYPES,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'
@@ -256,11 +261,11 @@ const CaseStudyResult = () => {
     }
     if (result?.next_topic?.attempt) {
       router.replace(
-        `/teachers/case-study/result/${result?.next_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
+        `${PageLink.TEACHER_CASE_STUDY}/result/${result?.next_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
       )
     } else {
       router.push(
-        `/teachers/case-study/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
+        `${PageLink.TEACHER_CASE_STUDY}/${result?.next_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.next_topic?.id}`,
       )
     }
   }
@@ -271,11 +276,11 @@ const CaseStudyResult = () => {
   const handlePeriousTopic = () => {
     if (result?.previous_topic?.attempt) {
       router.replace(
-        `/teachers/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
+        `${PageLink.TEACHER_CASE_STUDY}/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
       )
     } else {
       router.push(
-        `/teachers/case-study/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
+        `${PageLink.TEACHER_CASE_STUDY}/${result?.previous_topic?.question_topic_id}?quiz_id=${result?.quiz_id}&class_user_id=${router?.query?.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}&caseStudyId=${result?.previous_topic?.id}`,
       )
     }
   }
@@ -411,10 +416,10 @@ const CaseStudyResult = () => {
   const backToPart = () => {
     if (router?.query?.class_id && router?.query?.course_section_id) {
       router.push(
-        `/teachers/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
+        `${PageLink.TEACHER_MY_COURSE}/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
       )
     } else {
-      router.push(`/teachers/courses`)
+      router.push(PageLink.TEACHER_MY_COURSE)
     }
   }
 
