@@ -32,7 +32,7 @@ const Dashboard = () => {
                   link: PageLink.COURSES,
                 },
                 {
-                  title: 'dá',
+                  title: infoCourse.course_name,
                   link: PageLink.COURSE_DETAIL.replace(
                     '[courseId]',
                     router.query.courseId as string,
