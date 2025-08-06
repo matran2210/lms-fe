@@ -1,7 +1,7 @@
-import { ClockIcon, PencilV2Icon } from '@assets/icons'
+import { PencilV2Icon } from '@assets/icons'
 import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
+import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
 import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
@@ -311,9 +311,9 @@ const ProfileHeader = ({
           )}
         >
           <div className="flex w-full items-center justify-center gap-3 md:justify-start">
-            <TextSkeleton loading={loading || loadingEditName}>
+            <ProfileSkeleton loading={loading || loadingEditName}>
               {user.detail.full_name}
-            </TextSkeleton>
+            </ProfileSkeleton>
             <div>
               <Tag
                 bordered={false}
