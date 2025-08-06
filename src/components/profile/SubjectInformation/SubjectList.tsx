@@ -73,7 +73,7 @@ const SubjectList = ({ isEdit }: IProps) => {
         onClose={closeMakeDefault}
         title={
           <Select
-            suffixIcon={<CollapseArrowIcon selected />}
+            suffixIcon={<CollapseArrowIcon className="text-secondary" />}
             value={makeDefaultDrawer?.course_category_name}
             onChange={(value) => {
               setMakeDefaultDrawer({

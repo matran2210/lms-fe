@@ -115,7 +115,7 @@ const ProfileList = ({ isEdit }: IProps) => {
           onClose={closeMakeDefault}
           title={
             <Select
-              suffixIcon={<CollapseArrowIcon selected />}
+              suffixIcon={<CollapseArrowIcon className="text-secondary" />}
               value={makeDefaultDrawer?.id}
               onChange={(value, option) => {
                 if (!Array.isArray(option) && option) {

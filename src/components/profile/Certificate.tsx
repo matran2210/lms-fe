@@ -29,6 +29,46 @@ interface ICertificate {
   received_times: string
 }
 
+const mockCertificates: ICertificate[] = [
+  {
+    id: '1',
+    certificate_id: 'cert_001',
+    certificate_url:
+      'https://imgv2-1-f.scribdassets.com/img/document/394504624/original/7fdeddace1/1?v=1',
+    class_id: 'class_001',
+    course_id: 'course_001',
+    user_id: 'user_001',
+    pass_point: 85,
+    received_times: '2025-08-01T10:30:00Z',
+    certificate: {
+      id: 'cert_001',
+      name: 'Frontend Development Certificate',
+    },
+    course: {
+      id: 'course_001',
+      name: 'React & TypeScript Bootcamp',
+    },
+  },
+  {
+    id: '2',
+    certificate_id: 'cert_002',
+    certificate_url:
+      'https://imgv2-1-f.scribdassets.com/img/document/394504624/original/7fdeddace1/1?v=1',
+    class_id: 'class_002',
+    course_id: 'course_002',
+    user_id: 'user_002',
+    pass_point: 92,
+    received_times: '2025-07-28T15:45:00Z',
+    certificate: {
+      id: 'cert_002',
+      name: 'Backend Engineering Certificate',
+    },
+    course: {
+      id: 'course_002',
+      name: 'Node.js & Express Masterclass',
+    },
+  },
+]
 const Certificate = () => {
   const { downloadImage } = useDownloadImage()
   const [certificateData, setCertificateData] = useState<
@@ -43,6 +83,7 @@ const Certificate = () => {
       const certificate = res.data.certificates
       const userDetail = res.username
       setCertificateData(certificate)
+      setCertificateData(mockCertificates)
       setUserDetail(userDetail)
     } catch (error) {}
   }
