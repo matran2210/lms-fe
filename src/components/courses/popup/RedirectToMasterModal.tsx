@@ -7,6 +7,8 @@ import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import clsx from 'clsx'
 import { ECourseType, PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 const destinations = [
   {
@@ -34,48 +36,54 @@ export default function RedirectToMasterModal() {
   }
 
   return (
-    <BaseStaticModal
+    <SappModalV3
       visible={isVisibleRedirectToMasterModal}
-      title="Redirect to"
+      onOk={() => {}}
+      handleCancel={() => {}}
+      showFooter={false}
     >
-      <div className="mb-4 mt-4 md:mb-6 md:mt-10">
-        {destinations.map((destination, index) => (
-          <div
-            key={index}
-            className={clsx('flex items-center justify-center gap-6 py-4', {
-              'cursor-pointer': destination.path,
-            })}
-          >
-            <div className="relative h-[50px] w-[120px] md:w-[150px]">
-              <Image
-                src={destination.image}
-                objectFit="contain"
-                layout="fill"
-                alt={destination.title}
-              />
+      <div className="flex flex-col gap-6 md:gap-10">
+        <div className="text-3xl font-semibold">Redirect to</div>
+        <div className="p-4">
+          {destinations.map((destination, index) => (
+            <div
+              key={index}
+              className={clsx('flex items-center justify-center gap-6', {
+                'cursor-pointer': destination.path,
+              })}
+            >
+              <div className="relative h-[50px] w-[120px] md:w-[150px]">
+                <Image
+                  src={destination.image}
+                  objectFit="contain"
+                  layout="fill"
+                  alt={destination.title}
+                />
+              </div>
+              <div className="border-bw-15 h-[27px] border-r border-solid" />
+              <div className="text-base font-semibold md:text-xl">
+                {destination.title}
+              </div>
             </div>
-            <div className="border-bw-15 h-[27px] border-r border-solid" />
-            <div className="text-base font-semibold md:text-lg">
-              {destination.title}
-            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-y-3 text-center">
+          <div>
+            <ButtonPrimary
+              title="Confirm"
+              onClick={handleRedirect}
+              className="w-full"
+              size="medium"
+            />
           </div>
-        ))}
-      </div>
-      <div className="flex flex-col gap-y-4 text-center">
-        <div>
-          <SAPPButtonV2
-            title="Confirm"
-            onClick={handleRedirect}
-            className="w-full"
-          />
-        </div>
-        <div
-          className="cursor-pointer hover:text-primary"
-          onClick={handleCancel}
-        >
-          Stay at General Course
+          <div
+            className="cursor-pointer text-base font-semibold text-gray-800 underline"
+            onClick={handleCancel}
+          >
+            Stay at General Course
+          </div>
         </div>
       </div>
-    </BaseStaticModal>
+    </SappModalV3>
   )
 }

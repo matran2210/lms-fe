@@ -214,9 +214,8 @@ const MultipleQuestion = ({
               questions?.selectedResponseAnswers ?? [],
               0,
               <>
-                {Number(questions?.selectedResponseAnswers?.length || 0) +
-                  Number(questions?.constructedResponseAnswers?.length || 0) >=
-                  8 && (
+                {Number(questions?.constructedResponseAnswers?.length || 0) >
+                  0 && (
                   <div
                     className=" cursor-pointer text-sm font-medium underline xl:hidden"
                     onClick={() => {
@@ -282,11 +281,9 @@ const MultipleQuestion = ({
                   questions?.selectedResponseAnswers ?? [],
                   0,
                   <div className="flex max-h-[40px] grow items-center justify-end">
-                    {Number(questions?.selectedResponseAnswers?.length || 0) +
-                      Number(
-                        questions?.constructedResponseAnswers?.length || 0,
-                      ) >=
-                      8 && (
+                    {Number(
+                      questions?.constructedResponseAnswers?.length || 0,
+                    ) > 0 && (
                       <div
                         className="block cursor-pointer text-sm font-medium underline xl:hidden"
                         onClick={() => {
