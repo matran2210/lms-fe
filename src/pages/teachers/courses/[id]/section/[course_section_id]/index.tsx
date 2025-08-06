@@ -231,7 +231,7 @@ const CoursePartDetailTeacher = () => {
         })
       } else {
         router.push({
-          pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
+          pathname: `/teachers/case-study/result/${getCaseStudy?.attempt?.id}`,
           query: {
             class_user_id: previewPart.class_user_id,
             class_id: router?.query?.id,
@@ -252,7 +252,7 @@ const CoursePartDetailTeacher = () => {
         })
       } else {
         router.push({
-          pathname: `/case-study/${topicId}`,
+          pathname: `/teachers/case-study/${topicId}`,
           query: {
             quiz_id: quizId,
             class_user_id: previewPart.class_user_id,
