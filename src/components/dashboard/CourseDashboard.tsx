@@ -3,7 +3,9 @@ import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import OverallProgress from './dashboard-normal/OverallProgress'
 import LearningResult from './dashboard-normal/LearningResult'
 import { isUndefined } from 'lodash'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { COURSE_TYPE } from 'src/constants'
+import { ICourseInfo } from 'src/type/dashboard'
 
 export interface IActivityProgress {
   completed: number
@@ -16,7 +18,11 @@ export interface IActivities {
   activity?: IActivityProgress
 }
 
-const CourseDashboard = () => {
+const CourseDashboard = ({
+  setInfoCourse,
+}: {
+  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+}) => {
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   )
@@ -170,7 +176,7 @@ const CourseDashboard = () => {
 
       <div className="grid lg:flex xl:gap-8 2xl:mb-8">
         <div className="order-2 xl:order-1 xl:w-[60%]">
-          <TopicProgress />
+          <TopicProgress setInfoCourse={setInfoCourse} />
         </div>
         <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
           <LearningResult />

@@ -1,6 +1,6 @@
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 import { ANIMATION, COURSE_TYPE, PageLink } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
@@ -9,11 +9,16 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { ICourseInfo } from 'src/type/dashboard'
 
 const Dashboard = () => {
   const router = useRouter()
-  const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const [infoCourse, setInfoCourse] = useState<ICourseInfo>({
+    course_type: COURSE_TYPE.NORMAL_COURSE,
+    course_name: '',
+  })
+
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
       <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
@@ -27,7 +32,7 @@ const Dashboard = () => {
                   link: PageLink.COURSES,
                 },
                 {
-                  title: courseInfo?.name,
+                  title: 'dá',
                   link: PageLink.COURSE_DETAIL.replace(
                     '[courseId]',
                     router.query.courseId as string,
@@ -52,11 +57,9 @@ const Dashboard = () => {
         className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5 3xl:px-13.75"
         data-aos={ANIMATION.DATA_AOS}
       >
-        {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (
-          <CourseDashboard />
-        ) : (
-          <ExamDashboard />
-        )}
+        {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE
+          ? infoCourse && <CourseDashboard setInfoCourse={setInfoCourse} />
+          : infoCourse && <ExamDashboard setInfoCourse={setInfoCourse} />}
       </div>
     </Layout>
   )
