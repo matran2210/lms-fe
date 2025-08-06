@@ -17,6 +17,7 @@ export const shortNotesListSlice = createSlice({
   initialState,
   reducers: {
     activeNotesList: (state) => {
+      console.log('state', state)
       // Active khi action 'active' được gọi
       state.status = true
     },

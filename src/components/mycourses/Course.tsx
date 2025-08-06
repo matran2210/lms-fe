@@ -250,6 +250,7 @@ const Course = ({
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`
     const path =
       isRedirectDashboard &&
+      !isTeacher &&
       (determineButtonToShow === BUTTON_STATUS.Review ||
         determineButtonToShow === BUTTON_STATUS.Resume)
         ? `${basePath}/dashboard`

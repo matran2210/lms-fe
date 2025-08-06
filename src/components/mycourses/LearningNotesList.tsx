@@ -28,7 +28,7 @@ const LearningNotesList = () => {
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
   )
-
+  console.log(notesListStatus, 'notesListStatus')
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )

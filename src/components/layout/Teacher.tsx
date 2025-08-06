@@ -12,6 +12,7 @@ type LayoutTeacherProps = {
   title?: string
   breadcrumbs?: ITabs[]
   className?: string
+  isCourseDetail?: boolean
 }
 
 const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
@@ -19,6 +20,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   title = '',
   breadcrumbs = [],
   className = '',
+  isCourseDetail = false,
 }: LayoutTeacherProps) => {
   return (
     <>
@@ -26,7 +28,10 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
         <title>{title}</title>
       </Head>
       <div className="flex flex-nowrap">
-        <TeacherMenu />
+        <TeacherMenu
+          isCourseDetail={isCourseDetail}
+          breadcrumbs={breadcrumbs}
+        />
         <div className="min-h-screen w-full bg-gray-10">
           <div className="px-56 py-6">
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />

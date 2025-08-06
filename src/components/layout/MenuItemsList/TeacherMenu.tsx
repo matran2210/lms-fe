@@ -17,21 +17,69 @@ import {
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useRouter } from 'next/router'
-import { useAppSelector } from 'src/redux/hook'
+import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 
 import Link from 'next/link'
 import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon/index'
+import { ITabs } from 'src/type'
+import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
 
 const { Sider } = Layout
 
-export default function TeacherMenu() {
+export default function TeacherMenu({
+  isCourseDetail,
+  breadcrumbs,
+}: {
+  isCourseDetail: boolean
+  breadcrumbs: ITabs[]
+}) {
   const [selectedKey, setSelectedKey] = useState<string>('Home')
   const router = useRouter()
   const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
+  const dispatch = useAppDispatch()
 
-  const menuItems = useMemo(
-    () => [
+  const menuItems = useMemo(() => {
+    if (isCourseDetail) {
+      return [
+        {
+          key: TitleSidebar.COURSE_CONTENT,
+          title: TitleSidebar.COURSE_CONTENT,
+          active:
+            router.pathname === `${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}`,
+          icon: (
+            <HomeMenuIcon
+              selected={selectedKey === TitleSidebar.COURSE_CONTENT}
+            />
+          ),
+          link: breadcrumbs?.[2]?.link,
+        },
+        {
+          key: TitleSidebar.NOTES_LIST,
+          icon: (
+            <BookMenuIcon selected={selectedKey === TitleSidebar.NOTES_LIST} />
+          ),
+          link: '#',
+          active: selectedKey === TitleSidebar.NOTES_LIST,
+          title: TitleSidebar.NOTES_LIST,
+        },
+        {
+          key: 'File',
+          icon: <FileMenuIcon selected={selectedKey === 'File'} />,
+          link: PageLink.TEACHER_MY_REQUEST,
+          active: router.pathname === PageLink.TEACHER_MY_REQUEST,
+          title: TitleTeacherSidebar?.MYREQUEST,
+        },
+        {
+          key: 'MyCourse',
+          icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
+          link: PageLink.TEACHER_MY_COURSE,
+          active: router.pathname === PageLink.TEACHER_MY_COURSE,
+          title: TitleSidebar.COURSES,
+        },
+      ]
+    }
+    return [
       {
         key: 'Home',
         icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
@@ -78,16 +126,23 @@ export default function TeacherMenu() {
         active: router.pathname === PageLink.TEACHERS,
         title: TitleTeacherSidebar?.NOTIFICATIONS,
       },
-    ],
-    [selectedKey, router.pathname],
-  )
+    ]
+  }, [selectedKey, router.pathname, isCourseDetail, breadcrumbs])
+
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
 
   const handleMenuClick = (item: { key: string }) => {
     if (selectedKey !== item.key) {
       const selectedItem = menuItems.find(
         (menuItem) => menuItem.key === item.key, // Khi chọn icon trên thanh menu điều hướng đến trang phù hợp
       )
-      if (selectedItem?.link) {
+      if (item.key === TitleSidebar.NOTES_LIST) {
+        handleOpenNotesList()
+        console.log('chya vao day')
+      } else if (selectedItem?.link) {
         router.push(selectedItem.link)
       }
     }

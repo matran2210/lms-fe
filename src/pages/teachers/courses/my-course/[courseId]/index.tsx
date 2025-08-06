@@ -165,11 +165,18 @@ const CourseDetail = () => {
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHERS, title: 'LMS' },
     { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
-    { link: '', title: courseNameDetail || '' },
+    {
+      link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.courseId}`,
+      title: courseNameDetail || '',
+    },
   ]
 
   return (
-    <LayoutTeacher title="Course Detail" breadcrumbs={breadcrumbs}>
+    <LayoutTeacher
+      title="Course Detail"
+      breadcrumbs={breadcrumbs}
+      isCourseDetail
+    >
       <div className="header border-b border-default bg-white">
         <div className={`relative my-0 flex`}>
           <SearchForm
