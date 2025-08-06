@@ -156,11 +156,11 @@ const ListItemFilterMobile = ({
   const isAnyLoading =
     isLoading || subsectionData.isLoading || activityData.isLoading
 
-  if (isAnyLoading || isEmpty(list)) return null
+  if (isAnyLoading) return null
 
   return (
-    <>
-      {list.map((item) => {
+    <div className="flex min-h-1 flex-1 flex-col">
+      {list?.map((item) => {
         const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
@@ -174,7 +174,7 @@ const ListItemFilterMobile = ({
         return (
           <div
             key={item.id}
-            className="mt-3 flex items-center justify-between py-2"
+            className="flex items-center justify-between py-2"
             onClick={() => handleSelect(item, isSelected)}
           >
             <div
@@ -189,7 +189,7 @@ const ListItemFilterMobile = ({
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 

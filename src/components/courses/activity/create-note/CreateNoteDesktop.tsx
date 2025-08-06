@@ -1,7 +1,7 @@
 import { CloseNone, SaveIcon } from '@assets/icons'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import ButtonIcon from '@components/courses/buttons/ButtonIcon'
+import ButtonPrimary from '@components/v2/base/button/ButtonPrimary'
 import { Control, UseFormHandleSubmit } from 'react-hook-form'
 import { NoteFormData } from 'src/type/courses-3-level'
 
@@ -54,15 +54,13 @@ const CreateNoteDesktop = ({
           />
         </div>
         <div className="absolute bottom-0 right-0 px-1 py-3">
-          <ButtonIcon
+          <ButtonPrimary
             title="Save"
-            className="flex-row-reverse gap-2 rounded-md bg-bw-13 px-4 py-2 text-sm text-white"
-            classTitle="text-sm font-semibold"
+            className="font-semibold"
             onClick={handleSubmit(onSubmit)}
             loading={loading}
-          >
-            <SaveIcon />
-          </ButtonIcon>
+            startIcon={<SaveIcon />}
+          />
         </div>
       </div>
     </ModalResizeable>
