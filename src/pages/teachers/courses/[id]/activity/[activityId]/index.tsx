@@ -497,7 +497,7 @@ const ActivityTeacherPage = () => {
     } else {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
       router.push({
-        pathname: `teachers/courses/${router.query.id}/activity/${activityId}`,
+        pathname: `${PageLink.TEACHER_MY_COURSE}/${router.query.id}/activity/${activityId}`,
       })
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
