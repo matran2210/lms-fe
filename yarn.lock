@@ -11749,10 +11749,10 @@ sapp-common-package-ha-test@^1.0.25-test:
     sass-loader "^13"
     tailwindcss "^3"
 
-sapp-common-package@^1.2.6-test:
-  version "1.2.6-test"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.2.6-test.tgz#ef4633cd078e8bae15bb9910a99476a61953f529"
-  integrity sha512-kU/ioxzID2GVcelVZQNQe2HpywWwN8B6crKvFBX5tjk2eQuxwr/hZI2prulNG5PTB4x6MabEctJOoTRbeqmABQ==
+sapp-common-package@^1.2.7-test:
+  version "1.2.7-test"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.2.7-test.tgz#5eed38705a62ded25febb4a649b336f7eff4bae7"
+  integrity sha512-9tug0kuj9lwksIVj1isVGM6AO51wGXQ4gkKtGw2TeBucPNvnfHfMGwfiIj81q3YX4ncuHUuwNrFfUBwJNVygGg==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"

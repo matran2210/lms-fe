@@ -189,11 +189,12 @@ const TabSlide = ({
                   handleChangeTab(sortedData[index - 1].id)
                 }
               }}
-              className={
+              className={clsx(
                 sortedData.findIndex((e) => e.id === currentTab) === 0
                   ? 'pointer-events-none opacity-50'
-                  : ''
-              }
+                  : '',
+                'cursor-pointer',
+              )}
             >
               <ArrowIconV2 />
             </PageLink>
@@ -302,12 +303,13 @@ const TabSlide = ({
                   handleChangeTab(sortedData[index + 1].id)
                 }
               }}
-              className={
+              className={clsx(
                 sortedData.findIndex((e) => e.id === currentTab) ===
-                sortedData.length - 1
+                  sortedData.length - 1
                   ? 'pointer-events-none opacity-50'
-                  : ''
-              }
+                  : '',
+                'cursor-pointer',
+              )}
             >
               <ArrowIconV2 right={true} />
             </PageLink>

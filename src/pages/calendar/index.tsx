@@ -178,9 +178,15 @@ const Page = () => {
             </div>
             {open.isOpen && (
               <>
-                <DetailCalendar open={open} setOpen={setOpen} />
-                <DetailCalendarTablet open={open} setOpen={setOpen} />
-                <DetailCalendarMobile open={open} setOpen={setOpen} />
+                {isMobileView && (
+                  <DetailCalendarMobile open={open} setOpen={setOpen} />
+                )}
+                {isTabletView && (
+                  <DetailCalendarTablet open={open} setOpen={setOpen} />
+                )}
+                {isAlwaysShowSidebar && (
+                  <DetailCalendar open={open} setOpen={setOpen} />
+                )}
               </>
             )}
           </div>
