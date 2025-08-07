@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, Fragment } from 'react'
 import { Layout, Menu, Tooltip } from 'antd'
 import Image from 'next/image'
-import { userReducer } from 'src/redux/slice/User/User'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 import {
   HomeMenuIcon,
@@ -12,18 +13,18 @@ import {
   LogOutMenuIcon,
   MyCalendarMenuIcon,
   MyCourseTeacherIcon,
-} from 'src/assets/icons/index'
-
+} from 'src/assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import { AuthenticationManager } from '@utils/helpers/keycloak'
-import { useRouter } from 'next/router'
-import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 
-import Link from 'next/link'
-import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
-import ExpandIcon from 'src/components/layout/ExpandIcon/index'
-import { ITabs } from 'src/type'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { useAppSelector, useAppDispatch } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
 import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+
+import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
+import ExpandIcon from 'src/components/layout/ExpandIcon'
+import LearningResource from 'src/components/mycourses/LearningResource'
+import { ITabs } from 'src/type'
 
 const { Sider } = Layout
 
@@ -34,145 +35,151 @@ export default function TeacherMenu({
   isCourseDetail: boolean
   breadcrumbs: ITabs[]
 }) {
-  const [selectedKey, setSelectedKey] = useState<string>('Home')
-  const router = useRouter()
-  const { user } = useAppSelector(userReducer) // Lấy thông tin user đang đăng nhập
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const { user } = useAppSelector(userReducer)
+
+  const [selectedKey, setSelectedKey] = useState('Home')
+  const [openResource, setOpenResource] = useState(false)
+
+  const handleLogout = async () => {
+    try {
+      await new AuthenticationManager().logout()
+    } catch (err) {}
+  }
+
+  const openNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+
+  const openResources = () => {
+    setOpenResource(true)
+    document.body.style.overflow = 'hidden'
+  }
 
   const menuItems = useMemo(() => {
+    const isCurrent = (path: string | string[]) =>
+      Array.isArray(path)
+        ? path.includes(router.pathname)
+        : router.pathname === path
+
     if (isCourseDetail) {
       return [
         {
           key: TitleSidebar.COURSE_CONTENT,
           title: TitleSidebar.COURSE_CONTENT,
-          active:
-            router.pathname ===
-              `${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}` &&
-            selectedKey !== TitleSidebar.NOTES_LIST,
           icon: (
             <HomeMenuIcon
               selected={selectedKey === TitleSidebar.COURSE_CONTENT}
             />
           ),
-          link: breadcrumbs?.[2]?.link,
+          link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}`,
+          active:
+            isCurrent(`${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}`) &&
+            selectedKey !== TitleSidebar.NOTES_LIST,
         },
         {
           key: TitleSidebar.NOTES_LIST,
+          title: TitleSidebar.NOTES_LIST,
           icon: (
             <BookMenuIcon selected={selectedKey === TitleSidebar.NOTES_LIST} />
           ),
           link: '#',
           active: selectedKey === TitleSidebar.NOTES_LIST,
-          title: TitleSidebar.NOTES_LIST,
         },
         {
-          key: 'File',
-          icon: <FileMenuIcon selected={selectedKey === 'File'} />,
-          link: PageLink.TEACHER_MY_REQUEST,
-          active: router.pathname === PageLink.TEACHER_MY_REQUEST,
-          title: TitleTeacherSidebar?.MYREQUEST,
+          key: TitleSidebar.RESOURCES,
+          title: TitleSidebar.RESOURCES,
+          icon: (
+            <FileMenuIcon selected={selectedKey === TitleSidebar.RESOURCES} />
+          ),
+          link: '#',
+          active: selectedKey === TitleSidebar.RESOURCES,
         },
         {
           key: 'MyCourse',
+          title: TitleSidebar.COURSES,
           icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
           link: PageLink.TEACHER_MY_COURSE,
-          active: router.pathname === PageLink.TEACHER_MY_COURSE,
-          title: TitleSidebar.COURSES,
+          active: isCurrent(PageLink.TEACHER_MY_COURSE),
         },
       ]
     }
+
     return [
       {
         key: 'Home',
+        title: TitleTeacherSidebar.DASHBOARD,
         icon: <HomeMenuIcon selected={selectedKey === 'Home'} />,
         link: PageLink.TEACHERS,
-        active: router.pathname === PageLink.TEACHERS,
-        title: TitleTeacherSidebar?.DASHBOARD,
+        active: isCurrent(PageLink.TEACHERS),
       },
       {
         key: 'MyCourse',
+        title: TitleSidebar.COURSES,
         icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
         link: PageLink.TEACHER_MY_COURSE,
-        active: router.pathname === PageLink.TEACHER_MY_COURSE,
-        title: TitleSidebar.COURSES,
+        active: isCurrent(PageLink.TEACHER_MY_COURSE),
       },
       {
         key: 'Book',
+        title: TitleTeacherSidebar.MYCLASS,
         icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
         link: PageLink.TEACHER_MY_CLASS,
-        active: [
+        active: isCurrent([
           PageLink.TEACHER_MY_CLASS,
           `${PageLink.TEACHER_MY_CLASS}/[id]`,
           PageLink.TEACHER_CHAPTER_TEST,
-        ].includes(router.pathname),
-        title: TitleTeacherSidebar?.MYCLASS,
+        ]),
       },
       {
         key: 'MyCalendar',
+        title: TitleTeacherSidebar.MYCALENDAR,
         icon: <MyCalendarMenuIcon selected={selectedKey === 'MyCalendar'} />,
         link: PageLink.MY_CALENDAR,
-        active: router.pathname === PageLink.MY_CALENDAR,
-        title: TitleTeacherSidebar?.MYCALENDAR,
+        active: isCurrent(PageLink.MY_CALENDAR),
       },
       {
         key: 'File',
+        title: TitleTeacherSidebar.MYREQUEST,
         icon: <FileMenuIcon selected={selectedKey === 'File'} />,
         link: PageLink.TEACHER_MY_REQUEST,
-        active: router.pathname === PageLink.TEACHER_MY_REQUEST,
-        title: TitleTeacherSidebar?.MYREQUEST,
+        active: isCurrent(PageLink.TEACHER_MY_REQUEST),
       },
       {
         key: 'Bell',
+        title: TitleTeacherSidebar.NOTIFICATIONS,
         icon: <BellIcon selected={selectedKey === 'Bell'} />,
         link: PageLink.TEACHERS,
-        active: router.pathname === PageLink.TEACHERS,
-        title: TitleTeacherSidebar?.NOTIFICATIONS,
+        active: isCurrent(PageLink.TEACHERS),
       },
     ]
-  }, [selectedKey, router.pathname, isCourseDetail, breadcrumbs])
-
-  const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
-    document.body.style.overflow = 'hidden'
-  }
-
-  const handleMenuClick = (item: { key: string }) => {
-    if (item.key === TitleSidebar.NOTES_LIST) {
-      handleOpenNotesList()
-    } else {
-      if (selectedKey !== item.key) {
-        const selectedItem = menuItems.find(
-          (menuItem) => menuItem.key === item.key, // Khi chọn icon trên thanh menu điều hướng đến trang phù hợp
-        )
-        if (selectedItem?.link) {
-          router.push(selectedItem.link)
-        }
-      }
-    }
-    if (selectedKey !== item.key) {
-      setSelectedKey(item.key)
-    }
-  }
-
-  const handleLogout = async () => {
-    // Hàm đăng xuất
-    try {
-      // Gọi phương thức `logout()` của AuthenticationManager, chuyển hướng về trang gốc sau khi đăng xuất
-      const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout()
-    } catch (error) {}
-  }
+  }, [router.pathname, selectedKey, isCourseDetail, breadcrumbs])
 
   useEffect(() => {
-    const updateSelectedKey = () => {
-      const activeItem = menuItems.find((menuItem) => menuItem.active) // Find the active menu item
-      setSelectedKey(activeItem?.key ?? 'Home') // Update selectedKey, default to 'Home' if not found
+    setSelectedKey((prevKey) => {
+      if (prevKey === 'Home' || prevKey === '') {
+        const activeItem = menuItems.find((item) => item.active)
+        return activeItem?.key ?? 'Home'
+      }
+      return prevKey
+    })
+  }, [menuItems])
+
+  const handleMenuClick = ({ key }: { key: string }) => {
+    if (key === TitleSidebar.NOTES_LIST) {
+      openNotesList()
+    } else if (key === TitleSidebar.RESOURCES) {
+      openResources()
+    } else {
+      const target = menuItems.find((item) => item.key === key)
+      if (target?.link) router.push(target.link)
     }
+    if (key !== selectedKey) setSelectedKey(key)
+  }
 
-    updateSelectedKey()
-  }, [menuItems]) // Re-run effect when menuItems changes
-
-  const ItemMenu = ({
+  const MenuItemIcon = ({
     icon,
     action,
   }: {
@@ -184,16 +191,14 @@ export default function TeacherMenu({
     </div>
   )
 
-  const ItemMenuLink = () => (
+  const SidebarMenu = () => (
     <div className="flex flex-col items-center">
-      {/* Logo */}
-      <div className="mb-8 mt-6 flex items-center justify-center">
-        <div className="flex h-10 w-10 cursor-pointer items-center justify-center">
-          <ExpandIcon type={'teacher-logo-full'} />
+      <div className="mb-8 mt-6">
+        <div className="h-10 w-10 cursor-pointer">
+          <ExpandIcon type="teacher-logo-full" />
         </div>
       </div>
-      <div className="mb-7 h-[1.20px] w-8 bg-white"></div>
-      {/* Main Menu */}
+      <div className="mb-7 h-[1.2px] w-8 bg-white" />
       <Menu
         theme="dark"
         mode="inline"
@@ -204,13 +209,12 @@ export default function TeacherMenu({
           <Tooltip
             key={item.key}
             title={item.title}
-            overlayClassName="teacher-sidebar-tooltip"
             placement="right"
+            overlayClassName="teacher-sidebar-tooltip"
           >
             <Menu.Item
               key={item.key}
               icon={item.icon}
-              className="p-3"
               onClick={() => handleMenuClick(item)}
             />
           </Tooltip>
@@ -219,7 +223,7 @@ export default function TeacherMenu({
     </div>
   )
 
-  const BottomMenu = () => (
+  const BottomActionMenu = () => (
     <div className="mb-6 flex flex-col items-center gap-6">
       <Link href={PageLink.MYPROFILE}>
         <Image
@@ -234,21 +238,24 @@ export default function TeacherMenu({
           className="cursor-pointer rounded-full object-cover"
         />
       </Link>
-      <ItemMenu icon={<HelpMenuIcon />} />
-      <ItemMenu icon={<LogOutMenuIcon />} action={handleLogout} />
+      <MenuItemIcon icon={<HelpMenuIcon />} />
+      <MenuItemIcon icon={<LogOutMenuIcon />} action={handleLogout} />
     </div>
   )
 
   return (
-    <Sider
-      width={80}
-      collapsed
-      className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
-    >
-      <div className="flex h-full flex-col items-center justify-between">
-        <ItemMenuLink />
-        <BottomMenu />
-      </div>
-    </Sider>
+    <Fragment>
+      <Sider
+        width={80}
+        collapsed
+        className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
+      >
+        <div className="flex h-full flex-col items-center justify-between">
+          <SidebarMenu />
+          <BottomActionMenu />
+        </div>
+      </Sider>
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+    </Fragment>
   )
 }

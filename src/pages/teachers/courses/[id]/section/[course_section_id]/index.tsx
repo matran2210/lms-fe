@@ -458,7 +458,11 @@ const CoursePartDetailTeacher = () => {
   ]
 
   return (
-    <LayoutTeacher title="Course Part Detail" breadcrumbs={breadcrumbs}>
+    <LayoutTeacher
+      title="Course Part Detail"
+      breadcrumbs={breadcrumbs}
+      isCourseDetail
+    >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
         <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
