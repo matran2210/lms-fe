@@ -1,4 +1,4 @@
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
-import { GRADE_STATUS } from 'src/constants'
+import { GRADE_STATUS, TitleSidebar, PageLink } from 'src/constants'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -36,44 +36,36 @@ const TestResultDetail = () => {
   // Sử dụng hook useGetQuestionTabs trong component
   const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
-  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+  let linkTest = `${PageLink.TEACHER_TEST}/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   const quiz = questions?.quizAttempt?.quiz
   if (
     quiz?.is_limited &&
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-    linkTest = `/courses/test/test-result/${router.query.id}`
+    linkTest = `${PageLink.TEACHER_MY_COURSE}/test/test-result/${router.query.id}`
   }
 
-  // Config Courses
   const breadcrumbs: ITabs[] = [
     {
-      link: `/courses/my-course/${questions?.class_id ?? ''}`,
+      link: `${PageLink.TEACHER_MY_COURSE}/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
-      disable: false,
     },
     {
       link: linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
-      disable: true,
     },
     {
-      link: '/',
-      title: 'Results',
-      disable: false,
+      link: '#',
+      title: TitleSidebar.RESULTS,
     },
   ]
 
   return (
     <FullScreenLayout title="Test Result" className="!bg-gray-3">
       <div className="mx-auto max-w-1570">
-        <div className="px-5 xl:container md:px-10">
-          <Breadcrumb
-            tabs={breadcrumbs}
-            currentPage={'Results'}
-            className="2xl-max:py-4"
-          />
+        <div className="py-5 xl:container md:px-10">
+          <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>
         <div className="px-5 xl:container md:px-10">
           <TestResultPage

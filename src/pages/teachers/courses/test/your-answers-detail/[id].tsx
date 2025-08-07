@@ -7,6 +7,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TableQuestions from 'src/pages/courses/test/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
+import { PageLink } from 'src/constants'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -36,20 +37,20 @@ const TestResultDetail = () => {
   // Sử dụng hook useGetQuestionTabs trong component
   const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
-  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+  let linkTest = `${PageLink.TEACHER_TEST}/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   const quiz = questions?.quizAttempt?.quiz
   if (
     quiz?.is_limited &&
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-    linkTest = `/courses/test/test-result/${router.query.id}`
+    linkTest = `${PageLink.TEACHER_MY_COURSE}/test/test-result/${router.query.id}`
   }
 
   // Config Courses
   const breadcrumbs: ITabs[] = [
     {
-      link: `/courses/my-course/${questions?.class_id ?? ''}`,
+      link: `${PageLink.TEACHER_MY_COURSE}/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
       disable: false,
     },

@@ -10,7 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type/quiz'
 import HookFormSelect from '@components/base/select/HookFormSelect'
-import { GRADING_METHOD, GRADE_STATUS } from 'src/constants'
+import { GRADING_METHOD, GRADE_STATUS, PageLink } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
 import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRetakeOrContinueAttempt'
@@ -239,7 +239,7 @@ const TestModal = ({
     try {
       activeCourse && (await activeCourse())
       router.push({
-        pathname: `/test/${data.quiz.id}`,
+        pathname: `${PageLink.TEACHER_TEST}/${data.quiz.id}`,
         query: {
           class_user_id: class_user_id,
         },
@@ -613,11 +613,11 @@ const TestModal = ({
                         onClick={() => {
                           if (isManualGradingAndNotFinishedGrading) {
                             router.push(
-                              `/courses/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
+                              `${PageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${data?.quiz?.attempt?.id}`,
                             )
                           } else {
                             router.push({
-                              pathname: `/courses/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
+                              pathname: `${PageLink.TEACHER_MY_COURSE}/test/test-result/${selectedResult?.value ?? data?.quiz?.attempt?.id}`,
                               query: { attempt: selectedResult?.label },
                             })
                           }
