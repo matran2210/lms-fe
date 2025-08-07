@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
 import DeviceItem from './DeviceItem'
@@ -7,8 +7,16 @@ import Icon from '@components/icons'
 import { IDeviceItem } from 'src/type/Profile'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import { calculateTimeAgo } from '@utils/helpers'
+import { AuthAPI } from '@pages/api/profile'
+import { getCookie, getSessionIdFromToken } from '@utils/index'
+import { COOKIE_INFO } from 'src/constants'
+import clsx from 'clsx'
 
 const DeviceList = () => {
+  const sessionId =
+    getSessionIdFromToken(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? '') ??
+    getCookie(COOKIE_INFO.SESSION_ID)
+  const [loading, setLoading] = useState(false)
   const [listDevices, setListDevices] = useState<IDeviceItem[]>()
   const [selectedDrawer, setSelectedDrawer] = useState<{
     status: boolean
@@ -28,9 +36,23 @@ const DeviceList = () => {
     const res = await UserApi.getListDevices()
     setListDevices(res)
   }
+
+  const onRemoveDevice = async (session_id: string) => {
+    setLoading(true)
+    try {
+      const res = await AuthAPI.removeDevice(session_id)
+      if (res) {
+        setLoading(false)
+        closeDeviceDrawer()
+        getListDevices()
+      }
+    } catch (error) {}
+  }
+
   useEffect(() => {
     getListDevices()
   }, [])
+
   return (
     <ProfileCard
       title={
@@ -128,12 +150,25 @@ const DeviceList = () => {
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between rounded-lg bg-error-50 px-4 py-3 text-error">
-            <div className="font-medium">Remove Browser</div>
-            <div className="cursor-pointer">
-              <Icon type="delete" />
+          {sessionId !== selectedDrawer?.data.id && (
+            <div
+              onClick={() =>
+                !loading &&
+                onRemoveDevice(selectedDrawer?.data?.id ?? sessionId ?? '')
+              }
+              className={clsx(
+                'flex cursor-pointer items-center justify-between rounded-lg bg-error-50 px-4 py-3 text-error',
+                {
+                  '!cursor-not-allowed': loading,
+                },
+              )}
+            >
+              <div className="font-medium">Remove Browser</div>
+              <div className="cursor-pointer">
+                {loading ? <Icon type="loading" /> : <Icon type="delete" />}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </SappDrawerV2>
     </ProfileCard>
