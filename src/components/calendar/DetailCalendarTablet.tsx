@@ -3,19 +3,14 @@ import { IEvent } from 'sapp-common-package/dist/types'
 import { ICalendarDetail } from 'src/type/calendar'
 import CourseTree from './CourseTree'
 import SappIcon from 'src/common/SappIcon'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
 import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'
-import {
-  CloseDetailIcon,
-  SkeletonDetailIcon,
-  StatusDotIcon,
-  ZoomIcon,
-} from '@assets/icons/calendar'
+import { StatusDotIcon, ZoomIcon } from '@assets/icons/calendar'
 import { Divider, Drawer } from 'antd'
 import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
@@ -175,12 +170,10 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
   const isOnlineAndOpen =
     data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
 
-  const renderFormattedDate = (dateString: string) => {
-    const parsedDate = new Date(dateString)
-
-    const day = parsedDate.getDate().toString()
-    const monthName = parsedDate.toLocaleString('en-US', { month: 'long' })
-    const year = parsedDate.getFullYear()
+  const renderFormattedDate = (date: Dayjs) => {
+    const day = date.date().toString()
+    const monthName = date.format('MMMM') // Full month name in English
+    const year = date.year()
 
     return (
       <div className="flex text-2xl">
@@ -262,8 +255,9 @@ const DetailCalendarTablet = ({ open, setOpen }: IProps) => {
       }
       <div className="relative flex h-full flex-col bg-white !text-bw-13">
         <div className="mb-4 flex items-center justify-between">
-          {data?.schedule?.start_date &&
-            renderFormattedDate(data.schedule.start_date)}
+          {open?.data?.current_date
+            ? renderFormattedDate(open?.data?.current_date)
+            : null}
         </div>
 
         {/* Scrollable content */}

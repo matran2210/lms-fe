@@ -107,9 +107,19 @@ const FilterRadioGroup = ({
                                 : ` ${stateLabel} ${
                                     labelClass ? labelClass : ''
                                   }`
-                            } fw-bold flex-1 text-base leading-4 ${checked && '!text-primary'}`}
+                            } fw-bold flex-1 text-base leading-4 ${checked && '!text-primary'} relative`}
                           >
                             {option.label}
+                            {checked && (
+                              <button
+                                onClick={(e) => {
+                                  field.onChange()
+                                }}
+                                className="absolute -right-6 top-0 text-gray-300 hover:text-[#FF524E]"
+                              >
+                                <CloseCircleIcon color="currentColor" />
+                              </button>
+                            )}
                           </div>
                           {option.description && (
                             <div className={'text-sm text-[#6b7280]'}>
@@ -117,16 +127,6 @@ const FilterRadioGroup = ({
                             </div>
                           )}
                         </span>
-                        {checked && (
-                          <button
-                            onClick={(e) => {
-                              field.onChange()
-                            }}
-                            className="text-gray-300 hover:text-[#FF524E]"
-                          >
-                            <CloseCircleIcon color="currentColor" />
-                          </button>
-                        )}
                       </label>
                     </div>
                   </div>
