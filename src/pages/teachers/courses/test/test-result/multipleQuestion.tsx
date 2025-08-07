@@ -15,7 +15,7 @@ interface MultipleQuestionProps {
   setOpenAnnotaion: (open: boolean) => void
 }
 
-const MultipleQuestion = ({
+const MultipleQuestionTeacher = ({
   questions,
   className,
   multipleQuestionRef,
@@ -257,4 +257,4 @@ const MultipleQuestion = ({
   )
 }
 
-export default MultipleQuestion
+export default MultipleQuestionTeacher

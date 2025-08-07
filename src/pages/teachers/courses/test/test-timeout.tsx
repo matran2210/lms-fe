@@ -9,7 +9,7 @@ interface IProps {
   okButtonCaption?: string
   type: string | string[] | undefined
 }
-const TestTimeOutModal = ({
+const TestTimeOutModalTeacher = ({
   open,
   setOpen,
   handleSubmit,
@@ -60,4 +60,4 @@ const TestTimeOutModal = ({
   )
 }
 
-export default TestTimeOutModal
+export default TestTimeOutModalTeacher

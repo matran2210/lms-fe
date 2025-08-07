@@ -19,7 +19,7 @@ import { ITabs } from 'src/type'
 
 const DEFAULT_PAGESIZE = 18
 
-const CourseDetail = () => {
+const CourseDetailTeacher = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const [showSelectExam, setShowSelectExam] = useState(false)
@@ -230,4 +230,4 @@ const CourseDetail = () => {
   )
 }
 
-export default withAuthorization([UserType.TEACHER])(CourseDetail)
+export default withAuthorization([UserType.TEACHER])(CourseDetailTeacher)

@@ -33,7 +33,7 @@ interface ScoreDetailProps {
   gradingStatus?: string
 }
 
-const ScoreDetail = ({
+const ScoreDetailTeacher = ({
   className,
   type,
   gradingStatus,
@@ -321,4 +321,4 @@ const ScoreDetail = ({
   )
 }
 
-export default ScoreDetail
+export default ScoreDetailTeacher

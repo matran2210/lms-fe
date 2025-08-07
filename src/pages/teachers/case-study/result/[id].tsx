@@ -51,7 +51,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 
-const CaseStudyResult = () => {
+const CaseStudyResultTeacher = () => {
   const router = useRouter()
   const containerRef = useRef(null)
   const { control, setValue } = useForm()
@@ -991,4 +991,4 @@ const CaseStudyResult = () => {
   )
 }
 
-export default withAuthorization([UserType.TEACHER])(CaseStudyResult)
+export default withAuthorization([UserType.TEACHER])(CaseStudyResultTeacher)

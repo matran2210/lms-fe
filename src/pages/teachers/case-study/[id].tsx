@@ -57,7 +57,7 @@ import FileViewer from '@components/base/fileViewer/FileViewer'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 
-const CaseStudyDetail = () => {
+const CaseStudyDetailTeacher = () => {
   const checkType = (
     e: any,
     index: number | string,
@@ -1418,4 +1418,4 @@ const CaseStudyDetail = () => {
 }
 
 // eslint-disable-next-line import/no-unused-modules
-export default withAuthorization([UserType.TEACHER])(CaseStudyDetail)
+export default withAuthorization([UserType.TEACHER])(CaseStudyDetailTeacher)

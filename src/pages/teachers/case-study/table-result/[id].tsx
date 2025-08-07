@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react'
 import { ANIMATION, QUESTION_TYPES } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
+import { UserType } from 'src/redux/types/User/urser'
+import withAuthorization from 'src/HOC/withAuthorization'
 
 const headers = [
   {
@@ -38,7 +40,7 @@ const headers = [
   },
 ]
 
-const TableCaseStudyResult = () => {
+const TableCaseStudyResultTeacher = () => {
   const [scoreDetail, setScoreDetail] = useState<any>({
     answers: [],
     meta: {},
@@ -308,5 +310,7 @@ const TableCaseStudyResult = () => {
   )
 }
 
-export default TableCaseStudyResult
-TableCaseStudyResult.layout = LAYOUT.FULLSCREEN_LAYOUT
+export default withAuthorization([UserType.TEACHER])(
+  TableCaseStudyResultTeacher,
+)
+TableCaseStudyResultTeacher.layout = LAYOUT.FULLSCREEN_LAYOUT

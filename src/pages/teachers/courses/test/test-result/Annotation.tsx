@@ -8,7 +8,7 @@ interface IAnnotation {
   gradingStatus?: string
 }
 
-const Annotation = ({
+const AnnotationTeacher = ({
   openAnnotaion,
   setOpenAnnotaion,
   gradingStatus,
@@ -86,4 +86,4 @@ const Annotation = ({
   )
 }
 
-export default Annotation
+export default AnnotationTeacher

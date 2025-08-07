@@ -33,7 +33,7 @@ interface IProps {
   score: number
 }
 
-const TestResultPage = ({
+const TestResultPageTeacher = ({
   questions,
   type,
   chartData,
@@ -309,4 +309,4 @@ const TestResultPage = ({
   )
 }
 
-export default TestResultPage
+export default TestResultPageTeacher

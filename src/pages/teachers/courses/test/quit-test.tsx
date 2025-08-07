@@ -11,7 +11,7 @@ interface IProps {
   handleCancel: () => void
 }
 
-const QuitTestModal = ({
+const QuitTestModalTeacher = ({
   open,
   content,
   setOpen,
@@ -46,4 +46,4 @@ const QuitTestModal = ({
   )
 }
 
-export default QuitTestModal
+export default QuitTestModalTeacher

@@ -7,8 +7,10 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TestResultPage from 'src/pages/teachers/courses/test/test-result/testResultPage'
 import { GRADE_STATUS, TitleSidebar, PageLink } from 'src/constants'
+import { UserType } from 'src/redux/types/User/urser'
+import withAuthorization from 'src/HOC/withAuthorization'
 
-const TestResultDetail = () => {
+const TestResultDetailTeacher = () => {
   const router = useRouter()
 
   const useGetQuizAttempts = (queryKey: string, params: Object) => {
@@ -86,4 +88,4 @@ const TestResultDetail = () => {
   )
 }
 
-export default TestResultDetail
+export default withAuthorization([UserType.TEACHER])(TestResultDetailTeacher)
