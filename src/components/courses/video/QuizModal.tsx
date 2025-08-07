@@ -1,4 +1,4 @@
-import SappModal from '@components/base/modal/SappModal'
+import SappModalV2 from '@components/v2/base/modal/SappModalV2'
 import QuizComponent, {
   QuizComponentRef,
 } from '@components/mycourses/activity/documents/QuizComponent'
@@ -38,9 +38,9 @@ export default function QuizModal({
   const { handleSubmit } = useForm()
 
   return (
-    <SappModal
+    <SappModalV2
       open={modalOpen}
-      customTitle={<div className="!text-xl font-bold text-bw-1">Question</div>}
+      title={null}
       parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
       okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
       buttonSize="small"
@@ -48,14 +48,16 @@ export default function QuizModal({
       position="center"
       isInner={true}
       isBordered={true}
-      okButtonClass="!w-20 h-8.5 !px-0"
-      cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
-      footerButtonClassName="!justify-between flex"
-      handleSubmit={handleSubmit(onSubmit)}
+      okButtonClass="!h-9.5"
+      cancelButtonClass="!h-9.5"
+      footerButtonClassName="!justify-between flex flex-row-reverse"
+      onOk={handleSubmit(onSubmit)}
       handleCancel={onCancel}
       closeAfterSubmit={false}
-      colorCancel="textUnderline"
       cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
+      classNameModal="quiz-modal"
+      footer={null}
+      isCancelUnderLine={false}
     >
       <div className="py-5">
         <QuizComponent
@@ -69,6 +71,6 @@ export default function QuizModal({
           grading_preference={grading_preference}
         />
       </div>
-    </SappModal>
+    </SappModalV2>
   )
 }

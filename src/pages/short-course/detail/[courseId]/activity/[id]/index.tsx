@@ -599,6 +599,7 @@ export default function ActivityDetail() {
                             activeTab={activeTab}
                             handleCloseTab={setActiveTab}
                             onUpdateActiveVideo={setActiveVideo}
+                            newQuizModal={true}
                           ></VideoDocument>
                         </div>
                       )
