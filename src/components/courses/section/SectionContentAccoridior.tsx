@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants'
 import TestModal from '../popup/TestModal'
 import { TEST_TYPE_ENUM } from '@utils/constants'
+import clsx from 'clsx'
 
 const { Panel } = Collapse
 
@@ -31,7 +32,9 @@ export default function SectionContentAccoridior({
         expandIcon={({ isActive }) => (
           <div className="md:mr-1">
             <ArrowDownIcon
-              className={`h-5 w-5 transition-transform ${isActive ? 'rotate-180' : ''}`}
+              className={clsx('transition-transform', {
+                'rotate-180': isActive,
+              })}
             />
           </div>
         )}
@@ -68,15 +71,6 @@ export default function SectionContentAccoridior({
                     } flex-col`}
                   >
                     <span className="font-medium">{section.name}</span>
-                    {section?.course_section_type ===
-                      TEST_TYPE_ENUM.CHAPTER && (
-                      <span className="text-xs md:text-ssm">
-                        {section.activity_count} Activities{' '}
-                        <span className="font-normal text-gray-1">
-                          ({totalDuration})
-                        </span>
-                      </span>
-                    )}
                   </div>
                 }
                 key={index}
@@ -92,12 +86,6 @@ export default function SectionContentAccoridior({
               header={
                 <span className="flex flex-col">
                   <span className="font-medium">{section.name}</span>
-                  <span className="text-xs font-medium md:text-ssm">
-                    {section.activity_count} Activities{' '}
-                    <span className="font-normal text-gray-1">
-                      ({totalDuration})
-                    </span>
-                  </span>
                 </span>
               }
               key={index}
@@ -127,7 +115,7 @@ export default function SectionContentAccoridior({
                     return (
                       <div
                         key={activityIndex}
-                        className="group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2"
+                        className="group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2"
                         onClick={(e) => {
                           e.stopPropagation()
                           if (activity?.course_section_type === 'ACTIVITY') {

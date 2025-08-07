@@ -237,7 +237,7 @@ export default function MenuItem({
         )}
         {Icon === 'avatar' ? (
           <div
-            className={`label avatar pl-4 text-base font-normal transition-all duration-150 md:invisible md:opacity-0 ${
+            className={`label avatar pl-2 text-base font-normal transition-all duration-150 md:invisible md:opacity-0 ${
               selected ? 'text-white' : 'text-shade-icon'
             } group-hover:text-white`}
           >
@@ -284,7 +284,7 @@ export default function MenuItem({
         <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
       )}
       <div
-        className={`group mx-3 cursor-pointer rounded-sm px-4 py-2 hover:bg-primary ${
+        className={`group mx-0 cursor-pointer rounded px-3 py-2 hover:bg-primary md:mx-3 md:px-4 ${
           selected &&
           ((type === 'level-1' &&
             Icon !== 'avatar' &&
@@ -292,7 +292,7 @@ export default function MenuItem({
             (type === 'level-2' && Icon === 'result'))
             ? 'bg-primary'
             : ''
-        } sidebar-list-items relative mb-4 py-2 last:mb-0 ${
+        }  relative mb-4 py-2 last:mb-0 ${
           !isActivity &&
           (name === TitleSidebar.ADD_NOTE || name === TitleSidebar.CALCULATOR)
             ? 'hidden'

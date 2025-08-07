@@ -8,7 +8,7 @@ export default function CourseAction({
   courseAction,
 }: ICourseAction) {
   return (
-    <div className="action relative flex items-center justify-end">
+    <div className="action relative flex w-full items-center justify-end lg:w-auto">
       {determineButtonToShow !== 'Disabled' ? (
         <ButtonSecondaryV2
           title={

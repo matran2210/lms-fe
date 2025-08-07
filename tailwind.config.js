@@ -354,6 +354,7 @@ module.exports = {
         1729: '1729px',
         '8xl': '1920px',
         1570: '1570px',
+        1524: '1524px',
       },
       lineHeight: {
         0: '0',
@@ -372,6 +373,7 @@ module.exports = {
         none: '0px',
         full: '9999px',
         2.5: '6px',
+        100: '100px',
       },
       content: {
         empty: '""',
@@ -429,6 +431,7 @@ module.exports = {
         4.5: '1.125rem', // 18px
         5.5: '22px',
         8.5: '2.125rem',
+        9.5: '2.375rem', // 38px
         11.25: '45px',
         12.5: '50px',
         16.75: '4.188rem',

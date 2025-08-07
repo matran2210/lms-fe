@@ -47,7 +47,7 @@ import { useRouter } from 'next/router'
 import { useCourseContext } from '@contexts/index'
 import SappBreadCrumbs from '@components/v2/base/breadcrumb/SappBreadCrumbs'
 import SearchWithMenuToggle from '@components/v2/layout/Header/SearchWithMenuToggle'
-import LayoutCourses3Level from '@components/layout/Courses3level'
+import Layout from '@components/v2/layout'
 interface IFullScreenMobile {
   open: boolean
   title: string
@@ -347,7 +347,7 @@ const ProfilePage = () => {
   ]
 
   return (
-    <LayoutCourses3Level>
+    <Layout title="Student Profile">
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
@@ -437,7 +437,7 @@ const ProfilePage = () => {
           {openFullScreenMobile.children}
         </FullScreenMobile>
       )}
-    </LayoutCourses3Level>
+    </Layout>
   )
 }
 

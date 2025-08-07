@@ -18,6 +18,7 @@ export interface IButton3Level {
 
 export interface IButtonTabProps {
   items: IButtonTab[]
+  className?: string
 }
 
 export interface IButtonNextPrevProps {
