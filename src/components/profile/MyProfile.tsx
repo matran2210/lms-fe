@@ -1,7 +1,6 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormTextFieldV2 from '@components/base/textfield/HookFormTextFieldV2'
 import ProfileCard from '@components/card/ProfileCard'
@@ -30,6 +29,7 @@ import {
 import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
 
 interface IProps {
   isEdit: boolean
@@ -219,9 +219,9 @@ const MyProfile = ({
                   </div>
                 ) : (
                   <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
-                    <TextSkeleton loading={loading && !isEdit}>
+                    <ProfileSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
-                    </TextSkeleton>
+                    </ProfileSkeleton>
                   </div>
                 )}
               </TextWrapper>
@@ -539,7 +539,9 @@ const TextWrapper = ({
         )}
       >
         {value && (
-          <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
+          <ProfileSkeleton loading={loading && !isEdit}>
+            {value}
+          </ProfileSkeleton>
         )}
         {children}
       </div>

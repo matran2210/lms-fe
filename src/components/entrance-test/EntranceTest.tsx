@@ -287,18 +287,12 @@ const EntranceTest = ({
                     </span>
                     {data?.attempts?.length > 1 ? (
                       <Select
-                        options={
-                          data?.attempts
-                            ? Array.from({ length: 10 }, () =>
-                                data
-                                  .attempts!.map((item, index) => ({
-                                    value: item.id || '',
-                                    label: `${data.attempts!.length - index}`,
-                                  }))
-                                  .reverse(),
-                              ).flat()
-                            : []
-                        }
+                        options={data?.attempts
+                          ?.map((item, index) => ({
+                            value: item.id,
+                            label: `${(data?.attempts?.length ?? 0) - index}`,
+                          }))
+                          .reverse()}
                         classNames={{
                           root: 'select-result-attempt',
                           popup: { root: 'select-result-attempt-option' },
