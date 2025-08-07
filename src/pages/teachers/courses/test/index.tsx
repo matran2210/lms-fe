@@ -35,7 +35,7 @@ interface IProps {
   is_passed_course: boolean
 }
 
-const TestModal = ({
+const TestModalTeacher = ({
   open,
   setOpen,
   data,
@@ -654,29 +654,6 @@ const TestModal = ({
             setOpen={setOpenPopup}
             onCancel={() => onCancel()}
           />
-          {/* {openLastAttempt && remainingTimeLastAttempt.current > 0 && (
-        <PopupSelectRetakeOrContinueAttempt
-          open={openLastAttempt}
-          handleContinue={handleContinueLastAttempt}
-          handleRetake={handleRetakeNewAttempt}
-          setOpen={setOpenLastAttempt}
-          title={
-            <div className="flex items-center justify-between gap-2">
-              <div>{TEST_TYPE[data?.course_section_type]}</div>
-              {remainingTimeLastAttempt.current > 0 && (
-                <div className="item-center flex gap-2 font-normal text-[#3964EA]">
-                  <div className="m-auto">
-                    <ClockIcon color={'#3964EA'} size={24} />
-                  </div>
-                  <div className="text-[20px]">
-                    {formatTime(remainingTimeLastAttempt.current)}
-                  </div>
-                </div>
-              )}
-            </div>
-          }
-        />
-      )} */}
         </SappModalV3>
       ) : (
         <PopupSelectRetakeOrContinueAttempt
@@ -718,4 +695,4 @@ const TestModal = ({
   )
 }
 
-export default TestModal
+export default TestModalTeacher
