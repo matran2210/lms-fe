@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { ANIMATION, GRADE_STATUS } from 'src/constants'
+import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
 import { IAnswer } from 'src/type'
 
 interface MultipleQuestionProps {
@@ -237,7 +237,9 @@ const MultipleQuestion = ({
                   {showMore ? 'View Less' : 'View All'}
                 </div>
               )}
-              <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
+              <Link
+                href={`${PageLink.TEACHER_MY_COURSE}/my-course/${questions?.class_id ?? ''}`}
+              >
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}

@@ -79,6 +79,7 @@ const CourseParts = ({
                         coursePart={coursePart}
                         is_passed_course={is_passed_course}
                         class_user_id={class_user_id}
+                        isTeacher={isTeacher}
                       />
                     ) : (
                       <Part
@@ -106,6 +107,7 @@ const CourseParts = ({
                         coursePart={coursePart}
                         is_passed_course={is_passed_course}
                         class_user_id={class_user_id}
+                        isTeacher={isTeacher}
                       />
                     ) : (
                       <Part
@@ -188,6 +190,7 @@ const CourseParts = ({
                       coursePart={coursePart}
                       is_passed_course={is_passed_course}
                       class_user_id={class_user_id}
+                      isTeacher={isTeacher}
                     />
                   ) : (
                     <Part
@@ -241,6 +244,7 @@ const CourseParts = ({
                       coursePart={coursePart}
                       is_passed_course={is_passed_course}
                       class_user_id={class_user_id}
+                      isTeacher={isTeacher}
                     />
                   ) : (
                     <Part

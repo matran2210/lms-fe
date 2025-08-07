@@ -5,7 +5,7 @@ import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
-import TestResultPage from 'src/pages/courses/test/test-result/testResultPage'
+import TestResultPage from 'src/pages/teachers/courses/test/test-result/testResultPage'
 import { GRADE_STATUS, TitleSidebar, PageLink } from 'src/constants'
 
 const TestResultDetail = () => {

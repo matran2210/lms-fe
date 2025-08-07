@@ -2941,11 +2941,11 @@ const TestDetail = () => {
                         quizDetail?.grading_method === GRADING_METHOD.MANUAL
                       ) {
                         router.replace(
-                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                          `${PageLink.TEACHER_MY_COURSE}/test/your-answers-detail/${QuizResultId}`,
                         )
                       } else {
                         router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
+                          `${PageLink.TEACHER_MY_COURSE}/test/test-result/${QuizResultId}`,
                         )
                       }
                     } else {

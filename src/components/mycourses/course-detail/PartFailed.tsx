@@ -22,10 +22,12 @@ const PartFailed = ({
   coursePart,
   class_user_id,
   is_passed_course,
+  isTeacher,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
   is_passed_course: boolean
+  isTeacher: boolean
 }) => {
   const isSubmitted =
     coursePart?.quiz?.attempt &&
@@ -276,6 +278,7 @@ const PartFailed = ({
                   trackGA={() => {
                     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
                   }}
+                  isTeacher={isTeacher}
                 />
               )}
 

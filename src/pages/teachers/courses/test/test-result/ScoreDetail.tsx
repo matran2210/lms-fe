@@ -18,7 +18,7 @@ import {
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
-import { CoursesAPI } from '../../../api/courses/index'
+import { CoursesAPI } from 'src/pages/api/courses'
 import Tooltip from 'src/common/Tooltip'
 
 const commonHeaderClass =
