@@ -1,12 +1,16 @@
 import EChart from '@components/base/chart/Chart'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ITopicProgress } from 'src/type/dashboard'
+import { ICourseInfo, ITopicProgress } from 'src/type/dashboard'
 import { EChartsOption } from 'echarts'
 import useReponsive from 'src/hooks/useReponsive'
 
-const TopicProgress = () => {
+const TopicProgress = ({
+  setInfoCourse,
+}: {
+  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+}) => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
   const { isMobile, isTablet } = useReponsive()
@@ -120,8 +124,13 @@ const TopicProgress = () => {
   const getTopicProgress = async (id: string) => {
     try {
       const res = await DashboardAPI.getTopicProgress(id)
-
-      if (res && res.success) handleTopicProgress(res.data)
+      if (res && res.success && res?.data) {
+        handleTopicProgress(res.data)
+        setInfoCourse({
+          course_type: res.data?.[0]?.course_type,
+          course_name: res.data?.[0]?.course_name,
+        })
+      }
     } catch (error) {
       setOption(undefined)
     }

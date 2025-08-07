@@ -28,12 +28,11 @@ const Part = ({
 }) => {
   const router = useRouter()
   const { isMobileView } = useTailwindBreakpoint()
-  const percentProgress = round(
-    (course?.learning_progress?.total_course_sections_completed /
-      course?.learning_progress?.total_course_sections) *
-      100,
-    2,
-  )
+  const total = course?.learning_progress?.total_course_sections ?? 0
+  const completed =
+    course?.learning_progress?.total_course_sections_completed ?? 0
+
+  const percentProgress = total > 0 ? round((completed / total) * 100, 2) : 0
 
   const onClickPart = (id: string) => {
     const searchParams = buildQueryString({
