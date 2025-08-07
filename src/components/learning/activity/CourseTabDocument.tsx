@@ -158,7 +158,13 @@ const CourseTabDocument = ({
         key: tab?.id,
         label: (
           <div className="learning-act-tab-label text-base font-normal capitalize">
-            {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            <Tooltip
+              rootClassName="max-w-md"
+              classNames={{ body: '!py-1 !shadow-medium' }}
+              title={tab?.name?.split(' ')?.length > 5 ? tab?.name : undefined}
+            >
+              {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            </Tooltip>
           </div>
         ),
         children: (
