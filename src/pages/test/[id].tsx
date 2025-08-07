@@ -2170,7 +2170,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }

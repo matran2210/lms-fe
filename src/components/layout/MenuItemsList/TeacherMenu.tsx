@@ -23,7 +23,7 @@ import Link from 'next/link'
 import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon/index'
 import { ITabs } from 'src/type'
-import { activeNotesList } from 'src/redux/slice/Course/ShortCourse/NoteList/ShortNoteList'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
 
 const { Sider } = Layout
 
@@ -46,7 +46,9 @@ export default function TeacherMenu({
           key: TitleSidebar.COURSE_CONTENT,
           title: TitleSidebar.COURSE_CONTENT,
           active:
-            router.pathname === `${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}`,
+            router.pathname ===
+              `${PageLink.TEACHERS}${PageLink.COURSE_DETAIL}` &&
+            selectedKey !== TitleSidebar.NOTES_LIST,
           icon: (
             <HomeMenuIcon
               selected={selectedKey === TitleSidebar.COURSE_CONTENT}
@@ -135,16 +137,20 @@ export default function TeacherMenu({
   }
 
   const handleMenuClick = (item: { key: string }) => {
-    if (selectedKey !== item.key) {
-      const selectedItem = menuItems.find(
-        (menuItem) => menuItem.key === item.key, // Khi chọn icon trên thanh menu điều hướng đến trang phù hợp
-      )
-      if (item.key === TitleSidebar.NOTES_LIST) {
-        handleOpenNotesList()
-        console.log('chya vao day')
-      } else if (selectedItem?.link) {
-        router.push(selectedItem.link)
+    if (item.key === TitleSidebar.NOTES_LIST) {
+      handleOpenNotesList()
+    } else {
+      if (selectedKey !== item.key) {
+        const selectedItem = menuItems.find(
+          (menuItem) => menuItem.key === item.key, // Khi chọn icon trên thanh menu điều hướng đến trang phù hợp
+        )
+        if (selectedItem?.link) {
+          router.push(selectedItem.link)
+        }
       }
+    }
+    if (selectedKey !== item.key) {
+      setSelectedKey(item.key)
     }
   }
 
