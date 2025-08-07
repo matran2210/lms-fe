@@ -51,6 +51,13 @@ import 'sapp-notification/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 
+export const excludedPathsHelp = [
+  '/test/[id]',
+  '/case-study/[id]',
+  '/certificates/[id]',
+  '/case-study/result/[id]',
+  '/teachers',
+]
 type MyAppProps = AppProps & {
   Component: {
     layout?: String
@@ -148,18 +155,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [])
 
-  const excludedPathsHelp = [
-    '/test/[id]',
-    '/case-study/[id]',
-    '/certificates/[id]',
-    '/case-study/result/[id]',
-    '/teachers',
-  ]
-
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
     !isTeacherPage // Add condition to hide help on teacher pages
-
+  const hiddenChatbot =
+    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
+    isTeacherPage
   // Handle HubSpot widget visibility based on URL
   useEffect(() => {
     const hideHubspotWidget = () => {
@@ -170,8 +171,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       const chatFrame = document.getElementById('hubspot-messages-iframe')
       const widgetContainer = document.querySelector('.hs-shadow-container')
 
-      if (isTeacherPage) {
-        // Hide HubSpot chat widget on teacher pages
+      if (hiddenChatbot) {
+        // Hide HubSpot chat widget on teacher pages and other excluded paths
         if (container) {
           container.classList.add('visible-icon')
           // Add additional inline styles for redundancy
@@ -256,7 +257,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       observer.disconnect()
       router.events.off('routeChangeComplete', handleRouteChange)
     }
-  }, [isTeacherPage, router, showHelp])
+  }, [router, showHelp, hiddenChatbot])
 
   useEffect(() => {
     if (

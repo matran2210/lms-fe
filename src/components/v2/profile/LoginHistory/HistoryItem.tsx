@@ -1,0 +1,30 @@
+import { format, formatDistanceToNow } from 'date-fns'
+const HistoryItem = ({ data }: any) => {
+  const loginTime = new Date(data.updated_at)
+  const currentTime = new Date()
+
+  const timeDifference = currentTime.getTime() - loginTime.getTime()
+
+  let formattedTime
+
+  if (timeDifference < 24 * 60 * 60 * 1000) {
+    formattedTime = formatDistanceToNow(loginTime, { addSuffix: true })
+  } else {
+    formattedTime = format(loginTime, 'HH:mm:ss dd/MM/yyyy')
+  }
+  return (
+    <div className="sapp-hover-device-item mb-3 gap-1 border-b border-gray-300 pb-2 md:mb-4 md:gap-4 md:border-none md:p-0">
+      <div className="flex items-center gap-2">
+        <div className="text-sm font-medium text-secondary-v2-DEFAULT md:text-base">
+          {data.ip}
+        </div>
+      </div>
+      <div className="text-xs flex items-center gap-2 text-secondary-v2-100 md:text-sm">
+        <div>{formattedTime}</div>
+        {data.location && <div className="h-[4px] w-[4px] rounded-full"></div>}
+        <div>{data.location || ''}</div>
+      </div>
+    </div>
+  )
+}
+export default HistoryItem

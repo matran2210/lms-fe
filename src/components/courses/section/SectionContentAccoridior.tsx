@@ -186,7 +186,7 @@ export default function SectionContentAccoridior({
                         </div>
                         {activity?.course_section_type ==
                           TEST_TYPE_ENUM.ACTIVITY && (
-                          <span className="text-xs hidden text-gray-1 group-hover:text-primary md:block">
+                          <span className="text-xs hidden text-right text-gray-1 group-hover:text-primary md:block">
                             {formatDuration(activity?.duration)}
                           </span>
                         )}

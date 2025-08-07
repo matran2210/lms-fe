@@ -114,6 +114,8 @@ export type SidebarProps = {
   toggleDrawer: () => void
   setOpenResource: Dispatch<SetStateAction<boolean>>
   openResource: boolean
+  openExaminationInfo?: boolean
+  setOpenExaminationInfo?: Dispatch<SetStateAction<boolean>>
 }
 
 export type SidebarMobileProps = {

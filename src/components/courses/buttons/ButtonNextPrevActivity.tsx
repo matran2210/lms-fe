@@ -2,6 +2,7 @@ import React from 'react'
 import { Arrows, SpinIcon } from '@components/courses/icons'
 import { IButtonNextPrevProps } from 'src/type/courses-3-level/button'
 import BaseButtonIconFlip from '@components/courses/buttons/BaseButtonIconFlip'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 
 export default function NextPrevActivityButton({
   nextClick,
@@ -38,15 +39,13 @@ export default function NextPrevActivityButton({
 
       {showNext && (
         <div className="w-100">
-          <BaseButtonIconFlip
+          <ButtonPrimaryV2
             className={classNameNext}
-            variant="primary"
             title={titleNext}
             onClick={nextClick}
             disabled={disabled}
             loading={loading}
             size="small"
-            icon={<Arrows />}
           />
         </div>
       )}

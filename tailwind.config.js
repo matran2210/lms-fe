@@ -37,6 +37,7 @@ module.exports = {
       'v2-sm': ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
       'v2-base': ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,
       'v2-lg': ['1.125rem', { lineHeight: '1.6875rem' }] /* 18px, 27px */,
+      'v2-tiny': ['0.5rem', { lineHeight: '0.75rem' }] /* 8px, 12px */,
     },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
@@ -67,12 +68,14 @@ module.exports = {
           6: '#FFAE4C',
           light: 'rgba(255, 187, 0, .071)',
           'v2-DEFAULT': '#FFB700',
+          'v2-50': '#FFFBF2',
         },
         secondary: {
           DEFAULT: '#FFFAF0',
           'v2-100': '#B6B6B7',
           'v2-DEFAULT': '#404041',
           'v2-600': '#29353C',
+          'v2-300': '#7B7B7C',
         },
         danger: {
           DEFAULT: '#D35563',
@@ -132,6 +135,9 @@ module.exports = {
           'v2-300': '#D1D5DB',
           'v2-400': '#9CA3AF',
           'v2-800': '#1F2937',
+          'v2-200': '#E5E7EB',
+          600: '#4B5563',
+          canvas: '#F9F9F9',
         },
         green: {
           1: '#07af17',
@@ -228,6 +234,22 @@ module.exports = {
           },
           icon: '#1C274C',
         },
+        success: {
+          'v2-50': '#E7FCF2',
+          'v2-DEFAULT': '#10B367',
+        },
+        error: {
+          'v2-50': '#FEEDED',
+          'v2-400': '#C73B37',
+          'v2-DEFAULT': '#F80903',
+        },
+        warning: {
+          'v2-50': '#FCF3E5',
+          'v2-DEFAULT': '#E68200',
+        },
+        icon: {
+          DEFAULT: '#1C274C',
+        },
       },
       borderColor: {
         DEFAULT: '#DCDDDD',
@@ -275,6 +297,8 @@ module.exports = {
           '0px 0px 6px 0px rgba(18, 80, 163, 0.40), 0px 2px 4px 0px rgba(18, 80, 163, 0.20), 0px 4px 6px 0px rgba(18, 80, 163, 0.25)',
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
+        small: '0px 4px 20px 0px rgba(41, 41, 41, 0.05)',
+        card: '0px 4px 16px 0px #00000014',
       },
       minWidth: {
         4: '16px',
@@ -470,6 +494,9 @@ module.exports = {
       },
       textColor: {
         heading: '#374151',
+      },
+      aspectRatio: {
+        square: '1 / 1',
       },
     },
   },

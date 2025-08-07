@@ -6,6 +6,7 @@
 @import 'datetime-picker.scss';
 @import 'sidebar.scss';
 @import 'my-course.scss';
+@import 'my-profile.scss';
 @import 'course-3-level.scss';
 @import 'video.scss';
 @import 'activity.scss';
@@ -19,6 +20,7 @@
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
+@import './components/_drawer.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -1198,6 +1200,7 @@ td.sapp-border {
   left: 0;
   white-space: normal;
   word-wrap: break-word;
+  border: none;
 }
 
 .tooltip-text::after {
