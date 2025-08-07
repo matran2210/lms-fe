@@ -15,6 +15,7 @@ import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
+  PageLink,
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
@@ -221,7 +222,7 @@ const ScoreDetailTeacher = ({
                             onClick={() => {
                               if (answer?.id) {
                                 router.push(
-                                  `/explanation/${answer?.id}?title=My Course`,
+                                  `${PageLink.TEACHER_EXPLANATION}/${answer?.id}?title=My Course`,
                                 )
                               }
                             }}

@@ -6,7 +6,7 @@ import { LAYOUT } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { ANIMATION, QUESTION_TYPES } from 'src/constants'
+import { ANIMATION, PageLink, QUESTION_TYPES } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { UserType } from 'src/redux/types/User/urser'
@@ -255,7 +255,9 @@ const TableCaseStudyResultTeacher = () => {
                             ),
                           }}
                           onClick={() => {
-                            router.push(`/explanation/${e?.id}?title=My Course`)
+                            router.push(
+                              `${PageLink.TEACHER_EXPLANATION}/${e?.id}?title=My Course`,
+                            )
                           }}
                         ></div>
                       </td>

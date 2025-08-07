@@ -69,7 +69,9 @@ const MultipleQuestionTeacher = ({
         <button
           key={item?.id}
           onClick={() => {
-            router.push(`/explanation/${item?.id}?title=My Course`)
+            router.push(
+              `${PageLink.TEACHER_EXPLANATION}/${item?.id}?title=My Course`,
+            )
           }}
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
@@ -119,7 +121,9 @@ const MultipleQuestionTeacher = ({
             ) {
               return
             } else {
-              router.push(`/explanation/${item?.id}?title=My Course`)
+              router.push(
+                `${PageLink.TEACHER_EXPLANATION}/${item?.id}?title=My Course`,
+              )
             }
           }}
           className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
