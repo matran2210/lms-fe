@@ -324,3 +324,11 @@
     @apply mb-4;
   }
 }
+
+.quiz-modal {
+  @apply overflow-hidden rounded-lg;
+
+  .ant-modal-content {
+    @apply p-6;
+  }
+}
