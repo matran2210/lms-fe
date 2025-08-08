@@ -98,11 +98,17 @@ export default function TeacherMenu({
           active: selectedKey === TitleSidebar.RESOURCES,
         },
         {
-          key: 'MyCourse',
-          title: TitleSidebar.COURSES,
-          icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
-          link: PageLink.TEACHER_MY_COURSE,
-          active: isCurrent(PageLink.TEACHER_MY_COURSE),
+          key: TitleSidebar.RESULTS,
+          title: TitleSidebar.RESULTS,
+          icon: (
+            <MyCourseTeacherIcon
+              selected={selectedKey === TitleSidebar.RESULTS}
+            />
+          ),
+          link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+          active: isCurrent(
+            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+          ),
         },
       ]
     }

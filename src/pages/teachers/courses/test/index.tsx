@@ -18,8 +18,6 @@ import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
