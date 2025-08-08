@@ -30,11 +30,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
         <title>{title}</title>
       </Head>
       <div className="flex flex-nowrap">
-        <TeacherMenu
-          isCourseDetail={isCourseDetail}
-          breadcrumbs={breadcrumbs}
-          isActivity={isActivity}
-        />
+        <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} />
         <div className="min-h-screen w-full bg-gray-10">
           <div className="px-56 py-6">
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />

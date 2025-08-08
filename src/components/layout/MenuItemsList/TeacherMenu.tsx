@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState, Fragment } from 'react'
+import { useEffect, useMemo, useState, useCallback, Fragment } from 'react'
 import { Layout, Menu, Tooltip } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 import {
   HomeMenuIcon,
   BookMenuIcon,
@@ -15,28 +14,24 @@ import {
   MyCourseTeacherIcon,
 } from 'src/assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
 import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
-
 import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon'
 import LearningResource from 'src/components/mycourses/LearningResource'
-import { ITabs } from 'src/type'
 import { v4 as uuidv4 } from 'uuid'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
+import { IUser } from 'src/redux/types/User/urser'
 
 const { Sider } = Layout
 
 export default function TeacherMenu({
   isCourseDetail,
-  breadcrumbs,
   isActivity,
 }: {
   isCourseDetail: boolean
-  breadcrumbs: ITabs[]
   isActivity: boolean
 }) {
   const dispatch = useAppDispatch()
@@ -46,44 +41,40 @@ export default function TeacherMenu({
   const [selectedKey, setSelectedKey] = useState('Home')
   const [openResource, setOpenResource] = useState(false)
 
-  const handleLogout = async () => {
-    try {
-      await new AuthenticationManager().logout()
-    } catch (err) {}
-  }
-
-  const handleOpenNotesList = () => {
-    dispatch(activeNotesList())
-    document.body.style.overflow = 'hidden'
-  }
-
-  const handleOpenResources = () => {
-    setOpenResource(true)
-    document.body.style.overflow = 'hidden'
-  }
-
-  const handleAddNote = () => {
-    const note = {
-      uuid: uuidv4(),
-      id: '',
-      name: 'Note',
-      description: '',
-    }
-    dispatch(pushNotes(note))
-  }
-
-  const handleOpenCalculator = () => {
-    dispatch(openCalculator())
-  }
-
-  const menuItems = useMemo(() => {
-    const isCurrent = (path: string | string[]) =>
+  const isCurrent = useCallback(
+    (path: string | string[]) =>
       Array.isArray(path)
         ? path.includes(router.pathname)
-        : router.pathname === path
+        : router.pathname === path,
+    [router.pathname],
+  )
 
+  const handleLogout = useCallback(async () => {
+    try {
+      await new AuthenticationManager().logout()
+    } catch {}
+  }, [])
+
+  const actionHandlers: Record<string, () => void> = {
+    [TitleSidebar.NOTES_LIST]: () => {
+      dispatch(activeNotesList())
+      document.body.style.overflow = 'hidden'
+    },
+    [TitleSidebar.RESOURCES]: () => {
+      setOpenResource(true)
+      document.body.style.overflow = 'hidden'
+    },
+    [TitleSidebar.NEW_NOTE]: () => {
+      dispatch(
+        pushNotes({ uuid: uuidv4(), id: '', name: 'Note', description: '' }),
+      )
+    },
+    [TitleSidebar.CALCULATOR]: () => dispatch(openCalculator()),
+  }
+
+  const getMenuItems = useCallback(() => {
     if (isCourseDetail || isActivity) {
-      const item = [
+      const baseItems = [
         {
           key: TitleSidebar.COURSE_CONTENT,
           title: TitleSidebar.COURSE_CONTENT,
@@ -125,12 +116,13 @@ export default function TeacherMenu({
           ),
           link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
           active: isCurrent(
-            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? '[id]' : router.query?.courseId ? '[courseId]' : ''}/results`,
+            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? '[id]' : '[courseId]'}/results`,
           ),
         },
       ]
+
       if (isActivity) {
-        item.push(
+        baseItems.push(
           {
             key: TitleSidebar.NEW_NOTE,
             title: TitleSidebar.NEW_NOTE,
@@ -153,7 +145,7 @@ export default function TeacherMenu({
           },
         )
       }
-      return item
+      return baseItems
     }
 
     return [
@@ -204,27 +196,22 @@ export default function TeacherMenu({
         active: isCurrent(PageLink.TEACHERS),
       },
     ]
-  }, [router.pathname, selectedKey, isCourseDetail, breadcrumbs])
+  }, [isCourseDetail, isActivity, selectedKey, router.query, isCurrent])
+
+  const menuItems = useMemo(() => getMenuItems(), [getMenuItems])
 
   useEffect(() => {
     setSelectedKey((prevKey) => {
       if (prevKey === 'Home' || prevKey === '') {
-        const activeItem = menuItems.find((item) => item.active)
-        return activeItem?.key ?? 'Home'
+        return menuItems.find((item) => item.active)?.key ?? 'Home'
       }
       return prevKey
     })
   }, [menuItems])
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    if (key === TitleSidebar.NOTES_LIST) {
-      handleOpenNotesList()
-    } else if (key === TitleSidebar.RESOURCES) {
-      handleOpenResources()
-    } else if (key === TitleSidebar.NEW_NOTE) {
-      handleAddNote()
-    } else if (key === TitleSidebar.CALCULATOR) {
-      handleOpenCalculator()
+    if (actionHandlers[key]) {
+      actionHandlers[key]()
     } else {
       const target = menuItems.find((item) => item.key === key)
       if (target?.link) router.push(target.link)
@@ -232,83 +219,97 @@ export default function TeacherMenu({
     if (key !== selectedKey) setSelectedKey(key)
   }
 
-  const MenuItemIcon = ({
-    icon,
-    action,
-  }: {
-    icon: React.ReactNode
-    action?: () => void
-  }) => (
-    <div className="cursor-pointer p-2" onClick={action}>
-      {icon}
-    </div>
-  )
-
-  const SidebarMenu = () => (
-    <div className="flex flex-col items-center">
-      <div className="mb-8 mt-6">
-        <div className="h-10 w-10 cursor-pointer">
-          <ExpandIcon type="teacher-logo-full" />
-        </div>
-      </div>
-      <div className="mb-7 h-[1.2px] w-8 bg-white" />
-      <Menu
-        theme="dark"
-        mode="inline"
-        selectedKeys={[selectedKey]}
-        className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:flex [&_.ant-menu-item]:w-fit [&_.ant-menu-item]:items-center [&_.ant-menu-item]:p-3"
-      >
-        {menuItems.map((item) => (
-          <Tooltip
-            key={item.key}
-            title={item.title}
-            placement="right"
-            overlayClassName="teacher-sidebar-tooltip"
-          >
-            <Menu.Item
-              key={item.key}
-              icon={item.icon}
-              onClick={() => handleMenuClick(item)}
-            />
-          </Tooltip>
-        ))}
-      </Menu>
-    </div>
-  )
-
-  const BottomActionMenu = () => (
-    <div className="mb-6 flex flex-col items-center gap-6">
-      <Link href={PageLink.MYPROFILE}>
-        <Image
-          alt="avatar"
-          src={
-            user?.detail?.avatar['32x32'] ||
-            user?.detail?.avatar['ORIGIN'] ||
-            blankAvatar
-          }
-          width={32}
-          height={32}
-          className="cursor-pointer rounded-full object-cover"
-        />
-      </Link>
-      <MenuItemIcon icon={<HelpMenuIcon />} />
-      <MenuItemIcon icon={<LogOutMenuIcon />} action={handleLogout} />
-    </div>
-  )
-
   return (
     <Fragment>
       <Sider
         width={80}
         collapsed
-        className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center overflow-auto bg-blue-2"
+        className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center bg-blue-2"
       >
-        <div className="flex h-full flex-col items-center justify-between">
-          <SidebarMenu />
-          <BottomActionMenu />
+        <div className="flex h-full flex-col justify-between">
+          <SidebarMenu
+            items={menuItems}
+            selectedKey={selectedKey}
+            onClick={handleMenuClick}
+          />
+          <BottomActionMenu user={user} onLogout={handleLogout} />
         </div>
       </Sider>
       <LearningResource open={openResource} setOpenResource={setOpenResource} />
     </Fragment>
   )
 }
+
+const SidebarMenu = ({
+  items,
+  selectedKey,
+  onClick,
+}: {
+  items: {
+    key: string
+    title: string
+    icon: React.ReactNode
+    link: string
+    active: boolean
+  }[]
+  selectedKey: string
+  onClick: (key: { key: string }) => void
+}) => (
+  <div className="flex flex-col items-center">
+    <div className="mb-8 mt-6 h-10 w-10 cursor-pointer">
+      <ExpandIcon type="teacher-logo-full" />
+    </div>
+    <div className="mb-7 h-[1.2px] w-8 bg-white" />
+    <Menu
+      theme="dark"
+      mode="inline"
+      selectedKeys={[selectedKey]}
+      className="flex w-12 flex-col items-center gap-6 [&_.ant-menu-item]:p-3"
+    >
+      {items.map((item) => (
+        <Tooltip
+          key={item.key}
+          title={item.title}
+          placement="right"
+          overlayClassName="teacher-sidebar-tooltip"
+        >
+          <Menu.Item
+            key={item.key}
+            icon={item.icon}
+            onClick={() => onClick({ key: item.key })}
+          />
+        </Tooltip>
+      ))}
+    </Menu>
+  </div>
+)
+
+const BottomActionMenu = ({
+  user,
+  onLogout,
+}: {
+  user: IUser
+  onLogout: () => void
+}) => (
+  <div className="mb-6 flex flex-col items-center gap-6">
+    <Link href={PageLink.MYPROFILE}>
+      <Image
+        alt="avatar"
+        src={
+          user?.detail?.avatar['32x32'] ||
+          user?.detail?.avatar['ORIGIN'] ||
+          blankAvatar
+        }
+        width={32}
+        height={32}
+        className="cursor-pointer rounded-full object-cover"
+      />
+    </Link>
+    <div className="cursor-pointer p-2">
+      <HelpMenuIcon />
+    </div>
+    <div className="cursor-pointer p-2" onClick={onLogout}>
+      <LogOutMenuIcon />
+    </div>
+  </div>
+)
