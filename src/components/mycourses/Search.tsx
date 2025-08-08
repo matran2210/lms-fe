@@ -4,8 +4,7 @@ import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
-import { PageLink } from 'src/constants'
-
+import { getUserPrefix } from '@utils/helpers'
 interface IProps {
   placeholder: string
   formStyle: string
@@ -13,7 +12,12 @@ interface IProps {
   isTeacher?: boolean
 }
 
-const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
+const SearchForm = ({
+  placeholder,
+  formStyle,
+  setPage,
+  isTeacher = false,
+}: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -32,7 +36,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
       timerId = setTimeout(() => {
         !isSubmitting &&
           router.push(
-            `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
+            `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
           )
         setPage && setPage(9)
       }, 2000)
@@ -56,7 +60,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
       router.push(
-        `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
+        `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
       )
       setPage && setPage(9)
     }
@@ -69,7 +73,7 @@ const SearchForm = ({ placeholder, formStyle, setPage, isTeacher }: IProps) => {
     setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
     router.push(
-      `${isTeacher ? PageLink.TEACHERS : ''}/courses?name=${watch('name') ?? ''}${queryString}`,
+      `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
     )
     setPage && setPage(9)
   }
