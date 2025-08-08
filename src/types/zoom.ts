@@ -1,4 +1,4 @@
-import { ZoomMtgLang } from '@zoom/meetingsdk'
+import { MeetingInfoType, ZoomMtgLang } from '@zoom/meetingsdk'
 
 export interface ZoomMeetingConfig {
   meetingNumber: string
@@ -52,6 +52,8 @@ export interface ZoomInitConfig {
   leaveOnPageUnload?: boolean
   success: (success: unknown) => void
   error: (error: unknown) => void
+  meetingInfo?: MeetingInfoType[]
+  disableInvite?: boolean
 }
 
 export interface ZoomJoinConfig {

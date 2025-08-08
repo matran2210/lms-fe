@@ -6,18 +6,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#2563eb',
-        secondary: '#64748b',
-        accent: '#f59e42',
-      },
-      fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+        shade: {
+          secondary: '#404041',
+        },
+        icon: '#1C274C',
       },
       boxShadow: {
-        card: '0 4px 16px 0 rgba(0,0,0,0.07)',
-      },
-      spacing: {
-        128: '32rem', // custom spacing
+        header: '0px 4px 16px 0px #2C30000D',
       },
     },
   },

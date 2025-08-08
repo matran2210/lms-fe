@@ -3,6 +3,7 @@
 import { ZoomApi } from '@/api'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
+import { toggleMeetingContainer } from '@/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -10,7 +11,6 @@ export const ZoomMeeting = () => {
   const { isSDKLoaded, isJoining, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
-  const [hasJoined, setHasJoined] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -50,6 +50,7 @@ export const ZoomMeeting = () => {
         setMeetingConfig(config)
         setIsLoadingMeetingData(false)
       } catch (err) {
+        toggleMeetingContainer('none')
         setIsLoadingMeetingData(false)
       }
     }
@@ -59,21 +60,24 @@ export const ZoomMeeting = () => {
 
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {
-    if (isSDKLoaded && meetingConfig && !isJoining && !error && !hasJoined) {
+    if (isSDKLoaded && meetingConfig && !isJoining && !error) {
       router.replace(pathname, { scroll: false })
       handleJoinMeeting()
     }
-  }, [isSDKLoaded, meetingConfig, isJoining, error, hasJoined])
+  }, [isSDKLoaded, meetingConfig, isJoining, error])
 
   const handleJoinMeeting = async () => {
     if (!meetingConfig) return
 
-    try {
-      setHasJoined(true)
-      await joinMeeting(meetingConfig)
-    } catch (err) {
-      setHasJoined(false)
-    }
+    await joinMeeting(meetingConfig)
+  }
+
+  if (!token) {
+    return (
+      <div className="zoom-meeting-container">
+        <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
+      </div>
+    )
   }
 
   // Show loading state for meeting data

@@ -1,3 +1,5 @@
+import { ZOOM_CONFIG } from '@/constants/zoom'
+
 export function setCookie(name: string, value: string, days = 7) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString()
   document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`
@@ -30,4 +32,11 @@ function parseJwt<T extends object = Record<string, unknown>>(token: string): T 
 export function getSessionIdFromToken(token: string): string | null {
   const decoded = parseJwt(token)
   return typeof decoded?.session_state === 'string' ? decoded.session_state : null
+}
+
+export function toggleMeetingContainer(display: 'block' | 'none') {
+  const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
+  if (zoomContainer) {
+    zoomContainer.style.display = display
+  }
 }

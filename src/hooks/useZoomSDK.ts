@@ -2,6 +2,7 @@
 
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { ZoomMeetingConfig } from '@/types/zoom'
+import { toggleMeetingContainer } from '@/utils'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -29,13 +30,6 @@ export const useZoomSDK = () => {
     loadZoomSDK()
   }, [])
 
-  const toggleMeetingContainer = useCallback((display: 'block' | 'none') => {
-    const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
-    if (zoomContainer) {
-      zoomContainer.style.display = display
-    }
-  }, [])
-
   // Join meeting
   const joinMeeting = useCallback(
     async (config: ZoomMeetingConfig) => {
@@ -54,6 +48,8 @@ export const useZoomSDK = () => {
           leaveUrl: ZOOM_CONFIG.SDK_CONFIG.LEAVE_URL,
           patchJsMedia: ZOOM_CONFIG.SDK_CONFIG.PATCH_JS_MEDIA,
           leaveOnPageUnload: ZOOM_CONFIG.SDK_CONFIG.LEAVE_ON_PAGE_UNLOAD,
+          meetingInfo: [],
+          disableInvite: true,
           success: () => {
             // Join the meeting
             window.ZoomMtg.join({
@@ -80,7 +76,7 @@ export const useZoomSDK = () => {
           },
         })
       } catch (err) {
-        // toggleMeetingContainer('none')
+        toggleMeetingContainer('none')
         setError(err instanceof Error ? err.message : ZOOM_CONFIG.ERROR_MESSAGES.FAILED_TO_JOIN_MEETING)
         setIsJoining(false)
       }
