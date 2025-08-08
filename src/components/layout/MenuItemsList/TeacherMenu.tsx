@@ -19,21 +19,25 @@ import blankAvatar from '@assets/images/blank_avatar.webp'
 import { AuthenticationManager } from '@utils/helpers/keycloak'
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
-import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import { activeNotesList, pushNotes } from 'src/redux/slice/Course/NotesList'
 
 import { PageLink, TitleSidebar, TitleTeacherSidebar } from 'src/constants'
 import ExpandIcon from 'src/components/layout/ExpandIcon'
 import LearningResource from 'src/components/mycourses/LearningResource'
 import { ITabs } from 'src/type'
+import { v4 as uuidv4 } from 'uuid'
+import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 
 const { Sider } = Layout
 
 export default function TeacherMenu({
   isCourseDetail,
   breadcrumbs,
+  isActivity,
 }: {
   isCourseDetail: boolean
   breadcrumbs: ITabs[]
+  isActivity: boolean
 }) {
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -48,14 +52,28 @@ export default function TeacherMenu({
     } catch (err) {}
   }
 
-  const openNotesList = () => {
+  const handleOpenNotesList = () => {
     dispatch(activeNotesList())
     document.body.style.overflow = 'hidden'
   }
 
-  const openResources = () => {
+  const handleOpenResources = () => {
     setOpenResource(true)
     document.body.style.overflow = 'hidden'
+  }
+
+  const handleAddNote = () => {
+    const note = {
+      uuid: uuidv4(),
+      id: '',
+      name: 'Note',
+      description: '',
+    }
+    dispatch(pushNotes(note))
+  }
+
+  const handleOpenCalculator = () => {
+    dispatch(openCalculator())
   }
 
   const menuItems = useMemo(() => {
@@ -64,8 +82,8 @@ export default function TeacherMenu({
         ? path.includes(router.pathname)
         : router.pathname === path
 
-    if (isCourseDetail) {
-      return [
+    if (isCourseDetail || isActivity) {
+      const item = [
         {
           key: TitleSidebar.COURSE_CONTENT,
           title: TitleSidebar.COURSE_CONTENT,
@@ -107,10 +125,35 @@ export default function TeacherMenu({
           ),
           link: `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
           active: isCurrent(
-            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query.id || router.query.courseId}/results`,
+            `${PageLink.TEACHER_MY_COURSE}/my-course/${router.query?.id ? '[id]' : router.query?.courseId ? '[courseId]' : ''}/results`,
           ),
         },
       ]
+      if (isActivity) {
+        item.push(
+          {
+            key: TitleSidebar.NEW_NOTE,
+            title: TitleSidebar.NEW_NOTE,
+            icon: (
+              <MyCalendarMenuIcon
+                selected={selectedKey === TitleSidebar.NEW_NOTE}
+              />
+            ),
+            link: '#',
+            active: selectedKey === TitleSidebar.NEW_NOTE,
+          },
+          {
+            key: TitleSidebar.CALCULATOR,
+            title: TitleSidebar.CALCULATOR,
+            icon: (
+              <BellIcon selected={selectedKey === TitleSidebar.CALCULATOR} />
+            ),
+            link: '#',
+            active: selectedKey === TitleSidebar.CALCULATOR,
+          },
+        )
+      }
+      return item
     }
 
     return [
@@ -175,9 +218,13 @@ export default function TeacherMenu({
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === TitleSidebar.NOTES_LIST) {
-      openNotesList()
+      handleOpenNotesList()
     } else if (key === TitleSidebar.RESOURCES) {
-      openResources()
+      handleOpenResources()
+    } else if (key === TitleSidebar.NEW_NOTE) {
+      handleAddNote()
+    } else if (key === TitleSidebar.CALCULATOR) {
+      handleOpenCalculator()
     } else {
       const target = menuItems.find((item) => item.key === key)
       if (target?.link) router.push(target.link)

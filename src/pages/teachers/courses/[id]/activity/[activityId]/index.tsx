@@ -505,11 +505,7 @@ const ActivityTeacherPage = () => {
 
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <LayoutTeacher
-        title="Activity"
-        breadcrumbs={breadcrumbsData}
-        isCourseDetail
-      >
+      <LayoutTeacher title="Activity" breadcrumbs={breadcrumbsData} isActivity>
         <div className={`mx-auto my-0 max-w-xxl text-bw-1`}>
           {/* Notes */}
           <>
