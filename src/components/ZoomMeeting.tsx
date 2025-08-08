@@ -1,21 +1,20 @@
+'use client'
+
 import { ZoomApi } from '@/api'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-interface ZoomMeetingProps {
-  token: string
-  className?: string
-}
-
-export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' }) => {
+export const ZoomMeeting = () => {
   const { isSDKLoaded, isJoining, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
   const [hasJoined, setHasJoined] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
 
   const getZoomMeeting = async (token: string) => {
     const userInfoData = await ZoomApi.getZoomToken(token)
@@ -80,7 +79,7 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
   // Show loading state for meeting data
   if (isLoadingMeetingData) {
     return (
-      <div className={`zoom-meeting-container ${className}`}>
+      <div className="zoom-meeting-container">
         <div className="flex items-center justify-center rounded-lg bg-blue-50 p-8">
           <div className="mr-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
           <span className="text-lg font-medium text-blue-700">Đang tải thông tin cuộc họp...</span>
@@ -91,14 +90,14 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
 
   if (!meetingConfig) {
     return (
-      <div className={`zoom-meeting-container ${className}`}>
+      <div className="zoom-meeting-container">
         <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
       </div>
     )
   }
 
   return (
-    <div className={`zoom-meeting-container ${className}`}>
+    <div className="zoom-meeting-container">
       <div className="zoom-controls mb-6">
         {!isSDKLoaded && (
           <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">

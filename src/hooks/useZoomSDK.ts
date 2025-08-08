@@ -1,3 +1,5 @@
+'use client'
+
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { useCallback, useEffect, useState } from 'react'
