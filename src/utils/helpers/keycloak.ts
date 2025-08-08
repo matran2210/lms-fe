@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { UserApi } from '@/app/api/user'
+import { UserApi } from '@/api/user'
 import { fetcher } from '@/services/request'
 import { getMessagingToken } from '@/utils/firebase'
 import AsyncStorage from '@react-native-async-storage/async-storage'

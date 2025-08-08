@@ -2,10 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-#meeting-app {
-  @apply pt-16;
+:root {
+  --header-height: 4rem;
+}
+
+#zmmtg-root {
+  @apply mt-header-height !h-[calc(100%-var(--header-height))];
 }
 
 #meeting-app .meeting-info-container__wrapper {
   @apply hidden;
+}
+
+#meeting-app .zoom-workplace-logo {
+  @apply hidden umd:block;
 }

@@ -14,6 +14,13 @@ export default {
       boxShadow: {
         header: '0px 4px 16px 0px #2C30000D',
       },
+      screens: {
+        umd: '769px',
+        ulg: '1025px',
+      },
+      spacing: {
+        'header-height': 'var(--header-height)',
+      },
     },
   },
   plugins: [require('@tailwindcss/aspect-ratio'), require('@tailwindcss/forms')],

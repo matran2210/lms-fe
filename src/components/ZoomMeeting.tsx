@@ -1,6 +1,6 @@
 'use client'
 
-import { ZoomApi } from '@/api'
+import { ZoomApi } from '@/api/zoom'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { toggleMeetingContainer } from '@/utils'

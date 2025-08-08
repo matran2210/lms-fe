@@ -9,7 +9,8 @@ import Link from 'next/link'
 
 export const Header = () => {
   const handleLogout = async () => {
-    await AuthenticationManager.instance.logout()
+    const authenticationManager = new AuthenticationManager()
+    await authenticationManager.logout()
   }
 
   return (
