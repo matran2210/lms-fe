@@ -1,3 +1,7 @@
+@mixin tab-highlight {
+  @apply block !text-primary;
+}
+
 .sapp-tabs-profile {
   .ant-tabs-nav {
     @apply my-0 px-0 pt-0;
@@ -15,17 +19,20 @@
     &.ant-tabs-tab-active {
       @apply font-semibold;
       .ant-tabs-tab-btn {
-        @apply text-primary;
+        @include tab-highlight;
         &:focus {
-          @apply text-primary;
+          @include tab-highlight;
         }
       }
     }
     .ant-tabs-tab-btn {
       &:focus,
       &:hover {
-        @apply block !text-primary;
+        @include tab-highlight;
       }
+    }
+    &:hover {
+      @include tab-highlight;
     }
   }
   .ant-tabs-ink-bar {

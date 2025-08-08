@@ -76,14 +76,14 @@ export default function SearchForm3Level({
 
   return (
     <div
-      className={`relative mx-auto my-0 flex max-w-xxl rounded-lg bg-white px-4 py-2 shadow-search md:px-6 md:py-3 xl-max:mx-4`}
+      className={`relative mx-auto my-0 flex max-w-1524 rounded-lg bg-white px-4 py-3 shadow-search md:py-5 md:pl-8 md:pr-4 xl-max:mx-4`}
     >
       <form
         className={`flex w-full items-center ${formStyle}`}
         onSubmit={handleSubmit}
         onChange={handleReset}
       >
-        <button type="submit" className="flex h-5 w-5 md:h-6 md:w-6">
+        <button type="submit" className="text-secondary-v2-DEFAULT">
           <IconSearch />
         </button>
         <Controller
@@ -95,7 +95,7 @@ export default function SearchForm3Level({
               {...field}
               type="text"
               placeholder={placeholder}
-              className="h-6 w-full border-0 px-4 text-sm leading-[22px] text-bw-15 placeholder-bw-15 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
+              className="h-6 w-full border-0 px-4 text-sm leading-[22px] text-bw-15 placeholder-gray-v2-400 focus:border-0 focus:outline-0 focus:ring-0 md:text-base md:leading-6"
             />
           )}
         />

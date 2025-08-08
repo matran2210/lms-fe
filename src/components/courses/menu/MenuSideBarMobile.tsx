@@ -48,12 +48,12 @@ export default function SidebarMobile({
     <>
       {/* Top bar with hamburger and title */}
       <div
-        className={`m-4 ${router.pathname === '/short-course/detail/[courseId]/activity/[id]' ? 'hidden' : 'flex'} items-center justify-between rounded-md bg-white px-4 py-3 shadow-md md:hidden`}
+        className={`m-4 ${router.pathname === '/short-course/detail/[courseId]/activity/[id]' ? 'hidden' : 'flex'} items-center justify-between rounded-md bg-white px-4 py-3 shadow-search md:hidden`}
       >
         <MenuOutlined onClick={toggleDrawer} className="text-xl" />
         <span className="text-lg font-medium">
           Welcome to{' '}
-          <span className="text-yellow-500 font-semibold">Master Finance</span>
+          <span className="font-semibold text-primary">Master Finance</span>
         </span>
         <div />
       </div>
@@ -71,7 +71,7 @@ export default function SidebarMobile({
           <div>
             {/* Logo */}
             <div className="group-logos mx-auto h-[71px] px-5 pb-5.25">
-              <div className="flex h-[50px] items-end justify-start text-center">
+              <div className="flex h-[50px] items-end justify-center text-center">
                 <LogoMobile />
               </div>
             </div>
@@ -89,7 +89,10 @@ export default function SidebarMobile({
               closeSideBar={toggleDrawer}
             />
 
-            <TabButton items={itemButtonTab} />
+            <TabButton
+              items={itemButtonTab}
+              className="!rounded !px-1 !py-2 text-ssm"
+            />
           </div>
         </div>
       </Drawer>
