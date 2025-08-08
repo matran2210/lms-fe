@@ -12,7 +12,7 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
-import TestModalTeacher from 'src/pages/teachers/courses/test'
+import TestModalTeacher from '@components/courses/popup/TestModalTeacher'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'

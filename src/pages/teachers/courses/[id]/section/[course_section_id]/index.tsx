@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
-import TestModal from 'src/pages/teachers/courses/test'
+import TestModalTeacher from '@components/courses/popup/TestModalTeacher'
 import { ILearningOutcome } from 'src/type/courses'
 import LayoutTeacher from '@components/layout/Teacher'
 import { CoursesAPI } from 'src/pages/api/courses/index'
@@ -572,7 +572,7 @@ const CoursePartDetailTeacher = () => {
           </TextSkeleton>
         </SappDrawer>
         {open && (
-          <TestModal
+          <TestModalTeacher
             open={open}
             setOpen={setOpen}
             data={chapterData}
