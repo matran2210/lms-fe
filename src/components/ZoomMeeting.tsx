@@ -1,5 +1,4 @@
 import { ZoomApi } from '@/api'
-import { ZOOM_CONFIG } from '@/constants/zoom'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { usePathname, useRouter } from 'next/navigation'
@@ -145,9 +144,6 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
           </div>
         )}
       </div>
-
-      {/* Zoom SDK Container */}
-      <div id={ZOOM_CONFIG.MEETING_CONTAINER_ID} className="zoom-meeting-frame" style={{ display: 'none' }} />
     </div>
   )
 }
