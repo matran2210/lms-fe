@@ -2,7 +2,7 @@ import SappDrawer from '@components/base/SappDrawer'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { Alert } from 'antd'
 import { useRouter } from 'next/router'
-import PreviewPartDetail from 'preview-part'
+import PreviewPartDetail from 'sapp-preview-part-test'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink, TEST_TYPE } from 'src/constants'
@@ -522,6 +522,7 @@ const CoursePartDetailTeacher = () => {
           listFocusSubSectionIds={listFocusSubSectionIds}
           listFocusUnitIds={listFocusUnitIds}
           deadline={deadline}
+          isTeacher
         />
         <SappDrawer
           isOpen={openLearningOutcome}
