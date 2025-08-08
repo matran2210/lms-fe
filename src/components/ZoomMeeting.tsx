@@ -1,9 +1,8 @@
-'use client'
-
-import { processZoomMeetingAction } from '@/actions/zoom-actions'
+import { ZoomApi } from '@/api'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 interface ZoomMeetingProps {
@@ -16,20 +15,29 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
   const [hasJoined, setHasJoined] = useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const getZoomMeeting = async (token: string) => {
+    const userInfoData = await ZoomApi.getZoomToken(token)
+    const signatureData = await ZoomApi.getZoomSignature(userInfoData.data.meeting_id)
+
+    return {
+      userInfo: userInfoData.data,
+      signature: signatureData.data,
+    }
+  }
 
   // Process token and prepare meeting data
   useEffect(() => {
     const processMeetingToken = async () => {
-      if (!token) {
-        setIsLoadingMeetingData(false)
-        return
-      }
+      if (!token) return
 
       try {
         setIsLoadingMeetingData(true)
 
         const decodedToken = decodeURIComponent(token)
-        const meetingData = await processZoomMeetingAction(decodedToken)
+        const meetingData = await getZoomMeeting(decodedToken)
 
         const config: ZoomMeetingConfig = {
           meetingNumber: meetingData.userInfo.meeting_id,
@@ -49,11 +57,12 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
     }
 
     processMeetingToken()
-  }, [token])
+  }, [])
 
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {
     if (isSDKLoaded && meetingConfig && !isJoining && !error && !hasJoined) {
+      router.replace(pathname, { scroll: false })
       handleJoinMeeting()
     }
   }, [isSDKLoaded, meetingConfig, isJoining, error, hasJoined])
@@ -73,9 +82,9 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
   if (isLoadingMeetingData) {
     return (
       <div className={`zoom-meeting-container ${className}`}>
-        <div className="flex items-center justify-center p-8 bg-blue-50 rounded-lg">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-4"></div>
-          <span className="text-blue-700 font-medium text-lg">Đang tải thông tin cuộc họp...</span>
+        <div className="flex items-center justify-center rounded-lg bg-blue-50 p-8">
+          <div className="mr-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+          <span className="text-lg font-medium text-blue-700">Đang tải thông tin cuộc họp...</span>
         </div>
       </div>
     )
@@ -84,7 +93,7 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
   if (!meetingConfig) {
     return (
       <div className={`zoom-meeting-container ${className}`}>
-        <p className="text-gray-600 text-center p-8">Không có thông tin cuộc họp</p>
+        <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
       </div>
     )
   }
@@ -93,21 +102,21 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
     <div className={`zoom-meeting-container ${className}`}>
       <div className="zoom-controls mb-6">
         {!isSDKLoaded && (
-          <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
-            <span className="text-blue-700 font-medium">Đang tải Zoom SDK...</span>
+          <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">
+            <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600"></div>
+            <span className="font-medium text-blue-700">Đang tải Zoom SDK...</span>
           </div>
         )}
 
         {isJoining && (
-          <div className="flex items-center justify-center p-4 bg-green-50 rounded-lg">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mr-3"></div>
-            <span className="text-green-700 font-medium">Đang tham gia cuộc họp...</span>
+          <div className="flex items-center justify-center rounded-lg bg-green-50 p-4">
+            <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-green-600"></div>
+            <span className="font-medium text-green-700">Đang tham gia cuộc họp...</span>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-lg mb-4">
+          <div className="mb-4 rounded-lg border-l-4 border-red-400 bg-red-50 p-4">
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -126,7 +135,7 @@ export const ZoomMeeting: React.FC<ZoomMeetingProps> = ({ token, className = '' 
                 <div className="mt-3">
                   <button
                     onClick={handleJoinMeeting}
-                    className="text-sm bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded"
+                    className="rounded bg-red-100 px-3 py-1 text-sm text-red-800 hover:bg-red-200"
                   >
                     Thử lại
                   </button>

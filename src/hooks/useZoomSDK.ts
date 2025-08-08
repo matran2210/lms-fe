@@ -1,6 +1,3 @@
-'use client'
-
-import { getZoomSignatureAction } from '@/actions/zoom-actions'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { useCallback, useEffect, useState } from 'react'
@@ -15,8 +12,6 @@ export const useZoomSDK = () => {
   useEffect(() => {
     const loadZoomSDK = async () => {
       try {
-        if (typeof window === 'undefined') return
-
         await import('@zoom/meetingsdk')
 
         // Initialize SDK using window.ZoomMtg
@@ -32,12 +27,10 @@ export const useZoomSDK = () => {
     loadZoomSDK()
   }, [])
 
-  const getSignature = useCallback(async (meetingNumber: string) => {
-    const result = await getZoomSignatureAction(meetingNumber)
-
-    return {
-      signature: result.signature,
-      sdkKey: result.sdk_key,
+  const toggleMeetingContainer = useCallback((display: 'block' | 'none') => {
+    const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
+    if (zoomContainer) {
+      zoomContainer.style.display = display
     }
   }, [])
 
@@ -51,8 +44,7 @@ export const useZoomSDK = () => {
       setIsJoining(true)
       setError(null)
 
-      const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
-      zoomContainer!.style!.display = 'block'
+      toggleMeetingContainer('block')
 
       try {
         window.ZoomMtg.i18n.load('vi-VN')
@@ -86,19 +78,16 @@ export const useZoomSDK = () => {
           },
         })
       } catch (err) {
-        zoomContainer!.style!.display = 'none'
+        // toggleMeetingContainer('none')
         setError(err instanceof Error ? err.message : ZOOM_CONFIG.ERROR_MESSAGES.FAILED_TO_JOIN_MEETING)
         setIsJoining(false)
       }
     },
-    [isSDKLoaded, getSignature]
+    [isSDKLoaded]
   )
 
   const leaveMeeting = useCallback(() => {
-    const zoomContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
-    if (zoomContainer) {
-      zoomContainer.style.display = 'none'
-    }
+    toggleMeetingContainer('none')
   }, [])
 
   return {

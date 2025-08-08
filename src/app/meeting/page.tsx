@@ -1,20 +1,12 @@
 'use client'
 
 import { ZoomMeeting } from '@/components/ZoomMeeting'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useMemo } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
 
-function MeetingContent() {
+export default function MeetingPage() {
   const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
   const token = useMemo(() => searchParams.get('token'), [])
-
-  useEffect(() => {
-    if (token) {
-      router.replace(pathname, { scroll: false })
-    }
-  }, [router, pathname])
 
   if (!token) {
     return (
@@ -39,24 +31,5 @@ function MeetingContent() {
         <ZoomMeeting token={token} />
       </div>
     </div>
-  )
-}
-
-function LoadingFallback() {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-        <p className="text-gray-600">Đang tải...</p>
-      </div>
-    </div>
-  )
-}
-
-export default function MeetingPage() {
-  return (
-    <Suspense fallback={<LoadingFallback />}>
-      <MeetingContent />
-    </Suspense>
   )
 }
