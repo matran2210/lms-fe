@@ -9,6 +9,7 @@ import React from 'react'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { LinkedInShareButton } from './ButtonShareLinkedin'
 import CertificateCard from './CertificateCard'
+import LinkedInAddCertificateButton from './LinkedInAddCertificateButton'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -31,6 +32,17 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           <LinkedInShareButton
             certificateUrl={certificate?.certificate_url || ''}
           />
+
+          <div className="p-4">
+            <LinkedInAddCertificateButton
+              certName={certificate?.course.name || ''}
+              orgName="SAPP Academy"
+              issueYear={2025}
+              issueMonth={8}
+              certUrl={certificate?.certificate_url || ''}
+              certId={certificate?.id || ''}
+            />
+          </div>
 
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
