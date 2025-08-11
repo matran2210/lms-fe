@@ -156,7 +156,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                 size: 'medium',
                 className:
                   'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
-                htmlType: 'submit',
+                type: 'submit',
                 disabled:
                   loading ||
                   isEmpty(watch('confirmPassword')) ||
@@ -177,7 +177,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
               className="w-full py-2"
               size="medium"
               title="Confirm"
-              htmlType="submit"
+              type="submit"
               disabled={
                 loading ||
                 isEmpty(watch('confirmPassword')) ||

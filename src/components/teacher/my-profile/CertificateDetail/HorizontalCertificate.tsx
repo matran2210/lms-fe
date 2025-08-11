@@ -72,11 +72,9 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
-                iconPosition="end"
                 onClick={onDownload}
-              >
-                Download
-              </ButtonPrimary>
+                title="Download"
+              />
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >

@@ -17,3 +17,20 @@ export const ProfilePages = {
 } as const
 
 export type IProfilePages = (typeof ProfilePages)[keyof typeof ProfilePages]
+export interface IDeviceItem {
+  id: string
+  created_at: string
+  updated_at: string
+  ip: string
+  location: string
+  user_agent: UserAgent
+  user_id: string
+  is_current: boolean
+}
+export interface UserAgent {
+  browserName: string
+  browserVersion: string
+  osName: string
+  osVersion: string
+  deviceType: any
+}

@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
 import UserApi from 'src/redux/services/User/user'
 import DeviceItem from './DeviceItem'
-import ProfileCard from '@components/card/ProfileCard'
 import Icon from '@components/icons'
 import { IDeviceItem } from 'src/type/Profile'
 import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
@@ -26,7 +25,7 @@ const DeviceList = () => {
   }, [selectedDrawer?.data?.created_at])
 
   const getListDevices = async () => {
-    const res = await UserApi.getListDevices()
+    const res = await UserApi.getListDevicesV2()
     setListDevices(res)
   }
   useEffect(() => {
@@ -94,7 +93,7 @@ const DeviceList = () => {
           <div className="flex flex-col gap-3 md:gap-4">
             {selectedDrawer?.data?.user_agent.browserName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary md:w-[250px]">
+                <span className="inline-block text-secondary-500 md:w-[250px]">
                   Device Name:
                 </span>
                 <span className="font-semibold">
@@ -104,7 +103,7 @@ const DeviceList = () => {
             )}
             {selectedDrawer?.data.user_agent.browserName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary md:w-[250px]">
+                <span className="inline-block text-secondary-500 md:w-[250px]">
                   Browser:
                 </span>
                 <span className="font-semibold">
@@ -114,7 +113,7 @@ const DeviceList = () => {
             )}
             {selectedDrawer?.data.user_agent.osName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary md:w-[250px]">
+                <span className="inline-block text-secondary-500 md:w-[250px]">
                   OS:
                 </span>
                 <span className="font-semibold">

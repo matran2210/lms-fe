@@ -35,8 +35,8 @@ const ItemCard = ({
   value: React.ReactNode
 }) => (
   <div className="flex items-center justify-between">
-    <div className="text-secondary">{title}</div>
-    <div className="font-bold text-secondary">{value}</div>
+    <div className="text-secondary-500">{title}</div>
+    <div className="font-bold text-secondary-500">{value}</div>
   </div>
 )
 export default AttempItem

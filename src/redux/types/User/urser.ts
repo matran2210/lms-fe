@@ -168,6 +168,22 @@ export interface IUserHubspotProgramInfo {
   }
 }
 
+export interface UserHubspotExaminationSubjectItem {
+  id: string
+  examination_subject_id: string
+  result: string
+  examination_subject: {
+    id: string
+    subject_id: string
+    examination_id: string
+    subject: ISubjectItem
+    examination: {
+      id: string
+      name: string
+    }
+  }
+  is_final_examination_subject: boolean
+}
 export interface ICourseTabGroup {
   id: string
   user_hubspot_examination_subjects: [

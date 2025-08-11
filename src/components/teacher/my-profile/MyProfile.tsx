@@ -212,7 +212,7 @@ const MyProfile = ({
                         size: 'medium',
                         className:
                           'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
-                        htmlType: 'submit',
+                        type: 'submit',
                         loading: loading || loadingEditName,
                       }}
                     ></ButtonCancelSubmit>
@@ -277,7 +277,7 @@ const MyProfile = ({
                   className="w-full"
                   size="medium"
                   title="Confirm"
-                  htmlType="submit"
+                  type="submit"
                   disabled={loading || loadingEditName}
                 />
               </div>
@@ -388,7 +388,7 @@ const MyProfile = ({
                     className="w-full px-4 py-2"
                     size="medium"
                     title="Confirm"
-                    htmlType="submit"
+                    type="submit"
                     disabled={loading || loadingEditName}
                   />
                 </div>

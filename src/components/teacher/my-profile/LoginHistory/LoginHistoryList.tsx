@@ -5,7 +5,6 @@ import {
   loadMoreLoginHistory,
   userReducer,
 } from 'src/redux/slice/User/User'
-import ProfileCard from '@components/card/ProfileCard'
 import HistoryItem from './HistoryItem'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'
 
