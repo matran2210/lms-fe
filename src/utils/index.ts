@@ -1,3 +1,4 @@
+import { TOKEN_STORAGE_KEY } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 
 export function setCookie(name: string, value: string, days = 7) {
@@ -39,4 +40,15 @@ export function toggleMeetingContainer(display: 'block' | 'none') {
   if (zoomContainer) {
     zoomContainer.style.display = display
   }
+}
+
+export const getToken = (tokenFromParams: string | null): string | null => {
+  if (typeof window === 'undefined') return null
+
+  if (tokenFromParams) {
+    sessionStorage.setItem(TOKEN_STORAGE_KEY, tokenFromParams)
+    return tokenFromParams
+  }
+
+  return sessionStorage.getItem(TOKEN_STORAGE_KEY)
 }

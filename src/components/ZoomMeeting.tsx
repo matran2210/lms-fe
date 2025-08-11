@@ -3,7 +3,7 @@
 import { ZoomApi } from '@/api/zoom'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
-import { toggleMeetingContainer } from '@/utils'
+import { getToken, toggleMeetingContainer } from '@/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -11,10 +11,16 @@ export const ZoomMeeting = () => {
   const { isSDKLoaded, isJoining, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
+  const [token, setToken] = useState<string | null>(null)
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const tokenFromParams = searchParams.get('token')
+
+  useEffect(() => {
+    const currentToken = getToken(tokenFromParams)
+    setToken(currentToken)
+  }, [tokenFromParams])
 
   const getZoomMeeting = async (token: string) => {
     const userInfoData = await ZoomApi.getZoomToken(token)
@@ -56,15 +62,17 @@ export const ZoomMeeting = () => {
     }
 
     processMeetingToken()
-  }, [])
+  }, [token])
 
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {
     if (isSDKLoaded && meetingConfig && !isJoining && !error) {
-      router.replace(pathname, { scroll: false })
+      if (tokenFromParams) {
+        router.replace(pathname, { scroll: false })
+      }
       handleJoinMeeting()
     }
-  }, [isSDKLoaded, meetingConfig, isJoining, error])
+  }, [isSDKLoaded, meetingConfig, isJoining, error, tokenFromParams, router, pathname])
 
   const handleJoinMeeting = async () => {
     if (!meetingConfig) return

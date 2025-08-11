@@ -12,10 +12,10 @@ export function ZoomMeetingForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-100">
+    <div className="rounded-xl border border-gray-100 bg-white p-8 shadow-lg">
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4 flex items-center justify-center">
-          <svg className="w-8 h-8 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <h2 className="mb-4 flex items-center justify-center text-3xl font-bold text-gray-900">
+          <svg className="mr-3 h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -25,15 +25,15 @@ export function ZoomMeetingForm() {
           </svg>
           Tham gia Zoom Meeting
         </h2>
-        <p className="text-gray-600 text-lg">Nhấn vào nút bên dưới để tham gia cuộc họp Zoom</p>
+        <p className="text-lg text-gray-600">Nhấn vào nút bên dưới để tham gia cuộc họp Zoom</p>
       </div>
 
       {/* Meeting Join Section */}
       <div className="text-center">
-        <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-8 mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="mb-8 rounded-lg bg-gradient-to-r from-blue-50 to-green-50 p-8">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+              <svg className="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -43,15 +43,15 @@ export function ZoomMeetingForm() {
               </svg>
             </div>
           </div>
-          <h3 className="text-xl font-bold text-gray-800 mb-2">Tham gia nhanh chóng</h3>
-          <p className="text-gray-600 mb-6">Cuộc họp được cấu hình sẵn và sẵn sàng để bạn tham gia</p>
+          <h3 className="mb-2 text-xl font-bold text-gray-800">Tham gia nhanh chóng</h3>
+          <p className="mb-6 text-gray-600">Cuộc họp được cấu hình sẵn và sẵn sàng để bạn tham gia</p>
 
           <Link
             href={handleGetLink()}
             target="_blank"
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold text-lg rounded-lg transition-all duration-200 hover:from-green-700 hover:to-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="inline-flex transform items-center justify-center rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all duration-200 hover:scale-105 hover:from-green-700 hover:to-green-800 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-green-300"
           >
-            <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -64,21 +64,21 @@ export function ZoomMeetingForm() {
         </div>
 
         {/* Additional Info */}
-        <div className="text-sm text-gray-500 space-y-2">
+        <div className="space-y-2 text-sm text-gray-500">
           <p className="flex items-center justify-center">
-            <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mr-2 h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Tự động tham gia cuộc họp
           </p>
           <p className="flex items-center justify-center">
-            <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mr-2 h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Thông tin đã được cấu hình sẵn
           </p>
           <p className="flex items-center justify-center">
-            <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mr-2 h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
             Mở trong tab mới

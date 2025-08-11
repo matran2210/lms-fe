@@ -6,3 +6,5 @@ export const COOKIE_INFO = {
   KEYCLOAK_TOKEN: 'keycloakToken',
   KEYCLOAK_REFRESH_TOKEN: 'keycloakRefreshToken',
 }
+
+export const TOKEN_STORAGE_KEY = 'zoom_meeting_token'
