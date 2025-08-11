@@ -265,6 +265,7 @@ module.exports = {
       'gray-v2-100': '#B6B6B7',
       'gray-v2-DEFAULT': '#404041',
       'gray-v2-600': '#29353C',
+      'gray-v2-200': '#E5E7EB',
       secondary: '#404041',
     },
     screens: {

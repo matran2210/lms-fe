@@ -23,7 +23,7 @@ function CtaTrial() {
   const router = useRouter()
   const { setShowPinnedTrial, showPinnedTrial, openPopupCTA, setOpenPopupCTA } =
     useCourseContext()
-  const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
+  const { openPinned } = usePinnedNotifyContext()
 
   const isEnablePinnedPages = ENABLED_PINNED_PAGES.includes(router.pathname)
   const isEnablePinnedNotiPages = ENABLED_PINNED_NOTI_PAGES.includes(
@@ -55,7 +55,7 @@ function CtaTrial() {
   return (
     <>
       <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
-      {openPopupCTA && (
+      {isEnablePinnedNotiPages && openPinned && (
         <PinnedNotificationsV2
           bgColor="bg-info-100"
           borderColor="border-info"
