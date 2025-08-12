@@ -125,20 +125,22 @@ const Explanation = () => {
           onClick={() => {
             if (isUserViewAnswers) {
               router.push(
-                `/courses/${viewAnswersType}/your-answers-detail/${attempt?.id}`,
+                `${PageLink.TEACHER_MY_COURSE}/${viewAnswersType}/your-answers-detail/${attempt?.id}`,
               )
             } else {
               if (attempt?.quiz.id) {
                 switch (attempt?.quiz.quiz_type) {
                   case TEST_ATTEMPT_TYPE.ENTRANCE_TEST:
-                    router.push(`/entrance-test/table-result/${attempt?.id}`)
+                    // router.push(`/entrance-test/table-result/${attempt?.id}`)
                     break
                   case TEST_ATTEMPT_TYPE.CHAPTER_TEST:
                   case TEST_ATTEMPT_TYPE.FINAL_TEST:
                   case TEST_ATTEMPT_TYPE.MID_TERM_TEST:
                   case TEST_ATTEMPT_TYPE.MOCK_TEST:
                   case TEST_ATTEMPT_TYPE.TOPIC_TEST:
-                    router.push(`/courses/test/test-result/${attempt?.id}`)
+                    router.push(
+                      `${PageLink.TEACHER_MY_COURSE}/test/test-result/${attempt?.id}`,
+                    )
                     break
                   default:
                     router.push(

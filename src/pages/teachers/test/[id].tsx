@@ -1851,10 +1851,10 @@ const TestDetail = () => {
             return
           }
           if (type === 'entrance') {
-            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+            // router.replace(`/entrance-test/test-result/${res?.data?.id}`)
           } else if (type === 'event-test') {
             setSubmitEventTest(true)
-            router.replace(`/event-test`)
+            // router.replace(`/event-test`)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2212,11 +2212,11 @@ const TestDetail = () => {
                 case TEST_TYPE.TOPIC_TEST:
                 case TEST_TYPE.CHAPTER_TEST:
                 case TEST_TYPE.PART_TEST:
-                  return router.push(PageLink.COURSES)
+                  return router.push(PageLink.TEACHER_MY_COURSE)
                 case TEST_TYPE.ENTRANCE_TEST:
                   return router.push(PageLink.ENTRANCE_TEST)
                 default:
-                  return router.push(PageLink.COURSES)
+                  return router.push(PageLink.TEACHER_MY_COURSE)
               }
             }
           }
@@ -2927,9 +2927,9 @@ const TestDetail = () => {
                 .unwrap()
                 .then(() => {
                   if (type === 'entrance') {
-                    router.replace(`/entrance-test/test-result/${QuizResultId}`)
+                    // router.replace(`/entrance-test/test-result/${QuizResultId}`)
                   } else if (type === 'event-test') {
-                    router.replace(`/event-test`)
+                    // router.replace(`/event-test`)
                     // setSubmitEventTest(true)
                   } else {
                     if (
@@ -2967,7 +2967,7 @@ const TestDetail = () => {
             setOpen={setOpenQuit}
             handleQuit={() => {
               if (type === 'event-test') {
-                router.replace(`/event-test`)
+                // router.replace(`/event-test`)
                 // setSubmitEventTest(true)
               } else {
                 router.back()

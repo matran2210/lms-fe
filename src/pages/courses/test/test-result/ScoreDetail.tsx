@@ -15,6 +15,7 @@ import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
+  PageLink,
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttemptChartType, QuizAttemptChartType } from 'src/type'
@@ -31,6 +32,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  isTeacher?: boolean
 }
 
 const ScoreDetail = ({
@@ -38,6 +40,7 @@ const ScoreDetail = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -221,7 +224,7 @@ const ScoreDetail = ({
                             onClick={() => {
                               if (answer?.id) {
                                 router.push(
-                                  `/explanation/${answer?.id}?title=My Course`,
+                                  `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${answer?.id}?title=My Course`,
                                 )
                               }
                             }}

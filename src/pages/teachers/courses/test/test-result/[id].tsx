@@ -81,6 +81,7 @@ const TestResultDetailTeacher = () => {
                 ? questions?.quizAttempt?.score
                 : chartData?.multiple_choice_score
             }
+            isTeacher
           />
         </div>
       </div>
