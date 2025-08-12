@@ -156,7 +156,7 @@ const CoursePartDetail = () => {
 
         const nodeList = res?.data?.course_section_tree
         setIsPassedCourse(res?.data?.is_passed_course)
-        const newData = nodeList.map((item: IProps) => {
+        const newData = nodeList?.map((item: IProps) => {
           if (item.id === course_section_id) {
             const { parent_id, ...rest } = item
             return rest
@@ -483,7 +483,7 @@ const CoursePartDetail = () => {
 
   const listFocusSubsectionNames = useMemo(() => {
     if (listFocusSubSectionIds?.length && partDetail?.children?.length) {
-      return listFocusSubSectionIds.map((id) => {
+      return listFocusSubSectionIds?.map((id) => {
         const section = partDetail.children.find((item: any) => item.id === id)
         return section?.short_name || section?.name
       })

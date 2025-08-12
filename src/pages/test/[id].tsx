@@ -254,7 +254,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
-          } = answerSubmitted[0]
+          } = answerSubmitted?.[0]
 
           // Handle different question types
           if (
