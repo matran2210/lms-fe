@@ -3,10 +3,10 @@
     @apply w-[220px];
 
     .logo-full {
-      @apply visible !block opacity-100;
+      @apply pointer-events-auto opacity-100;
     }
     .group-logos {
-      @apply pb-5;
+      // @apply pb-5;
 
       & > div {
         @apply justify-center;
