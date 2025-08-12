@@ -33,6 +33,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  isTeacher?: boolean
 }
 
 const TableQuestions = ({
@@ -40,6 +41,7 @@ const TableQuestions = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -227,7 +229,7 @@ const TableQuestions = ({
                         onClick={() => {
                           if (answer?.id) {
                             router.push(
-                              `/explanation/${answer?.id}?title=Your Answers Detail&type=test`,
+                              `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${answer?.id}?title=Your Answers Detail&type=test`,
                             )
                           }
                         }}
