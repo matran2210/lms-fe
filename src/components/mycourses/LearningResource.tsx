@@ -253,7 +253,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                         <div className="text-base font-medium text-gray-800">
                           {resource?.name}
                         </div>
-                        <div className="text-gray-500 text-sm font-normal">
+                        <div className="text-sm font-normal text-gray">
                           {bytesToKilobyte(resource?.size)}
                         </div>
                       </div>

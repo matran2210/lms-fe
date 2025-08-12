@@ -46,7 +46,7 @@ import ActionCellV2 from '@components/base/action/ActionCellV2'
 const DEFAULT_PAGESIZE = 20
 
 const LearningNotesList = () => {
-  const { isMobileView } = useTailwindBreakpoint()
+  const { isMobileView, isAlwaysShowSidebar } = useTailwindBreakpoint()
   const notesListStatus = useAppSelector(
     (state) => state.notesListReducer?.status,
   )
@@ -318,6 +318,7 @@ const LearningNotesList = () => {
       rootClassName={'responsive-drawer-center'}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
+      closable={isAlwaysShowSidebar}
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
