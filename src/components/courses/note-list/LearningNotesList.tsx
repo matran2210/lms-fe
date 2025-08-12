@@ -500,6 +500,7 @@ export default function LearningNotesList({
           rootClassName={'responsive-drawer-center'}
           submitButtonClassName="w-full h-10"
           btnSubmitTile="Confirm"
+          closable
         >
           {renderContent()}
         </SappDrawerV3>
