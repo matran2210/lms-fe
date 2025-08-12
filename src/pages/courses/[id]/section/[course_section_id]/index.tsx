@@ -501,6 +501,12 @@ const CoursePartDetail = () => {
     return []
   }, [partDetail, chapterDetail])
 
+  const heightContent = isMobileView
+    ? '102px'
+    : isTabletView
+      ? '128px'
+      : '144px'
+
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
@@ -633,27 +639,39 @@ const CoursePartDetail = () => {
           rootClassName={'responsive-drawer-center'}
         >
           <div
-            style={{ borderBottom: '1px solid #DCDDDD' }}
-            className="learningOutcome-description pb-8 text-sm font-normal leading-normal text-secondary md:text-base"
-            dangerouslySetInnerHTML={{
-              __html: learningOutcome?.description ?? '',
+            className="overflow-y-auto"
+            style={{
+              maxHeight: `calc(100% - ${heightContent})`,
             }}
-          />
-          <div className="mt-8 flex flex-col gap-6">
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div key={outcome.id} className="flex items-start gap-2">
-                <div>
-                  <StarCircleIcon />
+          >
+            <div
+              style={{ borderBottom: '1px solid #DCDDDD' }}
+              className={clsx(
+                'learningOutcome-description text-sm font-normal leading-normal text-secondary md:text-base',
+                {
+                  'pb-8': learningOutcome?.description,
+                },
+              )}
+              dangerouslySetInnerHTML={{
+                __html: learningOutcome?.description ?? '',
+              }}
+            />
+            <div className="mt-8 flex flex-col gap-6">
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div key={outcome.id} className="flex items-start gap-2">
+                  <div>
+                    <StarCircleIcon />
+                  </div>
+                  <div className="flex items-start text-sm font-normal leading-normal text-gray-800 md:text-base">
+                    <div className="me-1">LO{index + 1}:</div>
+                    <div
+                      className="learningOutcome-description"
+                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                    />
+                  </div>
                 </div>
-                <div className="flex items-start text-sm font-normal leading-normal text-gray-800 md:text-base">
-                  <div className="me-1">LO{index + 1}:</div>
-                  <div
-                    className="learningOutcome-description"
-                    dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </SappDrawerV3>
         {open && (
