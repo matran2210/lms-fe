@@ -73,18 +73,18 @@ export default function Layout(props: LayoutProps): ReactElement {
       </Head>
       <div
         className={clsx('flex flex-nowrap rounded-xl', {
-          'lg:ml-20': showSidebar,
+          'lg:ml-[calc(5rem+32px)]': showSidebar,
         })}
       >
         <Sidebar
           isOpened={isOpenSidebar}
           toggleDrawer={toggleDrawer}
           className={clsx(
-            'menu-sidebar-left transition-all duration-150 ease-in-out',
+            'menu-sidebar-left transition-all duration-300 ease-out',
             'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
             `fixed left-0 h-[calc(100vh-32px)] rounded-xl bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
             {
-              'overflow-hidden': !guideStatus,
+              // 'overflow-hidden': !guideStatus,
               'menu-sidebar-left--hover !w-[220px]':
                 (guideStatus && (guideStep === 2 || guideStep === 3)) ||
                 isShowMenuContent,

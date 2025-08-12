@@ -38,8 +38,8 @@ export default function ExpandIcon({
           </div>
         )
       )}
-      {type === 'logo-default' && <LogoDefault />}
-      {type === 'logo-full' && <LogoFull />}
+      {type === 'logo-default' && <LogoDefault className={`${className}`} />}
+      {type === 'logo-full' && <LogoFull className={`${className}`} />}
       {type === 'teacher-logo-full' && <TeacherLogoFull />}
       {type === 'stats-chart-sharp' && (
         <svg
