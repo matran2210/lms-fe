@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import useDynamicLoading from 'src/hooks/use-dynamic'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ISection } from 'src/type/courses'
-import { DEFAULT_SELECT_SECTION } from 'src/constants'
+import { DEFAULT_SELECT_SECTION, PageLink } from 'src/constants'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
@@ -21,6 +21,8 @@ import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import Link from 'next/link'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
+import { userReducer } from 'src/redux/slice/User/User'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -31,6 +33,7 @@ const LearningNotesList = () => {
   const getNotesData = useAppSelector(
     (state) => state.notesListReducer?.note_data,
   )
+  const userType = useAppSelector(userReducer).user.type
 
   const dispatch = useAppDispatch()
   const [notesListData, setNotesListData] = useState<any>()
@@ -529,7 +532,11 @@ const LearningNotesList = () => {
                             <Link
                               href={
                                 queryId || courseId
-                                  ? `/courses/${
+                                  ? `${
+                                      userType === UserType.TEACHER
+                                        ? PageLink.TEACHER_MY_COURSE
+                                        : PageLink.COURSES
+                                    }/${
                                       queryId || courseId
                                     }/activity/${note?.course_section_id}?note_id=${note?.id}`
                                   : '#'
