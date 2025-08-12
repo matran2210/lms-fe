@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { CoursesAPI } from 'src/pages/api/courses'
-import ResultsTable from './ResultsTable'
+import ResultsTable from 'src/pages/courses/my-course/[courseId]/results/ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import LayoutTeacher from '@components/layout/Teacher'
@@ -83,7 +83,7 @@ const ResultsTeacher = () => {
           ) : (
             <>
               <div className="bg-white xl-max:container">
-                {isSuccess && <ResultsTable />}
+                {isSuccess && <ResultsTable isTeacher />}
               </div>
             </>
           )}

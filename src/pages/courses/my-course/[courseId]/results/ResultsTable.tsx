@@ -12,7 +12,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { GRADE_STATUS } from 'src/constants'
+import { GRADE_STATUS, PageLink } from 'src/constants'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
@@ -64,7 +64,7 @@ export const headers = [
   className: string
 }[]
 
-const ResultsTable = () => {
+const ResultsTable = ({ isTeacher }: { isTeacher: boolean }) => {
   const router = useRouter()
   const [quizActivities, setQuizActivities] = useState<
     QuizActivity[] | undefined
@@ -227,12 +227,12 @@ const ResultsTable = () => {
         {resultData?.data?.map((row) => {
           let link: string = '#'
           if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-            link = `/courses/${router?.query?.courseId}/activity/${row?.id}`
+            link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/${router?.query?.courseId}/activity/${row?.id}`
           } else {
             if (row?.quiz?.attempts?.length) {
-              link = `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
+              link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
             } else {
-              link = `/test/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
+              link = `${isTeacher ? PageLink.TEACHER_TEST : '/test'}/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
             }
           }
           return (
