@@ -64,7 +64,7 @@ export const headers = [
   className: string
 }[]
 
-const ResultsTable = ({ isTeacher }: { isTeacher: boolean }) => {
+const ResultsTable = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter()
   const [quizActivities, setQuizActivities] = useState<
     QuizActivity[] | undefined
