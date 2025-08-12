@@ -243,7 +243,9 @@ const MultipleQuestion = ({
                   {showMore ? 'View Less' : 'View All'}
                 </div>
               )}
-              <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
+              <Link
+                href={`${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/my-course/${questions?.class_id ?? ''}`}
+              >
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}
