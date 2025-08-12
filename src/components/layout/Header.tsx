@@ -1,7 +1,7 @@
 'use client'
 
+import { LogoutIcon } from '@/assets/icons'
 import Logo from '@/assets/logo.svg'
-import Logout from '@/assets/logout.svg'
 import SAPPButton from '@/components/button/SAPPButton'
 import { AuthenticationManager } from '@/utils/helpers/keycloak'
 import Image from 'next/image'
@@ -19,11 +19,7 @@ export const Header = () => {
         <Link href="/" className="focus:outline-none">
           <Image src={Logo} alt="logo" width={90} height={45} />
         </Link>
-        <SAPPButton
-          title="Logout"
-          suffixIcon={<Image src={Logout} alt="logout" width={24} height={24} className="!text-icon" />}
-          onClick={handleLogout}
-        />
+        <SAPPButton title="Logout" suffixIcon={<LogoutIcon className="text-icon" />} onClick={handleLogout} />
       </div>
     </header>
   )

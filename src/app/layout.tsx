@@ -1,6 +1,7 @@
 import { Header } from '@/components/layout/Header'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   icons: [
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Header />
         <div className="mt-16">{children}</div>
+        <Toaster />
       </body>
     </html>
   )

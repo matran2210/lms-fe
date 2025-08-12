@@ -1,0 +1,28 @@
+import { UserIcon } from '@/assets/icons'
+import { useFloatingUser } from '@/hooks/useFloatingUser'
+import { useRef } from 'react'
+
+interface FloatingUserProps {
+  userId: string
+}
+
+const FloatingUser = ({ userId }: FloatingUserProps) => {
+  const floatingRef = useRef<HTMLDivElement>(null)
+  const { position } = useFloatingUser({ floatingRef })
+
+  return (
+    <div
+      ref={floatingRef}
+      className="pointer-events-none fixed z-50 flex items-center gap-2 rounded-md bg-floating-user p-2 text-white shadow-lg backdrop-blur-floating-user transition-all duration-500 ease-in-out md:p-3"
+      style={{
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+      }}
+    >
+      <UserIcon />
+      <span className="text-sm font-medium">{userId}</span>
+    </div>
+  )
+}
+
+export default FloatingUser

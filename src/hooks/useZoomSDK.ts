@@ -9,6 +9,7 @@ import toast from 'react-hot-toast'
 export const useZoomSDK = () => {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false)
   const [isJoining, setIsJoining] = useState(false)
+  const [isJoined, setIsJoined] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   // Load Zoom SDK
@@ -37,9 +38,6 @@ export const useZoomSDK = () => {
         throw new Error(ZOOM_CONFIG.ERROR_MESSAGES.SDK_NOT_LOADED)
       }
 
-      setIsJoining(true)
-      setError(null)
-
       toggleMeetingContainer('block')
 
       try {
@@ -63,6 +61,7 @@ export const useZoomSDK = () => {
               success: () => {
                 toast.success(ZOOM_CONFIG.SUCCESS_MESSAGES.JOINED_MEETING)
                 setIsJoining(false)
+                setIsJoined(true)
               },
               error: () => {
                 setError(ZOOM_CONFIG.ERROR_MESSAGES.FAILED_TO_JOIN_MEETING)
@@ -91,6 +90,7 @@ export const useZoomSDK = () => {
   return {
     isSDKLoaded,
     isJoining,
+    isJoined,
     error,
     joinMeeting,
     leaveMeeting,

@@ -3,3 +3,7 @@ export interface BaseResponse<T> {
   message: string
   data: T
 }
+
+export interface ISvg {
+  className?: string
+}

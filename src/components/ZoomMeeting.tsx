@@ -6,9 +6,10 @@ import { ZoomMeetingConfig } from '@/types/zoom'
 import { getToken, toggleMeetingContainer } from '@/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import FloatingUser from './FloatingUser'
 
 export const ZoomMeeting = () => {
-  const { isSDKLoaded, isJoining, error, joinMeeting } = useZoomSDK()
+  const { isSDKLoaded, isJoining, isJoined, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
   const [token, setToken] = useState<string | null>(null)
@@ -154,6 +155,8 @@ export const ZoomMeeting = () => {
             </div>
           </div>
         )}
+
+        {isJoined && <FloatingUser userId={meetingConfig.userEmail} />}
       </div>
     </div>
   )
