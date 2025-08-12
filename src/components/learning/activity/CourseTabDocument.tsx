@@ -349,7 +349,7 @@ const CourseTabDocument = ({
                 })}
                 onClick={() => handleChangeTab(courseId as string, tab.id)}
               >
-                <PaginationDotIcon className="h-3 w-3 shrink-0 md:h-[15px] md:w-[15px]" />
+                <PaginationDotIcon className="h-[10px] w-[10px] shrink-0" />
               </span>
             ))}
           </div>
