@@ -256,7 +256,10 @@ const LearningNotesList = () => {
       name: 'Note',
       description: description,
     }
-    dispatch(pushNotes(note))
+    const isExist = getNotesData.find((item) => item.id === note.id)
+    if (!isExist) {
+      dispatch(pushNotes(note))
+    }
   }
 
   const handleOpenNote = (
