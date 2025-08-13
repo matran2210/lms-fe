@@ -23,7 +23,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
       ref={ref}
       {...events}
     >
-      <div className="-ml-6 mb-11 text-lg font-semibold xl:font-medium">
+      <div className="-ml-6 mb-11 text-xl font-semibold xl:font-medium">
         Multiple Choice Score by Part
       </div>
       <div className="">
@@ -37,7 +37,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
           <div>
             {isGraded && (
               <div
-                className={`group-hover:border-info absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300`}
+                className={`absolute left-3 z-10 flex h-0 items-center border-t border-dotted border-gray-300 group-hover:border-info`}
                 style={{
                   bottom: passingScore + '%',
                   width: data?.length * 150 - 12 + 'px',

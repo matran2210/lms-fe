@@ -821,7 +821,7 @@ const TestInfoItem = ({
   return (
     <div className="flex justify-between gap-8 text-base">
       <div className="text-gray">{label}</div>
-      <div className="pr-0.5 font-medium text-gray-800">{value}</div>
+      <div className="pr-0.5 text-start font-medium text-gray-800">{value}</div>
     </div>
   )
 }
