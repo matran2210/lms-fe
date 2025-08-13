@@ -56,6 +56,7 @@ export const ZoomMeeting = () => {
           tkToken: meetingData.userInfo.token,
           signature: meetingData.signature.signature,
           sdkKey: meetingData.signature.sdk_key,
+          hubspotContactId: meetingData.userInfo.hubspot_contact_id,
         }
 
         setMeetingConfig(config)
@@ -104,7 +105,7 @@ export const ZoomMeeting = () => {
   }
 
   return (
-    <div className="zoom-controls mb-6">
+    <div className="mb-6">
       {!isSDKLoaded && (
         <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">
           <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600"></div>
@@ -149,7 +150,7 @@ export const ZoomMeeting = () => {
         </div>
       )}
 
-      {isJoined && <FloatingUser userId={meetingConfig.userId} />}
+      {isJoined && <FloatingUser hubspotContactId={meetingConfig.hubspotContactId} />}
     </div>
   )
 }

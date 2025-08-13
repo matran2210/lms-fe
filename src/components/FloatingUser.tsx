@@ -3,10 +3,10 @@ import { useFloatingUser } from '@/hooks/useFloatingUser'
 import { useRef } from 'react'
 
 interface FloatingUserProps {
-  userId: string
+  hubspotContactId: string
 }
 
-const FloatingUser = ({ userId }: FloatingUserProps) => {
+const FloatingUser = ({ hubspotContactId }: FloatingUserProps) => {
   const floatingRef = useRef<HTMLDivElement>(null)
   const { position } = useFloatingUser({ floatingRef })
 
@@ -21,7 +21,7 @@ const FloatingUser = ({ userId }: FloatingUserProps) => {
       }}
     >
       <UserIcon />
-      <span className="text-sm font-medium">{userId}</span>
+      <span className="text-sm font-medium">{hubspotContactId}</span>
     </div>
   )
 }

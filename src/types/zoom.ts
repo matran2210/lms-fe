@@ -9,6 +9,7 @@ export interface ZoomMeetingConfig {
   tkToken: string
   signature: string
   sdkKey: string
+  hubspotContactId: string
 }
 
 export interface ZoomSignature {
@@ -21,6 +22,7 @@ export interface ZoomDecryptedToken {
   meeting_id: string
   token: string
   password: string
+  hubspot_contact_id: string
 }
 
 export interface DecryptedZoomUserInfo extends ZoomDecryptedToken {
