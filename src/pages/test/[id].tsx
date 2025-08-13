@@ -2363,6 +2363,7 @@ const TestDetail = () => {
           {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
+                className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
                 disabled={!watch(`${currentPage}_answer`)}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
