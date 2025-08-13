@@ -151,6 +151,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }: Props,
     ref,
   ) => {
+    const isAFTEREACHQUESTION = grading_preference === 'AFTER_EACH_QUESTION'
     const questionRef = useRef<HTMLDivElement>(null)
     const isShowIconButtonInBottom = [
       QUESTION_TYPES.FILL_WORD,
@@ -504,7 +505,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
               isShowWarning={
-                !watch?.(`${activeQuestion?.id}_${document_id}_answer`)
+                !watch?.(`${activeQuestion?.id}_${document_id}_answer`) &&
+                isAFTEREACHQUESTION
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
@@ -526,7 +528,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   watch?.(`${activeQuestion?.id}_${document_id}_answer`) &&
                   watch?.(`${activeQuestion?.id}_${document_id}_answer`)
                     .length > 0
-                )
+                ) && isAFTEREACHQUESTION
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
             />
@@ -994,21 +996,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
-          {activeQuestion?.question_topic?.description && (
+          {!!activeQuestion?.question_topic?.description && (
             <HighlightableHTML
               initialHTML={activeQuestion?.question_topic?.description ?? ''}
               storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
               className="sapp-questions"
-              isShowNote
             />
           )}
 
-          {activeQuestion?.question_topic?.description && (
+          {!!activeQuestion?.question_topic?.description && (
             <Divider className="my-4 md:my-8" />
           )}
           <div className="relative">
             {renderQuestion()}
-
             <div className="absolute bottom-[10px] right-0 z-[1050] flex w-12 flex-col gap-2">
               {exhibitData && exhibitData?.length > 0 && (
                 <>

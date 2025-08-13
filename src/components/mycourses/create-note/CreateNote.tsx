@@ -98,7 +98,9 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       >
         <div className="absolute left-0 top-0  h-full w-full rounded-xl border bg-white">
           <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
-            <div className="text-sm font-semibold text-gray-800">New Note</div>
+            <div className="text-sm font-semibold text-gray-800">
+              {id || activeSectionId ? 'Edit' : 'New'} Note
+            </div>
             <button
               className="text-icon"
               onClick={() => {

@@ -2388,7 +2388,7 @@ const TestDetail = () => {
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-            mouseEnterDelay={0.3}
+            mouseEnterDelay={0.2}
             placement="left"
             color={'#404041'}
           >
