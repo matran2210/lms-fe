@@ -1,3 +1,4 @@
+import { AppProvider } from '@/components/AppProvider'
 import { Header } from '@/components/layout/Header'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
@@ -33,9 +34,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <div id="zoom-app">
-          <Header />
-          <div className="mt-16">{children}</div>
-          <Toaster />
+          <AppProvider>
+            <Header />
+            <div className="mt-16">{children}</div>
+            <Toaster />
+          </AppProvider>
         </div>
       </body>
     </html>

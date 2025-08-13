@@ -6,11 +6,19 @@ import { toast } from 'react-hot-toast'
 import { COOKIE_INFO } from 'src/constants'
 import exceptions from './en.exceptions.json'
 
-const apiURL = process.env.NEXT_PUBLIC_BASE_API_URL
+const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL
+const lmsUrl = process.env.NEXT_PUBLIC_LMS_API_URL
 
-export const getBaseUrl = () => {
+export const getBaseUrl = (type?: 'base' | 'lms') => {
   if (typeof window !== 'undefined') {
-    return process.env.NEXT_PUBLIC_BASE_API_URL
+    switch (type) {
+      case 'base':
+        return baseUrl
+      case 'lms':
+        return lmsUrl
+      default:
+        return baseUrl
+    }
   }
   return ''
 }
@@ -73,7 +81,7 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios(`${apiURL}/auth/refresh-token`, {
+        axios(`${baseUrl}/auth/refresh-token`, {
           method: 'POST',
           headers: {
             Authorization: 'Bearer ' + getCookie(COOKIE_INFO.KEYCLOAK_TOKEN),
