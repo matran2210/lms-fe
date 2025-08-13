@@ -114,7 +114,6 @@ export enum RESPONSE_OPTION {
   WORD = 'WORD',
   SHEET = 'SHEET',
 }
-export const SAPP_EDU_URL_DOMAIN = 'https://sapp.edu.vn'
 export const MAX_UPLOAD_SIZE = 20 * 1024 * 1024
 export const MAX_UPLOAD_VIDEO_SIZE = 20 * 1024 * 1024 * 1024
 export const DEFAULT_PAGE_SIZE = 10
