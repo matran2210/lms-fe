@@ -15,7 +15,7 @@ interface HorizontalCertificateProps {
   onDownload?: () => void
 }
 export const handleOpenSapp = () =>
-  window.open(process.env.NEXT_PUBLIC_HOMEPAGE_SAPP_URL, '_blank')
+  window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
