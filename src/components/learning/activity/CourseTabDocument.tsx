@@ -236,7 +236,6 @@ const CourseTabDocument = ({
                                 initialHTML={e?.text_editor_content || ''}
                                 storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
                                 className="course-tab-text"
-                                isShowNote
                               />
                             )}
                             {/* <TextDocument

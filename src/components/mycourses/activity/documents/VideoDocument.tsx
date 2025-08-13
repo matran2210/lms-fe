@@ -17,6 +17,9 @@ import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { Soundwave } from '@components/courses/icons'
 import QuizModal from '@components/courses/video/QuizModal'
+import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
+import clsx from 'clsx'
+import SappIcon from 'src/common/SappIcon'
 
 type Props = {
   videos?: IVideo[]
@@ -348,45 +351,52 @@ const VideoDocument = ({
 
   return (
     <div>
-      <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
-        {(videos as IVideo[])?.length > 1 && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-            <span className="font-semibold text-bw-1">Video mode:</span>
-            <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
-              {videos?.map((v, i) => {
-                return (
-                  <label
-                    className=" flex cursor-pointer select-none items-center gap-2"
-                    key={v?.file?.id ?? i}
-                  >
-                    {/* Radio button for video selection */}
-                    <SappButton
-                      key={v?.file?.id ?? i}
-                      size="small"
-                      className="rounded-md !px-3 py-2 text-medium-sm !font-normal"
-                      title={'Video ' + (i + 1)}
-                      toolTipTitle=""
-                      onClick={() => debouncedHandleSetCurrentVideo.current(v)}
-                      {...(v?.file?.id === currentVideo?.file?.id
-                        ? {
-                            color: 'primary',
-                          }
-                        : { color: 'gray' })}
-                    />
-                  </label>
-                )
-              })}
-            </div>
-          </div>
-        )}
+      <div
+        className={clsx('mb-6 flex items-center gap-x-10 gap-y-2 ', {
+          'justify-between': (videos as IVideo[])?.length > 1,
+          'justify-end': (videos as IVideo[])?.length <= 1,
+        })}
+      >
+        {(videos as IVideo[])?.length > 1 &&
+          videos?.map((v, i) => {
+            return (
+              <label
+                className=" flex cursor-pointer select-none items-center gap-2"
+                key={v?.file?.id ?? i}
+              >
+                {/* Radio button for video selection */}
+                <SAPPRadio
+                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                  {...(v?.file?.id === currentVideo?.file?.id
+                    ? {
+                        checked: true,
+                      }
+                    : { checked: false })}
+                  size={'small'}
+                ></SAPPRadio>
+                <span
+                  className={`radio-item-label  ${
+                    v?.file?.id === currentVideo?.file?.id
+                      ? 'text-bw-1'
+                      : 'text-gray-1'
+                  }`}
+                >
+                  Video {i + 1}
+                </span>
+              </label>
+            )
+          })}
         <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
-              <span className="mr-2 text-bw-15 group-hover:text-primary">
+              {/* Icon for course video timeline */}
+              <SappIcon
+                className="fill-bw-1 group-hover:text-primary"
+                icon="course_video_timeline"
+              ></SappIcon>
+              <span className="ml-2 text-bw-1 group-hover:text-primary">
                 Timeline
               </span>
-              {/* Icon for course video timeline */}
-              <Soundwave className="text-bw-15 group-hover:text-primary" />
             </>
           ) : (
             <></>
