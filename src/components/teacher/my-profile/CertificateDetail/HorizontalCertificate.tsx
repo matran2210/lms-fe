@@ -8,13 +8,14 @@ import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { SAPP_EDU_URL_DOMAIN } from 'src/constants'
 
 interface HorizontalCertificateProps {
   certificate?: ICertificate
   issuedBy?: string
   onDownload?: () => void
 }
-export const handleOpenSapp = () => window.open('https://sapp.edu.vn', '_blank')
+export const handleOpenSapp = () => window.open(SAPP_EDU_URL_DOMAIN, '_blank')
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
