@@ -8,6 +8,7 @@ import { ICertificate } from '@pages/certificates/[id]'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { handleOpenSapp } from './HorizontalCertificate'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -44,7 +45,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
         <div className="flex flex-1 flex-col items-center gap-12">
           <div
             className="flex w-full cursor-pointer items-end"
-            onClick={() => window.open('https://sapp.edu.vn', '_blank')}
+            onClick={handleOpenSapp}
           >
             <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
               <Image

@@ -58,7 +58,7 @@ const LoginHistoryList = () => {
           handleLoadMoreHistory()
         }
       }}
-      bodyClassName="h-[calc(604px-70px)] overflow-y-auto"
+      bodyClassName="h-[534px] overflow-y-auto"
     >
       {loginHistory?.userActivities?.map((e: any) => {
         return (

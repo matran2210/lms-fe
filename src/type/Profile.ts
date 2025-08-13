@@ -32,5 +32,5 @@ export interface UserAgent {
   browserVersion: string
   osName: string
   osVersion: string
-  deviceType: any
+  deviceType: string
 }
