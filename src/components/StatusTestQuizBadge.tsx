@@ -65,7 +65,7 @@ const StatusTestQuizBadge = ({
   if (!label || !color || !bg) return '_ _'
   return (
     <div
-      className={`rounded px-2 py-1 text-sm font-medium ${color || ''} ${bg || ''} w-fit`}
+      className={`rounded px-2 py-1 text-sm ${color || ''} ${bg || ''} w-fit`}
     >
       {label}
     </div>

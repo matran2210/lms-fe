@@ -14,7 +14,6 @@ import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
-import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
 
 interface IProps {
@@ -128,9 +127,10 @@ const TestResultPage = ({
                 />
               </div>
               <div>
-                <MultipleQuestion
+                <MultipleChoiceScore
                   questions={questions}
-                  // className={'h-full'}
+                  score={score}
+                  globalAverage={globalAverageNumber}
                   multipleQuestionRef={multipleQuestionRef}
                 />
               </div>

@@ -23,7 +23,7 @@ const ChartCMAScore = ({ data, passingScore, isGraded }: IProps) => {
       ref={ref}
       {...events}
     >
-      <div className="-ml-6 mb-11 text-lg font-semibold xl:font-medium">
+      <div className="-ml-6 mb-11 text-xl font-semibold xl:font-medium">
         Multiple Choice Score by Part
       </div>
       <div className="">
