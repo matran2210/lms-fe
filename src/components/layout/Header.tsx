@@ -16,7 +16,7 @@ export const Header = () => {
   return (
     <header className="fixed left-0 right-0 top-0 z-50 bg-white shadow-header">
       <div className="flex h-16 items-center justify-between px-8 py-2">
-        <Link href="/" className="focus:outline-none">
+        <Link href="/" className="border-0 focus:!outline-none">
           <Image src={Logo} alt="logo" width={90} height={45} />
         </Link>
         <SAPPButton title="Logout" suffixIcon={<LogoutIcon className="text-icon" />} onClick={handleLogout} />

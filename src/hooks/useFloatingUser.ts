@@ -22,7 +22,9 @@ export const useFloatingUser = ({ floatingRef, areaBoundary }: UseFloatingUserPr
 
   useEffect(() => {
     const changePosition = () => {
-      const container = document.querySelector(`#${ZOOM_CONFIG.MEETING_CONTAINER_ID} video`)
+      const container = document.querySelector(
+        `#${ZOOM_CONFIG.MEETING_CONTAINER_ID} .${ZOOM_CONFIG.MEETING_VIDEO_FRAME}`
+      )
 
       if (!container || !floatingRef?.current) {
         return

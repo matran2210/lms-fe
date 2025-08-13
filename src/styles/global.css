@@ -17,3 +17,7 @@
 #meeting-app .zoom-workplace-logo {
   @apply hidden umd:block;
 }
+
+#meeting-app .single-main-container__main-view {
+  @apply h-[calc(100%-var(--header-height))];
+}

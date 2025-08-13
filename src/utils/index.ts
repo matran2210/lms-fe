@@ -1,4 +1,4 @@
-import { TOKEN_STORAGE_KEY } from '@/constants'
+import { HEADER_HEIGHT, TOKEN_STORAGE_KEY } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 
 export function setCookie(name: string, value: string, days = 7) {
@@ -51,4 +51,15 @@ export const getToken = (tokenFromParams: string | null): string | null => {
   }
 
   return sessionStorage.getItem(TOKEN_STORAGE_KEY)
+}
+
+export const adjustElementHeight = (element: Element) => {
+  const elementRect = element.getBoundingClientRect()
+  const currentHeight = elementRect.height
+
+  if (currentHeight) {
+    const newHeight = `${currentHeight - HEADER_HEIGHT}px`
+    const htmlElement = element as HTMLElement
+    htmlElement.style.height = newHeight
+  }
 }

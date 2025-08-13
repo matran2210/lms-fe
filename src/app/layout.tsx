@@ -32,9 +32,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <Header />
-        <div className="mt-16">{children}</div>
-        <Toaster />
+        <div id="zoom-app">
+          <Header />
+          <div className="mt-16">{children}</div>
+          <Toaster />
+        </div>
       </body>
     </html>
   )

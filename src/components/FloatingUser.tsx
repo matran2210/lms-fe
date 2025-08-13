@@ -13,10 +13,11 @@ const FloatingUser = ({ userId }: FloatingUserProps) => {
   return (
     <div
       ref={floatingRef}
-      className="pointer-events-none fixed z-50 flex items-center gap-2 rounded-md bg-floating-user p-2 text-white shadow-lg backdrop-blur-floating-user transition-all duration-500 ease-in-out md:p-3"
+      className="pointer-events-none fixed flex items-center gap-2 rounded-md bg-floating-user p-2 text-white shadow-lg backdrop-blur-floating-user transition-all duration-500 ease-in-out md:p-3"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
+        zIndex: 9999,
       }}
     >
       <UserIcon />

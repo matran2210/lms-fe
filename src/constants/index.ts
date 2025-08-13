@@ -8,3 +8,5 @@ export const COOKIE_INFO = {
 }
 
 export const TOKEN_STORAGE_KEY = 'zoom_meeting_token'
+
+export const HEADER_HEIGHT = 64

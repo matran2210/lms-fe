@@ -1,6 +1,7 @@
 import { MeetingInfoType, ZoomMtgLang } from '@zoom/meetingsdk'
 
 export interface ZoomMeetingConfig {
+  userId: string
   meetingNumber: string
   passWord: string
   userName: string

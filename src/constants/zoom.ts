@@ -28,6 +28,9 @@ export const ZOOM_CONFIG = {
 
   // Meeting container
   MEETING_CONTAINER_ID: 'zmmtg-root', // Default by zoom-sdk
+  MEETING_VIDEO_FRAME: 'single-main-container__video-frame',
+  MEETING_VIDEO_AVATAR: 'video-avatar__avatar',
+  MEETING_SEND_VIDEO_BUTTON: 'send-video-container__btn',
 
   // Success messages
   SUCCESS_MESSAGES: {

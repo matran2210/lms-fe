@@ -28,5 +28,6 @@ export default {
       },
     },
   },
+  important: '#zoom-app',
   plugins: [require('@tailwindcss/aspect-ratio'), require('@tailwindcss/forms')],
 } satisfies Config

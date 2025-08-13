@@ -1,6 +1,7 @@
 'use client'
 
 import { ZoomApi } from '@/api/zoom'
+import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { getToken, toggleMeetingContainer } from '@/utils'
@@ -17,6 +18,8 @@ export const ZoomMeeting = () => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const tokenFromParams = searchParams.get('token')
+
+  useZoomElementAdjustment(isJoined)
 
   useEffect(() => {
     const currentToken = getToken(tokenFromParams)
@@ -45,6 +48,7 @@ export const ZoomMeeting = () => {
         const meetingData = await getZoomMeeting(decodedToken)
 
         const config: ZoomMeetingConfig = {
+          userId: meetingData.userInfo.user_id,
           meetingNumber: meetingData.userInfo.meeting_id,
           passWord: meetingData.userInfo.password,
           userName: meetingData.userInfo.full_name || meetingData.userInfo.first_name || 'Guest',
@@ -82,82 +86,70 @@ export const ZoomMeeting = () => {
   }
 
   if (!token) {
-    return (
-      <div className="zoom-meeting-container">
-        <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
-      </div>
-    )
+    return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 
   // Show loading state for meeting data
   if (isLoadingMeetingData) {
     return (
-      <div className="zoom-meeting-container">
-        <div className="flex items-center justify-center rounded-lg bg-blue-50 p-8">
-          <div className="mr-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <span className="text-lg font-medium text-blue-700">Đang tải thông tin cuộc họp...</span>
-        </div>
+      <div className="flex items-center justify-center rounded-lg bg-blue-50 p-8">
+        <div className="mr-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
+        <span className="text-lg font-medium text-blue-700">Đang tải thông tin cuộc họp...</span>
       </div>
     )
   }
 
   if (!meetingConfig) {
-    return (
-      <div className="zoom-meeting-container">
-        <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
-      </div>
-    )
+    return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 
   return (
-    <div className="zoom-meeting-container">
-      <div className="zoom-controls mb-6">
-        {!isSDKLoaded && (
-          <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">
-            <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600"></div>
-            <span className="font-medium text-blue-700">Đang tải Zoom SDK...</span>
-          </div>
-        )}
+    <div className="zoom-controls mb-6">
+      {!isSDKLoaded && (
+        <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">
+          <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600"></div>
+          <span className="font-medium text-blue-700">Đang tải Zoom SDK...</span>
+        </div>
+      )}
 
-        {isJoining && (
-          <div className="flex items-center justify-center rounded-lg bg-green-50 p-4">
-            <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-green-600"></div>
-            <span className="font-medium text-green-700">Đang tham gia cuộc họp...</span>
-          </div>
-        )}
+      {isJoining && (
+        <div className="flex items-center justify-center rounded-lg bg-green-50 p-4">
+          <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-green-600"></div>
+          <span className="font-medium text-green-700">Đang tham gia cuộc họp...</span>
+        </div>
+      )}
 
-        {error && (
-          <div className="mb-4 rounded-lg border-l-4 border-red-400 bg-red-50 p-4">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+      {error && (
+        <div className="mb-4 rounded-lg border-l-4 border-red-400 bg-red-50 p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800">Lỗi cuộc họp</h3>
+              <div className="mt-2 text-sm text-red-700">
+                <p>{error}</p>
               </div>
-              <div className="ml-3">
-                <h3 className="text-sm font-medium text-red-800">Lỗi cuộc họp</h3>
-                <div className="mt-2 text-sm text-red-700">
-                  <p>{error}</p>
-                </div>
-                <div className="mt-3">
-                  <button
-                    onClick={handleJoinMeeting}
-                    className="rounded bg-red-100 px-3 py-1 text-sm text-red-800 hover:bg-red-200"
-                  >
-                    Thử lại
-                  </button>
-                </div>
+              <div className="mt-3">
+                <button
+                  onClick={handleJoinMeeting}
+                  className="rounded bg-red-100 px-3 py-1 text-sm text-red-800 hover:bg-red-200"
+                >
+                  Thử lại
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {isJoined && <FloatingUser userId={meetingConfig.userEmail} />}
-      </div>
+      {isJoined && <FloatingUser userId={meetingConfig.userId} />}
     </div>
   )
 }
