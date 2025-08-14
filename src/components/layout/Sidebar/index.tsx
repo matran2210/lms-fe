@@ -206,12 +206,8 @@ export default function Sidebar({
           },
         )}
       />
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+
       {openExaminationInfo && (
         <ExaminationInfo
           open={openExaminationInfo}
