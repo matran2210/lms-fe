@@ -1,6 +1,8 @@
 import { calculateTimeAgo } from '@utils/helpers'
+import { getCookie, getSessionIdFromToken } from '@utils/index'
 import clsx from 'clsx'
 import React, { Dispatch, SetStateAction, useMemo } from 'react'
+import { COOKIE_INFO } from 'src/constants'
 import { IDeviceItem } from 'src/type/Profile'
 
 interface IProps {
@@ -24,7 +26,9 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
     }
     return null
   }, [data.created_at])
-
+  const sessionId =
+    getSessionIdFromToken(getCookie(COOKIE_INFO.KEYCLOAK_TOKEN) ?? '') ??
+    getCookie(COOKIE_INFO.SESSION_ID)
   return (
     <div className="mb-4">
       <div
@@ -44,20 +48,20 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
             })
           }
         >
-          <div className="flex flex-1 flex-col justify-between gap-[10px] md:flex-row md:gap-4">
-            <div>
+          <div className="flex flex-col justify-between gap-2">
+            <div className="flex items-center gap-2">
               <span className="text-sm font-bold text-gray-800 md:text-base">
                 {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
               </span>
-              {data.is_current && (
-                <span className="ml-[10px] inline-block select-none bg-success-50 bg-opacity-5 px-2 py-1 text-sm leading-4 text-success">
+              {sessionId === data.id && (
+                <span className="inline-block select-none rounded bg-accent-success bg-opacity-5 px-2 py-1 text-v2-xs font-medium text-accent-success">
                   This device
                 </span>
               )}
             </div>
             <div>
-              <div className="text-left md:text-right">
-                <span className="text-sm font-bold text-gray-800 md:text-base">
+              <div className="">
+                <span className="text-sm font-bold text-gray-800">
                   Logged in
                 </span>
               </div>

@@ -14,14 +14,14 @@ interface HorizontalCertificateProps {
   issuedBy?: string
   onDownload?: () => void
 }
-export const handleOpenSapp = () =>
-  window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
 
 const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   certificate,
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const handleOpenSapp = () =>
+    window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"

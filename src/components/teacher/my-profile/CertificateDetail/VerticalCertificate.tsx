@@ -8,7 +8,6 @@ import { ICertificate } from '@pages/certificates/[id]'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import { handleOpenSapp } from './HorizontalCertificate'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -21,6 +20,8 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const handleOpenSapp = () =>
+    window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
