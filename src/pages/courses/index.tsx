@@ -241,7 +241,6 @@ const MyCourse = () => {
           isShowToggle
           isShowUserGuide
           disabledSearch={guideIsActive}
-          isCoursePage
         />
 
         <div

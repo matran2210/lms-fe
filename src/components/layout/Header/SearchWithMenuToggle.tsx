@@ -154,7 +154,7 @@ const SearchWithMenuToggle = ({
     )
   }
 
-  // if (!isCoursePage) return <div className="h-4" />
+  if (isCoursePage) return <div className="h-10" />
 
   return (
     <>

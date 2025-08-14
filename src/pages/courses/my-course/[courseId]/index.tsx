@@ -231,6 +231,7 @@ const CourseDetail = () => {
       <SearchWithMenuToggle
         handleOpenSidebar={handleOpenSidebar}
         isShowToggle
+        isCoursePage
       />
 
       {isLoading ? (
