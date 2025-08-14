@@ -231,6 +231,7 @@ const CourseDetail = () => {
       <SearchWithMenuToggle
         handleOpenSidebar={handleOpenSidebar}
         isShowToggle
+        isCoursePage
       />
 
       {isLoading ? (
@@ -257,7 +258,7 @@ const CourseDetail = () => {
             <HeaderMobile
               showIcon={false}
               title={courseNameDetail || ''}
-              className={clsx({ 'mt-4': isMobileView })}
+              className={clsx('!flex-nowrap', { 'mt-4': isMobileView })}
               extraActions={
                 <FilterCourse
                   totalResult={courses?.length || 0}
