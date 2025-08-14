@@ -1,24 +1,12 @@
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { RefObject, useEffect, useState } from 'react'
 
-interface AreaBoundary {
-  x: number
-  y: number
-  width: number
-  height: number
-  top: number
-  right: number
-  bottom: number
-  left: number
-}
-
 interface UseFloatingUserProps {
   floatingRef: RefObject<HTMLDivElement | null>
-  areaBoundary?: AreaBoundary
 }
 
-export const useFloatingUser = ({ floatingRef, areaBoundary }: UseFloatingUserProps) => {
-  const [position, setPosition] = useState({ top: -9999, left: -9999 })
+export const useFloatingUser = ({ floatingRef }: UseFloatingUserProps) => {
+  const [position, setPosition] = useState({ top: -999, left: -999 })
 
   useEffect(() => {
     const changePosition = () => {
@@ -30,7 +18,7 @@ export const useFloatingUser = ({ floatingRef, areaBoundary }: UseFloatingUserPr
         return
       }
 
-      const containerRect = areaBoundary || container.getBoundingClientRect()
+      const containerRect = container.getBoundingClientRect()
       const floatingRect = floatingRef.current.getBoundingClientRect()
 
       const floatingWidth = floatingRect.width
@@ -52,12 +40,37 @@ export const useFloatingUser = ({ floatingRef, areaBoundary }: UseFloatingUserPr
       })
     }
 
+    const createElementObserver = () => {
+      let observer: MutationObserver | null = null
+      if (floatingRef.current) {
+        observer = new MutationObserver(_ => {
+          if (!document.body.contains(floatingRef.current as Node)) {
+            const meetingContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID)
+            if (meetingContainer) {
+              meetingContainer.remove()
+            }
+            observer?.disconnect()
+          }
+        })
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        })
+      }
+      return observer
+    }
+
+    const observer = createElementObserver()
     const intervalId = setInterval(changePosition, 5000)
 
     return () => {
       clearInterval(intervalId)
+      if (observer) {
+        observer.disconnect()
+      }
     }
-  }, [floatingRef, areaBoundary])
+  }, [floatingRef])
 
   return { position }
 }
