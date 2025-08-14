@@ -1292,21 +1292,20 @@ td.sapp-border {
 }
 
 .tooltip-text {
-  @apply invisible absolute z-10 rounded-lg border border-[#e4e4e7] bg-white p-4 text-left text-[#27272a] shadow-lg transition-transform duration-300;
-  min-width: 300px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  @apply invisible absolute z-10 rounded-md bg-[#404041] px-2 py-1 text-left text-white shadow-lg transition-transform duration-300;
+  min-width: fit-content;
+  font-size: 14px;
   top: 100%;
   left: 0;
   white-space: normal;
   word-wrap: break-word;
   border: none;
+  line-height: 22px;
 }
 
 .tooltip-text::after {
   content: '';
-  @apply absolute bg-white;
+  @apply absolute bg-[#404041];
   top: -5px;
   left: 20px;
   transform: rotate(45deg);
