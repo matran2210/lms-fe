@@ -13,7 +13,7 @@ const TopicProgress = ({
 }) => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
-  const { isMobile, isTablet } = useReponsive()
+  const { isMobile } = useReponsive()
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -40,6 +40,14 @@ const TopicProgress = ({
     `
           },
         },
+        dataZoom: [
+          {
+            type: 'inside', // Cuộn bằng chuột hoặc touch
+            xAxisIndex: 0,
+            start: 0,
+            end: 50,
+          },
+        ],
 
         xAxis: {
           type: 'category',
