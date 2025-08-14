@@ -14,36 +14,36 @@ help:
 
 # Build Docker image
 build:
-	docker-compose build
+	docker compose build
 
 # Build Docker image without cache
 build-no-cache:
-	docker-compose build --no-cache
+	docker compose build --no-cache
 
 # Run application
 run:
-	docker-compose up -d
+	docker compose up -d
 
 # Stop application
 stop:
-	docker-compose down
+	docker compose down
 
 # Clean up containers and images
 clean:
-	docker-compose down --rmi all --volumes --remove-orphans
+	docker compose down --rmi all --volumes --remove-orphans
 	docker system prune -f
 
 # Show logs
 logs:
-	docker-compose logs -f zoom-fe
+	docker compose logs -f zoom-fe
 
 # Access container shell
 shell:
-	docker-compose exec zoom-fe sh
+	docker compose exec zoom-fe sh
 
 # Run tests
 test:
-	docker-compose exec zoom-fe yarn test
+	docker compose exec zoom-fe yarn test
 
 # Production build
 prod-build:
