@@ -17,6 +17,7 @@ export interface IUser {
   confirmation_status: null | string
   detail_id: string
   detail: IUserDetail
+  facilities?: IFacility[]
   user_contacts: IUserContact[]
   certificates: number
   courses: number
@@ -106,6 +107,11 @@ export interface IUserDetail {
   company_position: null | string
   company_rank: null | string
   settings: null | any
+}
+export interface IFacility {
+  id: string
+  name: string
+  code: string
 }
 export interface UserState {
   loading: boolean

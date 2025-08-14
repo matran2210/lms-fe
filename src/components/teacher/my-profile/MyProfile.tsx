@@ -30,6 +30,7 @@ import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import TeacherProfileCard from '@components/card/TeacherProfileCard'
+import { Tag } from 'antd'
 
 interface IProps {
   isEdit: boolean
@@ -147,6 +148,18 @@ const MyProfile = ({
     }
   }
 
+  const renderFacility = (
+    <div className="flex items-center gap-[10px]">
+      {user?.facilities?.map((facility, index) => (
+        <div
+          key={index}
+          className="rounded bg-gray-v2-100 px-[20px] py-1 text-v2-xs font-medium"
+        >
+          {facility.name}
+        </div>
+      ))}
+    </div>
+  )
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
@@ -188,15 +201,18 @@ const MyProfile = ({
               >
                 {isEdit ? (
                   <div className="flex w-full items-center gap-2">
-                    <HookFormTextField
-                      placeholder="Enter Text..."
-                      control={control}
-                      name="full_name"
-                      skeleton={loadingEditName}
-                      className="h-full w-full flex-1"
-                      inputClassName="rounded-lg h-full px-4 py-3"
-                      textSize="sm"
-                    ></HookFormTextField>
+                    <div className="flex-1">
+                      <HookFormTextField
+                        placeholder="Enter Text..."
+                        control={control}
+                        name="full_name"
+                        skeleton={loadingEditName}
+                        className="h-full w-full"
+                        inputClassName="rounded-lg h-full px-4 py-3"
+                        textSize="sm"
+                      ></HookFormTextField>
+                    </div>
+
                     <ButtonCancelSubmit
                       className="flex flex-row-reverse gap-2"
                       cancel={{
@@ -249,7 +265,7 @@ const MyProfile = ({
 
               <TextWrapper
                 title="Facility"
-                value={''}
+                value={renderFacility}
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
@@ -417,7 +433,7 @@ const TextWrapper = ({
   title: string
   children?: React.ReactNode
   isEdit?: boolean
-  value?: string
+  value?: React.ReactNode
   loading: boolean
   handleClickEdit?: () => void
   showEditIcon?: boolean
@@ -484,8 +500,8 @@ const TextWrapper = ({
           {children}
         </div>
         {!isEdit && showEditIcon && (
-          <div className="hidden flex-auto justify-end lg:flex">
-            <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
+          <div className="flex-auto justify-end lg:flex">
+            <div className="block grow cursor-pointer text-primary">
               <div
                 className="flex items-center gap-2"
                 onClick={handleClickEdit}
