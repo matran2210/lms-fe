@@ -138,7 +138,7 @@ const Certificate = () => {
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
-        <div className="flex min-h-352 flex-col items-center justify-center gap-8">
+        <div className="flex min-h-352 flex-col items-center justify-center gap-6">
           <NoCertificationIcon />
           <div className="text-xl text-txt-secondary">
             You don&rsquo;t have any certificate!
