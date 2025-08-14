@@ -34,3 +34,8 @@
 #zmmtg-root:not(.show-full-screen) .video-avatar__avatar-title + .video-avatar__avatar-footer {
   @apply left-0;
 }
+
+#zmmtg-root:not(.show-full-screen) .ReactModal__Content,
+#zmmtg-root:not(.show-full-screen) .mobile-suspension-window-wrapper {
+  @apply !top-28;
+}
