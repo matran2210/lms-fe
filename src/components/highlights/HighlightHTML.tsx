@@ -1,26 +1,23 @@
-import React, { MouseEventHandler, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Divider, Input, Modal, Popover } from 'antd'
 import {
-  Avatar,
-  Button,
-  Divider,
-  Drawer,
-  Input,
-  List,
-  Modal,
-  Popover,
-} from 'antd'
+  replaceTextAlignCenterToWebKitCenter,
+  replaceWhiteSpacePreWrapToNormal,
+} from '@utils/index'
+import parseHTML, { Element } from 'html-react-parser'
 import { PointerIcon, ShowCommentIcon } from '@assets/icons'
-import clsx from 'clsx'
 import { doHighlight, optionsImpl } from '@funktechno/texthighlighter/lib'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import AvatarCard from '@components/card/AvatarCard'
 import dayjs from 'dayjs'
-import { calculateTimeAgo } from '@utils/helpers'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import { CoursesAPI } from '@pages/api/courses'
 import { useCourseNoteContext } from '@contexts/CourseNoteContext'
+import { video_url } from '@utils/constants'
+import SappModalImage from '@components/base/modal/SappModalImage'
+import SAPPVideo from '@components/base/video/SAPPVideo'
 
 const { TextArea } = Input
 const DEBOUNCE_DELAY = 100
@@ -50,6 +47,11 @@ export const HighlightableHTML: React.FC<Props> = ({
   const router = useRouter()
   const activityId = router.query.activityId
   const containerRef = useRef<HTMLDivElement>(null)
+  const videoRefs = useRef<Record<string, React.RefObject<HTMLVideoElement>>>(
+    {},
+  )
+  const [src, setSrc] = useState<string>()
+  const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
   const [loading, setLoading] = useState<boolean>(false)
   const [html, setHtml] = useState<string>(initialHTML)
@@ -226,7 +228,7 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element
+      const target = event.target as any
 
       if (!selectedHighlightId || isProtectingSelection) return
 
@@ -294,7 +296,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   // Handle click outside for text selection
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element
+      const target = event.target as any
 
       if (!selection) return
 
@@ -663,6 +665,84 @@ export const HighlightableHTML: React.FC<Props> = ({
     return Math.max(0, rect.left + window.scrollX + centerOffset)
   }
 
+  const convertMathToImage = async (element: any) => {
+    const viewer = com?.wiris?.js?.JsPluginViewer
+
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {})
+      } catch (error) {}
+    }
+  }
+  useEffect(() => {
+    setTimeout(() => {
+      const editor = containerRef?.current
+      if (editor) {
+        const mfencedElements = editor?.querySelectorAll('mfenced')
+        mfencedElements.forEach((el: any) => {
+          const openAttr = el?.getAttribute('open')
+          const closeAttr = el?.getAttribute('close')
+          if (openAttr !== null && closeAttr) {
+            const replacements: { [key: string]: string } = {
+              '|': '|',
+              '||': '||',
+              '>': '<',
+              '}': '{',
+              ']': '[',
+              '&#62;': '&#60;',
+            }
+            if (replacements[closeAttr]) {
+              el?.setAttribute('open', replacements[closeAttr])
+            }
+          }
+        })
+
+        // Replace quote in font family
+        const mathElement = editor?.querySelectorAll('math')
+        if (mathElement) {
+          mathElement?.forEach((el: any) => {
+            if (el?.hasAttribute('style')) {
+              let styleValue = el?.getAttribute('style')
+              styleValue = styleValue?.replaceAll('"', '')
+              el?.setAttribute('style', styleValue)
+            }
+          })
+          convertMathToImage(editor)
+        }
+      }
+    }, 100)
+  })
+
+  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e?.target as HTMLElement
+    if (target.className === 'sapp_overlay_video') {
+      // const overlay = target.nextSibling as any
+      const video = target?.previousSibling as any
+      const src = video?.querySelector('source')?.getAttribute('token')
+      if (src && src !== 'null' && video.tagName === 'VIDEO') {
+        var iframe = document.createElement('iframe')
+        iframe.src = `${video_url}${src}/iframe?autoplay=true`
+        iframe.id = video?.id
+        iframe.className = video?.className
+        iframe.style.cssText = video?.style.cssText
+        iframe.allow =
+          'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
+        iframe.allowFullscreen = true
+        video?.parentNode?.replaceChild(iframe, video)
+        target?.classList.add('hidden')
+        // target?.parentNode?.removeChild(target.nextSibling as Node)
+      }
+    } else if (target?.tagName === 'IMG') {
+      const imageSrc = target?.getAttribute('src')
+      if (imageSrc) {
+        setSrc(() => {
+          setType('IMG')
+          return imageSrc
+        })
+      }
+    }
+  }
+
   return (
     <div
       onMouseUp={handleMouseUp}
@@ -812,14 +892,64 @@ export const HighlightableHTML: React.FC<Props> = ({
         </Modal>
       )}
 
-      <div
+      {/* <div
         id={storageKey}
         ref={containerRef}
         className={className}
         dangerouslySetInnerHTML={{ __html: html }}
         onCopy={(e) => e.preventDefault()}
         onContextMenu={(e) => e.preventDefault()}
-      />
+      /> */}
+      <div
+        id={storageKey}
+        ref={containerRef}
+        className={className}
+        onCopy={(e) => e.preventDefault()}
+        onContextMenu={(e) => e.preventDefault()}
+        onClick={handleOnclick}
+        translate="no"
+      >
+        {parseHTML(
+          replaceTextAlignCenterToWebKitCenter(
+            replaceWhiteSpacePreWrapToNormal(html || ''),
+          ),
+          {
+            replace: (domNode) => {
+              if (domNode.type === 'tag' && domNode.name === 'video') {
+                const sourceChild = (domNode.children as Element[]).find(
+                  (child) => child.name === 'source',
+                )
+                const videoToken = sourceChild?.attribs?.token
+                if (videoToken) {
+                  if (!videoRefs.current[videoToken]) {
+                    videoRefs.current[videoToken] =
+                      React.createRef<HTMLVideoElement>()
+                  }
+                  return (
+                    <SAPPVideo
+                      key={videoToken}
+                      options={{
+                        onTimeUpdate: () => {},
+                        src: videoToken,
+                      }}
+                      streamRef={videoRefs.current[videoToken]}
+                      pauseOnSeek={true}
+                      thumbnail={{
+                        '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
+                        '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
+                        '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
+                      }}
+                    />
+                  )
+                }
+              }
+            },
+          },
+        )}
+      </div>
+      {type === 'IMG' && (
+        <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
+      )}
     </div>
   )
 }

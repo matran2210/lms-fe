@@ -458,30 +458,28 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
-      {openNotification && (
-        <SappNotificationComponent
-          notifyDetail={{
-            ...notifyDetail,
-            send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
-          }}
-          tabs={tabs}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
-          handleMarkAll={handleMarkAll}
-          handleMarkById={handleMarkById}
-          handleUnMarkById={handleUnMarkById}
-          handleBack={handleBack}
-          isViewDetail={isViewDetail}
-          setOpenNotification={setOpenNotification}
-          openNotification={openNotification}
-          handleViewDetail={handleViewDetail}
-          notifyLists={notifyLists}
-          notificationUnread={notificationUnread}
-          scrollRef={scrollRef}
-          handleViewNotification={(link) => handleViewNotification(link)}
-          isDesktopView={isDesktopView}
-        />
-      )}
+      <SappNotificationComponent
+        notifyDetail={{
+          ...notifyDetail,
+          send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
+        }}
+        tabs={tabs}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        handleMarkAll={handleMarkAll}
+        handleMarkById={handleMarkById}
+        handleUnMarkById={handleUnMarkById}
+        handleBack={handleBack}
+        isViewDetail={isViewDetail}
+        setOpenNotification={setOpenNotification}
+        openNotification={openNotification}
+        handleViewDetail={handleViewDetail}
+        notifyLists={notifyLists}
+        notificationUnread={notificationUnread}
+        scrollRef={scrollRef}
+        handleViewNotification={(link) => handleViewNotification(link)}
+        isDesktopView={isDesktopView}
+      />
     </>
   )
 }
