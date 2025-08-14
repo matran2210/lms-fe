@@ -109,7 +109,7 @@ const TableEntranceResult = () => {
         </div>
       </div>
       <Layout size="sm" title="Entrance Test Result" showSidebar={false}>
-        <div className="m-autooverflow-x-auto overflow-y-hidden">
+        <div className="m-auto overflow-x-auto overflow-y-hidden">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
