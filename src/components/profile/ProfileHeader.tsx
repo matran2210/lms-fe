@@ -1,4 +1,4 @@
-import { PencilV2Icon } from '@assets/icons'
+import { PencilFillV2Icon, PencilV2Icon } from '@assets/icons'
 import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
@@ -6,7 +6,13 @@ import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
 import clsx from 'clsx'
 import Image, { StaticImageData } from 'next/image'
-import { Dispatch, MutableRefObject, SetStateAction, useEffect } from 'react'
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
@@ -42,7 +48,7 @@ const ProfileHeader = ({
   const { user, loading, loadingEditName, loadingEditAvatar } =
     useAppSelector(userReducer)
 
-  // Sử dụng state để lưu giá trị của hình ảnh xem trước
+  const [isEditAvatar, setIsEditAvatar] = useState(false)
 
   /**
    * Một hàm để xử lý khi người dùng thay đổi file ảnh tải lên
@@ -65,6 +71,7 @@ const ProfileHeader = ({
       setReViewImageSrc(url)
       // Đặt giá trị cho state avatar bằng file
       setAvatar(file)
+      setIsEditAvatar(true)
       // Xóa giá trị của input file
       if (inputFileRef.current) {
         inputFileRef.current.value = ''
@@ -80,11 +87,13 @@ const ProfileHeader = ({
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
     setIsEdit(false)
+    setIsEditAvatar(false)
   }
   const onCancelUploadAvatar = () => {
     // Đặt giá trị cho state avatar thành undefined
     setAvatar(undefined)
     setIsEdit(false)
+    setIsEditAvatar(false)
   }
 
   /**
@@ -134,6 +143,7 @@ const ProfileHeader = ({
         dispatch(getMe())
         // Đặt trạng thái isEdit thành false
         setIsEdit(false)
+        setIsEditAvatar(false)
         return
       }
 
@@ -148,8 +158,10 @@ const ProfileHeader = ({
       dispatch(getMe())
       // Đặt trạng thái isEdit thành false
       setIsEdit(false)
+      setIsEditAvatar(false)
     } catch (error: any) {
       setIsEdit(false)
+      setIsEditAvatar(false)
       setReViewImageSrc(undefined)
       if (error?.response?.data?.error?.code === '403|1002') {
         await dispatch(getLogoutUser())
@@ -169,61 +181,55 @@ const ProfileHeader = ({
               loading ? 'animate-pulse' : ''
             } w-100 h-100 absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-full lg:block`}
           >
-            <div className="absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
-              {isEdit && (
-                <div className="absolute bottom-0 left-0 right-0 top-0 z-10 cursor-pointer">
-                  <input
-                    type="file"
-                    className="absolute bottom-0 left-0 right-0 top-0 z-10 h-full w-full cursor-pointer opacity-0"
-                    onChange={handlerChangeUploadAvatar}
-                    ref={inputFileRef}
-                  />
-                  <div className="flex h-full w-full items-center justify-center bg-black opacity-40">
-                    {!loadingEditAvatar ? (
+            <div className="group absolute left-1/2 top-1/2 h-fit w-fit -translate-x-1/2 -translate-y-1/2 transform overflow-hidden rounded-full leading-[0]">
+              {/* {isEdit && ( */}
+              <div
+                className={clsx(
+                  'absolute bottom-0 left-0 right-0 top-0 z-10 cursor-pointer',
+                  {
+                    'hidden lg:hover:block lg:group-hover:block': !isEdit,
+                    block: isEdit || isEditAvatar,
+                  },
+                )}
+              >
+                <input
+                  type="file"
+                  className="absolute bottom-0 left-0 right-0 top-0 z-10 h-full w-full cursor-pointer opacity-0"
+                  onChange={handlerChangeUploadAvatar}
+                  ref={inputFileRef}
+                />
+                <div className="flex h-full w-full items-center justify-center bg-black bg-opacity-40">
+                  {!loadingEditAvatar ? (
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <PencilFillV2Icon className="h-6 w-6 text-white" />
+                      <span className="text-xs font-medium text-white">
+                        Edit Avatar
+                      </span>
+                    </div>
+                  ) : (
+                    <div role="status">
                       <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                        className="fill-blue-600 text-[#DCDDDD]00 h-8 w-8 animate-spin dark:text-[#4b5563]"
+                        viewBox="0 0 100 101"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M19.2857 7.14314C19.2857 6.76425 19.1351 6.40089 18.8672 6.13298C18.5994 5.86508 18.2359 5.71456 17.8571 5.71456H14.9999L12.8571 2.85742H7.1428L4.99995 5.71456H2.1428C1.76392 5.71456 1.40056 5.86508 1.13265 6.13298C0.864743 6.40089 0.714233 6.76425 0.714233 7.14314V15.7146C0.714233 16.0934 0.864743 16.4569 1.13265 16.7247C1.40056 16.9926 1.76392 17.1431 2.1428 17.1431H17.8571C18.2359 17.1431 18.5994 16.9926 18.8672 16.7247C19.1351 16.4569 19.2857 16.0934 19.2857 15.7146V7.14314Z"
-                          stroke="white"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
                         />
                         <path
-                          d="M9.99993 13.9286C11.7751 13.9286 13.2142 12.4895 13.2142 10.7143C13.2142 8.93909 11.7751 7.5 9.99993 7.5C8.22473 7.5 6.78564 8.93909 6.78564 10.7143C6.78564 12.4895 8.22473 13.9286 9.99993 13.9286Z"
-                          stroke="white"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
                         />
                       </svg>
-                    ) : (
-                      <div role="status">
-                        <svg
-                          aria-hidden="true"
-                          className="fill-blue-600 text-[#DCDDDD]00 h-8 w-8 animate-spin dark:text-[#4b5563]"
-                          viewBox="0 0 100 101"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                            fill="currentColor"
-                          />
-                          <path
-                            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                            fill="currentFill"
-                          />
-                        </svg>
-                        <span className="sr-only">Loading...</span>
-                      </div>
-                    )}
-                  </div>
+                      <span className="sr-only">Loading...</span>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
+              {/* )} */}
               <Image
                 src={
                   reViewImageSrc ||
@@ -241,7 +247,7 @@ const ProfileHeader = ({
               />
             </div>
           </div>
-          {isEdit ? (
+          {isEdit || isEditAvatar ? (
             <div
               className={clsx(
                 'absolute -right-[0.5px] bottom-0 z-[1] rounded-full bg-white p-1 shadow-small md:hidden',
@@ -276,16 +282,35 @@ const ProfileHeader = ({
           )}
         </div>
 
-        {isEdit && (
+        {(isEdit || isEditAvatar) && (
           <div
-            className="opacity-1 absolute bottom-2 right-0 z-10 hidden w-fit md:block"
-            onClick={handlerCancelUploadAvatar}
+            className={clsx(
+              'opacity-1 absolute bottom-2 right-0 z-10 hidden w-fit md:block',
+              {
+                'cursor-not-allowed': loadingEditAvatar,
+                'cursor-pointer': !loadingEditAvatar,
+              },
+            )}
+            onClick={() =>
+              avatar
+                ? onSubmit({ full_name: user.detail.full_name })
+                : handlerCancelUploadAvatar()
+            }
           >
             <div
               className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-error"
               role="button"
             >
-              <svg
+              {avatar ? (
+                <CheckCircleOutlineYellow
+                  className={clsx('h-5 w-5 text-primary', {
+                    'animate-spin': loadingEditAvatar,
+                  })}
+                />
+              ) : (
+                <CloseIconV2 className="h-5 w-5" />
+              )}
+              {/* <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -298,7 +323,7 @@ const ProfileHeader = ({
                   strokeLinejoin="round"
                   d="M6 18L18 6M6 6l12 12"
                 />
-              </svg>
+              </svg> */}
             </div>
           </div>
         )}
