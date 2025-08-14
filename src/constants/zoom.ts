@@ -31,6 +31,8 @@ export const ZOOM_CONFIG = {
   MEETING_VIDEO_FRAME: 'single-main-container__video-frame',
   MEETING_VIDEO_AVATAR: 'video-avatar__avatar',
   MEETING_SEND_VIDEO_BUTTON: 'send-video-container__btn',
+  MEETING_FULL_SCREEN_WIDGET: 'full-screen-widget',
+  MEETING_FULL_SCREEN_WIDGET_EXIT: 'Exit Full Screen',
 
   // Success messages
   SUCCESS_MESSAGES: {
