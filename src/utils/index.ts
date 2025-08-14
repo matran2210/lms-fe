@@ -53,13 +53,26 @@ export const getToken = (tokenFromParams: string | null): string | null => {
   return sessionStorage.getItem(TOKEN_STORAGE_KEY)
 }
 
-export const adjustElementHeight = (element: Element) => {
-  const elementRect = element.getBoundingClientRect()
-  const currentHeight = elementRect.height
+export const adjustElement = (selector: string) => {
+  const element = document.querySelector(selector)
+  if (element) {
+    adjustElementHeight(element)
+  }
+}
 
-  if (currentHeight) {
-    const newHeight = `${currentHeight - HEADER_HEIGHT}px`
-    const htmlElement = element as HTMLElement
-    htmlElement.style.height = newHeight
+export const adjustElementHeight = (element: Element) => {
+  const htmlElement = element as HTMLElement
+  const currentHeightStyle = htmlElement.style.height
+
+  if (currentHeightStyle && currentHeightStyle.includes('%')) {
+    htmlElement.style.height = `calc(${currentHeightStyle} - ${HEADER_HEIGHT}px)`
+  } else {
+    const elementRect = element.getBoundingClientRect()
+    const currentHeight = elementRect.height
+
+    if (currentHeight) {
+      const newHeight = `${currentHeight - HEADER_HEIGHT}px`
+      htmlElement.style.height = newHeight
+    }
   }
 }

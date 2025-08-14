@@ -6,7 +6,7 @@
   --header-height: 4rem;
 }
 
-#zmmtg-root {
+#zmmtg-root:not(.show-full-screen) {
   @apply mt-header-height !h-[calc(100%-var(--header-height))];
 }
 
@@ -18,6 +18,19 @@
   @apply hidden umd:block;
 }
 
-#meeting-app .single-main-container__main-view {
-  @apply h-[calc(100%-var(--header-height))];
+#zmmtg-root:not(.show-full-screen) .single-main-container__main-view,
+#zmmtg-root:not(.show-full-screen) .single-main-container__video-frame {
+  @apply !h-[calc(100%-var(--header-height))];
+}
+
+#zmmtg-root:not(.show-full-screen) video-player {
+  @apply !h-full;
+}
+
+#zmmtg-root:not(.show-full-screen) .video-avatar__avatar-footer {
+  @apply left-14;
+}
+
+#zmmtg-root:not(.show-full-screen) .video-avatar__avatar-title + .video-avatar__avatar-footer {
+  @apply left-0;
 }
