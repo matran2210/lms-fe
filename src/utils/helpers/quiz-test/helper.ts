@@ -2,7 +2,7 @@ import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
-import { Sheet } from 'src/type/test'
+import { Sheet } from 'src/type'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -243,14 +243,6 @@ const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
 export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
   const endTime = calculateEndTime(createdAt, quizTimed)
   return dayjs().isAfter(endTime)
-}
-
-// Gợi ý type tối thiểu
-type Sheet = {
-  name?: string
-  id?: string
-  status?: number
-  data: any[][] // 2D array (rows x cols)
 }
 
 const isHtmlEmpty = (s: string) => s.replace(/<[^>]*>/g, '').trim().length === 0
