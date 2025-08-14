@@ -19,7 +19,8 @@ export default function CourseDescriptionText({
       }}
       className={clsx(
         {
-          'line-clamp-3 h-[72px] text-ellipsis text-base': !isTooltip,
+          'line-clamp-3 h-[72px] text-ellipsis text-ssm lg:text-base':
+            !isTooltip,
         },
         enableCourse ? 'text-bw-15' : 'text-gray-2',
       )}

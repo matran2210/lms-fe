@@ -1,14 +1,14 @@
-import ModalMobile from '@components/base/modal/ModalMobile'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { useCourseContext } from '@contexts/index'
 import clsx from 'clsx'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { ReactElement, ReactNode, useState } from 'react'
+import { memo, ReactElement, ReactNode, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
-import Sidebar from './Sidebar'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { Courses3LevelMenu } from '@components/courses'
+import { withMasterFinanceProvider } from '@contexts/MasterFinance'
 interface LayoutProps {
   children: ReactNode
   title: string
@@ -20,7 +20,7 @@ interface LayoutProps {
 }
 
 // eslint-disable-next-line import/no-unused-modules
-export default function Layout(props: LayoutProps): ReactElement {
+const Layout = (props: LayoutProps) => {
   const {
     children,
     title,
@@ -73,34 +73,10 @@ export default function Layout(props: LayoutProps): ReactElement {
       </Head>
       <div
         className={clsx('flex flex-nowrap rounded-xl', {
-          'lg:ml-[calc(5rem+32px)]': showSidebar,
+          'lg:ml-20': showSidebar,
         })}
       >
-        <Sidebar
-          isOpened={isOpenSidebar}
-          toggleDrawer={toggleDrawer}
-          className={clsx(
-            'menu-sidebar-left transition-all duration-300 ease-out',
-            'hover:menu-sidebar-left--hover', // This still won't work as explained earlier
-            `fixed left-0 h-[calc(100vh-32px)] rounded-xl bg-white shadow-[0_0_16px_0_rgba(0,0,0,0.08)] lg:block lg:w-20`,
-            {
-              // 'overflow-hidden': !guideStatus,
-              'menu-sidebar-left--hover !w-[220px]':
-                (guideStatus && (guideStep === 2 || guideStep === 3)) ||
-                isShowMenuContent,
-              'h-[calc(100vh-32px-60px)]': !openPinned,
-              // 'hidden': !showSidebar,
-              // 'w-[220px]': isOpenSidebar,
-              'w-[220px] translate-x-0': showSidebar,
-              'w-[220px] -translate-x-60': !showSidebar,
-            },
-            paddingTop,
-          )}
-          setOpenResource={setOpenResource}
-          openResource={openResource}
-          openExaminationInfo={openExaminationInfo}
-          setOpenExaminationInfo={setOpenExaminationInfo}
-        />
+        <Courses3LevelMenu />
 
         <div
           className={clsx('container min-h-screen', {
@@ -120,3 +96,5 @@ export default function Layout(props: LayoutProps): ReactElement {
     </>
   )
 }
+
+export default memo(withMasterFinanceProvider(Layout))

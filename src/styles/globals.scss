@@ -1480,3 +1480,9 @@ mark {
   @apply rounded-none;
   z-index: 9999;
 }
+
+.style-modal-result {
+  .ant-modal-content {
+    @apply bg-gray-canvas;
+  }
+}

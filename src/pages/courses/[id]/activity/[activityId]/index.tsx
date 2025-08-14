@@ -113,8 +113,8 @@ const ActivityPage = () => {
   }
 
   const { data: activity, isLoading } = useGetActivityById(
-    router.query.activityId,
-    router.query.id,
+    router.query?.activityId,
+    router.query?.id,
   )
 
   const courseId = router.query?.id
@@ -252,7 +252,7 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
+        dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
 
@@ -398,7 +398,7 @@ const ActivityPage = () => {
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
         let url = ''
-        const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
+        const urlCourseDetail = `/courses/${router.query?.id}/section/${partId}`
         switch (e.course_section_type) {
           case 'PART':
           case 'CHAPTER':
@@ -587,7 +587,7 @@ const ActivityPage = () => {
               })}
               data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             >
-              <Discussion class_id={(router.query.id as string) || ''} />
+              <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
 

@@ -296,7 +296,7 @@ const CourseDetail = () => {
         />
       )}
 
-      <div className="sticky inset-x-0 bottom-4 z-50">
+      <div className="z-2 sticky inset-x-0 bottom-4">
         <div className="flex w-full flex-col gap-4">
           <CtaTrial />
           {pinnedCompletedCourse.isOpen && (

@@ -50,7 +50,7 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
-  RESULTS: 'Results',
+  RESULTS: 'Test / Quiz List',
   EXAM_INFORMATION: 'Exam Information',
   EXAM_LIST: 'Exam List',
   COURSE_CONTENT: 'Course Content',

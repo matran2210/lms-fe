@@ -403,7 +403,7 @@ export interface BaseModalProps {
   onClose: (
     e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
   ) => void
-  footer?: boolean
+  footer?: boolean | ReactNode
   closable?: boolean
   centered?: boolean
   width?: number | string

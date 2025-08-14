@@ -50,6 +50,8 @@ interface IProps {
   classNameModal?: string | undefined
   width?: number | string
   handleClose?: () => void
+  footer?: ReactNode
+  isCancelUnderLine?: boolean
 }
 
 const SappModalV2 = ({
@@ -77,10 +79,12 @@ const SappModalV2 = ({
   classNameModal,
   width = 560,
   handleClose,
+  footer,
+  isCancelUnderLine,
 }: IProps) => {
   return (
     <Modal
-      footer={false}
+      footer={footer}
       title={title}
       centered
       open={open}
@@ -113,6 +117,7 @@ const SappModalV2 = ({
               loading: externalLoading != undefined ? externalLoading : loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
+              isUnderLine: isCancelUnderLine,
             }}
           ></ButtonCancelSubmit>
         </div>

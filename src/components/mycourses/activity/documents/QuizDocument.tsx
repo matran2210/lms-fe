@@ -52,6 +52,7 @@ import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import ModalResults from '../ModalResults'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 type Props = {
   questions: IQuestion[]
@@ -629,6 +630,11 @@ const QuizDocument = ({
     refreshTab()
     setOpenGradedReport(false)
   }
+  const handleClearSelection = (activeQuestion: any) => {
+    if (!isQuestionConfirmed) {
+      setValue(`${activeQuestion?.id}_${document_id}_answer`, '')
+    }
+  }
 
   return (
     <div
@@ -802,11 +808,35 @@ const QuizDocument = ({
         </div>
         {/* Confirm Button */}
         <div
-          className={clsx('justify-end', {
+          className={clsx('justify-end gap-2', {
             'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
             flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
           })}
         >
+          {[
+            QUESTION_TYPES.TRUE_FALSE,
+            QUESTION_TYPES.ONE_CHOICE,
+            QUESTION_TYPES.MULTIPLE_CHOICE,
+          ].includes(activeQuestion?.qType) &&
+            !isQuestionConfirmed && (
+              <ButtonSecondary
+                className="!px-4 !py-2 !text-sm"
+                size={'small'}
+                disabled={
+                  ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                    activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                    !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                  (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                    !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                      ?.length)
+                }
+                onClick={() => {
+                  handleClearSelection(activeQuestion)
+                  trackGAEvent('Click Button Clear Selection Test')
+                }}
+                title="Clear Selection"
+              />
+            )}
           <Tooltip
             title={
               isQuestionConfirmed ||
@@ -834,7 +864,8 @@ const QuizDocument = ({
                 isAFTERAllQUESTION ||
                 (isQuestionConfirmed && isLastQuestion)) && (
                 <SappButton
-                  className="!rounded-lg !px-4 py-2"
+                  className="!rounded-lg !px-4 py-2 text-sm"
+                  childClass="text-sm"
                   title={
                     isLastQuestion
                       ? 'Finish'
@@ -864,6 +895,7 @@ const QuizDocument = ({
               {!isQuestionConfirmed && isAFTEREACHQUESTION && (
                 <SappButton
                   className="!rounded-lg !px-4 py-2"
+                  childClass="text-sm"
                   title={getButttonTitle()}
                   full={false}
                   size={'small'}

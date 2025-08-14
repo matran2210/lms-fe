@@ -118,6 +118,16 @@ export class AuthAPI {
     return fetcher(`users/devices`)
   }
 
+  /**
+   * @description Xóa device.
+   * @async
+   */
+  static removeDevice(session_id: string) {
+    return fetcher(`users/devices/${session_id}`, {
+      method: 'DELETE',
+    })
+  }
+
   static getListHistory(params: Object) {
     return fetcher(`users/activities`, {
       params: params,

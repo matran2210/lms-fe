@@ -158,7 +158,13 @@ const CourseTabDocument = ({
         key: tab?.id,
         label: (
           <div className="learning-act-tab-label text-base font-normal capitalize">
-            {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            <Tooltip
+              rootClassName="max-w-md"
+              classNames={{ body: '!py-1 !shadow-medium' }}
+              title={tab?.name?.split(' ')?.length > 5 ? tab?.name : undefined}
+            >
+              {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            </Tooltip>
           </div>
         ),
         children: (
@@ -230,7 +236,6 @@ const CourseTabDocument = ({
                                 initialHTML={e?.text_editor_content || ''}
                                 storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
                                 className="course-tab-text"
-                                isShowNote
                               />
                             )}
                             {/* <TextDocument
@@ -329,7 +334,6 @@ const CourseTabDocument = ({
                 handleChangeTab(courseId as string, getPreviousTabId() || '')
                 trackGAEvent('Click Button Previous Tab Activity')
               }}
-              style={{ marginRight: 8 }}
             >
               <ArrowLeft />
             </button>
@@ -343,7 +347,7 @@ const CourseTabDocument = ({
                 })}
                 onClick={() => handleChangeTab(courseId as string, tab.id)}
               >
-                <PaginationDotIcon className="h-3 w-3 shrink-0 md:h-[15px] md:w-[15px]" />
+                <PaginationDotIcon className="h-[10px] w-[10px] shrink-0" />
               </span>
             ))}
           </div>

@@ -58,7 +58,7 @@ const HookFormTextArea = ({
                   field.onChange(value)
                   onChange && onChange(value)
                 }}
-                className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
+                className={`${className} form-control rounded-[4px] border-[#dcdddd] focus:border-primary focus:shadow-0 focus:outline-none ${
                   error?.message ? 'is-invalid' : ''
                 }`}
                 placeholder={placeholder}

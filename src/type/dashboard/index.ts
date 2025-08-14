@@ -1,3 +1,5 @@
+import { COURSE_TYPE } from 'src/constants'
+
 interface IReport {
   completed_activities: number
   total_learning_time: number
@@ -14,7 +16,11 @@ export interface IWeeklyReport {
   current_week: IReport
 }
 
-export interface ITopicProgress {
+export interface ICourseInfo {
+  course_type: COURSE_TYPE
+  course_name: string
+}
+export interface ITopicProgress extends ICourseInfo {
   id: string
   name: string
   short_name: string | null
