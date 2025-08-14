@@ -195,7 +195,7 @@ const ScoreDetail = ({
               {
                 key: 0,
                 label: (
-                  <span className="text-base font-semibold text-gray-800">
+                  <span className="text-lg font-semibold text-gray-800">
                     {rows[0]?.belong_to?.name}
                   </span>
                 ),
@@ -215,7 +215,7 @@ const ScoreDetail = ({
                             <tr
                               key={answer?.id}
                               className={
-                                'align-baseline text-base text-gray-800'
+                                'align-baseline text-base text-gray-800 hover:bg-gray-100'
                               }
                             >
                               <td className="pr-3">{answer?.index}</td>
