@@ -1,6 +1,6 @@
 import { CloseIcon } from '@assets/icons'
 import { Modal } from 'antd'
-import { QuizResultComponent } from 'quiz-result-package'
+import { QuizResultComponent } from 'quiz-result-package-dat-test'
 import React from 'react'
 interface IProps {
   open: boolean

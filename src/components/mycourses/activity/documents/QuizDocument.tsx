@@ -26,7 +26,6 @@ import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
