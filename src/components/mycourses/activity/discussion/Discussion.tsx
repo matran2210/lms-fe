@@ -41,7 +41,6 @@ type Props = {
  */
 const Discussion = ({ class_id }: Props) => {
   const router = useRouter()
-  const { isMobileView } = useTailwindBreakpoint()
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
@@ -55,12 +54,16 @@ const Discussion = ({ class_id }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const [imageSrc, setImageSrc] = useState<string>()
+  const [isEditDiscussion, setIsEditDiscussion] = useState(false)
 
   const { control, handleSubmit, reset, setError, clearErrors } = useForm<{
     comment: string
     commentRoot: string
   }>({})
 
+  const handleEditDiscussionElement = (isEdit: boolean) => {
+    setIsEditDiscussion(isEdit)
+  }
   /**
    * Xử lý sự thay đổi của ID phản hồi và đặt lại biểu mẫu.
    * @param {string} idReply - ID của phản hồi.
@@ -357,6 +360,7 @@ const Discussion = ({ class_id }: Props) => {
                     isSappSupporterUserCurrent={
                       selector?.userInDiscussion?.is_sapp_supporter
                     }
+                    handleEditDiscussionElement={handleEditDiscussionElement}
                   />
                   <div
                     className={`${
@@ -388,6 +392,9 @@ const Discussion = ({ class_id }: Props) => {
                                 setLoading={setLoading}
                                 isSappSupporterUserCurrent={
                                   selector?.userInDiscussion?.is_sapp_supporter
+                                }
+                                handleEditDiscussionElement={
+                                  handleEditDiscussionElement
                                 }
                               />
                             </div>
@@ -524,7 +531,10 @@ const Discussion = ({ class_id }: Props) => {
       )}
 
       <div
-        className={`transition-max-height sticky bottom-0 flex gap-3 overflow-visible bg-white duration-300 md:relative`}
+        className={clsx(
+          `transition-max-height sticky bottom-0 flex gap-3 overflow-visible bg-white duration-300 md:relative`,
+          { hidden: isEditDiscussion },
+        )}
       >
         <div className="flex-none leading-0 md:mt-1">
           <Image

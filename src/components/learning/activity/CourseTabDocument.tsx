@@ -334,7 +334,6 @@ const CourseTabDocument = ({
                 handleChangeTab(courseId as string, getPreviousTabId() || '')
                 trackGAEvent('Click Button Previous Tab Activity')
               }}
-              style={{ marginRight: 8 }}
             >
               <ArrowLeft />
             </button>
