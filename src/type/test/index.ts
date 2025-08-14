@@ -141,10 +141,10 @@ export interface ExhibitQuestion {
   files: FileQuestion[]
 }
 
-export interface Sheet {
-  name: string
-  id: string
-  status: number
-  data: (any | null)[][]
-  celldata: any[]
+// Gợi ý type tối thiểu
+export type Sheet = {
+  name?: string
+  id?: string
+  status?: number
+  data: any[][] // 2D array (rows x cols)
 }
