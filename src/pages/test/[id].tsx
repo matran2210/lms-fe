@@ -2593,9 +2593,8 @@ const TestDetail = () => {
               )}
               style={{
                 ['--footer-h' as any]: activeShowAll
-                  ? `${80 + Math.max(0, Math.ceil((filteredTabs?.length || 0) / 25) - 1) * 44}px`
+                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / 25) - 1) * 44}px`
                   : '80px',
-                minHeight: activeShowAll ? '124px' : '80px',
               }}
             >
               <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
