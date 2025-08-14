@@ -78,9 +78,9 @@ const ProfileItem = ({
           </div>
           {!isEdit && (
             <div className="ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
-              <span className="hidden font-bold transition-all group-hover:inline-block group-hover:text-primary">
+              {/* <span className="hidden font-bold transition-all group-hover:inline-block group-hover:text-primary">
                 Xem Thêm
-              </span>
+              </span> */}
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
