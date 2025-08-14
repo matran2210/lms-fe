@@ -12,3 +12,5 @@ export const TOKEN_STORAGE_KEY = 'zoom_meeting_token'
 export const HEADER_HEIGHT = 64
 
 export const FLOATING_USER_ID = 'floating-user'
+
+export const SHOW_FULL_SCREEN_CLASS = 'show-full-screen'

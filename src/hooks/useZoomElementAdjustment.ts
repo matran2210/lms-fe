@@ -1,28 +1,19 @@
 'use client'
 
+import { SHOW_FULL_SCREEN_CLASS } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
-import { adjustElement } from '@/utils'
+import { useLayoutContext } from '@/contexts/LayoutContext'
 import { useCallback, useEffect, useRef } from 'react'
 
 export const useZoomElementAdjustment = (isJoined: boolean) => {
+  const { setIsShowHeader } = useLayoutContext()
   const observerRef = useRef<MutationObserver | null>(null)
 
-  const adjustFrameElement = useCallback(() => {
-    const frameSelector = `.${ZOOM_CONFIG.MEETING_VIDEO_FRAME}`
-    adjustElement(frameSelector)
-  }, [])
-
-  const adjustAvatarElement = useCallback(() => {
-    const avatarSelector = `.${ZOOM_CONFIG.MEETING_VIDEO_AVATAR}`
-    adjustElement(avatarSelector)
-  }, [])
-
-  const adjustVideoPlayerElement = useCallback(() => {
-    const videoPlayerSelector = `.${ZOOM_CONFIG.MEETING_VIDEO_FRAME} > video-player`
-    // Wait for the video player to be available
-    setTimeout(() => {
-      adjustElement(videoPlayerSelector)
-    }, 1000)
+  const toggleFullScreen = useCallback((isFullScreen: boolean) => {
+    const meetingContainer = document.getElementById(ZOOM_CONFIG.MEETING_CONTAINER_ID) as HTMLElement
+    if (meetingContainer) {
+      meetingContainer.classList.toggle(SHOW_FULL_SCREEN_CLASS, isFullScreen)
+    }
   }, [])
 
   const setupFullScreenObserver = useCallback(() => {
@@ -33,9 +24,14 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
       mutations.forEach(mutation => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'aria-label') {
           const currentAriaLabel = fullScreenButton.getAttribute('aria-label')
-          if (currentAriaLabel === ZOOM_CONFIG.MEETING_FULL_SCREEN_WIDGET_EXIT) return
+          if (currentAriaLabel === ZOOM_CONFIG.MEETING_FULL_SCREEN_WIDGET_EXIT) {
+            setIsShowHeader(false)
+            toggleFullScreen(true)
+            return
+          }
 
-          adjustFrameElement()
+          setIsShowHeader(true)
+          toggleFullScreen(false)
         }
       })
     })
@@ -46,13 +42,10 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
     })
 
     return observer
-  }, [adjustFrameElement])
+  }, [toggleFullScreen])
 
   useEffect(() => {
     if (!isJoined) return
-
-    adjustFrameElement()
-    adjustAvatarElement()
 
     observerRef.current = setupFullScreenObserver()
 
@@ -63,10 +56,4 @@ export const useZoomElementAdjustment = (isJoined: boolean) => {
       }
     }
   }, [isJoined])
-
-  return {
-    adjustFrameElement,
-    adjustAvatarElement,
-    adjustVideoPlayerElement,
-  }
 }
