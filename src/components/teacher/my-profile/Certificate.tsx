@@ -8,7 +8,7 @@ import useDownloadImage from 'src/hooks/useDownloadImage'
 import Image from 'next/image'
 import { sappFormatDate } from '@utils/index'
 import clsx from 'clsx'
-import { NoCertificationIcon } from '@assets/icons'
+import { HaveNoItemIcon } from '@assets/icons/teacher'
 
 interface ICertificate {
   certificate: {
@@ -139,7 +139,7 @@ const Certificate = () => {
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
         <div className="flex min-h-352 flex-col items-center justify-center gap-8">
-          <NoCertificationIcon />
+          <HaveNoItemIcon />
           <div className="text-xl text-txt-secondary">
             You don&rsquo;t have any certificate!
           </div>

@@ -84,20 +84,20 @@ const TestWrapper = ({
         )}
       >
         <div className="flex w-full items-center justify-between">
-          <div
-            className="cursor-pointer rounded bg-gray-200 p-2"
-            onClick={() => {
-              setOpenQuit(true)
-              dispatch(disableUnsavedChange())
-              // if (type === 'event-test') {
-              //   setSubmitEventTest(true)
-              // }
-            }}
-          >
-            <Icon type="close" />
+          {/* Bên trái */}
+          <div>
+            <div
+              className="w-fit cursor-pointer rounded bg-gray-200 p-2"
+              onClick={() => {
+                setOpenQuit(true)
+                dispatch(disableUnsavedChange())
+              }}
+            >
+              <Icon type="close" />
+            </div>
           </div>
 
-          <div className="max-w-[448px] text-gray-800">
+          <div className="absolute left-1/2 max-w-[448px] -translate-x-1/2 text-gray-800">
             <div className="truncate text-center text-base">
               {quizDetail?.name}
             </div>
@@ -109,6 +109,8 @@ const TestWrapper = ({
               />
             )}
           </div>
+
+          {/* Bên phải */}
           <div>
             <ButtonSecondary
               title="Finish"
@@ -127,12 +129,13 @@ const TestWrapper = ({
           </div>
         </div>
       </Header>
+
       <Content className={clsx('flex-grow overflow-auto p-0', contentClass)}>
         {children}
       </Content>
       <Footer
         className={clsx(
-          'shadow-t-sm relative w-full border-t border-gray-300 bg-white p-0',
+          'shadow-t-sm relative z-50 w-full border-t border-gray-300 bg-white p-0',
           footerClass,
           'h-auto',
         )}

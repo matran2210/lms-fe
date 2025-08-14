@@ -528,11 +528,11 @@ const TextWrapper = ({
           { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >
-        {title}
+        {title}:
       </div>
       <div
         className={clsx(
-          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start',
+          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start lg:text-start',
           {
             '!hidden !max-w-full lg:!block': isEdit,
           },

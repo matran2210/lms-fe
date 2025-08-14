@@ -221,13 +221,13 @@ const MyProfile = ({
                         size: 'medium',
                         disabled: loading || loadingEditName,
                         className:
-                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
+                          'min-w-fit text-sm w-20 rounded-lg py-2 px-4',
                       }}
                       submit={{
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-20 rounded-lg py-2 px-4 !no-underline',
                         htmlType: 'submit',
                         loading: loading || loadingEditName,
                       }}
@@ -451,7 +451,7 @@ const TextWrapper = ({
   return (
     <li
       className={clsx(
-        'group mb-6 flex gap-[1.4rem] text-sm md:mb-4 md:text-base',
+        'group mb-6 flex gap-[22.4px] text-sm md:mb-4 md:text-base',
         {
           'transition-[margin]': isEdit,
           '!block': isInForm && isEdit,
@@ -480,7 +480,7 @@ const TextWrapper = ({
 
       <div
         className={clsx(
-          'max-w-[200px] flex-none text-txt-secondary md:w-[17.43rem] lg:max-w-[50%]',
+          'max-w-[200px] flex-none text-txt-secondary md:w-[278.88px] lg:max-w-[50%]',
           { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >

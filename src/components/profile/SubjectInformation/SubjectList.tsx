@@ -88,7 +88,7 @@ const SubjectList = ({ isEdit }: IProps) => {
         }
         handleCancel={closeMakeDefault}
         classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
-        classNameBody="pt-0 md:pt-4 md:!px-0 lg:!px-8"
+        classNameBody="pt-0 lg:pt-2 md:!px-0 lg:!px-8"
         rootClassName={'profile-subject-drawer'}
         classNames={{
           content: 'rounded-2xl',
