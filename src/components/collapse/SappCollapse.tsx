@@ -1,4 +1,4 @@
-import { ArrowCollapseIcon, CollapseArrowIcon } from '@assets/icons'
+import { CollapseArrowIcon } from '@assets/icons'
 import { Collapse, CollapseProps } from 'antd'
 import React from 'react'
 

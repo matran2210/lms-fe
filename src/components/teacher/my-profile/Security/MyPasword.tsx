@@ -1,5 +1,3 @@
-import ProfileCard from '@components/card/ProfileCard'
-import Icon from '@components/icons'
 import React, { useState } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import FullScreenMobile from '../Modal/FullScreenMobile'
