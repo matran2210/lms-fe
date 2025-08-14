@@ -125,7 +125,152 @@ Code structure prioritizes readability, maintainability, and scalability
 
 ---
 
-## 9. License
+## 9. Docker Setup
+
+### Multi-stage Build
+
+Ứng dụng này đã được Docker hóa với multi-stage build để tối ưu hóa kích thước image và bảo mật.
+
+#### Cấu trúc Docker
+
+1. **Stage 1 (deps)**: Cài đặt dependencies
+2. **Stage 2 (builder)**: Build ứng dụng Next.js  
+3. **Stage 3 (runner)**: Runtime environment tối ưu
+
+#### Tối ưu hóa
+
+- Sử dụng Alpine Linux để giảm kích thước
+- Chỉ copy các file cần thiết cho production
+- Non-root user để tăng bảo mật
+- Sử dụng `dumb-init` để xử lý signals đúng cách
+
+### Cách sử dụng
+
+#### Sử dụng Makefile (Khuyến nghị)
+
+```bash
+# Xem tất cả commands
+make help
+
+# Build image
+make build
+
+# Chạy ứng dụng
+make run
+
+# Dừng ứng dụng
+make stop
+
+# Xem logs
+make logs
+
+# Truy cập container shell
+make shell
+
+# Dọn dẹp
+make clean
+```
+
+#### Sử dụng Docker Compose
+
+```bash
+# Build và chạy
+docker-compose up -d
+
+# Chỉ build
+docker-compose build
+
+# Dừng
+docker-compose down
+
+# Xem logs
+docker-compose logs -f zoom-fe
+```
+
+#### Sử dụng Docker trực tiếp
+
+```bash
+# Build
+docker build -t zoom-fe:latest .
+
+# Chạy
+docker run -d -p 3000:3000 --name zoom-fe-app zoom-fe:latest
+
+# Dừng và xóa
+docker stop zoom-fe-app && docker rm zoom-fe-app
+```
+
+### Environment Variables
+
+Các biến môi trường được cấu hình trong file `.env`:
+
+```bash
+# Zoom SDK Configuration
+NEXT_PUBLIC_ZOOM_SDK_KEY=your_zoom_sdk_key_here
+NEXT_PUBLIC_ZOOM_SDK_SECRET=your_zoom_sdk_secret_here
+
+# Firebase Configuration
+NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
+# ... và các biến khác
+```
+
+### Ports
+
+Ứng dụng chạy trên port **3000** (có thể thay đổi trong docker-compose.yml)
+
+### Health Check
+
+Container có health check tự động kiểm tra endpoint `/` mỗi 30 giây.
+
+### Bảo mật
+
+- Non-root user (nextjs:1001)
+- Chỉ copy các file cần thiết
+- Sử dụng Alpine Linux (ít attack surface)
+- Proper signal handling với dumb-init
+
+### Performance
+
+#### Image Size
+- **Base image**: ~200MB
+- **Final image**: ~150-200MB (tùy thuộc vào dependencies)
+
+#### Build Time
+- **First build**: ~5-10 phút
+- **Subsequent builds**: ~2-5 phút (với cache)
+
+#### Memory Usage
+- **Container**: ~100-200MB RAM
+- **Node.js process**: ~50-100MB RAM
+
+### Troubleshooting
+
+#### Build fails
+```bash
+# Xóa cache và build lại
+make clean
+make build
+```
+
+#### Container không start
+```bash
+# Kiểm tra logs
+make logs
+
+# Kiểm tra container status
+docker ps -a
+```
+
+#### Port conflict
+```bash
+# Thay đổi port trong docker-compose.yml
+ports:
+  - "3001:3000"  # Map port 3001 của host với port 3000 của container
+```
+
+---
+
+## 10. License
 
 MIT © 2025 SAPP Team
 
