@@ -7,6 +7,7 @@ import {
   CalculatorIcon,
   ExcelIcon,
   ExhibitsIcon,
+  EyeIcon,
   FlagIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -82,6 +83,10 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
+import { Popover, Tooltip } from 'antd'
+import clsx from 'clsx'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 
 declare global {
   interface Window {
@@ -2542,6 +2547,9 @@ const TestDetail = () => {
                         currentTabContent?.solution,
                         currentTabContent?.done,
                       )}
+                      <div className="mt-8 flex justify-end">
+                        <ButtonPrimaryV2 title="Reset to Answer Template" />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2618,6 +2626,9 @@ const TestDetail = () => {
                       currentTabContent?.solution,
                       currentTabContent?.done,
                     )}
+                    <div className="mt-8 flex justify-end">
+                      <ButtonPrimaryV2 title="Reset to Answer Template" />
+                    </div>
                   </div>
                 </div>
               )}
@@ -3045,6 +3056,12 @@ const TestDetail = () => {
             />
           )}
         </div>
+        {currentTabContent &&
+          currentTabContent.qType === QUESTION_TYPES.ESSAY && (
+            <ShowAnswerTemplate
+              {...{ currentTabContent, essayData, control, setValue }}
+            />
+          )}
       </CourseProvider>
     </FullScreenLayout>
   )
