@@ -38,7 +38,7 @@
 
     &.ant-collapse-item-active {
       & > .ant-collapse-header {
-        @apply border-gray-v2-200 border-b pb-4 lg:border-b-0 lg:pb-0;
+        @apply border-b border-gray-v2-200 pb-4 lg:border-b-0 lg:pb-0;
       }
 
       .collapse-button {
@@ -47,7 +47,7 @@
     }
 
     > .ant-collapse-header {
-      @apply border-gray-v2-200 flex-row-reverse border-solid px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
+      @apply flex-row-reverse border-solid border-gray-v2-200 px-0 py-0 md:flex-row md:!items-center md:px-4 md:py-3;
     }
 
     > .ant-collapse-content > .ant-collapse-content-box {
