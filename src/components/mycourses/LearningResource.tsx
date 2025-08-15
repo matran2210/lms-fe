@@ -247,10 +247,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   {resources?.resources?.map((resource) => (
                     <div
                       key={resource.id}
-                      className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
+                      className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                     >
                       <div>
-                        <div className="text-base font-medium text-gray-800">
+                        <div className="line-clamp-2 text-base font-medium text-gray-800">
                           {resource?.name}
                         </div>
                         <div className="text-sm font-normal text-gray">
