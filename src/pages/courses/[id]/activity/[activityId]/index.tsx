@@ -744,7 +744,9 @@ const ActivityPage = () => {
         </div>
         <BackToTop
           scrollContainerRef={scrollRef}
-          className={clsx('!bottom-9 !right-4 md:!right-8')}
+          className={clsx(
+            '!bottom-9 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
+          )}
         />
       </Layout>
 
