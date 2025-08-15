@@ -30,6 +30,8 @@ import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
+import TabLayout from './TabLayout'
+import { IUserContact } from 'src/redux/types/User/urser'
 
 interface IProps {
   isEdit: boolean
@@ -251,7 +253,10 @@ const MyProfile = ({
               />
               <TextWrapper
                 title="Email"
-                value={user?.user_contacts?.[0]?.email}
+                value={
+                  user?.user_contacts?.find((e: IUserContact) => e.is_default)
+                    ?.email ?? ''
+                }
                 loading={loading}
                 control={control}
                 isEdit={isEdit}

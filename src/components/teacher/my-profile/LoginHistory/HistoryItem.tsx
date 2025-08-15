@@ -13,7 +13,7 @@ const HistoryItem = ({ data }: any) => {
     formattedTime = format(loginTime, 'HH:mm:ss dd/MM/yyyy')
   }
   return (
-    <div className="sapp-hover-device-item gap-1 border-b border-gray-300 px-2 py-[6px] pb-2 hover:bg-gray-100 md:gap-4 md:rounded-md md:border-none md:p-2">
+    <div className="sapp-hover-device-item gap-1 rounded border-b border-gray-300 px-2 py-[6px] pb-2 hover:bg-gray-100 md:gap-4 md:border-none md:p-2">
       <div className="flex items-center gap-2">
         <div className="text-sm font-medium text-secondary md:text-base">
           {data.ip}
