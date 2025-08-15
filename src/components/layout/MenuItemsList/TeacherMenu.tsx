@@ -24,7 +24,8 @@ import LearningResource from 'src/components/mycourses/LearningResource'
 import { v4 as uuidv4 } from 'uuid'
 import { openCalculator } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
 import { IUser } from 'src/redux/types/User/urser'
-
+import { useCourseContext } from '@contexts/index'
+import clsx from 'clsx'
 const { Sider } = Layout
 
 export default function TeacherMenu({
@@ -40,7 +41,7 @@ export default function TeacherMenu({
 
   const [selectedKey, setSelectedKey] = useState('Home')
   const [openResource, setOpenResource] = useState(false)
-
+  const { showPinnedTrial } = useCourseContext()
   const isCurrent = useCallback(
     (path: string | string[]) =>
       Array.isArray(path)
@@ -224,7 +225,10 @@ export default function TeacherMenu({
       <Sider
         width={80}
         collapsed
-        className="fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center bg-blue-2"
+        className={clsx(
+          'fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center bg-blue-2',
+          showPinnedTrial && 'pt-[54px]',
+        )}
       >
         <div className="flex h-full flex-col justify-between">
           <SidebarMenu

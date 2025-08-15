@@ -186,14 +186,14 @@ const Part = ({
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                {progressPart}%
+                {progressPart || 0}%
               </p>
             </div>
           </div>
           <div className="progressbar h-1.5 bg-gray-3">
             <div
               className="progress-percentage h-1.5 bg-primary"
-              style={{ width: `${progressPart}%` }}
+              style={{ width: `${progressPart || 0}%` }}
             ></div>
           </div>
         </div>
