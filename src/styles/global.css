@@ -7,7 +7,7 @@
 }
 
 #zmmtg-root:not(.show-full-screen) {
-  @apply mt-header-height !h-[calc(100%-var(--header-height))];
+  @apply md:!h-[calc(100%-var(--header-height))] md:mt-header-height;
 }
 
 #meeting-app .meeting-info-container__wrapper {
