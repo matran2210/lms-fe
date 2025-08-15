@@ -205,6 +205,42 @@ const TestDetail = () => {
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
   const [trigger, setTrigger] = useState(false)
 
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình (responsive)
+  const [windowWidth, setWindowWidth] = useState(0)
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MAX_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
+
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
+
   useClickOutside({
     ref: dropUpRequire,
     callback: () => setShowLisRequirement(false),
@@ -2593,7 +2629,7 @@ const TestDetail = () => {
               )}
               style={{
                 ['--footer-h' as any]: activeShowAll
-                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / 25) - 1) * 44}px`
+                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
                   : '80px',
               }}
             >
@@ -2716,8 +2752,8 @@ const TestDetail = () => {
                   />
                   <div
                     className={clsx(
-                      `flex items-center justify-center lg:ml-8 lg:justify-start`,
-                      !activeShowAll && 'lg:ml-0',
+                      `flex items-center justify-center lg:justify-start`,
+                      activeShowAll ? 'lg:ml-8' : 'lg:ml-0',
                     )}
                   >
                     {activeShowAll && <OptionShowAll />}

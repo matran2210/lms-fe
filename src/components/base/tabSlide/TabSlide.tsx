@@ -4,7 +4,6 @@ import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 import clsx from 'clsx'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
-import { Grid } from 'antd'
 
 interface IProps {
   data: Array<any>
@@ -32,14 +31,56 @@ const TabSlide = ({
   hasScrollBar,
   setHasScrollBar,
 }: IProps) => {
-  const { useBreakpoint } = Grid
-  const screens = useBreakpoint()
-  const NUMBER_DISPLAY_DATA_DESKTOP = 25
-  const NUMBER_DISPLAY_DATA_TABLET = 14
-  const numberDisplayData = screens?.lg
-    ? NUMBER_DISPLAY_DATA_DESKTOP
-    : NUMBER_DISPLAY_DATA_TABLET
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const [windowWidth, setWindowWidth] = useState(0)
   const elementRef = useRef(null) as any
+
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MIN_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
+
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
+
+  // Cập nhật windowWidth khi activeShowAll thay đổi
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Sử dụng setTimeout để đảm bảo DOM đã render sau khi activeShowAll thay đổi
+    const timeoutId = setTimeout(updateWindowWidth, 100)
+
+    return () => clearTimeout(timeoutId)
+  }, [activeShowAll])
+
   useEffect(() => {
     const container = elementRef?.current as HTMLElement | null
     if (!container || activeShowAll) return
@@ -95,15 +136,14 @@ const TabSlide = ({
   }, [sortedData.length, setHasScrollBar])
 
   // Chia sortedData thành các dòng liên tiếp theo chiều ngang
-  const numberPerRow = numberDisplayData
   const rows = useMemo(() => {
-    if (!activeShowAll || sortedData.length <= numberPerRow) return []
+    if (!activeShowAll || sortedData.length <= numberDisplayData) return []
     const result = []
-    for (let i = 0; i < sortedData.length; i += numberPerRow) {
-      result.push(sortedData.slice(i, i + numberPerRow))
+    for (let i = 0; i < sortedData.length; i += numberDisplayData) {
+      result.push(sortedData.slice(i, i + numberDisplayData))
     }
     return result
-  }, [sortedData, activeShowAll, numberPerRow])
+  }, [sortedData, activeShowAll, numberDisplayData])
 
   const firstEssayPosition = useMemo(() => {
     for (let e of sortedData) {
@@ -276,7 +316,7 @@ const TabSlide = ({
                 ),
               )
             ) : (
-              // Show-all: multi-rows by numberPerRow (25 on desktop, 14 on tablet)
+              // Show-all: multi-rows by numberPerRow (responsive: max 25, min 14)
               <div className="flex flex-col gap-2">
                 {rows.map((row, rowIdx) => (
                   <div className="flex flex-row gap-2" key={rowIdx}>
