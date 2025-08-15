@@ -55,7 +55,7 @@
     "entrance-test-result-package-ha-test": "^1.1.25-test",
     "entrance-test-result-package-test-v2": "^1.1.25",
     "explanation-package": "^1.2.0",
-    "explanation-package-ha-test": "^1.1.23-test",
+    "explanation-package-ha-test": "^1.1.24-test",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
     "global": "^4.4.0",
