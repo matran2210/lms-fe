@@ -18,13 +18,13 @@ export default function CourseProgress({
             className={`relative ${textColorClass}`}
           />
           <p
-            className={`text-medium-sm font-medium ${textColorClass} ml-px pl-2`}
+            className={`text-medium-sm font-normal ${textColorClass} ml-px pl-2`}
           >
             {enableCourse ? showStatus : 'Expired'}
           </p>
         </div>
         <div className="number">
-          <p className={`text-medium-sm font-medium ${textColorClass}`}>
+          <p className={`text-medium-sm font-normal ${textColorClass}`}>
             {progressPart}%
           </p>
         </div>
@@ -33,7 +33,7 @@ export default function CourseProgress({
         <div
           className={`progress-percentage ${
             enableCourse ? 'bg-primary ' : 'bg-gray-2'
-          } h-1.5`}
+          } h-1.5 rounded-100`}
           style={{ width: `${progressPart}%` }}
         ></div>
       </div>

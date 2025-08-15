@@ -1,8 +1,8 @@
 import React from 'react'
 import { Arrows, SpinIcon } from '@components/courses/icons'
 import { IButtonNextPrevProps } from 'src/type/courses-3-level/button'
-import BaseButtonIconFlip from '@components/courses/buttons/BaseButtonIconFlip'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import clsx from 'clsx'
 
 export default function NextPrevActivityButton({
   nextClick,
@@ -17,10 +17,16 @@ export default function NextPrevActivityButton({
   classNamePrev,
 }: IButtonNextPrevProps) {
   return (
-    <div className="flex w-full justify-between lg:w-auto lg:justify-start">
+    <div
+      className={clsx('flex w-full lg:w-auto lg:justify-end', {
+        'justify-end': showNext && !showPrev,
+        'justify-between': showNext && showPrev,
+        'justify-start': !showNext && showPrev,
+      })}
+    >
       {showPrev && (
         <button
-          className={`mr-4 rounded-md text-center text-[0.875rem] font-medium leading-4 ${classNamePrev}`}
+          className={`mr-4 rounded-md text-center text-[0.875rem] font-medium leading-4 lg:mr-6 ${classNamePrev}`}
           onClick={prevClick}
           disabled={disabled || loading}
         >

@@ -18,6 +18,7 @@ import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import { video_url } from '@utils/constants'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
 import { Soundwave } from '@components/courses/icons'
+import QuizModal from '@components/courses/video/QuizModal'
 
 type Props = {
   videos?: IVideo[]
@@ -33,6 +34,7 @@ type Props = {
   activeVideo: string
   handleCloseTab?: (activeTab: string) => void
   onUpdateActiveVideo?: (activeVideo: string) => void
+  newQuizModal?: boolean
 }
 
 /**
@@ -54,6 +56,7 @@ const VideoDocument = ({
   activeVideo,
   handleCloseTab,
   onUpdateActiveVideo,
+  newQuizModal,
 }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<IVideo>(
     videos && videos.length > 0 ? videos[0] : ({} as IVideo),
@@ -338,13 +341,11 @@ const VideoDocument = ({
   return (
     <div>
       <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-          {(videos as IVideo[])?.length > 1 && (
+        {(videos as IVideo[])?.length > 1 && (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
             <span className="font-semibold text-bw-1">Video mode:</span>
-          )}
-          <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
-            {(videos as IVideo[])?.length > 1 &&
-              videos?.map((v, i) => {
+            <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
+              {videos?.map((v, i) => {
                 return (
                   <label
                     className=" flex cursor-pointer select-none items-center gap-2"
@@ -367,8 +368,9 @@ const VideoDocument = ({
                   </label>
                 )
               })}
+            </div>
           </div>
-        </div>
+        )}
         <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
@@ -430,47 +432,64 @@ const VideoDocument = ({
           thumbnail={currentVideo?.file?.resource?.thumbnail}
         >
           {/* Modal for quiz questions */}
-          <SappModal
-            open={modalOpen}
-            customTitle={
-              <div className="!text-xl font-bold text-bw-1">Question</div>
-            }
-            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-            okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
-            buttonSize="small"
-            size="max-w-full"
-            position="center"
-            isInner={true}
-            isBordered={true}
-            okButtonClass="!w-20 h-8.5 !px-0"
-            cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
-            footerButtonClassName="!justify-between flex"
-            handleSubmit={handleSubmit((e) =>
-              onSubmit(activeQuestion?.corrects ? true : false),
-            )}
-            handleCancel={() => {
-              handleClose({
-                questionId: activeQuestion?.id,
-                listQuestion: currentListQuestion,
-              })
-            }}
-            closeAfterSubmit={false}
-            colorCancel="textUnderline"
-            cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
-          >
-            <div className="py-5">
-              <QuizComponent
-                activityId={activityId}
-                tabId={tabId}
-                quizId={quizId}
-                ref={questionRef}
-                activeQuestion={activeQuestion}
-                showCorrect={true}
-                document_id={document_id}
-                grading_preference={grading_preference}
-              ></QuizComponent>
-            </div>
-          </SappModal>
+          {newQuizModal ? (
+            <QuizModal
+              modalOpen={modalOpen}
+              onSubmit={onSubmit}
+              onCancel={() => {}}
+              finishAll={finishAll}
+              isConfirmQuestion={isConfirmQuestion}
+              questionRef={questionRef}
+              activeQuestion={activeQuestion}
+              activityId={activityId}
+              tabId={tabId}
+              quizId={quizId}
+              document_id={document_id}
+              grading_preference={grading_preference}
+            />
+          ) : (
+            <SappModal
+              open={modalOpen}
+              customTitle={
+                <div className="!text-xl font-bold text-bw-1">Question</div>
+              }
+              parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
+              okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
+              buttonSize="small"
+              size="max-w-full"
+              position="center"
+              isInner={true}
+              isBordered={true}
+              okButtonClass="!w-20 h-8.5 !px-0"
+              cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+              footerButtonClassName="!justify-between flex"
+              handleSubmit={handleSubmit((e) =>
+                onSubmit(activeQuestion?.corrects ? true : false),
+              )}
+              handleCancel={() => {
+                handleClose({
+                  questionId: activeQuestion?.id,
+                  listQuestion: currentListQuestion,
+                })
+              }}
+              closeAfterSubmit={false}
+              colorCancel="textUnderline"
+              cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
+            >
+              <div className="py-5">
+                <QuizComponent
+                  activityId={activityId}
+                  tabId={tabId}
+                  quizId={quizId}
+                  ref={questionRef}
+                  activeQuestion={activeQuestion}
+                  showCorrect={true}
+                  document_id={document_id}
+                  grading_preference={grading_preference}
+                ></QuizComponent>
+              </div>
+            </SappModal>
+          )}
         </SAPPVideo>
       </div>
     </div>

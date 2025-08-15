@@ -17,6 +17,7 @@ export interface IUser {
   confirmation_status: null | string
   detail_id: string
   detail: IUserDetail
+  facilities?: IFacility[]
   user_contacts: IUserContact[]
   certificates: number
   courses: number
@@ -107,6 +108,11 @@ export interface IUserDetail {
   company_rank: null | string
   settings: null | any
 }
+export interface IFacility {
+  id: string
+  name: string
+  code: string
+}
 export interface UserState {
   loading: boolean
   loadingEditName: boolean
@@ -168,6 +174,22 @@ export interface IUserHubspotProgramInfo {
   }
 }
 
+export interface UserHubspotExaminationSubjectItem {
+  id: string
+  examination_subject_id: string
+  result: string
+  examination_subject: {
+    id: string
+    subject_id: string
+    examination_id: string
+    subject: ISubjectItem
+    examination: {
+      id: string
+      name: string
+    }
+  }
+  is_final_examination_subject: boolean
+}
 export interface ICourseTabGroup {
   id: string
   user_hubspot_examination_subjects: [
