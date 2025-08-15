@@ -290,7 +290,7 @@ const ScoreDetail = ({
                                         getTypeName(answer?.question?.qType),
                                         answer,
                                       ),
-                                      'rounded px-3',
+                                      'flex-1 rounded px-3',
                                     )}
                                   >
                                     {answer?.question?.qType !== 'ESSAY' ? (
@@ -312,7 +312,7 @@ const ScoreDetail = ({
                                   </div>
                                   <div className="h-[14px] w-[1px] bg-gray-300" />
                                   {answer?.question?.qType !== 'ESSAY' && (
-                                    <div className="flex items-center justify-start gap-1">
+                                    <div className="flex w-[80px] items-center justify-start gap-1">
                                       <Image
                                         src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                                         alt="Correct"

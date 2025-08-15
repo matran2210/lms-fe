@@ -279,14 +279,6 @@ const CourseTabDocument = ({
                 </div>
               </ActivitySkeleton>
             </div>
-            <div
-              className={clsx('mt-4', {
-                'block md:hidden': focusOnlyDiscussion,
-                hidden: !focusOnlyDiscussion,
-              })}
-            >
-              <Discussion class_id={(router.query.id as string) || ''} />
-            </div>
           </>
         ),
       }
@@ -307,6 +299,7 @@ const CourseTabDocument = ({
       <Tabs
         className={clsx('learning-activity-tabs course-tab', {
           'tabs-list-hidden': focusOnlyQuiz.open,
+          hidden: focusOnlyDiscussion,
         })}
         activeKey={selector?.currentTabId}
         items={items}
@@ -315,6 +308,14 @@ const CourseTabDocument = ({
           trackGAEvent('Click Button Tab Activity')
         }}
       />
+      <div
+        className={clsx('mt-4', {
+          'block md:hidden': focusOnlyDiscussion,
+          hidden: !focusOnlyDiscussion,
+        })}
+      >
+        <Discussion class_id={(router.query.id as string) || ''} />
+      </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div
           className={clsx(

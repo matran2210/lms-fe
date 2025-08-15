@@ -174,3 +174,21 @@
     }
   }
 }
+
+.custom-scroll {
+  &::-webkit-scrollbar-thumb {
+    @apply rounded bg-primary;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #ffb800; // giữ nguyên khi hover
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Firefox hỗ trợ */
+  scrollbar-color: #ffb800 transparent;
+  scrollbar-width: thin;
+}
