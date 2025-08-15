@@ -43,7 +43,7 @@ const ModalResults = ({
           'w-screen h-screen !max-w-none !rounded-none overflow-hidden !p-0',
       }}
     >
-      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden">
+      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6 xl:px-0">
         <div
           className="absolute right-6 top-5  ml-auto cursor-pointer"
           onClick={handleCancel}

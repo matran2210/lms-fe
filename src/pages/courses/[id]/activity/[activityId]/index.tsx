@@ -13,31 +13,16 @@ import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { CourseSectionType } from '@utils/constants'
-import { trackGAEvent } from '@utils/google-analytics'
-import {
-  convertMinutesToHourFormat,
-  truncateBySpace,
-  truncateString,
-} from '@utils/index'
+import { convertMinutesToHourFormat } from '@utils/index'
 
 import { uniqueId } from 'lodash'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
@@ -75,7 +60,8 @@ import ActivityResourceMobile from '@components/learning/activity/modal/Activity
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { ITabs } from 'src/type'
-import { title } from 'process'
+import BackToTop from '@components/BackToTop'
+import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -96,8 +82,9 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
+  const { previousSection } = usePreviousSectionRoute()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
-
+  const scrollRef = useRef<HTMLDivElement>(null)
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -380,6 +367,9 @@ const ActivityPage = () => {
     )
   }
 
+  const onBackToSection = () => {
+    router.push(previousSection || '')
+  }
   /**
    * @description lấy data breadcrumb using react-query
    */
@@ -522,7 +512,9 @@ const ActivityPage = () => {
                   </div>
                 )
               }
-              onBack={focusOnlyDiscussion ? onUnFocusDiscussion : router.back}
+              onBack={
+                focusOnlyDiscussion ? onUnFocusDiscussion : onBackToSection
+              }
               className={clsx('mb-0 md:mb-2 lg:mb-0', {
                 'px-4': focusOnlyDiscussion,
               })}
@@ -750,7 +742,12 @@ const ActivityPage = () => {
             <CtaTrial />
           </div>
         </div>
+        <BackToTop
+          scrollContainerRef={scrollRef}
+          className={clsx('!bottom-9 !right-4 md:!right-8')}
+        />
       </Layout>
+
       {openResource && (
         <LearningResource
           open={openResource}

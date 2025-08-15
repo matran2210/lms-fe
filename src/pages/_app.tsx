@@ -55,6 +55,7 @@ import 'sapp-preview-part-test/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
+import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -63,6 +64,8 @@ export const excludedPathsHelp = [
   '/case-study/result/[id]',
   '/teachers',
 ]
+
+const activityPath = ['/courses/[id]/activity/[activityId]']
 type MyAppProps = AppProps & {
   Component: {
     layout?: String
@@ -159,6 +162,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       window.GA_INITIALIZED = true
     }
   }, [])
+
+  const showBackToTop = !activityPath.some((path) =>
+    router.pathname.includes(path),
+  )
 
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
@@ -310,26 +317,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 <CourseNoteProvider>
                   <QueryClientProvider client={queryClient}>
                     <SocketContext.Provider value={socket}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      <SappConfirmDialogContainer />
-                      <RouteGuard>
-                        <>
-                          <div className="relative">
-                            <PinnedNotifications />
-                            <Component {...pageProps} />
-                          </div>
-                          <BackToTop />
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList />
-                          <PopupCompletedCourse />
-                        </>
-                      </RouteGuard>
+                      <PreviousSectionRouteProvider>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
+                        <RouteGuard>
+                          <>
+                            <div className="relative">
+                              <PinnedNotifications />
+                              <Component {...pageProps} />
+                            </div>
+                            {showBackToTop && <BackToTop />}
+                            <Help showHelp={showHelp} />
+                            <LearningNotesList />
+                            <PopupCompletedCourse />
+                          </>
+                        </RouteGuard>
+                      </PreviousSectionRouteProvider>
                     </SocketContext.Provider>
                   </QueryClientProvider>
                 </CourseNoteProvider>
