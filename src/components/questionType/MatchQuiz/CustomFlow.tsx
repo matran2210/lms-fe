@@ -66,7 +66,13 @@ const CustomFlow = ({
   }, [])
 
   return (
-    <div ref={wrapperRef} style={{ height: '100%', width: '100%' }}>
+    <div
+      ref={wrapperRef}
+      style={{ height: '100%', width: '100%' }}
+      onWheelCapture={(e) => {
+        e.stopPropagation()
+      }}
+    >
       <ReactFlow
         nodes={nodes}
         edges={edges}
