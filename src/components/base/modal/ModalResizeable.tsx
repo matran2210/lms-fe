@@ -25,6 +25,8 @@ interface ModalResizeableProps {
     | 'center right'
     | 'center'
   rootClassName?: string
+  bodyClassName?: string
+  contentClassName?: string
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -39,6 +41,8 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   handleCloseScratchPad,
   position = 'center',
   rootClassName,
+  bodyClassName,
+  contentClassName,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -111,7 +115,9 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       }
       className={clsx(styles.modalResizeable, rootClassName)}
     >
-      <div className="absolute left-0 top-0 h-full w-full">
+      <div
+        className={clsx('absolute left-0 top-0 h-full w-full', bodyClassName)}
+      >
         {header ? (
           header
         ) : (
@@ -127,7 +133,9 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             </button>
           </div>
         )}
-        <div className={styles.modalContent}>{children}</div>
+        <div className={clsx(styles.modalContent, contentClassName)}>
+          {children}
+        </div>
       </div>
     </Rnd>
   )

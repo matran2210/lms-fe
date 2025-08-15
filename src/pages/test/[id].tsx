@@ -2547,9 +2547,12 @@ const TestDetail = () => {
                         currentTabContent?.solution,
                         currentTabContent?.done,
                       )}
-                      <div className="mt-8 flex justify-end">
-                        <ButtonPrimaryV2 title="Reset to Answer Template" />
-                      </div>
+                      {currentTabContent &&
+                        currentTabContent.qType === QUESTION_TYPES.ESSAY && (
+                          <div className="mt-8 flex justify-end">
+                            <ButtonPrimaryV2 title="Reset to Answer Template" />
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -2626,9 +2629,12 @@ const TestDetail = () => {
                       currentTabContent?.solution,
                       currentTabContent?.done,
                     )}
-                    <div className="mt-8 flex justify-end">
-                      <ButtonPrimaryV2 title="Reset to Answer Template" />
-                    </div>
+                    {currentTabContent &&
+                      currentTabContent.qType === QUESTION_TYPES.ESSAY && (
+                        <div className="mt-8 flex justify-end">
+                          <ButtonPrimaryV2 title="Reset to Answer Template" />
+                        </div>
+                      )}
                   </div>
                 </div>
               )}
