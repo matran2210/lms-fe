@@ -41,7 +41,7 @@ const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint()
+  const { isMobileView, isTabletView } = useTailwindBreakpoint()
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -208,6 +208,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       isOpen: false,
     })
   }
+  const heightContent = isMobileView
+    ? '120px'
+    : isTabletView
+      ? '128px'
+      : '136px'
 
   return (
     <>
@@ -243,15 +248,20 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   <NoDataV2 />
                 </div>
               ) : (
-                <div className="mt-6 flex flex-col gap-4 md:mt-8">
+                <div
+                  className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
+                  style={{
+                    maxHeight: `calc(100% - ${heightContent})`,
+                  }}
+                >
                   {resources?.resources?.map((resource) => (
                     <div
                       key={resource.id}
                       className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                     >
                       <div>
-                        <div className="line-clamp-2 text-base font-medium text-gray-800">
-                          {resource?.name}
+                        <div className="line-clamp-2 break-all text-base font-medium text-gray-800">
+                          {resource?.name} {resource?.name}
                         </div>
                         <div className="text-sm font-normal text-gray">
                           {bytesToKilobyte(resource?.size)}
