@@ -29,3 +29,15 @@ export const useMasterFinanceContext = () => {
 
   return context
 }
+
+export const withMasterFinanceProvider = <T extends object>(
+  Component: React.ComponentType<T>,
+) => {
+  return function WithMasterFinanceProvider(props: T) {
+    return (
+      <MasterFinanceProvider>
+        <Component {...props} />
+      </MasterFinanceProvider>
+    )
+  }
+}

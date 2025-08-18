@@ -11,12 +11,12 @@ export default function CourseTitle({
 }: ICourseTitle) {
   return (
     <div
-      className={`name-course mb-4 text-2xl font-medium xl:h-[64px] ${
+      className={`name-course mb-4 text-base font-semibold lg:text-2xl xl:h-[64px] ${
         !enableCourse ? 'text-gray-2' : 'text-bw-15'
       }`}
     >
       <div
-        className="line-clamp-2 cursor-pointer text-ellipsis"
+        className="line-clamp-2 cursor-pointer text-ellipsis "
         onClick={() => {
           if (isActiveStudent && enableCourse) {
             courseAction()

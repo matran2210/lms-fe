@@ -24,7 +24,7 @@ import { getActivityById } from '@pages/api/short-course/activity'
 import { UploadAPI } from 'src/pages/api/short-course/upload'
 import ButtonIcon from '@components/courses/buttons/ButtonIcon'
 import { Arrows } from '@components/courses/icons'
-import { ACTIVE_TABS, DEFAULT_PAGESIZE } from 'src/constants'
+import { ACTIVE_TABS, DEFAULT_PAGESIZE, PageLink } from 'src/constants'
 import { useMemo, useRef, useLayoutEffect } from 'react'
 import TextDocument from '@components/mycourses/activity/documents/TextDocument'
 import VideoDocument from '@components/mycourses/activity/documents/VideoDocument'
@@ -48,6 +48,9 @@ import { CloseIcon } from '@assets/icons'
 import LearningNotesList from '@components/courses/note-list/LearningNotesList'
 import { CourseSectionsWithProgress } from 'src/type/course'
 import PdfModal from '@components/courses/popup/PdfModal'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { AltArrowLeft } from '@components/courses/icons/AltArrowLeft'
+import Link from 'next/link'
 
 interface VideoStateClicked {
   course_tab_document_id: string
@@ -82,6 +85,7 @@ export default function ActivityDetail() {
     IActivityResource['items'][number] | null
   >(null)
   const [isOpen, setIsOpen] = useState(false)
+  const { isMobileView } = useTailwindBreakpoint()
 
   const params = {
     user_section_learning_status:
@@ -477,20 +481,31 @@ export default function ActivityDetail() {
   return (
     <LayoutCourses3Level>
       <div className="relative mx-auto max-w-1729">
-        <Breadcrumb3Level
-          tabs={tabs}
-          currentPage={currentPage}
-          className="mx-3 md:mx-0 2xl-max:py-4"
-        />
+        {!isMobileView && (
+          <Breadcrumb3Level
+            tabs={tabs}
+            currentPage={currentPage}
+            className="mx-3 md:mx-0 2xl-max:py-4"
+          />
+        )}
 
-        <h1 className="mx-3 my-7 text-2xl font-bold text-bw-15 md:mx-0 md:my-3">
-          {activity?.name || 'Loading...'}
-        </h1>
+        <div className="mx-3 mb-6 mt-4 flex items-center justify-start md:mt-7 lg:mx-0 lg:mb-6">
+          {isMobileView && (
+            <Link href={`${PageLink.SHORT_COURSE_DETAIL}/${COURSEID}`}>
+              <div className="mr-2">
+                <AltArrowLeft />
+              </div>
+            </Link>
+          )}
+          <h1 className="line-clamp-1 text-[18px] font-bold text-bw-15 lg:text-2xl">
+            {activity?.name || 'Loading...'}
+          </h1>
+        </div>
 
         {(activity?.course_outcomes?.length ?? 0) > 0 && (
           <ButtonIcon
             title="View Learning Outcome"
-            className="mx-3 text-primary md:mx-0 lg:hidden"
+            className="mx-3 text-primary lg:mx-0 lg:hidden"
             onClick={() => {
               setActiveTab(ACTIVE_TABS.LEARNING)
             }}
@@ -555,8 +570,8 @@ export default function ActivityDetail() {
                 onClose={handleCloseTab}
               />
             )}
-            <div className="mb-0 bg-white bg-white pb-25 pt-6 shadow-search lg:mb-6 lg:block lg:rounded-xl lg:pb-6 lg:pl-6 lg:pr-6">
-              <div className={`mx-auto my-0 w-full px-6 pt-6`}>
+            <div className="mx-4 mb-24 rounded-lg bg-white pb-4 shadow-search lg:mx-0 lg:mb-10 lg:block lg:rounded-xl">
+              <div className="mx-auto my-0 w-full px-4 pt-1.5 lg:px-6">
                 <div className="tab-content overflow-x-auto overflow-y-hidden">
                   {course_tab_documents?.map((e, i) => {
                     const marginBottom =
@@ -584,6 +599,7 @@ export default function ActivityDetail() {
                             activeTab={activeTab}
                             handleCloseTab={setActiveTab}
                             onUpdateActiveVideo={setActiveVideo}
+                            newQuizModal={true}
                           ></VideoDocument>
                         </div>
                       )
@@ -609,7 +625,7 @@ export default function ActivityDetail() {
                   })}
                 </div>
 
-                <div className="float-left w-full md:px-6 md:pt-6 lg:float-right lg:w-auto lg:max-w-max">
+                <div className="float-right w-full pt-4 md:pt-6 lg:max-w-max">
                   <NextPrevActivityButton
                     nextClick={() =>
                       handleActivityNavigation(
@@ -635,6 +651,7 @@ export default function ActivityDetail() {
                     }
                     titleNext="Next Activity"
                     titlePrev="Previous Activity"
+                    classNamePrev="min-h-[38px]"
                   />
                 </div>
               </div>

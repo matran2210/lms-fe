@@ -13,10 +13,6 @@ export default function ActivityResourcesMobile({
   setDataModal,
   setIsOpen,
 }: IActivityResourceProps) {
-  const handleOpenModal = (item: IActivityResource['items'][number]) => {
-    setDataModal(item)
-    setIsOpen(true)
-  }
   return (
     <BaseModal
       title={title}
@@ -37,7 +33,7 @@ export default function ActivityResourcesMobile({
             </div>
             <div
               className="cursor-pointer truncate text-ssm md:text-base"
-              onClick={() => handleOpenModal(item)}
+              onClick={item.download}
             >
               {item.title}
             </div>
