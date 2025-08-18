@@ -42,6 +42,7 @@ const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
   const { isMobileView, isTabletView } = useTailwindBreakpoint()
+  const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -143,11 +144,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    const divElement = document.getElementById('sapp-drawer-resource-list')
-    if (!divElement) return
     const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = divElement
-      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+      const scrollEl = scrollRef.current
+      if (!scrollEl) return
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl
+      if (scrollTop + clientHeight + 200 >= scrollHeight) {
         if ((router.query.courseId || router.query.id) && open) {
           const nextPageIndex = pageIndex + 1
           if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
@@ -156,11 +157,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         }
       }
     }
-    divElement.addEventListener('scroll', handleScroll)
-    // Cleanup function
-    return () => {
-      divElement.removeEventListener('scroll', handleScroll)
-    }
+
+    const scrollEl = scrollRef.current
+    scrollEl?.addEventListener('scroll', handleScroll)
+    return () => scrollEl?.removeEventListener('scroll', handleScroll)
   }, [fetchData, pageIndex])
 
   const download = async (name: string, file_key: string) => {
@@ -249,6 +249,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                 </div>
               ) : (
                 <div
+                  ref={scrollRef}
                   className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
                   style={{
                     maxHeight: `calc(100% - ${heightContent})`,
