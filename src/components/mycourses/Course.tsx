@@ -245,18 +245,6 @@ const Course = ({
         category == PROGRAM.CMA)
 
     // Redirect to dashboard if the course type is practice, normal
-    if (
-      isRedirectDashboard &&
-      (determineButtonToShow == BUTTON_STATUS.Review ||
-        determineButtonToShow == BUTTON_STATUS.Resume)
-    ) {
-      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
-      return
-    } else {
-      router.push(`/courses/my-course/${classInstance?.id}`)
-    }
-
-    router.push(`/courses/my-course/${classInstance?.id}`)
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -270,6 +258,18 @@ const Course = ({
     } else {
       localStorage.removeItem('courseInfo')
     }
+    if (
+      isRedirectDashboard &&
+      (determineButtonToShow == BUTTON_STATUS.Review ||
+        determineButtonToShow == BUTTON_STATUS.Resume)
+    ) {
+      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+      return
+    } else {
+      router.push(`/courses/my-course/${classInstance?.id}`)
+    }
+
+    router.push(`/courses/my-course/${classInstance?.id}`)
 
     localStorage.setItem(
       'courseDetail',
