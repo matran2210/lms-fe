@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div id="zoom-app">
           <AppProvider>
             <Header />
-            <div className="mt-16">{children}</div>
+            <div className="md:mt-16">{children}</div>
             <Toaster />
           </AppProvider>
         </div>
