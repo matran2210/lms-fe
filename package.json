@@ -95,7 +95,7 @@
     "sapp-common-package": "^1.2.7-test",
     "sapp-common-package-ha-test": "^1.0.27-test",
     "sapp-notification": "^1.0.7",
-    "sapp-preview-part-test": "^1.4.2-test",
+    "sapp-preview-part-test": "^1.4.3-test",
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
     "socket.io-client": "^4.7.5",
