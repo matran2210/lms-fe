@@ -3,13 +3,13 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import Icon from '@components/icons'
 import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import { ICertificate } from '@pages/certificates/[id]'
-import { Button } from 'antd'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import { ClickToCopyButton } from 'src/common/SappCopyLink'
 import { LinkedInShareButton } from './ButtonShareLinkedin'
 import CertificateCard from './CertificateCard'
-import LinkedInAddCertificateButton from './LinkedInAddCertificateButton'
+import ModalShareToLinkedin from './ModalShareToLinkedin'
+import { CopyIcon } from '@assets/icons'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -22,6 +22,9 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const [openModalShare, setOpenModalShare] = useState(false)
+  const onOpenModalShare = () => setOpenModalShare(true)
+  const onCloseModalShare = () => setOpenModalShare(false)
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
@@ -29,21 +32,6 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
     >
       <div className="flex h-full items-center gap-12 xl:gap-20">
         <div className="flex-2 flex h-full w-[55%] items-center justify-center">
-          <LinkedInShareButton
-            certificateUrl={certificate?.certificate_url || ''}
-          />
-
-          <div className="p-4">
-            <LinkedInAddCertificateButton
-              certName={certificate?.course.name || ''}
-              orgName="SAPP Academy"
-              issueYear={2025}
-              issueMonth={8}
-              certUrl={certificate?.certificate_url || ''}
-              certId={certificate?.id || ''}
-            />
-          </div>
-
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -92,21 +80,28 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               >
                 Download
               </ButtonPrimary>
+              <LinkedInShareButton
+                certificateUrl={certificate?.certificate_url || ''}
+                onOpenModalShare={onOpenModalShare}
+              />
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
-                <Button
-                  icon={<Icon type="share" />}
-                  type="text"
-                  className="underline"
-                >
-                  Share Certificate
-                </Button>
+                <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200">
+                  <CopyIcon />
+                </div>
               </ClickToCopyButton>
             </div>
           </div>
         </div>
       </div>
+      {certificate && (
+        <ModalShareToLinkedin
+          open={openModalShare}
+          onClose={onCloseModalShare}
+          certificate={certificate}
+        />
+      )}
     </CertificateCard>
   )
 }

@@ -26,6 +26,12 @@ export default function ShareLinkedInPage() {
     window.close() // đóng popup
   }
 
+  useEffect(() => {
+    if (accessToken) {
+      sessionStorage.setItem('linkedinAccessToken', String(accessToken))
+    }
+  }, [accessToken, router.query])
+
   if (!accessToken || !urn || !asset || !shareUrl) return <p>Loading...</p>
 
   return (
