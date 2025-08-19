@@ -158,7 +158,13 @@ const CourseTabDocument = ({
         key: tab?.id,
         label: (
           <div className="learning-act-tab-label text-base font-normal capitalize">
-            {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            <Tooltip
+              rootClassName="max-w-md"
+              classNames={{ body: '!py-1 !shadow-medium' }}
+              title={tab?.name?.split(' ')?.length > 5 ? tab?.name : undefined}
+            >
+              {truncateBySpace(tab?.name, 5)?.toLowerCase()}
+            </Tooltip>
           </div>
         ),
         children: (
@@ -230,7 +236,6 @@ const CourseTabDocument = ({
                                 initialHTML={e?.text_editor_content || ''}
                                 storageKey={`${activityId}-${selector?.currentTabId}-${e?.id}-text-editor`}
                                 className="course-tab-text"
-                                isShowNote
                               />
                             )}
                             {/* <TextDocument
@@ -274,14 +279,6 @@ const CourseTabDocument = ({
                 </div>
               </ActivitySkeleton>
             </div>
-            <div
-              className={clsx('mt-4', {
-                'block md:hidden': focusOnlyDiscussion,
-                hidden: !focusOnlyDiscussion,
-              })}
-            >
-              <Discussion class_id={(router.query.id as string) || ''} />
-            </div>
           </>
         ),
       }
@@ -302,6 +299,7 @@ const CourseTabDocument = ({
       <Tabs
         className={clsx('learning-activity-tabs course-tab', {
           'tabs-list-hidden': focusOnlyQuiz.open,
+          hidden: focusOnlyDiscussion,
         })}
         activeKey={selector?.currentTabId}
         items={items}
@@ -310,10 +308,18 @@ const CourseTabDocument = ({
           trackGAEvent('Click Button Tab Activity')
         }}
       />
+      <div
+        className={clsx('mt-4', {
+          'block md:hidden': focusOnlyDiscussion,
+          hidden: !focusOnlyDiscussion,
+        })}
+      >
+        <Discussion class_id={(router.query.id as string) || ''} />
+      </div>
       {selector?.tabs && selector?.tabs?.length > 1 && (
         <div
           className={clsx(
-            'learning-act-tab-pagination flex items-center justify-center gap-8',
+            'learning-act-tab-pagination flex items-center justify-center gap-4 md:gap-8',
             {
               hidden: focusOnlyQuiz.open || focusOnlyDiscussion,
             },
@@ -329,7 +335,6 @@ const CourseTabDocument = ({
                 handleChangeTab(courseId as string, getPreviousTabId() || '')
                 trackGAEvent('Click Button Previous Tab Activity')
               }}
-              style={{ marginRight: 8 }}
             >
               <ArrowLeft />
             </button>
@@ -343,7 +348,7 @@ const CourseTabDocument = ({
                 })}
                 onClick={() => handleChangeTab(courseId as string, tab.id)}
               >
-                <PaginationDotIcon />
+                <PaginationDotIcon className="h-[10px] w-[10px] shrink-0" />
               </span>
             ))}
           </div>

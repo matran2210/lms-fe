@@ -39,7 +39,7 @@ const TestScratchPads = ({
   exhibitText = 'Exhibit',
 }: IProps) => {
   const handleChangeScratchPad = (
-    e: ChangeEvent<HTMLInputElement>,
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     id?: string,
   ) => {
     const { value } = e.target
@@ -109,8 +109,8 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl border border-gray-400">
-            <div className="flex w-full items-center justify-between bg-gray-100 px-4 py-3">
+          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
+            <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
               <div className="text-sm font-bold">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>

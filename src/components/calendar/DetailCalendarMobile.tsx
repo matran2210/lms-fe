@@ -3,25 +3,20 @@ import { IEvent } from 'sapp-common-package/dist/types'
 import { ICalendarDetail } from 'src/type/calendar'
 import CourseTree from './CourseTree'
 import SappIcon from 'src/common/SappIcon'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
 import { useRouter } from 'next/router'
 import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'
-import {
-  SkeletonDetailIcon,
-  StatusDotIcon,
-  ZoomIcon,
-} from '@assets/icons/calendar'
+import { StatusDotIcon, ZoomIcon } from '@assets/icons/calendar'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import FloatingCloseIcon from './FloatingCloseIcon'
-import SappDrawerV2 from '@components/base/drawer/SappDrawerV2'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { CollapseArrowIcon } from '@assets/icons'
+import { SpinIcon } from '@components/courses/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
@@ -40,7 +35,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <div className="flex max-w-fit items-center gap-1 rounded-[100px] bg-warning/5 px-[12px] py-[2px] text-sm font-normal text-warning">
           <StatusDotIcon />
-          Online
+          Holiday
         </div>
       )
     }
@@ -114,7 +109,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">
+          <div className="col-span-1 text-right font-semibold ">
             {start.format('MMM DD, YYYY')}
           </div>
         </>
@@ -124,16 +119,16 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
       return (
         <>
           <div className="col-span-1 ">Lesson Date:</div>
-          <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold ">{`${start.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
           <div className="col-span-1 ">Deadline</div>
-          <div className="col-span-1 text-right font-semibold">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
+          <div className="col-span-1 text-right font-semibold ">{`${end.format('HH:mm')} | ${end.format('MMM DD YYYY')}`}</div>
         </>
       )
     }
     return (
       <>
         <div className="col-span-1 ">Lesson Date:</div>
-        <div className="col-span-1 text-right font-semibold">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
+        <div className="col-span-1 text-right font-semibold ">{`${start.format('HH:mm')} - ${end.format('HH:mm')} | ${start.format('MMM DD YYYY')}`}</div>
       </>
     )
   }, [data])
@@ -171,12 +166,10 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
   const isOnlineAndOpen =
     data?.mode === LearningMode.ONLINE && dateOpenSection.isBefore(dateNow)
 
-  const renderFormattedDate = (dateString: string) => {
-    const parsedDate = new Date(dateString)
-
-    const day = parsedDate.getDate().toString()
-    const monthName = parsedDate.toLocaleString('en-US', { month: 'long' })
-    const year = parsedDate.getFullYear()
+  const renderFormattedDate = (date: Dayjs) => {
+    const day = date.date().toString()
+    const monthName = date.format('MMMM') // Tên tháng đầy đủ
+    const year = date.year()
 
     return (
       <div className="flex text-xl">
@@ -250,13 +243,14 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
         }
         title={''}
       >
-        <div className="relative flex h-full flex-col bg-white">
+        <div className="relative flex h-full flex-col bg-white !text-bw-13">
           <div className="mb-4 flex items-center gap-2">
             <div onClick={() => setOpen({ isOpen: false, data: null })}>
               <CollapseArrowIcon className="rotate-90" />
             </div>
-            {data?.schedule?.start_date &&
-              renderFormattedDate(data.schedule.start_date)}
+            {open?.data?.current_date
+              ? renderFormattedDate(open?.data?.current_date)
+              : null}
           </div>
 
           {/* Scrollable content */}
@@ -264,16 +258,16 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
             {data?.schedule && !loading ? (
               <>
                 <div>
-                  <div className="mb-5 text-base font-semibold text-secondary">
+                  <div className="mb-3 text-base font-semibold">
                     <div>Primary Information</div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
                     <div className="col-span-1 ">
                       {data?.schedule.is_holiday
                         ? 'Event Name:'
                         : 'Class Code:'}
                     </div>
-                    <div className="col-span-1 text-right font-semibold">
+                    <div className="col-span-1 text-right font-semibold ">
                       {data?.schedule.is_holiday
                         ? data?.name
                         : data?.class?.code}
@@ -314,8 +308,8 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   !isOnlyMidTermOrFinalTest && (
                     <>
                       <Divider />
-                      <div className="flex flex-col gap-5">
-                        <div className="text-base font-semibold">
+                      <div className="flex flex-col gap-3">
+                        <div className="text-base font-semibold ">
                           Course Content
                         </div>
                         <CourseTree data={data?.sections ?? []} />
@@ -327,7 +321,7 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                   data?.key_after_contents?.length > 0 && (
                     <>
                       <Divider />
-                      <div className="flex flex-col gap-5">
+                      <div className="flex flex-col gap-3">
                         <div className="col-span-1 text-base font-semibold">
                           Key Content Before
                         </div>
@@ -341,12 +335,12 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                 {data?.mode === LearningMode.OFFLINE && (
                   <>
                     <Divider />
-                    <div className="flex flex-col gap-5">
-                      <div className="text-lg font-semibold">
+                    <div className="flex flex-col gap-3">
+                      <div className="text-lg font-semibold ">
                         Classroom Detail
                       </div>
 
-                      <div className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-2">
                         <div className="grid grid-cols-2">
                           <div>Classroom:</div>
                           <div className="break-words text-right font-semibold">
@@ -366,11 +360,8 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
                 )}
               </>
             ) : (
-              <div className="flex h-full flex-col items-center justify-center">
-                <SkeletonDetailIcon />
-                <div className="text-xl font-normal">
-                  You dont have any schedule today!
-                </div>
+              <div className="flex h-full flex-col items-center justify-center ">
+                <SpinIcon />
               </div>
             )}
           </div>
@@ -379,9 +370,9 @@ const DetailCalendarMobile = ({ open, setOpen }: IProps) => {
             data.class.link_meeting && (
               <>
                 <Divider />
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-3">
                   <div className="text-lg font-semibold">Classroom Detail</div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-2">
                     <div className="grid grid-cols-2">
                       <div>Platform:</div>
                       <div

@@ -1,6 +1,6 @@
 export const CloseDetailIcon = ({
-  width = 32,
-  height = 32,
+  width = 24,
+  height = 24,
 }: {
   width?: number
   height?: number

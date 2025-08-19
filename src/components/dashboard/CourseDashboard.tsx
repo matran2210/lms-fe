@@ -3,7 +3,9 @@ import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import OverallProgress from './dashboard-normal/OverallProgress'
 import LearningResult from './dashboard-normal/LearningResult'
 import { isUndefined } from 'lodash'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { COURSE_TYPE } from 'src/constants'
+import { ICourseInfo } from 'src/type/dashboard'
 
 export interface IActivityProgress {
   completed: number
@@ -16,7 +18,11 @@ export interface IActivities {
   activity?: IActivityProgress
 }
 
-const CourseDashboard = () => {
+const CourseDashboard = ({
+  setInfoCourse,
+}: {
+  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+}) => {
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   )
@@ -121,7 +127,7 @@ const CourseDashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
         {dashboardStats.map((data) => {
           let bgColorClass = ''
           if (data.id === 1) bgColorClass = 'bg-primary'
@@ -152,7 +158,7 @@ const CourseDashboard = () => {
                   {!isUndefined(data?.completed) &&
                     !isUndefined(data?.total) &&
                     data.total !== 0 && (
-                      <div className="xl:mt-4.5 mt-3 h-2 w-full rounded-full bg-gray-200">
+                      <div className="mt-3 h-1.5 w-full rounded-full bg-gray-200 xl:mt-4.5">
                         <div
                           className="bg-yellow-400 h-full rounded-full"
                           style={{
@@ -168,11 +174,11 @@ const CourseDashboard = () => {
         })}
       </div>
 
-      <div className="grid xl:grid-cols-2 xl:gap-8 2xl:mb-8">
-        <div className="order-2 xl:order-1">
-          <TopicProgress />
+      <div className="grid lg:flex xl:gap-8 2xl:mb-8">
+        <div className="order-2 xl:order-1 xl:w-[60%]">
+          <TopicProgress setInfoCourse={setInfoCourse} />
         </div>
-        <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:h-[55vh]">
+        <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
           <LearningResult />
         </div>
       </div>

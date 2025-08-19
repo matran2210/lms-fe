@@ -33,7 +33,7 @@ export interface FileType {
 
 export interface Requirement {
   id: string | number
-  created_at: string
+  created_at?: string
   name: string
   description: string
   files: FileType[]
@@ -65,7 +65,7 @@ export type AnswerList = {
 }
 
 export interface DragDropAnswerItem {
-  id: string
+  id?: string
   idAnswer?: string
   value: string
   position: number
@@ -141,10 +141,10 @@ export interface ExhibitQuestion {
   files: FileQuestion[]
 }
 
-export interface Sheet {
-  name: string
-  id: string
-  status: number
-  data: (any | null)[][]
-  celldata: any[]
+// Gợi ý type tối thiểu
+export type Sheet = {
+  name?: string
+  id?: string
+  status?: number
+  data: any[][] // 2D array (rows x cols)
 }

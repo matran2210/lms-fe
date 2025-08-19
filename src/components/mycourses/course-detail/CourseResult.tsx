@@ -140,19 +140,16 @@ const ResultCourse = ({
       <div
         className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
       >
-        Result of Attemps:
+        Result of Attempts:
       </div>
       <div>
         {isAttempt ? (
           <div className="text-gray">1</div>
         ) : (
           <Select
-            options={resultList.data.map((item) => ({
+            options={resultList?.data?.map((item) => ({
               value: item.id,
               label: item.name,
-              status: item.status,
-              ratio_score: item.ratio_score,
-              score: item.score,
             }))}
             classNames={{
               root: 'select-result-attempt',
@@ -168,9 +165,27 @@ const ResultCourse = ({
               }
             }}
             variant="borderless"
-            value={selectedResult}
+            value={selectedResult?.value}
             onChange={(selectedOption) => {
-              setSelectedResult(selectedOption)
+              const selectedResultFind = resultList?.data?.find(
+                (item) => item?.id === selectedOption,
+              )
+              const selectedResult = {
+                label: selectedResultFind?.name,
+                value: selectedResultFind?.id,
+                ratio_score: selectedResultFind?.ratio_score,
+                status: selectedResultFind?.status,
+                score: selectedResultFind?.score,
+              }
+              setSelectedResult(
+                selectedResult as {
+                  label: string
+                  value: string
+                  ratio_score?: string
+                  status: string
+                  score: number
+                },
+              )
             }}
             suffixIcon={<ArrowDownIcon />}
           />

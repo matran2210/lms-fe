@@ -172,10 +172,8 @@ const ModalUploadFile = ({
     <div>
       <SappModalV3
         open={open}
-        title={
-          title ||
-          `Add ${capitalize(UPLOAD_TYPE[fileType].type.toLocaleLowerCase())}`
-        }
+        title={''}
+        headerClassName="text-lg !font-normal"
         cancelButtonCaption="Cancel"
         okButtonCaption={'Upload'}
         handleCancel={handleCancel}
@@ -186,8 +184,12 @@ const ModalUploadFile = ({
         icon={undefined}
         header={''}
         fullWidthBtn={true}
-        buttonSize="extra"
+        buttonSize="medium"
       >
+        <div className="pb-3 text-start text-[32px]">
+          {title ||
+            `Add ${capitalize(UPLOAD_TYPE[fileType].type.toLocaleLowerCase())}`}
+        </div>
         <UploadFileHandle
           uploadFile={uploadFile}
           setUploadFile={setUploadFile}

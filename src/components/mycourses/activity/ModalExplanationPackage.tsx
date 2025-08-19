@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import SappModal from '@components/base/modal/SappModal'
-import { ExplanationPackage } from 'explanation-package'
+import { ExplanationPackageV2 } from 'explanation-package-ha-test'
 // import 'explanation-package/dist/index.css'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
@@ -157,7 +156,7 @@ const ModalExplanationPackage = ({
         </div>
         <div className="mx-auto">
           <div className="mx-auto">
-            <ExplanationPackage
+            <ExplanationPackageV2
               getActiveQuestion={getActiveQuestion}
               activeQuestion={activeQuestion}
               document_id={document_id}

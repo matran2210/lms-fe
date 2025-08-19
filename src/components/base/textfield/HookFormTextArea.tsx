@@ -1,4 +1,5 @@
 import { Skeleton } from 'antd'
+import clsx from 'clsx'
 import React, { KeyboardEvent } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
@@ -10,6 +11,7 @@ interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   placeholder?: string
   className?: string
+  extraClassName?: string
   // rows?: number | undefined
   // label?: string
   // guideline?: string[]
@@ -28,6 +30,7 @@ const HookFormTextArea = ({
   onChange,
   placeholder,
   className = 'w-fill--available h-[7.5rem]',
+  extraClassName = 'top-4',
   // rows,
   // label,
   // guideline,
@@ -55,7 +58,7 @@ const HookFormTextArea = ({
                   field.onChange(value)
                   onChange && onChange(value)
                 }}
-                className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
+                className={`${className} form-control rounded-[4px] border-[#dcdddd] focus:border-primary focus:shadow-0 focus:outline-none ${
                   error?.message ? 'is-invalid' : ''
                 }`}
                 placeholder={placeholder}
@@ -63,7 +66,7 @@ const HookFormTextArea = ({
                 disabled={disabled}
                 onKeyDown={handleKeyDown}
               />
-              <div className="absolute right-4 top-1/2 translate-y-[-50%]">
+              <div className={clsx('absolute right-4', extraClassName)}>
                 {actions}
               </div>
             </div>

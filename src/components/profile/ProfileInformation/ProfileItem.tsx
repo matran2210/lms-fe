@@ -56,7 +56,7 @@ const ProfileItem = ({
                 Profile {index + 1}
               </span>
               {e?.is_default && (
-                <span className="ml-[10px] inline-block select-none rounded bg-success-50 bg-opacity-5 px-2 py-1 leading-4 text-success">
+                <span className="ml-[10px] inline-block select-none rounded bg-success-50 px-2 py-1 leading-4 text-success">
                   Default
                 </span>
               )}
@@ -78,9 +78,9 @@ const ProfileItem = ({
           </div>
           {!isEdit && (
             <div className="ml-auto hidden w-fit cursor-pointer select-none items-center gap-2 md:flex">
-              <span className="hidden font-bold transition-all group-hover:inline-block group-hover:text-primary">
+              {/* <span className="hidden font-bold transition-all group-hover:inline-block group-hover:text-primary">
                 Xem Thêm
-              </span>
+              </span> */}
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -264,14 +264,17 @@ const EssayQuestionPreview = ({
               </div>
             )}
             {data?.description && (
-              <EditorReader
-                className="editor-wrap mb-6"
-                text_editor_content={data?.description}
-                highlighted={
-                  question_data?.requirements?.[index || 0]?.highlighted
-                }
-                highlighArea="hightlight_area_require"
-              />
+              <>
+                <EditorReader
+                  className="editor-wrap mb-6"
+                  text_editor_content={data?.description}
+                  highlighted={
+                    question_data?.requirements?.[index || 0]?.highlighted
+                  }
+                  highlighArea="hightlight_area_require"
+                />
+                <Divider />
+              </>
             )}
 
             {data?.files?.length > 0 && (
@@ -297,8 +300,8 @@ const EssayQuestionPreview = ({
               </div>
             )}
           </div>
-          {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && <Divider className="my-8" />}
+          {/* {question_data.display_type === DISPLAY_TYPE.VERTICAL && question_data?.requirements?.length > 0 &&
+            !forCaseStudy && <Divider className="my-8" />} */}
         </>
       )}
       <>
@@ -306,7 +309,7 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-bw-13 text-lg font-semibold">
+                <div className="text-lg font-semibold text-bw-13">
                   {fullData.done
                     ? 'Your Answer File:'
                     : 'Upload file to submit'}
@@ -344,7 +347,6 @@ const EssayQuestionPreview = ({
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <Divider />
               <div
                 className={clsx(
                   'sapp-upload-file-preview',
@@ -378,13 +380,6 @@ const EssayQuestionPreview = ({
                 </div>
               </div>
               <Divider />
-              {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
-                !forCaseStudy &&
-                data && (
-                  <div className="mb-8">
-                    <hr />
-                  </div>
-                )}
             </React.Fragment>
           )
         ) : (

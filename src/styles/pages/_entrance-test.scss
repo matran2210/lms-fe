@@ -14,6 +14,7 @@
   }
 
   .rc-virtual-list-holder-inner {
+    position: relative !important;
     @apply gap-1;
     .ant-select-item-option {
       @apply p-2;

@@ -55,6 +55,9 @@ const UserApi = {
   getListDevices: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
+  getListDevicesV2: async (): Promise<IDeviceItem[]> => {
+    return AuthAPI.getListDevices()
+  },
   getListHistory: async ({
     page_index,
     page_size,

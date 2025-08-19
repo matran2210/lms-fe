@@ -20,10 +20,7 @@ const CardResultTest = ({
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
   const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
   const btnViewResult = () => (
-    <div
-      className="flex cursor-pointer items-center"
-      onClick={() => handleViewResult(resultData)}
-    >
+    <div className="flex items-center">
       <div className="mr-2 block text-sm font-medium text-gray-800 underline md:hidden">
         View Result
       </div>
@@ -35,8 +32,9 @@ const CardResultTest = ({
 
   return (
     <div
-      className="flex items-center justify-between rounded-xl bg-white p-4 shadow-small md:p-6"
+      className="flex cursor-pointer items-center justify-between rounded-xl bg-white p-4 shadow-small hover:bg-primary-50 md:p-6"
       ref={lastElementRef}
+      onClick={() => handleViewResult(resultData)}
     >
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
@@ -45,10 +43,7 @@ const CardResultTest = ({
             arrow={false}
             placement="topLeft"
           >
-            <div
-              className="cursor-pointer text-base font-semibold leading-[27px] text-gray-800 md:text-lg"
-              onClick={() => handleViewResult(resultData)}
-            >
+            <div className="text-base font-semibold leading-[27px] text-gray-800 md:text-lg">
               {resultData?.name}
             </div>
           </Tooltip>

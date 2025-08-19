@@ -24,6 +24,7 @@ import { isEmpty } from 'lodash'
 import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
 import { TitleSidebar } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import clsx from 'clsx'
 
 type Props = {
   open: boolean
@@ -256,7 +257,9 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
-        rootClassName={'responsive-drawer-center'}
+        rootClassName={clsx('responsive-drawer-center', {
+          'drawer-bottom-0': isMobileView,
+        })}
       >
         {isEdit ? (
           <FormProvider {...methods}>

@@ -261,61 +261,73 @@ const ResultsTable = ({
   const title =
     !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
 
-  if (isLoading || isMobileLoading)
-    return [...Array(6)].map((_, index) => (
-      <Skeleton key={index} active avatar>
-        <List.Item.Meta avatar={<Avatar />} />
-      </Skeleton>
-    ))
-
-  if (isEmpty(groupedDataByType) && !openFilter)
-    return (
-      <div className="flex h-full flex-col items-center justify-center">
-        <NoDataV2 />
-      </div>
-    )
-
   return (
     <FormProvider {...methods}>
+      {/* Filter desktop */}
       {!isMobileView && (
         <div className="my-6">
           <FilterCourseSection setParams={setParams} />
         </div>
       )}
 
-      <div className="mt-6 flex flex-col gap-6 md:mt-0">
-        {!isEmpty(groupedDataByType?.[TEST_TYPE.ACTIVITY]) && (
-          <div className="flex flex-col gap-6">
-            {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-              <CollapseActivity
-                key={item?.id}
-                resultData={item}
-                handleViewResult={handleViewResult}
-                getScore={getScore}
-                lastElementRef={lastElementRef}
-              />
-            ))}
+      {/* Loading state */}
+      {(isLoading || isMobileLoading) &&
+        [...Array(6)].map((_, index) => (
+          <Skeleton key={index} active avatar>
+            <List.Item.Meta avatar={<Avatar />} />
+          </Skeleton>
+        ))}
+
+      {/* Empty state */}
+      {!isLoading &&
+        !isMobileLoading &&
+        isEmpty(groupedDataByType) &&
+        !openFilter && (
+          <div className="flex h-full flex-col items-center justify-center">
+            <NoDataV2 />
           </div>
         )}
-        {Object.entries(groupedDataByType || {})
-          ?.filter(([type]) => type !== TEST_TYPE.ACTIVITY)
-          ?.map(([type, data]) =>
-            !isEmpty(data) ? (
-              <div key={type} className="flex flex-col gap-6">
-                {data.map((item) => (
-                  <CardResultTest
-                    key={item.id}
-                    resultData={item}
-                    handleViewResult={handleViewResult}
-                    getNameTooltipContent={getNameTooltipContent}
-                    lastElementRef={lastElementRef}
-                  />
-                ))}
-              </div>
-            ) : null,
-          )}
-      </div>
 
+      {/* Main content */}
+      {!isLoading && !isMobileLoading && !isEmpty(groupedDataByType) && (
+        <div className="mt-6 flex flex-col gap-6 md:mt-0">
+          {/* Activity results */}
+          {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
+            <div className="flex flex-col gap-6">
+              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
+                <CollapseActivity
+                  key={item?.id}
+                  resultData={item}
+                  handleViewResult={handleViewResult}
+                  getScore={getScore}
+                  lastElementRef={lastElementRef}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Other test types */}
+          {Object.entries(groupedDataByType || {})
+            .filter(([type]) => type !== TEST_TYPE.ACTIVITY)
+            .map(([type, data]) =>
+              !isEmpty(data) ? (
+                <div key={type} className="flex flex-col gap-6">
+                  {data.map((item) => (
+                    <CardResultTest
+                      key={item.id}
+                      resultData={item}
+                      handleViewResult={handleViewResult}
+                      getNameTooltipContent={getNameTooltipContent}
+                      lastElementRef={lastElementRef}
+                    />
+                  ))}
+                </div>
+              ) : null,
+            )}
+        </div>
+      )}
+
+      {/* Pagination */}
       {resultData && !isMobileView && (
         <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
@@ -326,18 +338,20 @@ const ResultsTable = ({
         />
       )}
 
+      {/* Grading modal */}
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => setOpenReport(false)}
-        fullWidthBtn={true}
+        fullWidthBtn
         buttonSize="extra"
         icon={<ConfirmIcon />}
-        header="Awating Grading"
-        content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
+        header="Awaiting Grading"
+        content="Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete."
       />
 
+      {/* Mobile filter drawer */}
       <SappDrawerV3
         open={openFilter}
         handleCancel={() => setOpenFilter(false)}
@@ -348,7 +362,7 @@ const ResultsTable = ({
         handleBack={handleBack}
         handleSubmit={handleSubmit}
         classNameHeader="pb-4 border-b border-gray-200"
-        rootClassName={'responsive-drawer-center'}
+        rootClassName="responsive-drawer-center"
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
       >

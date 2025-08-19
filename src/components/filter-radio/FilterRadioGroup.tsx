@@ -49,11 +49,8 @@ const FilterRadioGroup = ({
         return (
           <>
             <div
-              className={`flex ${
-                direction === 'horizontal'
-                  ? '_horizontal flex-row flex-wrap sm:flex-row md:flex-row lg:flex-col'
-                  : '_vertical flex-col sm:flex-row md:flex-row lg:flex-col'
-              } ${gap} ${
+              className={`_vertical flex flex-row lg:flex-col
+              ${gap} ${
                 justify === 'between'
                   ? 'justify-between'
                   : justify === 'center'
@@ -110,9 +107,19 @@ const FilterRadioGroup = ({
                                 : ` ${stateLabel} ${
                                     labelClass ? labelClass : ''
                                   }`
-                            } fw-bold flex-1 text-base leading-4 ${checked && '!text-primary'}`}
+                            } fw-bold flex-1 text-base leading-4 ${checked && '!text-primary'} relative`}
                           >
                             {option.label}
+                            {checked && (
+                              <button
+                                onClick={(e) => {
+                                  field.onChange()
+                                }}
+                                className="absolute -right-6 top-0 text-gray-300 hover:text-[#FF524E]"
+                              >
+                                <CloseCircleIcon color="currentColor" />
+                              </button>
+                            )}
                           </div>
                           {option.description && (
                             <div className={'text-sm text-[#6b7280]'}>
@@ -120,16 +127,6 @@ const FilterRadioGroup = ({
                             </div>
                           )}
                         </span>
-                        {checked && (
-                          <button
-                            onClick={(e) => {
-                              field.onChange()
-                            }}
-                            className="text-gray-300 hover:text-[#FF524E]"
-                          >
-                            <CloseCircleIcon color="currentColor" />
-                          </button>
-                        )}
                       </label>
                     </div>
                   </div>

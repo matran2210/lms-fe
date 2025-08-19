@@ -7,6 +7,7 @@
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'my-profile.scss';
+@import 'course-3-level.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import './components/_calculator.scss';
@@ -22,11 +23,11 @@
 @import 'progress.scss';
 @import './components/_input.scss';
 @import './components/_tooltip.scss';
-@import './components/drawer.scss';
 @import './pages/test';
+@import './components/drag-n-drop-question.scss';
 @import './pages/_entrance-test.scss';
 @import './components/sapp-modal-v3.scss';
-
+@import './components/_drawer.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -115,14 +116,14 @@ body *::-webkit-scrollbar-track {
 }
 
 body *::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+  @apply bg-primary;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 body *::-webkit-scrollbar-thumb:hover {
-  background-color: #a8bbbf;
+  @apply bg-primary;
 }
 
 .menu-sub-dropdown {
@@ -823,7 +824,7 @@ textarea.is-invalid:focus {
 }
 
 .ant-modal-root .ant-modal-mask {
-  @apply bg-[#000000cc];
+  @apply bg-overlay-control;
 }
 
 .sapp-modal__opt-continue-test {
@@ -940,8 +941,16 @@ $focus: (
 .ant-drawer-content {
   @apply rounded-2xl;
 }
+
 .ant-drawer-content-wrapper {
   @apply m-4 rounded-2xl;
+}
+
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-mask,
+.ant-drawer .ant-drawer-content-wrapper {
+  position: fixed;
+  background-color: #00000099;
 }
 
 .shadow-activity.aos-init.aos-animate {
@@ -1279,24 +1288,24 @@ td.sapp-border {
 }
 
 .tooltip-container {
-  @apply relative inline-block;
+  @apply relative inline-block py-1;
 }
 
 .tooltip-text {
-  @apply invisible absolute z-10 rounded-lg border border-[#e4e4e7] bg-white p-4 text-left text-[#27272a] shadow-lg transition-transform duration-300;
-  min-width: 300px;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  @apply invisible absolute z-10 rounded-md bg-[#404041] px-2 py-1 text-left text-white shadow-lg transition-transform duration-300;
+  min-width: fit-content;
+  font-size: 14px;
   top: 100%;
   left: 0;
   white-space: normal;
   word-wrap: break-word;
+  border: none;
+  line-height: 22px;
 }
 
 .tooltip-text::after {
   content: '';
-  @apply absolute bg-white;
+  @apply absolute bg-[#404041];
   top: -5px;
   left: 20px;
   transform: rotate(45deg);
@@ -1429,6 +1438,10 @@ select:focus {
   @apply max-w-max;
 }
 
+.sapp-tab-button .secondary {
+  @apply bg-gray-4 text-bw-15;
+}
+
 [type='search']:focus {
   --tw-ring-color: none;
 }
@@ -1466,4 +1479,10 @@ mark {
 .drawer-calendar__detail.drawer-calendar__detail--mobile .ant-drawer-content {
   @apply rounded-none;
   z-index: 9999;
+}
+
+.style-modal-result {
+  .ant-modal-content {
+    @apply bg-gray-canvas;
+  }
 }

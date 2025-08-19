@@ -8,6 +8,7 @@ import useDownloadImage from 'src/hooks/useDownloadImage'
 import Image from 'next/image'
 import { sappFormatDate } from '@utils/index'
 import clsx from 'clsx'
+import { NoCertificationIcon } from '@assets/icons'
 
 interface ICertificate {
   certificate: {
@@ -28,21 +29,61 @@ interface ICertificate {
   received_times: string
 }
 
+const mockCertificates: ICertificate[] = [
+  {
+    id: '1',
+    certificate_id: 'cert_001',
+    certificate_url:
+      'https://imgv2-1-f.scribdassets.com/img/document/394504624/original/7fdeddace1/1?v=1',
+    class_id: 'class_001',
+    course_id: 'course_001',
+    user_id: 'user_001',
+    pass_point: 85,
+    received_times: '2025-08-01T10:30:00Z',
+    certificate: {
+      id: 'cert_001',
+      name: 'Frontend Development Certificate',
+    },
+    course: {
+      id: 'course_001',
+      name: 'React & TypeScript Bootcamp',
+    },
+  },
+  {
+    id: '2',
+    certificate_id: 'cert_002',
+    certificate_url:
+      'https://imgv2-1-f.scribdassets.com/img/document/394504624/original/7fdeddace1/1?v=1',
+    class_id: 'class_002',
+    course_id: 'course_002',
+    user_id: 'user_002',
+    pass_point: 92,
+    received_times: '2025-07-28T15:45:00Z',
+    certificate: {
+      id: 'cert_002',
+      name: 'Backend Engineering Certificate',
+    },
+    course: {
+      id: 'course_002',
+      name: 'Node.js & Express Masterclass',
+    },
+  },
+]
 const Certificate = () => {
   const { downloadImage } = useDownloadImage()
-  const [certificateData, setCertificateData] = useState<ICertificate[]>([])
-  const [totalCertificateData, setTotalCertificateData] = useState<string>('0')
+  const [certificateData, setCertificateData] = useState<
+    ICertificate[] | undefined
+  >(undefined)
   const [modalOpen, setOpenModal] = useState(false)
   const [userDetail, setUserDetail] = useState('')
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await AuthAPI.getCertificate(1, 10)
+      const res = await AuthAPI.getCertificate(1, 30)
       const certificate = res.data.certificates
-      const totalCertificate = res.data.meta.total_records
       const userDetail = res.username
-      setTotalCertificateData(totalCertificate)
       setCertificateData(certificate)
+      setCertificateData(mockCertificates)
       setUserDetail(userDetail)
     } catch (error) {}
   }
@@ -78,7 +119,7 @@ const Certificate = () => {
           ) : (
             <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
           )}
-          <span className="font-semibold group-hover:text-primary">
+          <span className="text-base font-medium group-hover:text-primary">
             {record?.course?.name}
           </span>
         </div>
@@ -88,14 +129,14 @@ const Certificate = () => {
       title: 'Grade Archive',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary">{record?.pass_point}%</div>
+        <div className="text-base text-secondary">{record?.pass_point}%</div>
       ),
     },
     {
       title: 'Certificate Received',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary">
+        <div className="text-base text-secondary">
           {sappFormatDate(record?.received_times, 'DD/MM/YYYY HH:mm')}
         </div>
       ),
@@ -137,16 +178,28 @@ const Certificate = () => {
 
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
-      <Table<ICertificate>
-        className="profile-certificate-table hidden lg:block"
-        columns={columns}
-        dataSource={certificateData}
-      />
+      {certificateData && !certificateData?.length ? (
+        <div className="flex min-h-352 flex-col items-center justify-center gap-6">
+          <NoCertificationIcon />
+          <div className="text-xl text-gray-800">
+            You don&rsquo;t have any certificate!
+          </div>
+        </div>
+      ) : null}
+      {certificateData?.length ? (
+        <Table<ICertificate>
+          className="profile-certificate-table hidden lg:block"
+          columns={columns}
+          dataSource={certificateData}
+          pagination={false}
+        />
+      ) : null}
+
       <div className="flex flex-col gap-4 md:gap-6 lg:hidden">
         <div className="hidden text-xl font-semibold text-secondary md:block">
           Certificate
         </div>
-        {certificateData.length
+        {certificateData?.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem
                 key={item?.id}

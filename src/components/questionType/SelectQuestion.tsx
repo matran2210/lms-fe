@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
+import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
+import { Divider } from 'antd'
 import clsx from 'clsx'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
@@ -20,7 +21,10 @@ interface IProps {
   handleSaveHighLight?: any
   highlighted?: any
   allowHighLight?: boolean
-  defaultAnswer?: any
+  defaultAnswer?: Array<{
+    answer_id: string
+    answer_position: number
+  }>
   corrects?: {
     id: string
     answer: string
@@ -38,20 +42,25 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
-  onChange?: (values: string[]) => void
+  onChange?: (
+    values: Array<{
+      answer_id: string
+      answer_position: number
+    }>,
+  ) => void
   correctAnswerClass?: string
   explainClassname?: string
 }
 
 // Constants
-const baseBox = 'border rounded border-gray-15 rounded-lg'
+const baseBox = 'border rounded border-gray-300 rounded-lg'
 const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
-  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer`,
+  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer bg-white`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
   options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
-  option: 'px-3 py-2 hover:bg-yellow-900 cursor-pointer rounded',
-  icon: 'ml-2 text-gray-500',
+  option: 'px-3 py-2 cursor-pointer rounded',
+  icon: 'ml-2 text-gray-500 min-w-[24px]',
 }
 
 const SelectWord = forwardRef(
@@ -80,18 +89,23 @@ const SelectWord = forwardRef(
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
     const [key, setKey] = useState<string>(uniqueId('key'))
+    const componentId = useRef<string>(uniqueId('select-question-'))
     const isSelfReflection = data?.is_self_reflection
-    const str = data?.question_content
+    const str = replaceWhiteSpacePreWrapToNormal(data?.question_content)
     const [selectedValues, setSelectedValues] = useState<
       Record<number, string>
     >({})
 
     useEffect(() => {
       if (onChange) {
-        // Lấy ra mảng id theo thứ tự index
+        // Lấy ra mảng với format mới: answer_id và answer_position
         const values = Object.keys(selectedValues)
           .sort((a, b) => Number(a) - Number(b))
-          .map((k) => selectedValues[Number(k)])
+          .map((k) => ({
+            answer_id: selectedValues[Number(k)],
+            answer_position: Number(k) + 1,
+          }))
+          .filter((item) => item.answer_id) // Chỉ lấy những item có answer_id
         onChange(values)
       }
     }, [selectedValues])
@@ -100,8 +114,10 @@ const SelectWord = forwardRef(
     useEffect(() => {
       if (defaultAnswer && Array.isArray(defaultAnswer)) {
         const newSelected: Record<number, string> = {}
-        defaultAnswer.forEach((id, idx) => {
-          newSelected[idx] = id
+        defaultAnswer.forEach((item) => {
+          if (item.answer_id && item.answer_position) {
+            newSelected[item.answer_position - 1] = item.answer_id
+          }
         })
         setSelectedValues(newSelected)
       }
@@ -135,15 +151,15 @@ const SelectWord = forwardRef(
 
       const disabledClass = !corrects?.length
         ? ''
-        : 'cursor-not-allowed pointer-events-none'
+        : 'cursor-not-allowed pointer-events-none !justify-center'
       return `
-        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}">
+        <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}" data-component-id="${componentId.current}">
           <span class="truncate">${selectedAnswer?.label || 'Choose'}</span>
-            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown ${corrects?.length ? 'hidden' : ''}" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z" fill="#1C274C"/>
             </svg>
         </div>
-        <div class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;">
+        <div class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;" data-component-id="${componentId.current}">
           ${
             answerObj?.[+index + 1]?.length
               ? answerObj?.[+index + 1]
@@ -151,20 +167,20 @@ const SelectWord = forwardRef(
                     if (e?.label?.length > 100) {
                       return `
                 <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
-                     data-value="${e?.value}">
+                     data-value="${e?.value}" data-component-id="${componentId.current}">
                   ${e.label}
                 </div>
               `
                     }
                     return `
               <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
-                   data-value="${e?.value}">
+                   data-value="${e?.value}" data-component-id="${componentId.current}">
                 ${e?.label}
               </div>
             `
                   })
                   .join('')
-              : `<div class="option ${DROPDOWN_STYLES.option}">No options available</div>`
+              : `<div class="option ${DROPDOWN_STYLES.option}" data-component-id="${componentId.current}">No options available</div>`
           }
         </div>
       `
@@ -174,15 +190,19 @@ const SelectWord = forwardRef(
     useImperativeHandle(ref, () => ({
       handleReset() {
         const dropdowns = document?.querySelectorAll(
-          '.sapp-select--question',
+          `.sapp-select--question[data-component-id="${componentId.current}"]`,
         ) as any
         dropdowns.forEach((dropdown: any) => {
           dropdown.setAttribute('data-value', '')
-          const selectedText = dropdown.querySelector('.selected-text')
+          const selectedText = dropdown.querySelector(
+            `.selected-text[data-component-id="${componentId.current}"]`,
+          )
           if (selectedText) {
             selectedText.textContent = 'Choose'
           }
         })
+        // Reset selectedValues state
+        setSelectedValues({})
       },
       handleGetResult() {
         // action()
@@ -227,8 +247,11 @@ const SelectWord = forwardRef(
         )
         dropdownContainer.id = element?.id
         dropdownContainer.setAttribute('data-value', '')
+        dropdownContainer.setAttribute('data-component-id', componentId.current)
 
-        const defaultAnswerValue = defaultAnswer?.[index] || ''
+        const defaultAnswerValue =
+          defaultAnswer?.find((item) => item.answer_position === index + 1)
+            ?.answer_id || ''
 
         if (corrects) {
           const isCorrect = corrects?.some(
@@ -239,10 +262,10 @@ const SelectWord = forwardRef(
           )
 
           dropdownContainer?.classList?.add(
-            isCorrect || isSelfReflection
-              ? '!border-success'
-              : '!border-danger',
+            isCorrect || isSelfReflection ? '!border-success' : '!border-error',
             'sapp-select-confirmed',
+            '!w-fit',
+            '!min-w-fit',
           )
           dropdownContainer?.setAttribute('disabled', 'true')
         }
@@ -264,12 +287,24 @@ const SelectWord = forwardRef(
         // Xử lý hiện tooltip sẽ thêm vào mỗi select
         const tooltip = document.createElement('div')
         tooltip.classList.add('tooltip-container')
+        tooltip.setAttribute('data-component-id', componentId.current)
         const answer =
           data.answers?.find(
             (answer: { id: string; value: string }) =>
-              !isUndefined(defaultAnswer?.[index]) &&
-              !isNull(defaultAnswer?.[index]) &&
-              answer?.id === defaultAnswer?.[index],
+              !isUndefined(
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
+              ) &&
+              !isNull(
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
+              ) &&
+              answer?.id ===
+                defaultAnswer?.find(
+                  (item) => item.answer_position === index + 1,
+                )?.answer_id,
           )?.answer || ''
         const selectedAnswer = selectedValues[index]
           ? data.answers?.find(
@@ -278,7 +313,7 @@ const SelectWord = forwardRef(
             )?.answer
           : ''
         tooltip.innerHTML = `
-  <div class="tooltip-text ${(!!answer && answer.length > 18) || (!!selectedAnswer && selectedAnswer.length > 18) ? 'block' : 'hidden'}">${selectedAnswer || answer}</div>
+  <div class="tooltip-text ${(!!answer && answer.length > 18) || (!!selectedAnswer && selectedAnswer.length > 18) ? 'block' : 'hidden'}" data-component-id="${componentId.current}">${selectedAnswer || answer}</div>
 `
         tooltip.appendChild(dropdownContainer)
 
@@ -293,11 +328,9 @@ const SelectWord = forwardRef(
           )
           if (correctAnswer) {
             element.outerHTML = `
-              <span>
-                <span id="${element?.id}" class="text-base font-semibold text-state-success">
+                <span id="${element?.id}" class="text-base font-semibold text-success">
                   ${correctAnswer?.answer}
                 </span>
-              </span>
             `
           }
         })
@@ -308,14 +341,22 @@ const SelectWord = forwardRef(
 
     useEffect(() => {
       const updateTooltips = () => {
-        const dropdowns = document.querySelectorAll('.sapp-select--question')
+        const dropdowns = document.querySelectorAll(
+          `.sapp-select--question[data-component-id="${componentId.current}"]`,
+        )
         dropdowns.forEach((dropdown) => {
           const dropdownIndex = Array.from(
-            document.querySelectorAll('.sapp-select--question'),
+            document.querySelectorAll(
+              `.sapp-select--question[data-component-id="${componentId.current}"]`,
+            ),
           ).indexOf(dropdown)
-          const tooltipContainer = dropdown.closest('.tooltip-container')
+          const tooltipContainer = dropdown.closest(
+            `.tooltip-container[data-component-id="${componentId.current}"]`,
+          )
           if (tooltipContainer) {
-            const tooltipText = tooltipContainer.querySelector('.tooltip-text')
+            const tooltipText = tooltipContainer.querySelector(
+              `.tooltip-text[data-component-id="${componentId.current}"]`,
+            )
             if (tooltipText) {
               const selectedValue = selectedValues[dropdownIndex]
               if (selectedValue) {
@@ -354,7 +395,9 @@ const SelectWord = forwardRef(
       })
 
       // Theo dõi tất cả các dropdown
-      const dropdowns = document.querySelectorAll('.sapp-select--question')
+      const dropdowns = document.querySelectorAll(
+        `.sapp-select--question[data-component-id="${componentId.current}"]`,
+      )
       dropdowns.forEach((dropdown) => {
         observer.observe(dropdown, {
           attributes: true,
@@ -373,13 +416,17 @@ const SelectWord = forwardRef(
 
     useEffect(() => {
       const setupDropdownListeners = () => {
-        const dropdowns = document.querySelectorAll('.sapp-select--question')
+        const dropdowns = document.querySelectorAll(
+          `.sapp-select--question[data-component-id="${componentId.current}"]`,
+        )
 
         dropdowns.forEach((dropdown) => {
           if (!dropdown.getAttribute('data-listener-attached')) {
-            const selectedText = dropdown.querySelector('.selected-text')
+            const selectedText = dropdown.querySelector(
+              `.selected-text[data-component-id="${componentId.current}"]`,
+            )
             const options = dropdown.querySelector(
-              '.dropdown-options',
+              `.dropdown-options[data-component-id="${componentId.current}"]`,
             ) as HTMLElement
             const iconDropDown = dropdown.querySelector(
               '.icon-dropdown',
@@ -417,9 +464,13 @@ const SelectWord = forwardRef(
                     }
 
                     // Clear highlights
-                    options.querySelectorAll('.option').forEach((option) => {
-                      option.classList.remove('bg-[#e5e7eb]', 'selected')
-                    })
+                    options
+                      .querySelectorAll(
+                        `.option[data-component-id="${componentId.current}"]`,
+                      )
+                      .forEach((option) => {
+                        option.classList.remove('bg-gray-100', 'selected')
+                      })
 
                     options.style.display = 'block'
                   } else {
@@ -427,64 +478,80 @@ const SelectWord = forwardRef(
                   }
 
                   // Toggle UI styles
-                  dropdown.classList.toggle('border-gray-200', isNowOpen)
+                  dropdown.classList.toggle('border-primary', isNowOpen)
                   iconDropDown?.classList.toggle('rotate-180', isNowOpen)
                 }
               }
             })
 
             // Hover effect on options
-            options?.querySelectorAll('.option').forEach((option) => {
-              option.addEventListener('mouseenter', () => {
-                options
-                  .querySelectorAll('.option')
-                  .forEach((opt) =>
-                    opt.classList.remove('bg-[#e5e7eb]', 'selected'),
-                  )
-                option.classList.add('bg-[#e5e7eb]', 'selected')
+            options
+              ?.querySelectorAll(
+                `.option[data-component-id="${componentId.current}"]`,
+              )
+              .forEach((option) => {
+                option.addEventListener('mouseenter', () => {
+                  options
+                    .querySelectorAll(
+                      `.option[data-component-id="${componentId.current}"]`,
+                    )
+                    .forEach((opt) =>
+                      opt.classList.remove('bg-gray-100', 'selected'),
+                    )
+                  option.classList.add('bg-gray-100', 'selected')
+                })
               })
-            })
 
             // Option selection
-            options?.querySelectorAll('.option').forEach((option) => {
-              option.addEventListener('click', () => {
-                const value = option.getAttribute('data-value')
-                const label = option.textContent?.trim()
+            options
+              ?.querySelectorAll(
+                `.option[data-component-id="${componentId.current}"]`,
+              )
+              .forEach((option) => {
+                option.addEventListener('click', () => {
+                  const value = option.getAttribute('data-value')
+                  const label = option.textContent?.trim()
 
-                if (value && label) {
-                  const dropdownIndex = Array.from(
-                    document.querySelectorAll('.sapp-select--question'),
-                  ).indexOf(dropdown)
+                  if (value && label) {
+                    const dropdownIndex = Array.from(
+                      document.querySelectorAll(
+                        `.sapp-select--question[data-component-id="${componentId.current}"]`,
+                      ),
+                    ).indexOf(dropdown)
 
-                  dropdown.setAttribute('data-value', value)
-                  dropdown.setAttribute('data-text', label)
+                    dropdown.setAttribute('data-value', value)
+                    dropdown.setAttribute('data-text', label)
 
-                  setSelectedValues((prev) => ({
-                    ...prev,
-                    [dropdownIndex]: value,
-                  }))
+                    setSelectedValues((prev) => ({
+                      ...prev,
+                      [dropdownIndex]: value,
+                    }))
 
-                  const span = selectedText?.querySelector('span')
-                  if (span) {
-                    span.textContent =
-                      label.length > 50 ? label.slice(0, 50) + '...' : label
+                    const span = selectedText?.querySelector('span')
+                    if (span) {
+                      span.textContent =
+                        label.length > 50 ? label.slice(0, 50) + '...' : label
+                    }
+
+                    // Highlight selected option
+                    options
+                      .querySelectorAll(
+                        `.option[data-component-id="${componentId.current}"]`,
+                      )
+                      .forEach((opt) => {
+                        opt.classList.toggle(
+                          'bg-gray-100',
+                          opt.getAttribute('data-value') === value,
+                        )
+                      })
+
+                    options.style.display = 'none'
+                    dropdown.setAttribute('data-open', 'false')
+                    iconDropDown?.classList.remove('rotate-180')
+                    dropdown.classList.remove('border-primary')
                   }
-
-                  // Highlight selected option
-                  options.querySelectorAll('.option').forEach((opt) => {
-                    opt.classList.toggle(
-                      'bg-[#e5e7eb]',
-                      opt.getAttribute('data-value') === value,
-                    )
-                  })
-
-                  options.style.display = 'none'
-                  dropdown.setAttribute('data-open', 'false')
-                  iconDropDown?.classList.remove('rotate-180')
-                  dropdown.classList.remove('border-gray-200')
-                }
+                })
               })
-            })
 
             // Close dropdown when clicking outside
             document.addEventListener('click', (e) => {
@@ -495,15 +562,20 @@ const SelectWord = forwardRef(
 
                   // Restore selected option highlight
                   const selectedValue = dropdown.getAttribute('data-value')
-                  options.querySelectorAll('.option').forEach((option) => {
-                    option.classList.toggle(
-                      'bg-[#e5e7eb]',
-                      option.getAttribute('data-value') === selectedValue,
+                  options
+                    .querySelectorAll(
+                      `.option[data-component-id="${componentId.current}"]`,
                     )
-                  })
+                    .forEach((option) => {
+                      option.classList.toggle(
+                        'bg-gray-100',
+                        option.getAttribute('data-value') === selectedValue,
+                      )
+                    })
                 }
                 iconDropDown?.classList.remove('rotate-180')
-                dropdown.classList.remove('border-gray-200')
+                // dropdown.classList.remove('border-gray-200')
+                dropdown.classList.remove('border-primary')
               }
             })
 
@@ -526,7 +598,7 @@ const SelectWord = forwardRef(
     useEffect(() => {
       const setupSelectListeners = () => {
         const selectList = document.querySelectorAll(
-          'select.sapp-select--question',
+          `select.sapp-select--question[data-component-id="${componentId.current}"]`,
         )
         selectList.forEach((element) => {
           const htmlSelect = element as HTMLDivElement
@@ -558,7 +630,7 @@ const SelectWord = forwardRef(
           data?.question_topic?.exhibits?.length > 0 && (
             <>
               {data?.question_topic?.description && (
-                <div className="border-b-gray-2 my-6 border">
+                <div className="my-6 border border-b-gray-2">
                   {data?.question_topic?.id}
                 </div>
               )}
@@ -568,7 +640,7 @@ const SelectWord = forwardRef(
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
+                  <span className="text-error">* </span>
                   <span className="text-gray-1">Click to view</span>
                 </div>
               </div>
@@ -596,7 +668,7 @@ const SelectWord = forwardRef(
                   </div>
                 ))}
               </div>
-              <div className="border-b-gray-2 my-6 border"></div>
+              <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
 
@@ -638,24 +710,29 @@ const SelectWord = forwardRef(
 
         {/* Correct Answer Section */}
         {answerContent && (
-          <div className={clsx('pt-7.625', correctAnswerClass)}>
-            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
-            <EditorReader
-              className="questions mt-2"
-              text_editor_content={
-                answerContent?.documentElement?.querySelector('body')
-                  ?.innerHTML || ''
-              }
-            />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx('pt-7.625', correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
+              <EditorReader
+                className="questions mt-2"
+                text_editor_content={
+                  answerContent?.documentElement?.querySelector('body')
+                    ?.innerHTML || ''
+                }
+              />
+            </div>
+          </>
         )}
 
-        {/* Solution Section */}
         {solution && (
-          <div className={clsx('mt-6 bg-gray-canvas p-6', explainClassname)}>
-            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx(explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )

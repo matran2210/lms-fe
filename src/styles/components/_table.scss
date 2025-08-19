@@ -76,29 +76,55 @@
 }
 .profile-certificate-table {
   .ant-table-thead > tr > th {
-    @apply border-b-0 bg-white py-2 text-lg text-secondary;
+    @apply border-b-0 bg-white p-0 text-lg text-secondary;
 
     &::before {
       display: none !important;
     }
   }
+
+  .ant-table-tbody > tr > td {
+    @apply px-0 pb-8 pt-6;
+  }
 }
 
 .style-table-v2 {
   .ant-table {
-    @apply rounded-2xl shadow-table;
+    @apply overflow-hidden rounded-2xl shadow-table;
+  }
+  .ant-table-wrapper {
+    @apply overflow-hidden rounded-2xl;
   }
   .ant-table-thead > tr > th {
     @apply bg-white px-0 pb-6 pt-0 text-base font-medium text-gray;
 
     &::before {
-      display: none;
+      @apply hidden;
     }
   }
+
   .ant-table-tbody > tr > td {
-    @apply px-0 pb-6 pt-8;
+    @apply pb-6 pl-2 pr-8 pt-8;
+
+    &.custom-column-table {
+      @apply pr-0;
+    }
   }
+
   .ant-table-content {
     @apply p-6 lg:p-8;
   }
+}
+
+.style-table-quiz {
+  .ant-table-thead > tr > th {
+    @apply bg-white text-base font-medium text-gray-400;
+
+    &::before {
+      @apply hidden;
+    }
+  }
+}
+.column-center {
+  @apply flex justify-center;
 }

@@ -135,6 +135,7 @@ export interface IQuestion {
   time?: string
   question_topic?: IQuestionTopic
   time_spent: number
+  answer_file?: { file_key?: string; file_name?: string } | undefined
 }
 
 export enum ANSWER_CORRECT_TYPE {

@@ -3,7 +3,11 @@ import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { DEFAULT_PAGE_SIZE, DEFAULT_SELECT_SECTION } from 'src/constants'
+import {
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_SELECT_SECTION,
+  DEFAULT_SELECT_SECTION_NAME,
+} from 'src/constants'
 import {
   IOpenChooseItem,
   getTypeName,
@@ -16,15 +20,15 @@ import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
 
 interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
+  setOpenChooseItem: Dispatch<SetStateAction<any>>
   openChooseItem: IOpenChooseItem
   listSection: ISection[]
   listSubsection: ISection[]
-  listUnit: ISection[]
+  listUnit?: ISection[]
   listActivity: ISection[]
   setListSection: Dispatch<SetStateAction<ISection[]>>
   setListSubsection: Dispatch<SetStateAction<ISection[]>>
-  setListUnit: Dispatch<SetStateAction<ISection[]>>
+  setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
 }
 
@@ -65,11 +69,11 @@ const ListItemFilterMobile = ({
     const clearMap = {
       section: () => {
         setListSubsection([])
-        setListUnit([])
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       subsection: () => {
-        setListUnit([])
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       unit: () => setListActivity([]),
@@ -106,7 +110,7 @@ const ListItemFilterMobile = ({
   const { sections, fetchInitialSections, isLoading } = useInitialSections()
   const subsectionData = useSectionData(selected.section, 'CHAPTER')
   const unitData = useSectionData(selected.subsection, 'UNIT')
-  const activityData = useSectionData(selected.unit, 'ACTIVITY')
+  const activityData = useSectionData(selected.subsection, 'ACTIVITY')
 
   // FETCH section on mount
   useEffect(() => {
@@ -129,10 +133,11 @@ const ListItemFilterMobile = ({
   }, [selected.subsection])
 
   useEffect(() => {
-    if (selected.unit && isEmpty(listActivity)) {
+    if (selected.subsection && isEmpty(listActivity)) {
+      //Đạt check
       activityData.fetchSections(DEFAULT_PAGE_SIZE)
     }
-  }, [selected.unit])
+  }, [selected.subsection])
 
   // SET list after fetch
   useEffect(() => {
@@ -145,7 +150,8 @@ const ListItemFilterMobile = ({
   }, [subsectionData.sections])
 
   useEffect(() => {
-    if (!isEmpty(unitData.sections)) setListUnit(unitData.sections)
+    if (!isEmpty(unitData.sections))
+      setListUnit && setListUnit(unitData.sections)
   }, [unitData.sections])
 
   useEffect(() => {
@@ -159,34 +165,37 @@ const ListItemFilterMobile = ({
         listSection,
       ),
       subsection: listSubsection,
-      unit: listUnit,
+      unit: listUnit ?? [],
       activity: listActivity,
     }
     setList(map[openChooseItem.type] ?? [])
   }, [openChooseItem.type, listSection, listSubsection, listUnit, listActivity])
 
+  const hasSelectedOption = Object.values(selected).some((value) => !!value)
+
   // COMBINED loading check
   const isAnyLoading =
-    isLoading ||
-    subsectionData.isLoading ||
-    unitData.isLoading ||
-    activityData.isLoading
+    isLoading || subsectionData.isLoading || activityData.isLoading
 
-  if (isAnyLoading || isEmpty(list)) return null
+  if (isAnyLoading) return null
 
   return (
-    <>
-      {list.map((item) => {
-        const isSelected =
+    <div className="flex min-h-1 flex-1 flex-col">
+      {list?.map((item) => {
+        const isSelectedValue =
           selected.section === item.id ||
           selected.subsection === item.id ||
-          selected.unit === item.id ||
           selected.activity === item.id
+
+        const isSelected =
+          item.name === DEFAULT_SELECT_SECTION_NAME
+            ? !hasSelectedOption
+            : isSelectedValue
 
         return (
           <div
             key={item.id}
-            className="mt-3 flex items-center justify-between py-2"
+            className="flex items-center justify-between py-2"
             onClick={() => handleSelect(item, isSelected)}
           >
             <div
@@ -201,7 +210,7 @@ const ListItemFilterMobile = ({
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 

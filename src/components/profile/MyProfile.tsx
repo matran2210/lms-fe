@@ -1,7 +1,6 @@
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import HookFormTextFieldV2 from '@components/base/textfield/HookFormTextFieldV2'
 import ProfileCard from '@components/card/ProfileCard'
@@ -30,6 +29,9 @@ import {
 import { z } from 'zod'
 import FullScreenMobile from './Modal/FullScreenMobile'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import ProfileSkeleton from '@components/base/skeleton/ProfileSkeleton'
+import TabLayout from './TabLayout'
+import { IUserContact } from 'src/redux/types/User/urser'
 
 interface IProps {
   isEdit: boolean
@@ -219,9 +221,9 @@ const MyProfile = ({
                   </div>
                 ) : (
                   <div className="flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start">
-                    <TextSkeleton loading={loading && !isEdit}>
+                    <ProfileSkeleton loading={loading && !isEdit}>
                       {user.detail.full_name}
-                    </TextSkeleton>
+                    </ProfileSkeleton>
                   </div>
                 )}
               </TextWrapper>
@@ -251,7 +253,10 @@ const MyProfile = ({
               />
               <TextWrapper
                 title="Email"
-                value={user?.user_contacts?.[0]?.email}
+                value={
+                  user?.user_contacts?.find((e: IUserContact) => e.is_default)
+                    ?.email ?? ''
+                }
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
@@ -528,18 +533,20 @@ const TextWrapper = ({
           { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >
-        {title}
+        {title}:
       </div>
       <div
         className={clsx(
-          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start',
+          'flex flex-auto justify-end break-all text-end font-medium text-gray-800 lg:max-w-[300px] lg:justify-start lg:text-start',
           {
             '!hidden !max-w-full lg:!block': isEdit,
           },
         )}
       >
         {value && (
-          <TextSkeleton loading={loading && !isEdit}>{value}</TextSkeleton>
+          <ProfileSkeleton loading={loading && !isEdit}>
+            {value}
+          </ProfileSkeleton>
         )}
         {children}
       </div>

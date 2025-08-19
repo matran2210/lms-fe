@@ -8,7 +8,7 @@ import { validateFile } from 'src/utils/upload'
 // import ButtonIconOnly from '../../button/ButtonIconOnly'
 // import ButtonPrimary from '../../button/ButtonPrimary'
 import { UPLOAD_TYPE } from './UploadFileInterface'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 // import { ResourceAPI } from 'src/apis/resource-bank'
 
 type Props = {
@@ -89,12 +89,14 @@ const UploadFileHandle = ({
             <div className="sapp-upload-file-name">
               {_file?.name ?? _file?.originFileObj?.name}
             </div>
-            <Progress
-              percent={percent}
-              status={'active'}
-              strokeColor={strokeColor}
-              className="m-0"
-            />
+            {loading && (
+              <Progress
+                percent={percent}
+                status={'active'}
+                strokeColor={strokeColor}
+                className="m-0"
+              />
+            )}
           </div>
         </div>
       </>
@@ -140,12 +142,12 @@ const UploadFileHandle = ({
         {...(!isMultiple && { maxCount: 1 })}
       >
         <div className="scroll-y px-lg-15 px-10 pb-10 pt-10">
-          <div>
+          <div className="flex flex-col items-center justify-center">
             <div className="mb-3 flex justify-center">
               {typeof icon === 'object' ? (
                 <img width={64} height={64} src={icon.src} alt="Icon" />
               ) : (
-                <div className="d-flex justify-content-center align-items-center gap-5">
+                <div className="flex items-center justify-center gap-5">
                   {icon?.map((e: any, i: number) => {
                     return (
                       <img
@@ -162,22 +164,19 @@ const UploadFileHandle = ({
             </div>
             <p>Drag & Drop your file here</p>
             <p>or</p>
-            <ButtonPrimary
+            <ButtonSecondary
               disabled={loading}
               title="Browse"
               className="mb-10"
-            ></ButtonPrimary>
+            ></ButtonSecondary>
             <div className="mx-auto my-0 flex w-fit">
-              <span className="text-left"> File support:</span>
-              <div className="ms-2">
+              <span className="text-left">
+                {' '}
+                File support:{' '}
                 {UPLOAD_TYPE[fileType]?.note?.map((e, i) => {
-                  return (
-                    <div key={i} className="text-left">
-                      {e}
-                    </div>
-                  )
-                })}
-              </div>
+                  return <span key={i}>{e}&nbsp;</span>
+                })}{' '}
+              </span>
             </div>
           </div>
         </div>

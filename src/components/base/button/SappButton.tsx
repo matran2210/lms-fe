@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
 import { IButtonProps } from 'src/type'
 
@@ -25,13 +26,13 @@ const COLORS = {
     'bg-white border-[#050505] hover:border-[#A1A1A1] hover:text-[#A1A1A1] text-[#050505]',
   text: 'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 font-medium',
   textUnderline:
-    'bg-none text-[#050505] hover:text-[#A1A1A1] disabled:text-[#DCDDDD] underline-offset-2 underline font-medium',
-  quizActivity:
-    'bg-[#A1A1A1] hover:bg-[#DCDDDD] disabled:bg-[#DCDDDD] text-white',
-  okPopup: 'bg-error text-white',
-  cancelPopup: 'bg-[#F9F9F9] text-[#99A1B7]',
+    'bg-none text-bw-1 hover:text-gray-1 disabled:text-gray-2 underline-offset-2 underline font-medium',
+  quizActivity: 'bg-gray-1 hover:bg-gray-2 disabled:bg-gray-2 text-white',
+  okPopup: 'bg-accent-error text-white',
+  cancelPopup: 'bg-gray-4 text-accent-default',
   'light-dark':
-    'bg-[#29353C] hover:bg-secondary disabled:bg-gray-100 text-white',
+    'bg-secondary-600 hover:bg-secondary disabled:bg-gray-100 text-white',
+  gray: 'bg-white hover:bg-primary-2 disabled:bg-white text-bw-15 hover:text-white',
 }
 
 const PADDINGS = {
@@ -58,6 +59,7 @@ const COLOR_LOADING = {
   quizActivity: 'bg-white',
   okPopup: 'bg-white',
   cancelPopup: 'bg-white',
+  gray: 'bg-transparent',
   'light-dark': 'bg-white',
 }
 
@@ -70,7 +72,7 @@ const SappButton = ({
   full = false,
   disabled = false,
   loading = false,
-  type,
+  type = 'button',
   color = 'primary',
   isUnderLine,
   isPadding = true,
@@ -79,44 +81,70 @@ const SappButton = ({
   showTooltip = false,
   toolTipTitle = '',
 }: IButtonProps) => {
-  let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-  let paddingClass = isPadding ? PADDINGS[size] : PADDINGS['none']
-  let componentClass = `${className} relative text-center cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed font-medium box-border ${SIZES[size]} ${COLORS[color]} ${fullWidthClass} ${paddingClass}`
+  const isDisabled = disabled || loading
+  const paddingClass = isPadding ? PADDINGS[size] : PADDINGS.none
+  const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
 
-  isUnderLine = isUnderLine ?? color === 'text'
-  componentClass += ` ${isUnderLine ? 'hover:underline' : ''}`
+  const underlineClass =
+    isUnderLine !== undefined
+      ? isUnderLine
+        ? 'hover:underline'
+        : ''
+      : color === 'text'
+        ? 'hover:underline'
+        : ''
 
-  if (link)
+  const componentClass = `
+    ${className}
+    ${COLORS[color]}
+    ${SIZES[size]}
+    ${paddingClass}
+    ${fullWidthClass}
+    ${underlineClass}
+    relative text-center font-medium
+    ${isDisabled ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}
+  `.trim()
+
+  const loadingIndicator = (
+    <div className={`flex items-center justify-center ${classNameLoading}`}>
+      <span className="sr-only">Loading...</span>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
+      ></div>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
+      ></div>
+      <div
+        className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
+      ></div>
+    </div>
+  )
+
+  const buttonContent = (
+    <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
+      <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
+        {title}
+      </span>
+    </Tooltip>
+  )
+
+  // Use Next.js Link for better routing
+  if (link) {
     return (
-      <a href={link} className={componentClass} aria-disabled={disabled}></a>
+      <Link href={link} className={componentClass} aria-disabled={isDisabled}>
+        {loading ? loadingIndicator : buttonContent}
+      </Link>
     )
+  }
+
   return (
     <button
+      type={type}
       className={`${componentClass} ${classNameLoading}`}
-      type={type ?? 'button'}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={isDisabled}
     >
-      {loading ? (
-        <div className={`flex items-center justify-center ${classNameLoading}`}>
-          <span className="sr-only">Loading...</span>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.3s] ${COLOR_LOADING[color]}`}
-          ></div>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full [animation-delay:-0.15s] ${COLOR_LOADING[color]}`}
-          ></div>
-          <div
-            className={`h-2 w-2 animate-bounce rounded-full ${COLOR_LOADING[color]}`}
-          ></div>
-        </div>
-      ) : (
-        <Tooltip title={toolTipTitle} showTooltip={showTooltip}>
-          <span className={`${loading ? 'invisible' : ''} ${childClass}`}>
-            {title}
-          </span>
-        </Tooltip>
-      )}
+      {loading ? loadingIndicator : buttonContent}
     </button>
   )
 }

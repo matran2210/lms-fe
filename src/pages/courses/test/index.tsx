@@ -418,6 +418,7 @@ const TestModal = ({
             <>
               {shouldShowButtonStartOrRetake && (
                 <ButtonPrimary
+                  size="medium"
                   title="Start"
                   full
                   onClick={handleStartANewAttempt}
@@ -432,9 +433,15 @@ const TestModal = ({
           // ✅ Có bài đang làm dở → tiếp tục hoặc làm mới
           return (
             <>
-              <ButtonPrimary title="Continue" full onClick={handleFinishTest} />
+              <ButtonPrimary
+                size="medium"
+                title="Continue"
+                full
+                onClick={handleFinishTest}
+              />
               <ButtonSecondary
                 title="Start a new attempt"
+                size="medium"
                 full
                 onClick={handleStartANewAttempt}
               />
@@ -448,6 +455,7 @@ const TestModal = ({
           <>
             {shouldShowButtonStartOrRetake && (
               <ButtonPrimary
+                size="medium"
                 title="Retake"
                 full
                 onClick={handleRetakeNewAttempt}
@@ -462,6 +470,7 @@ const TestModal = ({
           // ✅ Lần làm cuối cùng bị hết thời gian → chỉ xem kết quả
           return (
             <ButtonPrimary
+              size="medium"
               title="View Result"
               full
               onClick={handleRedirectResult}
@@ -475,6 +484,7 @@ const TestModal = ({
             <>
               {shouldShowButtonStartOrRetake && (
                 <ButtonPrimary
+                  size="medium"
                   title="Start"
                   full
                   onClick={handleStartANewAttempt}
@@ -491,12 +501,14 @@ const TestModal = ({
             return (
               <>
                 <ButtonPrimary
+                  size="medium"
                   title="Continue"
                   full
                   onClick={handleFinishTest}
                 />
                 <ButtonSecondary
                   title="Submit now"
+                  size="medium"
                   full
                   onClick={handleSubmitNow}
                 />
@@ -506,6 +518,7 @@ const TestModal = ({
             // ✅ Là lần cuối và đã nộp → chỉ xem kết quả
             return (
               <ButtonPrimary
+                size="medium"
                 title="View Result"
                 full
                 onClick={handleRedirectResult}
@@ -518,18 +531,21 @@ const TestModal = ({
         return (
           <div className="flex flex-col items-center gap-3">
             <ButtonPrimary
+              size="medium"
               title="Continue the previous attempt"
               full
               onClick={handleContinueLastAttempt}
             />
             <ButtonSecondary
               title="Submit now"
+              size="medium"
               full
               onClick={handleSubmitNow}
             />
             <ButtonText
               title="Start a new attempt"
               full
+              size="medium"
               onClick={async () => {
                 await handleSubmitNow()
                 handleRetakeNewAttempt()
@@ -547,12 +563,14 @@ const TestModal = ({
         return (
           <>
             <ButtonPrimary
+              size="medium"
               title="View result"
               full
               onClick={handleRedirectResult}
             />
             <ButtonText
               title="Start a new attempt"
+              size="medium"
               full
               onClick={handleRetakeNewAttempt}
             />
@@ -564,13 +582,20 @@ const TestModal = ({
       return (
         <>
           <ButtonPrimary
+            size="medium"
             title="Continue the previous attempt"
             full
             onClick={handleContinueLastAttempt}
           />
-          <ButtonSecondary title="Submit now" full onClick={handleSubmitNow} />
+          <ButtonSecondary
+            title="Submit now"
+            size="medium"
+            full
+            onClick={handleSubmitNow}
+          />
           <ButtonText
             title="Start a new attempt"
+            size="medium"
             full
             onClick={handleRetakeNewAttempt}
           />
@@ -796,7 +821,7 @@ const TestInfoItem = ({
   return (
     <div className="flex justify-between gap-8 text-base">
       <div className="text-gray">{label}</div>
-      <div className="pr-0.5 font-medium text-gray-800">{value}</div>
+      <div className="pr-0.5 text-start font-medium text-gray-800">{value}</div>
     </div>
   )
 }

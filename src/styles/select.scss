@@ -70,7 +70,7 @@
 // style css for result popup
 .select-result {
   .select__control {
-    @apply h-[50px] border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+    @apply h-[50px] border-none focus:text-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -204,5 +204,21 @@
 .custom-ant-select {
   .ant-select-selector {
     @apply flex h-auto w-12 border-none bg-gray-canvas p-0 text-base font-normal leading-normal text-gray-600 shadow-none !important;
+  }
+}
+
+.profile-subject-select {
+  .ant-select-selector {
+    @apply flex items-center justify-between gap-2 !pl-0;
+    .ant-select-selection-item {
+      @apply text-lg md:text-2xl;
+    }
+  }
+
+  .ant-select-arrow {
+    @apply ml-2;
+  }
+  .ant-select-selection-item {
+    @apply flex-1 pr-2 text-2xl font-bold;
   }
 }

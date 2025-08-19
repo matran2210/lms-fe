@@ -29,6 +29,7 @@ import clsx from 'clsx'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SendComment from './SendComment'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   class_id: string
@@ -40,7 +41,6 @@ type Props = {
  */
 const Discussion = ({ class_id }: Props) => {
   const router = useRouter()
-
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityReducer)
   const [idReply, setIdReply] = useState<string>()
@@ -54,12 +54,16 @@ const Discussion = ({ class_id }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
 
   const [imageSrc, setImageSrc] = useState<string>()
+  const [isEditDiscussion, setIsEditDiscussion] = useState(false)
 
   const { control, handleSubmit, reset, setError, clearErrors } = useForm<{
     comment: string
     commentRoot: string
   }>({})
 
+  const handleEditDiscussionElement = (isEdit: boolean) => {
+    setIsEditDiscussion(isEdit)
+  }
   /**
    * Xử lý sự thay đổi của ID phản hồi và đặt lại biểu mẫu.
    * @param {string} idReply - ID của phản hồi.
@@ -338,196 +342,205 @@ const Discussion = ({ class_id }: Props) => {
   return (
     <div className="relative flex h-full flex-col justify-between bg-white">
       <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
-      <div>
-        <Skeleton loading={loading}>
-          {selector?.discussion?.map((e, i) => {
-            return (
-              <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
-                <DiscussionElement
-                  onReact={onReact}
-                  discussion={e}
-                  idReply={idReply}
-                  handleChangeIdReply={handleChangeIdReply}
-                  setImageSrc={setImageSrc}
-                  classId={class_id}
-                  profile={user}
-                  setLoading={setLoading}
-                  isSappSupporterUserCurrent={
-                    selector?.userInDiscussion?.is_sapp_supporter
-                  }
-                />
-                <div
-                  className={`${
-                    e?.children?.[0] ? 'mt-6' : ''
-                  } relative overflow-hidden pl-5 md:ml-[52px]`}
-                >
-                  {e?.children?.[0] && (
-                    <div>
-                      <div
-                        className="bg-size-100-30 absolute bottom-0 left-0 top-0 -mt-1 w-0.5"
-                        style={{
-                          background:
-                            'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
-                        }}
-                      ></div>
-                      {e?.children?.map((f, index) => {
-                        return (
-                          <div
-                            className={index === 0 ? '' : 'mt-5'}
-                            key={f?.id}
-                          >
-                            <DiscussionElement
-                              rank={2}
-                              discussion={f}
-                              onReact={onReact}
-                              setImageSrc={setImageSrc}
-                              classId={class_id}
-                              profile={user}
-                              setLoading={setLoading}
-                              isSappSupporterUserCurrent={
-                                selector?.userInDiscussion?.is_sapp_supporter
-                              }
-                            />
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
+      {!!selector?.discussion?.length && (
+        <div className="mb-6">
+          <Skeleton loading={loading}>
+            {selector?.discussion?.map((e, i) => {
+              return (
+                <div className={` ${i !== 0 ? 'mt-6' : ''}`} key={e.id}>
+                  <DiscussionElement
+                    onReact={onReact}
+                    discussion={e}
+                    idReply={idReply}
+                    handleChangeIdReply={handleChangeIdReply}
+                    setImageSrc={setImageSrc}
+                    classId={class_id}
+                    profile={user}
+                    setLoading={setLoading}
+                    isSappSupporterUserCurrent={
+                      selector?.userInDiscussion?.is_sapp_supporter
+                    }
+                    handleEditDiscussionElement={handleEditDiscussionElement}
+                  />
                   <div
-                    className={`transition-max-height flex items-start gap-3 overflow-visible duration-300 ${
-                      idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
-                    }`}
+                    className={`${
+                      e?.children?.[0] ? 'mt-6' : ''
+                    } relative overflow-hidden pl-5 md:ml-[52px]`}
                   >
-                    <div className="leading-0 flex-none">
-                      <Image
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                        src={
-                          selector?.userInDiscussion?.is_sapp_supporter
-                            ? e?.avatar?.['50x50'] ||
-                              e?.avatar?.['ORIGIN'] ||
-                              sappAvatar
-                            : user?.detail?.avatar?.['50x50'] ||
-                              user?.detail?.avatar?.['ORIGIN'] ||
-                              blankAvatar
-                        }
-                        loading="eager"
-                        priority={true}
-                        alt="avatar"
-                      ></Image>
-                    </div>
-                    <form
-                      onSubmit={handleSubmit((e) => onSubmit(e))}
-                      className="flex-1"
-                      encType="multipart/form-data"
-                    >
-                      {selectedFiles?.length > 0 && (
-                        <div>
-                          <ul className="flex flex-wrap gap-4">
-                            {selectedFiles.map((file, index) => (
-                              <li
-                                key={index}
-                                className="leading-0 relative mb-2"
-                              >
-                                <div
-                                  className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
-                                  role="button"
-                                  onClick={() =>
-                                    handleRemoveSelectedFiles(index)
-                                  }
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    className="h-4 w-4 "
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M6 18L18 6M6 6l12 12"
-                                    />
-                                  </svg>
-                                </div>
-                                <Image
-                                  width={100}
-                                  height={100}
-                                  src={URL.createObjectURL(file)}
-                                  loading="eager"
-                                  objectFit="contain"
-                                  alt="Discussion file"
-                                  onClick={() => {
-                                    setImageSrc(URL.createObjectURL(file))
-                                  }}
-                                  priority={true}
-                                ></Image>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      <div className="relative">
-                        <HookFormTextArea
-                          control={control}
-                          name={idReply === e?.id ? 'comment' : ''}
-                          placeholder="Input Text..."
-                          handleKeyDown={handleKeyDown}
-                          className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
-                          actions={
-                            <div className="flex items-center gap-x-3">
-                              <SappButtonIcon
-                                type="submit"
-                                ishover={false}
-                                className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-                                classTitle="!m-0"
-                              >
-                                <SendComment />
-                              </SappButtonIcon>
-                              <div
-                                className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: selectedFiles?.length > 0 })}`}
-                              >
-                                <CameraIcon />
-                                <input
-                                  type="file"
-                                  className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0 "
-                                  accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
-                                  onChange={handleFileChange}
-                                  ref={fileInputRef}
-                                />
-                              </div>
+                    {e?.children?.[0] && (
+                      <div>
+                        <div
+                          className="bg-size-100-30 absolute bottom-0 left-0 top-0 -mt-1 w-0.5"
+                          style={{
+                            background:
+                              'repeating-linear-gradient(to bottom, #DCDDDD, #DCDDDD 12px, white 6px, white 25px)',
+                          }}
+                        ></div>
+                        {e?.children?.map((f, index) => {
+                          return (
+                            <div
+                              className={index === 0 ? '' : 'mt-5'}
+                              key={f?.id}
+                            >
+                              <DiscussionElement
+                                rank={2}
+                                discussion={f}
+                                onReact={onReact}
+                                setImageSrc={setImageSrc}
+                                classId={class_id}
+                                profile={user}
+                                setLoading={setLoading}
+                                isSappSupporterUserCurrent={
+                                  selector?.userInDiscussion?.is_sapp_supporter
+                                }
+                                handleEditDiscussionElement={
+                                  handleEditDiscussionElement
+                                }
+                              />
                             </div>
-                          }
-                        />
-                        <ActionDiscussion
-                          titlePrimary={'reply this comment'}
-                          onClick={() => handleChangeIdReply('')}
-                        />
+                          )
+                        })}
                       </div>
-                      <SappButton
-                        title=""
-                        type="submit"
-                        className="hidden"
-                      ></SappButton>
-                    </form>
+                    )}
+                    <div
+                      className={`transition-max-height flex items-start gap-3 overflow-visible duration-300 ${
+                        idReply === e.id ? `mt-6 max-h-96` : 'max-h-0'
+                      }`}
+                    >
+                      <div className="flex-none leading-0 md:mt-1">
+                        <Image
+                          width={40}
+                          height={40}
+                          className="rounded-full"
+                          src={
+                            selector?.userInDiscussion?.is_sapp_supporter
+                              ? e?.avatar?.['50x50'] ||
+                                e?.avatar?.['ORIGIN'] ||
+                                sappAvatar
+                              : user?.detail?.avatar?.['50x50'] ||
+                                user?.detail?.avatar?.['ORIGIN'] ||
+                                blankAvatar
+                          }
+                          loading="eager"
+                          priority={true}
+                          alt="avatar"
+                        ></Image>
+                      </div>
+                      <form
+                        onSubmit={handleSubmit((e) => onSubmit(e))}
+                        className="flex-1"
+                        encType="multipart/form-data"
+                      >
+                        {selectedFiles?.length > 0 && (
+                          <div>
+                            <ul className="flex flex-wrap gap-4">
+                              {selectedFiles.map((file, index) => (
+                                <li
+                                  key={index}
+                                  className="relative mb-2 leading-0"
+                                >
+                                  <div
+                                    className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
+                                    role="button"
+                                    onClick={() =>
+                                      handleRemoveSelectedFiles(index)
+                                    }
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth="1.5"
+                                      stroke="currentColor"
+                                      className="h-4 w-4 "
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M6 18L18 6M6 6l12 12"
+                                      />
+                                    </svg>
+                                  </div>
+                                  <Image
+                                    width={100}
+                                    height={100}
+                                    src={URL.createObjectURL(file)}
+                                    loading="eager"
+                                    objectFit="contain"
+                                    alt="Discussion file"
+                                    onClick={() => {
+                                      setImageSrc(URL.createObjectURL(file))
+                                    }}
+                                    priority={true}
+                                  ></Image>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        <div className="relative">
+                          <HookFormTextArea
+                            control={control}
+                            name={idReply === e?.id ? 'comment' : ''}
+                            placeholder="Input Text..."
+                            handleKeyDown={handleKeyDown}
+                            className="w-fill--available comment-scrollbar h-[40px] min-h-14 rounded-lg px-4 py-2 md:h-12 md:py-3"
+                            actions={
+                              <div className="flex items-center gap-x-3">
+                                <SappButtonIcon
+                                  type="submit"
+                                  ishover={false}
+                                  className="sapp-custom-hover h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
+                                  classTitle="!m-0"
+                                >
+                                  <SendComment />
+                                </SappButtonIcon>
+                                <div
+                                  className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: selectedFiles?.length > 0 })}`}
+                                >
+                                  <CameraIcon />
+                                  <input
+                                    type="file"
+                                    className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0 "
+                                    accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                                    onChange={handleFileChange}
+                                    ref={fileInputRef}
+                                  />
+                                </div>
+                              </div>
+                            }
+                          />
+                          <ActionDiscussion
+                            titlePrimary={'reply this comment'}
+                            onClick={() => handleChangeIdReply('')}
+                          />
+                        </div>
+                        <SappButton
+                          title=""
+                          type="submit"
+                          className="hidden"
+                        ></SappButton>
+                      </form>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </Skeleton>
-      </div>
+              )
+            })}
+          </Skeleton>
+        </div>
+      )}
 
       <div
-        className={`transition-max-height sticky bottom-0 mt-6 flex items-start gap-3 overflow-visible bg-white duration-300 md:relative`}
+        className={clsx(
+          `transition-max-height sticky bottom-0 flex gap-3 overflow-visible bg-white duration-300 md:relative`,
+          { hidden: isEditDiscussion },
+        )}
       >
-        <div className="leading-0 flex-none">
+        <div className="flex-none leading-0 md:mt-1">
           <Image
-            width={50}
-            height={50}
-            className="rounded-full"
+            width={40}
+            height={40}
+            className="h-8 w-8 rounded-full md:h-10 md:w-10"
             src={
               selector.userInDiscussion?.is_sapp_supporter &&
               selector.userInDiscussion?.avatar
@@ -552,7 +565,7 @@ const Discussion = ({ class_id }: Props) => {
             <div>
               <ul className="flex flex-wrap gap-4">
                 {rootSelectedFiles?.map((file, index) => (
-                  <li key={index} className="leading-0 relative mb-2">
+                  <li key={index} className="relative mb-2 leading-0">
                     <div
                       className="absolute right-0 top-0 z-40 flex h-6 w-6 -translate-y-1/2 translate-x-1/2 cursor-pointer select-none items-center justify-center rounded-full bg-white shadow-box hover:text-error"
                       role="button"
@@ -596,7 +609,7 @@ const Discussion = ({ class_id }: Props) => {
               name={'commentRoot'}
               placeholder="Input Text..."
               handleKeyDown={(e: any) => handleKeyDown(e, true)}
-              className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
+              className="w-fill--available comment-scrollbar h-[40px] min-h-14 rounded-lg px-4 py-2 text-gray-800 md:h-12 md:py-3"
               actions={
                 <div className="flex items-center gap-x-3">
                   <SappButtonIcon

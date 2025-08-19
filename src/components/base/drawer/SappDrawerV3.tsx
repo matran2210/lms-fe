@@ -1,6 +1,6 @@
 import { CloseIconV2 } from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
 import ButtonText from '@components/base/button/ButtonText'
@@ -45,13 +45,21 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
-  classNameHeader = 'mb-4',
+  classNameHeader = 'mb-4 md:mb-6',
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
   isShowBtnBack = false,
   ...props
 }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add('overflow-y-hidden')
+    } else {
+      document.body.classList.remove('overflow-y-hidden')
+    }
+  }, [open])
+
   return (
     <Drawer
       open={open}
@@ -106,7 +114,7 @@ const SappDrawerV3: React.FC<IProps> = ({
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-4 pb-4 md:px-6 md:pb-6 lg:px-8 lg:pb-8">
             {cancelButtonCaption && (
               <ButtonText
                 title={cancelButtonCaption}
@@ -116,7 +124,7 @@ const SappDrawerV3: React.FC<IProps> = ({
               />
             )}
             <ButtonPrimary
-              title={btnSubmitTile}
+              title={btnSubmitTile ?? ''}
               className={submitButtonClassName}
               onClick={handleSubmit}
               size={sizeTextBtn}

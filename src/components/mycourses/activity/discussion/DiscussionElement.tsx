@@ -38,6 +38,7 @@ import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   rank?: number
@@ -50,6 +51,7 @@ type Props = {
   profile?: IUser
   setLoading: (isLoading: boolean) => void
   isSappSupporterUserCurrent?: boolean
+  handleEditDiscussionElement: (isEdit: boolean) => void
 }
 type UserInfo = {
   name: string
@@ -71,7 +73,9 @@ function DiscussionElement({
   profile,
   setLoading,
   isSappSupporterUserCurrent = false,
+  handleEditDiscussionElement,
 }: Props) {
+  const { isMobileView } = useTailwindBreakpoint()
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
   const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -120,6 +124,7 @@ function DiscussionElement({
       if (res?.success) {
         setDiscussionContent(res?.data?.content)
         setIsEdit(false)
+        handleEditDiscussionElement(false)
         setSelectFile([])
       }
     } catch (error) {
@@ -194,11 +199,13 @@ function DiscussionElement({
   const handleEdit = () => {
     setEditValue(discussionContent)
     setIsEdit(true)
+    handleEditDiscussionElement(true)
     trackGAEvent('Click Edit Comment Activity')
   }
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    handleEditDiscussionElement(false)
     handleRefresh()
     setSelectFile([])
     trackGAEvent('Click Cancel Edit Comment Activity')
@@ -304,14 +311,14 @@ function DiscussionElement({
             >
               <div
                 className={clsx(
-                  'leading-0 flex-none',
+                  'flex-none leading-0',
                   !isEmpty(userInfo) && 'cursor-pointer',
                 )}
               >
                 <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full"
+                  width={isMobileView ? 32 : 40}
+                  height={isMobileView ? 32 : 40}
+                  className="h-8 w-8 rounded-full md:h-10 md:w-10"
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
@@ -353,7 +360,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="md:ml-13 mt-3 w-auto md:-mt-3 md:w-fit">
+          <div className="mt-3 w-auto md:-mt-3 md:ml-[52px]">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
                 <Image
@@ -420,7 +427,7 @@ function DiscussionElement({
                     name="editData"
                     defaultValue={editValue}
                     handleKeyDown={handleKeyDown}
-                    className="w-fill--available comment-scrollbar h-[50px] min-h-[50px] rounded-lg px-4 py-3"
+                    className="w-fill--available comment-scrollbar h-[40px] min-h-14 rounded-lg px-4 py-2 md:h-12 md:py-3"
                     actions={
                       <div className="flex items-center gap-x-3">
                         <SappButtonIcon
@@ -483,7 +490,7 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="text-bw-1 flex cursor-pointer items-center gap-2 pr-8 font-medium hover:underline"
+                          className="flex cursor-pointer items-center gap-2 pr-8 font-medium text-bw-1 hover:underline"
                           onClick={handleEdit}
                         >
                           <EditMessageIcon /> Edit

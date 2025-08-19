@@ -13,7 +13,13 @@ import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, defaultStatusCourse, UserGuide } from 'src/constants'
+import {
+  ANIMATION,
+  defaultStatusCourse,
+  ECourseType,
+  PageLink,
+  UserGuide,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
@@ -23,12 +29,12 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import GotoModal from '@components/courses/popup/GotoModal'
+import clsx from 'clsx'
+import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
+import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
-export enum ECourseType {
-  MASTER = 'Master Finance',
-  GENERAL = 'General Course',
-}
 const defaultCategory = [
   {
     label: `All`,
@@ -37,6 +43,7 @@ const defaultCategory = [
 ]
 
 const MyCourse = () => {
+  const isEndGuide = Number(window.sessionStorage.getItem('totalCourse')) <= 0
   const {
     status: guideStatus,
     isActive: guideIsActive,
@@ -54,6 +61,8 @@ const MyCourse = () => {
    * @description lấy state trong context
    */
   const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
+  const { isVisibleGotoModal, setVisibleRedirectToMasterModal } =
+    useStaticModalContext()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
@@ -81,7 +90,19 @@ const MyCourse = () => {
       dispatch(clearGuideState())
     }, 50)
   }
-
+  const handleRedirect = (type: ECourseType) => {
+    setGeneralOrMasterCourse(type)
+    switch (type) {
+      case ECourseType.MASTER:
+        setVisibleRedirectToMasterModal(true)
+        break
+      case ECourseType.GENERAL:
+        setVisibleRedirectToMasterModal(false)
+        break
+      default:
+        break
+    }
+  }
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
@@ -111,9 +132,10 @@ const MyCourse = () => {
    * @description config params khi filter
    */
   const params = {
-    name: router.query.name || undefined,
-    status: router.query.status || undefined,
-    type: router.query.type || undefined,
+    name: router.query?.name || undefined,
+    status: router.query?.status || undefined,
+    type: router.query?.type || undefined,
+    template: '4',
   }
 
   /**
@@ -168,7 +190,7 @@ const MyCourse = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params.name, params.status, params.type, refetch])
+  }, [params?.name, params?.status, params?.type, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component
@@ -212,26 +234,29 @@ const MyCourse = () => {
         title="My Course"
         showSidebar={showSidebar || isAlwaysShowSidebar}
         handleToggleSidebar={handleCloseSidebar}
+        className="relative"
       >
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
           isShowUserGuide
           disabledSearch={guideIsActive}
-          isCoursePage
         />
 
-        <div className="mx-auto my-0 flex items-center justify-center rounded-md bg-white shadow-sidebar md:justify-between">
+        <div
+          className={
+            'flex justify-center rounded-md bg-white shadow-medium md:justify-between lg:rounded-xl'
+          }
+        >
           <div
-            className={`heading relative rounded-md bg-white 
-        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
-      `}
+            className={`heading relative h-full rounded-md bg-white p-3 md:p-6 lg:rounded-xl lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
             <Heading
               greeting="Welcome to"
               title={generalOrMasterCourse}
               showShadow={false}
+              des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
             {guideStatus && guideStep === 4 && (
               <PopupStep
@@ -239,20 +264,17 @@ const MyCourse = () => {
                 className="left-0 top-full mt-5"
                 index={4}
                 total={7}
-                isEnd={
-                  Number(window.sessionStorage.getItem('totalCourse')) <= 0
-                }
+                isEnd={isEndGuide}
                 title="Welcome"
+                handleCancel={closeUserGuide}
               />
             )}
           </div>
           <div
-            className={`mr-6 hidden items-center rounded-md bg-white md:flex lg:mr-8
-        ${guideStatus && guideStep === 5 ? 'z-50' : ''}
-      `}
+            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-md bg-[#F9F9F9]">
+            <div className="flex gap-2 rounded-[7px] bg-gray-canvas p-1 lg:gap-[10px]">
               <Button
                 type={
                   generalOrMasterCourse === ECourseType.MASTER
@@ -260,8 +282,16 @@ const MyCourse = () => {
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.MASTER)}
-                className="h-10 outline-none"
+                onClick={() => handleRedirect(ECourseType.MASTER)}
+                className={clsx(
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                  },
+                )}
               >
                 Master Finance
               </Button>
@@ -272,8 +302,16 @@ const MyCourse = () => {
                     : 'text'
                 }
                 block
-                onClick={() => setGeneralOrMasterCourse(ECourseType.GENERAL)}
-                className="h-10 outline-none"
+                onClick={() => handleRedirect(ECourseType.GENERAL)}
+                className={clsx(
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                  },
+                )}
               >
                 General Course
               </Button>
@@ -284,23 +322,27 @@ const MyCourse = () => {
                 className="left-0 top-full mt-5"
                 index={5}
                 total={7}
-                isEnd={
-                  Number(window.sessionStorage.getItem('totalCourse')) <= 0
-                }
+                isEnd={isEndGuide}
                 imgSrc={TourGuideCourseTab}
                 title="Course Tab"
+                handleCancel={closeUserGuide}
               />
             )}
           </div>
         </div>
         <div
-          className="mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11"
+          className={clsx(
+            'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
+            {
+              'relative z-50': guideStatus && guideStep === 7,
+            },
+          )}
           data-aos={ANIMATION.DATA_AOS}
         >
           <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
             My Courses
           </h1>
-          <div className={`relative`}>
+          <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
             {guideStatus && guideStep === 7 && (
               <PopupStep
@@ -329,7 +371,7 @@ const MyCourse = () => {
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
-            guideIsActive={guideStatus === true}
+            guideIsActive={guideStatus === true && !isEndGuide}
           />
           {guideStatus && guideStep === 6 && (
             <PopupStep
@@ -342,7 +384,9 @@ const MyCourse = () => {
             />
           )}
         </div>
-        {guideStatus && guideStep == 0 && (
+        <GotoModal />
+
+        {!isVisibleGotoModal && guideStatus && guideStep == 0 && (
           <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
         )}
         {guideStatus && (
@@ -351,6 +395,7 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
+        <RedirectToMasterModal />
       </Layout>
     </SappLoadingGlobal>
   )

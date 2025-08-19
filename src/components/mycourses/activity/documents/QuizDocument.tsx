@@ -26,7 +26,6 @@ import { trackGAEvent } from '@utils/google-analytics'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
@@ -52,6 +51,7 @@ import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import ModalResults from '../ModalResults'
 import { useForm } from 'react-hook-form'
 import clsx from 'clsx'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 type Props = {
   questions: IQuestion[]
@@ -211,8 +211,7 @@ const QuizDocument = ({
           setStartWorkTime(Date.now())
         } catch (error) {}
       }
-
-      questionRef?.current?.reset()
+      // questionRef?.current?.reset()
     }
   }
 
@@ -282,7 +281,7 @@ const QuizDocument = ({
         } catch (error) {}
       }
 
-      questionRef.current?.reset()
+      // questionRef.current?.reset()
     }
   }
 
@@ -365,9 +364,12 @@ const QuizDocument = ({
       )
         .unwrap()
         .then((e: any) => {
-          if (e?.progress?.is_completed) {
+          const isCompletedCourse = e?.data?.progress
+          if (!!isCompletedCourse?.is_completed) {
             setTimeout(() => {
-              dispatch(showPopupCompletedCourse(e?.progress?.content))
+              dispatch(
+                showPopupCompletedCourse(isCompletedCourse?.content || ''),
+              )
             }, 2000)
           }
           getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
@@ -539,7 +541,7 @@ const QuizDocument = ({
             </div>
             <div className="answer-area">
               <div
-                className="sapp-store storage2 min-h-large flex w-full flex-wrap gap-5 border p-5"
+                className="sapp-store storage2 flex min-h-large w-full flex-wrap gap-5 border p-5"
                 id="storage"
               >
                 <span className="answer-box" draggable="true">
@@ -627,6 +629,11 @@ const QuizDocument = ({
     refreshTab()
     setOpenGradedReport(false)
   }
+  const handleClearSelection = (activeQuestion: any) => {
+    if (!isQuestionConfirmed) {
+      setValue(`${activeQuestion?.id}_${document_id}_answer`, '')
+    }
+  }
 
   return (
     <div
@@ -665,7 +672,7 @@ const QuizDocument = ({
                     </span>
                   </button>
                 )}
-                <div className="text-bw-13 text-sm md:text-base">
+                <div className="text-sm text-bw-13 md:text-base">
                   Question: {activeQuestionIndex + 1} of{' '}
                   {questions?.length || 0}
                 </div>
@@ -800,11 +807,35 @@ const QuizDocument = ({
         </div>
         {/* Confirm Button */}
         <div
-          className={clsx('justify-end', {
+          className={clsx('justify-end gap-2', {
             'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
             flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
           })}
         >
+          {[
+            QUESTION_TYPES.TRUE_FALSE,
+            QUESTION_TYPES.ONE_CHOICE,
+            QUESTION_TYPES.MULTIPLE_CHOICE,
+          ].includes(activeQuestion?.qType) &&
+            !isQuestionConfirmed && (
+              <ButtonSecondary
+                className="!px-4 !py-2 !text-sm"
+                size={'small'}
+                disabled={
+                  ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                    activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                    !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                  (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                    !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                      ?.length)
+                }
+                onClick={() => {
+                  handleClearSelection(activeQuestion)
+                  trackGAEvent('Click Button Clear Selection Test')
+                }}
+                title="Clear Selection"
+              />
+            )}
           <Tooltip
             title={
               isQuestionConfirmed ||
@@ -825,7 +856,6 @@ const QuizDocument = ({
                 : 'You should select an answer before click'
             }
             classNames={{ root: 'max-w-72' }}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
             trigger={'hover'}
           >
             <>
@@ -833,7 +863,8 @@ const QuizDocument = ({
                 isAFTERAllQUESTION ||
                 (isQuestionConfirmed && isLastQuestion)) && (
                 <SappButton
-                  className="!rounded-lg !px-4 py-2"
+                  className="!rounded-lg !px-4 py-2 text-sm"
+                  childClass="text-sm"
                   title={
                     isLastQuestion
                       ? 'Finish'
@@ -863,6 +894,7 @@ const QuizDocument = ({
               {!isQuestionConfirmed && isAFTEREACHQUESTION && (
                 <SappButton
                   className="!rounded-lg !px-4 py-2"
+                  childClass="text-sm"
                   title={getButttonTitle()}
                   full={false}
                   size={'small'}

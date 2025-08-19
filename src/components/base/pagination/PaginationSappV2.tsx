@@ -42,7 +42,7 @@ const PaginationSappV2 = ({
     if (type === 'next') {
       return (
         <div className="flex items-center gap-1 ">
-          <div className="font-medium text-gray-600">Next</div>
+          <div className="text-base font-medium text-gray-600">Next</div>
           <div>
             <RightOutlined />
           </div>
@@ -56,7 +56,7 @@ const PaginationSappV2 = ({
           <div>
             <RightOutlined className="rotate-180" />
           </div>
-          <div className="font-medium text-gray-600">Previous</div>
+          <div className="text-base font-medium text-gray-600">Previous</div>
         </div>
       )
     }

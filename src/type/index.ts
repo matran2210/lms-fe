@@ -19,6 +19,7 @@ export type IButtonColors =
   | 'okPopup'
   | 'cancelPopup'
   | 'light-dark'
+  | 'gray'
 export interface IButtonProps {
   title: string
   onClick?: (e: any) => void
@@ -133,6 +134,11 @@ export interface IHookFormProps {
 
 export interface IHookFormDateRangePicker extends IHookFormProps {
   defaultValue?: [Dayjs, Dayjs]
+}
+
+export interface OptionType {
+  label: string
+  value: string | number
 }
 
 export * from './common'

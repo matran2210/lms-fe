@@ -5,7 +5,6 @@ import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -20,7 +19,7 @@ import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import 'entrance-test-result-package-test-v2/dist/index.css'
-import 'quiz-result-package/dist/index.css'
+import 'quiz-result-package-dat-test/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -47,15 +46,26 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import 'sapp-common-package-ha-test/dist/sapp-editor.css'
-import 'sapp-common-package/dist/index.css'
 import 'sapp-notification/dist/index.css'
 import '@xyflow/react/dist/style.css'
+import { StaticModalProvider } from '@contexts/StaticModalContext'
+import 'sapp-common-package-ha-test/dist/sapp-editor.css'
+import 'sapp-common-package/dist/index.css'
 import 'sapp-preview-part-test/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
+import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 
+export const excludedPathsHelp = [
+  '/test/[id]',
+  '/case-study/[id]',
+  '/certificates/[id]',
+  '/case-study/result/[id]',
+  '/teachers',
+]
+
+const activityPath = ['/courses/[id]/activity/[activityId]']
 type MyAppProps = AppProps & {
   Component: {
     layout?: String
@@ -153,18 +163,16 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [])
 
-  const excludedPathsHelp = [
-    '/test/[id]',
-    '/case-study/[id]',
-    '/certificates/[id]',
-    '/case-study/result/[id]',
-    '/teachers',
-  ]
+  const showBackToTop = !activityPath.some((path) =>
+    router.pathname.includes(path),
+  )
 
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
     !isTeacherPage // Add condition to hide help on teacher pages
-
+  const hiddenChatbot =
+    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
+    isTeacherPage
   // Handle HubSpot widget visibility based on URL
   useEffect(() => {
     const hideHubspotWidget = () => {
@@ -175,8 +183,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       const chatFrame = document.getElementById('hubspot-messages-iframe')
       const widgetContainer = document.querySelector('.hs-shadow-container')
 
-      if (isTeacherPage) {
-        // Hide HubSpot chat widget on teacher pages
+      if (hiddenChatbot) {
+        // Hide HubSpot chat widget on teacher pages and other excluded paths
         if (container) {
           container.classList.add('visible-icon')
           // Add additional inline styles for redundancy
@@ -261,7 +269,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       observer.disconnect()
       router.events.off('routeChangeComplete', handleRouteChange)
     }
-  }, [isTeacherPage, router, showHelp])
+  }, [router, showHelp, hiddenChatbot])
 
   useEffect(() => {
     if (
@@ -305,32 +313,36 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <AntConfigProvider>
           <PinnedNotifyProvider>
             <CourseProvider>
-              <CourseNoteProvider>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
-                    <RouteGuard>
-                      <>
-                        <div className="relative">
-                          <PinnedNotifications />
-                          <Component {...pageProps} />
-                        </div>
-                        <BackToTop />
-                        <Help showHelp={showHelp} />
-                        <LearningNotesList />
-                        <PopupCompletedCourse />
-                      </>
-                    </RouteGuard>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </CourseNoteProvider>
+              <StaticModalProvider>
+                <CourseNoteProvider>
+                  <QueryClientProvider client={queryClient}>
+                    <SocketContext.Provider value={socket}>
+                      <PreviousSectionRouteProvider>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
+                        <RouteGuard>
+                          <>
+                            <div className="relative">
+                              <PinnedNotifications />
+                              <Component {...pageProps} />
+                            </div>
+                            {showBackToTop && <BackToTop />}
+                            <Help showHelp={showHelp} />
+                            <LearningNotesList />
+                            <PopupCompletedCourse />
+                          </>
+                        </RouteGuard>
+                      </PreviousSectionRouteProvider>
+                    </SocketContext.Provider>
+                  </QueryClientProvider>
+                </CourseNoteProvider>
+              </StaticModalProvider>
             </CourseProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>

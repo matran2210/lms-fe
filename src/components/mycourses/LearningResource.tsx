@@ -41,7 +41,8 @@ const DEFAULT_PAGE_INDEX = 1
 const DEFAULT_PAGESIZE = 20
 
 const LearningResource = ({ open, setOpenResource }: IProps) => {
-  const { isMobileView } = useTailwindBreakpoint()
+  const { isMobileView, isTabletView } = useTailwindBreakpoint()
+  const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
@@ -143,11 +144,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   }
 
   useEffect(() => {
-    const divElement = document.getElementById('sapp-drawer-resource-list')
-    if (!divElement) return
     const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = divElement
-      if (Math.ceil(scrollTop + clientHeight) >= scrollHeight) {
+      const scrollEl = scrollRef.current
+      if (!scrollEl) return
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl
+      if (scrollTop + clientHeight + 200 >= scrollHeight) {
         if ((router.query.courseId || router.query.id) && open) {
           const nextPageIndex = pageIndex + 1
           if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
@@ -156,11 +157,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         }
       }
     }
-    divElement.addEventListener('scroll', handleScroll)
-    // Cleanup function
-    return () => {
-      divElement.removeEventListener('scroll', handleScroll)
-    }
+
+    const scrollEl = scrollRef.current
+    scrollEl?.addEventListener('scroll', handleScroll)
+    return () => scrollEl?.removeEventListener('scroll', handleScroll)
   }, [fetchData, pageIndex])
 
   const download = async (name: string, file_key: string) => {
@@ -208,6 +208,11 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       isOpen: false,
     })
   }
+  const heightContent = isMobileView
+    ? '120px'
+    : isTabletView
+      ? '128px'
+      : '136px'
 
   return (
     <>
@@ -243,17 +248,23 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   <NoDataV2 />
                 </div>
               ) : (
-                <div className="mt-6 flex flex-col gap-4 md:mt-8">
+                <div
+                  ref={scrollRef}
+                  className="mt-6 flex flex-col gap-4 overflow-y-auto md:mt-8"
+                  style={{
+                    maxHeight: `calc(100% - ${heightContent})`,
+                  }}
+                >
                   {resources?.resources?.map((resource) => (
                     <div
                       key={resource.id}
-                      className="flex h-[70px] items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
+                      className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                     >
                       <div>
-                        <div className="text-base font-medium text-gray-800">
-                          {resource?.name}
+                        <div className="line-clamp-2 break-all text-base font-medium text-gray-800">
+                          {resource?.name} {resource?.name}
                         </div>
-                        <div className="text-gray-500 text-sm font-normal">
+                        <div className="text-sm font-normal text-gray">
                           {bytesToKilobyte(resource?.size)}
                         </div>
                       </div>

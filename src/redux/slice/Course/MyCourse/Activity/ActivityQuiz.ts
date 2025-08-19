@@ -437,12 +437,7 @@ const quizSlice: Slice = createSlice({
                 ) || []),
                 {
                   question_id: payload.question.id,
-                  answer: (payload.myAnswers || [])
-                    ?.filter((e: string) => e)
-                    .map((e: string, i: number) => ({
-                      answer_id: e,
-                      answer_position: i + 1,
-                    })),
+                  answer: payload.myAnswers || [],
                   time_spent: payload.time_spent,
                 },
               ]
@@ -480,7 +475,7 @@ const quizSlice: Slice = createSlice({
                   answer: (payload.myAnswers || [])?.map(
                     (e: any, i: number) => ({
                       answer_id: e.idAnswer,
-                      answer_position: i + 1,
+                      answer_position: e.postion,
                     }),
                   ),
                   time_spent: payload.time_spent,
@@ -671,12 +666,7 @@ const quizSlice: Slice = createSlice({
                     ) || []),
                     {
                       question_id: payload.question.id,
-                      answer: (payload.myAnswers || [])
-                        ?.filter((e: string) => e)
-                        .map((e: string, i: number) => ({
-                          answer_id: e,
-                          answer_position: i + 1,
-                        })),
+                      answer: payload.myAnswers,
                       time_spent: payload.time_spent,
                     },
                   ]
@@ -717,7 +707,7 @@ const quizSlice: Slice = createSlice({
                       answer: (payload.myAnswers || [])?.map(
                         (e: any, i: number) => ({
                           answer_id: e.idAnswer,
-                          answer_position: i + 1,
+                          answer_position: e.postion,
                         }),
                       ),
                       time_spent: payload.time_spent,

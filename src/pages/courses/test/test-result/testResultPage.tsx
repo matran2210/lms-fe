@@ -14,7 +14,6 @@ import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
 import MultipleChoiceScore from './MultipleChoiceScore'
-import MultipleQuestion from './multipleQuestion'
 import ScoreDetail from './ScoreDetail'
 
 interface IProps {
@@ -85,7 +84,9 @@ const TestResultPage = ({
               <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
                 <ChartACCAScore data={chartData?.chart_data} />
                 {questions?.quizAttempt?.attempt_gradings?.map(
-                  (item, index) => <Recommendation data={item} key={index} />,
+                  (item, index) => (
+                    <Recommendation data={item} key={index} />
+                  ),
                 )}
                 <ScoreDetail
                   className={'relative'}
@@ -118,7 +119,9 @@ const TestResultPage = ({
                   passingScore={chartData?.quiz?.required_percent_score}
                 />
                 {questions?.quizAttempt?.attempt_gradings?.map(
-                  (item, index) => <Recommendation data={item} key={index} />,
+                  (item, index) => (
+                    <Recommendation data={item} key={index} />
+                  ),
                 )}
                 <ScoreDetail
                   className={''}
@@ -127,10 +130,11 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <div className="hidden lg:block">
-                <MultipleQuestion
+              <div>
+                <MultipleChoiceScore
                   questions={questions}
-                  className={'h-full'}
+                  score={score}
+                  globalAverage={globalAverageNumber}
                   multipleQuestionRef={multipleQuestionRef}
                 />
               </div>

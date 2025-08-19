@@ -29,7 +29,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'cursor-pointer rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 hover:bg-primary-50 md:p-4',
+          'cursor-pointer rounded-md bg-[#F9F9F9] p-3 hover:bg-primary-50 md:p-4',
           {
             'bg-primary-50': data.is_current,
           },
@@ -57,11 +57,11 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
             </div>
             <div>
               <div className="text-left md:text-right">
-                <span className="text-sm font-bold text-gray-800 md:text-base">
+                <span className="text-sm text-gray-800 md:text-base">
                   Logged in
                 </span>
               </div>
-              <div className="text-xs text-gray-400 md:text-sm">
+              <div className="text-xs font-bold text-gray-800 md:text-sm">
                 {formattedDate}
               </div>
             </div>

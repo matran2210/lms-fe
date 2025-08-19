@@ -71,7 +71,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 <p>issued by {issuedBy}!</p>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-stretch justify-center gap-4">
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
@@ -85,6 +85,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 onOpenModalShare={onOpenModalShare}
               />
               <ClickToCopyButton
+                className="h-auto"
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
                 <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200">

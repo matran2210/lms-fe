@@ -104,7 +104,7 @@ const NewFilltext = forwardRef(
             (ans) => ans.answer_position === index + 1,
           )
           if (correctAnswer) {
-            inputClass = 'text-base font-semibold text-success-600'
+            inputClass = 'text-success-600'
             element.outerHTML = `
               <span>
                 <span id="${inputId}" class="${inputClass}">
@@ -236,8 +236,9 @@ const NewFilltext = forwardRef(
 
         {answerContent && (
           <>
+            <Divider className="my-8" />
             <div className="mt-[38px] text-base font-semibold">
-              Correct Answer
+              Correct Answer:
             </div>
             <EditorReader
               className="questions mt-2"
@@ -252,7 +253,7 @@ const NewFilltext = forwardRef(
         {solution && (
           <>
             <Divider className="my-8" />
-            <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+            <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>

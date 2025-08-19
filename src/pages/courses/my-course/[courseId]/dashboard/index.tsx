@@ -1,7 +1,7 @@
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { useRouter } from 'next/router'
-import React from 'react'
-import { ANIMATION, COURSE_TYPE } from 'src/constants'
+import React, { useState } from 'react'
+import { ANIMATION, COURSE_TYPE, PageLink } from 'src/constants'
 import Layout from '@components/layout'
 import CourseDashboard from '@components/dashboard/CourseDashboard'
 import ExamDashboard from '@components/dashboard/dashboard-exam/ExamDashboard'
@@ -9,20 +9,40 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { ICourseInfo } from 'src/type/dashboard'
 
 const Dashboard = () => {
   const router = useRouter()
-  const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const [infoCourse, setInfoCourse] = useState<ICourseInfo>({
+    course_type: COURSE_TYPE.NORMAL_COURSE,
+    course_name: '',
+  })
+
   return (
-    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
-      <div className="3xl:px-13.75 lg:px-5" data-aos={ANIMATION.DATA_AOS}>
+    <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="2xl">
+      <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
-          <div className="hidden w-full items-center justify-between pb-4 pt-6 xl:flex">
-            <BreadcrumbFilter
-              name={courseInfo?.name || ''}
-              subpath="Dashboard"
-              courseId={router.query.courseId}
+          <div className="hidden w-full items-center justify-between pb-4 pt-10 xl:flex">
+            <SappBreadCrumbs
+              isTeacher={false}
+              breadcrumbs={[
+                {
+                  title: 'My Course',
+                  link: PageLink.COURSES,
+                },
+                {
+                  title: infoCourse.course_name,
+                  link: PageLink.COURSE_DETAIL.replace(
+                    '[courseId]',
+                    router.query.courseId as string,
+                  ),
+                },
+                {
+                  title: 'Student Dashboard',
+                  link: '',
+                },
+              ]}
             />
           </div>
           <div className="mb-6 mt-2 grid md:mb-7 md:mt-6 xl:mb-10 xl:mt-0">
@@ -34,14 +54,12 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="text-ink-700 3xl:px-13.75 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5"
+        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5 3xl:px-13.75"
         data-aos={ANIMATION.DATA_AOS}
       >
-        {courseInfo?.courseType == COURSE_TYPE.NORMAL_COURSE ? (
-          <CourseDashboard />
-        ) : (
-          <ExamDashboard />
-        )}
+        {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE
+          ? infoCourse && <CourseDashboard setInfoCourse={setInfoCourse} />
+          : infoCourse && <ExamDashboard setInfoCourse={setInfoCourse} />}
       </div>
     </Layout>
   )

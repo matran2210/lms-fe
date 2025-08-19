@@ -749,7 +749,10 @@ const SAPPVideo = ({
         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
-              src={thumbnail?.['950x535'] ?? ''}
+              src={
+                thumbnail?.['950x535'] ??
+                '/assets/images/default_thumbnail_video.png'
+              }
               alt={'Thumbnail image'}
               className="h-full w-full object-contain"
               width={952}
@@ -758,7 +761,7 @@ const SAPPVideo = ({
             />
           )}
         </div>
-        <div className="bg-overlay-loading absolute bottom-0 left-0 right-0 top-0 h-full w-full opacity-80 transition-opacity">
+        <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full bg-overlay-loading opacity-80 transition-opacity">
           <LoadingIcon
             loading={loading}
             loadingPercentage={loadingPercentage}
@@ -825,7 +828,10 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 className={`${styles.content}`}
-                poster={thumbnail?.['950x535'] ?? ''}
+                poster={
+                  thumbnail?.['950x535'] ??
+                  '/assets/images/default_thumbnail_video.png'
+                }
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
                     streamRef.current.pause()
@@ -842,7 +848,7 @@ const SAPPVideo = ({
                 <div className="flex-center flex w-full items-center gap-6">
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center bg-[#E5E7EB] before:-right-4"
+                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center rounded bg-[#E5E7EB] before:-right-4"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -862,7 +868,7 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center text-xsm mr-4 gap-1 font-normal leading-normal text-[#E3E3E3]">
+                    <div className="time flex-center mr-4 gap-1 text-xsm font-normal leading-normal text-[#E3E3E3]">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
@@ -882,7 +888,7 @@ const SAPPVideo = ({
                       defaultValue="0"
                     />
                     <div
-                      className="seek-tooltip text-xsm absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 font-semibold text-white"
+                      className="seek-tooltip absolute top-[-50px] -ml-5 hidden bg-[#00000080] p-1 text-xsm font-semibold text-white"
                       ref={seekTooltipRef}
                     >
                       00:00
@@ -1070,7 +1076,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Quality:
                                 </span>
-                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
+                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                   {playbackQuality === 'Auto'
                                     ? 'Auto'
                                     : getResolution(Number(playbackQuality))}
@@ -1088,7 +1094,7 @@ const SAPPVideo = ({
                                 <span className="block w-16 text-left text-sm font-semibold">
                                   Speed:
                                 </span>
-                                <span className="text-xsm flex items-center justify-between gap-1 font-medium">
+                                <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                   {playbackRate === 1 ? 'Normal' : playbackRate}
                                   <ArrowIcon
                                     className={'h-4 w-3'}
@@ -1105,7 +1111,7 @@ const SAPPVideo = ({
                                   <span className="block w-16 text-left text-sm font-semibold">
                                     CC:
                                   </span>
-                                  <span className="text-xsm flex items-center justify-between gap-1 font-medium">
+                                  <span className="flex items-center justify-between gap-1 text-xsm font-medium">
                                     {playbackCC === -1
                                       ? 'Off'
                                       : listCaptions[playbackCC].lang}

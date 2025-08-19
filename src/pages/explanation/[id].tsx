@@ -1,7 +1,7 @@
 import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
-import { ExplanationPackage } from 'explanation-package'
+import { ExplanationPackageV2 } from 'explanation-package-ha-test'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
@@ -13,7 +13,6 @@ import { IRequirement } from 'src/type/case-study'
 import { QUESTION_TYPES } from 'src/type/course/Question'
 import { IAtempt } from 'src/type/results'
 import { CoursesAPI } from '../api/courses'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { CloseIconV2 } from '@components/icons'
 import Tooltip from 'src/common/Tooltip'
 
@@ -179,7 +178,7 @@ const Explanation = () => {
             </button>
           </Tooltip>
         </div>
-        <ExplanationPackage
+        <ExplanationPackageV2
           getActiveQuestion={getActiveQuestion}
           activeQuestion={{
             ...activeQuestion,

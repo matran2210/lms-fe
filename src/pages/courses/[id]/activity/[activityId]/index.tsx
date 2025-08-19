@@ -13,31 +13,16 @@ import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
-import { CourseSectionType } from '@utils/constants'
-import { trackGAEvent } from '@utils/google-analytics'
-import {
-  convertMinutesToHourFormat,
-  truncateBySpace,
-  truncateString,
-} from '@utils/index'
+import { convertMinutesToHourFormat } from '@utils/index'
 
 import { uniqueId } from 'lodash'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import Tooltip from 'src/common/Tooltip'
 import { ANIMATION, EXHIBIT_TEXT_REPLACE, PROGRAM } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { CoursesAPI, getActivityById } from 'src/pages/api/courses'
@@ -75,7 +60,8 @@ import ActivityResourceMobile from '@components/learning/activity/modal/Activity
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { ITabs } from 'src/type'
-import { title } from 'process'
+import BackToTop from '@components/BackToTop'
+import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -96,8 +82,9 @@ export interface VideoStateClicked {
 }
 const ActivityPage = () => {
   const router = useRouter()
-  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
-
+  const { previousSection } = usePreviousSectionRoute()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+  const scrollRef = useRef<HTMLDivElement>(null)
   const useGetActivityById = (
     id: string | string[] | undefined,
     course_id: string | string[] | undefined,
@@ -113,8 +100,8 @@ const ActivityPage = () => {
   }
 
   const { data: activity, isLoading } = useGetActivityById(
-    router.query.activityId,
-    router.query.id,
+    router.query?.activityId,
+    router.query?.id,
   )
 
   const courseId = router.query?.id
@@ -252,7 +239,7 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
+        dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
 
@@ -297,9 +284,12 @@ const ActivityPage = () => {
     )
     isFinishRef.current = true
     setFetch_progress([...fetch_progress, sectionId])
-    if (response?.data?.progress?.is_completed) {
+
+    if (!!response?.data?.progress?.is_completed) {
       setTimeout(() => {
-        dispatch(showPopupCompletedCourse(response?.data?.progress?.content))
+        dispatch(
+          showPopupCompletedCourse(response?.data?.progress?.content || ''),
+        )
       }, 2000)
     }
   }
@@ -377,6 +367,9 @@ const ActivityPage = () => {
     )
   }
 
+  const onBackToSection = () => {
+    router.push(previousSection || '')
+  }
   /**
    * @description lấy data breadcrumb using react-query
    */
@@ -395,7 +388,7 @@ const ActivityPage = () => {
   const breadcrumbsData: ITabs[] = breadcrumbsMenu?.data
     ? breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
         let url = ''
-        const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
+        const urlCourseDetail = `/courses/${router.query?.id}/section/${partId}`
         switch (e.course_section_type) {
           case 'PART':
           case 'CHAPTER':
@@ -477,15 +470,13 @@ const ActivityPage = () => {
               {selector?.calculator_status && (
                 <MovableWindow
                   position={{
-                    width: '400px',
-                    height: '300px',
                     top: 'calc(25% - 150px)',
                     left: 'calc(25% - 200px)',
                   }}
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0 h-full w-full">
+                  <div className="absolute left-0 top-0">
                     <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
@@ -504,7 +495,7 @@ const ActivityPage = () => {
           </>
           {/* Main Activity */}
           <div
-            data-aos={ANIMATION.DATA_AOS}
+            data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             className={clsx('mb-[120px] flex flex-col gap-4 md:gap-6 lg:mb-6', {
               'mb-0': focusOnlyDiscussion,
             })}
@@ -521,7 +512,9 @@ const ActivityPage = () => {
                   </div>
                 )
               }
-              onBack={focusOnlyDiscussion ? onUnFocusDiscussion : router.back}
+              onBack={
+                focusOnlyDiscussion ? onUnFocusDiscussion : onBackToSection
+              }
               className={clsx('mb-0 md:mb-2 lg:mb-0', {
                 'px-4': focusOnlyDiscussion,
               })}
@@ -584,9 +577,9 @@ const ActivityPage = () => {
                 hidden: focusOnlyQuiz.open,
                 'hidden md:block': !focusOnlyQuiz.open,
               })}
-              data-aos={ANIMATION.DATA_AOS}
+              data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             >
-              <Discussion class_id={(router.query.id as string) || ''} />
+              <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
 
@@ -654,18 +647,22 @@ const ActivityPage = () => {
               return (
                 <MovableWindow
                   key={e.id}
+                  position={{
+                    top: '30% - 150px',
+                    left: '10px',
+                  }}
                   className="lg:hidden"
-                  position="bottom left"
                   zIndex={40}
+                  fixed
                 >
-                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                  <div className="absolute left-0 top-0 h-full w-64 rounded-xl">
                     <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
                       <div className="text-sm font-bold">Calculator</div>
                       <button onClick={() => handleCloseScratchPad(e)}>
                         <CloseModalIcon />
                       </button>
                     </div>
-                    <Calculator />
+                    <Calculator isMobileCalc />
                   </div>
                 </MovableWindow>
               )
@@ -745,7 +742,14 @@ const ActivityPage = () => {
             <CtaTrial />
           </div>
         </div>
+        <BackToTop
+          scrollContainerRef={scrollRef}
+          className={clsx(
+            '!bottom-9 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
+          )}
+        />
       </Layout>
+
       {openResource && (
         <LearningResource
           open={openResource}

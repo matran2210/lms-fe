@@ -7,6 +7,7 @@ import { Select } from 'antd'
 import Icon from '@components/icons'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
+import { PROGRAM } from 'src/constants'
 
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'
@@ -67,41 +68,37 @@ const SubjectList = ({ isEdit }: IProps) => {
           />
         )
       })}
-      {makeDefaultDrawer?.status && (
-        <SappDrawerV2
-          open={makeDefaultDrawer?.status || false}
-          onClose={closeMakeDefault}
-          title={
-            <Select
-              suffixIcon={<CollapseArrowIcon selected />}
-              value={makeDefaultDrawer?.course_category_name}
-              onChange={(value) => {
-                setMakeDefaultDrawer({
-                  course_category_name: value,
-                  status: true,
-                })
-              }}
-              variant="borderless"
-              className="profile-subject-select"
-              options={subjectOptions}
-            />
-          }
-          handleCancel={closeMakeDefault}
-          classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
-          classNameBody="pt-0 md:pt-4 md:!px-0 lg:!px-8"
-          rootClassName={'profile-subject-drawer'}
-          classNames={{
-            content: 'rounded-2xl',
-          }}
-        >
-          <ProgramDetail
-            typeProgram={makeDefaultDrawer?.course_category_name}
-            onOpenTab={() => {}}
+      <SappDrawerV2
+        open={makeDefaultDrawer?.status || false}
+        onClose={closeMakeDefault}
+        title={
+          <Select
+            suffixIcon={<CollapseArrowIcon className="text-secondary" />}
+            value={makeDefaultDrawer?.course_category_name}
+            onChange={(value) => {
+              setMakeDefaultDrawer({
+                course_category_name: value,
+                status: true,
+              })
+            }}
+            variant="borderless"
+            className="profile-subject-select"
+            options={subjectOptions}
           />
-        </SappDrawerV2>
-      )}
-
-      {}
+        }
+        handleCancel={closeMakeDefault}
+        classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
+        classNameBody="pt-0 lg:pt-2 md:!px-0 lg:!px-8"
+        rootClassName={'profile-subject-drawer'}
+        classNames={{
+          content: 'rounded-2xl',
+        }}
+      >
+        <ProgramDetail
+          typeProgram={makeDefaultDrawer?.course_category_name as PROGRAM}
+          onOpenTab={() => {}}
+        />
+      </SappDrawerV2>
     </ProfileCard>
   )
 }

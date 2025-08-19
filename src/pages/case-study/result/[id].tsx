@@ -7,7 +7,6 @@ import {
   UnHighLightIcon,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
-import PDFViewer from '@components/base/pdf/pdf-viewer'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -18,7 +17,7 @@ import AddWordPreview from '@components/questionType/FillText'
 import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
-import SelectWord from '@components/questionType/SelectWordQuestion'
+import SelectWord from '@components/questionType/SelectQuestion'
 import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
@@ -46,6 +45,9 @@ import clsx from 'clsx'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 
 const CaseStudyResult = () => {
   const router = useRouter()
@@ -178,11 +180,20 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
-            data={data}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
+          // <DragNDropPreview
+          //   data={data}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   corrects={corrects?.corrects}
+          //   solution={solution}
+          // />
+          <DragDropQuestion
+            data={data as any}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue?.(`${index}_answer`, data)
+            }}
             corrects={corrects?.corrects}
             solution={solution}
           />
@@ -337,17 +348,14 @@ const CaseStudyResult = () => {
       )
     }
     if (data.question.qType === QUESTION_TYPES.SELECT_WORD) {
-      return data.answer?.map(
-        (item: { answer_position: number; answer_id: string }) =>
-          item.answer_id,
-      )
+      return data.answer
     }
     if (data.question.qType === QUESTION_TYPES.DRAG_DROP) {
       return data.answer?.map(
         (item: { answer_position: number; answer_id: string }) => {
           return {
-            id: item.answer_id,
             idAnswer: item.answer_id,
+            position: item.answer_position,
             value: data?.question?.answers?.find(
               (ans: {
                 id: string
@@ -360,7 +368,6 @@ const CaseStudyResult = () => {
         },
       )
     }
-
     if (data.question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       return data.answer?.map((item: { answer_id: string }) => item.answer_id)
     }
@@ -886,8 +893,8 @@ const CaseStudyResult = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
+                    ;(setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false))
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">

@@ -164,7 +164,7 @@ export default function MenuItem({
     router?.query?.courseId ||
     router?.query?.activityId ||
     router?.query?.course_section_id
-
+  const isInMyProfile = router.asPath === PageLink.MYPROFILE
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info
   }
@@ -219,7 +219,11 @@ export default function MenuItem({
     return (
       <div className="flex items-center" onClick={handleActive}>
         {Icon === 'avatar' ? (
-          <div className="h-10 w-10 shrink-0">
+          <div
+            className={clsx('h-10 w-10 shrink-0', {
+              'rounded-full !border-2 border-primary': isInMyProfile,
+            })}
+          >
             {user?.detail?.avatar?.['40x40'] ||
             user.detail.avatar?.['ORIGIN'] ? (
               <Image
@@ -291,6 +295,7 @@ export default function MenuItem({
                 'line-clamp-1 text-base font-semibold text-[#050505]',
                 {
                   'group-hover:text-gray-800': !selected,
+                  '!text-primary': isInMyProfile,
                 },
               )}
             >
@@ -301,6 +306,7 @@ export default function MenuItem({
                 'line-clamp-1 text-sm font-normal capitalize text-[#A1A1A1]',
                 {
                   'group-hover:text-gray-800': !selected,
+                  '!text-primary': isInMyProfile,
                 },
               )}
             >
@@ -385,7 +391,9 @@ export default function MenuItem({
           (name === TitleSidebar.COURSES ||
             name === TitleSidebar.EXAM_LIST ||
             name === TitleSidebar.ENTRANCE_TEST ||
-            // hidden when not in course
+            // hidden when in course
+            name === TitleSidebar.CALENDAR ||
+            // hidden when in course
             name === LANG_SIGNIN.eventTest ||
             checkIsHiddenDashboard(
               JSON.parse(localStorage.getItem('courseInfo') as any),
@@ -450,30 +458,28 @@ export default function MenuItem({
           </div>
         ) : null}
       </div>
-      {openNotification && (
-        <SappNotificationComponent
-          notifyDetail={{
-            ...notifyDetail,
-            send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
-          }}
-          tabs={tabs}
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
-          handleMarkAll={handleMarkAll}
-          handleMarkById={handleMarkById}
-          handleUnMarkById={handleUnMarkById}
-          handleBack={handleBack}
-          isViewDetail={isViewDetail}
-          setOpenNotification={setOpenNotification}
-          openNotification={openNotification}
-          handleViewDetail={handleViewDetail}
-          notifyLists={notifyLists}
-          notificationUnread={notificationUnread}
-          scrollRef={scrollRef}
-          handleViewNotification={(link) => handleViewNotification(link)}
-          isDesktopView={isDesktopView}
-        />
-      )}
+      <SappNotificationComponent
+        notifyDetail={{
+          ...notifyDetail,
+          send_time: notifyDetail?.send_time || '', // Ensure send_time is always a string
+        }}
+        tabs={tabs}
+        selectedTab={selectedTab}
+        setSelectedTab={setSelectedTab}
+        handleMarkAll={handleMarkAll}
+        handleMarkById={handleMarkById}
+        handleUnMarkById={handleUnMarkById}
+        handleBack={handleBack}
+        isViewDetail={isViewDetail}
+        setOpenNotification={setOpenNotification}
+        openNotification={openNotification}
+        handleViewDetail={handleViewDetail}
+        notifyLists={notifyLists}
+        notificationUnread={notificationUnread}
+        scrollRef={scrollRef}
+        handleViewNotification={(link) => handleViewNotification(link)}
+        isDesktopView={isDesktopView}
+      />
     </>
   )
 }

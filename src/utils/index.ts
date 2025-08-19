@@ -13,6 +13,7 @@ import { useQuery } from 'react-query'
 export * from './common'
 import utc from 'dayjs/plugin/utc'
 import { DATE_FORMAT } from 'src/constants'
+import { cleanParams } from './common'
 
 dayjs.extend(utc)
 
@@ -128,8 +129,8 @@ export const buildQueryString = (params: Object) => {
   return queryParams ? `&${queryParams}` : ''
 }
 
-export const bytesToKilobyte = (bytes: number) => {
-  return `${(bytes / 1024).toFixed(2)}Kb` // 1 kilobyte = 1024 bytes
+export const bytesToKilobyte = (bytes: number, suffix = 'Kb') => {
+  return `${(bytes / 1024).toFixed(2)}${suffix}` // 1 kilobyte = 1024 bytes
 }
 
 export const cleanParamsAPI = (params: Object) => {
@@ -535,4 +536,13 @@ export function convertMinutesToHourFormat(minutes: number): string {
 
   if (hourStr && minStr) return `${hourStr} ${minStr}`
   return hourStr || minStr || '0 min'
+}
+
+export const formatPathWithQueryParams = (
+  pathname: string,
+  params: Record<string, string>,
+): string => {
+  const cleanedParams = cleanParams(params)
+  const queryString = new URLSearchParams(cleanedParams).toString()
+  return queryString ? `${pathname}?${queryString}` : pathname
 }

@@ -1,15 +1,19 @@
 import EChart from '@components/base/chart/Chart'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ITopicProgress } from 'src/type/dashboard'
+import { ICourseInfo, ITopicProgress } from 'src/type/dashboard'
 import { EChartsOption } from 'echarts'
 import useReponsive from 'src/hooks/useReponsive'
 
-const TopicProgress = () => {
+const TopicProgress = ({
+  setInfoCourse,
+}: {
+  setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
+}) => {
   const router = useRouter()
   const [option, setOption] = useState<EChartsOption>()
-  const { isMobile, isTablet } = useReponsive()
+  const { isMobile } = useReponsive()
 
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
@@ -36,6 +40,14 @@ const TopicProgress = () => {
     `
           },
         },
+        dataZoom: [
+          {
+            type: 'inside', // Cuộn bằng chuột hoặc touch
+            xAxisIndex: 0,
+            start: 0,
+            end: 50,
+          },
+        ],
 
         xAxis: {
           type: 'category',
@@ -120,8 +132,13 @@ const TopicProgress = () => {
   const getTopicProgress = async (id: string) => {
     try {
       const res = await DashboardAPI.getTopicProgress(id)
-
-      if (res && res.success) handleTopicProgress(res.data)
+      if (res && res.success && res?.data) {
+        handleTopicProgress(res.data)
+        setInfoCourse({
+          course_type: res.data?.[0]?.course_type,
+          course_name: res.data?.[0]?.course_name,
+        })
+      }
     } catch (error) {
       setOption(undefined)
     }
@@ -133,7 +150,7 @@ const TopicProgress = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-[48vh] xl:h-auto xl:p-8">
+    <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-[48vh] xl:h-full xl:p-8">
       <div className="mb-6 text-lg font-bold text-gray-800 md:mb-5 md:pb-3 xl:text-xl">
         Topic Progress
       </div>

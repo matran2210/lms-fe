@@ -12,11 +12,12 @@ interface IProps {
   value?: string | React.ReactNode
   colored?: boolean
   span?: number
+  className?: string
 }
 
 const CalcButton = (props: IProps) => {
-  const { value, colored, span } = props
-  const classList = `calc__btn
+  const { value, colored, span, className } = props
+  const classList = `calc__btn ${className}
       ${colored ? ' btn--colored' : ''} 
       ${span !== 1 ? ` btn--span-${span}` : ''}`
 

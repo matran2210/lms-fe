@@ -43,7 +43,7 @@ export const CustomNode: React.FC<NodeProps> = ({ data }) => {
     >
       <Tooltip
         title={isTruncated ? (data.label as React.ReactNode) : undefined}
-        placement="topLeft"
+        placement="top"
       >
         <span
           ref={labelRef}

@@ -1,3 +1,5 @@
+import { ISelectOption } from 'src/type'
+
 export const PageLink = {
   HOME: '/',
   COURSES: '/courses',
@@ -9,6 +11,7 @@ export const PageLink = {
   TEACHER_MY_CLASS: '/teachers/my-class',
   TEACHER_MY_REQUEST: '/teachers/my-request',
   TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
+  TEACHER_MY_PROFILE: '/teachers/overview',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -31,6 +34,9 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
+  SHORT_COURSE: '/short-course',
+  SHORT_COURSE_DETAIL: '/short-course/detail',
+  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {
@@ -44,18 +50,20 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
-  RESULTS: 'Results',
+  RESULTS: 'Test / Quiz List',
   EXAM_INFORMATION: 'Exam Information',
   EXAM_LIST: 'Exam List',
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
+  ADD_NOTE: 'Add Note',
   CALCULATOR: 'Calculator',
   ENTRANCE_TEST: 'Entrance Test',
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
   EXAM: 'Exam',
+  COURSE_RESOURCES: 'Course Resource',
 }
 
 export const TitleTeacherSidebar = {
@@ -134,7 +142,7 @@ export const UserGuide = {
   CONTENT_STEP_6:
     'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
   CONTENT_STEP_7:
-    'The filter section allows you to filter courses by curriculum and course status.',
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
 }
 
 export const defaultStatusCourse = [
@@ -230,7 +238,15 @@ export const QUIZ_ATTEMPT_STATUS_AUTO = [
 
 export const DEFAULT_SELECT = [{ label: 'All', value: '' }]
 
-export const DEFAULT_SELECT_SECTION = [{ name: 'All Section', id: '' }]
+export const DEFAULT_SELECT_SECTION_NAME = 'All Section'
+
+export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
+  {
+    label: 'All Section',
+    value: '',
+    name: DEFAULT_SELECT_SECTION_NAME,
+  },
+]
 
 export const COURSE_STATUS = {
   PUBLISH: 'PUBLISH',
@@ -559,7 +575,10 @@ export enum DATE_FORMAT {
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
-
+export enum ECourseType {
+  MASTER = 'Master Finance',
+  GENERAL = 'General Course',
+}
 export const COOKIE_INFO = {
   SESSION_ID: 'sessionId',
   KEYCLOAK_USER_ID: 'keycloakUserId',
@@ -579,3 +598,5 @@ export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'
+export * from './courses3level/activity'
+export * from './courses3level/courses'

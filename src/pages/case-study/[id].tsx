@@ -52,6 +52,10 @@ import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
 import ConFirmSubmit from '../test/conFirmSubmit'
 import LimitQuizModal from '../test/limitQuizModal'
+import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 const CaseStudyDetail = ({ questions }: any) => {
   const checkType = (
     e: any,
@@ -153,22 +157,38 @@ const CaseStudyDetail = ({ questions }: any) => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreview
+          // <DragNDropPreview
+          //   data={data}
+          //   // action={getAnswerDragNDrop}
+          //   // ref={ref}
+          //   handleSaveHighLight={() => {}}
+          //   // highlighted={highlighted}
+          //   // removeHighlight={removeHighlight}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+          // />
+          <DragDropQuestion
             data={data}
-            // action={getAnswerDragNDrop}
-            // ref={ref}
-            handleSaveHighLight={() => {}}
-            // highlighted={highlighted}
-            // removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue?.(`${index}_answer`, data)
+            }}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
         return (
           <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue?.(`${index}_answer`, value)}
             data={data}
             // action={getValueSelectText}
             handleSaveHighLight={() => {}}
@@ -552,14 +572,14 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType === QUESTION_TYPES.DRAG_DROP) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getAnswerDragNDrop(i),
+          answer: getValues(`${i}_answer`),
           id: question?.id,
           answers: question?.answers,
         })
       } else if (question?.qType === QUESTION_TYPES.SELECT_WORD) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValueSelectText(i),
+          answer: getValues(`${i}_answer`),
           id: question?.id,
           answers: question?.answers,
         })
@@ -616,27 +636,15 @@ const CaseStudyDetail = ({ questions }: any) => {
         } else if (e?.qType === QUESTION_TYPES.MATCHING) {
           answers.push({ question_id: e?.id, answer: e?.answer })
         } else if (e?.qType === QUESTION_TYPES.DRAG_DROP) {
-          let answer = []
-          for (let i in e?.answer) {
-            if (e?.answer[i].idAnswer) {
-              answer.push({
-                answer_id: e?.answer[i].idAnswer,
-                answer_position: +i + 1,
-              })
-            }
-          }
+          const answer = (e?.answer || [])
+            .filter((item: SlotValue) => item?.idAnswer)
+            .map((item: SlotValue) => ({
+              answer_id: item.idAnswer,
+              answer_position: item.position,
+            }))
           answers.push({ question_id: e?.id, answer })
         } else if (e?.qType === QUESTION_TYPES.SELECT_WORD) {
-          let answer = []
-          for (let i in e?.answer) {
-            if (e?.answer[i] && e?.answer[i] !== '') {
-              answer.push({
-                answer_id: e?.answer[i],
-                answer_position: +i + 1,
-              })
-            }
-          }
-          answers.push({ question_id: e?.id, answer })
+          answers.push({ question_id: e?.id, answer: e?.answer || [] })
         } else if (e?.qType === QUESTION_TYPES.FILL_WORD) {
           let answer = []
           for (let i in e?.answer) {
@@ -730,13 +738,20 @@ const CaseStudyDetail = ({ questions }: any) => {
     const total_attempt_time = Math.ceil((Date.now() - startTime) / 1000)
     if (quizAttempId) {
       try {
-        await CoursesAPI.submitCaseStudy(quizAttempId as string, {
+        const res = await CoursesAPI.submitCaseStudy(quizAttempId as string, {
           answers: answers,
           quiz_position_mapping: quiz_position_mapping,
           total_attempt_time: total_attempt_time,
           topic_scratch_pad: scratchPadValues.value,
         })
         toast.success('Submission successful')
+        const isCompletedCourse = res?.data?.progress
+        if (!!isCompletedCourse?.is_completed) {
+          setTimeout(() => {
+            dispatch(showPopupCompletedCourse(isCompletedCourse?.content || ''))
+          }, 2000)
+        }
+
         router.replace(
           `/case-study/result/${quizAttempId}?class_user_id=${router.query.class_user_id}&class_id=${router.query.class_id}&course_section_id=${router.query.course_section_id}`,
         )
@@ -1242,8 +1257,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
+                    ;(setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false))
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">

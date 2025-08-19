@@ -28,11 +28,10 @@ export interface IDeviceItem {
   user_id: string
   is_current: boolean
 }
-
 export interface UserAgent {
   browserName: string
   browserVersion: string
   osName: string
   osVersion: string
-  deviceType: any
+  deviceType: string
 }
