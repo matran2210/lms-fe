@@ -31,7 +31,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
       className=" hidden lg:block"
     >
       <div className="flex h-full items-center gap-12 xl:gap-20">
-        <div className="flex-2 flex h-full w-[55%] items-center justify-center">
+        <div className="flex h-full w-[55%] items-center justify-center">
           {certificate?.certificate_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -46,7 +46,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
             />
           )}
         </div>
-        <div className="flex flex-1 flex-col items-center gap-12">
+        <div className="flex flex-col items-center gap-12">
           <div
             className="flex w-full cursor-pointer items-end"
             onClick={() => window.open('https://sapp.edu.vn', '_blank')}
@@ -71,7 +71,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 <p>issued by {issuedBy}!</p>
               </div>
             </div>
-            <div className="flex items-stretch justify-center gap-4">
+            <div className="flex items-center justify-center gap-4">
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
