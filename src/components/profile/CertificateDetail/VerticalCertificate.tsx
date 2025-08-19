@@ -67,7 +67,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               </div>
               <div className="text-center">
                 <p>Congratulations, you have achieved the</p>
-                <p className="font-bold">{certificate?.course.name}</p>
+                <p className="font-bold">{certificate?.course?.name}</p>
                 <p>issued by {issuedBy}!</p>
               </div>
             </div>

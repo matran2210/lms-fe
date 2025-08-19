@@ -2,8 +2,9 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import HookFormCheckBox from '@components/base/checkbox/HookFormCheckBox'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import HookFormTextAreaV2 from '@components/base/textfield/HookFormTextAreaV2'
-import { getPersonURN, uploadImageToLinkedIn } from '@pages/api/certificate'
+import { uploadImageToLinkedIn } from '@pages/api/certificate'
 import { ICertificate } from '@pages/certificates/[id]'
+import { openLinkedInPopup } from '@utils/linkedin'
 import { Image } from 'antd'
 import dayjs from 'dayjs'
 import React, { useState } from 'react'
@@ -24,12 +25,24 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
   const [loading, setLoading] = useState(false)
   const certId = certificate?.id || ''
   const certURL = certificate?.certificate_url || ''
+  const shareUrl = encodeURIComponent(certURL)
+  const SAPP_LINKEDIN_ID = 15236709
+  const linkedInUrl =
+    `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME` +
+    `&name=${encodeURIComponent(certificate?.course.name || '')}` +
+    `&organizationId=${SAPP_LINKEDIN_ID}` +
+    // `&organizationName=${encodeURIComponent('SAPP Academy')}` +
+    `&issueYear=${dayjs().year()}` +
+    `&issueMonth=${dayjs().month() + 1}` +
+    `&certUrl=${encodeURIComponent(certURL)}` +
+    `&certId=${encodeURIComponent(certificate?.id || '')}`
   const form = useForm<IForm>({
     defaultValues: {
       shareToFeed: true,
       addToProfile: true,
     },
   })
+  const isShareToFeed = form.watch('shareToFeed')
   const onResetForm = () => {
     form.reset({
       shareToFeed: true,
@@ -41,89 +54,92 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
     onResetForm()
     onClose()
   }
+  const handleShareToFeed = async (data: IForm, callback?: () => void) => {
+    const token = sessionStorage.getItem('linkedin_access_token')
+    const personURN = sessionStorage.getItem('urn')
+
+    if (!token || !personURN) {
+      // Chưa có token → mở popup login LinkedIn
+      const popup = window.open(
+        `/api/auth/linkedin?popup=true&shareUrl=${encodeURIComponent(shareUrl)}&certId=${encodeURIComponent(certId)}`,
+        'LinkedInPopup',
+        'width=600,height=600',
+      )
+
+      // Lắng nghe message từ popup khi login xong
+      window.addEventListener('message', async (event) => {
+        if (event.origin !== window.location.origin) return
+
+        if (event.data.type === 'LINKEDIN_TOKEN') {
+          sessionStorage.setItem('linkedin_access_token', event.data.token)
+          sessionStorage.setItem('urn', event.data.personURN)
+
+          popup?.close()
+          const personURN = event.data.personURN
+          if (!personURN) {
+            toast.error('Không lấy được URN')
+            return
+          }
+          setLoading(true)
+          // Gọi luôn hàm upload sau khi login
+          const res = await uploadImageToLinkedIn(
+            event.data.token,
+            personURN,
+            shareUrl,
+            data.text || '',
+          )
+          setLoading(false)
+          if (res && res?.data?.success) {
+            toast.success(res?.data?.message)
+            callback?.() // Gọi callback để đóng modal sau khi upload thành công
+            handleClose()
+          } else {
+            callback?.() // Gọi callback để đóng modal sau khi upload thành công
+            toast.error(res?.data?.message)
+          }
+        }
+      })
+    } else {
+      // Có sẵn token rồi → gọi upload luôn
+      const personURN = sessionStorage.getItem('urn')
+      if (!personURN) {
+        toast.error('Không lấy được URN')
+        return
+      }
+      setLoading(true)
+      const res = await uploadImageToLinkedIn(
+        token,
+        personURN,
+        shareUrl,
+        data.text || '',
+      )
+      setLoading(false)
+      if (res && res?.data?.success) {
+        toast.success(res?.data?.message)
+        callback?.() // Gọi callback để đóng modal sau khi upload thành công
+        handleClose()
+      } else {
+        callback?.() // Gọi callback để đóng modal sau khi upload thành công
+        toast.error(res?.data?.message)
+      }
+    }
+  }
+
   const onSubmit = async (data: IForm) => {
-    const shareUrl = encodeURIComponent(certURL)
     if (data.addToProfile && data.shareToFeed) {
+      handleShareToFeed(data, () => openLinkedInPopup(linkedInUrl, handleClose))
+      return
     }
     // share to feed
     if (data.shareToFeed && !data.addToProfile) {
-      const token = sessionStorage.getItem('linkedin_access_token')
-      const personURN = sessionStorage.getItem('urn')
-
-      if (!token || !personURN) {
-        // Chưa có token → mở popup login LinkedIn
-        const popup = window.open(
-          `/api/auth/linkedin?popup=true&shareUrl=${encodeURIComponent(shareUrl)}&certId=${encodeURIComponent(certId)}`,
-          'LinkedInPopup',
-          'width=600,height=600',
-        )
-
-        // Lắng nghe message từ popup khi login xong
-        window.addEventListener('message', async (event) => {
-          if (event.origin !== window.location.origin) return
-
-          if (event.data.type === 'LINKEDIN_TOKEN') {
-            sessionStorage.setItem('linkedin_access_token', event.data.token)
-            sessionStorage.setItem('urn', event.data.personURN)
-
-            popup?.close()
-            const personURN = event.data.personURN
-            if (!personURN) {
-              toast.error('Không lấy được URN')
-              return
-            }
-            setLoading(true)
-            // Gọi luôn hàm upload sau khi login
-            const res = await uploadImageToLinkedIn(
-              event.data.token,
-              personURN,
-              shareUrl,
-              data.text || '',
-            )
-            setLoading(false)
-            if (res && res?.data?.success) {
-              toast.success(res?.data?.message)
-              handleClose()
-            } else {
-              toast.error(res?.data?.message)
-            }
-          }
-        })
-      } else {
-        // Có sẵn token rồi → gọi upload luôn
-        const personURN = sessionStorage.getItem('urn')
-        if (!personURN) {
-          toast.error('Không lấy được URN')
-          return
-        }
-        setLoading(true)
-        const res = await uploadImageToLinkedIn(
-          token,
-          personURN,
-          shareUrl,
-          data.text || '',
-        )
-        setLoading(false)
-        if (res && res?.data?.success) {
-          toast.success(res?.data?.message)
-          handleClose()
-        } else {
-          toast.error(res?.data?.message)
-        }
-      }
+      handleShareToFeed(data)
+      return
     }
     if (data.addToProfile && !data.shareToFeed) {
       // add to profile
-      const linkedInUrl =
-        `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME` +
-        `&name=${encodeURIComponent(certificate?.course.name || '')}` +
-        `&organizationName=${encodeURIComponent('SAPP Academy')}` +
-        `&issueYear=${dayjs().year()}` +
-        `&issueMonth=${dayjs().month() + 1}` +
-        `&certUrl=${encodeURIComponent(certURL)}` +
-        `&certId=${encodeURIComponent(certificate?.id || '')}`
-
-      window.open(linkedInUrl, '_blank', 'noopener,noreferrer')
+      openLinkedInPopup(linkedInUrl, handleClose)
+      handleClose()
+      return
     }
   }
 
@@ -145,26 +161,28 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
               title="Share to your Feed"
               classNameTitle="text-gray-800 font-semibold"
             />
-            <div className="flex items-center gap-5 rounded-lg border border-gray-300 p-4">
-              {certificate?.certificate_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <Image
-                  src={certURL}
-                  alt={certificate?.course.name}
-                  className="max-h-[125px] max-w-[80px] object-contain"
-                  //   width={80}
-                  //   height={125}
+            {isShareToFeed && (
+              <div className="flex items-center gap-5 rounded-lg border border-gray-300 p-4">
+                {certificate?.certificate_url && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <Image
+                    src={certURL}
+                    alt={certificate?.course.name}
+                    className="max-h-[125px] max-w-[80px] object-contain"
+                    //   width={80}
+                    //   height={125}
+                  />
+                )}
+                <HookFormTextAreaV2
+                  className="h-full flex-1"
+                  control={form.control}
+                  variant="borderless"
+                  name="text"
+                  placeholder="Say something about this..."
+                  autoSize={{ minRows: 2, maxRows: 6 }}
                 />
-              )}
-              <HookFormTextAreaV2
-                className="h-full flex-1"
-                control={form.control}
-                variant="borderless"
-                name="text"
-                placeholder="Say something about this..."
-                autoSize={{ minRows: 2, maxRows: 6 }}
-              />
-            </div>
+              </div>
+            )}
           </div>
           <div>
             <HookFormCheckBox
