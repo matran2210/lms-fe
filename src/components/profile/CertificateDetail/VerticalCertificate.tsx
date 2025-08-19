@@ -1,13 +1,15 @@
-import React from 'react'
-import { Button } from 'antd'
-import CertificateCard from './CertificateCard'
-import Image from 'next/image'
-import Icon from '@components/icons'
-import { ClickToCopyButton } from 'src/common/SappCopyLink'
-import { ICertificate } from '@pages/certificates/[id]'
-import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
 import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import Icon from '@components/icons'
+import CertificateImg from '@components/layout/ExpandIcon/CertificateImg'
+import { ICertificate } from '@pages/certificates/[id]'
+import Image from 'next/image'
+import React, { useState } from 'react'
+import { ClickToCopyButton } from 'src/common/SappCopyLink'
+import { LinkedInShareButton } from './ButtonShareLinkedin'
+import CertificateCard from './CertificateCard'
+import ModalShareToLinkedin from './ModalShareToLinkedin'
+import { CopyIcon } from '@assets/icons'
 
 interface CertificateVerticalProps {
   certificate?: ICertificate
@@ -20,6 +22,9 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const [openModalShare, setOpenModalShare] = useState(false)
+  const onOpenModalShare = () => setOpenModalShare(true)
+  const onCloseModalShare = () => setOpenModalShare(false)
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
@@ -62,7 +67,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               </div>
               <div className="text-center">
                 <p>Congratulations, you have achieved the</p>
-                <p className="font-bold">{certificate?.course.name}</p>
+                <p className="font-bold">{certificate?.course?.name}</p>
                 <p>issued by {issuedBy}!</p>
               </div>
             </div>
@@ -75,22 +80,29 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               >
                 Download
               </ButtonPrimary>
+              <LinkedInShareButton
+                certificateUrl={certificate?.certificate_url || ''}
+                onOpenModalShare={onOpenModalShare}
+              />
               <ClickToCopyButton
                 className="h-auto"
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
-                <Button
-                  icon={<Icon type="share" />}
-                  type="text"
-                  className="h-full underline"
-                >
-                  Share Certificate
-                </Button>
+                <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200">
+                  <CopyIcon />
+                </div>
               </ClickToCopyButton>
             </div>
           </div>
         </div>
       </div>
+      {certificate && (
+        <ModalShareToLinkedin
+          open={openModalShare}
+          onClose={onCloseModalShare}
+          certificate={certificate}
+        />
+      )}
     </CertificateCard>
   )
 }
