@@ -6,6 +6,9 @@ import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import { PageLink } from 'src/constants'
 import clsx from 'clsx'
+import { userReducer } from 'src/redux/slice/User/User'
+import { UserType } from 'src/redux/types/User/urser'
+import { useAppSelector } from 'src/redux/hook'
 
 const destinations = [
   {
@@ -22,7 +25,9 @@ const destinations = [
 ]
 
 export default function GotoModal() {
+  const userType = useAppSelector(userReducer).user.type
   const { isVisibleGotoModal, setVisibleGotoModal } = useStaticModalContext()
+
   const router = useRouter()
 
   const handleRedirect = (path: string) => {
@@ -31,7 +36,10 @@ export default function GotoModal() {
   }
 
   return (
-    <BaseStaticModal visible={isVisibleGotoModal} title="Where you want to go?">
+    <BaseStaticModal
+      visible={userType === UserType.TEACHER ? false : isVisibleGotoModal}
+      title="Where you want to go?"
+    >
       <div className="mt-6 flex flex-col gap-y-4 md:mt-10 md:gap-y-6">
         {destinations.map((destination, index) => (
           <div
