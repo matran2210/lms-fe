@@ -373,7 +373,7 @@ export default function LearningNotesList({
 
                   return (
                     <div
-                      className="hover:bg-primary-50 cursor-pointer rounded-2xl md:p-4"
+                      className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
                       key={note?.id}
                       onClick={handleView}
                     >

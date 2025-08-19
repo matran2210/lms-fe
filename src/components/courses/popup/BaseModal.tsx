@@ -1,6 +1,6 @@
-import React from 'react';
-import { Modal } from 'antd';
-import { BaseModalProps } from 'src/type/courses-3-level';
+import React from 'react'
+import { Modal } from 'antd'
+import { BaseModalProps } from 'src/type/courses-3-level'
 
 export default function BaseModal({
   title = '',
@@ -13,9 +13,8 @@ export default function BaseModal({
   style = {},
   bodyStyle = {},
   wrapClassName = '',
-  children
+  children,
 }: BaseModalProps) {
-
   return (
     <Modal
       title={title}
@@ -29,7 +28,7 @@ export default function BaseModal({
         borderRadius: 8,
         overflow: 'hidden',
         boxShadow: '0px 4px 12px 0px #2C30000A',
-        ...style
+        ...style,
       }}
       bodyStyle={{ ...bodyStyle }}
       wrapClassName={wrapClassName}

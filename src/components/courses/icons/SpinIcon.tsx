@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 export const SpinIcon = () => {
   return (
@@ -19,5 +19,5 @@ export const SpinIcon = () => {
         fill="currentColor"
       />
     </svg>
-  );
-};
+  )
+}

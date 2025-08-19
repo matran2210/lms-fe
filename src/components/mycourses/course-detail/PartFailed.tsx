@@ -12,6 +12,7 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
+import TestModalTeacher from '@components/courses/popup/TestModalTeacher'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
@@ -22,10 +23,12 @@ const PartFailed = ({
   coursePart,
   class_user_id,
   is_passed_course,
+  isTeacher,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
   is_passed_course: boolean
+  isTeacher: boolean
 }) => {
   const isSubmitted =
     coursePart?.quiz?.attempt &&
@@ -276,6 +279,7 @@ const PartFailed = ({
                   trackGA={() => {
                     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)
                   }}
+                  isTeacher={isTeacher}
                 />
               )}
 
@@ -308,15 +312,27 @@ const PartFailed = ({
           )}
         </div>
       </div>
-      <TestModal
-        open={open}
-        setOpen={setOpen}
-        title={coursePart?.name}
-        data={coursePart}
-        class_user_id={class_user_id}
-        is_passed_course={is_passed_course}
-        activeCourse={() => {}}
-      />
+      {isTeacher ? (
+        <TestModalTeacher
+          open={open}
+          setOpen={setOpen}
+          title={coursePart?.name}
+          data={coursePart}
+          class_user_id={class_user_id}
+          is_passed_course={is_passed_course}
+          activeCourse={() => {}}
+        />
+      ) : (
+        <TestModal
+          open={open}
+          setOpen={setOpen}
+          title={coursePart?.name}
+          data={coursePart}
+          class_user_id={class_user_id}
+          is_passed_course={is_passed_course}
+          activeCourse={() => {}}
+        />
+      )}
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
