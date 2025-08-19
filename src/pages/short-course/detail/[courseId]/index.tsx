@@ -106,7 +106,7 @@ const CourseDetail = () => {
       <div className="hidden pt-4 md:block">
         <SearchForm3Level placeholder={MY_COURSES.placeholderSearchV2} />
       </div>
-      <div className="relative mx-auto my-0 max-w-xxl xl-max:mx-4">
+      <div className="relative mx-auto my-0 max-w-1524 xl-max:mx-4">
         <Breadcrumb3Level
           tabs={breadcrumbs}
           currentPage={courseNameDetail}

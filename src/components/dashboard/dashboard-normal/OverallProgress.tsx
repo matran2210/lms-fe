@@ -180,7 +180,7 @@ const OverallProgress = ({ setActivities }: OverallProgressProps) => {
                   <span className="text-sm font-medium md:text-base">
                     <span className="text-gray-800">Completed</span>{' '}
                     <span className="text-gray">
-                      ({activities?.activity?.completed})
+                      ({activities?.activity?.completed || 0})
                     </span>
                   </span>
                 </div>
@@ -198,7 +198,7 @@ const OverallProgress = ({ setActivities }: OverallProgressProps) => {
                       typeof activities?.activity?.completed === 'number'
                         ? activities.activity.total -
                           activities.activity.completed
-                        : '-'}
+                        : 0}
                       )
                     </span>
                   </span>

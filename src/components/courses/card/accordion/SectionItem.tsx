@@ -26,7 +26,7 @@ export default function SectionItem({
           <span className="text-base font-medium text-bw-15 md:text-xl md:leading-7">
             {section?.name}
           </span>
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
             {!isFinish &&
               section?.course_section_type == TEST_TYPE_ENUM.PART && (
                 <span className="text-gray-1 hidden text-nowrap text-sm md:inline-block">

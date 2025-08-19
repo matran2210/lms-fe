@@ -121,6 +121,19 @@ const Part = ({
       isMobileView ? 'font-size: 14px' : 'font-size: 16px',
     )
   }
+  const handleReplace = (html: string = '') => {
+    if (!html) return ''
+    // Thay tất cả font-size
+    html = html.replace(/font-size:\s*[^;"]+/gi, 'font-size: 16px')
+
+    // Thay tất cả color
+    html = html.replace(/color:\s*[^;"]+/gi, 'color: white')
+
+    // Thay tất cả font-weight
+    html = html.replace(/font-weight:\s*[^;"]+/gi, 'font-weight: normal')
+    return html
+  }
+  const description = handleReplace(course?.description)
 
   return (
     <CardCourse
@@ -138,7 +151,7 @@ const Part = ({
             title={
               <div
                 dangerouslySetInnerHTML={{
-                  __html: transformAllFontSize(course?.description),
+                  __html: description,
                 }}
               />
             }

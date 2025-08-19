@@ -76,7 +76,7 @@ export default function Sidebar({
           className,
           isGuideActive ? 'z-50' : 'z-30',
           isOpened || (isGuideActive && 'w-[220px]'),
-          'peer m-4 rounded-xl',
+          'peer m-4 rounded-xl before:absolute before:-left-4 before:z-50 before:block before:h-full before:w-5 before:bg-transparent before:content-[""]',
         )}
       >
         <div
@@ -91,10 +91,15 @@ export default function Sidebar({
             onClick={() => closeSideBar()}
           >
             <div
-              className="flex h-[50px] items-end justify-center text-center"
+              className="relative flex h-[50px] items-end justify-center text-center"
               onClick={() => trackGAEvent('Click Logo SAPP Menu')}
             >
-              <ExpandIcon type={'logo-default'} />
+              <ExpandIcon
+                type={'logo-default'}
+                className={clsx(
+                  'transition-transform duration-300 ease-out lg:translate-x-[70%] lg:transform lg:group-hover:left-0 lg:group-hover:translate-x-0',
+                )}
+              />
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
@@ -192,20 +197,17 @@ export default function Sidebar({
         className={clsx(
           `sidebar-overlay ${
             isOpened
-              ? 'block peer-hover:block lg:hidden'
-              : 'hidden peer-hover:block'
-          } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080]`,
+              ? 'pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0'
+              : 'pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100'
+          } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080] transition-opacity duration-300 ease-in-out`,
           {
-            '!hidden': guideStatus && (guideStep === 2 || guideStep === 3),
+            '!pointer-events-none !opacity-0':
+              guideStatus && (guideStep === 2 || guideStep === 3),
           },
         )}
       />
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
+
       {openExaminationInfo && (
         <ExaminationInfo
           open={openExaminationInfo}

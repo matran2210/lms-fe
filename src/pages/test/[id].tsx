@@ -2,6 +2,7 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
+import styles from './test.module.scss'
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -84,6 +85,7 @@ import { IRequirement } from 'src/type/case-study'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
+  hasEditorValueFromHtml,
   isValuesEqual,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
@@ -203,6 +205,42 @@ const TestDetail = () => {
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
   const [trigger, setTrigger] = useState(false)
 
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình (responsive)
+  const [windowWidth, setWindowWidth] = useState(0)
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MAX_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
+
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
+
   useClickOutside({
     ref: dropUpRequire,
     callback: () => setShowLisRequirement(false),
@@ -254,7 +292,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
-          } = answerSubmitted[0]
+          } = answerSubmitted?.[0]
 
           // Handle different question types
           if (
@@ -663,7 +701,9 @@ const TestDetail = () => {
           const hasAnswer =
             currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
               ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
-              : getValues(`${currentTabID}_${index}_answer`)
+              : hasEditorValueFromHtml(
+                  getValues(`${currentTabID}_${index}_answer`),
+                )
           return {
             label: (
               <span className="flex items-center gap-1 text-base font-normal">
@@ -2363,6 +2403,7 @@ const TestDetail = () => {
           {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
+                className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
                 disabled={!watch(`${currentPage}_answer`)}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
@@ -2388,7 +2429,6 @@ const TestDetail = () => {
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-            mouseEnterDelay={0.3}
             placement="left"
             color={'#404041'}
           >
@@ -2585,9 +2625,13 @@ const TestDetail = () => {
           footer={
             <div
               className={clsx(
-                'flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:justify-between',
-                activeShowAll ? 'lg:h-[124px]' : 'lg:h-[80px]',
+                'flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:h-[var(--footer-h)] lg:justify-between',
               )}
+              style={{
+                ['--footer-h' as any]: activeShowAll
+                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
+                  : '80px',
+              }}
             >
               <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
                 {/* <button
@@ -2706,7 +2750,12 @@ const TestDetail = () => {
                     setValueFilter={setValueFilter}
                     isScrollCenter={false}
                   />
-                  <div className="flex items-center justify-center lg:ml-8 lg:justify-start">
+                  <div
+                    className={clsx(
+                      `flex items-center justify-center lg:justify-start`,
+                      activeShowAll ? 'lg:ml-8' : 'lg:ml-0',
+                    )}
+                  >
                     {activeShowAll && <OptionShowAll />}
                     <Tooltip
                       className="tooltip-show-all"
@@ -2801,14 +2850,18 @@ const TestDetail = () => {
                     </div>
                   )} */}
               <div
-                className="hidden min-w-[150px] cursor-pointer items-center gap-2 text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
+                className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
                 onClick={() => {
                   handleFlagQuestion(currentPage)
                   trackGAEvent('Click Button Flag To Review Test')
                 }}
               >
                 <FlagIcon />
-                <div>Flag to Review</div>
+                {currentTabContent?.flag ? (
+                  <div>Unflag to Review</div>
+                ) : (
+                  <div>Flag to Review</div>
+                )}
               </div>
               {/* <button
                   disabled={currentTabContent?.is_viewed_answer}
@@ -2889,8 +2942,13 @@ const TestDetail = () => {
                     id={'preview-question'}
                   >
                     <div
-                      className="h-full overflow-auto bg-white p-8"
-                      style={{ width: `calc(50% - ${leftWidth}px)` }}
+                      className={clsx(
+                        'h-full min-w-[20%] overflow-auto bg-white p-8',
+                        styles.scrollYOnly,
+                      )}
+                      style={{
+                        width: `calc(50% - ${leftWidth}px)`,
+                      }}
                     >
                       <div
                         id="hightlight_area_topic"
@@ -2946,7 +3004,11 @@ const TestDetail = () => {
                       </div>
                     </div>
                     <div
-                      className="h-full min-w-[300px] overflow-auto bg-white p-8"
+                      className={clsx(
+                        'h-full overflow-auto bg-white p-8',
+                        styles.scrollYOnly,
+                        'has-horizontal',
+                      )}
                       style={{ width: `calc(50% + ${leftWidth}px)` }}
                       ref={rightSideRef}
                     >

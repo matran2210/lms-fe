@@ -13,7 +13,6 @@ import { IRequirement } from 'src/type/case-study'
 import { QUESTION_TYPES } from 'src/type/course/Question'
 import { IAtempt } from 'src/type/results'
 import { CoursesAPI } from '../api/courses'
-import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { CloseIconV2 } from '@components/icons'
 import Tooltip from 'src/common/Tooltip'
 

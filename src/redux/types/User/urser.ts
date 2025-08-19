@@ -114,6 +114,11 @@ export interface IUserDetail {
   company_rank: null | string
   settings: null | any
 }
+export interface IFacility {
+  id: string
+  name: string
+  code: string
+}
 export interface UserState {
   loading: boolean
   loadingEditName: boolean

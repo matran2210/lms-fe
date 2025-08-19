@@ -5,7 +5,6 @@ import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -20,7 +19,7 @@ import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
 import 'entrance-test-result-package-test-v2/dist/index.css'
-import 'quiz-result-package/dist/index.css'
+import 'quiz-result-package-dat-test/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -56,6 +55,7 @@ import 'sapp-preview-part-test/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
+import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -64,6 +64,8 @@ export const excludedPathsHelp = [
   '/case-study/result/[id]',
   '/teachers',
 ]
+
+const activityPath = ['/courses/[id]/activity/[activityId]']
 type MyAppProps = AppProps & {
   Component: {
     layout?: String
@@ -160,6 +162,10 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       window.GA_INITIALIZED = true
     }
   }, [])
+
+  const showBackToTop = !activityPath.some((path) =>
+    router.pathname.includes(path),
+  )
 
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
@@ -311,26 +317,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                 <CourseNoteProvider>
                   <QueryClientProvider client={queryClient}>
                     <SocketContext.Provider value={socket}>
-                      <Toaster
-                        toastOptions={{
-                          style: {
-                            maxWidth: '400px', // Tăng chiều rộng của toast
-                          },
-                        }}
-                      />
-                      <SappConfirmDialogContainer />
-                      <RouteGuard>
-                        <>
-                          <div className="relative">
-                            <PinnedNotifications />
-                            <Component {...pageProps} />
-                          </div>
-                          <BackToTop />
-                          <Help showHelp={showHelp} />
-                          <LearningNotesList />
-                          <PopupCompletedCourse />
-                        </>
-                      </RouteGuard>
+                      <PreviousSectionRouteProvider>
+                        <Toaster
+                          toastOptions={{
+                            style: {
+                              maxWidth: '400px', // Tăng chiều rộng của toast
+                            },
+                          }}
+                        />
+                        <SappConfirmDialogContainer />
+                        <RouteGuard>
+                          <>
+                            <div className="relative">
+                              <PinnedNotifications />
+                              <Component {...pageProps} />
+                            </div>
+                            {showBackToTop && <BackToTop />}
+                            <Help showHelp={showHelp} />
+                            <LearningNotesList />
+                            <PopupCompletedCourse />
+                          </>
+                        </RouteGuard>
+                      </PreviousSectionRouteProvider>
                     </SocketContext.Provider>
                   </QueryClientProvider>
                 </CourseNoteProvider>

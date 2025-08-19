@@ -4,7 +4,6 @@ import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
 import clsx from 'clsx'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
-import { Grid } from 'antd'
 
 interface IProps {
   data: Array<any>
@@ -32,49 +31,98 @@ const TabSlide = ({
   hasScrollBar,
   setHasScrollBar,
 }: IProps) => {
-  const { useBreakpoint } = Grid
-  const screens = useBreakpoint()
-  const NUMBER_DISPLAY_DATA_DESKTOP = 25
-  const NUMBER_DISPLAY_DATA_TABLET = 14
-  const numberDisplayData = screens?.lg
-    ? NUMBER_DISPLAY_DATA_DESKTOP
-    : NUMBER_DISPLAY_DATA_TABLET
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const [windowWidth, setWindowWidth] = useState(0)
   const elementRef = useRef(null) as any
+
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MIN_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
   useEffect(() => {
-    if (elementRef?.current && !activeShowAll && isScrollCenter) {
-      elementRef.current.scrollTo(
-        elementRef?.current.offsetWidth *
-          Math.floor(
-            (49 * data.findIndex((e: any) => e.id === currentTab)) /
-              elementRef?.current.offsetWidth,
-          ),
-        0,
-      )
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
     }
-  }, [currentTab, elementRef?.current])
 
-  // useEffect(() => {
-  //   function updateState(hasScrollBar: any) {
-  //     if (hasScrollBar !== undefined) {
-  //       setValueFilter('filter', undefined)
-  //       setActiveShowAll(false)
-  //       const el = elementRef.current
-  //       el &&
-  //         setHasScrollBar(
-  //           el.scrollWidth > el.getBoundingClientRect().width &&
-  //             data?.length > 0,
-  //         )
-  //     }
-  //   }
-  //   updateState(hasScrollBar)
-  //   window.addEventListener('resize', updateState)
-  //   return () => window.removeEventListener('resize', updateState)
-  // }, [hasScrollBar])
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
 
-  // Sắp xếp lại thứ tự các câu hỏi theo index tăng dần
-  const sortedData = useMemo(() => {
-    return [...data].sort((a, b) => a.index - b.index)
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
+
+  // Cập nhật windowWidth khi activeShowAll thay đổi
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Sử dụng setTimeout để đảm bảo DOM đã render sau khi activeShowAll thay đổi
+    const timeoutId = setTimeout(updateWindowWidth, 100)
+
+    return () => clearTimeout(timeoutId)
+  }, [activeShowAll])
+
+  useEffect(() => {
+    const container = elementRef?.current as HTMLElement | null
+    if (!container || activeShowAll) return
+
+    const activeItem = container.querySelector(
+      `[data-tab-id="${currentTab}"]`,
+    ) as HTMLElement | null
+    if (!activeItem) return
+
+    const containerWidth = container.clientWidth
+    const itemWidth = activeItem.clientWidth
+    const itemLeft = activeItem.offsetLeft
+
+    let targetLeft = isScrollCenter
+      ? itemLeft - (containerWidth - itemWidth) / 2
+      : itemLeft - (containerWidth - itemWidth)
+
+    const maxScrollLeft = container.scrollWidth - containerWidth
+    if (targetLeft < 0) targetLeft = 0
+    if (targetLeft > maxScrollLeft) targetLeft = maxScrollLeft
+
+    container.scrollTo({ left: targetLeft, behavior: 'smooth' })
+  }, [currentTab, activeShowAll, isScrollCenter, data?.length])
+
+  // Loại bỏ trùng id, sau đó sắp xếp theo index tăng dần để tránh trùng item active
+  const uniqueData = useMemo(() => {
+    const seenIds = new Set<string>()
+    const result: any[] = []
+    for (const item of data || []) {
+      const id = item?.id
+      if (id == null) continue
+      if (!seenIds.has(id)) {
+        seenIds.add(id)
+        result.push(item)
+      }
+    }
+    return result
   }, [data])
+
+  const sortedData = useMemo(() => {
+    return [...uniqueData].sort((a, b) => a.index - b.index)
+  }, [uniqueData])
 
   useEffect(() => {
     if (elementRef?.current && sortedData.length > 0) {
@@ -85,15 +133,14 @@ const TabSlide = ({
             sortedData?.length > 0,
         )
     }
-  }, [elementRef?.current, sortedData?.length])
+  }, [sortedData.length, setHasScrollBar])
 
   // Chia sortedData thành các dòng liên tiếp theo chiều ngang
-  const numberPerRow = numberDisplayData
   const rows = useMemo(() => {
     if (!activeShowAll || sortedData.length <= numberDisplayData) return []
     const result = []
-    for (let i = 0; i < sortedData.length; i += numberPerRow) {
-      result.push(sortedData.slice(i, i + numberPerRow))
+    for (let i = 0; i < sortedData.length; i += numberDisplayData) {
+      result.push(sortedData.slice(i, i + numberDisplayData))
     }
     return result
   }, [sortedData, activeShowAll, numberDisplayData])
@@ -203,12 +250,11 @@ const TabSlide = ({
         {/* Phần render các số */}
         <div
           className={clsx(
-            'flex w-fit select-none justify-start gap-2 overflow-hidden pt-1 duration-300 ease-in-out will-change-auto',
+            'flex w-fit select-none justify-start gap-2 pt-1 duration-300 ease-in-out will-change-auto',
             {
               '!w-fit': activeShowAll,
-              'h-[88px]':
-                activeShowAll && sortedData?.length > numberDisplayData,
-              'h-[44px]': !activeShowAll,
+              'h-[44px] overflow-hidden': !activeShowAll,
+              'overflow-visible': activeShowAll,
             },
           )}
           ref={elementRef}
@@ -225,7 +271,11 @@ const TabSlide = ({
               sortedData.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
-                  <div className="flex" key={pageNum.id}>
+                  <div
+                    className="flex"
+                    key={pageNum.id}
+                    data-tab-id={pageNum.id}
+                  >
                     {idx !== 0 && <div className="me-2 h-full border"></div>}
                     <PageLink
                       key={pageNum.id}
@@ -244,39 +294,52 @@ const TabSlide = ({
                     </PageLink>
                   </div>
                 ) : (
-                  <PageLink
+                  <div
+                    className="flex"
                     key={pageNum.id}
-                    active={currentTab === pageNum.id}
-                    onClick={() => {
-                      if (setCurrentTab !== undefined) {
-                        handleChangeTab(pageNum.id)
-                      }
-                    }}
-                    isViewedProp={pageNum.attempted}
-                    isFlagedProp={pageNum.flag}
+                    data-tab-id={pageNum.id}
                   >
-                    {pageNum.index + 1}
-                  </PageLink>
+                    <PageLink
+                      key={pageNum.id}
+                      active={currentTab === pageNum.id}
+                      onClick={() => {
+                        if (setCurrentTab !== undefined) {
+                          handleChangeTab(pageNum.id)
+                        }
+                      }}
+                      isViewedProp={pageNum.attempted}
+                      isFlagedProp={pageNum.flag}
+                    >
+                      {pageNum.index + 1}
+                    </PageLink>
+                  </div>
                 ),
               )
             ) : (
+              // Show-all: multi-rows by numberPerRow (responsive: max 25, min 14)
               <div className="flex flex-col gap-2">
                 {rows.map((row, rowIdx) => (
                   <div className="flex flex-row gap-2" key={rowIdx}>
                     {row.map((pageNum: any) => (
-                      <PageLink
+                      <div
+                        className="flex"
                         key={pageNum.id}
-                        active={currentTab === pageNum.id}
-                        onClick={() => {
-                          if (setCurrentTab !== undefined) {
-                            handleChangeTab(pageNum.id)
-                          }
-                        }}
-                        isViewedProp={pageNum.attempted}
-                        isFlagedProp={pageNum.flag}
+                        data-tab-id={pageNum.id}
                       >
-                        {pageNum.index + 1}
-                      </PageLink>
+                        <PageLink
+                          key={pageNum.id}
+                          active={currentTab === pageNum.id}
+                          onClick={() => {
+                            if (setCurrentTab !== undefined) {
+                              handleChangeTab(pageNum.id)
+                            }
+                          }}
+                          isViewedProp={pageNum.attempted}
+                          isFlagedProp={pageNum.flag}
+                        >
+                          {pageNum.index + 1}
+                        </PageLink>
+                      </div>
                     ))}
                   </div>
                 ))}

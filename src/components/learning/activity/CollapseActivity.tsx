@@ -27,23 +27,25 @@ const CollapseActivity = ({
     {
       key: 'activity',
       label: (
-        <div className="text-base font-semibold leading-[27px] text-gray-800 md:text-lg">
-          {resultData?.name}
-        </div>
-      ),
-      children: (
-        <>
+        <div className="flex flex-col gap-2">
+          <div className="text-base font-semibold leading-[27px] text-gray-800 md:text-lg">
+            {resultData?.name}
+          </div>
           {!isMobileView && (
-            <div className="mb-4 mt-2 text-base font-normal leading-normal text-gray-400">
+            <div className="text-base font-normal leading-normal text-gray-400">
               {resultData?.path}
             </div>
           )}
+        </div>
+      ),
+      children: (
+        <div className="mt-4 md:mt-6">
           <TableListQuizInActivity
             data={resultData}
             handleViewActivity={handleViewActivity}
             getScore={getScore ?? (() => '-')}
           />
-        </>
+        </div>
       ),
     },
   ]

@@ -51,6 +51,7 @@ type Props = {
   profile?: IUser
   setLoading: (isLoading: boolean) => void
   isSappSupporterUserCurrent?: boolean
+  handleEditDiscussionElement: (isEdit: boolean) => void
 }
 type UserInfo = {
   name: string
@@ -72,6 +73,7 @@ function DiscussionElement({
   profile,
   setLoading,
   isSappSupporterUserCurrent = false,
+  handleEditDiscussionElement,
 }: Props) {
   const { isMobileView } = useTailwindBreakpoint()
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
@@ -122,6 +124,7 @@ function DiscussionElement({
       if (res?.success) {
         setDiscussionContent(res?.data?.content)
         setIsEdit(false)
+        handleEditDiscussionElement(false)
         setSelectFile([])
       }
     } catch (error) {
@@ -196,11 +199,13 @@ function DiscussionElement({
   const handleEdit = () => {
     setEditValue(discussionContent)
     setIsEdit(true)
+    handleEditDiscussionElement(true)
     trackGAEvent('Click Edit Comment Activity')
   }
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    handleEditDiscussionElement(false)
     handleRefresh()
     setSelectFile([])
     trackGAEvent('Click Cancel Edit Comment Activity')
@@ -422,7 +427,7 @@ function DiscussionElement({
                     name="editData"
                     defaultValue={editValue}
                     handleKeyDown={handleKeyDown}
-                    className="w-fill--available comment-scrollbar h-[40px] min-h-[40px] rounded-lg px-4 py-2 md:h-12 md:min-h-12 md:py-3"
+                    className="w-fill--available comment-scrollbar h-[40px] min-h-14 rounded-lg px-4 py-2 md:h-12 md:py-3"
                     actions={
                       <div className="flex items-center gap-x-3">
                         <SappButtonIcon

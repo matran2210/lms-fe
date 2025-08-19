@@ -204,15 +204,18 @@ const MyProfile = ({
               >
                 {isEdit ? (
                   <div className="flex w-full items-center gap-2">
-                    <HookFormTextField
-                      placeholder="Enter Text..."
-                      control={control}
-                      name="full_name"
-                      skeleton={loadingEditName}
-                      className="h-full w-full flex-1"
-                      inputClassName="rounded-lg h-full px-4 py-3"
-                      textSize="sm"
-                    ></HookFormTextField>
+                    <div className="flex-1">
+                      <HookFormTextField
+                        placeholder="Enter Text..."
+                        control={control}
+                        name="full_name"
+                        skeleton={loadingEditName}
+                        className="h-full w-full"
+                        inputClassName="rounded-lg h-full px-4 py-3"
+                        textSize="sm"
+                      ></HookFormTextField>
+                    </div>
+
                     <ButtonCancelSubmit
                       className="flex flex-row-reverse gap-2"
                       cancel={{
@@ -221,13 +224,13 @@ const MyProfile = ({
                         size: 'medium',
                         disabled: loading || loadingEditName,
                         className:
-                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4',
+                          'min-w-fit text-sm w-20 rounded-lg py-2 px-4',
                       }}
                       submit={{
                         title: 'Confirm',
                         size: 'medium',
                         className:
-                          'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
+                          'min-w-fit text-sm w-20 rounded-lg py-2 px-4 !no-underline',
                         htmlType: 'submit',
                         loading: loading || loadingEditName,
                       }}
@@ -434,7 +437,7 @@ const TextWrapper = ({
   title: string
   children?: React.ReactNode
   isEdit?: boolean
-  value?: string
+  value?: React.ReactNode
   loading: boolean
   handleClickEdit?: () => void
   showEditIcon?: boolean
@@ -451,7 +454,7 @@ const TextWrapper = ({
   return (
     <li
       className={clsx(
-        'group mb-6 flex gap-[1.4rem] text-sm md:mb-4 md:text-base',
+        'group mb-6 flex gap-[22.4px] text-sm md:mb-4 md:text-base',
         {
           'transition-[margin]': isEdit,
           '!block': isInForm && isEdit,
@@ -480,7 +483,7 @@ const TextWrapper = ({
 
       <div
         className={clsx(
-          'max-w-[200px] flex-none text-txt-secondary md:w-[17.43rem] lg:max-w-[50%]',
+          'max-w-[200px] flex-none text-txt-secondary md:w-[278.88px] lg:max-w-[50%]',
           { 'hidden lg:mb-2 lg:block': isEdit },
         )}
       >
@@ -501,8 +504,8 @@ const TextWrapper = ({
           {children}
         </div>
         {!isEdit && showEditIcon && (
-          <div className="hidden flex-auto justify-end lg:flex">
-            <div className="hidden grow cursor-pointer group-hover:block group-hover:text-primary">
+          <div className="flex-auto justify-end lg:flex">
+            <div className="block grow cursor-pointer text-primary">
               <div
                 className="flex items-center gap-2"
                 onClick={handleClickEdit}

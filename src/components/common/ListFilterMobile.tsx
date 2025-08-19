@@ -54,7 +54,7 @@ const ListFilterMobile = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-1 flex-col">
       {list.map((item) => (
         <div
           key={item.id}

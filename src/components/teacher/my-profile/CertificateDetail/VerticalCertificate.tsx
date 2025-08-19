@@ -20,6 +20,8 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const handleOpenSapp = () =>
+    window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
@@ -44,7 +46,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
         <div className="flex flex-1 flex-col items-center gap-12">
           <div
             className="flex w-full cursor-pointer items-end"
-            onClick={() => window.open('https://sapp.edu.vn', '_blank')}
+            onClick={handleOpenSapp}
           >
             <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
               <Image

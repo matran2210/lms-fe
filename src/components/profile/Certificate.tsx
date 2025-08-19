@@ -39,7 +39,7 @@ const Certificate = () => {
 
   const fetchChapterDetail = async () => {
     try {
-      const res = await AuthAPI.getCertificate(1, 10)
+      const res = await AuthAPI.getCertificate(1, 30)
       const certificate = res.data.certificates
       const userDetail = res.username
       setCertificateData(certificate)
@@ -78,7 +78,7 @@ const Certificate = () => {
           ) : (
             <CertificateImg className="border-none text-[#A1A1A1] group-hover:text-primary" />
           )}
-          <span className="font-semibold group-hover:text-primary">
+          <span className="text-base font-medium group-hover:text-primary">
             {record?.course?.name}
           </span>
         </div>
@@ -88,14 +88,14 @@ const Certificate = () => {
       title: 'Grade Archive',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary">{record?.pass_point}%</div>
+        <div className="text-base text-secondary">{record?.pass_point}%</div>
       ),
     },
     {
       title: 'Certificate Received',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary">
+        <div className="text-base text-secondary">
           {sappFormatDate(record?.received_times, 'DD/MM/YYYY HH:mm')}
         </div>
       ),
@@ -138,7 +138,7 @@ const Certificate = () => {
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
-        <div className="flex min-h-352 flex-col items-center justify-center gap-8">
+        <div className="flex min-h-352 flex-col items-center justify-center gap-6">
           <NoCertificationIcon />
           <div className="text-xl text-gray-800">
             You don&rsquo;t have any certificate!
@@ -150,6 +150,7 @@ const Certificate = () => {
           className="profile-certificate-table hidden lg:block"
           columns={columns}
           dataSource={certificateData}
+          pagination={false}
         />
       ) : null}
 

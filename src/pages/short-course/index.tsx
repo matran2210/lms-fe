@@ -120,10 +120,10 @@ const MyCourse3Level = () => {
         <SearchForm3Level placeholder={MY_COURSES.placeholderSearchV2} />
       </div>
       <div
-        className={`heading relative mx-auto my-0 mt-6 hidden max-w-xxl bg-white md:block xl-max:mx-4`}
+        className={`heading relative mx-auto my-0 mt-6 hidden max-w-1524 bg-white md:block xl-max:mx-4`}
         data-aos={ANIMATION.DATA_AOS}
       >
-        <div className="flex w-full items-center justify-between gap-8 rounded-md px-8 py-6 shadow-sidebar">
+        <div className="flex w-full items-center justify-between gap-8 rounded-md px-8 py-6 shadow-search">
           <div>
             <div>
               <h1 className="line-clamp-1 text-3xl font-medium leading-[46px] text-bw-15">
@@ -140,11 +140,11 @@ const MyCourse3Level = () => {
               </div>
             </div>
           </div>
-          <TabButton items={itemButtonTab} />
+          <TabButton items={itemButtonTab} className="!rounded" />
         </div>
       </div>
 
-      <div className="mx-auto mt-4 flex max-w-xxl items-center justify-between gap-8 md:mt-10 xl-max:mx-4">
+      <div className="mx-auto mt-4 flex max-w-1524 items-center justify-between gap-8 md:mt-10 xl-max:mx-4">
         <h3 className="text-2xl font-semibold leading-8 text-bw-15">
           My Course
         </h3>
@@ -156,7 +156,7 @@ const MyCourse3Level = () => {
       </div>
 
       <div
-        className={`relative mx-auto my-0 max-w-xxl pt-6 ${
+        className={`relative mx-auto my-0 max-w-1524 pt-6 ${
           isEmpty(courses)
             ? 'flex min-h-[calc(100vh-22rem)] items-center justify-center'
             : ''

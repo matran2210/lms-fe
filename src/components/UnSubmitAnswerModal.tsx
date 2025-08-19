@@ -51,7 +51,7 @@ const UnSubmitAnswerModal = ({
       cancelButtonClass="!p-0 underline hover:text-primary"
     >
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
-        <AlertTriagle className="md:w-22 md:h-22 h-12 w-12" />
+        <AlertTriagle className="h-12 w-12 md:h-[88px] md:w-[88px]" />
       </div>
       <div className="pb-4 pt-6 text-center text-2xl font-semibold text-gray-800 md:py-8 md:pt-10 md:text-3xl">
         Are You Sure?

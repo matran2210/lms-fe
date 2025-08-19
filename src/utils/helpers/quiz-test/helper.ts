@@ -2,7 +2,7 @@ import { TestAPI } from '@pages/api/test'
 import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
-import { Sheet } from 'src/type/test'
+import { Sheet } from 'src/type'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -245,39 +245,72 @@ export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
   return dayjs().isAfter(endTime)
 }
 
+const isHtmlEmpty = (s: string) => s.replace(/<[^>]*>/g, '').trim().length === 0
+
+const isMeaningfulCell = (cell: any): boolean => {
+  // Loại null/undefined
+  if (cell === null || cell === undefined) return false
+
+  // Số (kể cả 0) → tính là có dữ liệu nếu không phải NaN
+  if (typeof cell === 'number') return !Number.isNaN(cell)
+
+  // Boolean → cũng coi là có dữ liệu (người dùng đã nhập/chọn)
+  if (typeof cell === 'boolean') return true
+
+  // Chuỗi → khác rỗng/whitespace/HTML rỗng
+  if (typeof cell === 'string') {
+    const trimmed = cell.trim()
+    if (trimmed === '') return false
+    return !isHtmlEmpty(trimmed)
+  }
+
+  // Một số parser bọc giá trị trong object (vd: { v: 'abc' } hoặc { value: 123 } hoặc { text: '...' })
+  if (typeof cell === 'object') {
+    const wrapped = (cell as any).v ?? (cell as any).value ?? (cell as any).text
+    if (wrapped !== undefined) return isMeaningfulCell(wrapped)
+    // Nếu là mảng (ít gặp) → có phần tử “có ý nghĩa” là true
+    if (Array.isArray(cell)) return cell.some(isMeaningfulCell)
+    return false
+  }
+
+  // Các kiểu khác coi như không có dữ liệu
+  return false
+}
+
 export const checkSheetAnswered = (data: string | Sheet[]): boolean => {
   try {
-    // Parse the JSON string if it's a string
-    const parsedData: Sheet[] =
-      typeof data === 'string' ? JSON.parse(data) : data
+    const parsed: Sheet[] = typeof data === 'string' ? JSON.parse(data) : data
+    if (!Array.isArray(parsed) || parsed.length === 0) return false
 
-    // Check if data is an array and has at least one sheet
-    if (!Array.isArray(parsedData) || parsedData.length === 0) {
-      return false
-    }
+    for (const sheet of parsed) {
+      const grid = sheet?.data
+      if (!Array.isArray(grid)) continue
 
-    // Get the first sheet's data
-    const sheetData = parsedData[0].data
+      for (let r = 0; r < grid.length; r++) {
+        const row = grid[r]
+        if (!Array.isArray(row)) continue
 
-    // Check if sheetData exists and is an array
-    if (!Array.isArray(sheetData)) {
-      return false
-    }
-
-    // Check if any cell contains a non-null value
-    for (const row of sheetData) {
-      if (!Array.isArray(row)) continue
-
-      for (const cell of row) {
-        if (cell !== null) {
-          return true // Found a non-null value, meaning there's an answer
+        // Duyệt theo index để cả “ô trống (hole)” cũng được xem là undefined
+        for (let c = 0; c < row.length; c++) {
+          const cell = row[c]
+          if (isMeaningfulCell(cell)) return true
         }
       }
     }
 
-    return false // No non-null values found
-  } catch (error) {
-    // console.error('Error checking answer:', error)
+    return false
+  } catch {
     return false
   }
+}
+
+export function hasEditorValueFromHtml(
+  html: string | null | undefined,
+): boolean {
+  if (!html) return false
+
+  // Xoá hết thẻ HTML và khoảng trắng
+  const text = html.replace(/<[^>]*>/g, '').trim()
+
+  return text.length > 0
 }

@@ -174,7 +174,7 @@ const MultipleQuestion = ({
     )
   }
 
-  const annotations = [
+  const annotationsMultipleChoiceQuestions = [
     {
       text: 'Correct',
       color: 'bg-success',
@@ -183,6 +183,9 @@ const MultipleQuestion = ({
       text: 'Incorrect',
       color: 'bg-error',
     },
+  ]
+
+  const annotationsConstructedQuestions = [
     {
       text: 'Completed',
       color: 'bg-info',
@@ -192,6 +195,33 @@ const MultipleQuestion = ({
       color: 'bg-warning',
     },
   ]
+
+  const renderAnnotations = (
+    annotationsList: {
+      text: string
+      color: string
+    }[],
+  ) => {
+    return (
+      <div
+        className={clsx('text-xs md:text-base', {
+          'grid grid-cols-2 gap-x-14 gap-y-3': isLargeDesktopView,
+          'mx-auto flex items-center justify-center gap-8 md:gap-12':
+            showMore && !isLargeDesktopView,
+          'grid grid-cols-4 gap-x-12 gap-y-3': !showMore && !isLargeDesktopView,
+        })}
+      >
+        {annotationsList?.map((annotation) => (
+          <div key={annotation.text} className="flex items-center gap-2">
+            <div
+              className={`aspect-square h-4 w-4 rounded-full ${annotation.color}`}
+            />
+            <p>{annotation.text}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div className="relative">
@@ -231,7 +261,14 @@ const MultipleQuestion = ({
               </>,
               showMore,
             )}
-            <div className="h-[1px] w-full bg-gray-300" />
+
+            {questions?.selectedResponseAnswers?.length > 0 &&
+              renderAnnotations(annotationsMultipleChoiceQuestions)}
+
+            {questions?.constructedResponseAnswers?.length > 0 && (
+              <div className="h-[1px] w-full bg-gray-300" />
+            )}
+
             {renderBoxes(
               'Constructed Questions',
               questions?.constructedResponseAnswers ?? [],
@@ -239,24 +276,9 @@ const MultipleQuestion = ({
               null,
               showMore,
             )}
-            <div
-              className={clsx('text-xs md:text-base', {
-                'grid grid-cols-2 gap-x-14 gap-y-3': isLargeDesktopView,
-                'mx-auto flex items-center justify-center gap-3 md:gap-12':
-                  showMore && !isLargeDesktopView,
-                'grid grid-cols-4 gap-x-12 gap-y-3':
-                  !showMore && !isLargeDesktopView,
-              })}
-            >
-              {annotations.map((annotation) => (
-                <div key={annotation.text} className="flex items-center gap-2">
-                  <div
-                    className={`aspect-square h-5 w-5 rounded-full ${annotation.color}`}
-                  />
-                  <p>{annotation.text}</p>
-                </div>
-              ))}
-            </div>
+
+            {questions?.constructedResponseAnswers?.length > 0 &&
+              renderAnnotations(annotationsConstructedQuestions)}
           </div>
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
@@ -302,10 +324,10 @@ const MultipleQuestion = ({
                 )}
                 <div
                   className={
-                    'mt-3 flex items-center justify-between gap-3 text-xs md:justify-center md:gap-12 md:text-base'
+                    'mt-3 flex items-center justify-center gap-8 text-xs md:gap-12 md:text-base'
                   }
                 >
-                  {annotations.map((annotation) => (
+                  {annotationsMultipleChoiceQuestions.map((annotation) => (
                     <div
                       key={annotation.text}
                       className="flex items-center gap-1 lg:gap-2"

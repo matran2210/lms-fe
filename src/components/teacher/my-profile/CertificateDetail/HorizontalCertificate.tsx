@@ -20,6 +20,8 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
   issuedBy = 'SAPP Academy',
   onDownload,
 }) => {
+  const handleOpenSapp = () =>
+    window.open(process.env.NEXT_PUBLIC_SAPP_HOMEPAGE_DOMAIN, '_blank')
   return (
     <CertificateCard
       bodyClassName="flex h-screen justify-center container mx-auto"
@@ -28,7 +30,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
       <div className="flex max-w-[90%] flex-col items-center py-[84px] md:gap-10 md:py-[56px]">
         <div
           className="mb-10 flex w-full flex-shrink-0 cursor-pointer items-end md:mb-0"
-          onClick={() => window.open('https://sapp.edu.vn', '_blank')}
+          onClick={handleOpenSapp}
         >
           <div className="mx-auto my-auto block w-1/2 overflow-hidden sm:max-w-[14rem]">
             <Image

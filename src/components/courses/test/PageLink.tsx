@@ -71,7 +71,7 @@ const PageLink = ({
       <span className="h-[22px] w-4 text-center">{children}</span>
       {isFlagedProp && (
         <div className="absolute -right-1 -top-1.5">
-          <Flag className="text-badge-reject h-4 w-4" />
+          <Flag className="h-4 w-4 text-badge-reject" />
         </div>
       )}
     </li>

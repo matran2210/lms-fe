@@ -1257,8 +1257,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-[#ffdf20]'}`}
                   onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
+                    ;(setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false))
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">

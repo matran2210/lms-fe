@@ -2,8 +2,8 @@ import { CloseIcon } from '@assets/icons'
 import Layout from '@components/layout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from 'quiz-result-package'
-import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
+import { QuizResultComponent } from 'quiz-result-package-dat-test'
+import { IQuestionResultResponse } from 'quiz-result-package-dat-test/dist/type'
 import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
@@ -109,7 +109,7 @@ const TableEntranceResult = () => {
         </div>
       </div>
       <Layout size="sm" title="Entrance Test Result" showSidebar={false}>
-        <div className="m-autooverflow-x-auto overflow-y-hidden">
+        <div className="m-auto overflow-x-auto overflow-y-hidden">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}

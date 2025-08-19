@@ -231,6 +231,7 @@ const CourseDetail = () => {
       <SearchWithMenuToggle
         handleOpenSidebar={handleOpenSidebar}
         isShowToggle
+        isCoursePage
       />
 
       {isLoading ? (
@@ -257,7 +258,7 @@ const CourseDetail = () => {
             <HeaderMobile
               showIcon={false}
               title={courseNameDetail || ''}
-              className={clsx({ 'mt-4': isMobileView })}
+              className={clsx('!flex-nowrap', { 'mt-4': isMobileView })}
               extraActions={
                 <FilterCourse
                   totalResult={courses?.length || 0}
@@ -296,7 +297,7 @@ const CourseDetail = () => {
         />
       )}
 
-      <div className="sticky inset-x-0 bottom-4 z-50">
+      <div className="z-2 sticky inset-x-0 bottom-4">
         <div className="flex w-full flex-col gap-4">
           <CtaTrial />
           {pinnedCompletedCourse.isOpen && (

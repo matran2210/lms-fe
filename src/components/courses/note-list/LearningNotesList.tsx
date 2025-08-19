@@ -1,9 +1,4 @@
-import {
-  AltArrowLeft,
-  DeleteIcon,
-  EllipsisIconV2,
-  PencilV2Icon,
-} from '@assets/icons'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -42,6 +37,8 @@ import { DEFAULT_PAGESIZE } from 'src/constants'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import BaseModal from '@components/courses/popup/BaseModal'
+import ButtonPrimary from '@components/v2/base/button/ButtonPrimary'
+import { AltArrowLeft } from '../icons/AltArrowLeft'
 
 export default function LearningNotesList({
   onClose,
@@ -305,18 +302,16 @@ export default function LearningNotesList({
     }
   }
 
-  // Fetching note list after filter mobile was selected
-  useEffect(() => {
-    const debouncedSetCourseSectionId = debounce((value) => {
-      setCourseSectionId(value || '')
-    }, 500)
-
-    debouncedSetCourseSectionId(openChooseItem.params)
-
-    return () => {
-      debouncedSetCourseSectionId.cancel()
+  const handleFilter = () => {
+    if (openChooseItem?.params) {
+      setCourseSectionId(openChooseItem.params)
     }
-  }, [openChooseItem.params])
+    setIsOpenFilter(false)
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+  }
 
   // Common content for both desktop and mobile
   const renderContent = () => (
@@ -383,7 +378,7 @@ export default function LearningNotesList({
                       onClick={handleView}
                     >
                       <div className="flex justify-between">
-                        <div className="text-sm font-semibold text-gray-800 md:text-base">
+                        <div className="mr-4 line-clamp-1 text-sm font-semibold text-gray-800 md:text-base">
                           {note?.name}
                         </div>
                         <div onClick={(e) => e.stopPropagation()}>
@@ -461,6 +456,15 @@ export default function LearningNotesList({
           setListActivity={setListActivity}
         />
       )}
+      {isOpenFilter && (
+        <div className="mb-0 mt-2 w-full">
+          <ButtonPrimary
+            title="Confirm"
+            className="w-full"
+            onClick={handleFilter}
+          />
+        </div>
+      )}
     </FormProvider>
   )
 
@@ -474,9 +478,12 @@ export default function LearningNotesList({
           bodyStyle={{
             maxHeight: '50vh',
             overflowY: 'auto',
+            minHeight: '400px',
+            display: 'flex',
+            flexDirection: 'column',
           }}
           wrapClassName="note-list-modal"
-          footer={isOpenFilter}
+          footer={null}
           closable={!isOpenFilter}
         >
           {renderContent()}
@@ -493,6 +500,7 @@ export default function LearningNotesList({
           rootClassName={'responsive-drawer-center'}
           submitButtonClassName="w-full h-10"
           btnSubmitTile="Confirm"
+          closable
         >
           {renderContent()}
         </SappDrawerV3>
