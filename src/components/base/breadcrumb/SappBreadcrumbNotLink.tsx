@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Tooltip from 'src/common/Tooltip'
+import { PageLink } from 'src/constants'
 
 type IProps = {
   id: string
@@ -11,23 +12,43 @@ type IProps = {
 const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
   const router = useRouter()
   const getCourseId = router?.query?.courseId ?? router.query.id
+
+  const isShortCourse = router.pathname.startsWith(PageLink.SHORT_COURSE)
+
   return (
     <>
       {paths.map((path, index) => {
         let url = ''
-        switch (path.type) {
-          case 'PART':
-            url = `/courses/${getCourseId}/section/${path?.id}`
-            break
-          case 'CHAPTER':
-            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
-            break
-          case 'UNIT':
-            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-            break
-          case 'ACTIVITY':
-            url = `/courses/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-            break
+        if (isShortCourse) {
+          switch (path.type) {
+            case 'PART':
+              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
+              break
+            case 'CHAPTER':
+              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
+              break
+            case 'UNIT':
+              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
+              break
+            case 'ACTIVITY':
+              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
+              break
+          }
+        } else {
+          switch (path.type) {
+            case 'PART':
+              url = `${PageLink.COURSES}/${getCourseId}/section/${path?.id}`
+              break
+            case 'CHAPTER':
+              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
+              break
+            case 'UNIT':
+              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+              break
+            case 'ACTIVITY':
+              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+              break
+          }
         }
         return (
           <span

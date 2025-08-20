@@ -35,7 +35,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/courses/action/ActionCellV2'
-import { DEFAULT_PAGESIZE } from 'src/constants'
+import { DEFAULT_PAGESIZE, PageLink } from 'src/constants'
 import BaseModal from '@components/courses/popup/BaseModal'
 import ButtonPrimary from '@components/v2/base/button/ButtonPrimary'
 import { AltArrowLeft } from '../icons/AltArrowLeft'
@@ -344,8 +344,9 @@ export default function LearningNotesList({
                     }
                   }
                   const handleView = async () => {
+                    const pathname = `${PageLink.SHORT_COURSE}/detail/${courseId}/activity/${note?.course_section_id}`
                     await router.push({
-                      pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                      pathname,
                       query: {
                         note_id: note?.id,
                       },
