@@ -19,6 +19,7 @@ import { video_url } from '@utils/constants'
 import TimeLineModal from '@components/courses/timeline/TimeLineModal'
 import { Soundwave } from '@components/courses/icons'
 import QuizModal from '@components/courses/video/QuizModal'
+import { GRADING_PREFERENCE } from 'src/constants'
 
 type Props = {
   videos?: IVideo[]
@@ -338,6 +339,17 @@ const VideoDocument = ({
     }
   }, [atLastQuestion, isConfirmQuestion])
 
+  const handleCancelQuestion = () => {
+    handleClose({
+      questionId: activeQuestion?.id,
+      listQuestion: currentListQuestion,
+    })
+  }
+
+  const handleSubmitQuestion = handleSubmit(() =>
+    onSubmit(activeQuestion?.corrects ? true : false),
+  )
+
   return (
     <div>
       <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
@@ -430,13 +442,25 @@ const VideoDocument = ({
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
           thumbnail={currentVideo?.file?.resource?.thumbnail}
+          modalOpen={modalOpen}
+          finishAll={finishAll}
+          isConfirmQuestion={isConfirmQuestion}
+          activityId={activityId}
+          tabId={tabId}
+          quizId={quizId}
+          questionRef={questionRef}
+          activeQuestion={activeQuestion}
+          document_id={document_id}
+          grading_preference={grading_preference as GRADING_PREFERENCE}
+          handleSubmitQuestion={handleSubmitQuestion}
+          handleCancelQuestion={handleCancelQuestion}
         >
           {/* Modal for quiz questions */}
           {newQuizModal ? (
             <QuizModal
               modalOpen={modalOpen}
-              onSubmit={onSubmit}
-              onCancel={() => {}}
+              onSubmit={handleSubmitQuestion}
+              onCancel={handleCancelQuestion}
               finishAll={finishAll}
               isConfirmQuestion={isConfirmQuestion}
               questionRef={questionRef}
@@ -463,15 +487,8 @@ const VideoDocument = ({
               okButtonClass="!w-20 h-8.5 !px-0"
               cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
               footerButtonClassName="!justify-between flex"
-              handleSubmit={handleSubmit((e) =>
-                onSubmit(activeQuestion?.corrects ? true : false),
-              )}
-              handleCancel={() => {
-                handleClose({
-                  questionId: activeQuestion?.id,
-                  listQuestion: currentListQuestion,
-                })
-              }}
+              handleSubmit={handleSubmitQuestion}
+              handleCancel={handleCancelQuestion}
               closeAfterSubmit={false}
               colorCancel="textUnderline"
               cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
