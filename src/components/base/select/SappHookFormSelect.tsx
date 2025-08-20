@@ -57,7 +57,7 @@ const SappHookFormSelect = ({
     (selectedOption: OptionType | null) => {
       onSelectChange?.(selectedOption)
     },
-    [onSelectChange]
+    [onSelectChange],
   )
 
   const handleMenuOpen = useCallback(() => {
@@ -83,7 +83,7 @@ const SappHookFormSelect = ({
               className={clsx(
                 'select-single',
                 isSelectCustom && 'select-single-custom',
-                className
+                className,
               )}
               classNamePrefix="select"
               instanceId="selectInstanceId"

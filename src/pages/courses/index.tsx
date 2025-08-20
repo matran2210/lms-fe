@@ -81,9 +81,9 @@ const MyCourse = () => {
    * @description config params khi filter
    */
   const params = {
-    name: router.query.name || undefined,
-    status: router.query.status || undefined,
-    type: router.query.type || undefined,
+    name: router.query?.name || undefined,
+    status: router.query?.status || undefined,
+    type: router.query?.type || undefined,
     template: '4',
   }
 
@@ -139,7 +139,7 @@ const MyCourse = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params.name, params.status, params.type])
+  }, [params?.name, params?.status, params?.type])
 
   /**
    * @description gọi lại animation khi reload lại component

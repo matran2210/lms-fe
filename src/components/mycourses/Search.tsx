@@ -4,14 +4,20 @@ import Icon from '@components/icons'
 import { buildQueryString } from '@utils/index'
 import { Controller, useForm } from 'react-hook-form'
 import { debounce, isEmpty } from 'lodash'
-
+import { getUserPrefix } from '@utils/helpers'
 interface IProps {
   placeholder: string
   formStyle: string
   setPage?: Dispatch<SetStateAction<number>>
+  isTeacher?: boolean
 }
 
-const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
+const SearchForm = ({
+  placeholder,
+  formStyle,
+  setPage,
+  isTeacher = false,
+}: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
@@ -29,7 +35,9 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
     if (!isFirstRender && watch('name')?.length >= 3) {
       timerId = setTimeout(() => {
         !isSubmitting &&
-          router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+          router.push(
+            `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
+          )
         setPage && setPage(9)
       }, 2000)
     }
@@ -51,7 +59,9 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
     setIsSubmitting(false)
     // Check if 'name' is empty and perform search immediately
     if (!watch('name')) {
-      router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+      router.push(
+        `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
+      )
       setPage && setPage(9)
     }
   }, 500)
@@ -62,7 +72,9 @@ const SearchForm = ({ placeholder, formStyle, setPage }: IProps) => {
     setIsSubmitting(true)
     setIsFirstRender(false)
     // Redirect to the search results page with the query as a query parameter
-    router.push(`/courses?name=${watch('name') ?? ''}${queryString}`)
+    router.push(
+      `${getUserPrefix(isTeacher)}/courses?name=${watch('name') ?? ''}${queryString}`,
+    )
     setPage && setPage(9)
   }
 

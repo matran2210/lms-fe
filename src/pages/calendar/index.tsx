@@ -103,7 +103,7 @@ const Page = () => {
   }, [filter, data])
 
   return (
-    <Layout title="Course Detail">
+    <Layout title="Calendar">
       <div className="mx-auto my-0 max-w-[1570px] pt-6 xl-max:mx-6">
         <div className="relative">
           <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">

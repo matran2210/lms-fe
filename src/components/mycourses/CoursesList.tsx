@@ -10,6 +10,7 @@ interface CoursesProps {
   refetch: () => void
   isFetching: boolean
   isFetchingNextPage: boolean
+  isTeacher?: boolean
 }
 
 const CoursesList: React.FC<CoursesProps> = ({
@@ -18,6 +19,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   refetch,
   isFetching,
   isFetchingNextPage,
+  isTeacher = false,
 }) => {
   if (isFetching && !isFetchingNextPage) {
     return (
@@ -50,6 +52,7 @@ const CoursesList: React.FC<CoursesProps> = ({
               index={index}
               lastElementRef={lastElementRef}
               refetch={refetch}
+              isTeacher={isTeacher}
             />
           ))}
         </div>
