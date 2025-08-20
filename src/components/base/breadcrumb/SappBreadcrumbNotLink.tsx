@@ -20,20 +20,7 @@ const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
       {paths.map((path, index) => {
         let url = ''
         if (isShortCourse) {
-          switch (path.type) {
-            case 'PART':
-              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
-              break
-            case 'CHAPTER':
-              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
-              break
-            case 'UNIT':
-              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
-              break
-            case 'ACTIVITY':
-              url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
-              break
-          }
+          url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
         } else {
           switch (path.type) {
             case 'PART':
