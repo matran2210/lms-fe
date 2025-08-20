@@ -5,6 +5,7 @@ import { TEST_TYPE_ENUM } from '@utils/constants'
 import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 export default function SectionActionButtons({
   section,
@@ -26,7 +27,7 @@ export default function SectionActionButtons({
       section?.course_section_type == TEST_TYPE_ENUM.MID_TERM_TEST)
   ) {
     return (
-      <ButtonSecondaryV2
+      <ButtonSecondary
         title={'Start'}
         full={false}
         size="medium"

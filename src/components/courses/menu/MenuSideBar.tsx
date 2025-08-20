@@ -43,7 +43,7 @@ export default function Sidebar3Level({
         } ${isOpened ? 'w-[200px]' : ''}`}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative pb-6 pt-5.25 ${
+          className={`relative max-h-[calc(100vh-145px)] pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'
@@ -61,7 +61,7 @@ export default function Sidebar3Level({
               <ExpandIcon type={'logo-full'} />
             </div>
           </div>
-          <div className="bg-gray-2 mx-auto mb-6 h-px w-[calc(100%-48px)] text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={MENU_ITEMS}
             setOpenResource={setOpenResource}
@@ -72,7 +72,7 @@ export default function Sidebar3Level({
           className={`absolute bottom-0 w-full bg-white pb-6 
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="bg-gray-2 mx-auto mb-6 h-px w-[calc(100%-48px)] text-center"></div>
+          <div className="mx-auto mb-6 h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}

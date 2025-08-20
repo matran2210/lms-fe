@@ -97,8 +97,8 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import { download } from '@components/learning/activity/ActivityResource'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import ButtonText from '@components/base/button/ButtonText'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 declare global {
   interface Window {
@@ -2498,7 +2498,7 @@ const TestDetail = () => {
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
-              <ButtonTextV2
+              <ButtonText
                 className="bg-gray-100 hover:!bg-gray-100"
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
@@ -2508,9 +2508,9 @@ const TestDetail = () => {
                 <div className="flex items-center gap-2">
                   Next Question <Icon type="arrow-right" />
                 </div>
-              </ButtonTextV2>
+              </ButtonText>
             ) : (
-              <ButtonPrimaryV2
+              <ButtonPrimary
                 className="bg-gray-100 hover:!bg-gray-100"
                 onClick={async () => {
                   if (isGradingAfterEachQuestion) {

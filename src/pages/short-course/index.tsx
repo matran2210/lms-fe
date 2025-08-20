@@ -13,8 +13,7 @@ import { IButtonTab } from 'src/type/courses-3-level/button'
 import { CoursesAPI } from '../api/courses'
 import SearchForm3Level from '@components/courses/shared/SearchForm'
 import Filter3Level from '@components/courses/filter/Filter'
-import CoursesList from '@components/courses/card/CoursesList'
-import { RedirectModal } from '@components/courses'
+import { CoursesList, RedirectModal } from '@components/courses'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
