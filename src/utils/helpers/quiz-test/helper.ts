@@ -142,52 +142,6 @@ export const processDataAnswer = async (data: any): Promise<string> => {
   }
 }
 
-// Hàm stringify an toàn (tránh vòng tham chiếu)
-const safeStringify = (obj: any) => {
-  const seen = new WeakSet()
-  return JSON.stringify(obj, (key, value) => {
-    if (typeof value === 'object' && value !== null) {
-      if (seen.has(value)) return '[Circular]'
-      seen.add(value)
-    }
-    return value
-  })
-}
-
-// Hàm ép dữ liệu về Buffer
-const toBuffer = async (data: any): Promise<Buffer> => {
-  // Nếu đã là Buffer
-  if (Buffer.isBuffer(data)) return data
-
-  // Nếu là ArrayBuffer hoặc Uint8Array
-  if (data instanceof ArrayBuffer) return Buffer.from(data)
-  if (data instanceof Uint8Array) return Buffer.from(data)
-
-  // Nếu là Blob/File (browser)
-  if (typeof Blob !== 'undefined' && data instanceof Blob) {
-    const arrayBuffer = await data.arrayBuffer()
-    return Buffer.from(arrayBuffer)
-  }
-
-  // Nếu là string
-  if (typeof data === 'string') return Buffer.from(data, 'utf-8')
-
-  // Nếu là object thông thường → stringify an toàn
-  return Buffer.from(safeStringify(data), 'utf-8')
-}
-
-// Hàm chính: nhận bất kỳ dạng dữ liệu, trả về SHA-256 hex
-export const processOfficeFile = async (data: any): Promise<string> => {
-  try {
-    const buffer = await toBuffer(data)
-    return crypto.createHash('sha256').update(buffer).digest('hex')
-  } catch (err) {
-    return ''
-  }
-}
-
-// Compare Values
-
 /**
  * @description Compare two values by converting them to base64 and comparing
  * @param {any} oldValue Previous value
@@ -197,12 +151,6 @@ export const processOfficeFile = async (data: any): Promise<string> => {
 export const compareValues = async (oldValue: any, newValue: any) => {
   const hashOldValue = await processDataAnswer(oldValue)
   const hashNewValue = await processDataAnswer(newValue)
-  return hashOldValue === hashNewValue
-}
-
-export const compareValuesEssay = async (oldValue: any, newValue: any) => {
-  const hashOldValue = await processOfficeFile(oldValue)
-  const hashNewValue = await processOfficeFile(newValue)
   return hashOldValue === hashNewValue
 }
 
@@ -260,44 +208,21 @@ export const isValuesEqual = async (
     return await compareValues(oldValue, newValue)
   }
 
-  if (qType === QUESTION_TYPES.ESSAY) {
-    if (oldCurrentTabData?.data?.requirements?.length) {
-      const oldValue = oldCurrentTabData?.data?.requirements?.reduce(
-        (acc: string[], item: any) => {
-          acc.push(
-            (item?.answer_file?.file_key || '') + (item?.answer_text || ''),
-          )
-          return acc
-        },
-        [],
-      )
-
-      const newValue = currentTabContent?.data?.requirements?.reduce(
-        (acc: string[], item: any, indexItem: number) => {
-          acc.push(
-            (item?.answer_file?.file_key || '') +
-              (getValues(`${currentTabContent?.id}_${indexItem}_answer`) ||
-                item?.answer_text ||
-                ''),
-          )
-          return acc
-        },
-        [],
-      )
-
-      return await compareValuesEssay(oldValue, newValue)
-    } else {
-      const oldValue =
-        (oldCurrentTabData?.answer_file?.file_key || '') +
-        (oldCurrentTabData?.answer || '')
-      const newValue =
-        (currentTabContent?.answer_file?.file_key || '') +
-        (getValues(`${currentTabContent?.id}_0_answer`) ||
-          currentTabContent?.answer ||
-          '')
-      return await compareValues(oldValue, newValue)
-    }
-  }
+  // if (qType === QUESTION_TYPES.ESSAY) {
+  //   if (oldCurrentTabData?.data?.requirements?.length) {
+  //     return false
+  //   } else {
+  //     const oldValue =
+  //       (oldCurrentTabData?.answer_file?.file_key || '') +
+  //       (oldCurrentTabData?.answer || '')
+  //     const newValue =
+  //       (currentTabContent?.answer_file?.file_key || '') +
+  //       (getValues(`${currentTabContent?.id}_0_answer`) ||
+  //         currentTabContent?.answer ||
+  //         '')
+  //     return await compareValues(oldValue, newValue)
+  //   }
+  // }
 
   return false
 }
