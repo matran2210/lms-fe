@@ -4,7 +4,7 @@ import { disableUnsavedChange } from 'src/redux/slice/Login/Login'
 import Countdown from './Countdown'
 import { IHeaderTestProps } from 'src/type/courses-3-level'
 import { Close } from '../icons'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 export default function HeaderTest({
   checkUnSubmitAnswer,
@@ -54,7 +54,7 @@ export default function HeaderTest({
       </div>
 
       <div className="flex items-center justify-end">
-        <ButtonSecondaryV2
+        <ButtonSecondary
           title="Finish"
           size="small"
           loading={false}

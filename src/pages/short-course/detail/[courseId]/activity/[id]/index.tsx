@@ -41,7 +41,7 @@ import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import NextPrevActivityButton from '@components/courses/buttons/ButtonNextPrevActivity'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
-import Calculator from '@components/courses/activity/calculator'
+import Calculator from '@components/calculator'
 import CreateNote from '@components/courses/activity/create-note/CreateNote'
 import MovableWindow from '@components/base/window'
 import { CloseIcon } from '@assets/icons'
@@ -521,16 +521,14 @@ export default function ActivityDetail() {
         {selector?.calculator_status && (
           <MovableWindow
             position={{
-              width: '400px',
-              height: '300px',
               top: 'calc(25% - 150px)',
               left: 'calc(25% - 200px)',
             }}
             zIndex={500}
             fixed
           >
-            <div className="absolute left-0 top-0  h-full w-full">
-              <div className="bg-gray-2 flex h-10 w-full items-center justify-between rounded-t-md px-5">
+            <div className="absolute left-0 top-0">
+              <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
                 <div className="text-sm font-normal">Calculator</div>
                 <button
                   onClick={() => {

@@ -46,7 +46,7 @@ const Courses3LevelMenu = ({ openDrawer }: Courses3LevelMenuProps) => {
       <Sidebar3Level
         isOpened={isOpened}
         toggleDrawer={toggleDrawer}
-        className={`menu-sidebar-left max-w-screen fixed top-4 m-4 mt-0 hidden h-[calc(100vh-32px)] w-20 min-w-[80px] rounded-xl bg-white shadow-sidebar_menu lg:left-0 lg:block ${
+        className={`menu-sidebar-left max-w-screen hover:menu-sidebar-left--hover fixed top-4 m-4 mt-0 hidden h-[calc(100vh-32px)] w-20 min-w-[80px] rounded-xl bg-white shadow-sidebar_menu lg:left-0 lg:block ${
           openDrawer ? 'opacity-5' : ''
         } ${guideStatus ? '' : 'overflow-hidden'} ${paddingTop}`}
         setOpenResource={setOpenResource}

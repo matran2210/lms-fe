@@ -169,8 +169,6 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
       )}
     >
       <div className="absolute left-0 top-0 h-full w-full">
-        <div className="modal-dragger h-6 cursor-move p-6 pb-0" />
-
         {header ? (
           header
         ) : (
