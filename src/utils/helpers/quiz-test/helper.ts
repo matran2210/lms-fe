@@ -296,3 +296,8 @@ export const checkSheetAnswered = (data: string | Sheet[]): boolean => {
     return false
   }
 }
+
+export const isWorkbookEmpty = (sheets: Sheet[] | undefined): boolean => {
+  if (!sheets || sheets.length === 0) return true
+  return sheets?.every((s) => !s.celldata || s.celldata.length === 0)
+}
