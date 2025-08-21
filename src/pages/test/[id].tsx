@@ -2471,68 +2471,31 @@ const TestDetail = () => {
   const onResetAnswerEssayToTemplate = () => {
     const key = `${currentTabContent?.id}_${essayData?.index}_answer`
     const response_option = currentTabContent?.data?.response_option
-    let templateValue = ''
 
     switch (response_option) {
       case RESPONSE_OPTION.WORD:
-        // const requirement =
-        //   currentTabContent?.data?.requirements?.[essayData?.index]
-        // if (requirement?.short_answer) {
-        //   onResetFormatEssay(key, requirement.short_answer)
-        //   break
-        // }
-        // if (requirement?.answer_text) {
-        //   onResetFormatEssay(key, requirement.answer_text)
-        //   break
-        // }
-        // if (requirement?.answer_template) {
-        //   onResetFormatEssay(key, requirement.answer_template || '')
-        //   break
-        // }
-        // if (currentTabContent.answer) {
-        //   onResetFormatEssay(key, currentTabContent.answer)
-        //   break
-        // }
-        // onResetFormatEssay(key, currentTabContent?.data?.answer_template || '')
-        templateValue = getTemplateValueForWord()
+        const templateValueWord = getTemplateValueForWord()
+            // Reset form value
+        onResetFormatEssay(key, templateValueWord)
+            // Reset component con
+        if (refEditor?.current?.reset) {
+        refEditor.current.reset()
+    }
         break
       case RESPONSE_OPTION.SHEET:
-        // const requirementSheet =
-        //   currentTabContent?.data?.requirements?.[essayData?.index]
-        // if (requirementSheet?.short_answer) {
-        //   onResetFormatEssay(key, requirementSheet.short_answer)
-        //   break
-        // }
-        // if (requirementSheet?.answer_text) {
-        //   onResetFormatEssay(key, requirementSheet.answer_text)
-        //   break
-        // }
-        // if (requirementSheet?.answer_template) {
-        //   onResetFormatEssay(
-        //     key,
-        //     requirementSheet.answer_template || defaultSheetData,
-        //   )
-        //   break
-        // }
-
-        // if (currentTabContent.answer) {
-        //   onResetFormatEssay(key, currentTabContent.answer)
-        //   break
-        // }
-        // onResetFormatEssay(
-        //   key,
-        //   currentTabContent?.data?.answer_template || defaultSheetData,
-        // )
-        templateValue = getTemplateValueForSheet()
+        const templateValue = getTemplateValueForSheet()
+            // Reset form value
+        onResetFormatEssay(key, templateValue)
+            // Reset component con
+        if (refEditor?.current?.clear) {
+      refEditor.current.clear(templateValue)
+    }
         break
     }
-    // Reset form value
-    onResetFormatEssay(key, templateValue)
 
-    // Reset component con
-    if (refEditor?.current?.reset) {
-      refEditor.current.reset()
-    }
+
+
+    
   }
 
   return (

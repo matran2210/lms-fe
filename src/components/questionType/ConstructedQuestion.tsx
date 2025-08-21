@@ -104,6 +104,43 @@ const EssayQuestionPreview = ({
           const newKey = uniqueId('key')
           return newKey
         }),
+      clear: (templateValue?: string) => {
+      if (refSheet.current) {
+        try {
+          if (templateValue && String(templateValue).trim() !== '') {
+            // Nếu có templateValue, update sheet với giá trị đó
+            const sheetData = JSON.parse(templateValue)
+            const currentSheets = refSheet.current.getAllSheets()
+            
+            const updatedSheetData = sheetData.map((sheet: SheetData, index: number) => ({
+              ...sheet,
+              id: currentSheets[index]?.id || '',
+            }))
+            
+            updatedSheetData.forEach((sheet: SheetData) => {
+              refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+            })
+          } else {
+            // Nếu không có templateValue, clear data như cũ
+            const currentSheets = refSheet.current.getAllSheets()
+            
+            const emptySheets = currentSheets.map((sheet: SheetData) => ({
+              ...sheet,
+              celldata: [],
+              data: Array(sheet.row || 100)
+                .fill(null)
+                .map(() => Array(sheet.column || 50).fill(null)),
+            }))
+            
+            emptySheets.forEach((sheet: SheetData) => {
+              refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+            })
+          }
+        } catch (error) {
+          console.error('Error clearing/updating sheet data:', error)
+        }
+      }
+    }
     }
   }
 
