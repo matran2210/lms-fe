@@ -7,10 +7,17 @@ import { defaultStatusDetail } from 'src/constants'
 import { useForm } from 'react-hook-form'
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
 import TotalResullt from 'src/common/TotalResullt'
+import { getUserPrefix } from '@utils/helpers'
 
-const FilterCourseDetail = ({ totalResult }: { totalResult: number }) => {
+const FilterCourseDetail = ({
+  totalResult,
+  isTeacher = false,
+}: {
+  totalResult: number
+  isTeacher?: boolean
+}) => {
   const router = useRouter()
-  let apiUrl = `/courses/my-course/${router.query.courseId}`
+  let apiUrl = `${getUserPrefix(isTeacher)}/courses/my-course/${router.query.courseId}`
   const [isFirstRender, setIsFirstRender] = useState<boolean>(true)
 
   const { control, watch } = useForm()

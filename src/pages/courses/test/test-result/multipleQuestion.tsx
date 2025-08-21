@@ -2,20 +2,22 @@ import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { GRADE_STATUS } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
 import { IAnswer } from 'src/type'
 
 interface MultipleQuestionProps {
   questions: any
   className?: string
   multipleQuestionRef?: React.RefObject<HTMLDivElement>
+  isTeacher?: boolean
 }
 
 const MultipleQuestion = ({
   questions,
   className,
   multipleQuestionRef,
+  isTeacher,
 }: MultipleQuestionProps) => {
   const { isLargeDesktopView } = useTailwindBreakpoint()
   const router = useRouter()
@@ -72,7 +74,9 @@ const MultipleQuestion = ({
         <button
           key={item?.id}
           onClick={() => {
-            router.push(`/explanation/${item?.id}?title=My Course`)
+            router.push(
+              `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
+            )
           }}
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
@@ -142,7 +146,9 @@ const MultipleQuestion = ({
             ) {
               return
             } else {
-              router.push(`/explanation/${item?.id}?title=My Course`)
+              router.push(
+                `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
+              )
             }
           }}
           className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium

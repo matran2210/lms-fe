@@ -63,6 +63,7 @@ interface IProps {
       | undefined
     >
   >
+  isTeacher: boolean
 }
 
 const ResultCourse = ({
@@ -71,6 +72,7 @@ const ResultCourse = ({
   selectedResult,
   setSelectedResult,
   setOpenReport,
+  isTeacher,
 }: IProps) => {
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {

@@ -479,7 +479,7 @@ export default function ActivityDetail() {
   }
 
   return (
-    <LayoutCourses3Level>
+    <LayoutCourses3Level title="Activity">
       <div className="relative mx-auto max-w-1729">
         {!isMobileView && (
           <Breadcrumb3Level

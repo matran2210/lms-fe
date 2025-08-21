@@ -22,10 +22,10 @@ import PinnedCompletedCourse from '@components/layout/PinnedNotifications/Pinned
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { RemindChoosingExam } from 'src/type/course'
-import SelectExamPopup from './popups/SelectExamPopup'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import clsx from 'clsx'
+import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
 

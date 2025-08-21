@@ -42,6 +42,9 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
+import NoData from 'src/common/NoData'
+import { userReducer } from 'src/redux/slice/User/User'
+import { UserType } from 'src/redux/types/User/urser'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -60,6 +63,7 @@ const LearningNotesList = () => {
     name: '',
     params: '',
   })
+  const userType = useAppSelector(userReducer).user.type
 
   const [listSection, setListSection] = useState<ISection[]>([])
   const [listSubsection, setListSubsection] = useState<ISection[]>([])

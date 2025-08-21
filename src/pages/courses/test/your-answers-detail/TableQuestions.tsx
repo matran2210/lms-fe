@@ -32,6 +32,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  isTeacher?: boolean
 }
 
 const TableQuestions = ({
@@ -39,6 +40,7 @@ const TableQuestions = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -215,7 +217,7 @@ const TableQuestions = ({
                       }
                     >
                       <div
-                        className={`text-bw-1 line-clamp-1 cursor-pointer hover:font-semibold`}
+                        className={`line-clamp-1 cursor-pointer text-bw-1 hover:font-semibold`}
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             removeHtmlTags(
@@ -226,7 +228,7 @@ const TableQuestions = ({
                         onClick={() => {
                           if (answer?.id) {
                             router.push(
-                              `/explanation/${answer?.id}?title=Your Answers Detail&type=test`,
+                              `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${answer?.id}?title=Your Answers Detail&type=test`,
                             )
                           }
                         }}
@@ -236,7 +238,7 @@ const TableQuestions = ({
 
                   {/* Section */}
                   <td
-                    className="sapp-border text-bw-1 my-5 line-clamp-1 p-0 text-start"
+                    className="sapp-border my-5 line-clamp-1 p-0 text-start text-bw-1"
                     title={answer?.question.question_filter.part.name ?? '--'}
                   >
                     <Tooltip
@@ -251,7 +253,7 @@ const TableQuestions = ({
                   </td>
 
                   {/* Type */}
-                  <td className="sapp-border text-bw-1 p-0 pr-4">
+                  <td className="sapp-border p-0 pr-4 text-bw-1">
                     <div className="min-w-[111px]">
                       {getTypeName(answer?.question?.qType)}
                     </div>
@@ -281,7 +283,7 @@ const TableQuestions = ({
                         <Image
                           src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                           alt="Correct"
-                          className="text-state-success mr-1"
+                          className="mr-1 text-state-success"
                           width={16}
                           height={16}
                           layout="fixed"

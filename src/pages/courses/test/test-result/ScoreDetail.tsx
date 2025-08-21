@@ -18,6 +18,7 @@ import {
   ANIMATION,
   COMMON_TEXT_ENUM,
   GRADE_STATUS,
+  PageLink,
   QUESTION_TYPES,
 } from 'src/constants'
 import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
@@ -35,6 +36,7 @@ interface ScoreDetailProps {
   type: IQuizAttemptChartType
   gradingStatus?: string
   quizAttempt?: IQuizAttempt
+  isTeacher?: boolean
 }
 
 const ScoreDetail = ({
@@ -43,6 +45,7 @@ const ScoreDetail = ({
   gradingStatus,
   yourScoreDetailRef,
   quizAttempt,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
 

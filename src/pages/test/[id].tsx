@@ -653,6 +653,21 @@ const TestDetail = () => {
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData])
 
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? (dayjs(
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds') ?? 0)
+    : null
+
+  useEffect(() => {
+    if (!openTimeOut && remainingTimeinSeconds && remainingTimeinSeconds <= 0) {
+      setOpenTimeOut(true)
+    }
+  }, [openTimeOut, remainingTimeinSeconds])
+
   const isShowIconButtonInBottom = [
     QUESTION_TYPES.FILL_WORD,
     QUESTION_TYPES.TRUE_FALSE,
@@ -2743,11 +2758,8 @@ const TestDetail = () => {
                       // setEssayData(undefined)
                       handleChangeTab(id)
                     }}
-                    hasScrollBar={hasScrollBar}
                     setHasScrollBar={setHasScrollBar}
                     activeShowAll={activeShowAll}
-                    setActiveShowAll={setActiveShowAll}
-                    setValueFilter={setValueFilter}
                     isScrollCenter={false}
                   />
                   <div
@@ -3152,26 +3164,24 @@ const TestDetail = () => {
                       router.replace(`/event-test`)
                       // setSubmitEventTest(true)
                     } else {
+                      // if (type !== 'entrance') {
                       if (
-                        type !== 'entrance' &&
-                        quizDetail?.quiz_type !== 'FINAL_TEST'
+                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
                       ) {
-                        if (
-                          quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                        ) {
-                          router.replace(
-                            `/courses/test/your-answers-detail/${QuizResultId}`,
-                          )
-                        } else {
-                          router.replace(
-                            `/courses/test/test-result/${QuizResultId}`,
-                          )
-                        }
+                        router.replace(
+                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                        )
                       } else {
-                        router.back()
-                        setScoreQuestion(scoreFinalTest)
-                        setSubmitTest(true)
+                        router.replace(
+                          `/courses/test/test-result/${QuizResultId}`,
+                        )
                       }
+                      // } else {
+                      //   console.log('back backs')
+                      //   router.back()
+                      //   setScoreQuestion(scoreFinalTest)
+                      //   setSubmitTest(true)
+                      // }
                     }
                     trackGAEvent('Click Button Submit Time Out Test')
                   })

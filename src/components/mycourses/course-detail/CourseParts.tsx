@@ -16,12 +16,14 @@ const CourseParts = ({
   is_passed_course,
   lastElementRef,
   isTrial = false,
+  isTeacher = false,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
   is_passed_course: boolean
   lastElementRef: (node: HTMLDivElement) => void
   isTrial?: boolean
+  isTeacher?: boolean
 }) => {
   const router = useRouter()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
@@ -82,6 +84,7 @@ const CourseParts = ({
                         class_user_id={class_user_id}
                         isLock={handleLock(coursePart)}
                         lastElementRef={lastElementRef}
+                        isTeacher={isTeacher}
                       />
                     ) : (
                       <Part
@@ -89,6 +92,7 @@ const CourseParts = ({
                         course={coursePart}
                         lastElementRef={lastElementRef}
                         isLock={handleLock(coursePart)}
+                        isTeacher={isTeacher}
                       />
                     )}
                   </>
@@ -107,6 +111,7 @@ const CourseParts = ({
                         class_user_id={class_user_id}
                         isLock={handleLock(coursePart)}
                         lastElementRef={lastElementRef}
+                        isTeacher={isTeacher}
                       />
                     ) : (
                       <Part
@@ -114,6 +119,7 @@ const CourseParts = ({
                         course={coursePart}
                         lastElementRef={lastElementRef}
                         isLock={handleLock(coursePart)}
+                        isTeacher={isTeacher}
                       />
                     )}
                   </>
@@ -186,6 +192,7 @@ const CourseParts = ({
                       class_user_id={class_user_id}
                       isLock={handleLock(coursePart)}
                       lastElementRef={lastElementRef}
+                      isTeacher={isTeacher}
                     />
                   ) : (
                     <Part
@@ -196,6 +203,7 @@ const CourseParts = ({
                       deadline={deadline}
                       lastElementRef={lastElementRef}
                       isLock={handleLock(coursePart)}
+                      isTeacher={isTeacher}
                     />
                   )}
                 </>
@@ -235,6 +243,7 @@ const CourseParts = ({
                     class_user_id={class_user_id}
                     isLock={handleLock(coursePart)}
                     lastElementRef={lastElementRef}
+                    isTeacher={isTeacher}
                   />
                 ) : (
                   <Part

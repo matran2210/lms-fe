@@ -3,7 +3,11 @@ import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
 import ResultRowsModal from '@components/learning/ResultRowsModal'
 import { useCourseContext } from '@contexts/index'
 import { trackGAEvent } from '@utils/google-analytics'
-import { convertHourToDayLeft, convertLocalTimeToUTC } from '@utils/helpers'
+import {
+  convertHourToDayLeft,
+  convertLocalTimeToUTC,
+  getUserPrefix,
+} from '@utils/helpers'
 import { clearStylesHtml, truncateString } from '@utils/index'
 import { differenceInDays, parseISO, startOfDay } from 'date-fns'
 import { isNull, round } from 'lodash'
@@ -38,11 +42,13 @@ const Course = ({
   index,
   lastElementRef,
   refetch,
+  isTeacher = false,
 }: {
   course: ICourse
   index: number
   lastElementRef: (node: HTMLDivElement) => void
   refetch: () => void
+  isTeacher?: boolean
 }) => {
   const screens = useBreakpoint()
   const [open, setOpen] = useState<boolean>(false)
@@ -56,7 +62,7 @@ const Course = ({
   const classInstance = course?.classes[0]
   const [daysDifference, setDaysDifference] = useState(0)
   const currentDate = useMemo(() => new Date(), [])
-
+  const userPrefix = getUserPrefix(isTeacher)
   useEffect(() => {
     if (student?.finished_at) {
       const currentLocalDate = new Date()
@@ -206,7 +212,7 @@ const Course = ({
       const res = await CoursesAPI.activeCourse(params)
       if (res?.success) {
         router.push(
-          `/courses/my-course/${foundation_class_id || classInstance?.id}`,
+          `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
         )
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
@@ -245,6 +251,16 @@ const Course = ({
         category == PROGRAM.CMA)
 
     // Redirect to dashboard if the course type is practice, normal
+    const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`
+    const path =
+      isRedirectDashboard &&
+      !isTeacher &&
+      (determineButtonToShow === BUTTON_STATUS.Review ||
+        determineButtonToShow === BUTTON_STATUS.Resume)
+        ? `${basePath}/dashboard`
+        : basePath
+
+    router.push(path)
 
     if (isRedirectDashboard) {
       localStorage.setItem(
@@ -271,10 +287,7 @@ const Course = ({
 
     router.push(`/courses/my-course/${classInstance?.id}`)
 
-    localStorage.setItem(
-      'courseDetail',
-      `/courses/my-course/${classInstance?.id}`,
-    )
+    localStorage.setItem('courseDetail', basePath)
     if (course?.course_type === 'TRIAL_COURSE') {
       localStorage.setItem('daysDifference', daysDifference as any)
       localStorage.setItem('showPinTrial', 'true')
@@ -397,7 +410,7 @@ const Course = ({
    */
   const handleContinueFoundation = () => {
     router.push(
-      `/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
+      `${userPrefix}/courses/my-course/${course?.classes?.[0]?.normal_class_connections?.[0]?.foundation_class_id}`,
     )
   }
 

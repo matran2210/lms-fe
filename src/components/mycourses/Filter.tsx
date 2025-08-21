@@ -1,6 +1,7 @@
 // components/SearchForm.tsx
 
 import SappHookFormSelect from '@components/base/select/SappHookFormSelect'
+import { getUserPrefix } from '@utils/helpers'
 import { buildQueryString } from '@utils/index'
 import clsx from 'clsx'
 import { isEmpty } from 'lodash'
@@ -15,9 +16,10 @@ interface IProps {
   courses: ICourseAll
   setPage?: Dispatch<SetStateAction<number>>
   tourGuideActive?: boolean
+  isTeacher: boolean
 }
 
-const Filter = ({ courses, setPage, tourGuideActive }: IProps) => {
+const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
   const router = useRouter()
   const { control, watch, setValue } = useForm()
   const [activeStatus, setActiveStatus] = useState<boolean>(false)
@@ -30,7 +32,7 @@ const Filter = ({ courses, setPage, tourGuideActive }: IProps) => {
       value: '',
     },
   ]
-  let apiUrl = `/courses`
+  let apiUrl = `${getUserPrefix(isTeacher)}/courses`
 
   const queryString = buildQueryString({
     status: watch('status')?.value || '',

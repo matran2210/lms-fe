@@ -11,11 +11,7 @@ interface IProps {
   currentTab: string
   handleChangeTab?: any
   activeShowAll: boolean
-  setActiveShowAll: any
-  setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
-  answerSubmitted?: Array<any>
-  hasScrollBar: boolean
   setHasScrollBar: any
 }
 
@@ -25,10 +21,7 @@ const TabSlide = ({
   currentTab,
   handleChangeTab,
   activeShowAll,
-  setActiveShowAll,
-  setValueFilter,
   isScrollCenter = true,
-  hasScrollBar,
   setHasScrollBar,
 }: IProps) => {
   const MAX_ITEMS_PER_ROW = 25

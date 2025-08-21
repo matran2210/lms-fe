@@ -28,6 +28,7 @@ interface IProps {
   chartData: QuizAttemptChart
   subjectCode: string
   score: number
+  isTeacher?: boolean
 }
 
 const TestResultPage = ({
@@ -36,6 +37,7 @@ const TestResultPage = ({
   chartData,
   subjectCode,
   score,
+  isTeacher,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -185,6 +187,8 @@ const TestResultPage = ({
                 <Recommendation data={item} key={index} />
               ))}
               <ScoreDetail
+                isTeacher={isTeacher}
+                className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
@@ -203,6 +207,7 @@ const TestResultPage = ({
           <div className={commonMultipleScoreStyle}>
             <div className="flex max-h-full flex-col overflow-y-auto">
               <ScoreDetail
+                isTeacher={isTeacher}
                 className={'relative'}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}

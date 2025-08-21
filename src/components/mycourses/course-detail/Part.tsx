@@ -10,6 +10,8 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { LockClosedIcon } from '@assets/icons'
+import { getUserPrefix } from '@utils/helpers'
 
 const Part = ({
   course,
@@ -18,6 +20,7 @@ const Part = ({
   deadline,
   isLock,
   lastElementRef,
+  isTeacher = false,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
@@ -25,6 +28,7 @@ const Part = ({
   deadline?: string
   isLock?: boolean
   lastElementRef: (node: HTMLDivElement) => void
+  isTeacher?: boolean
 }) => {
   const router = useRouter()
   const { isMobileView } = useTailwindBreakpoint()
@@ -41,7 +45,7 @@ const Part = ({
       deadline,
     })
     router.push(
-      `/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${getUserPrefix(isTeacher)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
     )
   }
 

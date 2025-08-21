@@ -347,7 +347,7 @@ const ProfilePage = () => {
   ]
 
   return (
-    <Layout title="Student Profile">
+    <Layout title="My Profile">
       <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}

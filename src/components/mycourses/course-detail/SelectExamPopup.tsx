@@ -1,14 +1,12 @@
+import SappModalV3 from '@components/base/modal/SappModalV3'
+import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { ClassAPI } from '@pages/api/class'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import useSelectExams from 'src/hooks/useSelectExams'
-import { useMutation } from 'react-query'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useMutation } from 'react-query'
+import useSelectExams from 'src/hooks/useSelectExams'
 
 interface ISelectExamPopup {
   courseData: any
@@ -103,6 +101,4 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
   )
 }
 
-export default withAuthorization<ISelectExamPopup>([UserType.STUDENT])(
-  SelectExamPopup,
-)
+export default SelectExamPopup

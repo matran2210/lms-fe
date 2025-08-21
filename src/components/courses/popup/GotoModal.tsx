@@ -7,6 +7,9 @@ import BaseStaticModal from '@components/base/modal/BaseStaticModal'
 import { ECourseType, PageLink } from 'src/constants'
 import clsx from 'clsx'
 import { useCourseContext } from '@contexts/index'
+import { userReducer } from 'src/redux/slice/User/User'
+import { UserType } from 'src/redux/types/User/urser'
+import { useAppSelector } from 'src/redux/hook'
 
 interface IDestination {
   image: any
@@ -32,6 +35,7 @@ export const destinations: IDestination[] = [
 ]
 
 export default function GotoModal() {
+  const userType = useAppSelector(userReducer).user.type
   const { isVisibleGotoModal, setVisibleGotoModal } = useStaticModalContext()
   const { setGeneralOrMasterCourse } = useCourseContext()
 
@@ -44,7 +48,10 @@ export default function GotoModal() {
   }
 
   return (
-    <BaseStaticModal visible={isVisibleGotoModal} title="Where you want to go?">
+    <BaseStaticModal
+      visible={userType === UserType.TEACHER ? false : isVisibleGotoModal}
+      title="Where you want to go?"
+    >
       <div className="mt-6 flex flex-col gap-y-4 md:mt-10 md:gap-y-6">
         {destinations.map((destination, index) => (
           <div

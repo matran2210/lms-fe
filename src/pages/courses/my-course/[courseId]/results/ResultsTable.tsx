@@ -2,15 +2,17 @@ import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
 import { GradingMethod } from '@utils/constants'
 import { useRouter } from 'next/router'
 import {
-  SetStateAction,
   Dispatch,
+  SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
-import { useQuery, useInfiniteQuery } from 'react-query'
-import { GRADE_STATUS } from 'src/constants'
+import { useInfiniteQuery, useQuery } from 'react-query'
+import { GRADE_STATUS, PageLink } from 'src/constants'
+import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
 import { IResultsList, Results } from 'src/type/results'

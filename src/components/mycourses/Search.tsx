@@ -11,8 +11,9 @@ interface IProps {
   inputRef?: React.MutableRefObject<HTMLInputElement | null>
   setIsFocused?: Dispatch<SetStateAction<boolean>>
   isFocused?: boolean
-  handleSubmit: () => void
+  handleSubmit?: () => void
   isCoursePage?: boolean
+  isTeacher?: boolean
 }
 
 const SearchForm = ({
@@ -24,16 +25,19 @@ const SearchForm = ({
   isFocused,
   handleSubmit,
   isCoursePage,
+  isTeacher = false,
 }: IProps) => {
   const { query, push } = useRouter()
   const { control, watch, setValue } = useFormContext()
 
   useEffect(() => {
-    if (!isFocused && watch('name')?.trim()?.length) {
-      handleSubmit()
-    }
-    if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
-      push(PageLink.COURSES)
+    if (!isTeacher) {
+      if (!isFocused && watch('name')?.trim()?.length) {
+        handleSubmit?.()
+      }
+      if (!isFocused && !watch('name')?.trim()?.length && isCoursePage) {
+        push(PageLink.COURSES)
+      }
     }
   }, [isFocused, watch('name'), isCoursePage])
 
@@ -46,7 +50,7 @@ const SearchForm = ({
       className={formStyle}
       onSubmit={(e) => {
         e.preventDefault()
-        handleSubmit()
+        handleSubmit?.()
       }}
     >
       <button type="submit" className="flex">

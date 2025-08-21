@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 import router from 'next/router'
 import { GRADE_STATUS, GRADING_METHOD, TEST_TYPE } from 'src/constants'
 import TestModal from 'src/pages/courses/test'
+import TestModalTeacher from '@components/courses/popup/TestModalTeacher'
 import { IMyCourseDetail } from 'src/type/courses'
 import ResultCourse from './CourseResult'
 import SappModalV3 from '@components/base/modal/SappModalV3'
@@ -21,12 +22,14 @@ const PartFailed = ({
   is_passed_course,
   isLock = false,
   lastElementRef,
+  isTeacher,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
   is_passed_course: boolean
   isLock?: boolean
   lastElementRef: (node: HTMLDivElement) => void
+  isTeacher: boolean
 }) => {
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : 'Unlimited'
@@ -250,6 +253,7 @@ const PartFailed = ({
                   setOpenReport={setOpenReport}
                   selectedResult={selectedResult}
                   setSelectedResult={setSelectedResult}
+                  isTeacher={isTeacher}
                 />
               </p>
               {
@@ -335,15 +339,27 @@ const PartFailed = ({
           </div>
         </div>
       </CardCourse>
-      <TestModal
-        open={open}
-        setOpen={setOpen}
-        title={coursePart?.name}
-        data={coursePart}
-        class_user_id={class_user_id}
-        is_passed_course={is_passed_course}
-        activeCourse={() => {}}
-      />
+      {isTeacher ? (
+        <TestModalTeacher
+          open={open}
+          setOpen={setOpen}
+          title={coursePart?.name}
+          data={coursePart}
+          class_user_id={class_user_id}
+          is_passed_course={is_passed_course}
+          activeCourse={() => {}}
+        />
+      ) : (
+        <TestModal
+          open={open}
+          setOpen={setOpen}
+          title={coursePart?.name}
+          data={coursePart}
+          class_user_id={class_user_id}
+          is_passed_course={is_passed_course}
+          activeCourse={() => {}}
+        />
+      )}
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
