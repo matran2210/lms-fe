@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
-import { ANIMATION, GRADE_STATUS } from 'src/constants'
+import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
 import { IAnswer } from 'src/type'
 import Recommendation from './Recommendation'
 import { COMMENTS } from 'src/constants/grade'
@@ -15,6 +15,7 @@ interface MultipleQuestionProps {
   className?: string
   multipleQuestionRef?: React.RefObject<HTMLDivElement>
   setOpenAnnotaion: (open: boolean) => void
+  isTeacher?: boolean
 }
 
 const MultipleQuestion = ({
@@ -22,6 +23,7 @@ const MultipleQuestion = ({
   className,
   multipleQuestionRef,
   setOpenAnnotaion,
+  isTeacher,
 }: MultipleQuestionProps) => {
   const router = useRouter()
   const [showMore, setShowMore] = useState<boolean>(false)
@@ -75,7 +77,9 @@ const MultipleQuestion = ({
         <button
           key={item?.id}
           onClick={() => {
-            router.push(`/explanation/${item?.id}?title=My Course`)
+            router.push(
+              `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
+            )
           }}
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
@@ -125,7 +129,9 @@ const MultipleQuestion = ({
             ) {
               return
             } else {
-              router.push(`/explanation/${item?.id}?title=My Course`)
+              router.push(
+                `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${item?.id}?title=My Course`,
+              )
             }
           }}
           className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
@@ -260,7 +266,9 @@ const MultipleQuestion = ({
                   {showMore ? 'View Less' : 'View All'}
                 </div>
               )}
-              <Link href={`/courses/my-course/${questions?.class_id ?? ''}`}>
+              <Link
+                href={`${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/my-course/${questions?.class_id ?? ''}`}
+              >
                 <ButtonPrimary
                   title={'Quit'}
                   size={'medium'}

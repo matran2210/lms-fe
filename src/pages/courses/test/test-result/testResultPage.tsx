@@ -31,6 +31,7 @@ interface IProps {
   chartData: QuizAttemptChart
   subjectCode: string
   score: number
+  isTeacher?: boolean
 }
 
 const TestResultPage = ({
@@ -39,6 +40,7 @@ const TestResultPage = ({
   chartData,
   subjectCode,
   score,
+  isTeacher,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -136,6 +138,7 @@ const TestResultPage = ({
                     className={'xl:w-full'}
                     multipleQuestionRef={multipleQuestionRef}
                     setOpenAnnotaion={setOpenAnnotaion}
+                    isTeacher={isTeacher}
                   />
                 </div>
               </div>
@@ -168,6 +171,7 @@ const TestResultPage = ({
                 className={'h-full'}
                 multipleQuestionRef={multipleQuestionRef}
                 setOpenAnnotaion={setOpenAnnotaion}
+                isTeacher={isTeacher}
               />
             </div>
           )
@@ -187,6 +191,7 @@ const TestResultPage = ({
                 score={score}
               />
               <ScoreDetail
+                isTeacher={isTeacher}
                 className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
@@ -198,6 +203,7 @@ const TestResultPage = ({
               className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
               multipleQuestionRef={multipleQuestionRef}
               setOpenAnnotaion={setOpenAnnotaion}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -218,6 +224,7 @@ const TestResultPage = ({
                 recommendation={questions?.quizAttempt?.attempt_gradings}
               />
               <ScoreDetail
+                isTeacher={isTeacher}
                 className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
@@ -229,6 +236,7 @@ const TestResultPage = ({
               className={'h-full'}
               multipleQuestionRef={multipleQuestionRef}
               setOpenAnnotaion={setOpenAnnotaion}
+              isTeacher={isTeacher}
             />
           </div>
         )
@@ -237,6 +245,7 @@ const TestResultPage = ({
           <div className={commonMultipleScoreStyle}>
             <div className="flex max-h-full flex-col overflow-y-auto">
               <ScoreDetail
+                isTeacher={isTeacher}
                 className={'relative'}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
@@ -289,6 +298,7 @@ const TestResultPage = ({
                   className={'xl:w-full'}
                   multipleQuestionRef={multipleQuestionRef}
                   setOpenAnnotaion={setOpenAnnotaion}
+                  isTeacher={isTeacher}
                 />
               </div>
             </div>

@@ -5,13 +5,19 @@ import { useCourseContext } from '@contexts/index'
 import { PageLink } from 'src/constants'
 import { Courses3LevelMenu } from '@components/courses'
 import { withMasterFinanceProvider } from '@contexts/MasterFinance'
+import Head from 'next/head'
 
 type Courses3LevelProps = {
   children: React.ReactNode
   openDrawer?: boolean
+  title?: string
 }
 
-const LayoutCourses3Level = ({ children, openDrawer }: Courses3LevelProps) => {
+const LayoutCourses3Level = ({
+  children,
+  openDrawer,
+  title,
+}: Courses3LevelProps) => {
   const router = useRouter()
 
   const { openPinned, pinnedNotifications } = usePinnedNotifyContext()
@@ -34,6 +40,9 @@ const LayoutCourses3Level = ({ children, openDrawer }: Courses3LevelProps) => {
   }
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <div className="flex flex-col flex-nowrap bg-gray-4 md:flex-row">
         <Courses3LevelMenu />
         <div className="ml-auto min-h-screen w-full bg-gray-4 lg:mr-[50px] lg:max-w-[calc(100%-280px)]">

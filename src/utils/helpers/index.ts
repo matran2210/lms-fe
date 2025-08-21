@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { round } from 'lodash'
 import { MenuOption } from 'src/constants/courses3level/sidebar'
 import { MenuItem } from 'src/constants/menu-items'
+import { PageLink } from 'src/constants'
 
 export function isMobile() {
   const toMatch = [
@@ -385,3 +386,6 @@ export function makeMenuLevel(options: MenuOption[], depth = 0): MenuItem[] {
         : undefined,
   }))
 }
+
+export const getUserPrefix = (isTeacher: boolean) =>
+  isTeacher ? PageLink.TEACHERS : ''
