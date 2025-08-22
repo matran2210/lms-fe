@@ -1583,13 +1583,15 @@ const TestDetail = () => {
     if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
       if (!checkAnswered(currentTabContent)) return
       if (action === 'change-tab' || action === 'finish') {
-        const isEqualValue = await isValuesEqual(
-          currentTabContent,
-          oldCurrentTabData,
-          getValues,
-        )
-        // Check if the current tab content is the same as the old tab content
-        if (isEqualValue) return
+        if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
+          const isEqualValue = await isValuesEqual(
+            currentTabContent,
+            oldCurrentTabData,
+            getValues,
+          )
+          // Check if the current tab content is the same as the old tab content
+          if (isEqualValue) return
+        }
       }
     }
 
