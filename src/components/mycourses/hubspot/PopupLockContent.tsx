@@ -20,7 +20,7 @@ const MODAL_CONTENT = {
   lockSection: {
     header: 'This content is locked',
     content:
-      'Sorry, you do not have access to this content. Connect with our admissions consultant now to unlock your personalized learning pathway!',
+      'Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions conslutant.',
     icon: <LockSectionIcon />,
   },
   ctaUpgrade: {
@@ -122,16 +122,18 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
     <SappModalV3
       open={isOpen}
       handleCancel={handleClose}
-      onOk={handleOk}
+      onOk={handleUpgrade}
+      handleClose={showFooter ? handleClose : undefined}
       icon={icon}
       header={header}
       content={content}
       showFooter={showFooter}
-      okButtonCaption={okButtonCaption}
-      fullWidthBtn
-      buttonSize="medium"
-      cancelButtonCaption={cancelButtonCaption}
-      isUnderLine={isUnderLine}
+      okButtonCaption="Upgrade Now"
+      cancelButtonCaption={'Skip'}
+      showCancelButton={showFooter}
+      fullWidthBtn={true}
+      buttonSize="extra"
+      isClosable={showFooter}
     />
   )
 }
