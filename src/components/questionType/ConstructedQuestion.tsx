@@ -6,12 +6,13 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
-import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
+import toast from 'react-hot-toast'
 
 type SheetData = {
   name: string
@@ -105,42 +106,45 @@ const EssayQuestionPreview = ({
           return newKey
         }),
       clear: (templateValue?: string) => {
-      if (refSheet.current) {
-        try {
-          if (templateValue && String(templateValue).trim() !== '') {
+        if (refSheet.current) {
+          try {
             // Nếu có templateValue, update sheet với giá trị đó
-            const sheetData = JSON.parse(templateValue)
             const currentSheets = refSheet.current.getAllSheets()
-            
-            const updatedSheetData = sheetData.map((sheet: SheetData, index: number) => ({
-              ...sheet,
-              id: currentSheets[index]?.id || '',
-            }))
-            
-            updatedSheetData.forEach((sheet: SheetData) => {
-              refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
-            })
-          } else {
-            // Nếu không có templateValue, clear data như cũ
-            const currentSheets = refSheet.current.getAllSheets()
-            
-            const emptySheets = currentSheets.map((sheet: SheetData) => ({
-              ...sheet,
+            // function tạo sheet trống an toàn
+            const makeEmptySheet = (base: SheetData): SheetData => ({
+              id: base.id,
+              name: base.name,
+              status: base.status ?? 1,
+              row: base.row ?? 100,
+              column: base.column ?? 50,
               celldata: [],
-              data: Array(sheet.row || 100)
+              data: Array(base.row || 100)
                 .fill(null)
-                .map(() => Array(sheet.column || 50).fill(null)),
-            }))
-            
-            emptySheets.forEach((sheet: SheetData) => {
-              refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
+                .map(() => Array(base.column || 50).fill(null)),
             })
+
+            if (templateValue?.trim()) {
+              const sheetData: SheetData[] = JSON.parse(templateValue) || [
+                { name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] },
+              ]
+
+              const updatedSheetData = sheetData.map((sheet, index) => {
+                const base = currentSheets[index] || {}
+                return {
+                  ...makeEmptySheet(base as SheetData), // luôn tạo mới data, celldata
+                  ...cloneDeep(sheet), // merge nội dung từ JSON vào
+                  id: base?.id || sheet.id || '',
+                }
+              })
+
+              // update tất cả một lần
+              refSheet.current.updateSheet(updatedSheetData.map(cloneDeep))
+            }
+          } catch (error) {
+            toast.error('Error reset sheet data:')
           }
-        } catch (error) {
-          console.error('Error clearing/updating sheet data:', error)
         }
-      }
-    }
+      },
     }
   }
 
