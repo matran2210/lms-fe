@@ -538,82 +538,27 @@ const EssayQuestionPreview = ({
                           !fullData?.confirmed
                         ) {
                           const currentSheet = refSheet.current?.getSheet()
-                          const workbook = refSheet.current
-                          if (!workbook) return
+                          if (!currentSheet?.id) return
 
-                          // Khởi tạo snapshot nếu chưa có
-                          if (!sheetsSnapshotRef.current) {
-                            if (value && String(value).trim() !== '') {
-                              try {
-                                sheetsSnapshotRef.current = JSON.parse(value)
-                              } catch {
-                                sheetsSnapshotRef.current = null
-                              }
-                            }
-                            if (!sheetsSnapshotRef.current) {
-                              const allNow = (workbook.getAllSheets?.() ||
-                                []) as any[]
-                              sheetsSnapshotRef.current = allNow.map(
-                                (s: any) => ({
-                                  id: s?.id,
-                                  name: s?.name,
-                                  status: s?.status,
-                                  row: s?.row,
-                                  column: s?.column,
-                                  celldata: Array.isArray(s?.celldata)
-                                    ? s.celldata
-                                    : [],
-                                  data: s?.data ?? [],
-                                }),
-                              )
-                            }
-                          }
-
-                          // Đảm bảo snapshot có đủ các sheet hiện tại (thêm sheet mới nếu thiếu)
-                          const allNow = (workbook.getAllSheets?.() ||
-                            []) as any[]
-                          const byId = new Map<string, any>()
-                          sheetsSnapshotRef.current.forEach((s: any) => {
-                            if (s?.id) byId.set(s.id, s)
-                          })
-                          allNow.forEach((s: any) => {
-                            if (s?.id && !byId.has(s.id)) {
-                              byId.set(s.id, {
-                                id: s?.id,
-                                name: s?.name,
-                                status: s?.status,
-                                row: s?.row,
-                                column: s?.column,
-                                celldata: Array.isArray(s?.celldata)
-                                  ? s.celldata
-                                  : [],
-                                data: s?.data ?? [],
-                              })
-                            }
-                          })
-
-                          // Cập nhật sheet hiện tại vào snapshot
-                          if (currentSheet?.id) {
-                            byId.set(currentSheet.id, currentSheet)
-                          }
-
-                          // Duy trì thứ tự theo getAllSheets()
-                          const merged = allNow
-                            .map((s: any) => byId.get(s?.id))
-                            .filter(Boolean)
-                          sheetsSnapshotRef.current = merged
-
-                          if (
-                            merged.some(
-                              (s: any) =>
-                                Array.isArray(s?.celldata) &&
-                                s.celldata.length > 0,
+                          if (value) {
+                            let old = [...JSON.parse(value)]
+                            const index = old?.findIndex(
+                              (e: any) => e?.id === currentSheet?.id,
                             )
-                          ) {
-                            handleChange && handleChange(data?.id)
-                          }
 
-                          onChange(JSON.stringify(merged))
+                            if (index >= 0) {
+                              old.splice(index, 1, currentSheet)
+                            } else {
+                              old.push(currentSheet)
+                            }
+
+                            sheetsSnapshotRef.current = old
+                            onChange(JSON.stringify(old))
+                          } else {
+                            const newData = [currentSheet]
+                            sheetsSnapshotRef.current = newData
+                            onChange(JSON.stringify(newData))
+                          }
                         }
                       }}
                       data={
@@ -670,31 +615,29 @@ const EssayQuestionPreview = ({
                       // row={2}
 
                       onChange={(e) => {
-                        // const celldata = e.data
-                        if (!fullData?.done && !fullData?.confirmed) {
-                          const currentSheet = refSheet?.current?.getSheet()
-                          // // listSheet.splice(0,1)
-                          // listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)] = {...listSheet[listSheet.findIndex((e:any)=>e.id === currentSheet.id)], celldata: currentSheet.celldata}
+                        if (ignoreStructOpsRef.current) return
+                        if (
+                          !fullData?.is_viewed_answer &&
+                          !fullData?.confirmed
+                        ) {
+                          const currentSheet = refSheet.current?.getSheet()
+                          if (!currentSheet?.id) return
+
                           if (value) {
                             let old = [...JSON.parse(value)]
                             const index = old?.findIndex(
                               (e: any) => e?.id === currentSheet?.id,
                             )
-                            // Check event change text of sheet
-                            if (old?.[0]?.celldata?.length > 0) {
-                              handleChange && handleChange(data?.id)
-                            }
+
                             if (index >= 0) {
                               old.splice(index, 1, currentSheet)
                             } else {
                               old.push(currentSheet)
-                              // setValue(name, JSON.stringify(old))
                             }
+
                             onChange(JSON.stringify(old))
-                            // setValue(name, JSON.stringify(old))
                           } else {
                             onChange(JSON.stringify([currentSheet]))
-                            // setValue(name, JSON.stringify([currentSheet]))
                           }
                         }
                       }}
