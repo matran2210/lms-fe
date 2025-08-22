@@ -13,6 +13,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
+import { generateSheetId } from 'src/constants/attempt'
 
 type SheetData = {
   name: string
@@ -125,7 +126,13 @@ const EssayQuestionPreview = ({
 
             if (templateValue?.trim()) {
               const sheetData: SheetData[] = JSON.parse(templateValue) || [
-                { name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] },
+                {
+                  name: 'Sheet1',
+                  id: generateSheetId(),
+                  status: 1,
+                  data: [[]],
+                  celldata: [],
+                },
               ]
 
               const updatedSheetData = sheetData.map((sheet, index) => {
@@ -175,7 +182,15 @@ const EssayQuestionPreview = ({
         const sheetData =
           defaultValue && String(defaultValue).trim() !== ''
             ? JSON.parse(defaultValue)
-            : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+            : [
+                {
+                  name: 'Sheet1',
+                  id: generateSheetId(),
+                  status: 1,
+                  data: [[]],
+                  celldata: [],
+                },
+              ]
 
         // Convert sheetData to constructor with id of refSheet.current
         const currentSheets = refSheet.current.getAllSheets()

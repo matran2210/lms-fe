@@ -3,7 +3,7 @@ import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { Triangle } from '@components/icons/Triangle'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import { RESPONSE_OPTION } from 'src/constants'
 import {
@@ -55,6 +55,12 @@ const ShowAnswerTemplate = ({
       return currentTabContent?.data?.answer_template || defaultSheetData
     }
   }
+
+  useLayoutEffect(() => {
+    if (currentTabContent) {
+      setShowModalTemplate(false)
+    }
+  }, [currentTabContent])
 
   return (
     <>

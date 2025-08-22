@@ -305,8 +305,6 @@ const TestDetail = () => {
               return (
                 currentTabContent?.data?.answer_template || defaultSheetData
               )
-            default:
-              break
           }
         }
 
@@ -2475,27 +2473,23 @@ const TestDetail = () => {
     switch (response_option) {
       case RESPONSE_OPTION.WORD:
         const templateValueWord = getTemplateValueForWord()
-            // Reset form value
+        // Reset form value
         onResetFormatEssay(key, templateValueWord)
-            // Reset component con
+        // Reset component con
         if (refEditor?.current?.reset) {
-        refEditor.current.reset()
-    }
+          refEditor.current.reset()
+        }
         break
       case RESPONSE_OPTION.SHEET:
         const templateValue = getTemplateValueForSheet()
-            // Reset form value
+        // Reset form value
         onResetFormatEssay(key, templateValue)
-            // Reset component con
+        // Reset component con
         if (refEditor?.current?.clear) {
-      refEditor.current.clear(templateValue)
-    }
+          refEditor.current.clear(templateValue)
+        }
         break
     }
-
-
-
-    
   }
 
   return (
