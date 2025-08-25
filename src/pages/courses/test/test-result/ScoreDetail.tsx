@@ -156,7 +156,7 @@ const ScoreDetail = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
-  const groupedData = groupBy(allData, (item) => item?.belong_to.id)
+  const groupedData = groupBy(allData, (item) => item?.belong_to?.id)
   return (
     <div
       id="sapp-drawer-test-result-list"
