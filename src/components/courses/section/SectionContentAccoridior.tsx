@@ -98,7 +98,7 @@ export default function SectionContentAccoridior({
                   </span>
                   <span className="text-gray-1 md:hidden">|</span>
                   <span className="text-gray-1 md:hidden">{totalDuration}</span>
-                  <span className="text-gray-1 hidden md:inline-block">
+                  <span className="hidden text-gray-1 md:inline-block">
                     ({totalDuration})
                   </span>
                 </div>
@@ -112,10 +112,12 @@ export default function SectionContentAccoridior({
                       activity?.learning_progress
                         ?.total_course_sections_completed > 0
 
+                    const selectedActivity = activity?.id === router.query.id
+
                     return (
                       <div
                         key={activityIndex}
-                        className="group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2"
+                        className={`group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2     ${selectedActivity ? 'bg-gray-4 text-primary' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           if (activity?.course_section_type === 'ACTIVITY') {
@@ -159,7 +161,7 @@ export default function SectionContentAccoridior({
                               {activity.name}
                             </span>
 
-                            <div className="text-gray-1 flex gap-3 text-ssm md:hidden">
+                            <div className="flex gap-3 text-ssm text-gray-1 md:hidden">
                               {activity?.course_section_type === 'ACTIVITY' && (
                                 <span className="group-hover:text-primary">
                                   Duration: {formatDuration(activity.duration)}
@@ -174,7 +176,7 @@ export default function SectionContentAccoridior({
                         </div>
                         {activity?.course_section_type ==
                           TEST_TYPE_ENUM.ACTIVITY && (
-                          <span className="text-gray-1 hidden text-xs group-hover:text-primary md:block">
+                          <span className="hidden text-xs text-gray-1 group-hover:text-primary md:block">
                             {formatDuration(activity?.duration)}
                           </span>
                         )}
