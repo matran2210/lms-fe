@@ -6,14 +6,12 @@ import PopupModalTest from '@components/survey/PopupModalTest'
 import { useCourseContext } from '@contexts/index'
 import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP, PageLink } from 'src/constants'
+import { ANIMATION, PageLink } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
-import { RemindChoosingExam } from 'src/type/course'
-import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 import LayoutTeacher from '@components/layout/Teacher'
 import { ITabs } from 'src/type'
 
@@ -22,7 +20,6 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetailTeacher = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
-  const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
@@ -138,30 +135,6 @@ const CourseDetailTeacher = () => {
       setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
   })
 
-  const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
-    return (
-      remindChoosingExam.remind_by_progress ||
-      remindChoosingExam.remind_by_duration
-    )
-  }
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout
-
-    if (
-      isSuccess &&
-      canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
-    ) {
-      timeout = setTimeout(() => {
-        setShowSelectExam(true)
-      }, DELAY_TIME_DISPLAY_POPUP)
-    }
-
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [isSuccess, data])
-
   const breadcrumbs: ITabs[] = [
     { link: PageLink.TEACHERS, title: 'LMS' },
     { link: PageLink.TEACHER_MY_COURSE, title: 'My Course' },
@@ -214,11 +187,6 @@ const CourseDetailTeacher = () => {
       </div>
       {isSuccess && (
         <>
-          <SelectExamPopup
-            showSelectExam={showSelectExam}
-            setShowSelectExam={setShowSelectExam}
-            courseData={data?.pages?.[0]?.courseDetail}
-          />
           <PopupModalTest
             class_code={data?.pages?.[0]?.courseDetail?.code}
             program={data?.pages?.[0]?.courseDetail?.data?.program}

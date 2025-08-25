@@ -24,6 +24,7 @@ import {
   FINISHED_TEST_TITLE,
   GRADE_STATUS,
   GRADING_METHOD,
+  PageLink,
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
@@ -58,6 +59,7 @@ type Props = {
   refreshTab: () => void
   exhibitText: string
   attemptId?: string
+  isTeacher?: boolean
 }
 
 interface IAnswer {
@@ -101,6 +103,7 @@ const QuizDocument = ({
   refreshTab,
   exhibitText,
   attemptId,
+  isTeacher,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -592,11 +595,15 @@ const QuizDocument = ({
   const handleSubmit = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
-        router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+        router.replace(
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/your-answers-detail/${resultId}`,
+        )
         return
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
-        router.replace(`/courses/quiz/quiz-result/${resultId}`)
+        router.replace(
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}`,
+        )
         return
       }
     }
@@ -790,7 +797,9 @@ const QuizDocument = ({
         handleCancel={handleCalcelModalResult}
         onOk={() => {
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-            router.replace(`/courses/quiz/your-answers-detail/${resultId}`)
+            router.replace(
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/your-answers-detail/${resultId}`,
+            )
           } else {
             handleCalcelModalResult()
           }
