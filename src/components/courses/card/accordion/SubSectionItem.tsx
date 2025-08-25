@@ -119,9 +119,10 @@ export default function SubSectionItem({
                 ) : (
                   <>Duration: {formatDuration(sub?.quiz?.quiz_timed)}</>
                 )}
-                {sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER && (
-                  <span className="px-3">|</span>
-                )}
+                {sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER &&
+                  (isSubSectionLearning || isSubSectionFinished) && (
+                    <span className="px-3">|</span>
+                  )}
                 <span className="text-sm text-gray-1 md:hidden">
                   {`${sub.activity_count} Activities`}
                 </span>
@@ -276,7 +277,10 @@ export default function SubSectionItem({
                       </span>
                       {act?.course_section_type === TEST_TYPE_ENUM.ACTIVITY && (
                         <>
-                          <span>|</span>
+                          {(isActivityFinished ||
+                            Number(act?.learning_progress?.time_spent) > 0) && (
+                            <span>|</span>
+                          )}
                           {renderBadge(
                             isActivityFinished
                               ? 'Finished'
