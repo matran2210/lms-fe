@@ -112,10 +112,16 @@ export default function SectionContentAccoridior({
                       activity?.learning_progress
                         ?.total_course_sections_completed > 0
 
+                    const selectedActivity = activity?.id === router.query.id
+
                     return (
                       <div
                         key={activityIndex}
-                        className="group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2"
+                        className={`
+                        group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 
+                        hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2
+                        ${selectedActivity ? 'bg-gray-4 text-primary' : ''}
+                        `}
                         onClick={(e) => {
                           e.stopPropagation()
                           if (activity?.course_section_type === 'ACTIVITY') {
