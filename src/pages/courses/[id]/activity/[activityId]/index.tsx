@@ -86,7 +86,7 @@ const ActivityPage = () => {
     data: activity,
     isLoading,
     refetch,
-  } = useGetActivityById(router.query.activityId, router.query.id)
+  } = useGetActivityById(router.query?.activityId, router.query?.id)
 
   const courseId = router.query?.id
   const sectionId = router.query?.activityId as string
@@ -182,7 +182,7 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
-        dispatch(getDiscussion({ id: router.query.id, sectionId: sectionId }))
+        dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
 
@@ -454,7 +454,7 @@ const ActivityPage = () => {
       {breadcrumbsMenu?.data &&
         breadcrumbsMenu?.data?.map((e: IBreadCrumbs) => {
           let url = ''
-          const urlCourseDetail = `/courses/${router.query.id}/section/${partId}`
+          const urlCourseDetail = `/courses/${router.query?.id}/section/${partId}`
           switch (e.course_section_type) {
             case 'PART':
               url = urlCourseDetail
@@ -469,7 +469,7 @@ const ActivityPage = () => {
               url = '#'
               break
             default:
-              url = `/courses/my-course/${router.query.id}`
+              url = `/courses/my-course/${router.query?.id}`
               break
           }
 
@@ -522,7 +522,7 @@ const ActivityPage = () => {
 
   // Tìm vị trí của hoạt động tiếp theo trong mảng activityIds
   const nextActivityIndex = activityIds?.indexOf(
-    nextActivityId || router.query.activityId,
+    nextActivityId || router.query?.activityId,
   )
 
   // Lấy id của hoạt động trước đó
@@ -530,7 +530,7 @@ const ActivityPage = () => {
 
   // Tìm vị trí của hoạt động trước đó trong mảng activityIds
   const previousActivityIndex = activityIds?.indexOf(
-    previousActivityId || router.query.activityId,
+    previousActivityId || router.query?.activityId,
   )
 
   const findActivityByIndex = (previousIndex: number) => {
@@ -572,7 +572,7 @@ const ActivityPage = () => {
     } else {
       // Nếu hoạt động không bị khóa, điều hướng đến hoạt động và ghi nhận sự kiện
       router.push({
-        pathname: `/courses/${router.query.id}/activity/${activityId}`,
+        pathname: `/courses/${router.query?.id}/activity/${activityId}`,
       })
       trackGAEvent(eventLabel) // Ghi nhận sự kiện Google Analytics
     }
@@ -1035,7 +1035,7 @@ const ActivityPage = () => {
           </div>
           <div></div>
           <div className="mt-6 shadow-activity" data-aos={ANIMATION.DATA_AOS}>
-            <Discussion class_id={(router.query.id as string) || ''} />
+            <Discussion class_id={(router.query?.id as string) || ''} />
           </div>
 
           {/* Sratchpad */}

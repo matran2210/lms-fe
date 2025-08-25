@@ -2,7 +2,7 @@ import SappButton from '@components/base/button/SappButton'
 import HookFormSelect from '@components/base/select/HookFormSelect'
 import router from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
+import { GRADE_STATUS, GRADING_METHOD, PageLink } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 
@@ -46,6 +46,7 @@ interface IProps {
   quizAttempt: IQuizAttempt
   trackGA: () => void
   setOpenReport: Dispatch<SetStateAction<boolean>>
+  isTeacher: boolean
 }
 
 const ResultCourse = ({
@@ -54,6 +55,7 @@ const ResultCourse = ({
   quizAttempt,
   trackGA,
   setOpenReport,
+  isTeacher,
 }: IProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false)
   const [resultList, setResultList] = useState<IQuizResultList>({
@@ -128,7 +130,7 @@ const ResultCourse = ({
             className="!p-0 font-medium underline"
             onClick={() => {
               router.push(
-                `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
+                `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
               )
               trackGA()
             }}
@@ -143,7 +145,9 @@ const ResultCourse = ({
         className="!p-0 font-medium underline"
         onClick={() => {
           if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
-            router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+            router.push(
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${quizAttempt?.attempt?.id}`,
+            )
           }
 
           trackGA()
@@ -167,7 +171,7 @@ const ResultCourse = ({
             setSelectedResult(selectedOption)
             setIsFocus(false)
             router.push({
-              pathname: `/courses/test/test-result/${selectedOption.value}`,
+              pathname: `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${selectedOption.value}`,
               query: { attempt: selectedOption?.label },
             })
           }}

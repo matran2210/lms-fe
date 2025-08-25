@@ -557,7 +557,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
-          } = answerSubmitted[0]
+          } = answerSubmitted?.[0]
 
           // Handle different question types
           if (
@@ -925,6 +925,21 @@ const TestDetail = () => {
       }
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData])
+
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? (dayjs(
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds') ?? 0)
+    : null
+
+  useEffect(() => {
+    if (!openTimeOut && remainingTimeinSeconds && remainingTimeinSeconds <= 0) {
+      setOpenTimeOut(true)
+    }
+  }, [openTimeOut, remainingTimeinSeconds])
 
   useEffect(() => {
     if (currentTabContent?.id) {
@@ -1618,13 +1633,12 @@ const TestDetail = () => {
     if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
       if (!checkAnswered(currentTabContent)) return
       if (action === 'change-tab' || action === 'finish') {
-        if (currentTabContent?.data?.qType !== QUESTION_TYPES.ESSAY) {
+        if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
           const isEqualValue = await isValuesEqual(
             currentTabContent,
             oldCurrentTabData,
             getValues,
           )
-
           // Check if the current tab content is the same as the old tab content
           if (isEqualValue) return
         }
@@ -2223,7 +2237,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }
@@ -3082,26 +3095,22 @@ const TestDetail = () => {
                     router.replace(`/event-test`)
                     // setSubmitEventTest(true)
                   } else {
-                    if (
-                      type !== 'entrance' &&
-                      quizDetail?.quiz_type !== 'FINAL_TEST'
-                    ) {
-                      if (
-                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                      ) {
-                        router.replace(
-                          `/courses/test/your-answers-detail/${QuizResultId}`,
-                        )
-                      } else {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
-                        )
-                      }
+                    // if (type !== 'entrance') {
+                    if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+                      router.replace(
+                        `/courses/test/your-answers-detail/${QuizResultId}`,
+                      )
                     } else {
-                      router.back()
-                      setScoreQuestion(scoreFinalTest)
-                      setSubmitTest(true)
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
                     }
+                    // } else {
+                    //   console.log('back backs')
+                    //   router.back()
+                    //   setScoreQuestion(scoreFinalTest)
+                    //   setSubmitTest(true)
+                    // }
                   }
                   trackGAEvent('Click Button Submit Time Out Test')
                 })

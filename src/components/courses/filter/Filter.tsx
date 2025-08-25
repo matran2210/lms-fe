@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { buildQueryString } from '@utils/index'
+import { formatPathWithQueryParams } from '@utils/index'
 import { useForm } from 'react-hook-form'
 import { IFilterProps } from 'src/type/courses-3-level'
 import DesktopFilter3Level from '@components/courses/filter/FilterDesktop'
@@ -33,11 +33,6 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
 
   const totalResults = courses?.metadata?.total_records || 0
 
-  const queryString = buildQueryString({
-    status: filterStatus.value,
-    type: filterType.value,
-  })
-
   useEffect(() => {
     const queryStatus = router.query.status || ''
     const queryType = router.query.type || ''
@@ -60,9 +55,12 @@ export default function Filter3Level({ courses, setPage }: IFilterProps) {
 
   useEffect(() => {
     if (!isFirstRender) {
-      router.push(
-        `${PageLink.SHORT_COURSE}?name=${router.query.name || ''}${queryString}`,
-      )
+      const filterUrl = formatPathWithQueryParams(PageLink.SHORT_COURSE, {
+        name: router.query.name as string,
+        status: filterStatus.value,
+        type: filterType.value,
+      })
+      router.push(filterUrl)
       setPage?.(9)
     }
   }, [filterType, filterStatus])

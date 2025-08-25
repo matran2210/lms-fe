@@ -20,7 +20,7 @@ const MODAL_CONTENT = {
   lockSection: {
     header: 'This content is locked',
     content:
-      'Sorry, you do not have access to this content. Connect with our admissions consultant now to unlock your personalized learning pathway!',
+      'Sorry, you do not have access to this content. Click ‘Upgrade Now’ to receive a personalized learning consultation call from our admissions conslutant.',
     icon: <LockSectionIcon />,
   },
   ctaUpgrade: {
@@ -106,17 +106,17 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
       }
       handleCancel={handleClose}
       onOk={handleUpgrade}
-      handleClose={showForm.ctaUpgrade ? handleClose : undefined}
+      handleClose={showFooter ? handleClose : undefined}
       icon={icon}
       header={header}
       content={content}
       showFooter={showFooter}
       okButtonCaption="Upgrade Now"
       cancelButtonCaption={'Skip'}
-      showCancelButton={showForm.ctaUpgrade}
+      showCancelButton={showFooter}
       fullWidthBtn={true}
       buttonSize="extra"
-      isClosable={showForm.ctaUpgrade}
+      isClosable={showFooter}
     />
   )
 }

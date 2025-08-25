@@ -35,9 +35,9 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/courses/action/ActionCellV2'
-import { DEFAULT_PAGESIZE } from 'src/constants'
+import { DEFAULT_PAGESIZE, PageLink } from 'src/constants'
 import BaseModal from '@components/courses/popup/BaseModal'
-import ButtonIcon from '../buttons/ButtonIcon'
+import ButtonPrimary from '@components/v2/base/button/ButtonPrimary'
 import { AltArrowLeft } from '../icons/AltArrowLeft'
 
 export default function LearningNotesList({
@@ -302,18 +302,16 @@ export default function LearningNotesList({
     }
   }
 
-  // Fetching note list after filter mobile was selected
-  useEffect(() => {
-    const debouncedSetCourseSectionId = debounce((value) => {
-      setCourseSectionId(value || '')
-    }, 500)
-
-    debouncedSetCourseSectionId(openChooseItem.params)
-
-    return () => {
-      debouncedSetCourseSectionId.cancel()
+  const handleFilter = () => {
+    if (openChooseItem?.params) {
+      setCourseSectionId(openChooseItem.params)
     }
-  }, [openChooseItem.params])
+    setIsOpenFilter(false)
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+  }
 
   // Common content for both desktop and mobile
   const renderContent = () => (
@@ -346,8 +344,9 @@ export default function LearningNotesList({
                     }
                   }
                   const handleView = async () => {
+                    const pathname = `${PageLink.SHORT_COURSE}/detail/${courseId}/activity/${note?.course_section_id}`
                     await router.push({
-                      pathname: `/courses/${queryId || courseId}/activity/${note?.course_section_id}`,
+                      pathname,
                       query: {
                         note_id: note?.id,
                       },
@@ -375,12 +374,12 @@ export default function LearningNotesList({
 
                   return (
                     <div
-                      className="hover:bg-primary-50 cursor-pointer rounded-2xl md:p-4"
+                      className="cursor-pointer rounded-2xl hover:bg-primary-50 md:p-4"
                       key={note?.id}
                       onClick={handleView}
                     >
                       <div className="flex justify-between">
-                        <div className="text-sm font-semibold text-gray-800 md:text-base">
+                        <div className="mr-4 line-clamp-1 text-sm font-semibold text-gray-800 md:text-base">
                           {note?.name}
                         </div>
                         <div onClick={(e) => e.stopPropagation()}>
@@ -458,6 +457,15 @@ export default function LearningNotesList({
           setListActivity={setListActivity}
         />
       )}
+      {isOpenFilter && (
+        <div className="mb-0 mt-2 w-full">
+          <ButtonPrimary
+            title="Confirm"
+            className="w-full"
+            onClick={handleFilter}
+          />
+        </div>
+      )}
     </FormProvider>
   )
 
@@ -471,9 +479,12 @@ export default function LearningNotesList({
           bodyStyle={{
             maxHeight: '50vh',
             overflowY: 'auto',
+            minHeight: '400px',
+            display: 'flex',
+            flexDirection: 'column',
           }}
           wrapClassName="note-list-modal"
-          footer={isOpenFilter}
+          footer={null}
           closable={!isOpenFilter}
         >
           {renderContent()}
