@@ -39,6 +39,7 @@ export interface Requirement {
   files: FileType[]
   answer_file?: FileType | null
   answer_text?: string
+  answer_template?: string
 }
 
 export interface RequirementItem {

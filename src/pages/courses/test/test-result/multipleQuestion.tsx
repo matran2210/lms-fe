@@ -201,7 +201,7 @@ const MultipleQuestion = ({
                 <div className="my-auto">
                   <IconAnnotationGuide />
                 </div>
-                <div className="text-xs my-auto ml-1 font-normal">
+                <div className="my-auto ml-1 text-xs font-normal">
                   Annotation Guide
                 </div>
               </div>
