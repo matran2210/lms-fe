@@ -23,7 +23,7 @@ import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
 
-const commonHeaderClass = 'text-left p-0 text-sm text-[#A1A1A1] font-semibold'
+const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -53,19 +53,19 @@ const TableQuestions = ({
     },
     {
       label: 'Section',
-      className: clsx(commonHeaderClass, 'min-w-[180px]'),
+      className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+      className: clsx(commonHeaderClass, 'min-w-[100px] text-center'),
     },
     {
       label: 'Result',
-      className: clsx(commonHeaderClass),
+      className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
     },
     {
       label: 'Time Spent',
-      className: clsx(commonHeaderClass, ' min-w-20 !pr-0 text-center'),
+      className: clsx(commonHeaderClass, 'min-w-[100px] !pr-0 text-center'),
     },
   ]
 
@@ -158,7 +158,7 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit min-h-[237px] px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -183,7 +183,7 @@ const TableQuestions = ({
       >
         <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
-      <div className="block pl-4">
+      <div className="block rounded-xl bg-white p-8">
         <SappTable
           headers={headers}
           loading={isLoading}
@@ -196,12 +196,12 @@ const TableQuestions = ({
             return (
               <React.Fragment key={answer?.id}>
                 <tr key={answer?.id}>
-                  <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
+                  <td className="sapp-border p-0 pr-3 text-base text-gray-800">
                     {index + 1}
                   </td>
 
                   {/* Question */}
-                  <td className="sapp-border p-0 pr-4">
+                  <td className="p-0 pr-4 text-base text-gray-800">
                     <Tooltip
                       placement="topLeft"
                       title={
@@ -215,7 +215,7 @@ const TableQuestions = ({
                       }
                     >
                       <div
-                        className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
+                        className={`line-clamp-1 cursor-pointer text-base text-gray-800 hover:font-semibold`}
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             removeHtmlTags(
@@ -236,7 +236,7 @@ const TableQuestions = ({
 
                   {/* Section */}
                   <td
-                    className="sapp-border my-5 line-clamp-1 p-0 text-start text-[#050505]"
+                    className="sapp-border my-5 line-clamp-1 p-0 text-center text-base text-gray-800"
                     title={
                       answer?.question?.question_filter?.part?.name ?? '--'
                     }
@@ -254,7 +254,7 @@ const TableQuestions = ({
                   </td>
 
                   {/* Type */}
-                  <td className="sapp-border p-0 pr-4 text-[#050505]">
+                  <td className="sapp-border p-0 pr-4 text-center text-base text-gray-800">
                     <div className="min-w-[111px]">
                       {getTypeName(answer?.question?.qType)}
                     </div>
@@ -262,7 +262,7 @@ const TableQuestions = ({
 
                   {/* Result */}
                   <td
-                    className={`sapp-border flex justify-between gap-12 pr-4`}
+                    className={`sapp-border flex justify-center pr-4 text-base text-gray-800`}
                   >
                     <div
                       className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
@@ -279,27 +279,31 @@ const TableQuestions = ({
                         </>
                       )}
                     </div>
+
                     {answer?.question?.qType !== 'ESSAY' && (
-                      <div className="ml-1 flex items-center justify-start gap-2 text-[#A1A1A1]">
-                        <Image
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Correct"
-                          className="mr-1 text-success-600"
-                          width={16}
-                          height={16}
-                          layout="fixed"
-                        />
-                        {roundNumber(
-                          answer?.question?.question_report?.ratio || 0,
-                        )}
-                        %
-                      </div>
+                      <>
+                        <div className="mx-3 text-gray-300">|</div>
+                        <div className="flex items-center justify-start gap-1 text-base text-gray-800">
+                          <Image
+                            src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                            alt="Correct"
+                            className="mr-1 text-success-600"
+                            width={16}
+                            height={16}
+                            layout="fixed"
+                          />
+                          {roundNumber(
+                            answer?.question?.question_report?.ratio || 0,
+                          )}
+                          %
+                        </div>
+                      </>
                     )}
                   </td>
 
                   {/* Time Spent */}
                   <td className="sapp-border m-6 p-0">
-                    <div className="text-center">
+                    <div className="text-center text-base text-gray-800">
                       {(() => {
                         if (answer?.time_spent !== null) {
                           return convertSecondsToMinutesSeconds(
