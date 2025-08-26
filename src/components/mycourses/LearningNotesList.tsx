@@ -468,6 +468,7 @@ const LearningNotesList = () => {
                     onClick={() => onClose()}
                   >
                     <SappBreadcrumbNotLink
+                      isTeacher={userType === UserType.TEACHER}
                       paths={[...note?.course_section_path].reverse()}
                     />
                   </div>

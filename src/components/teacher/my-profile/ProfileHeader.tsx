@@ -300,7 +300,7 @@ const ProfileHeader = ({
             <div className="flex items-center">
               <Tag
                 bordered={false}
-                className="text-xs m-0 rounded bg-accent-info bg-opacity-5 px-2 py-1 font-normal text-accent-info"
+                className="m-0 rounded bg-accent-info bg-opacity-5 px-2 py-1 text-xs font-normal text-accent-info"
               >
                 Active
               </Tag>

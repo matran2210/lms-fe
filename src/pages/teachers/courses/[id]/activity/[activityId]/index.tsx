@@ -661,6 +661,7 @@ const ActivityTeacherPage = () => {
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
                               attemptId={e?.quiz?.attempt?.id}
+                              isTeacher
                             />
                           </div>
                         )

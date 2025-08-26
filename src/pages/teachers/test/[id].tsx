@@ -2644,8 +2644,8 @@ const TestDetail = () => {
               <button
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
-                  setAllowUnHighLight(!allowUnHighLight),
-                    setAllowHighLight(false)
+                  ;(setAllowUnHighLight(!allowUnHighLight),
+                    setAllowHighLight(false))
                   trackGAEvent('Click Button Unhighlight Test')
                 }}
               >

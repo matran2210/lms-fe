@@ -19,7 +19,7 @@ const HistoryItem = ({ data }: any) => {
           {data.ip}
         </div>
       </div>
-      <div className="text-xs flex items-center gap-2 text-secondary-100 md:text-sm">
+      <div className="flex items-center gap-2 text-xs text-secondary-100 md:text-sm">
         <div>{formattedTime}</div>
         {data.location && <div className="h-1 w-1 rounded-full"></div>}
         <div>{data.location || ''}</div>

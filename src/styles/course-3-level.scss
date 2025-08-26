@@ -102,7 +102,7 @@
     }
 
     &.topic_test {
-      @apply hover:bg-gray-4;
+      @apply rounded-lg hover:bg-gray-4;
       &.ant-collapse-item-active {
         @apply border-0;
       }
