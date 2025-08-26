@@ -3,7 +3,12 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import Icon from '@components/icons'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import { buildQueryString, formatTime, truncateHTML } from '@utils/index'
+import {
+  buildQueryString,
+  formatTime,
+  handleReplaceText,
+  truncateHTML,
+} from '@utils/index'
 import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -125,19 +130,8 @@ const Part = ({
       isMobileView ? 'font-size: 14px' : 'font-size: 16px',
     )
   }
-  const handleReplace = (html: string = '') => {
-    if (!html) return ''
-    // Thay tất cả font-size
-    html = html.replace(/font-size:\s*[^;"]+/gi, 'font-size: 16px')
 
-    // Thay tất cả color
-    html = html.replace(/color:\s*[^;"]+/gi, 'color: white')
-
-    // Thay tất cả font-weight
-    html = html.replace(/font-weight:\s*[^;"]+/gi, 'font-weight: normal')
-    return html
-  }
-  const description = handleReplace(course?.description)
+  const description = handleReplaceText(course?.description)
 
   return (
     <CardCourse

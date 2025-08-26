@@ -1,6 +1,11 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { removeHtmlTags, truncateString } from '@utils/index'
+import {
+  convertSlugToTitle,
+  handleReplaceText,
+  removeHtmlTags,
+  truncateString,
+} from '@utils/index'
 
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
@@ -193,6 +198,10 @@ const TableQuestions = ({
           classTable="w-full"
         >
           {allData?.map((answer, index) => {
+            const description = handleReplaceText(
+              answer?.question?.question_content ?? '--',
+            )
+            const content = convertSlugToTitle(description)
             return (
               <React.Fragment key={answer?.id}>
                 <tr key={answer?.id}>
@@ -207,9 +216,7 @@ const TableQuestions = ({
                       title={
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              answer?.question?.question_content ?? '--',
-                            ),
+                            __html: content,
                           }}
                         />
                       }
@@ -264,21 +271,27 @@ const TableQuestions = ({
                   <td
                     className={`sapp-border flex justify-center pr-4 text-base text-gray-800`}
                   >
-                    <div
-                      className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
-                    >
-                      {answer?.question?.qType !== 'ESSAY' ? (
-                        <>{answer?.is_correct ? 'Correct' : 'Incorrect'}</>
-                      ) : (
-                        <>
-                          {gradingStatus === GRADE_STATUS.FINISHED_GRADING
-                            ? 'Graded'
-                            : answer?.active === 'SUBMITED'
-                              ? 'Completed'
-                              : 'Not Completed'}
-                        </>
-                      )}
-                    </div>
+                    {answer?.question?.qType !== 'ESSAY' ? (
+                      <div
+                        className={clsx(
+                          `rounded-[4px] px-2 py-0.5 text-sm font-normal leading-5.5`,
+                          answer?.is_correct && 'bg-green-7 text-green-6',
+                          !answer?.is_correct && 'bg-error-50 text-error',
+                        )}
+                      >
+                        {answer?.is_correct ? 'Correct' : 'Incorrect'}
+                      </div>
+                    ) : (
+                      <div
+                        className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
+                      >
+                        {gradingStatus === GRADE_STATUS.FINISHED_GRADING
+                          ? 'Graded'
+                          : answer?.active === 'SUBMITED'
+                            ? 'Completed'
+                            : 'Not Completed'}
+                      </div>
+                    )}
 
                     {answer?.question?.qType !== 'ESSAY' && (
                       <>
