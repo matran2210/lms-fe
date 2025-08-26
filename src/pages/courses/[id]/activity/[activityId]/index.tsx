@@ -62,6 +62,8 @@ import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { ITabs } from 'src/type'
 import BackToTop from '@components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
+import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
+import { CalculatorIcon, ScratchPadIcon } from '@assets/v2/icons'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -411,6 +413,71 @@ const ActivityPage = () => {
       })
     : []
 
+  const assistiveItemClass =
+    'flex flex-col items-center justify-center gap-[6px]'
+  const listAssistive = [
+    {
+      label: (
+        <div className={assistiveItemClass}>
+          <CalculatorIcon className="h-6 w-6" />
+          <span className="text-xs">Calculator</span>
+        </div>
+      ),
+      onClick: () =>
+        handleOpenScratchPad({
+          type: 'calculator',
+        }),
+    },
+    {
+      label: (
+        <div className={assistiveItemClass}>
+          <ScratchPadIcon className="h-6 w-6" />
+          <span className="text-xs">New Note</span>
+        </div>
+      ),
+      onClick: handleAddNote,
+    },
+    {
+      label: (
+        <div className={assistiveItemClass}>
+          <DocumentTextIcon className="h-6 w-6" />
+          <span className="text-xs">Note List</span>
+        </div>
+      ),
+      onClick: handleOpenNotesList,
+    },
+    {
+      label: (
+        <div className={assistiveItemClass}>
+          <ResourceIcon className="h-6 w-6" />
+          <span className="text-xs">Resource</span>
+        </div>
+      ),
+      onClick: onOpenActivityResource,
+    },
+    ...((currentVideo?.file?.resource?.time_line?.length as number) > 0
+      ? [
+          {
+            label: (
+              <div className={assistiveItemClass}>
+                <TimeLineIcon />
+                <span className="text-xs">Timeline</span>
+              </div>
+            ),
+            onClick: onOpenVideoTimeline,
+          },
+        ]
+      : []),
+    {
+      label: (
+        <div className={assistiveItemClass}>
+          <DiscussionIcon className="h-6 w-6" />
+          <span className="text-xs">Discussion</span>
+        </div>
+      ),
+      onClick: onFocusDiscussion,
+    },
+  ]
   const [sessionData, setSessionData] = useState<Array<any>>([])
 
   useEffect(() => {
@@ -496,9 +563,12 @@ const ActivityPage = () => {
           {/* Main Activity */}
           <div
             data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
-            className={clsx('mb-[120px] flex flex-col gap-4 md:gap-6 lg:mb-6', {
-              'mb-0': focusOnlyDiscussion,
-            })}
+            className={clsx(
+              'flex flex-col gap-4 md:mb-[120px] md:gap-6 lg:mb-6',
+              {
+                'mb-0': focusOnlyDiscussion,
+              },
+            )}
           >
             {/* Header */}
             <HeaderMobile
@@ -582,8 +652,10 @@ const ActivityPage = () => {
               <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
-
-          <BottomMenu className={focusOnlyDiscussion ? 'hidden' : ''}>
+          <AssistiveTouch className="md:hidden" menuItems={listAssistive} />
+          <BottomMenu
+            className={focusOnlyDiscussion ? 'hidden' : 'hidden md:flex'}
+          >
             <div className="flex items-center justify-center gap-5">
               <CardMenuItem
                 title="Note List"
@@ -745,7 +817,7 @@ const ActivityPage = () => {
         <BackToTop
           scrollContainerRef={scrollRef}
           className={clsx(
-            '!bottom-9 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
+            '!bottom-24 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
           )}
         />
       </Layout>

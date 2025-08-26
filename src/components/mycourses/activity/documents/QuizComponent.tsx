@@ -1009,7 +1009,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           )}
           <div className="relative">
             {renderQuestion()}
-            <div className="absolute bottom-[10px] right-0 z-[1050] flex w-12 flex-col gap-2">
+            <div className="absolute -right-4 bottom-[10px] z-[1050] flex w-12 flex-col gap-2">
               {exhibitData && exhibitData?.length > 0 && (
                 <>
                   <Popover
@@ -1132,26 +1132,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   </div>
                 </Popover>
               )}
-              {((exhibitData && exhibitData?.length > 0) ||
-                activeQuestion?.question_topic?.files?.length > 0) && (
-                <Divider className="my-0 border-primary text-primary md:hidden" />
-              )}
-              <div
-                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay md:hidden"
-                onClick={() => {
-                  setOpenFile?.({
-                    type: 'calculator',
-                  })
-                }}
-              >
-                <CalculatorIconV2 isActive className="h-8 w-8" />
-              </div>
-              <div
-                className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay md:hidden"
-                onClick={handleAddNote}
-              >
-                <ScratchPadIconV2 isActive className="h-8 w-8" />
-              </div>
             </div>
           </div>
         </div>
