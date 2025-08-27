@@ -148,4 +148,5 @@ export type Sheet = {
   id?: string
   status?: number
   data: any[][] // 2D array (rows x cols)
+  celldata: any[]
 }
