@@ -1,19 +1,22 @@
 import HookFormEditor from '@components/base/editor/HookFormEditor'
 import React, { memo, useEffect, useRef, useState } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
+// import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import { Workbook } from '@fortune-sheet/react'
 import { runHighlight } from '@utils/index'
+import { Divider } from 'antd'
 import clsx from 'clsx'
-import { isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { Controller } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
+import { generateSheetId } from 'src/constants/attempt'
+import { MY_COURSES } from 'src/constants/lang'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { MY_COURSES } from 'src/constants/lang'
-import { Divider } from 'antd'
 
 type SheetData = {
   name: string
@@ -213,6 +216,52 @@ const EssayQuestionPreview = ({
           const newKey = uniqueId('key')
           return newKey
         }),
+      clear: (templateValue?: string) => {
+        if (refSheet.current) {
+          try {
+            // Nếu có templateValue, update sheet với giá trị đó
+            const currentSheets = refSheet.current.getAllSheets()
+            // function tạo sheet trống an toàn
+            const makeEmptySheet = (base: SheetData): SheetData => ({
+              id: base.id,
+              name: base.name,
+              status: base.status ?? 1,
+              row: base.row ?? 100,
+              column: base.column ?? 50,
+              celldata: [],
+              data: Array(base.row || 100)
+                .fill(null)
+                .map(() => Array(base.column || 50).fill(null)),
+            })
+
+            if (templateValue?.trim()) {
+              const sheetData: SheetData[] = JSON.parse(templateValue) || [
+                {
+                  name: 'Sheet1',
+                  id: generateSheetId(),
+                  status: 1,
+                  data: [[]],
+                  celldata: [],
+                },
+              ]
+
+              const updatedSheetData = sheetData.map((sheet, index) => {
+                const base = currentSheets[index] || {}
+                return {
+                  ...makeEmptySheet(base as SheetData), // luôn tạo mới data, celldata
+                  ...cloneDeep(sheet), // merge nội dung từ JSON vào
+                  id: base?.id || sheet.id || '',
+                }
+              })
+
+              // update tất cả một lần
+              refSheet.current.updateSheet(updatedSheetData.map(cloneDeep))
+            }
+          } catch (error) {
+            toast.error('Error reset sheet data:')
+          }
+        }
+      },
     }
   }
 
@@ -243,7 +292,15 @@ const EssayQuestionPreview = ({
         const sheetData =
           defaultValue && String(defaultValue).trim() !== ''
             ? JSON.parse(defaultValue)
-            : [{ name: 'Sheet1', id: '', status: 1, data: [[]], celldata: [] }]
+            : [
+                {
+                  name: 'Sheet1',
+                  id: generateSheetId(),
+                  status: 1,
+                  data: [[]],
+                  celldata: [],
+                },
+              ]
 
         // Convert sheetData to constructor with id of refSheet.current
         const currentSheets = refSheet.current.getAllSheets()

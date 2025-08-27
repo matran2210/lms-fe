@@ -9,7 +9,13 @@ type IProps = {
   type: string
 }
 
-const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
+const SappBreadcrumbNotLink = ({
+  paths,
+  isTeacher = false,
+}: {
+  paths: IProps[]
+  isTeacher?: boolean
+}) => {
   const router = useRouter()
   const getCourseId = router?.query?.courseId ?? router.query.id
 
@@ -24,16 +30,24 @@ const SappBreadcrumbNotLink = ({ paths }: { paths: IProps[] }) => {
         } else {
           switch (path.type) {
             case 'PART':
-              url = `${PageLink.COURSES}/${getCourseId}/section/${path?.id}`
+              url = `${
+                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              }/${getCourseId}/section/${path?.id}`
               break
             case 'CHAPTER':
-              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
+              url = `${
+                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
               break
             case 'UNIT':
-              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+              url = `${
+                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
               break
             case 'ACTIVITY':
-              url = `${PageLink.COURSES}/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+              url = `${
+                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
               break
           }
         }

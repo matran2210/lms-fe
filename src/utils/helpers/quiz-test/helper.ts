@@ -280,6 +280,11 @@ export const checkSheetAnswered = (data: string | Sheet[]): boolean => {
   }
 }
 
+export const isWorkbookEmpty = (sheets: Sheet[] | undefined): boolean => {
+  if (!sheets || sheets.length === 0) return true
+  return sheets?.every((s) => !s.celldata || s.celldata.length === 0)
+}
+
 export function hasEditorValueFromHtml(
   html: string | null | undefined,
 ): boolean {

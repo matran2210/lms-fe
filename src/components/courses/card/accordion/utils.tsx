@@ -3,8 +3,8 @@ import {
   COURSES_STATUS_BADGE,
   COURSES_STATUS_LABEL,
 } from 'src/constants/courses3level/courses'
-import { ICourseSection, IActivity } from 'src/type/courses-3-level'
 import { PlayIcon, TextIcon, ListIcon } from '@components/courses/icons'
+import { PastExamAnalysisIcon } from '@components/courses/icons/PastExamAnalysisIcon'
 
 export const formatDuration = (minutes: number) => {
   const hours = Math.floor(minutes / 60)
@@ -40,6 +40,7 @@ const activityIconMap: Record<string, JSX.Element> = {
   TEXT: <TextIcon className="w-4.5 md:w-6" />,
   QUIZ: <ListIcon className="w-4.5 md:w-6" />,
   TEST: <ListIcon className="w-4.5 md:w-6" />,
+  PAST_EXAM_ANALYSIS: <PastExamAnalysisIcon className="w-4.5 md:w-6" />,
 }
 
 export const renderIconActivity = (type: string) => {
