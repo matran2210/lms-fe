@@ -308,6 +308,7 @@ module.exports = {
       'medium-sm': ['14px', { lineHeight: '16.9px' }],
       ssm: ['12px', { lineHeight: '20px' }],
       action: ['0.8rem', { lineHeight: '17px' }],
+      xs: ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
       'v2-xs': ['0.75rem', { lineHeight: '1rem' }] /* 12px, 16px */,
       'v2-sm': ['0.875rem', { lineHeight: '1.375rem' }] /* 14px, 22px */,
       'v2-base': ['1rem', { lineHeight: '1.5rem' }] /* 16px, 24px */,

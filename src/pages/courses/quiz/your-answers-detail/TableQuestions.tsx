@@ -38,6 +38,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  isTeacher?: boolean
 }
 
 const TableQuestions = ({
@@ -45,6 +46,7 @@ const TableQuestions = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
   const headers = [
@@ -160,7 +162,9 @@ const TableQuestions = ({
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   const onShowDetail = (id: string) => {
-    router.push(`/explanation/${id}?title=Your Answers Detail&type=quiz`)
+    router.push(
+      `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${id}?title=Your Answers Detail&type=quiz`,
+    )
   }
   const renderResult = (answer: IAnswer) => {
     if (isEmpty(answer)) return '-'
@@ -230,7 +234,10 @@ const TableQuestions = ({
         className="absolute right-0 top-0 ml-auto cursor-pointer md:right-6 md:top-4"
         onClick={() => {
           router.push(
-            localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES,
+            isTeacher
+              ? (localStorage.getItem('previousCourseUrl') ??
+                  PageLink.TEACHER_MY_COURSE)
+              : (localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES),
           )
         }}
       >

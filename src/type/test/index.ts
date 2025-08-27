@@ -39,6 +39,7 @@ export interface Requirement {
   files: FileType[]
   answer_file?: FileType | null
   answer_text?: string
+  answer_template?: string
 }
 
 export interface RequirementItem {
@@ -147,4 +148,5 @@ export type Sheet = {
   id?: string
   status?: number
   data: any[][] // 2D array (rows x cols)
+  celldata: any[]
 }

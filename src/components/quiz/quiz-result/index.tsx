@@ -5,11 +5,12 @@ import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package-dat-test'
 import { IQuestionResultResponse } from 'quiz-result-package-dat-test/dist/type'
 import { useEffect, useState } from 'react'
+import { PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityInfo } from 'src/type'
 import Layout from '@components/layout'
 
-const QuizResults = () => {
+const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter()
   const [activityInfo, setActivitiInfo] = useState<ActivityInfo | null>(null)
   const { id } = router.query
@@ -79,7 +80,7 @@ const QuizResults = () => {
           onClick={() => {
             activityInfo !== null &&
               router.push(
-                `/courses/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
+                `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
               )
           }}
         >
@@ -97,7 +98,9 @@ const QuizResults = () => {
                 questionResponse={modalResult?.questions || []}
                 getTable={getTable}
                 onShowDetail={(e) => {
-                  router.push(`/explanation/${e.id}?title=Entrance Test`)
+                  router.push(
+                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
+                  )
                 }}
                 loading={loading}
                 is_lms_v2
