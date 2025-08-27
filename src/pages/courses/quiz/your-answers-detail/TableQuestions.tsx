@@ -215,10 +215,10 @@ const TableQuestions = ({
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="hidden items-center gap-x-3 md:block">
-        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
+      <div className="items-center gap-x-3">
+        <div className="mb-6 text-base font-semibold text-[#050505] md:text-lg xl:text-xl xl:font-medium">
           Your Answer Details{' '}
-          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-base text-[#FFB800]">
+          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-sm text-[#FFB800] md:text-base">
             Awaiting Grading
           </span>
         </div>
@@ -227,7 +227,7 @@ const TableQuestions = ({
         )}
       </div>
       <div
-        className="absolute right-6 top-4 ml-auto hidden cursor-pointer md:block"
+        className="absolute right-0 top-0 ml-auto cursor-pointer md:right-6 md:top-4"
         onClick={() => {
           router.push(
             localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES,

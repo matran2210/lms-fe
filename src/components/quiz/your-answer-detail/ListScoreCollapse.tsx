@@ -6,6 +6,8 @@ import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { htmlToRaw } from '@components/common/timer'
 import clsx from 'clsx'
 import { ArrowDownIcon } from '@components/courses/icons'
+import { IAnswer } from 'src/type'
+import type { QUESTION_TYPES } from 'src/constants'
 
 const ListScoreCollapse = ({
   data,
@@ -13,12 +15,12 @@ const ListScoreCollapse = ({
   renderResult,
   getTypeName,
 }: {
-  data: any[]
-  onShowDetail: (id: any) => void | undefined
-  renderResult: (item: any) => React.ReactNode
-  getTypeName: (type: string) => string
+  data: (IAnswer | undefined)[]
+  onShowDetail: (id: string) => void | undefined
+  renderResult: (item: IAnswer) => React.ReactNode
+  getTypeName: (type: QUESTION_TYPES | undefined) => string
 }) => {
-  const renderContent = (item: any) => {
+  const renderContent = (item: IAnswer) => {
     const classLabel = 'text-sm font-medium text-gray-400'
     const classRow = 'flex items-center gap-3'
     const classContent = 'text-gray-800 text-sm font-normal'
@@ -66,8 +68,8 @@ const ListScoreCollapse = ({
     )
   }
 
-  const getItems: (data: any[]) => CollapseProps['items'] = (data) => {
-    return data.map((item: any) => ({
+  const getItems: (data: IAnswer[]) => CollapseProps['items'] = (data) => {
+    return data.map((item: IAnswer) => ({
       key: item.id,
       label: (
         <div className={`collapse-label text-base font-medium text-gray-800`}>
@@ -80,7 +82,9 @@ const ListScoreCollapse = ({
 
   return (
     <BaseCollapse
-      items={getItems(data)}
+      items={getItems(
+        data.filter((item): item is IAnswer => item !== undefined),
+      )}
       expandIcon={({ isActive }) => (
         <ArrowDownIcon
           className={clsx('transition-transform', {
