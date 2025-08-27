@@ -1,4 +1,3 @@
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
@@ -7,6 +6,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -62,14 +62,10 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Your Answer Details">
+    <FullScreenLayout title="Your Answer Details" className="!bg-gray-4">
       <div className="mx-auto max-w-[1570px]">
-        <div className="px-5 xl:container md:px-10">
-          <Breadcrumb
-            tabs={breadcrumbs}
-            currentPage={'Your Answer Details'}
-            className="max-[1199px]:py-4"
-          />
+        <div className="px-5 pt-5 xl:container md:px-10">
+          <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>
         <div className="px-5 xl:container md:px-10">
           <>

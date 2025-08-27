@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityInfo } from 'src/type'
+import Layout from '@components/layout'
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter()
@@ -72,10 +73,10 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   }, [id])
 
   return (
-    <FullScreenLayout title="Quiz result">
-      <div className="m-auto max-w-[1570px] overflow-x-auto overflow-y-hidden px-6">
+    <FullScreenLayout title="Quiz result" className="!bg-gray-4">
+      <div className="m-auto max-w-[1570px] overflow-x-auto overflow-y-hidden">
         <div
-          className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
+          className="absolute right-6 top-[18px] z-10 ml-auto cursor-pointer"
           onClick={() => {
             activityInfo !== null &&
               router.push(
@@ -85,18 +86,28 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
         >
           <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
-        {modalResult?.questions?.data?.length > 0 && (
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={(e) => {
-              router.push(
-                `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
-              )
-            }}
-            loading={loading}
-          />
-        )}
+        <Layout
+          size="sm"
+          title="Quiz Result"
+          showSidebar={false}
+          className="bg-gray-4"
+        >
+          <div className="m-auto overflow-x-auto overflow-y-hidden">
+            {modalResult?.questions?.data?.length > 0 && (
+              <QuizResultComponent
+                questionResponse={modalResult?.questions || []}
+                getTable={getTable}
+                onShowDetail={(e) => {
+                  router.push(
+                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
+                  )
+                }}
+                loading={loading}
+                is_lms_v2
+              />
+            )}
+          </div>
+        </Layout>
       </div>
     </FullScreenLayout>
   )

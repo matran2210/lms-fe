@@ -477,6 +477,18 @@ export const clearStylesHtml = (htmlContent: string) => {
   }
   return ''
 }
+export const handleReplaceText = (html: string = '') => {
+  if (!html) return ''
+  // Thay tất cả font-size
+  html = html.replace(/font-size:\s*[^;"]+/gi, 'font-size: 16px')
+
+  // Thay tất cả color
+  html = html.replace(/color:\s*[^;"]+/gi, 'color: white')
+
+  // Thay tất cả font-weight
+  html = html.replace(/font-weight:\s*[^;"]+/gi, 'font-weight: normal')
+  return html
+}
 
 export function convertSlugToTitle(slug: string): string {
   if (!slug) return ''
