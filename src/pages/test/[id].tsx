@@ -1103,9 +1103,10 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = isSubmit
-        ? getValues(`${currentContent?.id}_0_answer`)
-        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+      const value =
+        isSubmit && currentContent?.data?.requirements?.length <= 1
+          ? getValues(`${currentContent?.id}_0_answer`)
+          : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
 
       if (
         currentContent?.data?.response_option &&
@@ -2532,7 +2533,16 @@ const TestDetail = () => {
                 type={type}
                 submited={submited}
                 setOpenSubmit={setOpenSubmit}
-                onSubmitAnswer={handleSubmitAnswer}
+                onSubmitAnswer={async (mode) => {
+                  const savedAnswer = await handleSaveCurrentAnswer(
+                    tabs,
+                    currentTabContent,
+                  )
+                  setTabs(savedAnswer)
+                  setTimeout(() => {
+                    handleSubmitAnswer(mode)
+                  }, 100)
+                }}
                 handleTimeoutSubmit={async () => {
                   if (!openLimit) {
                     if (!submited && !quizAttempt?.is_submitted) {
