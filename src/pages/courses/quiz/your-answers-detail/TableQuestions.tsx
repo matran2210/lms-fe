@@ -211,11 +211,11 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-[237px] px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit md:min-h-[237px] md:px-11 md:py-6 md:shadow-sidebar 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="hidden items-center gap-x-3 md:flex">
+      <div className="hidden items-center gap-x-3 md:block">
         <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
           Your Answer Details{' '}
           <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-base text-[#FFB800]">
