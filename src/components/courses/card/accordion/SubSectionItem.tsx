@@ -8,8 +8,8 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants'
 import TestModal from '@components/courses/popup/TestModal'
 import { TEST_TYPE_ENUM } from '@utils/constants'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonText from '@components/base/button/ButtonText'
 
 const { Panel } = Collapse
 type DataTestType = {
@@ -90,18 +90,18 @@ export default function SubSectionItem({
                   {sub?.name}
                 </span>
                 {sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST && (
-                  <span className="text-gray-1 hidden text-nowrap text-sm md:inline-block">
+                  <span className="hidden text-nowrap text-sm text-gray-1 md:inline-block">
                     {`${sub?.quiz?.quiz_question_instances?.length} Questions`}
                   </span>
                 )}
                 {!isSubSectionFinished &&
                   sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER && (
-                    <span className="text-gray-1 hidden text-nowrap text-sm md:inline-block">
+                    <span className="hidden text-nowrap text-sm text-gray-1 md:inline-block">
                       {`${sub.activity_count} Activities`}
                     </span>
                   )}
               </div>
-              <div className="text-gray-1 flex flex-wrap items-center text-sm leading-[22px]">
+              <div className="flex flex-wrap items-center text-sm leading-[22px] text-gray-1">
                 {sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER ? (
                   <>Duration: {totalDuration}</>
                 ) : (
@@ -110,7 +110,7 @@ export default function SubSectionItem({
                 {sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER && (
                   <span className="px-3">|</span>
                 )}
-                <span className="text-gray-1 text-sm md:hidden">
+                <span className="text-sm text-gray-1 md:hidden">
                   {`${sub.activity_count} Activities`}
                 </span>
                 {sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST ? (
@@ -134,7 +134,7 @@ export default function SubSectionItem({
             {sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST ? (
               checkSubTestFinished ? (
                 <div className="topic_test_action invisible hidden gap-4 md:flex">
-                  <ButtonTextV2
+                  <ButtonText
                     title="Retake"
                     size="medium"
                     className="text-primary"
@@ -159,7 +159,7 @@ export default function SubSectionItem({
                       }
                     }}
                   />
-                  <ButtonTextV2
+                  <ButtonText
                     title="Result"
                     size="medium"
                     className="text-bw-15"
@@ -179,7 +179,7 @@ export default function SubSectionItem({
                   />
                 </div>
               ) : (
-                <ButtonSecondaryV2
+                <ButtonSecondary
                   title={'Start'}
                   size="medium"
                   onClick={(e) => {
@@ -244,12 +244,12 @@ export default function SubSectionItem({
                         {act.name}
                       </span>
                       {act?.course_section_type !== TEST_TYPE_ENUM.ACTIVITY && (
-                        <span className="text-gray-1 hidden text-nowrap text-sm font-normal md:inline-block">
+                        <span className="hidden text-nowrap text-sm font-normal text-gray-1 md:inline-block">
                           {`${act?.quiz?.quiz_question_instances?.length} Questions`}
                         </span>
                       )}
                     </p>
-                    <div className="text-gray-1 flex gap-2 text-sm md:gap-3">
+                    <div className="flex gap-2 text-sm text-gray-1 md:gap-3">
                       <span>
                         Duration:{' '}
                         {formatDuration(
@@ -269,7 +269,7 @@ export default function SubSectionItem({
                       {act?.course_section_type !== TEST_TYPE_ENUM.ACTIVITY && (
                         <>
                           <span className="md:hidden">|</span>
-                          <span className="text-gray-1 inline-block text-nowrap text-sm font-normal md:hidden">
+                          <span className="inline-block text-nowrap text-sm font-normal text-gray-1 md:hidden">
                             {`${act?.activity_count} Activities`}
                           </span>
                         </>
@@ -294,7 +294,7 @@ export default function SubSectionItem({
                 {act?.course_section_type === TEST_TYPE_ENUM.CHAPTER_TEST ? (
                   isActivityFinished ? (
                     <div className="invisible hidden gap-4 group-hover:visible md:flex">
-                      <ButtonTextV2
+                      <ButtonText
                         title="Retake"
                         size="medium"
                         className="text-primary"
@@ -319,7 +319,7 @@ export default function SubSectionItem({
                           }
                         }}
                       />
-                      <ButtonTextV2
+                      <ButtonText
                         title="Result"
                         size="medium"
                         className="text-bw-15 "
@@ -331,7 +331,7 @@ export default function SubSectionItem({
                       />
                     </div>
                   ) : (
-                    <ButtonSecondaryV2
+                    <ButtonSecondary
                       title={'Start'}
                       size="medium"
                       onClick={(e) => {

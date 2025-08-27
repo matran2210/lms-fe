@@ -58,6 +58,7 @@
     "explanation-package-ha-test": "^1.1.25-test",
     "file-saver": "^2.0.5",
     "firebase": "^10.7.1",
+    "framer-motion": "^12.23.12",
     "global": "^4.4.0",
     "html-docx-js-typescript-papersize-thenn": "^0.1.5",
     "html-react-parser": "^5.2.5",
