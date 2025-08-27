@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
 import { Sheet } from 'src/type/test'
+import crypto from 'crypto'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -141,8 +142,6 @@ export const processDataAnswer = async (data: any): Promise<string> => {
   }
 }
 
-// Compare Values
-
 /**
  * @description Compare two values by converting them to base64 and comparing
  * @param {any} oldValue Previous value
@@ -209,44 +208,21 @@ export const isValuesEqual = async (
     return await compareValues(oldValue, newValue)
   }
 
-  if (qType === QUESTION_TYPES.ESSAY) {
-    if (oldCurrentTabData?.data?.requirements?.length) {
-      const oldValue = oldCurrentTabData?.data?.requirements?.reduce(
-        (acc: string[], item: any) => {
-          acc.push(
-            (item?.answer_file?.file_key || '') + (item?.answer_text || ''),
-          )
-          return acc
-        },
-        [],
-      )
-
-      const newValue = currentTabContent?.data?.requirements?.reduce(
-        (acc: string[], item: any, indexItem: number) => {
-          acc.push(
-            (item?.answer_file?.file_key || '') +
-              (getValues(`${currentTabContent?.id}_${indexItem}_answer`) ||
-                item?.answer_text ||
-                ''),
-          )
-          return acc
-        },
-        [],
-      )
-
-      return await compareValues(oldValue, newValue)
-    } else {
-      const oldValue =
-        (oldCurrentTabData?.answer_file?.file_key || '') +
-        (oldCurrentTabData?.answer || '')
-      const newValue =
-        (currentTabContent?.answer_file?.file_key || '') +
-        (getValues(`${currentTabContent?.id}_0_answer`) ||
-          currentTabContent?.answer ||
-          '')
-      return await compareValues(oldValue, newValue)
-    }
-  }
+  // if (qType === QUESTION_TYPES.ESSAY) {
+  //   if (oldCurrentTabData?.data?.requirements?.length) {
+  //     return false
+  //   } else {
+  //     const oldValue =
+  //       (oldCurrentTabData?.answer_file?.file_key || '') +
+  //       (oldCurrentTabData?.answer || '')
+  //     const newValue =
+  //       (currentTabContent?.answer_file?.file_key || '') +
+  //       (getValues(`${currentTabContent?.id}_0_answer`) ||
+  //         currentTabContent?.answer ||
+  //         '')
+  //     return await compareValues(oldValue, newValue)
+  //   }
+  // }
 
   return false
 }
@@ -295,4 +271,9 @@ export const checkSheetAnswered = (data: string | Sheet[]): boolean => {
     // console.error('Error checking answer:', error)
     return false
   }
+}
+
+export const isWorkbookEmpty = (sheets: Sheet[] | undefined): boolean => {
+  if (!sheets || sheets.length === 0) return true
+  return sheets?.every((s) => !s.celldata || s.celldata.length === 0)
 }

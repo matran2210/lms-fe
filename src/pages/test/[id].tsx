@@ -7,6 +7,7 @@ import {
   CalculatorIcon,
   ExcelIcon,
   ExhibitsIcon,
+  EyeIcon,
   FlagIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -75,6 +76,7 @@ import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
   isValuesEqual,
+  isWorkbookEmpty,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
@@ -82,6 +84,11 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
+import { Popover, Tooltip } from 'antd'
+import clsx from 'clsx'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import { defaultSheetData } from 'src/constants/attempt'
 
 declare global {
   interface Window {
@@ -239,23 +246,66 @@ const TestDetail = () => {
         const defaultValueEssay = () => {
           const key = `${currentTabID}_${essayData?.index}_answer`
           const valueFromForm = getValues(key)
+          const response_option = currentTabContent?.data?.response_option
+          switch (response_option) {
+            case RESPONSE_OPTION.WORD:
+              if (valueFromForm) {
+                return valueFromForm
+              }
+              const requirement =
+                currentTabContent?.data?.requirements?.[essayData?.index]
+              if (requirement?.short_answer) {
+                return requirement.short_answer
+              }
+              if (requirement?.answer_text) {
+                return requirement.answer_text
+              }
+              if (requirement?.answer_template) {
+                return requirement.answer_template || ''
+              }
+              if (currentTabContent.answer) return currentTabContent.answer
+              return currentTabContent?.data?.answer_template || ''
+            case RESPONSE_OPTION.SHEET:
+              if (valueFromForm) {
+                const isEmptyWorkbook = isWorkbookEmpty(
+                  JSON.parse(valueFromForm),
+                )
 
-          if (valueFromForm) {
-            return valueFromForm
+                if (isEmptyWorkbook) {
+                  const requirement =
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                  if (requirement?.short_answer) {
+                    return requirement.short_answer
+                  }
+                  if (requirement?.answer_text) {
+                    return requirement.answer_text
+                  }
+                  if (requirement?.answer_template) {
+                    return requirement.answer_template || defaultSheetData
+                  }
+                  if (currentTabContent.answer) return currentTabContent.answer
+                  return (
+                    currentTabContent?.data?.answer_template || defaultSheetData
+                  )
+                }
+                return valueFromForm
+              }
+              const requirementSheet =
+                currentTabContent?.data?.requirements?.[essayData?.index]
+              if (requirementSheet?.short_answer) {
+                return requirementSheet.short_answer
+              }
+              if (requirementSheet?.answer_text) {
+                return requirementSheet.answer_text
+              }
+              if (requirementSheet?.answer_template) {
+                return requirementSheet.answer_template || defaultSheetData
+              }
+              if (currentTabContent.answer) return currentTabContent.answer
+              return (
+                currentTabContent?.data?.answer_template || defaultSheetData
+              )
           }
-
-          const requirement =
-            currentTabContent?.data?.requirements?.[essayData?.index]
-
-          if (requirement?.short_answer) {
-            return requirement.short_answer
-          }
-
-          if (requirement?.answer_text) {
-            return requirement.answer_text
-          }
-
-          return currentTabContent.answer
         }
 
         return (
@@ -377,7 +427,7 @@ const TestDetail = () => {
 
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, getValues, setValue } = useForm()
+  const { control, getValues, setValue, reset, resetField } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -507,7 +557,7 @@ const TestDetail = () => {
             solution,
             is_self_reflection,
             requirements,
-          } = answerSubmitted[0]
+          } = answerSubmitted?.[0]
 
           // Handle different question types
           if (
@@ -875,6 +925,21 @@ const TestDetail = () => {
       }
     } else return undefined
   }, [currentPage, tabs, answersSubmitted, essayData])
+
+  const remainingTimeinSeconds = quizDetail?.quiz_timed
+    ? (dayjs(
+        dayjs(new Date(quizAttempt.created_at ?? '')).add(
+          quizDetail?.quiz_timed,
+          'minutes',
+        ),
+      ).diff(dayjs(), 'seconds') ?? 0)
+    : null
+
+  useEffect(() => {
+    if (!openTimeOut && remainingTimeinSeconds && remainingTimeinSeconds <= 0) {
+      setOpenTimeOut(true)
+    }
+  }, [openTimeOut, remainingTimeinSeconds])
 
   useEffect(() => {
     if (currentTabContent?.id) {
@@ -1568,13 +1633,15 @@ const TestDetail = () => {
     if (['change-tab', 'timeout', 'finish'].includes(action ?? '')) {
       if (!checkAnswered(currentTabContent)) return
       if (action === 'change-tab' || action === 'finish') {
-        const isEqualValue = await isValuesEqual(
-          currentTabContent,
-          oldCurrentTabData,
-          getValues,
-        )
-        // Check if the current tab content is the same as the old tab content
-        if (isEqualValue) return
+        if (currentTabContent?.qType !== QUESTION_TYPES.ESSAY) {
+          const isEqualValue = await isValuesEqual(
+            currentTabContent,
+            oldCurrentTabData,
+            getValues,
+          )
+          // Check if the current tab content is the same as the old tab content
+          if (isEqualValue) return
+        }
       }
     }
 
@@ -2170,7 +2237,6 @@ const TestDetail = () => {
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
-          // console.log(err)
         } finally {
           setLoading(false)
         }
@@ -2358,6 +2424,86 @@ const TestDetail = () => {
       )
     }
   }
+  const isShowTemplate =
+    currentTabContent?.data?.answer_template ||
+    currentTabContent?.data?.requirements?.some(
+      (req: Requirement) => req?.answer_template,
+    )
+  const onResetFormatEssay = (key: string, value: string) => {
+    resetField(key, {
+      defaultValue: value,
+      keepDirty: false,
+      keepTouched: false,
+      keepError: false,
+    }) // reset riêng field đó
+    setValue(key, value, {
+      shouldDirty: false,
+      shouldTouch: false,
+      shouldValidate: true,
+    }) // cập nhật lại giá trị
+    reset()
+  }
+
+  const getTemplateValueForWord = () => {
+    const requirement =
+      currentTabContent?.data?.requirements?.[essayData?.index]
+    if (requirement?.short_answer) {
+      return requirement.short_answer
+    }
+    if (requirement?.answer_text) {
+      return requirement.answer_text
+    }
+    if (requirement?.answer_template) {
+      return requirement.answer_template
+    }
+    if (currentTabContent.answer) {
+      return currentTabContent.answer
+    }
+    return currentTabContent?.data?.answer_template
+  }
+
+  const getTemplateValueForSheet = () => {
+    const requirementSheet =
+      currentTabContent?.data?.requirements?.[essayData?.index]
+    if (requirementSheet?.answer_text) {
+      return requirementSheet.answer_text
+    }
+    if (requirementSheet?.short_answer) {
+      return requirementSheet.short_answer
+    }
+    if (requirementSheet?.answer_template) {
+      return requirementSheet.answer_template || defaultSheetData
+    }
+    if (currentTabContent.answer) {
+      return currentTabContent.answer
+    }
+    return currentTabContent?.data?.answer_template || defaultSheetData
+  }
+  const onResetAnswerEssayToTemplate = () => {
+    const key = `${currentTabContent?.id}_${essayData?.index}_answer`
+    const response_option = currentTabContent?.data?.response_option
+
+    switch (response_option) {
+      case RESPONSE_OPTION.WORD:
+        const templateValueWord = getTemplateValueForWord()
+        // Reset form value
+        onResetFormatEssay(key, templateValueWord)
+        // Reset component con
+        if (refEditor?.current?.reset) {
+          refEditor.current.reset()
+        }
+        break
+      case RESPONSE_OPTION.SHEET:
+        const templateValue = getTemplateValueForSheet()
+        // Reset form value
+        onResetFormatEssay(key, templateValue)
+        // Reset component con
+        if (refEditor?.current?.clear) {
+          refEditor.current.clear(templateValue)
+        }
+        break
+    }
+  }
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
@@ -2542,6 +2688,16 @@ const TestDetail = () => {
                         currentTabContent?.solution,
                         currentTabContent?.done,
                       )}
+                      {currentTabContent &&
+                        currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+                        isShowTemplate && (
+                          <div className="mt-8 flex justify-end">
+                            <ButtonPrimaryV2
+                              title="Reset to Answer Template"
+                              onClick={onResetAnswerEssayToTemplate}
+                            />
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -2618,6 +2774,16 @@ const TestDetail = () => {
                       currentTabContent?.solution,
                       currentTabContent?.done,
                     )}
+                    {currentTabContent &&
+                      currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+                      isShowTemplate && (
+                        <div className="mt-8 flex justify-end">
+                          <ButtonPrimaryV2
+                            title="Reset to Answer Template"
+                            onClick={onResetAnswerEssayToTemplate}
+                          />
+                        </div>
+                      )}
                   </div>
                 </div>
               )}
@@ -2641,8 +2807,8 @@ const TestDetail = () => {
               <button
                 className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                 onClick={() => {
-                  setAllowUnHighLight(!allowUnHighLight),
-                    setAllowHighLight(false)
+                  ;(setAllowUnHighLight(!allowUnHighLight),
+                    setAllowHighLight(false))
                   trackGAEvent('Click Button Unhighlight Test')
                 }}
               >
@@ -2929,26 +3095,22 @@ const TestDetail = () => {
                     router.replace(`/event-test`)
                     // setSubmitEventTest(true)
                   } else {
-                    if (
-                      type !== 'entrance' &&
-                      quizDetail?.quiz_type !== 'FINAL_TEST'
-                    ) {
-                      if (
-                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                      ) {
-                        router.replace(
-                          `/courses/test/your-answers-detail/${QuizResultId}`,
-                        )
-                      } else {
-                        router.replace(
-                          `/courses/test/test-result/${QuizResultId}`,
-                        )
-                      }
+                    // if (type !== 'entrance') {
+                    if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
+                      router.replace(
+                        `/courses/test/your-answers-detail/${QuizResultId}`,
+                      )
                     } else {
-                      router.back()
-                      setScoreQuestion(scoreFinalTest)
-                      setSubmitTest(true)
+                      router.replace(
+                        `/courses/test/test-result/${QuizResultId}`,
+                      )
                     }
+                    // } else {
+                    //   console.log('back backs')
+                    //   router.back()
+                    //   setScoreQuestion(scoreFinalTest)
+                    //   setSubmitTest(true)
+                    // }
                   }
                   trackGAEvent('Click Button Submit Time Out Test')
                 })
@@ -3045,6 +3207,19 @@ const TestDetail = () => {
             />
           )}
         </div>
+        {currentTabContent &&
+          currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+          isShowTemplate && (
+            <ShowAnswerTemplate
+              {...{
+                currentTabContent,
+                essayData,
+                control,
+                setValue,
+                getValues,
+              }}
+            />
+          )}
       </CourseProvider>
     </FullScreenLayout>
   )

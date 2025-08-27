@@ -25,6 +25,7 @@ import {
 } from 'src/redux/slice/User/User'
 import { z } from 'zod'
 import TabLayout from './TabLayout'
+import { IUserContact } from 'src/redux/types/User/urser'
 
 interface IProps {
   isEdit: boolean
@@ -276,7 +277,10 @@ const MyProfile = ({
               />
               <TextWrapper
                 title="Email"
-                value={user?.user_contacts?.[0]?.email}
+                value={
+                  user?.user_contacts?.find((e: IUserContact) => e.is_default)
+                    ?.email ?? ''
+                }
                 isEdit={isEdit}
                 loading={loading}
               />

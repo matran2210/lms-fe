@@ -9,8 +9,13 @@ export const PageLink = {
   TEACHERS: '/teachers',
   STUDENTS: '/students',
   TEACHER_MY_CLASS: '/teachers/my-class',
+  TEACHER_MY_COURSE: '/teachers/courses',
   TEACHER_MY_REQUEST: '/teachers/my-request',
   TEACHER_CHAPTER_TEST: '/teachers/my-class/chapter-test',
+  TEACHER_CASE_STUDY: '/teachers/case-study',
+  TEACHER_TEST: '/teachers/test',
+  TEACHER_EXPLANATION: '/teachers/explanation',
+  TEACHER_MY_PROFILE: '/teachers/overview',
   AUTH_LOGIN: '/auth/login',
   AUTH_FORGOT_PASSWORD: '/auth/forgot-password',
   AUTH_FORGOT_PASSWORD_RECOVER: '/auth/forgot-password/recover',
@@ -21,8 +26,12 @@ export const PageLink = {
   MYPROFILE: '/overview',
   PAGE_NOT_FOUND: '/404',
   COURSE_DETAIL: '/courses/my-course/[courseId]',
+  TEACHER_COURSE_DETAIL_ID: '/teachers/courses/my-course/[courseId]',
   COURSE_PART_DETAIL: '/courses/[id]/section/[course_section_id]',
+  TEACHER_COURSE_PART_DETAIL:
+    '/teachers/courses/[id]/section/[course_section_id]',
   COURSE_ACTIVITY: '/courses/[id]/activity/[activityId]',
+  TEACHER_COURSE_ACTIVITY: '/teachers/courses/[id]/activity/[activityId]',
   TEST_RESULT: '/courses/test/test-result/[id]',
   USERPAGE: '/[page]',
   EVENT_TEST: '/event-test',
@@ -342,6 +351,7 @@ export const EVENT_TYPES = {
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
   LIVE_ONLINE: 'LIVE_ONLINE',
+  INACTIVE: 'INACTIVE',
 } as const
 
 export const EVENT_TYPES_RESPONSE = {
@@ -360,6 +370,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
   [EVENT_TYPES.LIVE_ONLINE]: '',
+  [EVENT_TYPES.INACTIVE]: '',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)

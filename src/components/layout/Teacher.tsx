@@ -5,6 +5,7 @@ import { ITabs } from 'src/type'
 import { memo } from 'react'
 import clsx from 'clsx'
 import Head from 'next/head'
+import { useCourseContext } from '@contexts/index'
 
 const { Title } = Typography
 type LayoutTeacherProps = {
@@ -12,6 +13,8 @@ type LayoutTeacherProps = {
   title?: string
   breadcrumbs?: ITabs[]
   className?: string
+  isCourseDetail?: boolean
+  isActivity?: boolean
 }
 
 const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
@@ -19,15 +22,23 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
   title = '',
   breadcrumbs = [],
   className = '',
+  isCourseDetail = false,
+  isActivity = false,
 }: LayoutTeacherProps) => {
+  const { showPinnedTrial } = useCourseContext()
   return (
     <>
       <Head>
         <title>{title}</title>
       </Head>
       <div className="flex flex-nowrap">
-        <TeacherMenu />
-        <div className="min-h-screen w-full bg-gray-10">
+        <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} />
+        <div
+          className={clsx(
+            'min-h-screen w-full bg-gray-10',
+            showPinnedTrial && 'mt-[54px]',
+          )}
+        >
           <div className="px-56 py-6">
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />
             <Title level={3} className="mt-1 pb-2 text-gray-700">

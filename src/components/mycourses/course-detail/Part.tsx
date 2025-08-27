@@ -15,17 +15,20 @@ import Tooltip from 'src/common/Tooltip'
 import { trackGAEvent } from '@utils/google-analytics'
 import { useCourseContext } from '@contexts/index'
 import { LockClosedIcon } from '@assets/icons'
+import { getUserPrefix } from '@utils/helpers'
 
 const Part = ({
   course,
   focusSubSectionIds,
   focusUnitIds,
   deadline,
+  isTeacher = false,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
   focusUnitIds?: string
   deadline?: string
+  isTeacher?: boolean
 }) => {
   const router = useRouter()
 
@@ -43,7 +46,7 @@ const Part = ({
       deadline,
     })
     router.push(
-      `/courses/${router.query.courseId}/section/${id}?${searchParams}`,
+      `${getUserPrefix(isTeacher)}/courses/${router.query.courseId}/section/${id}?${searchParams}`,
     )
   }
 
@@ -183,14 +186,14 @@ const Part = ({
             </div>
             <div className="number">
               <p className="text-medium-sm font-medium text-bw-1">
-                {progressPart}%
+                {progressPart || 0}%
               </p>
             </div>
           </div>
           <div className="progressbar h-1.5 bg-gray-3">
             <div
               className="progress-percentage h-1.5 bg-primary"
-              style={{ width: `${progressPart}%` }}
+              style={{ width: `${progressPart || 0}%` }}
             ></div>
           </div>
         </div>

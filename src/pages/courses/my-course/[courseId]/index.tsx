@@ -16,7 +16,7 @@ import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
 import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import { RemindChoosingExam } from 'src/type/course'
-import SelectExamPopup from './popups/SelectExamPopup'
+import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
 

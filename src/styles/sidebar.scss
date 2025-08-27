@@ -5,6 +5,10 @@ body:not(.no-hover) {
 
       .group-logos {
         @apply pb-5;
+
+        & > div {
+          @apply justify-center;
+        }
       }
 
       .logo-full {
