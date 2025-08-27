@@ -13,7 +13,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
-import { generateSheetId } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
 
 type SheetData = {
   name: string
@@ -56,6 +56,11 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
+  uniqueKey?: string
+}
+type SAPPEditorHandle = {
+  moveSelectionOutOfTable: () => void
+  resetContentSafe: (newContent: string) => void
 }
 const EssayQuestionPreview = ({
   data,
@@ -84,10 +89,11 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
+  uniqueKey,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
-  const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
+  const editorRef = useRef<SAPPEditorHandle>(null)
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
   // (thêm/xóa/undo/redo/di chuyển/sao chép sheet) của Fortune Sheet.
   // Mục đích: tránh serialize trạng thái trung gian gây lỗi "sheet not found".
@@ -204,11 +210,12 @@ const EssayQuestionPreview = ({
   }
   if (externalRef) {
     externalRef.current = {
-      reset: () =>
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        }),
+      reset: (templateValue?: string) => {
+        // editorRef.current?.moveSelectionOutOfTable()
+        editorRef.current?.resetContentSafe(
+          templateValue || defaultValue || DEFAULT_EDITOR_VALUE,
+        )
+      },
       clear: (templateValue?: string) => {
         if (refSheet.current) {
           try {
@@ -535,17 +542,17 @@ const EssayQuestionPreview = ({
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
-          key={key}
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
           {question_data?.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
+              // key={uniqueKey}
               control={control}
               name={name}
               math={true}
               height={500}
               placeholder="Your answer here"
-              defaultValue={defaultValue}
+              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
               disabled={
                 fullData?.confirmed ||
                 fullData?.data?.confirmed ||
@@ -553,6 +560,7 @@ const EssayQuestionPreview = ({
               }
               handleChange={() => handleChange && handleChange(data?.id)}
               // externalRef={externalRef}
+              editorRef={editorRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
@@ -642,17 +650,19 @@ const EssayQuestionPreview = ({
             <HookFormEditor
               control={control}
               name={name}
+              // key={uniqueKey}
               // externalRef={externalRef}
               math={true}
               height={500}
               placeholder="Your answer here"
-              defaultValue={defaultValue}
+              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
               disabled={
                 fullData?.is_viewed_answer ||
                 fullData?.confirmed ||
                 fullData?.data?.confirmed
               }
               handleChange={() => handleChange && handleChange(data?.id)}
+              editorRef={editorRef}
             />
           ) : (
             <div

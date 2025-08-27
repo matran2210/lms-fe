@@ -1,6 +1,10 @@
 import { Dayjs } from 'dayjs'
 import { Control } from 'react-hook-form'
 
+export type SAPPEditorHandle = {
+  moveSelectionOutOfTable: () => void
+  resetContentSafe: (newContent: string) => void
+}
 export type IButtonColors =
   | 'primary'
   | 'info'

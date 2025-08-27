@@ -2,8 +2,8 @@ import { Skeleton } from 'antd'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import DynamicBundledEditor from '../../form/editor'
-
-export const DEFAULT_EDITOR_VALUE = ''
+import { DEFAULT_EDITOR_VALUE } from 'src/constants/attempt'
+import { SAPPEditorHandle } from 'src/type'
 
 interface Props {
   name: string
@@ -21,6 +21,7 @@ interface Props {
   handleChange?: any
   disabled?: boolean
   key?: number | string
+  editorRef?: React.RefObject<SAPPEditorHandle>
 }
 
 const HookFormEditor = ({
@@ -39,9 +40,11 @@ const HookFormEditor = ({
   // labelClass = 'd-flex align-items-center fs-6 fw-bold form-label',
   disabled,
   key,
+  editorRef,
 }: Props) => {
   return (
     <Controller
+      key={key}
       name={name}
       control={control}
       defaultValue={defaultValue}
@@ -60,13 +63,14 @@ const HookFormEditor = ({
                     onChange(e)
                     handleChange && handleChange(e)
                   }}
-                  key={key}
+                  // key={key}
                   valueText={defaultValue}
                   className={`${className} ${error ? 'tox-tinymce_error' : ''}`}
                   height={height}
                   math={math}
                   placeholder={placeholder}
                   disabled={disabled}
+                  editorRef={editorRef}
                 />
                 <div>
                   {/* <GuidelineField guideline={guideline} /> */}
