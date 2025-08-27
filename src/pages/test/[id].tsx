@@ -242,9 +242,9 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
+        const key = `${currentTabID}_${essayData?.index}_answer`
 
         const defaultValueEssay = () => {
-          const key = `${currentTabID}_${essayData?.index}_answer`
           const valueFromForm = getValues(key)
           const response_option = currentTabContent?.data?.response_option
           switch (response_option) {
@@ -342,6 +342,7 @@ const TestDetail = () => {
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
             handleChange={handleEssayChange}
+            uniqueKey={key}
           />
           // <Luckysheet/>
         )
@@ -1338,6 +1339,9 @@ const TestDetail = () => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    await refEditor?.current?.reset()
+    await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       if (question) {
@@ -1362,7 +1366,6 @@ const TestDetail = () => {
         ) {
           ref.current?.handleReset()
         }
-        refEditor?.current?.reset()
         const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
         setCurrentPage(currentTab)
         setOpenScratchPad([])
@@ -1379,7 +1382,6 @@ const TestDetail = () => {
       ) {
         ref.current?.handleReset()
       }
-      refEditor?.current?.reset()
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
@@ -1988,7 +1990,7 @@ const TestDetail = () => {
       }
       setValue(`${currentTabContent?.id}_fillword`, '')
       if (data.qType === QUESTION_TYPES.ESSAY) {
-        refEditor?.current?.reset()
+        // refEditor?.current?.reset()
         setTabs((prev: any) => {
           const newData = prev.map((item: any) => {
             if (currentTabContent?.id === item.id) {

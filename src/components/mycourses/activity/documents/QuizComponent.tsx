@@ -151,7 +151,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
     const refEditor = useRef<RefEditor>(null)
 
-    const handleShowRequirement = (data: {
+    const handleResetEssay = async () => {
+      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+        refEditor?.current?.reset()
+        await new Promise((resolve) => setTimeout(resolve, 10))
+      }
+    }
+    const handleShowRequirement = async (data: {
       description: string
       index: number
       name: string
@@ -160,9 +166,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
-      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset()
-      }
+      handleResetEssay()
       setShowRequirement(data)
       setValue(
         `${activeQuestion?.id}_${data?.id}_essay`,
@@ -757,9 +761,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
-      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset()
-      }
+      handleResetEssay()
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
