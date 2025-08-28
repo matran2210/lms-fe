@@ -219,6 +219,17 @@ const CourseTabDocument = ({
                               attemptId={e?.quiz?.attempt?.id}
                               focusOnlyQuiz={focusOnlyQuiz}
                               setFocusOnlyQuiz={setFocusOnlyQuiz}
+                              is_limited={
+                                course_tab_documents[i]?.quiz?.is_limited ||
+                                false
+                              }
+                              limit_count={
+                                course_tab_documents[i]?.quiz?.limit_count || 0
+                              }
+                              number_of_attempts={
+                                course_tab_documents[i]?.quiz?.attempt
+                                  ?.number_of_attempts || 0
+                              }
                             />
                           </div>
                         )
