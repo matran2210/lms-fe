@@ -5,9 +5,12 @@
 :root {
   --header-height: 4rem;
 }
+#zoom-app .sapp-loading.active {
+  @apply !hidden md:!hidden;
+}
 
 #zmmtg-root:not(.show-full-screen) {
-  @apply md:!h-[calc(100%-var(--header-height))] md:mt-header-height;
+  @apply md:mt-header-height md:!h-[calc(100%-var(--header-height))];
 }
 
 #meeting-app .meeting-info-container__wrapper {
@@ -38,4 +41,8 @@
 #zmmtg-root:not(.show-full-screen) .ReactModal__Content,
 #zmmtg-root:not(.show-full-screen) .mobile-suspension-window-wrapper {
   @apply !top-28;
+}
+
+.lf-player-container {
+  @apply flex h-full items-center justify-center;
 }

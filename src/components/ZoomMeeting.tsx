@@ -90,36 +90,12 @@ export const ZoomMeeting = () => {
     return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 
-  // Show loading state for meeting data
-  if (isLoadingMeetingData) {
-    return (
-      <div className="flex items-center justify-center rounded-lg bg-blue-50 p-8">
-        <div className="mr-4 h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
-        <span className="text-lg font-medium text-blue-700">Đang tải thông tin cuộc họp...</span>
-      </div>
-    )
-  }
-
-  if (!meetingConfig) {
+  if (!meetingConfig && !isLoadingMeetingData) {
     return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 
   return (
     <div className="mb-6">
-      {!isSDKLoaded && (
-        <div className="flex items-center justify-center rounded-lg bg-blue-50 p-4">
-          <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-blue-600"></div>
-          <span className="font-medium text-blue-700">Đang tải Zoom SDK...</span>
-        </div>
-      )}
-
-      {isJoining && (
-        <div className="flex items-center justify-center rounded-lg bg-green-50 p-4">
-          <div className="mr-3 h-6 w-6 animate-spin rounded-full border-b-2 border-green-600"></div>
-          <span className="font-medium text-green-700">Đang tham gia cuộc họp...</span>
-        </div>
-      )}
-
       {error && (
         <div className="mb-4 rounded-lg border-l-4 border-red-400 bg-red-50 p-4">
           <div className="flex">
@@ -150,7 +126,7 @@ export const ZoomMeeting = () => {
         </div>
       )}
 
-      {isJoined && <FloatingUser hubspotContactId={meetingConfig.hubspotContactId} />}
+      {isJoined && meetingConfig && <FloatingUser hubspotContactId={meetingConfig.hubspotContactId} />}
     </div>
   )
 }

@@ -5,6 +5,8 @@ import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
+  title: 'Zoom Meeting',
+  description: 'Zoom Meeting',
   icons: [
     {
       rel: 'favicon-touch-icon',
@@ -36,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div id="zoom-app">
           <AppProvider>
             <Header />
-            <div className="md:mt-16">{children}</div>
+            {children}
             <Toaster />
           </AppProvider>
         </div>
