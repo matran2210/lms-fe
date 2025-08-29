@@ -1,5 +1,5 @@
 import HookFormEditor from '@components/base/editor/HookFormEditor'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import { CloseIcon, UploadIcon } from '@assets/icons'
@@ -8,11 +8,11 @@ import { Workbook } from '@fortune-sheet/react'
 import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'
 import clsx from 'clsx'
-import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isNull, isUndefined } from 'lodash'
 import { Controller } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { generateSheetId } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
 import { MY_COURSES } from 'src/constants/lang'
 import { UploadAPI } from 'src/pages/api/upload'
 import { useAppDispatch } from 'src/redux/hook'
@@ -62,6 +62,11 @@ export type IPreviewProp = {
   className?: string
   editorClassName?: string
   explainClassname?: string
+  uniqueKey?: string
+}
+type SAPPEditorHandle = {
+  moveSelectionOutOfTable: () => void
+  resetContentSafe: (newContent: string) => void
 }
 const EssayQuestionPreview = ({
   data,
@@ -91,10 +96,11 @@ const EssayQuestionPreview = ({
   editorClassName = '',
   explainClassname,
   setValue,
+  uniqueKey,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
-  const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
+  const editorRef = useRef<SAPPEditorHandle>(null)
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
   // (thêm/xóa/undo/redo/di chuyển/sao chép sheet) của Fortune Sheet.
   // Mục đích: tránh serialize trạng thái trung gian gây lỗi "sheet not found".
@@ -211,11 +217,12 @@ const EssayQuestionPreview = ({
   }
   if (externalRef) {
     externalRef.current = {
-      reset: () =>
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        }),
+      reset: (templateValue?: string) => {
+        // editorRef.current?.moveSelectionOutOfTable()
+        editorRef.current?.resetContentSafe(
+          templateValue || defaultValue || DEFAULT_EDITOR_VALUE,
+        )
+      },
       clear: (templateValue?: string) => {
         if (refSheet.current) {
           try {
@@ -554,17 +561,17 @@ const EssayQuestionPreview = ({
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
-          key={key}
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
           {question_data?.response_option === RESPONSE_OPTION.WORD ? (
             <HookFormEditor
+              // key={uniqueKey}
               control={control}
               name={name}
               math={true}
               height={500}
               placeholder="Your answer here"
-              defaultValue={defaultValue}
+              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
               disabled={
                 fullData?.confirmed ||
                 fullData?.data?.confirmed ||
@@ -573,6 +580,7 @@ const EssayQuestionPreview = ({
               handleChange={() => handleChange && handleChange(data?.id)}
               className={editorClassName}
               // externalRef={externalRef}
+              editorRef={editorRef}
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
@@ -654,17 +662,19 @@ const EssayQuestionPreview = ({
             <HookFormEditor
               control={control}
               name={name}
+              // key={uniqueKey}
               // externalRef={externalRef}
               math={true}
               height={500}
               placeholder="Your answer here"
-              defaultValue={defaultValue}
+              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
               disabled={
                 fullData?.is_viewed_answer ||
                 fullData?.confirmed ||
                 fullData?.data?.confirmed
               }
               handleChange={() => handleChange && handleChange(data?.id)}
+              editorRef={editorRef}
             />
           ) : (
             <div
