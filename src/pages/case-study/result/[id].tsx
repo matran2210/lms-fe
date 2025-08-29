@@ -22,10 +22,15 @@ import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { EXHIBIT_TEXT_REPLACE, PROGRAM, QUESTION_TYPES } from 'src/constants'
+import {
+  EXHIBIT_TEXT_REPLACE,
+  PROGRAM,
+  QUESTION_TYPES,
+  RESPONSE_OPTION,
+} from 'src/constants'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'
@@ -46,9 +51,10 @@ import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 
 const CaseStudyResult = () => {
+  const editorRefs = useRef<any[]>([])
   const router = useRouter()
   const containerRef = useRef(null)
-  const { control, setValue } = useForm()
+  const { control, setValue, getValues } = useForm()
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
@@ -198,6 +204,9 @@ const CaseStudyResult = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        if (!editorRefs.current[index]) {
+          editorRefs.current[index] = React.createRef()
+        }
         return (
           <EssayQuestionPreview
             data={{ ...requirementQuestion, ...requirement }}
@@ -224,6 +233,7 @@ const CaseStudyResult = () => {
             isShowContent={
               requirementIndex === 0 || data.requirements.length === 0
             }
+            externalRef={editorRefs.current[index]}
           />
         )
       default:
@@ -231,6 +241,22 @@ const CaseStudyResult = () => {
     }
   }
 
+  const handleResetEssay = async (
+    index: number,
+    activeQuestion: any,
+    defaultValue?: string,
+  ) => {
+    const essayRef = editorRefs.current[index]?.current
+
+    if (!essayRef) return
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      essayRef.reset?.(defaultValue)
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+      essayRef.resetSheet?.()
+    }
+  }
   /**
    *
    * */
@@ -245,10 +271,23 @@ const CaseStudyResult = () => {
     return order
   }
 
+  const resetEssayBeforeAction = () => {
+    result?.answers?.forEach((item: any, index: number) => {
+      const question =
+        item.question.qType === QUESTION_TYPES.ESSAY
+          ? { ...item.question, response_option: item.response_option }
+          : item.question
+      const name = `${index}_answer`
+      const defaultValue = getValues(name)
+      handleResetEssay(index, question, defaultValue)
+    })
+  }
+
   /**
    * handle go to next Topic
    */
   const handleNextTopic = () => {
+    resetEssayBeforeAction()
     if (!result?.next_topic) {
       backToPart()
       return
@@ -268,6 +307,7 @@ const CaseStudyResult = () => {
    * go to next Topic
    */
   const handlePeriousTopic = () => {
+    resetEssayBeforeAction()
     if (result?.previous_topic?.attempt) {
       router.replace(
         `/case-study/result/${result?.previous_topic?.attempt.id}?class_user_id=${router.query.class_user_id}&class_id=${router?.query?.class_id}&course_section_id=${router?.query?.course_section_id}`,
@@ -408,6 +448,7 @@ const CaseStudyResult = () => {
   }
 
   const backToPart = () => {
+    resetEssayBeforeAction()
     if (router?.query?.class_id && router?.query?.course_section_id) {
       router.push(
         `/courses/${router?.query?.class_id}/section/${router?.query?.course_section_id}`,
@@ -526,6 +567,8 @@ const CaseStudyResult = () => {
   }, [router.query.id])
 
   const questionRender = useMemo(() => {
+    editorRefs.current = new Array(result?.answers?.length || 0).fill(null)
+
     return result?.answers?.map((item: any, index: number) => {
       const question =
         item.question.qType === QUESTION_TYPES.ESSAY
@@ -882,8 +925,8 @@ const CaseStudyResult = () => {
                 <button
                   className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
                   onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
+                    ;(setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false))
                   }}
                 >
                   <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
