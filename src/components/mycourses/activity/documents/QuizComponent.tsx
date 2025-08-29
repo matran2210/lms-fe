@@ -11,15 +11,25 @@ import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadF
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
+  memo,
+  useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react'
-import { FieldValues, UseFormReset, useForm } from 'react-hook-form'
+import {
+  FieldValues,
+  UseFormGetValues,
+  UseFormReset,
+  UseFormWatch,
+  useForm,
+} from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
@@ -67,6 +77,19 @@ export type QuizComponentRef = {
   }) => void
   reset: UseFormReset<FieldValues>
   onSaveAnswer: (activeQuestion: IActivityStateQuestion) => void
+  onResetWord: (
+    name: string,
+    response_option: RESPONSE_OPTION,
+    defaultValue?: string | undefined,
+  ) => Promise<void>
+  onResetSheet: (response_option: RESPONSE_OPTION) => Promise<void>
+  watch: UseFormWatch<FieldValues>
+  getValues: UseFormGetValues<FieldValues>
+  onResetFormatEssay: (key: string, value: string) => void
+  onResetWordOnly: (
+    response_option: RESPONSE_OPTION,
+    defaultValue?: string | undefined,
+  ) => Promise<void>
 }
 
 type Props = {
@@ -114,7 +137,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const questionRef = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
-    const { control: controlAnswer, setValue, reset, getValues } = useForm({})
+    const {
+      control: controlAnswer,
+      setValue,
+      watch,
+      reset,
+      getValues,
+      resetField,
+    } = useForm({})
 
     const DragDropRef = useRef(null) as any
 
@@ -151,11 +181,57 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
     const refEditor = useRef(null) as any
 
-    const handleResetEssay = async (dataReset?: boolean) => {
+    const handleResetEssay = async (name: string, defaultValue?: string) => {
       if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset(dataReset)
+        onResetFormatEssay(name, defaultValue ?? DEFAULT_EDITOR_VALUE)
+
+        refEditor?.current?.reset(defaultValue)
+        await new Promise((resolve) => setTimeout(resolve, 10))
+      } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+        onResetFormatEssay(name, defaultValue ?? defaultSheetData)
+        refEditor?.current?.resetSheet()
+      }
+    }
+
+    const onResetWord = async (
+      name: string,
+      response_option: RESPONSE_OPTION,
+      defaultValue?: string,
+    ) => {
+      if (response_option === RESPONSE_OPTION.WORD) {
+        onResetFormatEssay(name, defaultValue ?? DEFAULT_EDITOR_VALUE)
+        refEditor?.current?.reset(defaultValue)
         await new Promise((resolve) => setTimeout(resolve, 10))
       }
+    }
+    const onResetWordOnly = async (
+      response_option: RESPONSE_OPTION,
+      defaultValue?: string,
+    ) => {
+      if (response_option === RESPONSE_OPTION.WORD) {
+        refEditor?.current?.reset(defaultValue)
+        await new Promise((resolve) => setTimeout(resolve, 10))
+      }
+    }
+    const onResetSheet = async (response_option: RESPONSE_OPTION) => {
+      if (response_option === RESPONSE_OPTION.SHEET) {
+        refEditor?.current?.resetSheet()
+      }
+    }
+
+    const onResetFormatEssay = (key: string, value: string) => {
+      resetField(key, {
+        defaultValue: value,
+        keepDirty: false,
+        keepTouched: false,
+        keepError: false,
+      }) // reset riêng field đó
+      setValue(key, value, {
+        shouldDirty: false,
+        shouldTouch: false,
+        shouldValidate: true,
+      }) // cập nhật lại giá trị
+      // reset()
     }
     const handleShowRequirement = async (data: {
       description: string
@@ -167,17 +243,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
       setShowRequirement(data)
-      setValue(
-        `${activeQuestion?.id}_${data?.id}_essay`,
+      const name = `${activeQuestion?.id}_${data?.id}_essay`
+      const defaultValue =
+        watch(name) ??
         activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
-          getValues(`${activeQuestion?.id}_${data?.id}_essay`) ??
-          null,
-      )
-      handleResetEssay(
-        activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
-          getValues(`${activeQuestion?.id}_${data?.id}_essay`) ??
-          null,
-      )
+        null
+      setValue(name, defaultValue)
+      handleResetEssay(name, defaultValue)
       setEssayData({
         req: data,
         index: data.index - 1,
@@ -265,6 +337,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onSubmit: onSubmit,
       reset: reset,
       onSaveAnswer: handleGetAnswer,
+      onResetWord: onResetWord,
+      onResetSheet: onResetSheet,
+      watch: watch,
+      getValues: getValues,
+      onResetFormatEssay: onResetFormatEssay,
+      onResetWordOnly: onResetWordOnly,
     }))
 
     const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
@@ -548,6 +626,44 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           )
 
         case QUESTION_TYPES.ESSAY:
+          const getDefaultValue = () => {
+            switch (activeQuestion?.response_option) {
+              case RESPONSE_OPTION.WORD:
+                return (
+                  watch(
+                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
+                  ) ??
+                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                    if (
+                      ans.requirement_id ===
+                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
+                    ) {
+                      return ans
+                    }
+                  })?.short_answer ??
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  DEFAULT_EDITOR_VALUE
+                )
+                break
+              case RESPONSE_OPTION.SHEET:
+                return (
+                  getValues(
+                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
+                  ) ??
+                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                    if (
+                      ans.requirement_id ===
+                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
+                    ) {
+                      return ans
+                    }
+                  })?.short_answer ??
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  defaultSheetData
+                )
+                break
+            }
+          }
           return (
             <>
               <div>
@@ -660,18 +776,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               </div>
               <div className="my-6"></div>
               <EssayQuestionPreview
-                defaultValue={
-                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
-                      return ans
-                    }
-                  })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
-                  null
-                }
+                defaultValue={getDefaultValue()}
                 data={activeQuestion?.requirements?.[essayData?.index ?? 0]}
                 question_content={activeQuestion?.question_content}
                 index={essayData?.index}
@@ -765,7 +870,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
-      handleResetEssay()
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
@@ -858,4 +962,4 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 )
 
 QuizComponent.displayName = 'QuizComponent'
-export default QuizComponent
+export default memo(QuizComponent)
