@@ -18,3 +18,4 @@ export const defaultSheetData = JSON.stringify([
     celldata: [],
   },
 ])
+export const DEFAULT_EDITOR_VALUE = '<p></p>'
