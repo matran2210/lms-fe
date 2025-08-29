@@ -45,6 +45,7 @@ const HookFormEditorV2 = ({
     <Controller
       name={name}
       control={control}
+      defaultValue={defaultValue}
       render={({ field: { onChange, value }, fieldState: { error } }) => {
         return (
           <>

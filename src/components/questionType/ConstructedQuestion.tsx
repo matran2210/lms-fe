@@ -599,10 +599,10 @@ const EssayQuestionPreview = ({
             />
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              key={key}
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
+                key={key}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
@@ -647,10 +647,10 @@ const EssayQuestionPreview = ({
             />
           ) : (
             <div
-              key={key}
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
+                key={key}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
