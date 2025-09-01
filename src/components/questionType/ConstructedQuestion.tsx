@@ -380,6 +380,28 @@ const EssayQuestionPreview = ({
     },
     [key],
   )
+  const renderWordEditor = useMemo(() => {
+    editorRef.current?.resetContentSafe(defaultValue)
+
+    return (
+      <HookFormEditor
+        control={control}
+        name={name}
+        math={true}
+        height={500}
+        placeholder="Your answer here"
+        defaultValue={defaultValue}
+        disabled={
+          fullData?.confirmed ||
+          fullData?.data?.confirmed ||
+          fullData?.is_viewed_answer
+        }
+        handleChange={() => handleChange && handleChange(data?.id)}
+        // externalRef={externalRef}
+        editorRef={editorRef}
+      />
+    )
+  }, [name])
   return (
     <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
@@ -581,22 +603,7 @@ const EssayQuestionPreview = ({
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
           {question_data?.response_option === RESPONSE_OPTION.WORD ? (
-            <HookFormEditor
-              control={control}
-              name={name}
-              math={true}
-              height={500}
-              placeholder="Your answer here"
-              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
-              disabled={
-                fullData?.confirmed ||
-                fullData?.data?.confirmed ||
-                fullData?.is_viewed_answer
-              }
-              handleChange={() => handleChange && handleChange(data?.id)}
-              // externalRef={externalRef}
-              editorRef={editorRef}
-            />
+            renderWordEditor
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
@@ -629,22 +636,7 @@ const EssayQuestionPreview = ({
               ></Controller>
             </div>
           ) : response_option_custom === 0 ? (
-            <HookFormEditor
-              control={control}
-              name={name}
-              // externalRef={externalRef}
-              math={true}
-              height={500}
-              placeholder="Your answer here"
-              defaultValue={defaultValue || DEFAULT_EDITOR_VALUE}
-              disabled={
-                fullData?.is_viewed_answer ||
-                fullData?.confirmed ||
-                fullData?.data?.confirmed
-              }
-              handleChange={() => handleChange && handleChange(data?.id)}
-              editorRef={editorRef}
-            />
+            renderWordEditor
           ) : (
             <div
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
