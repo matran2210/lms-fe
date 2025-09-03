@@ -59,6 +59,7 @@ import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { Requirement } from 'src/type'
 import { defaultSheetData } from 'src/constants/attempt'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -280,7 +281,22 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
-
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] = useState({
+    status: false,
+    onReset: () => {},
+  })
+  const onOpenResetToTemplateModal = (onReset: () => void) => {
+    setOpenResetToTemplateModal({
+      status: true,
+      onReset,
+    })
+  }
+  const onCloseResetToTemplateModal = () => {
+    setOpenResetToTemplateModal({
+      status: false,
+      onReset: () => {},
+    })
+  }
   const handleResetEssay = async (
     index: number,
     activeQuestion: any,
@@ -1239,7 +1255,11 @@ const CaseStudyDetail = ({ questions }: any) => {
                               <div className="mt-8 flex justify-end">
                                 <ButtonPrimaryV2
                                   title="Reset to Answer Template"
-                                  onClick={onResetAnswerEssayToTemplate}
+                                  onClick={() =>
+                                    onOpenResetToTemplateModal(
+                                      onResetAnswerEssayToTemplate,
+                                    )
+                                  }
                                 />
                               </div>
                             )}
@@ -1582,6 +1602,13 @@ const CaseStudyDetail = ({ questions }: any) => {
               )
             }
           />
+          {openResetToTemplateModal.status && (
+            <ResetToAnswerTemplateModal
+              open={openResetToTemplateModal.status}
+              handleReset={openResetToTemplateModal.onReset}
+              handleClose={onCloseResetToTemplateModal}
+            />
+          )}
           {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}

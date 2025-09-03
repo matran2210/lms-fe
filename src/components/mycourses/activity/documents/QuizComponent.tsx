@@ -8,6 +8,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import clsx from 'clsx'
@@ -173,7 +174,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       req: undefined,
       index: 0,
     })
-
+    const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+      useState(false)
+    const onOpenResetToTemplateModal = () => {
+      setOpenResetToTemplateModal(true)
+    }
+    const onCloseResetToTemplateModal = () => {
+      setOpenResetToTemplateModal(false)
+    }
     useClickOutside({
       ref: listRequirementRef,
       callback: () => setShowListRequirement(false),
@@ -1025,7 +1033,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               <div className="mt-8 flex justify-end">
                 <ButtonPrimaryV2
                   title="Reset to Answer Template"
-                  onClick={onResetAnswerEssayToTemplate}
+                  onClick={onOpenResetToTemplateModal}
                 />
               </div>
             )}
@@ -1068,6 +1076,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             )
           }
         />
+        {openResetToTemplateModal && (
+          <ResetToAnswerTemplateModal
+            open={openResetToTemplateModal}
+            handleReset={onResetAnswerEssayToTemplate}
+            handleClose={onCloseResetToTemplateModal}
+          />
+        )}
       </div>
     )
   },
