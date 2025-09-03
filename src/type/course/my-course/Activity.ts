@@ -98,7 +98,10 @@ export interface ITab {
         status: string
         id: string
         grading_status: string
+        number_of_attempts?: number
       }
+      is_limited?: boolean
+      limit_count?: number
       id?: string
       name?: string
       constructed_questions: IQuestion[]

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useEffect, useRef, useState } from 'react'
 import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -8,6 +9,7 @@ import {
   saveAnswer,
   selectQuestions,
   submitQuiz,
+  confirmQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import {
@@ -75,6 +77,10 @@ type Props = {
   isTeacher?: boolean
   focusOnlyQuiz: IFocusQuiz
   setFocusOnlyQuiz: React.Dispatch<React.SetStateAction<IFocusQuiz>>
+  // Optional attempt limitation info
+  is_limited?: boolean
+  limit_count?: number
+  number_of_attempts?: number
 }
 
 interface IAnswer {
@@ -116,6 +122,9 @@ const QuizDocument = ({
   isTeacher,
   focusOnlyQuiz,
   setFocusOnlyQuiz,
+  is_limited,
+  limit_count,
+  number_of_attempts,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -161,13 +170,38 @@ const QuizDocument = ({
     watch,
   } = useForm({})
 
+  // Compute whether user still has attempts left
+  const hasAttemptsLeft = (() => {
+    // If backend already disallows attempts, block retake
+    if (quizSetting && quizSetting.allow_attempt === false) return false
+    // Use explicit limit rules if provided
+    if (typeof is_limited === 'boolean') {
+      if (!is_limited) return true
+      const limit =
+        typeof limit_count === 'number' ? limit_count : Number.POSITIVE_INFINITY
+      const used =
+        typeof number_of_attempts === 'number' ? number_of_attempts : 0
+      return used < limit
+    }
+    // Fallback: allow retake when limits unknown
+    return true
+  })()
+
   useEffect(() => {
     ;(async () => {
       if (questions?.[0]?.id) {
         setStartWorkTime(Date.now())
+
+        // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
+        if (grading_preference === 'AFTER_ALL_QUESTIONS') {
+          // If finished, we'll restore answers and fetch corrects lazily per question on navigation
+          const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
+          setIsFinishQuiz(!!finished)
+        }
+
         // Load the first question when the component mounts
         try {
-          dispatch(
+          await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
@@ -175,16 +209,57 @@ const QuizDocument = ({
               questionId: questions?.[0]?.id || '',
             }),
           )
+
+          // Restore corrects if available
+          // No restore here; corrects fetched lazily per-question when finished
         } catch (error) {}
       }
     })()
-  }, [questions?.[0]?.id])
+  }, [questions, grading_preference, activityId, tabId, quizId, dispatch])
 
   useEffect(() => {
     if (runHandleFinishQuiz > 1) {
       setOpenFinishQuiz(true)
     }
   }, [runHandleFinishQuiz])
+
+  // Corrects are not persisted; they are fetched lazily per question when finished
+
+  // Lazy fetch corrects per question after finished
+  useEffect(() => {
+    if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
+    if (!activeQuestion?.id) return
+    const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
+    if (!finished) return
+
+    const answersKey = `quiz-answers-${quizId}`
+    const raw = sessionStorage.getItem(answersKey)
+    const storedAnswers: { [key: string]: any } = raw ? JSON.parse(raw) : {}
+    const myAnswersForActive = storedAnswers[activeQuestion.id]
+
+    // Only call API if we haven't got corrects yet for this question
+    const hasCorrects = !!activeQuestion.corrects
+    if (!hasCorrects) {
+      dispatch(
+        confirmQuestion({
+          activityId,
+          tabId,
+          quizId,
+          questionId: activeQuestion.id,
+          myAnswers: myAnswersForActive,
+          time_spent: 0,
+        }) as any,
+      )
+    }
+  }, [
+    grading_preference,
+    activeQuestion?.id,
+    activeQuestion?.corrects,
+    activityId,
+    tabId,
+    quizId,
+    dispatch,
+  ])
 
   const calculateWorkTime = () => {
     return activeQuestion?.confirmed
@@ -324,12 +399,28 @@ const QuizDocument = ({
         }),
       )
     }
+    // Persist user's answers per question for AFTER_ALL_QUESTIONS
+    if (grading_preference === 'AFTER_ALL_QUESTIONS' && activeQuestion?.id) {
+      try {
+        const answersKey = `quiz-answers-${quizId}`
+        const raw = sessionStorage.getItem(answersKey)
+        const stored: { [key: string]: any } = raw ? JSON.parse(raw) : {}
+        stored[activeQuestion.id] = myAnswers
+        sessionStorage.setItem(answersKey, JSON.stringify(stored))
+      } catch (_e) {}
+    }
   }
 
   const handleFinishQuiz = async () => {
     setOpenFinishQuiz(false)
     setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
+
+    if (grading_preference === 'AFTER_ALL_QUESTIONS') {
+      // Mark finished to preserve state across popup
+      sessionStorage.setItem(`quiz-finished-${quizId}`, 'true')
+    }
+
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
     const availableQuestions = questions?.map((item: any) => {
       if (isValidatedAnswer(item.myAnswers, item.qType)) {
@@ -642,6 +733,28 @@ const QuizDocument = ({
     }
   }
 
+  const handleRetakeQuestion = () => {
+    // Reset toàn bộ trạng thái quiz trong redux (xóa myAnswers, corrects, confirmed, time_spent, ...)
+    dispatch(
+      removeQuizFinished({
+        activityId,
+        tabId,
+        quizId,
+      }),
+    )
+    // Clear stored answers and finished flag
+    sessionStorage.removeItem(`quiz-answers-${quizId}`)
+    sessionStorage.removeItem(`quiz-finished-${quizId}`)
+    // Clear form values and force remount to avoid showing previous selections
+    reset({})
+    setQuizComponentKey((e) => e + 1)
+    setActiveQuestionIndex(0)
+    setRunHandleFinishQuiz(1)
+    setOpenFinishQuiz(false)
+    setOpenGradedReport(false)
+    setIsFinishQuiz(false)
+  }
+
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -791,7 +904,7 @@ const QuizDocument = ({
                 activityId={activityId}
                 tabId={tabId}
                 quizId={quizId}
-                showCorrect={isAFTEREACHQUESTION}
+                showCorrect={isAFTEREACHQUESTION || isAFTERAllQUESTION}
                 activeQuestion={activeQuestion}
                 ref={questionRef}
                 key={quizComponentKey}
@@ -868,36 +981,37 @@ const QuizDocument = ({
             <>
               {(isQuestionConfirmed ||
                 isAFTERAllQUESTION ||
-                (isQuestionConfirmed && isLastQuestion)) && (
-                <SappButton
-                  className="!rounded-lg !px-4 py-2 text-sm"
-                  childClass="text-sm"
-                  title={
-                    isLastQuestion
-                      ? 'Finish'
-                      : isAFTERAllQUESTION
-                        ? 'Submit & Next'
-                        : 'Next'
-                  }
-                  full={false}
-                  size={'small'}
-                  onClick={() => {
-                    if (loading) {
-                      return
+                (isQuestionConfirmed && isLastQuestion)) &&
+                !isFinishQuiz && (
+                  <SappButton
+                    className="!rounded-lg !px-4 py-2 text-sm"
+                    childClass="text-sm"
+                    title={
+                      isLastQuestion
+                        ? 'Finish'
+                        : isAFTERAllQUESTION
+                          ? 'Submit & Next'
+                          : 'Next'
                     }
-                    if (isLastQuestion) {
-                      handleQuizFinish()
-                      setRunHandleFinishQuiz((e) => e + 1)
-                      trackGAEvent('Click Button Finish Quiz Activity')
-                    } else {
-                      handleNextQuestion()
-                      trackGAEvent('Click Button Next Quiz Activity')
-                    }
-                  }}
-                  color="light-dark"
-                  loading={loading}
-                />
-              )}
+                    full={false}
+                    size={'small'}
+                    onClick={() => {
+                      if (loading) {
+                        return
+                      }
+                      if (isLastQuestion) {
+                        handleQuizFinish()
+                        setRunHandleFinishQuiz((e) => e + 1)
+                        trackGAEvent('Click Button Finish Quiz Activity')
+                      } else {
+                        handleNextQuestion()
+                        trackGAEvent('Click Button Next Quiz Activity')
+                      }
+                    }}
+                    color="light-dark"
+                    loading={loading}
+                  />
+                )}
               {!isQuestionConfirmed && isAFTEREACHQUESTION && (
                 <SappButton
                   className="!rounded-lg !px-4 py-2"
@@ -913,6 +1027,23 @@ const QuizDocument = ({
                   loading={loading}
                 />
               )}
+              {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+              {isQuestionConfirmed &&
+                isAFTERAllQUESTION &&
+                isFinishQuiz &&
+                hasAttemptsLeft && (
+                  <SappButton
+                    className="!rounded-lg !px-4 !py-2"
+                    childClass="text-sm"
+                    title={'Retake'}
+                    full={false}
+                    size={'small'}
+                    disabled={loading}
+                    onClick={() => {
+                      handleRetakeQuestion()
+                    }}
+                  />
+                )}
             </>
           </Tooltip>
         </div>
