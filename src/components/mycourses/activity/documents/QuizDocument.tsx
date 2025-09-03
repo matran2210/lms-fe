@@ -180,16 +180,14 @@ const QuizDocument = ({
     const defaultValue =
       questionRef.current?.getValues(name) ??
       activeQuestion?.myAnswers?.[0]?.short_answer
-    if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
-    } else {
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
       await questionRef.current?.onResetWord(
         name,
         activeQuestion?.response_option,
         defaultValue,
       )
     }
-    // await questionRef?.current?.onResetWordOnly(RESPONSE_OPTION.WORD)
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
       handleSaveAnswer()
@@ -211,6 +209,7 @@ const QuizDocument = ({
           const defaultValue =
             questionRef.current?.getValues(name) ??
             nextQuestionContent?.myAnswers?.[0]?.short_answer
+
           if (nextQuestionContent?.response_option === RESPONSE_OPTION.SHEET) {
             await questionRef.current?.onResetSheet(
               nextQuestionContent?.response_option,
@@ -245,6 +244,19 @@ const QuizDocument = ({
   const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
 
   const handleQuizFinish = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      questionRef.current?.getValues(name) ??
+      activeQuestion?.myAnswers?.[0]?.short_answer
+    if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
+    } else {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     setActiveQuestionIndex(activeQuestionIndex + 1)
     setIsFinishQuiz(true)
     handleSaveAnswer()
@@ -276,6 +288,18 @@ const QuizDocument = ({
   }
 
   const handlePrevQuestion = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      questionRef.current?.getValues(name) ??
+      activeQuestion?.myAnswers?.[0]?.short_answer
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
       handleSaveAnswer()
@@ -283,19 +307,17 @@ const QuizDocument = ({
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
-          await dispatch(
+          const prevQuestion = await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: prevQuestionId || '',
             }),
-          )
+          ).unwrap()
           setStartWorkTime(Date.now())
+          const preQuestionContent = prevQuestion?.question
 
-          const preQuestionContent = questionsList?.find(
-            (item: any) => item?.id === prevQuestionId,
-          )
           const name = `${preQuestionContent?.id}_${preQuestionContent?.requirements?.length ? preQuestionContent?.requirements?.[0]?.id : document_id}_essay`
           const defaultValue = preQuestionContent?.myAnswers?.[0]?.short_answer
           if (
@@ -324,13 +346,6 @@ const QuizDocument = ({
   const handleConfirmQuestion = async () => {
     setLoading(true)
     if (activeQuestion) {
-      const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
-      const defaultValue = activeQuestion?.myAnswers?.[0]?.short_answer
-      await questionRef.current?.onResetWord(
-        name,
-        activeQuestion?.response_option,
-        defaultValue,
-      )
       questionRef?.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,

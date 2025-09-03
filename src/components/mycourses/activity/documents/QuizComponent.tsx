@@ -216,6 +216,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const onResetSheet = async (response_option: RESPONSE_OPTION) => {
       if (response_option === RESPONSE_OPTION.SHEET) {
         refEditor?.current?.resetSheet()
+        await new Promise((resolve) => setTimeout(resolve, 10))
       }
     }
 
@@ -631,7 +632,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               case RESPONSE_OPTION.WORD:
                 return (
                   watch(
-                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
+                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
                   ) ??
                   activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                     if (
@@ -641,15 +642,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       return ans
                     }
                   })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
-                  DEFAULT_EDITOR_VALUE
+                  activeQuestion?.myAnswers?.[0]?.short_answer
                 )
                 break
               case RESPONSE_OPTION.SHEET:
                 return (
-                  getValues(
-                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                  ) ??
+                  // getValues(
+                  //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
+                  // ) ??
                   activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                     if (
                       ans.requirement_id ===
@@ -658,12 +658,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       return ans
                     }
                   })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
-                  defaultSheetData
+                  activeQuestion?.myAnswers?.[0]?.short_answer
                 )
                 break
             }
           }
+
           return (
             <>
               <div>
@@ -785,7 +785,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 setValue={setValue}
                 handleSaveHighLight={() => {}}
                 forCaseStudy={true}
-                name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
+                name={`${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`}
                 fullData={{
                   data: { ...activeQuestion },
                   solution: activeQuestion?.solution ?? '',
