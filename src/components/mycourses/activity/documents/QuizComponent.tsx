@@ -10,6 +10,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
@@ -978,7 +979,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }, [activeQuestion?.id])
 
     return (
-      <div>
+      <div
+        className={clsx({
+          'pr-4': isShowTemplate,
+        })}
+      >
         <div ref={questionRef}>
           <EditorReader
             text_editor_content={activeQuestion?.question_topic?.description}

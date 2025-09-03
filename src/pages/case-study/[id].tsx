@@ -55,6 +55,10 @@ import LimitQuizModal from '../test/limitQuizModal'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import { Requirement } from 'src/type'
+import { defaultSheetData } from 'src/constants/attempt'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -932,7 +936,53 @@ const CaseStudyDetail = ({ questions }: any) => {
     return data
   }, [listQuestions])
   editorRefs.current = new Array(questionData?.length || 0).fill(null)
+  const onResetFormatEssay = (key: string, value: string) => {
+    resetField(key, {
+      defaultValue: value,
+      keepDirty: false,
+      keepTouched: false,
+      keepError: false,
+    }) // reset riêng field đó
+    setValue(key, value, {
+      shouldDirty: false,
+      shouldTouch: false,
+      shouldValidate: true,
+    }) // cập nhật lại giá trị
+    // reset()
+  }
+  const getTemplateValueForWord = (question: any) => {
+    const requirement = question?.requirements?.[0]
+    if (requirement?.short_answer) {
+      return requirement.short_answer
+    }
+    if (requirement?.answer_text) {
+      return requirement.answer_text
+    }
+    if (requirement?.answer_template) {
+      return requirement.answer_template
+    }
+    if (question.answer) {
+      return question.answer
+    }
+    return question?.answer_template
+  }
 
+  const getTemplateValueForSheet = (question: any) => {
+    const requirementSheet = question?.requirements?.[0]
+    if (requirementSheet?.answer_text) {
+      return requirementSheet.answer_text
+    }
+    if (requirementSheet?.short_answer) {
+      return requirementSheet.short_answer
+    }
+    if (requirementSheet?.answer_template) {
+      return requirementSheet.answer_template || defaultSheetData
+    }
+    if (question.answer) {
+      return question.answer
+    }
+    return question?.answer_template || defaultSheetData
+  }
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Case Study">
@@ -1096,12 +1146,76 @@ const CaseStudyDetail = ({ questions }: any) => {
                           question?.requirements?.length === 0 &&
                           index !== 0)
 
+                      const isShowTemplate =
+                        question?.answer_template ||
+                        question?.requirements?.some(
+                          (req: Requirement) => req?.answer_template,
+                        )
+                      const getDefaultEssayValue = () => {
+                        if (question.qType !== QUESTION_TYPES.ESSAY)
+                          return undefined
+                        const response_option = question?.response_option
+                        switch (response_option) {
+                          case RESPONSE_OPTION.WORD:
+                            const requirement = question?.requirements?.[0]
+                            if (requirement?.answer_template) {
+                              return requirement.answer_template
+                            }
+                            return question?.answer_template
+
+                          case RESPONSE_OPTION.SHEET:
+                            const requirementSheet = question?.requirements?.[0]
+
+                            if (requirementSheet?.answer_template) {
+                              return (
+                                requirementSheet.answer_template ||
+                                defaultSheetData
+                              )
+                            }
+                            return question?.answer_template || defaultSheetData
+                        }
+                      }
+
+                      const onResetAnswerEssayToTemplate = () => {
+                        const key = `${index}_answer`
+                        const response_option = question?.response_option
+                        if (!editorRefs.current[index]) {
+                          editorRefs.current[index] = React.createRef()
+                        }
+                        switch (response_option) {
+                          case RESPONSE_OPTION.WORD:
+                            const templateValueWord =
+                              getTemplateValueForWord(question)
+                            // Reset form value
+                            onResetFormatEssay(key, templateValueWord)
+                            // Reset component con
+                            if (editorRefs.current[index]?.current?.reset) {
+                              editorRefs.current[index].current.reset(
+                                templateValueWord,
+                              )
+                            }
+                            break
+                          case RESPONSE_OPTION.SHEET:
+                            const templateValue =
+                              getTemplateValueForSheet(question)
+                            // Reset form value
+                            onResetFormatEssay(key, templateValue)
+                            // Reset component con
+                            if (editorRefs.current[index]?.current?.clear) {
+                              editorRefs.current[index].current.clear(
+                                templateValue,
+                              )
+                            }
+                            break
+                        }
+                      }
                       return (
                         <div
                           key={question?.id + index}
                           topic-key={question.topic_id}
                           className={`mb-8 ${clsx({
                             'border-t pt-8': isAddedBorder,
+                            'relative pr-4': isShowTemplate,
                           })}`}
                         >
                           {checkType(
@@ -1110,7 +1224,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             question,
                             question?.qType,
                             question?.id,
-                            undefined,
+                            getDefaultEssayValue(),
                             undefined,
                             undefined,
                             undefined,
@@ -1119,6 +1233,31 @@ const CaseStudyDetail = ({ questions }: any) => {
                             question?.question_content,
                             valueRef,
                           )}
+                          {question &&
+                            question.qType === QUESTION_TYPES.ESSAY &&
+                            isShowTemplate && (
+                              <div className="mt-8 flex justify-end">
+                                <ButtonPrimaryV2
+                                  title="Reset to Answer Template"
+                                  onClick={onResetAnswerEssayToTemplate}
+                                />
+                              </div>
+                            )}
+                          {question &&
+                            question.qType === QUESTION_TYPES.ESSAY &&
+                            isShowTemplate && (
+                              <ShowAnswerTemplate
+                                {...{
+                                  currentTabContent: question,
+                                  essayData: {
+                                    index: 0,
+                                    req: question?.requirements?.[0],
+                                  },
+                                }}
+                                isQuiz
+                                className="!-right-6 z-[1]"
+                              />
+                            )}
                         </div>
                       )
                     })}
