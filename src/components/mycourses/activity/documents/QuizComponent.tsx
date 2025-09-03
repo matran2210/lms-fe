@@ -198,6 +198,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const [openExhibitModal, setOpenExhibitModal] = useState(false)
     const refEditor = useRef<RefEditor>(null)
 
+    const handleResetEssay = async () => {
+      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+        refEditor?.current?.reset()
+        await new Promise((resolve) => setTimeout(resolve, 10))
+      }
+    }
     const onOpenExhibitModal = () => {
       setOpenExhibitModal(true)
       setShowWarning(false)
@@ -205,7 +211,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const onCloseExhibitModal = () => {
       setOpenExhibitModal(false)
     }
-    const handleShowRequirement = (data: {
+    const handleShowRequirement = async (data: {
       description: string
       index: number
       name: string
@@ -214,9 +220,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }) => {
       saveAnswer && saveAnswer()
       setShowListRequirement(false)
-      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset()
-      }
+      handleResetEssay()
       setShowRequirement(data)
       setValue?.(
         `${activeQuestion?.id}_${data?.id}_essay`,
@@ -932,9 +936,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
-      if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
-        refEditor?.current?.reset()
-      }
+      handleResetEssay()
       if (
         activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE ||
         activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||

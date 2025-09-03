@@ -19,7 +19,7 @@ const TestResultDetailTeacher = () => {
       params,
       () => CoursesAPI.getQuizAttempts(router.query.id),
       router.query.id !== undefined,
-      () => router.replace('/courses'),
+      () => router.replace(PageLink.TEACHER_MY_COURSE),
     )
   }
 

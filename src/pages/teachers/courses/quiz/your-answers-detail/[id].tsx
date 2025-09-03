@@ -6,6 +6,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
+import { PageLink } from 'src/constants'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 
 const TestResultDetail = () => {
@@ -17,7 +18,7 @@ const TestResultDetail = () => {
       params,
       () => CoursesAPI.getQuizAttempts(router.query.id),
       router.query.id !== undefined,
-      () => router.replace('/courses'),
+      () => router.replace(PageLink.TEACHER_MY_COURSE),
     )
   }
 
@@ -32,20 +33,20 @@ const TestResultDetail = () => {
 
   // Sử dụng hook useGetQuizDetail trong component
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
-  let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
+  let linkTest = `${PageLink.TEACHER_TEST}/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   const quiz = questions?.quizAttempt?.quiz
   if (
     quiz?.is_limited &&
     quiz?.limit_count === questions?.quizAttempt?.number_of_attempts
   ) {
     // Nếu bài test đã quá số lần làm bài thì chỉ cho link đến trang kết quả, không cho làm lại
-    linkTest = `/courses/test/test-result/${router.query.id}`
+    linkTest = `${PageLink.TEACHER_MY_COURSE}/test/test-result/${router.query.id}`
   }
 
   // Config Courses
   const breadcrumbs: ITabs[] = [
     {
-      link: `/courses/my-course/${questions?.class_id ?? ''}`,
+      link: `${PageLink.TEACHER_MY_COURSE}/my-course/${questions?.class_id ?? ''}`,
       title: `${questions?.course?.name ?? 'Course Detail'}`,
       disable: false,
     },
@@ -62,9 +63,9 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Your Answer Details" className="!bg-gray-4">
-      <div className="mx-auto max-w-[1570px]">
-        <div className="px-5 pt-5 xl:container md:px-10">
+    <FullScreenLayout title="Your Answer Details">
+      <div className="mx-auto max-w-1570">
+        <div className="mt-5 px-5 xl:container md:px-10">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>
         <div className="px-5 xl:container md:px-10">
@@ -76,6 +77,7 @@ const TestResultDetail = () => {
                     className={'relative'}
                     type={questions?.course?.course_categories?.[0]?.name}
                     gradingStatus={questions?.quizAttempt?.grading_status}
+                    isTeacher
                   />
                 </div>
               </div>

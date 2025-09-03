@@ -534,7 +534,7 @@ const ActivityTeacherPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0  h-full w-full">
-                    <div className="bg-gray-2 flex h-10 w-full items-center justify-between rounded-t-md px-5">
+                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -568,7 +568,7 @@ const ActivityTeacherPage = () => {
                     {activity?.name}
                   </Tooltip>
                 </div>
-                <div className="text-gray-1 whitespace-nowrap text-sm">
+                <div className="whitespace-nowrap text-sm text-gray-1">
                   {activity?.duration || 0}{' '}
                   {activity?.duration > 1 ? 'mins' : 'min'} estimated
                 </div>
@@ -664,6 +664,7 @@ const ActivityTeacherPage = () => {
                               attemptId={e?.quiz?.attempt?.id}
                               focusOnlyQuiz={{ id: '', open: false }}
                               setFocusOnlyQuiz={() => {}}
+                              isTeacher
                             />
                           </div>
                         )
@@ -748,7 +749,7 @@ const ActivityTeacherPage = () => {
                                     placement="right"
                                   >
                                     <p
-                                      className="text-gray-1 cursor-pointer hover:text-primary"
+                                      className="cursor-pointer text-gray-1 hover:text-primary"
                                       onClick={() => {
                                         isPreviewFile
                                           ? handleOpenScratchPad(
@@ -822,7 +823,7 @@ const ActivityTeacherPage = () => {
                             </svg>
                             Previous Tab
                           </div>
-                          <div className="bg-gray-3 absolute bottom-0 left-0 h-2.5 w-[129px]"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[129px] bg-gray-3"></div>
                         </div>
                       </div>
                     )}
@@ -854,7 +855,7 @@ const ActivityTeacherPage = () => {
                               />
                             </svg>
                           </div>
-                          <div className="bg-gray-3 absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1"></div>
+                          <div className="absolute bottom-0 left-0 h-2.5 w-[98px] -translate-x-1 bg-gray-3"></div>
                         </div>
                       </div>
                     )}
@@ -885,7 +886,7 @@ const ActivityTeacherPage = () => {
                     >
                       Previous Activity
                     </div>
-                    <div className="text-gray-1 flex text-medium-sm">
+                    <div className="flex text-medium-sm text-gray-1">
                       {getCourseIcon(
                         activity?.previous_activity?.display_icon,
                         activity?.previous_activity?.is_preview_locked,
@@ -921,7 +922,7 @@ const ActivityTeacherPage = () => {
                     >
                       Next Activity
                     </div>
-                    <div className="text-gray-1 flex justify-end text-medium-sm">
+                    <div className="flex justify-end text-medium-sm text-gray-1">
                       <Tooltip
                         title={activity?.next_activity?.name}
                         showTooltip={activity?.next_activity?.name?.length > 80}

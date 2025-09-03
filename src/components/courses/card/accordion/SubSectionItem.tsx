@@ -35,7 +35,9 @@ export default function SubSectionItem({
 }: ISubSectionProps) {
   const router = useRouter()
   const courseId = router.query.courseId
-  const isCollapsible = sub?.course_section_type !== TEST_TYPE_ENUM.TOPIC_TEST
+  const isCollapsible =
+    sub?.course_section_type !== TEST_TYPE_ENUM.TOPIC_TEST &&
+    sub?.children?.length > 0
   const totalDuration = formatDuration(
     sub.children.reduce((sum, act) => sum + (act?.duration || 0), 0),
   )
@@ -45,6 +47,10 @@ export default function SubSectionItem({
     sub?.learning_progress?.total_course_sections > 0 &&
     sub?.learning_progress?.total_course_sections ===
       sub?.learning_progress?.total_course_sections_completed
+
+  const isSubSectionLearning = (sub?.children ?? []).some(
+    (el) => Number(el?.learning_progress?.time_spent) > 0,
+  )
 
   const getActivityStatus = (act: IActivity) => {
     return (
@@ -82,7 +88,13 @@ export default function SubSectionItem({
             <div className="flex flex-col">
               {sub?.course_section_type === TEST_TYPE_ENUM.CHAPTER && (
                 <span className="mb-1 md:hidden">
-                  {renderBadge(isSubSectionFinished ? 'Finished' : 'Learning')}
+                  {renderBadge(
+                    isSubSectionFinished
+                      ? 'Finished'
+                      : isSubSectionLearning
+                        ? 'Learning'
+                        : '',
+                  )}
                 </span>
               )}
               <div className="mb-1 flex items-center gap-3">
@@ -125,7 +137,11 @@ export default function SubSectionItem({
                 ) : (
                   <span className="hidden md:inline-block">
                     {renderBadge(
-                      isSubSectionFinished ? 'Finished' : 'Learning',
+                      isSubSectionFinished
+                        ? 'Finished'
+                        : isSubSectionLearning
+                          ? 'Learning'
+                          : '',
                     )}
                   </span>
                 )}
@@ -137,7 +153,7 @@ export default function SubSectionItem({
                   <ButtonText
                     title="Retake"
                     size="medium"
-                    className="text-primary"
+                    className="!bg-transparent"
                     onClick={() => {
                       setOpen(true)
                       if (sub?.quiz) {
@@ -162,7 +178,7 @@ export default function SubSectionItem({
                   <ButtonText
                     title="Result"
                     size="medium"
-                    className="text-bw-15"
+                    className="!bg-transparent text-bw-15"
                     onClick={() => {
                       let attempts: IAttempt[] = []
                       const rawAttempt = sub?.quiz?.attempt
@@ -210,7 +226,7 @@ export default function SubSectionItem({
           </div>
         }
         key={`${sectionIndex}-${index}`}
-        className={`subsection-course-3lv ${sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST ? 'topic_test' : ''}`}
+        className={`subsection-course-3lv ${!isCollapsible ? 'topic_test' : ''}`}
       >
         <div className="flex flex-col gap-4 md:gap-2">
           {sub?.children.map((act, k) => {
@@ -262,7 +278,11 @@ export default function SubSectionItem({
                         <>
                           <span>|</span>
                           {renderBadge(
-                            isActivityFinished ? 'Finished' : 'Learning',
+                            isActivityFinished
+                              ? 'Finished'
+                              : Number(act?.learning_progress?.time_spent) > 0
+                                ? 'Learning'
+                                : '',
                           )}
                         </>
                       )}

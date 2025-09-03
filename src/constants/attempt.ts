@@ -5,3 +5,18 @@ export enum EAttemptStatus {
   IN_PROGRESS = 'IN_PROGRESS',
   NOT_STARTED = 'NOT_STARTED',
 }
+
+// Generate unique ID for sheets
+export const generateSheetId = (): string => {
+  return `sheet_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+}
+export const defaultSheetData = JSON.stringify([
+  {
+    name: 'Sheet1',
+    id: generateSheetId(),
+    status: 1,
+    data: [[]],
+    celldata: [],
+  },
+])
+export const DEFAULT_EDITOR_VALUE = '<p></p>'

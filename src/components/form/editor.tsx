@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Spin } from 'antd'
 import { VALID_UPLOAD_EDITOR } from 'src/constants'
 import { useSappEditorImageUpload } from 'src/hooks/useSappEditorImageUpload'
 import { SAPPEditor } from 'sapp-common-package-ha-test'
+import { SAPPEditorHandle } from 'src/type'
 interface IProps {
   onChange: (event: any) => void
   valueText?: string
@@ -14,6 +15,7 @@ interface IProps {
   acceptFiles?: { type: string; size: number }[]
   disabled?: boolean
   key?: number | string
+  editorRef?: React.RefObject<SAPPEditorHandle>
 }
 
 const Editor = ({
@@ -27,13 +29,15 @@ const Editor = ({
   acceptFiles = VALID_UPLOAD_EDITOR,
   disabled,
   key,
+  editorRef,
 }: IProps) => {
   const { handleImageUpload } = useSappEditorImageUpload()
   const [loading, setLoading] = useState(false)
   return (
-    <div>
+    <div key={key}>
       <Spin spinning={loading}>
         <SAPPEditor
+          ref={editorRef}
           {...(key && { key: key })}
           content={valueText}
           onChange={onChange}

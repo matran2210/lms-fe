@@ -2,7 +2,6 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import styles from './test.module.scss'
 import {
   CalculatorIconV2,
   DownloadIcon,
@@ -48,6 +47,7 @@ import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
+import styles from './test.module.scss'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
 import BackToTop from '@components/BackToTop'
@@ -62,6 +62,7 @@ import Layout from '@components/layout'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import RequirementsTab from '@components/test/RequirementsTab'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import TestWrapper from '@components/test/layout/TestWrapper'
 import { TestAPI } from '@pages/api/test'
 import { GradingPreference } from '@utils/constants'
@@ -96,9 +97,10 @@ import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import { download } from '@components/learning/activity/ActivityResource'
-import ButtonText from '@components/base/button/ButtonText'
+import { defaultSheetData } from 'src/constants/attempt'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonText from '@components/base/button/ButtonText'
+import { download } from '@components/learning/activity/ActivityResource'
 
 declare global {
   interface Window {
@@ -125,6 +127,7 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(router.query.id as string)
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
+  const { control, getValues, setValue, reset, resetField } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -134,9 +137,6 @@ const TestDetail = () => {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
-    control,
-    getValues,
-    setValue,
   } = useForm()
   const timeRef = useRef(null) as any
   const ref = useRef(null) as any
@@ -1193,9 +1193,10 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = isSubmit
-        ? getValues(`${currentContent?.id}_0_answer`)
-        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+      const value =
+        isSubmit && currentContent?.data?.requirements?.length <= 1
+          ? getValues(`${currentContent?.id}_0_answer`)
+          : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
 
       if (
         currentContent?.data?.response_option &&
@@ -1392,6 +1393,9 @@ const TestDetail = () => {
     // setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    await refEditor?.current?.reset()
+    await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
     const doAfterSetState = () => {
       setEditorReady(false) // Ẩn trước
       setTimeout(() => {
@@ -1433,7 +1437,6 @@ const TestDetail = () => {
         ) {
           ref.current?.handleReset()
         }
-        refEditor?.current?.reset()
         const savedAnswer = handleSaveCurrentAnswer(newData, currentTabContent)
         setCurrentPage(currentTab)
         setOpenScratchPad([])
@@ -1451,8 +1454,6 @@ const TestDetail = () => {
       ) {
         ref.current?.handleReset()
       }
-      refEditor?.current?.reset()
-
       const savedAnswer = handleSaveCurrentAnswer(tabs, currentTabContent)
       setCurrentPage(currentTab)
       setOpenScratchPad([])
@@ -1958,7 +1959,7 @@ const TestDetail = () => {
       }
       setValue(`${currentTabContent?.id}_fillword`, '')
       if (data.qType === QUESTION_TYPES.ESSAY) {
-        refEditor?.current?.reset()
+        // refEditor?.current?.reset()
         setTabs((prev: any) => {
           const newData = prev.map((item: any) => {
             if (currentTabContent?.id === item.id) {
@@ -2584,6 +2585,86 @@ const TestDetail = () => {
       </div>
     )
   }
+  const isShowTemplate =
+    currentTabContent?.data?.answer_template ||
+    currentTabContent?.data?.requirements?.some(
+      (req: Requirement) => req?.answer_template,
+    )
+  const onResetFormatEssay = (key: string, value: string) => {
+    resetField(key, {
+      defaultValue: value,
+      keepDirty: false,
+      keepTouched: false,
+      keepError: false,
+    }) // reset riêng field đó
+    setValue(key, value, {
+      shouldDirty: false,
+      shouldTouch: false,
+      shouldValidate: true,
+    }) // cập nhật lại giá trị
+    reset()
+  }
+
+  const getTemplateValueForWord = () => {
+    const requirement =
+      currentTabContent?.data?.requirements?.[essayData?.index]
+    if (requirement?.short_answer) {
+      return requirement.short_answer
+    }
+    if (requirement?.answer_text) {
+      return requirement.answer_text
+    }
+    if (requirement?.answer_template) {
+      return requirement.answer_template
+    }
+    if (currentTabContent.answer) {
+      return currentTabContent.answer
+    }
+    return currentTabContent?.data?.answer_template
+  }
+
+  const getTemplateValueForSheet = () => {
+    const requirementSheet =
+      currentTabContent?.data?.requirements?.[essayData?.index]
+    if (requirementSheet?.answer_text) {
+      return requirementSheet.answer_text
+    }
+    if (requirementSheet?.short_answer) {
+      return requirementSheet.short_answer
+    }
+    if (requirementSheet?.answer_template) {
+      return requirementSheet.answer_template || defaultSheetData
+    }
+    if (currentTabContent.answer) {
+      return currentTabContent.answer
+    }
+    return currentTabContent?.data?.answer_template || defaultSheetData
+  }
+  const onResetAnswerEssayToTemplate = () => {
+    const key = `${currentTabContent?.id}_${essayData?.index}_answer`
+    const response_option = currentTabContent?.data?.response_option
+
+    switch (response_option) {
+      case RESPONSE_OPTION.WORD:
+        const templateValueWord = getTemplateValueForWord()
+        // Reset form value
+        onResetFormatEssay(key, templateValueWord)
+        // Reset component con
+        if (refEditor?.current?.reset) {
+          refEditor.current.reset()
+        }
+        break
+      case RESPONSE_OPTION.SHEET:
+        const templateValue = getTemplateValueForSheet()
+        // Reset form value
+        onResetFormatEssay(key, templateValue)
+        // Reset component con
+        if (refEditor?.current?.clear) {
+          refEditor.current.clear(templateValue)
+        }
+        break
+    }
+  }
 
   return (
     <Layout
@@ -2605,7 +2686,16 @@ const TestDetail = () => {
           setOpenQuit={setOpenQuit}
           setSubmitEventTest={setSubmitEventTest}
           type={type}
-          onSubmitAnswer={handleSubmitAnswer}
+          onSubmitAnswer={async (mode) => {
+            const savedAnswer = await handleSaveCurrentAnswer(
+              tabs,
+              currentTabContent,
+            )
+            setTabs(savedAnswer)
+            setTimeout(() => {
+              handleSubmitAnswer(mode)
+            }, 100)
+          }}
           handleTimeoutSubmit={async () => {
             if (!openLimit) {
               if (!submited && !quizAttempt?.is_submitted) {
@@ -3296,6 +3386,19 @@ const TestDetail = () => {
               />
             )}
           </div>
+          {currentTabContent &&
+            currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+            isShowTemplate && (
+              <ShowAnswerTemplate
+                {...{
+                  currentTabContent,
+                  essayData,
+                  control,
+                  setValue,
+                  getValues,
+                }}
+              />
+            )}
         </TestWrapper>
       </CourseProvider>
       {exhibitData && exhibitData?.length > 0 && (

@@ -1,11 +1,16 @@
 import SappTable from '@components/base/SappTable'
 import { convertSecondsToMinutesSeconds, roundNumber } from '@utils/helpers'
-import { removeHtmlTags, truncateString } from '@utils/index'
+import {
+  convertSlugToTitle,
+  handleReplaceText,
+  removeHtmlTags,
+  truncateString,
+} from '@utils/index'
 
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
-import _ from 'lodash'
+import _, { isEmpty } from 'lodash'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -22,8 +27,9 @@ import { IAnswer, IQuizAttemptChartType } from 'src/type'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'
+import ListScoreCollapse from '@components/quiz/your-answer-detail/ListScoreCollapse'
 
-const commonHeaderClass = 'text-left p-0 text-sm text-[#A1A1A1] font-semibold'
+const commonHeaderClass = 'text-left p-0 text-base font-medium text-gray'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -32,6 +38,7 @@ interface ScoreDetailProps {
   yourScoreDetailRef?: React.RefObject<HTMLDivElement>
   type: IQuizAttemptChartType
   gradingStatus?: string
+  isTeacher?: boolean
 }
 
 const TableQuestions = ({
@@ -39,9 +46,9 @@ const TableQuestions = ({
   type,
   gradingStatus,
   yourScoreDetailRef,
+  isTeacher,
 }: ScoreDetailProps) => {
   const router = useRouter()
-
   const headers = [
     {
       label: '#',
@@ -53,19 +60,19 @@ const TableQuestions = ({
     },
     {
       label: 'Section',
-      className: clsx(commonHeaderClass, 'min-w-[180px]'),
+      className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
     },
     {
       label: 'Type',
-      className: clsx(commonHeaderClass, 'min-w-[150px]'),
+      className: clsx(commonHeaderClass, 'min-w-[100px] text-center'),
     },
     {
       label: 'Result',
-      className: clsx(commonHeaderClass),
+      className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
     },
     {
       label: 'Time Spent',
-      className: clsx(commonHeaderClass, ' min-w-20 !pr-0 text-center'),
+      className: clsx(commonHeaderClass, 'min-w-[100px] !pr-0 text-center'),
     },
   ]
 
@@ -154,18 +161,68 @@ const TableQuestions = ({
 
   // Flatten pages into a single array
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
+  const onShowDetail = (id: string) => {
+    router.push(
+      `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${id}?title=Your Answers Detail&type=quiz`,
+    )
+  }
+  const renderResult = (answer: IAnswer) => {
+    if (isEmpty(answer)) return '-'
+    return (
+      <>
+        {answer?.question?.qType !== 'ESSAY' ? (
+          <div
+            className={clsx(
+              `rounded-[4px] px-2 py-0.5 text-xs font-normal leading-5.5 md:text-sm`,
+              answer?.is_correct && 'bg-green-7 text-green-6',
+              !answer?.is_correct && 'bg-error-50 text-error',
+            )}
+          >
+            {answer?.is_correct ? 'Correct' : 'Incorrect'}
+          </div>
+        ) : (
+          <div
+            className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
+          >
+            {gradingStatus === GRADE_STATUS.FINISHED_GRADING
+              ? 'Graded'
+              : answer?.active === 'SUBMITED'
+                ? 'Completed'
+                : 'Not Completed'}
+          </div>
+        )}
+
+        {answer?.question?.qType !== 'ESSAY' && (
+          <>
+            <div className="mx-3 text-gray-300">|</div>
+            <div className="flex items-center justify-start gap-1 text-sm text-gray-800 md:text-base">
+              <Image
+                src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                alt="Correct"
+                className="mr-1 text-success-600"
+                width={16}
+                height={16}
+                layout="fixed"
+              />
+              {roundNumber(answer?.question?.question_report?.ratio || 0)}%
+            </div>
+          </>
+        )}
+      </>
+    )
+  }
 
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit min-h-[237px] bg-white px-5 py-4 shadow-sidebar md:px-11 md:py-6 2xl:px-24 ${className}`}
+      className={`!h-fit md:min-h-[237px] md:px-11 md:py-6 md:shadow-sidebar 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="flex items-center gap-x-3">
-        <div className="mb-6 text-lg font-semibold text-[#050505] xl:text-xl xl:font-medium">
+      <div className="items-center gap-x-3">
+        <div className="mb-6 text-base font-semibold text-[#050505] md:text-lg xl:text-xl xl:font-medium">
           Your Answer Details{' '}
-          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-base text-[#FFB800]">
+          <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-sm text-[#FFB800] md:text-base">
             Awaiting Grading
           </span>
         </div>
@@ -174,16 +231,19 @@ const TableQuestions = ({
         )}
       </div>
       <div
-        className="absolute right-6 top-4 ml-auto cursor-pointer"
+        className="absolute right-0 top-0 ml-auto cursor-pointer md:right-6 md:top-4"
         onClick={() => {
           router.push(
-            localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES,
+            isTeacher
+              ? (localStorage.getItem('previousCourseUrl') ??
+                  PageLink.TEACHER_MY_COURSE)
+              : (localStorage.getItem('previousCourseUrl') ?? PageLink.COURSES),
           )
         }}
       >
         <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
-      <div className="block pl-4">
+      <div className="hidden rounded-xl bg-white p-8 md:block">
         <SappTable
           headers={headers}
           loading={isLoading}
@@ -193,29 +253,31 @@ const TableQuestions = ({
           classTable="w-full"
         >
           {allData?.map((answer, index) => {
+            const description = handleReplaceText(
+              answer?.question?.question_content ?? '--',
+            )
+            const content = convertSlugToTitle(description)
             return (
               <React.Fragment key={answer?.id}>
                 <tr key={answer?.id}>
-                  <td className="sapp-border p-0 pr-3 font-semibold text-[#A1A1A1]">
+                  <td className="sapp-border p-0 pr-3 text-base text-gray-800">
                     {index + 1}
                   </td>
 
                   {/* Question */}
-                  <td className="sapp-border p-0 pr-4">
+                  <td className="p-0 pr-4 text-base text-gray-800">
                     <Tooltip
                       placement="topLeft"
                       title={
                         <div
                           dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              answer?.question?.question_content ?? '--',
-                            ),
+                            __html: content,
                           }}
                         />
                       }
                     >
                       <div
-                        className={`line-clamp-1 cursor-pointer text-[#050505] hover:font-semibold`}
+                        className={`line-clamp-1 cursor-pointer text-base text-gray-800 hover:font-semibold`}
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             removeHtmlTags(
@@ -224,11 +286,7 @@ const TableQuestions = ({
                           ),
                         }}
                         onClick={() => {
-                          if (answer?.id) {
-                            router.push(
-                              `/explanation/${answer?.id}?title=Your Answers Detail&type=quiz`,
-                            )
-                          }
+                          if (answer?.id) onShowDetail(answer?.id)
                         }}
                       />
                     </Tooltip>
@@ -236,7 +294,7 @@ const TableQuestions = ({
 
                   {/* Section */}
                   <td
-                    className="sapp-border my-5 line-clamp-1 p-0 text-start text-[#050505]"
+                    className="sapp-border my-5 line-clamp-1 p-0 text-center text-base text-gray-800"
                     title={
                       answer?.question?.question_filter?.part?.name ?? '--'
                     }
@@ -254,7 +312,7 @@ const TableQuestions = ({
                   </td>
 
                   {/* Type */}
-                  <td className="sapp-border p-0 pr-4 text-[#050505]">
+                  <td className="sapp-border p-0 pr-4 text-center text-base text-gray-800">
                     <div className="min-w-[111px]">
                       {getTypeName(answer?.question?.qType)}
                     </div>
@@ -262,44 +320,14 @@ const TableQuestions = ({
 
                   {/* Result */}
                   <td
-                    className={`sapp-border flex justify-between gap-12 pr-4`}
+                    className={`sapp-border flex justify-center pr-4 text-base text-gray-800`}
                   >
-                    <div
-                      className={`${renderBoxesAndLineClass(getTypeName(answer?.question?.qType), answer)}`}
-                    >
-                      {answer?.question?.qType !== 'ESSAY' ? (
-                        <>{answer?.is_correct ? 'Correct' : 'Incorrect'}</>
-                      ) : (
-                        <>
-                          {gradingStatus === GRADE_STATUS.FINISHED_GRADING
-                            ? 'Graded'
-                            : answer?.active === 'SUBMITED'
-                              ? 'Completed'
-                              : 'Not Completed'}
-                        </>
-                      )}
-                    </div>
-                    {answer?.question?.qType !== 'ESSAY' && (
-                      <div className="ml-1 flex items-center justify-start gap-2 text-[#A1A1A1]">
-                        <Image
-                          src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                          alt="Correct"
-                          className="mr-1 text-success-600"
-                          width={16}
-                          height={16}
-                          layout="fixed"
-                        />
-                        {roundNumber(
-                          answer?.question?.question_report?.ratio || 0,
-                        )}
-                        %
-                      </div>
-                    )}
+                    {renderResult(answer as IAnswer)}
                   </td>
 
                   {/* Time Spent */}
                   <td className="sapp-border m-6 p-0">
-                    <div className="text-center">
+                    <div className="text-center text-base text-gray-800">
                       {(() => {
                         if (answer?.time_spent !== null) {
                           return convertSecondsToMinutesSeconds(
@@ -317,6 +345,12 @@ const TableQuestions = ({
           })}
         </SappTable>
       </div>
+      <ListScoreCollapse
+        data={allData}
+        onShowDetail={onShowDetail}
+        renderResult={renderResult}
+        getTypeName={getTypeName}
+      />
       <span ref={ref} />
     </div>
   )
