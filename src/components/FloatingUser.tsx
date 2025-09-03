@@ -17,7 +17,7 @@ const FloatingUser = ({ hubspotContactId }: FloatingUserProps) => {
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
-        zIndex: 9999,
+        zIndex: 1000,
       }}
     >
       <UserIcon />

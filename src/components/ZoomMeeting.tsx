@@ -8,6 +8,7 @@ import { getToken, toggleMeetingContainer } from '@/utils'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
+import SAPPLoading from './loading/SAPPLoading'
 
 export const ZoomMeeting = () => {
   const { isSDKLoaded, isJoining, isJoined, error, joinMeeting } = useZoomSDK()
@@ -28,7 +29,7 @@ export const ZoomMeeting = () => {
 
   const getZoomMeeting = async (token: string) => {
     const userInfoData = await ZoomApi.getZoomToken(token)
-    const signatureData = await ZoomApi.getZoomSignature(userInfoData.data.meeting_id)
+    const signatureData = await ZoomApi.getZoomSignature(userInfoData.data?.meeting_id || '')
 
     return {
       userInfo: userInfoData.data,
@@ -46,6 +47,12 @@ export const ZoomMeeting = () => {
 
         const decodedToken = decodeURIComponent(token)
         const meetingData = await getZoomMeeting(decodedToken)
+
+        if (!meetingData.userInfo || !meetingData.signature) {
+          router.replace(process.env.NEXT_PUBLIC_LMS_FE_URL || '/')
+          setIsLoadingMeetingData(false)
+          return
+        }
 
         const config: ZoomMeetingConfig = {
           userId: meetingData.userInfo.user_id,
@@ -86,11 +93,11 @@ export const ZoomMeeting = () => {
     await joinMeeting(meetingConfig)
   }
 
-  if (!token) {
-    return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
+  if (isLoadingMeetingData) {
+    return <SAPPLoading />
   }
 
-  if (!meetingConfig && !isLoadingMeetingData) {
+  if (!token || !meetingConfig) {
     return <p className="p-8 text-center text-gray-600">Không có thông tin cuộc họp</p>
   }
 

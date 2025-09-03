@@ -1,11 +1,4 @@
 export const ZOOM_CONFIG = {
-  // Default meeting configuration
-  DEFAULT_MEETING_NUMBER: '93218677601',
-  DEFAULT_PASSWORD: '733327',
-  DEFAULT_USER_NAME: 'VDD',
-  DEFAULT_USER_EMAIL: 'vdinhdung2001@gmail.com',
-  DEFAULT_LEAVE_URL: 'http://localhost:3000',
-
   // Meeting roles
   ROLES: {
     ATTENDEE: 0,
@@ -48,5 +41,3 @@ export const ZOOM_CONFIG = {
     MEETING_NUMBER_REQUIRED: 'Meeting number is required',
   } as const,
 } as const
-
-export type ZoomRole = (typeof ZOOM_CONFIG.ROLES)[keyof typeof ZOOM_CONFIG.ROLES]

@@ -1,6 +1,6 @@
 'use client'
 
-import SAPPLoadingGlobal from '@/components/loading/SAPPLoadingGlobal'
+import SAPPLoading from '@/components/loading/SAPPLoading'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -10,5 +10,5 @@ export default function Home() {
     router.push('/meeting')
   }, [])
 
-  return <SAPPLoadingGlobal loading={true} />
+  return <SAPPLoading />
 }
