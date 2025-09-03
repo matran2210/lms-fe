@@ -7,6 +7,7 @@ import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
 import { Modal } from 'antd'
+import SappLoading from 'src/common/SappLoading'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -37,17 +38,6 @@ const ModalExplanationPackage = ({
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
-  useEffect(() => {
-    if (quizAttemptsAnswerId) {
-      getActiveQuestion(quizAttemptsAnswerId)
-    }
-  }, [quizAttemptsAnswerId])
-
-  useEffect(() => {
-    if (!open) {
-      setActiveQuestion(undefined)
-    }
-  }, [open])
 
   const getActiveQuestion = async (id: string) => {
     setLoading(true)
@@ -130,6 +120,18 @@ const ModalExplanationPackage = ({
     } catch (error) {}
   }
 
+  useEffect(() => {
+    if (quizAttemptsAnswerId) {
+      getActiveQuestion(quizAttemptsAnswerId)
+    }
+  }, [quizAttemptsAnswerId])
+
+  useEffect(() => {
+    if (!open) {
+      setActiveQuestion(undefined)
+    }
+  }, [open])
+
   return (
     <Modal
       open={open}
@@ -156,12 +158,16 @@ const ModalExplanationPackage = ({
         </div>
         <div className="mx-auto">
           <div className="mx-auto">
-            <ExplanationPackageV2
-              getActiveQuestion={getActiveQuestion}
-              activeQuestion={activeQuestion}
-              document_id={document_id}
-              handleDownload={handleDownload}
-            />
+            {activeQuestion ? (
+              <ExplanationPackageV2
+                getActiveQuestion={getActiveQuestion}
+                activeQuestion={activeQuestion}
+                document_id={document_id}
+                handleDownload={handleDownload}
+              />
+            ) : (
+              <SappLoading />
+            )}
           </div>
         </div>
       </div>
