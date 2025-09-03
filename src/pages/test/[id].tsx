@@ -88,6 +88,7 @@ import {
   checkTypeAndRenderTitle,
   hasEditorValueFromHtml,
   isValuesEqual,
+  isWorkbookEmpty,
 } from '../../utils/helpers/quiz-test/helper'
 import { QuestionAPI } from '../api/question'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
@@ -97,7 +98,7 @@ import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
-import { defaultSheetData } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { download } from '@components/learning/activity/ActivityResource'
@@ -127,7 +128,7 @@ const TestDetail = () => {
   const { questions } = useGetQuestionTabs(router.query.id as string)
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, getValues, setValue, reset, resetField } = useForm()
+  const { control, watch, getValues, setValue, reset, resetField } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -136,7 +137,7 @@ const TestDetail = () => {
   const {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
-    watch,
+    watch: watchExhibits,
   } = useForm()
   const timeRef = useRef(null) as any
   const ref = useRef(null) as any
@@ -267,6 +268,7 @@ const TestDetail = () => {
       }
 
       setScratchPads(answerSubmitted?.scratch_pad || '')
+
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
@@ -364,7 +366,6 @@ const TestDetail = () => {
           objTab,
           answerSubmitted?.results,
         )
-
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
           : { ...objTab }
@@ -407,11 +408,13 @@ const TestDetail = () => {
                               ? req?.answer_file
                               : requirementData?.answer_file,
                           short_answer:
-                            req?.short_answer !== undefined
+                            req?.short_answer !== undefined &&
+                            req?.short_answer !== null
                               ? req?.short_answer
                               : requirementData?.short_answer,
                           answer_text:
-                            req?.answer_text !== undefined
+                            req?.answer_text !== undefined &&
+                            req?.answer_text !== null
                               ? req?.answer_text
                               : requirementData?.short_answer,
                         }
@@ -430,7 +433,8 @@ const TestDetail = () => {
                 // ...requirementAmswer,
                 // done: true,
                 answer:
-                  updatedObjTab?.answer !== undefined
+                  updatedObjTab?.answer !== undefined &&
+                  updatedObjTab?.answer !== null
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
 
@@ -710,71 +714,146 @@ const TestDetail = () => {
       setAnswerListValue(id as unknown as number)
     }
 
-    const essayRequirementsItem = (defaultValue: any): TabsProps['items'] => {
+    const essayRequirementsItem = (): TabsProps['items'] => {
       return (
-        currentTabContent?.data?.requirements?.map((_: any, index: number) => {
-          const hasAnswer =
-            currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-              ? checkSheetAnswered(getValues(`${currentTabID}_${index}_answer`))
-              : hasEditorValueFromHtml(
-                  getValues(`${currentTabID}_${index}_answer`),
-                )
-          return {
-            label: (
-              <span className="flex items-center gap-1 text-base font-normal">
-                Requirement {index + 1}
-                {hasAnswer && (
-                  <CheckCircleOutlineYellow className="text-primary" />
-                )}
-              </span>
-            ),
-            key: index,
-            children: (
-              <>
-                {editorReady && (
-                  <EssayQuestionPreview
-                    data={{
-                      ...currentTabContent?.data?.requirements?.[index],
-                      ...essayData?.req,
-                    }}
-                    question_content={currentTabContent?.data?.question_content}
-                    index={index}
-                    question_data={currentTabContent?.data}
-                    control={control}
-                    handleSaveHighLight={handleSaveHighLight}
-                    highlighted={highlighted}
-                    removeHighlight={removeHighlight}
-                    allowHighLight={allowHighLight}
-                    allowUnHighLight={allowUnHighLight}
-                    solution={solution}
-                    name={`${currentTabID}_${index}_answer`}
-                    setValue={setValue}
-                    defaultValue={defaultValue}
-                    response_option_custom={currentTabContent.response_type}
-                    externalRef={refEditor}
-                    fullData={currentTabContent}
-                    isShowContent={false}
-                    openChooseFile={() =>
-                      setOpenUpload({
-                        status: true,
-                        question_id: currentPage,
-                        requirementIndex: index,
-                      })
+        currentTabContent?.data?.requirements?.map(
+          (requirement: any, index: number) => {
+            const hasAnswer =
+              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+                ? checkSheetAnswered(
+                    getValues(`${currentTabID}_${index}_answer`),
+                  )
+                : hasEditorValueFromHtml(
+                    getValues(`${currentTabID}_${index}_answer`),
+                  )
+            const key = `${currentTabID}_${index}_answer`
+            const getDefaultValueEssay = () => {
+              const valueFromForm = getValues(key)
+              const response_option = currentTabContent?.data?.response_option
+              switch (response_option) {
+                case RESPONSE_OPTION.WORD:
+                  if (valueFromForm !== undefined && valueFromForm !== null) {
+                    return valueFromForm
+                  }
+
+                  if (requirement?.short_answer) {
+                    return requirement.short_answer
+                  }
+                  if (requirement?.answer_text) {
+                    return requirement.answer_text
+                  }
+                  if (requirement?.answer_template) {
+                    return requirement.answer_template
+                  }
+                  if (currentTabContent.answer) {
+                    return currentTabContent.answer
+                  }
+
+                  return currentTabContent?.data?.answer_template
+
+                case RESPONSE_OPTION.SHEET:
+                  const valueFromSheetForm = getValues(key)
+                  if (valueFromSheetForm) {
+                    const isEmptyWorkbook = isWorkbookEmpty(
+                      JSON.parse(valueFromSheetForm),
+                    )
+
+                    if (isEmptyWorkbook) {
+                      if (requirement?.short_answer) {
+                        return requirement.short_answer
+                      }
+                      if (requirement?.answer_text) {
+                        return requirement.answer_text
+                      }
+                      if (requirement?.answer_template) {
+                        return requirement.answer_template || defaultSheetData
+                      }
+                      if (currentTabContent.answer)
+                        return currentTabContent.answer
+                      return (
+                        currentTabContent?.data?.answer_template ||
+                        defaultSheetData
+                      )
                     }
-                    handleClearFile={handleClearFile}
-                    setOpenPdf={handleOpenScratchPad}
-                    handleSaveHighLightRequirement={
-                      handleSaveHighLightRequirement
-                    }
-                    showRequiment={showListRequirement}
-                    handleChange={handleEssayChange}
-                    explainClassname="!mt-8 !p-0 !bg-transparent"
-                  />
-                )}
-              </>
-            ),
-          }
-        }) ?? []
+                    return valueFromSheetForm
+                  }
+                  const requirementSheet =
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                  if (requirementSheet?.short_answer) {
+                    return requirementSheet.short_answer
+                  }
+                  if (requirementSheet?.answer_text) {
+                    return requirementSheet.answer_text
+                  }
+                  if (requirementSheet?.answer_template) {
+                    return requirementSheet.answer_template || defaultSheetData
+                  }
+                  if (currentTabContent.answer) return currentTabContent.answer
+                  return (
+                    currentTabContent?.data?.answer_template || defaultSheetData
+                  )
+                // return getCurrentDefaultSheetValue
+              }
+            }
+            return {
+              label: (
+                <span className="flex items-center gap-1 text-base font-normal">
+                  Requirement {index + 1}
+                  {hasAnswer && (
+                    <CheckCircleOutlineYellow className="text-primary" />
+                  )}
+                </span>
+              ),
+              key: index,
+              children: (
+                <>
+                  {editorReady && (
+                    <EssayQuestionPreview
+                      data={{
+                        ...currentTabContent?.data?.requirements?.[index],
+                        ...essayData?.req,
+                      }}
+                      question_content={
+                        currentTabContent?.data?.question_content
+                      }
+                      index={index}
+                      question_data={currentTabContent?.data}
+                      control={control}
+                      handleSaveHighLight={handleSaveHighLight}
+                      highlighted={highlighted}
+                      removeHighlight={removeHighlight}
+                      allowHighLight={allowHighLight}
+                      allowUnHighLight={allowUnHighLight}
+                      solution={solution}
+                      name={`${currentTabID}_${index}_answer`}
+                      setValue={setValue}
+                      defaultValue={getDefaultValueEssay()}
+                      response_option_custom={currentTabContent.response_type}
+                      externalRef={refEditor}
+                      fullData={currentTabContent}
+                      isShowContent={false}
+                      openChooseFile={() =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: currentPage,
+                          requirementIndex: index,
+                        })
+                      }
+                      handleClearFile={handleClearFile}
+                      setOpenPdf={handleOpenScratchPad}
+                      handleSaveHighLightRequirement={
+                        handleSaveHighLightRequirement
+                      }
+                      showRequiment={showListRequirement}
+                      handleChange={handleEssayChange}
+                      explainClassname="!mt-8 !p-0 !bg-transparent"
+                    />
+                  )}
+                </>
+              ),
+            }
+          },
+        ) ?? []
       )
     }
 
@@ -910,26 +989,76 @@ const TestDetail = () => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        const key = `${currentTabID}_${essayData?.index}_answer`
         const defaultValueEssay = () => {
-          const key = `${currentTabID}_${essayData?.index}_answer`
           const valueFromForm = getValues(key)
+          const response_option = currentTabContent?.data?.response_option
+          switch (response_option) {
+            case RESPONSE_OPTION.WORD:
+              if (valueFromForm !== undefined && valueFromForm !== null) {
+                return valueFromForm
+              }
+              const requirement =
+                currentTabContent?.data?.requirements?.[essayData?.index]
 
-          if (valueFromForm) {
-            return valueFromForm
+              if (requirement?.short_answer) {
+                return requirement.short_answer
+              }
+              if (requirement?.answer_text) {
+                return requirement.answer_text
+              }
+              if (requirement?.answer_template) {
+                return requirement.answer_template
+              }
+              if (currentTabContent.answer) {
+                return currentTabContent.answer
+              }
+
+              return currentTabContent?.data?.answer_template
+
+            case RESPONSE_OPTION.SHEET:
+              const valueFromSheetForm = getValues(key)
+              if (valueFromSheetForm) {
+                const isEmptyWorkbook = isWorkbookEmpty(
+                  JSON.parse(valueFromSheetForm),
+                )
+
+                if (isEmptyWorkbook) {
+                  const requirement =
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                  if (requirement?.short_answer) {
+                    return requirement.short_answer
+                  }
+                  if (requirement?.answer_text) {
+                    return requirement.answer_text
+                  }
+                  if (requirement?.answer_template) {
+                    return requirement.answer_template || defaultSheetData
+                  }
+                  if (currentTabContent.answer) return currentTabContent.answer
+                  return (
+                    currentTabContent?.data?.answer_template || defaultSheetData
+                  )
+                }
+                return valueFromSheetForm
+              }
+              const requirementSheet =
+                currentTabContent?.data?.requirements?.[essayData?.index]
+              if (requirementSheet?.short_answer) {
+                return requirementSheet.short_answer
+              }
+              if (requirementSheet?.answer_text) {
+                return requirementSheet.answer_text
+              }
+              if (requirementSheet?.answer_template) {
+                return requirementSheet.answer_template || defaultSheetData
+              }
+              if (currentTabContent.answer) return currentTabContent.answer
+              return (
+                currentTabContent?.data?.answer_template || defaultSheetData
+              )
+            // return getCurrentDefaultSheetValue
           }
-
-          const requirement =
-            currentTabContent?.data?.requirements?.[essayData?.index]
-
-          if (requirement?.short_answer) {
-            return requirement.short_answer
-          }
-
-          if (requirement?.answer_text) {
-            return requirement.answer_text
-          }
-
-          return currentTabContent.answer
         }
 
         return (
@@ -942,7 +1071,7 @@ const TestDetail = () => {
             {currentTabContent?.data?.requirements?.length > 0 ? (
               <RequirementsTab
                 destroyInactiveTabPane={true}
-                items={essayRequirementsItem(defaultValueEssay())}
+                items={essayRequirementsItem()}
                 activeKey={essayData?.index ?? '0'}
                 defaultActiveKey="1"
                 onChange={(key) => {
@@ -970,7 +1099,7 @@ const TestDetail = () => {
                 allowHighLight={allowHighLight}
                 allowUnHighLight={allowUnHighLight}
                 solution={solution}
-                name={`${currentTabID}_${essayData?.index}_answer`}
+                name={key}
                 setValue={setValue}
                 defaultValue={defaultValueEssay()}
                 response_option_custom={currentTabContent.response_type}
@@ -1395,7 +1524,15 @@ const TestDetail = () => {
     setStartTime(Date.now())
     await refEditor?.current?.reset()
     await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
-
+    if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+      await refEditor?.current?.reset()
+      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+    } else if (
+      refEditor?.current?.resetSheet &&
+      currentContent?.qType === QUESTION_TYPES.ESSAY
+    ) {
+      refEditor?.current?.resetSheet()
+    }
     const doAfterSetState = () => {
       setEditorReady(false) // Ẩn trước
       setTimeout(() => {
@@ -2206,20 +2343,20 @@ const TestDetail = () => {
   }, [mousePosition.x, startResize, currentLeftWidth, currentMousePos])
 
   useEffect(() => {
-    if (watch('exhibits')) {
+    if (watchExhibits('exhibits')) {
       setOpenScratchPad((prev) => {
         let arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (let e of watchExhibits('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
       })
     }
-  }, [watch('exhibits')])
+  }, [watchExhibits('exhibits')])
 
   useEffect(() => {
     if (quizAttempt?.id) {
@@ -2602,7 +2739,7 @@ const TestDetail = () => {
       shouldTouch: false,
       shouldValidate: true,
     }) // cập nhật lại giá trị
-    reset()
+    // reset()
   }
 
   const getTemplateValueForWord = () => {
@@ -2820,6 +2957,61 @@ const TestDetail = () => {
                                 }`}
                                 onClick={() => {
                                   setEssayData({ req: e, index: index })
+                                    if (refEditor?.current && isEssayWord) {
+            const name = `${currentTabContent?.id}_${indexReq}_answer`
+            const valueFromFormReq = watch(name)
+
+            const getDefaultWordValue = () => {
+              if (!isEssayWord) return
+              if (valueFromFormReq !== undefined) {
+                return valueFromFormReq
+              }
+              const requirement =
+                currentTabContent?.data?.requirements?.[
+                  indexReq
+                ]
+
+              if (
+                requirement?.short_answer !== undefined
+              ) {
+                return (
+                  requirement.short_answer ||
+                  DEFAULT_EDITOR_VALUE
+                )
+              }
+              if (
+                requirement?.answer_text !== undefined
+              ) {
+                return (
+                  requirement.answer_text ||
+                  DEFAULT_EDITOR_VALUE
+                )
+              }
+              // if (requirement?.answer_template !== undefined) {
+              //   return requirement.answer_template || DEFAULT_EDITOR_VALUE
+              // }
+              // if (
+              //   currentTabContent?.answer !== undefined
+              // )
+              return currentTabContent.answer
+              // return currentTabContent?.data?.answer_template || DEFAULT_EDITOR_VALUE
+              // return DEFAULT_EDITOR_VALUE
+            }
+            // resetField(name, getCurrentDefaultWordValue)
+
+            onResetFormatEssay(
+              name,
+              getDefaultWordValue(),
+            )
+            refEditor.current.reset(
+              getDefaultWordValue(),
+            )
+          } else if (
+            refEditor?.current?.resetSheet &&
+            isEssaySheet
+          ) {
+            refEditor.current.resetSheet()
+          }
                                   rightSideRef?.current &&
                                     rightSideRef.current.scrollTo({
                                       top: 0,

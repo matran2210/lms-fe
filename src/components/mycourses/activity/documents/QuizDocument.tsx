@@ -1,33 +1,35 @@
 /* eslint-disable no-console */
 import { useEffect, useRef, useState } from 'react'
-import SappIcon from 'src/common/SappIcon'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
+  confirmQuestion,
   courseActivityQuizReducer,
   fetchQuestionById,
   removeQuizFinished,
   saveAnswer,
   selectQuestions,
   submitQuiz,
-  confirmQuestion,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import {
   CircleArrowLeftIcon,
   CircleArrowRightIcon,
-  CloseIcon,
   ConfirmIcon,
   MaximumContentIcon,
   MinimumContentIcon,
 } from '@assets/icons'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import SappButton from '@components/base/button/SappButton'
-import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
+import { Tooltip } from 'antd'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
   ANIMATION,
@@ -36,6 +38,7 @@ import {
   GRADING_METHOD,
   PageLink,
   QUESTION_TYPES,
+  RESPONSE_OPTION,
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
@@ -48,13 +51,8 @@ import {
 import { IQuestion } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { Tooltip } from 'antd'
-import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import ModalResults from '../ModalResults'
-import { useForm } from 'react-hook-form'
-import clsx from 'clsx'
-import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -168,6 +166,7 @@ const QuizDocument = ({
     reset,
     getValues,
     watch,
+    resetField,
   } = useForm({})
 
   // Compute whether user still has attempts left
@@ -271,6 +270,17 @@ const QuizDocument = ({
   }
 
   const handleNextQuestion = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      getValues(name) ?? activeQuestion?.myAnswers?.[0]?.short_answer
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
       handleSaveAnswer()
@@ -278,18 +288,34 @@ const QuizDocument = ({
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
         try {
-          await dispatch(
+          const nextQuestion = await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
             }),
-          )
+          ).unwrap()
           setStartWorkTime(Date.now())
+          const nextQuestionContent = nextQuestion?.question
+          const name = `${nextQuestionContent?.id}_${nextQuestionContent?.requirements?.length ? nextQuestionContent?.requirements?.[0]?.id : document_id}_essay`
+          const defaultValue =
+            getValues(name) ?? nextQuestionContent?.myAnswers?.[0]?.short_answer
+
+          if (nextQuestionContent?.response_option === RESPONSE_OPTION.SHEET) {
+            await questionRef.current?.onResetSheet(
+              nextQuestionContent?.response_option,
+            )
+          } else {
+            await questionRef.current?.onResetWord(
+              name,
+              nextQuestionContent?.response_option as RESPONSE_OPTION,
+              defaultValue,
+            )
+          }
         } catch (error) {}
       }
-      // questionRef?.current?.reset()
+      // // questionRef?.current?.reset()
     }
   }
 
@@ -309,6 +335,18 @@ const QuizDocument = ({
   const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
 
   const handleQuizFinish = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      getValues(name) ?? activeQuestion?.myAnswers?.[0]?.short_answer
+    if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
+    } else {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     setActiveQuestionIndex(activeQuestionIndex + 1)
     setIsFinishQuiz(true)
     handleSaveAnswer()
@@ -340,6 +378,17 @@ const QuizDocument = ({
   }
 
   const handlePrevQuestion = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      getValues(name) ?? activeQuestion?.myAnswers?.[0]?.short_answer
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
       handleSaveAnswer()
@@ -347,23 +396,45 @@ const QuizDocument = ({
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
-          await dispatch(
+          const prevQuestion = await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: prevQuestionId || '',
             }),
-          )
+          ).unwrap()
           setStartWorkTime(Date.now())
+          const preQuestionContent = prevQuestion?.question
+
+          const name = `${preQuestionContent?.id}_${preQuestionContent?.requirements?.length ? preQuestionContent?.requirements?.[0]?.id : document_id}_essay`
+          const defaultValue = preQuestionContent?.myAnswers?.[0]?.short_answer
+          if (
+            preQuestionContent &&
+            preQuestionContent?.response_option === RESPONSE_OPTION.WORD
+          ) {
+            questionRef.current?.onResetWord(
+              name,
+              preQuestionContent?.response_option,
+              defaultValue,
+            )
+          } else if (
+            preQuestionContent &&
+            preQuestionContent?.response_option === RESPONSE_OPTION.SHEET
+          ) {
+            questionRef.current?.onResetSheet(
+              preQuestionContent?.response_option,
+            )
+          }
         } catch (error) {}
       }
 
       // questionRef.current?.reset()
     }
+    // questionRef.current?.reset()
   }
 
-  const handleConfirmQuestion = () => {
+  const handleConfirmQuestion = async () => {
     setLoading(true)
     if (activeQuestion) {
       questionRef?.current?.onSubmit({
@@ -921,6 +992,7 @@ const QuizDocument = ({
                   reset,
                   getValues,
                   watch,
+                  resetField,
                 }}
               />
             )}

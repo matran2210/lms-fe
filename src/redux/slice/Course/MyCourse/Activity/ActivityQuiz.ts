@@ -109,6 +109,7 @@ const fetchQuestionById = createAsyncThunk(
           question: {
             ...response.data,
             time_spent: 0,
+            myAnswers: [],
             quiz_position_mapping: [
               {
                 question_id: questionId,

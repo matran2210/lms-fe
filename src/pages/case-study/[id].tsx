@@ -27,7 +27,7 @@ import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
@@ -37,6 +37,7 @@ import {
   EXHIBIT_TEXT_REPLACE,
   PROGRAM,
   QUESTION_TYPES,
+  RESPONSE_OPTION,
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -57,9 +58,11 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 const CaseStudyDetail = ({ questions }: any) => {
+  const editorRefs = useRef<any[]>([])
+
   const checkType = (
     e: any,
-    index: number | string,
+    index: number,
     data: any,
     type: string,
     currentTabID: string,
@@ -202,6 +205,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           />
         )
       case QUESTION_TYPES.ESSAY:
+        if (!editorRefs.current[index]) {
+          editorRefs.current[index] = React.createRef()
+        }
         return (
           <EssayQuestionPreview
             data={requirement}
@@ -242,6 +248,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               requirement?.requirementIndex === 0 ||
               data.requirements.length === 0
             }
+            externalRef={editorRefs.current[index]}
           />
         )
       default:
@@ -251,7 +258,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const router = useRouter()
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
-  const { control, handleSubmit, getValues, setValue } = useForm()
+  const { control, handleSubmit, getValues, setValue, resetField } = useForm()
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
@@ -282,6 +289,31 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
   const MatchQuizRef = useRef(null) as any
+
+  const handleResetEssay = async (
+    index: number,
+    activeQuestion: any,
+    defaultValue?: string,
+  ) => {
+    const essayRef = editorRefs.current[index]?.current
+
+    if (!essayRef) return
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      essayRef.reset?.(defaultValue)
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+      essayRef.resetSheet?.()
+    }
+  }
+
+  const resetEssayBeforeAction = () => {
+    questionData?.forEach((question: any, index: number) => {
+      const name = `${index}_answer`
+      const defaultValue = getValues(name)
+      handleResetEssay(index, question, defaultValue)
+    })
+  }
 
   /**
    * LIST DANH SÁCH CÁC CÂU CHƯA LÀM
@@ -895,6 +927,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     })
     return data
   }, [listQuestions])
+  editorRefs.current = new Array(questionData?.length || 0).fill(null)
 
   return (
     <SappLoadingGlobal loading={loading}>
@@ -922,6 +955,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               <SappButton
                 title="Quit"
                 onClick={() => {
+                  resetEssayBeforeAction()
                   setOpenQuit(true)
                   setUnsavedChanges(false)
                 }}
@@ -1339,6 +1373,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                   className={`bg-slate-200 mr-2 h-full py-3`}
                   title="View Answer"
                   onClick={() => {
+                    resetEssayBeforeAction()
                     setOpenScratchPad([])
                     if (checkUnSubmitAnswer().length) {
                       setUnSubmitAnswer(true)
