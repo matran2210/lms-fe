@@ -8,4 +8,5 @@ export interface IEssayAnswer {
   requirement_id: string
   response_option: string
   short_answer?: string
+  answer_template?: string
 }

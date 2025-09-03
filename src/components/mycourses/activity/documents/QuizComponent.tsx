@@ -1,3 +1,4 @@
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
@@ -7,6 +8,7 @@ import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { isEmpty, isUndefined } from 'lodash'
 import React, {
@@ -20,9 +22,11 @@ import React, {
   useState,
 } from 'react'
 import {
+  Control,
   FieldValues,
   UseFormGetValues,
   UseFormReset,
+  UseFormSetValue,
   UseFormWatch,
   useForm,
 } from 'react-hook-form'
@@ -39,7 +43,7 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 
 import { IEssayAnswer } from 'src/type/answer'
-import { IFile } from 'src/type/course'
+import { IFile, IRequirment } from 'src/type/course'
 import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -90,6 +94,12 @@ export type QuizComponentRef = {
     response_option: RESPONSE_OPTION,
     defaultValue?: string | undefined,
   ) => Promise<void>
+  getEssayData: () =>
+    | {
+        req?: IRequirement
+        index?: number
+      }
+    | undefined
 }
 
 type Props = {
@@ -158,7 +168,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const [essayData, setEssayData] = useState<{
       req?: IRequirement
       index?: number
-    }>()
+    }>({
+      req: undefined,
+      index: 0,
+    })
 
     useClickOutside({
       ref: listRequirementRef,
@@ -220,20 +233,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       }
     }
 
-    const onResetFormatEssay = (key: string, value: string) => {
-      resetField(key, {
-        defaultValue: value,
-        keepDirty: false,
-        keepTouched: false,
-        keepError: false,
-      }) // reset riêng field đó
-      setValue(key, value, {
-        shouldDirty: false,
-        shouldTouch: false,
-        shouldValidate: true,
-      }) // cập nhật lại giá trị
-      // reset()
-    }
     const handleShowRequirement = async (data: {
       description: string
       index: number
@@ -344,6 +343,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues: getValues,
       onResetFormatEssay: onResetFormatEssay,
       onResetWordOnly: onResetWordOnly,
+      getEssayData: () => essayData,
     }))
 
     const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
@@ -630,35 +630,50 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           const getDefaultValue = () => {
             switch (activeQuestion?.response_option) {
               case RESPONSE_OPTION.WORD:
+                const answer = activeQuestion?.myAnswers?.find(
+                  (ans: IEssayAnswer) => {
+                    if (
+                      ans.requirement_id ===
+                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
+                    ) {
+                      return ans
+                    }
+                  },
+                )
+
+                const requirement =
+                  activeQuestion?.requirements?.[essayData?.index ?? 0]
                 return (
                   watch(
                     `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
                   ) ??
-                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                  answer?.short_answer ??
+                  requirement?.answer_template ??
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  activeQuestion?.answer_template
+                )
+                break
+              case RESPONSE_OPTION.SHEET:
+                const answerSheet = activeQuestion?.myAnswers?.find(
+                  (ans: IEssayAnswer) => {
                     if (
                       ans.requirement_id ===
                       activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
                     ) {
                       return ans
                     }
-                  })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer
+                  },
                 )
-                break
-              case RESPONSE_OPTION.SHEET:
+                const requirementSheet =
+                  activeQuestion?.requirements?.[essayData?.index ?? 0]
                 return (
                   // getValues(
                   //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
                   // ) ??
-                  activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
-                    if (
-                      ans.requirement_id ===
-                      activeQuestion?.requirements?.[essayData?.index ?? 0]?.id
-                    ) {
-                      return ans
-                    }
-                  })?.short_answer ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer
+                  answerSheet?.short_answer ??
+                  requirementSheet?.answer_template ??
+                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  activeQuestion?.answer_template
                 )
                 break
             }
@@ -867,6 +882,88 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
       setExhibitData(exhibitOption)
     }
+
+    const isShowTemplate =
+      activeQuestion?.answer_template ||
+      activeQuestion?.requirements?.some(
+        (req: IRequirment) => req?.answer_template,
+      )
+    const onResetFormatEssay = (key: string, value: string) => {
+      resetField(key, {
+        defaultValue: value,
+        keepDirty: false,
+        keepTouched: false,
+        keepError: false,
+      }) // reset riêng field đó
+      setValue(key, value, {
+        shouldDirty: false,
+        shouldTouch: false,
+        shouldValidate: true,
+      }) // cập nhật lại giá trị
+      reset()
+    }
+
+    const getTemplateValueForWord = () => {
+      const requirement =
+        activeQuestion?.requirements?.[essayData?.index as number]
+      // if (requirement?.short_answer) {
+      //   return requirement.short_answer
+      // }
+      // if (requirement?.answer_text) {
+      //   return requirement.answer_text
+      // }
+      if (requirement?.answer_template) {
+        return requirement.answer_template
+      }
+      // if (currentTabContent.answer) {
+      //   return currentTabContent.answer
+      // }
+      return activeQuestion?.answer_template
+    }
+
+    const getTemplateValueForSheet = () => {
+      const requirementSheet =
+        activeQuestion?.requirements?.[essayData?.index as number]
+      // if (requirementSheet?.answer_text) {
+      //   return requirementSheet.answer_text
+      // }
+      // if (requirementSheet?.short_answer) {
+      //   return requirementSheet.short_answer
+      // }
+      if (requirementSheet?.answer_template) {
+        return requirementSheet.answer_template || defaultSheetData
+      }
+      // if (currentTabContent.answer) {
+      //   return currentTabContent.answer
+      // }
+      return activeQuestion?.answer_template || defaultSheetData
+    }
+    const onResetAnswerEssayToTemplate = () => {
+      const key = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`
+      const response_option = activeQuestion?.response_option
+
+      switch (response_option) {
+        case RESPONSE_OPTION.WORD:
+          const templateValueWord = getTemplateValueForWord()
+          // Reset form value
+          onResetFormatEssay(key, templateValueWord ?? DEFAULT_EDITOR_VALUE)
+          // Reset component con
+          if (refEditor?.current?.reset) {
+            refEditor.current.reset(templateValueWord)
+          }
+          break
+        case RESPONSE_OPTION.SHEET:
+          const templateValue = getTemplateValueForSheet()
+          // Reset form value
+          onResetFormatEssay(key, templateValue)
+          // Reset component con
+          if (refEditor?.current?.clear) {
+            refEditor.current.clear(templateValue)
+          }
+          break
+      }
+    }
+
     useEffect(() => {
       handleDefaultRequirement()
       handleGetExhibit()
@@ -917,6 +1014,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             </div>
           )}
           <React.Fragment>{renderQuestion()}</React.Fragment>
+          {activeQuestion &&
+            activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+            isShowTemplate && (
+              <div className="mt-8 flex justify-end">
+                <ButtonPrimaryV2
+                  title="Reset to Answer Template"
+                  onClick={onResetAnswerEssayToTemplate}
+                />
+              </div>
+            )}
         </div>
         {/* <div>
           {activeQuestion?.confirmed &&

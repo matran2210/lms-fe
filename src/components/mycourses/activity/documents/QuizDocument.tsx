@@ -26,12 +26,13 @@ import {
   GRADING_METHOD,
   PageLink,
   RESPONSE_OPTION,
+  QUESTION_TYPES,
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
-import { IQuestion } from 'src/type/course/Question'
+import { IQuestion, IRequirment } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
@@ -41,6 +42,7 @@ import {
 } from 'src/type/course/my-course/Activity'
 import { isNull } from 'lodash'
 import { useRouter } from 'next/router'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 
 type Props = {
   questions: IQuestion[]
@@ -691,6 +693,13 @@ const QuizDocument = ({
     refreshTab()
     setOpenGradedReport(false)
   }
+
+  const isShowTemplate =
+    activeQuestion?.answer_template ||
+    activeQuestion?.requirements?.some(
+      (req: IRequirment) => req?.answer_template,
+    )
+
   return (
     <div>
       <ConFirmSubmit
@@ -699,129 +708,144 @@ const QuizDocument = ({
         handleSubmit={handleFinishQuiz}
         handleCancel={handleCancelConfirmSubmit}
       />
-
-      <div
-        className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
-        data-aos={ANIMATION.DATA_AOS}
-      >
-        {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
-          <BluredNotification />
-        )}
-        {activeQuestion &&
-          ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
-            isNull(quizSetting)) && (
-            <QuizComponent
-              activityId={activityId}
-              tabId={tabId}
-              quizId={quizId}
-              showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
-              activeQuestion={activeQuestion}
-              ref={questionRef}
-              key={quizComponentKey}
-              document_id={document_id}
-              setOpenFile={setOpenFile}
-              grading_preference={grading_preference}
-              showQuestionContent={false}
-              isHideExhibit={false}
-              saveAnswer={handleSaveAnswer}
-              exhibitText={exhibitText}
-            />
+      <div className="relative">
+        <div
+          className={`text-black-1 h-[500px] select-none overflow-auto border border-gray-2 p-6 ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+            <BluredNotification />
           )}
-      </div>
-      <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
-        <div className="col-span-1 flex flex-wrap items-center gap-2">
-          <div
-            className={`${
-              is_graded || 'invisible'
-            } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
-          >
-            Graded Activity
-          </div>
-          {is_graded &&
-            grading_method === GRADING_METHOD.MANUAL &&
-            getGradedLabel(gradeStatus)}
+          {activeQuestion &&
+            ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+              isNull(quizSetting)) && (
+              <QuizComponent
+                activityId={activityId}
+                tabId={tabId}
+                quizId={quizId}
+                showCorrect={grading_preference === 'AFTER_EACH_QUESTION'}
+                activeQuestion={activeQuestion}
+                ref={questionRef}
+                key={quizComponentKey}
+                document_id={document_id}
+                setOpenFile={setOpenFile}
+                grading_preference={grading_preference}
+                showQuestionContent={false}
+                isHideExhibit={false}
+                saveAnswer={handleSaveAnswer}
+                exhibitText={exhibitText}
+              />
+            )}
         </div>
 
-        {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
-          isNull(quizSetting)) && (
-          <>
-            <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
-              <button
-                disabled={activeQuestionIndex === 0 || loading}
-                className={`cursor-pointer select-none ${
-                  activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
-                }`}
-                onClick={() => {
-                  if (loading) {
-                    return
-                  }
-                  handlePrevQuestion()
-                  trackGAEvent('Click Prev Question Quiz Activity')
-                }}
-              >
-                <SappIcon icon="arrow_left" />
-              </button>
-              Question: {activeQuestionIndex + 1} of {questions?.length || 0}
-              <button
-                disabled={isLastQuestion || loading}
-                className={`cursor-pointer select-none ${
-                  isLastQuestion || loading ? 'opacity-50' : ''
-                }`}
-                onClick={() => {
-                  if (loading) {
-                    return
-                  }
-                  handleNextQuestion()
-                  trackGAEvent('Click Next Question Quiz Activity')
-                }}
-              >
-                <SappIcon icon="arrow_right" />
-              </button>
+        <div className="grid min-h-[50px] grid-cols-3 items-center gap-3 bg-gray-3 px-6 py-2">
+          <div className="col-span-1 flex flex-wrap items-center gap-2">
+            <div
+              className={`${
+                is_graded || 'invisible'
+              } whitespace-nowrap   rounded bg-state-info bg-opacity-10 px-2 text-center  font-medium text-state-info`}
+            >
+              Graded Activity
             </div>
-            <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
-              {(isQuestionConfirmed ||
-                grading_preference !== 'AFTER_EACH_QUESTION' ||
-                (isQuestionConfirmed && isLastQuestion)) && (
-                <SappButton
-                  title={isLastQuestion ? 'Finish' : 'Next'}
-                  full={false}
-                  size={'small'}
+            {is_graded &&
+              grading_method === GRADING_METHOD.MANUAL &&
+              getGradedLabel(gradeStatus)}
+          </div>
+
+          {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+            isNull(quizSetting)) && (
+            <>
+              <div className="col-span-1 mx-auto flex w-fit items-center gap-3">
+                <button
+                  disabled={activeQuestionIndex === 0 || loading}
+                  className={`cursor-pointer select-none ${
+                    activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
+                  }`}
                   onClick={() => {
                     if (loading) {
                       return
                     }
-                    if (isLastQuestion) {
-                      handleQuizFinish()
-                      // handleSaveAnswer()
-                      setRunHandleFinishQuiz((e) => e + 1)
-                      trackGAEvent('Click Button Finish Quiz Activity')
-                    } else {
-                      handleNextQuestion()
-                      trackGAEvent('Click Button Next Quiz Activity')
-                    }
+                    handlePrevQuestion()
+                    trackGAEvent('Click Prev Question Quiz Activity')
                   }}
-                  color="primary"
-                  loading={loading}
-                />
-              )}
-              {!isQuestionConfirmed &&
-                grading_preference === 'AFTER_EACH_QUESTION' && (
+                >
+                  <SappIcon icon="arrow_left" />
+                </button>
+                Question: {activeQuestionIndex + 1} of {questions?.length || 0}
+                <button
+                  disabled={isLastQuestion || loading}
+                  className={`cursor-pointer select-none ${
+                    isLastQuestion || loading ? 'opacity-50' : ''
+                  }`}
+                  onClick={() => {
+                    if (loading) {
+                      return
+                    }
+                    handleNextQuestion()
+                    trackGAEvent('Click Next Question Quiz Activity')
+                  }}
+                >
+                  <SappIcon icon="arrow_right" />
+                </button>
+              </div>
+              <div className="col-span-1 flex flex-wrap items-center justify-end gap-2">
+                {(isQuestionConfirmed ||
+                  grading_preference !== 'AFTER_EACH_QUESTION' ||
+                  (isQuestionConfirmed && isLastQuestion)) && (
                   <SappButton
-                    title={getButttonTitle()}
+                    title={isLastQuestion ? 'Finish' : 'Next'}
                     full={false}
                     size={'small'}
-                    disabled={loading}
                     onClick={() => {
-                      handleSubmit()
+                      if (loading) {
+                        return
+                      }
+                      if (isLastQuestion) {
+                        handleQuizFinish()
+                        // handleSaveAnswer()
+                        setRunHandleFinishQuiz((e) => e + 1)
+                        trackGAEvent('Click Button Finish Quiz Activity')
+                      } else {
+                        handleNextQuestion()
+                        trackGAEvent('Click Button Next Quiz Activity')
+                      }
                     }}
                     color="primary"
                     loading={loading}
                   />
                 )}
-            </div>
-          </>
-        )}
+                {!isQuestionConfirmed &&
+                  grading_preference === 'AFTER_EACH_QUESTION' && (
+                    <SappButton
+                      title={getButttonTitle()}
+                      full={false}
+                      size={'small'}
+                      disabled={loading}
+                      onClick={() => {
+                        handleSubmit()
+                      }}
+                      color="primary"
+                      loading={loading}
+                    />
+                  )}
+              </div>
+            </>
+          )}
+        </div>
+        {activeQuestion &&
+          activeQuestion.qType === QUESTION_TYPES.ESSAY &&
+          isShowTemplate && (
+            <ShowAnswerTemplate
+              {...{
+                currentTabContent: activeQuestion,
+                essayData: questionRef.current?.getEssayData() as any,
+              }}
+              isQuiz
+              className="!right-4 z-[1]"
+            />
+          )}
       </div>
+
       <SappModal
         open={modalResult?.status}
         okButtonCaption={'Yes'}

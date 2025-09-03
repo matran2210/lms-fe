@@ -9,6 +9,7 @@ import { RESPONSE_OPTION } from 'src/constants'
 import {
   Control,
   FieldValues,
+  useForm,
   UseFormGetValues,
   UseFormSetValue,
 } from 'react-hook-form'
@@ -20,39 +21,35 @@ interface IProps {
     index: number
     req?: any
   }
-  control: Control<FieldValues, any>
-  setValue: UseFormSetValue<FieldValues>
-  getValues: UseFormGetValues<FieldValues>
+  isQuiz?: boolean
+  className?: string
 }
 const ShowAnswerTemplate = ({
   currentTabContent,
   essayData,
-  control,
-  setValue,
-  getValues,
+  isQuiz,
+  className,
 }: IProps) => {
+  const { control, setValue } = useForm()
   const [showModalTemplate, setShowModalTemplate] = useState(false)
 
-  const response_option = currentTabContent?.data?.response_option
+  const contentData = isQuiz ? currentTabContent : currentTabContent?.data
+  const response_option = contentData?.response_option
 
   const defaultValueEssay = () => {
     if (response_option === RESPONSE_OPTION.WORD) {
-      const requirement =
-        currentTabContent?.data?.requirements?.[essayData?.index]
-
+      const requirement = contentData?.requirements?.[essayData?.index]
       if (requirement?.answer_template) {
         return requirement.answer_template
       }
-
-      return currentTabContent?.data?.answer_template || ''
+      return contentData?.answer_template || ''
     } else if (response_option === RESPONSE_OPTION.SHEET) {
-      const requirement =
-        currentTabContent?.data?.requirements?.[essayData?.index]
+      const requirement = contentData?.requirements?.[essayData?.index]
 
       if (requirement?.answer_template) {
         return requirement.answer_template || defaultSheetData
       }
-      return currentTabContent?.data?.answer_template || defaultSheetData
+      return contentData?.answer_template || defaultSheetData
     }
   }
 
@@ -64,7 +61,12 @@ const ShowAnswerTemplate = ({
 
   return (
     <>
-      <div className="absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2">
+      <div
+        className={clsx(
+          'absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2',
+          className,
+        )}
+      >
         {true && (
           <Tooltip
             placement="left"
@@ -119,6 +121,7 @@ const ShowAnswerTemplate = ({
               </button>
             </div>
           }
+          isInBody
         >
           <div
             className={clsx('h-[100%-40px] bg-white ', {
@@ -131,7 +134,7 @@ const ShowAnswerTemplate = ({
               question_content={''}
               index={essayData?.index}
               question_data={{
-                ...currentTabContent?.data,
+                ...contentData,
                 assignment_type: 'TEXT',
               }}
               control={control}

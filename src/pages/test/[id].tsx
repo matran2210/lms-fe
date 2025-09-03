@@ -84,8 +84,6 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
-import { Popover, Tooltip } from 'antd'
-import clsx from 'clsx'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
@@ -2523,7 +2521,7 @@ const TestDetail = () => {
         onResetFormatEssay(key, templateValueWord)
         // Reset component con
         if (refEditor?.current?.reset) {
-          refEditor.current.reset()
+          refEditor.current.reset(templateValueWord)
         }
         break
       case RESPONSE_OPTION.SHEET:
@@ -3311,9 +3309,6 @@ const TestDetail = () => {
               {...{
                 currentTabContent,
                 essayData,
-                control,
-                setValue,
-                getValues,
               }}
             />
           )}
