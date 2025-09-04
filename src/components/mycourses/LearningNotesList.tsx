@@ -351,6 +351,17 @@ const LearningNotesList = () => {
     dispatch(pushNotes(note))
   }
 
+  const handleOpenNoteIfNeeded = (
+    id: string,
+    description: string,
+    index: number,
+  ) => {
+    if (!getNotesData.some((item) => item.id.includes(id))) {
+      handleEditNote(id, description, index)
+      onClose()
+    }
+  }
+
   return (
     <SappDrawer
       isOpen={notesListStatus}
@@ -511,20 +522,13 @@ const LearningNotesList = () => {
                         {activityId === note?.course_section_id ? (
                           <span
                             className="notes-list-icon"
-                            onClick={() => {
-                              if (
-                                !getNotesData.some((item) =>
-                                  item.id.includes(note?.id),
-                                )
-                              ) {
-                                handleEditNote(
-                                  note?.id,
-                                  note?.description,
-                                  index,
-                                )
-                                onClose()
-                              }
-                            }}
+                            onClick={() =>
+                              handleOpenNoteIfNeeded(
+                                note?.id,
+                                note?.description,
+                                index,
+                              )
+                            }
                           >
                             <EditIcon />
                           </span>
@@ -545,20 +549,13 @@ const LearningNotesList = () => {
                             >
                               <span
                                 className="notes-list-icon"
-                                onClick={() => {
-                                  if (
-                                    !getNotesData.some((item) =>
-                                      item.id.includes(note?.id),
-                                    )
-                                  ) {
-                                    handleEditNote(
-                                      note?.id,
-                                      note?.description,
-                                      index,
-                                    )
-                                    onClose()
-                                  }
-                                }}
+                                onClick={() =>
+                                  handleOpenNoteIfNeeded(
+                                    note?.id,
+                                    note?.description,
+                                    index,
+                                  )
+                                }
                               >
                                 <ViewIcon />
                               </span>
