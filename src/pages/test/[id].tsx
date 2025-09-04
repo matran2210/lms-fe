@@ -88,7 +88,7 @@ import { Popover, Tooltip } from 'antd'
 import clsx from 'clsx'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import { defaultSheetData } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 
 declare global {
   interface Window {
@@ -242,18 +242,19 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
-        const key = `${currentTabID}_${essayData?.index}_answer`
 
+        const key = `${currentTabID}_${essayData?.index}_answer`
         const defaultValueEssay = () => {
           const valueFromForm = getValues(key)
           const response_option = currentTabContent?.data?.response_option
           switch (response_option) {
             case RESPONSE_OPTION.WORD:
-              if (valueFromForm) {
+              if (valueFromForm !== undefined && valueFromForm !== null) {
                 return valueFromForm
               }
               const requirement =
                 currentTabContent?.data?.requirements?.[essayData?.index]
+
               if (requirement?.short_answer) {
                 return requirement.short_answer
               }
@@ -261,14 +262,19 @@ const TestDetail = () => {
                 return requirement.answer_text
               }
               if (requirement?.answer_template) {
-                return requirement.answer_template || ''
+                return requirement.answer_template
               }
-              if (currentTabContent.answer) return currentTabContent.answer
-              return currentTabContent?.data?.answer_template || ''
+              if (currentTabContent.answer) {
+                return currentTabContent.answer
+              }
+
+              return currentTabContent?.data?.answer_template
+
             case RESPONSE_OPTION.SHEET:
-              if (valueFromForm) {
+              const valueFromSheetForm = getValues(key)
+              if (valueFromSheetForm) {
                 const isEmptyWorkbook = isWorkbookEmpty(
-                  JSON.parse(valueFromForm),
+                  JSON.parse(valueFromSheetForm),
                 )
 
                 if (isEmptyWorkbook) {
@@ -288,7 +294,7 @@ const TestDetail = () => {
                     currentTabContent?.data?.answer_template || defaultSheetData
                   )
                 }
-                return valueFromForm
+                return valueFromSheetForm
               }
               const requirementSheet =
                 currentTabContent?.data?.requirements?.[essayData?.index]
@@ -305,6 +311,7 @@ const TestDetail = () => {
               return (
                 currentTabContent?.data?.answer_template || defaultSheetData
               )
+            // return getCurrentDefaultSheetValue
           }
         }
 
@@ -324,7 +331,7 @@ const TestDetail = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             solution={solution}
-            name={`${currentTabID}_${essayData?.index}_answer`}
+            name={key}
             setValue={setValue}
             defaultValue={defaultValueEssay()}
             response_option_custom={currentTabContent.response_type}
@@ -342,7 +349,6 @@ const TestDetail = () => {
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
             handleChange={handleEssayChange}
-            uniqueKey={key}
           />
           // <Luckysheet/>
         )
@@ -428,7 +434,7 @@ const TestDetail = () => {
 
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
-  const { control, getValues, setValue, reset, resetField } = useForm()
+  const { control, watch, getValues, setValue, reset, resetField } = useForm()
   const {
     control: controlFilter,
     watch: watchFilter,
@@ -437,7 +443,7 @@ const TestDetail = () => {
   const {
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
-    watch,
+    watch: watchExhibits,
   } = useForm()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -530,6 +536,7 @@ const TestDetail = () => {
       }
 
       setScratchPads(answerSubmitted?.scratch_pad || '')
+
       if (answerSubmitted) {
         const getCorrectAndSolution = (
           currentTabContent: any,
@@ -636,7 +643,6 @@ const TestDetail = () => {
           answerSubmitted?.results,
           answerSubmitted?.scratch_pad,
         )
-
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
           : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
@@ -679,11 +685,13 @@ const TestDetail = () => {
                               ? req?.answer_file
                               : requirementData?.answer_file,
                           short_answer:
-                            req?.short_answer !== undefined
+                            req?.short_answer !== undefined &&
+                            req?.short_answer !== null
                               ? req?.short_answer
                               : requirementData?.short_answer,
                           answer_text:
-                            req?.answer_text !== undefined
+                            req?.answer_text !== undefined &&
+                            req?.answer_text !== null
                               ? req?.answer_text
                               : requirementData?.short_answer,
                         }
@@ -702,7 +710,8 @@ const TestDetail = () => {
                 // ...requirementAmswer,
                 // done: true,
                 answer:
-                  updatedObjTab?.answer !== undefined
+                  updatedObjTab?.answer !== undefined &&
+                  updatedObjTab?.answer !== null
                     ? updatedObjTab?.answer
                     : answerSubmitted?.short_answer,
 
@@ -1153,6 +1162,19 @@ const TestDetail = () => {
   }
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
   const [trigger, setTrigger] = useState(false)
+  const isEssayWord = useMemo(() => {
+    return (
+      currentTabContent?.qType === QUESTION_TYPES.ESSAY &&
+      currentTabContent?.data?.response_option === RESPONSE_OPTION.WORD
+    )
+  }, [currentTabContent?.data?.response_option, currentTabContent?.qType])
+
+  const isEssaySheet = useMemo(() => {
+    return (
+      currentTabContent?.qType === QUESTION_TYPES.ESSAY &&
+      currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+    )
+  }, [currentTabContent?.data?.response_option, currentTabContent?.qType])
 
   const ref = useRef(null) as any
   const refEditor = useRef(null) as any
@@ -1340,8 +1362,16 @@ const TestDetail = () => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
-    await refEditor?.current?.reset()
-    await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
+    if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+      await refEditor?.current?.reset()
+      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+    } else if (
+      refEditor?.current?.resetSheet &&
+      currentContent?.qType === QUESTION_TYPES.ESSAY
+    ) {
+      refEditor?.current?.resetSheet()
+    }
 
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
@@ -2216,20 +2246,20 @@ const TestDetail = () => {
   }, [mousePosition.x, startResize, currentLeftWidth, currentMousePos])
 
   useEffect(() => {
-    if (watch('exhibits')) {
+    if (watchExhibits('exhibits')) {
       setOpenScratchPad((prev) => {
         let arr = [...prev]
         const newArr = arr.filter((e) => {
           return e.type !== 'exhibits'
         })
-        for (let e of watch('exhibits')) {
+        for (let e of watchExhibits('exhibits')) {
           setOnFocusingPad(e)
           newArr.push({ id: e, type: 'exhibits' })
         }
         return newArr
       })
     }
-  }, [watch('exhibits')])
+  }, [watchExhibits('exhibits')])
 
   useEffect(() => {
     if (quizAttempt?.id) {
@@ -2444,7 +2474,7 @@ const TestDetail = () => {
       shouldTouch: false,
       shouldValidate: true,
     }) // cập nhật lại giá trị
-    reset()
+    // reset()
   }
 
   const getTemplateValueForWord = () => {
@@ -2879,8 +2909,9 @@ const TestDetail = () => {
                             <button
                               key={e?.value}
                               className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
-                                !watch('exhibits')?.includes(e?.value) &&
-                                'text-gray-1'
+                                !watchExhibits('exhibits')?.includes(
+                                  e?.value,
+                                ) && 'text-gray-1'
                               }`}
                               onClick={() => handleOpenExhibit(e?.value)}
                             >{`${exhibitText} ${index + 1}`}</button>
@@ -2924,8 +2955,61 @@ const TestDetail = () => {
                                 if (e?.id !== essayData?.req?.id) {
                                   //chọn requirement khác thì mới set lại state
                                   setEssayData({ req: e, index: indexReq })
-                                  if (refEditor?.current) {
-                                    refEditor.current.reset()
+
+                                  if (refEditor?.current && isEssayWord) {
+                                    const name = `${currentTabContent?.id}_${indexReq}_answer`
+                                    const valueFromFormReq = watch(name)
+
+                                    const getDefaultWordValue = () => {
+                                      if (!isEssayWord) return
+                                      if (valueFromFormReq !== undefined) {
+                                        return valueFromFormReq
+                                      }
+                                      const requirement =
+                                        currentTabContent?.data?.requirements?.[
+                                          indexReq
+                                        ]
+
+                                      if (
+                                        requirement?.short_answer !== undefined
+                                      ) {
+                                        return (
+                                          requirement.short_answer ||
+                                          DEFAULT_EDITOR_VALUE
+                                        )
+                                      }
+                                      if (
+                                        requirement?.answer_text !== undefined
+                                      ) {
+                                        return (
+                                          requirement.answer_text ||
+                                          DEFAULT_EDITOR_VALUE
+                                        )
+                                      }
+                                      // if (requirement?.answer_template !== undefined) {
+                                      //   return requirement.answer_template || DEFAULT_EDITOR_VALUE
+                                      // }
+                                      // if (
+                                      //   currentTabContent?.answer !== undefined
+                                      // )
+                                      return currentTabContent.answer
+                                      // return currentTabContent?.data?.answer_template || DEFAULT_EDITOR_VALUE
+                                      // return DEFAULT_EDITOR_VALUE
+                                    }
+                                    // resetField(name, getCurrentDefaultWordValue)
+
+                                    onResetFormatEssay(
+                                      name,
+                                      getDefaultWordValue(),
+                                    )
+                                    refEditor.current.reset(
+                                      getDefaultWordValue(),
+                                    )
+                                  } else if (
+                                    refEditor?.current?.resetSheet &&
+                                    isEssaySheet
+                                  ) {
+                                    refEditor.current.resetSheet()
                                   }
                                 }
                                 rightSideRef?.current &&
@@ -2933,6 +3017,7 @@ const TestDetail = () => {
                                     top: 0,
                                     behavior: 'smooth',
                                   })
+                                setShowLisRequirement(false)
                               }}
                             >{`Requirement (${indexReq + 1})`}</button>
                           )
