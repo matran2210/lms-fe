@@ -45,7 +45,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   useEffect(() => {
     if (open) {
       setResetCountdown((prev) => !prev)
-      setTimeCountDown(1)
+      setTimeCountDown(5)
       setErrorMessage('')
     }
   }, [open])
@@ -54,13 +54,16 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
    * @description Handle countdown timeout
    */
   useEffect(() => {
+    if (time < timeCountDownResent && canResend === false) {
+      setCanResend(true)
+    }
+
     if (time <= 0) {
       setErrorMessage('OTP expired. Please generate a new OTP and try again!')
       setCanResend(true)
     }
-  }, [time])
+  }, [timeCountDown])
 
-  console.log('timeCountDown', timeCountDown)
   /**
    * @description Handling when entering code into the input cell
    */
@@ -131,10 +134,11 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     try {
       await AuthAPI.changeUserPassword(getValues('password'))
       setErrorMessage('')
+      setCanResend(false)
       settimeCountDownResent(() => {
         if (time <= 0) {
+          setTimeCountDown(5)
           setResetCountdown((prev) => !prev)
-          setTimeCountDown(1)
           return 285
         }
         return time - 15
