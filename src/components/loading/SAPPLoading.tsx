@@ -1,6 +1,7 @@
 'use client'
 
 import animation from '@/assets/animations/loading.json'
+import clsx from 'clsx'
 import dynamic from 'next/dynamic'
 
 interface SAPPLoadingProps {
@@ -13,7 +14,7 @@ const Player = dynamic(() => import('@lottiefiles/react-lottie-player').then(mod
 
 const SAPPLoading = ({ className }: SAPPLoadingProps) => {
   return (
-    <div className={`fixed z-[9999] block h-full w-full bg-white backdrop-blur-[2000px] ${className ?? ''}`}>
+    <div className={clsx('fixed bottom-0 left-0 right-0 top-0 z-[9999] bg-white backdrop-blur-[2000px]', className)}>
       <Player
         src={animation}
         autoplay
