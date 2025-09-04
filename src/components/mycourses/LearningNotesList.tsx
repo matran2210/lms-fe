@@ -543,7 +543,23 @@ const LearningNotesList = () => {
                                   : '#'
                               }
                             >
-                              <span className="notes-list-icon">
+                              <span
+                                className="notes-list-icon"
+                                onClick={() => {
+                                  if (
+                                    !getNotesData.some((item) =>
+                                      item.id.includes(note?.id),
+                                    )
+                                  ) {
+                                    handleEditNote(
+                                      note?.id,
+                                      note?.description,
+                                      index,
+                                    )
+                                    onClose()
+                                  }
+                                }}
+                              >
                                 <ViewIcon />
                               </span>
                             </Link>
