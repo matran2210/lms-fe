@@ -9,7 +9,6 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
@@ -202,6 +201,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     }>({ requirement_id: undefined, question_id: undefined, status: false })
     const [openPdf, setOpenPdf] = useState<{ status: boolean; url: string }>()
     const refEditor = useRef(null) as any
+    const essayDataRef = useRef(essayData)
 
     const handleResetEssay = async (name: string, defaultValue?: string) => {
       if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
@@ -253,12 +253,60 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       setShowListRequirement(false)
       setShowRequirement(data)
       const name = `${activeQuestion?.id}_${data?.id}_essay`
-      const defaultValue =
-        watch(name) ??
-        activeQuestion?.myAnswers?.[data.index - 1]?.short_answer ??
-        null
+      const getDefaultValue = () => {
+        switch (activeQuestion?.response_option) {
+          case RESPONSE_OPTION.WORD:
+            const answer = activeQuestion?.myAnswers?.find(
+              (ans: IEssayAnswer) => {
+                if (
+                  ans.requirement_id ===
+                  activeQuestion?.requirements?.[data.index - 1]?.id
+                ) {
+                  return ans
+                }
+              },
+            )
+
+            const requirement = activeQuestion?.requirements?.[data.index - 1]
+            return (
+              getValues(name) ||
+              answer?.short_answer ||
+              requirement?.answer_template ||
+              activeQuestion?.myAnswers?.[0]?.short_answer ||
+              activeQuestion?.answer_template
+            )
+            break
+          case RESPONSE_OPTION.SHEET:
+            const answerSheet = activeQuestion?.myAnswers?.find(
+              (ans: IEssayAnswer) => {
+                if (
+                  ans.requirement_id ===
+                  activeQuestion?.requirements?.[data.index - 1]?.id
+                ) {
+                  return ans
+                }
+              },
+            )
+
+            const requirementSheet =
+              activeQuestion?.requirements?.[data.index - 1]
+            return (
+              getValues(name) ||
+              answerSheet?.short_answer ||
+              requirementSheet?.answer_template ||
+              activeQuestion?.myAnswers?.[0]?.short_answer ||
+              activeQuestion?.answer_template
+            )
+            break
+        }
+      }
+      const defaultValue = getDefaultValue()
       setValue(name, defaultValue)
       handleResetEssay(name, defaultValue)
+      essayDataRef.current = {
+        req: data,
+        index: data.index - 1,
+      }
       setEssayData({
         req: data,
         index: data.index - 1,
@@ -352,7 +400,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues: getValues,
       onResetFormatEssay: onResetFormatEssay,
       onResetWordOnly: onResetWordOnly,
-      getEssayData: () => essayData,
+      getEssayData: () => essayDataRef.current,
     }))
 
     const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
@@ -653,12 +701,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 const requirement =
                   activeQuestion?.requirements?.[essayData?.index ?? 0]
                 return (
-                  watch(
+                  getValues(
                     `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                  ) ??
-                  answer?.short_answer ??
-                  requirement?.answer_template ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  ) ||
+                  answer?.short_answer ||
+                  requirement?.answer_template ||
+                  activeQuestion?.myAnswers?.[0]?.short_answer ||
                   activeQuestion?.answer_template
                 )
                 break
@@ -679,9 +727,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   // getValues(
                   //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
                   // ) ??
-                  answerSheet?.short_answer ??
-                  requirementSheet?.answer_template ??
-                  activeQuestion?.myAnswers?.[0]?.short_answer ??
+                  answerSheet?.short_answer ||
+                  requirementSheet?.answer_template ||
+                  activeQuestion?.myAnswers?.[0]?.short_answer ||
                   activeQuestion?.answer_template
                 )
                 break
@@ -871,6 +919,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const handleGetExhibit = () => {
       if (activeQuestion?.requirements) {
+        essayDataRef.current = {
+          req: activeQuestion?.requirements?.[0],
+          index: 0,
+        }
         setEssayData({
           req: activeQuestion?.requirements?.[0],
           index: 0,

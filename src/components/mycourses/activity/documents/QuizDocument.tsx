@@ -696,9 +696,13 @@ const QuizDocument = ({
 
   const isShowTemplate =
     activeQuestion?.answer_template ||
-    activeQuestion?.requirements?.some(
-      (req: IRequirment) => req?.answer_template,
-    )
+    activeQuestion?.requirements?.[
+      questionRef?.current?.getEssayData()?.index ?? 0
+    ]?.answer_template
+
+  const currentTabContent = {
+    ...activeQuestion,
+  }
 
   return (
     <div>
