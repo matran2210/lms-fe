@@ -4,6 +4,7 @@ import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
+import { Requirement } from 'src/type'
 
 interface IProps {
   data: Array<any>
@@ -169,7 +170,7 @@ const TabSlide = ({
   }
   const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
     if (Array.isArray(tabContent.data?.requirements)) {
-      const hasAnswer = (req: any) =>
+      const hasAnswer = (req: Requirement) =>
         req?.answer_file?.file_key || req?.answer_text
       return tabContent.data.requirements.every(hasAnswer)
     }
@@ -242,7 +243,7 @@ const TabSlide = ({
                       isFlagedProp={pageNum.flag}
                       //   type={type}
                     >
-                      {pageNum.index + 1} + haaha
+                      {pageNum.index + 1}
                     </PageLink>
                   </div>
                 ) : (
