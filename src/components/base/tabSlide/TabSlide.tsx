@@ -4,6 +4,7 @@ import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
+import { Requirement } from 'src/type'
 
 interface IProps {
   data: Array<any>
@@ -167,6 +168,13 @@ const TabSlide = ({
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
+  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
+    if (Array.isArray(tabContent.data?.requirements)) {
+      const hasAnswer = (req: Requirement) =>
+        req?.answer_file?.file_key || req?.answer_text
+      return tabContent.data.requirements.every(hasAnswer)
+    }
+  }
 
   return (
     <ul
@@ -228,7 +236,9 @@ const TabSlide = ({
                         }
                       }}
                       isViewedProp={
-                        pageNum.attempted || pageNum.is_viewed_answer
+                        pageNum.attempted ||
+                        pageNum.is_viewed_answer ||
+                        handleCheckAllRequirementHasAnswer(pageNum)
                       }
                       isFlagedProp={pageNum.flag}
                       //   type={type}
@@ -246,7 +256,10 @@ const TabSlide = ({
                         handleChangeTab(pageNum.id)
                       }
                     }}
-                    isViewedProp={pageNum.attempted}
+                    isViewedProp={
+                      pageNum.attempted ||
+                      handleCheckAllRequirementHasAnswer(pageNum)
+                    }
                     isFlagedProp={pageNum.flag}
                     //   type={type}
                   >
