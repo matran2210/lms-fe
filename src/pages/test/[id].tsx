@@ -93,6 +93,7 @@ import { TestAPI } from '@pages/api/test'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { IQuestion } from 'src/type/course'
 
 declare global {
   interface Window {
@@ -1365,47 +1366,52 @@ const TestDetail = () => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
-    const { question, topicDescription } = await getDetail(currentTab)
-    if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-      const name = `${currentTab}_0_answer`
-      const valueFromFormReq = getValues(name)
-      const savedAnswer = answersSubmitted?.find(
-        (e: any) => e.questionId === currentTab,
-      )
-      const isWordDataDefault =
-        question?.response_option === RESPONSE_OPTION.WORD
-          ? DEFAULT_EDITOR_VALUE
-          : defaultSheetData
-      const getDefaultWordValue = () => {
-        if (valueFromFormReq !== undefined) {
-          return valueFromFormReq
-        }
-        const requirementId = question?.requirements?.[0]?.id
-        const requirement = savedAnswer?.requirements?.find(
-          (e: any) => e.requirement_id === requirementId,
+
+    const resetCurrentQuestionAndNextQuestion = async (
+      question: IQuestion | null | undefined,
+    ) => {
+      if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+        const name = `${currentTab}_0_answer`
+        const valueFromFormReq = getValues(name)
+        const savedAnswer = answersSubmitted?.find(
+          (e: any) => e.questionId === currentTab,
         )
+        const isWordDataDefault =
+          question?.response_option === RESPONSE_OPTION.WORD
+            ? DEFAULT_EDITOR_VALUE
+            : defaultSheetData
+        const getDefaultWordValue = () => {
+          if (valueFromFormReq !== undefined) {
+            return valueFromFormReq
+          }
+          const requirementId = question?.requirements?.[0]?.id
+          const requirement = savedAnswer?.requirements?.find(
+            (e: any) => e.requirement_id === requirementId,
+          )
 
-        if (requirement?.short_answer !== undefined) {
-          return requirement.short_answer ?? isWordDataDefault
+          if (requirement?.short_answer !== undefined) {
+            return requirement.short_answer ?? isWordDataDefault
+          }
+          if (requirement?.answer_text !== undefined) {
+            return requirement.answer_text ?? isWordDataDefault
+          }
+          return savedAnswer?.short_answer ?? isWordDataDefault
         }
-        if (requirement?.answer_text !== undefined) {
-          return requirement.answer_text ?? isWordDataDefault
-        }
-        return savedAnswer?.short_answer ?? isWordDataDefault
-      }
-      onResetFormatEssay(name, getDefaultWordValue())
-      await refEditor?.current?.reset()
-      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+        onResetFormatEssay(name, getDefaultWordValue())
+        await refEditor?.current?.reset()
+        await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
 
-      if (
-        refEditor?.current?.resetSheet &&
-        question?.response_option === RESPONSE_OPTION.SHEET
-      ) {
-        refEditor?.current?.resetSheet()
+        if (
+          refEditor?.current?.resetSheet &&
+          question?.response_option === RESPONSE_OPTION.SHEET
+        ) {
+          refEditor?.current?.resetSheet()
+        }
       }
     }
-
     if (!currentContent?.viewed) {
+      const { question, topicDescription } = await getDetail(currentTab)
+      resetCurrentQuestionAndNextQuestion(question)
       if (question) {
         const newData = tabs?.map((item: any) => {
           if (currentTab === item.id) {
@@ -1438,6 +1444,7 @@ const TestDetail = () => {
         setLoading(false)
       }
     } else {
+      resetCurrentQuestionAndNextQuestion(currentContent?.data)
       if (
         currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
         currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD

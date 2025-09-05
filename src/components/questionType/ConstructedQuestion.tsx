@@ -369,7 +369,10 @@ const EssayQuestionPreview = ({
           question_data={question_data}
           defaultValue={defaultValue}
           index={index}
-          onChange={onChange}
+          onChange={(val: string) => {
+            onChange(val)
+            handleChange && handleChange(data?.id)
+          }}
           fullData={fullData}
           ignoreStructOpsRef={ignoreStructOpsRef}
           refSheet={refSheet}

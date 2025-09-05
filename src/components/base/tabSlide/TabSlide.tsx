@@ -168,13 +168,6 @@ const TabSlide = ({
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
-  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
-    if (Array.isArray(tabContent.data?.requirements)) {
-      const hasAnswer = (req: Requirement) =>
-        req?.answer_file?.file_key || req?.answer_text
-      return tabContent.data.requirements.every(hasAnswer)
-    }
-  }
 
   return (
     <ul
@@ -236,9 +229,7 @@ const TabSlide = ({
                         }
                       }}
                       isViewedProp={
-                        pageNum.attempted ||
-                        pageNum.is_viewed_answer ||
-                        handleCheckAllRequirementHasAnswer(pageNum)
+                        pageNum.attempted || pageNum.is_viewed_answer
                       }
                       isFlagedProp={pageNum.flag}
                       //   type={type}
@@ -256,10 +247,7 @@ const TabSlide = ({
                         handleChangeTab(pageNum.id)
                       }
                     }}
-                    isViewedProp={
-                      pageNum.attempted ||
-                      handleCheckAllRequirementHasAnswer(pageNum)
-                    }
+                    isViewedProp={pageNum.attempted}
                     isFlagedProp={pageNum.flag}
                     //   type={type}
                   >
