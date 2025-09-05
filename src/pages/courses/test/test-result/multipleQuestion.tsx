@@ -5,6 +5,9 @@ import React, { useRef, useState } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
 import { IAnswer } from 'src/type'
+import Recommendation from './Recommendation'
+import { COMMENTS } from 'src/constants/grade'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface MultipleQuestionProps {
   questions: any
@@ -26,6 +29,10 @@ const MultipleQuestion = ({
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
   const elementRef = useRef<HTMLDivElement>()
+  const [openRecommendation, setOpenRecommendation] = useState<boolean>(false)
+
+  const isGradeFinish =
+    questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
 
   /**
    * handle when scroll x for questions
@@ -286,6 +293,15 @@ const MultipleQuestion = ({
             {questions?.constructedResponseAnswers?.length > 0 &&
               renderAnnotations(annotationsConstructedQuestions)}
           </div>
+
+          {isGradeFinish && (
+            <ButtonPrimary
+              size={'medium'}
+              className={'mb-0 mt-6 px-11 text-medium-sm !font-medium'}
+              title={COMMENTS.REQUEST_REGRADING}
+              onClick={() => setOpenRecommendation(true)}
+            />
+          )}
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
           <div
@@ -350,6 +366,12 @@ const MultipleQuestion = ({
           </div>
         </div>
       </div>
+      <Recommendation
+        classId={questions?.class_id ?? ''}
+        quizAttemptId={questions?.quizAttempt?.id ?? ''}
+        openRecomendation={openRecommendation}
+        setOpenRecomendation={setOpenRecommendation}
+      />
     </div>
   )
 }
