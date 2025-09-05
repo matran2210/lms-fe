@@ -1499,7 +1499,9 @@ const TestDetail = () => {
   const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
     if (Array.isArray(tabContent.data?.requirements)) {
       const hasAnswer = (req: any) =>
-        req?.answer_file?.file_key || answerListRef?.current?.[req?.id || '']
+        req?.answer_file?.file_key ||
+        req?.answer_text ||
+        answerListRef?.current?.[req?.id || '']
       return tabContent.data.requirements.every(hasAnswer)
     }
   }
