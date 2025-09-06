@@ -281,20 +281,34 @@ const CaseStudyDetail = ({ questions }: any) => {
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<number[]>([])
   const [exhibitText, setExhibitText] = useState<string>('')
-  const [openResetToTemplateModal, setOpenResetToTemplateModal] = useState({
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] = useState<{
+    status: boolean
+    question: any
+    index: number
+  }>({
     status: false,
-    onReset: () => {},
+    question: undefined,
+    index: 0,
   })
-  const onOpenResetToTemplateModal = (onReset: () => void) => {
+
+  const onOpenResetToTemplateModal = ({
+    question,
+    index,
+  }: {
+    question: any
+    index: number
+  }) => {
     setOpenResetToTemplateModal({
       status: true,
-      onReset,
+      question,
+      index,
     })
   }
   const onCloseResetToTemplateModal = () => {
     setOpenResetToTemplateModal({
       status: false,
-      onReset: () => {},
+      question: undefined,
+      index: 0,
     })
   }
   const handleResetEssay = async (
@@ -309,12 +323,13 @@ const CaseStudyDetail = ({ questions }: any) => {
     if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
       essayRef.reset?.(defaultValue)
       await new Promise((resolve) => setTimeout(resolve, 10))
-    } else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-      essayRef.resetSheet?.()
     }
+    // else if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+    //   essayRef.resetSheet?.()
+    // }
   }
 
-  const resetEssayBeforeAction = () => {
+  const resetEssayBeforeAction = async () => {
     questionData?.forEach((question: any, index: number) => {
       const name = `${index}_answer`
       const defaultValue = getValues(name)
@@ -951,6 +966,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     })
     return data
   }, [listQuestions])
+
   editorRefs.current = new Array(questionData?.length || 0).fill(null)
   const onResetFormatEssay = (key: string, value: string) => {
     resetField(key, {
@@ -999,6 +1015,40 @@ const CaseStudyDetail = ({ questions }: any) => {
     }
     return question?.answer_template || defaultSheetData
   }
+
+  const onResetAnswerEssayToTemplate = ({
+    index,
+    question,
+  }: {
+    index: number
+    question: any
+  }) => {
+    const key = `${index}_answer`
+    const response_option = question?.response_option
+    if (!editorRefs.current[index]) {
+      editorRefs.current[index] = React.createRef()
+    }
+    switch (response_option) {
+      case RESPONSE_OPTION.WORD:
+        const templateValueWord = getTemplateValueForWord(question)
+        // Reset form value
+        onResetFormatEssay(key, templateValueWord)
+        // Reset component con
+        if (editorRefs.current[index]?.current?.reset) {
+          editorRefs.current[index].current.reset(templateValueWord)
+        }
+        break
+      case RESPONSE_OPTION.SHEET:
+        const templateValue = getTemplateValueForSheet(question)
+        // Reset form value
+        onResetFormatEssay(key, templateValue)
+        // Reset component con
+        if (!!editorRefs.current[index]?.current?.clear) {
+          editorRefs.current[index].current.clear(templateValue)
+        }
+        break
+    }
+  }
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Case Study">
@@ -1024,8 +1074,8 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <SappButton
                 title="Quit"
-                onClick={() => {
-                  resetEssayBeforeAction()
+                onClick={async () => {
+                  await resetEssayBeforeAction()
                   setOpenQuit(true)
                   setUnsavedChanges(false)
                 }}
@@ -1164,15 +1214,16 @@ const CaseStudyDetail = ({ questions }: any) => {
 
                       const isShowTemplate =
                         question?.answer_template ||
-                        question?.requirements?.some(
-                          (req: Requirement) => req?.answer_template,
-                        )
+                        question?.requirements?.[0]?.answer_template
                       const getDefaultEssayValue = () => {
                         if (question.qType !== QUESTION_TYPES.ESSAY)
                           return undefined
                         const response_option = question?.response_option
+                        const name = `${index}_answer`
+                        const formValue = getValues(name)
                         switch (response_option) {
                           case RESPONSE_OPTION.WORD:
+                            if (formValue) return formValue
                             const requirement = question?.requirements?.[0]
                             if (requirement?.answer_template) {
                               return requirement.answer_template
@@ -1180,6 +1231,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return question?.answer_template
 
                           case RESPONSE_OPTION.SHEET:
+                            if (formValue) return formValue
                             const requirementSheet = question?.requirements?.[0]
 
                             if (requirementSheet?.answer_template) {
@@ -1192,39 +1244,6 @@ const CaseStudyDetail = ({ questions }: any) => {
                         }
                       }
 
-                      const onResetAnswerEssayToTemplate = () => {
-                        const key = `${index}_answer`
-                        const response_option = question?.response_option
-                        if (!editorRefs.current[index]) {
-                          editorRefs.current[index] = React.createRef()
-                        }
-                        switch (response_option) {
-                          case RESPONSE_OPTION.WORD:
-                            const templateValueWord =
-                              getTemplateValueForWord(question)
-                            // Reset form value
-                            onResetFormatEssay(key, templateValueWord)
-                            // Reset component con
-                            if (editorRefs.current[index]?.current?.reset) {
-                              editorRefs.current[index].current.reset(
-                                templateValueWord,
-                              )
-                            }
-                            break
-                          case RESPONSE_OPTION.SHEET:
-                            const templateValue =
-                              getTemplateValueForSheet(question)
-                            // Reset form value
-                            onResetFormatEssay(key, templateValue)
-                            // Reset component con
-                            if (editorRefs.current[index]?.current?.clear) {
-                              editorRefs.current[index].current.clear(
-                                templateValue,
-                              )
-                            }
-                            break
-                        }
-                      }
                       return (
                         <div
                           key={question?.id + index}
@@ -1256,9 +1275,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                                 <ButtonPrimaryV2
                                   title="Reset to Answer Template"
                                   onClick={() =>
-                                    onOpenResetToTemplateModal(
-                                      onResetAnswerEssayToTemplate,
-                                    )
+                                    onOpenResetToTemplateModal({
+                                      question,
+                                      index,
+                                    })
                                   }
                                 />
                               </div>
@@ -1535,8 +1555,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 <SappButton
                   className={`mr-2 h-full bg-primary py-3`}
                   title="View Answer"
-                  onClick={() => {
-                    resetEssayBeforeAction()
+                  onClick={async () => {
+                    await resetEssayBeforeAction()
                     setOpenScratchPad([])
                     if (checkUnSubmitAnswer().length) {
                       setUnSubmitAnswer(true)
@@ -1602,13 +1622,19 @@ const CaseStudyDetail = ({ questions }: any) => {
               )
             }
           />
-          {openResetToTemplateModal.status && (
-            <ResetToAnswerTemplateModal
-              open={openResetToTemplateModal.status}
-              handleReset={openResetToTemplateModal.onReset}
-              handleClose={onCloseResetToTemplateModal}
-            />
-          )}
+          {openResetToTemplateModal.status &&
+            openResetToTemplateModal.question && (
+              <ResetToAnswerTemplateModal
+                open={openResetToTemplateModal.status}
+                handleReset={() =>
+                  onResetAnswerEssayToTemplate({
+                    question: openResetToTemplateModal.question,
+                    index: openResetToTemplateModal.index,
+                  })
+                }
+                handleClose={onCloseResetToTemplateModal}
+              />
+            )}
           {/* <PopupViewPdf
         open={openPdf?.status || false}
         setOpen={setOpenPdf}
