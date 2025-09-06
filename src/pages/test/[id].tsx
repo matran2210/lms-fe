@@ -247,7 +247,11 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
-
+        // Tạo data từng bước
+        const part1 =
+          currentTabContent?.data?.requirements?.[essayData?.index] || {}
+        const part2 = essayData?.req || {}
+        const dataEssay = { ...part1, ...part2 }
         const key = `${currentTabID}_${essayData?.index}_answer`
         const defaultValueEssay = () => {
           const valueFromForm = getValues(key)
@@ -319,13 +323,9 @@ const TestDetail = () => {
               )
           }
         }
-
         return (
           <EssayQuestionPreview
-            data={{
-              ...currentTabContent?.data?.requirements?.[essayData?.index],
-              ...essayData?.req,
-            }}
+            data={dataEssay}
             question_content={currentTabContent?.data?.question_content}
             index={essayData?.index}
             question_data={currentTabContent?.data}
@@ -354,6 +354,7 @@ const TestDetail = () => {
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
             handleChange={handleEssayChange}
+            isInTest
           />
           // <Luckysheet/>
         )
@@ -1157,13 +1158,19 @@ const TestDetail = () => {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           return checkSheetAnswered(singleValue)
         } else {
-          return !!singleValue
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
+            return false
+          }
+          return true
         }
       } else {
         if (currentContent.response_type === 1) {
           return checkSheetAnswered(singleValue)
         } else {
-          return !!singleValue
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
+            return false
+          }
+          return true
         }
       }
     }
@@ -1370,7 +1377,6 @@ const TestDetail = () => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
-
     const resetCurrentQuestionAndNextQuestion = async (
       question: IQuestion | null | undefined,
     ) => {
@@ -1415,7 +1421,7 @@ const TestDetail = () => {
     }
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
-      resetCurrentQuestionAndNextQuestion(question)
+      await resetCurrentQuestionAndNextQuestion(question)
       if (question) {
         const newData = tabs?.map((item: any) => {
           if (currentTab === item.id) {
@@ -1448,7 +1454,7 @@ const TestDetail = () => {
         setLoading(false)
       }
     } else {
-      resetCurrentQuestionAndNextQuestion(currentContent?.data)
+      await resetCurrentQuestionAndNextQuestion(currentContent?.data)
       if (
         currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
         currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
@@ -1570,7 +1576,6 @@ const TestDetail = () => {
           return {
             ...item,
             answer: answer,
-
             attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
@@ -1671,7 +1676,8 @@ const TestDetail = () => {
                 ? req.answer_text
                 : ''
             } else {
-              answerListRef.current[req.id] = req.answer_text
+              answerListRef.current[req.id] =
+                req.answer_text !== DEFAULT_EDITOR_VALUE ? req.answer_text : ''
             }
           }
         }
