@@ -7,7 +7,6 @@ import {
   CalculatorIcon,
   ExcelIcon,
   ExhibitsIcon,
-  EyeIcon,
   FlagIcon,
   HighlightIcon,
   ScratchPadIcon,
@@ -30,7 +29,14 @@ import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import {
+  cloneDeep,
+  debounce,
+  isEmpty,
+  isUndefined,
+  set,
+  uniqueId,
+} from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -87,6 +93,7 @@ import { TestAPI } from '@pages/api/test'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { IQuestion } from 'src/type/course'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 
 declare global {
@@ -241,11 +248,16 @@ const TestDetail = () => {
         const handleEssayChange = (id: string) => {
           setAnswerListValue(id as unknown as number)
         }
-
+        // Tạo data từng bước
+        const part1 =
+          currentTabContent?.data?.requirements?.[essayData?.index] || {}
+        const part2 = essayData?.req || {}
+        const dataEssay = { ...part1, ...part2 }
         const key = `${currentTabID}_${essayData?.index}_answer`
         const defaultValueEssay = () => {
           const valueFromForm = getValues(key)
           const response_option = currentTabContent?.data?.response_option
+
           switch (response_option) {
             case RESPONSE_OPTION.WORD:
               if (valueFromForm !== undefined && valueFromForm !== null) {
@@ -310,16 +322,11 @@ const TestDetail = () => {
               return (
                 currentTabContent?.data?.answer_template || defaultSheetData
               )
-            // return getCurrentDefaultSheetValue
           }
         }
-
         return (
           <EssayQuestionPreview
-            data={{
-              ...currentTabContent?.data?.requirements?.[essayData?.index],
-              ...essayData?.req,
-            }}
+            data={dataEssay}
             question_content={currentTabContent?.data?.question_content}
             index={essayData?.index}
             question_data={currentTabContent?.data}
@@ -348,6 +355,7 @@ const TestDetail = () => {
             handleSaveHighLightRequirement={handleSaveHighLightRequirement}
             showRequiment={showListRequirement}
             handleChange={handleEssayChange}
+            isInTest
           />
           // <Luckysheet/>
         )
@@ -1120,46 +1128,55 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value =
-        isSubmit && currentContent?.data?.requirements?.length <= 1
+
+      const hasRequirements =
+        Array.isArray(currentContent?.data?.requirements) &&
+        (currentContent?.data?.requirements?.length ?? 0) > 0
+
+      // If essay has requirements, check each requirement's editor value
+      if (hasRequirements) {
+        const isSheet =
+          currentContent?.data?.response_option === RESPONSE_OPTION.SHEET ||
+          currentContent?.response_type === 1
+
+        for (
+          let idx = 0;
+          idx < (currentContent?.data?.requirements?.length ?? 0);
+          idx++
+        ) {
+          const reqValue = getValues(`${currentPage}_${idx}_answer`)
+          if (isSheet) {
+            if (checkSheetAnswered(reqValue)) return true
+          } else {
+            if (reqValue) return true
+          }
+        }
+        return false
+      }
+
+      // No requirements -> fall back to single editor value
+      const singleValue =
+        isSubmit && (currentContent?.data?.requirements?.length ?? 0) <= 1
           ? getValues(`${currentContent?.id}_0_answer`)
-          : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+          : getValues(`${currentPage}_${essayData?.index}_answer`)
 
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
       ) {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
-          if (value) {
-            const data = JSON.parse(value)
-            for (let e of data) {
-              if (e?.celldata && e?.celldata?.length > 0) {
-                return true
-              }
-            }
-            return false
-          }
-          return false
+          return checkSheetAnswered(singleValue)
         } else {
-          if (!value) {
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
             return false
           }
           return true
         }
       } else {
         if (currentContent.response_type === 1) {
-          if (value) {
-            const data = JSON.parse(value)
-            for (let e of data) {
-              if (e?.celldata && e?.celldata?.length > 0) {
-                return true
-              }
-            }
-            return false
-          }
-          return false
+          return checkSheetAnswered(singleValue)
         } else {
-          if (!value) {
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
             return false
           }
           return true
@@ -1369,19 +1386,51 @@ const TestDetail = () => {
     setLoading(true)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
+    const resetCurrentQuestionAndNextQuestion = async (
+      question: IQuestion | null | undefined,
+    ) => {
+      if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+        const name = `${currentTab}_0_answer`
+        const valueFromFormReq = getValues(name)
+        const savedAnswer = answersSubmitted?.find(
+          (e: any) => e.questionId === currentTab,
+        )
+        const isWordDataDefault =
+          question?.response_option === RESPONSE_OPTION.WORD
+            ? DEFAULT_EDITOR_VALUE
+            : defaultSheetData
+        const getDefaultWordValue = () => {
+          if (valueFromFormReq !== undefined) {
+            return valueFromFormReq
+          }
+          const requirementId = question?.requirements?.[0]?.id
+          const requirement = savedAnswer?.requirements?.find(
+            (e: any) => e.requirement_id === requirementId,
+          )
 
-    if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-      await refEditor?.current?.reset()
-      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
-    } else if (
-      refEditor?.current?.resetSheet &&
-      currentContent?.qType === QUESTION_TYPES.ESSAY
-    ) {
-      refEditor?.current?.resetSheet()
+          if (requirement?.short_answer !== undefined) {
+            return requirement.short_answer ?? isWordDataDefault
+          }
+          if (requirement?.answer_text !== undefined) {
+            return requirement.answer_text ?? isWordDataDefault
+          }
+          return savedAnswer?.short_answer ?? isWordDataDefault
+        }
+        onResetFormatEssay(name, getDefaultWordValue())
+        await refEditor?.current?.reset()
+        await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
+        if (
+          refEditor?.current?.resetSheet &&
+          question?.response_option === RESPONSE_OPTION.SHEET
+        ) {
+          refEditor?.current?.resetSheet()
+        }
+      }
     }
-
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
+      await resetCurrentQuestionAndNextQuestion(question)
       if (question) {
         const newData = tabs?.map((item: any) => {
           if (currentTab === item.id) {
@@ -1414,6 +1463,7 @@ const TestDetail = () => {
         setLoading(false)
       }
     } else {
+      await resetCurrentQuestionAndNextQuestion(currentContent?.data)
       if (
         currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
         currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
@@ -1535,7 +1585,6 @@ const TestDetail = () => {
           return {
             ...item,
             answer: answer,
-
             attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
@@ -1636,7 +1685,8 @@ const TestDetail = () => {
                 ? req.answer_text
                 : ''
             } else {
-              answerListRef.current[req.id] = req.answer_text
+              answerListRef.current[req.id] =
+                req.answer_text !== DEFAULT_EDITOR_VALUE ? req.answer_text : ''
             }
           }
         }
@@ -2965,7 +3015,7 @@ const TestDetail = () => {
 
                                   if (refEditor?.current && isEssayWord) {
                                     const name = `${currentTabContent?.id}_${indexReq}_answer`
-                                    const valueFromFormReq = watch(name)
+                                    const valueFromFormReq = getValues(name)
 
                                     const getDefaultWordValue = () => {
                                       if (!isEssayWord) return
@@ -2993,18 +3043,11 @@ const TestDetail = () => {
                                           DEFAULT_EDITOR_VALUE
                                         )
                                       }
-                                      // if (requirement?.answer_template !== undefined) {
-                                      //   return requirement.answer_template || DEFAULT_EDITOR_VALUE
-                                      // }
-                                      // if (
-                                      //   currentTabContent?.answer !== undefined
-                                      // )
-                                      return currentTabContent.answer
-                                      // return currentTabContent?.data?.answer_template || DEFAULT_EDITOR_VALUE
-                                      // return DEFAULT_EDITOR_VALUE
+                                      return (
+                                        currentTabContent.answer ||
+                                        DEFAULT_EDITOR_VALUE
+                                      )
                                     }
-                                    // resetField(name, getCurrentDefaultWordValue)
-
                                     onResetFormatEssay(
                                       name,
                                       getDefaultWordValue(),
