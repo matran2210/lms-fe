@@ -1,10 +1,10 @@
 'use client'
 
+import { HOME_LMS_URL } from '@/constants'
 import { ZOOM_CONFIG } from '@/constants/zoom'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { toggleMeetingContainer } from '@/utils'
 import { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 
 export const useZoomSDK = () => {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false)
@@ -43,7 +43,7 @@ export const useZoomSDK = () => {
       try {
         window.ZoomMtg.i18n.load('vi-VN')
         window.ZoomMtg.init({
-          leaveUrl: ZOOM_CONFIG.SDK_CONFIG.LEAVE_URL,
+          leaveUrl: HOME_LMS_URL,
           patchJsMedia: ZOOM_CONFIG.SDK_CONFIG.PATCH_JS_MEDIA,
           leaveOnPageUnload: ZOOM_CONFIG.SDK_CONFIG.LEAVE_ON_PAGE_UNLOAD,
           meetingInfo: [],
@@ -59,7 +59,6 @@ export const useZoomSDK = () => {
               userEmail: config.userEmail,
               tk: config.tkToken,
               success: () => {
-                toast.success(ZOOM_CONFIG.SUCCESS_MESSAGES.JOINED_MEETING)
                 setIsJoining(false)
                 setIsJoined(true)
               },
@@ -83,16 +82,11 @@ export const useZoomSDK = () => {
     [isSDKLoaded]
   )
 
-  const leaveMeeting = useCallback(() => {
-    toggleMeetingContainer('none')
-  }, [])
-
   return {
     isSDKLoaded,
     isJoining,
     isJoined,
     error,
     joinMeeting,
-    leaveMeeting,
   }
 }
