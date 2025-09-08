@@ -94,6 +94,7 @@ import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import { IQuestion } from 'src/type/course'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 
 declare global {
   interface Window {
@@ -509,8 +510,16 @@ const TestDetail = () => {
     }>
   >([])
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+    useState(false)
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
 
+  const onOpenResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(true)
+  }
+  const onCloseResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(false)
+  }
   useClickOutside({
     ref: dropUpRef,
     callback: () => setShowListExhibits(false),
@@ -2571,7 +2580,7 @@ const TestDetail = () => {
         onResetFormatEssay(key, templateValueWord)
         // Reset component con
         if (refEditor?.current?.reset) {
-          refEditor.current.reset()
+          refEditor.current.reset(templateValueWord)
         }
         break
       case RESPONSE_OPTION.SHEET:
@@ -2784,7 +2793,7 @@ const TestDetail = () => {
                           <div className="mt-8 flex justify-end">
                             <ButtonPrimaryV2
                               title="Reset to Answer Template"
-                              onClick={onResetAnswerEssayToTemplate}
+                              onClick={onOpenResetToTemplateModal}
                             />
                           </div>
                         )}
@@ -2870,7 +2879,7 @@ const TestDetail = () => {
                         <div className="mt-8 flex justify-end">
                           <ButtonPrimaryV2
                             title="Reset to Answer Template"
-                            onClick={onResetAnswerEssayToTemplate}
+                            onClick={onOpenResetToTemplateModal}
                           />
                         </div>
                       )}
@@ -3352,12 +3361,16 @@ const TestDetail = () => {
               {...{
                 currentTabContent,
                 essayData,
-                control,
-                setValue,
-                getValues,
               }}
             />
           )}
+        {openResetToTemplateModal && (
+          <ResetToAnswerTemplateModal
+            open={openResetToTemplateModal}
+            handleReset={onResetAnswerEssayToTemplate}
+            handleClose={onCloseResetToTemplateModal}
+          />
+        )}
       </CourseProvider>
     </FullScreenLayout>
   )
