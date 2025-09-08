@@ -1,6 +1,7 @@
 'use client'
 
 import { ZoomApi } from '@/api/zoom'
+import { HOME_LMS_URL } from '@/constants'
 import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
@@ -13,6 +14,7 @@ import SAPPLoading from './loading/SAPPLoading'
 export const ZoomMeeting = () => {
   const { isSDKLoaded, isJoining, isJoined, error, joinMeeting } = useZoomSDK()
   const [meetingConfig, setMeetingConfig] = useState<ZoomMeetingConfig | null>(null)
+  const [isLoadingToken, setIsLoadingToken] = useState(true)
   const [isLoadingMeetingData, setIsLoadingMeetingData] = useState(true)
   const [token, setToken] = useState<string | null>(null)
   const router = useRouter()
@@ -25,6 +27,7 @@ export const ZoomMeeting = () => {
   useEffect(() => {
     const currentToken = getToken(tokenFromParams)
     setToken(currentToken)
+    setIsLoadingToken(false)
   }, [tokenFromParams])
 
   const getZoomMeeting = async (token: string) => {
@@ -39,8 +42,13 @@ export const ZoomMeeting = () => {
 
   // Process token and prepare meeting data
   useEffect(() => {
+    if (isLoadingToken) return
+
     const processMeetingToken = async () => {
-      if (!token) return
+      if (!token) {
+        router.replace(HOME_LMS_URL)
+        return
+      }
 
       try {
         setIsLoadingMeetingData(true)
@@ -49,7 +57,7 @@ export const ZoomMeeting = () => {
         const meetingData = await getZoomMeeting(decodedToken)
 
         if (!meetingData.userInfo || !meetingData.signature) {
-          router.replace(process.env.NEXT_PUBLIC_LMS_FE_URL || '/')
+          router.replace(HOME_LMS_URL)
           setIsLoadingMeetingData(false)
           return
         }
@@ -75,7 +83,7 @@ export const ZoomMeeting = () => {
     }
 
     processMeetingToken()
-  }, [token])
+  }, [isLoadingToken])
 
   // Auto join meeting when SDK is loaded and meeting config is ready
   useEffect(() => {

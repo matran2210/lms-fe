@@ -3,6 +3,7 @@
 import { AltArrowLeft, LogoutIcon } from '@/assets/icons'
 import Logo from '@/assets/logo.svg'
 import SAPPButton from '@/components/button/SAPPButton'
+import { HOME_LMS_URL } from '@/constants'
 import { useLayoutContext } from '@/contexts/LayoutContext'
 import { useTailwindBreakpoint } from '@/hooks/useTailwindBreakpoint'
 import { AuthenticationManager } from '@/utils/helpers/keycloak'
@@ -30,7 +31,7 @@ export const Header = () => {
             { active: isLoadingGlobal }
           )}
         >
-          <Link href="/" className="text-white">
+          <Link href={HOME_LMS_URL} className="text-white">
             <AltArrowLeft />
           </Link>
         </div>
@@ -42,7 +43,7 @@ export const Header = () => {
           )}
         >
           <div className="flex h-16 items-center justify-between px-8 py-2">
-            <Link href="/" className="border-0 focus:!outline-none">
+            <Link href={HOME_LMS_URL} className="border-0 focus:!outline-none">
               <Image src={Logo} alt="logo" width={90} height={45} />
             </Link>
             <SAPPButton title="Logout" suffixIcon={<LogoutIcon className="text-icon" />} onClick={handleLogout} />
