@@ -970,6 +970,12 @@ const TestDetail = () => {
     if (currentTabContent?.id) {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
+      setExhibitText(
+        currentTabContent?.topicDescription?.course_categories?.[0]?.name ===
+          PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
@@ -2340,11 +2346,6 @@ const TestDetail = () => {
             const res = await CoursesAPI.createQuizAttempt(
               router.query.id as string,
               router.query.class_user_id as string,
-            )
-            setExhibitText(
-              res.data.program === PROGRAM.CMA
-                ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
-                : EXHIBIT_TEXT_REPLACE.EXHIBIT,
             )
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
