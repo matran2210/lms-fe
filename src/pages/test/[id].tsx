@@ -971,7 +971,7 @@ const TestDetail = () => {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
       setExhibitText(
-        currentTabContent?.topicDescription?.course_categories?.[0]?.name ===
+        currentTabContent?.topicDescription?.course_category?.name ===
           PROGRAM.CMA
           ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
@@ -1376,6 +1376,7 @@ const TestDetail = () => {
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
+          router?.query?.class_user_id as string,
         )
         question = await QuestionAPI.getQuestionDetail(currentPage)
       }
