@@ -84,8 +84,6 @@ import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
 import { TestAPI } from '@pages/api/test'
-import { Popover, Tooltip } from 'antd'
-import clsx from 'clsx'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import { defaultSheetData } from 'src/constants/attempt'
@@ -946,7 +944,7 @@ const TestDetail = () => {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
       setExhibitText(
-        currentTabContent?.topicDescription?.course_categories?.[0]?.name ===
+        currentTabContent?.topicDescription?.course_category?.name ===
           PROGRAM.CMA
           ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
           : EXHIBIT_TEXT_REPLACE.EXHIBIT,
@@ -1328,6 +1326,7 @@ const TestDetail = () => {
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
+          router?.query?.class_user_id as string,
         )
         question = await QuestionAPI.getQuestionDetail(currentPage)
       }
