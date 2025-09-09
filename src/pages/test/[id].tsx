@@ -1103,48 +1103,52 @@ const TestDetail = () => {
       if (currentContent?.answer_file?.file_key) {
         return true
       }
-      const value = isSubmit
-        ? getValues(`${currentContent?.id}_0_answer`)
-        : getValues(`${currentContent?.id}_${essayData?.index}_answer`)
+
+      const hasRequirements =
+        Array.isArray(currentContent?.data?.requirements) &&
+        (currentContent?.data?.requirements?.length ?? 0) > 0
+
+      // If essay has requirements, check each requirement's editor value
+      if (hasRequirements) {
+        const isSheet =
+          currentContent?.data?.response_option === RESPONSE_OPTION.SHEET ||
+          currentContent?.response_type === 1
+
+        for (
+          let idx = 0;
+          idx < (currentContent?.data?.requirements?.length ?? 0);
+          idx++
+        ) {
+          const reqValue = getValues(`${currentPage}_${idx}_answer`)
+          if (isSheet) {
+            if (checkSheetAnswered(reqValue)) return true
+          } else {
+            if (reqValue) return true
+          }
+        }
+        return false
+      }
+
+      // No requirements -> fall back to single editor value
+      const singleValue =
+        isSubmit && (currentContent?.data?.requirements?.length ?? 0) <= 1
+          ? getValues(`${currentContent?.id}_0_answer`)
+          : getValues(`${currentPage}_${essayData?.index}_answer`)
 
       if (
         currentContent?.data?.response_option &&
         currentContent?.data?.response_option !== null
       ) {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
-          if (value) {
-            const data = JSON.parse(value)
-            for (let e of data) {
-              if (e?.celldata && e?.celldata?.length > 0) {
-                return true
-              }
-            }
-            return false
-          }
-          return false
+          return checkSheetAnswered(singleValue)
         } else {
-          if (!value) {
-            return false
-          }
-          return true
+          return !!singleValue
         }
       } else {
         if (currentContent.response_type === 1) {
-          if (value) {
-            const data = JSON.parse(value)
-            for (let e of data) {
-              if (e?.celldata && e?.celldata?.length > 0) {
-                return true
-              }
-            }
-            return false
-          }
-          return false
+          return checkSheetAnswered(singleValue)
         } else {
-          if (!value) {
-            return false
-          }
-          return true
+          return !!singleValue
         }
       }
     }
@@ -2532,7 +2536,16 @@ const TestDetail = () => {
                 type={type}
                 submited={submited}
                 setOpenSubmit={setOpenSubmit}
-                onSubmitAnswer={handleSubmitAnswer}
+                onSubmitAnswer={async (mode) => {
+                  const savedAnswer = await handleSaveCurrentAnswer(
+                    tabs,
+                    currentTabContent,
+                  )
+                  setTabs(savedAnswer)
+                  setTimeout(() => {
+                    handleSubmitAnswer(mode)
+                  }, 100)
+                }}
                 handleTimeoutSubmit={async () => {
                   if (!openLimit) {
                     if (!submited && !quizAttempt?.is_submitted) {
