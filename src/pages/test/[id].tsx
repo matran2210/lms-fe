@@ -1158,7 +1158,7 @@ const TestDetail = () => {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           return checkSheetAnswered(singleValue)
         } else {
-          if (!value || value === DEFAULT_EDITOR_VALUE) {
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
             return false
           }
           return true
@@ -1167,7 +1167,7 @@ const TestDetail = () => {
         if (currentContent.response_type === 1) {
           return checkSheetAnswered(singleValue)
         } else {
-          if (!value || value === DEFAULT_EDITOR_VALUE) {
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
             return false
           }
           return true
