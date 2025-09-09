@@ -24,7 +24,7 @@ interface Props {
   editorRef?: React.RefObject<SAPPEditorHandle>
 }
 
-const HookFormEditor = ({
+const HookFormEditorV2 = ({
   name,
   control,
   defaultValue = DEFAULT_EDITOR_VALUE,
@@ -39,12 +39,10 @@ const HookFormEditor = ({
   handleChange,
   // labelClass = 'd-flex align-items-center fs-6 fw-bold form-label',
   disabled,
-  key,
   editorRef,
 }: Props) => {
   return (
     <Controller
-      key={key}
       name={name}
       control={control}
       defaultValue={defaultValue}
@@ -91,4 +89,4 @@ const HookFormEditor = ({
   )
 }
 
-export default HookFormEditor
+export default HookFormEditorV2

@@ -16,7 +16,7 @@ import SappModal from '@components/base/modal/SappModal'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
-import dayjs, { Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
 import { QuizResultComponent } from 'quiz-result-package'
 import toast from 'react-hot-toast'
 import {
@@ -25,6 +25,7 @@ import {
   GRADE_STATUS,
   GRADING_METHOD,
   PageLink,
+  RESPONSE_OPTION,
   SOCIAL_LINK,
 } from 'src/constants'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
@@ -175,6 +176,18 @@ const QuizDocument = ({
   }
 
   const handleNextQuestion = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      questionRef.current?.getValues(name) ??
+      activeQuestion?.myAnswers?.[0]?.short_answer
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     if (activeQuestionIndex < questions?.length - 1) {
       setActiveQuestionIndex(activeQuestionIndex + 1)
       handleSaveAnswer()
@@ -182,19 +195,36 @@ const QuizDocument = ({
       const nextQuestionId = questions[activeQuestionIndex + 1]?.id
       if (nextQuestionId) {
         try {
-          await dispatch(
+          const nextQuestion = await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
             }),
-          )
+          ).unwrap()
           setStartWorkTime(Date.now())
+          const nextQuestionContent = nextQuestion?.question
+          const name = `${nextQuestionContent?.id}_${nextQuestionContent?.requirements?.length ? nextQuestionContent?.requirements?.[0]?.id : document_id}_essay`
+          const defaultValue =
+            questionRef.current?.getValues(name) ??
+            nextQuestionContent?.myAnswers?.[0]?.short_answer
+
+          if (nextQuestionContent?.response_option === RESPONSE_OPTION.SHEET) {
+            await questionRef.current?.onResetSheet(
+              nextQuestionContent?.response_option,
+            )
+          } else {
+            await questionRef.current?.onResetWord(
+              name,
+              nextQuestionContent?.response_option as RESPONSE_OPTION,
+              defaultValue,
+            )
+          }
         } catch (error) {}
       }
 
-      questionRef?.current?.reset()
+      // questionRef?.current?.reset()
     }
   }
 
@@ -214,6 +244,19 @@ const QuizDocument = ({
   const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
 
   const handleQuizFinish = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      questionRef.current?.getValues(name) ??
+      activeQuestion?.myAnswers?.[0]?.short_answer
+    if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
+      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
+    } else {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     setActiveQuestionIndex(activeQuestionIndex + 1)
     setIsFinishQuiz(true)
     handleSaveAnswer()
@@ -245,6 +288,18 @@ const QuizDocument = ({
   }
 
   const handlePrevQuestion = async () => {
+    const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
+    const defaultValue =
+      questionRef.current?.getValues(name) ??
+      activeQuestion?.myAnswers?.[0]?.short_answer
+
+    if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+      await questionRef.current?.onResetWord(
+        name,
+        activeQuestion?.response_option,
+        defaultValue,
+      )
+    }
     if (activeQuestionIndex > 0) {
       setActiveQuestionIndex(activeQuestionIndex - 1)
       handleSaveAnswer()
@@ -252,23 +307,43 @@ const QuizDocument = ({
       const prevQuestionId = questions?.[activeQuestionIndex - 1]?.id
       if (prevQuestionId) {
         try {
-          await dispatch(
+          const prevQuestion = await dispatch(
             fetchQuestionById({
               activityId: activityId,
               tabId: tabId,
               quizId: quizId,
               questionId: prevQuestionId || '',
             }),
-          )
+          ).unwrap()
           setStartWorkTime(Date.now())
+          const preQuestionContent = prevQuestion?.question
+
+          const name = `${preQuestionContent?.id}_${preQuestionContent?.requirements?.length ? preQuestionContent?.requirements?.[0]?.id : document_id}_essay`
+          const defaultValue = preQuestionContent?.myAnswers?.[0]?.short_answer
+          if (
+            preQuestionContent &&
+            preQuestionContent?.response_option === RESPONSE_OPTION.WORD
+          ) {
+            questionRef.current?.onResetWord(
+              name,
+              preQuestionContent?.response_option,
+              defaultValue,
+            )
+          } else if (
+            preQuestionContent &&
+            preQuestionContent?.response_option === RESPONSE_OPTION.SHEET
+          ) {
+            questionRef.current?.onResetSheet(
+              preQuestionContent?.response_option,
+            )
+          }
         } catch (error) {}
       }
-
-      questionRef.current?.reset()
     }
+    // questionRef.current?.reset()
   }
 
-  const handleConfirmQuestion = () => {
+  const handleConfirmQuestion = async () => {
     setLoading(true)
     if (activeQuestion) {
       questionRef?.current?.onSubmit({

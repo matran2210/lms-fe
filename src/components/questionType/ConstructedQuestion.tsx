@@ -1,21 +1,29 @@
-import HookFormEditor from '@components/base/editor/HookFormEditor'
-import React, { memo, useEffect, useRef, useState } from 'react'
+import HookFormEditor from '@components/base/editor/HookFormEditorV2'
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 // import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
-import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isNull, isUndefined, set, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
-import { generateSheetId } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
+import HookFormExcel from '@components/base/textfield/HookFormExcel'
 
-type SheetData = {
+export type SheetData = {
   name: string
   id: string
   status: number
@@ -56,6 +64,11 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
+  isInTest?: boolean
+}
+type SAPPEditorHandle = {
+  moveSelectionOutOfTable: () => void
+  resetContentSafe: (newContent: string) => void
 }
 const EssayQuestionPreview = ({
   data,
@@ -84,10 +97,13 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
+  isInTest = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
-  const [key, setKey] = useState<string>('1')
   const refSheet = useRef(null) as any
+  const [key, setKey] = useState('1')
+
+  const editorRef = useRef<SAPPEditorHandle>(null)
   // Cờ chặn tạm thời onChange trong lúc đang thực hiện các thao tác cấu trúc
   // (thêm/xóa/undo/redo/di chuyển/sao chép sheet) của Fortune Sheet.
   // Mục đích: tránh serialize trạng thái trung gian gây lỗi "sheet not found".
@@ -204,11 +220,20 @@ const EssayQuestionPreview = ({
   }
   if (externalRef) {
     externalRef.current = {
-      reset: () =>
+      reset: (templateValue?: string) => {
+        // editorRef.current?.moveSelectionOutOfTable()
+        editorRef.current?.resetContentSafe(
+          templateValue !== undefined
+            ? templateValue
+            : defaultValue || DEFAULT_EDITOR_VALUE,
+        )
+      },
+      resetSheet: () => {
         setKey((prev) => {
           const newKey = uniqueId('key')
           return newKey
-        }),
+        })
+      },
       clear: (templateValue?: string) => {
         if (refSheet.current) {
           try {
@@ -337,6 +362,58 @@ const EssayQuestionPreview = ({
       dispatch(loginSlice.actions.enableUnsavedChange())
     }
   }
+
+  const stableDataId = useMemo(() => {
+    // Chỉ return khi data hợp lệ
+    if (data && data.id && typeof data.id === 'string' && isInTest) {
+      return data.id
+    }
+    return null
+  }, [data?.id])
+
+  const renderSheetEditor = useCallback(
+    ({ onChange }: any) => {
+      return (
+        <HookFormExcel
+          question_data={question_data}
+          defaultValue={defaultValue}
+          index={index}
+          onChange={(val: string) => {
+            onChange(val)
+            handleChange && handleChange(data?.id)
+          }}
+          fullData={fullData}
+          ignoreStructOpsRef={ignoreStructOpsRef}
+          refSheet={refSheet}
+          sheetsSnapshotRef={sheetsSnapshotRef}
+          onOp={handleOp}
+        />
+      )
+    },
+    [key, stableDataId],
+  )
+  const renderWordEditor = useMemo(() => {
+    editorRef.current?.resetContentSafe(defaultValue)
+
+    return (
+      <HookFormEditor
+        control={control}
+        name={name}
+        math={true}
+        height={500}
+        placeholder="Your answer here"
+        defaultValue={defaultValue}
+        disabled={
+          fullData?.confirmed ||
+          fullData?.data?.confirmed ||
+          fullData?.is_viewed_answer
+        }
+        handleChange={() => handleChange && handleChange(data?.id)}
+        // externalRef={externalRef}
+        editorRef={editorRef}
+      />
+    )
+  }, [name])
   return (
     <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
@@ -535,179 +612,56 @@ const EssayQuestionPreview = ({
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
-          key={key}
           className={`${showRequiment ? 'pointer-events-none' : ''}`}
         >
           {question_data?.response_option === RESPONSE_OPTION.WORD ? (
-            <HookFormEditor
-              control={control}
-              name={name}
-              math={true}
-              height={500}
-              placeholder="Your answer here"
-              defaultValue={defaultValue}
-              disabled={
-                fullData?.confirmed ||
-                fullData?.data?.confirmed ||
-                fullData?.is_viewed_answer
-              }
-              handleChange={() => handleChange && handleChange(data?.id)}
-              // externalRef={externalRef}
-            />
+            renderWordEditor
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
+                key={key}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
                 render={({ field: { onChange, value } }) => {
-                  const isValid = (value?: string) => {
-                    try {
-                      if (
-                        !value ||
-                        isEmpty(value) ||
-                        isUndefined(value) ||
-                        isNull(value)
-                      )
-                        return false
-                      JSON.parse(value)
-                      return true
-                    } catch {
-                      return false
-                    }
-                  }
-                  return (
-                    <Workbook
-                      // generateSheetId={() => name}
-                      ref={refSheet}
-                      // column={2}
-                      // row={2}
-                      onOp={handleOp}
-                      // Keep legacy format: merge changed sheets into previous snapshot.
-                      // Also enrich with celldata/data and avoid overwriting other sheets.
-                      onChange={(evt) => {
-                        if (ignoreStructOpsRef.current) return
-                        if (
-                          !fullData?.is_viewed_answer &&
-                          !fullData?.confirmed
-                        ) {
-                          const currentSheet = refSheet.current?.getSheet()
-                          if (!currentSheet?.id) return
-
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old?.findIndex(
-                              (e: any) => e?.id === currentSheet?.id,
-                            )
-
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
-                            }
-
-                            sheetsSnapshotRef.current = old
-                            onChange(JSON.stringify(old))
-                          } else {
-                            const newData = [currentSheet]
-                            sheetsSnapshotRef.current = newData
-                            onChange(JSON.stringify(newData))
-                          }
-                        }
-                      }}
-                      data={
-                        isValid(value)
-                          ? JSON.parse(value)
-                          : [
-                              {
-                                name: 'Sheet1',
-                                // config: {
-                                //   authority: {
-
-                                //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
-
-                                //   },
-                                // },
-                              },
-                            ]
-                      }
-                    />
-                  )
+                  // const isValid = (value?: string) => {
+                  //   try {
+                  //     if (
+                  //       !value ||
+                  //       isEmpty(value) ||
+                  //       isUndefined(value) ||
+                  //       isNull(value)
+                  //     )
+                  //       return false
+                  //     JSON.parse(value)
+                  //     return true
+                  //   } catch {
+                  //     return false
+                  //   }
+                  // }
+                  return renderSheetEditor({
+                    onChange,
+                  })
                 }}
               ></Controller>
             </div>
           ) : response_option_custom === 0 ? (
-            <HookFormEditor
-              control={control}
-              name={name}
-              // externalRef={externalRef}
-              math={true}
-              height={500}
-              placeholder="Your answer here"
-              defaultValue={defaultValue}
-              disabled={
-                fullData?.is_viewed_answer ||
-                fullData?.confirmed ||
-                fullData?.data?.confirmed
-              }
-              handleChange={() => handleChange && handleChange(data?.id)}
-            />
+            renderWordEditor
           ) : (
             <div
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
+                key={key}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
                 render={({ field: { onChange, value } }) => {
-                  return (
-                    <Workbook
-                      // generateSheetId={() => name}
-                      ref={refSheet}
-                      // column={2}
-                      // row={2}
-
-                      onChange={(e) => {
-                        if (ignoreStructOpsRef.current) return
-                        if (
-                          !fullData?.is_viewed_answer &&
-                          !fullData?.confirmed
-                        ) {
-                          const currentSheet = refSheet.current?.getSheet()
-                          if (!currentSheet?.id) return
-
-                          if (value) {
-                            let old = [...JSON.parse(value)]
-                            const index = old?.findIndex(
-                              (e: any) => e?.id === currentSheet?.id,
-                            )
-
-                            if (index >= 0) {
-                              old.splice(index, 1, currentSheet)
-                            } else {
-                              old.push(currentSheet)
-                            }
-
-                            onChange(JSON.stringify(old))
-                          } else {
-                            onChange(JSON.stringify([currentSheet]))
-                          }
-                        }
-                      }}
-                      data={
-                        value && String(value).trim() !== ''
-                          ? JSON.parse(value)
-                          : [
-                              {
-                                name: 'Sheet1',
-                              },
-                            ]
-                      }
-                    />
-                  )
+                  return renderSheetEditor({
+                    onChange,
+                  })
                 }}
               ></Controller>
             </div>

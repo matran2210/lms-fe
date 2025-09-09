@@ -4,6 +4,7 @@ import PageLink from '../pagination/PageLink'
 import ArrowIcon from '../pagination/ArrowIcon'
 import { QUESTION_TYPES } from 'src/constants'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
+import { Requirement } from 'src/type'
 
 interface IProps {
   data: Array<any>
