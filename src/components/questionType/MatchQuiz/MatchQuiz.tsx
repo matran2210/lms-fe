@@ -472,7 +472,7 @@ const MatchQuiz = forwardRef(
     const correctFlow = useMemo(() => {
       if (!corrects || nodes.length === 0) return { nodes: [], edges: [] }
 
-      const allAnswersCorrect = defaultAnswer.every((pair: any) =>
+      const allAnswersCorrect = (defaultAnswer ?? [])?.every((pair: any) =>
         corrects.some(
           (c: any) =>
             String(c.id) === String(pair.question_id) &&

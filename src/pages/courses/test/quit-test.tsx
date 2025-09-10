@@ -10,6 +10,7 @@ interface IProps {
   setOpen: Dispatch<SetStateAction<boolean>>
   handleQuit: () => void
   handleCancel: () => void
+  [key: string]: any
 }
 
 const QuitTestModal = ({
@@ -18,6 +19,7 @@ const QuitTestModal = ({
   setOpen,
   handleQuit,
   handleCancel,
+  ...props
 }: IProps) => {
   const onSubmit = () => {
     setOpen(false)
@@ -44,6 +46,7 @@ const QuitTestModal = ({
       header="Are you sure?"
       content={content}
       cancelButtonClass="underline !p-0 !w-fit hover:text-primary"
+      {...props}
     />
   )
 }
