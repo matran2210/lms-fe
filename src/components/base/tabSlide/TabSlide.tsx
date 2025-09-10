@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import PageLink from '../pagination/PageLink'
-import { QUESTION_TYPES } from 'src/constants'
-import { FieldValues, UseFormSetValue } from 'react-hook-form'
 import clsx from 'clsx'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { QUESTION_TYPES } from 'src/constants'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
+import PageLink from '../pagination/PageLink'
 
 interface IProps {
   data: Array<any>

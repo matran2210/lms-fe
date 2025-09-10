@@ -3,6 +3,10 @@ import {
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
 import {
+  ArrowUpIcon,
+  CalculatorIcon,
+  ExcelIcon,
+  ExhibitsIcon,
   CalculatorIconV2,
   DownloadIcon,
   FileTextIcon,
@@ -23,7 +27,14 @@ import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { CourseProvider, useCourseContext } from '@contexts/index'
 import { runHighlight } from '@utils/index'
-import { cloneDeep, debounce, isEmpty, isUndefined, uniqueId } from 'lodash'
+import {
+  cloneDeep,
+  debounce,
+  isEmpty,
+  isUndefined,
+  set,
+  uniqueId,
+} from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -99,6 +110,8 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
+import { IQuestion } from 'src/type/course'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { download } from '@components/learning/activity/ActivityResource'
@@ -201,7 +214,15 @@ const TestDetail = () => {
     }>
   >([])
   const [answersSubmitted, setAnswersSubmitted] = useState<any>([])
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+    useState(false)
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
+  const onOpenResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(true)
+  }
+  const onCloseResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(false)
+  }
   const [showWarning, setShowWarning] = useState(true)
   const [filteredTabs, setFilterTabs] = useState<any[]>([])
   const [trigger, setTrigger] = useState(false)
@@ -683,6 +704,12 @@ const TestDetail = () => {
     if (currentTabContent?.id) {
       const oldCurrentTabData = cloneDeep(currentTabContent)
       setOldCurrentTabData(oldCurrentTabData)
+      setExhibitText(
+        currentTabContent?.topicDescription?.course_category?.name ===
+          PROGRAM.CMA
+          ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
+          : EXHIBIT_TEXT_REPLACE.EXHIBIT,
+      )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTabContent?.id])
@@ -990,9 +1017,18 @@ const TestDetail = () => {
         )
       case QUESTION_TYPES.ESSAY:
         const key = `${currentTabID}_${essayData?.index}_answer`
+        const handleEssayChange = (id: string) => {
+          setAnswerListValue(id as unknown as number)
+        }
+        // Tạo data từng bước
+        const part1 =
+          currentTabContent?.data?.requirements?.[essayData?.index] || {}
+        const part2 = essayData?.req || {}
+        const dataEssay = { ...part1, ...part2 }
         const defaultValueEssay = () => {
           const valueFromForm = getValues(key)
           const response_option = currentTabContent?.data?.response_option
+
           switch (response_option) {
             case RESPONSE_OPTION.WORD:
               if (valueFromForm !== undefined && valueFromForm !== null) {
@@ -1057,10 +1093,8 @@ const TestDetail = () => {
               return (
                 currentTabContent?.data?.answer_template || defaultSheetData
               )
-            // return getCurrentDefaultSheetValue
           }
         }
-
         return (
           <>
             <EditorReader
@@ -1085,10 +1119,7 @@ const TestDetail = () => {
             ) : (
               <EssayQuestionPreview
                 isShowContent={false}
-                data={{
-                  ...currentTabContent?.data?.requirements?.[essayData?.index],
-                  ...essayData?.req,
-                }}
+                data={dataEssay}
                 question_content={currentTabContent?.data?.question_content}
                 index={essayData?.index}
                 question_data={currentTabContent?.data}
@@ -1361,13 +1392,19 @@ const TestDetail = () => {
         if (currentContent?.data?.response_option === RESPONSE_OPTION.SHEET) {
           return checkSheetAnswered(singleValue)
         } else {
-          return !!singleValue
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
+            return false
+          }
+          return true
         }
       } else {
         if (currentContent.response_type === 1) {
           return checkSheetAnswered(singleValue)
         } else {
-          return !!singleValue
+          if (!singleValue || singleValue === DEFAULT_EDITOR_VALUE) {
+            return false
+          }
+          return true
         }
       }
     }
@@ -1509,6 +1546,7 @@ const TestDetail = () => {
           questions[questions.findIndex((e: any) => e.id === currentPage)]
             ?.question_topic_id,
           quizDetail?.id,
+          router?.query?.class_user_id as string,
         )
         question = await QuestionAPI.getQuestionDetail(currentPage)
       }
@@ -1525,16 +1563,47 @@ const TestDetail = () => {
     // setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
-    await refEditor?.current?.reset()
-    await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
-    if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-      await refEditor?.current?.reset()
-      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
-    } else if (
-      refEditor?.current?.resetSheet &&
-      currentContent?.qType === QUESTION_TYPES.ESSAY
-    ) {
-      refEditor?.current?.resetSheet()
+    const resetCurrentQuestionAndNextQuestion = async (
+      question: IQuestion | null | undefined,
+    ) => {
+      if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
+        const name = `${currentTab}_0_answer`
+        const valueFromFormReq = getValues(name)
+        const savedAnswer = answersSubmitted?.find(
+          (e: any) => e.questionId === currentTab,
+        )
+        const isWordDataDefault =
+          question?.response_option === RESPONSE_OPTION.WORD
+            ? DEFAULT_EDITOR_VALUE
+            : defaultSheetData
+        const getDefaultWordValue = () => {
+          if (valueFromFormReq !== undefined) {
+            return valueFromFormReq
+          }
+          const requirementId = question?.requirements?.[0]?.id
+          const requirement = savedAnswer?.requirements?.find(
+            (e: any) => e.requirement_id === requirementId,
+          )
+
+          if (requirement?.short_answer !== undefined) {
+            return requirement.short_answer ?? isWordDataDefault
+          }
+          if (requirement?.answer_text !== undefined) {
+            return requirement.answer_text ?? isWordDataDefault
+          }
+          return savedAnswer?.short_answer ?? isWordDataDefault
+        }
+        onResetFormatEssay(name, getDefaultWordValue())
+        await refEditor?.current?.reset()
+        await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
+        if (
+          refEditor?.current?.resetSheet &&
+          question?.response_option === RESPONSE_OPTION.SHEET
+        ) {
+          refEditor?.current?.resetSheet()
+        }
+      }
     }
     const doAfterSetState = () => {
       setEditorReady(false) // Ẩn trước
@@ -1552,9 +1621,9 @@ const TestDetail = () => {
         }
       }, 100)
     }
-
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
+      await resetCurrentQuestionAndNextQuestion(question)
       if (question) {
         const newData = tabs?.map((item: any) => {
           if (currentTab === item.id) {
@@ -1588,6 +1657,7 @@ const TestDetail = () => {
         setLoading(false)
       }
     } else {
+      await resetCurrentQuestionAndNextQuestion(currentContent?.data)
       if (
         currentTabContent.qType !== QUESTION_TYPES.FILL_WORD &&
         currentTabContent.qType !== QUESTION_TYPES.SELECT_WORD
@@ -1688,7 +1758,6 @@ const TestDetail = () => {
           return {
             ...item,
             answer: answer,
-
             attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
@@ -1744,6 +1813,56 @@ const TestDetail = () => {
     })
     setTabs(newTabs)
   }
+
+  const handleChangeTypeEssay = (value: number) => {
+    const newTabs = tabs.map((tab: any) => {
+      if (tab.id === currentPage) {
+        return {
+          ...tab,
+          data: {
+            ...tab?.data,
+            requirements: currentTabContent?.data?.requirements?.map(
+              (req: any, idx: number) => {
+                return {
+                  ...req,
+                  response_type: value,
+                }
+              },
+            ),
+          },
+        }
+      }
+      return tab
+    })
+    setTabs(newTabs)
+  }
+
+  // Initialize answerListRef values once when component mounts
+  useEffect(() => {
+    if (
+      currentTabContent?.data?.response_option === 'SHEET' ||
+      currentTabContent?.data?.response_option === 'WORD'
+    ) {
+      currentTabContent?.data?.requirements?.forEach((req: Requirement) => {
+        if (req?.id) {
+          if (req?.answer_file?.file_key) {
+            answerListRef.current[req.id] = req?.answer_file?.file_key
+          } else if (req?.answer_text) {
+            if (currentTabContent?.data?.response_option === 'SHEET') {
+              answerListRef.current[req.id] = checkSheetAnswered(
+                req.answer_text,
+              )
+                ? req.answer_text
+                : ''
+            } else {
+              answerListRef.current[req.id] = req.answer_text
+            }
+          }
+        }
+      })
+    }
+  }, [currentTabContent])
+
   const setAnswerListValue = debounce((requirementId: number) => {
     answerListRef.current[requirementId] =
       getValues(`${currentPage}_${essayData?.index}_answer`) || ''
@@ -2385,11 +2504,6 @@ const TestDetail = () => {
               router.query.id as string,
               router.query.class_user_id as string,
             )
-            setExhibitText(
-              res.data.program === PROGRAM.CMA
-                ? EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE
-                : EXHIBIT_TEXT_REPLACE.EXHIBIT,
-            )
             localStorage.setItem('quizAttempt', JSON.stringify(res.data))
             setIsQuizAttemptCreated(true) // Mark the attempt as created
           } catch (err: any) {
@@ -2558,6 +2672,16 @@ const TestDetail = () => {
     return (
       <div>
         <div className="flex items-center justify-end gap-2">
+          {currentTabContent &&
+            currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+            isShowTemplate && (
+              <div className="mt-8 flex justify-end">
+                <ButtonPrimary
+                  title="Reset to Answer Template"
+                  onClick={onOpenResetToTemplateModal}
+                />
+              </div>
+            )}
           {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
@@ -2791,7 +2915,7 @@ const TestDetail = () => {
         onResetFormatEssay(key, templateValueWord)
         // Reset component con
         if (refEditor?.current?.reset) {
-          refEditor.current.reset()
+          refEditor.current.reset(templateValueWord)
         }
         break
       case RESPONSE_OPTION.SHEET:
@@ -3588,12 +3712,16 @@ const TestDetail = () => {
                 {...{
                   currentTabContent,
                   essayData,
-                  control,
-                  setValue,
-                  getValues,
                 }}
               />
             )}
+          {openResetToTemplateModal && (
+            <ResetToAnswerTemplateModal
+              open={openResetToTemplateModal}
+              handleReset={onResetAnswerEssayToTemplate}
+              handleClose={onCloseResetToTemplateModal}
+            />
+          )}
         </TestWrapper>
       </CourseProvider>
       {exhibitData && exhibitData?.length > 0 && (

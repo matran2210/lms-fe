@@ -63,12 +63,7 @@ const CaseStudyWrapper = ({
             <div
               className="w-fit cursor-pointer rounded bg-[#E5E7EB] p-2"
               onClick={() => {
-                if (isResult) {
-                  onQuit && onQuit()
-                } else {
-                  setOpenQuit && setOpenQuit(true)
-                  dispatch(disableUnsavedChange())
-                }
+                onQuit && onQuit()
               }}
             >
               <CloseIconV2 />
@@ -90,8 +85,7 @@ const CaseStudyWrapper = ({
                     if (onPrevQuestion) {
                       onPrevQuestion()
                     } else {
-                      setOpenQuit && setOpenQuit(true)
-                      dispatch(disableUnsavedChange())
+                      setOpenQuit?.(true)
                     }
                   }}
                 >
@@ -148,12 +142,6 @@ const CaseStudyWrapper = ({
                 )
                   return
                 onSubmitAnswer()
-                if (checkUnSubmitAnswer()?.length > 0) {
-                  setUnSubmitAnswer(true)
-                } else {
-                  setOpenSubmit(true)
-                }
-                dispatch(disableUnsavedChange())
               }}
             />
           </div>
