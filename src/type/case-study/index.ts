@@ -108,6 +108,8 @@ export interface ITopic {
   files: IFile[] | []
   exhibits: IExhibit[] | []
   case_study_name?: string
+  qType: string
+  requirements: IRequirement[]
 }
 
 export interface ICratchPad {
