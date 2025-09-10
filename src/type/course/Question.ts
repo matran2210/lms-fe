@@ -87,6 +87,7 @@ export interface IRequirment {
     file_name: string
   }
   explanation?: string
+  answer_template?: string
 }
 
 export interface IQuestionFilter {

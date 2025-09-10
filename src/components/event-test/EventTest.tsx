@@ -114,8 +114,8 @@ const EventTest = ({
       case 'CMA':
         return (
           <ContentTestCongratution
-            text1="Your results for Round 2 will"
-            text2="be emailed to you on October 17, 2024"
+            text1="Your results will"
+            text2="be emailed to you on September 30, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
@@ -147,7 +147,7 @@ const EventTest = ({
   //       return '28/06/2025'
 
   //     case 'CMA':
-  //       return '28/09/2024'
+  //       return '30/09/2025'
   //     default:
   //       break
   //   }

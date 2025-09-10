@@ -98,7 +98,7 @@ const Recommendation = ({
                   {COMMENTS?.CANCEL}
                 </button>
                 <ButtonPrimary
-                  type="submit"
+                  htmlType="submit"
                   title={COMMENTS?.SAVE}
                   className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors  duration-200 focus:outline-none"
                 />

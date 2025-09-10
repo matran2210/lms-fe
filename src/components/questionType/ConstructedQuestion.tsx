@@ -71,6 +71,7 @@ export type IPreviewProp = {
   editorClassName?: string
   explainClassname?: string
   uniqueKey?: string
+  isInTest?: boolean
 }
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void
@@ -105,6 +106,7 @@ const EssayQuestionPreview = ({
   explainClassname,
   setValue,
   uniqueKey,
+  isInTest = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const refSheet = useRef(null) as any
@@ -370,6 +372,14 @@ const EssayQuestionPreview = ({
     }
   }
 
+  const stableDataId = useMemo(() => {
+    // Chỉ return khi data hợp lệ
+    if (data && data.id && typeof data.id === 'string' && isInTest) {
+      return data.id
+    }
+    return null
+  }, [data?.id])
+
   const renderSheetEditor = useCallback(
     ({ onChange }: any) => {
       return (
@@ -377,7 +387,10 @@ const EssayQuestionPreview = ({
           question_data={question_data}
           defaultValue={defaultValue}
           index={index}
-          onChange={onChange}
+          onChange={(val: string) => {
+            onChange(val)
+            handleChange && handleChange(data?.id)
+          }}
           fullData={fullData}
           ignoreStructOpsRef={ignoreStructOpsRef}
           refSheet={refSheet}
@@ -386,7 +399,7 @@ const EssayQuestionPreview = ({
         />
       )
     },
-    [key],
+    [key, stableDataId],
   )
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
