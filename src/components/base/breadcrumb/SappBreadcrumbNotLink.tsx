@@ -19,37 +19,31 @@ const SappBreadcrumbNotLink = ({
   const router = useRouter()
   const getCourseId = router?.query?.courseId ?? router.query.id
 
-  const isShortCourse = router.pathname.startsWith(PageLink.SHORT_COURSE)
-
   return (
     <>
       {paths.map((path, index) => {
         let url = ''
-        if (isShortCourse) {
-          url = `${PageLink.SHORT_COURSE}/detail/${getCourseId}/activity/${path?.id}`
-        } else {
-          switch (path.type) {
-            case 'PART':
-              url = `${
-                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-              }/${getCourseId}/section/${path?.id}`
-              break
-            case 'CHAPTER':
-              url = `${
-                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
-              break
-            case 'UNIT':
-              url = `${
-                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-              break
-            case 'ACTIVITY':
-              url = `${
-                isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-              }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-              break
-          }
+        switch (path.type) {
+          case 'PART':
+            url = `${
+              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+            }/${getCourseId}/section/${path?.id}`
+            break
+          case 'CHAPTER':
+            url = `${
+              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${path?.id}`
+            break
+          case 'UNIT':
+            url = `${
+              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+            break
+          case 'ACTIVITY':
+            url = `${
+              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
+            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
+            break
         }
         return (
           <span
