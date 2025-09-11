@@ -17,7 +17,19 @@ export default function AssistiveTouch({
 }: AssistiveTouchProps) {
   const [open, setOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: window.innerHeight / 2 }) // vị trí mặc định
   const wrapperRef = useRef<HTMLDivElement>(null)
+
+  const handleStop = (_: any, data: any) => {
+    setTimeout(() => setIsDragging(false), 50)
+
+    if (!wrapperRef.current) return
+
+    // luôn hút về bên phải
+    const targetY = data.y
+
+    setPosition({ x: 0, y: targetY })
+  }
 
   // Detect click outside
   useEffect(() => {
@@ -44,20 +56,26 @@ export default function AssistiveTouch({
   return (
     <Draggable
       bounds="body"
+      position={position}
       onStart={() => setIsDragging(false)} // reset
       onDrag={() => setIsDragging(true)} // đang kéo
-      onStop={() => {
-        // delay một nhịp nhỏ để tránh nhầm với click
-        setTimeout(() => setIsDragging(false), 50)
-      }}
+      onStop={handleStop}
       defaultClassName={className}
+      nodeRef={wrapperRef}
     >
-      <div ref={wrapperRef} className="fixed bottom-[50%] right-5 z-50">
+      <div
+        ref={wrapperRef}
+        className="fixed bottom-[50%] right-5 z-50"
+        style={{ touchAction: 'none' }}
+      >
         {/* Main Button - chỉ hiện khi chưa open */}
         {!open && (
           <button
             onClick={() => {
               if (!isDragging) setOpen(true) // chỉ mở nếu KHÔNG kéo
+            }}
+            onTouchEnd={() => {
+              if (!isDragging) setOpen(true)
             }}
             className="flex items-center justify-center rounded-full bg-icon p-2 text-white shadow-lg backdrop-blur-sm transition active:scale-95"
           >
