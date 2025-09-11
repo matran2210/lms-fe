@@ -43,6 +43,7 @@ interface IProps {
   setUnSubmitAnswer: Dispatch<SetStateAction<boolean>>
   checkUnSubmitAnswer: () => number[]
   footer?: React.ReactNode
+  resetWordBeforeAction?: () => Promise<void>
 }
 const TestWrapper = ({
   children,
@@ -61,6 +62,7 @@ const TestWrapper = ({
   quizAttempt,
   handleTimeoutSubmit,
   onSubmitAnswer,
+  resetWordBeforeAction,
 }: PropsWithChildren<IProps>) => {
   const dispatch = useAppDispatch()
   const startTime = dayjs(quizAttempt.created_at)
@@ -88,7 +90,8 @@ const TestWrapper = ({
           <div>
             <div
               className="w-fit cursor-pointer rounded bg-gray-200 p-2"
-              onClick={() => {
+              onClick={async () => {
+                await resetWordBeforeAction?.()
                 setOpenQuit(true)
                 dispatch(disableUnsavedChange())
               }}
@@ -116,7 +119,8 @@ const TestWrapper = ({
               title="Finish"
               size="small"
               className="!bg-white !px-4 !py-2 font-semibold"
-              onClick={() => {
+              onClick={async () => {
+                await resetWordBeforeAction?.()
                 onSubmitAnswer('finish')
                 if (checkUnSubmitAnswer()?.length > 0) {
                   setUnSubmitAnswer(true)
