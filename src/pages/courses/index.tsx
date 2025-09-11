@@ -8,7 +8,7 @@ import PopupWelcome from '@components/user-guide/PopupWelcome'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import { ANIMATION, UserGuide } from 'src/constants'
@@ -19,11 +19,13 @@ import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import GotoModal from '@components/courses/popup/GotoModal'
+import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 
 const DEFAULT_PAGESIZE = 9
 
 const MyCourse = () => {
   const dispatch = useAppDispatch()
+  const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideIsActive = useAppSelector(
     (state) => state.userGuideReducer?.isActive,
@@ -156,6 +158,9 @@ const MyCourse = () => {
       window.sessionStorage.setItem('totalCourse', courses?.length)
     }
   }, [courses])
+  useEffect(() => {
+    setOpenModalMarketingInApp(true)
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -271,6 +276,10 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
           ></div>
         )}
+        <ModalMarketingInApp
+          open={openModalMarketingInApp}
+          setOpen={setOpenModalMarketingInApp}
+        />
         <GotoModal />
       </Layout>
     </SappLoadingGlobal>
