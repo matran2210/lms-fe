@@ -1396,43 +1396,47 @@ const TestDetail = () => {
     const resetCurrentQuestionAndNextQuestion = async (
       question: IQuestion | null | undefined,
     ) => {
-      if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-        const name = `${currentTab}_0_answer`
-        const valueFromFormReq = getValues(name)
-        const savedAnswer = answersSubmitted?.find(
-          (e: any) => e.questionId === currentTab,
+      const name = `${currentTab}_0_answer`
+      const valueFromFormReq = getValues(name)
+      const savedAnswer = answersSubmitted?.find(
+        (e: any) => e.questionId === currentTab,
+      )
+      const isWordDataDefault =
+        question?.response_option === RESPONSE_OPTION.WORD
+          ? DEFAULT_EDITOR_VALUE
+          : defaultSheetData
+      const getDefaultWordValue = () => {
+        if (valueFromFormReq !== undefined) {
+          return valueFromFormReq
+        }
+        const requirementId = question?.requirements?.[0]?.id
+        const savedRequirement = savedAnswer?.requirements?.find(
+          (e: any) => e.requirement_id === requirementId,
         )
-        const isWordDataDefault =
-          question?.response_option === RESPONSE_OPTION.WORD
-            ? DEFAULT_EDITOR_VALUE
-            : defaultSheetData
-        const getDefaultWordValue = () => {
-          if (valueFromFormReq !== undefined) {
-            return valueFromFormReq
-          }
-          const requirementId = question?.requirements?.[0]?.id
-          const requirement = savedAnswer?.requirements?.find(
-            (e: any) => e.requirement_id === requirementId,
-          )
+        const requirement = question?.requirements?.[0]
 
-          if (requirement?.short_answer !== undefined) {
-            return requirement.short_answer ?? isWordDataDefault
-          }
-          if (requirement?.answer_text !== undefined) {
-            return requirement.answer_text ?? isWordDataDefault
-          }
-          return savedAnswer?.short_answer ?? isWordDataDefault
+        if (savedRequirement?.short_answer !== undefined) {
+          return savedRequirement.short_answer ?? isWordDataDefault
         }
-        onResetFormatEssay(name, getDefaultWordValue())
-        await refEditor?.current?.reset()
-        await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+        if (savedRequirement?.answer_text !== undefined) {
+          return savedRequirement.answer_text ?? isWordDataDefault
+        }
+        if (requirement?.answer_template !== undefined) {
+          return requirement.answer_template ?? isWordDataDefault
+        }
+        // return savedAnswer?.short_answer ?? isWordDataDefault
+        return question?.answer_template ?? isWordDataDefault
+      }
 
-        if (
-          refEditor?.current?.resetSheet &&
-          question?.response_option === RESPONSE_OPTION.SHEET
-        ) {
-          refEditor?.current?.resetSheet()
-        }
+      onResetFormatEssay(name, getDefaultWordValue())
+      await refEditor?.current?.reset()
+      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
+      if (
+        refEditor?.current?.resetSheet &&
+        question?.response_option === RESPONSE_OPTION.SHEET
+      ) {
+        refEditor?.current?.resetSheet()
       }
     }
     if (!currentContent?.viewed) {
@@ -3108,26 +3112,21 @@ const TestDetail = () => {
                                           indexReq
                                         ]
 
-                                      if (
-                                        requirement?.short_answer !== undefined
-                                      ) {
-                                        return (
-                                          requirement.short_answer ||
-                                          DEFAULT_EDITOR_VALUE
-                                        )
+                                      if (requirement?.short_answer) {
+                                        return requirement.short_answer
                                       }
-                                      if (
-                                        requirement?.answer_text !== undefined
-                                      ) {
-                                        return (
-                                          requirement.answer_text ||
-                                          DEFAULT_EDITOR_VALUE
-                                        )
+                                      if (requirement?.answer_text) {
+                                        return requirement.answer_text
                                       }
-                                      return (
-                                        currentTabContent.answer ||
-                                        DEFAULT_EDITOR_VALUE
-                                      )
+                                      if (requirement?.answer_template) {
+                                        return requirement.answer_template
+                                      }
+                                      if (currentTabContent.answer) {
+                                        return currentTabContent.answer
+                                      }
+
+                                      return currentTabContent?.data
+                                        ?.answer_template
                                     }
                                     onResetFormatEssay(
                                       name,
