@@ -1,25 +1,25 @@
 import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
 import { useRouter } from 'next/router'
-import dashboardIcon from '@assets/images/dashboard_mkt_in_app.svg'
+import dashboardMktInApp from '@assets/images/dashboard_mkt_in_app.svg'
 import { useEffect, useState } from 'react'
 
 const listTab = [
-  { title: 'Marketing In App', value: 'home', src: dashboardIcon },
-  { title: 'Dashboard', value: 'dashboard', src: dashboardIcon },
-  { title: 'My Course', value: 'my-course', src: dashboardIcon },
+  { title: 'Marketing In App', value: 'home', src: dashboardMktInApp },
+  { title: 'Dashboard', value: 'dashboard', src: dashboardMktInApp },
+  { title: 'My Course', value: 'my-course', src: dashboardMktInApp },
   {
     title: 'Student Calendar',
     value: 'student-calendar',
-    src: dashboardIcon,
+    src: dashboardMktInApp,
   },
   {
     title: 'Learning Activity',
     value: 'learning-activity',
-    src: dashboardIcon,
+    src: dashboardMktInApp,
   },
-  { title: 'Test', value: 'test', src: dashboardIcon },
-  { title: 'Dashboard Test', value: 'dashboard-test', src: dashboardIcon },
-  { title: 'Exam List', value: 'exam-list', src: dashboardIcon },
+  { title: 'Test', value: 'test', src: dashboardMktInApp },
+  { title: 'Dashboard Test', value: 'dashboard-test', src: dashboardMktInApp },
+  { title: 'Exam List', value: 'exam-list', src: dashboardMktInApp },
 ]
 
 const MarketingInApp = () => {
