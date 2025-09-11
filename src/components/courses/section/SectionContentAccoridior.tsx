@@ -17,6 +17,7 @@ const { Panel } = Collapse
 
 export default function SectionContentAccoridior({
   sections,
+  class_user_id,
 }: SectionContentProps) {
   const router = useRouter()
   const courseId = router.query.courseId
@@ -199,6 +200,7 @@ export default function SectionContentAccoridior({
         open={open}
         data={dataTest}
         setOpen={() => setOpen(false)}
+        class_user_id={class_user_id}
       />
     </div>
   )

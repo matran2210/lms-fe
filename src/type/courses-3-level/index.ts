@@ -359,6 +359,7 @@ export interface CourseInfo {
 export type SectionContentProps = {
   title?: string
   sections: ISubSection[]
+  class_user_id?: string
 }
 
 export type SectionContentModalProp = {
