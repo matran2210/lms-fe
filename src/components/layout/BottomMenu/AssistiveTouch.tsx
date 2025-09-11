@@ -17,7 +17,7 @@ export default function AssistiveTouch({
 }: AssistiveTouchProps) {
   const [open, setOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [position, setPosition] = useState({ x: 0, y: window.innerHeight / 2 }) // vị trí mặc định
+  const [position, setPosition] = useState({ x: 0, y: 50 }) // vị trí mặc định
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   const handleStop = (_: any, data: any) => {
