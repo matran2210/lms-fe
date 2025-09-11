@@ -2056,7 +2056,7 @@ const TestDetail = () => {
     }
   }
 
-  const handleClearSelection = (currentTabContent: any) => {
+  const handleClearSelection = async (currentTabContent: any) => {
     const data = currentTabContent.data
 
     if (data && !currentTabContent.is_viewed_answer) {
@@ -2079,6 +2079,7 @@ const TestDetail = () => {
         return arr
       })
       if (data.qType === QUESTION_TYPES.ESSAY) {
+        await resetWordBeforeAction()
         setValue(`${currentTabContent?.id}_answer`, undefined)
       } else {
         setValue(`${currentTabContent?.id}_answer`, '')
@@ -2596,6 +2597,82 @@ const TestDetail = () => {
         break
     }
   }
+  const resetWordBeforeAction = async () => {
+    if (currentTabContent?.data?.response_option === RESPONSE_OPTION.WORD) {
+      const key = `${currentTabContent?.id}_${essayData?.index}_answer`
+      const defaultValueEssay = () => {
+        const valueFromForm = getValues(key)
+        const response_option = currentTabContent?.data?.response_option
+
+        switch (response_option) {
+          case RESPONSE_OPTION.WORD:
+            if (valueFromForm !== undefined && valueFromForm !== null) {
+              return valueFromForm
+            }
+            const requirement =
+              currentTabContent?.data?.requirements?.[essayData?.index]
+
+            if (requirement?.short_answer) {
+              return requirement.short_answer
+            }
+            if (requirement?.answer_text) {
+              return requirement.answer_text
+            }
+            if (requirement?.answer_template) {
+              return requirement.answer_template
+            }
+            if (currentTabContent.answer) {
+              return currentTabContent.answer
+            }
+
+            return currentTabContent?.data?.answer_template
+
+          case RESPONSE_OPTION.SHEET:
+            const valueFromSheetForm = getValues(key)
+            if (valueFromSheetForm) {
+              const isEmptyWorkbook = isWorkbookEmpty(
+                JSON.parse(valueFromSheetForm),
+              )
+
+              if (isEmptyWorkbook) {
+                const requirement =
+                  currentTabContent?.data?.requirements?.[essayData?.index]
+                if (requirement?.short_answer) {
+                  return requirement.short_answer
+                }
+                if (requirement?.answer_text) {
+                  return requirement.answer_text
+                }
+                if (requirement?.answer_template) {
+                  return requirement.answer_template || defaultSheetData
+                }
+                if (currentTabContent.answer) return currentTabContent.answer
+                return (
+                  currentTabContent?.data?.answer_template || defaultSheetData
+                )
+              }
+              return valueFromSheetForm
+            }
+            const requirementSheet =
+              currentTabContent?.data?.requirements?.[essayData?.index]
+            if (requirementSheet?.short_answer) {
+              return requirementSheet.short_answer
+            }
+            if (requirementSheet?.answer_text) {
+              return requirementSheet.answer_text
+            }
+            if (requirementSheet?.answer_template) {
+              return requirementSheet.answer_template || defaultSheetData
+            }
+            if (currentTabContent.answer) return currentTabContent.answer
+            return currentTabContent?.data?.answer_template || defaultSheetData
+        }
+      }
+      const defaultValue = defaultValueEssay()
+      refEditor?.current?.reset(defaultValue)
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    }
+  }
 
   return (
     <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
@@ -2636,6 +2713,7 @@ const TestDetail = () => {
                 }}
                 handleTimeoutSubmit={async () => {
                   if (!openLimit) {
+                    await resetWordBeforeAction()
                     if (!submited && !quizAttempt?.is_submitted) {
                       const remainingTimeinSeconds = quizDetail?.quiz_timed
                         ? dayjs(
@@ -2666,6 +2744,7 @@ const TestDetail = () => {
                     }
                   }
                 }}
+                resetWordBeforeAction={resetWordBeforeAction}
               />
             )}
 
@@ -3152,7 +3231,7 @@ const TestDetail = () => {
                     ? 'border-gray-1 text-bw-1'
                     : 'border-default text-gray-2'
                 } w-[150px] justify-center p-1 py-2`}
-                onClick={() => {
+                onClick={async () => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
                 }}
@@ -3168,6 +3247,7 @@ const TestDetail = () => {
                 <button
                   className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                   onClick={async () => {
+                    await resetWordBeforeAction()
                     const data = await getResult(currentTabContent)
                     handleSubmitAnswer('view-answer')
                     confirmAnswer(
