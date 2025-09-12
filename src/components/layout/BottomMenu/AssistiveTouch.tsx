@@ -17,18 +17,45 @@ export default function AssistiveTouch({
 }: AssistiveTouchProps) {
   const [open, setOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [position, setPosition] = useState({ x: 0, y: 50 }) // vị trí mặc định
+  const [position, setPosition] = useState({ x: 0, y: 50 })
+  const [dragStartTime, setDragStartTime] = useState(0)
   const wrapperRef = useRef<HTMLDivElement>(null)
 
+  const handleStart = () => {
+    setDragStartTime(Date.now())
+    setIsDragging(false)
+  }
+
+  const handleDrag = () => {
+    setIsDragging(true)
+  }
+
   const handleStop = (_: any, data: any) => {
-    setTimeout(() => setIsDragging(false), 50)
+    const dragDuration = Date.now() - dragStartTime
+
+    // Nếu kéo quá ngắn (< 100ms) thì coi như click
+    if (dragDuration < 100) {
+      setIsDragging(false)
+    } else {
+      // Delay để tránh trigger onClick ngay sau khi kéo
+      setTimeout(() => setIsDragging(false), 150)
+    }
 
     if (!wrapperRef.current) return
 
-    // luôn hút về bên phải
+    // Luôn hút về bên phải
     const targetY = data.y
-
     setPosition({ x: 0, y: targetY })
+  }
+
+  const handleButtonClick = (e: any) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    // Chỉ mở menu nếu không đang kéo
+    if (!isDragging) {
+      setOpen((prev) => !prev)
+    }
   }
 
   // Detect click outside
@@ -57,8 +84,8 @@ export default function AssistiveTouch({
     <Draggable
       bounds="body"
       position={position}
-      onStart={() => setIsDragging(false)} // reset
-      onDrag={() => setIsDragging(true)} // đang kéo
+      onStart={handleStart}
+      onDrag={handleDrag}
       onStop={handleStop}
       defaultClassName={className}
       nodeRef={wrapperRef}
@@ -68,16 +95,17 @@ export default function AssistiveTouch({
         className="fixed bottom-[50%] right-5 z-50"
         style={{ touchAction: 'none' }}
       >
-        {/* Main Button - chỉ hiện khi chưa open */}
+        {/* Main Button */}
         {!open && (
           <button
-            onClick={() => {
-              if (!isDragging) setOpen(true) // chỉ mở nếu KHÔNG kéo
+            type="button"
+            onClick={handleButtonClick}
+            onTouchEnd={handleButtonClick}
+            className="flex items-center justify-center rounded-full bg-icon p-2 text-white shadow-lg backdrop-blur-sm transition-transform active:scale-95"
+            style={{
+              cursor: isDragging ? 'grabbing' : 'pointer',
+              pointerEvents: 'auto',
             }}
-            onTouchEnd={() => {
-              if (!isDragging) setOpen(true)
-            }}
-            className="flex items-center justify-center rounded-full bg-icon p-2 text-white shadow-lg backdrop-blur-sm transition active:scale-95"
           >
             <AssistiveIcon />
           </button>
@@ -91,17 +119,19 @@ export default function AssistiveTouch({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 10 }}
               transition={{ duration: 0.2 }}
-              className="absolute bottom-0 right-0 inline-flex flex-col items-center justify-center gap-[20px] rounded-[20px] bg-gray-800/80 px-6
-               py-5 backdrop-blur-[2px]"
+              className="absolute bottom-0 right-0 inline-flex flex-col items-center justify-center gap-[20px] rounded-[20px] bg-gray-800/80 px-6 py-5 backdrop-blur-[2px]"
             >
               {menuItems.map((item, idx) => (
                 <button
                   key={idx}
-                  onClick={() => {
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
                     item.onClick()
                     setOpen(false)
                   }}
-                  className="text-xs text-white transition hover:text-primary"
+                  className="text-xs text-white transition-colors hover:text-primary"
                 >
                   {item.label}
                 </button>
