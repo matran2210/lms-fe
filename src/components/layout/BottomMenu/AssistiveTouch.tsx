@@ -131,7 +131,13 @@ export default function AssistiveTouch({
                     item.onClick()
                     setOpen(false)
                   }}
-                  className="text-xs text-white transition-colors hover:text-primary"
+                  onTouchEnd={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    item.onClick()
+                    setOpen(false)
+                  }}
+                  className="text-xs text-white transition hover:text-primary"
                 >
                   {item.label}
                 </button>
