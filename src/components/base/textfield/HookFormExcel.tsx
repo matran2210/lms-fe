@@ -1,4 +1,3 @@
-import { SheetData } from '@components/questionType/ConstructedQuestion'
 import { Workbook } from '@fortune-sheet/react'
 import { isEmpty, isNull, isUndefined } from 'lodash'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
@@ -55,73 +54,6 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
     }
   })
 
-  // nếu value thay đổi từ ngoài (ví dụ load form mới) → chỉ setData lúc đầu, không push liên tục
-  // useEffect(() => {
-  //     if (
-  //         refSheet &&
-  //         refSheet.current &&
-  //         Number(index) <= question_data?.requirements?.length
-  //     ) {
-  //         if (
-  //             defaultValue === undefined ||
-  //             defaultValue === null ||
-  //             String(defaultValue).trim() === ''
-  //         ) {
-  //             const emptySheets = refSheet.current
-  //                 ?.getAllSheets()
-  //                 .map((sheet: SheetData) => ({
-  //                     ...sheet,
-  //                     celldata: [],
-  //                     data: Array(sheet.row || 100)
-  //                         .fill(null)
-  //                         .map(() => Array(sheet.column || 50).fill(null)),
-  //                 }))
-  //             emptySheets.forEach((sheet: SheetData) => {
-  //                 refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
-  //             })
-  //         } else {
-  //             const sheetData =
-  //                 defaultValue && String(defaultValue).trim() !== ''
-  //                     ? JSON.parse(defaultValue)
-  //                     : [
-  //                         {
-  //                             name: 'Sheet1',
-  //                             id: generateSheetId(),
-  //                             status: 1,
-  //                             data: [[]],
-  //                             celldata: [],
-  //                         },
-  //                     ]
-
-  //             // Convert sheetData to constructor with id of refSheet.current
-  //             const currentSheets = refSheet.current.getAllSheets()
-  //             const updatedSheetData = sheetData.map(
-  //                 (sheet: SheetData, index: number) => ({
-  //                     ...sheet,
-  //                     id: currentSheets[index]?.id || '',
-  //                 }),
-  //             )
-
-  //             const emptySheets = currentSheets.map((sheet: SheetData) => ({
-  //                 ...sheet,
-  //                 celldata: [],
-  //                 data: Array(sheet.row || 100)
-  //                     .fill(null)
-  //                     .map(() => Array(sheet.column || 50).fill(null)),
-  //             }))
-  //             emptySheets.forEach((sheet: SheetData, index: number) => {
-  //                 if (sheet?.name === sheetData[index]?.name) {
-  //                     refSheet.current?.updateSheet(
-  //                         JSON.parse(JSON.stringify([updatedSheetData[index]])),
-  //                     )
-  //                 } else {
-  //                     refSheet.current?.updateSheet(JSON.parse(JSON.stringify([sheet])))
-  //                 }
-  //             })
-  //         }
-  //     }
-  // }, [defaultValue, index])
-
   const handleWorkbookChange = useCallback(() => {
     if (ignoreStructOpsRef.current) return
     if (!fullData?.is_viewed_answer && !fullData?.confirmed) {
@@ -157,20 +89,9 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
       return false
     }
   }
+
   return (
     <Workbook
-      // data={defaultValue && isValid(defaultValue) ? JSON.parse(defaultValue) : [
-      //     {
-      //         name: 'Sheet1',
-      //         // config: {
-      //         //   authority: {
-
-      //         //     sheet: true, //If it is 1 or true, the worksheet is protected; if it is 0 or false, the worksheet is not protected.
-
-      //         //   },
-      //         // },
-      //     },
-      // ]}
       data={initialData}
       ref={refSheet}
       onChange={handleWorkbookChange}
