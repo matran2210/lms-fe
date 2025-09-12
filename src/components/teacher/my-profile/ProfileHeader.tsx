@@ -1,6 +1,10 @@
-import { ClockIcon, PencilFillV2Icon, PencilV2Icon } from '@assets/icons'
+import {
+  CheckCircleOutlineYellow,
+  ClockIcon,
+  PencilFillV2Icon,
+  PencilV2Icon,
+} from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import { CheckCircleOutlineYellow } from '@assets/v2/icons'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'

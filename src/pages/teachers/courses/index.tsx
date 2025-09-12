@@ -14,7 +14,6 @@ import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
-import GotoModal from '@components/courses/popup/GotoModal'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -160,7 +159,6 @@ const MyCourseTeacher = () => {
             isTeacher
           />
         </div>
-        <GotoModal />
       </LayoutTeacher>
     </SappLoadingGlobal>
   )

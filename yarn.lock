@@ -6046,10 +6046,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.0.tgz#af6c0a3ce212792cb8ef072fcda01242d6f9337f"
-  integrity sha512-2Rrur8pjtGH/B3iVDroMYcXeJA0jyODJntf1lyE63W3Qas/lvo93tsuq6UNG/ZEBQxMt/X/U8YbcBSJu8xHiYA==
+explanation-package@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.1.tgz#e09d65dbce688ecbdda4247ae1355cc0967dfc35"
+  integrity sha512-h6IS8tqOJaIyhpePD12ltz6n3SkwPeY60JigqmPr9sWVv1X2wXjeMWtCg4Cmm2xcDy/jpcNYd+Dp8ApcMdH5Fg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -10146,10 +10146,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.3.1.tgz#d80ec59922486120cf4eb2ef115a47dfb2a4663e"
-  integrity sha512-kD9g2pKm0aMkLb3jckSK6bYW5owH0bloLpOD9v5ZEkS4jyRjMKmTnFuIhN2mNwHNmLitBbOTSAFP4674HmhLCg==
+sapp-common-package@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.3.4.tgz#754286eeedcf4d085a5991d09961a43c958af8d1"
+  integrity sha512-m67hyA04uB0crsR+SUIALiDCgkB6Uc9xOpt8A+xAnYqu2yud5iUQXIjlsO/ss2ORL1EXLgrcAMeKWygirU6jBg==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
