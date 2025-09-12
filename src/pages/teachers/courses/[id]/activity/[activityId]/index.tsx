@@ -699,8 +699,6 @@ const ActivityTeacherPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
-                              activeTab=""
-                              activeVideo=""
                             ></VideoDocument>
                           </div>
                         )
