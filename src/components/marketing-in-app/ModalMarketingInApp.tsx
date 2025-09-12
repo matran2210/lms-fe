@@ -16,11 +16,12 @@ const ModalMarketingInApp = ({
   const router = useRouter()
   return (
     <Modal
+      width={1000}
       footer={false}
-      centered
       open={open}
+      centered
       closeIcon={false}
-      className={'modal-marketing-in-app'}
+      rootClassName="modal-marketing-in-app"
     >
       <div>
         <Image

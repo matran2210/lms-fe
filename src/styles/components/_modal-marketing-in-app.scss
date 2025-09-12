@@ -1,11 +1,5 @@
 .modal-marketing-in-app {
-  .ant-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .ant-modal-content {
-    @apply h-[760px] w-[1000px] !rounded-3xl p-0;
+    @apply h-[760px] !w-[1000px] !rounded-3xl p-0;
   }
 }
