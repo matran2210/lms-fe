@@ -1424,6 +1424,9 @@ const TestDetail = () => {
         if (requirement?.answer_template !== undefined) {
           return requirement.answer_template ?? isWordDataDefault
         }
+        if (savedAnswer?.short_answer !== undefined) {
+          return savedAnswer?.short_answer ?? isWordDataDefault
+        }
         // return savedAnswer?.short_answer ?? isWordDataDefault
         return question?.answer_template ?? isWordDataDefault
       }
