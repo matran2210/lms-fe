@@ -1,8 +1,7 @@
 import { Modal } from 'antd'
 import Image from 'next/image'
-import ImgHeaderModalMktInApp from '@assets/images/img_header_modal_mkt_in_app.png'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonText from '@components/base/button/ButtonText'
 import { Dispatch, SetStateAction } from 'react'
 import { useRouter } from 'next/router'
 
@@ -26,10 +25,13 @@ const ModalMarketingInApp = ({
       <div>
         <Image
           className="rounded-t-3xl"
-          src={ImgHeaderModalMktInApp}
+          src="https://cdn.sapp.edu.vn/icons/img_header_modal_mkt_in_app.png"
           width={1000}
           height={380}
           alt="default_bg_mkt_in_app"
+          priority
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,..."
         />
       </div>
       <div className="flex flex-col items-center justify-center px-[200px] py-[56px]">
@@ -42,14 +44,14 @@ const ModalMarketingInApp = ({
           designed to make your learning journey easier and more engaging.
         </div>
         <div className="mt-10 flex w-full flex-col items-center justify-center gap-3 px-[100px]">
-          <ButtonPrimaryV2
+          <ButtonPrimary
             title="Explore now"
             className="w-full"
             onClick={() => {
               router.push('/marketing-in-app')
             }}
           />
-          <ButtonTextV2
+          <ButtonText
             size="medium"
             onClick={() => setOpen(false)}
             title="Skip"

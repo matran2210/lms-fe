@@ -10,6 +10,9 @@ const FooterMarketingInApp = () => {
         height={377}
         alt="bgImgFooter"
         className="w-full"
+        priority
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,..."
       />
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-8">
         <div className="text-center text-[32px] font-semibold leading-[46px] text-white">

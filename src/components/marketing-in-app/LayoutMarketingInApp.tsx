@@ -21,7 +21,13 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
 
       <div className="min-h-screen w-full bg-white">
         <div className="relative">
-          <Image src={dashboardTab} alt="bgImg" />
+          <Image
+            src={dashboardTab}
+            alt="bgImg"
+            priority
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,..."
+          />
           <NavigationBarMKTInApp />
         </div>
         <FooterMarketingInApp />
