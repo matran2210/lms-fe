@@ -4,22 +4,32 @@ import SAPP_Logo from '@assets/images/sapp_logo.svg'
 import GotoImage from '@assets/images/goto-image.png'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 import BaseStaticModal from '@components/base/modal/BaseStaticModal'
-import { PageLink } from 'src/constants'
+import { ECourseType, PageLink } from 'src/constants'
 import clsx from 'clsx'
+import { useCourseContext } from '@contexts/index'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
 import { useAppSelector } from 'src/redux/hook'
 
-const destinations = [
+interface IDestination {
+  image: any
+  title: string
+  path: string
+  type: ECourseType
+  classNameHeight?: string
+}
+export const destinations: IDestination[] = [
   {
     image: GotoImage,
     title: 'Master Finance',
     path: PageLink.SHORT_COURSE,
+    type: ECourseType.MASTER,
   },
   {
     image: SAPP_Logo,
     title: 'General Course',
     path: PageLink.COURSES,
+    type: ECourseType.GENERAL,
     classNameHeight: 'h-[50px]',
   },
 ]
@@ -27,12 +37,14 @@ const destinations = [
 export default function GotoModal() {
   const userType = useAppSelector(userReducer).user.type
   const { isVisibleGotoModal, setVisibleGotoModal } = useStaticModalContext()
+  const { setGeneralOrMasterCourse } = useCourseContext()
 
   const router = useRouter()
 
-  const handleRedirect = (path: string) => {
+  const handleRedirect = (destination: IDestination) => {
     setVisibleGotoModal(false)
-    router.push(path)
+    setGeneralOrMasterCourse(destination.type)
+    router.push(destination.path)
   }
 
   return (
@@ -42,7 +54,7 @@ export default function GotoModal() {
           <div
             key={index}
             className="flex cursor-pointer items-center justify-center gap-6 rounded-lg border border-solid border-white py-2 hover:border-primary md:py-4"
-            onClick={() => handleRedirect(destination.path)}
+            onClick={() => handleRedirect(destination)}
           >
             <div
               className={clsx(
@@ -57,7 +69,7 @@ export default function GotoModal() {
                 alt={destination.title}
               />
             </div>
-            <div className="h-[27px] border border-solid border-bw-15" />
+            <div className="border-bw-15 h-[27px] border border-solid" />
             <div className="text-base font-semibold md:text-xl">
               {destination.title}
             </div>

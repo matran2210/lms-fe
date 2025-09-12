@@ -281,7 +281,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.CALCULATOR && (
-        <div className="mx-auto h-px w-[calc(100%-48px)] bg-gray-2 text-center"></div>
+        <div className="bg-gray-2 mx-auto h-px w-[calc(100%-48px)] text-center"></div>
       )}
       <div
         className={`group mx-0 cursor-pointer rounded px-3 py-2 hover:bg-primary md:mx-3 md:px-4 ${

@@ -8,10 +8,10 @@ import { IQuizResultList } from 'src/type'
 import { ClassAPI } from '@pages/api/class'
 import { capitalizeFirstLetter } from '@utils/index'
 import { IAttempt } from 'src/type/courses-3-level'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { useForm } from 'react-hook-form'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 interface IProps {
   open: boolean
@@ -156,13 +156,13 @@ export default function TestModal({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-yellow-400">
+          <div className="text-yellow-400 pr-0.5 font-medium">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+          <div className="text-gray-500 pr-0.5 font-medium">Unsubmitted</div>
         )
     }
   }
@@ -229,13 +229,13 @@ export default function TestModal({
             footer={null}
           >
             <div className="flex justify-between gap-2 pb-4 pt-6 text-sm lg:pb-6 lg:pt-8 lg:text-base">
-              <div className="w-1/2 text-gray-200">Name:</div>
+              <div className="w-1/2 text-gray">Name:</div>
               <div className="line-clamp-2 w-1/2 pr-0.5 text-right font-medium text-bw-1">
                 {data?.name}
               </div>
             </div>
             <div className="flex justify-between gap-8 pb-4 text-sm lg:pb-6 lg:text-base">
-              <div className="text-gray-200">Pass Point:</div>
+              <div className="text-gray">Pass Point:</div>
               <div className="pr-0.5 font-medium text-bw-1">
                 {data?.quiz?.required_percent_score ? (
                   <>{data?.quiz?.required_percent_score ?? '--'}</>
@@ -245,7 +245,7 @@ export default function TestModal({
               </div>
             </div>
             <div className="flex justify-between gap-8 pb-4 text-sm lg:pb-6 lg:text-base">
-              <div className="text-gray-200">Time Allowed:</div>
+              <div className="text-gray">Time Allowed:</div>
               <div className="pr-0.5 font-medium text-bw-1">
                 {data?.quiz?.quiz_timed
                   ? formatTime(data?.quiz?.quiz_timed * 60)
@@ -253,21 +253,21 @@ export default function TestModal({
               </div>
             </div>
             <div className="flex justify-between gap-8 pb-4 text-sm lg:pb-6 lg:text-base">
-              <div className="text-gray-200">Grading Method:</div>
+              <div className="text-gray">Grading Method:</div>
               <div className="pr-0.5 font-medium text-bw-1">
                 {capitalizeFirstLetter(selectedResult?.grading_method) ??
                   capitalizeFirstLetter(data?.quiz?.grading_method)}
               </div>
             </div>
             <div className="flex justify-between gap-8 pb-4 text-sm lg:pb-6 lg:text-base">
-              <div className="text-gray-200">No of Attempts:</div>
+              <div className="text-gray">No of Attempts:</div>
               <div className="pr-0.5 font-medium text-bw-1">
                 {data?.quiz?.attempt?.number_of_attempts || 0}/
                 {data?.quiz?.is_limited ? data?.quiz?.limit_count : 'Unlimited'}
               </div>
             </div>
             <div className="flex justify-between gap-8 pb-1 text-sm lg:pb-6 lg:text-base">
-              <div className="text-gray-200">Status:</div>
+              <div className="text-gray">Status:</div>
               {data?.quiz?.is_graded &&
               data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
                 getGradedStatus(data?.quiz?.attempt?.grading_status)
@@ -350,7 +350,7 @@ export default function TestModal({
               </div>
             )}
             <div className="flex flex-col gap-2 lg:gap-3">
-              <ButtonPrimaryV2
+              <ButtonPrimary
                 title={
                   status === StatusQuizAttempt.Unsubmitted ? 'Start' : 'Retake'
                 }
@@ -367,7 +367,7 @@ export default function TestModal({
                 }}
                 className="h-[38px]"
               />
-              <ButtonSecondaryV2
+              <ButtonSecondary
                 title={'Cancel'}
                 full={true}
                 size="medium"

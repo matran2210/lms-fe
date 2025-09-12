@@ -13,14 +13,17 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
 import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
-import { cloneDeep, isEmpty, isNull, isUndefined, set, uniqueId } from 'lodash'
+import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CloseIcon, UploadIcon } from '@assets/icons'
-import { useAppDispatch } from 'src/redux/hook'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { Divider } from 'antd'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
+import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
+import { MY_COURSES } from 'src/constants/lang'
+import { useAppDispatch } from 'src/redux/hook'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
 
 export type SheetData = {
@@ -64,6 +67,10 @@ export type IPreviewProp = {
   handleChange?: (id: string) => void
   isShowContent?: boolean
   showRequiment?: boolean
+  className?: string
+  editorClassName?: string
+  explainClassname?: string
+  uniqueKey?: string
   isInTest?: boolean
 }
 type SAPPEditorHandle = {
@@ -78,12 +85,9 @@ const EssayQuestionPreview = ({
   control,
   handleSaveHighLight = () => {},
   highlighted,
-  removeHighlight,
   allowHighLight,
   forCaseStudy = false,
-  solution,
   name,
-  setValue,
   defaultValue,
   response_option_custom,
   externalRef,
@@ -97,6 +101,11 @@ const EssayQuestionPreview = ({
   handleChange,
   isShowContent = true,
   showRequiment = false,
+  className = '',
+  editorClassName = '',
+  explainClassname,
+  setValue,
+  uniqueKey,
   isInTest = false,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
@@ -415,7 +424,15 @@ const EssayQuestionPreview = ({
     )
   }, [name])
   return (
-    <div style={{ background: 'white' }}>
+    <div
+      className={clsx(
+        'w-full overflow-hidden',
+        {
+          'rounded-xl bg-gray-100 p-8 lg:rounded-2xl': !isShowContent,
+        },
+        className,
+      )}
+    >
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
@@ -444,7 +461,7 @@ const EssayQuestionPreview = ({
           }}
         >
           <EditorReader
-            className="sapp-questions"
+            className="sapp-questions sapp-editor-reader"
             text_editor_content={question_content}
             highlighted={highlighted}
           />
@@ -486,22 +503,25 @@ const EssayQuestionPreview = ({
               </div>
             )}
             {data?.description && (
-              <EditorReader
-                className="editor-wrap mb-4"
-                text_editor_content={data?.description}
-                highlighted={
-                  question_data?.requirements?.[index || 0]?.highlighted
-                }
-                highlighArea="hightlight_area_require"
-              />
+              <>
+                <EditorReader
+                  className="editor-wrap mb-6"
+                  text_editor_content={data?.description}
+                  highlighted={
+                    question_data?.requirements?.[index || 0]?.highlighted
+                  }
+                  highlighArea="hightlight_area_require"
+                />
+                <Divider />
+              </>
             )}
 
             {data?.files?.length > 0 && (
-              <div className="mb-4">
+              <div>
                 {data?.files?.map((e: any, index: number) => {
                   return (
                     <div
-                      className="mb-1 w-fit cursor-pointer text-state-info hover:underline"
+                      className="mb-1 block w-fit max-w-full cursor-pointer break-all text-[#3964EA] hover:underline"
                       onClick={() => {
                         setOpenPdf &&
                           setOpenPdf(
@@ -519,8 +539,8 @@ const EssayQuestionPreview = ({
               </div>
             )}
           </div>
-          {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
-            !forCaseStudy && <div className="sapp-seprate-line-preview"></div>}
+          {/* {question_data.display_type === DISPLAY_TYPE.VERTICAL && question_data?.requirements?.length > 0 &&
+            !forCaseStudy && <Divider className="my-8" />} */}
         </>
       )}
       <>
@@ -528,13 +548,13 @@ const EssayQuestionPreview = ({
           !isNull(fileData.key) && !isUndefined(fileData.key) ? (
             <React.Fragment>
               <div className="sapp-upload-file-preview">
-                <div className="text-base font-semibold">
+                <div className="text-lg font-semibold text-bw-13">
                   {fullData.done
                     ? 'Your Answer File:'
                     : 'Upload file to submit'}
                 </div>
                 <div
-                  className="cursor-pointer text-state-info hover:underline"
+                  className="cursor-pointer text-[#3964EA] hover:underline"
                   onClick={() =>
                     handleDownload({
                       files: [
@@ -559,7 +579,9 @@ const EssayQuestionPreview = ({
               </div>
               {question_data.display_type === DISPLAY_TYPE.VERTICAL &&
                 !forCaseStudy && (
-                  <div className="sapp-seprate-line-preview"></div>
+                  <div className="mb-8">
+                    <hr />
+                  </div>
                 )}
             </React.Fragment>
           ) : (
@@ -569,7 +591,7 @@ const EssayQuestionPreview = ({
                   'sapp-upload-file-preview',
                   data
                     ? ''
-                    : 'w-fit flex-col !items-start justify-start !pt-0 font-semibold',
+                    : 'justify- w-fit flex-col !items-start !pt-0 font-semibold',
                 )}
               >
                 <div
@@ -596,9 +618,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              {question_data?.display_type === DISPLAY_TYPE.VERTICAL &&
-                !forCaseStudy &&
-                data && <div className="sapp-seprate-line-preview"></div>}
+              <Divider />
             </React.Fragment>
           )
         ) : (
@@ -618,7 +638,7 @@ const EssayQuestionPreview = ({
             renderWordEditor
           ) : question_data.response_option === RESPONSE_OPTION.SHEET ? (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 key={key}
@@ -651,7 +671,7 @@ const EssayQuestionPreview = ({
             renderWordEditor
           ) : (
             <div
-              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
+              className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
                 key={key}
@@ -663,15 +683,20 @@ const EssayQuestionPreview = ({
                     onChange,
                   })
                 }}
-              ></Controller>
+              />
             </div>
           )}
           {(fullData?.confirmed ||
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div className="mb-11 mt-8 bg-gray-4 p-4">
-                <div className="font-semibold">Solution</div>
+              <div
+                className={clsx(
+                  'mb-11 mt-8 bg-[#F9F9F9] p-4',
+                  explainClassname,
+                )}
+              >
+                <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader
                   text_editor_content={
                     data?.explanation ??

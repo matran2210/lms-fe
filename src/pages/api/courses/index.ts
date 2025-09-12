@@ -130,12 +130,16 @@ export class CoursesAPI {
   static async getTopicDescription(
     id: string | string[] | undefined,
     quiz_id?: string,
+    class_user_id?: string,
     cache = false,
   ): Promise<any> {
-    const uri =
+    let uri =
       url.getTopicDescription +
       `/${id}?quiz_id=${quiz_id}&include_questions=false`
 
+    if (class_user_id) {
+      uri += `&class_user_id=${class_user_id}`
+    }
     if (!cache) return fetcher(uri)
 
     if (!this.CACHE_GET_TOPIC_DESCRIPTION[uri]) {
@@ -249,7 +253,7 @@ export class CoursesAPI {
     return fetcher(`${url.getQuizAttempts}/user-answers/${id}`)
   }
 
-  static submitAllQuestion(id: string, data: any): Promise<any> {
+  static submitAllQuestion(id: string, data?: any): Promise<any> {
     //is submit test
     const uri = url.submitQuestion + `/${id}` + '/submit'
     return fetcher(`${uri}`, {
@@ -385,7 +389,7 @@ export class CoursesAPI {
     return fetcher(
       `course-sections/short/list?page_index=${page_index ? page_index : 1}&page_size=${
         page_size || 10
-      }&type=${type}&parentId=${parentId ?? ''}${
+      }&type=${type}${parentId ? `&parentId=${parentId}` : ''}${
         classId ? `&classId=${classId}` : ''
       }`,
       { params: params },

@@ -153,7 +153,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
               />
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-error-v2-400">{errorMessage}</span>
+              <span className="text-error-v2-400 text-sm">{errorMessage}</span>
               <span
                 className={`min-w-fit text-right text-sm font-semibold ${
                   timeCountDown === '00 : 00'

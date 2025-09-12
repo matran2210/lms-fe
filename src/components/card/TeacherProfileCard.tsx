@@ -23,11 +23,9 @@ const TeacherProfileCard = ({
     <Card
       title={
         <div className="mb-6 flex flex-col gap-2">
-          <span className="text-xl font-semibold text-secondary-500">
-            {title}
-          </span>
+          <span className="text-xl font-semibold text-secondary">{title}</span>
           {subtitle && (
-            <span className="text-base font-normal text-secondary-500">
+            <span className="text-base font-normal text-secondary">
               {subtitle}
             </span>
           )}

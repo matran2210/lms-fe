@@ -104,7 +104,7 @@ const CourseDetail = () => {
   return (
     <LayoutCourses3Level title="Course Detail">
       <div className="hidden pt-4 md:block">
-        <SearchForm3Level placeholder={MY_COURSES.placeholderSearch3Level} />
+        <SearchForm3Level placeholder={MY_COURSES.placeholderSearchV2} />
       </div>
       <div className="relative mx-auto my-0 max-w-1524 xl-max:mx-4">
         <Breadcrumb3Level

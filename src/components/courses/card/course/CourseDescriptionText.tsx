@@ -22,7 +22,7 @@ export default function CourseDescriptionText({
           'line-clamp-3 h-[72px] text-ellipsis text-ssm lg:text-base':
             !isTooltip,
         },
-        enableCourse ? 'text-bw-15' : 'text-gray-2',
+        enableCourse ? 'text-bw-1' : 'text-gray-2',
       )}
     />
   )

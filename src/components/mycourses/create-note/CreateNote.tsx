@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import MovableWindow from '@components/base/window'
-import { SaveIcon, PlusIcon, CloseIconNote } from '@assets/icons'
+import { SaveIcon, CloseIconNote } from '@assets/icons'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast'
 import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
 import { useAppDispatch } from 'src/redux/hook'
 import { v4 as uuidv4 } from 'uuid'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface IProps {
   id: string | undefined
@@ -38,16 +39,6 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
   })
-
-  const handleAddNote = () => {
-    const note = {
-      uuid: uuidv4(),
-      id: '',
-      name: 'Note',
-      description: '',
-    }
-    dispatch(pushNotes(note))
-  }
 
   const createNewNote = async (data: any) => {
     try {
@@ -105,48 +96,44 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         zIndex={40}
         fixed
       >
-        <div className="absolute left-0 top-0  h-full w-full border bg-white">
-          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-gray-3 px-2.5">
-            <button
-              className="text-gray-1"
-              onClick={() => {
-                handleAddNote()
-              }}
-            >
-              <PlusIcon />
-            </button>
-            <div className="flex items-center">
-              <button
-                className="text-gray-1"
-                onClick={() => {
-                  handleSubmit((data: any) => {
-                    onSubmit(data)
-                  })()
-                }}
-                disabled={loading}
-              >
-                <SaveIcon />
-              </button>
-              <span className="mx-4 h-4 w-px bg-gray-1"></span>
-              <button
-                className="text-gray-1"
-                onClick={() => {
-                  removeNote()
-                }}
-                disabled={loading}
-              >
-                <CloseIconNote />
-              </button>
+        <div className="absolute left-0 top-0  h-full w-full rounded-xl border bg-white">
+          <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+            <div className="text-sm font-semibold text-gray-800">
+              {id || activeSectionId ? 'Edit' : 'New'} Note
             </div>
+            <button
+              className="text-icon"
+              onClick={() => {
+                removeNote()
+              }}
+              disabled={loading}
+            >
+              <CloseIconNote />
+            </button>
           </div>
-          <div className="h-[calc(100%-30px)]">
-            <HookFormTextArea
-              placeholder="Take a note..."
-              control={control}
-              name={`description_${id ? id : uuid}`}
-              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
-              defaultValue={content}
-            />
+          <div className="h-[calc(100%-48px)]">
+            <div className="flex h-full flex-col p-4">
+              <HookFormTextArea
+                placeholder="Take a note..."
+                control={control}
+                name={`description_${id ? id : uuid}`}
+                className="not-resizer sapp-text-area h-full w-full flex-1 whitespace-pre-wrap placeholder:text-sm placeholder:font-normal placeholder:text-[#A1A1A1]"
+                defaultValue={content}
+              />
+              <div className="flex justify-end">
+                <ButtonPrimary
+                  onClick={() => {
+                    handleSubmit((data: any) => {
+                      onSubmit(data)
+                    })()
+                  }}
+                  disabled={loading}
+                  startIcon={<SaveIcon />}
+                >
+                  Save
+                </ButtonPrimary>
+              </div>
+            </div>
           </div>
         </div>
       </MovableWindow>

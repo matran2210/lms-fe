@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 
-import SappModal from '@components/base/modal/SappModal'
-import { ExplanationPackage } from 'explanation-package'
+import { ExplanationPackageV2 } from 'explanation-package-ha-test'
 // import 'explanation-package/dist/index.css'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
+import { Modal } from 'antd'
+import SappLoading from 'src/common/SappLoading'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -32,22 +33,11 @@ const ModalExplanationPackage = ({
 }: {
   quizAttemptsAnswerId: string
   open: boolean
-  setOpen: (open?: boolean) => void
+  setOpen: () => void
   document_id?: string
 }) => {
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false)
-  useEffect(() => {
-    if (quizAttemptsAnswerId) {
-      getActiveQuestion(quizAttemptsAnswerId)
-    }
-  }, [quizAttemptsAnswerId])
-
-  useEffect(() => {
-    if (!open) {
-      setActiveQuestion(undefined)
-    }
-  }, [open])
 
   const getActiveQuestion = async (id: string) => {
     setLoading(true)
@@ -130,47 +120,58 @@ const ModalExplanationPackage = ({
     } catch (error) {}
   }
 
+  useEffect(() => {
+    if (quizAttemptsAnswerId) {
+      getActiveQuestion(quizAttemptsAnswerId)
+    }
+  }, [quizAttemptsAnswerId])
+
+  useEffect(() => {
+    if (!open) {
+      setActiveQuestion(undefined)
+    }
+  }, [open])
+
   return (
-    <div>
-      {/* {loading && (
-        <div className="fixed left-0 top-0 right-0 bottom-0 w-screen h-screen backdrop-blur-sm flex justify-center items-center z-[9999]">
-          Loading
+    <Modal
+      open={open}
+      title=""
+      onOk={setOpen}
+      onCancel={setOpen}
+      footer={[]}
+      closable={false}
+      //   closeIcon={<CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />}
+      style={{ top: 0, left: 0, padding: 0, maxWidth: '100%', height: '100%' }}
+      width="100vw"
+      centered={false}
+      classNames={{
+        content:
+          'bg-white w-screen h-screen !max-w-none !rounded-none overflow-hidden !p-0',
+      }}
+    >
+      <div>
+        <div
+          className="absolute right-6 top-[14px]  ml-auto cursor-pointer"
+          onClick={() => setOpen()}
+        >
+          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
-      )} */}
-      <SappModal
-        open={open}
-        okButtonCaption={'Yes'}
-        cancelButtonCaption={'No'}
-        handleCancel={() => setOpen(undefined)}
-        handleSubmit={() => setOpen(undefined)}
-        setOpen={() => setOpen(undefined)}
-        size="max-w-xxl"
-        position="center"
-        showFooter={false}
-        isFullScreen={true}
-        refClass="h-full md:px-0 px-5 pb-5 flex flex-col animate-jump-in relative transform overflow-hidden bg-white text-left shadow-xl transition-all"
-        showHeader={false}
-      >
-        <div>
-          <div
-            className="absolute right-6 top-[14px]  ml-auto cursor-pointer"
-            onClick={() => setOpen(undefined)}
-          >
-            <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
-          </div>
+        <div className="mx-auto">
           <div className="mx-auto">
-            <div className="mx-auto">
-              <ExplanationPackage
+            {activeQuestion ? (
+              <ExplanationPackageV2
                 getActiveQuestion={getActiveQuestion}
                 activeQuestion={activeQuestion}
                 document_id={document_id}
                 handleDownload={handleDownload}
               />
-            </div>
+            ) : (
+              <SappLoading />
+            )}
           </div>
         </div>
-      </SappModal>
-    </div>
+      </div>
+    </Modal>
   )
 }
 

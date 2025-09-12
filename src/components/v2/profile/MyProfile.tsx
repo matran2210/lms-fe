@@ -316,7 +316,7 @@ const MyProfile = ({
                 />
               )}
             </ul>
-            <div className="cursor-pointer rounded-lg bg-warning-v2-50 p-4 text-warning-v2-DEFAULT md:hidden">
+            <div className="bg-warning-v2-50 text-warning-v2-DEFAULT cursor-pointer rounded-lg p-4 md:hidden">
               <div
                 className="flex items-center justify-between gap-2"
                 onClick={handleChangeToEditForm}

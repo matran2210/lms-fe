@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -38,6 +39,8 @@ interface IProps {
   ) => void
   isHideExhibit?: boolean
   exhibitText?: string
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 const AddWordPreview = forwardRef(
   (
@@ -56,6 +59,8 @@ const AddWordPreview = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText = 'Exhibit',
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -99,8 +104,8 @@ const AddWordPreview = forwardRef(
           )
           inputClass =
             correctAnswer || isSelfReflection === true
-              ? '!border-success text-state-success text-center !font-normal'
-              : '!border-danger text-danger text center !font-normal'
+              ? '!border-[#397839] text-success-600 text-center !font-normal'
+              : '!border-[#d35563] text-[#d35563] text center !font-normal'
         }
 
         element.outerHTML = `
@@ -122,7 +127,7 @@ const AddWordPreview = forwardRef(
             (ans: any) => ans?.answer_position === index + 1,
           )
           if (correctAnswer) {
-            inputClass = 'text-base font-semibold text-state-success'
+            inputClass = 'text-success-600'
             // }
             element.outerHTML = `
                 <span>
@@ -165,7 +170,7 @@ const AddWordPreview = forwardRef(
     //     corrects.forEach((element, index) => {
     //       const isCorrect = elements?.[index]
     //       if (element instanceof HTMLElement) {
-    //         element.classList.add(isCorrect ? 'border-success' : 'border-error')
+    //         element.classList.add(isCorrect ? 'border-[#397839]' : 'border-[#B90E0A]')
     //       }
     //       element.classList.add('pointer-events-none')
     //     })
@@ -178,15 +183,15 @@ const AddWordPreview = forwardRef(
           data?.question_topic?.exhibits?.length > 0 && (
             <>
               {!!data?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2"></div>
+                <div className="my-6 border border-b-[#DCDDDD]"></div>
               )}
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   {exhibitText}s ({data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
-                  <span className="text-gray-1">Click to view</span>
+                  <span className="text-error">* </span>
+                  <span className="text-[#A1A1A1]">Click to view</span>
                 </div>
               </div>
               <div className="flex flex-col gap-2">
@@ -216,7 +221,7 @@ const AddWordPreview = forwardRef(
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-[#DCDDDD]"></div>
             </>
           )}
         <EditorReader
@@ -246,7 +251,7 @@ const AddWordPreview = forwardRef(
           }}
           key={key}
           extenalRef={refEditor}
-          className="sapp-questions"
+          className="sapp-questions sapp-editor-reader"
           text_editor_content={
             questionContent?.documentElement?.querySelector('body')
               ?.innerHTML || ''
@@ -254,22 +259,20 @@ const AddWordPreview = forwardRef(
           highlighted={highlighted}
         />
         {answerContent && (
-          <>
-            <div className="pt-[22px] text-base font-semibold">
-              Correct Answer
-            </div>
+          <div className={clsx('pt-5.75', correctAnswerClass)}>
+            <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
-              className="questions mt-2"
+              className="questions mt-4"
               text_editor_content={
                 answerContent?.documentElement?.querySelector('body')
                   ?.innerHTML || ''
               }
             />
-          </>
+          </div>
         )}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
+          <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         )}

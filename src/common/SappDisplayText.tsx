@@ -14,7 +14,6 @@ const SappDisplayText = ({
           <div className={`break-all font-sans text-base ${className}`}>
             {item}
           </div>
-          <br />
         </React.Fragment>
       ))}
     </React.Fragment>

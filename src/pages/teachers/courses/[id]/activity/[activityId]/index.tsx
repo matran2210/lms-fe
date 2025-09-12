@@ -53,6 +53,7 @@ import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import { ITabs } from 'src/type'
+import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -661,6 +662,8 @@ const ActivityTeacherPage = () => {
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
                               attemptId={e?.quiz?.attempt?.id}
+                              focusOnlyQuiz={{ id: '', open: false }}
+                              setFocusOnlyQuiz={() => {}}
                               isTeacher
                             />
                           </div>
@@ -864,7 +867,7 @@ const ActivityTeacherPage = () => {
 
           {/* Next/Prev Activities */}
           <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-            <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+            <div className="border-b-primary-2 relative mb-6 border-b-2 bg-white px-6 py-3 shadow-activity">
               <div
                 ref={endActivityRef}
                 className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ? 'between' : 'end'}`}

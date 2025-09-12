@@ -90,7 +90,7 @@ const SearchWithMenuToggle = ({
             <div
               key={index}
               className={clsx(
-                'inline-flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-lg bg-gray-v2-200',
+                'bg-gray-v2-200 inline-flex cursor-pointer flex-col items-center justify-center gap-2.5 rounded-lg',
                 item.className,
               )}
               onMouseDown={item.action}
@@ -172,7 +172,7 @@ const SearchWithMenuToggle = ({
             </div>
           )}
           <div
-            className="flex w-full items-center justify-between rounded-lg border border-transparent bg-white px-2 py-3 shadow-small
+            className="border-transparent flex w-full items-center justify-between rounded-lg border bg-white px-2 py-3 shadow-small
            focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4"
           >
             <SearchForm

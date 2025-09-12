@@ -169,24 +169,24 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
     middtermCourse: (
       <span>
         Chúc mừng bạn đã hoàn thành{' '}
-        <span className="text-sm font-medium text-bw-1">50%</span> lớp học{' '}
-        <span className="text-sm font-medium text-bw-1">{class_code}</span>. Tại
-        SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập tốt
-        nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp quý
-        giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ học
-        tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-[#050505]">50%</span> lớp học{' '}
+        <span className="text-sm font-medium text-[#050505]">{class_code}</span>
+        . Tại SAPP Academy, chúng tôi luôn nỗ lực mang đến trải nghiệm học tập
+        tốt nhất. Hãy dành 2 phút để chia sẻ cảm nhận của bạn – những đóng góp
+        quý giá này sẽ giúp chúng tôi nâng cao chất lượng khóa học và dịch vụ
+        học tập. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     finalCourse: (
       <span>
         Bạn đã đi đến chặng đường cuối cùng của lớp học{' '}
-        <span className="text-sm font-medium text-bw-1">{class_code}</span>!
-        Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm đáng
-        nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy thấu
-        hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong nhận
-        được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp chúng tôi
-        cải thiện chất lượng khóa học và mang đến trải nghiệm học tập tốt hơn
-        cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
+        <span className="text-sm font-medium text-[#050505]">{class_code}</span>
+        ! Trong suốt hành trình vừa qua, chắc hẳn bạn đã có những trải nghiệm
+        đáng nhớ về nội dung khóa học cũng như dịch vụ hỗ trợ. Để SAPP Academy
+        thấu hiểu và không ngừng nâng cao chất lượng đào tạo, chúng tôi rất mong
+        nhận được phản hồi từ bạn. Chỉ với 2 phút, đóng góp của bạn sẽ giúp
+        chúng tôi cải thiện chất lượng khóa học và mang đến trải nghiệm học tập
+        tốt hơn cho các học viên sau. Cảm ơn bạn đã đồng hành cùng chúng tôi!
       </span>
     ),
     completeCourse: (
@@ -260,11 +260,11 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center text-center text-4xl font-semibold text-bw-1">
+      <div className="mt-6 flex justify-center text-center text-4xl font-semibold text-[#050505]">
         {SURVEY_TITLES[surveyType]}
       </div>
 
-      <div className="mb-3 mt-4 text-center text-medium-sm leading-[150%] text-gray-1">
+      <div className="mb-3 mt-4 text-center text-sm leading-[150%] text-[#A1A1A1]">
         {SURVEY_CONTENTS[surveyType]}
       </div>
     </SappModalV2>

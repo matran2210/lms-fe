@@ -2,22 +2,22 @@ export const REQUEST_TYPE = {
   BUSY_SCHEDULE: {
     value: 'TEACHER_SCHEDULE_BUSY',
     label: 'Busy Schedule',
-    colorClass: 'text-state-cancel',
+    colorClass: 'text-[#D20306]',
   },
   WEEKLY_NORM: {
     value: 'TEACHER_WEEKLY_NORMS',
     label: 'Weekly Norm',
-    colorClass: 'text-blue-3',
+    colorClass: 'text-[#025eff]',
   },
   TIMEOFF: {
     value: 'TEACHER_SCHEDULE_TIME_OFF',
     label: 'Timeoff',
-    colorClass: 'text-green-1',
+    colorClass: 'text-[#07af17]',
   },
   TEACHING_MODE: {
     value: 'TEACHING_MODE',
     label: 'Teaching mode change',
-    colorClass: 'text-green-1',
+    colorClass: 'text-[#07af17]',
   },
 }
 export const REQUEST_STATUS = {

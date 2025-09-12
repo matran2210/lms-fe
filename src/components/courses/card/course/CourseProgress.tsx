@@ -29,7 +29,7 @@ export default function CourseProgress({
           </p>
         </div>
       </div>
-      <div className="progressbar h-1.5 bg-gray-3">
+      <div className="progressbar bg-gray-3 h-1.5">
         <div
           className={`progress-percentage ${
             enableCourse ? 'bg-primary ' : 'bg-gray-2'

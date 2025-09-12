@@ -15,7 +15,7 @@
     @apply ml-0 lg:ml-16;
   }
   .ant-tabs-tab {
-    @apply font-normal text-gray-v2-800;
+    @apply font-normal text-gray-800;
     &.ant-tabs-tab-active {
       @apply font-semibold;
       .ant-tabs-tab-btn {
@@ -36,7 +36,7 @@
     }
   }
   .ant-tabs-ink-bar {
-    @apply bg-primary-v2-DEFAULT;
+    @apply bg-primary;
   }
 }
 
@@ -45,7 +45,7 @@
     @apply hidden border-b-0 p-0 md:block;
     .ant-card-head-wrapper {
       .ant-card-head-title {
-        @apply text-xl font-bold text-secondary-v2-DEFAULT;
+        @apply text-xl font-bold text-secondary;
       }
     }
   }
@@ -71,18 +71,18 @@
 
 .certificate-card-wrapper {
   @apply h-full w-full bg-cover bg-center bg-no-repeat;
-  background-image: url('../assets/v2/images/certificate-bg.png');
+  background-image: url('../assets/images/certificate-bg.png');
 }
 
 .ant-otp {
   @apply flex justify-between gap-3;
   .ant-otp-input-wrapper {
     input {
-      @apply rounded-md border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:!px-5 md:py-4 md:text-2xl;
+      @apply rounded-lg border border-[#DCDDDD] p-2 text-center text-base font-medium shadow-0 outline-none md:!px-5 md:py-4 md:text-2xl;
       @apply focus:border-primary focus:shadow-0 focus:outline-none;
 
       &.ant-input-status-error {
-        @apply border-[#C73B37] text-error-v2-400;
+        @apply border-[#C73B37] text-error-400;
         @apply hover:border-[#C73B37] focus:border-[#C73B37] focus:shadow-0 focus:outline-none;
       }
     }

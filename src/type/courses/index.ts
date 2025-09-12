@@ -272,6 +272,43 @@ export type IQuizAttemptChartType =
   | 'CMA'
   | 'OTHER'
 
+export type SectionDropdownFormValues = {
+  section: string | null
+  subsection: string | null
+  unit: string | null
+  activity: string | null
+}
+
+export const allTypes = ['section', 'subsection', 'unit', 'activity'] as const
+
+export type SectionField = (typeof allTypes)[number]
+
+export interface IOpenChooseItem {
+  isOpen: boolean
+  type: SectionField
+  name: string
+  params?: string
+}
+
+export const nextTypeMap = {
+  section: 'subsection',
+  subsection: 'unit',
+  unit: 'activity',
+} as Record<SectionField, SectionField>
+
+export const backTypeMap = {
+  activity: 'unit',
+  unit: 'subsection',
+  subsection: 'section',
+} as Record<SectionField, SectionField>
+
+export const getTypeName = {
+  section: 'Section',
+  subsection: 'Subsection',
+  unit: 'Unit',
+  activity: 'Activity',
+} as Record<SectionField, string>
+
 export interface ISelectOption {
   label: string
   value: string

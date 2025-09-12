@@ -1,20 +1,17 @@
 import {
-  CalculatorIcon,
-  CloseIcon,
-  ExhibitsIcon,
-  HighlightIcon,
-  ScratchPadIcon,
-  UnHighLightIcon,
+  CalculatorIconV2,
+  CircleCloseIcon,
+  DownloadIcon,
+  FileTextIcon,
+  ResizeIcon,
+  ScratchPadIconV2,
 } from '@assets/icons'
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
@@ -34,7 +31,6 @@ import {
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { IExhibit } from 'src/type/exhibit'
-import SappButton from '@components/base/button/SappButton'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import {
@@ -45,10 +41,20 @@ import {
   IRequirement,
   ITopic,
 } from 'src/type/case-study'
-import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
-import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
+import { Triangle } from '@components/icons/Triangle'
+import CaseStudyWrapper from '@components/case-study/layout/CaseStudyWrapper'
+import Popover from '@components/Popover'
+import { download } from '@components/learning/activity/ActivityResource'
+import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
+import { Divider } from 'antd'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
@@ -58,6 +64,8 @@ const CaseStudyResult = () => {
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState<number>(0)
+  const questionsScrollRef = useRef<HTMLDivElement | null>(null)
 
   // handle show exhibit list
   const [showListExhibits, setShowListExhibits] = useState(false)
@@ -78,6 +86,8 @@ const CaseStudyResult = () => {
     value: '',
   })
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false)
+  const [showWarning, setShowWarning] = useState(true)
 
   /**
    * Declare form to handle exhibit
@@ -156,7 +166,7 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.MATCHING:
         return (
-          <MatchingQuestion
+          <MatchQuizComponent
             data={data}
             highlighted={highlighted}
             allowHighLight={allowHighLight}
@@ -182,11 +192,20 @@ const CaseStudyResult = () => {
         )
       case QUESTION_TYPES.DRAG_DROP:
         return (
-          <DragNDropPreivew
-            data={data}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
+          // <DragNDropPreview
+          //   data={data}
+          //   allowHighLight={allowHighLight}
+          //   allowUnHighLight={allowUnHighLight}
+          //   defaultAnswer={defaultValue}
+          //   corrects={corrects?.corrects}
+          //   solution={solution}
+          // />
+          <DragDropQuestion
+            data={data as any}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue?.(`${index}_answer`, data)
+            }}
             corrects={corrects?.corrects}
             solution={solution}
           />
@@ -230,9 +249,7 @@ const CaseStudyResult = () => {
             response_option_custom={0}
             solution={solution}
             setOpenPdf={handleOpenScratchPad}
-            isShowContent={
-              requirementIndex === 0 || data.requirements.length === 0
-            }
+            isShowContent={true}
             externalRef={editorRefs.current[index]}
           />
         )
@@ -375,14 +392,17 @@ const CaseStudyResult = () => {
       )
     }
     if (data.question.qType === QUESTION_TYPES.SELECT_WORD) {
-      return data.answer
+      return data.answer?.map(
+        (item: { answer_position: number; answer_id: string }) =>
+          item.answer_id,
+      )
     }
     if (data.question.qType === QUESTION_TYPES.DRAG_DROP) {
       return data.answer?.map(
         (item: { answer_position: number; answer_id: string }) => {
           return {
-            id: item.answer_id,
             idAnswer: item.answer_id,
+            position: item.answer_position,
             value: data?.question?.answers?.find(
               (ans: {
                 id: string
@@ -395,7 +415,6 @@ const CaseStudyResult = () => {
         },
       )
     }
-
     if (data.question.qType === QUESTION_TYPES.MULTIPLE_CHOICE) {
       return data.answer?.map((item: { answer_id: string }) => item.answer_id)
     }
@@ -586,15 +605,20 @@ const CaseStudyResult = () => {
       const requirementQuestion = question?.requirements?.find(
         (req: IRequirement) => req.id === item?.requirement?.id,
       )
-      const isAddedBorder =
-        (requirementIndex === 0 && index !== 0) ||
-        (index !== 0 && question.qType !== QUESTION_TYPES.ESSAY) ||
-        (question?.requirements?.length === 0 && index !== 0)
+
       return (
         <div
+          id={`question-${index}`}
           key={question?.id + index}
           topic-key={question?.question_topic?.id}
-          className={`mb-8 ${clsx({ 'border-t pt-8': isAddedBorder })}`}
+          className={clsx(
+            'mb-8 flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
+            {
+              'min-w-[350px] bg-white px-0 py-8':
+                question?.data?.qType === QUESTION_TYPES.ESSAY,
+              '!w-fit': question?.data?.qType === QUESTION_TYPES.MATCHING,
+            },
+          )}
         >
           {checkType(
             index,
@@ -617,28 +641,58 @@ const CaseStudyResult = () => {
     })
   }, [result])
 
+  const scrollToQuestion = (index: number) => {
+    const container = questionsScrollRef.current as any
+    const target = document.getElementById(`question-${index}`)
+    if (!container || !target) return
+    const top = (target as any).offsetTop ?? 0
+    container.scrollTo({ top: Math.max(top - 12, 0), behavior: 'smooth' })
+    setActiveQuestionIndex(index)
+  }
+
+  const handleNextQuestion = () => {
+    const total = questionRender?.length || 0
+    if (total === 0) return
+    const next = Math.min(activeQuestionIndex + 1, total - 1)
+    scrollToQuestion(next)
+  }
+
+  const handlePrevQuestion = () => {
+    const prev = Math.max(activeQuestionIndex - 1, 0)
+    scrollToQuestion(prev)
+  }
+
+  const isScatchPadEnabled = useMemo(() => {
+    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
+  }, [openScratchPad])
+
+  const isShowIconButtonInBottom = [
+    QUESTION_TYPES.FILL_WORD,
+    QUESTION_TYPES.TRUE_FALSE,
+    QUESTION_TYPES.ONE_CHOICE,
+    QUESTION_TYPES.SELECT_WORD,
+  ].includes(topics?.qType as QUESTION_TYPES)
+
   return (
     <SappLoadingGlobal loading={loading}>
-      <FullScreenLayout title="Case Study">
+      <CaseStudyWrapper
+        onQuit={() => backToPart()}
+        isResult
+        title={`${topics?.case_study_name} - ${topics?.name}`}
+        onNextQuestion={handleNextQuestion}
+        onPrevQuestion={handlePrevQuestion}
+        currentQuestion={activeQuestionIndex}
+        totalQuestions={questionRender?.length || 0}
+      >
         <div
-          className="relative flex h-screen flex-col overflow-hidden bg-white"
+          className="relative flex h-full flex-col overflow-hidden bg-white"
           onMouseUp={() => {
             setStartResize(false)
             setCurrentLeftWidth(leftWidth)
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
-              <div className="w-1/3 truncate text-lg-xl font-medium">
-                {topics?.case_study_name} - {topics?.name}
-              </div>
-              <SappButton title="Quit" onClick={() => backToPart()} />
-            </div>
-            {/* End Header */}
-            <div
-              className="flex h-[calc(100%-104px)] bg-gray-3"
-              id={'preview-question'}
-            >
+            <div className="flex h-full bg-[#F1F1F1]" id={'preview-question'}>
               <div
                 className={`h-full overflow-auto bg-white p-6`}
                 style={{ width: `calc(50% - ${leftWidth}px)` }}
@@ -646,14 +700,10 @@ const CaseStudyResult = () => {
                 <div
                   className="min-w-[700px]"
                   id="hightlight_area_topic"
-                  onMouseUp={(e: React.MouseEvent<HTMLDivElement>) => {
-                    const element = e.target as Node
+                  onMouseUp={(e: any) => {
                     if (
-                      element instanceof HTMLElement &&
-                      element.tagName.charAt(0) !== 'm' &&
-                      (element.firstChild instanceof HTMLElement
-                        ? element.firstChild.tagName !== 'math'
-                        : true)
+                      e.target.tagName.charAt(0) !== 'm' &&
+                      e.target.firstChild?.tagName !== 'math'
                     ) {
                       if (e) {
                         if (allowHighLight) {
@@ -674,50 +724,42 @@ const CaseStudyResult = () => {
                     }
                   }}
                 >
-                  <div key={topics?.id} data-key={topics?.id} className="mb-4">
+                  {/* {topics} */}
+
+                  <div
+                    key={topics?.id}
+                    data-key={topics?.id}
+                    // className="min-h-[calc(100vh-104px)]"
+                    className="mb-4"
+                  >
                     <EditorReader
                       className="editor-wrap"
                       text_editor_content={topics?.description}
                     />
                   </div>
-                  {topics?.files &&
-                    topics?.files?.length > 0 &&
-                    topics?.files.map((e: IFile, index: number) => {
-                      return (
-                        <div
-                          className="cursor-pointer text-state-info hover:underline"
-                          onClick={() =>
-                            handleOpenScratchPad(
-                              'file',
-                              e?.resource?.url,
-                              e?.resource?.name,
-                            )
-                          }
-                          key={index}
-                        >
-                          {e?.resource?.name}
-                        </div>
-                      )
-                    })}
                 </div>
               </div>
               <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
                 }}
                 onMouseUp={() => setStartResize(false)}
-              ></div>
+              >
+                <div className="h-8 w-8 rounded-full bg-white">
+                  <ResizeIcon />
+                </div>
+              </div>
               <div
-                className={` h-full overflow-auto bg-white py-6 `}
+                className={`h-full overflow-auto bg-white py-6`}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}
+                ref={questionsScrollRef}
                 onScroll={(e) => {
                   const { target } = e
                   if (
-                    (target as HTMLDivElement).scrollTop +
-                      (target as HTMLDivElement).offsetHeight >=
-                    (target as HTMLDivElement).scrollHeight
+                    (target as any).scrollTop + (target as any).offsetHeight >=
+                    (target as any).scrollHeight
                   ) {
                     dispatch(loadMoreQuestion(''))
                   }
@@ -727,14 +769,10 @@ const CaseStudyResult = () => {
                   <div
                     className="px-6"
                     id="hightlight_area"
-                    onMouseUp={(e: React.MouseEvent<HTMLDivElement>) => {
-                      const element = e.target as Node
+                    onMouseUp={(e: any) => {
                       if (
-                        element instanceof HTMLElement &&
-                        element.tagName.charAt(0) !== 'm' &&
-                        (element.firstChild instanceof HTMLElement
-                          ? element.firstChild.tagName !== 'math'
-                          : true)
+                        e.target.tagName.charAt(0) !== 'm' &&
+                        e.target.firstChild?.tagName !== 'math'
                       ) {
                         if (e) {
                           if (allowHighLight) {
@@ -760,270 +798,304 @@ const CaseStudyResult = () => {
                 </div>
               </div>
             </div>
-            {openScratchPad?.map((e, index: number) => {
-              if (e.type === 'calculator') {
-                return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: 'fit-content',
-                      top: 'calc(25% - 150px)',
-                      left: 'calc(25% - 200px)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div>Calculator</div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <Calculator />
+          </div>
+          {openScratchPad?.map((e, index: number) => {
+            if (e.type === 'calculator') {
+              return (
+                <MovableWindow
+                  position={{
+                    width: '344px',
+                    height: 'fit-content',
+                    top: 'calc(25% - 150px)',
+                    left: 'calc(25% - 200px)',
+                  }}
+                  key={e?.id}
+                  onClick={() => setOnFocusingPad(e?.id as string)}
+                  zIndex={
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
+                  }
+                >
+                  <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+                    <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-bold">Calculator</div>
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseModalIcon />
+                      </button>
                     </div>
-                  </MovableWindow>
-                )
-              } else if (e.type === 'scratch_pad') {
-                return (
-                  <MovableWindow
-                    position={{
-                      width: '400px',
-                      height: '300px',
-                      top: 'calc(50% - 150px)',
-                      left: 'calc(50% - 200px)',
-                    }}
-                    key={e?.id}
-                    onClick={() => setOnFocusingPad(e?.id ?? '')}
-                    zIndex={
-                      onFocusingPad === e?.id
-                        ? openScratchPad?.length + 500
-                        : index + 500
-                    }
-                  >
-                    <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-                        <div>Scratch Pad</div>
-                        <button onClick={() => handleCloseScratchPad(e)}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                      <HookFormTextArea
-                        defaultValue={scratchPadValues?.value}
-                        placeholder="Take a note..."
-                        control={controlScratch}
-                        name={e?.id ?? ''}
-                        onChange={(
-                          event: React.ChangeEvent<
-                            HTMLTextAreaElement | HTMLInputElement
-                          >,
-                        ) => handleChangeScratchPad(event, e?.id)}
-                        className="sapp-text-area h-[calc(100%-40px)] w-full p-5"
-                      />
-                      {/* </div> */}
+                    <Calculator />
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'scratch_pad') {
+              return (
+                <MovableWindow
+                  position={{
+                    width: '412px',
+                    height: '312px',
+                    top: 'calc(50% - 150px)',
+                    left: 'calc(50% - 200px)',
+                  }}
+                  key={e?.id}
+                  onClick={() => setOnFocusingPad(e?.id as string)}
+                  zIndex={
+                    onFocusingPad === e?.id
+                      ? openScratchPad?.length + 500
+                      : index + 500
+                  }
+                >
+                  <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
+                    <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
+                      <div className="text-sm font-bold">Scratch Pad</div>
+                      {/* <CloseIcon */}
+                      <button onClick={() => handleCloseScratchPad(e)}>
+                        <CloseModalIcon />
+                      </button>
                     </div>
-                  </MovableWindow>
-                )
-              } else if (e.type === 'exhibits') {
-                const i = exhibitData?.findIndex(
-                  (el: IExhibit) => el?.id === e?.id,
-                )
-                const exhibitsDes = exhibitData?.find(
-                  (exhibit) => exhibit?.id === e?.id,
-                )
-                return (
-                  <ModalResizeable
-                    key={e.id}
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                    position="bottom left"
-                    header={
-                      <div className="relative">
-                        <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
-                          <div className="truncate">
-                            <span className="text-base font-semibold ">{`${exhibitText} ${
-                              (i ?? 0) + 1
-                            }: `}</span>
-                            {exhibitsDes?.name}
+                    <HookFormTextArea
+                      defaultValue={scratchPadValues?.value}
+                      placeholder="Take a note..."
+                      control={controlScratch}
+                      name={e?.id as string}
+                      onChange={(event) => handleChangeScratchPad(event, e?.id)}
+                      className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
+                    />
+                    {/* </div> */}
+                  </div>
+                </MovableWindow>
+              )
+            } else if (e.type === 'exhibits') {
+              const i = exhibitData?.findIndex(
+                (el: IExhibit) => el?.id === e?.id,
+              )
+              const exhibitsDes = exhibitData?.find(
+                (exhibit) => exhibit?.id === e?.id,
+              )
+              return (
+                <ModalResizeable
+                  key={e.id}
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center left"
+                  header={
+                    <div className="relative my-3 px-6">
+                      <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
+                        <div className="truncate">
+                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
+                            (i ?? 0) + 1
+                          }: ${exhibitsDes?.name}`}</span>
+                        </div>
+                      </div>
+                      <button
+                        className="absolute right-6 top-0"
+                        onClick={() => handleCloseScratchPad(e)}
+                      >
+                        <CircleCloseIcon />
+                      </button>
+                    </div>
+                  }
+                  modalIndex={i}
+                  draggableFull
+                >
+                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                    <EditorReader
+                      text_editor_content={exhibitsDes?.description}
+                      className="w-full"
+                    />
+                    {exhibitsDes &&
+                      exhibitsDes?.files?.length > 0 &&
+                      exhibitsDes?.files?.map((e: any, index: number) => {
+                        return (
+                          <div
+                            key={index}
+                            className="h-full cursor-pointer overflow-auto bg-white"
+                          >
+                            <FileViewer
+                              fileName={e?.resource?.name}
+                              fileUrl={e?.resource?.url}
+                            />
                           </div>
+                        )
+                      })}
+                  </div>
+                  <Triangle className="absolute bottom-2 right-2" />
+                </ModalResizeable>
+              )
+            } else if (e.type === 'file') {
+              return (
+                <ModalResizeable
+                  title={e?.fileName}
+                  width={650}
+                  height={850}
+                  key={e.id}
+                  handleCloseScratchPad={() => handleCloseScratchPad(e)}
+                  position="center"
+                  draggableFull
+                >
+                  <div
+                    className="overflow-auto bg-white p-4"
+                    style={{ height: 'calc(100% - 40px' }}
+                  >
+                    <FileViewer
+                      fileName={e?.fileName as string}
+                      fileUrl={e?.file as string}
+                    />
+                  </div>
+                </ModalResizeable>
+              )
+            }
+          })}
+          <div className="fixed bottom-[232px] right-8 z-[1000] w-12">
+            <div className="flex flex-col gap-3">
+              {exhibitData && exhibitData?.length > 0 && (
+                <Popover
+                  placement="leftTop"
+                  trigger="click"
+                  open={isClickExhibitOpen}
+                  onOpenChange={(open) => setIsClickExhibitOpen(open)}
+                  content={
+                    <div className="flex flex-col gap-2">
+                      {exhibits?.map(
+                        (
+                          e: { label: string; value: string },
+                          index: number,
+                        ) => {
+                          return (
+                            <div
+                              key={e?.value}
+                              className={
+                                'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-[#0E1214]'
+                              }
+                              onClick={() => {
+                                handleOpenExhibit(e?.value)
+                                setShowWarning(false)
+                              }}
+                            >{`${exhibitText} ${index + 1}`}</div>
+                          )
+                        },
+                      )}
+                    </div>
+                  }
+                >
+                  <Popover
+                    content={
+                      <div className="flex items-center gap-2 px-2 ">
+                        <NotesOutline className="h-4 w-4 text-white" />
+                        <div className="text-sm">
+                          {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}
                         </div>
-                        <button
-                          className="absolute right-3 top-2"
-                          onClick={() => handleCloseScratchPad(e)}
-                        >
-                          <CloseIcon />
-                        </button>
                       </div>
                     }
+                    trigger="hover"
+                    open={!isClickExhibitOpen ? undefined : false}
+                    placement="left"
                   >
-                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
-                      <EditorReader
-                        text_editor_content={exhibitsDes?.description}
-                        className=" w-full"
-                      />
-                      {exhibitsDes &&
-                        exhibitsDes?.files?.length > 0 &&
-                        exhibitsDes?.files?.map((e: IFile, index: number) => {
-                          return (
-                            <div key={index} className="overflow-auto bg-white">
-                              <FileViewer
-                                fileName={e?.resource?.name ?? ''}
-                                fileUrl={e?.resource?.url ?? ''}
-                              />
+                    <div className="grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
+                      <NotesOutline className="h-8 w-8 text-white" />
+                      <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+                      {showWarning && (
+                        <PulsingExclamation
+                          className="absolute -right-3 -top-4"
+                          style={{
+                            animation: 'pulseAnim 1.2s infinite ease-in-out',
+                            transformOrigin: 'center',
+                          }}
+                        />
+                      )}
+                    </div>
+                  </Popover>
+                </Popover>
+              )}
+
+              {topics?.files && topics?.files?.length > 0 && (
+                <Popover
+                  className=""
+                  placement="leftTop"
+                  trigger="click"
+                  getPopupContainer={() => document.body}
+                  content={
+                    <div className="flex flex-col gap-2">
+                      {topics?.files?.map((e: any, index: number) => {
+                        return (
+                          <div
+                            className={clsx(
+                              `flex items-start justify-between gap-8 p-2`,
+                            )}
+                            key={e?.value}
+                          >
+                            <div
+                              key={e?.value}
+                              className={clsx(
+                                'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline',
+                              )}
+                              onClick={() =>
+                                handleOpenScratchPad(
+                                  'file',
+                                  e?.resource?.url,
+                                  e?.resource?.name,
+                                )
+                              }
+                            >
+                              {e?.resource?.name}
                             </div>
-                          )
-                        })}
+                            <div
+                              className="cursor-pointer text-white"
+                              onClick={() => {
+                                download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                )
+                              }}
+                            >
+                              <DownloadIcon color="currentColor" />
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
-                  </ModalResizeable>
-                )
-              } else if (e.type === 'file') {
-                return (
-                  <ModalResizeable
-                    title={e?.fileName}
-                    width={650}
-                    height={850}
-                    minWidth={200}
-                    minHeight={200}
-                    key={e.id}
-                    dragHandleClassName="modal-header"
-                    handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                    position="center"
-                  >
-                    <div
-                      className="overflow-auto bg-white p-4"
-                      style={{ height: 'calc(100% - 40px' }}
-                    >
-                      <FileViewer
-                        fileName={e?.fileName ?? ''}
-                        fileUrl={e?.file ?? ''}
-                      />
-                    </div>
-                  </ModalResizeable>
-                )
-              }
-            })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
-              <div className="flex h-full items-center">
-                <button
-                  className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-                  onClick={() => {
-                    setAllowHighLight(!allowHighLight)
-                    setAllowUnHighLight(false)
-                  }}
+                  }
+                  zIndex={1050}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
-                    <HighlightIcon />
-                    <div className="hidden text-sm font-normal 3xl:inline-block">
-                      Highlight
-                    </div>
-                  </div>
-                </button>
-                <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
-                  onClick={() => {
-                    ;(setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false))
-                  }}
-                >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
-                    <UnHighLightIcon />
-                    <div className="hidden text-sm font-normal 3xl:inline-block">
-                      Unhighlight
-                    </div>
-                  </div>
-                </button>
-                <button
-                  className="h-full"
-                  onClick={() => handleOpenScratchPad('scratch_pad')}
-                >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
-                    <ScratchPadIcon />
-                    <div className="hidden text-sm font-normal 3xl:inline-block">
-                      Scratch Pad
-                    </div>
-                  </div>
-                </button>
-                <button
-                  className={`h-full ${
-                    checkCalExist > -1 && 'sapp-disable-button'
-                  }`}
-                  onClick={() => handleOpenScratchPad('calculator')}
-                  disabled={checkCalExist > -1}
-                >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:px-6">
-                    <CalculatorIcon />
-                    <div className="hidden text-sm font-normal 3xl:inline-block">
-                      Calculator
-                    </div>
-                  </div>
-                </button>
-                {exhibits.length > 0 && (
-                  <button className="relative h-full">
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowListExhibits(!showListExhibits)
-                      }}
-                    >
-                      <ExhibitsIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden  lg:inline-block 3xl:me-1">
-                            {`${exhibitText}s (${exhibits?.length})`}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
-                        {exhibits?.map(
-                          (
-                            e: { label: string; value: string },
-                            index: number,
-                          ) => {
-                            return (
-                              <button
-                                key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
-                                  !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
-                                }`}
-                                onClick={() => handleOpenExhibit(e?.value)}
-                              >{`${exhibitText} ${index + 1}`}</button>
-                            )
-                          },
-                        )}
-                      </div>
+                  <div
+                    className={clsx(
+                      'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                     )}
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-x-2 px-3  ">
-                {result?.previous_topic && (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                    onClick={handlePeriousTopic}
                   >
-                    <div className="text-medium-sm font-medium">Previous</div>
-                  </button>
-                )}
-                <button
-                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
-                  onClick={handleNextTopic}
-                >
-                  <div className="text-medium-sm font-medium">
-                    {result?.next_topic ? 'Next' : 'Finish'}
+                    <FileTextIcon />
                   </div>
-                </button>
+                </Popover>
+              )}
+            </div>
+            {((exhibitData && exhibitData?.length > 0) ||
+              (topics?.files && topics?.files?.length > 0)) && (
+              <Divider className="my-6" />
+            )}
+            <div className="flex flex-col gap-3">
+              <div
+                className={clsx(
+                  'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                )}
+                onClick={() => {
+                  handleOpenScratchPad('scratch_pad')
+                }}
+              >
+                <ScratchPadIconV2 isActive className="h-6 w-6" />
               </div>
+              <button
+                className={clsx(
+                  'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                )}
+                onClick={() => {
+                  handleOpenScratchPad('calculator')
+                }}
+                disabled={checkCalExist > -1}
+              >
+                <CalculatorIconV2 isActive className="h-6 w-6" />
+              </button>
             </div>
           </div>
         </div>
-      </FullScreenLayout>
+      </CaseStudyWrapper>
     </SappLoadingGlobal>
   )
 }

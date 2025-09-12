@@ -129,7 +129,7 @@ export default function ScoreDetail({
           Score Details
         </div>
         {router?.query?.attempt && (
-          <div className="mb-6 text-base text-gray-1">{`attempt: ${router?.query?.attempt}`}</div>
+          <div className="text-gray-1 mb-6 text-base">{`attempt: ${router?.query?.attempt}`}</div>
         )}
       </div>
       <div className="block pl-4">
@@ -155,7 +155,7 @@ export default function ScoreDetail({
                 return (
                   <React.Fragment key={answer?.id}>
                     <tr key={answer?.id}>
-                      <td className="sapp-border p-0 pr-3 font-semibold text-gray-1">
+                      <td className="sapp-border text-gray-1 p-0 pr-3 font-semibold">
                         {answer?.index}
                       </td>
 
@@ -240,7 +240,7 @@ export default function ScoreDetail({
                           )}
                         </div>
                         {answer?.question?.qType !== 'ESSAY' && (
-                          <div className="ml-1 flex items-center justify-start gap-2 text-gray-1">
+                          <div className="text-gray-1 ml-1 flex items-center justify-start gap-2">
                             <Image
                               src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
                               alt="Correct"

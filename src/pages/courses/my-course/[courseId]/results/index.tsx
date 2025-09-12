@@ -1,21 +1,29 @@
 import Layout from '@components/layout'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
-import Heading from '@components/mycourses/Heading'
-import SearchForm from '@components/mycourses/Search'
-import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import { useRouter } from 'next/router'
-import { useQuery } from 'react-query'
-import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { MY_COURSES } from 'src/constants/lang'
-import { CoursesAPI } from 'src/pages/api/courses'
 import ResultsTable from './ResultsTable'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-
-const DEFAULT_PAGESIZE = 10
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import { PageLink, TEST_AND_QUIZ_TITLE } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { useQuery } from 'react-query'
+import { CoursesAPI } from '@pages/api/courses'
+import { DEFAULT_PAGE_SIZE } from 'src/constants'
+import clsx from 'clsx'
+import { FilterCourseIcon } from 'src/assets/icons'
+import { useState } from 'react'
+import { IOpenChooseItem } from 'src/type/courses'
 
 const Results = () => {
   const router = useRouter()
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
+  const [openFilter, setOpenFilter] = useState(false)
+  const handleBack = () => {
+    if (router.query.courseId)
+      router.push(`/courses/my-course/${router.query.courseId}`)
+  }
 
   /**
    * @description config API course detail
@@ -30,7 +38,7 @@ const Results = () => {
     const { data } = await CoursesAPI.getCourseDetail(
       router.query.courseId,
       pageParam || 1,
-      DEFAULT_PAGESIZE,
+      DEFAULT_PAGE_SIZE,
       params,
     )
     return {
@@ -44,11 +52,7 @@ const Results = () => {
       router.query.user_section_learning_status || undefined,
   }
 
-  const {
-    data: courseData,
-    isSuccess,
-    isLoading,
-  } = useQuery({
+  const { data: courseData } = useQuery({
     queryKey: ['courseDetail'],
     queryFn: ({ pageParam }) => fetchCourseDetail({ pageParam, params }),
     refetchOnWindowFocus: true,
@@ -61,45 +65,46 @@ const Results = () => {
   const courseNameDetail = courseData?.courseDetail?.data?.name
 
   return (
-    <SappLoadingGlobal loading={isLoading}>
-      <Layout title="Course Result">
-        <div className="h-[70px] border-b border-default bg-white">
-          <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
-            />
-          </div>
+    <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
+      {isAlwaysShowSidebar && (
+        <div className="mb-8 mt-6 flex w-full">
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: PageLink.COURSES,
+              },
+              {
+                title: courseNameDetail || '',
+                link: PageLink.COURSE_DETAIL.replace(
+                  '[courseId]',
+                  router.query.courseId as string,
+                ),
+              },
+              {
+                title: TEST_AND_QUIZ_TITLE,
+                link: '',
+              },
+            ]}
+          />
         </div>
-        <div className="mx-auto my-0 max-w-xxl xl-max:mx-6">
-          {isLoading ? (
-            <CourseSkeleton className="pt-6" />
-          ) : (
-            <>
-              <div className="main relative mx-auto my-0 max-w-xxl">
-                <div className="flex w-full items-center justify-between pb-4 pt-6">
-                  {isSuccess && courseNameDetail && (
-                    <BreadcrumbFilter
-                      name={courseNameDetail}
-                      subpath="Results"
-                      courseId={router.query.courseId}
-                    />
-                  )}
-
-                  {/* <FilterCourseDetail totalResult={courses?.length || 0} /> */}
-                </div>
-              </div>
-              <div className="mx-auto my-0 flex max-w-xxl bg-white">
-                <Heading greeting="" title={'Results'} />
-              </div>
-              <div className="mx-auto my-0 mb-6 mt-6 max-w-xxl bg-white px-8 pb-3 pt-8 xl-max:container">
-                {isSuccess && <ResultsTable />}
-              </div>
-            </>
-          )}
-        </div>
-      </Layout>
-    </SappLoadingGlobal>
+      )}
+      <HeaderMobile
+        title={TEST_AND_QUIZ_TITLE}
+        showIcon={isTabletView || isMobileView}
+        onBack={handleBack}
+        className={clsx({ 'mt-4': isMobileView, 'mt-8': isTabletView })}
+        extraActions={
+          isMobileView && (
+            <div onClick={() => setOpenFilter((prev) => !prev)}>
+              <FilterCourseIcon />
+            </div>
+          )
+        }
+      />
+      <ResultsTable openFilter={openFilter} setOpenFilter={setOpenFilter} />
+    </Layout>
   )
 }
 

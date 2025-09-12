@@ -9,9 +9,9 @@ const ClassProgress = ({ title, percent = 0 }: IProps) => {
         <span className="text-sm text-gray-400">{title}</span>
         <span className="text-sm font-bold">{percent.toFixed(2)}%</span>
       </div>
-      <div className="mb-3 h-1.5 w-full rounded bg-gray-200">
+      <div className="mb-3 h-[6px] w-full rounded bg-[#e5e7eb]">
         <div
-          className="h-1.5 rounded bg-primary"
+          className="h-[6px] rounded bg-primary"
           style={{ width: `${percent}%` }}
         />
       </div>

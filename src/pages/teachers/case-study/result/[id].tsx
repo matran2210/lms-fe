@@ -591,7 +591,7 @@ const CaseStudyResultTeacher = () => {
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
+            <div className="bg-gray-3 flex items-center justify-between px-6 py-2 ">
               <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
@@ -599,7 +599,7 @@ const CaseStudyResultTeacher = () => {
             </div>
             {/* End Header */}
             <div
-              className="flex h-[calc(100%-104px)] bg-gray-3"
+              className="bg-gray-3 flex h-[calc(100%-104px)]"
               id={'preview-question'}
             >
               <div
@@ -665,7 +665,7 @@ const CaseStudyResultTeacher = () => {
                 </div>
               </div>
               <div
-                className="h-full w-[20px] cursor-ew-resize bg-gray-3"
+                className="bg-gray-3 h-full w-[20px] cursor-ew-resize"
                 onMouseDown={() => {
                   setStartResize(true)
                   setCurrentMousePos(x || 0)
@@ -742,7 +742,7 @@ const CaseStudyResultTeacher = () => {
                     }
                   >
                     <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="bg-gray-2 flex h-10 w-full items-center justify-between px-5">
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -770,7 +770,7 @@ const CaseStudyResultTeacher = () => {
                     }
                   >
                     <div className="absolute left-0 top-0  h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div className="bg-gray-2 flex h-10 w-full items-center justify-between px-5">
                         <div>Scratch Pad</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />
@@ -869,7 +869,7 @@ const CaseStudyResultTeacher = () => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className=" bg-gray-3 relative flex h-[48px] items-center justify-between shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -942,7 +942,7 @@ const CaseStudyResultTeacher = () => {
                       </div>
                     </div>
                     {showListExhibits && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
+                      <div className="sapp-separateLine bg-gray-3 absolute bottom-full h-fit justify-center shadow-questions-exhibits 3xl:w-full">
                         {exhibits?.map(
                           (
                             e: { label: string; value: string },

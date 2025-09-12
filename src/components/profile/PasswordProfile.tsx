@@ -1,8 +1,8 @@
 import useCountdown from '@components/auth/Countdown'
 import ButtonText from '@components/base/button/ButtonText'
-import SappButton from '@components/base/button/SappButton'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import SAPPTextFiled from '@components/base/textfield/SAPPTextFiled'
+import Icon from '@components/icons'
 import React, {
   createRef,
   Dispatch,
@@ -11,10 +11,16 @@ import React, {
   useState,
 } from 'react'
 import { UseFormGetValues, UseFormReset } from 'react-hook-form'
-import { AuthAPI } from 'src/pages/api/profile'
-import { IChangePassword } from './ChangePassword'
 import toast from 'react-hot-toast'
+import { AuthAPI } from 'src/pages/api/profile'
+import { useAppSelector } from 'src/redux/hook'
+import { userReducer } from 'src/redux/slice/User/User'
+import { IChangePassword } from './ChangePassword'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import type { GetProps } from 'antd'
+import { Input } from 'antd'
 
+type OTPProps = GetProps<typeof Input.OTP>
 interface IProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -23,15 +29,13 @@ interface IProps {
 }
 
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
+  const { user } = useAppSelector(userReducer)
+
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
   const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState('')
-  const inputRefs = Array(6)
-    .fill(0)
-    .map(() => createRef<HTMLInputElement>())
-
   const [loading, setLoading] = useState<boolean>(false)
 
   /**
@@ -59,48 +63,6 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   }, [timeCountDown])
 
   /**
-   * @description Handling when entering code into the input cell
-   */
-  const onEnterDigit = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const value = event.target.value
-
-    // Validate input data, pass if data is single number or empty string
-    if ((Number.isNaN(parseInt(value)) && value != '') || value.length > 1)
-      return event.preventDefault()
-
-    // Focus to next input cell
-    if (index < 5 && value) {
-      inputRefs[index + 1].current?.focus()
-    }
-
-    // Update the code
-    let newCode = [...code]
-    newCode[index] = value
-    setCode(newCode)
-  }
-
-  /**
-   * @description chức năng paste OTP
-   */
-  const handlePaste = (index: number, e: any) => {
-    e.preventDefault() // Ngăn chặn hành động paste mặc định
-    const pasted = e.clipboardData
-      .getData('text/plain')
-      .replace(/\n/g, '')
-      .replace(/\r/g, '')
-      .split(' ')
-      .slice(0, 6)
-
-    // Update the OTP array
-    const newOtp = [...code]
-    newOtp.splice(index, pasted.length, ...pasted)
-    setCode(newOtp?.filter((value) => value !== ''))
-  }
-
-  /**
    * @description function verify code
    */
   const verifyCode = async () => {
@@ -116,6 +78,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       setCode(['', '', '', '', '', ''])
       toast.success('Change Password Successfully!')
     } catch (error) {
+      setErrorMessage('Invaild OTP. Please try again!')
     } finally {
       setLoading(false)
     }
@@ -141,6 +104,19 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
     } catch (error) {}
   }
 
+  const otpLength = 6
+
+  const onInput: OTPProps['onInput'] = (value) => {
+    const paddedValue = Array.from(
+      { length: otpLength },
+      (_, i) => value[i] || '',
+    )
+    setCode(paddedValue)
+  }
+
+  const sharedProps: OTPProps = {
+    onInput,
+  }
   return (
     <SappModalV2
       title={undefined}
@@ -148,61 +124,70 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       handleCancel={() => setOpen(false)}
       onOk={() => {}}
       showFooter={false}
+      classNameModal="sapp-profile-modal"
     >
-      <div className="">
-        <div className="mb-2 text-4xl font-semibold text-bw-1">
-          Change Password
+      <div className="flex flex-col items-center justify-between gap-6 md:gap-10">
+        <div className="text-primary">
+          <Icon
+            type="mail-box"
+            className="h-12 w-12 md:!h-[88px] md:!w-[88px]"
+          />
         </div>
-        <span className="mb-10 text-medium-sm text-gray-1">
-          Enter your 6-digit code that you received on your email.
-        </span>
-        <div className="mb-2 mt-12 grid grid-cols-6 grid-rows-1 gap-3">
-          {code?.map((otp, index) => (
-            <SAPPTextFiled
-              key={index}
-              inputRef={inputRefs[index]}
-              type="text"
-              value={otp}
-              onChange={(event) => onEnterDigit(index, event)}
-              inputClassName={`text-center h-[67px] w-[67px] ${
-                errorMessage ? 'border-state-error' : 'border-gray-2'
-              } pt-5.25 pb-5 px-0`}
-              onPaste={(e: any) =>
-                code?.every((data) => data === '') && handlePaste(index, e)
-              }
-            />
-          ))}
+        <div className="flex w-full flex-col items-center justify-between gap-4 md:gap-8">
+          <div className="text-center text-sm md:text-xl">
+            <div>Please enter the code we sent to</div>
+            <div>
+              <span className="text-xl font-semibold">
+                {user?.user_contacts?.[0]?.email || ''}
+              </span>
+            </div>
+          </div>
+          <div className="w-full">
+            <div className="mb-2">
+              <Input.OTP
+                length={otpLength}
+                {...sharedProps}
+                size="large"
+                rootClassName="profile-change-password"
+                status={errorMessage ? 'error' : undefined}
+                className="profile-change-password"
+              />
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-error-400">{errorMessage}</span>
+              <span
+                className={`min-w-fit text-right text-sm font-semibold ${
+                  timeCountDown === '00 : 00'
+                    ? 'text-error-400'
+                    : 'text-[#050505]'
+                }`}
+              >
+                {timeCountDown}
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="mb-8 flex justify-between">
-          <span className="text-medium-sm text-state-error">
-            {errorMessage}
-          </span>
-          <span
-            className={`min-w-fit text-right text-medium-sm ${
-              timeCountDown === '00:00' ? 'text-state-error' : 'text-bw-1'
-            }`}
-          >
-            {timeCountDown}
-          </span>
+
+        <div className="w-full">
+          <ButtonPrimary
+            title="Verify Code"
+            full={true}
+            className="mb-4 rounded-lg py-2 font-semibold"
+            size="medium"
+            loading={loading}
+            onClick={verifyCode}
+            disabled={code.some((e) => e === '') || time <= 0}
+          />
+          <ButtonText
+            title="Resend Code"
+            full={true}
+            disabled={!canResend}
+            onClick={onResendCode}
+            className="text-base font-medium"
+            size="medium"
+            loading={loading}
+          />
         </div>
-        <SappButton
-          title="Verify Code"
-          full={true}
-          className="mb-5 h-12.5 !font-semibold"
-          size="lager"
-          loading={loading}
-          onClick={verifyCode}
-          disabled={code.some((e) => e === '') || time <= 0}
-        />
-        <ButtonText
-          title="Resend Code"
-          full={true}
-          disabled={!canResend}
-          onClick={onResendCode}
-          className="pb-3.25 pt-3 no-underline"
-          size="medium"
-          loading={loading}
-        />
       </div>
     </SappModalV2>
   )

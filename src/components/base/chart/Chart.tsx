@@ -9,6 +9,9 @@ export interface EChartsProps {
   settings?: SetOptionOpts
   loading?: boolean
   theme?: 'light' | 'dark'
+  width?: string
+  height?: string
+  minHeight?: string
 }
 
 export default function EChart({
@@ -17,13 +20,23 @@ export default function EChart({
   settings,
   loading,
   theme,
+  height = '100%',
+  width = '100%',
+  minHeight = '380px',
 }: EChartsProps): JSX.Element {
   const chartRef = useRef<HTMLDivElement>(null)
 
+  // ResizeObserver để tự động resize chart khi container thay đổi kích thước
   useEffect(() => {
     let chart: ECharts | undefined
+    let resizeObserver: ResizeObserver | undefined
     if (chartRef.current) {
       chart = init(chartRef.current, theme)
+      // Resize khi container thay đổi kích thước
+      resizeObserver = new ResizeObserver(() => {
+        chart?.resize()
+      })
+      resizeObserver.observe(chartRef.current)
     }
 
     function resizeChart() {
@@ -34,6 +47,9 @@ export default function EChart({
     return () => {
       chart?.dispose()
       window.removeEventListener('resize', resizeChart)
+      if (resizeObserver && chartRef.current) {
+        resizeObserver.unobserve(chartRef.current)
+      }
     }
   }, [theme])
 
@@ -52,6 +68,15 @@ export default function EChart({
   }, [loading, theme])
 
   return (
-    <div ref={chartRef} style={{ width: '100%', height: '100%', ...style }} />
+    <div
+      ref={chartRef}
+      style={{
+        width: width,
+        height: height,
+        minHeight: minHeight,
+        position: 'relative',
+        ...style,
+      }}
+    />
   )
 }

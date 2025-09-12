@@ -2,11 +2,8 @@ import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { IOpenChooseItem, SectionField } from 'src/type/courses-3-level/course'
+import { IOpenChooseItem, SectionField } from 'src/type'
 
-interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
-}
 interface IList {
   id: number
   name: string
@@ -14,7 +11,11 @@ interface IList {
   type: SectionField
 }
 
-const ListFilterMobile = ({ setOpenChooseItem }: IProps) => {
+const ListFilterMobile = ({
+  setOpenChooseItem,
+}: {
+  setOpenChooseItem: Dispatch<SetStateAction<any>>
+}) => {
   const { watch } = useFormContext()
   const list: IList[] = [
     {
@@ -28,6 +29,12 @@ const ListFilterMobile = ({ setOpenChooseItem }: IProps) => {
       name: 'Subsection',
       isDisabled: !watch('section'),
       type: 'subsection',
+    },
+    {
+      id: 3,
+      name: 'Unit',
+      isDisabled: !watch('subsection'),
+      type: 'unit',
     },
     {
       id: 4,

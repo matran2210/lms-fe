@@ -40,7 +40,7 @@ export const PageLink = {
   REQUEST: '/request',
   MY_REQUEST: '/teachers/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
-  COURSE_CONTENT: '/courses/my-course',
+  COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
   SHORT_COURSE: '/short-course',
   SHORT_COURSE_DETAIL: '/short-course/detail',
@@ -58,8 +58,9 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
-  RESULTS: 'Results',
+  RESULTS: 'Test / Quiz List',
   EXAM_INFORMATION: 'Exam Information',
+  EXAM_LIST: 'Exam List',
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
@@ -69,6 +70,7 @@ export const TitleSidebar = {
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
+  EXAM: 'Exam',
   COURSE_RESOURCES: 'Course Resource',
 }
 
@@ -144,9 +146,11 @@ export const UserGuide = {
   CONTENT_STEP_4:
     'This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.',
   CONTENT_STEP_5:
-    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+    'Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.',
   CONTENT_STEP_6:
-    'The filter section allows you to filter courses by curriculum and course status.',
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+  CONTENT_STEP_7:
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
 }
 
 export const defaultStatusCourse = [
@@ -201,8 +205,12 @@ export const defaultStatusEnstraceTest = [
     value: 'SUBMITTED',
   },
   {
-    label: 'Unsubmitted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -212,12 +220,16 @@ export const defaultStatusEventTest = [
     value: '',
   },
   {
-    label: 'Completed',
+    label: 'Submitted',
     value: 'SUBMITTED',
   },
   {
-    label: 'Uncompleted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -360,6 +372,7 @@ export const EVENT_TYPES_RESPONSE = {
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
   LIVE_ONLINE: 'LIVE_ONLINE',
+  INACTIVE: 'INACTIVE',
 } as const
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
@@ -370,7 +383,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
   [EVENT_TYPES.LIVE_ONLINE]: '',
-  [EVENT_TYPES.INACTIVE]: '',
+  [EVENT_TYPES.INACTIVE]: 'Inactive',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
@@ -573,7 +586,10 @@ export enum DATE_FORMAT {
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
-
+export enum ECourseType {
+  MASTER = 'Master Finance',
+  GENERAL = 'General Course',
+}
 export const COOKIE_INFO = {
   SESSION_ID: 'sessionId',
   KEYCLOAK_USER_ID: 'keycloakUserId',
@@ -584,6 +600,10 @@ export const COOKIE_INFO = {
 export const LABEL_MAX_LENGTH = 12
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+export const CLASS_TYPE = {
+  TRIAL: 'TRIAL',
+}
+export const TEST_AND_QUIZ_TITLE = 'Test & Quiz'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

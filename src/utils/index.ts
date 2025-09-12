@@ -107,22 +107,28 @@ export const countWords = (text: string) => {
 }
 
 export const convertSnakeCaseToHumanReadable = (str: string) => {
+  if (!str || str.trim() === '') return '-'
+
   const words = str
     .toLowerCase()
     .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
+  if (words.length === 0) return '-'
+
   return words.join(' ')
 }
 
 export const convertHumanReadableToSnakeCase = (str: string) => {
+  if (!str || str.trim() === '') return ''
+
   const words = str
     .toLowerCase()
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+
   return words.join('_')
 }
-
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
     .filter(([_, value]) => value !== '' && value !== undefined) // Exclude empty parameters
@@ -415,6 +421,27 @@ export const formatDateFromUTC = (date: string, format = DATE_FORMAT.DATE) => {
 }
 
 /**
+ * Trả về chuỗi thời gian biểu diễn khoảng thời gian từ lúc bắt đầu đến lúc kết thúc.
+ *
+ * @param started_at - Thời gian bắt đầu (UTC dạng string, ví dụ: '2025-06-27T03:00:00Z')
+ * @param finished_at - Thời gian kết thúc (UTC dạng string)
+ * @returns Chuỗi dạng "start - end", hoặc "-" nếu không có dữ liệu
+ *
+ * @example
+ * getDuration('2025-06-26T03:00:00Z', '2025-06-27T05:00:00Z')
+ * // 👉 "26/06/2025 - 27/06/2025"
+ *
+ * getDuration('', '')
+ * // 👉 "-"
+ */
+export const getDuration = (started_at: string, finished_at: string) => {
+  const start = started_at ? formatDateFromUTC(started_at) : ''
+  const end = finished_at ? formatDateFromUTC(finished_at) : ''
+  const duration = [start, end].filter(Boolean).join(' - ') || '-'
+  return duration
+}
+
+/**
  * @description Chuyển đổi giá trị enum của loại bài kiểm tra thành chuỗi dễ đọc.
  * @param {string} quizType - Giá trị enum của loại bài kiểm tra.
  * @return {string} - Chuỗi mô tả loại bài kiểm tra dễ đọc.
@@ -461,6 +488,18 @@ export const clearStylesHtml = (htmlContent: string) => {
       .replace(/\sstyle=".*?"/gi, '') // Xóa các thuộc tính inline style
   }
   return ''
+}
+export const handleReplaceText = (html: string = '') => {
+  if (!html) return ''
+  // Thay tất cả font-size
+  html = html.replace(/font-size:\s*[^;"]+/gi, 'font-size: 16px')
+
+  // Thay tất cả color
+  html = html.replace(/color:\s*[^;"]+/gi, 'color: white')
+
+  // Thay tất cả font-weight
+  html = html.replace(/font-weight:\s*[^;"]+/gi, 'font-weight: normal')
+  return html
 }
 
 export function convertSlugToTitle(slug: string): string {
@@ -510,6 +549,17 @@ export function getSessionIdFromToken(token: string): string | null {
   return typeof decoded?.session_state === 'string'
     ? decoded.session_state
     : null
+}
+
+export function convertMinutesToHourFormat(minutes: number): string {
+  const hrs = Math.floor(minutes / 60)
+  const mins = minutes % 60
+
+  const hourStr = hrs > 0 ? `${hrs} hour${hrs > 1 ? 's' : ''}` : ''
+  const minStr = mins > 0 ? `${mins} min${mins > 1 ? 's' : ''}` : ''
+
+  if (hourStr && minStr) return `${hourStr} ${minStr}`
+  return hourStr || minStr || '0 min'
 }
 
 export const formatPathWithQueryParams = (

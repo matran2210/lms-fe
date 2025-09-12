@@ -155,15 +155,14 @@ const DetailRequestModal = ({
       footerClassName={clsx('flex !justify-end gap-4', {
         'px-0': isApproved,
       })}
-      headerClassName="!bg-white !text-black border border-b-solid border-gray-5 px-8 py-5 text-xl"
+      headerClassName="!bg-white !text-black border border-b-solid border-[#7E8299] px-8 py-5 text-xl"
       sizeTextBtn="medium"
       cancelButtonClassName={clsx('font-medium rounded-md no-underline', {
-        '!bg-gray-4 hover:!bg-gray-6 !text-gray-13 !me-0': isPending,
-        '!bg-state-cancel !text-white hover:bg-state-cancel': isApproved,
+        '!bg-[#F9F9F9] hover:!bg-[#D8D8E5] !text-[#78829D] !me-0': isPending,
+        '!bg-[#D20306] !text-white hover:bg-[#D20306]': isApproved,
       })}
       submitButtonClassName="rounded-md"
       showSubmitButton={isPending}
-      isSecondaryCancelButton={false}
     >
       <div>
         <div className="mb-6 flex flex-col gap-4">
@@ -171,10 +170,10 @@ const DetailRequestModal = ({
             {selectedRequest?.class?.code || data?.data?.class?.code}
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm text-gray-12">Processing deadline:</div>
+            <div className="text-sm text-[#99A1B7]">Processing deadline:</div>
             <div
               className={clsx('flex items-center gap-2 text-sm', {
-                'text-state-cancel': isOverdue,
+                'text-[#D20306]': isOverdue,
               })}
             >
               {isOverdue && (

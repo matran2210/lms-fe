@@ -1,35 +1,95 @@
+import Icon from '@components/icons'
 import Layout from '@components/layout'
-import SearchForm from '@components/mycourses/Search'
-import BreadcrumbProfile from '@components/profile/BreadCrumbMyprofile'
 import Certificate from '@components/profile/Certificate'
 import ChangePassword from '@components/profile/ChangePassword'
-import Devices from '@components/profile/Devices'
-import ExamInfoTab from '@components/profile/ExamInformation/ExamInfoTab'
-import LoginHistory from '@components/profile/LoginHistory'
-import ProfileContent from '@components/profile/ProfileContent'
+import LoginHistoryList from '@components/profile/LoginHistory/LoginHistoryList'
 import ProfileHeader from '@components/profile/ProfileHeader'
-import ProfileSideBar from '@components/profile/ProfileSideBar'
-import ProgramDetail from '@components/profile/ProgramDetail'
 import Settings from '@components/profile/Settings'
+import TabHeaderItem from '@components/tab/TabHeaderItem'
+import { AuthenticationManager } from '@utils/helpers/keycloak'
+import { Collapse, CollapseProps, Divider, Tabs } from 'antd'
 import Image, { StaticImageData } from 'next/image'
-import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { ANIMATION } from 'src/constants'
+import {
+  ANIMATION,
+  DEFAULT_PAGE_NUMBER,
+  DEFAULT_PAGE_SIZE,
+  PageLink,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs } from 'src/type'
-import { IProfilePages, ProfilePages } from 'src/type/Profile'
+import { ITabs, NOTIFICATION_STATUS } from 'src/type'
+import { IDeviceItem, ProfilePages } from 'src/type/Profile'
+
+import {
+  convertSlugToTitle,
+  getLocalStorageItem,
+  removeLocalStorageItem,
+} from '@utils/index'
+
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+
+import DeviceList from '@components/profile/DeviceInformation/DeviceList'
+import MyProfile from '@components/profile/MyProfile'
+import ProfileList from '@components/profile/ProfileInformation/ProfileList'
+import MyPasword from '@components/profile/Security/MyPasword'
+import SubjectList from '@components/profile/SubjectInformation/SubjectList'
+import { getLogoutUser } from 'src/redux/slice/Login/Login'
+import Footer from '@components/layout/Footer'
+import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import { CollapseArrowIcon } from '@assets/icons'
+import OverviewItemCard from '@components/profile/Overview/OverviewItemCard'
+import FullScreenMobile from '@components/profile/Modal/FullScreenMobile'
+import { getLoginHistory, userReducer } from 'src/redux/slice/User/User'
+import UserApi from 'src/redux/services/User/user'
+import { useRouter } from 'next/router'
+import { useCourseContext } from '@contexts/index'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+
+interface IFullScreenMobile {
+  open: boolean
+  title: string
+  children: React.ReactNode
+}
 
 const ProfilePage = () => {
   const router = useRouter()
-  const page = router.query.page as IProfilePages
+  const dispatch = useAppDispatch()
+  const { loginHistory } = useAppSelector(userReducer)
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
   const [isEdit, setIsEdit] = useState<boolean>(false)
+  const [isChangePassword, setIsChangePassword] = useState<boolean>(false)
   const [avatar, setAvatar] = useState<File>()
   const inputFileRef = useRef<HTMLInputElement | null>(null)
-  const [isSelectPage, setSelectPage] = useState<boolean>(false)
+  const [listDevices, setListDevices] = useState<IDeviceItem[]>()
   const [reViewImageSrc, setReViewImageSrc] = useState<
     string | StaticImageData
   >()
+  const [openFullScreenMobile, setOpenFullScreenMobile] =
+    useState<IFullScreenMobile>({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
+  const onOpenFullScreenMobile = (title: string, children: React.ReactNode) => {
+    setOpenFullScreenMobile({
+      open: true,
+      title,
+      children,
+    })
+  }
+  const onCloseFullScreenMobile = () => {
+    setOpenFullScreenMobile({
+      open: false,
+      title: '',
+      children: <></>,
+    })
+  }
 
   const NotFound = () => (
     <div className="grid h-full place-items-center p-6">
@@ -40,22 +100,54 @@ const ProfilePage = () => {
           width="320"
           height="260"
         />
-        <h1 className="mt-3 text-2xl font-bold text-bw-1 md:text-4xl">
+        <h1 className="mt-3 text-2xl font-bold text-[#050505] md:text-4xl">
           Tab Not Found
         </h1>
       </div>
     </div>
   )
-
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   const handleSetAvatar = (avatar: File | undefined) => {
     setAvatar(avatar)
   }
-  const handleSetIsEdit = (isEdit: boolean) => {
-    if (!isEdit && inputFileRef.current) {
-      inputFileRef.current.value = ''
-    }
-    setIsEdit(isEdit)
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(getLogoutUser()).then(() => {
+        const pinnedStatus = getLocalStorageItem('pinnedStatus')
+        if (pinnedStatus === NOTIFICATION_STATUS.SHOWING) {
+          removeLocalStorageItem('pinnedId')
+        }
+      })
+      const authenticationManager = new AuthenticationManager()
+      await authenticationManager.logout()
+    } catch (error) {}
   }
+  const getListDevices = async () => {
+    const res = await UserApi.getListDevices()
+    setListDevices(res)
+  }
+
+  useEffect(() => {
+    dispatch(
+      getLoginHistory({
+        page_index: DEFAULT_PAGE_NUMBER,
+        page_size: DEFAULT_PAGE_SIZE,
+        type: 'login',
+      }),
+    )
+    getListDevices()
+  }, [])
   let breadcrumbs: ITabs[] = [
     {
       link: `/${ProfilePages.OVERVIEW}`,
@@ -66,155 +158,306 @@ const ProfilePage = () => {
       title: 'Details',
     },
   ]
+  const items = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
+      ),
+      children: (
+        <>
+          <MyProfile
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            avatar={avatar}
+            handleSetAvatar={handleSetAvatar}
+            setReViewImageSrc={setReViewImageSrc}
+          />
+          <SubjectList isEdit={isEdit} />
+          <ProfileList isEdit={isEdit} />
+        </>
+      ),
+    },
+    {
+      key: 'certificates',
+      label: (
+        <TabHeaderItem
+          icon={<Icon type="certificates" />}
+          title="Certificates"
+        />
+      ),
+      children: <Certificate />,
+    },
+    {
+      key: 'setting',
+      label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
+      children: <Settings />,
+    },
+    {
+      key: 'sercurity',
+      label: (
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+      ),
+      children: (
+        <>
+          {isChangePassword ? (
+            <ChangePassword handleCancel={() => setIsChangePassword(false)} />
+          ) : (
+            <div className="flex flex-col">
+              <MyPasword setIsChangePassword={setIsChangePassword} />
+              <DeviceList />
+              <LoginHistoryList />
+            </div>
+          )}
+        </>
+      ),
+    },
+  ]
 
-  let selectedContent: JSX.Element | null = null
-
-  switch (page) {
-    case ProfilePages.Certificates:
-      selectedContent = <Certificate onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.Devices:
-      selectedContent = <Devices onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.LoginHistory:
-      selectedContent = <LoginHistory onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.ChangePassword:
-      selectedContent = <ChangePassword onOpenTab={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.Settings:
-      selectedContent = <Settings onBack={() => setSelectPage(true)} />
-      break
-
-    case ProfilePages.OVERVIEW:
-      selectedContent = (
-        <ProfileContent
-          setReViewImageSrc={setReViewImageSrc}
+  const myProfileItems: CollapseProps['items'] = [
+    {
+      key: 'overview',
+      label: <p className="text-base font-semibold text-gray-800">Overview</p>,
+      children: (
+        <MyProfile
           isEdit={isEdit}
-          setIsEdit={handleSetIsEdit}
-          page={page}
+          setIsEdit={setIsEdit}
           avatar={avatar}
           handleSetAvatar={handleSetAvatar}
-          onOpenTab={() => setSelectPage(true)}
+          setReViewImageSrc={setReViewImageSrc}
         />
-      )
-      break
-
-    case ProfilePages.CFA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="CFA"
-          onOpenTab={() => setSelectPage(true)}
+      ),
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'exam-id',
+      label: <p className="text-base font-semibold text-gray-800">Exam ID</p>,
+      children: <SubjectList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'profile',
+      label: <p className="text-base font-semibold text-gray-800">Profile</p>,
+      children: <ProfileList isEdit={isEdit} />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
+  const mySecurityItems: CollapseProps['items'] = [
+    {
+      key: 'password',
+      label: <p className="text-base font-semibold text-gray-800">Password</p>,
+      children: <MyPasword setIsChangePassword={setIsChangePassword} />,
+      showArrow: false,
+      collapsible: 'icon',
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'device-list',
+      label: (
+        <CollapseListLabel
+          title="Browser"
+          subtitle="These are browsers that you logged on"
+          count={listDevices?.length || 0}
         />
-      )
-      break
-
-    case ProfilePages.CMA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="CMA"
-          onOpenTab={() => setSelectPage(true)}
+      ),
+      children: <DeviceList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+    {
+      key: 'login-history',
+      label: (
+        <CollapseListLabel
+          title="Log in History"
+          subtitle="These are IP adresses that logged in"
+          count={loginHistory?.meta?.total_records || 0}
         />
-      )
-      break
+      ),
+      children: <LoginHistoryList />,
+      className:
+        'mb-4 !border-none !rounded-lg bg-white !shadow-small profile-collapse-item',
+    },
+  ]
 
-    case ProfilePages.ACCA:
-      selectedContent = (
-        <ProgramDetail
-          typeProgram="ACCA"
-          onOpenTab={() => setSelectPage(true)}
+  const mobileOverviewItems = [
+    {
+      key: 'my-profile',
+      label: (
+        <TabHeaderItem icon={<Icon type="my-profile" />} title="My profile" />
+      ),
+      children: (
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['overview', 'exam-id', 'profile']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
+          )}
+          items={myProfileItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
         />
-      )
-      break
-
-    case ProfilePages.ExamInformation:
-      selectedContent = <ExamInfoTab onBack={() => setSelectPage(true)} />
-      break
-
-    default:
-      selectedContent = <NotFound />
-      break
-  }
-  const handleResize = () => {
-    if (window.innerWidth < 1024) {
-      setSelectPage(false)
-    } else {
-      setSelectPage(true)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  useEffect(() => {
-    setSelectPage(window.innerWidth >= 1024)
-  }, [page])
+      ),
+    },
+    {
+      key: 'certificates',
+      label: (
+        <TabHeaderItem
+          icon={<Icon type="certificates" />}
+          title="Certificates"
+        />
+      ),
+      children: <Certificate />,
+    },
+    {
+      key: 'setting',
+      label: <TabHeaderItem icon={<Icon type="setting" />} title="Setting" />,
+      children: <Settings />,
+    },
+    {
+      key: 'sercurity',
+      label: (
+        <TabHeaderItem icon={<Icon type="sercurity" />} title="Sercurity" />
+      ),
+      children: loginHistory && (
+        <Collapse
+          bordered={false}
+          expandIconPosition="end"
+          defaultActiveKey={['password', 'device-list', 'login-history']}
+          expandIcon={({ isActive }) => (
+            <CollapseArrowIcon selected={isActive} />
+          )}
+          items={mySecurityItems}
+          className="bg-gray-canvas p-0"
+          rootClassName="mobile-collapse"
+        />
+      ),
+    },
+  ]
 
   return (
-    <Layout title="My Profile">
-      <div className="flex h-full w-full flex-col">
-        <div className="border-b border-default bg-white px-4 lg:px-20">
-          <div className="mx-auto my-0 flex h-full max-w-xxl py-4.5">
-            <SearchForm
-              placeholder="Enter name of course..."
-              formStyle="w-full flex items-center"
-            />
-          </div>
-        </div>
-        <div className="mx-auto my-0 flex w-full max-w-xxl grow flex-col px-5 xl:px-0">
-          <div className="main sm:mx-4 lg:mx-0 ">
-            <BreadcrumbProfile tabs={breadcrumbs} currentPage={'Detail'} />
+    <Layout
+      title="My Profile"
+      size="sm"
+      showSidebar={showSidebar || isAlwaysShowSidebar}
+      handleToggleSidebar={handleCloseSidebar}
+      fullWidth={isMobileView}
+    >
+      <div className="mt-2 flex h-full w-full flex-col px-4 md:mt-0 md:px-0">
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+          className={'hidden md:flex'}
+        />
+        <div className="mx-auto my-0 flex w-full grow flex-col">
+          <div className="main hidden sm:mx-4 md:mb-6 md:block lg:mx-0 lg:mb-4">
+            <div className="hidden text-2xl font-medium md:block lg:hidden">
+              Student Profile
+            </div>
+            <SappBreadCrumbs isTeacher={false} breadcrumbs={breadcrumbs} />
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
-            <ProfileHeader
-              reViewImageSrc={reViewImageSrc}
-              setReViewImageSrc={setReViewImageSrc}
-              setAvatar={handleSetAvatar}
-              isEdit={isEdit}
-              inputFileRef={inputFileRef}
+            <HeaderMobile
+              title="Student Profile"
+              className="mb-4 md:hidden"
+              onBack={() => router.push(`${PageLink.COURSES}`)}
             />
-          </div>
-          <div className="mb-6 flex w-full flex-grow flex-col items-stretch justify-between gap-6 sm:flex-row">
-            {isSelectPage && (
-              <ProfileSideBar page={page}>{selectedContent}</ProfileSideBar>
-            )}
-            {!isSelectPage && (
-              <div className="mb-6 block w-full grow bg-white lg:mb-0 lg:hidden lg:grow-0">
-                {selectedContent}
+            <div className="flex flex-col gap-8 rounded-2xl bg-transparent md:gap-12 md:bg-white md:p-6 md:shadow-card lg:gap-16 lg:px-10 lg:py-8">
+              <ProfileHeader
+                reViewImageSrc={reViewImageSrc}
+                setReViewImageSrc={setReViewImageSrc}
+                setAvatar={handleSetAvatar}
+                avatar={avatar}
+                isEdit={isEdit}
+                inputFileRef={inputFileRef}
+                setIsEdit={setIsEdit}
+              />
+              <div>
+                <Tabs
+                  tabBarExtraContent={
+                    <div
+                      className="hover-transition-font-weight hidden cursor-pointer items-center gap-2 font-bold text-error lg:flex"
+                      onClick={handleLogout}
+                    >
+                      <Icon type="logout" className="font-normal" />
+                      <div>Logout</div>
+                    </div>
+                  }
+                  className="sapp-tabs-profile hidden md:block"
+                  defaultActiveKey="my-profile"
+                  items={items}
+                />
+
+                <div className="flex flex-col gap-3 md:hidden">
+                  {mobileOverviewItems.map((item, index) => (
+                    <OverviewItemCard
+                      key={index}
+                      title={item.label}
+                      onClick={() =>
+                        onOpenFullScreenMobile(
+                          convertSlugToTitle(item.key),
+                          item.children,
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+
+                <Divider className="md:hidden" />
+                <div
+                  className={clsx(
+                    'hover-transition-font-weight flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-50 p-4 text-base font-medium text-error md:mt-8 lg:hidden',
+                    {
+                      '!hidden': isEdit || isChangePassword,
+                    },
+                  )}
+                  onClick={handleLogout}
+                >
+                  <Icon type="logout" className="font-normal" />
+                  <div>Logout</div>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
+      {isMobileView && openFullScreenMobile.open && (
+        <FullScreenMobile
+          className="bg-gray-canvas px-4 pb-4"
+          title={openFullScreenMobile.title}
+          open={openFullScreenMobile.open}
+          onClose={onCloseFullScreenMobile}
+        >
+          {openFullScreenMobile.children}
+        </FullScreenMobile>
+      )}
     </Layout>
   )
 }
 
-// export const getServerSideProps: GetServerSideProps<IProps> = async (
-//   context,
-// ) => {
-//   const params = context.query
-//   if (
-//     !params?.page ||
-//     typeof params?.page !== 'string'
-//     // ||
-//     // !PROFILE_PAGES[
-//     //   (params?.page as string)?.toUpperCase() as keyof typeof PROFILE_PAGES
-//     // ]
-//   ) {
-//     return {
-//       notFound: true,
-//     }
-//   }
+const CollapseListLabel = ({
+  title,
+  subtitle,
+  count,
+}: {
+  title: string
+  subtitle: string
+  count: number
+}) => (
+  <div>
+    <p className="mb-2 text-base font-semibold">
+      {title}{' '}
+      <span className="text-base font-normal text-secondary-300">
+        ({count})
+      </span>
+    </p>
+    <p className="text-sm">{subtitle}</p>
+  </div>
+)
 
-//   return {
-//     props: { page: params?.page as IProfilePages },
-//   }
-// }
 export default withAuthorization([UserType.STUDENT])(ProfilePage)

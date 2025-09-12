@@ -1,34 +1,33 @@
-body:not(.no-hover) {
-  .menu-sidebar-left {
-    &:hover {
-      @apply w-[230px] min-w-[220px];
+@layer utilities {
+  .menu-sidebar-left--hover {
+    @apply w-[220px];
 
-      .group-logos {
-        @apply pb-5;
+    .logo-full {
+      @apply pointer-events-auto opacity-100;
+    }
+    .group-logos {
+      // @apply pb-5;
 
-        & > div {
-          @apply justify-center;
-        }
+      & > div {
+        @apply justify-center;
       }
+    }
 
-      .logo-full {
-        @apply visible opacity-100;
-      }
+    .sidebar-item .label {
+      display: -webkit-box;
+      @apply visible opacity-100;
 
-      .sidebar-item .label {
-        display: -webkit-box;
-        @apply visible opacity-100;
-
-        &.avatar {
-          display: block;
-        }
+      &.avatar {
+        display: block;
       }
     }
   }
 }
 
 .menu-sidebar-left {
-  transition: all 0.2s linear;
+  height: calc(100% - 16px);
+  transition: width 0.2s linear;
+  transform: translateZ(0) scale(1, 1);
   -webkit-transform: translateZ(0) scale(1, 1);
 }
 
@@ -41,7 +40,7 @@ body:not(.no-hover) {
 
   .sidebar-child {
     &.level-1 {
-      @apply invisible absolute left-full top-0 z-20 w-max rounded-md border border-default bg-white p-4 opacity-0 transition-all duration-300;
+      @apply invisible absolute left-full top-0 z-20 w-max rounded-md border border-[#DCDDDD] bg-white p-4 opacity-0 transition-all duration-300;
       .sidebar-item {
         @apply justify-start;
 
@@ -68,10 +67,6 @@ body:not(.no-hover) {
 
       .menu-items-list {
         @apply p-4 pb-0;
-      }
-
-      .sidebar-list-items {
-        @apply mb-3 last:mb-0;
       }
     }
   }

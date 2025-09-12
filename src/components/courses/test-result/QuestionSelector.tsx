@@ -137,7 +137,7 @@ export default function QuestionSelector({
             <div
               className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
                 type === 'Constructed Questions' && totalBefore > 0
-                  ? 'border-l border-default pl-3'
+                  ? 'border-default border-l pl-3'
                   : ''
               }`}
             >
@@ -181,19 +181,19 @@ export default function QuestionSelector({
         </div>
         <div className="bottom-0 mt-auto w-full bg-white xl:sticky">
           <div
-            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-default md:flex-row xl:items-center xl:py-6 ${
+            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} border-default items-end justify-between gap-2 md:flex-row xl:items-center xl:py-6 ${
               showMore ? 'items-center border-t pt-4' : 'pt-0 xl:border-t'
             }`}
           >
             <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
-                className="flex cursor-pointer flex-row pr-2 text-center text-gray-1  hover:text-primary"
+                className="text-gray-1 flex cursor-pointer flex-row pr-2 text-center  hover:text-primary"
                 onClick={() => setOpenAnnotaion(true)}
               >
                 <div className="my-auto">
                   <IconAnnotationGuide />
                 </div>
-                <div className="text-xs my-auto ml-1 font-normal">
+                <div className="my-auto ml-1 text-xs font-normal">
                   Annotation Guide
                 </div>
               </div>

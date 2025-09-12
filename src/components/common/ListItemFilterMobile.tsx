@@ -14,19 +14,21 @@ import {
   SectionField,
   nextTypeMap,
   allTypes,
-} from 'src/type/courses-3-level/course'
-import { ISection } from 'src/type'
+  ISection,
+} from 'src/type'
 import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
 
 interface IProps {
-  setOpenChooseItem: Dispatch<SetStateAction<IOpenChooseItem>>
+  setOpenChooseItem: Dispatch<SetStateAction<any>>
   openChooseItem: IOpenChooseItem
   listSection: ISection[]
   listSubsection: ISection[]
+  listUnit?: ISection[]
   listActivity: ISection[]
   setListSection: Dispatch<SetStateAction<ISection[]>>
   setListSubsection: Dispatch<SetStateAction<ISection[]>>
+  setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
 }
 
@@ -35,15 +37,18 @@ const ListItemFilterMobile = ({
   openChooseItem,
   listSection,
   listSubsection,
+  listUnit,
   listActivity,
   setListSection,
   setListSubsection,
+  setListUnit,
   setListActivity,
 }: IProps) => {
   const { watch, setValue } = useFormContext()
   const selected = {
     section: watch('section'),
     subsection: watch('subsection'),
+    unit: watch('unit'),
     activity: watch('activity'),
   }
 
@@ -64,9 +69,11 @@ const ListItemFilterMobile = ({
     const clearMap = {
       section: () => {
         setListSubsection([])
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       subsection: () => {
+        setListUnit && setListUnit([])
         setListActivity([])
       },
       unit: () => setListActivity([]),
@@ -102,6 +109,7 @@ const ListItemFilterMobile = ({
   // SECTION FETCHING HOOKS
   const { sections, fetchInitialSections, isLoading } = useInitialSections()
   const subsectionData = useSectionData(selected.section, 'CHAPTER')
+  const unitData = useSectionData(selected.subsection, 'UNIT')
   const activityData = useSectionData(selected.subsection, 'ACTIVITY')
 
   // FETCH section on mount
@@ -119,7 +127,14 @@ const ListItemFilterMobile = ({
   }, [selected.section])
 
   useEffect(() => {
+    if (selected.subsection && isEmpty(listUnit)) {
+      unitData.fetchSections(DEFAULT_PAGE_SIZE)
+    }
+  }, [selected.subsection])
+
+  useEffect(() => {
     if (selected.subsection && isEmpty(listActivity)) {
+      //Đạt check
       activityData.fetchSections(DEFAULT_PAGE_SIZE)
     }
   }, [selected.subsection])
@@ -135,6 +150,11 @@ const ListItemFilterMobile = ({
   }, [subsectionData.sections])
 
   useEffect(() => {
+    if (!isEmpty(unitData.sections))
+      setListUnit && setListUnit(unitData.sections)
+  }, [unitData.sections])
+
+  useEffect(() => {
     if (!isEmpty(activityData.sections)) setListActivity(activityData.sections)
   }, [activityData.sections])
 
@@ -145,10 +165,11 @@ const ListItemFilterMobile = ({
         listSection,
       ),
       subsection: listSubsection,
+      unit: listUnit ?? [],
       activity: listActivity,
     }
     setList(map[openChooseItem.type] ?? [])
-  }, [openChooseItem.type, listSection, listSubsection, listActivity])
+  }, [openChooseItem.type, listSection, listSubsection, listUnit, listActivity])
 
   const hasSelectedOption = Object.values(selected).some((value) => !!value)
 

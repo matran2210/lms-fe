@@ -41,7 +41,7 @@ export default function ScoreChart({
                 alt="global"
               />
             </div>
-            <div className="text-base font-normal text-gray-1">
+            <div className="text-gray-1 text-base font-normal">
               Global Average {GlobalAverage}%
             </div>
           </div>
@@ -53,7 +53,7 @@ export default function ScoreChart({
           <div>
             {isGraded && (
               <div
-                className={`absolute flex h-0 w-full items-center border-t border-dotted border-gray-2 group-hover:border-state-info`}
+                className={`group-hover:border-state-info absolute flex h-0 w-full items-center border-t border-dotted border-gray-2`}
                 style={{
                   bottom: passingScore + '%',
                 }}

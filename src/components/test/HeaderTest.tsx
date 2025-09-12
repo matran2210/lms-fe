@@ -30,6 +30,7 @@ interface IProps {
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
   onSubmitAnswer: (action?: string) => void
   handleTimeoutSubmit: () => void
+  resetWordBeforeAction?: () => Promise<void>
 }
 
 const calculateRemainingTime = (
@@ -54,6 +55,7 @@ const HeaderTest = ({
   submited,
   onSubmitAnswer,
   handleTimeoutSubmit,
+  resetWordBeforeAction,
 }: IProps) => {
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
@@ -70,7 +72,7 @@ const HeaderTest = ({
     (remainingTimeinSeconds ?? 0) > 0 ? (remainingTimeinSeconds ?? 0) : 0
 
   return (
-    <div className="relative z-50 flex items-center justify-between bg-gray-3 px-6 py-2">
+    <div className="relative z-50 flex items-center justify-between bg-[#F1F1F1] px-6 py-2">
       <div className="w-2/6 truncate text-[18px] font-medium">
         {quizDetail?.name}
       </div>
@@ -84,7 +86,7 @@ const HeaderTest = ({
 
       <div className="flex w-2/6 items-center justify-end">
         {!['ENTRANCE_TEST', 'EVENT_TEST'].includes(quizDetail?.quiz_type) && (
-          <div className="mr-6 text-medium-sm text-bw-1">
+          <div className="mr-6 text-sm text-[#050505]">
             Attempt: {quizAttempt?.number_of_attempts}
             {quizDetail?.is_limited ? `/${quizDetail?.limit_count}` : ''}
           </div>
@@ -97,8 +99,8 @@ const HeaderTest = ({
             loading: false,
             disabled: submited,
             className: 'border border-bw-1',
-            color: 'secondary',
-            onClick: () => {
+            onClick: async () => {
+              await resetWordBeforeAction?.()
               onSubmitAnswer('finish')
               if (checkUnSubmitAnswer()?.length > 0) {
                 setUnSubmitAnswer(true)
@@ -112,8 +114,8 @@ const HeaderTest = ({
             title: 'Quit',
             size: 'small',
             className: 'border border-bw-1 !w-[109px]',
-            color: 'secondary',
-            onClick: () => {
+            onClick: async () => {
+              await resetWordBeforeAction?.()
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
               // if (type === 'event-test') {

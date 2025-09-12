@@ -17,8 +17,8 @@ const PageLink = ({
       <li
         className={`flex cursor-not-allowed items-center justify-center ${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-gray-6'
-            : 'min-h-9 text-gray-1'
+            ? 'text-gray-6 min-h-8 min-w-8'
+            : 'text-gray-1 min-h-9'
         }`}
       >
         {children}
@@ -28,7 +28,7 @@ const PageLink = ({
     return (
       <li
         className={`${
-          type === 'table' ? 'min-h-8 min-w-8 text-gray-5' : 'min-h-10'
+          type === 'table' ? 'text-gray-5 min-h-8 min-w-8' : 'min-h-10'
         } flex cursor-pointer items-center justify-center`}
         {...otherProps}
       >
@@ -42,8 +42,8 @@ const PageLink = ({
       <li
         className={`flex items-center justify-center ${
           type === 'table'
-            ? 'min-h-8 min-w-8 text-gray-5'
-            : 'min-h-10 text-3xl font-thin leading-[33px] text-gray-1'
+            ? 'text-gray-5 min-h-8 min-w-8'
+            : 'text-gray-1 min-h-10 text-3xl font-thin leading-[33px]'
         }`}
       >
         {children}

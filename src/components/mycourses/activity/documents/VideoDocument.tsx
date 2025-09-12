@@ -1,24 +1,24 @@
-import { memo, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import {
-  IActivityStateQuestion,
-  courseActivityQuizReducer,
-  fetchQuestionById,
-} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
+import { TimeLineIcon } from '@assets/icons'
 import SappButton from '@components/base/button/SappButton'
 import SappModal from '@components/base/modal/SappModal'
-import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
+import TimeLineModal from '@components/courses/timeline/TimeLineModal'
+import { video_url } from '@utils/constants'
 import { debounce } from '@utils/helpers'
-import SappIcon from 'src/common/SappIcon'
+import { memo, useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAppDispatch } from 'src/redux/hook'
+import {
+  IActivityStateQuestion,
+  fetchQuestionById,
+} from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import { video_url } from '@utils/constants'
-import TimeLineModal from '@components/courses/timeline/TimeLineModal'
-import { Soundwave } from '@components/courses/icons'
 import QuizModal from '@components/courses/video/QuizModal'
+import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
+import clsx from 'clsx'
+import SappIcon from 'src/common/SappIcon'
 import { GRADING_PREFERENCE } from 'src/constants'
 
 type Props = {
@@ -31,8 +31,9 @@ type Props = {
   quizId: string
   grading_preference: 'AFTER_EACH_QUESTION' | 'AFTER_ALL_QUESTIONS'
   class_user_id?: string
-  activeTab: string
-  activeVideo: string
+  handleSetCurrentVideoCallback?: (video: IVideo) => void
+  activeTab?: string
+  activeVideo?: string
   handleCloseTab?: (activeTab: string) => void
   onUpdateActiveVideo?: (activeVideo: string) => void
   newQuizModal?: boolean
@@ -53,12 +54,20 @@ const VideoDocument = ({
   document_id,
   quizId,
   grading_preference,
+  handleSetCurrentVideoCallback,
   activeTab,
   activeVideo,
   handleCloseTab,
   onUpdateActiveVideo,
   newQuizModal,
 }: Props) => {
+  const {
+    control: controlAnswer,
+    setValue,
+    reset: resetAnswer,
+    getValues,
+    watch,
+  } = useForm({})
   const [currentVideo, setCurrentVideo] = useState<IVideo>(
     videos && videos.length > 0 ? videos[0] : ({} as IVideo),
   )
@@ -132,6 +141,7 @@ const VideoDocument = ({
     }
     // setDefaultListQuestion(listQuestion)
     setCurrentVideo(v)
+    handleSetCurrentVideoCallback?.(v)
     onUpdateActiveVideo?.(v.file.id)
     quizTimed.current = listQuestion.reduce(
       (obj, e) => {
@@ -352,45 +362,52 @@ const VideoDocument = ({
 
   return (
     <div>
-      <div className="mb-2.5 flex items-center justify-between gap-x-10 gap-y-2 text-primary">
-        {(videos as IVideo[])?.length > 1 && (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
-            <span className="font-semibold text-bw-1">Video mode:</span>
-            <div className="flex gap-2 rounded-sm bg-gray-4 p-1">
-              {videos?.map((v, i) => {
-                return (
-                  <label
-                    className=" flex cursor-pointer select-none items-center gap-2"
-                    key={v?.file?.id ?? i}
-                  >
-                    {/* Radio button for video selection */}
-                    <SappButton
-                      key={v?.file?.id ?? i}
-                      size="small"
-                      className="rounded-md !px-3 py-2 text-medium-sm !font-normal"
-                      title={'Video ' + (i + 1)}
-                      toolTipTitle=""
-                      onClick={() => debouncedHandleSetCurrentVideo.current(v)}
-                      {...(v?.file?.id === currentVideo?.file?.id
-                        ? {
-                            color: 'primary',
-                          }
-                        : { color: 'gray' })}
-                    />
-                  </label>
-                )
-              })}
-            </div>
-          </div>
-        )}
+      <div
+        className={clsx('mb-6 flex items-center gap-x-10 gap-y-2 ', {
+          'justify-between': (videos as IVideo[])?.length > 1,
+          'justify-end': (videos as IVideo[])?.length <= 1,
+        })}
+      >
+        {(videos as IVideo[])?.length > 1 &&
+          videos?.map((v, i) => {
+            return (
+              <label
+                className=" flex cursor-pointer select-none items-center gap-2"
+                key={v?.file?.id ?? i}
+              >
+                {/* Radio button for video selection */}
+                <SAPPRadio
+                  onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                  {...(v?.file?.id === currentVideo?.file?.id
+                    ? {
+                        checked: true,
+                      }
+                    : { checked: false })}
+                  size={'small'}
+                ></SAPPRadio>
+                <span
+                  className={`radio-item-label  ${
+                    v?.file?.id === currentVideo?.file?.id
+                      ? 'text-bw-1'
+                      : 'text-gray-1'
+                  }`}
+                >
+                  Video {i + 1}
+                </span>
+              </label>
+            )
+          })}
         <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
           {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
             <>
-              <span className="mr-2 text-bw-15 group-hover:text-primary">
+              {/* Icon for course video timeline */}
+              <SappIcon
+                className="fill-bw-1 group-hover:text-primary"
+                icon="course_video_timeline"
+              ></SappIcon>
+              <span className="ml-2 text-bw-1 group-hover:text-primary">
                 Timeline
               </span>
-              {/* Icon for course video timeline */}
-              <Soundwave className="text-bw-15 group-hover:text-primary" />
             </>
           ) : (
             <></>
@@ -409,15 +426,15 @@ const VideoDocument = ({
                 return (
                   <div
                     key={i}
-                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-medium-sm text-bw-1 hover:bg-gray-4 hover:text-primary-2"
+                    className="mx-3 grid grid-cols-[1.3fr,6fr] gap-3 p-3 text-sm text-[#050505] hover:bg-[#F9F9F9] hover:text-primary-2"
                     onClick={() => {
                       handleGoTimeline(e?.time)
                     }}
                   >
-                    <div className="mim-w-[62px] text-state-info">
+                    <div className="mim-w-[62px] text-[#3964EA]">
                       {formatTime(e?.time)}
                     </div>
-                    <div className="line-clamp-2 text-bw-1 text-inherit">
+                    <div className="text-inherit line-clamp-2 text-[#050505]">
                       {htmlToRaw(e?.text)}
                     </div>
                   </div>
@@ -427,7 +444,7 @@ const VideoDocument = ({
           </div>
         </div>
       </div>
-      <div className="relative">
+      <div className="relative overflow-hidden rounded-lg shadow-small">
         <SAPPVideo
           streamRef={streamRef}
           options={{

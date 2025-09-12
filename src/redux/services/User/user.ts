@@ -5,7 +5,7 @@ import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
 import { PinnedNotifications } from 'src/type'
 import { fetchFormData } from '@services/requestV2'
-import { IDeviceItem } from 'src/type/v2'
+import { IDeviceItem } from 'src/type/Profile'
 
 const UserApi = {
   /**
@@ -52,7 +52,7 @@ const UserApi = {
     // Sử dụng httpService để gửi yêu cầu POST_FORM_DATA
     return fetchFormData({ url: `${apiURL}/users/avatar`, formData })
   },
-  getListDevices: async (): Promise<IResponse<any>> => {
+  getListDevices: async (): Promise<IDeviceItem[]> => {
     return AuthAPI.getListDevices()
   },
   getListDevicesV2: async (): Promise<IDeviceItem[]> => {

@@ -35,7 +35,7 @@ const ProfileItem = ({
     <div className={className}>
       <div
         className={clsx(
-          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-v2-50 md:px-6 md:py-4 md:text-base',
+          'hover:bg-primary-v2-50 group rounded-md bg-gray-canvas p-3 text-sm md:px-6 md:py-4 md:text-base',
         )}
         onClick={() =>
           setMakeDefaultDrawer({
@@ -56,7 +56,7 @@ const ProfileItem = ({
                 Profile {index + 1}
               </span>
               {e?.is_default && (
-                <span className="ml-[10px] inline-block select-none rounded bg-success-v2-50 bg-opacity-5 px-2 py-1 leading-4 text-success-v2-DEFAULT">
+                <span className="bg-success-v2-50 text-success-v2-DEFAULT ml-[10px] inline-block select-none rounded bg-opacity-5 px-2 py-1 leading-4">
                   Default
                 </span>
               )}

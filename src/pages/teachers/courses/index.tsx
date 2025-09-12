@@ -127,7 +127,7 @@ const MyCourseTeacher = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs}>
-        <div className="header border-b border-default bg-white">
+        <div className="header border-default border-b bg-white">
           <div className={`relative my-0 flex`}>
             <SearchForm
               placeholder={MY_COURSES.placeholderSearch}

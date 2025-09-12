@@ -88,14 +88,14 @@ const Certificate = () => {
       title: 'Grade Archive',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary-500">{record?.pass_point}%</div>
+        <div className="text-secondary">{record?.pass_point}%</div>
       ),
     },
     {
       title: 'Certificate Received',
       align: 'center',
       render: (record) => (
-        <div className="text-secondary-500">
+        <div className="text-secondary">
           {sappFormatDate(record?.received_times, 'DD/MM/YYYY HH:mm')}
         </div>
       ),
@@ -112,7 +112,7 @@ const Certificate = () => {
           >
             <Icon
               type="download"
-              className="cursor-pointer text-secondary-500 hover:text-primary"
+              className="cursor-pointer text-secondary hover:text-primary"
             />
           </div>
 
@@ -127,7 +127,7 @@ const Certificate = () => {
           >
             <Icon
               type="eye-view"
-              className="cursor-pointer text-secondary-500 hover:text-primary"
+              className="cursor-pointer text-secondary hover:text-primary"
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ const Certificate = () => {
       ) : null}
 
       <div className="flex flex-col gap-4 md:gap-6 lg:hidden">
-        <div className="hidden text-xl font-semibold text-secondary-500 md:block">
+        <div className="hidden text-xl font-semibold text-secondary md:block">
           Certificate
         </div>
         {certificateData?.length
@@ -247,7 +247,7 @@ const CertificateItem = ({
             >
               <Icon
                 type="download"
-                className="cursor-pointer text-secondary-500 hover:text-primary"
+                className="cursor-pointer text-secondary hover:text-primary"
               />
             </div>
 
@@ -262,7 +262,7 @@ const CertificateItem = ({
             >
               <Icon
                 type="eye-view"
-                className="cursor-pointer text-secondary-500 hover:text-primary"
+                className="cursor-pointer text-secondary hover:text-primary"
               />
             </div>
           </div>

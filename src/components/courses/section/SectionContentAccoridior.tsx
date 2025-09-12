@@ -1,22 +1,23 @@
-import React, { useState } from 'react'
+import { TEST_TYPE_ENUM } from '@utils/constants'
 import { Collapse } from 'antd'
-import { IActivity, SectionContentProps } from 'src/type/courses-3-level'
-import { ArrowDownIcon } from '../icons'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { ROUTES } from 'src/constants'
+import { SectionContentProps } from 'src/type/courses-3-level'
 import {
-  renderBadge,
   formatDuration,
+  renderBadge,
   renderIconActivity,
 } from '../card/accordion/utils'
-import { useRouter } from 'next/router'
-import { ROUTES } from 'src/constants'
+import { ArrowDownIcon } from '../icons'
 import TestModal from '../popup/TestModal'
-import { TEST_TYPE_ENUM } from '@utils/constants'
 import clsx from 'clsx'
 
 const { Panel } = Collapse
 
 export default function SectionContentAccoridior({
   sections,
+  class_user_id,
 }: SectionContentProps) {
   const router = useRouter()
   const courseId = router.query.courseId
@@ -117,11 +118,7 @@ export default function SectionContentAccoridior({
                     return (
                       <div
                         key={activityIndex}
-                        className={`
-                        group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 
-                        hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2
-                        ${selectedActivity ? 'bg-gray-4 text-primary' : ''}
-                        `}
+                        className={`group mb-3 flex cursor-pointer flex-col justify-between gap-1 rounded-md p-0 hover:bg-gray-4 hover:text-primary md:mb-2 md:flex-row md:items-center md:gap-0 md:p-2     ${selectedActivity ? 'bg-gray-4 text-primary' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           if (activity?.course_section_type === 'ACTIVITY') {
@@ -180,7 +177,7 @@ export default function SectionContentAccoridior({
                         </div>
                         {activity?.course_section_type ==
                           TEST_TYPE_ENUM.ACTIVITY && (
-                          <span className="hidden text-right text-xs text-gray-1 group-hover:text-primary md:block">
+                          <span className="hidden text-xs text-gray-1 group-hover:text-primary md:block">
                             {formatDuration(activity?.duration)}
                           </span>
                         )}
@@ -199,6 +196,7 @@ export default function SectionContentAccoridior({
         open={open}
         data={dataTest}
         setOpen={() => setOpen(false)}
+        class_user_id={class_user_id}
       />
     </div>
   )

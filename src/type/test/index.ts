@@ -66,7 +66,7 @@ export type AnswerList = {
 }
 
 export interface DragDropAnswerItem {
-  id: string
+  id?: string
   idAnswer?: string
   value: string
   position: number
@@ -142,10 +142,11 @@ export interface ExhibitQuestion {
   files: FileQuestion[]
 }
 
-export interface Sheet {
-  name: string
-  id: string
-  status: number
-  data: (any | null)[][]
+// Gợi ý type tối thiểu
+export type Sheet = {
+  name?: string
+  id?: string
+  status?: number
+  data: any[][] // 2D array (rows x cols)
   celldata: any[]
 }

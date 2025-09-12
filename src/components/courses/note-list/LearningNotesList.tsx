@@ -32,9 +32,9 @@ import {
 import NoDataV2 from 'src/common/NodataV2'
 import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
-import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/courses/action/ActionCellV2'
+import ListFilterMobile from '@components/common/ListFilterMobile'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import { DEFAULT_PAGESIZE, PageLink } from 'src/constants'
 import BaseModal from '@components/courses/popup/BaseModal'
 import ButtonPrimary from '@components/v2/base/button/ButtonPrimary'
@@ -501,6 +501,7 @@ export default function LearningNotesList({
           rootClassName={'responsive-drawer-center'}
           submitButtonClassName="w-full h-10"
           btnSubmitTile="Confirm"
+          closable
         >
           {renderContent()}
         </SappDrawerV3>

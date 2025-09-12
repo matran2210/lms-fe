@@ -13,8 +13,7 @@ import { IButtonTab } from 'src/type/courses-3-level/button'
 import { CoursesAPI } from '../api/courses'
 import SearchForm3Level from '@components/courses/shared/SearchForm'
 import Filter3Level from '@components/courses/filter/Filter'
-import CoursesList from '@components/courses/card/CoursesList'
-import { RedirectModal } from '@components/courses'
+import { CoursesList, RedirectModal } from '@components/courses'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
@@ -117,7 +116,7 @@ const MyCourse3Level = () => {
   return (
     <LayoutCourses3Level title="My Course">
       <div className="hidden pt-4 md:block">
-        <SearchForm3Level placeholder={MY_COURSES.placeholderSearch3Level} />
+        <SearchForm3Level placeholder={MY_COURSES.placeholderSearchV2} />
       </div>
       <div
         className={`heading relative mx-auto my-0 mt-6 hidden max-w-1524 bg-white md:block xl-max:mx-4`}
@@ -152,7 +151,7 @@ const MyCourse3Level = () => {
       </div>
 
       <div className="pt-4 md:hidden">
-        <SearchForm3Level placeholder={MY_COURSES.placeholderSearch3Level} />
+        <SearchForm3Level placeholder={MY_COURSES.placeholderSearchV2} />
       </div>
 
       <div

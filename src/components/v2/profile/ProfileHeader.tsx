@@ -204,7 +204,7 @@ const ProfileHeader = ({
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          className="text-[#DCDDDD]00 h-8 w-8 animate-spin fill-blue-600 dark:text-[#4b5563]"
+                          className="text-[#DCDDDD]00 fill-blue-600 h-8 w-8 animate-spin dark:text-[#4b5563]"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -282,7 +282,7 @@ const ProfileHeader = ({
             onClick={handlerCancelUploadAvatar}
           >
             <div
-              className="hover:text-error flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box"
+              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-white shadow-box hover:text-error"
               role="button"
             >
               <svg
@@ -317,7 +317,7 @@ const ProfileHeader = ({
             <div>
               <Tag
                 bordered={false}
-                className="m-0 rounded bg-success-v2-50 px-2 py-[2px] text-sm font-normal text-success-v2-DEFAULT md:text-base"
+                className="bg-success-v2-50 text-success-v2-DEFAULT m-0 rounded px-2 py-[2px] text-sm font-normal md:text-base"
               >
                 Active
               </Tag>

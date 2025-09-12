@@ -1,44 +1,50 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import CalcButton from './calcButton'
+import clsx from 'clsx'
 
 interface IProps {
   click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   keyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
+  isMobileCalc?: boolean
 }
 
 const ButtonsContainer = (props: IProps) => {
-  const { click, keyDown } = props
+  const { click, keyDown, isMobileCalc = false } = props
+
+  const btnClassName = isMobileCalc ? 'w-[48px] h-[48px]' : ''
   return (
     <div
-      className="calc__btns-container"
+      className={clsx('calc__btns-container', {
+        '!p-4': isMobileCalc,
+      })}
       onClick={click}
       onKeyDown={keyDown}
       aria-hidden="true"
     >
-      <CalcButton value="AC" />
-      <CalcButton value="+/-" />
-      <CalcButton value="%" />
-      <CalcButton value="÷" colored />
+      <CalcButton value="AC" className={btnClassName} />
+      <CalcButton value="+/-" className={btnClassName} />
+      <CalcButton value="%" className={btnClassName} />
+      <CalcButton value="÷" className={btnClassName} colored />
 
-      <CalcButton value="7" />
-      <CalcButton value="8" />
-      <CalcButton value="9" />
-      <CalcButton value="x" colored />
+      <CalcButton value="7" className={btnClassName} />
+      <CalcButton value="8" className={btnClassName} />
+      <CalcButton value="9" className={btnClassName} />
+      <CalcButton value="x" className={btnClassName} colored />
 
-      <CalcButton value="4" />
-      <CalcButton value="5" />
-      <CalcButton value="6" />
-      <CalcButton value="-" colored />
+      <CalcButton value="4" className={btnClassName} />
+      <CalcButton value="5" className={btnClassName} />
+      <CalcButton value="6" className={btnClassName} />
+      <CalcButton value="-" className={btnClassName} colored />
 
-      <CalcButton value="1" />
-      <CalcButton value="2" />
-      <CalcButton value="3" />
-      <CalcButton value="+" colored />
+      <CalcButton value="1" className={btnClassName} />
+      <CalcButton value="2" className={btnClassName} />
+      <CalcButton value="3" className={btnClassName} />
+      <CalcButton value="+" className={btnClassName} colored />
 
-      <CalcButton value="0" span={2} />
-      <CalcButton value="." />
-      <CalcButton value="=" colored />
+      <CalcButton value="." className={btnClassName} />
+      <CalcButton value="0" className={btnClassName} />
+      <CalcButton value="delete" className={btnClassName} />
+      <CalcButton value="=" className={btnClassName} colored />
     </div>
   )
 }

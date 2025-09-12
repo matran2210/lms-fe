@@ -1,6 +1,6 @@
 import { ClockIcon, PencilFillV2Icon, PencilV2Icon } from '@assets/icons'
+import { CheckCircleOutlineYellow } from '@assets/icons/test'
 import blankAvatar from '@assets/images/blank_avatar.webp'
-import { CheckCircleOutlineYellow } from '@assets/v2/icons'
 import TextSkeleton from '@components/base/skeleton/TextSkeleton'
 import { CloseIconV2 } from '@components/icons'
 import { Divider, Tag } from 'antd'
@@ -214,7 +214,7 @@ const ProfileHeader = ({
                       <div role="status">
                         <svg
                           aria-hidden="true"
-                          className="text-[#DCDDDD]00 h-8 w-8 animate-spin fill-blue-600 dark:text-[#4b5563]"
+                          className="fill-blue-600 text-[#DCDDDD]00 h-8 w-8 animate-spin dark:text-[#4b5563]"
                           viewBox="0 0 100 101"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +290,7 @@ const ProfileHeader = ({
       <div className="w-full flex-1 md:my-6 lg:my-0">
         <div
           className={clsx(
-            'mb-4 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary-500 md:mb-4 md:block md:max-w-[600px] md:text-2xl',
+            'mb-4 flex items-center justify-center gap-2 truncate text-lg font-bold text-secondary md:mb-4 md:block md:max-w-[600px] md:text-2xl',
           )}
         >
           <div className="flex w-full items-center justify-center gap-3 md:justify-start">

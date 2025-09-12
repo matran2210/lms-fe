@@ -1,11 +1,6 @@
 import React from 'react'
-import Link from 'next/link'
-import { IButtonProps } from 'src/type'
-import SpinIcon from './SpinIcon'
-
-interface IButtonSecondaryProps extends IButtonProps {
-  isSecondaryButton?: boolean
-}
+import BaseButton from './BaseButton'
+import { IButtonBaseProps } from 'src/type'
 
 const ButtonSecondary = ({
   title,
@@ -13,68 +8,63 @@ const ButtonSecondary = ({
   className = '',
   link,
   size = 'small',
-  full = false,
-  loading = false,
   disabled = false,
-  isSecondaryButton = true,
-}: IButtonSecondaryProps) => {
-  const isDisabled = disabled || loading
-
-  const textSizeClass =
+  startIcon,
+  endIcon,
+  full = false,
+  children,
+  ...props
+}: IButtonBaseProps) => {
+  let textSizeClass =
     size === 'small'
-      ? 'text-[0.875rem] leading-4'
+      ? 'text-sm'
       : size === 'medium'
-        ? 'text-[1rem] leading-6'
-        : 'text-lg leading-6.5'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
+  let padding =
+    size === 'small'
+      ? 'py-[7px] px-[15px]'
+      : size === 'medium'
+        ? 'py-[7px] px-[15px] md:py-[11px] md:px-[23px]'
+        : 'py-[7px] px-[15px] md:py-[15px] md:px-[31px]'
 
-  const paddingVerticalClass =
-    size === 'small' ? 'py-2' : size === 'medium' ? 'py-2' : 'py-2.8'
+  let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  let disabledClass = disabled
+    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+    : 'cursor-pointer'
 
-  const paddingHorizontalClass =
-    size === 'small' ? 'px-7' : size === 'medium' ? 'px-8' : 'px-9'
-
-  const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
-
-  const componentClass = `
-    text-center 
-    ${fullWidthClass} 
-    ${paddingVerticalClass} 
-    ${paddingHorizontalClass} 
-    text-bw-1 
-    ${textSizeClass} 
-    font-medium 
-    bg-gray-3 
-    ${isDisabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'} 
-    ${isSecondaryButton ? 'secondary' : ''} 
+  let componentClass = `
+    text-center
+    text-secondary
+    hover:!text-secondary
+    bg-transparent
+    rounded-lg
+    border border-secondary
+    hover:!border-secondary
+    hover:!bg-gray-100
+    box-border
+    font-medium
+    ${padding}
+    ${textSizeClass}
+    ${fullWidthClass}
+    ${disabledClass} 
     ${className}
-  `.trim()
-
-  const buttonContent = loading ? (
-    <div className="flex items-center justify-center space-x-2">
-      <SpinIcon />
-      <span>Loading...</span>
-    </div>
-  ) : (
-    <span>{title}</span>
-  )
-
-  if (link) {
-    return (
-      <Link href={link} className={componentClass} aria-disabled={isDisabled}>
-        {buttonContent}
-      </Link>
-    )
-  }
+  `
 
   return (
-    <button
-      className={componentClass}
+    <BaseButton
+      className={`${componentClass}`}
       onClick={onClick}
-      disabled={isDisabled}
-      type="button"
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {buttonContent}
-    </button>
+      <div className="flex items-center gap-2.5">
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
+      </div>
+    </BaseButton>
   )
 }
 

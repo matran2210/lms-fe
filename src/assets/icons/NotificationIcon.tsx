@@ -35,7 +35,7 @@ const NotificationIcon = ({ className }: IIcon) => {
       {notificationUnread > 0 && (
         <span
           className={clsx(
-            'text-xs  absolute flex aspect-1  items-center justify-center rounded-full bg-[#D35563] text-white',
+            'absolute flex aspect-1 items-center  justify-center rounded-full bg-[#D35563] text-xs text-white',
             badgeClass,
           )}
         >

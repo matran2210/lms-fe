@@ -1,5 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
+import { Divider } from 'antd'
+import clsx from 'clsx'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -46,13 +48,15 @@ interface IProps {
       answer_position: number
     }>,
   ) => void
+  correctAnswerClass?: string
+  explainClassname?: string
 }
 
 // Constants
-const baseBox = 'border rounded border-gray-15 rounded-lg'
+const baseBox = 'border rounded border-gray-300 rounded-lg'
 const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
-  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer`,
+  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer bg-white`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
   options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
   option: 'px-3 py-2 cursor-pointer rounded',
@@ -75,6 +79,8 @@ const SelectWord = forwardRef(
       isHideExhibit = true,
       exhibitText,
       onChange,
+      correctAnswerClass,
+      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -145,11 +151,11 @@ const SelectWord = forwardRef(
 
       const disabledClass = !corrects?.length
         ? ''
-        : 'cursor-not-allowed pointer-events-none'
+        : 'cursor-not-allowed pointer-events-none !justify-center'
       return `
         <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}" data-component-id="${componentId.current}">
           <span class="truncate">${selectedAnswer?.label || 'Choose'}</span>
-            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown ${corrects?.length ? 'hidden' : ''}" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" clip-rule="evenodd" d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z" fill="#1C274C"/>
             </svg>
         </div>
@@ -256,10 +262,10 @@ const SelectWord = forwardRef(
           )
 
           dropdownContainer?.classList?.add(
-            isCorrect || isSelfReflection
-              ? '!border-success'
-              : '!border-danger',
+            isCorrect || isSelfReflection ? '!border-success' : '!border-error',
             'sapp-select-confirmed',
+            '!w-fit',
+            '!min-w-fit',
           )
           dropdownContainer?.setAttribute('disabled', 'true')
         }
@@ -322,11 +328,9 @@ const SelectWord = forwardRef(
           )
           if (correctAnswer) {
             element.outerHTML = `
-              <span>
-                <span id="${element?.id}" class="font-semibold text-state-success">
+                <span id="${element?.id}" class="text-base font-semibold text-success">
                   ${correctAnswer?.answer}
                 </span>
-              </span>
             `
           }
         })
@@ -465,7 +469,7 @@ const SelectWord = forwardRef(
                         `.option[data-component-id="${componentId.current}"]`,
                       )
                       .forEach((option) => {
-                        option.classList.remove('bg-[#e5e7eb]', 'selected')
+                        option.classList.remove('bg-gray-100', 'selected')
                       })
 
                     options.style.display = 'block'
@@ -474,7 +478,7 @@ const SelectWord = forwardRef(
                   }
 
                   // Toggle UI styles
-                  dropdown.classList.toggle('border-gray-200', isNowOpen)
+                  dropdown.classList.toggle('border-primary', isNowOpen)
                   iconDropDown?.classList.toggle('rotate-180', isNowOpen)
                 }
               }
@@ -492,9 +496,9 @@ const SelectWord = forwardRef(
                       `.option[data-component-id="${componentId.current}"]`,
                     )
                     .forEach((opt) =>
-                      opt.classList.remove('bg-[#e5e7eb]', 'selected'),
+                      opt.classList.remove('bg-gray-100', 'selected'),
                     )
-                  option.classList.add('bg-[#e5e7eb]', 'selected')
+                  option.classList.add('bg-gray-100', 'selected')
                 })
               })
 
@@ -536,7 +540,7 @@ const SelectWord = forwardRef(
                       )
                       .forEach((opt) => {
                         opt.classList.toggle(
-                          'bg-[#e5e7eb]',
+                          'bg-gray-100',
                           opt.getAttribute('data-value') === value,
                         )
                       })
@@ -544,7 +548,7 @@ const SelectWord = forwardRef(
                     options.style.display = 'none'
                     dropdown.setAttribute('data-open', 'false')
                     iconDropDown?.classList.remove('rotate-180')
-                    dropdown.classList.remove('border-gray-200')
+                    dropdown.classList.remove('border-primary')
                   }
                 })
               })
@@ -564,13 +568,14 @@ const SelectWord = forwardRef(
                     )
                     .forEach((option) => {
                       option.classList.toggle(
-                        'bg-[#e5e7eb]',
+                        'bg-gray-100',
                         option.getAttribute('data-value') === selectedValue,
                       )
                     })
                 }
                 iconDropDown?.classList.remove('rotate-180')
-                dropdown.classList.remove('border-gray-200')
+                // dropdown.classList.remove('border-gray-200')
+                dropdown.classList.remove('border-primary')
               }
             })
 
@@ -635,7 +640,7 @@ const SelectWord = forwardRef(
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-state-error">* </span>
+                  <span className="text-error">* </span>
                   <span className="text-gray-1">Click to view</span>
                 </div>
               </div>
@@ -706,25 +711,28 @@ const SelectWord = forwardRef(
         {/* Correct Answer Section */}
         {answerContent && (
           <>
-            <div className="pt-[18px] text-base font-semibold">
-              Correct Answer
+            <Divider className="my-8" />
+            <div className={clsx('pt-7.625', correctAnswerClass)}>
+              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
+              <EditorReader
+                className="questions mt-2"
+                text_editor_content={
+                  answerContent?.documentElement?.querySelector('body')
+                    ?.innerHTML || ''
+                }
+              />
             </div>
-            <EditorReader
-              className="questions mt-2"
-              text_editor_content={
-                answerContent?.documentElement?.querySelector('body')
-                  ?.innerHTML || ''
-              }
-            />
           </>
         )}
 
-        {/* Solution Section */}
         {solution && (
-          <div className="mt-6 bg-gray-4 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8" />
+            <div className={clsx(explainClassname)}>
+              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )

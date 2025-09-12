@@ -21,6 +21,7 @@ export interface IActivityStateQuestion extends IQuestion {
   quiz_position_mapping?: any
   defaultValue?: any
   isDrafAnswer?: boolean
+  answer_template?: string
 }
 
 /**
@@ -476,7 +477,7 @@ const quizSlice: Slice = createSlice({
                   answer: (payload.myAnswers || [])?.map(
                     (e: any, i: number) => ({
                       answer_id: e.idAnswer,
-                      answer_position: i + 1,
+                      answer_position: e.postion,
                     }),
                   ),
                   time_spent: payload.time_spent,
@@ -708,7 +709,7 @@ const quizSlice: Slice = createSlice({
                       answer: (payload.myAnswers || [])?.map(
                         (e: any, i: number) => ({
                           answer_id: e.idAnswer,
-                          answer_position: i + 1,
+                          answer_position: e.postion,
                         }),
                       ),
                       time_spent: payload.time_spent,

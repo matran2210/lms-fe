@@ -6,20 +6,20 @@ const { Text } = Typography
 export const statusMap = {
   COMPLETED: {
     label: 'Completed',
-    color: 'text-green-1',
-    bg: 'bg-green-2',
+    color: 'text-[#07af17]',
+    bg: 'bg-[#01711f0D]',
   },
   IN_PROGRESS: {
     label: 'In Progress',
-    color: 'text-blue-3',
-    bg: 'bg-blue-4',
+    color: 'text-[#025eff]',
+    bg: 'bg-[#025eff0D]',
   },
   NOT_STARTED: {
     label: 'Not Started',
     color: 'text-primary-4',
     bg: 'bg-primary-5',
   },
-  ended: { label: 'Ended', color: 'text-gray-600', bg: 'bg-gray-100' },
+  ended: { label: 'Ended', color: 'text-[#4b5563]', bg: 'bg-gray-100' },
 }
 
 export const StatusTag = ({ status }: { status: keyof typeof statusMap }) => {
@@ -42,7 +42,7 @@ export default function Overview({
         {certificateData?.map((item: ICertificateData) => (
           <div key={item?.value} className="grid grid-cols-5 items-center">
             <div className="col-span-1">
-              <Text className="text-sm font-normal text-gray-400">
+              <Text className="text-sm font-normal text-[#a1a1aa]">
                 {item.label}
               </Text>
             </div>

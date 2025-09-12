@@ -29,6 +29,7 @@ const CreateNoteDesktop = ({
   return (
     <ModalResizeable
       position="center left"
+      draggableFull
       width={412}
       height={350}
       header={

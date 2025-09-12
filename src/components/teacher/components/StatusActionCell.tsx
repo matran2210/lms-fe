@@ -8,47 +8,51 @@ type Props = {
 export const statusQuizMap = {
   SUBMITTED: {
     label: 'Submitted',
-    color: 'text-green-1',
-    bg: 'bg-green-2',
+    color: 'text-success',
+    bg: 'bg-success-50',
   },
   IN_PROGRESS: {
     label: 'In Progress',
-    color: 'text-blue-3',
-    bg: 'bg-blue-4',
+    color: 'text-[#025eff]',
+    bg: 'bg-[#025eff0D]',
   },
   UN_SUBMITTED: {
-    label: 'Unsubmitted',
-    color: 'text-danger-3',
-    bg: 'text-danger-4',
+    label: 'UnSubmitted',
+    color: 'text-warning',
+    bg: 'bg-warning-50',
   },
   FINISHED: {
     label: 'Finished',
-    color: 'text-green-1',
-    bg: 'bg-green-2',
+    color: 'text-[#07af17]',
+    bg: 'bg-[#01711f0D]',
   },
   UN_FINISHED: {
     label: 'UnFinished',
-    color: 'text-danger-3',
-    bg: 'bg-danger-5',
+    color: 'text-[#d35563]-3',
+    bg: 'bg-[#D35563]-5',
   },
   AWAITING_GRADING: {
     label: 'Awaiting grading',
-    color: 'text-orange-4',
-    bg: 'bg-orange-1',
+    color: 'text-[#F89707]',
+    bg: 'bg-[#F897070D]',
   },
   FINISHED_GRADING: {
     label: 'Finished Grading',
-    color: 'text-blue-7',
-    bg: 'bg-blue-900',
+    color: 'text-[#176CDD]',
+    bg: 'bg-[#176CDD0D]',
   },
   DRAFT: {
     label: 'Draft',
-    color: 'text-gray-11',
-    bg: 'bg-gray-100',
+    color: 'text-[#99A1B7]',
+    bg: 'bg-[#f3f4f6]',
   },
 }
 
-const StatusQuizTag = ({ status }: { status: keyof typeof statusQuizMap }) => {
+export const StatusQuizTag = ({
+  status,
+}: {
+  status: keyof typeof statusQuizMap
+}) => {
   const { label, color, bg } = statusQuizMap[status] || {
     label: '',
     color: '',
@@ -58,7 +62,7 @@ const StatusQuizTag = ({ status }: { status: keyof typeof statusQuizMap }) => {
   if (!label || !color || !bg) return '_ _'
   return (
     <div
-      className={`text-xs rounded px-2 py-1 font-medium ${color || ''} ${bg || ''} w-fit`}
+      className={`rounded px-2 py-1 text-xs font-medium ${color || ''} ${bg || ''} w-fit`}
     >
       {label}
     </div>

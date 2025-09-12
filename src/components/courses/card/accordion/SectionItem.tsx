@@ -29,7 +29,7 @@ export default function SectionItem({
           <div className="flex items-center gap-3">
             {!isFinish &&
               section?.course_section_type == TEST_TYPE_ENUM.PART && (
-                <span className="hidden text-nowrap text-sm text-gray-1 md:inline-block">
+                <span className="text-gray-1 hidden text-nowrap text-sm md:inline-block">
                   {totalActivities} Activities
                 </span>
               )}
@@ -41,13 +41,13 @@ export default function SectionItem({
           </div>
         </div>
         {section?.course_section_type == TEST_TYPE_ENUM.PART && (
-          <span className="mb-2 text-nowrap text-sm text-gray-1 md:hidden">
+          <span className="text-gray-1 mb-2 text-nowrap text-sm md:hidden">
             {totalActivities} Activities
           </span>
         )}
         {section?.cta_status !== 'Finished' && (
           <p
-            className="mt-2 line-clamp-3 text-sm text-gray-1 md:line-clamp-1 md:text-base md:text-bw-15"
+            className="text-gray-1 mt-2 line-clamp-3 text-sm md:line-clamp-1 md:text-base md:text-bw-15"
             dangerouslySetInnerHTML={{
               __html: clearStylesHtml(section?.description),
             }}

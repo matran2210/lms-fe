@@ -36,7 +36,7 @@ const DeviceList = () => {
       title={
         <div>
           Browsers{' '}
-          <span className="text-base font-normal text-secondary-v2-300">
+          <span className="text-secondary-v2-300 text-base font-normal">
             ({listDevices?.length || 0})
           </span>
         </div>
@@ -132,7 +132,7 @@ const DeviceList = () => {
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-error-v2-50 px-4 py-3 text-error-v2-DEFAULT">
+            <div className="bg-error-v2-50 text-error-v2-DEFAULT flex items-center justify-between rounded-lg px-4 py-3">
               <div className="font-medium">Remove Browser</div>
               <div className="cursor-pointer">
                 <Icon type="delete" />

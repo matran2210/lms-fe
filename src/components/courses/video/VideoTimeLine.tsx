@@ -27,7 +27,7 @@ export default function VideoTimeline({ timeLine, onGoTimeline }: Props) {
               <div className="mim-w-[62px] text-state-info">
                 {formatTime(e?.time)}
               </div>
-              <div className="line-clamp-2 text-bw-1 text-inherit">
+              <div className="text-inherit line-clamp-2 text-bw-1">
                 {htmlToRaw(e?.text)}
               </div>
             </div>

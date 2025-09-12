@@ -1,8 +1,4 @@
 import Layout from '@components/layout'
-import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import Heading from '@components/mycourses/Heading'
-import SearchForm from '@components/mycourses/Search'
-import BreadcrumbFilter from '@components/mycourses/course-detail/BreadcrumbFilter'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -11,11 +7,24 @@ import { CoursesAPI } from '@pages/api/courses'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import {
+  ANIMATION,
+  CLASS_TYPE,
+  defaultStatusDetail,
+  DELAY_TIME_DISPLAY_POPUP,
+  PageLink,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
-import { ANIMATION, DELAY_TIME_DISPLAY_POPUP } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
+import FilterCourse from '@components/mycourses/FilterCourse'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import PinnedCompletedCourse from '@components/layout/PinnedNotifications/PinnedCompletedCourse'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { RemindChoosingExam } from 'src/type/course'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
+import clsx from 'clsx'
 import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
 
 const DEFAULT_PAGESIZE = 18
@@ -23,11 +32,34 @@ const DEFAULT_PAGESIZE = 18
 const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
+  const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setshowSidebar] = useState(false)
+  const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
+  const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
+    isOpen: false,
+    passedAt: '',
+    userCertificateUrl: '',
+    userCertificateId: '',
+    courseName: '',
+  })
   const [showSelectExam, setShowSelectExam] = useState(false)
 
   const params = {
     user_section_learning_status:
       router.query.user_section_learning_status || undefined,
+  }
+
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setshowSidebar(true)
+    setOpenSidebar(true)
+  }
+  const handleCloseSidebar = () => {
+    setshowSidebar(false)
+    setOpenSidebar(false)
   }
 
   /**
@@ -131,6 +163,8 @@ const CourseDetail = () => {
    * @description biến này lấy name của course
    */
   const class_user_id = data?.pages?.[0]?.courseDetail?.class_user_id
+  const isTrial =
+    data?.pages?.[0]?.courseDetail?.class_type === CLASS_TYPE.TRIAL
 
   const { setCourseType } = useCourseContext()
 
@@ -163,56 +197,116 @@ const CourseDetail = () => {
     }
   }, [isSuccess, data])
 
-  return (
-    <Layout title="Course Detail">
-      <div className="border-b border-e-default bg-white">
-        <div className="mx-auto my-0 flex max-w-xxl py-6 xl-max:mx-5">
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearch}
-            formStyle="w-full flex items-center"
-          />
-        </div>
-      </div>
+  /**
+   * @description hiển thị pinned completed course
+   */
+  useEffect(() => {
+    const courseDetail = data?.pages?.[0]?.courseDetail
+    if (!courseDetail) return
 
-      <div className="mx-auto my-0 max-w-xxl pt-6 xl-max:mx-6">
-        {isLoading ? (
-          <CourseSkeleton />
-        ) : (
-          <>
-            <div className="main relative">
-              <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-                <BreadcrumbFilter name={courseNameDetail ?? ''} />
-                <FilterCourseDetail totalResult={courses?.length || 0} />
-              </div>
-            </div>
-            <div className="flex bg-white" data-aos={ANIMATION.DATA_AOS}>
-              <Heading greeting="Welcome to" title={courseNameDetail ?? ''} />
-            </div>
-            <div className="pt-6" data-aos={ANIMATION.DATA_AOS}>
-              <CourseParts
-                courses={courses}
-                is_passed_course={is_passed_course ?? false}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
-          </>
-        )}
-      </div>
-      {isSuccess && (
+    const {
+      is_passed: isPassed,
+      user_certificate_url: userCertificateUrl,
+      user_certificate_id: userCertificateId,
+      passed_at: passedAt,
+    } = courseDetail
+
+    if (isPassed && userCertificateId) {
+      setPinnedCompletedCourse({
+        isOpen: isPassed,
+        passedAt,
+        userCertificateUrl,
+        userCertificateId,
+        courseName: courseNameDetail || '',
+      })
+    }
+  }, [data])
+
+  return (
+    <Layout
+      title="Course Detail"
+      showSidebar={showSidebar || isAlwaysShowSidebar}
+      handleToggleSidebar={handleCloseSidebar}
+    >
+      <SearchWithMenuToggle
+        handleOpenSidebar={handleOpenSidebar}
+        isShowToggle
+        isCoursePage
+      />
+
+      {isLoading ? (
+        <CourseSkeleton />
+      ) : (
         <>
-          <SelectExamPopup
-            showSelectExam={showSelectExam}
-            setShowSelectExam={setShowSelectExam}
-            courseData={data?.pages?.[0]?.courseDetail}
+          <SappBreadCrumbs
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: PageLink.COURSES,
+              },
+              {
+                title: courseNameDetail || '',
+                link: '',
+              },
+            ]}
           />
-          <PopupModalTest
-            class_code={data?.pages?.[0]?.courseDetail?.code}
-            program={data?.pages?.[0]?.courseDetail?.data?.program}
-            data={data?.pages?.[0]?.courseDetail}
-          />
+          <div
+            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <HeaderMobile
+              showIcon={false}
+              title={courseNameDetail || ''}
+              className={clsx('!flex-nowrap', { 'mt-4': isMobileView })}
+              extraActions={
+                <FilterCourse
+                  totalResult={courses?.length || 0}
+                  listFilter={[
+                    {
+                      name: 'user_section_learning_status',
+                      placeholder: 'Status',
+                      options: defaultStatusDetail,
+                    },
+                  ]}
+                />
+              }
+            />
+          </div>
+          <div className="h-full pt-6" data-aos={ANIMATION.DATA_AOS}>
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course || false}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
+          </div>
         </>
       )}
+
+      {isSuccess &&
+        data.pages[0].courseDetail.remind_choosing_exam &&
+        showSelectExamPopup && <SelectExamPopup courseData={data} />}
+
+      {data?.pages?.[0]?.courseDetail?.data?.program && (
+        <PopupModalTest
+          class_code={data?.pages?.[0]?.courseDetail?.code}
+          program={data?.pages?.[0]?.courseDetail?.data?.program}
+          data={data?.pages?.[0]?.courseDetail || {}}
+        />
+      )}
+
+      <div className="z-2 sticky inset-x-0 bottom-4">
+        <div className="flex w-full flex-col gap-4">
+          <CtaTrial />
+          {pinnedCompletedCourse.isOpen && (
+            <PinnedCompletedCourse
+              pinnedCompletedCourse={pinnedCompletedCourse}
+            />
+          )}
+        </div>
+      </div>
     </Layout>
   )
 }

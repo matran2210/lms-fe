@@ -1,5 +1,7 @@
 import { ConfirmIcon } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
+import BackIcon from '@assets/icons/BackIcon'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import SappButtonIcon from '@components/base/button/SappButtonIcon'
 import SappModalV2 from '@components/base/modal/SappModalV2'
 import { trackGAEvent } from '@utils/google-analytics'
 
@@ -41,31 +43,32 @@ const ConFirmSubmit = ({
       title={''}
       showFooter={false}
     >
-      <div className="mx-auto flex w-max items-center justify-center rounded-full bg-secondary p-8">
-        <ConfirmIcon />
+      <div className="mx-auto flex w-max items-center justify-center rounded-full">
+        <ConfirmIcon className="md:w-22 md:h-22 h-12 w-12" />
       </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+      <div className="flex justify-center pb-4 pt-6 text-2xl font-semibold text-gray-800 md:pb-8 md:pt-10 md:text-3xl">
         Confirm Submission
       </div>
-      <div className="mb-11 mt-4 text-center text-sm font-normal text-gray-1">
+      <div className="text-center text-sm font-normal text-gray-800 md:text-base">
         {message ??
           'Are you sure you are done here and ready to view the report?'}
       </div>
-      <div className="relative pt-5 md:pt-5">
-        <div className="flex flex-col-reverse gap-6">
-          <SappButton
-            title="Cancel"
-            size="medium"
-            color="textUnderline"
-            className="w-full"
-            onClick={onCancel}
-          />
-          <SappButton
+      <div className="relative pt-6 md:pt-10">
+        <div className="flex flex-col gap-3">
+          <ButtonPrimary
             title={'Submit'}
             size="medium"
-            className="h-12.5 w-full"
+            className="h-[50px] w-full"
             onClick={onSubmit}
           />
+          <SappButtonIcon
+            onClick={onCancel}
+            ishover={false}
+            className="flex w-full gap-2 border-none !p-0 text-gray-800 underline hover:text-primary"
+          >
+            <BackIcon />
+            <div className="text-base font-semibold">Back to My Course</div>
+          </SappButtonIcon>
         </div>
       </div>
     </SappModalV2>

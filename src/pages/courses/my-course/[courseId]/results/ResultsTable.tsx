@@ -1,116 +1,152 @@
-import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
-import SappTable from '@components/base/SappTable'
-import { GradingMethod, TEST_TYPE as testTypeTitle } from '@utils/constants'
-import {
-  capitalizeFirstLetter,
-  getTimeFromInput,
-  truncateString,
-} from '@utils/index'
-import { Modal } from 'antd'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
+import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
+import { GradingMethod } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { GRADE_STATUS, PageLink } from 'src/constants'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import ResultQuizModal from './ResultQuizModal'
-import ResultsTableFilter from './ResultsTableFilter'
+import { IResultsList, Results } from 'src/type/results'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
-import Tooltip from 'src/common/Tooltip'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
+import CollapseActivity from '@components/learning/activity/CollapseActivity'
+import { isEmpty } from 'lodash'
+import CardResultTest from '@components/learning/activity/CardResultTest'
+import { Avatar, List, Skeleton } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import {
+  IOpenChooseItem,
+  ISection,
+  SectionDropdownFormValues,
+  backTypeMap,
+  getTypeName,
+} from 'src/type/courses'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { FormProvider, useForm } from 'react-hook-form'
+import ListFilterMobile from '@components/common/ListFilterMobile'
+import NoDataV2 from 'src/common/NodataV2'
 
-const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
-
-// Là essay nên không có điểm
-const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
-
-export const headers = [
-  ...['Name', 'Type'].map((label) => ({
-    label,
-    className: commonHeaderCellStyle,
-  })),
-  {
-    label: 'Graded Activity',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Status',
-    className: clsx(commonHeaderCellStyle, 'capitalize'),
-  },
-  {
-    label: 'Score',
-    className: clsx(commonHeaderCellStyle, 'text-center'),
-  },
-  {
-    label: 'Quizzes/Tests',
-    className: commonHeaderCellStyle,
-  },
-  {
-    label: 'Time Spent',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Last submission',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-] as {
-  label: string
-  className: string
-}[]
-
-const ResultsTable = ({ isTeacher = false }: { isTeacher?: boolean }) => {
+const ResultsTable = ({
+  openFilter,
+  setOpenFilter,
+}: {
+  openFilter: boolean
+  setOpenFilter: Dispatch<SetStateAction<boolean>>
+}) => {
   const router = useRouter()
-  const [quizActivities, setQuizActivities] = useState<
-    QuizActivity[] | undefined
-  >(undefined)
-  const [openModal, setOpenModal] = useState(false)
+  const { isMobileView } = useTailwindBreakpoint()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [openReport, setOpenReport] = useState<boolean>(false)
-
+  const [params, setParams] = useState<string>('')
+  const observer = useRef<IntersectionObserver>()
+  const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
+    isOpen: false,
+    type: 'section',
+    name: '',
+    params: '',
+  })
+  const [listSection, setListSection] = useState<ISection[]>([])
+  const [listSubsection, setListSubsection] = useState<ISection[]>([])
+  const [listUnit, setListUnit] = useState<ISection[]>([])
+  const [listActivity, setListActivity] = useState<ISection[]>([])
+  const queryParams = [params, pageSize, currentPage, router.query.courseId]
+  const methods = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
+    },
+  })
   /**
-   * Filter
-   */
-  const selectFilterProp = useSelectFilter(router?.query?.courseId)
-  const { selected } = selectFilterProp
-  /**
-   * @description config params khi filter
-   */
-  const params = {
-    parent_id: selected?.value || undefined,
-  }
-
-  /**
-   * @description sử dụng react-query để lấy data
+   * @description sử dụng react-query và infinite query để lấy data
    */
   const {
-    data: resultData,
-    isLoading,
-    refetch,
+    data: mobileData,
+    fetchNextPage,
+    hasNextPage,
     isFetching,
-  } = useQuery<IResultsList>({
+    isLoading: isMobileLoading,
+  } = useInfiniteQuery({
+    queryKey: ['TestResultMobile', ...queryParams],
+    queryFn: ({ pageParam }) =>
+      CoursesAPI.getCourseResults(
+        router.query.courseId as string,
+        pageParam || 1,
+        pageSize,
+        params && {
+          parent_id: params,
+        },
+      ),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage?.data?.data?.length &&
+        allPages?.length < lastPage?.data?.metadata?.total_pages
+        ? allPages?.length + 1
+        : undefined
+    },
+    enabled: isMobileView && router.query.courseId !== undefined, // ❗ Chỉ gọi khi là mobile view
+    retry: false,
+  })
+
+  const dataMobile: IResultsList = useMemo(() => {
+    return {
+      data: mobileData?.pages.reduce((acc: IResultsList[], page) => {
+        return [...acc, ...page?.data?.data]
+      }, []),
+      class_user_id: mobileData?.pages[0]?.data?.class_user_id,
+      metadata: mobileData?.pages[0]?.data?.metadata,
+    }
+  }, [mobileData])
+
+  const { data: resultData, isLoading } = useQuery<IResultsList>({
     // Fetch lại data khi filter thay đổi
-    queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
+    queryKey: [CourseKey.ResultsList, ...queryParams],
     queryFn: () => {
       return CoursesAPI.getCourseResults(
         router.query.courseId as string,
         currentPage || 1,
         pageSize,
-        params,
+        params && {
+          parent_id: params,
+        },
       )
     },
-    enabled: router.query.courseId !== undefined,
+    enabled: router.query.courseId !== undefined && !isMobileView, // ❗ Chỉ gọi khi là tablet or desktop
     select: (data: { data: any }) => {
       return data.data
     },
     retry: false,
   })
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (isMobileLoading) return
+
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries?.[0]?.isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetching, isMobileLoading],
+  )
 
   const getScore = (
     rowData: Results,
@@ -129,244 +165,227 @@ const ResultsTable = ({ isTeacher = false }: { isTeacher?: boolean }) => {
     return '-'
   }
 
-  const getStatus = (row: Results) => {
-    if (row?.course_section_type === TEST_TYPE.ACTIVITY) {
-      for (const quiz of row?.quiz_activity) {
-        if (
-          quiz?.attempts?.length === 0 ||
-          (!quiz?.attempts?.[0].grading_status &&
-            quiz?.grading_method === GradingMethod.MANUAL) ||
-          (quiz?.grading_method === GradingMethod.AUTO &&
-            quiz?.attempts?.[0].status !== 'SUBMITTED')
-        )
-          return '-'
-      }
-      return 'Submitted'
-    } else {
-      if (row?.quiz?.grading_method === GradingMethod.MANUAL) {
-        switch (row?.quiz?.attempts?.[0]?.grading_status) {
-          case GRADE_STATUS.AWAITING_GRADING:
-            return 'Awaiting Grading'
-          case GRADE_STATUS.FINISHED_GRADING:
-            return 'Finish Grading'
-          default:
-            return 'Manual Grading'
-        }
-      }
-      return capitalizeFirstLetter(
-        row?.quiz?.attempts?.[0]?.status?.toLocaleLowerCase(),
-      )
+  const handleGetLink = (row: Results): string => {
+    if (row.course_section_type === TEST_TYPE.ACTIVITY) {
+      return `/courses/${router?.query?.courseId}/activity/${row?.id}`
     }
+
+    if (row?.quiz?.attempts?.length) {
+      return `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
+    }
+
+    return `/test/${row?.quiz?.id}?class_user_id=${isMobileView ? dataMobile?.class_user_id : resultData?.class_user_id}`
   }
 
-  const getNameTooltipContent = (row: Results, link: string) => {
+  const getNameTooltipContent = (row: Results) => {
+    const link = handleGetLink(row)
     return (
       <div>
-        {true ? (
+        {link ? (
           <div
             onClick={() => {
               router.push(link)
             }}
           >
-            <strong className="cursor-pointer text-base text-bw-1 hover:underline">
+            <strong className="cursor-pointer text-base hover:underline">
               {row?.name}
             </strong>
           </div>
         ) : (
-          <strong className="text-base text-bw-1">{row?.name}</strong>
+          <strong className="text-base">{row?.name}</strong>
         )}
-        <p className="text-ssm text-gray-1">{row?.path}</p>
+        <p className="text-xs">{row?.path}</p>
       </div>
     )
   }
 
-  const isDoneQuiz = (data: Results) => {
-    switch (data?.course_section_type) {
-      case TEST_TYPE.ACTIVITY: {
-        if (!data?.quiz_activity?.length) {
-          return
+  const groupedDataByType =
+    (isMobileView ? dataMobile?.data : resultData?.data || [])?.reduce(
+      (acc, item) => {
+        const type = item.course_section_type as TEST_TYPE
+        if (!Object.values(TEST_TYPE).includes(type)) return acc // bỏ nếu không thuộc TEST_TYPE
+
+        const formattedItem = {
+          name: item?.name,
+          quiz_activity: item?.quiz_activity || [],
+          quiz: item?.quiz || null,
+          id: item?.id,
+          path: item?.path,
+          course_section_type: item?.course_section_type,
         }
-        for (const item of data?.quiz_activity) {
-          if (item?.attempts?.length === 0) {
-            return false
-          }
-        }
-        return true
-      }
-      case TEST_TYPE.TOPIC_TEST:
-      case TEST_TYPE.CHAPTER_TEST:
-      case TEST_TYPE.MID_TERM_TEST:
-      case TEST_TYPE.PART_TEST:
-      case TEST_TYPE.FINAL_TEST:
-        return !data?.quiz
-          ? false
-          : data?.quiz?.attempts?.length > 0
-            ? true
-            : false
-      default:
-        return true
+
+        if (!acc[type]) acc[type] = []
+        acc[type].push(formattedItem)
+
+        return acc
+      },
+      {} as Record<TEST_TYPE, any[]>,
+    ) || []
+
+  const handleViewResult = (row: Results) => {
+    const link = handleGetLink(row)
+    if (
+      row?.course_section_type !== TEST_TYPE.ACTIVITY &&
+      row?.quiz?.grading_method === 'MANUAL' &&
+      row?.quiz?.attempts?.[0]?.grading_status === GRADE_STATUS.AWAITING_GRADING
+    ) {
+      setOpenReport(true)
+      return
+    }
+    router.push(link)
+  }
+
+  const handleSubmit = () => {
+    setOpenFilter(false)
+    setParams(openChooseItem.params || '')
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+  }
+
+  const handleBack = () => {
+    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
+      const type = backTypeMap[openChooseItem.type]
+      setOpenChooseItem({
+        ...openChooseItem,
+        type: type,
+        name: getTypeName[type],
+      })
+    } else {
+      setOpenChooseItem({
+        ...openChooseItem,
+        isOpen: false,
+      })
     }
   }
 
-  useEffect(() => {
-    refetch()
-  }, [selected])
+  const title =
+    !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
 
   return (
-    <>
-      <div className="mb-8 flex flex-wrap gap-6 md:flex-nowrap">
-        <ResultsTableFilter {...selectFilterProp} />
-      </div>
-      <SappTable
-        headers={headers}
-        hasCheck={false}
-        isCheckedAll={false}
-        classTable="w-full"
-        loading={isFetching}
-      >
-        {resultData?.data?.map((row) => {
-          let link: string = '#'
-          if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-            link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/${router?.query?.courseId}/activity/${row?.id}`
-          } else {
-            if (row?.quiz?.attempts?.length) {
-              link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-            } else {
-              link = `${isTeacher ? PageLink.TEACHER_TEST : '/test'}/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
-            }
-          }
-          return (
-            <tr
-              className={clsx({
-                'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': !isDoneQuiz(row),
-              })}
-              key={row?.id}
-            >
-              {/* Name */}
-              <td className={clsx(commonDataCellStyle)}>
-                <Tooltip
-                  title={getNameTooltipContent(row, link)}
-                  arrow={false}
-                  placement="topLeft"
-                >
-                  <div
-                    onClick={() => {
-                      if (
-                        row?.course_section_type !== TEST_TYPE.ACTIVITY &&
-                        row?.quiz?.grading_method === 'MANUAL' &&
-                        row?.quiz?.attempts?.[0]?.grading_status ===
-                          GRADE_STATUS.AWAITING_GRADING
-                      ) {
-                        setOpenReport(true)
-                        return
-                      }
-                      router.push(link)
-                    }}
-                    className="cursor-pointer"
-                  >
-                    {truncateString(row?.name, 30)}
-                  </div>
-                </Tooltip>
-              </td>
+    <FormProvider {...methods}>
+      {/* Filter desktop */}
+      {!isMobileView && (
+        <div className="my-6">
+          <FilterCourseSection setParams={setParams} />
+        </div>
+      )}
 
-              {/* Type */}
-              <td className={clsx(commonDataCellStyle)}>
-                {testTypeTitle[row?.course_section_type]}
-              </td>
+      {/* Loading state */}
+      {(isLoading || isMobileLoading) &&
+        [...Array(6)].map((_, index) => (
+          <Skeleton key={index} active avatar>
+            <List.Item.Meta avatar={<Avatar />} />
+          </Skeleton>
+        ))}
 
-              {/* Graded Activity */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {row?.quiz?.is_graded ? 'Yes' : 'No'}
-              </td>
+      {/* Empty state */}
+      {!isLoading &&
+        !isMobileLoading &&
+        isEmpty(groupedDataByType) &&
+        !openFilter && (
+          <div className="flex h-full flex-col items-center justify-center">
+            <NoDataV2 />
+          </div>
+        )}
 
-              {/* Status */}
-              <td className={clsx(commonDataCellStyle)}>{getStatus(row)}</td>
+      {/* Main content */}
+      {!isLoading && !isMobileLoading && !isEmpty(groupedDataByType) && (
+        <div className="mt-6 flex flex-col gap-6 md:mt-0">
+          {/* Activity results */}
+          {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
+            <div className="flex flex-col gap-6">
+              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
+                <CollapseActivity
+                  key={item?.id}
+                  resultData={item}
+                  handleViewResult={handleViewResult}
+                  getScore={getScore}
+                  lastElementRef={lastElementRef}
+                />
+              ))}
+            </div>
+          )}
 
-              {/* Score */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getScore(row, row?.quiz?.grading_method)}
-              </td>
-              {/* Quizzes/Tests */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz_activity && row?.quiz_activity.length >= 0 ? (
-                  <span
-                    onClick={() => {
-                      if (row?.quiz_activity.length > 0) {
-                        setOpenModal(true)
-                        setQuizActivities(row.quiz_activity)
-                      }
-                    }}
-                    className={clsx(
-                      row?.quiz_activity.length > 0 &&
-                        `cursor-pointer text-state-info underline`,
-                    )}
-                  >
-                    {row.quiz_activity.length}
-                  </span>
-                ) : (
-                  <span>-</span>
-                )}
-              </td>
+          {/* Other test types */}
+          {Object.entries(groupedDataByType || {})
+            .filter(([type]) => type !== TEST_TYPE.ACTIVITY)
+            .map(([type, data]) =>
+              !isEmpty(data) ? (
+                <div key={type} className="flex flex-col gap-6">
+                  {data.map((item) => (
+                    <CardResultTest
+                      key={item.id}
+                      resultData={item}
+                      handleViewResult={handleViewResult}
+                      getNameTooltipContent={getNameTooltipContent}
+                      lastElementRef={lastElementRef}
+                    />
+                  ))}
+                </div>
+              ) : null,
+            )}
+        </div>
+      )}
 
-              {/* Time Spent */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
-              </td>
-
-              {/* Last Submission */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz?.attempts?.length > 0
-                  ? dayjs(row?.quiz?.attempts[0]?.updated_at).format(
-                      'DD/MM/YYYY HH:mm',
-                    )
-                  : '-'}
-              </td>
-            </tr>
-          )
-        })}
-      </SappTable>
-      {resultData && (
-        <PaginationSAPP
+      {/* Pagination */}
+      {resultData && !isMobileView && (
+        <PaginationSappV2
           currentPage={resultData.metadata?.page_index}
           pageSize={resultData.metadata?.page_size}
           totalItems={resultData.metadata?.total_records}
           setCurrentPage={setCurrentPage}
           setPageSize={setPageSize}
-          type={'table'}
-          classname="mt-3"
         />
       )}
+
+      {/* Grading modal */}
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => setOpenReport(false)}
-        fullWidthBtn={true}
+        fullWidthBtn
         buttonSize="extra"
         icon={<ConfirmIcon />}
-        header="Awating Grading"
-        content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
+        header="Awaiting Grading"
+        content="Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete."
       />
-      <Modal
-        open={openModal}
-        centered
-        onOk={() => {
-          setOpenModal(false)
-        }}
-        title="List Quiz of Activity"
-        onCancel={() => setOpenModal(false)}
-        footer={null}
-        width={800}
-        styles={{
-          content: {
-            padding: 32,
-          },
-        }}
+
+      {/* Mobile filter drawer */}
+      <SappDrawerV3
+        open={openFilter}
+        handleCancel={() => setOpenFilter(false)}
+        isShowBtnClose
+        title={title}
+        isShowFooter={openFilter}
+        isShowBtnBack={openChooseItem.isOpen}
+        handleBack={handleBack}
+        handleSubmit={handleSubmit}
+        classNameHeader="pb-4 border-b border-gray-200"
+        rootClassName="responsive-drawer-center"
+        submitButtonClassName="w-full h-10"
+        btnSubmitTile="Confirm"
       >
-        {quizActivities && <ResultQuizModal quizActivities={quizActivities} />}
-      </Modal>
-    </>
+        {openFilter && !openChooseItem.isOpen ? (
+          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+        ) : (
+          <ListItemFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            openChooseItem={openChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
+        )}
+      </SappDrawerV3>
+    </FormProvider>
   )
 }
 

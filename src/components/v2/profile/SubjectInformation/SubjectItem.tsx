@@ -31,7 +31,7 @@ const SubjectItem = ({
     <div className={className}>
       <div
         className={clsx(
-          'group rounded-md bg-gray-canvas p-3 text-sm hover:bg-primary-v2-50 md:px-6 md:py-4 md:text-base',
+          'hover:bg-primary-v2-50 group rounded-md bg-gray-canvas p-3 text-sm md:px-6 md:py-4 md:text-base',
         )}
         onClick={() =>
           setMakeDefaultDrawer({

@@ -9,10 +9,7 @@ interface IProps {
 const StatusItem = ({ status, className = '' }: IProps) => {
   return (
     <span
-      className={clsx(
-        `rounded-[4px] px-2 py-1 text-ssm font-medium`,
-        className,
-      )}
+      className={clsx(`rounded-[4px] px-2 py-1 text-xs font-medium`, className)}
     >
       {capitalizeFirstLetter(status)}
     </span>

@@ -1,47 +1,85 @@
 import Layout from '@components/layout'
 import CoursesList from '@components/mycourses/CoursesList'
-import Filter from '@components/mycourses/Filter'
 import Heading from '@components/mycourses/Heading'
-import SearchForm from '@components/mycourses/Search'
 import PopupStep from '@components/user-guide/PopupStep'
 import PopupWelcome from '@components/user-guide/PopupWelcome'
+import { Button } from 'antd'
 import Aos from 'aos'
 import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
+import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
+import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
+import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import { ANIMATION, UserGuide } from 'src/constants'
-import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import { active, increment, reset } from 'src/redux/slice/Course/UserGuide'
-import { CoursesAPI } from '../api/courses'
-import { MY_COURSES } from 'src/constants/lang'
+import {
+  ANIMATION,
+  defaultStatusCourse,
+  ECourseType,
+  PageLink,
+  UserGuide,
+} from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
+import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
 import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI } from '../api/courses'
+import FilterCourse from '@components/mycourses/FilterCourse'
+import { useCourseContext } from '@contexts/index'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import GotoModal from '@components/courses/popup/GotoModal'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
+import clsx from 'clsx'
+import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
+import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
+const defaultCategory = [
+  {
+    label: `All`,
+    value: '',
+  },
+]
 
 const MyCourse = () => {
+  const isEndGuide = Number(window.sessionStorage.getItem('totalCourse')) <= 0
+  const {
+    status: guideStatus,
+    isActive: guideIsActive,
+    step: guideStep,
+  } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
-  const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
-  const guideIsActive = useAppSelector(
-    (state) => state.userGuideReducer?.isActive,
-  )
-  const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
+  const { setOpenSidebar } = useCourseContext()
+  const [showSidebar, setShowSidebar] = useState(false)
   const router = useRouter()
   const userGuideLine = useAppSelector(
     (state) => state.userReducer.user.detail.settings?.course_guide,
   )
+  /**
+   * @description lấy state trong context
+   */
+  const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
+  const { isVisibleGotoModal, setVisibleRedirectToMasterModal } =
+    useStaticModalContext()
+
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
 
-  const nextStep = () => {
-    dispatch(increment())
+  /**
+   * @description handle open and close sidebar
+   */
+  const handleOpenSidebar = () => {
+    setShowSidebar(true)
+    setOpenSidebar(true)
   }
-
+  const handleCloseSidebar = () => {
+    setShowSidebar(false)
+    setOpenSidebar(false)
+  }
   const closeUserGuide = () => {
     if (confirmDialogOverLayRef.current) {
       confirmDialogOverLayRef.current.classList.add('animate-fade-out-overlay')
@@ -51,14 +89,27 @@ const MyCourse = () => {
     document.body.style.removeProperty('padding-right')
     document.body.classList.remove('overflow-hidden')
     setTimeout(() => {
-      dispatch(reset())
+      dispatch(clearGuideState())
     }, 50)
+  }
+  const handleRedirect = (type: ECourseType) => {
+    setGeneralOrMasterCourse(type)
+    switch (type) {
+      case ECourseType.MASTER:
+        setVisibleRedirectToMasterModal(true)
+        break
+      case ECourseType.GENERAL:
+        setVisibleRedirectToMasterModal(false)
+        break
+      default:
+        break
+    }
   }
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
     }
-  }, [userGuideLine])
+  }, [dispatch, guideIsActive, userGuideLine])
 
   /**
    * @description Gọi API My Course
@@ -141,7 +192,7 @@ const MyCourse = () => {
   // Use useEffect to refetch data when params change
   useEffect(() => {
     refetch()
-  }, [params?.name, params?.status, params?.type])
+  }, [params?.name, params?.status, params?.type, refetch])
 
   /**
    * @description gọi lại animation khi reload lại component
@@ -162,125 +213,198 @@ const MyCourse = () => {
     setOpenModalMarketingInApp(true)
   }, [])
 
+  const firstPage = data?.pages?.[0]
+  const totalRecords = firstPage?.category?.metadata?.total_records || 0
+  const dynamicCategoryOptions =
+    firstPage?.category?.total?.map((category: { categoryName: string }) => ({
+      label: category.categoryName,
+      value: category.categoryName,
+    })) || []
+  const listFilter = [
+    {
+      name: 'type',
+      placeholder: 'Category',
+      options: defaultCategory.concat(dynamicCategoryOptions),
+    },
+    {
+      name: 'status',
+      placeholder: 'Status',
+      options: defaultStatusCourse,
+    },
+  ]
+
   return (
     <SappLoadingGlobal loading={isLoading}>
-      <Layout title="My Course">
-        <div className="header border-b border-default bg-white">
+      <Layout
+        title="My Course"
+        showSidebar={showSidebar || isAlwaysShowSidebar}
+        handleToggleSidebar={handleCloseSidebar}
+        className="relative"
+      >
+        <SearchWithMenuToggle
+          handleOpenSidebar={handleOpenSidebar}
+          isShowToggle
+          isShowUserGuide
+          disabledSearch={guideIsActive}
+        />
+
+        <div
+          className={
+            'flex justify-center rounded-md bg-white shadow-medium md:justify-between lg:rounded-xl'
+          }
+        >
           <div
-            className={`relative mx-auto my-0 flex max-w-xxl py-5.75 xl-max:mx-6 
-          ${guideStatus && guideStep === 1 ? 'z-50 bg-white px-5' : ''}`}
+            className={`heading relative h-full rounded-md bg-white p-3 md:p-6 lg:rounded-xl lg:px-8 lg:py-6 ${guideStatus && guideStep === 4 ? 'z-50' : ''}`}
+            data-aos={ANIMATION.DATA_AOS}
           >
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
-              // setPage={setPage}
+            <Heading
+              greeting="Welcome to"
+              title={generalOrMasterCourse}
+              showShadow={false}
+              des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
-            {guideStatus && guideStep === 1 && (
+            {guideStatus && guideStep === 4 && (
               <PopupStep
-                content={UserGuide.CONTENT_STEP_1}
-                className="left-0 top-full mt-3 w-full max-w-[365px]"
-                index={1}
-                total={6}
-                handleNext={nextStep}
+                content={UserGuide.CONTENT_STEP_4}
+                className="left-0 top-full mt-5"
+                index={4}
+                total={7}
+                isEnd={isEndGuide}
+                title="Welcome"
+                handleCancel={closeUserGuide}
+              />
+            )}
+          </div>
+          <div
+            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div className="flex gap-2 rounded-[7px] bg-gray-canvas p-1 lg:gap-[10px]">
+              <Button
+                type={
+                  generalOrMasterCourse === ECourseType.MASTER
+                    ? 'primary'
+                    : 'text'
+                }
+                block
+                onClick={() => handleRedirect(ECourseType.MASTER)}
+                className={clsx(
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                  },
+                )}
+              >
+                Master Finance
+              </Button>
+              <Button
+                type={
+                  generalOrMasterCourse === ECourseType.GENERAL
+                    ? 'primary'
+                    : 'text'
+                }
+                block
+                onClick={() => handleRedirect(ECourseType.GENERAL)}
+                className={clsx(
+                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
+                  {
+                    'font-semibold':
+                      generalOrMasterCourse === ECourseType.GENERAL,
+                    'text-gray-800':
+                      generalOrMasterCourse === ECourseType.MASTER,
+                  },
+                )}
+              >
+                General Course
+              </Button>
+            </div>
+            {guideStatus && guideStep === 5 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_5}
+                className="left-0 top-full mt-5"
+                index={5}
+                total={7}
+                isEnd={isEndGuide}
+                imgSrc={TourGuideCourseTab}
+                title="Course Tab"
                 handleCancel={closeUserGuide}
               />
             )}
           </div>
         </div>
-        <div className="main mx-auto my-0 max-w-xxl">
-          <div className="flex justify-end xl-max:mx-6">
-            <div
-              className={`relative pb-4 pt-6 ${
-                guideStatus && guideStep === 6 ? 'z-50 -mr-4 bg-white px-4' : ''
-              }`}
-            >
-              <Filter courses={data?.pages?.[0]?.category} />
-              {guideStatus && guideStep === 6 && (
-                <PopupStep
-                  content={UserGuide.CONTENT_STEP_6}
-                  className="right-full top-full mt-3 w-screen max-w-365px"
-                  index={6}
-                  total={6}
-                  handleNext={closeUserGuide}
-                  showCancel={false}
-                  titleButtonNext="Done"
-                />
-              )}
-            </div>
+        <div
+          className={clsx(
+            'mx-auto mb-6 mt-8 flex items-center justify-between lg:mt-11',
+            {
+              'relative z-50': guideStatus && guideStep === 7,
+            },
+          )}
+          data-aos={ANIMATION.DATA_AOS}
+        >
+          <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
+            My Courses
+          </h1>
+          <div className="relative">
+            <FilterCourse totalResult={totalRecords} listFilter={listFilter} />
+            {guideStatus && guideStep === 7 && (
+              <PopupStep
+                content={UserGuide.CONTENT_STEP_7}
+                className="right-1/2 top-full mt-5"
+                index={7}
+                total={7}
+                titleButtonNext="Finish"
+                title="Filter"
+                handleCancel={closeUserGuide}
+                imgSrc={TourGuideFilter}
+              />
+            )}
           </div>
         </div>
         <div
-          className={`heading relative mx-auto my-0 flex max-w-xxl bg-white xl-max:mx-6
-        ${guideStatus && guideStep === 4 ? 'z-50' : ''}
-      `}
-          data-aos={ANIMATION.DATA_AOS}
-        >
-          <Heading
-            greeting="Welcome to"
-            title="My Course"
-            des={
-              <div>
-                Here you can find all your courses, each packed with{' '}
-                <span className="font-medium">expert lessons</span>,{' '}
-                <span className="font-medium">study materials</span>, and{' '}
-                <span className="font-medium">interactive exercises</span>.
-                Select a course to start learning!
-              </div>
-            }
-          />
-          {guideStatus && guideStep === 4 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_4}
-              className="left-0 top-full mt-3 w-full max-w-365px"
-              index={4}
-              total={6}
-              handleNext={
-                Number(window.sessionStorage.getItem('totalCourse')) > 0
-                  ? nextStep
-                  : closeUserGuide
-              }
-              handleCancel={closeUserGuide}
-            />
-          )}
-        </div>
-        <div
-          // data-aos={ANIMATION.DATA_AOS}
-          className={`relative mx-auto my-0 max-w-xxl pt-6 ${
+          className={`relative mx-auto my-0 ${
             isEmpty(courses)
               ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
               : ''
-          } ${guideStatus && guideStep === 5 ? 'sapp-active-item-guide' : ''}`}
+          } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
         >
-          {guideStatus && guideStep === 5 && (
-            <PopupStep
-              content={UserGuide.CONTENT_STEP_5}
-              className="left-1/2 top-0 mt-6 w-full max-w-xs 2xl:left-[33%] 2xl:max-w-[362px]"
-              index={5}
-              total={6}
-              handleNext={nextStep}
-              handleCancel={closeUserGuide}
-            />
-          )}
           <CoursesList
             courses={courses}
             lastElementRef={lastElementRef}
             refetch={refetch}
             isFetching={isFetching}
             isFetchingNextPage={isFetchingNextPage}
+            guideIsActive={guideStatus === true && !isEndGuide}
           />
+          {guideStatus && guideStep === 6 && (
+            <PopupStep
+              content={UserGuide.CONTENT_STEP_6}
+              className="top-[20px] mt-6 2xl:left-[33.5%]"
+              index={6}
+              total={7}
+              title="Courses"
+              imgSrc={TourGuideCourses}
+            />
+          )}
         </div>
-        {guideStatus && guideStep == 0 && <PopupWelcome />}
+        <GotoModal />
+
+        {!isVisibleGotoModal && guideStatus && guideStep == 0 && (
+          <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
+        )}
         {guideStatus && (
           <div
             ref={confirmDialogOverLayRef}
-            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
-          ></div>
+            className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
+          />
         )}
+        <RedirectToMasterModal />
         <ModalMarketingInApp
           open={openModalMarketingInApp}
           setOpen={setOpenModalMarketingInApp}
         />
-        <GotoModal />
       </Layout>
     </SappLoadingGlobal>
   )

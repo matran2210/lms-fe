@@ -2,8 +2,8 @@ import { Tooltip as AntdTooltip, ConfigProvider } from 'antd'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import { ReactNode } from 'react'
 
-export const DEFAULT_TOOLTIP_BG_COLOR = '#ffffff'
-export const DEFAULT_TOOLTIP_COLOR = '#000000'
+export const DEFAULT_TOOLTIP_BG_COLOR = '#404041'
+export const DEFAULT_TOOLTIP_COLOR = '#FFF'
 
 interface ITooltip {
   showTooltip?: boolean

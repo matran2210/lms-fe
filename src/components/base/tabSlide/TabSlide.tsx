@@ -1,124 +1,150 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import Pagination from '../pagination/Pagination'
-import PageLink from '../pagination/PageLink'
-import ArrowIcon from '../pagination/ArrowIcon'
+import clsx from 'clsx'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { QUESTION_TYPES } from 'src/constants'
-import { FieldValues, UseFormSetValue } from 'react-hook-form'
-import { Requirement } from 'src/type'
+import { ArrowIconV2 } from '../pagination/ArrowIconV2'
+import PageLink from '../pagination/PageLink'
 
 interface IProps {
   data: Array<any>
   setCurrentTab?: any
-  optionShowAll?: ReactNode
   currentTab: string
   handleChangeTab?: any
   activeShowAll: boolean
-  setActiveShowAll: any
-  setValueFilter: UseFormSetValue<FieldValues>
   isScrollCenter?: boolean
-  answerSubmitted?: Array<any>
+  setHasScrollBar: any
 }
 
 const TabSlide = ({
   data,
   setCurrentTab,
-  optionShowAll,
   currentTab,
   handleChangeTab,
   activeShowAll,
-  setActiveShowAll,
-  setValueFilter,
   isScrollCenter = true,
+  setHasScrollBar,
 }: IProps) => {
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const [windowWidth, setWindowWidth] = useState(0)
   const elementRef = useRef(null) as any
-  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
 
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MIN_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
   useEffect(() => {
-    if (elementRef?.current && !activeShowAll && isScrollCenter) {
-      elementRef.current.scrollTo(
-        elementRef?.current.offsetWidth *
-          Math.floor(
-            (49 * data.findIndex((e: any) => e.id === currentTab)) /
-              elementRef?.current.offsetWidth,
-          ),
-        0,
-      )
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
     }
-  }, [currentTab, elementRef?.current])
+
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
+
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
+
+  // Cập nhật windowWidth khi activeShowAll thay đổi
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Sử dụng setTimeout để đảm bảo DOM đã render sau khi activeShowAll thay đổi
+    const timeoutId = setTimeout(updateWindowWidth, 100)
+
+    return () => clearTimeout(timeoutId)
+  }, [activeShowAll])
 
   useEffect(() => {
-    function updateState(hasScrollBar: any) {
-      if (hasScrollBar !== undefined) {
-        setValueFilter('filter', undefined)
-        setActiveShowAll(false)
-        const el = elementRef.current
-        el &&
-          setHasScrollBar(
-            el.scrollWidth > el.getBoundingClientRect().width &&
-              data?.length > 0,
-          )
+    const container = elementRef?.current as HTMLElement | null
+    if (!container || activeShowAll) return
+
+    const activeItem = container.querySelector(
+      `[data-tab-id="${currentTab}"]`,
+    ) as HTMLElement | null
+    if (!activeItem) return
+
+    const containerWidth = container.clientWidth
+    const itemWidth = activeItem.clientWidth
+    const itemLeft = activeItem.offsetLeft
+
+    let targetLeft = isScrollCenter
+      ? itemLeft - (containerWidth - itemWidth) / 2
+      : itemLeft - (containerWidth - itemWidth)
+
+    const maxScrollLeft = container.scrollWidth - containerWidth
+    if (targetLeft < 0) targetLeft = 0
+    if (targetLeft > maxScrollLeft) targetLeft = maxScrollLeft
+
+    container.scrollTo({ left: targetLeft, behavior: 'smooth' })
+  }, [currentTab, activeShowAll, isScrollCenter, data?.length])
+
+  // Loại bỏ trùng id, sau đó sắp xếp theo index tăng dần để tránh trùng item active
+  const uniqueData = useMemo(() => {
+    const seenIds = new Set<string>()
+    const result: any[] = []
+    for (const item of data || []) {
+      const id = item?.id
+      if (id == null) continue
+      if (!seenIds.has(id)) {
+        seenIds.add(id)
+        result.push(item)
       }
     }
-    updateState(hasScrollBar)
-    window.addEventListener('resize', updateState)
-    return () => window.removeEventListener('resize', updateState)
-  }, [hasScrollBar])
+    return result
+  }, [data])
+
+  const sortedData = useMemo(() => {
+    return [...uniqueData].sort((a, b) => a.index - b.index)
+  }, [uniqueData])
+
   useEffect(() => {
-    if (elementRef?.current && data.length > 0) {
+    if (elementRef?.current && sortedData.length > 0) {
       const el = elementRef.current
       el &&
         setHasScrollBar(
-          el.scrollWidth > el.getBoundingClientRect().width && data?.length > 0,
+          el.scrollWidth > el.getBoundingClientRect().width &&
+            sortedData?.length > 0,
         )
     }
-  }, [elementRef?.current])
-  const renderTab = useMemo(() => {
-    let arr = [] as any
-    let i = 1
-    let splited = false
-    let splitedPosition
-    for (let e of data) {
-      if (e.qType === QUESTION_TYPES.ESSAY) {
-        splitedPosition = e.index
-        break
-      }
-    }
-    while (i <= data.length) {
-      if (i === data.length) {
-        if (splited === false) {
-          arr.push([data[i - 1]])
-        } else {
-          arr.push([undefined, data[i - 1]])
-        }
-      } else {
-        if (data[i].index === splitedPosition && splited == false) {
-          arr.push([data[i - 1], 'split'])
-          i--
-          splited = true
-        } else {
-          if (splited === false) {
-            arr.push([data[i - 1], data[i]])
-          } else {
-            arr.push([data[i], data[i - 1]])
-          }
-        }
-      }
-      i += 2
-    }
-    // for (let i = 1; i <= data.length ; i += 2) {
+  }, [sortedData.length, setHasScrollBar])
 
-    // }
-    return arr
-  }, [data])
+  // Chia sortedData thành các dòng liên tiếp theo chiều ngang
+  const rows = useMemo(() => {
+    if (!activeShowAll || sortedData.length <= numberDisplayData) return []
+    const result = []
+    for (let i = 0; i < sortedData.length; i += numberDisplayData) {
+      result.push(sortedData.slice(i, i + numberDisplayData))
+    }
+    return result
+  }, [sortedData, activeShowAll, numberDisplayData])
 
   const firstEssayPosition = useMemo(() => {
-    for (let e of data) {
+    for (let e of sortedData) {
       if (e.qType === QUESTION_TYPES.ESSAY) {
         return e.index
       }
     }
     return undefined
-  }, [data])
+  }, [sortedData])
 
   // const [arrowDisable, setArrowDisable] = useState(true);
 
@@ -156,73 +182,96 @@ const TabSlide = ({
    */
   const [scrollLeft, setScrollLeft] = useState(0)
 
-  const handleMouseDown = (event: React.MouseEvent<any>) => {
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true) // Đánh dấu rằng việc kéo đã bắt đầu
-    setStartX(event.pageX - elementRef.current.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
-    setScrollLeft(elementRef.current.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
+    setStartX(event.pageX - elementRef?.current?.offsetLeft) // Lưu trữ vị trí x của chuột khi bắt đầu kéo
+    setScrollLeft(elementRef?.current?.scrollLeft) // Lưu trữ giá trị scrollLeft hiện tại của menu container
   }
 
-  const handleMouseMove = (event: React.MouseEvent<any>) => {
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (!isDragging) return // Nếu không đang kéo, không thực hiện gì cả
-    const x = event.pageX - elementRef.current.offsetLeft // Tính toán vị trí x mới của chuột
+    const x = event?.pageX - elementRef?.current?.offsetLeft // Tính toán vị trí x mới của chuột
     const distance = (x - startX) * 2 // Tính khoảng cách di chuyển của chuột từ vị trí bắt đầu kéo
     elementRef.current.scrollLeft = scrollLeft - distance // Cuộn menu container dựa trên khoảng cách di chuyển của chuột
   }
 
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    const touch = event?.touches[0]
+    setIsDragging(true)
+    setStartX(touch?.pageX - elementRef?.current?.offsetLeft)
+    setScrollLeft(elementRef?.current?.scrollLeft)
+  }
+
+  const handleTouchMove = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging) return
+    const touch = event?.touches[0]
+    const x = touch?.pageX - elementRef?.current?.offsetLeft
+    const distance = (x - startX) * 2
+    elementRef.current.scrollLeft = scrollLeft - distance
+  }
+
   return (
     <ul
-      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3`}
+      className={`pagination flex min-h-[40px] w-full flex-wrap items-center gap-3 ${activeShowAll ? 'lg:max-w-[1222px]' : 'h-[44px] lg:max-w-[calc(100vw-88px-32px)]'}`}
       aria-label="Pagination"
     >
-      <div
-        className={`${
-          !activeShowAll
-            ? `relative ${
-                hasScrollBar ? 'w-[calc(100%-141px)]' : 'w-full'
-              } mx-7`
-            : 'flex w-full items-center gap-6'
-        }`}
-      >
-        {hasScrollBar && (
-          <div
-            className={`${
-              !activeShowAll && 'absolute -left-3 top-0.5 -translate-x-full'
-            }`}
-          >
+      <div className={`flex w-full items-center justify-center gap-4`}>
+        {/* Nút mũi tên trái */}
+        {data?.length > 0 && (
+          <div className="flex items-center">
             <PageLink
+              disabled={sortedData.findIndex((e) => e.id === currentTab) === 0}
               arrow={true}
               onClick={() => {
-                // if (setCurrentTab !== undefined) {
-                //   const index = data.findIndex((e) => e.id === currentTab)
-                //   handleChangeTab(data[index - 1].id)
-                // }
-                handleHorizantalScroll(elementRef.current, 25, 100, -10)
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index > 0 && setCurrentTab) {
+                  handleChangeTab(sortedData[index - 1].id)
+                }
               }}
-              // type={type}
+              className={clsx(
+                sortedData.findIndex((e) => e.id === currentTab) === 0
+                  ? 'pointer-events-none opacity-50'
+                  : '',
+                'cursor-pointer',
+              )}
             >
-              <ArrowIcon iconType={'teeny'}></ArrowIcon>
+              <ArrowIconV2 />
             </PageLink>
           </div>
         )}
+        {/* Phần render các số */}
         <div
-          className={'flex w-full select-none gap-2 overflow-hidden'}
+          className={clsx(
+            'flex w-fit select-none justify-start gap-2 pt-1 duration-300 ease-in-out will-change-auto',
+            {
+              '!w-fit': activeShowAll,
+              'h-[44px] overflow-hidden': !activeShowAll,
+              'overflow-visible': activeShowAll,
+            },
+          )}
           ref={elementRef}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={() => setIsDragging(false)}
         >
-          {data.length > 0 ? (
-            !activeShowAll ? (
-              data.map((pageNum: any, idx: any) =>
+          {sortedData.length > 0 ? (
+            !activeShowAll || sortedData?.length <= numberDisplayData ? (
+              sortedData.map((pageNum: any, idx: any) =>
                 firstEssayPosition !== undefined &&
                 pageNum.index === firstEssayPosition ? (
-                  <div className="flex" key={pageNum.id}>
+                  <div
+                    className="flex"
+                    key={pageNum.id}
+                    data-tab-id={pageNum.id}
+                  >
                     {idx !== 0 && <div className="me-2 h-full border"></div>}
                     <PageLink
                       key={pageNum.id}
                       active={currentTab === pageNum.id}
-                      // disabled={isNaN(pageNum)}
                       onClick={() => {
                         if (setCurrentTab !== undefined) {
                           handleChangeTab(pageNum.id)
@@ -232,132 +281,93 @@ const TabSlide = ({
                         pageNum.attempted || pageNum.is_viewed_answer
                       }
                       isFlagedProp={pageNum.flag}
-                      //   type={type}
                     >
                       {pageNum.index + 1}
                     </PageLink>
                   </div>
                 ) : (
-                  <PageLink
+                  <div
+                    className="flex"
                     key={pageNum.id}
-                    active={currentTab === pageNum.id}
-                    // disabled={isNaN(pageNum)}
-                    onClick={() => {
-                      if (setCurrentTab !== undefined) {
-                        handleChangeTab(pageNum.id)
-                      }
-                    }}
-                    isViewedProp={pageNum.attempted}
-                    isFlagedProp={pageNum.flag}
-                    //   type={type}
+                    data-tab-id={pageNum.id}
                   >
-                    {pageNum.index + 1}
-                  </PageLink>
+                    <PageLink
+                      key={pageNum.id}
+                      active={currentTab === pageNum.id}
+                      onClick={() => {
+                        if (setCurrentTab !== undefined) {
+                          handleChangeTab(pageNum.id)
+                        }
+                      }}
+                      isViewedProp={pageNum.attempted}
+                      isFlagedProp={pageNum.flag}
+                    >
+                      {pageNum.index + 1}
+                    </PageLink>
+                  </div>
                 ),
               )
             ) : (
-              renderTab.map((pageNum: any, idx: number) => {
-                return (
-                  <div className="flex flex-col gap-2" key={idx}>
-                    {pageNum[0] ? (
-                      pageNum[0] !== 'split' ? (
+              // Show-all: multi-rows by numberPerRow (responsive: max 25, min 14)
+              <div className="flex flex-col gap-2">
+                {rows.map((row, rowIdx) => (
+                  <div className="flex flex-row gap-2" key={rowIdx}>
+                    {row.map((pageNum: any) => (
+                      <div
+                        className="flex"
+                        key={pageNum.id}
+                        data-tab-id={pageNum.id}
+                      >
                         <PageLink
-                          key={pageNum[0].id}
-                          active={currentTab === pageNum[0].id}
-                          // disabled={isNaN(pageNum)}
+                          key={pageNum.id}
+                          active={currentTab === pageNum.id}
                           onClick={() => {
                             if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[0].id)
+                              handleChangeTab(pageNum.id)
                             }
                           }}
-                          isViewedProp={pageNum[0].attempted}
-                          isFlagedProp={pageNum[0].flag}
-                          //   type={type}
+                          isViewedProp={pageNum.attempted}
+                          isFlagedProp={pageNum.flag}
                         >
-                          {pageNum[0].index + 1}
+                          {pageNum.index + 1}
                         </PageLink>
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[1px] border"></div>
-                        </div>
-                      )
-                    ) : (
-                      <div className="h-full w-[40px]"></div>
-                    )}
-                    {pageNum[1] ? (
-                      pageNum[1] !== 'split' ? (
-                        <PageLink
-                          key={pageNum[1].id}
-                          active={currentTab === pageNum[1].id}
-                          // disabled={isNaN(pageNum)}
-                          onClick={() => {
-                            if (setCurrentTab !== undefined) {
-                              handleChangeTab(pageNum[1].id)
-                            }
-                          }}
-                          isViewedProp={pageNum[1].attempted}
-                          isFlagedProp={pageNum[1].flag}
-                          //   type={type}
-                        >
-                          {pageNum[1].index + 1}
-                        </PageLink>
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <div className="h-full w-[1px] border"></div>
-                        </div>
-                      )
-                    ) : (
-                      <div className="h-full w-[40px]"></div>
-                    )}
+                      </div>
+                    ))}
                   </div>
-                )
-                // }
-              })
+                ))}
+              </div>
             )
           ) : (
-            <div className="flex w-full justify-center">
+            <div className="flex w-full items-center justify-center">
               Your search did not match any questions
             </div>
           )}
         </div>
-        {hasScrollBar && (
-          <div
-            className={`${
-              !activeShowAll && 'absolute -right-3 top-0.5 translate-x-full'
-            }`}
-          >
+        {/* Nút mũi tên phải */}
+        {data?.length > 0 && (
+          <div className="flex items-center">
             <PageLink
               disabled={
-                data.findIndex((e) => e.id === currentTab) === data.length - 1
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                sortedData.length - 1
               }
               arrow={true}
               onClick={() => {
-                // if (setCurrentTab !== undefined) {
-                //   const index = data.findIndex((e) => e.id === currentTab)
-                //   handleChangeTab(data[index + 1].id)
-                // }
-                handleHorizantalScroll(elementRef.current, 25, 100, 10)
+                const index = sortedData.findIndex((e) => e.id === currentTab)
+                if (index < sortedData.length - 1 && setCurrentTab) {
+                  handleChangeTab(sortedData[index + 1].id)
+                }
               }}
-              // type={type}
+              className={clsx(
+                sortedData.findIndex((e) => e.id === currentTab) ===
+                  sortedData.length - 1
+                  ? 'pointer-events-none opacity-50'
+                  : '',
+                'cursor-pointer',
+              )}
             >
-              <ArrowIcon iconType={'teeny'} right={true}></ArrowIcon>
+              <ArrowIconV2 right={true} />
             </PageLink>
-          </div>
-        )}
-        {hasScrollBar && (
-          <div className="flex items-center">
-            {activeShowAll && optionShowAll}
-            <div
-              className={`ml-6 w-max cursor-pointer text-sm font-semibold leading-4.5 text-bw-1 underline ${
-                !activeShowAll && 'absolute -right-28 top-1/2 -translate-y-1/2'
-              }`}
-              onClick={() => {
-                // setPageNums(activeShowAll ? arrPage : getPagination)
-                setActiveShowAll(!activeShowAll)
-              }}
-            >
-              {!activeShowAll ? 'Show All' : 'Show Less'}
-            </div>
           </div>
         )}
       </div>

@@ -23,7 +23,7 @@ export default function BaseButton({
     small: 'text-sm leading-5.5 py-2 px-4',
     medium:
       'text-sm leading-5.5 md:text-base md:leading-6 py-1.5 md:py-3 px-4 md:px-[31px] min-w-[92px] md:min-w-[120px]',
-    lager: 'text-lg leading-6.5 py-2.8 px-9',
+    large: 'text-lg leading-6.5 py-2.8 px-9',
     extra: 'text-xl leading-6.5 py-2.8 px-9',
   }
 

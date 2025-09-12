@@ -29,7 +29,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
     <div className="mb-4">
       <div
         className={clsx(
-          'cursor-pointer rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 hover:bg-primary-v2-50 md:p-4',
+          'hover:bg-primary-v2-50 cursor-pointer rounded-md border border-[#F1F1F1] bg-[#F9F9F9] p-3 md:p-4',
           {
             'bg-primary-v2-50': data.is_current,
           },
@@ -50,7 +50,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
                 {`${data.user_agent.browserName} ${data.user_agent.browserVersion} (${data.user_agent.osName})`}
               </span>
               {data.is_current && (
-                <span className="ml-[10px] inline-block select-none bg-success-v2-50 bg-opacity-5 px-2 py-1 text-sm leading-4 text-success-v2-DEFAULT">
+                <span className="bg-success-v2-50 text-success-v2-DEFAULT ml-[10px] inline-block select-none bg-opacity-5 px-2 py-1 text-sm leading-4">
                   This device
                 </span>
               )}

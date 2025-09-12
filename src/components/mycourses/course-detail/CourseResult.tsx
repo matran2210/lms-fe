@@ -1,10 +1,8 @@
-import SappButton from '@components/base/button/SappButton'
-import HookFormSelect from '@components/base/select/HookFormSelect'
-import router from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { GRADE_STATUS, GRADING_METHOD, PageLink } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
+import { Select } from 'antd'
+import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 interface IQuizAttempt {
   attempt?: {
@@ -43,21 +41,39 @@ interface CoursePart {
 interface IProps {
   class_user_id?: string
   coursePart: CoursePart
-  quizAttempt: IQuizAttempt
-  trackGA: () => void
   setOpenReport: Dispatch<SetStateAction<boolean>>
+  selectedResult:
+    | {
+        label: string
+        value: string
+        ratio_score?: string
+        status: string
+        score: number
+      }
+    | undefined
+  setSelectedResult: Dispatch<
+    SetStateAction<
+      | {
+          label: string
+          value: string
+          ratio_score?: string
+          status: string
+          score: number
+        }
+      | undefined
+    >
+  >
   isTeacher: boolean
 }
 
 const ResultCourse = ({
   class_user_id,
   coursePart,
-  quizAttempt,
-  trackGA,
+  selectedResult,
+  setSelectedResult,
   setOpenReport,
   isTeacher,
 }: IProps) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false)
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
       page_index: 1,
@@ -68,13 +84,6 @@ const ResultCourse = ({
     data: [],
   })
 
-  const [selectedResult, setSelectedResult] = useState<{
-    label: string
-    value: string
-    ratio_score?: string
-    status: string
-  }>()
-
   const handleNextPage = () => {
     const pageIndex = resultList.metadata.page_index
     const totalPage = resultList.metadata.total_pages
@@ -83,124 +92,106 @@ const ResultCourse = ({
     }
   }
 
-  const fetchResult = async (pageIndex: number, pageSize: number) => {
-    if (class_user_id && coursePart?.quiz?.id) {
-      const response = await ClassAPI.getAllResultOfQuiz(
-        class_user_id,
-        coursePart?.quiz?.id,
-        { page_index: pageIndex ?? 1, page_size: pageSize ?? 10 },
-      )
-      if (response?.data?.data && response?.data?.metadata?.total_records > 1) {
-        const results = response.data.data
-        setResultList((prev: IQuizResultList) => {
-          return {
-            metadata: response.data.metadata,
-            data: [...prev.data, ...results]?.filter(
-              (item, index, self) =>
-                index === self?.findIndex((t) => t.id === item.id),
-            ),
-          }
-        })
-        setSelectedResult({
-          label: results?.[0]?.name,
-          value: results?.[0]?.id,
-          ratio_score: results?.[0]?.ratio_score,
-          status: results?.[0]?.status,
-        })
-      }
+  const fetchResult = async (pageIndex: number = 1, pageSize: number = 10) => {
+    if (!class_user_id || !coursePart?.quiz?.id) return
+
+    const response = await ClassAPI.getAllResultOfQuiz(
+      class_user_id,
+      coursePart.quiz.id,
+      {
+        page_index: pageIndex,
+        page_size: pageSize,
+      },
+    )
+
+    const results = response?.data?.data || []
+    const totalRecords = response?.data?.metadata?.total_records || 0
+
+    if (!results.length) return
+
+    // Set selected result (dùng chung ở cả 2 nhánh)
+    const firstResult = results[0]
+    setSelectedResult({
+      label: firstResult.name,
+      value: firstResult.id,
+      ratio_score: firstResult.ratio_score,
+      status: firstResult.status,
+      score: firstResult.score,
+    })
+
+    // Nếu nhiều hơn 1 kết quả thì gộp vào result list
+    if (totalRecords > 1) {
+      setResultList((prev: IQuizResultList) => ({
+        metadata: response.data.metadata,
+        data: [...prev.data, ...results].filter(
+          (item, index, self) =>
+            index === self.findIndex((t) => t.id === item.id),
+        ),
+      }))
     }
   }
+
   useEffect(() => {
     fetchResult(1, 10)
   }, [])
 
-  const isManualGradingAndNotFinishedGrading =
-    coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL &&
-    coursePart?.quiz?.attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+  const isAttempt = resultList?.data?.length <= 1
 
-  return resultList.data.length <= 1 ? (
-    isManualGradingAndNotFinishedGrading ? (
-      <>
-        {coursePart?.quiz?.attempt?.grading_status ===
-        GRADE_STATUS.AWAITING_GRADING ? (
-          <SappButton
-            title={'Your Answers'}
-            isUnderLine
-            color="text"
-            className="!p-0 font-medium underline"
-            onClick={() => {
-              router.push(
-                `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
-              )
-              trackGA()
-            }}
-          />
-        ) : null}
-      </>
-    ) : (
-      <SappButton
-        title={'Result'}
-        isUnderLine
-        color="text"
-        className="!p-0 font-medium underline"
-        onClick={() => {
-          if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
-            router.push(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${quizAttempt?.attempt?.id}`,
-            )
-          }
-
-          trackGA()
-        }}
-      />
-    )
-  ) : (
+  return (
     <div className="flex h-8 items-center gap-2">
       <div
-        className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}
+        className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
       >
-        Result:
+        Result of Attempts:
       </div>
       <div>
-        <HookFormSelect
-          classParent="w-full md:max-w-full border-none h-[50px] forcus:text-primary"
-          placeholder=""
-          className="right-top"
-          value={selectedResult}
-          onChange={(selectedOption) => {
-            setSelectedResult(selectedOption)
-            setIsFocus(false)
-            router.push({
-              pathname: `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${selectedOption.value}`,
-              query: { attempt: selectedOption?.label },
-            })
-          }}
-          options={resultList.data.map((item) => ({
-            value: item.id,
-            label: item.name,
-            status: item.status,
-            ratio_score: item.ratio_score,
-          }))}
-          onMenuScrollToBottom={(e: React.UIEvent<HTMLDivElement>) => {
-            const { target } = e
-            if (
-              (target as HTMLDivElement).scrollTop +
-                (target as HTMLDivElement).offsetHeight ===
-              (target as HTMLDivElement).scrollHeight
-            ) {
-              handleNextPage()
-            }
-          }}
-          isResultSelect
-          maxMenuHeight={130}
-          onFocus={(e) => {
-            setIsFocus(true)
-          }}
-          onBlur={(e) => {
-            setIsFocus(false)
-          }}
-          isSearchable={false}
-        />
+        {isAttempt ? (
+          <div className="text-gray">1</div>
+        ) : (
+          <Select
+            options={resultList?.data?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+            classNames={{
+              root: 'select-result-attempt',
+              popup: { root: 'select-result-attempt-option' },
+            }}
+            onPopupScroll={(e) => {
+              const target = e.target as HTMLDivElement
+              if (
+                target.scrollTop + target.offsetHeight >=
+                target.scrollHeight
+              ) {
+                handleNextPage()
+              }
+            }}
+            variant="borderless"
+            value={selectedResult?.value}
+            onChange={(selectedOption) => {
+              const selectedResultFind = resultList?.data?.find(
+                (item) => item?.id === selectedOption,
+              )
+              const selectedResult = {
+                label: selectedResultFind?.name,
+                value: selectedResultFind?.id,
+                ratio_score: selectedResultFind?.ratio_score,
+                status: selectedResultFind?.status,
+                score: selectedResultFind?.score,
+              }
+              setSelectedResult(
+                selectedResult as {
+                  label: string
+                  value: string
+                  ratio_score?: string
+                  status: string
+                  score: number
+                },
+              )
+            }}
+            suffixIcon={<ArrowDownIcon />}
+          />
+        )}
       </div>
     </div>
   )

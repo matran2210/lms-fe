@@ -1,10 +1,17 @@
 import type { TablePaginationConfig, TableProps } from 'antd'
 import { Table, Typography } from 'antd'
+import { ColumnsType } from 'antd/es/table'
 import React, { Dispatch, SetStateAction } from 'react'
+import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import clsx from 'clsx'
 
 const { Title } = Typography
-
-interface BaseTableProps {
+interface TablePaginationParams {
+  page_index: number
+  page_size: number
+}
+export interface ReusableTableProps<DataType, ParamType>
+  extends TableProps<DataType> {
   columns: Array<any>
   data: Array<any>
   pagination: TablePaginationConfig
@@ -16,9 +23,31 @@ interface BaseTableProps {
     isShowTitle: boolean
   }
   emptyText?: string
+  isShowIndex?: boolean
+  showFooter?: boolean
+  footerComponent?: React.ReactNode
+  isShowPagination?: boolean
+  className?: string
 }
 
-const SappTable = <T extends { id: React.Key }>({
+const getIndexColumns = (
+  queryParams?: TablePaginationConfig,
+): ColumnsType<any> => {
+  return [
+    {
+      title: '#',
+      render: (_, __, index: number) =>
+        index +
+        1 +
+        ((queryParams?.current || DEFAULT_PAGE_NUMBER) - 1) *
+          (queryParams?.pageSize || DEFAULT_PAGE_SIZE),
+
+      width: 48,
+    },
+  ]
+}
+
+const SappTable = <DataType, ParamType extends TablePaginationParams>({
   columns,
   data,
   pagination,
@@ -27,13 +56,19 @@ const SappTable = <T extends { id: React.Key }>({
   handleChangeParams,
   titleTable = { title: '', isShowTitle: false },
   emptyText,
-}: BaseTableProps) => {
+  isShowIndex = false,
+  showFooter = false,
+  footerComponent = undefined,
+  isShowPagination = true,
+  className = '',
+  ...props
+}: ReusableTableProps<DataType, ParamType>) => {
   const handleTableChange = (pagination: TablePaginationConfig) => {
     if (setPagination) {
       setPagination(pagination)
     }
-    const currentPage = pagination.current ?? 1
-    const pageSize = pagination.pageSize ?? 10
+    const currentPage = pagination.current || DEFAULT_PAGE_NUMBER
+    const pageSize = pagination.pageSize || DEFAULT_PAGE_SIZE
     if (handleChangeParams) {
       handleChangeParams(currentPage, pageSize)
     }
@@ -42,20 +77,25 @@ const SappTable = <T extends { id: React.Key }>({
   return (
     <>
       {titleTable?.isShowTitle && titleTable?.title && (
-        <Title level={5} className="mt-6 text-gray-700">
+        <Title level={5} className="mt-6 text-[#374151]">
           {titleTable.title}
         </Title>
       )}
-      <Table<T>
-        columns={columns}
+      <Table<DataType>
         dataSource={data}
-        pagination={pagination}
+        pagination={isShowPagination ? pagination : false}
         onChange={handleTableChange}
         loading={loading}
-        rowKey={(record) => record?.id || 'id'}
+        rowKey={props.rowKey || 'id'}
         scroll={{ x: 'max-content' }}
-        className="sapp-table"
+        className={clsx('sapp-table', className)}
         locale={{ emptyText: emptyText }} // ← Customize here
+        footer={showFooter ? () => footerComponent : undefined}
+        {...props}
+        columns={[
+          ...(isShowIndex ? getIndexColumns(pagination) : []),
+          ...(columns ?? []),
+        ]}
       />
     </>
   )

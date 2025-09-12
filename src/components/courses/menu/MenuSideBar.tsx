@@ -43,7 +43,7 @@ export default function Sidebar3Level({
         } ${isOpened ? 'w-[200px]' : ''}`}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative pb-6 pt-5.25 ${
+          className={`relative max-h-[calc(100vh-145px)] pb-6 pt-5.25 ${
             guideStatus && guideStep == 2
               ? 'z-50 bg-white'
               : 'overflow-y-auto overflow-x-hidden'

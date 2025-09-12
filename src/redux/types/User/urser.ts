@@ -61,6 +61,12 @@ export interface IUserContact {
   ward: string
 }
 
+export interface IFacility {
+  code: string
+  id: string
+  name: string
+}
+
 export enum UserType {
   STUDENT = 'STUDENT',
   TEACHER = 'TEACHER',
@@ -192,24 +198,7 @@ export interface UserHubspotExaminationSubjectItem {
 }
 export interface ICourseTabGroup {
   id: string
-  user_hubspot_examination_subjects: [
-    {
-      id: string
-      examination_subject_id: string
-      result: string
-      examination_subject: {
-        id: string
-        subject_id: string
-        examination_id: string
-        subject: ISubjectItem
-        examination: {
-          id: string
-          name: string
-        }
-      }
-      is_final_examination_subject: boolean
-    },
-  ]
+  user_hubspot_examination_subjects: UserHubspotExaminationSubjectItem[]
 }
 
 export interface IExamination {

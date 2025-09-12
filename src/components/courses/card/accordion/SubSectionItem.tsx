@@ -8,8 +8,8 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants'
 import TestModal from '@components/courses/popup/TestModal'
 import { TEST_TYPE_ENUM } from '@utils/constants'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonText from '@components/base/button/ButtonText'
 
 const { Panel } = Collapse
 type DataTestType = {
@@ -150,7 +150,7 @@ export default function SubSectionItem({
             {sub?.course_section_type === TEST_TYPE_ENUM.TOPIC_TEST ? (
               checkSubTestFinished ? (
                 <div className="topic_test_action invisible hidden gap-4 md:flex">
-                  <ButtonTextV2
+                  <ButtonText
                     title="Retake"
                     size="medium"
                     className="!bg-transparent"
@@ -175,7 +175,7 @@ export default function SubSectionItem({
                       }
                     }}
                   />
-                  <ButtonTextV2
+                  <ButtonText
                     title="Result"
                     size="medium"
                     className="!bg-transparent text-bw-15"
@@ -195,7 +195,7 @@ export default function SubSectionItem({
                   />
                 </div>
               ) : (
-                <ButtonSecondaryV2
+                <ButtonSecondary
                   title={'Start'}
                   size="medium"
                   onClick={(e) => {
@@ -314,7 +314,7 @@ export default function SubSectionItem({
                 {act?.course_section_type === TEST_TYPE_ENUM.CHAPTER_TEST ? (
                   isActivityFinished ? (
                     <div className="invisible hidden gap-4 group-hover:visible md:flex">
-                      <ButtonTextV2
+                      <ButtonText
                         title="Retake"
                         size="medium"
                         className="text-primary"
@@ -339,7 +339,7 @@ export default function SubSectionItem({
                           }
                         }}
                       />
-                      <ButtonTextV2
+                      <ButtonText
                         title="Result"
                         size="medium"
                         className="text-bw-15 "
@@ -351,7 +351,7 @@ export default function SubSectionItem({
                       />
                     </div>
                   ) : (
-                    <ButtonSecondaryV2
+                    <ButtonSecondary
                       title={'Start'}
                       size="medium"
                       onClick={(e) => {

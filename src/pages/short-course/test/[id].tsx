@@ -2,7 +2,6 @@ import {
   removeHighlights,
   serializeHighlights,
 } from '@/../node_modules/@funktechno/texthighlighter/lib/index'
-import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import DragNDropPreivew from '@components/questionType/DragNDrop'
@@ -32,7 +31,6 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
-
 import { trackGAEvent } from '@utils/google-analytics'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { Requirement, ScratchPadValue } from 'src/type'
@@ -62,13 +60,12 @@ import {
   Tab,
   TabAnswer,
   TimerRefType,
-  UploadState,
 } from 'src/type/courses-3-level'
 import TabSlide from '@components/courses/test/TabSlide'
 import { IQuestion } from 'src/type/course'
 import { NoMobile } from '@components/courses/icons/NoMobile'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 const warningText =
   'You have unsaved changes - are you sure you wish to leave this page?'
@@ -1581,7 +1578,7 @@ const TestDetail = () => {
           LMS Pro’s Testing can be difficult on a mobile device. You can use
           tablet or desktop device for better experience.
         </p>
-        <ButtonPrimaryV2
+        <ButtonPrimary
           title="Back to homepage"
           size="medium"
           loading={false}
@@ -1726,7 +1723,7 @@ const TestDetail = () => {
                       quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                         <div className="flex gap-2 pt-6">
                           {!currentTabContent?.done && (
-                            <ButtonSecondaryV2
+                            <ButtonSecondary
                               title="Clear Selection"
                               size="medium"
                               loading={false}
@@ -1741,7 +1738,7 @@ const TestDetail = () => {
                             />
                           )}
 
-                          <ButtonPrimaryV2
+                          <ButtonPrimary
                             title="Confirm"
                             size="medium"
                             loading={false}
@@ -1865,7 +1862,7 @@ const TestDetail = () => {
                       quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
                         <div className="flex gap-2 pt-6">
                           {!currentTabContent?.done && (
-                            <ButtonSecondaryV2
+                            <ButtonSecondary
                               title="Clear Selection"
                               size="medium"
                               loading={false}
@@ -1880,7 +1877,7 @@ const TestDetail = () => {
                             />
                           )}
 
-                          <ButtonPrimaryV2
+                          <ButtonPrimary
                             title="Confirm"
                             size="medium"
                             loading={false}

@@ -13,11 +13,11 @@ import HookFormSelect from '@components/base/select/HookFormSelect'
 import { GRADING_METHOD, GRADE_STATUS, PageLink } from 'src/constants'
 import { capitalizeFirstLetter } from '@utils/index'
 import { useDispatch } from 'react-redux'
-import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRetakeOrContinueAttempt'
 import { ClockIcon } from '@assets/icons'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import clsx from 'clsx'
 import { isQuizExpired } from '@utils/helpers/quiz-test/helper'
+import PopupSelectRetakeOrContinueAttempt from '@components/common/PopupSelectRetakeOrContinueAttempt'
 
 enum StatusQuizAttempt {
   Passed = 'Passed',
@@ -296,13 +296,13 @@ const TestModalTeacher = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="pr-0.5 font-medium text-yellow-400">
+          <div className="text-yellow-400 pr-0.5 font-medium">
             Awaiting Grading
           </div>
         )
       default:
         return (
-          <div className="pr-0.5 font-medium text-gray-500">Unsubmitted</div>
+          <div className="text-gray-500 pr-0.5 font-medium">Unsubmitted</div>
         )
     }
   }
@@ -491,7 +491,7 @@ const TestModalTeacher = ({
             renderOkButtonCaption() === 'Continue' &&
             data?.quiz?.attempt?.number_of_attempts ===
               data?.quiz?.limit_count && (
-              <div className="mt-8 text-center text-base !font-normal text-gray-1">
+              <div className="text-gray-1 mt-8 text-center text-base !font-normal">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>
               </div>
@@ -506,13 +506,13 @@ const TestModalTeacher = ({
             data?.quiz?.attempt?.number_of_attempts === data?.quiz?.limit_count
           ) && (
             <>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-gray-1">Name:</div>
                 <div className="line-clamp-2 pr-0.5 font-medium text-bw-1">
                   {data?.name}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-gray-1">Pass Point:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.is_graded ? (
@@ -522,7 +522,7 @@ const TestModalTeacher = ({
                   )}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-gray-1">Time Allowed:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.quiz_timed
@@ -530,14 +530,14 @@ const TestModalTeacher = ({
                     : 'Unlimited'}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-gray-1">Grading Method:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {capitalizeFirstLetter(selectedResult?.grading_method) ??
                     capitalizeFirstLetter(data?.quiz?.grading_method)}
                 </div>
               </div>
-              <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+              <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                 <div className="text-gray-1">No of Attempts:</div>
                 <div className="pr-0.5 font-medium text-bw-1">
                   {data?.quiz?.attempt?.number_of_attempts || 0}/
@@ -547,7 +547,7 @@ const TestModalTeacher = ({
                 </div>
               </div>
               {data?.quiz && (
-                <div className="flex justify-between gap-8 border-b border-slate-100 py-6 text-base">
+                <div className="border-slate-100 flex justify-between gap-8 border-b py-6 text-base">
                   <div className="flex items-center gap-2 hover:text-primary">
                     <div
                       className={`forcus-group:text-primary text-gray-1 ${isFocus ? 'text-primary' : ''}`}

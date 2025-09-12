@@ -25,7 +25,7 @@ export const renderer = ({
   }
 
   return (
-    <div className="flex w-2/6 justify-center font-tech text-[21px] font-bold tracking-[2px] text-bw-1">
+    <div className="flex w-2/6 justify-center font-tech text-[21px] font-bold tracking-[2px] text-[#050505]">
       {formatNumber(hours)}:{formatNumber(minutes)}:{formatNumber(seconds)}
     </div>
   )

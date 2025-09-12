@@ -134,7 +134,7 @@ const ProfilePage = () => {
   }
   const getListDevices = async () => {
     const res = await UserApi.getListDevices()
-    setListDevices(res.data)
+    setListDevices(res)
   }
 
   useEffect(() => {
@@ -381,7 +381,7 @@ const ProfilePage = () => {
                 <Tabs
                   tabBarExtraContent={
                     <div
-                      className="hover-transition-font-weight hidden cursor-pointer items-center gap-2 font-bold text-error-v2-DEFAULT lg:flex"
+                      className="hover-transition-font-weight text-error-v2-DEFAULT hidden cursor-pointer items-center gap-2 font-bold lg:flex"
                       onClick={handleLogout}
                     >
                       <Icon type="logout" className="font-normal" />
@@ -411,7 +411,7 @@ const ProfilePage = () => {
                 <Divider className="md:hidden" />
                 <div
                   className={clsx(
-                    'hover-transition-font-weight flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-error-v2-50 p-4 text-base font-medium text-error-v2-DEFAULT md:mt-8 lg:hidden',
+                    'hover-transition-font-weight bg-error-v2-50 text-error-v2-DEFAULT flex cursor-pointer items-center justify-center gap-2 rounded-lg p-4 text-base font-medium md:mt-8 lg:hidden',
                     {
                       '!hidden': isEdit || isChangePassword,
                     },
@@ -453,7 +453,7 @@ const CollapseListLabel = ({
   <div>
     <p className="mb-2 text-base font-semibold">
       {title}{' '}
-      <span className="text-base font-normal text-secondary-v2-300">
+      <span className="text-secondary-v2-300 text-base font-normal">
         ({count})
       </span>
     </p>

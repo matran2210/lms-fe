@@ -1,4 +1,5 @@
 import { Skeleton } from 'antd'
+import clsx from 'clsx'
 import React, { KeyboardEvent } from 'react'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
@@ -10,6 +11,7 @@ interface IProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   placeholder?: string
   className?: string
+  extraClassName?: string
   // rows?: number | undefined
   // label?: string
   // guideline?: string[]
@@ -18,6 +20,7 @@ interface IProps {
   // required?: boolean
   skeleton?: boolean
   handleKeyDown?: (e: KeyboardEvent<HTMLTextAreaElement>) => void
+  actions?: React.ReactNode
 }
 
 const HookFormTextArea = ({
@@ -26,7 +29,8 @@ const HookFormTextArea = ({
   defaultValue,
   onChange,
   placeholder,
-  className = 'w-fill--available h-30',
+  className = 'w-fill--available h-[7.5rem]',
+  extraClassName = 'top-4',
   // rows,
   // label,
   // guideline,
@@ -35,6 +39,7 @@ const HookFormTextArea = ({
   // required,
   skeleton,
   handleKeyDown,
+  actions,
 }: IProps) => {
   return (
     <Controller
@@ -44,22 +49,27 @@ const HookFormTextArea = ({
       render={({ field, fieldState: { error } }) => (
         <>
           {!skeleton ? (
-            <textarea
-              {...field}
-              value={field.value ?? ''}
-              defaultValue={field.value ? undefined : defaultValue}
-              onChange={(value) => {
-                field.onChange(value)
-                onChange && onChange(value)
-              }}
-              className={`${className} form-control rounded-[4px] border-[#dcdddd] ${
-                error?.message ? 'is-invalid' : ''
-              }`}
-              placeholder={placeholder}
-              // rows={rows ?? 3}
-              disabled={disabled}
-              onKeyDown={handleKeyDown}
-            />
+            <div className="relative h-full">
+              <textarea
+                {...field}
+                value={field.value ?? ''}
+                defaultValue={field.value ? undefined : defaultValue}
+                onChange={(value) => {
+                  field.onChange(value)
+                  onChange && onChange(value)
+                }}
+                className={`${className} form-control rounded-[4px] border-[#dcdddd] focus:border-primary focus:shadow-0 focus:outline-none ${
+                  error?.message ? 'is-invalid' : ''
+                }`}
+                placeholder={placeholder}
+                // rows={rows ?? 3}
+                disabled={disabled}
+                onKeyDown={handleKeyDown}
+              />
+              <div className={clsx('absolute right-4', extraClassName)}>
+                {actions}
+              </div>
+            </div>
           ) : (
             <Skeleton.Input
               active
