@@ -1485,6 +1485,7 @@ const TestDetail = () => {
       setTabs(savedAnswer)
     }
     setLoading(false)
+    handleResetRequirementIndex()
   }
 
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
@@ -2425,7 +2426,7 @@ const TestDetail = () => {
     }
   }, [startResize])
 
-  useEffect(() => {
+  const handleResetRequirementIndex = () => {
     if (
       tabs &&
       tabs.length > 0 &&
@@ -2438,7 +2439,7 @@ const TestDetail = () => {
         index: 0,
       })
     }
-  }, [currentTabContent?.id, tabs])
+  }
 
   useEffect(() => {
     async function fetchTabs() {
