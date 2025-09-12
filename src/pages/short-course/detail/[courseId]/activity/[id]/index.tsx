@@ -662,7 +662,10 @@ export default function ActivityDetail() {
               onClose={handleCloseTab}
             />
 
-            <SectionContent sections={filteredSubsections} />
+            <SectionContent
+              sections={filteredSubsections}
+              class_user_id={data?.class_user_id}
+            />
 
             {activityResourceItems.length > 0 && (
               <ActivityResource

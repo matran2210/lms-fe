@@ -107,15 +107,27 @@ export const countWords = (text: string) => {
 }
 
 export const convertSnakeCaseToHumanReadable = (str: string) => {
+  if (!str || str.trim() === '') return '-'
+
   const words = str
     .toLowerCase()
     .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 
+  if (words.length === 0) return '-'
+
   return words.join(' ')
 }
-export function convertHumanReadableToSnakeCase(text: string) {
-  return text.trim().toLowerCase().split(/\s+/).join('_')
+
+export const convertHumanReadableToSnakeCase = (str: string) => {
+  if (!str || str.trim() === '') return ''
+
+  const words = str
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+
+  return words.join('_')
 }
 export const buildQueryString = (params: Object) => {
   const queryParams = Object.entries(params)
