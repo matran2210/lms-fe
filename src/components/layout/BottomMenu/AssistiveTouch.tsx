@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Draggable from 'react-draggable'
 import { motion, AnimatePresence } from 'framer-motion'
 import { AssistiveIcon } from '@assets/icons'
+import clsx from 'clsx'
 
 interface AssistiveTouchProps {
   menuItems: {
@@ -112,39 +113,62 @@ export default function AssistiveTouch({
         )}
 
         {/* Menu */}
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 10 }}
-              transition={{ duration: 0.2 }}
-              className="absolute bottom-0 right-0 inline-flex flex-col items-center justify-center gap-[20px] rounded-[20px] bg-gray-800/80 px-6 py-5 backdrop-blur-[2px]"
-            >
-              {menuItems.map((item, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    item.onClick()
-                    setOpen(false)
-                  }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    item.onClick()
-                    setOpen(false)
-                  }}
-                  className="text-xs text-white transition hover:text-primary"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </motion.div>
+        {/* <AnimatePresence> */}
+        <div
+          // initial={{ opacity: 0, scale: 0.8, y: 10 }}
+          // animate={{ opacity: 1, scale: 1, y: 0 }}
+          // exit={{ opacity: 0, scale: 0.8, y: 10 }}
+          // transition={{ duration: 0.2 }}
+          // style={{
+          //   // Fallback styles nếu Framer Motion fail
+          //   opacity: open ? 1 : 0,
+          //   display: open ? 'inline-flex' : 'none',
+          //   position: 'absolute',
+          //   bottom: 0,
+          //   right: 0,
+          //   backgroundColor: 'rgba(31, 41, 55, 0.8)',
+          //   backdropFilter: 'blur(2px)',
+          //   borderRadius: '20px',
+          //   padding: '20px 24px',
+          //   flexDirection: 'column',
+          //   alignItems: 'center',
+          //   justifyContent: 'center',
+          //   gap: '20px',
+          // }}
+          className={clsx(
+            'absolute bottom-0 right-0 inline-flex flex-col items-center justify-center gap-[20px] rounded-[20px] bg-gray-800/80 px-6 py-5 backdrop-blur-[2px]',
+            'origin-bottom-right transform transition-all duration-200 ease-in-out',
+            {
+              'pointer-events-auto visible translate-y-0 scale-100 opacity-100':
+                open,
+              'pointer-events-none invisible translate-y-3 scale-75 opacity-0':
+                !open,
+            },
           )}
-        </AnimatePresence>
+        >
+          {menuItems.map((item, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                item.onClick()
+                setOpen(false)
+              }}
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                item.onClick()
+                setOpen(false)
+              }}
+              className="text-xs text-white transition hover:text-primary"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        {/* </AnimatePresence> */}
       </div>
     </Draggable>
   )
