@@ -30,6 +30,7 @@ import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
 import GotoModal from '@components/courses/popup/GotoModal'
+import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import clsx from 'clsx'
 import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
 import { useStaticModalContext } from '@contexts/StaticModalContext'
@@ -50,6 +51,7 @@ const MyCourse = () => {
     step: guideStep,
   } = useAppSelector((state) => state.userGuideReducer)
   const dispatch = useAppDispatch()
+  const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
@@ -207,6 +209,9 @@ const MyCourse = () => {
       window.sessionStorage.setItem('totalCourse', courses?.length)
     }
   }, [courses])
+  useEffect(() => {
+    setOpenModalMarketingInApp(true)
+  }, [])
 
   const firstPage = data?.pages?.[0]
   const totalRecords = firstPage?.category?.metadata?.total_records || 0
@@ -396,6 +401,10 @@ const MyCourse = () => {
           />
         )}
         <RedirectToMasterModal />
+        <ModalMarketingInApp
+          open={openModalMarketingInApp}
+          setOpen={setOpenModalMarketingInApp}
+        />
       </Layout>
     </SappLoadingGlobal>
   )
