@@ -252,7 +252,7 @@ const TestDetail = () => {
         const part1 =
           currentTabContent?.data?.requirements?.[essayData?.index] || {}
         const part2 = essayData?.req || {}
-        const dataEssay = { ...part1, ...part2 }
+        const dataEssay = { ...part2, ...part1 }
         const key = `${currentTabID}_${essayData?.index}_answer`
         const defaultValueEssay = () => {
           const valueFromForm = getValues(key)
@@ -2547,17 +2547,8 @@ const TestDetail = () => {
   const getTemplateValueForWord = () => {
     const requirement =
       currentTabContent?.data?.requirements?.[essayData?.index]
-    if (requirement?.short_answer) {
-      return requirement.short_answer
-    }
-    if (requirement?.answer_text) {
-      return requirement.answer_text
-    }
     if (requirement?.answer_template) {
       return requirement.answer_template
-    }
-    if (currentTabContent.answer) {
-      return currentTabContent.answer
     }
     return currentTabContent?.data?.answer_template
   }
@@ -2565,17 +2556,8 @@ const TestDetail = () => {
   const getTemplateValueForSheet = () => {
     const requirementSheet =
       currentTabContent?.data?.requirements?.[essayData?.index]
-    if (requirementSheet?.answer_text) {
-      return requirementSheet.answer_text
-    }
-    if (requirementSheet?.short_answer) {
-      return requirementSheet.short_answer
-    }
     if (requirementSheet?.answer_template) {
       return requirementSheet.answer_template || defaultSheetData
-    }
-    if (currentTabContent.answer) {
-      return currentTabContent.answer
     }
     return currentTabContent?.data?.answer_template || defaultSheetData
   }

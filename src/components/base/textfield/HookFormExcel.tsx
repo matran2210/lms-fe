@@ -58,7 +58,7 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
     if (ignoreStructOpsRef.current) return
     if (!fullData?.is_viewed_answer && !fullData?.confirmed) {
       const currentSheet = refSheet.current?.getSheet()
-      if (!currentSheet?.id) return
+      // if (!currentSheet?.id) return
 
       if (value) {
         let old = [...JSON.parse(value)]

@@ -251,7 +251,14 @@ const CaseStudyDetail = ({ questions }: any) => {
   const router = useRouter()
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
-  const { control, handleSubmit, getValues, setValue, resetField } = useForm()
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    resetField,
+    reset: resetAnswer,
+  } = useForm()
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
@@ -984,34 +991,16 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getTemplateValueForWord = (question: any) => {
     const requirement = question?.requirements?.[0]
-    if (requirement?.short_answer) {
-      return requirement.short_answer
-    }
-    if (requirement?.answer_text) {
-      return requirement.answer_text
-    }
     if (requirement?.answer_template) {
       return requirement.answer_template
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template
   }
 
   const getTemplateValueForSheet = (question: any) => {
     const requirementSheet = question?.requirements?.[0]
-    if (requirementSheet?.answer_text) {
-      return requirementSheet.answer_text
-    }
-    if (requirementSheet?.short_answer) {
-      return requirementSheet.short_answer
-    }
     if (requirementSheet?.answer_template) {
       return requirementSheet.answer_template || defaultSheetData
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template || defaultSheetData
   }
@@ -1592,7 +1581,10 @@ const CaseStudyDetail = ({ questions }: any) => {
           <QuitTestModal
             open={openQuit}
             setOpen={setOpenQuit}
-            handleQuit={() => backToPart()}
+            handleQuit={() => {
+              resetAnswer()
+              backToPart()
+            }}
             handleCancel={() => setUnsavedChanges(true)}
             content="If you quit at this time, the test results will not be saved."
           />

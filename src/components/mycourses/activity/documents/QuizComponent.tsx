@@ -967,36 +967,18 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const getTemplateValueForWord = () => {
       const requirement =
         activeQuestion?.requirements?.[essayData?.index as number]
-      // if (requirement?.short_answer) {
-      //   return requirement.short_answer
-      // }
-      // if (requirement?.answer_text) {
-      //   return requirement.answer_text
-      // }
       if (requirement?.answer_template) {
         return requirement.answer_template
       }
-      // if (currentTabContent.answer) {
-      //   return currentTabContent.answer
-      // }
       return activeQuestion?.answer_template
     }
 
     const getTemplateValueForSheet = () => {
       const requirementSheet =
         activeQuestion?.requirements?.[essayData?.index as number]
-      // if (requirementSheet?.answer_text) {
-      //   return requirementSheet.answer_text
-      // }
-      // if (requirementSheet?.short_answer) {
-      //   return requirementSheet.short_answer
-      // }
       if (requirementSheet?.answer_template) {
         return requirementSheet.answer_template || defaultSheetData
       }
-      // if (currentTabContent.answer) {
-      //   return currentTabContent.answer
-      // }
       return activeQuestion?.answer_template || defaultSheetData
     }
     const onResetAnswerEssayToTemplate = () => {
