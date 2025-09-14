@@ -214,7 +214,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
-            name={`${index}_answer`}
+            name={`${data?.id}_${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
             fullData={{ data }}
@@ -251,14 +251,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const router = useRouter()
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
-  const {
-    control,
-    handleSubmit,
-    getValues,
-    setValue,
-    resetField,
-    reset: resetAnswer,
-  } = useForm()
+  const { control, handleSubmit, getValues, setValue, resetField } = useForm()
   const { control: controlScratch } = useForm()
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
@@ -338,7 +331,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const resetEssayBeforeAction = async () => {
     questionData?.forEach((question: any, index: number) => {
-      const name = `${index}_answer`
+      const name = `${question?.id}_${index}_answer`
       const defaultValue = getValues(name)
       handleResetEssay(index, question, defaultValue)
     })
@@ -668,7 +661,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType == QUESTION_TYPES.ESSAY) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValues(`${i}_answer`),
+          answer: getValues(`${question?.id}_${i}_answer`),
           id: question?.id,
           requirement_id: question?.requirements?.[0]?.id,
           answers: question?.answers,
@@ -1012,7 +1005,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     index: number
     question: any
   }) => {
-    const key = `${index}_answer`
+    const key = `${question?.id}_${index}_answer`
     const response_option = question?.response_option
     if (!editorRefs.current[index]) {
       editorRefs.current[index] = React.createRef()
@@ -1208,7 +1201,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         if (question.qType !== QUESTION_TYPES.ESSAY)
                           return undefined
                         const response_option = question?.response_option
-                        const name = `${index}_answer`
+                        const name = `${question?.id}_${index}_answer`
                         const formValue = getValues(name)
                         switch (response_option) {
                           case RESPONSE_OPTION.WORD:
@@ -1582,7 +1575,6 @@ const CaseStudyDetail = ({ questions }: any) => {
             open={openQuit}
             setOpen={setOpenQuit}
             handleQuit={() => {
-              resetAnswer()
               backToPart()
             }}
             handleCancel={() => setUnsavedChanges(true)}
