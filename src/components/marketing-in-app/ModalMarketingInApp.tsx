@@ -3,7 +3,6 @@ import Image from 'next/image'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { Dispatch, SetStateAction } from 'react'
-import { useRouter } from 'next/router'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const ModalMarketingInApp = ({
@@ -13,7 +12,6 @@ const ModalMarketingInApp = ({
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
-  const router = useRouter()
   const { isMobileView, isTabletView } = useTailwindBreakpoint()
   const widthModal = isMobileView ? 343 : isTabletView ? 600 : 1000
   const widthImg = isMobileView ? 343 : isTabletView ? 600 : 1000
@@ -22,7 +20,7 @@ const ModalMarketingInApp = ({
     <Modal
       width={widthModal}
       footer={false}
-      open={open}
+      open={isMobileView ? false : open}
       centered
       closeIcon={false}
       rootClassName="modal-marketing-in-app"

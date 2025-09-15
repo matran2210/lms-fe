@@ -6,7 +6,11 @@ import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingIn
 
 type LayoutTeacherProps = {
   title: string
-  dashboardTab: string
+  dashboardTab: {
+    src: string
+    title: string
+    value: string
+  }
 }
 
 const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
@@ -19,11 +23,11 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         <title>{title}</title>
       </Head>
 
-      <div className="relative min-h-screen w-screen overflow-y-auto overflow-x-hidden">
+      <div className="relative min-h-screen w-screen overflow-y-auto">
         <div className="max-w-full">
           <Image
-            src="https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt_small.png"
-            alt="bg dashboard"
+            src={dashboardTab.src}
+            alt={dashboardTab.title}
             layout="responsive"
             width={1920}
             height={6170}
