@@ -1,7 +1,8 @@
 import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
 import { useRouter } from 'next/router'
-import dashboardMktInApp from '@assets/images/dashboard_mkt_in_app.svg'
+// import dashboardMktInApp from '@assets/images/dashboard_mkt_in_app.svg'
 import { useEffect, useState } from 'react'
+const dashboardMktInApp = 'https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt.png'
 
 const listTab = [
   { title: 'Marketing In App', value: 'home', src: dashboardMktInApp },
