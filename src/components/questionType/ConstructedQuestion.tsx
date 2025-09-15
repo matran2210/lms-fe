@@ -367,7 +367,7 @@ const EssayQuestionPreview = ({
       return (
         <HookFormExcel
           question_data={question_data}
-          defaultValue={setDefaultIdToSheetData(defaultValue)}
+          defaultValue={defaultValue}
           index={index}
           onChange={(val: string) => {
             onChange(val)
