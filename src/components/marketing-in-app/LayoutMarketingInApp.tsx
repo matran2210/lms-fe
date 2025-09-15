@@ -31,6 +31,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
           />
         </div>
         <NavigationBarMKTInApp />
+        <FooterMarketingInApp />
       </div>
     </>
   )
