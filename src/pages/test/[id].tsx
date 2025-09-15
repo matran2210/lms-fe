@@ -1396,7 +1396,8 @@ const TestDetail = () => {
     const resetCurrentQuestionAndNextQuestion = async (
       question: IQuestion | null | undefined,
     ) => {
-      const name = `${currentTab}_0_answer`
+      const requirementLength = question?.requirements?.length
+      const name = `${currentTab}_${requirementLength ? 0 : undefined}_answer`
       const valueFromFormReq = getValues(name)
       const savedAnswer = answersSubmitted?.find(
         (e: any) => e.questionId === currentTab,
@@ -2443,7 +2444,7 @@ const TestDetail = () => {
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
-        index: 0,
+        index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
       })
     }
   }

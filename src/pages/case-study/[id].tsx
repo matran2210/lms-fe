@@ -198,9 +198,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        if (!editorRefs.current[index]) {
-          editorRefs.current[index] = React.createRef()
-        }
+        // if (!editorRefs.current[index]) {
+        //   editorRefs.current[index] = React.createRef()
+        // }
         return (
           <EssayQuestionPreview
             data={requirement}
@@ -241,7 +241,7 @@ const CaseStudyDetail = ({ questions }: any) => {
               requirement?.requirementIndex === 0 ||
               data.requirements.length === 0
             }
-            externalRef={editorRefs.current[index]}
+            externalRef={ref}
           />
         )
       default:
@@ -1225,7 +1225,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return question?.answer_template || defaultSheetData
                         }
                       }
-
+                      if (!editorRefs.current[index]) {
+                        editorRefs.current[index] = React.createRef()
+                      }
                       return (
                         <div
                           key={question?.id + index}
@@ -1248,7 +1250,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             undefined,
                             question?.requirements?.[0],
                             question?.question_content,
-                            valueRef,
+                            editorRefs.current[index],
                           )}
                           {question &&
                             question.qType === QUESTION_TYPES.ESSAY &&
