@@ -22,7 +22,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
       <div className="relative min-h-screen w-screen overflow-y-auto overflow-x-hidden">
         <div className="max-w-full">
           <Image
-            src="https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt.png"
+            src="https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt_small.png"
             alt="bg dashboard"
             layout="responsive"
             width={1920}
