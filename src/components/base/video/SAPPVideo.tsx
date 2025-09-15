@@ -15,10 +15,6 @@ import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
 import { LoadingIcon, PiPIcon } from '@assets/icons'
 import { useRouter } from 'next/router'
-import { QuizComponentRef } from '@components/mycourses/activity/documents/QuizComponent'
-import { IActivityStateQuestion } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
-import { GRADING_PREFERENCE } from 'src/constants'
-import FullScreenQuizComponent from '@components/mycourses/activity/documents/FullScreenQuizComponent'
 
 interface IProp {
   options: any
@@ -29,18 +25,6 @@ interface IProp {
   timeQuiz?: any
   thumbnail?: Thumbnail
   children?: ReactNode
-  modalOpen?: boolean
-  finishAll?: boolean
-  isConfirmQuestion?: boolean
-  activityId?: string
-  tabId?: string
-  quizId?: string
-  questionRef?: React.RefObject<QuizComponentRef>
-  activeQuestion?: IActivityStateQuestion
-  document_id?: string
-  grading_preference?: GRADING_PREFERENCE
-  handleSubmitQuestion?: () => void
-  handleCancelQuestion?: () => void
 }
 
 type ResolutionTypes =
@@ -79,18 +63,6 @@ const SAPPVideo = ({
   timeQuiz,
   thumbnail,
   children,
-  modalOpen,
-  finishAll,
-  isConfirmQuestion,
-  activityId,
-  tabId,
-  quizId,
-  questionRef,
-  activeQuestion,
-  document_id,
-  grading_preference,
-  handleCancelQuestion,
-  handleSubmitQuestion,
 }: IProp) => {
   const [playerFunction, setPlayerFunction] = useState<any>()
   const [valueVolume, setValueVolume] = useState<number>(1)
@@ -107,7 +79,6 @@ const SAPPVideo = ({
   const [canPlay, setCanPlay] = useState<boolean>(false)
   const [loadingPercentage, setLoadingPercentage] = useState<number>(0)
   const [cloudflarePlayer, setCloudflarePlayer] = useState<boolean>(false)
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false)
 
   const playbackAnimationRef = useRef<HTMLDivElement>(null)
   const videoControlsRef = useRef<HTMLDivElement>(null)
@@ -627,7 +598,6 @@ const SAPPVideo = ({
 
     if (fullscreenButtonRef?.current && fullScreenIcon && fullScreenExitIcon) {
       const isFullScreen = document.fullscreenElement !== null
-      setIsFullscreen(isFullScreen)
       fullscreenButtonRef.current.setAttribute(
         'data-title',
         `${isFullScreen ? 'Exit' : 'Enter'} full screen`,
@@ -771,7 +741,6 @@ const SAPPVideo = ({
       router.events.off('routeChangeStart', handleRouteChange)
     }
   }, [router.events])
-  const questionConditions = activityId && document_id && grading_preference
 
   return (
     <>
@@ -809,9 +778,7 @@ const SAPPVideo = ({
                 !hideVideo ? styles.wrapper : styles.hideWrapper
               } ${loading ? 'hidden' : ''}`}
             >
-              {!isFullscreen && (
-                <div className={`popup-question`}>{children}</div>
-              )}
+              <div className={`popup-question`}>{children}</div>
               <Stream
                 {...options}
                 key={options?.src}
@@ -834,9 +801,7 @@ const SAPPVideo = ({
               } ${loading ? 'hidden' : ''}`}
               ref={videoContainerRef}
             >
-              {!isFullscreen && (
-                <div className={`popup-question`}>{children}</div>
-              )}
+              <div className={`popup-question`}>{children}</div>
               <div
                 className="playback-animation flex-center"
                 ref={playbackAnimationRef}
@@ -877,24 +842,8 @@ const SAPPVideo = ({
                 // disablePictureInPicture
                 controlsList="nodownload"
               />
-              {isFullscreen && questionConditions && (
-                <FullScreenQuizComponent
-                  finishAll={finishAll}
-                  isConfirmQuestion={isConfirmQuestion}
-                  modalOpen={modalOpen}
-                  activityId={activityId}
-                  tabId={tabId || ''}
-                  quizId={quizId || ''}
-                  questionRef={questionRef}
-                  activeQuestion={activeQuestion}
-                  document_id={document_id}
-                  grading_preference={grading_preference}
-                  handleSubmitQuestion={handleSubmitQuestion}
-                  handleCancelQuestion={handleCancelQuestion}
-                />
-              )}
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full rounded-b-lg px-5 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full px-4 py-3"
                 ref={videoControlsRef}
               >
                 <div className="flex-center flex w-full items-center gap-6">

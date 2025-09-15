@@ -8,10 +8,8 @@ import React, {
   useState,
 } from 'react'
 import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
-// import SpreadsheetEditor from '@components/base/spreadSheet/SpreadSheetEditor'
 import EditorReader from '@components/base/editor/EditorReader'
 import { runHighlight } from '@utils/index'
-import { Workbook } from '@fortune-sheet/react'
 import { Controller } from 'react-hook-form'
 import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
 import { UploadAPI } from 'src/pages/api/upload'
@@ -20,25 +18,15 @@ import { Divider } from 'antd'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
 import { MY_COURSES } from 'src/constants/lang'
 import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import {
+  DEFAULT_EDITOR_VALUE,
+  generateSheetId,
+  SheetData,
+} from 'src/constants/attempt'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
-
-export type SheetData = {
-  name: string
-  id: string
-  status: number
-  data: (string | number | null)[][]
-  celldata: {
-    r: number
-    c: number
-    v: { v: string; ct: { fa: string; t: string }; m: string }
-  }[]
-  row?: number
-  column?: number
-}
 
 export type IPreviewProp = {
   data: any
@@ -381,7 +369,7 @@ const EssayQuestionPreview = ({
   }, [data?.id])
 
   const renderSheetEditor = useCallback(
-    ({ onChange }: any) => {
+    ({ onChange, value }: any) => {
       return (
         <HookFormExcel
           question_data={question_data}
@@ -663,6 +651,7 @@ const EssayQuestionPreview = ({
                   // }
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               ></Controller>
@@ -681,6 +670,7 @@ const EssayQuestionPreview = ({
                 render={({ field: { onChange, value } }) => {
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               />

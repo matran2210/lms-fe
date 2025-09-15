@@ -11,7 +11,7 @@ const SappDisplayText = ({
     <React.Fragment>
       {text.split('\n').map((item, index) => (
         <React.Fragment key={index}>
-          <div className={`break-all font-sans text-base ${className}`}>
+          <div className={`break-words font-sans text-base ${className}`}>
             {item}
           </div>
         </React.Fragment>

@@ -231,7 +231,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
-            name={`${index}_answer`}
+            name={`${data?.id}_${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
             fullData={{ data }}
@@ -349,7 +349,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const resetEssayBeforeAction = async () => {
     questionData?.forEach((question: any, index: number) => {
-      const name = `${index}_answer`
+      const name = `${question?.id}_${index}_answer`
       const defaultValue = getValues(name)
       handleResetEssay(index, question, defaultValue)
     })
@@ -665,7 +665,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType == QUESTION_TYPES.ESSAY) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValues(`${i}_answer`),
+          answer: getValues(`${question?.id}_${i}_answer`),
           id: question?.id,
           requirement_id: question?.requirements?.[0]?.id,
           answers: question?.answers,
@@ -1011,34 +1011,16 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getTemplateValueForWord = (question: any) => {
     const requirement = question?.requirements?.[0]
-    if (requirement?.short_answer) {
-      return requirement.short_answer
-    }
-    if (requirement?.answer_text) {
-      return requirement.answer_text
-    }
     if (requirement?.answer_template) {
       return requirement.answer_template
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template
   }
 
   const getTemplateValueForSheet = (question: any) => {
     const requirementSheet = question?.requirements?.[0]
-    if (requirementSheet?.answer_text) {
-      return requirementSheet.answer_text
-    }
-    if (requirementSheet?.short_answer) {
-      return requirementSheet.short_answer
-    }
     if (requirementSheet?.answer_template) {
       return requirementSheet.answer_template || defaultSheetData
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template || defaultSheetData
   }
@@ -1050,7 +1032,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     index: number
     question: any
   }) => {
-    const key = `${index}_answer`
+    const key = `${question?.id}_${index}_answer`
     const response_option = question?.response_option
     if (!editorRefs.current[index]) {
       editorRefs.current[index] = React.createRef()
@@ -1244,7 +1226,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         if (question.qType !== QUESTION_TYPES.ESSAY)
                           return undefined
                         const response_option = question?.response_option
-                        const name = `${index}_answer`
+                        const name = `${question?.id}_${index}_answer`
                         const formValue = getValues(name)
                         switch (response_option) {
                           case RESPONSE_OPTION.WORD:
@@ -1507,7 +1489,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           <QuitTestModal
             open={openQuit}
             setOpen={setOpenQuit}
-            handleQuit={() => backToPart()}
+            handleQuit={() => {
+              backToPart()
+            }}
             handleCancel={() => setUnsavedChanges(true)}
             content="If you quit at this time, the test results will not be saved."
             maskClosable={false}

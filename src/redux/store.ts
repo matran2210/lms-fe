@@ -4,7 +4,6 @@ import loginReducer from './slice/Login/Login'
 import userReducer from './slice/User/User'
 import confirmDialogReducer from './slice/ConfirmDialog/ConfirmDialogSlice'
 import courseActivityReducer from './slice/Course/MyCourse/Activity/Activity'
-import shortCourseActivityReducer from './slice/Course/ShortCourse/Activity/Activity'
 import notificationReducer from './slice/Notification/Notification'
 import courseActivityQuizReducer from './slice/Course/MyCourse/Activity/ActivityQuiz'
 import userGuideReducer from './slice/Course/UserGuide'
@@ -13,7 +12,6 @@ import entranceTestReducer from './slice/EntranceTest/EntranceTest'
 import eventTestReducer from './slice/EventTest/EventTest'
 import notesListReducer from './slice/Course/NotesList'
 import popupReducer from './slice/Popup/Result-test'
-import shortNotesListReducer from './slice/Course/ShortCourse/NoteList/ShortNoteList'
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +19,6 @@ export const store = configureStore({
     userReducer,
     confirmDialogReducer,
     courseActivityReducer,
-    shortCourseActivityReducer,
     notificationReducer,
     popupReducer,
     courseActivityQuizReducer,
@@ -30,7 +27,6 @@ export const store = configureStore({
     entranceTestReducer,
     eventTestReducer,
     notesListReducer,
-    shortNotesListReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

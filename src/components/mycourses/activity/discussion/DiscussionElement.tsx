@@ -362,7 +362,7 @@ function DiscussionElement({
           </div>
           <div className="mt-3 w-auto md:-mt-3 md:ml-[52px]">
             {discussionFile?.map((e) => (
-              <div key={e.id} className={`relative bg-cover bg-no-repeat `}>
+              <div key={e.id} className={`relative bg-cover bg-no-repeat`}>
                 <Image
                   width={100}
                   height={100}

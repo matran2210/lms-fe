@@ -1,7 +1,6 @@
 import { Metadata } from 'src/type/results'
 import { CourseProgram } from '..'
 import { ExaminationSubject } from '@components/profile/ExamInformation/type'
-import { ISubSection } from 'src/type/courses-3-level'
 
 export * from './Result'
 
@@ -45,8 +44,6 @@ export interface CourseSectionsWithProgress {
   learning_progress: LearningProgress
   position: number
   user_section_learning_status: string
-  activity_count?: number
-  subsections: ISubSection[]
 }
 
 export interface Quiz {

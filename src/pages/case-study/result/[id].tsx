@@ -237,7 +237,7 @@ const CaseStudyResult = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
-            name={`${index}_answer`}
+            name={`${data?.id}_${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
             fullData={{
@@ -294,7 +294,7 @@ const CaseStudyResult = () => {
         item.question.qType === QUESTION_TYPES.ESSAY
           ? { ...item.question, response_option: item.response_option }
           : item.question
-      const name = `${index}_answer`
+      const name = `${question?.id}_${index}_answer`
       const defaultValue = getValues(name)
       handleResetEssay(index, question, defaultValue)
     })

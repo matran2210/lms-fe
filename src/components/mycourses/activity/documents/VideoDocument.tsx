@@ -1,25 +1,20 @@
-import { TimeLineIcon } from '@assets/icons'
-import SappButton from '@components/base/button/SappButton'
+import { memo, useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import SappModal from '@components/base/modal/SappModal'
 import SAPPVideo from '@components/base/video/SAPPVideo'
 import { formatTime, htmlToRaw } from '@components/common/timer'
-import TimeLineModal from '@components/courses/timeline/TimeLineModal'
 import { video_url } from '@utils/constants'
 import { debounce } from '@utils/helpers'
-import { memo, useEffect, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useAppDispatch } from 'src/redux/hook'
 import {
   IActivityStateQuestion,
   fetchQuestionById,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 import { IQuestion, IVideo } from 'src/type/course/Question'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
-import QuizModal from '@components/courses/video/QuizModal'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import clsx from 'clsx'
 import SappIcon from 'src/common/SappIcon'
-import { GRADING_PREFERENCE } from 'src/constants'
 
 type Props = {
   videos?: IVideo[]
@@ -83,7 +78,7 @@ const VideoDocument = ({
   const [isConfirmQuestion, setIsConfirmQuestion] = useState<boolean>(false)
   const [lastQuestion, setLastQuestion] = useState<IQuestion>()
   const { handleSubmit, reset } = useForm()
-  const internalRef = useRef<IntersectionObserver>()
+  const internalRef = useRef<any>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
 
@@ -349,17 +344,6 @@ const VideoDocument = ({
     }
   }, [atLastQuestion, isConfirmQuestion])
 
-  const handleCancelQuestion = () => {
-    handleClose({
-      questionId: activeQuestion?.id,
-      listQuestion: currentListQuestion,
-    })
-  }
-
-  const handleSubmitQuestion = handleSubmit(() =>
-    onSubmit(activeQuestion?.corrects ? true : false),
-  )
-
   return (
     <div>
       <div
@@ -412,16 +396,9 @@ const VideoDocument = ({
           ) : (
             <></>
           )}
-          <TimeLineModal
-            items={timeLine}
-            visible={
-              activeTab === 'timeline' && currentVideo?.file?.id === activeVideo
-            }
-            onClose={() => handleCloseTab?.('')}
-            onGoTimeline={handleGoTimeline}
-          />
-          <div className="max-w-[100px]: absolute -right-[3px] bottom-0 hidden w-[412px] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
-            <div className="h-full max-h-[412px] flex-1 snap-y overflow-y-auto bg-white">
+
+          <div className="max-w-[6.25rem]: absolute -right-[0.1875rem] bottom-0 hidden w-[25.75rem] translate-y-full animate-fade-in-overlay overflow-hidden bg-white py-3 shadow-single-dialog group-hover:block">
+            <div className="h-full max-h-[25.75rem] flex-1 snap-y overflow-y-auto bg-white">
               {timeLine?.map((e, i) => {
                 return (
                   <div
@@ -459,71 +436,49 @@ const VideoDocument = ({
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
           thumbnail={currentVideo?.file?.resource?.thumbnail}
-          modalOpen={modalOpen}
-          finishAll={finishAll}
-          isConfirmQuestion={isConfirmQuestion}
-          activityId={activityId}
-          tabId={tabId}
-          quizId={quizId}
-          questionRef={questionRef}
-          activeQuestion={activeQuestion}
-          document_id={document_id}
-          grading_preference={grading_preference as GRADING_PREFERENCE}
-          handleSubmitQuestion={handleSubmitQuestion}
-          handleCancelQuestion={handleCancelQuestion}
         >
           {/* Modal for quiz questions */}
-          {newQuizModal ? (
-            <QuizModal
-              modalOpen={modalOpen}
-              onSubmit={handleSubmitQuestion}
-              onCancel={handleCancelQuestion}
-              finishAll={finishAll}
-              isConfirmQuestion={isConfirmQuestion}
-              questionRef={questionRef}
-              activeQuestion={activeQuestion}
-              activityId={activityId}
-              tabId={tabId}
-              quizId={quizId}
-              document_id={document_id}
-              grading_preference={grading_preference}
-            />
-          ) : (
-            <SappModal
-              open={modalOpen}
-              customTitle={
-                <div className="!text-xl font-bold text-bw-1">Question</div>
-              }
-              parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
-              okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
-              buttonSize="small"
-              size="max-w-full"
-              position="center"
-              isInner={true}
-              isBordered={true}
-              okButtonClass="!w-20 h-8.5 !px-0"
-              cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
-              footerButtonClassName="!justify-between flex"
-              handleSubmit={handleSubmitQuestion}
-              handleCancel={handleCancelQuestion}
-              closeAfterSubmit={false}
-              colorCancel="textUnderline"
-              cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
-            >
-              <div className="py-5">
-                <QuizComponent
-                  activityId={activityId}
-                  tabId={tabId}
-                  quizId={quizId}
-                  ref={questionRef}
-                  activeQuestion={activeQuestion}
-                  showCorrect={true}
-                  document_id={document_id}
-                  grading_preference={grading_preference}
-                ></QuizComponent>
-              </div>
-            </SappModal>
-          )}
+          <SappModal
+            open={modalOpen}
+            customTitle={
+              <div className="!text-xl font-bold text-bw-1">Question</div>
+            }
+            parentChildClass="snap-y flex-1 overflow-y-scroll bg-white -mr-4.5"
+            okButtonCaption={`${finishAll ? 'Finish' : !isConfirmQuestion ? 'Submit' : 'Finish'}`}
+            buttonSize="small"
+            size="max-w-full"
+            position="center"
+            isInner={true}
+            isBordered={true}
+            okButtonClass="!w-20 h-8.5 !px-0"
+            cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
+            footerButtonClassName="!justify-between flex"
+            handleSubmit={handleSubmit((e) =>
+              onSubmit(activeQuestion?.corrects ? true : false),
+            )}
+            handleCancel={() => {
+              handleClose({
+                questionId: activeQuestion?.id,
+                listQuestion: currentListQuestion,
+              })
+            }}
+            closeAfterSubmit={false}
+            colorCancel="textUnderline"
+            cancelButtonCaption={`${finishAll ? '' : !isConfirmQuestion ? 'Skip' : ''}`}
+          >
+            <div className="py-5">
+              <QuizComponent
+                activityId={activityId}
+                tabId={tabId}
+                quizId={quizId}
+                ref={questionRef}
+                activeQuestion={activeQuestion}
+                showCorrect={true}
+                document_id={document_id}
+                grading_preference={grading_preference}
+              ></QuizComponent>
+            </div>
+          </SappModal>
         </SAPPVideo>
       </div>
     </div>
