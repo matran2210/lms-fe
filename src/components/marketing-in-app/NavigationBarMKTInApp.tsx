@@ -15,7 +15,7 @@ const NavigationBarMKTInApp = () => {
   ]
 
   return (
-    <div className="absolute left-1/2 top-[72px] inline-flex w-auto -translate-x-1/2 items-center justify-between rounded-[50px] bg-white p-3 outline outline-1 outline-offset-[-1px] outline-primary">
+    <div className="absolute left-1/2 top-14 hidden w-auto -translate-x-1/2  items-center justify-between rounded-[50px] bg-white p-3 outline outline-1 outline-offset-[-1px] outline-primary lg:inline-flex xl:top-[72px]">
       {navigationItems.map((item) => {
         const isActive = (router.query?.tab || 'home') === item.href
 
@@ -23,7 +23,7 @@ const NavigationBarMKTInApp = () => {
           <div
             key={item.title}
             className={clsx(
-              'flex cursor-pointer items-center justify-center gap-2.5 rounded-[50px] px-6 py-2',
+              'flex cursor-pointer items-center justify-center gap-2.5 rounded-[50px] px-4 py-2 xl:px-6',
               isActive && 'bg-primary',
             )}
             onClick={() => {
@@ -35,7 +35,7 @@ const NavigationBarMKTInApp = () => {
           >
             <div
               className={clsx(
-                'justify-start text-nowrap text-center text-base font-normal leading-normal text-gray-500',
+                'text-gray-500 justify-start text-nowrap text-center text-base font-normal leading-normal',
                 isActive && 'text-white',
               )}
             >

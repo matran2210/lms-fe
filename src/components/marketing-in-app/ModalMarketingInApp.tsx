@@ -56,7 +56,7 @@ const ModalMarketingInApp = ({
             className="w-full lg:text-lg"
             size={isMobileView || isTabletView ? 'small' : 'medium'}
             onClick={() => {
-              router.push('/marketing-in-app')
+              window.open('/marketing-in-app', '_blank') // mở tab mới
             }}
           />
           <ButtonText
