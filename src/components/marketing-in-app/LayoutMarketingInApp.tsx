@@ -19,19 +19,18 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         <title>{title}</title>
       </Head>
 
-      <div className="min-h-screen w-full bg-white">
-        <div className="relative min-h-screen w-screen overflow-y-auto">
+      <div className="relative min-h-screen w-screen overflow-y-auto overflow-x-hidden">
+        <div className="max-w-full">
           <Image
             src="https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt.png"
             alt="bg dashboard"
-            layout="responsive" // Next 12: responsive = width 100%, height auto
-            width={1920} // tỉ lệ gốc ảnh
-            height={6170} // tỉ lệ gốc ảnh
+            layout="responsive"
+            width={1920}
+            height={6170}
             priority
           />
-          <NavigationBarMKTInApp />
-          {/* <FooterMarketingInApp /> */}
         </div>
+        <NavigationBarMKTInApp />
       </div>
     </>
   )
