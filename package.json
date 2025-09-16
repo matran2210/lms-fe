@@ -91,12 +91,14 @@
     "react-rnd": "^10.5.2",
     "react-router-dom": "^6.20.0",
     "react-select": "^5.8.0",
+    "react-slick": "^0.31.0",
     "react-use-draggable-scroll": "^0.4.7",
     "sapp-common-package": "^1.3.6",
     "sapp-notification": "^1.0.7",
     "sapp-preview-part-test": "^1.4.3-test",
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
+    "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.5",
     "tailwind-merge": "^3.3.1",
     "usehooks-ts": "^3.1.0",
@@ -112,6 +114,7 @@
     "@types/node": "^18.0.0",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.2.17",
+    "@types/react-slick": "^0.23.13",
     "@types/uuid": "^9.0.7",
     "autoprefixer": "^10.4.16",
     "critters": "^0.0.19",
@@ -130,7 +133,9 @@
   "resolutions": {
     "string-width": "4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.7"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx,jsx}": [
