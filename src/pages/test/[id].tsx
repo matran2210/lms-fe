@@ -1382,7 +1382,9 @@ const TestDetail = () => {
       // No requirements -> fall back to single editor value
       const singleValue =
         isSubmit && (currentContent?.data?.requirements?.length ?? 0) <= 1
-          ? getValues(`${currentContent?.id}_0_answer`)
+          ? getValues(
+              `${currentContent?.id}_${currentContent?.data?.requirements?.length ? 0 : undefined}_answer`,
+            )
           : getValues(`${currentPage}_${essayData?.index}_answer`)
 
       if (
@@ -1683,7 +1685,7 @@ const TestDetail = () => {
     }
 
     setLoading(false)
-    handleResetRequirementIndex()
+    // handleResetRequirementIndex()
     setScratchPadValues([])
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
@@ -2586,7 +2588,21 @@ const TestDetail = () => {
     }
   }, [startResize])
 
-  const handleResetRequirementIndex = () => {
+  // const handleResetRequirementIndex = () => {
+  //   if (
+  //     tabs &&
+  //     tabs.length > 0 &&
+  //     currentTabContent &&
+  //     currentTabContent?.data?.requirements
+  //     // && !essayData
+  //   ) {
+  //     setEssayData({
+  //       req: currentTabContent?.data?.requirements?.[0],
+  //       index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
+  //     })
+  //   }
+  // }
+  useEffect(() => {
     if (
       tabs &&
       tabs.length > 0 &&
@@ -2599,7 +2615,7 @@ const TestDetail = () => {
         index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
       })
     }
-  }
+  }, [currentTabContent?.id, tabs])
 
   useEffect(() => {
     async function fetchTabs() {
