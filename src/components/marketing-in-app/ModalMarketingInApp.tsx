@@ -59,7 +59,10 @@ const ModalMarketingInApp = ({
           />
           <ButtonText
             size={isMobileView || isTabletView ? 'small' : 'medium'}
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false)
+              localStorage.setItem('openModalMarketingInApp', 'true')
+            }}
             className="lg:text-lg"
             title="Skip"
           />

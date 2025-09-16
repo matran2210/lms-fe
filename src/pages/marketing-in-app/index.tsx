@@ -33,7 +33,9 @@ const MarketingInApp = () => {
   }, [tab])
 
   return (
-    <LayoutMarketingInApp title={activeTab.title} dashboardTab={activeTab} />
+    <div className="overflow-x-hidden">
+      <LayoutMarketingInApp title={activeTab.title} dashboardTab={activeTab} />
+    </div>
   )
 }
 export default MarketingInApp
