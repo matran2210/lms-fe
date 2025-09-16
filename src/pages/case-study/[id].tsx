@@ -21,7 +21,6 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -248,6 +247,8 @@ const CaseStudyDetail = ({ questions }: any) => {
         return <div></div>
     }
   }
+  const dragStateRef = useRef({ startX: 0, startLeftWidth: 0 })
+  const currentWidthRef = useRef(0)
   const router = useRouter()
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
@@ -416,13 +417,13 @@ const CaseStudyDetail = ({ questions }: any) => {
     return result
   }
 
-  const { x } = useMousePosition()
-  useEffect(() => {
-    if (startResize) {
-      const temp = currentLeftWidth
-      setLeftWidth(temp + (currentMousePos - (x || 0)))
-    }
-  }, [x, startResize])
+  // const { x } = useMousePosition()
+  // useEffect(() => {
+  //   if (startResize) {
+  //     const temp = currentLeftWidth
+  //     setLeftWidth(temp + (currentMousePos - (x || 0)))
+  //   }
+  // }, [x, startResize])
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -946,7 +947,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const questionData = useMemo(() => {
     const data: any[] = []
-    listQuestions.map((item: any) => {
+    listQuestions.map((item: any, listIndex: number) => {
       const question = Object.values(item)[0] as any
       const topicId = Object.keys(item)[0] as string
       if (
@@ -958,16 +959,28 @@ const CaseStudyDetail = ({ questions }: any) => {
             ...question,
             requirements: [{ ...req, requirementIndex: index }],
             topic_id: topicId,
+            stableKey: `${question.id}_${index}_${listIndex}`, // ← Key stable
           })
         })
       } else {
-        data.push({ ...question, topic_id: topicId })
+        data.push({
+          ...question,
+          topic_id: topicId,
+          stableKey: `${question.id}_${listIndex}`, // ← Key stable
+        })
       }
     })
     return data
   }, [listQuestions])
 
-  editorRefs.current = new Array(questionData?.length || 0).fill(null)
+  // editorRefs.current = new Array(questionData?.length || 0).fill(null)
+  useEffect(() => {
+    // Chỉ tạo refs khi cần thiết
+    editorRefs.current = Array(questionData?.length || 0)
+      .fill(null)
+      .map((_, index) => editorRefs.current[index] || React.createRef())
+  }, [questionData?.length])
+
   const onResetFormatEssay = (key: string, value: string) => {
     resetField(key, {
       defaultValue: value,
@@ -1031,15 +1044,19 @@ const CaseStudyDetail = ({ questions }: any) => {
         break
     }
   }
+  useEffect(() => {
+    currentWidthRef.current = leftWidth
+  }, [leftWidth])
+
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Case Study">
         <div
           className="relative flex h-screen flex-col overflow-hidden bg-white"
-          onMouseUp={() => {
-            setStartResize(false)
-            setCurrentLeftWidth(leftWidth)
-          }}
+          // onMouseUp={() => {
+          //   setStartResize(false)
+          //   setCurrentLeftWidth(leftWidth)
+          // }}
         >
           {/* {startResize && (
         <div className="absolute w-screen h-screen z-[1350]"></div>
@@ -1136,11 +1153,34 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div
                 className="h-full w-[20px] cursor-ew-resize bg-gray-3"
-                onMouseDown={() => {
+                onMouseDown={(e) => {
                   setStartResize(true)
-                  setCurrentMousePos(x || 0)
+                  dragStateRef.current = {
+                    startX: e.clientX,
+                    startLeftWidth: currentLeftWidth,
+                  }
+
+                  const handleMouseMove = (moveEvent: { clientX: number }) => {
+                    requestAnimationFrame(() => {
+                      const deltaX =
+                        dragStateRef.current.startX - moveEvent.clientX
+                      const newLeftWidth =
+                        dragStateRef.current.startLeftWidth + deltaX
+                      setLeftWidth(newLeftWidth)
+                      currentWidthRef.current = newLeftWidth // Cập nhật ref ngay lập tức
+                    })
+                  }
+
+                  const handleMouseUp = () => {
+                    setStartResize(false)
+                    setCurrentLeftWidth(currentWidthRef.current) // Dùng giá trị từ ref
+                    document.removeEventListener('mousemove', handleMouseMove)
+                    document.removeEventListener('mouseup', handleMouseUp)
+                  }
+
+                  document.addEventListener('mousemove', handleMouseMove)
+                  document.addEventListener('mouseup', handleMouseUp)
                 }}
-                onMouseUp={() => setStartResize(false)}
               ></div>
               <div
                 className={`h-full overflow-auto bg-white py-6`}
