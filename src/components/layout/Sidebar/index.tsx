@@ -1,3 +1,4 @@
+import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 import LearningResource from '@components/mycourses/LearningResource'
 import PopupStep from '@components/user-guide/PopupStep'
 import { trackGAEvent } from '@utils/google-analytics'
@@ -5,7 +6,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { ECourseType, UserGuide } from 'src/constants'
+import { UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,
@@ -14,12 +15,8 @@ import {
 } from '../../../constants/menu-items'
 import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
-import ExaminationInfo from '@components/mycourses/course-detail/ExaminationInfo'
 
-import { Button, Divider } from 'antd'
-import { useCourseContext } from '@contexts/index'
-import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
-import { useStaticModalContext } from '@contexts/StaticModalContext'
+import { Divider } from 'antd'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -44,28 +41,12 @@ export default function Sidebar({
   /**
    * @description lấy state trong context
    */
-  const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
-  const { setVisibleRedirectToMasterModal } = useStaticModalContext()
   const closeSideBar = () => {
     toggleDrawer()
     document.body.classList.add('no-hover')
     setTimeout(() => {
       document.body.classList.remove('no-hover')
     }, 1000)
-  }
-
-  const handleRedirect = (type: ECourseType) => {
-    setGeneralOrMasterCourse(type)
-    switch (type) {
-      case ECourseType.MASTER:
-        setVisibleRedirectToMasterModal(true)
-        break
-      case ECourseType.GENERAL:
-        setVisibleRedirectToMasterModal(false)
-        break
-      default:
-        break
-    }
   }
 
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
@@ -151,42 +132,6 @@ export default function Sidebar({
               total={7}
             />
           )}
-          <div className={`mx-2 mt-6 rounded-[7px] bg-gray-100 p-1 md:hidden`}>
-            <div className="flex items-center gap-1">
-              <Button
-                type={
-                  generalOrMasterCourse === ECourseType.GENERAL
-                    ? 'primary'
-                    : 'text'
-                }
-                block
-                onClick={() => handleRedirect(ECourseType.GENERAL)}
-                className={clsx('w-full px-1 py-2 text-xs outline-none', {
-                  'font-semibold':
-                    generalOrMasterCourse === ECourseType.GENERAL,
-                  'text-gray-800': generalOrMasterCourse === ECourseType.MASTER,
-                })}
-              >
-                General Course
-              </Button>
-              <Button
-                type={
-                  generalOrMasterCourse === ECourseType.MASTER
-                    ? 'primary'
-                    : 'text'
-                }
-                block
-                onClick={() => handleRedirect(ECourseType.MASTER)}
-                className={clsx('w-full px-1 py-2 text-xs outline-none', {
-                  'font-semibold': generalOrMasterCourse === ECourseType.MASTER,
-                  'text-gray-800':
-                    generalOrMasterCourse === ECourseType.GENERAL,
-                })}
-              >
-                Master Finance
-              </Button>
-            </div>
-          </div>
         </div>
         {guideStatus && (guideStep === 2 || guideStep === 3) && (
           <div className="absolute inset-0 z-40 animate-fade-in-overlay rounded-xl bg-black opacity-[.55] transition-opacity" />
@@ -214,7 +159,6 @@ export default function Sidebar({
           setOpen={setOpenExaminationInfo}
         />
       )}
-      <RedirectToMasterModal />
     </div>
   )
 }

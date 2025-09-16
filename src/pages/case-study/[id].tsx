@@ -19,7 +19,6 @@ import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
-import useMousePosition from '@utils/hookMouseMove'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { uniqueId } from 'lodash'
@@ -215,9 +214,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           />
         )
       case QUESTION_TYPES.ESSAY:
-        if (!editorRefs.current[index]) {
-          editorRefs.current[index] = React.createRef()
-        }
+        // if (!editorRefs.current[index]) {
+        //   editorRefs.current[index] = React.createRef()
+        // }
         return (
           <EssayQuestionPreview
             data={requirement}
@@ -231,7 +230,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
-            name={`${index}_answer`}
+            name={`${data?.id}_${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
             fullData={{ data }}
@@ -255,13 +254,15 @@ const CaseStudyDetail = ({ questions }: any) => {
             setOpenPdf={handleOpenScratchPad}
             setUnsavedChanges={setUnsavedChanges}
             isShowContent={true}
-            externalRef={editorRefs.current[index]}
+            externalRef={ref}
           />
         )
       default:
         return <div></div>
     }
   }
+  const dragStateRef = useRef({ startX: 0, startLeftWidth: 0 })
+  const currentWidthRef = useRef(0)
   const router = useRouter()
   const valueRef = useRef<any>([])
   const containerRef = useRef<any>(null)
@@ -349,7 +350,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const resetEssayBeforeAction = async () => {
     questionData?.forEach((question: any, index: number) => {
-      const name = `${index}_answer`
+      const name = `${question?.id}_${index}_answer`
       const defaultValue = getValues(name)
       handleResetEssay(index, question, defaultValue)
     })
@@ -434,13 +435,13 @@ const CaseStudyDetail = ({ questions }: any) => {
     return result
   }
 
-  const { x } = useMousePosition()
-  useEffect(() => {
-    if (startResize) {
-      const temp = currentLeftWidth
-      setLeftWidth(temp + (currentMousePos - (x || 0)))
-    }
-  }, [x, startResize])
+  // const { x } = useMousePosition()
+  // useEffect(() => {
+  //   if (startResize) {
+  //     const temp = currentLeftWidth
+  //     setLeftWidth(temp + (currentMousePos - (x || 0)))
+  //   }
+  // }, [x, startResize])
   useEffect(() => {
     if (router.query.id) {
       dispatch(
@@ -665,7 +666,7 @@ const CaseStudyDetail = ({ questions }: any) => {
       } else if (question?.qType == QUESTION_TYPES.ESSAY) {
         arrAnswer.push({
           qType: question?.qType,
-          answer: getValues(`${i}_answer`),
+          answer: getValues(`${question?.id}_${i}_answer`),
           id: question?.id,
           requirement_id: question?.requirements?.[0]?.id,
           answers: question?.answers,
@@ -973,7 +974,7 @@ const CaseStudyDetail = ({ questions }: any) => {
 
   const questionData = useMemo(() => {
     const data: any[] = []
-    listQuestions.map((item: any) => {
+    listQuestions.map((item: any, listIndex: number) => {
       const question = Object.values(item)[0] as any
       const topicId = Object.keys(item)[0] as string
       if (
@@ -985,16 +986,28 @@ const CaseStudyDetail = ({ questions }: any) => {
             ...question,
             requirements: [{ ...req, requirementIndex: index }],
             topic_id: topicId,
+            stableKey: `${question.id}_${index}_${listIndex}`, // ← Key stable
           })
         })
       } else {
-        data.push({ ...question, topic_id: topicId })
+        data.push({
+          ...question,
+          topic_id: topicId,
+          stableKey: `${question.id}_${listIndex}`, // ← Key stable
+        })
       }
     })
     return data
   }, [listQuestions])
 
-  editorRefs.current = new Array(questionData?.length || 0).fill(null)
+  // editorRefs.current = new Array(questionData?.length || 0).fill(null)
+  useEffect(() => {
+    // Chỉ tạo refs khi cần thiết
+    editorRefs.current = Array(questionData?.length || 0)
+      .fill(null)
+      .map((_, index) => editorRefs.current[index] || React.createRef())
+  }, [questionData?.length])
+
   const onResetFormatEssay = (key: string, value: string) => {
     resetField(key, {
       defaultValue: value,
@@ -1011,34 +1024,16 @@ const CaseStudyDetail = ({ questions }: any) => {
   }
   const getTemplateValueForWord = (question: any) => {
     const requirement = question?.requirements?.[0]
-    if (requirement?.short_answer) {
-      return requirement.short_answer
-    }
-    if (requirement?.answer_text) {
-      return requirement.answer_text
-    }
     if (requirement?.answer_template) {
       return requirement.answer_template
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template
   }
 
   const getTemplateValueForSheet = (question: any) => {
     const requirementSheet = question?.requirements?.[0]
-    if (requirementSheet?.answer_text) {
-      return requirementSheet.answer_text
-    }
-    if (requirementSheet?.short_answer) {
-      return requirementSheet.short_answer
-    }
     if (requirementSheet?.answer_template) {
       return requirementSheet.answer_template || defaultSheetData
-    }
-    if (question.answer) {
-      return question.answer
     }
     return question?.answer_template || defaultSheetData
   }
@@ -1050,7 +1045,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     index: number
     question: any
   }) => {
-    const key = `${index}_answer`
+    const key = `${question?.id}_${index}_answer`
     const response_option = question?.response_option
     if (!editorRefs.current[index]) {
       editorRefs.current[index] = React.createRef()
@@ -1076,6 +1071,9 @@ const CaseStudyDetail = ({ questions }: any) => {
         break
     }
   }
+  useEffect(() => {
+    currentWidthRef.current = leftWidth
+  }, [leftWidth])
 
   const onQuit = async () => {
     await resetEssayBeforeAction()
@@ -1109,10 +1107,10 @@ const CaseStudyDetail = ({ questions }: any) => {
       >
         <div
           className="relative flex h-full flex-col overflow-hidden bg-white"
-          onMouseUp={() => {
-            setStartResize(false)
-            setCurrentLeftWidth(leftWidth)
-          }}
+          // onMouseUp={() => {
+          //   setStartResize(false)
+          //   setCurrentLeftWidth(leftWidth)
+          // }}
         >
           <div className="h-full" ref={containerRef}>
             <div className="flex h-full bg-[#F1F1F1]" id={'preview-question'}>
@@ -1184,11 +1182,34 @@ const CaseStudyDetail = ({ questions }: any) => {
               </div>
               <div
                 className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
-                onMouseDown={() => {
+                onMouseDown={(e) => {
                   setStartResize(true)
-                  setCurrentMousePos(x || 0)
+                  dragStateRef.current = {
+                    startX: e.clientX,
+                    startLeftWidth: currentLeftWidth,
+                  }
+
+                  const handleMouseMove = (moveEvent: { clientX: number }) => {
+                    requestAnimationFrame(() => {
+                      const deltaX =
+                        dragStateRef.current.startX - moveEvent.clientX
+                      const newLeftWidth =
+                        dragStateRef.current.startLeftWidth + deltaX
+                      setLeftWidth(newLeftWidth)
+                      currentWidthRef.current = newLeftWidth // Cập nhật ref ngay lập tức
+                    })
+                  }
+
+                  const handleMouseUp = () => {
+                    setStartResize(false)
+                    setCurrentLeftWidth(currentWidthRef.current) // Dùng giá trị từ ref
+                    document.removeEventListener('mousemove', handleMouseMove)
+                    document.removeEventListener('mouseup', handleMouseUp)
+                  }
+
+                  document.addEventListener('mousemove', handleMouseMove)
+                  document.addEventListener('mouseup', handleMouseUp)
                 }}
-                onMouseUp={() => setStartResize(false)}
               >
                 <div className="h-8 w-8 rounded-full bg-white">
                   <ResizeIcon />
@@ -1244,7 +1265,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                         if (question.qType !== QUESTION_TYPES.ESSAY)
                           return undefined
                         const response_option = question?.response_option
-                        const name = `${index}_answer`
+                        const name = `${question?.id}_${index}_answer`
                         const formValue = getValues(name)
                         switch (response_option) {
                           case RESPONSE_OPTION.WORD:
@@ -1268,7 +1289,9 @@ const CaseStudyDetail = ({ questions }: any) => {
                             return question?.answer_template || defaultSheetData
                         }
                       }
-
+                      if (!editorRefs.current[index]) {
+                        editorRefs.current[index] = React.createRef()
+                      }
                       return (
                         <div
                           id={`question-${index}`}
@@ -1299,7 +1322,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                             undefined,
                             question?.requirements?.[0],
                             question?.question_content,
-                            valueRef,
+                            editorRefs.current[index],
                           )}
                           {question &&
                             question.qType === QUESTION_TYPES.ESSAY &&
@@ -1507,7 +1530,9 @@ const CaseStudyDetail = ({ questions }: any) => {
           <QuitTestModal
             open={openQuit}
             setOpen={setOpenQuit}
-            handleQuit={() => backToPart()}
+            handleQuit={() => {
+              backToPart()
+            }}
             handleCancel={() => setUnsavedChanges(true)}
             content="If you quit at this time, the test results will not be saved."
             maskClosable={false}

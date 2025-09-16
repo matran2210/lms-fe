@@ -1,10 +1,12 @@
 import {
+  CalculatorIcon,
   CalculatorIconV2,
   CircleCloseIcon,
   CloseIcon,
   DocumentTextIcon,
   HourglassIcon,
   ResourceIcon,
+  ScratchPadIcon,
   ScratchPadIconV2,
   TimeLineIcon,
 } from '@assets/icons'
@@ -63,7 +65,6 @@ import { ITabs } from 'src/type'
 import BackToTop from '@components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
-import { CalculatorIcon, ScratchPadIcon } from '@assets/v2/icons'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -269,9 +270,11 @@ const ActivityPage = () => {
 
   // Clear notes & calculator
   useEffect(() => {
-    dispatch(clearNote())
+    if (!router.query?.note_id) {
+      dispatch(clearNote())
+    }
     dispatch(closeCalculator())
-  }, [dispatch, router.asPath])
+  }, [dispatch, router.asPath, router.query?.note_id])
 
   /**
    * Hàm xử lý khi kết thúc tiến trình phần của khóa học.

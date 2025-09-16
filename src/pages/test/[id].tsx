@@ -1566,43 +1566,51 @@ const TestDetail = () => {
     const resetCurrentQuestionAndNextQuestion = async (
       question: IQuestion | null | undefined,
     ) => {
-      if (currentContent?.qType === QUESTION_TYPES.ESSAY) {
-        const name = `${currentTab}_0_answer`
-        const valueFromFormReq = getValues(name)
-        const savedAnswer = answersSubmitted?.find(
-          (e: any) => e.questionId === currentTab,
+      const requirementLength = question?.requirements?.length
+      const name = `${currentTab}_${requirementLength ? 0 : undefined}_answer`
+      const valueFromFormReq = getValues(name)
+      const savedAnswer = answersSubmitted?.find(
+        (e: any) => e.questionId === currentTab,
+      )
+      const isWordDataDefault =
+        question?.response_option === RESPONSE_OPTION.WORD
+          ? DEFAULT_EDITOR_VALUE
+          : defaultSheetData
+      const getDefaultWordValue = () => {
+        if (valueFromFormReq !== undefined) {
+          return valueFromFormReq
+        }
+        const requirementId = question?.requirements?.[0]?.id
+        const savedRequirement = savedAnswer?.requirements?.find(
+          (e: any) => e.requirement_id === requirementId,
         )
-        const isWordDataDefault =
-          question?.response_option === RESPONSE_OPTION.WORD
-            ? DEFAULT_EDITOR_VALUE
-            : defaultSheetData
-        const getDefaultWordValue = () => {
-          if (valueFromFormReq !== undefined) {
-            return valueFromFormReq
-          }
-          const requirementId = question?.requirements?.[0]?.id
-          const requirement = savedAnswer?.requirements?.find(
-            (e: any) => e.requirement_id === requirementId,
-          )
+        const requirement = question?.requirements?.[0]
 
-          if (requirement?.short_answer !== undefined) {
-            return requirement.short_answer ?? isWordDataDefault
-          }
-          if (requirement?.answer_text !== undefined) {
-            return requirement.answer_text ?? isWordDataDefault
-          }
+        if (savedRequirement?.short_answer !== undefined) {
+          return savedRequirement.short_answer ?? isWordDataDefault
+        }
+        if (savedRequirement?.answer_text !== undefined) {
+          return savedRequirement.answer_text ?? isWordDataDefault
+        }
+        if (requirement?.answer_template !== undefined) {
+          return requirement.answer_template ?? isWordDataDefault
+        }
+        if (savedAnswer?.short_answer !== undefined) {
           return savedAnswer?.short_answer ?? isWordDataDefault
         }
-        onResetFormatEssay(name, getDefaultWordValue())
-        await refEditor?.current?.reset()
-        await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+        // return savedAnswer?.short_answer ?? isWordDataDefault
+        return question?.answer_template ?? isWordDataDefault
+      }
 
-        if (
-          refEditor?.current?.resetSheet &&
-          question?.response_option === RESPONSE_OPTION.SHEET
-        ) {
-          refEditor?.current?.resetSheet()
-        }
+      onResetFormatEssay(name, getDefaultWordValue())
+      await refEditor?.current?.reset()
+      await new Promise((resolve) => setTimeout(resolve, 10)) // hoặc setTimeout với delay nhỏ như 10ms
+
+      if (
+        refEditor?.current?.resetSheet &&
+        question?.response_option === RESPONSE_OPTION.SHEET
+      ) {
+        refEditor?.current?.resetSheet()
       }
     }
     const doAfterSetState = () => {
@@ -1621,6 +1629,7 @@ const TestDetail = () => {
         }
       }, 100)
     }
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       await resetCurrentQuestionAndNextQuestion(question)
@@ -1674,6 +1683,7 @@ const TestDetail = () => {
     }
 
     setLoading(false)
+    handleResetRequirementIndex()
     setScratchPadValues([])
   }
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
@@ -2576,7 +2586,7 @@ const TestDetail = () => {
     }
   }, [startResize])
 
-  useEffect(() => {
+  const handleResetRequirementIndex = () => {
     if (
       tabs &&
       tabs.length > 0 &&
@@ -2586,10 +2596,10 @@ const TestDetail = () => {
     ) {
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
-        index: 0,
+        index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
       })
     }
-  }, [currentTabContent?.id, tabs])
+  }
 
   useEffect(() => {
     async function fetchTabs() {
@@ -2874,17 +2884,8 @@ const TestDetail = () => {
   const getTemplateValueForWord = () => {
     const requirement =
       currentTabContent?.data?.requirements?.[essayData?.index]
-    if (requirement?.short_answer) {
-      return requirement.short_answer
-    }
-    if (requirement?.answer_text) {
-      return requirement.answer_text
-    }
     if (requirement?.answer_template) {
       return requirement.answer_template
-    }
-    if (currentTabContent.answer) {
-      return currentTabContent.answer
     }
     return currentTabContent?.data?.answer_template
   }
@@ -2892,17 +2893,8 @@ const TestDetail = () => {
   const getTemplateValueForSheet = () => {
     const requirementSheet =
       currentTabContent?.data?.requirements?.[essayData?.index]
-    if (requirementSheet?.answer_text) {
-      return requirementSheet.answer_text
-    }
-    if (requirementSheet?.short_answer) {
-      return requirementSheet.short_answer
-    }
     if (requirementSheet?.answer_template) {
       return requirementSheet.answer_template || defaultSheetData
-    }
-    if (currentTabContent.answer) {
-      return currentTabContent.answer
     }
     return currentTabContent?.data?.answer_template || defaultSheetData
   }

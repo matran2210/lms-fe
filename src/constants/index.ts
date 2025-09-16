@@ -42,9 +42,6 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
-  SHORT_COURSE: '/short-course',
-  SHORT_COURSE_DETAIL: '/short-course/detail',
-  SHORT_COURSE_PROFILE: '/short-course/profile',
 }
 
 export const TitleSidebar = {
@@ -586,10 +583,7 @@ export enum DATE_FORMAT {
   DATE_TIME_DASH = 'HH:mm - DD/MM/YYYY',
   DATE = 'DD/MM/YYYY',
 }
-export enum ECourseType {
-  MASTER = 'Master Finance',
-  GENERAL = 'General Course',
-}
+
 export const COOKIE_INFO = {
   SESSION_ID: 'sessionId',
   KEYCLOAK_USER_ID: 'keycloakUserId',
@@ -609,5 +603,5 @@ export * from './socketEvents'
 export * from './localStorageKeys'
 export * from './request'
 export * from './socketEvents'
-export * from './courses3level/activity'
-export * from './courses3level/courses'
+// export * from './courses3level/activity'
+// export * from './courses3level/courses'

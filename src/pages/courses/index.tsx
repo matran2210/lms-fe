@@ -13,13 +13,7 @@ import TourGuideCourseTab from 'src/assets/lotties/tour-guide-course-tab.json'
 import TourGuideCourses from 'src/assets/lotties/tour-guide-courses.json'
 import TourGuideFilter from 'src/assets/lotties/tour-guide-filter.json'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
-import {
-  ANIMATION,
-  defaultStatusCourse,
-  ECourseType,
-  PageLink,
-  UserGuide,
-} from 'src/constants'
+import { ANIMATION, defaultStatusCourse, UserGuide } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { active, clearGuideState } from 'src/redux/slice/Course/UserGuide'
@@ -29,11 +23,8 @@ import FilterCourse from '@components/mycourses/FilterCourse'
 import { useCourseContext } from '@contexts/index'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle'
-import GotoModal from '@components/courses/popup/GotoModal'
 import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 import clsx from 'clsx'
-import RedirectToMasterModal from '@components/courses/popup/RedirectToMasterModal'
-import { useStaticModalContext } from '@contexts/StaticModalContext'
 
 const DEFAULT_PAGESIZE = 9
 const defaultCategory = [
@@ -62,9 +53,6 @@ const MyCourse = () => {
   /**
    * @description lấy state trong context
    */
-  const { generalOrMasterCourse, setGeneralOrMasterCourse } = useCourseContext()
-  const { isVisibleGotoModal, setVisibleRedirectToMasterModal } =
-    useStaticModalContext()
 
   const confirmDialogOverLayRef = useRef<HTMLDivElement>(null)
   const observer = useRef<IntersectionObserver>()
@@ -92,19 +80,7 @@ const MyCourse = () => {
       dispatch(clearGuideState())
     }, 50)
   }
-  const handleRedirect = (type: ECourseType) => {
-    setGeneralOrMasterCourse(type)
-    switch (type) {
-      case ECourseType.MASTER:
-        setVisibleRedirectToMasterModal(true)
-        break
-      case ECourseType.GENERAL:
-        setVisibleRedirectToMasterModal(false)
-        break
-      default:
-        break
-    }
-  }
+
   useEffect(() => {
     if (userGuideLine === 'NOT_ACTIVE' && !guideIsActive) {
       dispatch(active())
@@ -259,7 +235,7 @@ const MyCourse = () => {
           >
             <Heading
               greeting="Welcome to"
-              title={generalOrMasterCourse}
+              title={'General Course'}
               showShadow={false}
               des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
@@ -279,48 +255,6 @@ const MyCourse = () => {
             className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
-            <div className="flex gap-2 rounded-[7px] bg-gray-canvas p-1 lg:gap-[10px]">
-              <Button
-                type={
-                  generalOrMasterCourse === ECourseType.MASTER
-                    ? 'primary'
-                    : 'text'
-                }
-                block
-                onClick={() => handleRedirect(ECourseType.MASTER)}
-                className={clsx(
-                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
-                  {
-                    'font-semibold':
-                      generalOrMasterCourse === ECourseType.MASTER,
-                    'text-gray-800':
-                      generalOrMasterCourse === ECourseType.GENERAL,
-                  },
-                )}
-              >
-                Master Finance
-              </Button>
-              <Button
-                type={
-                  generalOrMasterCourse === ECourseType.GENERAL
-                    ? 'primary'
-                    : 'text'
-                }
-                block
-                onClick={() => handleRedirect(ECourseType.GENERAL)}
-                className={clsx(
-                  'text-sx h-10 w-full p-2 outline-none lg:px-4 lg:text-base',
-                  {
-                    'font-semibold':
-                      generalOrMasterCourse === ECourseType.GENERAL,
-                    'text-gray-800':
-                      generalOrMasterCourse === ECourseType.MASTER,
-                  },
-                )}
-              >
-                General Course
-              </Button>
-            </div>
             {guideStatus && guideStep === 5 && (
               <PopupStep
                 content={UserGuide.CONTENT_STEP_5}
@@ -389,9 +323,8 @@ const MyCourse = () => {
             />
           )}
         </div>
-        <GotoModal />
 
-        {!isVisibleGotoModal && guideStatus && guideStep == 0 && (
+        {guideStatus && guideStep == 0 && (
           <PopupWelcome confirmDialogOverLayRef={confirmDialogOverLayRef} />
         )}
         {guideStatus && (
@@ -400,7 +333,6 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-[.55] transition-opacity`}
           />
         )}
-        <RedirectToMasterModal />
         <ModalMarketingInApp
           open={openModalMarketingInApp}
           setOpen={setOpenModalMarketingInApp}

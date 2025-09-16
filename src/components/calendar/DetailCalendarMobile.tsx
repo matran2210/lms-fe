@@ -16,7 +16,7 @@ import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { CollapseArrowIcon } from '@assets/icons'
-import { SpinIcon } from '@components/courses/icons'
+import { SpinIcon } from '@assets/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 

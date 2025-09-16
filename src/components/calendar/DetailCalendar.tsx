@@ -18,7 +18,7 @@ import {
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
-import { SpinIcon } from '@components/courses/icons'
+import { SpinIcon } from '@assets/icons'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 
