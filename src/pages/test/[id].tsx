@@ -155,6 +155,7 @@ const TestDetail = () => {
   const timeRef = useRef(null) as any
   const ref = useRef(null) as any
   const refEditor = useRef(null) as any
+  const currentTabIdRef = useRef(null)
   const dispatch = useAppDispatch()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
@@ -2607,9 +2608,11 @@ const TestDetail = () => {
       tabs &&
       tabs.length > 0 &&
       currentTabContent &&
-      currentTabContent?.data?.requirements
+      currentTabContent?.data?.requirements &&
+      currentTabIdRef.current !== currentTabContent?.id
       // && !essayData
     ) {
+      currentTabIdRef.current = currentTabContent?.id
       setEssayData({
         req: currentTabContent?.data?.requirements?.[0],
         index: currentTabContent?.data?.requirements?.[0] ? 0 : undefined,
