@@ -7,6 +7,7 @@ const FooterMarketingInApp = () => {
         className="cursor-pointer rounded-lg bg-white px-2 py-1 font-semibold text-primary shadow-md sm:text-sm md:px-6 md:py-2 md:text-base lg:px-8 lg:py-4 lg:text-lg"
         onClick={() => {
           router.push('/')
+          localStorage.setItem('openModalMarketingInApp', 'true')
         }}
       >
         Khám phá ngay
