@@ -1,5 +1,12 @@
 .modal-marketing-in-app {
   .ant-modal-content {
-    @apply h-[340px] !rounded-3xl p-0 md:h-[600px] lg:h-[760px];
+    @apply h-[449px] !rounded-3xl p-5 md:h-[500px] md:p-6 lg:h-[672px] lg:p-8;
   }
+}
+.modal-marketing-in-app .slick-slider {
+  @apply overflow-hidden;
+}
+
+.modal-marketing-in-app .slick-list {
+  @apply overflow-hidden;
 }

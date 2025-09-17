@@ -1,5 +1,7 @@
 import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'

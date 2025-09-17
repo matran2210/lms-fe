@@ -52,7 +52,13 @@
   align-items: center;
   display: flex;
 }
-
+.slick-list {
+  padding-left: 0 !important; /* bỏ padding trái */
+}
+.slick-slide {
+  display: flex !important;
+  justify-content: flex-start !important;
+}
 *:not(math, math *),
 *:not(math, math *)::after,
 *:not(math, math *)::before,
