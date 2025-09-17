@@ -42,6 +42,7 @@ const SliderHome = () => {
 
     return 493
   }
+
   const getHeightImg = () => {
     if (isMobileView) return 310
     if (isMDMiddleView) return 189
@@ -52,8 +53,10 @@ const SliderHome = () => {
     if (isXLMiddleView) return 220
     if (isLargeDesktopView) return 201
     if (isAlwaysShowSidebar) return 157
+
     return 310
   }
+
   const widthImg = getWidthImg()
   const heightImg = getHeightImg()
   const listSlides = [

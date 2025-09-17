@@ -3,7 +3,6 @@ import Head from 'next/head'
 import NavigationBarMKTInApp from '@components/marketing-in-app/NavigationBarMKTInApp'
 import Image from 'next/image'
 import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingInApp'
-import BgHomeMktInApp from '@assets/images/bg_home_mkt.png'
 import SliderHome from '@components/marketing-in-app/SliderHome'
 import clsx from 'clsx'
 
@@ -21,6 +20,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
   title = '',
   dashboardTab,
 }: LayoutTeacherProps) => {
+  const isHome = dashboardTab.value === 'home'
   return (
     <>
       <Head>
@@ -30,24 +30,22 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
       <div
         className={clsx(
           'relative w-screen',
-          dashboardTab.value === 'home' && 'h-screen overflow-hidden',
-          dashboardTab.value !== 'home' && ' min-h-screen overflow-y-auto',
+          isHome && 'h-screen overflow-hidden',
+          !isHome && 'min-h-screen overflow-y-auto',
         )}
       >
         <Image
           src={dashboardTab.src}
           alt={dashboardTab.title}
           priority
-          layout={dashboardTab.value === 'home' ? 'fill' : 'responsive'}
-          objectFit={dashboardTab.value === 'home' ? 'cover' : undefined}
-          width={dashboardTab.value !== 'home' ? 1920 : undefined}
-          height={
-            dashboardTab.value !== 'home' ? dashboardTab.height : undefined
-          }
+          layout={isHome ? 'fill' : 'responsive'}
+          objectFit={isHome ? 'cover' : undefined}
+          width={!isHome ? 1920 : undefined}
+          height={!isHome ? dashboardTab.height : undefined}
         />
         <NavigationBarMKTInApp />
-        {dashboardTab.value === 'home' ? (
-          <div className="absolute bottom-32 left-1/2 z-10 w-full -translate-x-1/2 px-25">
+        {isHome ? (
+          <div className="absolute bottom-32 left-1/2 w-full -translate-x-1/2 px-25">
             <SliderHome />
           </div>
         ) : (

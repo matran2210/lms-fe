@@ -36,6 +36,7 @@ const ModalMarketingInApp = ({
     autoplay: true,
     autoplaySpeed: 1500,
     initialSlide: 0,
+    arrows: false,
   }
 
   const listSlides = [
