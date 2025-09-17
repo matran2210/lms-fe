@@ -47,7 +47,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         />
         <NavigationBarMKTInApp />
         {dashboardTab.value === 'home' ? (
-          <div className="absolute bottom-5 left-1/2 z-10 w-full -translate-x-1/2 px-25">
+          <div className="absolute bottom-32 left-1/2 z-10 w-full -translate-x-1/2 px-25">
             <SliderHome />
           </div>
         ) : (

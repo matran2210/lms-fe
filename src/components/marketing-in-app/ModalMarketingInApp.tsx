@@ -7,6 +7,7 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { linkCdnMktInApp } from '@pages/marketing-in-app'
 
 const ModalMarketingInApp = ({
   open,
@@ -18,7 +19,7 @@ const ModalMarketingInApp = ({
   const { isMobileView, isTabletView } = useTailwindBreakpoint()
   const widthModal = isMobileView ? 335 : isTabletView ? 600 : 1000
   const widthImg = isMobileView ? 255 : isTabletView ? 480 : 816
-  const heightImg = isMobileView ? 97 : isTabletView ? 200 : 310
+  const heightImg = isMobileView ? 97 : isTabletView ? 182 : 310
 
   const handleClose = () => {
     setOpen(false)
@@ -37,6 +38,13 @@ const ModalMarketingInApp = ({
     initialSlide: 0,
   }
 
+  const listSlides = [
+    `${linkCdnMktInApp}/slider_modal_1_min.png`,
+    `${linkCdnMktInApp}/slider_modal_2_min.png`,
+    `${linkCdnMktInApp}/slider_modal_3_min.png`,
+    `${linkCdnMktInApp}/slider_modal_4_min.png`,
+  ]
+
   return (
     <Modal
       width={widthModal}
@@ -47,36 +55,18 @@ const ModalMarketingInApp = ({
       rootClassName="modal-marketing-in-app"
     >
       <SlickSlider {...settings}>
-        <div>
-          <Image
-            className="rounded-lg md:rounded-2xl"
-            src="https://cdn.sapp.edu.vn/icons/img_header_modal_mkt_in_app.png"
-            width={widthImg}
-            height={heightImg}
-            alt="default_bg_mkt_in_app"
-            priority
-          />
-        </div>
-        <div>
-          <Image
-            className="rounded-lg md:rounded-2xl"
-            src="https://cdn.sapp.edu.vn/icons/img_header_modal_mkt_in_app.png"
-            width={widthImg}
-            height={heightImg}
-            alt="default_bg_mkt_in_app"
-            priority
-          />
-        </div>
-        <div>
-          <Image
-            className="rounded-lg md:rounded-2xl"
-            src="https://cdn.sapp.edu.vn/icons/img_header_modal_mkt_in_app.png"
-            width={widthImg}
-            height={heightImg}
-            alt="default_bg_mkt_in_app"
-            priority
-          />
-        </div>
+        {listSlides.map((src, index) => (
+          <div key={index}>
+            <Image
+              className="rounded-lg md:rounded-2xl"
+              src={src}
+              width={widthImg}
+              height={heightImg}
+              alt={`slide-${index}`}
+              priority
+            />
+          </div>
+        ))}
       </SlickSlider>
 
       <div className="flex flex-col items-center justify-center pt-6 lg:px-[120px] lg:pt-8">

@@ -2,7 +2,7 @@ import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingIn
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
+export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 
 const listTab = [
   {
