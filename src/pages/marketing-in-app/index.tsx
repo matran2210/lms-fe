@@ -2,52 +2,56 @@ import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingIn
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-const dashboardMktInApp =
-  'https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt_small.png'
+const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 
 const listTab = [
   {
     title: 'Marketing In App',
     value: 'home',
-    src: dashboardMktInApp,
+    src: `${linkCdnMktInApp}/bg_home_mkt-min.png`,
     height: 6170,
   },
   {
     title: 'Dashboard',
     value: 'dashboard',
-    src: dashboardMktInApp,
-    height: 4170,
+    src: `${linkCdnMktInApp}/bg_dashboard_mkt-min.png`,
+    height: 6170,
   },
   {
     title: 'My Course',
     value: 'my-course',
-    src: dashboardMktInApp,
-    height: 6170,
+    src: `${linkCdnMktInApp}/bg_my_course_mkt-min.png`,
+    height: 6778,
   },
   {
     title: 'Student Calendar',
     value: 'student-calendar',
-    src: dashboardMktInApp,
-    height: 6170,
+    src: `${linkCdnMktInApp}/bg_calendar_mkt-min.png`,
+    height: 5225,
   },
   {
     title: 'Learning Activity',
     value: 'learning-activity',
-    src: dashboardMktInApp,
-    height: 6170,
+    src: `${linkCdnMktInApp}/bg_learning_activity_mkt-min.png`,
+    height: 6156,
   },
-  { title: 'Test', value: 'test', src: dashboardMktInApp, height: 6170 },
+  {
+    title: 'Test',
+    value: 'test',
+    src: `${linkCdnMktInApp}/bg_test_mkt-min.png`,
+    height: 11019,
+  },
   {
     title: 'Dashboard Test',
     value: 'dashboard-test',
-    src: dashboardMktInApp,
-    height: 6170,
+    src: `${linkCdnMktInApp}/bg_test_result_mkt-min.png`,
+    height: 5837,
   },
   {
     title: 'Exam List',
     value: 'exam-list',
-    src: dashboardMktInApp,
-    height: 6170,
+    src: `${linkCdnMktInApp}/bg_exam_list_mkt-min.png`,
+    height: 4707,
   },
 ]
 
