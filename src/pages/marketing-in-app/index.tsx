@@ -6,22 +6,49 @@ const dashboardMktInApp =
   'https://cdn.sapp.edu.vn/icons/bg_dashboard_mkt_small.png'
 
 const listTab = [
-  { title: 'Marketing In App', value: 'home', src: dashboardMktInApp },
-  { title: 'Dashboard', value: 'dashboard', src: dashboardMktInApp },
-  { title: 'My Course', value: 'my-course', src: dashboardMktInApp },
+  {
+    title: 'Marketing In App',
+    value: 'home',
+    src: dashboardMktInApp,
+    height: 6170,
+  },
+  {
+    title: 'Dashboard',
+    value: 'dashboard',
+    src: dashboardMktInApp,
+    height: 4170,
+  },
+  {
+    title: 'My Course',
+    value: 'my-course',
+    src: dashboardMktInApp,
+    height: 6170,
+  },
   {
     title: 'Student Calendar',
     value: 'student-calendar',
     src: dashboardMktInApp,
+    height: 6170,
   },
   {
     title: 'Learning Activity',
     value: 'learning-activity',
     src: dashboardMktInApp,
+    height: 6170,
   },
-  { title: 'Test', value: 'test', src: dashboardMktInApp },
-  { title: 'Dashboard Test', value: 'dashboard-test', src: dashboardMktInApp },
-  { title: 'Exam List', value: 'exam-list', src: dashboardMktInApp },
+  { title: 'Test', value: 'test', src: dashboardMktInApp, height: 6170 },
+  {
+    title: 'Dashboard Test',
+    value: 'dashboard-test',
+    src: dashboardMktInApp,
+    height: 6170,
+  },
+  {
+    title: 'Exam List',
+    value: 'exam-list',
+    src: dashboardMktInApp,
+    height: 6170,
+  },
 ]
 
 const MarketingInApp = () => {

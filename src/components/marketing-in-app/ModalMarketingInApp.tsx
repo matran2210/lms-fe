@@ -33,7 +33,7 @@ const ModalMarketingInApp = ({
     centerMode: true,
     centerPadding: isMobileView ? '12px' : isTabletView ? '24px' : '40px',
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 1500,
     initialSlide: 0,
   }
 

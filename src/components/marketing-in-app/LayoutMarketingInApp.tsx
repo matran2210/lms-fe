@@ -10,6 +10,7 @@ type LayoutTeacherProps = {
     src: string
     title: string
     value: string
+    height: number
   }
 }
 
@@ -30,7 +31,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
             alt={dashboardTab.title}
             layout="responsive"
             width={1920}
-            height={6170}
+            height={dashboardTab.height}
             priority
           />
         </div>
