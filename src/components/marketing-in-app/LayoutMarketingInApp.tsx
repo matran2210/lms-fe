@@ -1,10 +1,12 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 import Head from 'next/head'
 import NavigationBarMKTInApp from '@components/marketing-in-app/NavigationBarMKTInApp'
 import Image from 'next/image'
 import FooterMarketingInApp from '@components/marketing-in-app/FooterMarketingInApp'
 import SliderHome from '@components/marketing-in-app/SliderHome'
 import clsx from 'clsx'
+import { ValueSidebar } from 'src/constants'
+import SappLoading from 'src/common/SappLoading'
 
 type LayoutTeacherProps = {
   title: string
@@ -20,7 +22,11 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
   title = '',
   dashboardTab,
 }: LayoutTeacherProps) => {
-  const isHome = dashboardTab.value === 'home'
+  const isHome = dashboardTab.value === ValueSidebar.HOME
+  const [loaded, setLoaded] = useState(false)
+  useEffect(() => {
+    setLoaded(false)
+  }, [dashboardTab])
   return (
     <>
       <Head>
@@ -34,6 +40,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
           !isHome && 'min-h-screen overflow-y-auto',
         )}
       >
+        {!loaded && <SappLoading />}
         <Image
           src={dashboardTab.src}
           alt={dashboardTab.title}
@@ -42,6 +49,15 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
           objectFit={isHome ? 'cover' : undefined}
           width={!isHome ? 1920 : undefined}
           height={!isHome ? dashboardTab.height : undefined}
+          className={clsx(
+            'transition-opacity duration-700 ease-in-out',
+            loaded ? 'opacity-100' : 'opacity-0',
+          )}
+          onLoad={() =>
+            setTimeout(() => {
+              setLoaded(true)
+            }, 1000)
+          }
         />
         <NavigationBarMKTInApp />
         {isHome ? (

@@ -70,7 +70,7 @@ const MarketingInApp = () => {
   if (isMobileView) return null
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="pointer-events-none overflow-x-hidden">
       <LayoutMarketingInApp title={activeTab.title} dashboardTab={activeTab} />
     </div>
   )

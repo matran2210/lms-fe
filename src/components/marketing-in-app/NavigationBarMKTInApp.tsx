@@ -11,7 +11,7 @@ const NavigationBarMKTInApp = () => {
   }))
 
   return (
-    <div className="absolute left-1/2 top-10 hidden w-auto -translate-x-1/2 items-center justify-between rounded-[50px] bg-white p-3 outline outline-1 outline-offset-[-1px] outline-primary md:inline-flex lg:top-14 xl:top-[72px]">
+    <div className="pointer-events-auto absolute left-1/2 top-10 hidden w-auto -translate-x-1/2 items-center justify-between rounded-[50px] bg-white p-3 outline outline-1 outline-offset-[-1px] outline-primary md:inline-flex lg:top-14 xl:top-[72px]">
       {navigationItems.map((item) => {
         const isActive = (router.query?.tab || 'home') === item.href
 
