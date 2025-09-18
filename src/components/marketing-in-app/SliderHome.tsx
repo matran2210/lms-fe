@@ -1,8 +1,12 @@
-const SlickSlider: any =
-  (require('react-slick') as any).default || require('react-slick')
+import type { ComponentType } from 'react'
+import type { Settings } from 'react-slick'
 import { linkCdnMktInApp } from '@pages/marketing-in-app'
 import Image from 'next/image'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+// Use require to avoid type conflicts between react-slick types and React types
+const SlickSlider: ComponentType<Settings> =
+  (require('react-slick') as { default?: ComponentType<Settings> }).default ??
+  (require('react-slick') as ComponentType<Settings>)
 
 const SliderHome = () => {
   const {
