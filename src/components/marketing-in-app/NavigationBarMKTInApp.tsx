@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 const NavigationBarMKTInApp = () => {
   const router = useRouter()
+  //TODO: title với value này dùng chung thì e viết thành const đi nhé rồi apply vào, sau chẳng may sửa name hay value thì sửa 1 chỗ thôi là được
   const navigationItems = [
     { title: 'Home', href: 'home' },
     { title: 'Dashboard', href: 'dashboard' },

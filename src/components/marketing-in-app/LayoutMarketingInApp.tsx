@@ -49,9 +49,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
             <SliderHome />
           </div>
         ) : (
-          <>
-            <FooterMarketingInApp />
-          </>
+          <FooterMarketingInApp />
         )}
       </div>
     </>

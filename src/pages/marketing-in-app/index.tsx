@@ -5,6 +5,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 
+// TODO: cái title với value e viết thành const nhé, có chỗ khác dùng đấy
 const listTab = [
   {
     title: 'Marketing In App',
@@ -67,6 +68,7 @@ const MarketingInApp = () => {
   }, [tab])
 
   if (isMobileView) return null
+
   return (
     <div className="overflow-x-hidden">
       <LayoutMarketingInApp title={activeTab.title} dashboardTab={activeTab} />
