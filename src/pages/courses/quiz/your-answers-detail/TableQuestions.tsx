@@ -219,7 +219,7 @@ const TableQuestions = ({
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
-      <div className="items-center gap-x-3">
+      <div className="flex items-center gap-x-3">
         <div className="mb-6 text-base font-semibold text-[#050505] md:text-lg xl:text-xl xl:font-medium">
           Your Answer Details{' '}
           <span className="ml-5 rounded-sm bg-[#FFB8001A] px-1 py-1.5 text-sm text-[#FFB800] md:text-base">
