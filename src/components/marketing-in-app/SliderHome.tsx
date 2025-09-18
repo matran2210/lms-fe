@@ -10,7 +10,6 @@ const SlickSlider: ComponentType<Settings> =
 
 const SliderHome = () => {
   const {
-    isMobileView,
     isTabletView,
     is2XLView,
     is3XLView,
@@ -23,10 +22,10 @@ const SliderHome = () => {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: isMDMiddleView || isTabletView ? 2 : isMobileView ? 1 : 3,
+    slidesToShow: isMDMiddleView || isTabletView ? 2 : 3,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: isMobileView ? '12px' : isTabletView ? '24px' : '40px',
+    centerPadding: isTabletView ? '24px' : '40px',
     autoplay: true,
     autoplaySpeed: 1500,
     initialSlide: 0,
@@ -34,7 +33,6 @@ const SliderHome = () => {
   }
 
   const getWidthImg = () => {
-    if (isMobileView) return 493
     if (isMDMiddleView) return 300
     if (isTabletView) return 250
     if (is2XLView) return 400
@@ -48,7 +46,6 @@ const SliderHome = () => {
   }
 
   const getHeightImg = () => {
-    if (isMobileView) return 310
     if (isMDMiddleView) return 189
     if (isTabletView) return 157
     if (is2XLView) return 252
