@@ -19,7 +19,7 @@ const SliderHome = () => {
     isXLMiddleView,
     isAlwaysShowSidebar,
     isMDMiddleView,
-  } = useTailwindBreakpoint()
+  } = useTailwindBreakpoint({ isMktInApp: true })
   const settings = {
     infinite: true,
     speed: 500,

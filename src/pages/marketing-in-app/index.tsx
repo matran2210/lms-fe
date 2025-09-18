@@ -1,6 +1,7 @@
 import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 
@@ -59,10 +60,13 @@ const MarketingInApp = () => {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState(listTab[0])
   const { tab } = router.query
+  const { isMobileView } = useTailwindBreakpoint()
+
   useEffect(() => {
     setActiveTab(listTab.find((item) => item.value === tab) || listTab[0])
   }, [tab])
 
+  if (isMobileView) return null
   return (
     <div className="overflow-x-hidden">
       <LayoutMarketingInApp title={activeTab.title} dashboardTab={activeTab} />

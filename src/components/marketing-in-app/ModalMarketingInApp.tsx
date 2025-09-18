@@ -91,14 +91,16 @@ const ModalMarketingInApp = ({
             size={isMobileView || isTabletView ? 'small' : 'medium'}
             onClick={() => {
               handleClose()
-              window.open('/marketing-in-app', '_blank') // mở tab mới
+              if (!isMobileView) window.open('/marketing-in-app', '_blank')
             }}
           />
-          <ButtonText
-            size={isMobileView || isTabletView ? 'small' : 'medium'}
-            onClick={handleClose}
-            title="Skip"
-          />
+          {!isMobileView && (
+            <ButtonText
+              size={isTabletView ? 'small' : 'medium'}
+              onClick={handleClose}
+              title="Skip"
+            />
+          )}
         </div>
       </div>
     </Modal>
