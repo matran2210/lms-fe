@@ -1337,3 +1337,7 @@ select:focus {
 [type='search']:focus {
   --tw-ring-color: none;
 }
+
+.luckysheet-scrollbar-ltr {
+  z-index: 500 !important;
+}

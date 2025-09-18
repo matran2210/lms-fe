@@ -2880,6 +2880,7 @@ const TestDetail = () => {
                         isShowTemplate && (
                           <div className="mt-8 flex justify-end">
                             <ButtonPrimaryV2
+                              disabled={currentTabContent.is_viewed_answer}
                               title="Reset to Answer Template"
                               onClick={onOpenResetToTemplateModal}
                             />
@@ -2966,6 +2967,7 @@ const TestDetail = () => {
                       isShowTemplate && (
                         <div className="mt-8 flex justify-end">
                           <ButtonPrimaryV2
+                            disabled={currentTabContent.is_viewed_answer}
                             title="Reset to Answer Template"
                             onClick={onOpenResetToTemplateModal}
                           />

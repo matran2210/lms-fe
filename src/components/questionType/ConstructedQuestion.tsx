@@ -404,7 +404,7 @@ const EssayQuestionPreview = ({
         editorRef={editorRef}
       />
     )
-  }, [name])
+  }, [name, defaultValue])
   return (
     <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
