@@ -187,10 +187,10 @@ const MyCourse = () => {
   }, [courses])
 
   useEffect(() => {
-    // const hasOpened = localStorage.getItem('openModalMarketingInApp')
-    // if (!hasOpened) {
-    setOpenModalMarketingInApp(true)
-    // }
+    const hasOpened = localStorage.getItem('openModalMarketingInApp')
+    if (!hasOpened) {
+      setOpenModalMarketingInApp(true)
+    }
   }, [])
 
   const firstPage = data?.pages?.[0]
