@@ -1,19 +1,14 @@
+import { listTab } from '@pages/marketing-in-app'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 
 const NavigationBarMKTInApp = () => {
   const router = useRouter()
-  //TODO: title với value này dùng chung thì e viết thành const đi nhé rồi apply vào, sau chẳng may sửa name hay value thì sửa 1 chỗ thôi là được
-  const navigationItems = [
-    { title: 'Home', href: 'home' },
-    { title: 'Dashboard', href: 'dashboard' },
-    { title: 'My Course', href: 'my-course' },
-    { title: 'Student Calendar', href: 'student-calendar' },
-    { title: 'Learning Activity', href: 'learning-activity' },
-    { title: 'Test', href: 'test' },
-    { title: 'Dashboard Test', href: 'dashboard-test' },
-    { title: 'Exam List', href: 'exam-list' },
-  ]
+
+  const navigationItems = listTab.map(({ title, value }) => ({
+    title,
+    href: value,
+  }))
 
   return (
     <div className="absolute left-1/2 top-10 hidden w-auto -translate-x-1/2 items-center justify-between rounded-[50px] bg-white p-3 outline outline-1 outline-offset-[-1px] outline-primary md:inline-flex lg:top-14 xl:top-[72px]">

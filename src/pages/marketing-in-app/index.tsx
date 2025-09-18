@@ -1,57 +1,57 @@
 import LayoutMarketingInApp from '@components/marketing-in-app/LayoutMarketingInApp'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { TitleSidebar, ValueSidebar } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export const linkCdnMktInApp = 'https://cdn.sapp.edu.vn/images/fe'
 
-// TODO: cái title với value e viết thành const nhé, có chỗ khác dùng đấy
-const listTab = [
+export const listTab = [
   {
-    title: 'Marketing In App',
-    value: 'home',
+    title: TitleSidebar.HOME,
+    value: ValueSidebar.HOME,
     src: `${linkCdnMktInApp}/bg_home_mkt-min.png`,
     height: 6170,
   },
   {
-    title: 'Dashboard',
-    value: 'dashboard',
+    title: TitleSidebar.DASHBOARD,
+    value: ValueSidebar.DASHBOARD,
     src: `${linkCdnMktInApp}/bg_dashboard_mkt-min.png`,
     height: 6170,
   },
   {
-    title: 'My Course',
-    value: 'my-course',
+    title: TitleSidebar.COURSES,
+    value: ValueSidebar.COURSES,
     src: `${linkCdnMktInApp}/bg_my_course_mkt-min.png`,
     height: 6778,
   },
   {
-    title: 'Student Calendar',
-    value: 'student-calendar',
+    title: TitleSidebar.STUDENT_CALENDAR,
+    value: ValueSidebar.STUDENT_CALENDAR,
     src: `${linkCdnMktInApp}/bg_calendar_mkt-min.png`,
     height: 5225,
   },
   {
-    title: 'Learning Activity',
-    value: 'learning-activity',
+    title: TitleSidebar.LEARNING_ACTIVITY,
+    value: ValueSidebar.LEARNING_ACTIVITY,
     src: `${linkCdnMktInApp}/bg_learning_activity_mkt-min.png`,
     height: 6156,
   },
   {
-    title: 'Test',
-    value: 'test',
+    title: TitleSidebar.TEST,
+    value: ValueSidebar.TEST,
     src: `${linkCdnMktInApp}/bg_test_mkt-min.png`,
     height: 11019,
   },
   {
-    title: 'Dashboard Test',
-    value: 'dashboard-test',
+    title: TitleSidebar.DASHBOARD_TEST,
+    value: ValueSidebar.DASHBOARD_TEST,
     src: `${linkCdnMktInApp}/bg_test_result_mkt-min.png`,
     height: 5837,
   },
   {
-    title: 'Exam List',
-    value: 'exam-list',
+    title: TitleSidebar.EXAM_LIST,
+    value: ValueSidebar.EXAM_LIST,
     src: `${linkCdnMktInApp}/bg_exam_list_mkt-min.png`,
     height: 4707,
   },
