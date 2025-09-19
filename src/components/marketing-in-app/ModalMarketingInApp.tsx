@@ -1,7 +1,10 @@
-import { Modal, Carousel } from 'antd'
+import { Modal } from 'antd'
+import type { ComponentType } from 'react'
+import type { Settings } from 'react-slick'
 // Use require to avoid type conflicts between react-slick types and React types
-const SlickSlider: any =
-  (require('react-slick') as any).default || require('react-slick')
+const SlickSlider: ComponentType<Settings> =
+  (require('react-slick') as { default?: ComponentType<Settings> }).default ??
+  (require('react-slick') as ComponentType<Settings>)
 import Image from 'next/image'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
@@ -36,6 +39,7 @@ const ModalMarketingInApp = ({
     autoplay: true,
     autoplaySpeed: 1500,
     initialSlide: 0,
+    arrows: false,
   }
 
   const listSlides = [
@@ -87,14 +91,16 @@ const ModalMarketingInApp = ({
             size={isMobileView || isTabletView ? 'small' : 'medium'}
             onClick={() => {
               handleClose()
-              window.open('/marketing-in-app', '_blank') // mở tab mới
+              if (!isMobileView) window.open('/marketing-in-app', '_blank')
             }}
           />
-          <ButtonText
-            size={isMobileView || isTabletView ? 'small' : 'medium'}
-            onClick={handleClose}
-            title="Skip"
-          />
+          {!isMobileView && (
+            <ButtonText
+              size={isTabletView ? 'small' : 'medium'}
+              onClick={handleClose}
+              title="Skip"
+            />
+          )}
         </div>
       </div>
     </Modal>

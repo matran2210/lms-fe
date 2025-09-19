@@ -12,7 +12,9 @@ const TAILWIND_BREAKPOINTS = {
   '4xl': 1920,
 }
 
-export const useTailwindBreakpoint = () => {
+export const useTailwindBreakpoint = ({
+  isMktInApp = false,
+}: { isMktInApp?: boolean } = {}) => {
   const [breakpoint, setBreakpoint] = useState<
     | 'sm'
     | 'md'
@@ -33,11 +35,11 @@ export const useTailwindBreakpoint = () => {
       if (width >= TAILWIND_BREAKPOINTS['4xl']) setBreakpoint('4xl')
       else if (width >= TAILWIND_BREAKPOINTS['3xl']) setBreakpoint('3xl')
       else if (width >= TAILWIND_BREAKPOINTS['2xl']) setBreakpoint('2xl')
-      else if (width >= TAILWIND_BREAKPOINTS['xl-middle'])
+      else if (width >= TAILWIND_BREAKPOINTS['xl-middle'] && isMktInApp)
         setBreakpoint('xl-middle')
       else if (width >= TAILWIND_BREAKPOINTS['xl']) setBreakpoint('xl')
       else if (width >= TAILWIND_BREAKPOINTS['lg']) setBreakpoint('lg')
-      else if (width >= TAILWIND_BREAKPOINTS['md-middle'])
+      else if (width >= TAILWIND_BREAKPOINTS['md-middle'] && isMktInApp)
         setBreakpoint('md-middle')
       else if (width >= TAILWIND_BREAKPOINTS['md']) setBreakpoint('md')
       else if (width >= TAILWIND_BREAKPOINTS['sm']) setBreakpoint('sm')
@@ -55,9 +57,7 @@ export const useTailwindBreakpoint = () => {
   const isShowMenuContent = ['base', 'sm', 'md'].includes(breakpoint)
   const isMobileView = ['base', 'sm'].includes(breakpoint)
   const isTabletView = ['md'].includes(breakpoint)
-  const isLargeDesktopView = ['xl', 'xl-middle', '2xl', '3xl', '4xl'].includes(
-    breakpoint,
-  )
+  const isLargeDesktopView = ['xl', '2xl', '3xl', '4xl'].includes(breakpoint)
   const is4XLView = ['4xl'].includes(breakpoint)
   const is3XLView = ['3xl'].includes(breakpoint)
   const is2XLView = ['2xl'].includes(breakpoint)

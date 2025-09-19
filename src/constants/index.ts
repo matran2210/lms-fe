@@ -69,6 +69,22 @@ export const TitleSidebar = {
   CALENDAR: 'Calendar',
   EXAM: 'Exam',
   COURSE_RESOURCES: 'Course Resource',
+  STUDENT_CALENDAR: 'Student Calendar',
+  LEARNING_ACTIVITY: 'Learning Activity',
+  TEST: 'Test',
+  DASHBOARD_TEST: 'Dashboard Test',
+  HOME: 'Home',
+}
+
+export const ValueSidebar = {
+  HOME: 'home',
+  DASHBOARD: 'dashboard',
+  COURSES: 'my-course',
+  STUDENT_CALENDAR: 'student-calendar',
+  LEARNING_ACTIVITY: 'learning-activity',
+  TEST: 'test',
+  DASHBOARD_TEST: 'dashboard-test',
+  EXAM_LIST: 'exam-list',
 }
 
 export const TitleTeacherSidebar = {

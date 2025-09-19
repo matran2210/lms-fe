@@ -1,12 +1,15 @@
-const SlickSlider: any =
-  (require('react-slick') as any).default || require('react-slick')
+import type { ComponentType } from 'react'
+import type { Settings } from 'react-slick'
 import { linkCdnMktInApp } from '@pages/marketing-in-app'
 import Image from 'next/image'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+// Use require to avoid type conflicts between react-slick types and React types
+const SlickSlider: ComponentType<Settings> =
+  (require('react-slick') as { default?: ComponentType<Settings> }).default ??
+  (require('react-slick') as ComponentType<Settings>)
 
 const SliderHome = () => {
   const {
-    isMobileView,
     isTabletView,
     is2XLView,
     is3XLView,
@@ -15,14 +18,14 @@ const SliderHome = () => {
     isXLMiddleView,
     isAlwaysShowSidebar,
     isMDMiddleView,
-  } = useTailwindBreakpoint()
+  } = useTailwindBreakpoint({ isMktInApp: true })
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: isMDMiddleView || isTabletView ? 2 : isMobileView ? 1 : 3,
+    slidesToShow: isMDMiddleView || isTabletView ? 2 : 3,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: isMobileView ? '12px' : isTabletView ? '24px' : '40px',
+    centerPadding: isTabletView ? '24px' : '40px',
     autoplay: true,
     autoplaySpeed: 1500,
     initialSlide: 0,
@@ -30,7 +33,6 @@ const SliderHome = () => {
   }
 
   const getWidthImg = () => {
-    if (isMobileView) return 493
     if (isMDMiddleView) return 300
     if (isTabletView) return 250
     if (is2XLView) return 400
@@ -42,8 +44,8 @@ const SliderHome = () => {
 
     return 493
   }
+
   const getHeightImg = () => {
-    if (isMobileView) return 310
     if (isMDMiddleView) return 189
     if (isTabletView) return 157
     if (is2XLView) return 252
@@ -52,8 +54,10 @@ const SliderHome = () => {
     if (isXLMiddleView) return 220
     if (isLargeDesktopView) return 201
     if (isAlwaysShowSidebar) return 157
+
     return 310
   }
+
   const widthImg = getWidthImg()
   const heightImg = getHeightImg()
   const listSlides = [
