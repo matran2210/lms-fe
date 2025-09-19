@@ -688,36 +688,50 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             const currentReq = activeQuestion?.requirements?.find(
               (r: any) => r?.id === currentReqId,
             )
+            const hasRequirements =
+              Array.isArray(activeQuestion?.requirements) &&
+              activeQuestion?.requirements?.length > 0
             switch (activeQuestion?.response_option) {
               case RESPONSE_OPTION.WORD: {
-                const answer = activeQuestion?.myAnswers?.find(
-                  (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
-                )
-                return (
-                  getValues(
-                    `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                  ) ||
-                  (answer?.short_answer as any) ||
-                  (currentReq?.answer_template as any) ||
-                  ''
-                )
+                if (!hasRequirements) {
+                  const answerAlone = activeQuestion?.myAnswers?.[0]
+                  return (
+                    (answerAlone?.short_answer as any) ||
+                    (activeQuestion?.answer_template as any) ||
+                    ''
+                  )
+                } else {
+                  const answer = activeQuestion?.myAnswers?.find(
+                    (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
+                  )
+                  return (
+                    (answer?.short_answer as any) ||
+                    (currentReq?.answer_template as any) ||
+                    ''
+                  )
+                }
               }
               case RESPONSE_OPTION.SHEET: {
-                const answerSheet = activeQuestion?.myAnswers?.find(
-                  (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
-                )
-                const requirementSheet =
-                  activeQuestion?.requirements?.[essayData?.index ?? 0]
-                return (
-                  answerSheet?.short_answer ||
-                  requirementSheet?.answer_template ||
-                  activeQuestion?.myAnswers?.[0]?.short_answer ||
-                  activeQuestion?.answer_template
-                )
+                if (!hasRequirements) {
+                  const answerAlone = activeQuestion?.myAnswers?.[0]
+                  return (
+                    (answerAlone?.short_answer as any) ||
+                    (activeQuestion?.answer_template as any) ||
+                    defaultSheetData
+                  )
+                } else {
+                  const answerSheet = activeQuestion?.myAnswers?.find(
+                    (ans: IEssayAnswer) => ans.requirement_id === currentReqId,
+                  )
+                  return (
+                    (answerSheet?.short_answer as any) ||
+                    (currentReq?.answer_template as any) ||
+                    defaultSheetData
+                  )
+                }
               }
             }
           }
-
           return (
             <>
               <div>
