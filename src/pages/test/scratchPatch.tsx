@@ -1,4 +1,5 @@
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import clsx from 'clsx'
 import { Control } from 'react-hook-form'
 
 type ScratchPadValue = {
@@ -18,12 +19,14 @@ interface IProps {
   handleChangeScratchPad: React.ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   >
+  className?: string
 }
 const ScratchPatch = ({
   scratchPadValues,
   control,
   scratchPads,
   handleChangeScratchPad,
+  className,
 }: IProps) => {
   return (
     <HookFormTextArea
@@ -32,7 +35,10 @@ const ScratchPatch = ({
       name={scratchPadValues?.id ?? ''}
       defaultValue={scratchPads ?? ''}
       onChange={handleChangeScratchPad}
-      className="sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal"
+      className={clsx(
+        'sapp-text-area not-resizer h-full w-full rounded-b-xl rounded-t-none px-5 py-3 placeholder:text-sm placeholder:font-normal',
+        className,
+      )}
     />
   )
 }
