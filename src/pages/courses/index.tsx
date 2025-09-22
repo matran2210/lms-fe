@@ -283,7 +283,7 @@ const MyCourse = () => {
           data-aos={ANIMATION.DATA_AOS}
         >
           <h1 className="text-lg font-semibold text-gray-800 lg:text-2xl">
-            My Courses
+            Course List
           </h1>
           <div className="relative">
             <FilterCourse totalResult={totalRecords} listFilter={listFilter} />

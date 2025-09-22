@@ -439,7 +439,7 @@ const Course = ({
   // }
   const isDesktop = screens.lg
   const maxLengthTitle = isDesktop ? 25 : 15
-  const sizeIcon = 'h-5 w-5 md:h-6 md:w-6'
+  const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
   const classNameDes = `text-sm font-normal md:text-base ${
     enableCourse ? 'text-gray-800' : 'text-gray-300'
   }`
@@ -453,7 +453,7 @@ const Course = ({
           ref={lastElementRef}
           disabledTitle={!enableCourse}
           classNameTitle={`h-12 mb-4 md:h-16`}
-          hideBadge={!enableCourse}
+          hideBadge={true}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
@@ -466,7 +466,7 @@ const Course = ({
                 <div>
                   <GraduationCapIcon className={sizeIcon} />
                 </div>
-                <div className="text-xs font-semibold text-icon md:text-sm">
+                <div className="text-xs font-medium text-icon md:text-sm">
                   <Tooltip
                     title={course?.classes?.[0]?.code}
                     showTooltip={
@@ -493,7 +493,7 @@ const Course = ({
                   <CourseTimeIcon className={sizeIcon} />
                 </div>
                 <div
-                  className={`text-xs font-semibold md:text-sm ${
+                  className={`text-xs font-medium md:text-sm ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
                   }`}
                 >
@@ -588,7 +588,7 @@ const Course = ({
           >
             {determineButtonToShow !== 'Disabled' && (
               <ButtonSecondary
-                size="medium"
+                size="small"
                 title={
                   determineButtonToShow === 'Active'
                     ? 'Activate'

@@ -137,7 +137,7 @@ const CoursesList: React.FC<CoursesProps> = ({
               </div>
               <div className={clsx('action flex items-center justify-end')}>
                 <ButtonSecondary
-                  size="medium"
+                  size="small"
                   title={'Resume'}
                   className="ml-auto w-full md:w-auto"
                 />
