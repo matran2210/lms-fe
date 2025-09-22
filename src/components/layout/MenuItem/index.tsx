@@ -309,9 +309,7 @@ export default function MenuItem({
                   '!text-primary': isInMyProfile,
                 },
               )}
-            >
-              {user?.type?.toLowerCase()}
-            </div>
+            ></div>
           </div>
         ) : (
           <>
