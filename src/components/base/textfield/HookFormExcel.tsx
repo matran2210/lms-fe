@@ -78,7 +78,7 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
         onChange(JSON.stringify(newData))
       }
     }
-  }, [onChange, fullData])
+  }, [fullData])
   const isValid = (value?: string) => {
     try {
       if (!value || isEmpty(value) || isUndefined(value) || isNull(value))

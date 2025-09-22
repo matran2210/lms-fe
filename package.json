@@ -93,7 +93,7 @@
     "react-select": "^5.8.0",
     "react-slick": "^0.31.0",
     "react-use-draggable-scroll": "^0.4.7",
-    "sapp-common-package": "^1.3.6",
+    "sapp-common-package": "^1.3.7",
     "sapp-notification": "^1.0.7",
     "sapp-preview-part-test": "^1.4.3-test",
     "sass": "^1.53.0",

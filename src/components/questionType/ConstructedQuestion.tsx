@@ -410,7 +410,7 @@ const EssayQuestionPreview = ({
         editorRef={editorRef}
       />
     )
-  }, [name])
+  }, [name, defaultValue])
   return (
     <div
       className={clsx(
