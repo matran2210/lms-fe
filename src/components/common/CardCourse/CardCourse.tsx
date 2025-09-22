@@ -64,46 +64,53 @@ const CardCourse = forwardRef<
     return (
       <div
         className={clsx(
-          'border-transparent relative flex flex-col rounded-xl border border-white bg-white p-4 shadow-card transition-shadow duration-300 hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8',
+          'border-transparent relative flex flex-col rounded-xl border border-white bg-white p-4 shadow-card transition-colors duration-300 ease-in-out hover:border-primary hover:shadow-md md:p-6 lg:rounded-2xl lg:p-8',
           classNameCard,
         )}
         ref={ref}
-        data-aos={ANIMATION.DATA_AOS}
       >
-        {!hideBadge && (
-          <Badge
-            {...(attemptStatus
-              ? mappingBadgeFromStatus[attemptStatus]!
-              : badgeCode
-                ? badgeCode
-                : {
-                    badge: 'Not started',
-                    className: 'bg-info-50 text-info',
-                  })}
-          />
-        )}
-        <div className={clsx('flex justify-between', classNameTitle)}>
-          <h2
-            className={clsx('line-clamp-2 text-base font-medium md:text-2xl', {
-              'text-gray-300': disabledTitle,
-              'text-gray-800': !disabledTitle,
-            })}
-          >
-            <Tooltip title={title} showTooltip={(title as string)?.length > 60}>
-              {truncateString(title, 60)}
-            </Tooltip>
-          </h2>
-          {isLock && (
-            <div>
-              <LockClosedIcon />
-            </div>
+        <div data-aos={ANIMATION.DATA_AOS}>
+          {!hideBadge && (
+            <Badge
+              {...(attemptStatus
+                ? mappingBadgeFromStatus[attemptStatus]!
+                : badgeCode
+                  ? badgeCode
+                  : {
+                      badge: 'Not started',
+                      className: 'bg-info-50 text-info',
+                    })}
+            />
           )}
-        </div>
+          <div className={clsx('flex justify-between', classNameTitle)}>
+            <h2
+              className={clsx(
+                'line-clamp-2 text-base font-medium md:text-2xl',
+                {
+                  'text-gray-300': disabledTitle,
+                  'text-gray-800': !disabledTitle,
+                },
+              )}
+            >
+              <Tooltip
+                title={title}
+                showTooltip={(title as string)?.length > 60}
+              >
+                {truncateString(title, 60)}
+              </Tooltip>
+            </h2>
+            {isLock && (
+              <div>
+                <LockClosedIcon />
+              </div>
+            )}
+          </div>
 
-        {children}
-        {/* card footer */}
-        {footer}
-        {/* card footer */}
+          {children}
+          {/* card footer */}
+          {footer}
+          {/* card footer */}
+        </div>
       </div>
     )
   },
