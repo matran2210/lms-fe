@@ -371,6 +371,7 @@ module.exports = {
         'focus-overdue':
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
         card: '0px 4px 16px 0px #00000014',
+        header: '0px 4px 16px 0px rgba(44, 48, 0, 0.05)',
       },
       minWidth: {
         4: '16px',

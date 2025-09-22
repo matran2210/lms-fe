@@ -81,7 +81,7 @@ const TestWrapper = ({
     <Layout className="flex h-screen flex-col">
       <Header
         className={clsx(
-          'sticky top-0 z-10 flex w-full items-center bg-white px-8 py-3 shadow-sm',
+          'sticky top-0 z-10 flex w-full items-center bg-white px-8 py-3 shadow-header',
           headerClass,
         )}
       >
