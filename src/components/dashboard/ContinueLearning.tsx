@@ -34,7 +34,7 @@ const ContinueLearning = () => {
 
             {/* Text */}
             <div className="flex flex-col">
-              <div className="text-base font-semibold text-gray-800 md:ms-1 md:text-xl">
+              <div className="text-base font-semibold text-gray-800 md:text-xl">
                 Continue your learning journey!
               </div>
 
