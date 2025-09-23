@@ -1,6 +1,6 @@
 import { Workbook } from '@fortune-sheet/react'
 import { isEmpty, isNull, isUndefined } from 'lodash'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { generateSheetId } from 'src/constants/attempt'
 
 interface WorkbookFieldProps {
@@ -54,6 +54,64 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
     }
   })
 
+  const normalizedData = useMemo(() => {
+    try {
+      const sheets = Array.isArray(initialData) ? initialData : []
+      const result = sheets.map((sheet: any, idx: number) => {
+        const rawRows: any[] = Array.isArray(sheet?.data) ? sheet.data : [[]]
+        const rowCount = Math.max(rawRows.length, 1)
+        const colCount = Math.max(
+          1,
+          ...rawRows.map((r) => (Array.isArray(r) ? r.length : 0)),
+        )
+        const padded: any[][] = Array(rowCount)
+          .fill(null)
+          .map((_, r) => {
+            const row = Array.isArray(rawRows[r]) ? rawRows[r] : []
+            const arr = Array(colCount).fill(null)
+            for (let c = 0; c < Math.min(colCount, row.length); c++) {
+              arr[c] = row[c]
+            }
+            return arr
+          })
+        const builtCelldata: any[] = []
+        for (let r = 0; r < rowCount; r++) {
+          for (let c = 0; c < colCount; c++) {
+            const cell = padded[r][c]
+            if (cell && typeof cell === 'object') {
+              builtCelldata.push({ r, c, v: cell })
+            }
+          }
+        }
+        return {
+          name: sheet?.name || `Sheet${idx + 1}`,
+          id: sheet?.id || generateSheetId(),
+          status:
+            typeof sheet?.status === 'number'
+              ? sheet.status
+              : idx === 0
+                ? 1
+                : 0,
+          row: sheet?.row || rowCount,
+          column: sheet?.column || colCount,
+          celldata:
+            Array.isArray(sheet?.celldata) && sheet.celldata.length > 0
+              ? sheet.celldata
+              : builtCelldata,
+          data: padded,
+        }
+      })
+      // eslint-disable-next-line no-console
+      console.log(
+        '[SHEET][HookFormExcel] normalizedData sheets:',
+        result.length,
+      )
+      return result
+    } catch {
+      return initialData
+    }
+  }, [initialData])
+
   const handleWorkbookChange = useCallback(() => {
     if (ignoreStructOpsRef.current) return
     if (!fullData?.is_viewed_answer && !fullData?.confirmed) {
@@ -92,7 +150,7 @@ const HookFormExcel: React.FC<WorkbookFieldProps> = ({
 
   return (
     <Workbook
-      data={initialData}
+      data={normalizedData}
       ref={refSheet}
       onChange={handleWorkbookChange}
       onOp={onOp}
