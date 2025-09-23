@@ -193,7 +193,7 @@ const Part = ({
           </div>
           <div className="action flex items-center justify-end">
             <ButtonSecondary
-              size="medium"
+              size="small"
               title={
                 course?.cta_status === 'PREVIEW'
                   ? 'Preview'

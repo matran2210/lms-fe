@@ -995,10 +995,13 @@ p a {
 }
 
 #floating-button {
-  @apply fixed h-[60px] w-[60px] cursor-pointer rounded-full bg-white;
+  @apply fixed h-[48px] w-[48px] cursor-pointer rounded-full bg-white;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 4px,
     rgba(0, 0, 0, 0.2) 0px 2px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sapp-pinned-noti-header {

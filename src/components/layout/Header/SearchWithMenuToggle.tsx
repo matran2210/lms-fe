@@ -159,7 +159,7 @@ const SearchWithMenuToggle = ({
       <FormProvider {...methods}>
         <div
           className={clsx(
-            'my-4 flex items-center justify-between gap-2 md:gap-6 lg:mb-4 lg:mt-4',
+            'flex items-center justify-between gap-2 md:gap-6 lg:mt-4',
             className,
           )}
         >
