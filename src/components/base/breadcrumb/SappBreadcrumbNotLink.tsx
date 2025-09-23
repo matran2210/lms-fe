@@ -18,10 +18,11 @@ const SappBreadcrumbNotLink = ({
 }) => {
   const router = useRouter()
   const getCourseId = router?.query?.courseId ?? router.query.id
+  const displayPaths = paths.filter((p) => p.type !== 'ACTIVITY')
 
   return (
     <>
-      {paths.map((path, index) => {
+      {displayPaths.map((path, index) => {
         let url = ''
         switch (path.type) {
           case 'PART':
@@ -39,11 +40,6 @@ const SappBreadcrumbNotLink = ({
               isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
             }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
             break
-          case 'ACTIVITY':
-            url = `${
-              isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES
-            }/${getCourseId}/section/${paths?.[0]?.id}?unit_id=${paths?.[1].id}`
-            break
         }
         return (
           <span
@@ -55,7 +51,7 @@ const SappBreadcrumbNotLink = ({
                 <Tooltip title={path?.name}>{path?.name}</Tooltip>
               </span>
             </Link>
-            {index < paths.length - 1 && (
+            {index < displayPaths.length - 1 && (
               <span className="inline-block overflow-hidden px-1 text-sm font-normal text-[#A1A1A1]">
                 {' '}
                 /{' '}
