@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { DownloadIcon } from '@assets/icons'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import { bytesToKilobyte, cleanParamsAPI } from '@utils/index'
+import { formatBytes, cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
 import React, {
@@ -32,6 +32,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import Tooltip from 'src/common/Tooltip'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
@@ -214,6 +215,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       ? '128px'
       : '136px'
 
+  const getSize = (size: number) => formatBytes(size)
   return (
     <>
       <SappDrawerV3
@@ -258,14 +260,16 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                   {resources?.resources?.map((resource) => (
                     <div
                       key={resource.id}
-                      className="flex items-center justify-between rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
+                      className="flex items-center justify-between gap-6 rounded-lg bg-gray-100 px-4 py-3 hover:bg-primary-50"
                     >
                       <div>
                         <div className="line-clamp-2 break-all text-base font-medium text-gray-800">
-                          {resource?.name} {resource?.name}
+                          <Tooltip title={resource?.name}>
+                            {resource?.name}
+                          </Tooltip>
                         </div>
                         <div className="text-sm font-normal text-gray">
-                          {bytesToKilobyte(resource?.size)}
+                          {getSize(resource?.size)}
                         </div>
                       </div>
                       <a
