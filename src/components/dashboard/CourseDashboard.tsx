@@ -150,15 +150,17 @@ const CourseDashboard = ({
                   <div className="text-lg font-semibold text-gray-800">
                     {data?.name}
                   </div>
-                  <div className="mt-2 text-base font-medium text-gray-400 xl:mt-0">
+                  <div
+                    className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-medium text-gray-400`}
+                  >
                     {!isUndefined(data?.completed)
                       ? `${data.completed}/${data.total}`
-                      : 'Complete all sections to get certificate'}
+                      : 'Complete course to get certificate'}
                   </div>
                   {!isUndefined(data?.completed) &&
                     !isUndefined(data?.total) &&
                     data.total !== 0 && (
-                      <div className="mt-3 h-1.5 w-full rounded-full bg-gray-200 xl:mt-4.5">
+                      <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
                         <div
                           className="bg-yellow-400 h-full rounded-full"
                           style={{
