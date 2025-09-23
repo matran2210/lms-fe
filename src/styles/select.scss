@@ -207,6 +207,37 @@
   }
 }
 
+.select-result-attempt {
+  /* Đổi màu khi hover vào selector */
+  &:hover {
+    .ant-select-arrow {
+      @apply text-primary;
+    }
+  }
+
+  .ant-select-selector:hover {
+    @apply border-primary;
+  }
+}
+
+/* Popup option cho Select ở CourseResult */
+.select-result-attempt-option {
+  .ant-select-item-option {
+    @apply cursor-pointer;
+  }
+
+  /* Hover đổi màu nền + text */
+  .ant-select-item-option:hover,
+  .ant-select-item-option-active {
+    @apply bg-secondary text-primary;
+  }
+
+  /* Trạng thái đã chọn đồng bộ màu với hover */
+  .ant-select-item-option-selected {
+    @apply bg-secondary text-primary;
+  }
+}
+
 .profile-subject-select {
   .ant-select-selector {
     @apply flex items-center justify-between gap-2 !pl-0;

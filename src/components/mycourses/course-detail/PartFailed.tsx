@@ -306,7 +306,7 @@ const PartFailed = ({
               <div className="flex flex-1 items-center justify-end gap-4">
                 {quizAttempt.id && (
                   <ButtonText
-                    size="medium"
+                    size="small"
                     title={titleButtonViewResult()}
                     onClick={handleRedirectResult}
                   />
@@ -314,7 +314,7 @@ const PartFailed = ({
 
                 {isShowButtonAction() && (
                   <ButtonSecondary
-                    size="medium"
+                    size="small"
                     title={renderOkButtonCaption()}
                     onClick={() => {
                       if (

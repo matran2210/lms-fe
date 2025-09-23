@@ -24,7 +24,7 @@ const Dashboard = () => {
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="2xl">
       <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
-          <div className="hidden w-full items-center justify-between pb-4 pt-10 xl:flex">
+          <div className="hidden w-full items-center justify-between pb-4 pt-4 xl:flex">
             <SappBreadCrumbs
               isTeacher={false}
               breadcrumbs={[

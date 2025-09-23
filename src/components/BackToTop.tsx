@@ -36,7 +36,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   return (
     <div
       className={clsx(
-        `fixed bottom-[160px] right-[27px] z-50 cursor-pointer`,
+        `fixed bottom-[160px] right-[20px] z-50 cursor-pointer`,
         className,
         {
           hidden: !isVisible,
@@ -44,7 +44,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
       )}
       onClick={scrollToTop}
     >
-      <div className="flex items-center justify-center rounded-full bg-white p-2 shadow-card">
+      <div className="flex size-[48px] items-center justify-center rounded-full bg-white p-2 shadow-card">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <path
             fillRule="evenodd"

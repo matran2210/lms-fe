@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 import { Select } from 'antd'
+import clsx from 'clsx'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 interface IQuizAttempt {
@@ -153,10 +154,11 @@ const ResultCourse = ({
               value: item.id,
               label: item.name,
             }))}
-            classNames={{
-              root: 'select-result-attempt',
-              popup: { root: 'select-result-attempt-option' },
-            }}
+            // classNames={{
+            //   root: 'select-result-attempt',
+            //   popup: { root: 'select-result-attempt-option' },
+            // }}
+            className={clsx('custom-select-v2 h-12 w-[60px]')}
             onPopupScroll={(e) => {
               const target = e.target as HTMLDivElement
               if (
