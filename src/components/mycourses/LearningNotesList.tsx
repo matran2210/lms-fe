@@ -310,7 +310,6 @@ const LearningNotesList = () => {
       isOpen: false,
     })
   }
-
   return (
     <SappDrawerV3
       open={notesListStatus}
@@ -340,7 +339,7 @@ const LearningNotesList = () => {
               />
             )}
 
-            <div className="result-scroll mt-6 flex h-[calc(100vh-10rem)] flex-col gap-6 overflow-y-auto md:mt-4 md:gap-0">
+            <div className="result-scroll mt-6 flex h-[250px] flex-col gap-6 overflow-y-auto md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]">
               {!isEmpty(notesListData?.notes) ? (
                 <>
                   {notesListData?.notes?.map(
@@ -395,7 +394,7 @@ const LearningNotesList = () => {
                         >
                           <div className="flex justify-between">
                             <div className="text-sm font-semibold text-gray-800 md:text-base">
-                              {note?.name}
+                              {note?.course_section_path[0]?.name}
                             </div>
                             <div onClick={(e) => e.stopPropagation()}>
                               <ActionCellV2
@@ -424,7 +423,10 @@ const LearningNotesList = () => {
                             {!isExpanded && note?.description?.length > 230 ? (
                               <button
                                 className="block text-sm font-normal text-gray-400 md:text-base"
-                                onClick={() => toggleExpand(note?.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  toggleExpand(note?.id)
+                                }}
                               >
                                 Show more
                               </button>
@@ -433,7 +435,10 @@ const LearningNotesList = () => {
                                 {note?.description?.length > 230 ? (
                                   <button
                                     className="block text-sm font-normal text-[#A1A1A1] md:text-base"
-                                    onClick={() => toggleExpand(note?.id)}
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      toggleExpand(note?.id)
+                                    }}
                                   >
                                     Show less
                                   </button>

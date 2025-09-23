@@ -7076,10 +7076,10 @@ explanation-package-ha-test@^1.1.25-test:
     styled-components "5.3.11"
     tailwindcss "^3.3.5"
 
-explanation-package@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.1.tgz#e09d65dbce688ecbdda4247ae1355cc0967dfc35"
-  integrity sha512-h6IS8tqOJaIyhpePD12ltz6n3SkwPeY60JigqmPr9sWVv1X2wXjeMWtCg4Cmm2xcDy/jpcNYd+Dp8ApcMdH5Fg==
+explanation-package@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.2.tgz#636eda1c307c0c09fabdba4279ce3c4f99b82e36"
+  integrity sha512-On5BnWyWEyO9rwrn/GfZIrnnkE6iu7muN5RM3fE+uiJavbxE3O8BWnFbP+jf9b5Ey+OmY5gP0a/FKSIKmFvllA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
