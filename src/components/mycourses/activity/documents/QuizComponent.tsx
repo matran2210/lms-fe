@@ -28,6 +28,7 @@ import DragDropQuestion, {
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { isEmptyParagraph } from '@utils/index'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
 import clsx from 'clsx'
 import { isEmpty, isUndefined } from 'lodash'
@@ -1218,17 +1219,19 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     return (
       <div>
         <div ref={questionRef}>
-          {!!activeQuestion?.question_topic?.description && (
-            <HighlightableHTML
-              initialHTML={activeQuestion?.question_topic?.description ?? ''}
-              storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
-              className="sapp-questions"
-            />
-          )}
+          {!!activeQuestion?.question_topic?.description &&
+            !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
+              <HighlightableHTML
+                initialHTML={activeQuestion?.question_topic?.description ?? ''}
+                storageKey={`quiz-${activityId}-${tabId}-${quizId}-question-topic-${activeQuestion?.id}`}
+                className="sapp-questions"
+              />
+            )}
 
-          {!!activeQuestion?.question_topic?.description && (
-            <Divider className="my-4 md:my-8" />
-          )}
+          {!!activeQuestion?.question_topic?.description &&
+            !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
+              <Divider className="my-4 md:my-8" />
+            )}
           <div className="relative">
             {renderQuestion()}
             <div className="absolute -right-4 bottom-[10px] z-[1050] flex w-12 flex-col gap-2">

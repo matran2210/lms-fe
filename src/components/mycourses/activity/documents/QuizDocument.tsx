@@ -81,25 +81,6 @@ type Props = {
   number_of_attempts?: number
 }
 
-interface IAnswer {
-  active: string
-  id: string
-  is_correct: false
-  quiz_attempt_id: string
-  time_spent: number
-  topic_attempt_id: string
-  question: {
-    id: string
-    qType: string
-    question_content: string
-    question_filter_id: {
-      part: {
-        name: string
-      }
-    }
-  }
-}
-
 const QuizDocument = ({
   questions,
   activityId,
@@ -622,6 +603,19 @@ const QuizDocument = ({
     setShowQuestionResultDetail({ id: data?.id, isOpen: true })
   }
 
+  const scrollToQuiz = (quizId: string) => {
+    setTimeout(() => {
+      const element = document.getElementById(quizId)
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        })
+      }
+    }, 100) // delay 1 chút để React render xong
+  }
+
   const startTime = quizSetting?.start_time
   const endTime = quizSetting?.end_time
   const BluredNotification = () => (
@@ -888,13 +882,15 @@ const QuizDocument = ({
                 )}
               </div>
               <div
+                id={`quiz-toggle-${quizId}`}
                 className="hidden cursor-pointer justify-end text-icon md:flex"
-                onClick={() =>
+                onClick={() => {
                   setFocusOnlyQuiz({
                     open: !focusOnlyQuiz.open,
                     id: !!focusOnlyQuiz.id ? '' : quizId,
                   })
-                }
+                  scrollToQuiz(`quiz-toggle-${quizId}`)
+                }}
               >
                 {focusOnlyQuiz.open ? (
                   <MinimumContentIcon />
