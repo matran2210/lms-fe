@@ -158,7 +158,7 @@ const ResultCourse = ({
             //   root: 'select-result-attempt',
             //   popup: { root: 'select-result-attempt-option' },
             // }}
-            className={clsx('custom-select-v2 h-12 w-[60px]')}
+            className="custom-select-v2 h-12 w-[60px]"
             onPopupScroll={(e) => {
               const target = e.target as HTMLDivElement
               if (
