@@ -18,6 +18,16 @@ Production-ready, easy to extend and customize.
 
 ---
 
+## Prerequisites
+
+- Node.js v24.3.0 or higher
+  ```bash
+  node -v
+  v24.3.0
+  ```
+
+---
+
 ## 1. Quick Start
 
 git clone https://github.com/your-org/your-repo.git my-nextjs-app
