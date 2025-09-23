@@ -70,15 +70,17 @@ const ChangExamDate = ({
         placeholder="Choose one option"
         onMenuScrollToBottom={hasNextPage && fetchNextPage}
       />
-      <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
-        You can only change the exam date up to two times.
-      </div>
-      <div className="mt-1 text-sm font-bold italic leading-snug text-gray-600">
-        {remainingChanges} change remaining
+      <div className="flex justify-between">
+        <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
+          You can only change the exam date up to two times.
+        </div>
+        <div className="mt-1 text-sm font-bold italic leading-snug text-gray-600">
+          {remainingChanges} change remaining
+        </div>
       </div>
       <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
         <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
-          Registration evidence:
+          Registration Evidence:
         </div>
         <Controller
           name="note"
