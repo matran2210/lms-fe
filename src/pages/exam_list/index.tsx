@@ -116,11 +116,7 @@ const ExamInformation = () => {
       className: className,
       align: 'center',
       render: (record) => (
-        <NameNoActionCell
-          dataColumn={record?.class?.code}
-          className={textStyle}
-          isCenter
-        />
+        <NameNoActionCell dataColumn={record?.class?.code} isCenter />
       ),
       width: 350,
     },
@@ -131,7 +127,6 @@ const ExamInformation = () => {
       render: (record) => (
         <NameNoActionCell
           dataColumn={record?.class?.course?.course_categories[0].name}
-          className={textStyle}
           isCenter
         />
       ),
@@ -144,7 +139,6 @@ const ExamInformation = () => {
       render: (record) => (
         <NameNoActionCell
           dataColumn={getDuration(record?.started_at, record?.finished_at)}
-          className={textStyle}
           isCenter
         />
       ),
@@ -260,17 +254,17 @@ const ExamInformation = () => {
           )}
         </div>
       </div>
-      {currentRow && isDrawerOpen && currentRow?.class?.id && (
-        <ExaminationInfo
-          open={isDrawerOpen}
-          setOpen={setIsDrawerOpen}
-          classIdProps={currentRow?.class?.id}
-          currentValue={currentRow?.examination_subject_id}
-          onSuccess={refetchNormal}
-          isEditProps
-          isExamList
-        />
-      )}
+      {/* {currentRow && isDrawerOpen && currentRow?.class?.id && ( */}
+      <ExaminationInfo
+        open={isDrawerOpen}
+        setOpen={setIsDrawerOpen}
+        classIdProps={currentRow?.class?.id}
+        currentValue={currentRow?.examination_subject_id}
+        onSuccess={refetchNormal}
+        isEditProps
+        isExamList
+      />
+      {/* )} */}
     </Layout>
   )
 }

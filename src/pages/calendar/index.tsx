@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { SAPPCalendarV2 } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
+  ANIMATION,
   CALENDAR_COLOR_TYPES,
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
@@ -118,17 +119,27 @@ const Page = () => {
 
   return (
     <Layout title="Calendar" size="2xl" showSidebar={isAlwaysShowSidebar}>
-      <div className="mx-auto my-0 h-full max-w-[1644px]" id="calendar-root">
+      <div
+        className="mx-auto my-0 h-full max-w-[1644px]"
+        id="calendar-root"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         <div className="relative flex h-full flex-col">
-          <div className="py-2 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10">
+          <div className="py-2 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:py-6">
             <HeaderMobile
               title={TitleSidebar.CALENDAR}
               showIcon={isTabletView || isMobileView}
               onBack={handleBack}
             />
           </div>
-          <div className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between">
-            <div className="flex w-full min-w-0 justify-center lg:flex-1">
+          <div
+            className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div
+              className="flex w-full min-w-0 justify-center lg:flex-1"
+              data-aos={ANIMATION.DATA_AOS}
+            >
               <SAPPCalendarV2
                 showWeeklyNorm={false}
                 events={
