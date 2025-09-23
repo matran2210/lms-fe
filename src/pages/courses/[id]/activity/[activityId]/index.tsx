@@ -510,7 +510,7 @@ const ActivityPage = () => {
       >
         <div
           className={clsx('h-full', {
-            'my-2 md:mt-6 lg:mt-2': !focusOnlyDiscussion,
+            'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
             'py-2': focusOnlyDiscussion,
           })}
         >
@@ -579,7 +579,7 @@ const ActivityPage = () => {
               isHidden={focusOnlyQuiz.open}
               extraActions={
                 focusOnlyDiscussion ? null : (
-                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-gray-200 px-3 py-1 text-xs text-gray-800 md:py-[6px] md:text-sm">
+                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-gray-800 md:py-[6px] md:text-sm">
                     <HourglassIcon className="shrink-0" />
                     <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                   </div>

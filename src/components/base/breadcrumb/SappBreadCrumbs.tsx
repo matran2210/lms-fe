@@ -63,13 +63,14 @@ const SappBreadCrumbs = ({
                 <li className="flex items-center">
                   <span
                     className={clsx(
-                      isTeacher && 'text-tiny',
+                      'text-[1.125rem]',
+                      // isTeacher && 'text-tiny',
                       index === lastIndex - 1
                         ? 'text-gray-800'
                         : 'text-gray-400',
                     )}
                   >
-                    {isTeacher ? '▶' : '/'}
+                    {/* {isTeacher ? '▶' : '/'} */}/
                   </span>
                 </li>
               )}
