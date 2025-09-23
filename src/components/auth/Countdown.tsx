@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState, useRef } from 'react'
 function useCountdown(
   minutes: number,
   seconds: number = 0,
+  reset: boolean = false,
 ): [string, Function, number] {
   const [time, setTime] = useState(minutes * 60 + seconds)
   const endTimeRef = useRef<number | null>(null)
@@ -38,7 +39,7 @@ function useCountdown(
     updateRemainingTime() // Cập nhật lần đầu ngay khi vào useEffect
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [reset])
 
   const formatTime = () => {
     let mins = Math.floor(time / 60)
