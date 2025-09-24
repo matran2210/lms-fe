@@ -587,21 +587,24 @@ const Course = ({
             )}
           >
             {determineButtonToShow !== 'Disabled' && (
-              <ButtonSecondary
-                size="small"
-                title={
-                  determineButtonToShow === 'Active'
-                    ? 'Activate'
-                    : determineButtonToShow
-                }
-                className="ml-auto w-full md:w-auto"
-                onClick={() => {
-                  if (isActiveStudent) {
-                    courseAction()
+              <div className="w-[84px]">
+                <ButtonSecondary
+                  full
+                  size="small"
+                  title={
+                    determineButtonToShow === 'Active'
+                      ? 'Activate'
+                      : determineButtonToShow
                   }
-                  trackGAEvent('CLick Button Course Item')
-                }}
-              />
+                  className="w-full"
+                  onClick={() => {
+                    if (isActiveStudent) {
+                      courseAction()
+                    }
+                    trackGAEvent('CLick Button Course Item')
+                  }}
+                />
+              </div>
             )}
           </div>
 

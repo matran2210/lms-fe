@@ -3,10 +3,10 @@ import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import OverallProgress from './dashboard-normal/OverallProgress'
 import LearningResult from './dashboard-normal/LearningResult'
 import { isUndefined } from 'lodash'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { COURSE_TYPE } from 'src/constants'
+import { Dispatch, SetStateAction, memo, useState } from 'react'
+import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import { ICourseInfo } from 'src/type/dashboard'
-
+import StatsSkeleton from '@components/skeleton/StatsSkeleton'
 export interface IActivityProgress {
   completed: number
   total: number
@@ -26,6 +26,10 @@ const CourseDashboard = ({
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   )
+  const [loading, setLoading] = useState<boolean>(false)
+  const handleLoading = (loading: boolean) => {
+    setLoading(loading)
+  }
 
   const dashboardStats = [
     {
@@ -115,77 +119,94 @@ const CourseDashboard = ({
       ),
     },
   ]
-
   return (
-    <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
-      <div className="grid xl:grid-cols-2 xl:gap-8">
-        <div>
-          <OverallProgress setActivities={setActivities} />
+    <>
+      {/* {loading ? <div className='w-full'><DashboardSkeleton /></div> : ( */}
+      <div
+        className={`flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8`}
+        data-aos={ANIMATION.DATA_AOS}
+      >
+        <div className="grid xl:grid-cols-2 xl:gap-8">
+          <div>
+            <OverallProgress
+              setActivities={setActivities}
+              handleLoading={handleLoading}
+              loading={loading}
+            />
+          </div>
+          <div className="mt-6 rounded-2xl bg-white shadow-small xl:mt-0">
+            <WeeklyReport />
+          </div>
         </div>
-        <div className="mt-6 rounded-2xl bg-white shadow-small xl:mt-0">
-          <WeeklyReport />
-        </div>
-      </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
-        {dashboardStats.map((data) => {
-          let bgColorClass = ''
-          if (data.id === 1) bgColorClass = 'bg-primary'
-          else if (data.id === 2) bgColorClass = 'bg-info-500'
-          else if (data.id === 3) bgColorClass = 'bg-warning'
-          else bgColorClass = 'bg-success'
+        {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8"> */}
+        {loading ? (
+          <div className="w-full">
+            <StatsSkeleton></StatsSkeleton>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8">
+            {dashboardStats.map((data) => {
+              let bgColorClass = ''
+              if (data.id === 1) bgColorClass = 'bg-primary'
+              else if (data.id === 2) bgColorClass = 'bg-info-500'
+              else if (data.id === 3) bgColorClass = 'bg-warning'
+              else bgColorClass = 'bg-success'
 
-          return (
-            <div
-              className="w-full rounded-2xl bg-white p-5 shadow-small md:p-6"
-              key={data.name}
-            >
-              <div className="flex">
+              return (
                 <div
-                  className={`${bgColorClass} flex h-9 w-9 items-center justify-center rounded-md px-1.5`}
+                  className="w-full rounded-2xl bg-white p-5 shadow-small md:p-6"
+                  key={data.name}
                 >
-                  {data.icon}
-                </div>
-                <div className="ms-4 w-full">
-                  <div className="text-lg font-semibold text-gray-800">
-                    {data?.name}
-                  </div>
-                  <div
-                    className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-medium text-gray-400`}
-                  >
-                    {!isUndefined(data?.completed)
-                      ? `${data.completed}/${data.total}`
-                      : 'Complete course to get certificate'}
-                  </div>
-                  {!isUndefined(data?.completed) &&
-                    !isUndefined(data?.total) &&
-                    data.total !== 0 && (
-                      <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
-                        <div
-                          className="bg-yellow-400 h-full rounded-full"
-                          style={{
-                            width: `${Math.floor((data.completed / data.total) * 100)}%`,
-                          }}
-                        ></div>
+                  <div className="flex">
+                    <div
+                      className={`${bgColorClass} flex h-9 w-9 items-center justify-center rounded-md px-1.5`}
+                    >
+                      {data.icon}
+                    </div>
+                    <div className="ms-4 w-full">
+                      <div className="text-lg font-semibold text-gray-800">
+                        {data?.name}
                       </div>
-                    )}
+                      <div
+                        className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-medium text-gray-400`}
+                      >
+                        {!isUndefined(data?.completed)
+                          ? `${data.completed}/${data.total}`
+                          : 'Complete course to get certificate'}
+                      </div>
+                      {!isUndefined(data?.completed) &&
+                        !isUndefined(data?.total) &&
+                        data.total !== 0 && (
+                          <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
+                            <div
+                              className="bg-yellow-400 h-full rounded-full"
+                              style={{
+                                width: `${Math.floor((data.completed / data.total) * 100)}%`,
+                              }}
+                            ></div>
+                          </div>
+                        )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
+              )
+            })}
+          </div>
+        )}
+        {/* </div> */}
 
-      <div className="grid lg:flex xl:gap-8 2xl:mb-8">
-        <div className="order-2 xl:order-1 xl:w-[60%]">
-          <TopicProgress setInfoCourse={setInfoCourse} />
-        </div>
-        <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
-          <LearningResult />
+        <div className="grid lg:flex xl:gap-8 2xl:mb-8">
+          <div className="order-2 xl:order-1 xl:w-[60%]">
+            <TopicProgress setInfoCourse={setInfoCourse} />
+          </div>
+          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
+            <LearningResult />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
-export default CourseDashboard
+export default memo(CourseDashboard)
