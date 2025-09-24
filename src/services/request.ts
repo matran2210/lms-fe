@@ -81,7 +81,7 @@ request.interceptors.response.use(
       if (!isRefreshing) {
         isRefreshing = true
 
-        axios(`${baseUrl}/auth/refresh-token`, {
+        axios(`${lmsUrl}/auth/refresh-token`, {
           method: 'POST',
           headers: {
             Authorization: 'Bearer ' + getCookie(COOKIE_INFO.KEYCLOAK_TOKEN),
