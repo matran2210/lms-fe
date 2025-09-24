@@ -1,5 +1,4 @@
 import withBundleAnalyzer from '@next/bundle-analyzer'
-import { withSentryConfig } from '@sentry/nextjs'
 import removeImports from 'next-remove-imports'
 import path from 'path'
 
@@ -46,14 +45,14 @@ let nextConfig = {
 nextConfig = bundleAnalyzer(nextConfig)
 nextConfig = removeImportsPlugin(nextConfig)
 
-export default withSentryConfig(nextConfig, {
-  org: process.env.NEXT_PUBLIC_SENTRY_NAME,
-  project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
-  silent: true,
-  widenClientFileUpload: true,
-  tunnelRoute: '/monitoring',
-  hideSourceMaps: true,
-  disableLogger: true,
-  automaticVercelMonitors: true,
-  telemetry: false,
-})
+// export default withSentryConfig(nextConfig, {
+//   org: process.env.NEXT_PUBLIC_SENTRY_NAME,
+//   project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
+//   silent: true,
+//   widenClientFileUpload: true,
+//   tunnelRoute: '/monitoring',
+//   hideSourceMaps: true,
+//   disableLogger: true,
+//   automaticVercelMonitors: true,
+//   telemetry: false,
+// })
