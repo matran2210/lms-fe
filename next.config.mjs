@@ -49,7 +49,7 @@ nextConfig = removeImportsPlugin(nextConfig)
 export default withSentryConfig(nextConfig, {
   org: process.env.NEXT_PUBLIC_SENTRY_NAME,
   project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
-  silent: !process.env.CI,
+  silent: true,
   widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
   hideSourceMaps: true,
