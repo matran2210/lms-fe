@@ -2767,7 +2767,7 @@ const TestDetail = () => {
                     if (id) {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      // setEssayData(undefined)
+                      setEssayData(undefined)
                       handleChangeTab(id)
                     }
                   }}
