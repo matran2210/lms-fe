@@ -77,7 +77,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 badge: 'ACCA',
                 className: 'bg-badge-200 text-badge-500 font-medium',
               }}
-              classNameCard={clsx('lg:min-h-[444px] min-h-[344px]', {
+              classNameCard={clsx('lg:min-h-[380px] min-h-[280px]', {
                 'z-50': guideStatus && guideStep === 6,
               })}
             >
