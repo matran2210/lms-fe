@@ -10,7 +10,7 @@ type Props = {
 const NameNoActionCell: FC<Props> = ({
   dataColumn,
   isCenter = false,
-  className = 'text-sm font-normal text-gray-400',
+  className = 'text-sm font-normal text-gray-800',
 }) => (
   <div className={clsx('flex items-center', isCenter && 'justify-center')}>
     <div className="flex flex-col">

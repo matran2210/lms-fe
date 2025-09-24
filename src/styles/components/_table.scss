@@ -104,7 +104,7 @@
   }
 
   .ant-table-tbody > tr > td {
-    @apply pb-6 pl-2 pr-8 pt-8;
+    @apply px-0 pb-6 pt-8;
 
     &.custom-column-table {
       @apply pr-0;

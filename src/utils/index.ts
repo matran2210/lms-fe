@@ -577,3 +577,16 @@ export const formatPathWithQueryParams = (
   const queryString = new URLSearchParams(cleanedParams).toString()
   return queryString ? `${pathname}?${queryString}` : pathname
 }
+
+export const isEmptyParagraph = (html: string) => {
+  // Loại bỏ thẻ <p> và </p>
+  const content = html.replace(/<\/?p>/g, '')
+
+  // Decode &nbsp; thành ký tự U+00A0
+  const normalized = content.replace(/&nbsp;/g, '\u00A0')
+
+  // Trim cả space thường và nbsp
+  const cleaned = normalized.replace(/[\s\u00A0]+/g, '')
+
+  return cleaned.length === 0
+}

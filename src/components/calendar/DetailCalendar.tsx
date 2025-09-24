@@ -4,7 +4,11 @@ import { ICalendarDetail } from 'src/type/calendar'
 import CourseTree from './CourseTree'
 import SappIcon from 'src/common/SappIcon'
 import dayjs, { Dayjs } from 'dayjs'
-import { CALENDAR_FILTER_TYPE, LEARNING_USER_STATUS } from 'src/constants'
+import {
+  ANIMATION,
+  CALENDAR_FILTER_TYPE,
+  LEARNING_USER_STATUS,
+} from 'src/constants'
 import { useRouter } from 'next/router'
 import { CourseSectionType, TEST_TYPE_ENUM } from '@utils/constants'
 import { LearningMode } from 'src/type/progress'
@@ -197,7 +201,10 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
   if (!open.isOpen) return null
 
   return (
-    <div className="sticky top-4 hidden h-[calc(100vh-32px)] w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex">
+    <div
+      className="sticky top-4 hidden h-[calc(100vh-32px)] w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex"
+      data-aos={ANIMATION.DATA_AOS}
+    >
       <div className="mb-8 flex items-center justify-start gap-2">
         <button
           className="text-gray-500 hover:text-gray-700"

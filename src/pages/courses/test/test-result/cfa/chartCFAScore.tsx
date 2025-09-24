@@ -103,7 +103,7 @@ const ChartCFAScore = ({ data }: IProps) => {
                   />
                 </div>
                 <div className="w-full text-xs font-medium md:text-sm">
-                  Alternative Investment and Derivatives
+                  {item?.title}
                 </div>
                 <div className="text-xs font-normal md:text-sm">
                   {`${roundNumber(item?.max_section_score)}%`}

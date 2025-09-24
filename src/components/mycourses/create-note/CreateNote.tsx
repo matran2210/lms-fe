@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
+import { CloseIconNote, SaveIcon } from '@assets/icons'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
-import { SaveIcon, CloseIconNote } from '@assets/icons'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
-import { v4 as uuidv4 } from 'uuid'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import { closeNote } from 'src/redux/slice/Course/NotesList'
+import { z } from 'zod'
 
 interface IProps {
   id: string | undefined
@@ -121,7 +121,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
                 defaultValue={content}
               />
               <div className="flex justify-end">
-                <ButtonPrimary
+                <ButtonSecondary
                   onClick={() => {
                     handleSubmit((data: any) => {
                       onSubmit(data)
@@ -131,7 +131,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
                   startIcon={<SaveIcon />}
                 >
                   Save
-                </ButtonPrimary>
+                </ButtonSecondary>
               </div>
             </div>
           </div>

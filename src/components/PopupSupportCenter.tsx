@@ -159,11 +159,11 @@ const InfomationItem = ({
   return (
     <div onClick={onClick} className="relative mt-3 cursor-pointer">
       <div className="flex rounded-xl border border-gray-300 px-4 py-3">
-        <div className="z-[2] flex h-full w-full hover:hidden">
+        <div className="z-[2] flex h-full w-full transition-all duration-200 ease-in-out hover:hidden">
           <div className="flex items-center">{icon}</div>
           <div className="ms-3 text-[10px] text-gray-800">{children}</div>
         </div>
-        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-xl text-xs font-medium opacity-0 hover:z-10 hover:bg-secondary-600 hover:text-white hover:opacity-100">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-xl text-xs font-medium opacity-0 transition-all duration-200 ease-in-out hover:z-10 hover:bg-secondary-600 hover:text-white hover:opacity-100">
           <div>{hoverText}</div>
         </div>
       </div>
