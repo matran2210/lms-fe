@@ -44,7 +44,7 @@ const ConFirmSubmit = ({
       showFooter={false}
     >
       <div className="mx-auto flex w-max items-center justify-center rounded-full">
-        <ConfirmIcon className="md:w-22 md:h-22 h-12 w-12" />
+        <ConfirmIcon className="h-12 w-12 md:h-[88px] md:w-[88px]" />
       </div>
       <div className="flex justify-center pb-4 pt-6 text-2xl font-semibold text-gray-800 md:pb-8 md:pt-10 md:text-3xl">
         Confirm Submission

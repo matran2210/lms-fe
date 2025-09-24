@@ -2742,7 +2742,7 @@ const TestDetail = () => {
               body: 'text-sm !py-1 !px-2 flex items-center',
             }}
             getPopupContainer={(triggerNode) => triggerNode.parentElement!}
-            placement="left"
+            placement="top"
             color={'#404041'}
           >
             {/* <ButtonPrimaryV2
