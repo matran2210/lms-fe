@@ -190,7 +190,7 @@ const LearningResult = () => {
       : '%Results = Module test (40%) + Topic test (60%)'
 
   return (
-    <div className="flex h-auto w-full rounded-2xl bg-white p-4 md:p-6 xl:p-8">
+    <div className="flex h-auto w-full rounded-2xl bg-white p-4 md:p-6">
       <div className="w-full">
         <div className="mb-6 flex items-center justify-between md:mb-5 md:pb-3">
           <div className="w-full justify-between md:flex">
