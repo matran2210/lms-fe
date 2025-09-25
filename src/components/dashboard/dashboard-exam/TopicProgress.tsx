@@ -18,6 +18,13 @@ const TopicProgress = ({
   const handleTopicProgress = (data: ITopicProgress[]) => {
     if (data.length) {
       const option = {
+        grid: {
+          left: 0,
+          right: 0,
+          top: 10,
+          bottom: 0,
+          containLabel: true,
+        },
         tooltip: {
           trigger: 'item',
           borderWidth: 0,

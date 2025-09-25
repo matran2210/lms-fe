@@ -131,7 +131,7 @@ const LearningResult = () => {
               fontWeight: '500',
               lineHeight: 22,
               formatter: function (name: string) {
-                const maxLength = 16
+                const maxLength = 10
                 return name.length > maxLength
                   ? name.slice(0, maxLength) + '…'
                   : name
