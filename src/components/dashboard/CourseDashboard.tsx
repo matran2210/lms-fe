@@ -121,7 +121,6 @@ const CourseDashboard = ({
   ]
   return (
     <>
-      {/* {loading ? <div className='w-full'><DashboardSkeleton /></div> : ( */}
       <div
         className={`flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8`}
         data-aos={ANIMATION.DATA_AOS}
@@ -138,8 +137,6 @@ const CourseDashboard = ({
             <WeeklyReport />
           </div>
         </div>
-
-        {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 xl:gap-8"> */}
         {loading ? (
           <div className="w-full">
             <StatsSkeleton></StatsSkeleton>
@@ -194,8 +191,6 @@ const CourseDashboard = ({
             })}
           </div>
         )}
-        {/* </div> */}
-
         <div className="grid lg:flex xl:gap-8 2xl:mb-8">
           <div className="order-2 xl:order-1 xl:w-[60%]">
             <TopicProgress setInfoCourse={setInfoCourse} />
