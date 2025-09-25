@@ -1,4 +1,4 @@
-import { CircleCloseIcon } from '@assets/icons'
+import { CircleCloseIcon, CloseIconNote } from '@assets/icons'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -109,12 +109,14 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="text-sm font-normal">Scratch Pad</div>
+          <div className="absolute left-0 top-0 h-full w-full rounded-xl border bg-white">
+            <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+              <div className="text-sm font-semibold text-gray-800">
+                Scratch Pad
+              </div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CircleCloseIcon />
+                <CloseIconNote />
               </button>
             </div>
             <ScratchPatch
@@ -129,6 +131,7 @@ const TestScratchPads = ({
                 setScratchPads(event.target.value)
                 handleChangeScratchPad(event, currentPage)
               }}
+              className="!h-fit"
             />
           </div>
         </MovableWindow>

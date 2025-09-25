@@ -3115,36 +3115,55 @@ const TestDetail = () => {
                 >
                   <ButtonContent icon={<UnHighLightIcon />} content="" />
                 </button> */}
-                <button
-                  className={`h-fit rounded-lg ${
-                    isScatchPadEnabled && 'bg-primary'
-                  }`}
-                  onClick={() => {
-                    handleOpenScratchPad('scratch_pad')
-                    trackGAEvent('Click Button ScratchPad Test')
-                  }}
+                <Popover
+                  content={
+                    <div className="flex items-center gap-2 px-2 ">
+                      Scratch Pad
+                    </div>
+                  }
+                  trigger="hover"
+                  placement="top"
                 >
-                  <ButtonContent
-                    icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
-                    content=""
-                  />
-                </button>
-                <button
-                  className={`h-fit rounded-lg ${
-                    checkCalExist > -1 && 'bg-primary'
-                  }`}
-                  onClick={() => {
-                    handleOpenScratchPad('calculator')
-                    trackGAEvent('Click Button Calculator Test')
-                  }}
-                  disabled={checkCalExist > -1}
+                  <button
+                    className={`h-fit rounded-lg ${
+                      isScatchPadEnabled && 'bg-primary'
+                    }`}
+                    onClick={() => {
+                      handleOpenScratchPad('scratch_pad')
+                      trackGAEvent('Click Button ScratchPad Test')
+                    }}
+                  >
+                    <ButtonContent
+                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      content=""
+                    />
+                  </button>
+                </Popover>
+                <Popover
+                  content={
+                    <div className="flex items-center gap-2 px-2 ">
+                      Calculator
+                    </div>
+                  }
+                  trigger="hover"
+                  placement="top"
                 >
-                  <ButtonContent
-                    icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
-                    content=""
-                  />
-                </button>
-
+                  <button
+                    className={`h-fit rounded-lg ${
+                      checkCalExist > -1 && 'bg-primary'
+                    }`}
+                    onClick={() => {
+                      handleOpenScratchPad('calculator')
+                      trackGAEvent('Click Button Calculator Test')
+                    }}
+                    disabled={checkCalExist > -1}
+                  >
+                    <ButtonContent
+                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      content=""
+                    />
+                  </button>
+                </Popover>
                 {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
                   <button className="relative h-full" ref={dropUpRequire}>
                     <div
