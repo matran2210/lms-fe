@@ -20,22 +20,13 @@ import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
-import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
+import {
+  DEFAULT_EDITOR_VALUE,
+  generateSheetId,
+  setDefaultIdToSheetData,
+  SheetData,
+} from 'src/constants/attempt'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
-
-export type SheetData = {
-  name: string
-  id: string
-  status: number
-  data: (string | number | null)[][]
-  celldata: {
-    r: number
-    c: number
-    v: { v: string; ct: { fa: string; t: string }; m: string }
-  }[]
-  row?: number
-  column?: number
-}
 
 export type IPreviewProp = {
   data: any
@@ -372,7 +363,7 @@ const EssayQuestionPreview = ({
   }, [data?.id])
 
   const renderSheetEditor = useCallback(
-    ({ onChange }: any) => {
+    ({ onChange, value }: any) => {
       return (
         <HookFormExcel
           question_data={question_data}
@@ -413,7 +404,7 @@ const EssayQuestionPreview = ({
         editorRef={editorRef}
       />
     )
-  }, [name])
+  }, [name, defaultValue])
   return (
     <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
@@ -643,6 +634,7 @@ const EssayQuestionPreview = ({
                   // }
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               ></Controller>
@@ -661,6 +653,7 @@ const EssayQuestionPreview = ({
                 render={({ field: { onChange, value } }) => {
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               ></Controller>

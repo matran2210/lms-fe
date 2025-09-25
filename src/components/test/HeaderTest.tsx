@@ -30,6 +30,7 @@ interface IProps {
   setOpenSubmit: Dispatch<SetStateAction<boolean>>
   onSubmitAnswer: (action?: string) => void
   handleTimeoutSubmit: () => void
+  resetWordBeforeAction?: () => Promise<void>
 }
 
 const calculateRemainingTime = (
@@ -54,6 +55,7 @@ const HeaderTest = ({
   submited,
   onSubmitAnswer,
   handleTimeoutSubmit,
+  resetWordBeforeAction,
 }: IProps) => {
   const dispatch = useAppDispatch()
   // const remainingTime = calculateRemainingTime(quizAttempt?.created_at, quizAttempt?.quiz_timed);
@@ -98,7 +100,8 @@ const HeaderTest = ({
             disabled: submited,
             className: 'border border-bw-1',
             color: 'secondary',
-            onClick: () => {
+            onClick: async () => {
+              await resetWordBeforeAction?.()
               onSubmitAnswer('finish')
               if (checkUnSubmitAnswer()?.length > 0) {
                 setUnSubmitAnswer(true)
@@ -113,7 +116,8 @@ const HeaderTest = ({
             size: 'small',
             className: 'border border-bw-1 !w-[109px]',
             color: 'secondary',
-            onClick: () => {
+            onClick: async () => {
+              await resetWordBeforeAction?.()
               setOpenQuit(true)
               dispatch(disableUnsavedChange())
               // if (type === 'event-test') {

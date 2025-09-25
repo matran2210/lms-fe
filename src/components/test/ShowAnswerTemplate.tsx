@@ -9,6 +9,7 @@ import { RESPONSE_OPTION } from 'src/constants'
 import {
   Control,
   FieldValues,
+  useForm,
   UseFormGetValues,
   UseFormSetValue,
 } from 'react-hook-form'
@@ -20,68 +21,95 @@ interface IProps {
     index: number
     req?: any
   }
-  control: Control<FieldValues, any>
-  setValue: UseFormSetValue<FieldValues>
-  getValues: UseFormGetValues<FieldValues>
+  isQuiz?: boolean
+  className?: string
 }
 const ShowAnswerTemplate = ({
   currentTabContent,
   essayData,
-  control,
-  setValue,
-  getValues,
+  isQuiz,
+  className,
 }: IProps) => {
+  const { control, setValue } = useForm()
   const [showModalTemplate, setShowModalTemplate] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
 
-  const response_option = currentTabContent?.data?.response_option
+  const contentData = isQuiz ? currentTabContent : currentTabContent?.data
+  const response_option = contentData?.response_option
 
   const defaultValueEssay = () => {
     if (response_option === RESPONSE_OPTION.WORD) {
-      const requirement =
-        currentTabContent?.data?.requirements?.[essayData?.index]
-
+      const requirement = contentData?.requirements?.[essayData?.index]
       if (requirement?.answer_template) {
         return requirement.answer_template
       }
-
-      return currentTabContent?.data?.answer_template || ''
+      return contentData?.answer_template || ''
     } else if (response_option === RESPONSE_OPTION.SHEET) {
-      const requirement =
-        currentTabContent?.data?.requirements?.[essayData?.index]
+      const requirement = contentData?.requirements?.[essayData?.index]
 
       if (requirement?.answer_template) {
         return requirement.answer_template || defaultSheetData
       }
-      return currentTabContent?.data?.answer_template || defaultSheetData
+      return contentData?.answer_template || defaultSheetData
     }
   }
 
   useLayoutEffect(() => {
     if (currentTabContent) {
       setShowModalTemplate(false)
+      setShowTooltip(false)
     }
   }, [currentTabContent])
 
+  const handleToggleModal = () => {
+    if (showModalTemplate) {
+      // Khi đóng modal, ẩn tooltip
+      setShowTooltip(false)
+      setShowModalTemplate(false)
+    } else {
+      // Khi mở modal, ẩn tooltip
+      setShowTooltip(false)
+      setShowModalTemplate(true)
+    }
+  }
+
+  const handleCloseModal = () => {
+    setShowModalTemplate(false)
+    setShowTooltip(false)
+  }
+
   return (
     <>
-      <div className="absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2">
+      <div
+        className={clsx(
+          'absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2',
+          className,
+        )}
+      >
         {true && (
           <Tooltip
             placement="left"
+            visible={showTooltip && !showModalTemplate}
             title={
-              showModalTemplate ? undefined : (
-                <div className="flex items-center gap-2 text-white">
-                  <EyeIcon className="h-4 w-4" />{' '}
-                  <div className="text-sm">Show Answer Template</div>
-                </div>
-              )
+              <div className="flex items-center gap-2 text-white">
+                <EyeIcon className="h-4 w-4" />{' '}
+                <div className="text-sm">Show Answer Template</div>
+              </div>
             }
           >
             <div
               className={clsx(
                 'group bottom-0 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
               )}
-              onClick={() => setShowModalTemplate(!showModalTemplate)}
+              onClick={handleToggleModal}
+              onMouseEnter={() => {
+                if (!showModalTemplate) {
+                  setShowTooltip(true)
+                }
+              }}
+              onMouseLeave={() => {
+                setShowTooltip(false)
+              }}
             >
               <EyeIcon />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
@@ -91,7 +119,7 @@ const ShowAnswerTemplate = ({
       </div>
       {showModalTemplate && (
         <ModalResizeable
-          handleCloseScratchPad={() => setShowModalTemplate(false)}
+          handleCloseScratchPad={handleCloseModal}
           rootClassName="rounded-xl"
           bodyClassName="p-6"
           contentClassName={clsx('!p-0', {
@@ -113,12 +141,13 @@ const ShowAnswerTemplate = ({
               </div>
               <button
                 className="absolute right-0 top-0"
-                onClick={() => setShowModalTemplate(false)}
+                onClick={handleCloseModal}
               >
                 <CircleCloseIcon />
               </button>
             </div>
           }
+          isInBody
         >
           <div
             className={clsx('h-[100%-40px] bg-white ', {
@@ -131,7 +160,7 @@ const ShowAnswerTemplate = ({
               question_content={''}
               index={essayData?.index}
               question_data={{
-                ...currentTabContent?.data,
+                ...contentData,
                 assignment_type: 'TEXT',
               }}
               control={control}

@@ -25,7 +25,12 @@ interface IProps {
 const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
   const [code, setCode] = useState(Array(6).join('.').split('.'))
   const [canResend, setCanResend] = useState(false)
-  const [timeCountDown, setTimeCountDown, time] = useCountdown(5)
+  const [resetCountdown, setResetCountdown] = useState(false)
+  const [timeCountDown, setTimeCountDown, time] = useCountdown(
+    0,
+    0,
+    resetCountdown,
+  )
   const [timeCountDownResent, settimeCountDownResent] = useState<number>(285)
   const [errorMessage, setErrorMessage] = useState('')
   const inputRefs = Array(6)
@@ -39,6 +44,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
    */
   useEffect(() => {
     if (open) {
+      setResetCountdown((prev) => !prev)
       setTimeCountDown(5)
       setErrorMessage('')
     }
@@ -132,6 +138,7 @@ const PasswordProfile = ({ open, reset, setOpen, getValues }: IProps) => {
       settimeCountDownResent(() => {
         if (time <= 0) {
           setTimeCountDown(5)
+          setResetCountdown((prev) => !prev)
           return 285
         }
         return time - 15

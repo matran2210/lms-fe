@@ -134,7 +134,7 @@ const ChartCMAScore = ({
         {data?.map((item) => {
           return (
             <div key={item.part_id} className="w-auto">
-              <div className="w-full break-all py-2 text-medium-sm font-medium leading-4 text-bw-1">
+              <div className="w-full whitespace-normal break-words py-2 text-medium-sm font-medium leading-4 text-bw-1">
                 {`${item?.short_name ? item?.short_name + ' -' : ''} ${item?.title}`}
               </div>
             </div>

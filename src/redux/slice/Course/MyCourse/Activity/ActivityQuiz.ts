@@ -21,6 +21,7 @@ export interface IActivityStateQuestion extends IQuestion {
   quiz_position_mapping?: any
   defaultValue?: any
   isDrafAnswer?: boolean
+  answer_template?: string
 }
 
 /**
@@ -529,7 +530,7 @@ const quizSlice: Slice = createSlice({
 
           const existingQuestion = state[activityId][tabId][
             quizId
-          ].questions.find((q) => q.id === question.id)
+          ]?.questions?.find((q) => q.id === question.id)
 
           if (!existingQuestion) {
             state[activityId][tabId][quizId].questions.push(question)
