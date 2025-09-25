@@ -11645,10 +11645,10 @@ sapp-notification@^1.0.7:
     dayjs "^1.11.12"
     tailwind-scrollbar "^4.0.2"
 
-sapp-preview-part-test@^1.4.3-test:
-  version "1.4.3-test"
-  resolved "https://registry.yarnpkg.com/sapp-preview-part-test/-/sapp-preview-part-test-1.4.3-test.tgz#6196d0a63853b1ec69a224da097af286bc6b1240"
-  integrity sha512-zD48iorXO7q+XQpiiA/4UDVnTHXsGXsZrz4XuwTtozOexAPA2PYiKVUJV0TThupKDfs+uZk7E6o7RVffY3l42Q==
+sapp-preview-part-test@^1.4.6-test:
+  version "1.4.6-test"
+  resolved "https://registry.yarnpkg.com/sapp-preview-part-test/-/sapp-preview-part-test-1.4.6-test.tgz#cb0451d5832e1dbb475921dc715637b4b5fc445c"
+  integrity sha512-sdTsCf+BQATRe1GYVryGI+FOfPzXbXjes6sVKEXTQpUxwJDlnkX+G0VBcRLIg5FDtYnNN23Z3mnl8kd4g8Stdw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
