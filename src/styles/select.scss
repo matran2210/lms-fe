@@ -176,6 +176,11 @@
   }
 }
 
+.rc-virtual-list-scrollbar-thumb {
+  @apply bg-primary !important;
+  @apply w-[6px] !important;
+}
+
 .custom-select-v2 {
   /* Text mặc định */
   .ant-select-arrow {
