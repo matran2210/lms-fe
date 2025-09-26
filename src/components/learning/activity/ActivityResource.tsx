@@ -5,6 +5,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import React from 'react'
+import Tooltip from 'src/common/Tooltip'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { IActivity } from 'src/type/course/my-course/Activity'
 
@@ -33,7 +34,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
     {
       key: 'activity_resource',
       label: (
-        <div className={'text-bw-13 select-none text-lg font-medium'}>
+        <div className={'select-none text-lg font-medium text-bw-13'}>
           Activity Resource
         </div>
       ),
@@ -49,33 +50,38 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
 
                 return (
                   <div
-                    className={clsx(`flex items-center gap-8`, {
+                    className={clsx('group flex items-center gap-3', {
                       'mb-3': index < activity?.files?.length - 1,
                     })}
                     key={index}
                   >
-                    <div className="">
-                      <p
-                        className="cursor-pointer text-info-600 underline hover:text-primary"
-                        onClick={() => {
-                          isPreviewFile
-                            ? handleOpenScratchPad(
-                                {
-                                  type: 'file',
-                                },
-                                e?.resource?.url,
-                                e?.resource?.name,
-                              )
-                            : download(e?.resource?.name, e?.resource?.file_key)
+                    <div>
+                      <Tooltip title="Preview File">
+                        <p
+                          className="cursor-pointer text-info-600 underline hover:text-primary"
+                          onClick={() => {
+                            isPreviewFile
+                              ? handleOpenScratchPad(
+                                  { type: 'file' },
+                                  e?.resource?.url,
+                                  e?.resource?.name,
+                                )
+                              : download(
+                                  e?.resource?.name,
+                                  e?.resource?.file_key,
+                                )
 
-                          trackGAEvent('Click Open File Resource')
-                        }}
-                      >
-                        {e?.resource?.name}
-                      </p>
+                            trackGAEvent('Click Open File Resource')
+                          }}
+                        >
+                          {e?.resource?.name}
+                        </p>
+                      </Tooltip>
                     </div>
+
+                    {/* Icon chỉ hiện khi hover vào cả row */}
                     <div
-                      className="cursor-pointer text-icon hover:text-primary"
+                      className="hidden cursor-pointer text-icon hover:text-primary group-hover:block"
                       onClick={() => {
                         download(e?.resource?.name, e?.resource?.file_key)
                         trackGAEvent('Click Button Download Resource Activity')

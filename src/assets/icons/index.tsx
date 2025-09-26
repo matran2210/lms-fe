@@ -2917,6 +2917,7 @@ export const PiPIcon = () => {
     </svg>
   )
 }
+
 export const ArrowLeft = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2936,6 +2937,7 @@ export const ArrowLeft = ({ className }: IIconProps) => {
     </svg>
   )
 }
+
 export const ArrowRight = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2955,6 +2957,7 @@ export const ArrowRight = ({ className }: IIconProps) => {
     </svg>
   )
 }
+
 export const PaginationDotIcon = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -2969,6 +2972,7 @@ export const PaginationDotIcon = ({ className }: { className?: string }) => {
     </svg>
   )
 }
+
 export const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -3000,6 +3004,7 @@ export const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   )
 }
+
 export const CircleCloseIcon = () => {
   return (
     <svg
@@ -3026,22 +3031,23 @@ export const CircleCloseIcon = () => {
 export const CircleInfoIcon = ({ className }: IIconProps) => {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      className={className}
+      width="24"
+      height="24"
       viewBox="0 0 16 16"
       fill="none"
-      className={className}
+      xmlns="http://www.w3.org/2000/svg"
     >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M14.6673 7.99998C14.6673 11.6819 11.6825 14.6666 8.00065 14.6666C4.31875 14.6666 1.33398 11.6819 1.33398 7.99998C1.33398 4.31808 4.31875 1.33331 8.00065 1.33331C11.6825 1.33331 14.6673 4.31808 14.6673 7.99998ZM8.00065 11.8333C8.27679 11.8333 8.50065 11.6095 8.50065 11.3333V7.33331C8.50065 7.05717 8.27679 6.83331 8.00065 6.83331C7.72451 6.83331 7.50065 7.05717 7.50065 7.33331V11.3333C7.50065 11.6095 7.72451 11.8333 8.00065 11.8333ZM8.00065 4.66665C8.36884 4.66665 8.66732 4.96512 8.66732 5.33331C8.66732 5.7015 8.36884 5.99998 8.00065 5.99998C7.63246 5.99998 7.33398 5.7015 7.33398 5.33331C7.33398 4.96512 7.63246 4.66665 8.00065 4.66665Z"
-        fill="currentColor"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M14.6654 8.00004C14.6654 11.6819 11.6806 14.6667 7.9987 14.6667C4.3168 14.6667 1.33203 11.6819 1.33203 8.00004C1.33203 4.31814 4.3168 1.33337 7.9987 1.33337C11.6806 1.33337 14.6654 4.31814 14.6654 8.00004ZM7.9987 11.8334C8.27484 11.8334 8.4987 11.6095 8.4987 11.3334V7.33337C8.4987 7.05723 8.27484 6.83337 7.9987 6.83337C7.72256 6.83337 7.4987 7.05723 7.4987 7.33337V11.3334C7.4987 11.6095 7.72256 11.8334 7.9987 11.8334ZM7.9987 4.66671C8.36689 4.66671 8.66536 4.96518 8.66536 5.33337C8.66536 5.70156 8.36689 6.00004 7.9987 6.00004C7.63051 6.00004 7.33203 5.70156 7.33203 5.33337C7.33203 4.96518 7.63051 4.66671 7.9987 4.66671Z"
+        fill="#E68200"
       />
     </svg>
   )
 }
+
 export const CircleCheckIcon = () => {
   return (
     <svg
