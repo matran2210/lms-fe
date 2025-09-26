@@ -7077,9 +7077,9 @@ explanation-package-ha-test@^1.1.25-test:
     tailwindcss "^3.3.5"
 
 explanation-package@^1.2.3:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.2.tgz#636eda1c307c0c09fabdba4279ce3c4f99b82e36"
-  integrity sha512-On5BnWyWEyO9rwrn/GfZIrnnkE6iu7muN5RM3fE+uiJavbxE3O8BWnFbP+jf9b5Ey+OmY5gP0a/FKSIKmFvllA==
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.4.tgz#976c3b42a237f8f226d9d4506ad43edf7bab0003"
+  integrity sha512-/HcXhL8CRntJwKUoHbdEyUjUfm1bKnwI6HBSa3Y1vRDzqQyqGh+CTTTH0XJNrOCrIkfHs8tBxeWkmp7vhaSf0Q==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -11645,7 +11645,7 @@ sapp-notification@^1.0.7:
     dayjs "^1.11.12"
     tailwind-scrollbar "^4.0.2"
 
-sapp-preview-part-test@^1.4.7-test:
+sapp-preview-part-test@1.4.7-test:
   version "1.4.7-test"
   resolved "https://registry.yarnpkg.com/sapp-preview-part-test/-/sapp-preview-part-test-1.4.7-test.tgz#ac5d6915c16c4d65185fae6316c6dd8d9edd98b9"
   integrity sha512-fQ9B4T+I86JOGLv9AEg0smtSayPJj/aQxnT6X+acZs4DJlYHyexcPEfLE5utOtNUzIx3Rxma3mV0kfgNMr804g==
