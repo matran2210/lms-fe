@@ -108,6 +108,11 @@ const EssayQuestionPreview = ({
   // Lưu snapshot sheets gần nhất (đầy đủ celldata) để không mất dữ liệu các sheet khác khi đổi sheet
   const sheetsSnapshotRef = useRef<any[] | null>(null)
 
+  // Tạo unique key cho mỗi requirement để tránh xung đột giữa các requirements
+  const requirementKey = useMemo(() => {
+    return `requirement-${data?.id || index || 0}`
+  }, [data?.id, index])
+
   // Đồng bộ Controller với các thay đổi cấu trúc của Fortune Sheet
   // - Bật cờ ignoreStructOpsRef khi thao tác cấu trúc đang diễn ra để onChange không chạy
   // - Sau khi thao tác hoàn tất, đồng bộ toàn bộ danh sách sheets vào Controller rồi tắt cờ
@@ -372,6 +377,7 @@ const EssayQuestionPreview = ({
     ({ onChange, value }: any) => {
       return (
         <HookFormExcel
+          key={`${requirementKey}-${key}`}
           question_data={question_data}
           defaultValue={defaultValue}
           index={index}
@@ -387,7 +393,7 @@ const EssayQuestionPreview = ({
         />
       )
     },
-    [key, stableDataId],
+    [key, stableDataId, requirementKey],
   )
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
@@ -629,7 +635,7 @@ const EssayQuestionPreview = ({
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
-                key={key}
+                key={`${requirementKey}-${key}`}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
@@ -663,7 +669,7 @@ const EssayQuestionPreview = ({
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full overflow-hidden rounded-lg`}
             >
               <Controller
-                key={key}
+                key={`${requirementKey}-${key}`}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}

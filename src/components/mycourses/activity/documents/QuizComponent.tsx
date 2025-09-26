@@ -389,11 +389,31 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
             case QUESTION_TYPES.ESSAY: {
               activeQuestion?.myAnswers?.map((ans: IEssayAnswer) => {
-                ans?.short_answer &&
-                  setValue?.(
-                    `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`,
-                    ans?.short_answer,
-                  )
+                const fieldName = `${activeQuestion?.id}_${ans.requirement_id ?? document_id}_essay`
+
+                if (activeQuestion?.response_option === 'SHEET') {
+                  // Logic cho SHEET: luôn ưu tiên short_answer (user's changes)
+                  if (ans?.short_answer) {
+                    setValue(fieldName, ans?.short_answer)
+                  } else {
+                    // Không có short_answer → lấy từ answer_template
+                    const requirement = activeQuestion?.requirements?.find(
+                      (req: any) => req?.id === ans?.requirement_id,
+                    )
+                    const templateValue =
+                      requirement?.answer_template ||
+                      activeQuestion?.answer_template
+
+                    if (templateValue) {
+                      setValue(fieldName, templateValue)
+                    }
+                  }
+                } else {
+                  // Logic cho WORD: giữ nguyên như cũ
+                  if (ans?.short_answer) {
+                    setValue(fieldName, ans?.short_answer)
+                  }
+                }
               })
             }
           }
@@ -1351,6 +1371,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         'bottom-0': isShowIconButtonInBottom,
                       },
                     )}
+                    disabled={activeQuestion?.confirmed}
                   >
                     <FileTextIcon />
                     <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />

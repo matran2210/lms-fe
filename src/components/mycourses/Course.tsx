@@ -113,7 +113,8 @@ const Course = ({
 
     if (
       courseStatus === COURSE_STATUS.PUBLISH ||
-      courseStatus === COURSE_STATUS.LOCK
+      courseStatus === COURSE_STATUS.LOCK ||
+      courseStatus === COURSE_STATUS.BLOCK
     ) {
       if (
         classUserType === CLASS_USER_TYPES.TRANSFERED_TO &&
@@ -179,7 +180,6 @@ const Course = ({
 
     if (
       courseStatus === COURSE_STATUS.DRAFT ||
-      courseStatus === COURSE_STATUS.BLOCK ||
       disabledCourseByClassType.includes(classUserType)
     )
       return BUTTON_STATUS.Hidden

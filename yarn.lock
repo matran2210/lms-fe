@@ -7076,8 +7076,8 @@ explanation-package-ha-test@^1.1.25-test:
     styled-components "5.3.11"
     tailwindcss "^3.3.5"
 
-explanation-package@^1.2.2:
-  version "1.2.2"
+explanation-package@^1.2.3:
+  version "1.2.3"
   resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.2.tgz#636eda1c307c0c09fabdba4279ce3c4f99b82e36"
   integrity sha512-On5BnWyWEyO9rwrn/GfZIrnnkE6iu7muN5RM3fE+uiJavbxE3O8BWnFbP+jf9b5Ey+OmY5gP0a/FKSIKmFvllA==
   dependencies:

@@ -3275,7 +3275,7 @@ const TestDetail = () => {
                     handleChangeTab={async (id?: string) => {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
-                      // setEssayData(undefined)
+                      setEssayData(undefined)
                       handleChangeTab(id)
                     }}
                     setHasScrollBar={setHasScrollBar}
