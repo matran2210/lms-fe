@@ -3450,8 +3450,8 @@ export const DiscussionIcon = ({ className }: IIconProps) => {
 export const NoCertificationIcon = ({ className }: IIconProps) => {
   return (
     <svg
-      width="185"
-      height="185"
+      width="125.55"
+      height="125.55"
       viewBox="0 0 185 185"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
