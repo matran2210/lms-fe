@@ -44,66 +44,64 @@ const LearningResult = () => {
         title: {
           text: '',
         },
-        tooltip: {
-          trigger: 'item',
-          borderWidth: 0,
-          formatter: function (params: any) {
-            const values = params.value
-            const indicators = data?.map((e: ILearningResult) => e.name)
-            let tooltipText = `<strong>${params.name}</strong><br/>`
-            values.forEach((val: any, i: number) => {
-              tooltipText += `<span class='text-[#7086FD]'>●</span> ${indicators[i]}: ${val}%<br/>`
-            })
-            return tooltipText
-          },
+        // tooltip: {
+        //   trigger: 'item',
+        //   borderWidth: 0,
+        //   borderRadius: 8,
+        //   formatter: function (params: any) {
+        //     const values = params.value
+        //     const indicators = data?.map((e: ILearningResult) => e.name)
+        //     let tooltipText = `<strong>${params.name}</strong><br/>`
+        //     values.forEach((val: any, i: number) => {
+        //       tooltipText += `<span class='text-[#404041] pt-3 me-3 ms-2'>●</span> ${indicators[i]}: ${val}%<br/>`
+        //     })
+        //     return tooltipText
+        //   },
+        // },
+        graphic: {
+          type: 'group',
+          left: 'center',
+          top: 'middle',
+          invisible: true,
+          children: [
+            {
+              type: 'rect',
+              invisible: false,
+              shape: {
+                width: total ? 86 : 50,
+                height: 30,
+                r: 8,
+              },
+              style: {
+                fill: '#fff',
+                stroke: '#FFFFFF',
+                lineWidth: 2,
+                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                shadowBlur: 10,
+                align: 'center',
+                verticalAlign: 'middle',
+              },
+              x: 0 - (total ? 43 : 25), // Half the width of the rectangle to center it
+              y: 0 - 15, // Y position is still -15, to place it vertically centered
+              z: 3,
+            },
+            {
+              type: 'text',
+              invisible: false,
+              style: {
+                text: `${parseFloat((total / data.length).toFixed(2))}%`,
+                fontSize: 20,
+                fontWeight: 600,
+                fill: '#6FD3B0',
+                align: 'center',
+                verticalAlign: 'middle',
+              },
+              x: 0,
+              y: 0,
+              z: 4,
+            },
+          ],
         },
-        graphic:
-          total > 0
-            ? {
-                type: 'group',
-                left: 'center',
-                top: 'middle',
-                invisible: true,
-                children: [
-                  {
-                    type: 'rect',
-                    invisible: false,
-                    shape: {
-                      width: total ? 86 : 50,
-                      height: 30,
-                      r: 8,
-                    },
-                    style: {
-                      fill: '#fff',
-                      stroke: '#FFFFFF',
-                      lineWidth: 2,
-                      shadowColor: 'rgba(0, 0, 0, 0.1)',
-                      shadowBlur: 10,
-                      align: 'center',
-                      verticalAlign: 'middle',
-                    },
-                    x: 0 - (total ? 43 : 25), // Half the width of the rectangle to center it
-                    y: 0 - 15, // Y position is still -15, to place it vertically centered
-                    z: 3,
-                  },
-                  {
-                    type: 'text',
-                    invisible: false,
-                    style: {
-                      text: `${parseFloat((total / data.length).toFixed(2))}%`,
-                      fontSize: 20,
-                      fontWeight: 600,
-                      fill: '#6FD3B0',
-                      align: 'center',
-                      verticalAlign: 'middle',
-                    },
-                    x: 0,
-                    y: 0,
-                    z: 4,
-                  },
-                ],
-              }
-            : undefined,
 
         radar: [
           {

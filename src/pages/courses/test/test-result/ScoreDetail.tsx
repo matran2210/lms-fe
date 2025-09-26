@@ -54,7 +54,7 @@ const ScoreDetail = ({
   const headers = [
     {
       label: 'Q#',
-      className: clsx(commonHeaderClass, 'xl:min-w-[50px] text-start'),
+      className: clsx(commonHeaderClass, 'xl:min-w-[50px] text-center'),
     },
     {
       label: 'Question Name',
@@ -73,7 +73,10 @@ const ScoreDetail = ({
           },
           {
             label: 'Time Spent',
-            className: clsx(commonHeaderClass, ' min-w-[80px] !pr-0 text-end'),
+            className: clsx(
+              commonHeaderClass,
+              ' min-w-[80px] !pr-0 text-center',
+            ),
           },
         ]),
   ]
@@ -221,7 +224,9 @@ const ScoreDetail = ({
                                 'align-baseline text-base text-gray-800 hover:bg-gray-100'
                               }
                             >
-                              <td className="pr-3">{answer?.index}</td>
+                              <td className="pr-3 text-center">
+                                {answer?.index}
+                              </td>
 
                               {/* Question */}
                               <td className="pr-4">
@@ -335,7 +340,7 @@ const ScoreDetail = ({
                               </td>
 
                               {/* Time Spent */}
-                              <td className="m-6 hidden p-0 text-end md:table-cell">
+                              <td className="m-6 hidden p-0 text-center md:table-cell">
                                 {(() => {
                                   if (answer?.time_spent !== null) {
                                     return convertSecondsToMinutesSeconds(

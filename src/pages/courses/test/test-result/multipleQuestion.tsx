@@ -218,7 +218,7 @@ const MultipleQuestion = ({
     return (
       <div
         className={clsx('text-xs md:text-base', {
-          'grid grid-cols-2 gap-x-14 gap-y-3': isLargeDesktopView,
+          'grid w-full grid-cols-2 gap-y-3': isLargeDesktopView,
           'mx-auto flex items-center justify-center gap-8 md:gap-12':
             showMore && !isLargeDesktopView,
           'grid grid-cols-4 gap-x-12 gap-y-3': !showMore && !isLargeDesktopView,
