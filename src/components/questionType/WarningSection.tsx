@@ -10,7 +10,7 @@ const WarningSection = ({ isShowWarning, className = '' }: IProps) => {
     <div>
       {isShowWarning && (
         <div className={clsx('mb-4 mt-6 flex gap-2 text-warning', className)}>
-          <CircleInfoIcon className="shrink-0" />
+          <CircleInfoIcon />
           <div className="text-base font-normal">
             You should select an answer before clicking “Submit”, because once
             you submit, the correct answer will be displayed.

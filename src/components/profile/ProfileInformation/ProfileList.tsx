@@ -92,6 +92,7 @@ const ProfileList = ({ isEdit }: IProps) => {
       is_default: data?.is_default,
     }
   })
+
   return (
     <ProfileCard
       title="Profile"
@@ -114,7 +115,11 @@ const ProfileList = ({ isEdit }: IProps) => {
         onClose={closeMakeDefault}
         title={
           <Select
-            suffixIcon={<CollapseArrowIcon className="text-secondary" />}
+            suffixIcon={
+              profileOptions?.length === 1 ? null : (
+                <CollapseArrowIcon className="text-secondary" />
+              )
+            }
             value={makeDefaultDrawer?.id}
             onChange={(value, option) => {
               if (!Array.isArray(option) && option) {
@@ -145,23 +150,23 @@ const ProfileList = ({ isEdit }: IProps) => {
         <div className="flex flex-col gap-3 md:gap-4">
           {makeDefaultDrawer?.phone && (
             <div className="flex items-center justify-between text-gray-800">
-              <span className="inline-block text-secondary md:w-[250px]">
+              <span className="inline-block text-base text-secondary md:w-[250px]">
                 <div className="flex">
                   <Icon type="phone-ring" className="mr-2" /> Phone Number:
                 </div>
               </span>
-              <span className="font-medium">
+              <span className="text-base font-semibold">
                 {makeDefaultDrawer?.phone || ''}{' '}
               </span>
             </div>
           )}
           <div className="text-text-gray-800 flex items-center justify-between">
-            <span className="inline-block text-secondary md:w-[250px]">
+            <span className="inline-block text-base text-secondary md:w-[250px]">
               <div className="flex">
                 <Icon type="email" className="mr-2" /> Email Adress:
               </div>
             </span>
-            <span className="font-medium">
+            <span className="text-base font-semibold">
               {makeDefaultDrawer?.email || ''}
             </span>
           </div>
@@ -179,19 +184,21 @@ const ProfileList = ({ isEdit }: IProps) => {
         </div>
         <Divider />
 
-        <div>
-          <div className="flex items-center justify-between gap-4 md:justify-start">
-            <span className="text-sm font-semibold text-gray-800 md:text-base">
-              Set as default:
-            </span>
-            <Switch
-              className="sapp-profile-switch"
-              checked={!!makeDefaultDrawer?.is_default}
-              onChange={handleSetDefault}
-              disabled={!!makeDefaultDrawer?.is_default}
-            />
+        {profileOptions?.length > 1 && (
+          <div>
+            <div className="flex items-center justify-between gap-4 md:justify-start">
+              <span className="text-sm font-semibold text-gray-800 md:text-base">
+                Set as default:
+              </span>
+              <Switch
+                className="sapp-profile-switch"
+                checked={!!makeDefaultDrawer?.is_default}
+                onChange={handleSetDefault}
+                disabled={!!makeDefaultDrawer?.is_default}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </SappDrawerV2>
     </ProfileCard>
   )

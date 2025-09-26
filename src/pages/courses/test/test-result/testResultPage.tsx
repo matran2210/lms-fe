@@ -148,7 +148,7 @@ const TestResultPage = ({
         return (
           <div className={commonMultipleScoreStyle}>
             <div className="max-h-ful flex flex-col gap-6">
-              <div className="items-start rounded-xl bg-white p-4 shadow-sidebar md:p-6">
+              <div className="items-start rounded-xl bg-white p-4 shadow-small md:p-6">
                 <ChartCFAScore data={chartData?.chart_data} />
               </div>
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (

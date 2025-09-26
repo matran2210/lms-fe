@@ -11,7 +11,7 @@ interface IProps {
 const AttempItem = ({ index, courseTabData, control }: IProps) => {
   return (
     <div>
-      <div className="mb-2 mt-4 text-sm font-semibold md:text-base">
+      <div className="mb-2 mt-4 text-sm font-medium text-secondary md:text-base">
         Attemp {index + 1}:
       </div>
       <div className="mb-5 rounded-lg bg-[#F9F9F9] p-3">
