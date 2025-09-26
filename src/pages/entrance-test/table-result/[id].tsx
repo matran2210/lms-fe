@@ -108,7 +108,7 @@ const TableEntranceResult = () => {
           <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
         </div>
       </div>
-      <Layout size="sm" title="Entrance Test Result" showSidebar={false}>
+      <Layout size="md" title="Entrance Test Result" showSidebar={false}>
         <div className="m-auto overflow-x-auto overflow-y-hidden">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent

@@ -16,7 +16,7 @@ const EventTestList = ({
     <div
       className={`${
         !isEmpty(eventTestLists)
-          ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'
+          ? 'grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3'
           : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}

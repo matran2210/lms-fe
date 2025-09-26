@@ -87,7 +87,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
         </div>
         <Layout
-          size="sm"
+          size="md"
           title="Quiz Result"
           showSidebar={false}
           className="bg-gray-4"

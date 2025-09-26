@@ -163,7 +163,7 @@ const EntranceTest = ({
         <ButtonSecondary
           title="Begin"
           className="ml-auto"
-          size="medium"
+          size="small"
           onClick={handleClickBegin}
         />
       )
@@ -172,7 +172,7 @@ const EntranceTest = ({
       return (
         <ButtonSecondary
           title="Resume"
-          size="medium"
+          size="small"
           className="ml-auto"
           onClick={handleClickBegin}
         />
@@ -180,18 +180,20 @@ const EntranceTest = ({
     } else {
       return (
         <>
-          <ButtonText
-            title="Result"
-            size="medium"
-            onClick={() =>
-              router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
-            }
-          />
+          <div className="flex h-[38px] items-center">
+            <ButtonText
+              title="Result"
+              size="small"
+              onClick={() =>
+                router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
+              }
+            />
+          </div>
           {data?.attempts?.length < (data?.limit_count ?? 0) && (
             <ButtonSecondary
               title="Retake"
               className="ml-4"
-              size="medium"
+              size="small"
               onClick={() => {
                 localStorage.removeItem('quizAttempt')
                 setOpen(true)
