@@ -358,7 +358,9 @@ const ProfilePage = () => {
             <div className="hidden text-2xl font-medium md:block lg:hidden">
               Student Profile
             </div>
-            <SappBreadCrumbs isTeacher={false} breadcrumbs={breadcrumbs} />
+            <h1 className="text-lg font-semibold text-gray-800 lg:mt-8 lg:text-2xl">
+              Profile
+            </h1>
           </div>
           <div className="relative" data-aos={ANIMATION.DATA_AOS}>
             <HeaderMobile
