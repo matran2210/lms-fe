@@ -36,15 +36,24 @@ const CoursesList: React.FC<CoursesProps> = ({
     return (
       <div className="mb-6 grid w-full gap-6 sm:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
         {Array(9)
-          .fill([])
+          .fill(null)
           .map((_, index) => (
             <div
-              className={`item flex w-full flex-col bg-white p-[30px] shadow-sidebar`}
               key={index}
+              className="item flex w-full flex-col rounded-xl bg-white p-7.5 shadow-sidebar"
             >
-              <div className={`flex min-h-[352px] flex-col`}>
-                <Skeleton />
-                <Skeleton.Button className="mt-auto self-end" />
+              <div className="flex min-h-[352px] flex-col">
+                {/* Skeleton content */}
+                <div className="w-full animate-pulse space-y-4">
+                  {/* Khối chính */}
+                  <div className="bg-skeleton h-6 w-3/4 animate-pulse rounded"></div>
+                  <div className="bg-skeleton h-5 w-1/2 animate-pulse rounded"></div>
+                  <div className="bg-skeleton h-36 w-full animate-pulse rounded"></div>
+                </div>
+                {/* Skeleton button */}
+                <div className="mt-auto self-end">
+                  <div className="bg-skeleton h-8 w-24 animate-pulse rounded"></div>
+                </div>
               </div>
             </div>
           ))}

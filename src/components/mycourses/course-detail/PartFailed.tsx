@@ -214,6 +214,18 @@ const PartFailed = ({
         classNameTitle={`h-12 md:h-16 font-medium`}
         classNameCard="lg:h-[456px] md:h-[428px] h-[328px]"
         isLock={isLock}
+        onClick={() => {
+          if (coursePart?.course_section_link_parents?.[0]?.is_preview_locked) {
+            setOpenPopupCTA({
+              lockSection: true,
+              ctaUpgrade: false,
+              thankYou: false,
+              thankYouLater: false,
+            })
+          } else {
+            setOpen(true)
+          }
+        }}
       >
         <div className="flex h-full flex-1 flex-col justify-between">
           <div className="info mb-6 mt-4 border-l border-gray-2 pl-4 md:mt-6">

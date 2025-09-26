@@ -69,7 +69,7 @@ const EntranceTest = () => {
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
-          className="my-4"
+          className="mb-6 mt-4"
         />
         <div className="my-0">
           {isLoading ? (

@@ -142,6 +142,10 @@ const Part = ({
       classNameTitle={`h-12 md:h-16 font-medium`}
       classNameCard="lg:h-[456px] md:h-[428px] h-[328px]"
       isLock={isLock}
+      onClick={() => {
+        handleRouterPartDetail()
+        trackGAEventBasedOnProgress(percentProgress)
+      }}
     >
       <div className="flex h-full flex-1 flex-col">
         <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[72px]">

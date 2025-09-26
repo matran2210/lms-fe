@@ -459,29 +459,33 @@ const Course = ({
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
           classNameCard="lg:min-h-[380px] min-h-[280px]"
+          onClick={() => {
+            if (isActiveStudent) {
+              courseAction()
+            }
+          }}
         >
           <div className="flex items-center justify-between">
-            {enableCourse ? (
-              <div className="flex items-center gap-2">
-                <div>
-                  <GraduationCapIcon className={sizeIcon} />
-                </div>
-                <div className="text-xs font-medium text-icon md:text-sm">
-                  <Tooltip
-                    title={course?.classes?.[0]?.code}
-                    showTooltip={
-                      course?.classes?.[0]?.code?.length > maxLengthTitle
-                    }
-                  >
-                    {truncateString(course?.classes?.[0]?.code, maxLengthTitle)}
-                  </Tooltip>
-                </div>
+            <div className="flex items-center gap-2">
+              <div>
+                <GraduationCapIcon
+                  className={sizeIcon}
+                  fill={enableCourse ? '#1C274C' : '#D1D5DB'}
+                />
               </div>
-            ) : (
-              <div className="name-class text-sm text-[#A1A1A1]">
-                <span className="ml-1 font-medium text-[#050505]" />
+              <div
+                className={`text-xs font-medium ${enableCourse ? 'text-icon' : 'text-gray-300'}  md:text-sm`}
+              >
+                <Tooltip
+                  title={course?.classes?.[0]?.code}
+                  showTooltip={
+                    course?.classes?.[0]?.code?.length > maxLengthTitle
+                  }
+                >
+                  {truncateString(course?.classes?.[0]?.code, maxLengthTitle)}
+                </Tooltip>
               </div>
-            )}
+            </div>
 
             {determineButtonToShow !== 'Active' && (
               <div className="flex items-center gap-1">
