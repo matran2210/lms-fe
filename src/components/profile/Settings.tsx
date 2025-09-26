@@ -3,9 +3,9 @@ import TabLayout from './TabLayout'
 
 const Settings = () => {
   return (
-    <div className="flex min-h-352 flex-col items-center justify-center gap-6">
+    <div className="mb-6 mt-0 flex min-h-352 flex-col items-center justify-center gap-2 md:mb-0 md:mt-8 lg:mt-10">
       <ComingSoonIcon className="h-[112px] w-[140px]" />
-      <div className="text-base text-gray-800">Coming Soon!</div>
+      <div className="text-small text-gray-400">Coming Soon!</div>
     </div>
   )
 }
