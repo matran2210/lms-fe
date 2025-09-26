@@ -44,6 +44,7 @@ const CardCourse = forwardRef<
     classNameTitle?: string
     classNameCard?: string
     isLock?: boolean
+    onClick?: () => void
   }
 >(
   (
@@ -58,6 +59,7 @@ const CardCourse = forwardRef<
       classNameTitle = 'mt-2 mb-4 md:mb-6 md:mt-3',
       classNameCard = '',
       isLock = false,
+      onClick,
     },
     ref,
   ) => {
@@ -85,12 +87,13 @@ const CardCourse = forwardRef<
           <div className={clsx('flex justify-between', classNameTitle)}>
             <h2
               className={clsx(
-                'line-clamp-2 text-base font-medium md:text-2xl',
+                'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
                 {
                   'text-gray-300': disabledTitle,
                   'text-gray-800': !disabledTitle,
                 },
               )}
+              onClick={onClick}
             >
               <Tooltip
                 title={title}
