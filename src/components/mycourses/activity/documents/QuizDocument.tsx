@@ -180,7 +180,7 @@ const QuizDocument = ({
   const handleNextQuestion = async () => {
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
     const defaultValue =
-      questionRef.current?.getValues(name) ??
+      questionRef.current?.getValues(name) ||
       activeQuestion?.myAnswers?.[0]?.short_answer
 
     if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
@@ -209,8 +209,10 @@ const QuizDocument = ({
           const nextQuestionContent = nextQuestion?.question
           const name = `${nextQuestionContent?.id}_${nextQuestionContent?.requirements?.length ? nextQuestionContent?.requirements?.[0]?.id : document_id}_essay`
           const defaultValue =
-            questionRef.current?.getValues(name) ??
-            nextQuestionContent?.myAnswers?.[0]?.short_answer
+            questionRef.current?.getValues(name) ||
+            nextQuestionContent?.myAnswers?.[0]?.short_answer ||
+            nextQuestionContent?.answer_template ||
+            nextQuestionContent?.requirements?.[0]?.answer_template
 
           if (nextQuestionContent?.response_option === RESPONSE_OPTION.SHEET) {
             await questionRef.current?.onResetSheet(
@@ -248,7 +250,7 @@ const QuizDocument = ({
   const handleQuizFinish = async () => {
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
     const defaultValue =
-      questionRef.current?.getValues(name) ??
+      questionRef.current?.getValues(name) ||
       activeQuestion?.myAnswers?.[0]?.short_answer
     if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
       await questionRef.current?.onResetSheet(activeQuestion?.response_option)
@@ -292,7 +294,7 @@ const QuizDocument = ({
   const handlePrevQuestion = async () => {
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
     const defaultValue =
-      questionRef.current?.getValues(name) ??
+      questionRef.current?.getValues(name) ||
       activeQuestion?.myAnswers?.[0]?.short_answer
 
     if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
