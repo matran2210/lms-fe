@@ -1,13 +1,12 @@
 import {
   AlertInfoIcon,
-  CalculatorIconV2,
   CircleCheckIcon,
   CircleInfoIcon,
   CollapseArrowIcon,
   DownloadIcon,
   FileTextIcon,
-  ScratchPadIconV2,
 } from '@assets/icons'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -18,7 +17,6 @@ import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { download } from '@components/learning/activity/ActivityResource'
 import Popover from '@components/Popover'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreview from '@components/questionType/DragNDrop'
 import AddWordPreview from '@components/questionType/FillText'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
@@ -27,6 +25,7 @@ import DragDropQuestion, {
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { isEmptyParagraph } from '@utils/index'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
@@ -35,10 +34,8 @@ import { isEmpty, isUndefined } from 'lodash'
 import React, {
   forwardRef,
   memo,
-  useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -50,7 +47,6 @@ import {
   UseFormResetField,
   UseFormSetValue,
   UseFormWatch,
-  useForm,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
@@ -219,6 +215,14 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const [openExhibitModal, setOpenExhibitModal] = useState(false)
     const refEditor = useRef(null) as any
+    const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+      useState(false)
+    const onOpenResetToTemplateModal = () => {
+      setOpenResetToTemplateModal(true)
+    }
+    const onCloseResetToTemplateModal = () => {
+      setOpenResetToTemplateModal(false)
+    }
 
     const handleResetEssay = async (
       name: string,
@@ -1371,7 +1375,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                         'bottom-0': isShowIconButtonInBottom,
                       },
                     )}
-                    // disabled={activeQuestion?.confirmed}
                   >
                     <FileTextIcon />
                     <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
@@ -1379,6 +1382,17 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 </Popover>
               )}
             </div>
+            {activeQuestion &&
+              activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+              isShowTemplate && (
+                <div className="mt-8 flex justify-end">
+                  <ButtonPrimaryV2
+                    title="Reset to Answer Template"
+                    onClick={onOpenResetToTemplateModal}
+                    disabled={activeQuestion?.confirmed}
+                  />
+                </div>
+              )}
           </div>
         </div>
 
@@ -1443,6 +1457,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             </div>
           </Modal>
         )}
+        <ResetToAnswerTemplateModal
+          open={openResetToTemplateModal}
+          handleReset={onResetAnswerEssayToTemplate}
+          handleClose={onCloseResetToTemplateModal}
+        />
       </div>
     )
   },

@@ -2706,7 +2706,7 @@ const TestDetail = () => {
           {currentTabContent &&
             currentTabContent.qType === QUESTION_TYPES.ESSAY &&
             isShowTemplate && (
-              <div className="mt-8 flex justify-end">
+              <div className="flex justify-end">
                 <ButtonPrimary
                   title="Reset to Answer Template"
                   onClick={onOpenResetToTemplateModal}
