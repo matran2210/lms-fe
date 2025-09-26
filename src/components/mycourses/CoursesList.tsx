@@ -34,7 +34,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   )
   if (isFetching && !isFetchingNextPage) {
     return (
-      <div className="mb-6 grid w-full grid-cols-2 gap-6 lg:grid-cols-3">
+      <div className="mb-6 grid w-full gap-6 sm:grid-cols-2 xl:grid-cols-3 xl-max:px-6">
         {Array(9)
           .fill([])
           .map((_, index) => (
@@ -55,7 +55,7 @@ const CoursesList: React.FC<CoursesProps> = ({
   return (
     <>
       {!isEmpty(courses) && !guideIsActive ? (
-        <div className="mb-6 grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {courses?.map((course, index: number) => (
             <Course
               key={index}
@@ -68,7 +68,7 @@ const CoursesList: React.FC<CoursesProps> = ({
           ))}
         </div>
       ) : (
-        <div className=" mb-6 grid gap-6 md:grid-cols-2 2xl:grid-cols-3">
+        <div className="mb-6 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {guideIsActive && (
             <CardCourse
               title={'Certificate in International Financial Reporting'}

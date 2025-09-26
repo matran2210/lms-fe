@@ -12,7 +12,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface LayoutProps {
   children: ReactNode
   title: string
-  size?: 'sm' | 'md' | 'xl' | '2xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
   showSidebar?: boolean
   fullWidth?: boolean
   handleToggleSidebar?: () => void
@@ -24,7 +24,7 @@ export default function Layout(props: LayoutProps): ReactElement {
   const {
     children,
     title,
-    size = 'xl',
+    size = 'lg',
     showSidebar = true,
     fullWidth = false,
     handleToggleSidebar,
@@ -105,10 +105,11 @@ export default function Layout(props: LayoutProps): ReactElement {
         <div
           className={clsx('container min-h-screen', {
             'max-w-[calc(1179px+4rem)]': size === 'sm',
-            'max-w-[calc(1444px+4rem)]': size === 'md',
+            'max-w-[calc(1230px+4rem)]': size === 'md',
+            'max-w-[calc(1318px+4rem)]': size === 'lg',
             'max-w-[calc(1524px+4rem)]': size === 'xl',
-            'max-w-[calc(1580px+4rem)]': size === '2xl',
-            'max-w-full p-0': fullWidth,
+            'max-w-[calc(1644px+4rem)]': size === '2xl',
+            '!max-w-full p-0': fullWidth,
           })}
         >
           <div className={clsx(`${paddingTop} h-full bg-[#F9F9F9]`, className)}>

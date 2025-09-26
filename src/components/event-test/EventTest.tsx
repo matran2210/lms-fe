@@ -205,7 +205,7 @@ const EventTest = ({
       return (
         <ButtonSecondary
           title="Resume"
-          size="medium"
+          size="small"
           className="ml-auto"
           onClick={handleClickBegin}
         />
@@ -217,7 +217,7 @@ const EventTest = ({
         <ButtonSecondary
           title="Begin"
           className="ml-auto"
-          size="medium"
+          size="small"
           onClick={handleClickBegin}
         />
       )

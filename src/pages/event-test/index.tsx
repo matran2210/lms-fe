@@ -72,6 +72,7 @@ const EventTest = () => {
         <SearchWithMenuToggle
           handleOpenSidebar={handleOpenSidebar}
           isShowToggle
+          className="my-4"
         />
         <div className="my-0">
           {isLoading ? (
@@ -109,7 +110,7 @@ const EventTest = () => {
             </>
           )}
         </div>
-        <Footer />
+        {/* <Footer /> */}
         {/* <PopUpRemindEntrance /> */}
       </Layout>
     </SappLoadingGlobal>
