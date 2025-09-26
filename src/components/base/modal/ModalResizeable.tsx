@@ -183,7 +183,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
             header
           ) : (
             <div className={styles.modalHeader}>
-              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
+              <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
                 <div className="truncate">{title}</div>
               </div>
               <button
