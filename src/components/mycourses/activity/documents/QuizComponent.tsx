@@ -321,13 +321,34 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       return value
     }
 
-    const getAnswerMatching = () => {
-      let value = [] as any
+    const getAnswerMatching = (): {
+      question_id: string
+      answer_id: string
+    }[] => {
+      if (DragDropRef?.current?.handleGetResult) {
+        const result = DragDropRef.current.handleGetResult()
+
+        let value: { question_id: string; answer_id: string }[] = []
+        Object.entries(result).forEach(([questionId, matching]) => {
+          const matchingObj = matching as { answer: { id: string } }
+          if (matchingObj?.answer?.id) {
+            value.push({
+              question_id: questionId,
+              answer_id: matchingObj.answer.id,
+            })
+          }
+        })
+        return value
+      }
+
+      let value: { question_id: string; answer_id: string }[] = []
       const inputs = questionRef?.current?.querySelectorAll(
         '.sapp-match-result',
-      ) as any
+      ) as NodeListOf<HTMLElement>
       for (let e of inputs) {
-        const childId = e?.querySelector('.sapp-notched-container')
+        const childId = e?.querySelector(
+          '.sapp-notched-container',
+        ) as HTMLElement
         value.push({ question_id: e?.id, answer_id: childId?.id })
       }
       return value
@@ -636,8 +657,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.MATCHING:
           return (
             <MatchingQuestion
-              data={activeQuestion}
-              action={getAnswerMatching}
+              ref={DragDropRef}
+              data={activeQuestion as any}
+              action={getAnswerMatching as any}
               defaultAnswer={activeQuestion?.defaultValue}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
               setOpenFile={setOpenFile}
