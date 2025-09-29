@@ -68,7 +68,7 @@ interface IProps {
   allowHighLight?: boolean
   defaultAnswer?: IDefaultAnswer[]
   done?: boolean
-  extenalRef?: React.RefObject<HTMLDivElement>
+  extenalRef?: (element: HTMLDivElement | null) => void
   index?: number
   corrects?: ICorrectAnswer[]
   solution?: string
