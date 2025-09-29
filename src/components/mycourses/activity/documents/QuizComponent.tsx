@@ -106,6 +106,8 @@ export type QuizComponentRef = {
     defaultValue?: string | undefined,
   ) => Promise<void>
   onResetSheet: (response_option: RESPONSE_OPTION) => Promise<void>
+  watch: UseFormWatch<FieldValues>
+  getValues: UseFormGetValues<FieldValues>
   onResetFormatEssay: (key: string, value: string) => void
   onResetWordOnly: (
     response_option: RESPONSE_OPTION,
@@ -432,6 +434,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       onSaveAnswer: handleGetAnswer,
       onResetWord: onResetWord,
       onResetSheet: onResetSheet,
+      watch: watch!,
+      getValues: getValues!,
       onResetFormatEssay: onResetFormatEssay,
       onResetWordOnly: onResetWordOnly,
     }))
