@@ -77,7 +77,7 @@ export interface IAtempt {
   }
 }
 export interface ITestQuizProps {
-  resultData: Results
+  resultData: Results[]
   handleViewResult: (row: Results) => void
   getNameTooltipContent?: (row: Results) => React.ReactNode
   getScore?: (row: Results, grading_method: GradingMethod) => string

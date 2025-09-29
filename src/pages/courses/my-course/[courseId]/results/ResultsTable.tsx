@@ -130,7 +130,6 @@ const ResultsTable = ({
     },
     retry: false,
   })
-
   const lastElementRef = useCallback(
     (node: HTMLDivElement) => {
       if (isMobileLoading) return
@@ -262,13 +261,17 @@ const ResultsTable = ({
 
   const title =
     !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
-
   return (
     <FormProvider {...methods}>
       {/* Filter desktop */}
       {!isMobileView && (
-        <div className="my-6">
-          <FilterCourseSection setParams={setParams} />
+        <div className="my-6 flex items-center justify-end gap-4">
+          <div className="text-sm leading-[22px] tracking-[0%] text-gray-800">
+            {resultData?.metadata?.total_records} Results
+          </div>
+          <div className="w-[369px]">
+            <FilterCourseSection setParams={setParams} showOnlySection={true} />
+          </div>
         </div>
       )}
 
@@ -296,15 +299,15 @@ const ResultsTable = ({
           {/* Activity results */}
           {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
             <div className="flex flex-col gap-6">
-              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-                <CollapseActivity
-                  key={item?.id}
-                  resultData={item}
-                  handleViewResult={handleViewResult}
-                  getScore={getScore}
-                  lastElementRef={lastElementRef}
-                />
-              ))}
+              {/* {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => ( */}
+              <CollapseActivity
+                // key={item?.id}
+                resultData={groupedDataByType[TEST_TYPE.ACTIVITY]}
+                handleViewResult={handleViewResult}
+                getScore={getScore}
+                lastElementRef={lastElementRef}
+              />
+              {/* ))} */}
             </div>
           )}
 

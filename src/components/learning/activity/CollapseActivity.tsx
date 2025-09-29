@@ -21,7 +21,7 @@ const CollapseActivity = ({
     setActiveKey(key)
   }
   const handleViewActivity = () => {
-    handleViewResult(resultData)
+    // handleViewResult(resultData[0])
   }
   const getItemsActivity = [
     {
@@ -29,13 +29,8 @@ const CollapseActivity = ({
       label: (
         <div className="flex flex-col gap-2">
           <div className="text-base font-semibold leading-[27px] text-gray-800 md:text-lg">
-            {resultData?.name}
+            Part A: Audit framework and regulation
           </div>
-          {!isMobileView && (
-            <div className="text-base font-normal leading-normal text-gray-400">
-              {resultData?.path}
-            </div>
-          )}
         </div>
       ),
       children: (
