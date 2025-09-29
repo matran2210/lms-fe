@@ -290,10 +290,8 @@ const Course = ({
     localStorage.setItem('courseDetail', basePath)
     if (course?.course_type === 'TRIAL_COURSE') {
       localStorage.setItem('daysDifference', daysDifference as any)
-      localStorage.setItem('showPinTrial', 'true')
     } else {
       localStorage.removeItem('daysDifference')
-      localStorage.removeItem('showPinTrial')
     }
   }
 
