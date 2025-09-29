@@ -2,8 +2,8 @@ import { CloseIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { QuizResultComponent } from 'quiz-result-package-dat-test'
-import { IQuestionResultResponse } from 'quiz-result-package-dat-test/dist/type'
+import { QuizResultComponent } from 'quiz-result-package'
+import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -93,7 +93,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           className="bg-gray-4"
         >
           <div className="m-auto overflow-x-auto overflow-y-hidden">
-            {modalResult?.questions?.data?.length > 0 && (
+            {/* {modalResult?.questions?.data?.length > 0 && (
               <QuizResultComponent
                 questionResponse={modalResult?.questions || []}
                 getTable={getTable}
@@ -105,7 +105,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
                 loading={loading}
                 is_lms_v2
               />
-            )}
+            )} */}
           </div>
         </Layout>
       </div>
