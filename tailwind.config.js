@@ -250,6 +250,7 @@ module.exports = {
         },
         icon: '#1C274C',
       },
+      skeleton: '#0000000f',
     },
     borderColor: {
       primary: '#FFB700',

@@ -49,7 +49,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { defaultSheetData } from 'src/constants/attempt'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
@@ -1245,7 +1245,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       : []
 
     return (
-      <div>
+      <div data-aos={ANIMATION.DATA_AOS}>
         <div ref={questionRef}>
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
