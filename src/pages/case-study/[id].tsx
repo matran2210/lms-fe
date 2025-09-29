@@ -140,7 +140,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            extenalRef={(el: HTMLDivElement | null) =>
+              (valueRef.current[index || 0] = el)
+            }
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -155,7 +157,7 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => {
+            extenalRef={(el: HTMLDivElement | null) => {
               valueRef.current[index || 0] = el
             }}
           />
@@ -172,7 +174,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            extenalRef={(el: HTMLDivElement | null) =>
+              (valueRef.current[index || 0] = el)
+            }
           />
         )
       case QUESTION_TYPES.SELECT_WORD:
@@ -193,7 +197,9 @@ const CaseStudyDetail = ({ questions }: any) => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             corrects={corrects?.corrects}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            extenalRef={(el: HTMLDivElement | null) =>
+              (valueRef.current[index || 0] = el)
+            }
           />
         )
       case QUESTION_TYPES.ESSAY:
@@ -250,7 +256,7 @@ const CaseStudyDetail = ({ questions }: any) => {
   const dragStateRef = useRef({ startX: 0, startLeftWidth: 0 })
   const currentWidthRef = useRef(0)
   const router = useRouter()
-  const valueRef = useRef<any>([])
+  const valueRef = useRef<(HTMLDivElement | null)[]>([])
   const containerRef = useRef<any>(null)
   const { control, handleSubmit, getValues, setValue, resetField } = useForm()
   const { control: controlScratch } = useForm()
