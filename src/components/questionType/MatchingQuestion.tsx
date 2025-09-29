@@ -14,18 +14,63 @@ import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 
+interface IAnswer {
+  id: string
+  answer: string
+}
+
+interface IQuestionMatching {
+  id: string
+  content: string
+  answer: IAnswer
+}
+
+interface IQuestionTopic {
+  description?: string
+  exhibits?: IExhibitData[]
+}
+
+interface IMatchingQuestionData {
+  id: string
+  question_content: string
+  question_matchings: IQuestionMatching[]
+  question_topic?: IQuestionTopic
+  is_self_reflection?: boolean
+}
+
+interface IDefaultAnswer {
+  question_id: string
+  answer_id: string
+}
+
+interface ICorrectAnswer {
+  id: string
+  answer: IAnswer
+}
+
+interface IHighlightData {
+  start: number
+  end: number
+  color: string
+}
+
+interface IMatchingQuestionRef {
+  handleReset: () => void
+  handleGetResult: () => Record<string, IQuestionMatching>
+}
+
 interface IProps {
-  data: any
-  action?: any
-  handleSaveHighLight?: any
-  highlighted?: any
-  removeHighlight?: any
+  data: IMatchingQuestionData
+  action?: () => Record<string, IQuestionMatching>
+  handleSaveHighLight?: (highlight: IHighlightData) => void
+  highlighted?: IHighlightData[]
+  removeHighlight?: (highlight: IHighlightData) => void
   allowHighLight?: boolean
-  defaultAnswer?: any
+  defaultAnswer?: IDefaultAnswer[]
   done?: boolean
-  extenalRef?: any
+  extenalRef?: React.RefObject<HTMLDivElement>
   index?: number
-  corrects?: any
+  corrects?: ICorrectAnswer[]
   solution?: string
   allowUnHighLight?: boolean
   uuid?: string
@@ -39,11 +84,12 @@ interface IProps {
   isAlwaysShowAnswer?: boolean
   exhibitText?: string
 }
+
 type IProp = {
   value: string
   className?: string
 }
-let dragParentIdRef: string
+
 const MatchingQuestion = forwardRef(
   (
     {
@@ -65,165 +111,208 @@ const MatchingQuestion = forwardRef(
       isAlwaysShowAnswer = false,
       exhibitText = 'Exhibit',
     }: IProps,
-    ref: ForwardedRef<any>,
+    ref: ForwardedRef<IMatchingQuestionRef>,
   ) => {
-    const [defaultValue, setDefaultValue] = useState<any>()
-    const [answers, setAnswers] = useState<any>()
-    const [correctAnswer, setCorrectAnswer] = useState<any>()
-    const [storageId, setStoreId] = useState(uniqueId('storage'))
-    const matchingQuestionRef = useRef<HTMLDivElement>(null)
+    const [defaultValue, setDefaultValue] = useState<
+      Record<string, IQuestionMatching>
+    >({})
+    const [answers, setAnswers] = useState<IAnswer[]>([])
+    const [correctAnswer, setCorrectAnswer] = useState<Record<string, IAnswer>>(
+      {},
+    )
+    const [key, setKey] = useState<string>('1')
     const isSelfReflection = data?.is_self_reflection
+    const matchingQuestionRef = useRef<HTMLDivElement | null>(null)
 
-    function allowDrop(ev: any) {
-      ev?.preventDefault()
+    const [dragging, setDragging] = useState<{ answerId: string } | null>(null)
+    const isProcessingRef = useRef(false)
+    const hasLocalModifications = useRef(false)
 
-      const slotElement = ev?.target
-      slotElement?.classList?.add('dragging')
-
-      const matchingQuestion = matchingQuestionRef?.current
-      if (!matchingQuestion) return
-
-      const rect = matchingQuestion?.getBoundingClientRect()
-
-      // Lấy chiều dài của phần tử matchingQuestion
-      const matchingQuestionHeight = matchingQuestion?.clientHeight
-
-      // Lấy tọa độ y của con trỏ chuột tính từ đỉnh của phần tử matchingQuestion
-      const mouseY = ev?.clientY - rect?.top
-
-      // Thiết lập ngưỡng cho việc cuộn
-      const threshold = 200
-
-      // Kiểm tra nếu con trỏ chuột nằm ở phía trên ngưỡng
-      if (mouseY < threshold) {
-        matchingQuestion?.scrollBy(0, -10)
-      }
-
-      // Kiểm tra nếu con trỏ chuột nằm ở phía dưới ngưỡng
-      if (mouseY > matchingQuestionHeight - threshold) {
-        matchingQuestion?.scrollBy(0, 10)
-      }
+    const findMatchingByAnswerId = (
+      answerId?: string,
+    ): IQuestionMatching | null => {
+      if (!answerId) return null
+      return (
+        data?.question_matchings?.find(
+          (q: IQuestionMatching) => q?.answer?.id === answerId,
+        ) ?? null
+      )
     }
-    function allowDropStorage(ev: any) {
-      if (ev?.target?.classList?.contains('dropable')) {
-        ev?.preventDefault()
-      } else {
+
+    function handleDragStart(ev: React.DragEvent, answerId: string) {
+      try {
+        ev?.dataTransfer?.setData('text/plain', String(answerId))
+        ev?.dataTransfer?.setData('parentQuestionId', String(data?.id))
+        ev.dataTransfer && (ev.dataTransfer.effectAllowed = 'move')
+      } catch (e) {}
+      setDragging({ answerId })
+    }
+
+    function handleDragOver(ev: React.DragEvent) {
+      ev.preventDefault()
+    }
+
+    function handleDropToMatch(ev: React.DragEvent, targetMatchId: string) {
+      ev.preventDefault()
+      ev.stopPropagation() // Ngăn event bubbling
+
+      // Tránh duplicate processing
+      if (isProcessingRef.current) {
         return
       }
-    }
+      isProcessingRef.current = true
 
-    function drag(ev: any) {
-      ev?.dataTransfer?.setData('text', ev.target.id)
-      ev?.dataTransfer?.setData('questionId', data.id)
-
-      if (uuid) {
-        dragParentIdRef = ev?.target?.closest(`#${uuid}`)?.id
+      const parentQuestionId =
+        ev?.dataTransfer?.getData('parentQuestionId') || String(data?.id)
+      if (String(parentQuestionId) !== String(data?.id)) {
+        setDragging(null)
+        isProcessingRef.current = false
+        return
       }
+
+      const answerId =
+        ev?.dataTransfer?.getData('text/plain') || dragging?.answerId
+      if (!answerId) {
+        setDragging(null)
+        isProcessingRef.current = false
+        return
+      }
+
+      const sourceMatchId = Object.keys(defaultValue).find(
+        (k) => defaultValue[k]?.answer?.id === answerId,
+      )
+
+      const draggedAnswerObj =
+        answers.find((a) => String(a?.id) === String(answerId)) ||
+        (sourceMatchId ? defaultValue[sourceMatchId]?.answer : null)
+
+      if (!draggedAnswerObj) {
+        setDragging(null)
+        isProcessingRef.current = false
+        return
+      }
+
+      const targetAnswerObj = defaultValue[targetMatchId]?.answer || null
+
+      setDefaultValue((prev) => {
+        const next = { ...prev }
+
+        if (sourceMatchId && sourceMatchId !== String(targetMatchId)) {
+          const draggedMatching = prev[sourceMatchId]
+          next[targetMatchId] = {
+            ...draggedMatching,
+            id: targetMatchId,
+          }
+
+          if (targetAnswerObj) {
+            const targetMatching = prev[targetMatchId]
+            next[sourceMatchId] = {
+              ...targetMatching,
+              id: sourceMatchId,
+            }
+          } else {
+            delete next[sourceMatchId]
+          }
+        } else {
+          const draggedMatching = findMatchingByAnswerId(answerId) || {
+            id: targetMatchId,
+            content: '',
+            answer: draggedAnswerObj,
+          }
+          next[targetMatchId] = draggedMatching
+
+          hasLocalModifications.current = true
+        }
+
+        hasLocalModifications.current = true
+
+        return next
+      })
+
+      setAnswers((prev) => {
+        let next = prev.filter((a) => String(a?.id) !== String(answerId))
+
+        if (!sourceMatchId && targetAnswerObj) {
+          next = [...next, targetAnswerObj]
+        }
+
+        return next
+      })
+
+      setDragging(null)
+      isProcessingRef.current = false
     }
 
-    function drop(ev: any, dropId: string, dropItem?: boolean) {
+    function handleDropToStorage(ev: React.DragEvent) {
       ev.preventDefault()
 
-      const slotElement = ev?.target
-      slotElement?.classList?.remove('dragging')
-
-      if (uuid && (!dragParentIdRef || dragParentIdRef !== uuid)) {
+      const parentQuestionId =
+        ev?.dataTransfer?.getData('parentQuestionId') || String(data?.id)
+      if (String(parentQuestionId) !== String(data?.id)) {
+        setDragging(null)
         return
       }
-      dragParentIdRef = ''
 
-      const questionId = ev?.dataTransfer.getData('questionId')
-      var data = ev?.dataTransfer?.getData('text')
-
-      let draggingItem
-
-      if (uuid) {
-        draggingItem = slotElement
-          .closest(`#${uuid}`)
-          ?.querySelector(`[id="${data}"]`)
-      } else {
-        draggingItem = document?.getElementById(data)
+      const answerId =
+        ev?.dataTransfer?.getData('text/plain') || dragging?.answerId
+      if (!answerId) {
+        setDragging(null)
+        return
       }
 
-      const oldParent = draggingItem?.parentNode
-      if (questionId === dropId) {
-        if (
-          slotElement?.children?.length === 0 &&
-          ev?.target?.classList?.contains('dropable') &&
-          !dropItem
-        ) {
-          ev?.target?.appendChild(draggingItem)
-        } else if (dropItem) {
-          const parent = ev?.target?.parentNode
-          oldParent?.appendChild(ev?.target)
-          parent.appendChild(draggingItem)
-          return
-        }
-      } else return
-    }
-    const handleStorage = (event: any, id: string) => {
-      // prevent the default behavior of the drop event
-      event.preventDefault()
-      // get the id of the dragged piece from the dataTransfer object
-      const pieceId = event?.dataTransfer.getData('text')
-      const questId = event?.dataTransfer.getData('questionId')
-      // get the storage element from the DOM
-      let storage
-      if (uuid) {
-        storage = event?.target
-          ?.closest(`#${uuid}`)
-          ?.querySelector(`.${storageId}`)
-      } else {
-        storage = document.querySelector(`.${storageId}`)
+      const sourceMatchId = Object.keys(defaultValue).find(
+        (k) => defaultValue[k]?.answer?.id === answerId,
+      )
+
+      const draggedAnswerObj = sourceMatchId
+        ? defaultValue[sourceMatchId]?.answer
+        : answers.find((a) => String(a?.id) === String(answerId))
+      if (!draggedAnswerObj) {
+        setDragging(null)
+        return
       }
-      // append the piece element to the storage element
-      if (event.target === storage && questId === id) {
-        if (uuid) {
-          storage?.appendChild(
-            event?.target
-              .closest(`#${uuid}`)
-              ?.querySelector(`[id="${pieceId}"]`) as any,
-          )
-        } else {
-          storage?.appendChild(document.getElementById(pieceId) as any)
-        }
-      } else return
+
+      setAnswers((prev) => {
+        if (prev.find((a) => String(a?.id) === String(draggedAnswerObj?.id)))
+          return prev
+        return [...prev, draggedAnswerObj]
+      })
+
+      if (sourceMatchId) {
+        setDefaultValue((prev) => {
+          const next = { ...prev }
+          delete next[sourceMatchId]
+          return next
+        })
+      }
+
+      setDragging(null)
     }
-    const [key, setKey] = useState<string>('1')
 
     useImperativeHandle(ref, () => ({
       handleReset() {
-        // setAnswered([])
-        setKey((prev) => {
-          const newKey = uniqueId('key')
-          return newKey
-        })
-        // setAnswered()
+        setKey(uniqueId('key'))
+        setAnswers([])
+        setDefaultValue({})
       },
       handleGetResult() {
-        // action()
+        return defaultValue
       },
     }))
+
     const QuestionCard = ({
       value,
       className = 'sapp-arrowed-container',
     }: IProp) => {
       return <div className={`${className}`}>{value}</div>
     }
-    // useEffect(() => {
-    //   if (data) {
-    //     DeserializeHighlight(highlighted)
-    //   }
-    // }, [data])
-    function shuffleArray(array: Array<any>) {
+
+    function shuffleArray<T>(array: T[]): T[] {
       let currentIndex = array?.length,
         randomIndex
-      // While there remain elements to shuffle
       while (currentIndex > 0) {
-        // Pick a remaining element
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex--
-        // And swap it with the current element
         ;[array[currentIndex], array[randomIndex]] = [
           array[randomIndex],
           array[currentIndex],
@@ -231,21 +320,32 @@ const MatchingQuestion = forwardRef(
       }
       return array
     }
+
     useEffect(() => {
-      let obj = {} as any
-      let objCorrect = {} as any
-      let arr = []
+      let obj: Record<string, IQuestionMatching> = {}
+      let objCorrect: Record<string, IAnswer> = {}
+      let arr: IAnswer[] = []
+
       for (let quest of data?.question_matchings) {
         arr.push(quest?.answer)
-        if (defaultAnswer) {
-          obj[quest?.id] = data?.question_matchings.find(
-            (el: any) =>
+
+        const existingLocalValue = defaultValue[quest?.id]
+        if (hasLocalModifications.current && existingLocalValue) {
+          obj[quest?.id] = existingLocalValue
+        } else if (defaultAnswer) {
+          const foundMatching = data?.question_matchings.find(
+            (el: IQuestionMatching) =>
               el?.answer?.id ===
-              defaultAnswer.find((e: any) => e?.question_id === quest?.id)
-                ?.answer_id,
+              defaultAnswer.find(
+                (e: IDefaultAnswer) => e?.question_id === quest?.id,
+              )?.answer_id,
           )
+          if (foundMatching) {
+            obj[quest?.id] = foundMatching
+          }
         }
       }
+
       shuffleArray(arr)
       if (corrects) {
         for (let correct of corrects) {
@@ -263,17 +363,18 @@ const MatchingQuestion = forwardRef(
       }
       setAnswers(arr)
       setDefaultValue(obj)
-    }, [defaultAnswer, data?.question_matchings])
+    }, [defaultAnswer, data?.question_matchings, corrects, isAlwaysShowAnswer])
+
     return (
-      <div key={key} ref={extenalRef} id={`${uuid}`}>
+      <div key={key} ref={extenalRef} id={`${uuid}`} data-matching-ref>
         <div
           id="hightlight_area"
-          onMouseUp={(e: any) => {
+          onMouseUp={(e: React.MouseEvent) => {
+            const target = e?.target as HTMLElement
             if (
-              e?.target?.tagName?.charAt(0) !== 'm' &&
-              e?.target?.firstChild?.tagName !== 'math'
+              target?.tagName?.charAt(0) !== 'm' &&
+              (target?.firstChild as HTMLElement)?.tagName !== 'math'
             ) {
-              // if(e){
               if (allowHighLight) {
                 runHighlight(
                   handleSaveHighLight,
@@ -285,10 +386,11 @@ const MatchingQuestion = forwardRef(
                   handleSaveHighLight,
                   allowUnHighLight || false,
                   'hightlight_area',
-                  { color: 'white' },
+                  {
+                    color: 'white',
+                  },
                 )
               }
-              // }
             }
           }}
         >
@@ -310,31 +412,33 @@ const MatchingQuestion = forwardRef(
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  {data?.question_topic?.exhibits?.map((e: any, i: number) => {
-                    return (
-                      <div
-                        className="cursor-pointer hover:text-primary"
-                        key={e?.id ?? i}
-                        onClick={(event) => {
-                          setOpenFile &&
-                            setOpenFile(
-                              {
-                                type: 'exhibits',
-                                description: e?.description,
-                                name: e?.name,
-                                index: i,
-                                files: e?.files,
-                              },
-                              null,
-                              null,
-                              event,
-                            )
-                        }}
-                      >
-                        {exhibitText} {i + 1}: {e?.name}
-                      </div>
-                    )
-                  })}
+                  {data?.question_topic?.exhibits?.map(
+                    (e: IExhibitData, i: number) => {
+                      return (
+                        <div
+                          className="cursor-pointer hover:text-primary"
+                          key={(e as any)?.id ?? `exhibit-${i}`}
+                          onClick={(event) => {
+                            setOpenFile &&
+                              setOpenFile(
+                                {
+                                  type: 'exhibits',
+                                  description: e?.description,
+                                  name: e?.name,
+                                  index: i,
+                                  files: e?.files,
+                                },
+                                null,
+                                null,
+                                event,
+                              )
+                          }}
+                        >
+                          {exhibitText} {i + 1}: {e?.name}
+                        </div>
+                      )
+                    },
+                  )}
                 </div>
                 <div className="my-6 border border-b-gray-2"></div>
               </>
@@ -342,33 +446,35 @@ const MatchingQuestion = forwardRef(
           <EditorReader
             className="sapp-questions !mb-[32px]"
             text_editor_content={data?.question_content}
-            highlighted={highlighted}
+            highlighted={highlighted as any}
           />
         </div>
+
         {!corrects ? (
           <div
             className="flex flex-col gap-y-5 px-19"
             ref={matchingQuestionRef}
           >
-            {data?.question_matchings?.map((e: any) => {
+            {data?.question_matchings?.map((e: IQuestionMatching) => {
               return (
                 <div className="flex flex-nowrap gap-x-20 " key={e?.id}>
                   <QuestionCard value={e?.content} />
                   <div
                     id={e?.id}
-                    className="sapp-match-result dropable flex-1"
-                    onDrop={() => drop(event, data?.id)}
-                    onDragOver={() => allowDrop(event)}
+                    className="sapp-match-result dropable min-h-[48px] flex-1"
+                    onDragOver={handleDragOver}
+                    onDrop={(ev) => handleDropToMatch(ev, e?.id)}
                   >
-                    {defaultValue?.[e?.id]?.id && (
+                    {defaultValue?.[e?.id]?.answer?.id && (
                       <div
-                        // className="w-fit"
                         className="sapp-notched-container min-w-132px"
-                        id={defaultValue[e?.id]?.answer?.id}
-                        draggable="true"
-                        onDragStart={drag}
-                        onDrop={() => drop(event, data?.id, true)}
-                        onDragOver={() => allowDrop(event)}
+                        id={String(defaultValue[e?.id]?.answer?.id)}
+                        draggable
+                        onDragStart={(ev) =>
+                          handleDragStart(ev, defaultValue[e?.id]?.answer?.id)
+                        }
+                        onDragOver={handleDragOver}
+                        onDrop={(ev) => handleDropToMatch(ev, e?.id)}
                       >
                         {defaultValue[e?.id]?.answer?.answer}
                       </div>
@@ -377,23 +483,22 @@ const MatchingQuestion = forwardRef(
                 </div>
               )
             })}
+
             <div
-              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5 ${storageId}`}
-              onDrop={(ev) => handleStorage(ev, data?.id)}
-              onDragOver={allowDropStorage}
+              className={`sapp-store dropable flex min-h-large flex-wrap gap-5 overflow-hidden border p-5`}
+              onDragOver={handleDragOver}
+              onDrop={handleDropToStorage}
               id="storage"
             >
-              {answers?.map((answer: any) => {
+              {answers?.map((answer: IAnswer) => {
                 return (
                   <div
-                    // className="w-fit"
                     key={answer?.id}
                     className="sapp-notched-container min-w-fit"
-                    id={answer?.id}
-                    draggable="true"
-                    onDragStart={drag}
-                    onDrop={() => drop(event, data?.id, true)}
-                    onDragOver={() => allowDrop(event)}
+                    id={String(answer?.id)}
+                    draggable
+                    onDragStart={(ev) => handleDragStart(ev, answer?.id)}
+                    onDragOver={handleDragOver}
                   >
                     {answer?.answer}
                   </div>
@@ -404,87 +509,79 @@ const MatchingQuestion = forwardRef(
         ) : (
           <>
             <div className="flex flex-col gap-y-5 px-[123px]">
-              {data?.question_matchings.map((e: any, index: number) => {
-                return (
-                  <div className="flex flex-nowrap justify-between" key={index}>
-                    {defaultValue?.[e?.id]?.answer?.id ===
-                      correctAnswer?.[e?.id]?.id ||
-                    isSelfReflection === true ? (
-                      <>
-                        <QuestionCard
-                          value={e?.content}
-                          className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6"
-                        />
-                        <div
-                          // id={e?.id}
-                          className="sapp-match-result flex-1"
-                        >
-                          {defaultValue?.[e?.id]?.id && (
-                            <div
-                              // className="w-fit"
-                              className="sapp-notched-container-corrects min-w-132px !border-gray-6 before:!border-gray-6"
-                              // id={defaultValue[e?.id]?.answer.id}
-                            >
-                              {defaultValue[e?.id]?.answer?.answer}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <QuestionCard
-                          value={e?.content}
-                          className="sapp-arrowed-container-incorrects text-state-error"
-                        />
-                        <div
-                          // id={e?.id}
-                          className="sapp-match-result flex-1"
-                        >
-                          {defaultValue?.[e?.id]?.id && (
-                            <div
-                              // className="w-fit"
-                              className="sapp-notched-container-incorrects min-w-132px text-state-error"
-                              // id={defaultValue[e?.id]?.answer.id}
-                            >
-                              {defaultValue[e?.id]?.answer?.answer}
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )
-              })}
+              {data?.question_matchings.map(
+                (e: IQuestionMatching, index: number) => {
+                  return (
+                    <div
+                      className="flex flex-nowrap justify-between"
+                      key={index}
+                    >
+                      {defaultValue?.[e?.id]?.answer?.id ===
+                        correctAnswer?.[e?.id]?.id ||
+                      isSelfReflection === true ? (
+                        <>
+                          <QuestionCard
+                            value={e?.content}
+                            className="sapp-arrowed-container-corrects !border-gray-6 before:!border-gray-6"
+                          />
+                          <div className="sapp-match-result flex-1">
+                            {defaultValue?.[e?.id]?.id && (
+                              <div className="sapp-notched-container-corrects min-w-132px !border-gray-6 before:!border-gray-6">
+                                {defaultValue[e?.id]?.answer?.answer}
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <QuestionCard
+                            value={e?.content}
+                            className="sapp-arrowed-container-incorrects text-state-error"
+                          />
+                          <div className="sapp-match-result flex-1">
+                            {defaultValue?.[e?.id]?.id && (
+                              <div className="sapp-notched-container-incorrects min-w-132px text-state-error">
+                                {defaultValue[e?.id]?.answer?.answer}
+                              </div>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )
+                },
+              )}
             </div>
+
             <div className="flex flex-col gap-y-5 pt-[42px]">
               <div className=" text-base font-semibold">Correct Answer</div>
 
-              {data?.question_matchings?.map((e: any, index: number) => {
-                return (
-                  <div
-                    className="flex flex-nowrap justify-between px-[123px]"
-                    key={index}
-                  >
-                    <QuestionCard
-                      value={e?.content}
-                      className="sapp-arrowed-container-corrects text-state-success"
-                    />
-                    <div className="sapp-match-result flex-1">
-                      {correctAnswer?.[e?.id]?.id && (
-                        <div
-                          // className="w-fit"
-                          className="sapp-notched-container-corrects min-w-132px text-state-success"
-                        >
-                          {correctAnswer?.[e?.id]?.answer}
-                        </div>
-                      )}
+              {data?.question_matchings?.map(
+                (e: IQuestionMatching, index: number) => {
+                  return (
+                    <div
+                      className="flex flex-nowrap justify-between px-[123px]"
+                      key={index}
+                    >
+                      <QuestionCard
+                        value={e?.content}
+                        className="sapp-arrowed-container-corrects text-state-success"
+                      />
+                      <div className="sapp-match-result flex-1">
+                        {correctAnswer?.[e?.id]?.id && (
+                          <div className="sapp-notched-container-corrects min-w-132px text-state-success">
+                            {correctAnswer?.[e?.id]?.answer}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )
-              })}
+                  )
+                },
+              )}
             </div>
           </>
         )}
+
         {solution && (
           <div className="mt-6 bg-gray-4 p-6">
             <SappTitleSolution title={MY_COURSES.explanations} />
@@ -495,5 +592,6 @@ const MatchingQuestion = forwardRef(
     )
   },
 )
+
 MatchingQuestion.displayName = 'MatchingQuestion'
 export default memo(MatchingQuestion)
