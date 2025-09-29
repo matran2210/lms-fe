@@ -27,7 +27,7 @@ import { trackGAEvent } from '@utils/google-analytics'
 import { Tooltip } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { isNull } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -53,6 +53,7 @@ import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import ModalResults from '../ModalResults'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
+import LoadingQuizDocument from './LoadingQuizDocument'
 
 type Props = {
   questions: IQuestion[]
@@ -961,167 +962,175 @@ const QuizDocument = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-4 md:gap-8">
-        {/* Question */}
+      {isUndefined(activeQuestion) ? (
+        <LoadingQuizDocument />
+      ) : (
         <div
-          className={`text-black-1 h-full ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+          className="flex flex-col gap-4 md:gap-8"
           data-aos={ANIMATION.DATA_AOS}
         >
-          {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
-            <BluredNotification />
-          )}
-          {activeQuestion &&
-            ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
-              isNull(quizSetting)) && (
-              <QuizComponent
-                activityId={activityId}
-                tabId={tabId}
-                quizId={quizId}
-                showCorrect={isAFTEREACHQUESTION || isAFTERAllQUESTION}
-                activeQuestion={activeQuestion}
-                ref={questionRef}
-                key={quizComponentKey}
-                document_id={document_id}
-                setOpenFile={setOpenFile}
-                grading_preference={grading_preference}
-                showQuestionContent={false}
-                isHideExhibit={false}
-                saveAnswer={handleSaveAnswer}
-                exhibitText={exhibitText}
-                {...{
-                  controlAnswer,
-                  setValue,
-                  reset,
-                  getValues,
-                  watch,
-                  resetField,
-                }}
-              />
-            )}
-        </div>
-        {/* Confirm Button */}
-        <div
-          className={clsx('justify-end gap-2', {
-            'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
-            flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
-          })}
-        >
-          {[
-            QUESTION_TYPES.TRUE_FALSE,
-            QUESTION_TYPES.ONE_CHOICE,
-            QUESTION_TYPES.MULTIPLE_CHOICE,
-          ].includes(activeQuestion?.qType) &&
-            !isQuestionConfirmed && (
-              <ButtonSecondary
-                className="!px-4 !py-2 !text-sm"
-                size={'small'}
-                disabled={
-                  ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                    activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                    !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-                  (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                    !watch(`${activeQuestion?.id}_${document_id}_answer`)
-                      ?.length)
-                }
-                onClick={() => {
-                  handleClearSelection(activeQuestion)
-                  trackGAEvent('Click Button Clear Selection Test')
-                }}
-                title="Clear Selection"
-              />
-            )}
-          <Tooltip
-            title={
-              isQuestionConfirmed ||
-              isAFTERAllQUESTION ||
-              (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
-              ![
-                QUESTION_TYPES.TRUE_FALSE,
-                QUESTION_TYPES.ONE_CHOICE,
-                QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(activeQuestion?.qType) ||
-              ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-              (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                watch(`${activeQuestion?.id}_${document_id}_answer`) &&
-                watch(`${activeQuestion?.id}_${document_id}_answer`).length > 0)
-                ? null
-                : 'You should select an answer before click'
-            }
-            classNames={{ root: 'max-w-72' }}
-            trigger={'hover'}
+          {/* Question */}
+          <div
+            className={`text-black-1 h-full ${!!gradeStatus ? 'pointer-events-none opacity-100' : ''} `}
+            data-aos={ANIMATION.DATA_AOS}
           >
-            <>
-              {(isQuestionConfirmed ||
+            {!quizSetting?.allow_attempt && !isNull(quizSetting) && (
+              <BluredNotification />
+            )}
+            {activeQuestion &&
+              ((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
+                isNull(quizSetting)) && (
+                <QuizComponent
+                  activityId={activityId}
+                  tabId={tabId}
+                  quizId={quizId}
+                  showCorrect={isAFTEREACHQUESTION || isAFTERAllQUESTION}
+                  activeQuestion={activeQuestion}
+                  ref={questionRef}
+                  key={quizComponentKey}
+                  document_id={document_id}
+                  setOpenFile={setOpenFile}
+                  grading_preference={grading_preference}
+                  showQuestionContent={false}
+                  isHideExhibit={false}
+                  saveAnswer={handleSaveAnswer}
+                  exhibitText={exhibitText}
+                  {...{
+                    controlAnswer,
+                    setValue,
+                    reset,
+                    getValues,
+                    watch,
+                    resetField,
+                  }}
+                />
+              )}
+          </div>
+          {/* Confirm Button */}
+          <div
+            className={clsx('justify-end gap-2', {
+              'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
+              flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
+            })}
+          >
+            {[
+              QUESTION_TYPES.TRUE_FALSE,
+              QUESTION_TYPES.ONE_CHOICE,
+              QUESTION_TYPES.MULTIPLE_CHOICE,
+            ].includes(activeQuestion?.qType) &&
+              !isQuestionConfirmed && (
+                <ButtonSecondary
+                  className="!px-4 !py-2 !text-sm"
+                  size={'small'}
+                  disabled={
+                    ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                      activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                      !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                    (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                      !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                        ?.length)
+                  }
+                  onClick={() => {
+                    handleClearSelection(activeQuestion)
+                    trackGAEvent('Click Button Clear Selection Test')
+                  }}
+                  title="Clear Selection"
+                />
+              )}
+            <Tooltip
+              title={
+                isQuestionConfirmed ||
                 isAFTERAllQUESTION ||
-                (isQuestionConfirmed && isLastQuestion)) &&
-                !isFinishQuiz && (
+                (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+                ![
+                  QUESTION_TYPES.TRUE_FALSE,
+                  QUESTION_TYPES.ONE_CHOICE,
+                  QUESTION_TYPES.MULTIPLE_CHOICE,
+                ].includes(activeQuestion?.qType) ||
+                ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                  activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                  watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
+                    0)
+                  ? null
+                  : 'You should select an answer before click'
+              }
+              classNames={{ root: 'max-w-72' }}
+              trigger={'hover'}
+            >
+              <>
+                {(isQuestionConfirmed ||
+                  isAFTERAllQUESTION ||
+                  (isQuestionConfirmed && isLastQuestion)) &&
+                  !isFinishQuiz && (
+                    <SappButton
+                      className="!rounded-lg !px-4 py-2 text-sm"
+                      childClass="text-sm"
+                      title={
+                        isLastQuestion
+                          ? 'Finish'
+                          : isAFTERAllQUESTION
+                            ? 'Submit & Next'
+                            : 'Next'
+                      }
+                      full={false}
+                      size={'small'}
+                      onClick={() => {
+                        if (loading) {
+                          return
+                        }
+                        if (isLastQuestion) {
+                          handleQuizFinish()
+                          setRunHandleFinishQuiz((e) => e + 1)
+                          trackGAEvent('Click Button Finish Quiz Activity')
+                        } else {
+                          handleNextQuestion()
+                          trackGAEvent('Click Button Next Quiz Activity')
+                        }
+                      }}
+                      color="light-dark"
+                      loading={loading}
+                    />
+                  )}
+                {!isQuestionConfirmed && isAFTEREACHQUESTION && (
                   <SappButton
-                    className="!rounded-lg !px-4 py-2 text-sm"
+                    className="!rounded-lg !px-4 py-2"
                     childClass="text-sm"
-                    title={
-                      isLastQuestion
-                        ? 'Finish'
-                        : isAFTERAllQUESTION
-                          ? 'Submit & Next'
-                          : 'Next'
-                    }
+                    title={getButttonTitle()}
                     full={false}
                     size={'small'}
+                    disabled={loading}
                     onClick={() => {
-                      if (loading) {
-                        return
-                      }
-                      if (isLastQuestion) {
-                        handleQuizFinish()
-                        setRunHandleFinishQuiz((e) => e + 1)
-                        trackGAEvent('Click Button Finish Quiz Activity')
-                      } else {
-                        handleNextQuestion()
-                        trackGAEvent('Click Button Next Quiz Activity')
-                      }
+                      handleSubmit()
                     }}
                     color="light-dark"
                     loading={loading}
                   />
                 )}
-              {!isQuestionConfirmed && isAFTEREACHQUESTION && (
-                <SappButton
-                  className="!rounded-lg !px-4 py-2"
-                  childClass="text-sm"
-                  title={getButttonTitle()}
-                  full={false}
-                  size={'small'}
-                  disabled={loading}
-                  onClick={() => {
-                    handleSubmit()
-                  }}
-                  color="light-dark"
-                  loading={loading}
-                />
-              )}
-              {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-              {isQuestionConfirmed &&
-                isAFTERAllQUESTION &&
-                isFinishQuiz &&
-                hasAttemptsLeft && (
-                  <SappButton
-                    className="!rounded-lg !px-4 !py-2"
-                    childClass="text-sm"
-                    title={'Retake'}
-                    full={false}
-                    size={'small'}
-                    disabled={loading}
-                    onClick={() => {
-                      handleRetakeQuestion()
-                    }}
-                  />
-                )}
-            </>
-          </Tooltip>
+                {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+                {isQuestionConfirmed &&
+                  isAFTERAllQUESTION &&
+                  isFinishQuiz &&
+                  hasAttemptsLeft && (
+                    <SappButton
+                      className="!rounded-lg !px-4 !py-2"
+                      childClass="text-sm"
+                      title={'Retake'}
+                      full={false}
+                      size={'small'}
+                      disabled={loading}
+                      onClick={() => {
+                        handleRetakeQuestion()
+                      }}
+                    />
+                  )}
+              </>
+            </Tooltip>
+          </div>
         </div>
-      </div>
+      )}
 
       {modalResult?.status && (
         <ModalResults
