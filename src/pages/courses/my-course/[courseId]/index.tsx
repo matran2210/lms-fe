@@ -78,6 +78,7 @@ const CourseDetail = () => {
       DEFAULT_PAGESIZE,
       params,
     )
+
     return {
       class_user_id: data?.class_user_id,
       is_passed: data?.is_passed,
@@ -169,8 +170,16 @@ const CourseDetail = () => {
   const { setCourseType } = useCourseContext()
 
   useEffect(() => {
-    isSuccess &&
+    if (isSuccess) {
+      if (
+        data?.pages?.[0]?.courseDetail?.data?.course_type === 'TRIAL_COURSE'
+      ) {
+        localStorage.setItem('showPinTrial', 'true')
+      } else {
+        localStorage.removeItem('showPinTrial')
+      }
       setCourseType(data.pages[0].courseDetail.data.course_type ?? '')
+    }
   })
 
   const canShowExam = (remindChoosingExam: RemindChoosingExam) => {
