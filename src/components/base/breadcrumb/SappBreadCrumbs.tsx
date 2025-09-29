@@ -23,7 +23,7 @@ const SappBreadCrumbs = ({
           const isLast = index === lastIndex
           const titleDisplay = handleTitleDisplay(
             breadcrumb.title,
-            isLast ? 60 : 30,
+            isLast ? 20 : 30,
           )
           const isLong = breadcrumb.title?.length > 30
 
