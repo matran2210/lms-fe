@@ -5,10 +5,9 @@ import { PageLink } from 'src/constants'
 const LogoDefault = () => {
   const router = useRouter()
   const pathname = router.pathname
-  const isShortCourse = pathname.startsWith(PageLink.SHORT_COURSE)
 
   return (
-    <Link href={isShortCourse ? PageLink.SHORT_COURSE : PageLink.COURSES}>
+    <Link href={PageLink.COURSES}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"

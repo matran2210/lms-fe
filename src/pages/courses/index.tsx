@@ -18,7 +18,6 @@ import { CoursesAPI } from '../api/courses'
 import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import GotoModal from '@components/courses/popup/GotoModal'
 
 const DEFAULT_PAGESIZE = 9
 
@@ -271,7 +270,6 @@ const MyCourse = () => {
             className={`fixed inset-0 z-40 animate-fade-in-overlay bg-black opacity-55 transition-opacity`}
           ></div>
         )}
-        <GotoModal />
       </Layout>
     </SappLoadingGlobal>
   )

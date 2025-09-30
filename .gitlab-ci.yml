@@ -34,7 +34,7 @@ build_master:
 
 deploy_staging:
   stage: deploy
-  image: node:18
+  image: node:20
   only:
     - staging
   script:

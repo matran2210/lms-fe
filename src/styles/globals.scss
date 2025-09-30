@@ -7,7 +7,6 @@
 @import 'sidebar.scss';
 @import 'my-course.scss';
 @import 'my-profile.scss';
-@import 'course-3-level.scss';
 @import 'video.scss';
 @import 'activity.scss';
 @import 'test.scss';
@@ -16,7 +15,6 @@
 @import './components/_select.scss';
 @import './components/_datepicker.scss';
 @import './components/_collapse.scss';
-
 @import './components/_table.scss';
 @import 'progress.scss';
 @import './components/_input.scss';
@@ -1336,4 +1334,8 @@ select:focus {
 
 [type='search']:focus {
   --tw-ring-color: none;
+}
+
+.luckysheet-scrollbar-ltr {
+  z-index: 500 !important;
 }

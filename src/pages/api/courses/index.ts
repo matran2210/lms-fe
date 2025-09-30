@@ -130,12 +130,16 @@ export class CoursesAPI {
   static async getTopicDescription(
     id: string | string[] | undefined,
     quiz_id?: string,
+    class_user_id?: string,
     cache = false,
   ): Promise<any> {
-    const uri =
+    let uri =
       url.getTopicDescription +
       `/${id}?quiz_id=${quiz_id}&include_questions=false`
 
+    if (class_user_id) {
+      uri += `&class_user_id=${class_user_id}`
+    }
     if (!cache) return fetcher(uri)
 
     if (!this.CACHE_GET_TOPIC_DESCRIPTION[uri]) {

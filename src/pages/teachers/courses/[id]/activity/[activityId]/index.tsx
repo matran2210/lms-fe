@@ -212,11 +212,13 @@ const ActivityTeacherPage = () => {
     videoRef.current,
   ])
 
-  // Clear notes & calculator
+  // Clear notes & calculator (keep notes if navigating with note_id)
   useEffect(() => {
-    dispatch(clearNote())
+    if (!router.query?.note_id) {
+      dispatch(clearNote())
+    }
     dispatch(closeCalculator())
-  }, [dispatch, router.asPath])
+  }, [dispatch, router.asPath, router.query?.note_id])
 
   const onVideoStart = (file_id: string, course_tab_document_id: string) => {
     if (isHasQuizGrading) {
@@ -699,8 +701,6 @@ const ActivityTeacherPage = () => {
                                 'AFTER_EACH_QUESTION'
                               }
                               class_user_id={activity?.class_user_id}
-                              activeTab=""
-                              activeVideo=""
                             ></VideoDocument>
                           </div>
                         )
