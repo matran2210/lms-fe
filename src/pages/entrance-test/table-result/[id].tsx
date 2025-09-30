@@ -76,7 +76,7 @@ const TableEntranceResult = () => {
   return (
     <>
       <div className="relative">
-        <div className="flex flex-col items-center justify-between bg-white p-4 md:p-2.5">
+        <div className="flex flex-col items-center justify-between bg-white p-4 shadow-header md:p-2.5">
           <h2 className="text-base font-semibold md:text-2xl">Entrance Test</h2>
           <div className="mt-1 hidden md:block">
             <span className="text-gray-800">
@@ -109,7 +109,7 @@ const TableEntranceResult = () => {
         </div>
       </div>
       <Layout size="md" title="Entrance Test Result" showSidebar={false}>
-        <div className="m-auto overflow-x-auto overflow-y-hidden">
+        <div className="">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
