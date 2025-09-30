@@ -79,7 +79,7 @@ const TestResultDetail = () => {
           title="Retake"
           size="small"
           onClick={handleRetake}
-          className={clsx('hidden md:block', { hidden: !isShowRetakeButton })}
+          className={clsx('hidden md:block', !isShowRetakeButton && '!hidden')}
         />
         <Tooltip
           placement="left"
