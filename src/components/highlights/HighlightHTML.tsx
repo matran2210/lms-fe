@@ -745,7 +745,7 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   return (
     <div
-      className="text-[16px]"
+      className="text-base"
       onMouseUp={handleMouseUp}
       style={{ position: 'relative' }}
       onClick={handleHighlightClick}
