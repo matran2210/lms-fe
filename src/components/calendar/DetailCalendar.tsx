@@ -198,11 +198,15 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
     )
   }
 
-  if (!open.isOpen) return null
-
   return (
     <div
-      className="sticky top-4 hidden h-[calc(100vh-32px)] w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex"
+      className={clsx(
+        'sticky top-4 h-[calc(100vh-32px)] w-[425px] flex-col overflow-y-auto rounded-2xl bg-white p-8 !text-bw-13 shadow-table lg:flex',
+        'transition-all duration-300 ease-in-out',
+        open.isOpen
+          ? 'translate-x-0 opacity-100'
+          : 'translate-x-full opacity-0',
+      )}
       data-aos={ANIMATION.DATA_AOS}
     >
       <div className="mb-8 flex items-center justify-start gap-2">
@@ -218,7 +222,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
       </div>
       {data?.schedule && !loading ? (
         <>
-          <div>
+          <div data-aos={ANIMATION.DATA_AOS}>
             <div className="mb-5 text-lg font-semibold">
               <div>Primary Information</div>
             </div>
