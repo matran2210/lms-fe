@@ -97,7 +97,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your results will"
-            text2="be emailed to you on October 21, 2025"
+            text2="be emailed to you on October 14, 2025"
             text3="Please remember to check your inbox to ensure you don’t miss the update."
           />
         )
@@ -129,7 +129,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return '28/06/2025'
 
       case 'CMA':
-        return '21/10/2025'
+        return '14/10/2025'
       default:
         break
     }
