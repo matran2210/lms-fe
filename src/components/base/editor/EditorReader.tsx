@@ -167,7 +167,7 @@ const EditorReader = ({
   return (
     <>
       <div
-        className={`mce-content-body ${className}`}
+        className={`mce-content-body text-[16px] ${className}`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
@@ -175,7 +175,7 @@ const EditorReader = ({
         <div
           ref={extenalRef}
           className={clsx({
-            'pined-noti text-[14px] text-white': pinned,
+            'pined-noti text-white': pinned,
           })}
           key={content}
           onClick={handleOnclick}
