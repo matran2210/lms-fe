@@ -175,7 +175,7 @@ const ScoreDetail = ({
       className={`mb-[180px] lg:mb-[200px] xl:mb-0 ${className}`}
     >
       <div className="mb-4 flex items-center gap-x-3">
-        <div className="text-lg font-semibold md:text-xl ">
+        <div className="text-lg font-semibold">
           Score Details{' '}
           {!router?.query?.attempt && quizAttempt?.number_of_attempts && (
             <span className="text-sm text-gray-400 md:text-base">
