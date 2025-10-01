@@ -1,5 +1,5 @@
 import { IMetaData } from 'src/type'
-interface ITemplateConfig {
+export interface ITemplateConfig {
   template_full: number
   template_short_course: number
 }
