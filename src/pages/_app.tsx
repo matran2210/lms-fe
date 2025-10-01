@@ -43,7 +43,6 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
-import { StaticModalProvider } from '@contexts/StaticModalContext'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-common-package/dist/index.css'
 import 'preview-part/dist/index.css'
@@ -301,37 +300,35 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <AntConfigProvider>
           <PinnedNotifyProvider>
             <CourseProvider>
-              <StaticModalProvider>
-                <QueryClientProvider client={queryClient}>
-                  <SocketContext.Provider value={socket}>
-                    <Toaster
-                      toastOptions={{
-                        style: {
-                          maxWidth: '400px', // Tăng chiều rộng của toast
-                        },
-                      }}
-                    />
-                    <SappConfirmDialogContainer />
-                    <RouteGuard>
-                      <>
-                        <div className="relative">
-                          <PinnedNotifications />
-                          <CtaTrial />
-                          <Component {...pageProps} />
-                        </div>
-                        {showHelp && (
-                          <>
-                            <BackToTop />
-                            <Help showHelp={showHelp} />
-                          </>
-                        )}
-                        <LearningNotesList />
-                        <PopupCompletedCourse />
-                      </>
-                    </RouteGuard>
-                  </SocketContext.Provider>
-                </QueryClientProvider>
-              </StaticModalProvider>
+              <QueryClientProvider client={queryClient}>
+                <SocketContext.Provider value={socket}>
+                  <Toaster
+                    toastOptions={{
+                      style: {
+                        maxWidth: '400px', // Tăng chiều rộng của toast
+                      },
+                    }}
+                  />
+                  <SappConfirmDialogContainer />
+                  <RouteGuard>
+                    <>
+                      <div className="relative">
+                        <PinnedNotifications />
+                        <CtaTrial />
+                        <Component {...pageProps} />
+                      </div>
+                      {showHelp && (
+                        <>
+                          <BackToTop />
+                          <Help showHelp={showHelp} />
+                        </>
+                      )}
+                      <LearningNotesList />
+                      <PopupCompletedCourse />
+                    </>
+                  </RouteGuard>
+                </SocketContext.Provider>
+              </QueryClientProvider>
             </CourseProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>

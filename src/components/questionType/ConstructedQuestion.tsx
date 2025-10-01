@@ -20,22 +20,13 @@ import { useAppDispatch } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import clsx from 'clsx'
 import toast from 'react-hot-toast'
-import { DEFAULT_EDITOR_VALUE, generateSheetId } from 'src/constants/attempt'
+import {
+  DEFAULT_EDITOR_VALUE,
+  generateSheetId,
+  setDefaultIdToSheetData,
+  SheetData,
+} from 'src/constants/attempt'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
-
-export type SheetData = {
-  name: string
-  id: string
-  status: number
-  data: (string | number | null)[][]
-  celldata: {
-    r: number
-    c: number
-    v: { v: string; ct: { fa: string; t: string }; m: string }
-  }[]
-  row?: number
-  column?: number
-}
 
 export type IPreviewProp = {
   data: any
@@ -110,6 +101,11 @@ const EssayQuestionPreview = ({
   const ignoreStructOpsRef = useRef<boolean>(false)
   // Lưu snapshot sheets gần nhất (đầy đủ celldata) để không mất dữ liệu các sheet khác khi đổi sheet
   const sheetsSnapshotRef = useRef<any[] | null>(null)
+
+  // Tạo unique key cho mỗi requirement để tránh xung đột giữa các requirements
+  const requirementKey = useMemo(() => {
+    return `requirement-${data?.id || index || 0}`
+  }, [data?.id, index])
 
   // Đồng bộ Controller với các thay đổi cấu trúc của Fortune Sheet
   // - Bật cờ ignoreStructOpsRef khi thao tác cấu trúc đang diễn ra để onChange không chạy
@@ -372,9 +368,10 @@ const EssayQuestionPreview = ({
   }, [data?.id])
 
   const renderSheetEditor = useCallback(
-    ({ onChange }: any) => {
+    ({ onChange, value }: any) => {
       return (
         <HookFormExcel
+          key={`${requirementKey}-${key}`}
           question_data={question_data}
           defaultValue={defaultValue}
           index={index}
@@ -390,7 +387,7 @@ const EssayQuestionPreview = ({
         />
       )
     },
-    [key, stableDataId],
+    [key, stableDataId, requirementKey],
   )
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
@@ -413,7 +410,7 @@ const EssayQuestionPreview = ({
         editorRef={editorRef}
       />
     )
-  }, [name])
+  }, [name, defaultValue])
   return (
     <div style={{ background: 'white' }}>
       {question_content && isShowContent && (
@@ -621,7 +618,7 @@ const EssayQuestionPreview = ({
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
-                key={key}
+                key={`${requirementKey}-${key}`}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
@@ -643,6 +640,7 @@ const EssayQuestionPreview = ({
                   // }
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               ></Controller>
@@ -654,13 +652,14 @@ const EssayQuestionPreview = ({
               className={`${fullData?.is_viewed_answer || fullData?.confirmed || fullData?.data?.confirmed ? 'pointer-events-none opacity-100' : ''} h-[500px] w-full border`}
             >
               <Controller
-                key={key}
+                key={`${requirementKey}-${key}`}
                 name={name}
                 control={control}
                 defaultValue={defaultValue}
                 render={({ field: { onChange, value } }) => {
                   return renderSheetEditor({
                     onChange,
+                    value,
                   })
                 }}
               ></Controller>

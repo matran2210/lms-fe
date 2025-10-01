@@ -49,6 +49,7 @@ import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import { isPdfFile } from '@utils/helpers'
 import FileViewer from '@components/base/fileViewer/FileViewer'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
@@ -218,7 +219,7 @@ const CaseStudyResult = () => {
             allowHighLight={allowHighLight}
             allowUnHighLight={allowUnHighLight}
             forCaseStudy={true}
-            name={`${index}_answer`}
+            name={`${data?.id}_${index}_answer`}
             setValue={setValue}
             defaultValue={defaultValue}
             fullData={{
@@ -277,7 +278,7 @@ const CaseStudyResult = () => {
         item.question.qType === QUESTION_TYPES.ESSAY
           ? { ...item.question, response_option: item.response_option }
           : item.question
-      const name = `${index}_answer`
+      const name = `${question?.id}_${index}_answer`
       const defaultValue = getValues(name)
       handleResetEssay(index, question, defaultValue)
     })
@@ -617,6 +618,8 @@ const CaseStudyResult = () => {
     })
   }, [result])
 
+  const { isDesktopView } = useTailwindBreakpoint()
+
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Case Study">
@@ -884,8 +887,8 @@ const CaseStudyResult = () => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={650}
-                    height={850}
+                    width={isDesktopView ? 650 : 400}
+                    height={isDesktopView ? 750 : 400}
                     minWidth={200}
                     minHeight={200}
                     key={e.id}

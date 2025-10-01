@@ -3,13 +3,12 @@ import EditorReader from '@components/base/editor/EditorReader'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
 import FileViewer from '@components/base/fileViewer/FileViewer'
-import { CloseModalIcon } from '@assets/v2/icons'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -38,7 +37,7 @@ const TestScratchPads = ({
   exhibitText = 'Exhibit',
 }: IProps) => {
   const handleChangeScratchPad = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: ChangeEvent<HTMLInputElement>,
     id?: string,
   ) => {
     const { value } = e.target
@@ -95,8 +94,8 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '412px',
-            height: '312px',
+            width: '400px',
+            height: '300px',
             top: 'calc(50% - 150px)',
             left: 'calc(50% - 200px)',
           }}
@@ -108,12 +107,12 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full overflow-hidden rounded-xl">
-            <div className="flex w-full items-center justify-between bg-gray-v2-100 px-4 py-3">
-              <div className="text-sm font-bold">Scratch Pad</div>
+          <div className="absolute left-0 top-0 h-full w-full border">
+            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+              <div className="text-sm font-normal">Scratch Pad</div>
               {/* <CloseIcon */}
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseModalIcon />
+                <CloseIcon />
               </button>
             </div>
             <ScratchPatch

@@ -2,6 +2,7 @@ import { CloseIcon } from '@assets/icons'
 import styles from '@styles/components/ModalResizeable.module.scss'
 import clsx from 'clsx'
 import React, { ReactNode, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Rnd } from 'react-rnd'
 
 interface ModalResizeableProps {
@@ -27,6 +28,7 @@ interface ModalResizeableProps {
   rootClassName?: string
   bodyClassName?: string
   contentClassName?: string
+  isInBody?: boolean
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -43,6 +45,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   rootClassName,
   bodyClassName,
   contentClassName,
+  isInBody = false,
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -90,55 +93,60 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     setModalPosition(calculatePosition(position, size.width, size.height))
   }, [])
 
-  return (
-    <Rnd
-      size={{ width: size.width, height: size.height }}
-      position={modalPosition}
-      onDragStop={(e, d) => setModalPosition({ x: d.x, y: d.y })}
-      onResizeStop={(e, direction, ref, delta, newPos) => {
-        setSize({
-          width: parseInt(ref.style.width),
-          height: parseInt(ref.style.height),
-        })
-        setModalPosition(newPos)
-      }}
-      minWidth={minWidth}
-      minHeight={minHeight}
-      bounds="window"
-      style={{
-        background: 'white',
-        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-        border: '1px solid #DCDDDD',
-      }}
-      dragHandleClassName={
-        dragHandleClassName ? dragHandleClassName : 'modal-header'
-      }
-      className={clsx(styles.modalResizeable, rootClassName)}
-    >
-      <div
-        className={clsx('absolute left-0 top-0 h-full w-full', bodyClassName)}
+  const renderContent = () => {
+    return (
+      <Rnd
+        size={{ width: size.width, height: size.height }}
+        position={modalPosition}
+        onDragStop={(e, d) => setModalPosition({ x: d.x, y: d.y })}
+        onResizeStop={(e, direction, ref, delta, newPos) => {
+          setSize({
+            width: parseInt(ref.style.width),
+            height: parseInt(ref.style.height),
+          })
+          setModalPosition(newPos)
+        }}
+        minWidth={minWidth}
+        minHeight={minHeight}
+        bounds="window"
+        style={{
+          background: 'white',
+          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+          border: '1px solid #DCDDDD',
+        }}
+        dragHandleClassName={
+          dragHandleClassName ? dragHandleClassName : 'modal-header'
+        }
+        className={clsx(styles.modalResizeable, rootClassName)}
       >
-        {header ? (
-          header
-        ) : (
-          <div className={styles.modalHeader}>
-            <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
-              <div className="truncate">{title}</div>
+        <div
+          className={clsx('absolute left-0 top-0 h-full w-full', bodyClassName)}
+        >
+          {header ? (
+            header
+          ) : (
+            <div className={styles.modalHeader}>
+              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between px-5">
+                <div className="truncate">{title}</div>
+              </div>
+              <button
+                className="absolute right-3 top-2"
+                onClick={handleCloseScratchPad}
+              >
+                <CloseIcon />
+              </button>
             </div>
-            <button
-              className="absolute right-3 top-2"
-              onClick={handleCloseScratchPad}
-            >
-              <CloseIcon />
-            </button>
+          )}
+          <div className={clsx(styles.modalContent, contentClassName)}>
+            {children}
           </div>
-        )}
-        <div className={clsx(styles.modalContent, contentClassName)}>
-          {children}
         </div>
-      </div>
-    </Rnd>
-  )
+      </Rnd>
+    )
+  }
+  return isInBody
+    ? createPortal(renderContent(), document.body)
+    : renderContent()
 }
 
 export default ModalResizeable

@@ -136,7 +136,9 @@ const CaseStudyDetailTeacher = () => {
             allowUnHighLight={allowUnHighLight}
             defaultAnswer={defaultValue}
             done={done}
-            extenalRef={(el: any) => (valueRef.current[index || 0] = el)}
+            extenalRef={(el: HTMLDivElement | null) =>
+              (valueRef.current[index || 0] = el)
+            }
           />
         )
       case QUESTION_TYPES.FILL_WORD:
