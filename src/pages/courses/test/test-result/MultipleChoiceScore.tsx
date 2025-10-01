@@ -29,7 +29,7 @@ const MultipleChoiceScore = ({
         <div
           className={`w-full justify-between rounded-xl bg-white p-4 shadow-small md:p-6 lg:rounded-2xl xl:mb-8`}
         >
-          <div className="mb-4 text-lg font-bold text-gray-800 md:text-2xl">
+          <div className="mb-4 text-lg font-semibold text-gray-800 md:text-xl">
             {questions?.quizAttempt?.grading_status ===
             GRADE_STATUS.FINISHED_GRADING
               ? 'Overall Score'
