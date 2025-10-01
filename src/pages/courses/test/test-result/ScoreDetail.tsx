@@ -201,8 +201,15 @@ const ScoreDetail = ({
               {
                 key: 0,
                 label: (
-                  <span className="text-lg font-semibold text-gray-800">
-                    {rows[0]?.belong_to?.name}
+                  <span className="text-lg font-medium text-gray-800 md:text-xl">
+                    {rows[0]?.belong_to?.name
+                      ?.split(' ')
+                      .map(
+                        (word) =>
+                          word.charAt(0).toUpperCase() +
+                          word.slice(1).toLowerCase(),
+                      )
+                      .join(' ')}
                   </span>
                 ),
                 children: (
