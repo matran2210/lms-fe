@@ -365,7 +365,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {user.courses} Enrolled Courses
+            {user.courses?.template_full ?? 0} Enrolled Courses
           </div>
           <Divider type="vertical" className="m-0 bg-gray-300" />
           <div className="flex items-center justify-start gap-1">
@@ -383,7 +383,7 @@ const ProfileHeader = ({
                 fill="currentColor"
               />
             </svg>
-            {user.certificates} Certificates
+            {user.certificates?.template_full ?? 0} Certificates
           </div>
         </div>
       </div>
