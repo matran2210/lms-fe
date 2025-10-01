@@ -1,7 +1,7 @@
 export interface Thumbnail {
-  '640x360': string
-  '770x435': string
-  '950x535': string
+  '311x175': string
+  '656x369': string
+  '1270x716': string
   [key: string]: string
 }
 

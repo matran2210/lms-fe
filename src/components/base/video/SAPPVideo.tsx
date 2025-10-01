@@ -15,6 +15,7 @@ import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
 import { LoadingIcon, PiPIcon } from '@assets/icons'
 import { useRouter } from 'next/router'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProp {
   options: any
@@ -742,6 +743,21 @@ const SAPPVideo = ({
     }
   }, [router.events])
 
+  const { isDesktopView, isMDMiddleView, isXLMiddleView } =
+    useTailwindBreakpoint()
+
+  const getThumbnail = () => {
+    if (isDesktopView) {
+      return { src: thumbnail?.['1270x716'], width: 1270, height: 716 }
+    }
+    if (isMDMiddleView || isXLMiddleView) {
+      return { src: thumbnail?.['656x369'], width: 656, height: 369 }
+    }
+    return { src: thumbnail?.['311x175'], width: 311, height: 175 }
+  }
+
+  const { src, width, height } = getThumbnail()
+
   return (
     <>
       <div
@@ -750,14 +766,11 @@ const SAPPVideo = ({
         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
-              src={
-                thumbnail?.['950x535'] ??
-                '/assets/images/default_thumbnail_video.png'
-              }
-              alt={'Thumbnail image'}
+              src={src ?? '/assets/images/default_thumbnail_video.png'}
+              alt="Thumbnail image"
               className="h-full w-full object-contain"
-              width={952}
-              height={535.5}
+              width={width}
+              height={height}
               priority
             />
           )}
