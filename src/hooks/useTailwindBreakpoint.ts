@@ -75,6 +75,7 @@ export const useTailwindBreakpoint = ({
   const is2XLView = ['2xl'].includes(breakpoint)
   const isXLMiddleView = ['xl-middle'].includes(breakpoint)
   const isMDMiddleView = ['md-middle'].includes(breakpoint)
+  const isDesktopView = ['2xl', '3xl', '4xl'].includes(breakpoint)
   return {
     isAlwaysShowSidebar,
     isShowMenuContent,
@@ -87,5 +88,6 @@ export const useTailwindBreakpoint = ({
     is2XLView,
     isXLMiddleView,
     isMDMiddleView,
+    isDesktopView,
   }
 }
