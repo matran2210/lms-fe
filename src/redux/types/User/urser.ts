@@ -1,4 +1,10 @@
 import { IMetaData } from 'src/type'
+
+export interface ITemplateConfig {
+  template_full: number
+  template_short_course: number
+}
+
 export interface IUser {
   id: string
   created_at: string
@@ -19,14 +25,8 @@ export interface IUser {
   detail: IUserDetail
   facilities?: IFacility[]
   user_contacts: IUserContact[]
-  certificates: {
-    template_full: number
-    template_short_course: number
-  }
-  courses: {
-    template_full: number
-    template_short_course: number
-  }
+  certificates: ITemplateConfig
+  courses: ITemplateConfig
   university?: IUniversity
   university_program?: any
   major?: IMajor
