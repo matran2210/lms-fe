@@ -91,7 +91,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   return (
     <>
       <ModalResizeable
-        bodyClassName="h-[calc(100%+32px)]"
+        bodyClassName="h-[calc(100%-8px)]"
         modalIndex={count}
         header={
           <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
@@ -127,6 +127,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
           {isChanged && (
             <div className="flex justify-end">
               <ButtonSecondary
+                data-aos="fade-in"
                 onClick={() => {
                   handleSubmit((data: any) => {
                     onSubmit(data)

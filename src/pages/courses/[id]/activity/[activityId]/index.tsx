@@ -579,7 +579,7 @@ const ActivityPage = () => {
               isHidden={focusOnlyQuiz.open}
               extraActions={
                 focusOnlyDiscussion ? null : (
-                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-gray-800 md:py-[6px] md:text-sm">
+                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
                     <HourglassIcon className="shrink-0" />
                     <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                   </div>
@@ -744,18 +744,18 @@ const ActivityPage = () => {
             } else if (e.type === 'file') {
               return (
                 <ModalResizeable
+                  bodyClassName="h-[100%]"
                   title={e.fileName}
                   width={650}
                   height={850}
                   key={e.id}
-                  className="!z-40"
+                  className="!z-40 h-full"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
-                    style={{ height: 'calc(100% - 40px' }}
-                    className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
+                    className="h-full cursor-pointer select-none text-right text-base font-semibold text-gray-800 hover:text-primary"
                   >
                     {/* <div className='flex flex-'> */}
                     <FileViewer fileName={e?.fileName} fileUrl={e?.file} />
