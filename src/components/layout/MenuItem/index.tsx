@@ -159,6 +159,14 @@ export default function MenuItem({
     closeSideBar()
   }
 
+  function formatName(fullName?: string): string {
+    if (!fullName) return ''
+
+    const words = fullName.trim().split(/\s+/)
+    const lastTwo = words.slice(-2)
+    return lastTwo.join(' ')
+  }
+
   const isActivity = router?.query?.activityId
   const isInCourse =
     router?.query?.courseId ||
@@ -299,7 +307,7 @@ export default function MenuItem({
                 },
               )}
             >
-              {user?.detail?.full_name}
+              {formatName(user?.detail?.full_name)}
             </div>
             <div
               className={clsx(
@@ -324,7 +332,7 @@ export default function MenuItem({
                   },
                 )}
               >
-                {user?.detail?.full_name}
+                {formatName(user?.detail?.full_name)}
               </span>
             ) : (
               <span
