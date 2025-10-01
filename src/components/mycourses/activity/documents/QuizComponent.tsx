@@ -133,16 +133,12 @@ type Props = {
   isHideExhibit?: boolean
   saveAnswer?: () => void
   exhibitText?: string
-  controlAnswer?: Control<FieldValues, any>
+  controlAnswer: Control<FieldValues, any>
   setValue?: UseFormSetValue<FieldValues>
   reset?: UseFormReset<FieldValues>
   getValues?: UseFormGetValues<FieldValues>
   watch?: UseFormWatch<FieldValues>
   resetField?: UseFormResetField<FieldValues>
-}
-
-type RefEditor = {
-  reset: () => void
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(

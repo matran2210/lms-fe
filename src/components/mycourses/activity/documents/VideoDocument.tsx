@@ -476,7 +476,8 @@ const VideoDocument = ({
                 showCorrect={true}
                 document_id={document_id}
                 grading_preference={grading_preference}
-              ></QuizComponent>
+                controlAnswer={controlAnswer}
+              />
             </div>
           </SappModal>
         </SAPPVideo>
