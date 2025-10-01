@@ -94,7 +94,6 @@ const CaseStudyResult = () => {
    * Declare form to handle exhibit
    */
   const {
-    control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
