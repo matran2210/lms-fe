@@ -19,8 +19,14 @@ export interface IUser {
   detail: IUserDetail
   facilities?: IFacility[]
   user_contacts: IUserContact[]
-  certificates: number
-  courses: number
+  certificates: {
+    template_full: number
+    template_short_course: number
+  }
+  courses: {
+    template_full: number
+    template_short_course: number
+  }
   university?: IUniversity
   university_program?: any
   major?: IMajor
