@@ -3,7 +3,12 @@ import { USER_STATUS, USER_TYPE } from '@utils/constants/User'
 import toast from 'react-hot-toast'
 import UserApi from 'src/redux/services/User/user'
 import { RootState } from 'src/redux/store'
-import { IUserStatus, UserType, UserState } from 'src/redux/types/User/urser'
+import {
+  IUserStatus,
+  UserType,
+  UserState,
+  ITemplateConfig,
+} from 'src/redux/types/User/urser'
 import { AuthAPI } from '../../../pages/api/profile/index'
 
 const initialState: UserState = {
@@ -71,8 +76,14 @@ const initialState: UserState = {
     user_hubspot_program_infos: [],
     course_tab_groups: {},
     user_contacts: [],
-    certificates: 0,
-    courses: 0,
+    certificates: {
+      template_full: 0,
+      template_short_course: 0,
+    },
+    courses: {
+      template_full: 0,
+      template_short_course: 0,
+    },
     keycloak_user_id: '',
   },
   loginHistory: {
@@ -220,12 +231,21 @@ export const userSlice = createSlice({
       getUserInformation.fulfilled,
       (
         state,
-        action: PayloadAction<{ courses: number; certificates: number }>,
+        action: PayloadAction<{
+          courses: ITemplateConfig
+          certificates: ITemplateConfig
+        }>,
       ) => {
         state.loading = false
         if (action.payload) {
-          state.user.courses = action.payload.courses
-          state.user.certificates = action.payload.certificates
+          if (state.user.courses) {
+            state.user.courses.template_full =
+              action.payload.courses?.template_full
+          }
+          if (state.user.certificates) {
+            state.user.certificates.template_full =
+              action.payload.certificates?.template_full
+          }
         }
       },
     )
