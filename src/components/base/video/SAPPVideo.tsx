@@ -748,12 +748,29 @@ const SAPPVideo = ({
 
   const getThumbnail = () => {
     if (isDesktopView) {
-      return { src: thumbnail?.['1270x716'], width: 1270, height: 716 }
+      return {
+        src:
+          thumbnail?.['1270x716'] ??
+          '/assets/images/default_thumbnail_video.png',
+        width: 1270,
+        height: 716,
+      }
     }
     if (isMDMiddleView || isXLMiddleView) {
-      return { src: thumbnail?.['656x369'], width: 656, height: 369 }
+      return {
+        src:
+          thumbnail?.['656x369'] ??
+          '/assets/images/default_thumbnail_video.png',
+        width: 656,
+        height: 369,
+      }
     }
-    return { src: thumbnail?.['311x175'], width: 311, height: 175 }
+    return {
+      src:
+        thumbnail?.['311x175'] ?? '/assets/images/default_thumbnail_video.png',
+      width: 311,
+      height: 175,
+    }
   }
 
   const { src, width, height } = getThumbnail()
@@ -766,7 +783,7 @@ const SAPPVideo = ({
         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
-              src={src ?? '/assets/images/default_thumbnail_video.png'}
+              src={src}
               alt="Thumbnail image"
               className="h-full w-full object-contain"
               width={width}
@@ -843,7 +860,7 @@ const SAPPVideo = ({
                 controls={false}
                 className={`${styles.content}`}
                 poster={
-                  thumbnail?.['950x535'] ??
+                  thumbnail?.['1270x716'] ??
                   '/assets/images/default_thumbnail_video.png'
                 }
                 onSeeking={() => {
