@@ -163,6 +163,8 @@ const QuizDocument = ({
         typeof limit_count === 'number' ? limit_count : Number.POSITIVE_INFINITY
       const used =
         typeof number_of_attempts === 'number' ? number_of_attempts : 0
+
+      console.log(limit, used, 'limit, used')
       return used < limit
     }
     // Fallback: allow retake when limits unknown
