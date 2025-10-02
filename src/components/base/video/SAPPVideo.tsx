@@ -743,8 +743,7 @@ const SAPPVideo = ({
     }
   }, [router.events])
 
-  const { isDesktopView, isMDMiddleView, isXLMiddleView } =
-    useTailwindBreakpoint()
+  const { isDesktopView, isXLMiddleView } = useTailwindBreakpoint()
 
   const getThumbnail = () => {
     if (isDesktopView) {
@@ -756,7 +755,7 @@ const SAPPVideo = ({
         height: 716,
       }
     }
-    if (isMDMiddleView || isXLMiddleView) {
+    if (isXLMiddleView) {
       return {
         src:
           thumbnail?.['656x369'] ??
