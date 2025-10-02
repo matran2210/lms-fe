@@ -54,6 +54,7 @@ import ModalExplanationPackage from '../ModalExplanationPackage'
 import ModalResults from '../ModalResults'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import LoadingQuizDocument from './LoadingQuizDocument'
+import { use } from 'echarts'
 
 type Props = {
   questions: IQuestion[]
@@ -162,6 +163,8 @@ const QuizDocument = ({
         typeof limit_count === 'number' ? limit_count : Number.POSITIVE_INFINITY
       const used =
         typeof number_of_attempts === 'number' ? number_of_attempts : 0
+
+      console.log(limit, used, 'limit, used')
       return used < limit
     }
     // Fallback: allow retake when limits unknown
@@ -772,7 +775,7 @@ const QuizDocument = ({
         return 'Result'
       }
     }
-    return 'Submit'
+    return 'View Answer'
   }
 
   const handleSubmit = () => {
@@ -827,100 +830,100 @@ const QuizDocument = ({
     setIsFinishQuiz(false)
   }
 
-  const renderActionButton = () => {
-    return (
-      <>
-        {isQuestionConfirmed &&
-          isAFTEREACHQUESTION &&
-          !isLastQuestion &&
-          !isFinishQuiz && (
-            <SappButton
-              className="!rounded-lg !px-4 py-2 text-sm"
-              childClass="text-sm"
-              title={'Next'}
-              full={false}
-              size={'small'}
-              onClick={() => {
-                if (loading) {
-                  return
-                }
-                if (isLastQuestion) {
-                  handleQuizFinish()
-                  trackGAEvent('Click Button Finish Quiz Activity')
-                } else {
-                  handleNextQuestion()
-                  trackGAEvent('Click Button Next Quiz Activity')
-                }
-              }}
-              color="light-dark"
-              loading={loading}
-            />
-          )}
-        {isAFTERAllQUESTION && !isFinishQuiz && (
-          <SappButton
-            className="!rounded-lg !px-4 py-2 text-sm"
-            childClass="text-sm"
-            title={
-              isLastQuestion
-                ? 'Finish'
-                : isAFTERAllQUESTION
-                  ? 'Submit & Next'
-                  : 'Next'
-            }
-            full={false}
-            size={'small'}
-            onClick={() => {
-              if (loading) {
-                return
-              }
-              if (isLastQuestion) {
-                handleQuizFinish()
-                setRunHandleFinishQuiz((e) => e + 1)
-                trackGAEvent('Click Button Finish Quiz Activity')
-              } else {
-                handleNextQuestion()
-                trackGAEvent('Click Button Next Quiz Activity')
-              }
-            }}
-            color="light-dark"
-            loading={loading}
-          />
-        )}
-        {!isQuestionConfirmed && isAFTEREACHQUESTION && (
-          <SappButton
-            className="!rounded-lg !px-4 py-2"
-            childClass="text-sm"
-            title={getButttonTitle()}
-            full={false}
-            size={'small'}
-            disabled={loading}
-            onClick={() => {
-              handleSubmit()
-            }}
-            color="light-dark"
-            loading={loading}
-          />
-        )}
-        {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-        {isQuestionConfirmed &&
-          isAFTERAllQUESTION &&
-          isFinishQuiz &&
-          hasAttemptsLeft && (
-            <SappButton
-              className="!rounded-lg !px-4 !py-2"
-              childClass="text-sm"
-              title={'Retake'}
-              full={false}
-              size={'small'}
-              disabled={loading}
-              onClick={() => {
-                handleRetakeQuestion()
-              }}
-            />
-          )}
-      </>
-    )
-  }
+  // const renderActionButton = () => {
+  //   return (
+  //     <>
+  //       {isQuestionConfirmed &&
+  //         isAFTEREACHQUESTION &&
+  //         !isLastQuestion &&
+  //         !isFinishQuiz && (
+  //           <SappButton
+  //             className="!rounded-lg !px-4 py-2 text-sm"
+  //             childClass="text-sm"
+  //             title={'Next'}
+  //             full={false}
+  //             size={'small'}
+  //             onClick={() => {
+  //               if (loading) {
+  //                 return
+  //               }
+  //               if (isLastQuestion) {
+  //                 handleQuizFinish()
+  //                 trackGAEvent('Click Button Finish Quiz Activity')
+  //               } else {
+  //                 handleNextQuestion()
+  //                 trackGAEvent('Click Button Next Quiz Activity')
+  //               }
+  //             }}
+  //             color="light-dark"
+  //             loading={loading}
+  //           />
+  //         )}
+  //       {isAFTERAllQUESTION && !isFinishQuiz && hasAttemptsLeft && (
+  //         <SappButton
+  //           className="!rounded-lg !px-4 py-2 text-sm"
+  //           childClass="text-sm"
+  //           title={
+  //             isLastQuestion
+  //               ? 'Finish'
+  //               : isAFTERAllQUESTION
+  //                 ? 'Submit & Next'
+  //                 : 'Next'
+  //           }
+  //           full={false}
+  //           size={'small'}
+  //           onClick={() => {
+  //             if (loading) {
+  //               return
+  //             }
+  //             if (isLastQuestion) {
+  //               handleQuizFinish()
+  //               setRunHandleFinishQuiz((e) => e + 1)
+  //               trackGAEvent('Click Button Finish Quiz Activity')
+  //             } else {
+  //               handleNextQuestion()
+  //               trackGAEvent('Click Button Next Quiz Activity')
+  //             }
+  //           }}
+  //           color="light-dark"
+  //           loading={loading}
+  //         />
+  //       )}
+  //       {!isQuestionConfirmed && isAFTEREACHQUESTION && (
+  //         <SappButton
+  //           className="!rounded-lg !px-4 py-2"
+  //           childClass="text-sm"
+  //           title={getButttonTitle()}
+  //           full={false}
+  //           size={'small'}
+  //           disabled={loading}
+  //           onClick={() => {
+  //             handleSubmit()
+  //           }}
+  //           color="light-dark"
+  //           loading={loading}
+  //         />
+  //       )}
+  //       {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+  //       {isQuestionConfirmed &&
+  //         isAFTERAllQUESTION &&
+  //         isFinishQuiz &&
+  //         hasAttemptsLeft && (
+  //           <SappButton
+  //             className="!rounded-lg !px-4 !py-2"
+  //             childClass="text-sm"
+  //             title={'Retake'}
+  //             full={false}
+  //             size={'small'}
+  //             disabled={loading}
+  //             onClick={() => {
+  //               handleRetakeQuestion()
+  //             }}
+  //           />
+  //         )}
+  //     </>
+  //   )
+  // }
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -1154,7 +1157,73 @@ const QuizDocument = ({
               classNames={{ root: 'max-w-72' }}
               trigger={'hover'}
             >
-              {renderActionButton()}
+              <>
+                {(isQuestionConfirmed ||
+                  isAFTERAllQUESTION ||
+                  (isQuestionConfirmed && isLastQuestion)) &&
+                  !isFinishQuiz && (
+                    <SappButton
+                      className="!rounded-lg !px-4 py-2 text-sm"
+                      childClass="text-sm"
+                      title={
+                        isLastQuestion
+                          ? 'Finish'
+                          : isAFTERAllQUESTION
+                            ? 'Submit & Next'
+                            : 'Next'
+                      }
+                      full={false}
+                      size={'small'}
+                      onClick={() => {
+                        if (loading) {
+                          return
+                        }
+                        if (isLastQuestion) {
+                          handleQuizFinish()
+                          setRunHandleFinishQuiz((e) => e + 1)
+                          trackGAEvent('Click Button Finish Quiz Activity')
+                        } else {
+                          handleNextQuestion()
+                          trackGAEvent('Click Button Next Quiz Activity')
+                        }
+                      }}
+                      color="light-dark"
+                      loading={loading}
+                    />
+                  )}
+                {!isQuestionConfirmed && isAFTEREACHQUESTION && (
+                  <SappButton
+                    className="!rounded-lg !px-4 py-2"
+                    childClass="text-sm"
+                    title={getButttonTitle()}
+                    full={false}
+                    size={'small'}
+                    disabled={loading}
+                    onClick={() => {
+                      handleSubmit()
+                    }}
+                    color="light-dark"
+                    loading={loading}
+                  />
+                )}
+                {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+                {isQuestionConfirmed &&
+                  isAFTERAllQUESTION &&
+                  isFinishQuiz &&
+                  hasAttemptsLeft && (
+                    <SappButton
+                      className="!rounded-lg !px-4 !py-2"
+                      childClass="text-sm"
+                      title={'Retake'}
+                      full={false}
+                      size={'small'}
+                      disabled={loading}
+                      onClick={() => {
+                        handleRetakeQuestion()
+                      }}
+                    />
+                  )}
+              </>
             </Tooltip>
           </div>
         </div>

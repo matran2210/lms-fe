@@ -336,7 +336,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getValueFillText = () => {
       let value = []
-      const inputs = document?.querySelectorAll(
+      const inputs = questionRef?.current?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
       for (let e of inputs) {
