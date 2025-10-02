@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react'
 
 import { ExplanationPackageV2 } from 'explanation-package-ha-test'
 // import 'explanation-package/dist/index.css'
-import { CloseIcon } from '@assets/icons'
+import { AltArrowLeft } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityAPI } from '../../../pages/api/activity/index'
 import { Modal } from 'antd'
 import SappLoading from 'src/common/SappLoading'
+import { CloseIconV2 } from '@components/icons'
 
 export enum QUESTION_LEVELS {
   FUNDAMENTAL = 'FUNDAMENTAL',
@@ -151,10 +152,15 @@ const ModalExplanationPackage = ({
     >
       <div>
         <div
-          className="absolute right-6 top-[14px]  ml-auto cursor-pointer"
+          className="absolute left-8 top-5 z-10 cursor-pointer"
           onClick={() => setOpen()}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <div className="hidden rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:block">
+            <AltArrowLeft />
+          </div>
+          <div className="rounded-md bg-gray-200 p-2 transition-all duration-300 ease-in-out hover:bg-gray-300 md:hidden">
+            <CloseIconV2 className="h-[18px] w-[18px]" />
+          </div>
         </div>
         <div className="mx-auto">
           <div className="mx-auto">
