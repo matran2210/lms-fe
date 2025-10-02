@@ -257,6 +257,7 @@ module.exports = {
       DEFAULT: '#DCDDDD',
       focus: '#141414',
       success: '#10B367',
+      'success-600': '#078A4D',
       error: '#F80903',
       info: '#22AAFF',
       warning: '#E68200',
