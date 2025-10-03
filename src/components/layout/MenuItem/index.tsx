@@ -324,7 +324,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -337,7 +337,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -364,7 +364,7 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group cursor-pointer rounded ${
+          `group transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
             selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
@@ -443,9 +443,12 @@ export default function MenuItem({
               isExpanded={isExpanded}
               handleClick={onClick}
               type={'ontoggle'}
-              className={clsx(`${selected ? 'bg-primary text-white' : ''}`, {
-                'group-hover:text-gray-800': !selected,
-              })}
+              className={clsx(
+                `transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : ''}`,
+                {
+                  'group-hover:text-gray-800': !selected,
+                },
+              )}
             />
           ) : null}
         </div>

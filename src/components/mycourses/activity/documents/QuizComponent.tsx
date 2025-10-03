@@ -626,6 +626,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.TRUE_FALSE:
           return (
             <OneChoiceQuestion
+              defaultValues={activeQuestion?.defaultValue}
               data={activeQuestion}
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
