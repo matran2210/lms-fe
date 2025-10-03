@@ -545,7 +545,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4 md:mt-8 lg:mt-10">
+      <div className="mt-4">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
