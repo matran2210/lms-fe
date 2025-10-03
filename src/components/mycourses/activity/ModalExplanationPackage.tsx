@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { ExplanationPackageV2 } from 'explanation-package-ha-test'
+import { ExplanationPackageV2 } from 'explanation-package'
 // import 'explanation-package/dist/index.css'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
