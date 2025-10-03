@@ -4485,7 +4485,7 @@
     dompurify "^3.0.10"
     uuid "^8.3.2"
 
-"@wiris/mathtype-tinymce6@^8.13.1", "@wiris/mathtype-tinymce6@^8.5.0":
+"@wiris/mathtype-tinymce6@^8.13.1":
   version "8.13.3"
   resolved "https://registry.yarnpkg.com/@wiris/mathtype-tinymce6/-/mathtype-tinymce6-8.13.3.tgz#8eea698c1f25b7dbde28fa4fa78a3afb3af7a51a"
   integrity sha512-CpbxSyF+mWq/nLDhqbjY5W4/8zLaihMW+VT5I5JFT9moHwz3euY/gcWLrroXkKJfwtmlJVQzFkj6dphHlY35vQ==
@@ -4788,7 +4788,7 @@ antd@5.25.0:
     scroll-into-view-if-needed "^3.1.0"
     throttle-debounce "^5.0.2"
 
-antd@^5.21.1, antd@^5.22.7:
+antd@^5.21.1:
   version "5.27.0"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.27.0.tgz#2798b4b6d8ee7c295fcdd4e2cd7c037c5e927465"
   integrity sha512-o54dmpooLOc08RSGCkeEQBYAGPxUSmnhmYJKCNTHH46vzjOVxdteu+wPTRVkRbAkDTbs2VcNr5VL7Lu67rPIiA==
@@ -7064,10 +7064,10 @@ explanation-package-ha-test@^1.1.25-test:
     styled-components "5.3.11"
     tailwindcss "^3.3.5"
 
-explanation-package@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.4.tgz#976c3b42a237f8f226d9d4506ad43edf7bab0003"
-  integrity sha512-/HcXhL8CRntJwKUoHbdEyUjUfm1bKnwI6HBSa3Y1vRDzqQyqGh+CTTTH0XJNrOCrIkfHs8tBxeWkmp7vhaSf0Q==
+explanation-package@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.1.tgz#61021f4cc036fe60872e9e1b3c018b54c830b7ae"
+  integrity sha512-YodomN+Cw2B7rDkWXqOvWEd22BlmupJ80UDusm4U3yn7weTYH4eWp5jd7/zjaT3PZN8m47vmzYNP6YOHZogj8A==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -7076,10 +7076,11 @@ explanation-package@^1.2.4:
     "@funktechno/texthighlighter" "^2.1.2"
     "@tailwindcss/aspect-ratio" "^0.4.2"
     "@tailwindcss/forms" "^0.5.7"
-    "@tinymce/tinymce-react" "^4.3.0"
-    "@wiris/mathtype-tinymce6" "^8.5.0"
-    antd "^5.22.7"
+    "@types/styled-components" "5.1.34"
+    "@xyflow/react" "^12.8.2"
+    antd "^5.26.6"
     autoprefixer "^10.4.16"
+    clsx "^2.1.1"
     css-loader "^6.8.1"
     dashjs "^4.7.4"
     html-react-parser "^5.1.10"
@@ -7087,8 +7088,8 @@ explanation-package@^1.2.4:
     react-hook-form "7.46.0"
     react-shadow "^20.4.0"
     sass "^1.53.0"
+    styled-components "5.3.11"
     tailwindcss "^3.3.5"
-    tinymce "^6.8.3"
 
 external-editor@^2.0.1:
   version "2.2.0"
@@ -12496,7 +12497,7 @@ tinyexec@0.3.2:
   resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.2.tgz#941794e657a85e496577995c6eef66f53f42b3d2"
   integrity sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==
 
-"tinymce@^6.0.0 || ^5.5.1", tinymce@^6.8.3:
+"tinymce@^6.0.0 || ^5.5.1":
   version "6.8.6"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.6.tgz#799e4f03eeb4399399dfdeb12ba17b3b91887adf"
   integrity sha512-++XYEs8lKWvZxDCjrr8Baiw7KiikraZ5JkLMg6EdnUVNKJui0IsrAADj5MsyUeFkcEryfn2jd3p09H7REvewyg==
