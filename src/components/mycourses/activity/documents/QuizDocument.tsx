@@ -334,7 +334,9 @@ const QuizDocument = ({
         defaultValue,
       )
     }
-    setActiveQuestionIndex(activeQuestionIndex + 1)
+
+    // Lần cuối thì không cần tăng nữa
+    // setActiveQuestionIndex(activeQuestionIndex + 1)
     setIsFinishQuiz(true)
     handleSaveAnswer()
     // Load the next question if it hasn't been loaded yet
@@ -361,7 +363,8 @@ const QuizDocument = ({
     // Nếu chưa hoàn thành bài quiz, không thực hiện gì cả
     if (!isFinishQuiz) return
     // Trả lại chỉ mục câu hỏi hiện tại về trước 1 để người dùng có thể tiếp tục làm bài
-    setActiveQuestionIndex(activeQuestionIndex - 1)
+    // setActiveQuestionIndex(activeQuestionIndex - 1)
+    setIsFinishQuiz(false)
   }
 
   const handlePrevQuestion = async () => {
@@ -772,7 +775,7 @@ const QuizDocument = ({
         return 'Result'
       }
     }
-    return 'View Answer'
+    return 'Save and View Answers'
   }
 
   const handleSubmit = () => {
@@ -827,100 +830,6 @@ const QuizDocument = ({
     setIsFinishQuiz(false)
   }
 
-  // const renderActionButton = () => {
-  //   return (
-  //     <>
-  //       {isQuestionConfirmed &&
-  //         isAFTEREACHQUESTION &&
-  //         !isLastQuestion &&
-  //         !isFinishQuiz && (
-  //           <SappButton
-  //             className="!rounded-lg !px-4 py-2 text-sm"
-  //             childClass="text-sm"
-  //             title={'Next'}
-  //             full={false}
-  //             size={'small'}
-  //             onClick={() => {
-  //               if (loading) {
-  //                 return
-  //               }
-  //               if (isLastQuestion) {
-  //                 handleQuizFinish()
-  //                 trackGAEvent('Click Button Finish Quiz Activity')
-  //               } else {
-  //                 handleNextQuestion()
-  //                 trackGAEvent('Click Button Next Quiz Activity')
-  //               }
-  //             }}
-  //             color="light-dark"
-  //             loading={loading}
-  //           />
-  //         )}
-  //       {isAFTERAllQUESTION && !isFinishQuiz && hasAttemptsLeft && (
-  //         <SappButton
-  //           className="!rounded-lg !px-4 py-2 text-sm"
-  //           childClass="text-sm"
-  //           title={
-  //             isLastQuestion
-  //               ? 'Finish'
-  //               : isAFTERAllQUESTION
-  //                 ? 'Submit & Next'
-  //                 : 'Next'
-  //           }
-  //           full={false}
-  //           size={'small'}
-  //           onClick={() => {
-  //             if (loading) {
-  //               return
-  //             }
-  //             if (isLastQuestion) {
-  //               handleQuizFinish()
-  //               setRunHandleFinishQuiz((e) => e + 1)
-  //               trackGAEvent('Click Button Finish Quiz Activity')
-  //             } else {
-  //               handleNextQuestion()
-  //               trackGAEvent('Click Button Next Quiz Activity')
-  //             }
-  //           }}
-  //           color="light-dark"
-  //           loading={loading}
-  //         />
-  //       )}
-  //       {!isQuestionConfirmed && isAFTEREACHQUESTION && (
-  //         <SappButton
-  //           className="!rounded-lg !px-4 py-2"
-  //           childClass="text-sm"
-  //           title={getButttonTitle()}
-  //           full={false}
-  //           size={'small'}
-  //           disabled={loading}
-  //           onClick={() => {
-  //             handleSubmit()
-  //           }}
-  //           color="light-dark"
-  //           loading={loading}
-  //         />
-  //       )}
-  //       {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-  //       {isQuestionConfirmed &&
-  //         isAFTERAllQUESTION &&
-  //         isFinishQuiz &&
-  //         hasAttemptsLeft && (
-  //           <SappButton
-  //             className="!rounded-lg !px-4 !py-2"
-  //             childClass="text-sm"
-  //             title={'Retake'}
-  //             full={false}
-  //             size={'small'}
-  //             disabled={loading}
-  //             onClick={() => {
-  //               handleRetakeQuestion()
-  //             }}
-  //           />
-  //         )}
-  //     </>
-  //   )
-  // }
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -998,45 +907,6 @@ const QuizDocument = ({
                 ) : (
                   <MaximumContentIcon />
                 )}
-                {/* {(isQuestionConfirmed ||
-                grading_preference !== 'AFTER_EACH_QUESTION' ||
-                (isQuestionConfirmed && isLastQuestion)) && (
-                <SappButton
-                  title={isLastQuestion ? 'Finish' : 'Next'}
-                  full={false}
-                  size={'small'}
-                  onClick={() => {
-                    if (loading) {
-                      return
-                    }
-                    if (isLastQuestion) {
-                      handleQuizFinish()
-                      // handleSaveAnswer()
-                      setRunHandleFinishQuiz((e) => e + 1)
-                      trackGAEvent('Click Button Finish Quiz Activity')
-                    } else {
-                      handleNextQuestion()
-                      trackGAEvent('Click Button Next Quiz Activity')
-                    }
-                  }}
-                  color="primary"
-                  loading={loading}
-                />
-              )}
-              {!isQuestionConfirmed &&
-                grading_preference === 'AFTER_EACH_QUESTION' && (
-                  <SappButton
-                    title={getButttonTitle()}
-                    full={false}
-                    size={'small'}
-                    disabled={loading}
-                    onClick={() => {
-                      handleSubmit()
-                    }}
-                    color="primary"
-                    loading={loading}
-                  />
-                )} */}
               </div>
             </>
           )}
@@ -1056,7 +926,7 @@ const QuizDocument = ({
         )}
       </div>
 
-      {isUndefined(activeQuestion) ? (
+      {isUndefined(activeQuestion) || loading ? (
         <LoadingQuizDocument />
       ) : (
         <div
@@ -1166,7 +1036,7 @@ const QuizDocument = ({
                         isLastQuestion
                           ? 'Finish'
                           : isAFTERAllQUESTION
-                            ? 'Submit & Next'
+                            ? 'Next Question'
                             : 'Next'
                       }
                       full={false}
