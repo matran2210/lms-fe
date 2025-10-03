@@ -137,6 +137,7 @@ const ProfileList = ({ isEdit }: IProps) => {
             variant="borderless"
             className="profile-subject-select"
             options={profileOptions}
+            open={profileOptions?.length > 1}
           />
         }
         handleCancel={closeMakeDefault}
