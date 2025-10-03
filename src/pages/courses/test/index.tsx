@@ -714,16 +714,32 @@ const TestModal = ({
                               popup: { root: 'select-result-attempt-option' },
                             }}
                             variant="borderless"
-                            value={selectedResult}
+                            value={selectedResult?.value}
                             onChange={(selectedOption) => {
-                              setSelectedResult(selectedOption)
+                              if (selectedOption) {
+                                const tempSelectedResult =
+                                  resultList?.data?.find(
+                                    (item) => item?.id === selectedOption,
+                                  )
+                                if (tempSelectedResult) {
+                                  setSelectedResult({
+                                    label: tempSelectedResult?.name,
+                                    value: tempSelectedResult?.id,
+                                    ratio_score:
+                                      tempSelectedResult?.ratio_score,
+                                    status: tempSelectedResult?.status,
+                                    grading_method:
+                                      tempSelectedResult?.quiz?.grading_method,
+                                  })
+                                }
+                              }
                             }}
-                            options={resultList.data.map((item, index) => ({
-                              name: item.name,
-                              value: item.id,
-                              label: item.name,
-                              status: item.status,
-                              ratio_score: item.ratio_score,
+                            options={resultList?.data?.map((item, index) => ({
+                              name: item?.name,
+                              value: item?.id,
+                              label: item?.name,
+                              status: item?.status,
+                              ratio_score: item?.ratio_score,
                               number_of_attempt: 3 - index,
                             }))}
                             onPopupScroll={(e) => {

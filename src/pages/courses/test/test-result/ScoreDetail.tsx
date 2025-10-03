@@ -197,6 +197,7 @@ const ScoreDetail = ({
             key={program}
             ghost
             expandIconPosition="end"
+            defaultActiveKey={[0]}
             items={[
               {
                 key: 0,
