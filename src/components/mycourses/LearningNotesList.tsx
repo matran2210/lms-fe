@@ -90,6 +90,9 @@ const LearningNotesList = () => {
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
   const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<string[]>([])
+  const [noteHeights, setNoteHeights] = useState<{
+    [key: string]: { full: number; collapsed: number }
+  }>({})
   const [loading, setLoading] = useState<boolean>(false)
   const [paramsCourseSectionId, setCourseSectionId] = useState<string>('')
   const [isPageStateVariables, setIsPageStateVariables] =
@@ -115,6 +118,59 @@ const LearningNotesList = () => {
         return [...prevExpanded, noteId]
       }
     })
+  }
+
+  const measureNoteHeight = (noteId: string, element: HTMLDivElement) => {
+    if (noteHeights[noteId]) return
+
+    // Lấy computed styles của element gốc
+    const computedStyles = window.getComputedStyle(element)
+    const spanElement = element.querySelector('span')
+    const spanStyles = spanElement ? window.getComputedStyle(spanElement) : null
+
+    // Tạo element tạm để đo chiều cao full
+    const tempElement = element.cloneNode(true) as HTMLDivElement
+    tempElement.style.position = 'absolute'
+    tempElement.style.visibility = 'hidden'
+    tempElement.style.height = 'auto'
+    tempElement.style.maxHeight = 'none'
+    tempElement.style.overflow = 'visible'
+    tempElement.style.webkitLineClamp = 'unset'
+
+    // Copy các styles quan trọng từ element gốc
+    tempElement.style.width = computedStyles.width
+    tempElement.style.padding = computedStyles.padding
+    tempElement.style.margin = computedStyles.margin
+    tempElement.style.fontSize = computedStyles.fontSize
+    tempElement.style.lineHeight = computedStyles.lineHeight
+    tempElement.style.fontFamily = computedStyles.fontFamily
+
+    // Tìm span chứa text trong tempElement và copy styles
+    const tempSpan = tempElement.querySelector('span')
+    if (tempSpan && spanStyles) {
+      tempSpan.style.webkitLineClamp = 'unset'
+      tempSpan.style.display = 'block'
+      tempSpan.style.whiteSpace = spanStyles.whiteSpace
+      tempSpan.style.wordBreak = spanStyles.wordBreak
+      tempSpan.style.fontSize = spanStyles.fontSize
+      tempSpan.style.lineHeight = spanStyles.lineHeight
+    }
+
+    document.body.appendChild(tempElement)
+    const fullHeight = tempElement.offsetHeight
+
+    // Đo chiều cao collapsed (3 dòng) - đảm bảo element đang ở trạng thái collapsed
+    const collapsedHeight = element.offsetHeight
+
+    document.body.removeChild(tempElement)
+
+    setNoteHeights((prev) => ({
+      ...prev,
+      [noteId]: {
+        full: fullHeight + 10,
+        collapsed: collapsedHeight,
+      },
+    }))
   }
 
   const params = cleanParamsAPI({
@@ -413,39 +469,55 @@ const LearningNotesList = () => {
                             />
                           </div>
                           <div className="mt-1 text-sm font-normal text-gray-800 md:mt-4 md:text-base">
-                            <span
-                              className={`whitespace-pre-wrap break-all ${
-                                isExpanded ? '' : 'line-clamp-3'
-                              }`}
+                            <div
+                              ref={(el) => {
+                                if (
+                                  el &&
+                                  note?.description?.length > 230 &&
+                                  !noteHeights[note?.id]
+                                ) {
+                                  // Đo chiều cao ngay khi component mount
+                                  setTimeout(() => {
+                                    measureNoteHeight(note?.id, el)
+                                  }, 0)
+                                }
+                              }}
+                              className="overflow-hidden transition-all duration-300 ease-in-out"
+                              style={{
+                                maxHeight:
+                                  note?.description?.length > 230
+                                    ? isExpanded
+                                      ? noteHeights[note?.id]?.full
+                                        ? `${noteHeights[note?.id].full}px`
+                                        : 'none'
+                                      : noteHeights[note?.id]?.collapsed
+                                        ? `${noteHeights[note?.id].collapsed}px`
+                                        : '4.5rem'
+                                    : undefined,
+                              }}
                             >
-                              {note?.description}
-                            </span>
-                            {!isExpanded && note?.description?.length > 230 ? (
+                              <span
+                                className={`whitespace-pre-wrap break-all ${
+                                  !isExpanded &&
+                                  note?.description?.length > 230 &&
+                                  !noteHeights[note?.id]
+                                    ? 'line-clamp-3'
+                                    : ''
+                                }`}
+                              >
+                                {note?.description}
+                              </span>
+                            </div>
+                            {note?.description?.length > 230 && (
                               <button
-                                className="block text-sm font-normal text-gray-400 md:text-base"
+                                className="block text-sm font-normal text-gray-400 transition-colors duration-200 hover:text-gray-600 md:text-base"
                                 onClick={(e) => {
                                   e.stopPropagation()
                                   toggleExpand(note?.id)
                                 }}
                               >
-                                Show more
+                                {isExpanded ? 'Show less' : 'Show more'}
                               </button>
-                            ) : (
-                              <>
-                                {note?.description?.length > 230 ? (
-                                  <button
-                                    className="block text-sm font-normal text-[#A1A1A1] md:text-base"
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      toggleExpand(note?.id)
-                                    }}
-                                  >
-                                    Show less
-                                  </button>
-                                ) : (
-                                  <></>
-                                )}
-                              </>
                             )}
                           </div>
                           <div className="mt-2 flex md:mt-4">

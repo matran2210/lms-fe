@@ -122,7 +122,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             control={control}
             name={`description_${id ? id : uuid}`}
             defaultValue={content}
-            className="not-resizer sapp-text-area h-full w-full flex-1 whitespace-pre-wrap placeholder:text-sm placeholder:font-normal placeholder:text-[#A1A1A1]"
+            className="not-resizer sapp-text-area h-[calc(100%-8px)] w-full flex-1 whitespace-pre-wrap placeholder:text-sm placeholder:font-normal placeholder:text-[#A1A1A1]"
           />
           {isChanged && (
             <div className="flex justify-end">

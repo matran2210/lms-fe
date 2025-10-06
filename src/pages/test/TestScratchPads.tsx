@@ -94,47 +94,44 @@ const TestScratchPads = ({
       )
     } else if (e.type === 'scratch_pad') {
       return (
-        <MovableWindow
-          position={{
-            width: '400px',
-            height: '300px',
-            top: 'calc(50% - 150px)',
-            left: 'calc(50% - 200px)',
-          }}
+        <ModalResizeable
+          position="center left"
           key={currentPage}
-          onClick={() => {
-            setOnFocusingPad(e?.id)
-          }}
-          zIndex={
-            onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
-          }
-        >
-          <div className="absolute left-0 top-0 h-full w-full rounded-xl border bg-white">
-            <div className="flex w-full items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+          header={
+            <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
               <div className="text-sm font-semibold text-gray-800">
                 Scratch Pad
               </div>
-              {/* <CloseIcon */}
-              <button onClick={() => handleCloseScratchPad(e)}>
+              <button
+                className="text-icon"
+                onClick={() => handleCloseScratchPad(e)}
+              >
                 <CloseIconNote />
               </button>
             </div>
-            <ScratchPatch
-              scratchPadValues={scratchPadValues.find(
-                (el) => el.id === currentPage,
-              )}
-              control={controlScratch}
-              scratchPads={scratchPads}
-              handleChangeScratchPad={(
-                event: ChangeEvent<HTMLInputElement>,
-              ) => {
-                setScratchPads(event.target.value)
-                handleChangeScratchPad(event, currentPage)
-              }}
-              className="!h-fit"
-            />
-          </div>
-        </MovableWindow>
+          }
+          handleCloseScratchPad={() => {
+            handleCloseScratchPad(e)
+          }}
+          onClick={() => {
+            setOnFocusingPad(e?.id)
+          }}
+          width={412}
+          height={350}
+        >
+          <ScratchPatch
+            scratchPadValues={scratchPadValues.find(
+              (el) => el.id === currentPage,
+            )}
+            control={controlScratch}
+            scratchPads={scratchPads}
+            handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) => {
+              setScratchPads(event.target.value)
+              handleChangeScratchPad(event, currentPage)
+            }}
+            className="!h-fit"
+          />
+        </ModalResizeable>
       )
     } else if (e.type === 'exhibits') {
       const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)

@@ -282,16 +282,14 @@ const CourseDetail = () => {
               }
             />
           </div>
-          <div data-aos={ANIMATION.DATA_AOS}>
-            <div className="h-full">
-              <CourseParts
-                isTrial={isTrial}
-                courses={courses}
-                is_passed_course={is_passed_course || false}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
+          <div data-aos={ANIMATION.DATA_AOS} className="h-full">
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course || false}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
           </div>
         </>
       )}
