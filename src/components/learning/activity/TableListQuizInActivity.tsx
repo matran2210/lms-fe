@@ -1,4 +1,4 @@
-import { QuizActivity, Results } from 'src/type/results'
+import { QuizActivity } from 'src/type/results'
 import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { Tooltip } from 'antd'
 import SappTable from '@components/table/SappTable'
@@ -7,7 +7,7 @@ import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
 import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
 import { EDateTime } from 'src/type'
-import { GradingMethod } from '@utils/constants'
+// import { GradingMethod } from '@utils/constants'
 import { Dispatch, SetStateAction } from 'react'
 
 const TableListQuizInActivity = ({
@@ -16,7 +16,7 @@ const TableListQuizInActivity = ({
   setPagination,
   handleChangeParams,
   loading,
-  // handleViewActivity,
+  handleViewActivity,
   // getScore,
 }: {
   data: any
@@ -25,7 +25,7 @@ const TableListQuizInActivity = ({
   handleChangeParams: (currentPage: number, pageSize: number) => void
   loading: boolean
   // data: Results
-  // handleViewActivity: () => void
+  handleViewActivity: (record: QuizActivity) => void
   // getScore: (row: Results, grading_method: GradingMethod) => string
 }) => {
   const truncateText = (text: string, maxLength = 30) => {
@@ -104,7 +104,7 @@ const TableListQuizInActivity = ({
     pagination.total && pagination.total > (pagination.pageSize || 10)
 
   return (
-    <SappTable
+    <SappTable<QuizActivity, any>
       columns={columnsValue}
       data={data ?? []}
       pagination={pagination}
@@ -113,9 +113,9 @@ const TableListQuizInActivity = ({
       loading={loading}
       isShowIndex
       isShowPagination={!!shouldShowPagination}
-      // onRow={() => ({
-      //   onClick: () => handleViewActivity(),
-      // })}
+      onRow={(record: QuizActivity) => ({
+        onClick: () => handleViewActivity(record),
+      })}
       className="style-table-quiz cursor-pointer"
       rowClassName={(record, index) => {
         const isLastRow = data && index === data.length - 1

@@ -9,24 +9,27 @@ import useSappPaging from 'src/hooks/useSappPaging'
 import { CoursesAPI } from '@pages/api/courses'
 import router from 'next/router'
 
-const CollapseActivity = ({
-  resultData,
-  // handleViewResult,
-  // getScore,
-  // lastElementRef,
-}: any) => {
-  // }: ITestQuizProps) => {
-  // const { isMobileView } = useTailwindBreakpoint()
+const CollapseActivity = ({ resultData }: any) => {
   const [activeKey, setActiveKey] = useState<string | string[]>(['activity'])
-
-  // if (!resultData) return null
 
   const handleChange = (key: string | string[]) => {
     setActiveKey(key)
   }
-  // const handleViewActivity = () => {
-  //   // handleViewResult(resultData[0])
-  // }
+  const handleViewActivity = (record: any) => {
+    if (!record?.id) return
+    const courseId = router.query.courseId as string
+    if (record.attempts.length) {
+      router.push(`/courses/test/test-result/${record.attempts[0].id}`)
+    } else {
+      if (record.activity_id) {
+        router.push(`/courses/${courseId}/activity/${record.activity_id}`)
+      } else {
+        router.push(
+          `/test/${resultData?.id}?class_user_id=${resultData?.class_user_id}`,
+        )
+      }
+    }
+  }
   const {
     data: classSectionTest,
     isLoading,
@@ -77,8 +80,7 @@ const CollapseActivity = ({
             setPagination={setPagination}
             handleChangeParams={handleChangeParams}
             loading={isLoading}
-            // handleViewActivity={handleViewActivity}
-            // getScore={getScore ?? (() => '-')}
+            handleViewActivity={handleViewActivity}
           />
         </div>
       ),
@@ -87,7 +89,6 @@ const CollapseActivity = ({
   return (
     <Collapse
       className="bg-white shadow-small"
-      // ref={lastElementRef}
       bordered={false}
       expandIconPosition="end"
       activeKey={activeKey}
@@ -99,11 +100,6 @@ const CollapseActivity = ({
         />
       )}
       items={getItemsActivity}
-      // className={`learning-activity-collapse rounded-xl bg-white p-4 shadow-small md:p-6 hover:${
-      //   Array.isArray(activeKey) && activeKey.includes('activity')
-      //     ? 'bg-white'
-      //     : 'bg-primary-50'
-      // }`}
     />
   )
 }
