@@ -164,7 +164,6 @@ const SAPPVideo = ({
             })
 
             player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
-              setCanPlay(true)
               setCloudflarePlayer(false)
             })
 
@@ -175,6 +174,10 @@ const SAPPVideo = ({
             player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
               setSeeking(false)
             })
+
+            if (player.isReady()) {
+              setCanPlay(true)
+            }
           } else {
             setCanPlay(true)
             setCloudflarePlayer(true)
