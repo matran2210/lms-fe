@@ -83,7 +83,16 @@ const SappTable = <DataType, ParamType extends TablePaginationParams>({
       )}
       <Table<DataType>
         dataSource={data}
-        pagination={isShowPagination ? pagination : false}
+        pagination={
+          isShowPagination
+            ? {
+                ...pagination,
+                showQuickJumper: false,
+                showSizeChanger: true,
+                responsive: true,
+              }
+            : false
+        }
         onChange={handleTableChange}
         loading={loading}
         rowKey={props.rowKey || 'id'}

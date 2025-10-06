@@ -1,5 +1,5 @@
 import { QuizActivity, Results } from 'src/type/results'
-import { ColumnsType } from 'antd/es/table'
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table'
 import { Tooltip } from 'antd'
 import SappTable from '@components/table/SappTable'
 import { StatusQuizTag } from '@components/teacher/components/StatusActionCell'
@@ -8,15 +8,25 @@ import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
 import { EDateTime } from 'src/type'
 import { GradingMethod } from '@utils/constants'
+import { Dispatch, SetStateAction } from 'react'
 
 const TableListQuizInActivity = ({
   data,
-  handleViewActivity,
-  getScore,
+  pagination,
+  setPagination,
+  handleChangeParams,
+  loading,
+  // handleViewActivity,
+  // getScore,
 }: {
-  data: Results[]
-  handleViewActivity: () => void
-  getScore: (row: Results, grading_method: GradingMethod) => string
+  data: any
+  pagination: TablePaginationConfig
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+  handleChangeParams: (currentPage: number, pageSize: number) => void
+  loading: boolean
+  // data: Results
+  // handleViewActivity: () => void
+  // getScore: (row: Results, grading_method: GradingMethod) => string
 }) => {
   const truncateText = (text: string, maxLength = 30) => {
     if (!text) return ''
@@ -27,7 +37,7 @@ const TableListQuizInActivity = ({
     {
       title: 'Type',
       align: 'center',
-      render: (record) => <div>Quiz</div>,
+      render: (record) => <div>{record?.quiz_type}</div>,
     },
     {
       title: 'Graded Activity',
@@ -51,15 +61,13 @@ const TableListQuizInActivity = ({
     {
       title: 'Score',
       align: 'center',
-      render: (record) => <div>100</div>,
+      render: (record) => <div>{record?.attempts?.[0]?.score ?? '-'}</div>,
     },
     {
-      title: 'Path',
-      align: 'center',
+      title: <div style={{ textAlign: 'center', width: '100%' }}>Path</div>,
       render: (record) =>
         (() => {
-          const fullText =
-            'Topic 6: FIXED INCOME/Learning module 4: Credit Analysis Models/Unit 2: Credit Scores and Credit Ratings/Activity 2: Credit Scores and Credit Ratings'
+          const fullText = record?.quiz_path
           return (
             <Tooltip title={fullText}>
               <div>{truncateText(fullText)}</div>
@@ -70,37 +78,50 @@ const TableListQuizInActivity = ({
     {
       title: 'Time Spent',
       align: 'center',
-      render: (record) => <div>{getTimeFromInput(130)}</div>,
+      render: (record) => (
+        <div>
+          {getTimeFromInput(record?.attempts?.[0]?.total_attempt_time) ?? '-'}
+        </div>
+      ),
     },
     {
       title: 'Last Submission',
       align: 'center',
       render: (record) => (
         <div>
-          {1 > 0
-            ? dayjs('2025-09-29T03:00:00Z').format(EDateTime.fullDate)
+          {record?.attempts?.[0]?.finished_at
+            ? dayjs(record?.attempts?.[0]?.finished_at).format(
+                EDateTime.fullDate,
+              )
             : '-'}
         </div>
       ),
     },
   ]
 
+  // Tính toán xem có nên hiển thị pagination không
+  const shouldShowPagination =
+    pagination.total && pagination.total > (pagination.pageSize || 10)
+
   return (
     <SappTable
       columns={columnsValue}
       data={data ?? []}
-      pagination={{
-        current: 1,
-        pageSize: data?.length,
-        total: data?.length,
-      }}
-      loading={false}
+      pagination={pagination}
+      setPagination={setPagination}
+      handleChangeParams={handleChangeParams}
+      loading={loading}
       isShowIndex
-      isShowPagination={false}
-      onRow={() => ({
-        onClick: () => handleViewActivity(),
-      })}
+      isShowPagination={!!shouldShowPagination}
+      // onRow={() => ({
+      //   onClick: () => handleViewActivity(),
+      // })}
       className="style-table-quiz cursor-pointer"
+      rowClassName={(record, index) => {
+        const isLastRow = data && index === data.length - 1
+        const isSinglePage = !shouldShowPagination
+        return isLastRow && isSinglePage ? 'last-row-no-border' : ''
+      }}
     />
   )
 }

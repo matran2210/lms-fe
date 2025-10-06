@@ -405,18 +405,19 @@ export class CoursesAPI {
     })
   }
 
-  static getCourseResults(
-    id: string | string[],
-    page_index: number,
-    page_size: number,
-    params: Object,
+  static getCourseSectionTest(
+    id: string | string[] | undefined,
+    params?: Object,
   ): Promise<any> {
-    return fetcher(
-      `courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
-      {
-        params: params,
-      },
-    )
+    return fetcher(`courses/${id}/section-test`, {
+      params: params,
+    })
+  }
+
+  static getCourseResults(id: string | string[], params: Object): Promise<any> {
+    return fetcher(`courses/${id}/quizzes`, {
+      params: params,
+    })
   }
 
   static getCourseNotesList(page_size: number, params?: Object): Promise<any> {
