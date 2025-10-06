@@ -437,6 +437,7 @@ const VideoDocument = ({
           hideVideo={hideVideo}
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
+          key={`video-${timeQuiz.length || 0}`}
           thumbnail={currentVideo?.file?.resource?.thumbnail}
         >
           {/* Modal for quiz questions */}
