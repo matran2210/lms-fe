@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ITabs } from 'src/type'
 import Tooltip from 'src/common/Tooltip'
 
@@ -11,11 +11,25 @@ const SappBreadCrumbs = ({
   breadcrumbs?: ITabs[]
   isTeacher?: boolean
 }) => {
+  const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
   const lastIndex = breadcrumbs.length - 1
   const handleTitleDisplay = (title: string, length: number) => {
     const isLong = title?.length > length
     return isLong ? title.slice(0, length) + '...' : title
   }
+
+  const checkIsLastTakesFullWidth = () => {
+    const element = document.querySelector('.breadcrumb-last') as HTMLElement
+    if (!element) return false
+    const computedStyle = window.getComputedStyle(element)
+    const lineHeight = parseFloat(computedStyle.lineHeight)
+    const elementHeight = element.offsetHeight
+    const numberOfLines = Math.round(elementHeight / lineHeight)
+    return numberOfLines >= 2
+  }
+  useEffect(() => {
+    setIsLastTakesFullWidth(checkIsLastTakesFullWidth())
+  }, [])
   return (
     <nav aria-label="breadcrumb" className="hidden lg:block">
       <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
@@ -36,7 +50,19 @@ const SappBreadCrumbs = ({
                 )}
               >
                 {isLast ? (
-                  <span>{titleDisplay}</span>
+                  isLastTakesFullWidth ? (
+                    <Tooltip
+                      title={breadcrumb.title}
+                      showTooltip={isLong}
+                      placement="bottomLeft"
+                    >
+                      <span className="breadcrumb-last cursor-pointer">
+                        {titleDisplay}
+                      </span>
+                    </Tooltip>
+                  ) : (
+                    <span className="breadcrumb-last">{breadcrumb.title}</span>
+                  )
                 ) : (
                   <Link href={breadcrumb.link}>
                     <div>
@@ -48,7 +74,8 @@ const SappBreadCrumbs = ({
                         <span
                           className={clsx(
                             'cursor-pointer',
-                            isLong && 'hover:text-primary',
+                            isLong &&
+                              'transition-all duration-300 hover:text-primary',
                           )}
                         >
                           {titleDisplay}

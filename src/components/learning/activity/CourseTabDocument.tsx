@@ -15,6 +15,7 @@ import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
+import { EAttemptStatus } from 'src/constants/attempt'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import {
@@ -185,6 +186,10 @@ const CourseTabDocument = ({
                         ...(e?.quiz?.constructed_questions || []),
                       ]
                       if (e?.type === 'QUIZ') {
+                        const isQuizFinished =
+                          !!e?.quiz?.attempt &&
+                          e?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED
+
                         return (
                           <div
                             key={e?.id + '_' + i + '_' + selector?.currentTabId}
@@ -230,6 +235,7 @@ const CourseTabDocument = ({
                                 course_tab_documents[i]?.quiz?.attempt
                                   ?.number_of_attempts || 0
                               }
+                              isQuizFinished={isQuizFinished}
                             />
                           </div>
                         )
