@@ -1,7 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IResponse, IScoreDetails } from 'src/type'
+import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from 'src/type'
 import { CourseDetail } from 'src/type/course'
 
 export class CoursesAPI {
@@ -227,6 +227,18 @@ export class CoursesAPI {
         ...(no_group_view && { no_group_view }),
       },
     })
+  }
+  static getQuizAttemptsAnswer({
+    attempt_id,
+    question_id,
+  }: {
+    attempt_id: string
+    question_id: string
+  }): Promise<{
+    success: boolean
+    data: IAnswerQuizLastestAttempt
+  }> {
+    return fetcher(`/quiz-attempts/${attempt_id}/answer/${question_id}`)
   }
 
   static getQuizAttemptsTableEntranceTest(

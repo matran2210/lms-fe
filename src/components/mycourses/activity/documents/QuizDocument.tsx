@@ -80,6 +80,7 @@ type Props = {
   is_limited?: boolean
   limit_count?: number
   number_of_attempts?: number
+  isQuizFinished?: boolean
 }
 
 const QuizDocument = ({
@@ -105,6 +106,7 @@ const QuizDocument = ({
   is_limited,
   limit_count,
   number_of_attempts,
+  isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -135,7 +137,7 @@ const QuizDocument = ({
   }>()
 
   const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
-
+  const [storedAnswers, setStoredAnswers] = useState<{ [key: string]: any }>({})
   const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
 
   const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
@@ -176,8 +178,7 @@ const QuizDocument = ({
         // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
         if (grading_preference === 'AFTER_ALL_QUESTIONS') {
           // If finished, we'll restore answers and fetch corrects lazily per question on navigation
-          const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
-          setIsFinishQuiz(!!finished)
+          setIsFinishQuiz(isQuizFinished)
         }
 
         // Load the first question when the component mounts
@@ -188,6 +189,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: questions?.[0]?.id || '',
+              attemptId,
             }),
           )
 
@@ -208,30 +210,28 @@ const QuizDocument = ({
 
   // Lazy fetch corrects per question after finished
   useEffect(() => {
-    if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
-    if (!activeQuestion?.id) return
-    const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
-    if (!finished) return
+    const fetchAndConfirmQuestion = async () => {
+      if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
+      if (!activeQuestion?.id) return
 
-    const answersKey = `quiz-answers-${quizId}`
-    const raw = sessionStorage.getItem(answersKey)
-    const storedAnswers: { [key: string]: any } = raw ? JSON.parse(raw) : {}
-    const myAnswersForActive = storedAnswers[activeQuestion.id]
-
-    // Only call API if we haven't got corrects yet for this question
-    const hasCorrects = !!activeQuestion.corrects
-    if (!hasCorrects) {
-      dispatch(
-        confirmQuestion({
-          activityId,
-          tabId,
-          quizId,
-          questionId: activeQuestion.id,
-          myAnswers: myAnswersForActive,
-          time_spent: 0,
-        }) as any,
-      )
+      if (!isFinishQuiz) return
+      // Only call API if we haven't got corrects yet for this question
+      const hasCorrects = !!activeQuestion.corrects
+      if (!hasCorrects) {
+        dispatch(
+          confirmQuestion({
+            activityId,
+            tabId,
+            quizId,
+            questionId: activeQuestion.id,
+            attemptId,
+            myAnswers: [],
+            time_spent: 0,
+          }) as any,
+        )
+      }
     }
+    fetchAndConfirmQuestion()
   }, [
     grading_preference,
     activeQuestion?.id,
@@ -277,6 +277,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
+              attemptId,
             }),
           ).unwrap()
           setStartWorkTime(Date.now())
@@ -318,7 +319,7 @@ const QuizDocument = ({
    * @returns Không có giá trị trả về.
    */
 
-  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
+  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(isQuizFinished)
 
   const handleQuizFinish = async () => {
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
@@ -460,16 +461,6 @@ const QuizDocument = ({
           time_spent: calculateWorkTime(),
         }),
       )
-    }
-    // Persist user's answers per question for AFTER_ALL_QUESTIONS
-    if (grading_preference === 'AFTER_ALL_QUESTIONS' && activeQuestion?.id) {
-      try {
-        const answersKey = `quiz-answers-${quizId}`
-        const raw = sessionStorage.getItem(answersKey)
-        const stored: { [key: string]: any } = raw ? JSON.parse(raw) : {}
-        stored[activeQuestion.id] = myAnswers
-        sessionStorage.setItem(answersKey, JSON.stringify(stored))
-      } catch (_e) {}
     }
   }
 
@@ -818,8 +809,7 @@ const QuizDocument = ({
       }),
     )
     // Clear stored answers and finished flag
-    sessionStorage.removeItem(`quiz-answers-${quizId}`)
-    sessionStorage.removeItem(`quiz-finished-${quizId}`)
+    setStoredAnswers({})
     // Clear form values and force remount to avoid showing previous selections
     reset({})
     setQuizComponentKey((e) => e + 1)
