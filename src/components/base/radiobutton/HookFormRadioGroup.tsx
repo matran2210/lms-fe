@@ -119,6 +119,7 @@ const HookFormRadioGroup = ({
                           value={option.value.toString()}
                           checked={checked}
                           className="mt-[3px] flex-none"
+                          state={state}
                         />
                         <span className="flex-1">
                           <div

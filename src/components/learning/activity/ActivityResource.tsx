@@ -50,38 +50,33 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
 
                 return (
                   <div
-                    className={clsx('group flex items-center gap-3', {
-                      'mb-3': index < activity?.files?.length - 1,
-                    })}
+                    className={clsx(
+                      'group flex cursor-pointer items-center gap-3',
+                      { 'mb-3': index < activity?.files?.length - 1 },
+                    )}
                     key={index}
+                    onClick={() => {
+                      isPreviewFile
+                        ? handleOpenScratchPad(
+                            { type: 'file' },
+                            e?.resource?.url,
+                            e?.resource?.name,
+                          )
+                        : download(e?.resource?.name, e?.resource?.file_key)
+
+                      trackGAEvent('Click Open File Resource')
+                    }}
                   >
-                    <div>
-                      <Tooltip title="Preview File">
-                        <p
-                          className="cursor-pointer text-info-600 underline hover:text-primary"
-                          onClick={() => {
-                            isPreviewFile
-                              ? handleOpenScratchPad(
-                                  { type: 'file' },
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              : download(
-                                  e?.resource?.name,
-                                  e?.resource?.file_key,
-                                )
+                    {/* Text */}
+                    <Tooltip title="Preview File">
+                      <p className="text-info-600 underline group-hover:text-primary">
+                        {e?.resource?.name}
+                      </p>
+                    </Tooltip>
 
-                            trackGAEvent('Click Open File Resource')
-                          }}
-                        >
-                          {e?.resource?.name}
-                        </p>
-                      </Tooltip>
-                    </div>
-
-                    {/* Icon chỉ hiện khi hover vào cả row */}
+                    {/* Icon */}
                     <div
-                      className="hidden cursor-pointer text-icon hover:text-primary group-hover:block"
+                      className="hidden cursor-pointer text-icon group-hover:block group-hover:text-primary"
                       onClick={() => {
                         download(e?.resource?.name, e?.resource?.file_key)
                         trackGAEvent('Click Button Download Resource Activity')

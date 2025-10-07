@@ -71,7 +71,7 @@ const MENU_OPTIONS: MenuOption[] = [
   },
   {
     name: TitleSidebar.EXAM,
-    icon: 'exam-information',
+    icon: 'exam_list',
     url: '#',
     type: 'level-1',
   },

@@ -1,7 +1,7 @@
 import { AltArrowLeft, MenuDotsIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
-import { ExplanationPackageV2 } from 'explanation-package-ha-test'
+import { ExplanationPackageV2 } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'

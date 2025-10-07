@@ -15,7 +15,7 @@ import { Alert, Skeleton } from 'antd'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import PreviewPartDetail from 'sapp-preview-part-test'
+import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { PageLink, TEST_TYPE } from 'src/constants'
@@ -253,6 +253,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
           query: {
@@ -274,6 +278,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/${topicId}`,
           query: {

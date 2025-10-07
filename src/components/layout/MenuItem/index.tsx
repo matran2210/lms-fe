@@ -159,6 +159,14 @@ export default function MenuItem({
     closeSideBar()
   }
 
+  function formatName(fullName?: string): string {
+    if (!fullName) return ''
+
+    const words = fullName.trim().split(/\s+/)
+    const lastTwo = words.slice(-2)
+    return lastTwo.join(' ')
+  }
+
   const isActivity = router?.query?.activityId
   const isInCourse =
     router?.query?.courseId ||
@@ -299,7 +307,7 @@ export default function MenuItem({
                 },
               )}
             >
-              {user?.detail?.full_name}
+              {formatName(user?.detail?.full_name)}
             </div>
             <div
               className={clsx(
@@ -316,7 +324,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -324,12 +332,12 @@ export default function MenuItem({
                   },
                 )}
               >
-                {user?.detail?.full_name}
+                {formatName(user?.detail?.full_name)}
               </span>
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -356,7 +364,7 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group cursor-pointer rounded ${
+          `group transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
             selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
@@ -435,9 +443,12 @@ export default function MenuItem({
               isExpanded={isExpanded}
               handleClick={onClick}
               type={'ontoggle'}
-              className={clsx(`${selected ? 'bg-primary text-white' : ''}`, {
-                'group-hover:text-gray-800': !selected,
-              })}
+              className={clsx(
+                `transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : ''}`,
+                {
+                  'group-hover:text-gray-800': !selected,
+                },
+              )}
             />
           ) : null}
         </div>

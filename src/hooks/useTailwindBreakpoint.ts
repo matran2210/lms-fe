@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useLayoutEffect, useState } from 'react'
 
 const TAILWIND_BREAKPOINTS = {
   sm: 640, // Mobile
@@ -15,6 +15,29 @@ const TAILWIND_BREAKPOINTS = {
 export const useTailwindBreakpoint = ({
   isMktInApp = false,
 }: { isMktInApp?: boolean } = {}) => {
+  const getBreakpointFromWidth = useCallback(
+    (width: number) => {
+      if (width >= TAILWIND_BREAKPOINTS['4xl']) return '4xl'
+      if (width >= TAILWIND_BREAKPOINTS['3xl']) return '3xl'
+      if (width >= TAILWIND_BREAKPOINTS['2xl']) return '2xl'
+      if (width >= TAILWIND_BREAKPOINTS['xl-middle'] && isMktInApp)
+        return 'xl-middle'
+      if (width >= TAILWIND_BREAKPOINTS['xl']) return 'xl'
+      if (width >= TAILWIND_BREAKPOINTS['lg']) return 'lg'
+      if (width >= TAILWIND_BREAKPOINTS['md-middle'] && isMktInApp)
+        return 'md-middle'
+      if (width >= TAILWIND_BREAKPOINTS['md']) return 'md'
+      if (width >= TAILWIND_BREAKPOINTS['sm']) return 'sm'
+      return 'base'
+    },
+    [isMktInApp],
+  )
+
+  const initialBreakpoint =
+    typeof window !== 'undefined'
+      ? getBreakpointFromWidth(window.innerWidth)
+      : 'base'
+
   const [breakpoint, setBreakpoint] = useState<
     | 'sm'
     | 'md'
@@ -26,30 +49,19 @@ export const useTailwindBreakpoint = ({
     | 'base'
     | 'xl-middle'
     | 'md-middle'
-  >('base')
+  >(initialBreakpoint)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
-
-      if (width >= TAILWIND_BREAKPOINTS['4xl']) setBreakpoint('4xl')
-      else if (width >= TAILWIND_BREAKPOINTS['3xl']) setBreakpoint('3xl')
-      else if (width >= TAILWIND_BREAKPOINTS['2xl']) setBreakpoint('2xl')
-      else if (width >= TAILWIND_BREAKPOINTS['xl-middle'] && isMktInApp)
-        setBreakpoint('xl-middle')
-      else if (width >= TAILWIND_BREAKPOINTS['xl']) setBreakpoint('xl')
-      else if (width >= TAILWIND_BREAKPOINTS['lg']) setBreakpoint('lg')
-      else if (width >= TAILWIND_BREAKPOINTS['md-middle'] && isMktInApp)
-        setBreakpoint('md-middle')
-      else if (width >= TAILWIND_BREAKPOINTS['md']) setBreakpoint('md')
-      else if (width >= TAILWIND_BREAKPOINTS['sm']) setBreakpoint('sm')
-      else setBreakpoint('base')
+      setBreakpoint(getBreakpointFromWidth(width))
     }
 
+    // Sync immediately in layout to avoid paint flicker
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [getBreakpointFromWidth])
 
   const isAlwaysShowSidebar = ['lg', 'xl', '2xl', '3xl', '4xl'].includes(
     breakpoint,
@@ -63,6 +75,7 @@ export const useTailwindBreakpoint = ({
   const is2XLView = ['2xl'].includes(breakpoint)
   const isXLMiddleView = ['xl-middle'].includes(breakpoint)
   const isMDMiddleView = ['md-middle'].includes(breakpoint)
+  const isDesktopView = ['2xl', '3xl', '4xl'].includes(breakpoint)
   return {
     isAlwaysShowSidebar,
     isShowMenuContent,
@@ -75,5 +88,6 @@ export const useTailwindBreakpoint = ({
     is2XLView,
     isXLMiddleView,
     isMDMiddleView,
+    isDesktopView,
   }
 }

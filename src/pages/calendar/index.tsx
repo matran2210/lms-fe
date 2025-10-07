@@ -19,6 +19,7 @@ import {
 } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
+import clsx from 'clsx'
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =
     useTailwindBreakpoint()
@@ -125,7 +126,7 @@ const Page = () => {
         data-aos={ANIMATION.DATA_AOS}
       >
         <div className="relative flex h-full flex-col">
-          <div className="py-2 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:py-6">
+          <div className="py-2 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:pb-6 xl:pt-4">
             <HeaderMobile
               title={TitleSidebar.CALENDAR}
               showIcon={isTabletView || isMobileView}
@@ -187,19 +188,26 @@ const Page = () => {
                 headerType={CALENDAR_TYPE.LMS}
               />
             </div>
-            {open.isOpen && (
-              <>
-                {isMobileView && (
-                  <DetailCalendarMobile open={open} setOpen={setOpen} />
-                )}
-                {isTabletView && (
-                  <DetailCalendarTablet open={open} setOpen={setOpen} />
-                )}
-                {isAlwaysShowSidebar && (
-                  <DetailCalendar open={open} setOpen={setOpen} />
-                )}
-              </>
-            )}
+            <div
+              className={clsx(
+                'transition-all duration-300 ease-in-out',
+                open.isOpen && isAlwaysShowSidebar ? 'w-[425px]' : 'w-0',
+              )}
+            >
+              {open.isOpen && (
+                <>
+                  {isMobileView && (
+                    <DetailCalendarMobile open={open} setOpen={setOpen} />
+                  )}
+                  {isTabletView && (
+                    <DetailCalendarTablet open={open} setOpen={setOpen} />
+                  )}
+                  {isAlwaysShowSidebar && (
+                    <DetailCalendar open={open} setOpen={setOpen} />
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

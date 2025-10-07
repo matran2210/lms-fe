@@ -49,7 +49,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
+import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
 import { defaultSheetData } from 'src/constants/attempt'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
@@ -133,16 +133,12 @@ type Props = {
   isHideExhibit?: boolean
   saveAnswer?: () => void
   exhibitText?: string
-  controlAnswer?: Control<FieldValues, any>
+  controlAnswer: Control<FieldValues, any>
   setValue?: UseFormSetValue<FieldValues>
   reset?: UseFormReset<FieldValues>
   getValues?: UseFormGetValues<FieldValues>
   watch?: UseFormWatch<FieldValues>
   resetField?: UseFormResetField<FieldValues>
-}
-
-type RefEditor = {
-  reset: () => void
 }
 
 const QuizComponent = forwardRef<QuizComponentRef, Props>(
@@ -340,7 +336,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const getValueFillText = () => {
       let value = []
-      const inputs = document?.querySelectorAll(
+      const inputs = questionRef?.current?.querySelectorAll(
         'input[stringHTML="true"]',
       ) as any
       for (let e of inputs) {
@@ -630,6 +626,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.TRUE_FALSE:
           return (
             <OneChoiceQuestion
+              defaultValues={activeQuestion?.defaultValue}
               data={activeQuestion}
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
@@ -1245,7 +1242,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       : []
 
     return (
-      <div>
+      <div data-aos={ANIMATION.DATA_AOS}>
         <div ref={questionRef}>
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (

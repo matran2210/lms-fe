@@ -29,6 +29,8 @@ interface IProps {
   subjectCode: string
   score: number
   isTeacher?: boolean
+  loadingChart?: boolean
+  loadingAttempt?: boolean
 }
 
 const TestResultPage = ({
@@ -38,6 +40,7 @@ const TestResultPage = ({
   subjectCode,
   score,
   isTeacher,
+  loadingChart,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
@@ -84,7 +87,10 @@ const TestResultPage = ({
           return (
             <div className={commonMultipleScoreStyle}>
               <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
-                <ChartACCAScore data={chartData?.chart_data} />
+                <ChartACCAScore
+                  data={chartData?.chart_data}
+                  loading={loadingChart}
+                />
                 {questions?.quizAttempt?.attempt_gradings?.map(
                   (item, index) => (
                     <Recommendation data={item} key={index} />
@@ -119,6 +125,7 @@ const TestResultPage = ({
                     GRADE_STATUS.FINISHED_GRADING
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
+                  loadingChart={loadingChart}
                 />
                 {questions?.quizAttempt?.attempt_gradings?.map(
                   (item, index) => (
@@ -182,6 +189,7 @@ const TestResultPage = ({
                   GRADE_STATUS.FINISHED_GRADING
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
+                loadingChart={loadingChart}
               />
               {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
                 <Recommendation data={item} key={index} />

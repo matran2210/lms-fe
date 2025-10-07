@@ -4788,7 +4788,7 @@ antd@5.25.0:
     scroll-into-view-if-needed "^3.1.0"
     throttle-debounce "^5.0.2"
 
-antd@^5.21.1, antd@^5.22.2:
+antd@^5.21.1:
   version "5.27.0"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.27.0.tgz#2798b4b6d8ee7c295fcdd4e2cd7c037c5e927465"
   integrity sha512-o54dmpooLOc08RSGCkeEQBYAGPxUSmnhmYJKCNTHH46vzjOVxdteu+wPTRVkRbAkDTbs2VcNr5VL7Lu67rPIiA==
@@ -6452,22 +6452,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.1.tgz#c28c34a43379ca7f61d074130b2f5f7020a30694"
   integrity sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==
 
-entrance-test-result-package-test-v2@^1.1.25:
-  version "1.1.25"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package-test-v2/-/entrance-test-result-package-test-v2-1.1.25.tgz#721a32c759d96b547725a4ff277f4c46e5ec06b8"
-  integrity sha512-9qUs3iaWCjhXMInyCLBEm2VqrCvJhG9LUcbzboZ09wQP15+DtWH3OHKOxuUbpQpCavJ6k6rvWFx7KVZuTTnTAg==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@types/dompurify" "^3.0.5"
-    antd "^5.25.0"
-    caniuse-lite "^1.0.30001651"
-    dompurify "^3.2.5"
-    sass "^1.69.5"
-
-entrance-test-result-package@^1.2.1-test:
-  version "1.2.1-test"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.2.1-test.tgz#eaad2b7eb8c246995ffaadb923cf8ad78b49e917"
-  integrity sha512-HWNv2jwsqnjN85KKc3rI6GcVvwoUFhXuEc9SoUa2KiIUox9CPCvgJtU+0Af9uq04eYinClOzg24AL70SWacXdw==
+entrance-test-result-package@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.2.5.tgz#bb28c4f59cd58cb07cdc638535b4970c52fd2028"
+  integrity sha512-eSLUUPHllwya9TeWxkITWo0HQPHMQiBr8DP5i5bLpQ4j1I1KJBFb8e1giohdREUOSt9Hd9ouziUQk8dNQlmMSA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"
@@ -7050,33 +7038,7 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package-ha-test@^1.1.25-test:
-  version "1.1.25-test"
-  resolved "https://registry.yarnpkg.com/explanation-package-ha-test/-/explanation-package-ha-test-1.1.25-test.tgz#9eca92653beb8347d7e3cdd51fb415285d8a54bb"
-  integrity sha512-xoOAJwtbb9MItRJUjFi3obduj6ahiRLzI9J51aKaA5eS6SmP4ztD+KRB0oEyyQJnljQzuSlZcXwFARa2p6mbyQ==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@cloudflare/stream-react" "^1.9.1"
-    "@cyntler/react-doc-viewer" "1.10.4"
-    "@fortune-sheet/react" "^0.19.1"
-    "@tailwindcss/aspect-ratio" "^0.4.2"
-    "@tailwindcss/forms" "^0.5.7"
-    "@types/styled-components" "5.1.34"
-    "@xyflow/react" "^12.8.2"
-    antd "^5.26.6"
-    autoprefixer "^10.4.16"
-    clsx "^2.1.1"
-    css-loader "^6.8.1"
-    dashjs "^4.7.4"
-    html-react-parser "^5.1.10"
-    lodash "^4.17.21"
-    react-hook-form "7.46.0"
-    react-shadow "^20.4.0"
-    sass "^1.53.0"
-    styled-components "5.3.11"
-    tailwindcss "^3.3.5"
-
-explanation-package@^1.2.4:
+explanation-package@1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.1.tgz#61021f4cc036fe60872e9e1b3c018b54c830b7ae"
   integrity sha512-YodomN+Cw2B7rDkWXqOvWEd22BlmupJ80UDusm4U3yn7weTYH4eWp5jd7/zjaT3PZN8m47vmzYNP6YOHZogj8A==
@@ -10263,17 +10225,17 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.4.1.tgz#3284adfcb2415675c8c7ff8115529cf2d13ec8e0"
-  integrity sha512-1r31IJwV6gDxDvD1h+w6pyXTLRYmOEvRcLKlaXxqXsPuEOWcxLapS6TwxiP+FGkHhdD6XrpH6KovoL5BB7SReQ==
+preview-part@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.3.tgz#d672f91c228d0b9991af4182537ca0f60b00caec"
+  integrity sha512-g5FJ7ofuvBgc12TIEc+FKUtsaYuNwYfKNgx3UAsL2Vio2WIRtyYNOQnxgqzmxM5bBbPkrGykArRrlUDSHn5v1g==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
     "@types/aos" "^3.0.7"
     "@types/lodash" "^4.14.202"
     "@types/react-lines-ellipsis" "^0.15.6"
-    antd "^5.22.2"
+    antd "5.25.0"
     aos "^2.3.4"
     dayjs "^1.11.13"
     lodash "^4.17.21"
@@ -10547,18 +10509,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package-dat-test@^1.2.4-test:
-  version "1.2.4-test"
-  resolved "https://registry.yarnpkg.com/quiz-result-package-dat-test/-/quiz-result-package-dat-test-1.2.4-test.tgz#03b25c9f7e57dc1a8e5b6c422c36f4470aad849a"
-  integrity sha512-ibT3s9dsSDMkXDNYIpsiA3pM5Lp3ETBx917rkWqIaPR5cp0PHeIcKAVeireJV9HP+Yn8oDXXRxgaxYge3DznIA==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    lodash "^4.17.21"
-
-quiz-result-package@^1.2.41-test:
-  version "1.2.41-test"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.41-test.tgz#cf9402b604ae707fcb6fd90217663bb6aa3e745c"
-  integrity sha512-U6dcs/+3oOmjjdO3BOOYobtANK9bivaweje2XSJxO45m8334aBjlBHyphTcFzDf5tofcOMeUddh1/mt4J2w8qQ==
+quiz-result-package@^1.2.41:
+  version "1.2.41"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.41.tgz#b66fd9423cd8ac1b20efca8adcf58528f1dee6f3"
+  integrity sha512-Apl4AWwSjdBI1MAOkn2f+fsqLG/l/bP7bSYQDGqfTn7NuI4iDoLe/nMtbe1FxT0XKAEx2QP9+OcormFJCKoAKw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"

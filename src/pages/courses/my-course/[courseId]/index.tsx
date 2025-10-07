@@ -261,7 +261,7 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="flex items-start justify-between gap-6 md:mt-8 lg:my-4"
+            className="mb-8 mt-2 flex items-start justify-between gap-6"
             data-aos={ANIMATION.DATA_AOS}
           >
             <HeaderMobile
@@ -282,16 +282,14 @@ const CourseDetail = () => {
               }
             />
           </div>
-          <div data-aos={ANIMATION.DATA_AOS}>
-            <div className="h-full pt-6">
-              <CourseParts
-                isTrial={isTrial}
-                courses={courses}
-                is_passed_course={is_passed_course || false}
-                class_user_id={class_user_id}
-                lastElementRef={lastElementRef}
-              />
-            </div>
+          <div data-aos={ANIMATION.DATA_AOS} className="h-full">
+            <CourseParts
+              isTrial={isTrial}
+              courses={courses}
+              is_passed_course={is_passed_course || false}
+              class_user_id={class_user_id}
+              lastElementRef={lastElementRef}
+            />
           </div>
         </>
       )}

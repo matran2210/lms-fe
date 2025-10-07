@@ -167,7 +167,7 @@ const EditorReader = ({
   return (
     <>
       <div
-        className={`mce-content-body ${className}`}
+        className={`mce-content-body text-base ${className}`}
         id={id || ''}
         onMouseUp={onMouseUp ? onMouseUp : () => {}}
         ref={editorRef}
@@ -175,7 +175,7 @@ const EditorReader = ({
         <div
           ref={extenalRef}
           className={clsx({
-            'pined-noti text-[14px] text-white': pinned,
+            'pined-noti text-base text-white': pinned,
           })}
           key={content}
           onClick={handleOnclick}
@@ -207,9 +207,9 @@ const EditorReader = ({
                         streamRef={videoRefs.current[videoToken]}
                         pauseOnSeek={true}
                         thumbnail={{
-                          '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
-                          '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
-                          '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
+                          '311x175': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
+                          '656x369': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
+                          '1270x716': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
                         }}
                       />
                     )

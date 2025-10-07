@@ -110,7 +110,7 @@ const EventTest = () => {
             </>
           )}
         </div>
-        {/* <Footer /> */}
+        <Footer />
         {/* <PopUpRemindEntrance /> */}
       </Layout>
     </SappLoadingGlobal>
