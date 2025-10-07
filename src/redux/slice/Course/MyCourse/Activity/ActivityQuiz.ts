@@ -212,37 +212,62 @@ const confirmQuestion = createAsyncThunk(
           question_id: questionId,
         })
         const responseData = res?.data?.answer
-        const userAnswer = responseData?.answer
-          ? responseData?.answer?.map((answer) => {
-              if (
-                answer?.answer_id &&
-                !answer?.answer_text &&
-                !answer?.answer_position &&
-                !answer?.question_id
-              ) {
-                return answer?.answer_id
-              } else if (
-                answer?.answer_text &&
-                answer?.answer_position &&
-                !answer?.answer_id &&
-                !answer?.question_id
-              ) {
-                return answer?.answer_text
-              } else {
-                return answer
-              }
-            })
-          : responseData?.question_answer_id
-        const result = {
-          activityId,
-          tabId,
-          quizId,
-          myAnswers: userAnswer,
-          time_spent,
-        }
-        return {
-          ...result,
-          question: { ...responseData?.question, myAnswers: userAnswer },
+
+        if (responseData.question.qType !== QUESTION_TYPES.ESSAY) {
+          const userAnswer = responseData?.answer
+            ? responseData?.answer?.map((answer) => {
+                if (
+                  answer?.answer_id &&
+                  !answer?.answer_text &&
+                  !answer?.answer_position &&
+                  !answer?.question_id
+                ) {
+                  return answer?.answer_id
+                } else if (
+                  answer?.answer_text &&
+                  answer?.answer_position &&
+                  !answer?.answer_id &&
+                  !answer?.question_id
+                ) {
+                  return answer?.answer_text
+                } else {
+                  return answer
+                }
+              })
+            : responseData?.question_answer_id
+          const result = {
+            activityId,
+            tabId,
+            quizId,
+            myAnswers: userAnswer,
+            time_spent,
+          }
+          return {
+            ...result,
+            question: { ...responseData?.question, myAnswers: userAnswer },
+          }
+        } else {
+          const userAnswer = responseData?.question?.requirement_answers?.length
+            ? responseData?.question?.requirement_answers
+            : [
+                {
+                  question_id: questionId,
+                  short_answer: responseData?.short_answer || '',
+                  answer_file: responseData?.answer_file || null,
+                },
+              ]
+
+          const result = {
+            activityId,
+            tabId,
+            quizId,
+            myAnswers: userAnswer,
+            time_spent,
+          }
+          return {
+            ...result,
+            question: { ...responseData?.question, myAnswers: userAnswer },
+          }
         }
       } else {
         const result = {
@@ -825,7 +850,7 @@ const quizSlice: Slice = createSlice({
                       (q: { question_id: string | undefined }) =>
                         q.question_id !== payload.question.id,
                     ) || []),
-                    ...(payload.myAnswers || {}).map((item: IEssayAnswer) => ({
+                    ...(payload.myAnswers || []).map((item: IEssayAnswer) => ({
                       ...item,
                       time_spent: payload.time_spent,
                     })),

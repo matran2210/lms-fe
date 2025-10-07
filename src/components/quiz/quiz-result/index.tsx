@@ -99,7 +99,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
                 getTable={getTable}
                 onShowDetail={(e) => {
                   router.push(
-                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
+                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Quiz Result`,
                   )
                 }}
                 loading={loading}

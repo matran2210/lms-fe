@@ -782,6 +782,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     break
                 }
               }
+
               return {
                 key: e?.id,
                 label: (

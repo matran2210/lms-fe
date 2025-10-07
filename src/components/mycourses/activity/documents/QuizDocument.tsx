@@ -54,6 +54,7 @@ import ModalExplanationPackage from '../ModalExplanationPackage'
 import ModalResults from '../ModalResults'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import LoadingQuizDocument from './LoadingQuizDocument'
+import { GradingPreference } from '@utils/constants'
 
 type Props = {
   questions: IQuestion[]
@@ -130,20 +131,9 @@ const QuizDocument = ({
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
   const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
-  const [modalResult, setModalResult] = useState<{
-    status?: boolean
-    questions?: any
-    id?: string
-  }>()
-
   const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
-  const [storedAnswers, setStoredAnswers] = useState<{ [key: string]: any }>({})
   const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
 
-  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
-    id: string
-    isOpen: boolean
-  }>()
   const {
     control: controlAnswer,
     setValue,
@@ -189,7 +179,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: questions?.[0]?.id || '',
-              attemptId,
+              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
             }),
           )
 
@@ -224,7 +214,7 @@ const QuizDocument = ({
             tabId,
             quizId,
             questionId: activeQuestion.id,
-            attemptId,
+            ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
             myAnswers: [],
             time_spent: 0,
           }) as any,
@@ -235,7 +225,7 @@ const QuizDocument = ({
   }, [
     grading_preference,
     activeQuestion?.id,
-    activeQuestion?.corrects,
+    // activeQuestion?.corrects,
     activityId,
     tabId,
     quizId,
@@ -277,7 +267,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
-              attemptId,
+              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
             }),
           ).unwrap()
           setStartWorkTime(Date.now())
@@ -471,7 +461,7 @@ const QuizDocument = ({
 
     if (grading_preference === 'AFTER_ALL_QUESTIONS') {
       // Mark finished to preserve state across popup
-      sessionStorage.setItem(`quiz-finished-${quizId}`, 'true')
+      setIsFinishQuiz(true)
     }
 
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
@@ -519,7 +509,15 @@ const QuizDocument = ({
               )
             }, 2000)
           }
-          getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
+          // getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
+          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+            setOpenGradedReport(true)
+            return
+          } else {
+            router.replace(
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}`,
+            )
+          }
           dispatch(
             removeQuizFinished({
               activityId,
@@ -529,10 +527,10 @@ const QuizDocument = ({
           )
           setQuizComponentKey((e) => e + 1)
           setActiveQuestionIndex(0)
-          if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-            setOpenGradedReport(true)
-            return
-          }
+          // if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+          //   setOpenGradedReport(true)
+          //   return
+          // }
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -543,66 +541,62 @@ const QuizDocument = ({
     }
   }
 
-  const getTable = async ({
-    id,
-    page_index,
-    page_size,
-  }: {
-    id?: string
-    page_index: number
-    page_size: number
-  }) => {
-    setLoading(true)
-    try {
-      // const checkId = id || modalResult?.id
-      // if (checkId === resultId) return
-      setResultId(id ?? modalResult?.id ?? '')
-      const response = await CoursesAPI.getQuizAttemptsTable(
-        id || modalResult?.id || '',
-        {
-          page_index,
-          page_size,
-        },
-      )
+  // const getTable = async ({
+  //   id,
+  //   page_index,
+  //   page_size,
+  // }: {
+  //   id?: string
+  //   page_index: number
+  //   page_size: number
+  // }) => {
+  //   setLoading(true)
+  //   try {
+  //     // const checkId = id || modalResult?.id
+  //     // if (checkId === resultId) return
+  //     setResultId(id ?? modalResult?.id ?? '')
+  //     const response = await CoursesAPI.getQuizAttemptsTable(
+  //       id || modalResult?.id || '',
+  //       {
+  //         page_index,
+  //         page_size,
+  //       },
+  //     )
 
-      const newQuestionResponse: IQuestionResultResponse = {
-        meta: response?.data?.metadata,
-        data: (modalResult?.questions?.data ?? []).concat(
-          response?.data?.answers?.map((answer) => {
-            return {
-              active: answer?.active,
-              id: answer?.id,
-              content: answer?.question?.question_content,
-              section: answer?.question?.question_filter?.part?.name,
-              type: answer?.question?.qType,
-              is_correct: answer?.is_correct,
-              time_spent: answer?.time_spent,
-              question: answer?.question,
-            }
-          }) || [],
-        ),
-        attempt_info: response?.data?.attempt_info,
-      }
+  //     const newQuestionResponse: IQuestionResultResponse = {
+  //       meta: response?.data?.metadata,
+  //       data: (modalResult?.questions?.data ?? []).concat(
+  //         response?.data?.answers?.map((answer) => {
+  //           return {
+  //             active: answer?.active,
+  //             id: answer?.id,
+  //             content: answer?.question?.question_content,
+  //             section: answer?.question?.question_filter?.part?.name,
+  //             type: answer?.question?.qType,
+  //             is_correct: answer?.is_correct,
+  //             time_spent: answer?.time_spent,
+  //             question: answer?.question,
+  //           }
+  //         }) || [],
+  //       ),
+  //       attempt_info: response?.data?.attempt_info,
+  //     }
 
-      if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-        setOpenGradedReport(true)
-        return
-      } else {
-        setModalResult((e) => ({
-          id: id || e?.id,
-          status: true,
-          questions: newQuestionResponse,
-        }))
-      }
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleShowQuestionResultDetail = (data: IQuestionResult) => {
-    setShowQuestionResultDetail({ id: data?.id, isOpen: true })
-  }
+  //     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+  //       setOpenGradedReport(true)
+  //       return
+  //     } else {
+  //       setModalResult((e) => ({
+  //         id: id || e?.id,
+  //         status: true,
+  //         questions: newQuestionResponse,
+  //       }))
+  //     }
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const scrollToQuiz = (quizId: string) => {
     setTimeout(() => {
@@ -808,8 +802,6 @@ const QuizDocument = ({
         quizId,
       }),
     )
-    // Clear stored answers and finished flag
-    setStoredAnswers({})
     // Clear form values and force remount to avoid showing previous selections
     reset({})
     setQuizComponentKey((e) => e + 1)
@@ -819,7 +811,6 @@ const QuizDocument = ({
     setOpenGradedReport(false)
     setIsFinishQuiz(false)
   }
-
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -1086,7 +1077,7 @@ const QuizDocument = ({
         </div>
       )}
 
-      {modalResult?.status && (
+      {/* {modalResult?.status && (
         <ModalResults
           getTable={getTable}
           handleShowQuestionResultDetail={handleShowQuestionResultDetail}
@@ -1099,15 +1090,15 @@ const QuizDocument = ({
           loading={loading}
           handleOk={() => setModalResult(undefined)}
         />
-      )}
+      )} */}
 
-      {showQuestionResultDetail?.isOpen && (
+      {/* {showQuestionResultDetail?.isOpen && (
         <ModalExplanationPackage
           quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
           open={showQuestionResultDetail?.isOpen || false}
           setOpen={() => setShowQuestionResultDetail(undefined)}
         />
-      )}
+      )} */}
       {openGradedReport && (
         <SappModalV3
           open={openGradedReport}
