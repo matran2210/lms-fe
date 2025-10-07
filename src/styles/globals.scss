@@ -281,7 +281,7 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 35px;
   margin-bottom: 4px;
 
-  @apply bg-[#F9F9F9] text-center text-base font-bold;
+  @apply bg-[#F9F9F9] text-center text-base font-bold focus:border-primary focus:shadow-0 focus:outline-none;
 }
 
 .sapp-select--selectword-preview,

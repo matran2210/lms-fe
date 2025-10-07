@@ -63,19 +63,19 @@ export const isValidatedAnswer = (
       )
       return !!value?.length
     case QUESTION_TYPES.SELECT_WORD:
-      return (answer as IMatchingAnswer[])?.[0].answer?.length > 0
+      return (answer as IMatchingAnswer[])?.[0]?.answer?.length > 0
     case QUESTION_TYPES.MATCHING:
-      value = (answer as IMatchingAnswer[])?.[0].answer?.filter(
+      value = (answer as IMatchingAnswer[])?.[0]?.answer?.filter(
         (item) => !!item.answer_id,
       )
       return !!value?.length
     case QUESTION_TYPES.FILL_WORD:
-      value = (answer as IFillWordAnswer[])?.[0].answer?.filter(
+      value = (answer as IFillWordAnswer[])?.[0]?.answer?.filter(
         (item) => !!item.answer_text,
       )
       return !!value?.length
     case QUESTION_TYPES.DRAG_DROP:
-      value = (answer as IDragAndDropAnswer[])?.[0].answer?.filter(
+      value = (answer as IDragAndDropAnswer[])?.[0]?.answer?.filter(
         (item) => !!item.answer_id,
       )
       return !!value?.length

@@ -54,6 +54,7 @@ import ModalExplanationPackage from '../ModalExplanationPackage'
 import ModalResults from '../ModalResults'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import LoadingQuizDocument from './LoadingQuizDocument'
+import { GradingPreference } from '@utils/constants'
 
 type Props = {
   questions: IQuestion[]
@@ -80,6 +81,7 @@ type Props = {
   is_limited?: boolean
   limit_count?: number
   number_of_attempts?: number
+  isQuizFinished?: boolean
 }
 
 const QuizDocument = ({
@@ -105,6 +107,7 @@ const QuizDocument = ({
   is_limited,
   limit_count,
   number_of_attempts,
+  isQuizFinished = false,
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
@@ -128,20 +131,9 @@ const QuizDocument = ({
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
   const [startWorkTime, setStartWorkTime] = useState(Date.now())
 
-  const [modalResult, setModalResult] = useState<{
-    status?: boolean
-    questions?: any
-    id?: string
-  }>()
-
   const [quizComponentKey, setQuizComponentKey] = useState<number>(1)
-
   const [openFinishQuiz, setOpenFinishQuiz] = useState<boolean>(false)
 
-  const [showQuestionResultDetail, setShowQuestionResultDetail] = useState<{
-    id: string
-    isOpen: boolean
-  }>()
   const {
     control: controlAnswer,
     setValue,
@@ -176,8 +168,7 @@ const QuizDocument = ({
         // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
         if (grading_preference === 'AFTER_ALL_QUESTIONS') {
           // If finished, we'll restore answers and fetch corrects lazily per question on navigation
-          const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
-          setIsFinishQuiz(!!finished)
+          setIsFinishQuiz(isQuizFinished)
         }
 
         // Load the first question when the component mounts
@@ -188,6 +179,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: questions?.[0]?.id || '',
+              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
             }),
           )
 
@@ -208,34 +200,32 @@ const QuizDocument = ({
 
   // Lazy fetch corrects per question after finished
   useEffect(() => {
-    if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
-    if (!activeQuestion?.id) return
-    const finished = sessionStorage.getItem(`quiz-finished-${quizId}`)
-    if (!finished) return
+    const fetchAndConfirmQuestion = async () => {
+      if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
+      if (!activeQuestion?.id) return
 
-    const answersKey = `quiz-answers-${quizId}`
-    const raw = sessionStorage.getItem(answersKey)
-    const storedAnswers: { [key: string]: any } = raw ? JSON.parse(raw) : {}
-    const myAnswersForActive = storedAnswers[activeQuestion.id]
-
-    // Only call API if we haven't got corrects yet for this question
-    const hasCorrects = !!activeQuestion.corrects
-    if (!hasCorrects) {
-      dispatch(
-        confirmQuestion({
-          activityId,
-          tabId,
-          quizId,
-          questionId: activeQuestion.id,
-          myAnswers: myAnswersForActive,
-          time_spent: 0,
-        }) as any,
-      )
+      if (!isFinishQuiz) return
+      // Only call API if we haven't got corrects yet for this question
+      const hasCorrects = !!activeQuestion.corrects
+      if (!hasCorrects) {
+        dispatch(
+          confirmQuestion({
+            activityId,
+            tabId,
+            quizId,
+            questionId: activeQuestion.id,
+            ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
+            myAnswers: [],
+            time_spent: 0,
+          }) as any,
+        )
+      }
     }
+    fetchAndConfirmQuestion()
   }, [
     grading_preference,
     activeQuestion?.id,
-    activeQuestion?.corrects,
+    // activeQuestion?.corrects,
     activityId,
     tabId,
     quizId,
@@ -277,6 +267,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
+              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
             }),
           ).unwrap()
           setStartWorkTime(Date.now())
@@ -318,7 +309,7 @@ const QuizDocument = ({
    * @returns Không có giá trị trả về.
    */
 
-  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(false)
+  const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(isQuizFinished)
 
   const handleQuizFinish = async () => {
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
@@ -334,7 +325,9 @@ const QuizDocument = ({
         defaultValue,
       )
     }
-    setActiveQuestionIndex(activeQuestionIndex + 1)
+
+    // Lần cuối thì không cần tăng nữa
+    // setActiveQuestionIndex(activeQuestionIndex + 1)
     setIsFinishQuiz(true)
     handleSaveAnswer()
     // Load the next question if it hasn't been loaded yet
@@ -361,7 +354,8 @@ const QuizDocument = ({
     // Nếu chưa hoàn thành bài quiz, không thực hiện gì cả
     if (!isFinishQuiz) return
     // Trả lại chỉ mục câu hỏi hiện tại về trước 1 để người dùng có thể tiếp tục làm bài
-    setActiveQuestionIndex(activeQuestionIndex - 1)
+    // setActiveQuestionIndex(activeQuestionIndex - 1)
+    setIsFinishQuiz(false)
   }
 
   const handlePrevQuestion = async () => {
@@ -458,16 +452,6 @@ const QuizDocument = ({
         }),
       )
     }
-    // Persist user's answers per question for AFTER_ALL_QUESTIONS
-    if (grading_preference === 'AFTER_ALL_QUESTIONS' && activeQuestion?.id) {
-      try {
-        const answersKey = `quiz-answers-${quizId}`
-        const raw = sessionStorage.getItem(answersKey)
-        const stored: { [key: string]: any } = raw ? JSON.parse(raw) : {}
-        stored[activeQuestion.id] = myAnswers
-        sessionStorage.setItem(answersKey, JSON.stringify(stored))
-      } catch (_e) {}
-    }
   }
 
   const handleFinishQuiz = async () => {
@@ -477,7 +461,7 @@ const QuizDocument = ({
 
     if (grading_preference === 'AFTER_ALL_QUESTIONS') {
       // Mark finished to preserve state across popup
-      sessionStorage.setItem(`quiz-finished-${quizId}`, 'true')
+      setIsFinishQuiz(true)
     }
 
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
@@ -525,20 +509,28 @@ const QuizDocument = ({
               )
             }, 2000)
           }
-          getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
-          dispatch(
-            removeQuizFinished({
-              activityId,
-              tabId,
-              quizId: quizId,
-            }),
-          )
-          setQuizComponentKey((e) => e + 1)
-          setActiveQuestionIndex(0)
+          // getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
             setOpenGradedReport(true)
             return
+          } else {
+            const searchParams =
+              is_limited && limit_count && number_of_attempts
+                ? `attempt=${number_of_attempts + 1}/${limit_count}`
+                : ''
+            router.replace(
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}?${searchParams}`,
+            )
           }
+          // dispatch(
+          //   removeQuizFinished({
+          //     activityId,
+          //     tabId,
+          //     quizId: quizId,
+          //   }),
+          // )
+          setQuizComponentKey((e) => e + 1)
+          // setActiveQuestionIndex(0)
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
@@ -549,66 +541,62 @@ const QuizDocument = ({
     }
   }
 
-  const getTable = async ({
-    id,
-    page_index,
-    page_size,
-  }: {
-    id?: string
-    page_index: number
-    page_size: number
-  }) => {
-    setLoading(true)
-    try {
-      // const checkId = id || modalResult?.id
-      // if (checkId === resultId) return
-      setResultId(id ?? modalResult?.id ?? '')
-      const response = await CoursesAPI.getQuizAttemptsTable(
-        id || modalResult?.id || '',
-        {
-          page_index,
-          page_size,
-        },
-      )
+  // const getTable = async ({
+  //   id,
+  //   page_index,
+  //   page_size,
+  // }: {
+  //   id?: string
+  //   page_index: number
+  //   page_size: number
+  // }) => {
+  //   setLoading(true)
+  //   try {
+  //     // const checkId = id || modalResult?.id
+  //     // if (checkId === resultId) return
+  //     setResultId(id ?? modalResult?.id ?? '')
+  //     const response = await CoursesAPI.getQuizAttemptsTable(
+  //       id || modalResult?.id || '',
+  //       {
+  //         page_index,
+  //         page_size,
+  //       },
+  //     )
 
-      const newQuestionResponse: IQuestionResultResponse = {
-        meta: response?.data?.metadata,
-        data: (modalResult?.questions?.data ?? []).concat(
-          response?.data?.answers?.map((answer) => {
-            return {
-              active: answer?.active,
-              id: answer?.id,
-              content: answer?.question?.question_content,
-              section: answer?.question?.question_filter?.part?.name,
-              type: answer?.question?.qType,
-              is_correct: answer?.is_correct,
-              time_spent: answer?.time_spent,
-              question: answer?.question,
-            }
-          }) || [],
-        ),
-        attempt_info: response?.data?.attempt_info,
-      }
+  //     const newQuestionResponse: IQuestionResultResponse = {
+  //       meta: response?.data?.metadata,
+  //       data: (modalResult?.questions?.data ?? []).concat(
+  //         response?.data?.answers?.map((answer) => {
+  //           return {
+  //             active: answer?.active,
+  //             id: answer?.id,
+  //             content: answer?.question?.question_content,
+  //             section: answer?.question?.question_filter?.part?.name,
+  //             type: answer?.question?.qType,
+  //             is_correct: answer?.is_correct,
+  //             time_spent: answer?.time_spent,
+  //             question: answer?.question,
+  //           }
+  //         }) || [],
+  //       ),
+  //       attempt_info: response?.data?.attempt_info,
+  //     }
 
-      if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-        setOpenGradedReport(true)
-        return
-      } else {
-        setModalResult((e) => ({
-          id: id || e?.id,
-          status: true,
-          questions: newQuestionResponse,
-        }))
-      }
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleShowQuestionResultDetail = (data: IQuestionResult) => {
-    setShowQuestionResultDetail({ id: data?.id, isOpen: true })
-  }
+  //     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+  //       setOpenGradedReport(true)
+  //       return
+  //     } else {
+  //       setModalResult((e) => ({
+  //         id: id || e?.id,
+  //         status: true,
+  //         questions: newQuestionResponse,
+  //       }))
+  //     }
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const scrollToQuiz = (quizId: string) => {
     setTimeout(() => {
@@ -772,7 +760,7 @@ const QuizDocument = ({
         return 'Result'
       }
     }
-    return 'View Answer'
+    return 'Save and View Answers'
   }
 
   const handleSubmit = () => {
@@ -814,9 +802,6 @@ const QuizDocument = ({
         quizId,
       }),
     )
-    // Clear stored answers and finished flag
-    sessionStorage.removeItem(`quiz-answers-${quizId}`)
-    sessionStorage.removeItem(`quiz-finished-${quizId}`)
     // Clear form values and force remount to avoid showing previous selections
     reset({})
     setQuizComponentKey((e) => e + 1)
@@ -826,101 +811,6 @@ const QuizDocument = ({
     setOpenGradedReport(false)
     setIsFinishQuiz(false)
   }
-
-  // const renderActionButton = () => {
-  //   return (
-  //     <>
-  //       {isQuestionConfirmed &&
-  //         isAFTEREACHQUESTION &&
-  //         !isLastQuestion &&
-  //         !isFinishQuiz && (
-  //           <SappButton
-  //             className="!rounded-lg !px-4 py-2 text-sm"
-  //             childClass="text-sm"
-  //             title={'Next'}
-  //             full={false}
-  //             size={'small'}
-  //             onClick={() => {
-  //               if (loading) {
-  //                 return
-  //               }
-  //               if (isLastQuestion) {
-  //                 handleQuizFinish()
-  //                 trackGAEvent('Click Button Finish Quiz Activity')
-  //               } else {
-  //                 handleNextQuestion()
-  //                 trackGAEvent('Click Button Next Quiz Activity')
-  //               }
-  //             }}
-  //             color="light-dark"
-  //             loading={loading}
-  //           />
-  //         )}
-  //       {isAFTERAllQUESTION && !isFinishQuiz && hasAttemptsLeft && (
-  //         <SappButton
-  //           className="!rounded-lg !px-4 py-2 text-sm"
-  //           childClass="text-sm"
-  //           title={
-  //             isLastQuestion
-  //               ? 'Finish'
-  //               : isAFTERAllQUESTION
-  //                 ? 'Submit & Next'
-  //                 : 'Next'
-  //           }
-  //           full={false}
-  //           size={'small'}
-  //           onClick={() => {
-  //             if (loading) {
-  //               return
-  //             }
-  //             if (isLastQuestion) {
-  //               handleQuizFinish()
-  //               setRunHandleFinishQuiz((e) => e + 1)
-  //               trackGAEvent('Click Button Finish Quiz Activity')
-  //             } else {
-  //               handleNextQuestion()
-  //               trackGAEvent('Click Button Next Quiz Activity')
-  //             }
-  //           }}
-  //           color="light-dark"
-  //           loading={loading}
-  //         />
-  //       )}
-  //       {!isQuestionConfirmed && isAFTEREACHQUESTION && (
-  //         <SappButton
-  //           className="!rounded-lg !px-4 py-2"
-  //           childClass="text-sm"
-  //           title={getButttonTitle()}
-  //           full={false}
-  //           size={'small'}
-  //           disabled={loading}
-  //           onClick={() => {
-  //             handleSubmit()
-  //           }}
-  //           color="light-dark"
-  //           loading={loading}
-  //         />
-  //       )}
-  //       {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-  //       {isQuestionConfirmed &&
-  //         isAFTERAllQUESTION &&
-  //         isFinishQuiz &&
-  //         hasAttemptsLeft && (
-  //           <SappButton
-  //             className="!rounded-lg !px-4 !py-2"
-  //             childClass="text-sm"
-  //             title={'Retake'}
-  //             full={false}
-  //             size={'small'}
-  //             disabled={loading}
-  //             onClick={() => {
-  //               handleRetakeQuestion()
-  //             }}
-  //           />
-  //         )}
-  //     </>
-  //   )
-  // }
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -998,45 +888,6 @@ const QuizDocument = ({
                 ) : (
                   <MaximumContentIcon />
                 )}
-                {/* {(isQuestionConfirmed ||
-                grading_preference !== 'AFTER_EACH_QUESTION' ||
-                (isQuestionConfirmed && isLastQuestion)) && (
-                <SappButton
-                  title={isLastQuestion ? 'Finish' : 'Next'}
-                  full={false}
-                  size={'small'}
-                  onClick={() => {
-                    if (loading) {
-                      return
-                    }
-                    if (isLastQuestion) {
-                      handleQuizFinish()
-                      // handleSaveAnswer()
-                      setRunHandleFinishQuiz((e) => e + 1)
-                      trackGAEvent('Click Button Finish Quiz Activity')
-                    } else {
-                      handleNextQuestion()
-                      trackGAEvent('Click Button Next Quiz Activity')
-                    }
-                  }}
-                  color="primary"
-                  loading={loading}
-                />
-              )}
-              {!isQuestionConfirmed &&
-                grading_preference === 'AFTER_EACH_QUESTION' && (
-                  <SappButton
-                    title={getButttonTitle()}
-                    full={false}
-                    size={'small'}
-                    disabled={loading}
-                    onClick={() => {
-                      handleSubmit()
-                    }}
-                    color="primary"
-                    loading={loading}
-                  />
-                )} */}
               </div>
             </>
           )}
@@ -1056,7 +907,7 @@ const QuizDocument = ({
         )}
       </div>
 
-      {isUndefined(activeQuestion) ? (
+      {isUndefined(activeQuestion) || loading ? (
         <LoadingQuizDocument />
       ) : (
         <div
@@ -1166,7 +1017,7 @@ const QuizDocument = ({
                         isLastQuestion
                           ? 'Finish'
                           : isAFTERAllQUESTION
-                            ? 'Submit & Next'
+                            ? 'Next Question'
                             : 'Next'
                       }
                       full={false}
@@ -1226,7 +1077,7 @@ const QuizDocument = ({
         </div>
       )}
 
-      {modalResult?.status && (
+      {/* {modalResult?.status && (
         <ModalResults
           getTable={getTable}
           handleShowQuestionResultDetail={handleShowQuestionResultDetail}
@@ -1239,15 +1090,15 @@ const QuizDocument = ({
           loading={loading}
           handleOk={() => setModalResult(undefined)}
         />
-      )}
+      )} */}
 
-      {showQuestionResultDetail?.isOpen && (
+      {/* {showQuestionResultDetail?.isOpen && (
         <ModalExplanationPackage
           quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
           open={showQuestionResultDetail?.isOpen || false}
           setOpen={() => setShowQuestionResultDetail(undefined)}
         />
-      )}
+      )} */}
       {openGradedReport && (
         <SappModalV3
           open={openGradedReport}
