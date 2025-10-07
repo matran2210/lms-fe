@@ -7,6 +7,7 @@ import { Dispatch, SetStateAction, memo, useState } from 'react'
 import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import { ICourseInfo } from 'src/type/dashboard'
 import StatsSkeleton from '@components/skeleton/StatsSkeleton'
+import LearningResultTest from './dashboard-normal/LearningResultTest'
 export interface IActivityProgress {
   completed: number
   total: number
@@ -119,6 +120,7 @@ const CourseDashboard = ({
       ),
     },
   ]
+
   return (
     <>
       <div
@@ -196,7 +198,8 @@ const CourseDashboard = ({
             <TopicProgress setInfoCourse={setInfoCourse} />
           </div>
           <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
-            <LearningResult />
+            <LearningResultTest />
+            {/* <LearningResult /> */}
           </div>
         </div>
       </div>
