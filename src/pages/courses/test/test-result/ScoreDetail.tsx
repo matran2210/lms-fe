@@ -191,190 +191,234 @@ const ScoreDetail = ({
         )}
       </div>
       <div className="flex flex-col gap-4">
-        {Object.entries(groupedData).map(([program, rows]) => (
-          <Collapse
-            className="test-collapse rounded-xl bg-white shadow-small lg:rounded-2xl"
-            key={program}
-            ghost
-            expandIconPosition="end"
-            defaultActiveKey={[0]}
-            items={[
-              {
-                key: 0,
-                label: (
-                  <span className="text-lg font-medium text-gray-800">
-                    {rows[0]?.belong_to?.name
-                      ?.split(' ')
-                      .map(
-                        (word) =>
-                          word.charAt(0).toUpperCase() +
-                          word.slice(1).toLowerCase(),
-                      )
-                      .join(' ')}
-                  </span>
-                ),
-                children: (
-                  <div>
-                    <SappTable
-                      headers={headers}
-                      loading={isLoading}
-                      isCheckedAll={true}
-                      onChange={() => {}}
-                      hasCheck={false}
-                      classTable="w-full"
-                    >
-                      {rows?.map((answer) => {
-                        return (
-                          <React.Fragment key={answer?.id}>
-                            <tr
-                              key={answer?.id}
-                              className={
-                                'align-baseline text-base text-gray-800 hover:bg-gray-100'
-                              }
-                            >
-                              <td className="pr-3 text-center">
-                                {answer?.index}
-                              </td>
+        {isLoading ? (
+          <LoadingScoreDetail />
+        ) : (
+          <>
+            {Object.entries(groupedData).map(([program, rows]) => (
+              <Collapse
+                className="test-collapse rounded-xl bg-white shadow-small lg:rounded-2xl"
+                key={program}
+                ghost
+                expandIconPosition="end"
+                defaultActiveKey={[0]}
+                items={[
+                  {
+                    key: 0,
+                    label: (
+                      <span className="text-lg font-medium text-gray-800">
+                        {rows[0]?.belong_to?.name
+                          ?.split(' ')
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() +
+                              word.slice(1).toLowerCase(),
+                          )
+                          .join(' ')}
+                      </span>
+                    ),
+                    children: (
+                      <div>
+                        <SappTable
+                          headers={headers}
+                          loading={isLoading}
+                          isCheckedAll={true}
+                          onChange={() => {}}
+                          hasCheck={false}
+                          classTable="w-full"
+                        >
+                          {rows?.map((answer) => {
+                            return (
+                              <React.Fragment key={answer?.id}>
+                                <tr
+                                  key={answer?.id}
+                                  className={
+                                    'align-baseline text-base text-gray-800 hover:bg-gray-100'
+                                  }
+                                >
+                                  <td className="pr-3 text-center">
+                                    {answer?.index}
+                                  </td>
 
-                              {/* Question */}
-                              <td className="pr-4">
-                                <div>
-                                  <Tooltip
-                                    title={
-                                      answer?.question?.question_content &&
-                                      DOMPurify.sanitize(
-                                        htmlToRaw(
-                                          answer?.question?.question_content,
-                                        ) ?? '--',
-                                      )
-                                    }
-                                  >
-                                    <div
-                                      className={`line-clamp-1 cursor-pointer text-sm md:text-base`}
-                                      onClick={() => {
-                                        if (answer?.id) {
-                                          router.push(
-                                            `/explanation/${answer?.id}?title=My Course`,
-                                          )
-                                        }
-                                      }}
-                                    >
-                                      {answer?.question?.question_content &&
-                                        truncateString(
+                                  {/* Question */}
+                                  <td className="pr-4">
+                                    <div>
+                                      <Tooltip
+                                        title={
+                                          answer?.question?.question_content &&
                                           DOMPurify.sanitize(
                                             htmlToRaw(
                                               answer?.question
                                                 ?.question_content,
                                             ) ?? '--',
+                                          )
+                                        }
+                                      >
+                                        <div
+                                          className={`line-clamp-1 cursor-pointer text-sm md:text-base`}
+                                          onClick={() => {
+                                            if (answer?.id) {
+                                              router.push(
+                                                `/explanation/${answer?.id}?title=My Course`,
+                                              )
+                                            }
+                                          }}
+                                        >
+                                          {answer?.question?.question_content &&
+                                            truncateString(
+                                              DOMPurify.sanitize(
+                                                htmlToRaw(
+                                                  answer?.question
+                                                    ?.question_content,
+                                                ) ?? '--',
+                                              ),
+                                              40,
+                                            )}
+                                        </div>
+                                      </Tooltip>
+                                      <Tooltip
+                                        title={
+                                          answer?.question?.question_filter
+                                            ?.chapter?.name
+                                        }
+                                      >
+                                        <span className="text-sm text-gray-400">
+                                          {truncateString(
+                                            answer?.question?.question_filter
+                                              ?.chapter?.name ?? '',
+                                            40,
+                                          )}
+                                        </span>
+                                      </Tooltip>
+                                    </div>
+                                  </td>
+
+                                  {/* Type */}
+                                  <td className="hidden pr-4 md:table-cell">
+                                    <div className="text-center">
+                                      {getTypeName(answer?.question?.qType)}
+                                    </div>
+                                  </td>
+
+                                  {/* Result */}
+                                  <td
+                                    className={`hidden pr-4 text-center md:table-cell`}
+                                  >
+                                    <div className="flex w-full items-center justify-center gap-3">
+                                      <div
+                                        className={clsx(
+                                          renderBoxesAndLineClass(
+                                            getTypeName(
+                                              answer?.question?.qType,
+                                            ),
+                                            answer,
                                           ),
-                                          40,
+                                          'flex-1 rounded px-3',
                                         )}
-                                    </div>
-                                  </Tooltip>
-                                  <Tooltip
-                                    title={
-                                      answer?.question?.question_filter?.chapter
-                                        ?.name
-                                    }
-                                  >
-                                    <span className="text-sm text-gray-400">
-                                      {truncateString(
-                                        answer?.question?.question_filter
-                                          ?.chapter?.name ?? '',
-                                        40,
+                                      >
+                                        {answer?.question?.qType !== 'ESSAY' ? (
+                                          <>
+                                            {answer?.is_correct
+                                              ? 'Correct'
+                                              : 'Incorrect'}
+                                          </>
+                                        ) : (
+                                          <>
+                                            {gradingStatus ===
+                                            GRADE_STATUS.FINISHED_GRADING
+                                              ? 'Graded'
+                                              : answer?.active === 'SUBMITED'
+                                                ? 'Completed'
+                                                : 'Not Completed'}
+                                          </>
+                                        )}
+                                      </div>
+                                      <div className="h-[14px] w-[1px] bg-gray-300" />
+                                      {answer?.question?.qType !== 'ESSAY' && (
+                                        <div className="flex w-[80px] items-center justify-start gap-1">
+                                          <Image
+                                            src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
+                                            alt="Correct"
+                                            className="mr-1 text-success-600"
+                                            width={16}
+                                            height={16}
+                                            layout="fixed"
+                                          />
+                                          {roundNumber(
+                                            answer?.question?.question_report
+                                              ?.ratio || 0,
+                                          )}
+                                          %
+                                        </div>
                                       )}
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              </td>
-
-                              {/* Type */}
-                              <td className="hidden pr-4 md:table-cell">
-                                <div className="text-center">
-                                  {getTypeName(answer?.question?.qType)}
-                                </div>
-                              </td>
-
-                              {/* Result */}
-                              <td
-                                className={`hidden pr-4 text-center md:table-cell`}
-                              >
-                                <div className="flex w-full items-center justify-center gap-3">
-                                  <div
-                                    className={clsx(
-                                      renderBoxesAndLineClass(
-                                        getTypeName(answer?.question?.qType),
-                                        answer,
-                                      ),
-                                      'flex-1 rounded px-3',
-                                    )}
-                                  >
-                                    {answer?.question?.qType !== 'ESSAY' ? (
-                                      <>
-                                        {answer?.is_correct
-                                          ? 'Correct'
-                                          : 'Incorrect'}
-                                      </>
-                                    ) : (
-                                      <>
-                                        {gradingStatus ===
-                                        GRADE_STATUS.FINISHED_GRADING
-                                          ? 'Graded'
-                                          : answer?.active === 'SUBMITED'
-                                            ? 'Completed'
-                                            : 'Not Completed'}
-                                      </>
-                                    )}
-                                  </div>
-                                  <div className="h-[14px] w-[1px] bg-gray-300" />
-                                  {answer?.question?.qType !== 'ESSAY' && (
-                                    <div className="flex w-[80px] items-center justify-start gap-1">
-                                      <Image
-                                        src="https://file.rendit.io/n/OiFcovF8STzKyMYRzNk0.svg"
-                                        alt="Correct"
-                                        className="mr-1 text-success-600"
-                                        width={16}
-                                        height={16}
-                                        layout="fixed"
-                                      />
-                                      {roundNumber(
-                                        answer?.question?.question_report
-                                          ?.ratio || 0,
-                                      )}
-                                      %
                                     </div>
-                                  )}
-                                </div>
-                              </td>
+                                  </td>
 
-                              {/* Time Spent */}
-                              <td className="m-6 hidden p-0 text-center md:table-cell">
-                                {(() => {
-                                  if (answer?.time_spent !== null) {
-                                    return convertSecondsToMinutesSeconds(
-                                      answer?.time_spent || 0,
-                                    )
-                                  } else {
-                                    return '---'
-                                  }
-                                })()}
-                              </td>
-                            </tr>
-                          </React.Fragment>
-                        )
-                      })}
-                    </SappTable>
-                  </div>
-                ),
-              },
-            ]}
-            expandIcon={({ isActive }) => (
-              <CollapseArrowIcon selected={isActive} />
-            )}
-          />
-        ))}
+                                  {/* Time Spent */}
+                                  <td className="m-6 hidden p-0 text-center md:table-cell">
+                                    {(() => {
+                                      if (answer?.time_spent !== null) {
+                                        return convertSecondsToMinutesSeconds(
+                                          answer?.time_spent || 0,
+                                        )
+                                      } else {
+                                        return '---'
+                                      }
+                                    })()}
+                                  </td>
+                                </tr>
+                              </React.Fragment>
+                            )
+                          })}
+                        </SappTable>
+                      </div>
+                    ),
+                  },
+                ]}
+                expandIcon={({ isActive }) => (
+                  <CollapseArrowIcon selected={isActive} />
+                )}
+              />
+            ))}
+          </>
+        )}
       </div>
       <span ref={ref} />
+    </div>
+  )
+}
+
+const LoadingScoreDetail = () => {
+  return (
+    <div className="rounded-xl bg-white p-6">
+      {/* Fake table header */}
+      <div className="border-gray-200 mb-3 flex w-full justify-between border-b pb-2">
+        <div className="h-8 w-20 rounded bg-skeleton" />
+        <div className="h-8 w-1/3 rounded bg-skeleton" />
+        <div className="hidden h-8 w-20 rounded bg-skeleton md:block" />
+        <div className="hidden h-8 w-20 rounded bg-skeleton md:block" />
+        <div className="hidden h-8 w-24 rounded bg-skeleton md:block" />
+      </div>
+
+      {/* Fake table rows */}
+      <div className="space-y-3">
+        {Array(5)
+          .fill(0)
+          .map((_, i) => (
+            <div
+              key={i}
+              className={clsx(
+                'bg-gray-50 flex items-center justify-between rounded-lg py-3',
+              )}
+            >
+              <div className="h-8 w-20 rounded bg-skeleton" />
+              <div className="h-8 w-1/3 rounded bg-skeleton" />
+              <div className="hidden h-8 w-16 rounded bg-skeleton md:block" />
+              <div className="hidden h-8 w-20 rounded bg-skeleton md:block" />
+              <div className="hidden h-8 w-24 rounded bg-skeleton md:block" />
+            </div>
+          ))}
+      </div>
     </div>
   )
 }
