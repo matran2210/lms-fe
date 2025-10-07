@@ -8,6 +8,7 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import useSappPaging from 'src/hooks/useSappPaging'
 import { CoursesAPI } from '@pages/api/courses'
 import router from 'next/router'
+import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
 
 const CollapseActivity = ({ resultData }: any) => {
   const [activeKey, setActiveKey] = useState<string | string[]>(['activity'])
@@ -17,17 +18,52 @@ const CollapseActivity = ({ resultData }: any) => {
   }
   const handleViewActivity = (record: any) => {
     if (!record?.id) return
+
     const courseId = router.query.courseId as string
-    if (record.attempts.length) {
-      router.push(`/courses/test/test-result/${record.attempts[0].id}`)
-    } else {
+    const quiz = record
+    const attempt = quiz?.attempts?.[0]
+
+    // Logic điều hướng theo yêu cầu:
+    // 1. Bài Quiz chấm điểm (tính trọng số) nhưng chấm tự động hoặc bài Quiz không chấm điểm: màn Activity detail
+    // 2. Bài Quiz chấm điểm và chấm bằng tay nhưng chưa chấm xong: /quiz/your-answers-detail
+    // 3. Bài Quiz chấm điểm và chấm bằng tay đã chấm xong: /quiz/quiz-result
+
+    // Case 1: Quiz không chấm điểm hoặc chấm tự động
+    if (!quiz.is_graded || quiz.grading_method === GRADING_METHOD.AUTO) {
+      // Điều hướng đến màn Activity detail
       if (record.activity_id) {
         router.push(`/courses/${courseId}/activity/${record.activity_id}`)
       } else {
         router.push(
-          `/test/${resultData?.id}?class_user_id=${resultData?.class_user_id}`,
+          `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
         )
       }
+      return
+    }
+
+    // Case 2 & 3: Quiz chấm điểm và chấm bằng tay (MANUAL)
+    if (quiz.is_graded && quiz.grading_method === GRADING_METHOD.MANUAL) {
+      if (attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING) {
+        // Case 2: Chưa chấm xong - điều hướng đến your-answers-detail
+        router.push(`/courses/quiz/your-answers-detail/${attempt.id}`)
+        return
+      }
+
+      if (attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING) {
+        // Case 3: Đã chấm xong - điều hướng đến quiz-result
+        router.push(`/courses/test/test-result/${attempt.id}`)
+        return
+      }
+
+      // Fallback: Nếu chưa có attempt hoặc grading_status không xác định
+      if (record.activity_id) {
+        router.push(`/courses/${courseId}/activity/${record.activity_id}`)
+      } else {
+        router.push(
+          `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
+        )
+      }
+      return
     }
   }
   const {

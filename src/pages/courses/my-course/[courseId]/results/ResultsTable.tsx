@@ -216,7 +216,7 @@ const ResultsTable = ({
             {flatData
               ?.filter((item: any) => item.quiz === null)
               ?.map((item: any) => (
-                <CollapseActivity key={item?.id} />
+                <CollapseActivity key={item?.id} resultData={item} />
               ))}
           </div>
           <div className="flex flex-col gap-6">
