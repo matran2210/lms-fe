@@ -514,23 +514,23 @@ const QuizDocument = ({
             setOpenGradedReport(true)
             return
           } else {
+            const searchParams =
+              is_limited && limit_count && number_of_attempts
+                ? `attempt=${number_of_attempts + 1}/${limit_count}`
+                : ''
             router.replace(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}`,
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}?${searchParams}`,
             )
           }
-          dispatch(
-            removeQuizFinished({
-              activityId,
-              tabId,
-              quizId: quizId,
-            }),
-          )
+          // dispatch(
+          //   removeQuizFinished({
+          //     activityId,
+          //     tabId,
+          //     quizId: quizId,
+          //   }),
+          // )
           setQuizComponentKey((e) => e + 1)
-          setActiveQuestionIndex(0)
-          // if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
-          //   setOpenGradedReport(true)
-          //   return
-          // }
+          // setActiveQuestionIndex(0)
         })
     } catch (error: any) {
       if (error?.response?.status === 422) {
