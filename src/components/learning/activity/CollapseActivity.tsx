@@ -2,7 +2,7 @@ import { CollapseArrowIcon } from '@assets/icons'
 import { Collapse } from 'antd'
 import React, { useState, useEffect } from 'react'
 import TableListQuizInActivity from './TableListQuizInActivity'
-import { ITestQuizProps } from 'src/type/results'
+import { Results, QuizActivity } from 'src/type/results'
 import clsx from 'clsx'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import useSappPaging from 'src/hooks/useSappPaging'
@@ -10,13 +10,17 @@ import { CoursesAPI } from '@pages/api/courses'
 import router from 'next/router'
 import { GRADE_STATUS, GRADING_METHOD } from 'src/constants'
 
-const CollapseActivity = ({ resultData }: any) => {
+interface CollapseActivityProps {
+  resultData: Results
+}
+
+const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   const [activeKey, setActiveKey] = useState<string | string[]>(['activity'])
 
   const handleChange = (key: string | string[]) => {
     setActiveKey(key)
   }
-  const handleViewActivity = (record: any) => {
+  const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return
 
     const courseId = router.query.courseId as string

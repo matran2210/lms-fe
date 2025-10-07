@@ -10,6 +10,15 @@ import { EDateTime } from 'src/type'
 // import { GradingMethod } from '@utils/constants'
 import { Dispatch, SetStateAction } from 'react'
 
+interface TableListQuizInActivityProps {
+  data: QuizActivity[]
+  pagination: TablePaginationConfig
+  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
+  handleChangeParams: (currentPage: number, pageSize: number) => void
+  loading: boolean
+  handleViewActivity: (record: QuizActivity) => void
+}
+
 const TableListQuizInActivity = ({
   data,
   pagination,
@@ -18,16 +27,7 @@ const TableListQuizInActivity = ({
   loading,
   handleViewActivity,
   // getScore,
-}: {
-  data: any
-  pagination: TablePaginationConfig
-  setPagination: Dispatch<SetStateAction<TablePaginationConfig>>
-  handleChangeParams: (currentPage: number, pageSize: number) => void
-  loading: boolean
-  // data: Results
-  handleViewActivity: (record: QuizActivity) => void
-  // getScore: (row: Results, grading_method: GradingMethod) => string
-}) => {
+}: TableListQuizInActivityProps) => {
   const truncateText = (text: string, maxLength = 30) => {
     if (!text) return ''
     return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text
@@ -104,7 +104,7 @@ const TableListQuizInActivity = ({
     pagination.total && pagination.total > (pagination.pageSize || 10)
 
   return (
-    <SappTable<QuizActivity, any>
+    <SappTable<QuizActivity, { page_index: number; page_size: number }>
       columns={columnsValue}
       data={data ?? []}
       pagination={pagination}
