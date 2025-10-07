@@ -93,7 +93,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
           className="bg-gray-4"
         >
           <div className="m-auto overflow-x-auto overflow-y-hidden">
-            {modalResult?.questions?.data?.length > 0 && (
+            {/* {modalResult?.questions?.data?.length > 0 && (
               <QuizResultComponent
                 questionResponse={modalResult?.questions || []}
                 getTable={getTable}
@@ -105,7 +105,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
                 loading={loading}
                 is_lms_v2
               />
-            )}
+            )} */}
           </div>
         </Layout>
       </div>
