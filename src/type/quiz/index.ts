@@ -33,10 +33,10 @@ export interface QuizAttempt {
   id: string
   quiz_position_mapping: any[]
   class_user_id: string
-  quiz: Quiz
+  quiz: IQuiz
 }
 
-export interface Quiz {
+export interface IQuiz {
   id: string
   quiz_type: string
 }
