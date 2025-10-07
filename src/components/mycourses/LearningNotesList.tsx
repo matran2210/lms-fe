@@ -388,6 +388,7 @@ const LearningNotesList = () => {
             {isMobileView ? (
               <SortBy action={() => setIsOpenFilter(true)} />
             ) : (
+              // <></>
               <FilterCourseSection
                 setParams={setCourseSectionId}
                 heightCustom="h-10"
