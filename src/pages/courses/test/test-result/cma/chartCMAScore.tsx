@@ -26,7 +26,7 @@ const ChartCMAScore = ({
   return (
     <>
       {loadingChart ? (
-        <LoadingSkeletonChart ref={ref} events={events} />
+        <LoadingChartScore ref={ref} events={events} />
       ) : (
         <div
           className="scrollbar min-h-[433px] w-full max-w-full select-none items-start overflow-x-auto rounded-xl bg-white p-4 !pl-12 text-gray-800 shadow-small md:p-6"
@@ -123,7 +123,7 @@ const ChartCMAScore = ({
 
 export default ChartCMAScore
 
-const LoadingSkeletonChart = ({
+const LoadingChartScore = ({
   ref,
   events,
 }: {

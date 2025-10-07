@@ -27,7 +27,7 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
         {...events}
       >
         {loading ? (
-          <LoadingChart />
+          <LoadingChartScore />
         ) : (
           <>
             {data?.map((item: ChartDatum) => {
@@ -79,7 +79,7 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
   )
 }
 
-const LoadingChart = () => {
+const LoadingChartScore = () => {
   return Array(3)
     .fill(null)
     .map((_, index) => (
