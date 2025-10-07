@@ -62,7 +62,7 @@ const CourseParts = ({
 
     if (isEmpty(listFocusSectionIds) || isOverdue)
       return (
-        <div className={'mb-10 grid gap-6 md:grid-cols-2 2xl:grid-cols-3'}>
+        <div className={'mb-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3'}>
           {courses?.map((coursePart, index: number) => {
             const content = (
               <div
@@ -172,7 +172,7 @@ const CourseParts = ({
             )}
           </div>
         )}
-        <div className={'grid gap-6 md:grid-cols-2 2xl:grid-cols-3'}>
+        <div className={'grid gap-6 sm:grid-cols-2 xl:grid-cols-3'}>
           {listCourseSectionFocus.map((coursePart, index: number) => {
             const content = (
               <div
@@ -224,7 +224,7 @@ const CourseParts = ({
         </div>
 
         {listCourseSectionFocus.length > 0 && <Divider className="my-10" />}
-        <div className={'grid gap-6 md:grid-cols-2 2xl:grid-cols-3'}>
+        <div className={'grid gap-6 sm:grid-cols-2 xl:grid-cols-3'}>
           {listCourseSectionOther?.map((coursePart, index: number) => {
             return (
               <div

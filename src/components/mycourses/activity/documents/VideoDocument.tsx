@@ -348,40 +348,41 @@ const VideoDocument = ({
     <div>
       {(videos as IVideo[])?.length > 1 && (
         <div
-          className={clsx('mb-6 flex items-center gap-x-10 gap-y-2 ', {
-            'justify-between': (videos as IVideo[])?.length > 1,
-            'justify-end': (videos as IVideo[])?.length <= 1,
-          })}
+          className={clsx(
+            'mb-6 flex items-center justify-between gap-x-10 gap-y-2',
+          )}
         >
-          {(videos as IVideo[])?.length > 1 &&
-            videos?.map((v, i) => {
-              return (
-                <label
-                  className=" flex cursor-pointer select-none items-center gap-2"
-                  key={v?.file?.id ?? i}
-                >
-                  {/* Radio button for video selection */}
-                  <SAPPRadio
-                    onChange={() => debouncedHandleSetCurrentVideo.current(v)}
-                    {...(v?.file?.id === currentVideo?.file?.id
-                      ? {
-                          checked: true,
-                        }
-                      : { checked: false })}
-                    size={'small'}
-                  ></SAPPRadio>
-                  <span
-                    className={`radio-item-label  ${
-                      v?.file?.id === currentVideo?.file?.id
-                        ? 'text-bw-1'
-                        : 'text-gray-1'
-                    }`}
+          <div className="flex items-center gap-8">
+            {(videos as IVideo[])?.length > 1 &&
+              videos?.map((v, i) => {
+                return (
+                  <label
+                    className=" flex cursor-pointer select-none items-center gap-2"
+                    key={v?.file?.id ?? i}
                   >
-                    Video {i + 1}
-                  </span>
-                </label>
-              )
-            })}
+                    {/* Radio button for video selection */}
+                    <SAPPRadio
+                      onChange={() => debouncedHandleSetCurrentVideo.current(v)}
+                      {...(v?.file?.id === currentVideo?.file?.id
+                        ? {
+                            checked: true,
+                          }
+                        : { checked: false })}
+                      size={'small'}
+                    ></SAPPRadio>
+                    <span
+                      className={`radio-item-label  ${
+                        v?.file?.id === currentVideo?.file?.id
+                          ? 'text-bw-1'
+                          : 'text-gray-1'
+                      }`}
+                    >
+                      Video {i + 1}
+                    </span>
+                  </label>
+                )
+              })}
+          </div>
           <div className="group relative z-30 hidden cursor-pointer select-none items-center md:flex">
             {(currentVideo?.file?.resource?.time_line?.length as number) > 0 ? (
               <>
@@ -437,6 +438,7 @@ const VideoDocument = ({
           hideVideo={hideVideo}
           openQuestion={modalOpen}
           timeQuiz={timeQuiz}
+          key={`video-${timeQuiz.length || 0}`}
           thumbnail={currentVideo?.file?.resource?.thumbnail}
         >
           {/* Modal for quiz questions */}
@@ -454,7 +456,7 @@ const VideoDocument = ({
             isBordered={true}
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"
-            footerButtonClassName="!justify-between flex"
+            footerButtonClassName="!justify-between items-center flex"
             handleSubmit={handleSubmit((e) =>
               onSubmit(activeQuestion?.corrects ? true : false),
             )}

@@ -65,6 +65,7 @@ import { ITabs } from 'src/type'
 import BackToTop from '@components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
+import { CourseSectionType } from '@utils/constants'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -482,6 +483,9 @@ const ActivityPage = () => {
     },
   ]
   const [sessionData, setSessionData] = useState<Array<any>>([])
+  const chapterId = breadcrumbsMenu?.data?.find(
+    (e: IBreadCrumbs) => e?.course_section_type === CourseSectionType.CHAPTER,
+  )?.id
 
   useEffect(() => {
     // Lấy giá trị từ sessionStorage với key 'activityId'
@@ -520,6 +524,7 @@ const ActivityPage = () => {
               hidden: focusOnlyQuiz.open,
               'hidden lg:flex': !focusOnlyQuiz.open,
             })}
+            onClick={() => localStorage.setItem('course_chapter_id', chapterId)}
           >
             <SappBreadCrumbs breadcrumbs={breadcrumbsData} />
           </div>

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 import clsx from 'clsx'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
@@ -17,6 +17,7 @@ interface FilterCourseSectionProps {
   heightCustom?: string
   isPageStateVariables?: boolean
   allowClear?: boolean
+  showOnlySection?: boolean
 }
 
 const FilterCourseSection = ({
@@ -24,6 +25,7 @@ const FilterCourseSection = ({
   heightCustom,
   isPageStateVariables,
   allowClear = false,
+  showOnlySection = false,
 }: FilterCourseSectionProps) => {
   const { control, watch, setValue } = useFormContext()
 
@@ -34,66 +36,83 @@ const FilterCourseSection = ({
 
   const { sections, fetchInitialSections } = useInitialSections()
   const { sections: subSections, fetchSections: fetchSubsections } =
-    useSectionData(selectedSection, 'CHAPTER')
+    useSectionData(showOnlySection ? null : selectedSection, 'CHAPTER')
   const { sections: units, fetchSections: fetchUnits } = useSectionData(
-    selectedSubsection,
+    showOnlySection ? null : selectedSubsection,
     'UNIT',
   )
   const { sections: activities, fetchSections: fetchActivities } =
-    useSectionData(selectedUnit, 'ACTIVITY')
+    useSectionData(showOnlySection ? null : selectedUnit, 'ACTIVITY')
 
-  const resetFormFields = (fields: SectionField[]) => {
-    fields.forEach((field) => setValue(field, null))
-  }
+  const resetFormFields = useCallback(
+    (fields: SectionField[]) => {
+      fields.forEach((field) => setValue(field, null))
+    },
+    [setValue],
+  )
 
-  const handleDropdownChange = (
-    fieldName: SectionField,
-    selected: string | null,
-    fieldsToReset: SectionField[],
-  ) => {
-    setValue(fieldName, selected)
-    resetFormFields(fieldsToReset)
-  }
+  const handleDropdownChange = useCallback(
+    (
+      fieldName: SectionField,
+      selected: string | null,
+      fieldsToReset: SectionField[],
+    ) => {
+      setValue(fieldName, selected)
+      resetFormFields(fieldsToReset)
+    },
+    [setValue, resetFormFields],
+  )
 
   useEffect(() => {
-    if (!selectedSection) {
+    if (!showOnlySection && !selectedSection) {
       resetFormFields(['subsection', 'unit', 'activity'])
     }
-  }, [selectedSection])
+  }, [selectedSection, showOnlySection, resetFormFields])
 
   useEffect(() => {
     if (isEmpty(sections)) {
       fetchInitialSections(DEFAULT_PAGE_SIZE)
     }
-  }, [])
+  }, [sections, fetchInitialSections])
 
   useEffect(() => {
-    if (!isEmpty(selectedSection)) {
+    if (!showOnlySection && !isEmpty(selectedSection)) {
       fetchSubsections(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedSection])
+  }, [selectedSection, showOnlySection, fetchSubsections])
 
   useEffect(() => {
-    if (!isEmpty(selectedSubsection)) {
+    if (!showOnlySection && !isEmpty(selectedSubsection)) {
       fetchUnits(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedSubsection])
+  }, [selectedSubsection, showOnlySection, fetchUnits])
 
   useEffect(() => {
-    if (!isEmpty(selectedUnit)) {
+    if (!showOnlySection && !isEmpty(selectedUnit)) {
       fetchActivities(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedUnit])
+  }, [selectedUnit, showOnlySection, fetchActivities])
 
   useEffect(() => {
-    setParams(
-      selectedActivity ||
-        selectedUnit ||
-        selectedSubsection ||
-        selectedSection ||
-        '',
-    )
-  }, [selectedActivity, selectedUnit, selectedSubsection, selectedSection])
+    if (showOnlySection) {
+      setParams(selectedSection || '')
+    } else {
+      setParams(
+        selectedActivity ||
+          selectedUnit ||
+          selectedSubsection ||
+          selectedSection ||
+          '',
+      )
+    }
+  }, [
+    selectedActivity,
+    selectedUnit,
+    selectedSubsection,
+    selectedSection,
+    showOnlySection,
+    setParams,
+  ])
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToSections,
@@ -103,37 +122,57 @@ const FilterCourseSection = ({
   const {
     handleMenuScrollToBottom: handleMenuScrollToSubsections,
     setPage: setPageSubsection,
-  } = useDynamicLoading(fetchSubsections, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(
+    showOnlySection ? () => {} : fetchSubsections,
+    DEFAULT_PAGE_SIZE,
+  )
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToUnit,
     setPage: setPageUnit,
-  } = useDynamicLoading(fetchUnits, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(
+    showOnlySection ? () => {} : fetchUnits,
+    DEFAULT_PAGE_SIZE,
+  )
 
   const {
     handleMenuScrollToBottom: handleMenuScrollToActivity,
     setPage: setPageActivity,
-  } = useDynamicLoading(fetchActivities, DEFAULT_PAGE_SIZE)
+  } = useDynamicLoading(
+    showOnlySection ? () => {} : fetchActivities,
+    DEFAULT_PAGE_SIZE,
+  )
 
   useEffect(() => {
     if (isPageStateVariables) {
-      const pageStateVariables = [
-        setPageSection,
-        setPageSubsection,
-        setPageUnit,
-        setPageActivity,
-      ]
-      pageStateVariables.forEach((setPageVariable) => {
-        setPageVariable(DEFAULT_PAGE_SIZE * 2)
-      })
+      if (showOnlySection) {
+        setPageSection(DEFAULT_PAGE_SIZE * 2)
+      } else {
+        const pageStateVariables = [
+          setPageSection,
+          setPageSubsection,
+          setPageUnit,
+          setPageActivity,
+        ]
+        pageStateVariables.forEach((setPageVariable) => {
+          setPageVariable(DEFAULT_PAGE_SIZE * 2)
+        })
+      }
     }
-  }, [isPageStateVariables])
+  }, [
+    isPageStateVariables,
+    showOnlySection,
+    setPageSection,
+    setPageSubsection,
+    setPageUnit,
+    setPageActivity,
+  ])
 
   return (
     <div
       className={clsx(
-        'grid w-full grid-cols-4',
-        heightCustom ? 'gap-2' : 'gap-4',
+        showOnlySection ? 'w-full' : 'grid w-full grid-cols-4',
+        !showOnlySection && (heightCustom ? 'gap-2' : 'gap-4'),
       )}
     >
       <SAPPSelectV2
@@ -147,65 +186,73 @@ const FilterCourseSection = ({
           })),
         )}
         onChange={(selected) =>
-          handleDropdownChange('section', selected, [
-            'subsection',
-            'unit',
-            'activity',
-          ])
+          showOnlySection
+            ? setValue('section', selected)
+            : handleDropdownChange('section', selected, [
+                'subsection',
+                'unit',
+                'activity',
+              ])
         }
         heightCustom={heightCustom}
         onMenuScrollToBottom={handleMenuScrollToSections}
         allowClear={allowClear}
       />
-      <SAPPSelectV2
-        control={control}
-        name="subsection"
-        placeholder="Subsection"
-        options={
-          selectedSection
-            ? subSections?.map((s) => ({ label: s.name, value: s.id }))
-            : []
-        }
-        onChange={(selected) =>
-          handleDropdownChange('subsection', selected, ['unit', 'activity'])
-        }
-        allowClear={allowClear}
-        onMenuScrollToBottom={handleMenuScrollToSubsections}
-        disabled={!selectedSection}
-        heightCustom={heightCustom}
-      />
-      <SAPPSelectV2
-        control={control}
-        name="unit"
-        placeholder="Unit"
-        options={
-          selectedSubsection
-            ? units?.map((u) => ({ label: u.name, value: u.id }))
-            : []
-        }
-        onChange={(selected) =>
-          handleDropdownChange('unit', selected, ['activity'])
-        }
-        onMenuScrollToBottom={handleMenuScrollToUnit}
-        disabled={!selectedSubsection}
-        heightCustom={heightCustom}
-        allowClear={allowClear}
-      />
-      <SAPPSelectV2
-        control={control}
-        name="activity"
-        placeholder="Activity"
-        options={
-          selectedUnit
-            ? activities?.map((a) => ({ label: a.name, value: a.id }))
-            : []
-        }
-        onChange={(selected) => handleDropdownChange('activity', selected, [])}
-        onMenuScrollToBottom={handleMenuScrollToActivity}
-        disabled={!selectedUnit}
-        heightCustom={heightCustom}
-        allowClear={allowClear}
-      />
+      {!showOnlySection && (
+        <>
+          <SAPPSelectV2
+            control={control}
+            name="subsection"
+            placeholder="Subsection"
+            options={
+              selectedSection
+                ? subSections?.map((s) => ({ label: s.name, value: s.id }))
+                : []
+            }
+            onChange={(selected) =>
+              handleDropdownChange('subsection', selected, ['unit', 'activity'])
+            }
+            allowClear={allowClear}
+            onMenuScrollToBottom={handleMenuScrollToSubsections}
+            disabled={!selectedSection}
+            heightCustom={heightCustom}
+          />
+          <SAPPSelectV2
+            control={control}
+            name="unit"
+            placeholder="Unit"
+            options={
+              selectedSubsection
+                ? units?.map((u) => ({ label: u.name, value: u.id }))
+                : []
+            }
+            onChange={(selected) =>
+              handleDropdownChange('unit', selected, ['activity'])
+            }
+            onMenuScrollToBottom={handleMenuScrollToUnit}
+            disabled={!selectedSubsection}
+            heightCustom={heightCustom}
+            allowClear={allowClear}
+          />
+          <SAPPSelectV2
+            control={control}
+            name="activity"
+            placeholder="Activity"
+            options={
+              selectedUnit
+                ? activities?.map((a) => ({ label: a.name, value: a.id }))
+                : []
+            }
+            onChange={(selected) =>
+              handleDropdownChange('activity', selected, [])
+            }
+            onMenuScrollToBottom={handleMenuScrollToActivity}
+            disabled={!selectedUnit}
+            heightCustom={heightCustom}
+            allowClear={allowClear}
+          />
+        </>
+      )}
     </div>
   )
 }

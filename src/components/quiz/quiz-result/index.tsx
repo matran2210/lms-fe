@@ -1,4 +1,3 @@
-import { CloseIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
