@@ -942,10 +942,6 @@ $focus: (
   @apply fixed z-[1100];
 }
 
-.ant-drawer .ant-drawer-mask {
-  @apply fixed bg-black opacity-60;
-}
-
 .ant-drawer-content {
   @apply rounded-2xl;
 }
@@ -955,10 +951,8 @@ $focus: (
 }
 
 .ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-mask,
 .ant-drawer .ant-drawer-content-wrapper {
-  position: fixed;
-  background-color: #00000099;
+  @apply fixed bg-overlay-control;
 }
 
 .shadow-activity.aos-init.aos-animate {
