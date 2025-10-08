@@ -4485,7 +4485,7 @@
     dompurify "^3.0.10"
     uuid "^8.3.2"
 
-"@wiris/mathtype-tinymce6@^8.13.1", "@wiris/mathtype-tinymce6@^8.5.0":
+"@wiris/mathtype-tinymce6@^8.13.1":
   version "8.13.3"
   resolved "https://registry.yarnpkg.com/@wiris/mathtype-tinymce6/-/mathtype-tinymce6-8.13.3.tgz#8eea698c1f25b7dbde28fa4fa78a3afb3af7a51a"
   integrity sha512-CpbxSyF+mWq/nLDhqbjY5W4/8zLaihMW+VT5I5JFT9moHwz3euY/gcWLrroXkKJfwtmlJVQzFkj6dphHlY35vQ==
@@ -4788,7 +4788,7 @@ antd@5.25.0:
     scroll-into-view-if-needed "^3.1.0"
     throttle-debounce "^5.0.2"
 
-antd@^5.21.1, antd@^5.22.7:
+antd@^5.21.1:
   version "5.27.0"
   resolved "https://registry.yarnpkg.com/antd/-/antd-5.27.0.tgz#2798b4b6d8ee7c295fcdd4e2cd7c037c5e927465"
   integrity sha512-o54dmpooLOc08RSGCkeEQBYAGPxUSmnhmYJKCNTHH46vzjOVxdteu+wPTRVkRbAkDTbs2VcNr5VL7Lu67rPIiA==
@@ -7038,15 +7038,16 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package-ha-test@^1.1.25-test:
-  version "1.1.25-test"
-  resolved "https://registry.yarnpkg.com/explanation-package-ha-test/-/explanation-package-ha-test-1.1.25-test.tgz#9eca92653beb8347d7e3cdd51fb415285d8a54bb"
-  integrity sha512-xoOAJwtbb9MItRJUjFi3obduj6ahiRLzI9J51aKaA5eS6SmP4ztD+KRB0oEyyQJnljQzuSlZcXwFARa2p6mbyQ==
+explanation-package@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.1.tgz#61021f4cc036fe60872e9e1b3c018b54c830b7ae"
+  integrity sha512-YodomN+Cw2B7rDkWXqOvWEd22BlmupJ80UDusm4U3yn7weTYH4eWp5jd7/zjaT3PZN8m47vmzYNP6YOHZogj8A==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
     "@cyntler/react-doc-viewer" "1.10.4"
     "@fortune-sheet/react" "^0.19.1"
+    "@funktechno/texthighlighter" "^2.1.2"
     "@tailwindcss/aspect-ratio" "^0.4.2"
     "@tailwindcss/forms" "^0.5.7"
     "@types/styled-components" "5.1.34"
@@ -7063,32 +7064,6 @@ explanation-package-ha-test@^1.1.25-test:
     sass "^1.53.0"
     styled-components "5.3.11"
     tailwindcss "^3.3.5"
-
-explanation-package@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.2.4.tgz#976c3b42a237f8f226d9d4506ad43edf7bab0003"
-  integrity sha512-/HcXhL8CRntJwKUoHbdEyUjUfm1bKnwI6HBSa3Y1vRDzqQyqGh+CTTTH0XJNrOCrIkfHs8tBxeWkmp7vhaSf0Q==
-  dependencies:
-    "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
-    "@cloudflare/stream-react" "^1.9.1"
-    "@cyntler/react-doc-viewer" "1.10.4"
-    "@fortune-sheet/react" "^0.19.1"
-    "@funktechno/texthighlighter" "^2.1.2"
-    "@tailwindcss/aspect-ratio" "^0.4.2"
-    "@tailwindcss/forms" "^0.5.7"
-    "@tinymce/tinymce-react" "^4.3.0"
-    "@wiris/mathtype-tinymce6" "^8.5.0"
-    antd "^5.22.7"
-    autoprefixer "^10.4.16"
-    css-loader "^6.8.1"
-    dashjs "^4.7.4"
-    html-react-parser "^5.1.10"
-    lodash "^4.17.21"
-    react-hook-form "7.46.0"
-    react-shadow "^20.4.0"
-    sass "^1.53.0"
-    tailwindcss "^3.3.5"
-    tinymce "^6.8.3"
 
 external-editor@^2.0.1:
   version "2.2.0"
@@ -10250,10 +10225,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.4.4.tgz#81d392cf499e83bd0ae96fceaef1be6e6d228829"
-  integrity sha512-gOrrDWQQlII/nJPWzxdSht96wSovlNPx6VyfZ8JenqVA3NOYVczv6s4QUl0IHa0KJSJQG8q0UKH26Q9P+GH+Yg==
+preview-part@1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.2.tgz#48b1bd1101666a51dd929ad96ba7ffffef4462bd"
+  integrity sha512-q2/hPCdOSoScQZrV7RQldrmEgA+YvPIkRyRTfE0A1HO93gWTPlL9NXPr4TaUAWOPuAKADcagUA77Ua2++Gsh8Q==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -10534,10 +10509,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.2.41:
-  version "1.2.41"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.41.tgz#b66fd9423cd8ac1b20efca8adcf58528f1dee6f3"
-  integrity sha512-Apl4AWwSjdBI1MAOkn2f+fsqLG/l/bP7bSYQDGqfTn7NuI4iDoLe/nMtbe1FxT0XKAEx2QP9+OcormFJCKoAKw==
+quiz-result-package@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.3.1.tgz#d65e120838dc2195e780c78dfc39f7cd8059b2ae"
+  integrity sha512-8iw2+cy7JwlOz0ci0YjtUKgdoHN4n+Mhq97o+ewzKo5Ayxtyqp8TMk7alC6peLN3BvwKxw3VtySWbT7GGosU1w==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"
@@ -11578,10 +11553,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.3.7:
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.3.7.tgz#9abfe25fdb57000f3a7579c5d9cc000c141b42cf"
-  integrity sha512-xHHySIVxTftNPLrGOuzwv8ARdLwHXKp2rMMbXzY3FucEuxJzAKk15v9KyfPg5DVQWBZKWYUz9OvHyofV0FAAbQ==
+sapp-common-package@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.1.tgz#9bf58967e12b69f82984e854f4fbaac3fc24f85a"
+  integrity sha512-ulmdAOwPOX92Ql5jm67czKfNPb2xENtPxPyxgAYdpLcs8dnx68aQExeQOYeLchNs5t4gtxw5c28qiQSWpWHV2w==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
@@ -12496,7 +12471,7 @@ tinyexec@0.3.2:
   resolved "https://registry.yarnpkg.com/tinyexec/-/tinyexec-0.3.2.tgz#941794e657a85e496577995c6eef66f53f42b3d2"
   integrity sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==
 
-"tinymce@^6.0.0 || ^5.5.1", tinymce@^6.8.3:
+"tinymce@^6.0.0 || ^5.5.1":
   version "6.8.6"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-6.8.6.tgz#799e4f03eeb4399399dfdeb12ba17b3b91887adf"
   integrity sha512-++XYEs8lKWvZxDCjrr8Baiw7KiikraZ5JkLMg6EdnUVNKJui0IsrAADj5MsyUeFkcEryfn2jd3p09H7REvewyg==

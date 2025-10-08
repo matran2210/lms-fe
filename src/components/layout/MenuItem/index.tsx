@@ -125,38 +125,72 @@ export default function MenuItem({
     setOpenExaminationInfo && setOpenExaminationInfo(true)
   }
 
-  const handleActive = () => {
+  const onClickMenuItem = () => {
+    const hasCourseContext = router?.query?.courseId || router?.query?.id
+
+    // Nếu url trống => là menu Notification
     if (isEmpty(url)) {
       setOpenNotification(true)
       if (isEmpty(notifyLists)) {
         refreshNotification(false)
       }
+      closeSideBar()
+      return
     }
-    if (router?.query?.courseId || router.query.id) {
-      name === TitleSidebar.COURSE_CONTENT && handleOpenCourseContentPage()
-      name === TitleSidebar.RESOURCES && handleOpenResource()
-      name === TitleSidebar.NOTES_LIST && handleOpenNotesList()
-      name === TitleSidebar.NEW_NOTE && handleAddNote()
-      name === TitleSidebar.CALCULATOR && handleOpenCalculator()
-      name === TitleSidebar.RESULTS && handleOpenResultsPage()
-      name === TitleSidebar.EXAM && handleOpenExaminationInfoPage()
-    }
-  }
-  const onClickMenuItem = () => {
-    if (url !== '#' && !isEmpty(url)) {
-      const targetUrl =
-        url === PageLink.RESULTS
-          ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/results`
-          : url === PageLink.DASHBOARD
-            ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}/dashboard`
-            : name === TitleSidebar.COURSE_CONTENT
-              ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
-              : url
-      router.push({
-        pathname: targetUrl,
-      })
+
+    // Nếu đang ở trong course
+    if (hasCourseContext) {
+      switch (name) {
+        case TitleSidebar.COURSE_CONTENT:
+          handleOpenCourseContentPage()
+          break
+        case TitleSidebar.RESOURCES:
+          handleOpenResource()
+          break
+        case TitleSidebar.NOTES_LIST:
+          handleOpenNotesList()
+          break
+        case TitleSidebar.NEW_NOTE:
+          handleAddNote()
+          break
+        case TitleSidebar.CALCULATOR:
+          handleOpenCalculator()
+          break
+        case TitleSidebar.RESULTS:
+          handleOpenResultsPage()
+          break
+        case TitleSidebar.EXAM:
+          handleOpenExaminationInfoPage()
+          break
+        default:
+          // Nếu có url cụ thể
+          if (url && url !== '#') {
+            const targetUrl =
+              url === PageLink.RESULTS
+                ? `/courses/my-course/${router.query.courseId || router.query.id}/results`
+                : url === PageLink.DASHBOARD
+                  ? `/courses/my-course/${router.query.courseId || router.query.id}/dashboard`
+                  : name === TitleSidebar.COURSE_CONTENT
+                    ? `/courses/my-course/${router.query.courseId || router.query.id}`
+                    : url
+
+            router.push({ pathname: targetUrl })
+          }
+          break
+      }
+    } else {
+      // Nếu không ở trong course thì chỉ điều hướng URL bình thường
+      if (url && url !== '#') router.push({ pathname: url })
     }
     closeSideBar()
+  }
+
+  function formatName(fullName?: string): string {
+    if (!fullName) return ''
+
+    const words = fullName.trim().split(/\s+/)
+    const lastTwo = words.slice(-2)
+    return lastTwo.join(' ')
   }
 
   const isActivity = router?.query?.activityId
@@ -217,7 +251,7 @@ export default function MenuItem({
 
   const renderMenuContent = () => {
     return (
-      <div className="flex items-center" onClick={handleActive}>
+      <div className="flex items-center">
         {Icon === 'avatar' ? (
           <div
             className={clsx('h-10 w-10 shrink-0', {
@@ -299,7 +333,7 @@ export default function MenuItem({
                 },
               )}
             >
-              {user?.detail?.full_name}
+              {formatName(user?.detail?.full_name)}
             </div>
             <div
               className={clsx(
@@ -316,7 +350,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -324,12 +358,12 @@ export default function MenuItem({
                   },
                 )}
               >
-                {user?.detail?.full_name}
+                {formatName(user?.detail?.full_name)}
               </span>
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -356,7 +390,7 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group cursor-pointer rounded ${
+          `group transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
             selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
@@ -435,9 +469,12 @@ export default function MenuItem({
               isExpanded={isExpanded}
               handleClick={onClick}
               type={'ontoggle'}
-              className={clsx(`${selected ? 'bg-primary text-white' : ''}`, {
-                'group-hover:text-gray-800': !selected,
-              })}
+              className={clsx(
+                `transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : ''}`,
+                {
+                  'group-hover:text-gray-800': !selected,
+                },
+              )}
             />
           ) : null}
         </div>

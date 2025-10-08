@@ -1,4 +1,3 @@
-import { CloseIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
@@ -9,6 +8,7 @@ import { PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityInfo } from 'src/type'
 import Layout from '@components/layout'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter()
@@ -74,9 +74,9 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
 
   return (
     <FullScreenLayout title="Quiz result" className="!bg-gray-4">
-      <div className="m-auto max-w-[1570px] overflow-x-auto overflow-y-hidden">
+      <div>
         <div
-          className="absolute right-6 top-[18px] z-10 ml-auto cursor-pointer"
+          className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
             activityInfo !== null &&
               router.push(
@@ -84,22 +84,23 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
               )
           }}
         >
-          <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseModalIcon />
         </div>
         <Layout
-          size="md"
+          // size="md"
+          fullWidth
           title="Quiz Result"
           showSidebar={false}
           className="bg-gray-4"
         >
-          <div className="m-auto overflow-x-auto overflow-y-hidden">
+          <div className="m-auto">
             {modalResult?.questions?.data?.length > 0 && (
               <QuizResultComponent
                 questionResponse={modalResult?.questions || []}
                 getTable={getTable}
                 onShowDetail={(e) => {
                   router.push(
-                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
+                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Quiz Result`,
                   )
                 }}
                 loading={loading}

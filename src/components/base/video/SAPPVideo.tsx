@@ -15,6 +15,7 @@ import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
 import { LoadingIcon, PiPIcon } from '@assets/icons'
 import { useRouter } from 'next/router'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProp {
   options: any
@@ -107,6 +108,7 @@ const SAPPVideo = ({
   ]
 
   const [seeking, setSeeking] = useState(false)
+  const animationFrameRef = useRef<number | null>(null)
 
   let dashjs: any
 
@@ -162,7 +164,6 @@ const SAPPVideo = ({
             })
 
             player.on(dashjs.MediaPlayer.events.BUFFER_LOADED, () => {
-              setCanPlay(true)
               setCloudflarePlayer(false)
             })
 
@@ -173,6 +174,10 @@ const SAPPVideo = ({
             player.on(dashjs.MediaPlayer.events.PLAYBACK_SEEKED, () => {
               setSeeking(false)
             })
+
+            if (player.isReady()) {
+              setCanPlay(true)
+            }
           } else {
             setCanPlay(true)
             setCloudflarePlayer(true)
@@ -228,7 +233,9 @@ const SAPPVideo = ({
       if (streamRef.current) {
         resetStreamHandlers()
         streamRef.current.addEventListener('play', updatePlayButton)
+        streamRef.current.addEventListener('play', startProgressAnimation)
         streamRef.current.addEventListener('pause', updatePlayButton)
+        streamRef.current.addEventListener('pause', stopProgressAnimation)
         streamRef.current.addEventListener('loadedmetadata', initializeVideo)
         streamRef.current.addEventListener('timeupdate', updateTimeElapsed)
         streamRef.current.addEventListener('timeupdate', updateProgress)
@@ -267,6 +274,8 @@ const SAPPVideo = ({
         if (streamRef.current) {
           streamRef.current.removeEventListener('play', updatePlayButton)
           streamRef.current.removeEventListener('pause', updatePlayButton)
+          streamRef.current.removeEventListener('play', startProgressAnimation)
+          streamRef.current.removeEventListener('pause', stopProgressAnimation)
           streamRef.current.removeEventListener(
             'loadedmetadata',
             initializeVideo,
@@ -279,12 +288,12 @@ const SAPPVideo = ({
           )
           streamRef.current.removeEventListener('click', togglePlay)
           streamRef.current.removeEventListener('click', animatePlayback)
-          streamRef.current.removeEventListener('mouseenter', showControls)
+          streamRef.current.removeEventListener('mousemove', showControls)
           streamRef.current.removeEventListener('mouseleave', hideControls)
         }
         if (videoControlsRef.current) {
           videoControlsRef.current.removeEventListener(
-            'mouseenter',
+            'mousemove',
             showControls,
           )
           videoControlsRef.current.removeEventListener(
@@ -366,8 +375,10 @@ const SAPPVideo = ({
   function togglePlay() {
     if (streamRef?.current?.paused || streamRef?.current?.ended) {
       streamRef.current?.play()
+      startProgressAnimation()
     } else {
       streamRef.current?.pause()
+      stopProgressAnimation()
     }
   }
 
@@ -445,12 +456,34 @@ const SAPPVideo = ({
   // updateProgress indicates how far through the video
   // the current playback is by updating the progress bar
   function updateProgress() {
-    let currentTime = Math.ceil(streamRef?.current?.currentTime || 0)
+    // Use 10ms resolution for smoother progress movement
+    const currentTime =
+      Math.round((streamRef?.current?.currentTime || 0) * 100) / 100
     if (seekRef?.current) {
       seekRef.current.value = String(currentTime)
     }
     if (progressBarRef?.current) {
       progressBarRef.current.value = currentTime
+    }
+  }
+
+  // Smooth progress using requestAnimationFrame while playing
+  function startProgressAnimation() {
+    const tick = () => {
+      const t = streamRef?.current?.currentTime || 0
+      if (seekRef?.current) seekRef.current.value = String(t)
+      if (progressBarRef?.current) progressBarRef.current.value = t
+      animationFrameRef.current = requestAnimationFrame(tick)
+    }
+    if (!animationFrameRef.current) {
+      animationFrameRef.current = requestAnimationFrame(tick)
+    }
+  }
+
+  function stopProgressAnimation() {
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+      animationFrameRef.current = null
     }
   }
 
@@ -482,7 +515,7 @@ const SAPPVideo = ({
   function skipAhead(event: Event) {
     const skipTo =
       event.target instanceof HTMLInputElement ? event.target.value : '0'
-    streamRef.current.currentTime = parseInt(skipTo, 10)
+    streamRef.current.currentTime = parseFloat(skipTo)
     if (progressBarRef?.current) {
       progressBarRef.current.value = Number(skipTo)
     }
@@ -742,6 +775,37 @@ const SAPPVideo = ({
     }
   }, [router.events])
 
+  const { isDesktopView, isXLMiddleView } = useTailwindBreakpoint()
+
+  const getThumbnail = () => {
+    if (isDesktopView) {
+      return {
+        src:
+          thumbnail?.['1270x716'] ??
+          '/assets/images/default_thumbnail_video.png',
+        width: 1270,
+        height: 716,
+      }
+    }
+    if (isXLMiddleView) {
+      return {
+        src:
+          thumbnail?.['656x369'] ??
+          '/assets/images/default_thumbnail_video.png',
+        width: 656,
+        height: 369,
+      }
+    }
+    return {
+      src:
+        thumbnail?.['311x175'] ?? '/assets/images/default_thumbnail_video.png',
+      width: 311,
+      height: 175,
+    }
+  }
+
+  const { src, width, height } = getThumbnail()
+
   return (
     <>
       <div
@@ -750,14 +814,11 @@ const SAPPVideo = ({
         <div className="absolute bottom-0 left-0 right-0 top-0 h-full w-full">
           {thumbnail && (
             <Image
-              src={
-                thumbnail?.['950x535'] ??
-                '/assets/images/default_thumbnail_video.png'
-              }
-              alt={'Thumbnail image'}
+              src={src}
+              alt="Thumbnail image"
               className="h-full w-full object-contain"
-              width={952}
-              height={535.5}
+              width={width}
+              height={height}
               priority
             />
           )}
@@ -830,7 +891,7 @@ const SAPPVideo = ({
                 controls={false}
                 className={`${styles.content}`}
                 poster={
-                  thumbnail?.['950x535'] ??
+                  thumbnail?.['1270x716'] ??
                   '/assets/images/default_thumbnail_video.png'
                 }
                 onSeeking={() => {
@@ -884,7 +945,7 @@ const SAPPVideo = ({
                       className="seek absolute top-0 z-10 m-0 w-full cursor-pointer"
                       min="0"
                       type="range"
-                      step="1"
+                      step="0.01"
                       ref={seekRef}
                       defaultValue="0"
                     />

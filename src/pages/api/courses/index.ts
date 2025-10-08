@@ -1,7 +1,7 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IResponse, IScoreDetails } from 'src/type'
+import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from 'src/type'
 import { CourseDetail } from 'src/type/course'
 
 export class CoursesAPI {
@@ -228,6 +228,18 @@ export class CoursesAPI {
       },
     })
   }
+  static getQuizAttemptsAnswer({
+    attempt_id,
+    question_id,
+  }: {
+    attempt_id: string
+    question_id: string
+  }): Promise<{
+    success: boolean
+    data: IAnswerQuizLastestAttempt
+  }> {
+    return fetcher(`/quiz-attempts/${attempt_id}/answer/${question_id}`)
+  }
 
   static getQuizAttemptsTableEntranceTest(
     id: string,
@@ -405,18 +417,19 @@ export class CoursesAPI {
     })
   }
 
-  static getCourseResults(
-    id: string | string[],
-    page_index: number,
-    page_size: number,
-    params: Object,
+  static getCourseSectionTest(
+    id: string | string[] | undefined,
+    params?: Object,
   ): Promise<any> {
-    return fetcher(
-      `courses/${id}/quizzes?page_index=${page_index}&page_size=${page_size}`,
-      {
-        params: params,
-      },
-    )
+    return fetcher(`courses/${id}/section-test`, {
+      params: params,
+    })
+  }
+
+  static getCourseResults(id: string | string[], params: Object): Promise<any> {
+    return fetcher(`courses/${id}/quizzes`, {
+      params: params,
+    })
   }
 
   static getCourseNotesList(page_size: number, params?: Object): Promise<any> {

@@ -253,6 +253,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
           query: {
@@ -274,6 +278,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/${topicId}`,
           query: {
@@ -545,7 +553,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4 md:mt-8 lg:mt-10">
+      <div className="mt-4">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (

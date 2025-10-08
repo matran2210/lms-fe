@@ -19,6 +19,7 @@ const SAPPRadio = ({
   onChange,
   disabled = false,
   className = '',
+  state,
 }: IProps) => {
   return (
     <label className={clsx('relative inline-block h-5 w-5', className)}>
@@ -33,8 +34,10 @@ const SAPPRadio = ({
       />
       <div
         className={clsx('h-full w-full rounded-full border transition-all', {
-          'border-primary': checked,
-          'border-secondary': !checked,
+          'border-primary': checked && (state === 'primary' || !state),
+          'border-success-600': state === 'success',
+          'border-error': state === 'error',
+          'border-secondary': !checked && (state === 'primary' || !state),
           'cursor-not-allowed opacity-50': disabled,
           'cursor-pointer': !disabled,
         })}
@@ -45,7 +48,9 @@ const SAPPRadio = ({
             {
               'opacity-100': checked,
               'opacity-0': !checked,
-              'bg-primary': checked,
+              'bg-primary': checked && (state === 'primary' || !state),
+              'bg-success-600': checked && state === 'success',
+              'bg-error': checked && state === 'error',
             },
           )}
         />

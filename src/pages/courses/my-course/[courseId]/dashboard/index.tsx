@@ -24,7 +24,7 @@ const Dashboard = () => {
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
       <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
-          <div className="hidden w-full items-center justify-between pb-4 pt-4 xl:flex">
+          <div className="mt-4 hidden w-full items-center justify-between xl:flex">
             <SappBreadCrumbs
               isTeacher={false}
               breadcrumbs={[
@@ -46,7 +46,7 @@ const Dashboard = () => {
               ]}
             />
           </div>
-          <div className="mb-6 mt-2 grid md:mb-7 md:mt-6 xl:mb-10 xl:mt-0">
+          <div className="mb-6 mt-2 grid md:mb-7 xl:mb-8">
             <HeaderMobile
               title="Student Dashboard"
               onBack={() => router.back()}

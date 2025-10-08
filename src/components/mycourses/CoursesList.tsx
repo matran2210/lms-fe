@@ -1,14 +1,13 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
-import { Skeleton } from 'antd'
-import { isEmpty } from 'lodash'
-import React from 'react'
-import { ICourse } from 'src/type/courses'
-import Course from './Course'
 import CardCourse from '@components/common/CardCourse/CardCourse'
+import Icon, { CourseTimeIcon, GraduationCapIcon } from '@components/icons'
 import { clearStylesHtml } from '@utils/index'
 import clsx from 'clsx'
+import { isEmpty } from 'lodash'
+import React from 'react'
 import { useAppSelector } from 'src/redux/hook'
+import { ICourse } from 'src/type/courses'
+import Course from './Course'
 
 interface CoursesProps {
   courses: ICourse[]
@@ -46,13 +45,13 @@ const CoursesList: React.FC<CoursesProps> = ({
                 {/* Skeleton content */}
                 <div className="w-full animate-pulse space-y-4">
                   {/* Khối chính */}
-                  <div className="bg-skeleton h-6 w-3/4 animate-pulse rounded"></div>
-                  <div className="bg-skeleton h-5 w-1/2 animate-pulse rounded"></div>
-                  <div className="bg-skeleton h-36 w-full animate-pulse rounded"></div>
+                  <div className="h-6 w-3/4 animate-pulse rounded-md bg-skeleton"></div>
+                  <div className="h-5 w-1/2 animate-pulse rounded-md bg-skeleton"></div>
+                  <div className="h-36 w-full animate-pulse rounded-md bg-skeleton"></div>
                 </div>
                 {/* Skeleton button */}
                 <div className="mt-auto self-end">
-                  <div className="bg-skeleton h-8 w-24 animate-pulse rounded"></div>
+                  <div className="h-8 w-24 animate-pulse rounded-md bg-skeleton"></div>
                 </div>
               </div>
             </div>

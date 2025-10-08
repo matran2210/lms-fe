@@ -1,5 +1,5 @@
 import { IconBuildingModify } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { CoursesAPI } from '@pages/api/courses'
 import { onLinkSocial } from '@utils/index'
 import { useRouter } from 'next/router'
@@ -235,39 +235,37 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
   const isSurveyActive =
     open.middtermCourse || open.finalCourse || open.completeCourse
 
+  const ContentModalTest = () => {
+    return (
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          {SURVEY_CONTENTS[surveyType]}
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <SappModalV2
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      position="center"
-      title={undefined}
+    <SappModalV3
       open={isSurveyActive}
       handleClose={handleTest}
       handleCancel={handleClose}
       onOk={open.completeCourse ? handleConfirmComplete : handleSubmit}
+      icon={SURVEY_ICONS[surveyType]}
+      header={SURVEY_TITLES[surveyType]}
+      content={<ContentModalTest />}
+      showFooter
       okButtonCaption={
         open.completeCourse ? 'Tôi đã hoàn thành' : 'Thực hiện khảo sát'
       }
-      fullWidthBtn={true}
-      buttonSize="extra"
-      showFooter
+      fullWidthBtn
+      buttonSize="medium"
       cancelButtonCaption={
         open.completeCourse ? 'Tôi sẽ làm sau' : 'Nhắc lại sau'
       }
-    >
-      <div className="flex justify-center">
-        <div className="w-fit rounded-full bg-secondary p-8">
-          {SURVEY_ICONS[surveyType]}
-        </div>
-      </div>
-
-      <div className="mt-6 flex justify-center text-center text-4xl font-semibold text-[#050505]">
-        {SURVEY_TITLES[surveyType]}
-      </div>
-
-      <div className="mb-3 mt-4 text-center text-sm leading-[150%] text-[#A1A1A1]">
-        {SURVEY_CONTENTS[surveyType]}
-      </div>
-    </SappModalV2>
+      headerClassName="text-center"
+      isUnderLine
+    />
   )
 }
 

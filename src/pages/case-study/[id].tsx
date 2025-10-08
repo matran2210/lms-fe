@@ -66,6 +66,7 @@ import { download } from '@components/learning/activity/ActivityResource'
 import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { Triangle } from '@components/icons/Triangle'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -1084,6 +1085,7 @@ const CaseStudyDetail = ({ questions }: any) => {
     setOpenQuit(true)
     setUnsavedChanges(false)
   }
+  const { isDesktopView } = useTailwindBreakpoint()
 
   return (
     <SappLoadingGlobal loading={loading}>
@@ -1493,8 +1495,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                 return (
                   <ModalResizeable
                     title={e?.fileName}
-                    width={650}
-                    height={850}
+                    width={isDesktopView ? 650 : 400}
+                    height={isDesktopView ? 750 : 400}
                     key={e.id}
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center"

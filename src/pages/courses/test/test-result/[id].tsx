@@ -38,10 +38,16 @@ const TestResultDetail = () => {
   }
 
   // Sử dụng hook useGetQuizDetail trong component
-  const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
+  const { data: questions, isLoading: loadingAttempt } = useGetQuizAttempts(
+    'quiz-attempts',
+    {},
+  )
 
   // Sử dụng hook useGetQuestionTabs trong component
-  const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
+  const { data: chartData, isLoading: loadingChart } = useGetQuizAttemptsChart(
+    'quiz-attempts-chart',
+    {},
+  )
 
   const quiz = questions?.quizAttempt?.quiz
   const isShowRetakeButton =
@@ -79,7 +85,7 @@ const TestResultDetail = () => {
           title="Retake"
           size="small"
           onClick={handleRetake}
-          className={clsx('hidden md:block', { hidden: !isShowRetakeButton })}
+          className={clsx('hidden md:block', !isShowRetakeButton && '!hidden')}
         />
         <Tooltip
           placement="left"
@@ -110,6 +116,8 @@ const TestResultDetail = () => {
               ? questions?.quizAttempt?.score
               : chartData?.multiple_choice_score
           }
+          loadingChart={loadingChart}
+          loadingAttempt={loadingAttempt}
         />
       </div>
       {isMobileView && (

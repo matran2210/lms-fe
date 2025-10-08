@@ -55,6 +55,7 @@ import { download } from '@components/learning/activity/ActivityResource'
 import { NotesOutline } from '@components/icons/Notes'
 import PulsingExclamation from '@components/icons/PulsingExclamation'
 import { Divider } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const CaseStudyResult = () => {
   const editorRefs = useRef<any[]>([])
@@ -93,7 +94,6 @@ const CaseStudyResult = () => {
    * Declare form to handle exhibit
    */
   const {
-    control: controlExhibits,
     getValues: getValuesExhibits,
     setValue: setValueExhibits,
     watch,
@@ -672,6 +672,7 @@ const CaseStudyResult = () => {
     QUESTION_TYPES.ONE_CHOICE,
     QUESTION_TYPES.SELECT_WORD,
   ].includes(topics?.qType as QUESTION_TYPES)
+  const { isDesktopView } = useTailwindBreakpoint()
 
   return (
     <SappLoadingGlobal loading={loading}>
@@ -925,8 +926,8 @@ const CaseStudyResult = () => {
               return (
                 <ModalResizeable
                   title={e?.fileName}
-                  width={650}
-                  height={850}
+                  width={isDesktopView ? 650 : 400}
+                  height={isDesktopView ? 750 : 400}
                   key={e.id}
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center"

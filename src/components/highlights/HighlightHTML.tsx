@@ -745,6 +745,7 @@ export const HighlightableHTML: React.FC<Props> = ({
 
   return (
     <div
+      className="text-base"
       onMouseUp={handleMouseUp}
       style={{ position: 'relative' }}
       onClick={handleHighlightClick}
@@ -935,9 +936,9 @@ export const HighlightableHTML: React.FC<Props> = ({
                       streamRef={videoRefs.current[videoToken]}
                       pauseOnSeek={true}
                       thumbnail={{
-                        '640x360': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=360`,
-                        '770x435': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=435`,
-                        '950x535': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=535`,
+                        '311x175': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
+                        '656x369': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
+                        '1270x716': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
                       }}
                     />
                   )

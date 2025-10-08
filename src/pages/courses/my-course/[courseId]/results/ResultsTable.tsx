@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { GRADE_STATUS, PageLink } from 'src/constants'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
@@ -71,169 +71,83 @@ const ResultsTable = ({
       activity: null,
     },
   })
+
   /**
    * @description sử dụng react-query và infinite query để lấy data
    */
+
   const {
-    data: mobileData,
+    data: infiniteData,
     fetchNextPage,
     hasNextPage,
-    isFetching,
-    isLoading: isMobileLoading,
+    isFetchingNextPage,
+    isLoading,
+    refetch,
   } = useInfiniteQuery({
-    queryKey: ['TestResultMobile', ...queryParams],
-    queryFn: ({ pageParam }) =>
-      CoursesAPI.getCourseResults(
+    queryKey: [
+      CourseKey.ResultsList,
+      router.query.courseId,
+      params || 'all',
+      pageSize,
+    ],
+    queryFn: ({ pageParam = 1 }) => {
+      const queryParams: any = {
+        page_index: pageParam,
+        page_size: pageSize,
+      }
+      if (params && params.trim() !== '') {
+        queryParams.section_id = params
+      }
+      return CoursesAPI.getCourseSectionTest(
         router.query.courseId as string,
-        pageParam || 1,
-        pageSize,
-        params && {
-          parent_id: params,
-        },
-      ),
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage?.data?.data?.length &&
-        allPages?.length < lastPage?.data?.metadata?.total_pages
-        ? allPages?.length + 1
-        : undefined
-    },
-    enabled: isMobileView && router.query.courseId !== undefined, // ❗ Chỉ gọi khi là mobile view
-    retry: false,
-  })
-
-  const dataMobile: IResultsList = useMemo(() => {
-    return {
-      data: mobileData?.pages.reduce((acc: IResultsList[], page) => {
-        return [...acc, ...page?.data?.data]
-      }, []),
-      class_user_id: mobileData?.pages[0]?.data?.class_user_id,
-      metadata: mobileData?.pages[0]?.data?.metadata,
-    }
-  }, [mobileData])
-
-  const { data: resultData, isLoading } = useQuery<IResultsList>({
-    // Fetch lại data khi filter thay đổi
-    queryKey: [CourseKey.ResultsList, ...queryParams],
-    queryFn: () => {
-      return CoursesAPI.getCourseResults(
-        router.query.courseId as string,
-        currentPage || 1,
-        pageSize,
-        params && {
-          parent_id: params,
-        },
+        queryParams,
       )
     },
-    enabled: router.query.courseId !== undefined && !isMobileView, // ❗ Chỉ gọi khi là tablet or desktop
-    select: (data: { data: any }) => {
-      return data.data
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages = lastPage?.data?.metadata?.total_pages
+      const current = allPages?.length || 1
+      if (!totalPages) return undefined
+      return current < totalPages ? current + 1 : undefined
     },
-    retry: false,
+    enabled: router.query.courseId !== undefined,
+    refetchOnWindowFocus: false,
   })
 
+  const flatData = useMemo(() => {
+    if (!infiniteData?.pages?.length) return []
+    return infiniteData.pages.reduce((acc: any[], page: any) => {
+      const items = page?.data?.data || []
+      const class_user_id = page?.data?.class_user_id || ''
+      const mappedItems = items.map((item: any) => ({
+        ...item,
+        class_user_id,
+      }))
+      return acc.concat(mappedItems)
+    }, [])
+  }, [infiniteData])
+
+  const totalRecords = useMemo(
+    () => infiniteData?.pages?.[0]?.data?.metadata?.total_records || 0,
+    [infiniteData],
+  )
+
   const lastElementRef = useCallback(
-    (node: HTMLDivElement) => {
-      if (isMobileLoading) return
-
+    (node: HTMLDivElement | null) => {
+      if (isLoading) return
       if (observer.current) observer.current.disconnect()
-
       observer.current = new IntersectionObserver((entries) => {
-        if (entries?.[0]?.isIntersecting && hasNextPage && !isFetching) {
+        if (
+          entries?.[0]?.isIntersecting &&
+          hasNextPage &&
+          !isFetchingNextPage
+        ) {
           fetchNextPage()
         }
       })
-
       if (node) observer.current.observe(node)
     },
-    [fetchNextPage, hasNextPage, isFetching, isMobileLoading],
+    [fetchNextPage, hasNextPage, isFetchingNextPage, isLoading],
   )
-
-  const getScore = (
-    rowData: Results,
-    grading_method: GradingMethod,
-  ): string => {
-    const attempt = rowData?.quiz?.attempts[0]
-    if (!attempt) return '-'
-    if (grading_method === GradingMethod.AUTO)
-      return `${attempt?.multiple_choice_score}%`
-    if (
-      grading_method === GradingMethod.MANUAL &&
-      attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
-    ) {
-      return `${attempt?.score}%`
-    }
-    return '-'
-  }
-
-  const handleGetLink = (row: Results): string => {
-    if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-      return `/courses/${router?.query?.courseId}/activity/${row?.id}`
-    }
-
-    if (row?.quiz?.attempts?.length) {
-      return `/courses/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-    }
-
-    return `/test/${row?.quiz?.id}?class_user_id=${isMobileView ? dataMobile?.class_user_id : resultData?.class_user_id}`
-  }
-
-  const getNameTooltipContent = (row: Results) => {
-    const link = handleGetLink(row)
-    return (
-      <div>
-        {link ? (
-          <div
-            onClick={() => {
-              router.push(link)
-            }}
-          >
-            <strong className="cursor-pointer text-base hover:underline">
-              {row?.name}
-            </strong>
-          </div>
-        ) : (
-          <strong className="text-base">{row?.name}</strong>
-        )}
-        <p className="text-xs">{row?.path}</p>
-      </div>
-    )
-  }
-
-  const groupedDataByType =
-    (isMobileView ? dataMobile?.data : resultData?.data || [])?.reduce(
-      (acc, item) => {
-        const type = item.course_section_type as TEST_TYPE
-        if (!Object.values(TEST_TYPE).includes(type)) return acc // bỏ nếu không thuộc TEST_TYPE
-
-        const formattedItem = {
-          name: item?.name,
-          quiz_activity: item?.quiz_activity || [],
-          quiz: item?.quiz || null,
-          id: item?.id,
-          path: item?.path,
-          course_section_type: item?.course_section_type,
-        }
-
-        if (!acc[type]) acc[type] = []
-        acc[type].push(formattedItem)
-
-        return acc
-      },
-      {} as Record<TEST_TYPE, any[]>,
-    ) || []
-
-  const handleViewResult = (row: Results) => {
-    const link = handleGetLink(row)
-    if (
-      row?.course_section_type !== TEST_TYPE.ACTIVITY &&
-      row?.quiz?.grading_method === 'MANUAL' &&
-      row?.quiz?.attempts?.[0]?.grading_status === GRADE_STATUS.AWAITING_GRADING
-    ) {
-      setOpenReport(true)
-      return
-    }
-    router.push(link)
-  }
 
   const handleSubmit = () => {
     setOpenFilter(false)
@@ -242,6 +156,8 @@ const ResultsTable = ({
       ...openChooseItem,
       isOpen: false,
     })
+    setCurrentPage(1)
+    refetch()
   }
 
   const handleBack = () => {
@@ -265,15 +181,21 @@ const ResultsTable = ({
 
   return (
     <FormProvider {...methods}>
-      {/* Filter desktop */}
-      {!isMobileView && (
-        <div className="my-6">
-          <FilterCourseSection setParams={setParams} />
+      <div className="my-6 flex items-center justify-end gap-4">
+        <div className="text-sm leading-[22px] tracking-[0%] text-gray-800">
+          {totalRecords} Results
         </div>
-      )}
+        <div className="w-[369px]">
+          <FilterCourseSection
+            setParams={setParams}
+            showOnlySection={true}
+            allowClear={true}
+          />
+        </div>
+      </div>
 
       {/* Loading state */}
-      {(isLoading || isMobileLoading) &&
+      {isLoading &&
         [...Array(6)].map((_, index) => (
           <Skeleton key={index} active avatar>
             <List.Item.Meta avatar={<Avatar />} />
@@ -281,63 +203,41 @@ const ResultsTable = ({
         ))}
 
       {/* Empty state */}
-      {!isLoading &&
-        !isMobileLoading &&
-        isEmpty(groupedDataByType) &&
-        !openFilter && (
-          <div className="flex h-full flex-col items-center justify-center">
-            <NoDataV2 />
-          </div>
-        )}
-
-      {/* Main content */}
-      {!isLoading && !isMobileLoading && !isEmpty(groupedDataByType) && (
-        <div className="mt-6 flex flex-col gap-6 md:mt-0">
-          {/* Activity results */}
-          {!isEmpty(groupedDataByType[TEST_TYPE.ACTIVITY]) && (
-            <div className="flex flex-col gap-6">
-              {groupedDataByType[TEST_TYPE.ACTIVITY]?.map((item) => (
-                <CollapseActivity
-                  key={item?.id}
-                  resultData={item}
-                  handleViewResult={handleViewResult}
-                  getScore={getScore}
-                  lastElementRef={lastElementRef}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Other test types */}
-          {Object.entries(groupedDataByType || {})
-            .filter(([type]) => type !== TEST_TYPE.ACTIVITY)
-            .map(([type, data]) =>
-              !isEmpty(data) ? (
-                <div key={type} className="flex flex-col gap-6">
-                  {data.map((item) => (
-                    <CardResultTest
-                      key={item.id}
-                      resultData={item}
-                      handleViewResult={handleViewResult}
-                      getNameTooltipContent={getNameTooltipContent}
-                      lastElementRef={lastElementRef}
-                    />
-                  ))}
-                </div>
-              ) : null,
-            )}
+      {!isLoading && isEmpty(flatData) && !openFilter && (
+        <div className="flex h-full flex-col items-center justify-center">
+          <NoDataV2 />
         </div>
       )}
 
-      {/* Pagination */}
-      {resultData && !isMobileView && (
-        <PaginationSappV2
-          currentPage={resultData.metadata?.page_index}
-          pageSize={resultData.metadata?.page_size}
-          totalItems={resultData.metadata?.total_records}
-          setCurrentPage={setCurrentPage}
-          setPageSize={setPageSize}
-        />
+      {/* Main content */}
+      {!isLoading && !isEmpty(flatData) && (
+        <div className="mt-6 flex flex-col gap-6 md:mt-0">
+          <div className="flex flex-col gap-6">
+            {flatData
+              ?.filter((item: any) => item.quiz === null)
+              ?.map((item: any) => (
+                <CollapseActivity key={item?.id} resultData={item} />
+              ))}
+          </div>
+          <div className="flex flex-col gap-6">
+            {flatData
+              ?.filter((item: any) => item.quiz !== null)
+              ?.map((item: any) => (
+                <CardResultTest key={item.id} resultData={item} />
+              ))}
+          </div>
+
+          <div ref={lastElementRef} />
+          {isFetchingNextPage && (
+            <div className="flex flex-col gap-2">
+              {[...Array(2)].map((_, index) => (
+                <Skeleton key={index} active avatar>
+                  <List.Item.Meta avatar={<Avatar />} />
+                </Skeleton>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Grading modal */}

@@ -32,6 +32,7 @@ interface ModalResizeableProps {
   bodyClassName?: string
   contentClassName?: string
   isInBody?: boolean
+  onClick?: () => void
 }
 
 const ModalResizeable: React.FC<ModalResizeableProps> = ({
@@ -52,6 +53,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
   bodyClassName,
   contentClassName,
   isInBody = false,
+  onClick = () => {},
 }) => {
   const [size, setSize] = useState({ width, height })
 
@@ -175,6 +177,8 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
           className,
           rootClassName,
         )}
+        onMouseDown={onClick}
+        onTouchStart={onClick}
       >
         <div
           className={clsx('absolute left-0 top-0 h-full w-full', bodyClassName)}

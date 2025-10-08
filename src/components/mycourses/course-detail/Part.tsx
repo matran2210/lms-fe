@@ -1,22 +1,15 @@
-import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 import Icon from '@components/icons'
+import { useCourseContext } from '@contexts/index'
+import { trackGAEvent } from '@utils/google-analytics'
+import { getUserPrefix } from '@utils/helpers'
+import { buildQueryString, formatTime, handleReplaceText } from '@utils/index'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import {
-  buildQueryString,
-  formatTime,
-  handleReplaceText,
-  truncateHTML,
-} from '@utils/index'
-import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 import Tooltip from 'src/common/Tooltip'
-import { trackGAEvent } from '@utils/google-analytics'
-import { useCourseContext } from '@contexts/index'
-import CardCourse from '@components/common/CardCourse/CardCourse'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { LockClosedIcon } from '@assets/icons'
-import { getUserPrefix } from '@utils/helpers'
+import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 
 const Part = ({
   course,
@@ -148,7 +141,7 @@ const Part = ({
       }}
     >
       <div className="flex h-full flex-1 flex-col">
-        <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[72px]">
+        <div className="des my-4 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[140px]">
           <Tooltip
             title={
               <div
@@ -157,15 +150,13 @@ const Part = ({
                 }}
               />
             }
-            showTooltip={(course?.description as string)?.length > 200}
+            showTooltip={(description as string)?.length > 150}
           >
             <div
               dangerouslySetInnerHTML={{
-                __html:
-                  truncateHTML(25, transformAllFontSize(course?.description)) ??
-                  '',
+                __html: description ?? '',
               }}
-              className="text-sm font-normal text-gray-800 md:text-base"
+              className="line-clamp-6 text-sm font-normal text-gray-800 md:text-base"
             />
           </Tooltip>
         </div>

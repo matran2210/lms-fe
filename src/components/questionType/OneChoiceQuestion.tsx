@@ -63,7 +63,7 @@ const OneChoiceQuestion = ({
     if (defaultValues) {
       setValue(name, defaultValues)
     } else {
-      setValue(name, '')
+      setValue?.(name, '')
     }
   }, [defaultValues, name])
   const convertAnswer = useMemo(() => {
@@ -188,7 +188,7 @@ const OneChoiceQuestion = ({
       {solution && (
         <>
           <Divider className="my-8" />
-          <div className={clsx('bg-gray-4 mt-6 p-6', explainClassname)}>
+          <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.solution}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

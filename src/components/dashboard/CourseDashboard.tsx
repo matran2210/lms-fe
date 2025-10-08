@@ -166,7 +166,7 @@ const CourseDashboard = ({
                         {data?.name}
                       </div>
                       <div
-                        className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-medium text-gray-400`}
+                        className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-normal text-gray-400`}
                       >
                         {!isUndefined(data?.completed)
                           ? `${data.completed}/${data.total}`
