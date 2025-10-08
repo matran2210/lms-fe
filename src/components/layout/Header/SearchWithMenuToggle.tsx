@@ -174,7 +174,7 @@ const SearchWithMenuToggle = ({
           {!isCoursePage && (
             <div
               className={clsx(
-                'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary focus-within:outline-none hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
+                'border-transparent flex w-full items-center justify-between rounded-lg border border-white bg-white px-2 py-3 shadow-small transition-all duration-300 focus-within:border-primary hover:border-primary active:border-primary md:py-4 md:pl-8 md:pr-4',
                 {
                   'z-50': isShowUserGuide && guideStatus && guideStep === 1,
                 },

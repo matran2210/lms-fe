@@ -71,7 +71,7 @@ const SearchForm = ({
             disabled={disabled}
             placeholder={placeholder}
             className="h-5 w-full border-0 text-sm font-normal placeholder:text-gray-400 
-            focus:border-0 focus:outline-0 focus:ring-0 md:h-6 md:px-4 md:text-base"
+            focus:border-0 focus:outline-0 focus:ring-0 active:border-0 active:outline-0 md:h-6 md:px-4 md:text-base"
             onFocus={() => setIsFocused?.(true)}
             onBlur={() => setIsFocused?.(false)}
           />
