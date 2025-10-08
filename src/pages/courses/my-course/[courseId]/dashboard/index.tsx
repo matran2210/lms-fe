@@ -22,7 +22,7 @@ const Dashboard = () => {
 
   return (
     <Layout title="Dashboard" showSidebar={isAlwaysShowSidebar} size="xl">
-      <div className="lg:px-5 3xl:px-13.75" data-aos={ANIMATION.DATA_AOS}>
+      <div data-aos={ANIMATION.DATA_AOS}>
         <div className="main relative mx-auto my-0">
           <div className="mt-4 hidden w-full items-center justify-between xl:flex">
             <SappBreadCrumbs
@@ -55,7 +55,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans lg:px-5 3xl:px-13.75"
+        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans"
         data-aos={ANIMATION.DATA_AOS}
       >
         {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE

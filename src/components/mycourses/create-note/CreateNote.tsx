@@ -35,7 +35,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       .min(1, VALIDATE_REQUIRED),
   })
 
-  const { control, handleSubmit, watch } = useForm<any>({
+  const { control, handleSubmit, watch, reset } = useForm<any>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
     defaultValues: {
@@ -43,8 +43,9 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
     },
   })
 
+  const [baselineContent, setBaselineContent] = useState<string>(content)
   const watchDescription = watch(`description_${id ? id : uuid}`)
-  const isChanged = watchDescription !== content
+  const isChanged = watchDescription !== baselineContent
 
   const createNewNote = async (data: any) => {
     try {
@@ -56,6 +57,13 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       }
       const res = await CoursesAPI.createNote(params)
       setActiveSectionId(res?.data?.id)
+      // Cập nhật baseline để lần gõ tiếp theo hiển thị nút Save chính xác
+      const savedValue = data?.[`description_${id ? id : uuid}`] || ''
+      setBaselineContent(savedValue)
+      reset(
+        { [`description_${id ? id : uuid}`]: savedValue },
+        { keepDirty: false },
+      )
       toast.success('Tạo thành công!')
     } catch (error) {
       toast.error('Tạo không thành công!')
@@ -72,6 +80,13 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         description: data?.[`description_${id ? id : uuid}`],
       }
       await CoursesAPI.updateCourseNotesList(id || activeSectionId, params)
+      // Cập nhật baseline sau khi lưu để theo dõi thay đổi mới
+      const savedValue = data?.[`description_${id ? id : uuid}`] || ''
+      setBaselineContent(savedValue)
+      reset(
+        { [`description_${id ? id : uuid}`]: savedValue },
+        { keepDirty: false },
+      )
       toast.success('Cập nhật thành công!')
     } catch (error) {
       toast.error('Cập nhật không thành công!')

@@ -282,35 +282,37 @@ const PartFailed = ({
               (coursePart?.quiz?.attempt?.number_of_attempts !==
                 coursePart?.quiz?.limit_count &&
                 isRunoutAttemp) ? (
-                <ButtonSecondary
-                  size="medium"
-                  disabled={
-                    coursePart?.quiz?.is_limited &&
-                    coursePart?.quiz?.attempt?.number_of_attempts ===
-                      coursePart?.quiz?.limit_count
-                  }
-                  title={`Start`}
-                  className={`${
-                    coursePart?.quiz?.attempt?.number_of_attempts !==
-                      coursePart?.quiz?.limit_count && ''
-                  } ml-auto w-full md:w-auto`}
-                  onClick={() => {
-                    if (
-                      coursePart?.course_section_link_parents?.[0]
-                        ?.is_preview_locked
-                    ) {
-                      setOpenPopupCTA({
-                        lockSection: true,
-                        ctaUpgrade: false,
-                        thankYou: false,
-                        thankYouLater: false,
-                      })
-                    } else {
-                      setOpen(true)
+                <div className="w-[84px]">
+                  <ButtonSecondary
+                    size="small"
+                    disabled={
+                      coursePart?.quiz?.is_limited &&
+                      coursePart?.quiz?.attempt?.number_of_attempts ===
+                        coursePart?.quiz?.limit_count
                     }
-                    trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
-                  }}
-                />
+                    title={`Start`}
+                    className={`${
+                      coursePart?.quiz?.attempt?.number_of_attempts !==
+                        coursePart?.quiz?.limit_count && ''
+                    } ml-auto w-full`}
+                    onClick={() => {
+                      if (
+                        coursePart?.course_section_link_parents?.[0]
+                          ?.is_preview_locked
+                      ) {
+                        setOpenPopupCTA({
+                          lockSection: true,
+                          ctaUpgrade: false,
+                          thankYou: false,
+                          thankYouLater: false,
+                        })
+                      } else {
+                        setOpen(true)
+                      }
+                      trackGAEvent(`Click Button Start ${showTitleFinalTest}`)
+                    }}
+                  />
+                </div>
               ) : (
                 <></>
               )
