@@ -106,7 +106,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   return (
     <>
       <ModalResizeable
-        bodyClassName="h-[calc(100%-8px)]"
+        bodyClassName="h-[calc(100%-6px)]"
         modalIndex={count}
         header={
           <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
