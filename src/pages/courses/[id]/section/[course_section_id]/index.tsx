@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { PageLink, TEST_TYPE } from 'src/constants'
+import { ANIMATION, PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
@@ -553,7 +553,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4">
+      <div className="mt-4" data-aos={ANIMATION.DATA_AOS}>
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -578,36 +578,38 @@ const CoursePartDetail = () => {
             ]}
           />
         )}
-        <PreviewPartDetail
-          chapterMenu={partDetail}
-          fetchChapterDetail={fetchChapterDetail}
-          chapterDetail={chapterDetail}
-          loading={isLoading}
-          loadingChapter={loadingChapter}
-          setLoadingChapter={setLoadingChapter}
-          setOpenLearningOutcome={setOpenLearningOutcome}
-          course_id={router.query.id as any}
-          course_section_id={router.query.course_section_id as any}
-          handleRouterActivity={handleRouterActivity}
-          handleRouterCaseStudy={handleRouterCaseStudy}
-          handleLearningOutCome={handleLearningOutCome}
-          handleRouterChapter={handleRouterChapter}
-          readMore={readMore}
-          setReadMore={setReadMore}
-          defaultActive={router.query.chapter ?? defaultActive}
-          focus_id={router?.query?.focus_id as string}
-          handleGetItem={handleActive}
-          handleGoBack={handleGoBack}
-          listFocusSubSectionIds={listFocusSubSectionIds}
-          listFocusUnitIds={listFocusUnitIds}
-          deadline={deadline}
-          // handleShowToast={handleShowToast}
-          setIsOpenChapter={setIsOpenChapter}
-          isOpenChapter={isOpenChapter}
-          isLMSV2
-          isMobileView={isMobileView}
-          isTabletView={isTabletView}
-        />
+        <div data-aos={ANIMATION.DATA_AOS}>
+          <PreviewPartDetail
+            chapterMenu={partDetail}
+            fetchChapterDetail={fetchChapterDetail}
+            chapterDetail={chapterDetail}
+            loading={isLoading}
+            loadingChapter={loadingChapter}
+            setLoadingChapter={setLoadingChapter}
+            setOpenLearningOutcome={setOpenLearningOutcome}
+            course_id={router.query.id as any}
+            course_section_id={router.query.course_section_id as any}
+            handleRouterActivity={handleRouterActivity}
+            handleRouterCaseStudy={handleRouterCaseStudy}
+            handleLearningOutCome={handleLearningOutCome}
+            handleRouterChapter={handleRouterChapter}
+            readMore={readMore}
+            setReadMore={setReadMore}
+            defaultActive={router.query.chapter ?? defaultActive}
+            focus_id={router?.query?.focus_id as string}
+            handleGetItem={handleActive}
+            handleGoBack={handleGoBack}
+            listFocusSubSectionIds={listFocusSubSectionIds}
+            listFocusUnitIds={listFocusUnitIds}
+            deadline={deadline}
+            // handleShowToast={handleShowToast}
+            setIsOpenChapter={setIsOpenChapter}
+            isOpenChapter={isOpenChapter}
+            isLMSV2
+            isMobileView={isMobileView}
+            isTabletView={isTabletView}
+          />
+        </div>
         <BottomMenu>
           <div className="flex items-center justify-center gap-5">
             <CardMenuItem
