@@ -1,4 +1,3 @@
-import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import { forwardRef, HTMLAttributes } from 'react'
 
@@ -14,9 +13,9 @@ const CourseSkeleton = forwardRef<
           <div className="h-10 w-2/12 animate-pulse rounded-md bg-skeleton" />
         </div>
       </div>
-      <div className="heading flex bg-white">
-        <div className="w-full justify-between p-7.5 shadow-sidebar 2xl:flex 2xl:py-4.5">
-          <h1 className="line-clamp-1 w-1/2 text-2xl font-light text-[#050505]">
+      <div className="flex rounded-2xl bg-white shadow-card">
+        <div className="w-full justify-between p-7.5 2xl:flex 2xl:py-4.5">
+          <h1 className="line-clamp-1 w-1/2 text-2xl font-light">
             <div className="h-10 w-full animate-pulse rounded-md bg-skeleton" />
           </h1>
         </div>
@@ -27,7 +26,7 @@ const CourseSkeleton = forwardRef<
             .fill([])
             .map((_, index) => (
               <div
-                className={`item flex flex-col rounded-md bg-white p-[30px] shadow-sidebar`}
+                className={`item flex flex-col rounded-2xl bg-white p-[30px] shadow-card`}
                 key={index}
               >
                 <div className={`flex min-h-[352px] flex-col`}>
