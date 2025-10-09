@@ -165,10 +165,17 @@ body *::-webkit-scrollbar-thumb:hover {
   }
 
   table {
-    border-color: gray;
     border-style: inset;
+    @apply border-separate !overflow-hidden !rounded-lg !border !border-solid !border-gray-300;
+    border-width: 1px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
   }
 
+  table td {
+    @apply border !border-solid !border-gray-300 !p-2;
+    border-width: 1px !important;
+  }
   p {
     @apply mb-2 break-words;
   }
