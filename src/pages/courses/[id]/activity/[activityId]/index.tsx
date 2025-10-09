@@ -521,7 +521,7 @@ const ActivityPage = () => {
         >
           {/* Breadcrumbs */}
           <div
-            className={clsx('overflow-x-auto pb-8 pt-4 text-sm font-medium', {
+            className={clsx('overflow-x-auto pb-2 pt-4 text-sm font-medium', {
               hidden: focusOnlyQuiz.open,
               'hidden lg:flex': !focusOnlyQuiz.open,
             })}
@@ -578,7 +578,7 @@ const ActivityPage = () => {
           <div
             data-aos={isMobileView ? undefined : ANIMATION.DATA_AOS}
             className={clsx(
-              'flex flex-col gap-4 md:mb-[120px] md:gap-6 lg:mb-6',
+              'flex flex-col gap-4 md:mb-[120px] md:gap-8 lg:mb-4',
               {
                 'mb-0': focusOnlyDiscussion,
               },

@@ -558,6 +558,7 @@ const CoursePartDetail = () => {
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
           <SappBreadCrumbs
+            className="mb-2"
             isTeacher={false}
             breadcrumbs={[
               {

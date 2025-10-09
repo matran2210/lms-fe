@@ -7,9 +7,11 @@ import Tooltip from 'src/common/Tooltip'
 const SappBreadCrumbs = ({
   breadcrumbs = [],
   isTeacher = true,
+  className,
 }: {
   breadcrumbs?: ITabs[]
   isTeacher?: boolean
+  className?: string
 }) => {
   const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
   const lastIndex = breadcrumbs.length - 1
@@ -31,7 +33,7 @@ const SappBreadCrumbs = ({
     setIsLastTakesFullWidth(checkIsLastTakesFullWidth())
   }, [])
   return (
-    <nav aria-label="breadcrumb" className="hidden lg:block">
+    <nav aria-label="breadcrumb" className={clsx('hidden lg:block', className)}>
       <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
         {breadcrumbs.map((breadcrumb, index) => {
           const isLast = index === lastIndex
@@ -46,7 +48,7 @@ const SappBreadCrumbs = ({
               <li
                 className={clsx(
                   'text-base',
-                  isLast ? 'font-semibold text-gray-800' : 'text-gray-400',
+                  isLast ? 'font-medium text-gray-400' : 'text-gray-800',
                 )}
               >
                 {isLast ? (
@@ -73,9 +75,7 @@ const SappBreadCrumbs = ({
                       >
                         <span
                           className={clsx(
-                            'cursor-pointer',
-                            isLong &&
-                              'transition-all duration-300 hover:text-primary',
+                            'cursor-pointer transition-all duration-300 hover:text-primary',
                           )}
                         >
                           {titleDisplay}
