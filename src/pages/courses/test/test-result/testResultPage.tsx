@@ -233,7 +233,7 @@ const TestResultPage = ({
     }
   }, [type, chartData, questions, score, globalAverageNumber, subjectCode])
 
-  return <>{!!type ? renderDashboard : <SappLoading />}</>
+  return renderDashboard
 }
 
 export default TestResultPage
