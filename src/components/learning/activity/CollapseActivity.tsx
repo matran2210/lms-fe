@@ -15,10 +15,21 @@ interface CollapseActivityProps {
 }
 
 const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
-  const [activeKey, setActiveKey] = useState<string | string[]>(['activity'])
+  const [activeKey, setActiveKey] = useState<string | string[]>([])
+  const [hasDataLoaded, setHasDataLoaded] = useState(false)
 
   const handleChange = (key: string | string[]) => {
     setActiveKey(key)
+    // Chỉ gọi API khi collapse được mở và chưa có data
+    if (Array.isArray(key) && key.includes('activity') && !hasDataLoaded) {
+      setHasDataLoaded(true)
+    } else if (
+      typeof key === 'string' &&
+      key === 'activity' &&
+      !hasDataLoaded
+    ) {
+      setHasDataLoaded(true)
+    }
   }
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return
@@ -91,6 +102,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
       classId: router.query.classId,
       sectionId: resultData?.id,
     },
+    enabled: hasDataLoaded, // Chỉ gọi API khi collapse được mở
   })
 
   // Cập nhật total records nếu API không trả về metadata
@@ -128,7 +140,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   ]
   return (
     <Collapse
-      className="bg-white shadow-small"
+      className="bg-white p-2 shadow-small"
       bordered={false}
       expandIconPosition="end"
       activeKey={activeKey}
