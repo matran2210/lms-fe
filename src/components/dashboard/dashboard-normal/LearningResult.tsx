@@ -1,19 +1,56 @@
-import EChart from '@components/base/chart/Chart'
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  ResponsiveContainer,
+  Tooltip as RTooltip,
+} from 'recharts'
 import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
 import { COURSE_TYPE, DATE_FORMAT } from 'src/constants'
 import { IconEssentional } from '@assets/icons/Dashboard'
 import Tooltip from 'src/common/Tooltip'
 import useReponsive from 'src/hooks/useReponsive'
 
-const LearningResult = () => {
+const LearningResultTest = () => {
   const router = useRouter()
   const [option, setOption] = useState<any>()
   const [hasLearning, setHasLearning] = useState<boolean>(false)
   const [mockTestId, setMockTestId] = useState<string>('')
+  const [chartData, setChartData] = useState<{ name: string; score: number }[]>(
+    [],
+  )
+  const containerRef = useRef<HTMLDivElement>(null)
+  const tickTooltipRef = useRef<HTMLDivElement>(null)
+
+  const avgPercent = useMemo(() => {
+    if (!chartData.length) return 0
+    const sum = chartData.reduce((acc, d) => acc + (Number(d.score) || 0), 0)
+    return Number((sum / chartData.length).toFixed(2))
+  }, [chartData])
+
+  // Dot hiển thị trạng thái "active" luôn (vòng ngoài mờ + lõi)
+  const ActiveDot = (props: any) => {
+    const { cx, cy } = props
+    if (cx == null || cy == null) return null
+    return (
+      <g>
+        <circle
+          cx={cx}
+          cy={cy}
+          r={5}
+          fill="#6FD3B0"
+          stroke="#FFFFFF"
+          strokeWidth={2}
+        />
+      </g>
+    )
+  }
   const courseInfo = JSON.parse(localStorage.getItem('courseInfo') as any)
   const { isMobile } = useReponsive()
 
@@ -143,7 +180,9 @@ const LearningResult = () => {
             data: [
               {
                 name: 'Learning results',
-                value: data?.map((result: { score: number }) => result?.score),
+                value: data?.map((result: { score: number }) => {
+                  return result?.score
+                }),
                 areaStyle: {
                   color: 'rgba(111, 211, 176, 0.45)',
                 },
@@ -162,8 +201,15 @@ const LearningResult = () => {
 
       setHasLearning(hasLearning)
       setOption(option)
+      setChartData(
+        data.map((e: ILearningResult) => ({
+          name: e?.short_name || e?.name,
+          score: Number(e?.score || 0),
+        })),
+      )
     } else {
       setOption(null)
+      setChartData([])
     }
   }
 
@@ -191,7 +237,7 @@ const LearningResult = () => {
     <div className="flex h-auto w-full rounded-2xl bg-white p-4 md:p-6">
       <div className="w-full">
         <div className="mb-6 flex items-center justify-between md:mb-5 md:pb-3">
-          <div className="w-full justify-between md:flex">
+          <div className="w-full items-center justify-between sm:flex lg:block 2xl:flex">
             <div className="flex">
               <div className="mb-2 min-w-fit text-lg font-semibold md:mb-0 md:text-xl">
                 Your Learning Results
@@ -214,12 +260,149 @@ const LearningResult = () => {
         <div className="flex">
           {option && (
             <div className={`flex grow flex-col`}>
-              <div className="grow">
-                <EChart
-                  option={option}
-                  height={isMobile ? '350px' : '420px'}
-                  minHeight={isMobile ? '350px' : '420px'}
+              <div
+                className="relative grow focus:outline-none [&_*]:outline-none [&_*]:focus:outline-none"
+                ref={containerRef}
+                tabIndex={-1}
+                style={{ outline: 'none' }}
+                onMouseDown={() =>
+                  containerRef.current && containerRef.current.blur()
+                }
+                onFocus={(e) => (e.currentTarget as HTMLDivElement).blur()}
+              >
+                <ResponsiveContainer width="100%" height={isMobile ? 350 : 420}>
+                  <RadarChart data={chartData} outerRadius="80%">
+                    <PolarGrid
+                      stroke="#D1D5DB"
+                      gridType="circle"
+                      radialLines={true}
+                    />
+                    <RTooltip
+                      cursor={{ stroke: 'transparent' }}
+                      isAnimationActive={false}
+                      allowEscapeViewBox={{ x: false, y: false }}
+                      wrapperStyle={{
+                        outline: 'none',
+                        maxWidth: 200,
+                        pointerEvents: 'none',
+                        zIndex: 30,
+                      }}
+                      contentStyle={{
+                        borderRadius: 6,
+                        border: '1px solid #E5E7EB',
+                        boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+                        whiteSpace: 'normal',
+                        wordBreak: 'break-word',
+                        padding: '4px 6px',
+                        fontSize: 12,
+                        lineHeight: 1.2,
+                      }}
+                      labelStyle={{
+                        marginBottom: 2,
+                        fontWeight: 600,
+                        fontSize: 12,
+                        color: '#111827',
+                      }}
+                      itemStyle={{
+                        padding: 0,
+                        margin: 0,
+                        fontSize: 12,
+                        color: '#374151',
+                      }}
+                      separator=": "
+                      filterNull={true}
+                      offset={6}
+                      formatter={(value: any) => {
+                        const num = Number(value)
+                        const display = Number.isFinite(num)
+                          ? `${Math.round(num)}%`
+                          : `${value}`
+                        return [display, '']
+                      }}
+                      labelFormatter={(label: any) => String(label)}
+                    />
+                    <PolarAngleAxis
+                      dataKey="name"
+                      tick={(props: any) => {
+                        const { x, y, payload, textAnchor } = props
+                        const full: string = payload?.value || ''
+                        const maxLength = 10
+                        const display =
+                          full.length > maxLength
+                            ? full.slice(0, maxLength) + '…'
+                            : full
+                        const adjustedY = y > 300 ? y + 10 : y
+                        return (
+                          <text
+                            x={x}
+                            y={adjustedY}
+                            textAnchor={textAnchor}
+                            fill="#374151"
+                            fontSize={14}
+                            fontWeight={500}
+                            onMouseEnter={(evt) => {
+                              const rect =
+                                containerRef.current?.getBoundingClientRect()
+                              const tip = tickTooltipRef.current
+                              if (!rect || !tip) return
+                              tip.textContent = full
+                              tip.style.display = 'block'
+                              tip.style.left = `${evt.clientX - rect.left}px`
+                              tip.style.top = `${evt.clientY - rect.top - 12}px`
+                            }}
+                            onMouseMove={(evt) => {
+                              const rect =
+                                containerRef.current?.getBoundingClientRect()
+                              const tip = tickTooltipRef.current
+                              if (!rect || !tip) return
+                              tip.style.left = `${evt.clientX - rect.left}px`
+                              tip.style.top = `${evt.clientY - rect.top - 12}px`
+                            }}
+                            onMouseLeave={() => {
+                              const tip = tickTooltipRef.current
+                              if (tip) tip.style.display = 'none'
+                            }}
+                          >
+                            {display}
+                          </text>
+                        )
+                      }}
+                    />
+                    <PolarRadiusAxis
+                      tick={false}
+                      axisLine={false}
+                      domain={[0, 100]}
+                      tickCount={6}
+                    />
+                    <Radar
+                      name="Learning results"
+                      dataKey="score"
+                      stroke="#6FD3B0"
+                      fill="#6FD3B0"
+                      fillOpacity={0.45}
+                      strokeWidth={1}
+                      dot={<ActiveDot />}
+                      activeDot={<ActiveDot />}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+                <div
+                  ref={tickTooltipRef}
+                  className="pointer-events-none absolute z-20 hidden rounded-md bg-white px-2 py-1 text-xs text-gray-700 shadow ring-1 ring-gray-200"
+                  style={{ transform: 'translate(-50%, -100%)' }}
                 />
+                {avgPercent ? (
+                  <div
+                    className="pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+                    style={{ textAlign: 'center' }}
+                  >
+                    <div className="rounded-md bg-white px-2 py-1 text-lg font-semibold text-[#6FD3B0] shadow-sm ring-1 ring-gray-200">
+                      {avgPercent}%
+                    </div>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </div>
               {isNormal && (
                 <div className="flex items-center justify-center gap-2.5">
@@ -237,4 +420,4 @@ const LearningResult = () => {
   )
 }
 
-export default LearningResult
+export default LearningResultTest
