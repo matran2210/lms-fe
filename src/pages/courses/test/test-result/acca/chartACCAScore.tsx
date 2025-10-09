@@ -4,6 +4,7 @@ import { useScrollShadows } from 'src/hooks/useScrollShadows'
 import { ChartDatum } from 'src/type'
 interface IProps {
   data: ChartDatum[]
+  loading?: boolean
 }
 
 /**
@@ -12,7 +13,7 @@ interface IProps {
  * Renders a horizontal bar chart displaying ACCA - Low F scores by part.
  *
  */
-const ChartACCAScore = ({ data }: IProps) => {
+const ChartACCAScore = ({ data, loading }: IProps) => {
   const { ref, showLeft, showRight } = useScrollShadows<HTMLDivElement>()
   const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
@@ -25,34 +26,41 @@ const ChartACCAScore = ({ data }: IProps) => {
         ref={ref}
         {...events}
       >
-        {data?.map((item: ChartDatum) => {
-          const percentage = calculatePercentage(
-            item?.section_score,
-            item?.max_section_score,
-          )
-          return (
-            <div
-              key={item?.part_id}
-              className="flex w-11/12 max-w-[444px] shrink-0 snap-start flex-col items-start justify-end gap-4 md:w-1/2 xl:w-1/3"
-            >
-              <div className="line-clamp-2 text-sm font-medium md:text-base">
-                {item?.title}
-              </div>
-              <div className="relative h-2 w-full rounded-full bg-progress-active">
+        {loading ? (
+          <LoadingChartScore />
+        ) : (
+          <>
+            {data?.map((item: ChartDatum) => {
+              const percentage = calculatePercentage(
+                item?.section_score,
+                item?.max_section_score,
+              )
+              return (
                 <div
-                  className="absolute left-0 top-0 h-2 rounded-full bg-primary text-sm md:text-base"
-                  style={{
-                    width: `${percentage}%`,
-                  }}
-                />
-              </div>
-              <div>
-                <span>{`${percentage}%`}</span>
-                <span className="ml-2 inline-block text-sm text-gray-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
-              </div>
-            </div>
-          )
-        })}
+                  key={item?.part_id}
+                  className="flex w-11/12 max-w-[444px] shrink-0 snap-start flex-col items-start justify-end gap-4 md:w-1/2 xl:w-1/3"
+                >
+                  <div className="line-clamp-2 text-sm font-medium md:text-base">
+                    {item?.title}
+                  </div>
+                  <div className="relative h-2 w-full rounded-full bg-progress-active">
+                    <div
+                      className="absolute left-0 top-0 h-2 rounded-full bg-primary text-sm md:text-base"
+                      style={{
+                        width: `${percentage}%`,
+                      }}
+                    />
+                  </div>
+                  <div>
+                    <span>{`${percentage}%`}</span>
+                    <span className="ml-2 inline-block text-sm text-gray-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </>
+        )}
+
         {/* Left shadow */}
         <div
           className={`pointer-events-none absolute bottom-0 left-0 h-2/3 w-28 bg-gradient-to-r from-white to-white/0 transition-opacity duration-300 ${
@@ -69,6 +77,36 @@ const ChartACCAScore = ({ data }: IProps) => {
       </div>
     </div>
   )
+}
+
+const LoadingChartScore = () => {
+  return Array(3)
+    .fill(null)
+    .map((_, index) => (
+      <div
+        key={index}
+        className="flex w-11/12 max-w-[444px] shrink-0 animate-pulse snap-start flex-col items-start justify-end gap-4 md:w-1/2 xl:w-1/3"
+      >
+        {/* Title skeleton */}
+        <div className="h-6 w-3/4 rounded bg-skeleton"></div>
+
+        {/* Progress bar skeleton */}
+        <div className="relative h-2 w-full rounded-full bg-skeleton">
+          <div
+            className="absolute left-0 top-0 h-2 w-1/3 rounded-full bg-skeleton"
+            style={{
+              width: `${Math.random() * 80 + 10}%`,
+            }}
+          ></div>
+        </div>
+
+        {/* Percentage and answers skeleton */}
+        <div className="flex items-center gap-2">
+          <div className="h-6 w-10 rounded bg-skeleton"></div>
+          <div className="h-6 w-24 rounded bg-skeleton"></div>
+        </div>
+      </div>
+    ))
 }
 
 export default ChartACCAScore

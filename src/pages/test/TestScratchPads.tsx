@@ -95,7 +95,7 @@ const TestScratchPads = ({
     } else if (e.type === 'scratch_pad') {
       return (
         <ModalResizeable
-          position='center left'
+          position="center left"
           key={currentPage}
           header={
             <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">

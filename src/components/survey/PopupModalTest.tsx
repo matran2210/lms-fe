@@ -263,7 +263,7 @@ const PopupModalTest: React.FC<SurveyModalProps> = ({
       cancelButtonCaption={
         open.completeCourse ? 'Tôi sẽ làm sau' : 'Nhắc lại sau'
       }
-      headerClassName='text-center'
+      headerClassName="text-center"
       isUnderLine
     />
   )

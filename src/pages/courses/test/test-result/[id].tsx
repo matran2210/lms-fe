@@ -38,10 +38,16 @@ const TestResultDetail = () => {
   }
 
   // Sử dụng hook useGetQuizDetail trong component
-  const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
+  const { data: questions, isLoading: loadingAttempt } = useGetQuizAttempts(
+    'quiz-attempts',
+    {},
+  )
 
   // Sử dụng hook useGetQuestionTabs trong component
-  const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
+  const { data: chartData, isLoading: loadingChart } = useGetQuizAttemptsChart(
+    'quiz-attempts-chart',
+    {},
+  )
 
   const quiz = questions?.quizAttempt?.quiz
   const isShowRetakeButton =
@@ -110,6 +116,8 @@ const TestResultDetail = () => {
               ? questions?.quizAttempt?.score
               : chartData?.multiple_choice_score
           }
+          loadingChart={loadingChart}
+          loadingAttempt={loadingAttempt}
         />
       </div>
       {isMobileView && (

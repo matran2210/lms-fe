@@ -21,6 +21,7 @@ export interface Results {
   quiz: Quiz
   quiz_activity: QuizActivity[]
   path: any
+  class_user_id: string
 }
 
 export interface QuizActivity {
@@ -32,6 +33,8 @@ export interface QuizActivity {
   grading_method: GradingMethod
   is_graded: boolean
   attempts: Attempt[]
+  quiz_path?: string
+  activity_id?: string
 }
 
 export interface Quiz {
@@ -77,7 +80,7 @@ export interface IAtempt {
   }
 }
 export interface ITestQuizProps {
-  resultData: Results
+  resultData: Results[]
   handleViewResult: (row: Results) => void
   getNameTooltipContent?: (row: Results) => React.ReactNode
   getScore?: (row: Results, grading_method: GradingMethod) => string

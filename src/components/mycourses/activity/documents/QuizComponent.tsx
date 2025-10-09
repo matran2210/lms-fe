@@ -646,6 +646,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.MULTIPLE_CHOICE:
           return (
             <MultiChoiceQuestion
+              defaultValues={activeQuestion?.defaultValue}
               data={activeQuestion}
               control={controlAnswer}
               corrects={showCorrect ? activeQuestion?.corrects : undefined}
@@ -781,6 +782,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     break
                 }
               }
+
               return {
                 key: e?.id,
                 label: (

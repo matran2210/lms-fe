@@ -281,7 +281,7 @@ body *::-webkit-scrollbar-thumb:hover {
   height: 35px;
   margin-bottom: 4px;
 
-  @apply bg-[#F9F9F9] text-center text-base font-bold;
+  @apply bg-[#F9F9F9] text-center text-base font-bold focus:border-primary focus:shadow-0 focus:outline-none;
 }
 
 .sapp-select--selectword-preview,
@@ -942,10 +942,6 @@ $focus: (
   @apply fixed z-[1100];
 }
 
-.ant-drawer .ant-drawer-mask {
-  @apply fixed bg-black opacity-60;
-}
-
 .ant-drawer-content {
   @apply rounded-2xl;
 }
@@ -955,10 +951,8 @@ $focus: (
 }
 
 .ant-drawer .ant-drawer-mask,
-.ant-drawer .ant-drawer-mask,
 .ant-drawer .ant-drawer-content-wrapper {
-  position: fixed;
-  background-color: #00000099;
+  @apply fixed bg-overlay-control;
 }
 
 .shadow-activity.aos-init.aos-animate {
@@ -1505,4 +1499,8 @@ mark {
 .ant-table-wrapper .ant-table-thead > tr > th,
 .ant-table-wrapper .ant-table-tbody > tr > td {
   border-bottom: 1px solid #d1d5db;
+}
+
+.shadow-entrance-test {
+  box-shadow: 0px 4px 16px 0px rgba(44, 48, 0, 0.05);
 }

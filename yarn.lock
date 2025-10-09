@@ -10509,10 +10509,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.2.41:
-  version "1.2.41"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.2.41.tgz#b66fd9423cd8ac1b20efca8adcf58528f1dee6f3"
-  integrity sha512-Apl4AWwSjdBI1MAOkn2f+fsqLG/l/bP7bSYQDGqfTn7NuI4iDoLe/nMtbe1FxT0XKAEx2QP9+OcormFJCKoAKw==
+quiz-result-package@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.3.1.tgz#d65e120838dc2195e780c78dfc39f7cd8059b2ae"
+  integrity sha512-8iw2+cy7JwlOz0ci0YjtUKgdoHN4n+Mhq97o+ewzKo5Ayxtyqp8TMk7alC6peLN3BvwKxw3VtySWbT7GGosU1w==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"
@@ -11553,10 +11553,10 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.3.7:
-  version "1.3.7"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.3.7.tgz#9abfe25fdb57000f3a7579c5d9cc000c141b42cf"
-  integrity sha512-xHHySIVxTftNPLrGOuzwv8ARdLwHXKp2rMMbXzY3FucEuxJzAKk15v9KyfPg5DVQWBZKWYUz9OvHyofV0FAAbQ==
+sapp-common-package@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.1.tgz#9bf58967e12b69f82984e854f4fbaac3fc24f85a"
+  integrity sha512-ulmdAOwPOX92Ql5jm67czKfNPb2xENtPxPyxgAYdpLcs8dnx68aQExeQOYeLchNs5t4gtxw5c28qiQSWpWHV2w==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"

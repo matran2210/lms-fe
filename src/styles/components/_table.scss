@@ -124,6 +124,13 @@
       @apply hidden;
     }
   }
+
+  // Loại bỏ border-bottom của row cuối cùng
+  .last-row-no-border {
+    .ant-table-cell {
+      border-bottom: none !important;
+    }
+  }
 }
 .column-center {
   @apply flex justify-center;
