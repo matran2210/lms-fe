@@ -754,9 +754,22 @@ const ActivityPage = () => {
                   width={650}
                   height={850}
                   key={e.id}
-                  className="!z-40 h-full"
+                  className="!z-40 h-full !rounded-lg"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
+                  header={
+                    <div className="">
+                      <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
+                        <div className="truncate">{e.fileName}</div>
+                      </div>
+                      <button
+                        className="absolute right-3 top-2"
+                        onClick={() => handleCloseScratchPad(e)}
+                      >
+                        <CloseIcon />
+                      </button>
+                    </div>
+                  }
                 >
                   <div
                     // className="overflow-auto p-4 bg-white"
