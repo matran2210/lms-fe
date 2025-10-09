@@ -66,6 +66,7 @@ import BackToTop from '@components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import { CourseSectionType } from '@utils/constants'
+import ExpandIcon from '@components/layout/ExpandIcon'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -423,7 +424,7 @@ const ActivityPage = () => {
     {
       label: (
         <div className={assistiveItemClass}>
-          <CalculatorIcon className="h-6 w-6" />
+          <ExpandIcon type="caculator" className="h-6 w-6" />
           <span className="text-xs">Calculator</span>
         </div>
       ),
@@ -435,7 +436,7 @@ const ActivityPage = () => {
     {
       label: (
         <div className={assistiveItemClass}>
-          <ScratchPadIcon className="h-6 w-6" />
+          <ExpandIcon type="create-note" className="h-6 w-6" />
           <span className="text-xs">New Note</span>
         </div>
       ),
@@ -552,7 +553,12 @@ const ActivityPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0">
-                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5">
+                    <div
+                      className="flex h-10 w-full items-center justify-between rounded-t-md bg-[#DCDDDD] px-5"
+                      style={{
+                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                      }}
+                    >
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -736,7 +742,12 @@ const ActivityPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0 h-full w-64 rounded-xl">
-                    <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
+                    <div
+                      className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3"
+                      style={{
+                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                      }}
+                    >
                       <div className="text-sm font-bold">Calculator</div>
                       <button onClick={() => handleCloseScratchPad(e)}>
                         <CloseModalIcon />

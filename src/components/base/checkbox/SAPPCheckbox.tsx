@@ -45,9 +45,9 @@ const SAPPCheckbox = ({
     <div className={`inline-block ${className}`}>
       <input
         className={clsx(
-          'block h-6 w-6 bg-transparent',
-          'rounded-[5px] outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0',
-          SIZES[size],
+          'block !h-5 !w-5 bg-transparent',
+          '!rounded-md outline-none ring-0 ring-offset-0 focus:outline-none focus:ring-0 focus:ring-offset-0',
+          // SIZES[size],
           inputStyle,
           STATE[state],
           {
