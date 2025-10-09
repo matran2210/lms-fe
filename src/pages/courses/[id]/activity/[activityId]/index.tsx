@@ -754,7 +754,7 @@ const ActivityPage = () => {
                   width={650}
                   height={850}
                   key={e.id}
-                  className="!z-40 h-full rounded-[0px]"
+                  className="!z-40 h-full"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="bottom left"
                   header={

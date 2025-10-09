@@ -1,5 +1,5 @@
 import { calculatePercentage } from '@utils/helpers'
-import { Tooltip } from 'antd'
+import Tooltip from 'src/common/Tooltip'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { useScrollShadows } from 'src/hooks/useScrollShadows'
 import { ChartDatum } from 'src/type'
