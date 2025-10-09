@@ -173,7 +173,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
         }
         className={clsx(
           styles.modalResizeable,
-          'rounded-xl',
+          'overflow-hidden rounded-xl',
           className,
           rootClassName,
         )}

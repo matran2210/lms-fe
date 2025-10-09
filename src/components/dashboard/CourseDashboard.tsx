@@ -119,6 +119,7 @@ const CourseDashboard = ({
       ),
     },
   ]
+
   return (
     <>
       <div
@@ -191,11 +192,11 @@ const CourseDashboard = ({
             })}
           </div>
         )}
-        <div className="grid lg:flex xl:gap-8 2xl:mb-8">
-          <div className="order-2 xl:order-1 xl:w-[60%]">
+        <div className="grid lg:flex lg:gap-6 xl:gap-8 2xl:mb-8">
+          <div className="order-2 lg:order-1 lg:w-[60%]">
             <TopicProgress setInfoCourse={setInfoCourse} />
           </div>
-          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
+          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white shadow-small lg:order-2 lg:my-0 lg:w-[40%]">
             <LearningResult />
           </div>
         </div>

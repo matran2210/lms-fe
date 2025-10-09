@@ -939,7 +939,7 @@ $focus: (
 }
 
 .ant-drawer {
-  @apply fixed z-[1100];
+  @apply fixed z-[1100] outline-none;
 }
 
 .ant-drawer-content {

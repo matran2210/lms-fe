@@ -33,7 +33,10 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         <div className="text-base font-medium text-gray-800">
           Support Center
         </div>
-        <div onClick={() => setVisible(!visible)}>
+        <div
+          className="cursor-pointer transition-all duration-200 ease-in-out hover:scale-110"
+          onClick={() => setVisible(!visible)}
+        >
           <CloseIconV2 />
         </div>
       </div>

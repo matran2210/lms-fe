@@ -73,38 +73,36 @@ const FilterCourseSection = ({
     if (isEmpty(sections)) {
       fetchInitialSections(DEFAULT_PAGE_SIZE)
     }
-  }, [sections, fetchInitialSections])
+  }, [sections])
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedSection)) {
       fetchSubsections(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedSection, showOnlySection, fetchSubsections])
+  }, [selectedSection, showOnlySection])
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedSubsection)) {
       fetchUnits(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedSubsection, showOnlySection, fetchUnits])
+  }, [selectedSubsection, showOnlySection])
 
   useEffect(() => {
     if (!showOnlySection && !isEmpty(selectedUnit)) {
       fetchActivities(DEFAULT_PAGE_SIZE)
     }
-  }, [selectedUnit, showOnlySection, fetchActivities])
+  }, [selectedUnit, showOnlySection])
 
   useEffect(() => {
-    if (showOnlySection) {
-      setParams(selectedSection || '')
-    } else {
-      setParams(
-        selectedActivity ||
-          selectedUnit ||
-          selectedSubsection ||
-          selectedSection ||
-          '',
-      )
-    }
+    const next = showOnlySection
+      ? selectedSection || ''
+      : selectedActivity ||
+        selectedUnit ||
+        selectedSubsection ||
+        selectedSection ||
+        ''
+
+    setParams((prev) => (prev === next ? prev : next))
   }, [
     selectedActivity,
     selectedUnit,

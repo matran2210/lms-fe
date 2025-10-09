@@ -1,4 +1,5 @@
 import { calculatePercentage } from '@utils/helpers'
+import Tooltip from 'src/common/Tooltip'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { useScrollShadows } from 'src/hooks/useScrollShadows'
 import { ChartDatum } from 'src/type'
@@ -17,7 +18,7 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
   const { ref, showLeft, showRight } = useScrollShadows<HTMLDivElement>()
   const { events } = useDraggable(ref as React.MutableRefObject<HTMLElement>)
   return (
-    <div className="relative block h-fit min-h-[152px] rounded-xl bg-white p-4 pb-0 text-gray-800 shadow-small md:p-6">
+    <div className="relative block h-fit min-h-[152px] overflow-hidden rounded-xl bg-white p-4 pb-0 text-gray-800 shadow-small md:p-6">
       <div className="mb-6 text-lg font-semibold md:mb-8 ">
         Multiple Choice Score by Part
       </div>
@@ -38,22 +39,26 @@ const ChartACCAScore = ({ data, loading }: IProps) => {
               return (
                 <div
                   key={item?.part_id}
-                  className="flex w-11/12 max-w-[444px] shrink-0 snap-start flex-col items-start justify-end gap-4 md:w-1/2 xl:w-1/3"
+                  className="flex w-11/12 max-w-[444px] shrink-0 snap-start flex-col justify-between gap-4 md:w-1/2 xl:w-1/3"
                 >
-                  <div className="line-clamp-2 text-sm font-medium md:text-base">
-                    {item?.title}
-                  </div>
-                  <div className="relative h-2 w-full rounded-full bg-progress-active">
-                    <div
-                      className="absolute left-0 top-0 h-2 rounded-full bg-primary text-sm md:text-base"
-                      style={{
-                        width: `${percentage}%`,
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <span>{`${percentage}%`}</span>
-                    <span className="ml-2 inline-block text-sm text-gray-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
+                  <Tooltip title={item?.title}>
+                    <div className="line-clamp-1 text-sm font-medium md:text-base">
+                      {item?.title}
+                    </div>
+                  </Tooltip>
+                  <div className="w-full">
+                    <div className="relative h-2 w-full rounded-full bg-progress-active">
+                      <div
+                        className="absolute left-0 top-0 h-2 rounded-full bg-primary text-sm md:text-base"
+                        style={{
+                          width: `${percentage}%`,
+                        }}
+                      />
+                    </div>
+                    <div className="mt-2">
+                      <span>{`${percentage}%`}</span>
+                      <span className="ml-2 inline-block text-sm text-gray-400">{`${item?.section_score}/${item?.max_section_score} correct answers`}</span>
+                    </div>
                   </div>
                 </div>
               )
