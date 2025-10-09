@@ -71,6 +71,9 @@ const Calculator = ({ isMobileCalc = false }: IProps) => {
       className={clsx('calc', {
         '!w-64': isMobileCalc,
       })}
+      style={{
+        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+      }}
     >
       <Display
         total={total ?? ''}

@@ -1116,7 +1116,12 @@ const CaseStudyDetailTeacher = () => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-full border">
-                      <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
+                      <div
+                        className="flex h-10 w-full items-center justify-between bg-gray-2 px-5"
+                        style={{
+                          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                        }}
+                      >
                         <div>Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseIcon />

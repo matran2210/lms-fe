@@ -536,7 +536,12 @@ const ActivityTeacherPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0  h-full w-full">
-                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
+                    <div
+                      className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5"
+                      style={{
+                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                      }}
+                    >
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {

@@ -1386,7 +1386,12 @@ const CaseStudyDetail = ({ questions }: any) => {
                     }
                   >
                     <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
-                      <div className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3">
+                      <div
+                        className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3"
+                        style={{
+                          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                        }}
+                      >
                         <div className="text-sm font-bold">Calculator</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
                           <CloseModalIcon />
