@@ -7,6 +7,7 @@ interface UsePagingProps {
   uniqueKey: string
   queryFn: (...args: any[]) => Promise<any>
   params: Record<string, any>
+  enabled?: boolean
 }
 
 interface UsePagingResultSapp<TData = any, TError = unknown>
@@ -22,6 +23,7 @@ const useSappPaging = ({
   uniqueKey,
   queryFn,
   params,
+  enabled = true,
 }: UsePagingProps): UsePagingResultSapp => {
   const router = useRouter()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -35,7 +37,7 @@ const useSappPaging = ({
   const { data, isLoading, ...other } = useQuery({
     queryKey: [uniqueKey, pagination.current, pagination.pageSize, params],
     queryFn,
-    enabled: !!uniqueKey, // Chỉ chạy khi uniqueKey có giá trị hợp lệ
+    enabled: !!uniqueKey && enabled, // Chỉ chạy khi uniqueKey có giá trị hợp lệ và enabled = true
     retry: false, // Không thử lại nếu request bị lỗi
   })
 
