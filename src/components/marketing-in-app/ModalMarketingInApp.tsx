@@ -20,8 +20,8 @@ const ModalMarketingInApp = ({
   setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
   const { isMobileView, isTabletView } = useTailwindBreakpoint()
-  const widthModal = isMobileView ? 335 : isTabletView ? 600 : 1000
-  const widthImg = isMobileView ? 255 : isTabletView ? 480 : 816
+  const widthModal = isMobileView ? 335 : isTabletView ? 600 : 900
+  const widthImg = isMobileView ? 265 : isTabletView ? 505 : 776
   const heightImg = isMobileView ? 97 : isTabletView ? 182 : 310
 
   const handleClose = () => {
@@ -31,13 +31,13 @@ const ModalMarketingInApp = ({
 
   const settings = {
     infinite: true,
-    speed: 500,
+    speed: 1000,
     slidesToShow: 1,
     slidesToScroll: 1,
     centerMode: true,
-    centerPadding: isMobileView ? '12px' : isTabletView ? '24px' : '40px',
+    centerPadding: isMobileView ? '8px' : isTabletView ? '12px' : '16px',
     autoplay: true,
-    autoplaySpeed: 1500,
+    autoplaySpeed: 2000,
     initialSlide: 0,
     arrows: false,
   }
