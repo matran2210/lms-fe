@@ -18,6 +18,7 @@ import Tooltip from 'src/common/Tooltip'
 
 const Explanation = () => {
   const router = useRouter()
+  const { attempt: noOfAttempt } = router.query
   const [activeQuestion, setActiveQuestion] = useState<any>()
   const [attempt, setAttempt] = useState<IAtempt>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -119,6 +120,7 @@ const Explanation = () => {
   const viewAnswersType = router?.query?.type
   const isUserViewAnswersDetailAndEssay =
     isUserViewAnswers && activeQuestion?.qType === QUESTION_TYPES.ESSAY
+
   return (
     <SappLoadingGlobal loading={loading}>
       <FullScreenLayout title="Detailed Explanation">
@@ -133,7 +135,12 @@ const Explanation = () => {
               if (attempt?.quiz.id) {
                 switch (attempt?.quiz.quiz_type) {
                   case TEST_ATTEMPT_TYPE.ENTRANCE_TEST:
-                    router.push(`/entrance-test/table-result/${attempt?.id}`)
+                    const searchParams = noOfAttempt
+                      ? `attempt=${noOfAttempt}`
+                      : ''
+                    router.push(
+                      `/entrance-test/table-result/${attempt?.id}?${searchParams}`,
+                    )
                     break
                   case TEST_ATTEMPT_TYPE.CHAPTER_TEST:
                   case TEST_ATTEMPT_TYPE.FINAL_TEST:

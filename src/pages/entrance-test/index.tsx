@@ -93,7 +93,7 @@ const EntranceTest = () => {
                   data-aos={ANIMATION.DATA_AOS}
                 >
                   <h2 className="text-lg font-semibold text-gray-800 lg:text-2xl">
-                    Entrance Test
+                    Entrance Test List
                   </h2>
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />
                 </div>

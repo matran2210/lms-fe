@@ -13,6 +13,7 @@ import { EAttemptStatus } from 'src/constants/attempt'
 import { IEntranceTest, IEntranceTestAttempt } from 'src/type/entrance-test'
 import EntrancePopup from './EntrancePopup'
 import EntrancePopupContinue from './EntrancePopupContinue'
+import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
 
 interface EntranceTestProps {
   data: {
@@ -125,7 +126,13 @@ const EntranceTest = ({
       )
       if (res.success) {
         if (redirectToResult) {
-          router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
+          const searchParams = getNoOfAttemptEntranceTest({
+            data: data as IEntranceTest,
+            currentAttempt,
+          })
+          router.push(
+            `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
+          )
         } else {
           await onRefetch()
         }
@@ -184,9 +191,15 @@ const EntranceTest = ({
             <ButtonText
               title="Result"
               size="small"
-              onClick={() =>
-                router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
-              }
+              onClick={() => {
+                const searchParams = getNoOfAttemptEntranceTest({
+                  data: data as IEntranceTest,
+                  currentAttempt,
+                })
+                router.push(
+                  `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
+                )
+              }}
             />
           </div>
           {data?.attempts?.length < (data?.limit_count ?? 0) && (

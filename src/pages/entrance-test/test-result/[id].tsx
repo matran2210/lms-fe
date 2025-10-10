@@ -15,7 +15,7 @@ const TestEntranceResult = () => {
   const router = useRouter()
   const [showPinnedNotification, setShowPinnedNotification] = useState(true)
   const [isFading, setIsFading] = useState(false)
-
+  const { attempt } = router.query
   const { data: chartData, isLoading } = useGetDataQuery(
     'QuizAttemptsChart',
     {},
@@ -50,7 +50,9 @@ const TestEntranceResult = () => {
               <QuizResult
                 dataChart={chartData?.chart_data}
                 onClick={() =>
-                  router.push(`/entrance-test/table-result/${router.query.id}`)
+                  router.push(
+                    `/entrance-test/table-result/${router.query.id}?attempt=${attempt}`,
+                  )
                 }
                 dataTable={chartData}
                 onPublish={() => {}}
