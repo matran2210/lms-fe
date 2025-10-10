@@ -89,7 +89,7 @@ const TestWrapper = ({
           {/* Bên trái */}
           <div>
             <div
-              className="w-fit cursor-pointer rounded bg-gray-200 p-2"
+              className="w-fit cursor-pointer rounded bg-gray-200 p-2 duration-300 hover:bg-gray-300"
               onClick={async () => {
                 await resetWordBeforeAction?.()
                 setOpenQuit(true)

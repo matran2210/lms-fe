@@ -61,7 +61,7 @@ const CaseStudyWrapper = ({
           {/* Bên trái */}
           <div>
             <div
-              className="w-fit cursor-pointer rounded bg-[#E5E7EB] p-2"
+              className="w-fit cursor-pointer rounded bg-[#E5E7EB] p-2 duration-300 hover:bg-gray-300"
               onClick={() => {
                 onQuit && onQuit()
               }}
