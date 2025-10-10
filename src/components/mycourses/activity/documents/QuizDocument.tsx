@@ -127,6 +127,7 @@ const QuizDocument = ({
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
+  const [loadingButton, setLoadingButton] = useState<boolean>(false)
   const [resultId, setResultId] = useState<string>(attemptId || '')
   const [openGradedReport, setOpenGradedReport] = useState<boolean>(false)
   const [startWorkTime, setStartWorkTime] = useState(Date.now())
@@ -418,17 +419,22 @@ const QuizDocument = ({
 
   const handleConfirmQuestion = async () => {
     setLoading(true)
+    setLoadingButton(true)
     if (activeQuestion) {
       questionRef?.current?.onSubmit({
         activityId: activityId,
         tabId: tabId,
         quizId: quizId,
         time_spent: calculateWorkTime(),
-        then: () => {
+        then: async () => {
           setLoading(false)
+          await new Promise((resolve) => setTimeout(resolve, 500))
+          setLoadingButton(false)
         },
-        onFinally: () => {
+        onFinally: async () => {
           setLoading(false)
+          await new Promise((resolve) => setTimeout(resolve, 500))
+          setLoadingButton(false)
         },
       })
     }
@@ -1012,6 +1018,7 @@ const QuizDocument = ({
                   !isFinishQuiz && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2 text-sm"
+                      classNameLoading="!rounded-lg !px-4 py-2 text-sm"
                       childClass="text-sm"
                       title={
                         isLastQuestion
@@ -1051,7 +1058,8 @@ const QuizDocument = ({
                       handleSubmit()
                     }}
                     color="light-dark"
-                    loading={loading}
+                    classNameLoading="!rounded-lg !px-4 py-2"
+                    loading={loadingButton || loading}
                   />
                 )}
                 {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
