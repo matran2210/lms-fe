@@ -2812,7 +2812,6 @@ const TestDetail = () => {
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
               <ButtonText
-                className="bg-transparent"
                 onClick={() => {
                   handleChangeTab(filteredTabs[indexTab + 1].id)
                   trackGAEvent('Click Button Next Question')

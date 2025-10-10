@@ -27,7 +27,7 @@ const ButtonText = ({
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
   let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-transparent !text-secondary-100 hover:!text-secondary-100'
+    ? 'cursor-not-allowed !text-secondary-100 hover:!text-secondary-100'
     : 'cursor-pointer'
 
   let isUnderline = isUnderLine ? 'underline' : ''
@@ -38,6 +38,7 @@ const ButtonText = ({
     font-medium
     !border-none
     text-gray-800
+    !bg-transparent
     hover:text-primary
     ${isUnderline}
     ${fullWidthClass} 
