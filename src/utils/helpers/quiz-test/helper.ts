@@ -4,6 +4,7 @@ import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { QUESTION_TYPES, TEST_TYPE } from 'src/constants'
 import { Sheet } from 'src/type/test'
 import crypto from 'crypto'
+import { IEntranceTest, IEntranceTestAttempt } from 'src/type/entrance-test'
 
 export const getResult = async (currentTabContent: any) => {
   const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
@@ -294,4 +295,29 @@ export function hasEditorValueFromHtml(
   const text = html.replace(/<[^>]*>/g, '').trim()
 
   return text.length > 0
+}
+
+export const getNoOfAttemptEntranceTest = ({
+  data,
+  currentAttempt,
+}: {
+  currentAttempt: IEntranceTestAttempt
+  data: IEntranceTest
+}) => {
+  const attemptIndex = data?.attempts?.findIndex(
+    (item) => item.id === currentAttempt.id,
+  )
+  let searchParams = ''
+  if (data?.limit_count === 1) {
+    searchParams = (attemptIndex ?? -1) > -1 ? `attempt=1/1` : ''
+  } else if (data?.attempts?.length === 1) {
+    searchParams =
+      (attemptIndex ?? -1) > -1 ? `attempt=1/${data?.limit_count}` : ''
+  } else {
+    searchParams =
+      data?.limit_count && (attemptIndex ?? -1) > -1
+        ? `attempt=${attemptIndex === 1 ? 1 : 2}/${data?.limit_count}`
+        : ''
+  }
+  return searchParams
 }

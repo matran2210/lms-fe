@@ -3,6 +3,7 @@ import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonText from '@components/base/button/ButtonText'
 import TestPopup from '@components/common/TestPopup'
 import { trackGAEvent } from '@utils/google-analytics'
+import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
 import dayjs from 'dayjs'
 import router from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
@@ -34,7 +35,10 @@ const EntrancePopupContinue = ({
   // }, [remainingTimeLastAttempt])
 
   const handleRedirectResult = () => {
-    router.push(`/entrance-test/test-result/${currentAttempt?.id}`)
+    const searchParams = getNoOfAttemptEntranceTest({ data, currentAttempt })
+    router.push(
+      `/entrance-test/test-result/${currentAttempt?.id}?${searchParams}`,
+    )
   }
 
   const handleStartANewAttempt = async () => {

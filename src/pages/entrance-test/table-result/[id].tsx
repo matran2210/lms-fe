@@ -8,10 +8,12 @@ import { useEffect, useState } from 'react'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { CoursesAPI } from '../../api/courses/index'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const TableEntranceResult = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { id, attempt } = router.query
   const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
     status?: boolean
@@ -73,61 +75,42 @@ const TableEntranceResult = () => {
     }
   }, [id])
 
-  return (
-    <>
-      <div className="relative">
-        <div className="flex flex-col items-center justify-between bg-white p-4 shadow-header md:p-2.5">
-          <h2 className="text-base font-semibold md:text-2xl">Entrance Test</h2>
-          <div className="mt-1 hidden md:block">
-            <span className="text-gray-800">
-              Result:{' '}
-              {(() => {
-                const totalCorrect =
-                  modalResult?.result_answer?.total_correct_answers
-                const totalQuestion = modalResult?.result_answer?.total_question
-                const hasValidData =
-                  (totalCorrect || totalCorrect === 0) && totalQuestion
+  const searchParams =
+    attempt && attempt !== 'undefined' ? `attempt=${attempt}` : ''
 
-                return hasValidData ? (
-                  <strong className="text-info">
-                    {totalCorrect}/{totalQuestion}
-                  </strong>
-                ) : (
-                  <strong className="text-info">__ /{totalQuestion}</strong>
-                )
-              })()}
-            </span>
-          </div>
-        </div>
+  return (
+    <FullScreenLayout title="Entrance test result" className="!bg-gray-4">
+      <div>
         <div
-          className="absolute right-4 top-4 z-10 cursor-pointer rounded-md bg-progress-active p-1 md:right-8 md:top-5 md:p-2"
+          className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
-            router.push(`/entrance-test/test-result/${id}`)
+            router.push(`/entrance-test/test-result/${id}?${searchParams}`)
           }}
         >
-          <CloseIcon className="h-4.5 w-4.5 transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary md:h-6 md:w-6" />
+          <CloseModalIcon />
         </div>
       </div>
-      <Layout size="md" title="Entrance Test Result" showSidebar={false}>
+      <Layout fullWidth title="Entrance Test Result" showSidebar={false}>
         <div className="">
           {modalResult?.questions?.data?.length > 0 && (
             <QuizResultComponent
               questionResponse={modalResult?.questions || []}
               getTable={getTable}
-              onShowDetail={(e) =>
+              onShowDetail={(e) => {
                 router
-                  .push(`/explanation/${e.id}?title=Entrance Test`)
+                  .push(
+                    `/explanation/${e.id}?title=Entrance Test&${searchParams}`,
+                  )
                   .then(() => window.location.reload())
-              }
+              }}
               loading={loading}
               showTotal={false}
-              is_lms_v2={true}
-              isQuizResult={false}
+              is_lms_v2
             />
           )}
         </div>
       </Layout>
-    </>
+    </FullScreenLayout>
   )
 }
 export default withAuthorization([UserType.STUDENT])(TableEntranceResult)
