@@ -288,28 +288,29 @@ const LearningResultTest = () => {
                         zIndex: 30,
                       }}
                       contentStyle={{
-                        borderRadius: 6,
-                        border: '1px solid #E5E7EB',
-                        boxShadow: '0 4px 10px rgba(0,0,0,0.06)',
+                        borderRadius: 8,
+                        boxShadow: '0px 4px 16px 0px #00000014',
                         whiteSpace: 'normal',
                         wordBreak: 'break-word',
-                        padding: '4px 6px',
-                        fontSize: 12,
-                        lineHeight: 1.2,
+                        padding: '12px',
+                        fontSize: 14,
+                        lineHeight: '22px',
                       }}
                       labelStyle={{
                         marginBottom: 2,
                         fontWeight: 600,
-                        fontSize: 12,
-                        color: '#111827',
+                        fontSize: 16,
+                        lineHeight: '24px',
+                        color: '#374151',
                       }}
                       itemStyle={{
                         padding: 0,
                         margin: 0,
-                        fontSize: 12,
+                        fontSize: 14,
+                        lineHeight: '22px',
                         color: '#374151',
                       }}
-                      separator=": "
+                      separator="Progress: "
                       filterNull={true}
                       offset={6}
                       formatter={(value: any) => {
