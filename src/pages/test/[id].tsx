@@ -2106,6 +2106,7 @@ const TestDetail = () => {
       return [...prev, payload]
     })
   }
+
   const handleSubmitQuestions = async (typeSubmit: 'timeout' | 'submit') => {
     if (currentTabContent) {
       const allQuest = handleSaveCurrentAnswer(tabs, currentTabContent)
@@ -2162,7 +2163,13 @@ const TestDetail = () => {
             return
           }
           if (type === 'entrance') {
-            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+            const searchParams =
+              quizAttempt?.number_of_attempts && quizDetail?.limit_count
+                ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                : ``
+            router.replace(
+              `/entrance-test/test-result/${res?.data?.id}?${searchParams}`,
+            )
           } else if (type === 'event-test') {
             router.replace(`/event-test`)
             setSubmitEventTest(true)
@@ -3676,8 +3683,13 @@ const TestDetail = () => {
                   .unwrap()
                   .then(() => {
                     if (type === 'entrance') {
+                      const searchParams =
+                        quizAttempt?.number_of_attempts &&
+                        quizDetail?.limit_count
+                          ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                          : ``
                       router.replace(
-                        `/entrance-test/test-result/${QuizResultId}`,
+                        `/entrance-test/test-result/${QuizResultId}?${searchParams}`,
                       )
                     } else if (type === 'event-test') {
                       router.replace(`/event-test`)
