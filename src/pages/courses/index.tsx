@@ -338,8 +338,7 @@ const MyCourse = () => {
           />
         )}
         <ModalMarketingInApp
-          // open={openModalMarketingInApp}
-          open={true}
+          open={openModalMarketingInApp}
           setOpen={setOpenModalMarketingInApp}
         />
       </Layout>
