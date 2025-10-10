@@ -111,15 +111,15 @@ const ExamInformation = () => {
       ),
       width: 450,
     },
-    {
-      title: 'Class Code',
-      className: className,
-      align: 'center',
-      render: (record) => (
-        <NameNoActionCell dataColumn={record?.class?.code} isCenter />
-      ),
-      width: 350,
-    },
+    // {
+    //   title: 'Class Code',
+    //   className: className,
+    //   align: 'center',
+    //   render: (record) => (
+    //     <NameNoActionCell dataColumn={record?.class?.code} isCenter />
+    //   ),
+    //   width: 350,
+    // },
     {
       title: 'Program',
       className: className,
@@ -130,7 +130,7 @@ const ExamInformation = () => {
           isCenter
         />
       ),
-      width: 300,
+      width: 100,
     },
     {
       title: 'Duration',
@@ -143,6 +143,20 @@ const ExamInformation = () => {
         />
       ),
       width: 300,
+    },
+    {
+      title: 'Exam Date',
+      className: className,
+      align: 'center',
+      render: (record) => (
+        <NameNoActionCell
+          dataColumn={
+            record?.class?.course?.examination_subject?.examination?.name
+          }
+          isCenter
+        />
+      ),
+      width: 120,
     },
     {
       title: '',
@@ -218,13 +232,13 @@ const ExamInformation = () => {
   }
   return (
     <Layout title={TitleSidebar.EXAM_LIST} showSidebar={isAlwaysShowSidebar}>
-      <div className="mt-4 lg:mt-10">
+      <div className="mt-4">
         <HeaderMobile
           title={TitleSidebar.EXAM_LIST}
           showIcon={isTabletView || isMobileView}
           onBack={handleBack}
         />
-        <div className="mt-6 md:mt-8">
+        <div className="mt-6">
           {isMobileView ? (
             contentMobile()
           ) : (
@@ -239,7 +253,7 @@ const ExamInformation = () => {
                 }}
                 loading={isNormalLoading}
                 isShowPagination={false}
-                className="style-table-v2"
+                className="style-table-v2  rounded-xl shadow-table"
               />
               {!isEmpty(normalData) && (
                 <PaginationSappV2
