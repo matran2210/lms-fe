@@ -6567,10 +6567,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.1.tgz#c28c34a43379ca7f61d074130b2f5f7020a30694"
   integrity sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==
 
-entrance-test-result-package@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.2.5.tgz#bb28c4f59cd58cb07cdc638535b4970c52fd2028"
-  integrity sha512-eSLUUPHllwya9TeWxkITWo0HQPHMQiBr8DP5i5bLpQ4j1I1KJBFb8e1giohdREUOSt9Hd9ouziUQk8dNQlmMSA==
+entrance-test-result-package@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.3.2.tgz#ff0696d8e7a3994fda16b479de81380fa4e7e8d8"
+  integrity sha512-uCOf6SZT+2Ex401avx8aeaah6x3ErUvhKV7VEaD0t7wteR7DDkEf+/o50MhviZW8zAXgTNS3leogHef3pAumHw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"
@@ -7163,10 +7163,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.1.tgz#61021f4cc036fe60872e9e1b3c018b54c830b7ae"
-  integrity sha512-YodomN+Cw2B7rDkWXqOvWEd22BlmupJ80UDusm4U3yn7weTYH4eWp5jd7/zjaT3PZN8m47vmzYNP6YOHZogj8A==
+explanation-package@1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.2.tgz#27e188fed3199ab984f25c1dc08fe52ac4f1d71e"
+  integrity sha512-dO0MLUwj8PkWV6BbQCdZy0It3y3MWw66j13hO/yLWNDuxKZUmpIhyHeUH93hEqv4KGvqA85rK7GYFg0KAlsCig==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -7182,10 +7182,11 @@ explanation-package@1.3.1:
     clsx "^2.1.1"
     css-loader "^6.8.1"
     dashjs "^4.7.4"
-    html-react-parser "^5.1.10"
+    html-react-parser "^5.2.6"
     lodash "^4.17.21"
     react-hook-form "7.46.0"
     react-shadow "^20.4.0"
+    sapp-common-package "^1.4.1"
     sass "^1.53.0"
     styled-components "5.3.11"
     tailwindcss "^3.3.5"
@@ -7807,7 +7808,7 @@ html-entities@^1.2.1:
   resolved "https://registry.yarnpkg.com/html-entities/-/html-entities-1.4.0.tgz#cfbd1b01d2afaf9adca1b10ae7dffab98c71d2dc"
   integrity sha512-8nxjcBcd8wovbeKx7h3wTji4e6+rhaVuPNpMqwWgnHh+N9ToqsCs6XztWRBPQ+UtzsoMAdKZtUENoVzU/EMtZA==
 
-html-react-parser@^5.1.10, html-react-parser@^5.2.5:
+html-react-parser@^5.2.5:
   version "5.2.5"
   resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-5.2.5.tgz#4a0d62c129d5d5c63cc49f986c946552d737190c"
   integrity sha512-bRPdv8KTqG9CEQPMNGksDqmbiRfVQeOidry8pVetdh/1jQ1Edx4KX5m0lWvDD89Pt4CqTYjK1BLz6NoNVxN/Uw==
@@ -7816,6 +7817,16 @@ html-react-parser@^5.1.10, html-react-parser@^5.2.5:
     html-dom-parser "5.1.1"
     react-property "2.0.2"
     style-to-js "1.1.16"
+
+html-react-parser@^5.2.6:
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/html-react-parser/-/html-react-parser-5.2.6.tgz#547a8820be5c76bc2a10f0bb32dd9119d440438b"
+  integrity sha512-qcpPWLaSvqXi+TndiHbCa+z8qt0tVzjMwFGFBAa41ggC+ZA5BHaMIeMJla9g3VSp4SmiZb9qyQbmbpHYpIfPOg==
+  dependencies:
+    domhandler "5.0.3"
+    html-dom-parser "5.1.1"
+    react-property "2.0.2"
+    style-to-js "1.1.17"
 
 htmlparser2@10.0.0:
   version "10.0.0"
@@ -11764,10 +11775,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.7.tgz#f44b7ce49f46e67b96e9ff5be5c396a328103889"
-  integrity sha512-0+en/bPSMkk3cjt8tsW5CplJdCEyImVvnQq0YdzK8qvvcUP0/4JAu9LyphCl5cdNHLTl0XkZL+M47/Mv8uoAbA==
+sapp-notification@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.8.tgz#f745d1eb28d8f08be472dc3d7a173c8a9f22dd39"
+  integrity sha512-6vjQC9RaaPVcgpMwd9vIwRAggF4d2eUZi4DuIZnqpA0+CJRxY/bYEUPxfyMMqL17Fsfy5xLJHtgjQiovckOoBw==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
@@ -12377,10 +12388,24 @@ style-to-js@1.1.16:
   dependencies:
     style-to-object "1.0.8"
 
+style-to-js@1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/style-to-js/-/style-to-js-1.1.17.tgz#488b1558a8c1fd05352943f088cc3ce376813d83"
+  integrity sha512-xQcBGDxJb6jjFCTzvQtfiPn6YvvP2O8U1MDIPNfJQlWMYfktPy+iGsHE7cssjs7y84d9fQaK4UF3RIJaAHSoYA==
+  dependencies:
+    style-to-object "1.0.9"
+
 style-to-object@1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.8.tgz#67a29bca47eaa587db18118d68f9d95955e81292"
   integrity sha512-xT47I/Eo0rwJmaXC4oilDGDWLohVhR6o/xAQcPQN8q6QBuZVL8qMYL85kLmST5cPjAorwvqIA4qXTRQoYHaL6g==
+  dependencies:
+    inline-style-parser "0.2.4"
+
+style-to-object@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/style-to-object/-/style-to-object-1.0.9.tgz#35c65b713f4a6dba22d3d0c61435f965423653f0"
+  integrity sha512-G4qppLgKu/k6FwRpHiGiKPaPTFcG3g4wNVX/Qsfu+RqQM30E7Tyu/TEgxcL9PNLF5pdRLwQdE3YKKf+KF2Dzlw==
   dependencies:
     inline-style-parser "0.2.4"
 
