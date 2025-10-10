@@ -81,7 +81,8 @@ const SappButton = ({
   showTooltip = false,
   toolTipTitle = '',
 }: IButtonProps) => {
-  const isDisabled = disabled || loading
+  // const isDisabled = disabled || loading
+  const isDisabled = disabled
   const paddingClass = isPadding ? PADDINGS[size] : PADDINGS.none
   const fullWidthClass = full ? 'block w-full' : 'inline-block w-fit'
 
