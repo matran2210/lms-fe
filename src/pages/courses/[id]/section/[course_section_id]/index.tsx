@@ -408,10 +408,9 @@ const CoursePartDetail = () => {
       router.query.id,
       chapterDetail?.id,
     )
-    // 29/2/2023: Temporary comment to fix multiple API calls
-    // if (res?.success) {
-    //   fetchChapterDetail(id, course_section_id)
-    // }
+    if (res?.success) {
+      fetchChapterDetail(id, course_section_id)
+    }
   }
 
   const handleCaseStudyProcess = async (
