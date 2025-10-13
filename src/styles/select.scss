@@ -204,6 +204,17 @@
     }
   }
 }
+.select-card-course {
+  .ant-select-item-option-content {
+    @apply text-center !important;
+  }
+  .ant-select-selector {
+    @apply px-2 !important;
+  }
+  .ant-select-dropdown {
+    @apply px-1 !important;
+  }
+}
 
 .custom-ant-select {
   .ant-select-selector {
@@ -225,13 +236,4 @@
   .ant-select-selection-item {
     @apply flex-1 pr-2 text-2xl font-bold;
   }
-}
-.ant-select-item-option-content {
-  @apply text-center !important;
-}
-.ant-select-selector {
-  @apply px-2 !important;
-}
-.ant-select-dropdown {
-  @apply px-1 !important;
 }
