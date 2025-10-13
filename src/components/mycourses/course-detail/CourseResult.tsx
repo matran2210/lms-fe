@@ -159,7 +159,9 @@ const ResultCourse = ({
             //   root: 'select-result-attempt',
             //   popup: { root: 'select-result-attempt-option' },
             // }}
-            className="custom-select-v2 select-card-course h-8 pr-2"
+            //
+            className="custom-select-v2 h-8 pr-2"
+            popupClassName="select-card-course"
             onPopupScroll={(e) => {
               const target = e.target as HTMLDivElement
               if (
