@@ -253,7 +253,7 @@ const ExamInformation = () => {
                 }}
                 loading={isNormalLoading}
                 isShowPagination={false}
-                className="style-table-v2  rounded-xl shadow-table"
+                className="style-table-v2 rounded-xl"
               />
               {!isEmpty(normalData) && (
                 <PaginationSappV2
