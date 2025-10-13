@@ -378,6 +378,15 @@ export default function MenuItem({
             className={animationClass}
           />
         )
+      case 'exam-information':
+        return (
+          <Lottie
+            animationData={examInfoAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
 
       default:
         return (
