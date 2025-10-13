@@ -90,7 +90,7 @@
 
 .style-table-v2 {
   .ant-table {
-    @apply overflow-hidden rounded-2xl shadow-table;
+    @apply overflow-hidden rounded-2xl shadow-small;
   }
   .ant-table-wrapper {
     @apply overflow-hidden rounded-2xl;
