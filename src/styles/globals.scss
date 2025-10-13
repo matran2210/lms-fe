@@ -203,8 +203,16 @@ body *::-webkit-scrollbar-thumb:hover {
   }
 
   table {
-    border-color: gray;
     border-style: inset;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    overflow: hidden !important;
+  }
+  table td {
+    border: 1px solid #d1d5db !important;
+    padding: 8px !important;
   }
 
   p {
