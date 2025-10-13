@@ -23,6 +23,20 @@ import SappNotificationComponent from 'sapp-notification'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
 import clsx from 'clsx'
+import myCourseAnimationIcon from 'public/animations/MyCourse.json'
+import addNoteAnimationIcon from 'public/animations/AddNote.json'
+import resourceAnimationIcon from 'public/animations/Resource.json'
+import calculatorAnimationIcon from 'public/animations/Calculator.json'
+import calendarAnimationIcon from 'public/animations/Calendar.json'
+import courseContentAnimationIcon from 'public/animations/CourseContent.json'
+import dashboardAnimationIcon from 'public/animations/Dashboard.json'
+import entranceTestAnimationIcon from 'public/animations/EntranceTest.json'
+import examListAnimationIcon from 'public/animations/ExamList.json'
+import eventTestAminationIcon from 'public/animations/EventTest.json'
+import examInfoAnimationIcon from 'public/animations/ExamInfo.json'
+import noteListAnimationIcon from 'public/animations/NoteList.json'
+import testQuizListAnimationIcon from 'public/animations/TestQuizList.json'
+import Lottie from 'lottie-react'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -249,6 +263,148 @@ export default function MenuItem({
     }
   }, [pagination])
 
+  const animationClass = clsx(
+    `before-icon w-6 h-6 hidden group-hover/menuItem:block`,
+  )
+  const renderIcon = () => {
+    switch (Icon) {
+      case 'course':
+      case 'course-content':
+      case 'activity':
+        return (
+          <Lottie
+            animationData={myCourseAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'notes-list':
+        return (
+          <Lottie
+            animationData={noteListAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'create-note':
+        return (
+          <Lottie
+            animationData={addNoteAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'learning-resource':
+        return (
+          <Lottie
+            animationData={resourceAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'caculator':
+        return (
+          <Lottie
+            animationData={calculatorAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'calendar':
+        return (
+          <Lottie
+            animationData={calendarAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'grid':
+        return (
+          <Lottie
+            animationData={dashboardAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'entrance-test':
+        return (
+          <Lottie
+            animationData={entranceTestAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'exam_list':
+        return (
+          <Lottie
+            animationData={examListAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'result':
+        return (
+          <Lottie
+            animationData={testQuizListAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'bookmark':
+        return (
+          <Lottie
+            animationData={courseContentAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'event-test':
+        return (
+          <Lottie
+            animationData={eventTestAminationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+      case 'exam-information':
+        return (
+          <Lottie
+            animationData={examInfoAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+
+      default:
+        return (
+          <Lottie
+            animationData={myCourseAnimationIcon}
+            loop
+            autoplay
+            className={animationClass}
+          />
+        )
+        break
+    }
+  }
+
+  const isShowHoverIcon = () => {
+    return !['notification'].includes(Icon)
+  }
+
   const renderMenuContent = () => {
     return (
       <div className="flex items-center">
@@ -299,17 +455,33 @@ export default function MenuItem({
                 />
               </div>
             ) : (
-              <ExpandIcon
-                type={Icon}
-                className={clsx(
-                  `before-icon min-h-6 min-w-6 shrink-0 ${
-                    selected ? 'bg-primary text-white' : 'text-gray-800'
-                  }`,
-                  {
-                    'group-hover:text-gray-800': !selected,
-                  },
-                )}
-              />
+              <>
+                {!selected && isShowHoverIcon() && renderIcon()}
+                <ExpandIcon
+                  type={Icon}
+                  className={clsx(
+                    `before-icon min-h-6 min-w-6 shrink-0 ${
+                      selected ? 'bg-primary text-white' : 'text-gray-800'
+                    }`,
+                    {
+                      'group-hover:text-gray-800': !selected,
+                      'group-hover/menuItem:hidden':
+                        !selected && isShowHoverIcon(),
+                    },
+                  )}
+                />
+              </>
+              // <ExpandIcon
+              //   type={Icon}
+              //   className={clsx(
+              //     `before-icon min-h-6 min-w-6 shrink-0 ${
+              //       selected ? 'bg-primary text-white' : 'text-gray-800'
+              //     }`,
+              //     {
+              //       'group-hover:text-gray-800': !selected,
+              //     },
+              //   )}
+              // />
             )}
           </>
         )}
@@ -390,7 +562,7 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
+          `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
             selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
