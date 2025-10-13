@@ -123,6 +123,7 @@ const TestScratchPads = ({
           }}
           width={412}
           height={350}
+          modalIndex={index}
         >
           <ScratchPatch
             scratchPadValues={scratchPadValues.find(
