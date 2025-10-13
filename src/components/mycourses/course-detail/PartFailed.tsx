@@ -327,26 +327,31 @@ const PartFailed = ({
                 )}
 
                 {isShowButtonAction() && (
-                  <ButtonSecondary
-                    size="small"
-                    title={renderOkButtonCaption()}
-                    onClick={() => {
-                      if (
-                        coursePart?.course_section_link_parents?.[0]
-                          ?.is_preview_locked
-                      ) {
-                        setOpenPopupCTA({
-                          lockSection: true,
-                          ctaUpgrade: false,
-                          thankYou: false,
-                          thankYouLater: false,
-                        })
-                      } else {
-                        setOpen(true)
-                      }
-                      trackGAEvent(`Click Button Retake ${showTitleFinalTest}`)
-                    }}
-                  />
+                  <div className="w-[84px]">
+                    <ButtonSecondary
+                      className="w-full"
+                      size="small"
+                      title={renderOkButtonCaption()}
+                      onClick={() => {
+                        if (
+                          coursePart?.course_section_link_parents?.[0]
+                            ?.is_preview_locked
+                        ) {
+                          setOpenPopupCTA({
+                            lockSection: true,
+                            ctaUpgrade: false,
+                            thankYou: false,
+                            thankYouLater: false,
+                          })
+                        } else {
+                          setOpen(true)
+                        }
+                        trackGAEvent(
+                          `Click Button Retake ${showTitleFinalTest}`,
+                        )
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             )}
