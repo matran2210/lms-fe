@@ -89,7 +89,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your test results will"
-            text2="be emailed to you on October 25, 2025"
+            text2="be emailed to you on October 23, 2025"
             text3="Please check your email regularly to receive the earliest update."
           />
         )
