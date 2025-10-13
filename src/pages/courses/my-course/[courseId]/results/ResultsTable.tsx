@@ -181,7 +181,7 @@ const ResultsTable = ({
 
   return (
     <FormProvider {...methods}>
-      <div className="my-6 flex items-center justify-end gap-4">
+      <div className="my-4 flex items-center justify-end gap-4">
         <div className="text-sm leading-[22px] tracking-[0%] text-gray-800">
           {totalRecords} Results
         </div>

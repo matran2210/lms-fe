@@ -728,7 +728,7 @@ const ActivityPage = () => {
           </BottomMenu>
 
           {/* Sratchpad */}
-          {openScratchPad.map((e) => {
+          {openScratchPad.map((e, index) => {
             if (e.type === 'calculator') {
               return (
                 <MovableWindow
@@ -760,6 +760,7 @@ const ActivityPage = () => {
             } else if (e.type === 'file') {
               return (
                 <ModalResizeable
+                  modalIndex={index}
                   bodyClassName="h-[100%]"
                   title={e.fileName}
                   width={650}
@@ -767,7 +768,7 @@ const ActivityPage = () => {
                   key={e.id}
                   className="!z-40 h-full !rounded-lg"
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
-                  position="bottom left"
+                  position="center left"
                   header={
                     <div className="">
                       <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">

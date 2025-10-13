@@ -67,7 +67,7 @@ const Results = () => {
   return (
     <Layout title={TEST_AND_QUIZ_TITLE} showSidebar={isAlwaysShowSidebar}>
       {isAlwaysShowSidebar && (
-        <div className="mb-8 mt-6 flex w-full">
+        <div className="mb-2 mt-4 flex w-full">
           <SappBreadCrumbs
             isTeacher={false}
             breadcrumbs={[

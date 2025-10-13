@@ -93,40 +93,40 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
     //   },
     // }
     const positions = {
-      'top left': { x: scrollX + shift, y: scrollY + shift },
+      'top left': { x: shift, y: shift },
       'top middle': {
-        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
-        y: scrollY + shift,
+        x: (windowWidth - modalWidth) / 2 + shift,
+        y: shift,
       },
       'top right': {
-        x: scrollX + windowWidth - modalWidth - shift,
-        y: scrollY + shift,
+        x: windowWidth - modalWidth - shift,
+        y: shift,
       },
 
       'center left': {
-        x: scrollX + shift,
-        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
+        x: shift,
+        y: (windowHeight - modalHeight) / 2 + shift,
       },
       center: {
-        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
-        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
+        x: (windowWidth - modalWidth) / 2 + shift,
+        y: (windowHeight - modalHeight) / 2 + shift,
       },
       'center right': {
-        x: scrollX + windowWidth - modalWidth - shift,
-        y: scrollY + (windowHeight - modalHeight) / 2 + shift,
+        x: windowWidth - modalWidth - shift,
+        y: (windowHeight - modalHeight) / 2 + shift,
       },
 
       'bottom left': {
-        x: scrollX + shift,
-        y: scrollY + windowHeight - modalHeight - shift,
+        x: shift,
+        y: windowHeight - modalHeight - shift,
       },
       'bottom middle': {
-        x: scrollX + (windowWidth - modalWidth) / 2 + shift,
-        y: scrollY + windowHeight - modalHeight - shift,
+        x: (windowWidth - modalWidth) / 2 + shift,
+        y: windowHeight - modalHeight - shift,
       },
       'bottom right': {
-        x: scrollX + windowWidth - modalWidth - shift,
-        y: scrollY + windowHeight - modalHeight - shift,
+        x: windowWidth - modalWidth - shift,
+        y: windowHeight - modalHeight - shift,
       },
     }
 
@@ -145,64 +145,83 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
 
   const renderContent = () => {
     return (
-      <Rnd
-        size={{ width: size.width, height: size.height }}
-        position={modalPosition}
-        onDragStop={(e, d) => setModalPosition({ x: d.x, y: d.y })}
-        onResizeStop={(e, direction, ref, delta, newPos) => {
-          setSize({
-            width: parseInt(ref.style.width),
-            height: parseInt(ref.style.height),
-          })
-          setModalPosition(newPos)
-        }}
-        minWidth={minWidth}
-        minHeight={minHeight}
-        bounds="window"
-        style={{
-          background: 'white',
-          boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-          border: '1px solid #DCDDDD',
-        }}
-        dragHandleClassName={
-          draggableFull
-            ? undefined
-            : dragHandleClassName
-              ? dragHandleClassName
-              : 'modal-dragger'
-        }
-        className={clsx(
-          styles.modalResizeable,
-          'overflow-hidden rounded-xl',
-          className,
-          rootClassName,
-        )}
-        onMouseDown={onClick}
-        onTouchStart={onClick}
-      >
-        <div
-          className={clsx('absolute left-0 top-0 h-full w-full', bodyClassName)}
-        >
-          {header ? (
-            header
-          ) : (
-            <div className={styles.modalHeader}>
-              <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
-                <div className="truncate">{title}</div>
-              </div>
-              <button
-                className="absolute right-3 top-2"
-                onClick={handleCloseScratchPad}
-              >
-                <CloseIcon />
-              </button>
-            </div>
+      <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
+        <Rnd
+          size={{ width: size.width, height: size.height }}
+          position={modalPosition}
+          onDragStop={(e, d) => {
+            const maxX = window.innerWidth - size.width
+            const maxY = window.innerHeight - size.height
+            setModalPosition({
+              x: Math.min(Math.max(0, d.x), maxX),
+              y: Math.min(Math.max(0, d.y), maxY),
+            })
+          }}
+          onResizeStop={(e, direction, ref, delta, newPos) => {
+            const newWidth = parseInt(ref.style.width)
+            const newHeight = parseInt(ref.style.height)
+            const maxX = window.innerWidth - newWidth
+            const maxY = window.innerHeight - newHeight
+
+            setSize({ width: newWidth, height: newHeight })
+            setModalPosition({
+              x: Math.min(Math.max(0, newPos.x), maxX),
+              y: Math.min(Math.max(0, newPos.y), maxY),
+            })
+          }}
+          minWidth={minWidth}
+          minHeight={minHeight}
+          bounds="window"
+          style={{
+            background: 'white',
+            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+            border: '1px solid #DCDDDD',
+            position: 'fixed',
+            pointerEvents: 'auto',
+          }}
+          dragHandleClassName={
+            draggableFull
+              ? undefined
+              : dragHandleClassName
+                ? dragHandleClassName
+                : 'modal-dragger'
+          }
+          className={clsx(
+            styles.modalResizeable,
+            'overflow-hidden rounded-xl',
+            className,
+            rootClassName,
           )}
-          <div className={clsx(styles.modalContent, contentClassName)}>
-            {children}
+          onMouseDown={onClick}
+          onTouchStart={onClick}
+        >
+          <div
+            className={clsx(
+              'absolute left-0 top-0 h-full w-full',
+              bodyClassName,
+            )}
+          >
+            {header ? (
+              header
+            ) : (
+              <div className={styles.modalHeader}>
+                <div className="modal-header modal-dragger flex h-10 w-full cursor-move items-center justify-between px-5">
+                  <div className="truncate">{title}</div>
+                </div>
+                <button
+                  className="absolute right-3 top-2"
+                  onClick={handleCloseScratchPad}
+                >
+                  <CloseIcon />
+                </button>
+              </div>
+            )}
+            <div className={clsx(styles.modalContent, contentClassName)}>
+              {children}
+            </div>
           </div>
-        </div>
-      </Rnd>
+        </Rnd>
+      </div>
     )
   }
   return isInBody
