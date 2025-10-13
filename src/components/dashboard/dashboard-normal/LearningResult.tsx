@@ -295,6 +295,7 @@ const LearningResultTest = () => {
                         padding: '12px',
                         fontSize: 14,
                         lineHeight: '22px',
+                        border: 'unset',
                       }}
                       labelStyle={{
                         marginBottom: 2,

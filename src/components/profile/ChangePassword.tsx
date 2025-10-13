@@ -144,7 +144,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
           </div>
           <div className="hidden justify-end lg:flex">
             <ButtonCancelSubmit
-              className="flex flex-row-reverse gap-2"
+              className="flex flex-row-reverse items-center gap-2"
               cancel={{
                 title: 'Cancel',
                 onClick: handleCancel,
