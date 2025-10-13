@@ -166,17 +166,16 @@ body *::-webkit-scrollbar-thumb:hover {
 
   table {
     border-style: inset;
-    border: 1px solid #d1d5db !important;
-    border-radius: 8px !important;
+    @apply border-separate !overflow-hidden !rounded-lg !border !border-solid !border-gray-300;
+    border-width: 1px !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
-    overflow: hidden !important;
-  }
-  table td {
-    border: 1px solid #d1d5db !important;
-    padding: 8px !important;
   }
 
+  table td {
+    @apply border !border-solid !border-gray-300 !p-2;
+    border-width: 1px !important;
+  }
   p {
     @apply mb-2 break-words;
   }

@@ -89,7 +89,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
         return (
           <ContentTestCongratution
             text1="Your test results will"
-            text2="be emailed to you on Septemper 27, 2024"
+            text2="be emailed to you on October 25, 2025"
             text3="Please check your email regularly to receive the earliest update."
           />
         )
@@ -123,7 +123,7 @@ const EventTest = ({ data }: { data: IEventTest }) => {
   const resultDate = (category: string) => {
     switch (category) {
       case 'ACCA':
-        return '04/10/2024'
+        return '23/10/2025'
 
       case 'CFA':
         return '28/06/2025'
