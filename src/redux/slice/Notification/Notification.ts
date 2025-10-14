@@ -172,6 +172,15 @@ export const notificationSlice = createSlice({
         ...action.payload,
       }
     },
+    clearNotifications: (state) => {
+      state.list_notifications = []
+      state.meta = {
+        total_records: 0,
+        total_pages: 1,
+        page_index: 1,
+        page_size: 10,
+      }
+    },
     updateStatus: (state, action: PayloadAction<any>) => {
       let new_list_notifications = []
       new_list_notifications = state.list_notifications.map((e) => {
@@ -288,6 +297,7 @@ export const {
   updateStatusAll,
   showNotification,
   hideNotification,
+  clearNotifications,
 } = notificationSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
