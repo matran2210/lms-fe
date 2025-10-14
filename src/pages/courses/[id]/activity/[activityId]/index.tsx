@@ -67,6 +67,8 @@ import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import { CourseSectionType } from '@utils/constants'
 import ExpandIcon from '@components/layout/ExpandIcon'
+import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+import { useCourseContext } from '@contexts/index'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -103,7 +105,7 @@ const ActivityPage = () => {
       },
     )
   }
-
+  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const { data: activity, isLoading } = useGetActivityById(
     router.query?.activityId,
     router.query?.id,
@@ -590,7 +592,7 @@ const ActivityPage = () => {
               isHidden={focusOnlyQuiz.open}
               extraActions={
                 focusOnlyDiscussion ? null : (
-                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
+                  <div className="bg-warning-100 flex items-center gap-1 whitespace-nowrap rounded-md px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
                     <HourglassIcon className="shrink-0" />
                     <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                   </div>
@@ -852,6 +854,10 @@ const ActivityPage = () => {
           className={clsx(
             '!bottom-24 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
           )}
+        />
+        <PopupLockContent
+          showForm={openPopupCTA}
+          setShowForm={setOpenPopupCTA}
         />
       </Layout>
 
