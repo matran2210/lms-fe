@@ -14,6 +14,7 @@ import React, {
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
+import { useTooltipModal } from 'src/hooks/useTooltipModal'
 
 // Types
 interface IProps {
@@ -56,10 +57,11 @@ interface IProps {
 const baseBox = 'border rounded border-gray-300 rounded-lg'
 const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
-  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer bg-white`,
+  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer bg-white my-1`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
-  options: `absolute !top-[44px] !left-0 -translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
-  option: 'px-3 py-2 cursor-pointer rounded',
+  options: `-translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
+  option:
+    'px-3 py-2 cursor-pointer rounded hover:bg-gray-100 transition-colors duration-100',
   icon: 'ml-2 text-gray-500 min-w-[24px]',
 }
 
@@ -95,6 +97,8 @@ const SelectWord = forwardRef(
     const [selectedValues, setSelectedValues] = useState<
       Record<number, string>
     >({})
+
+    const { showTooltip, hideTooltip } = useTooltipModal()
 
     useEffect(() => {
       if (onChange) {
@@ -154,9 +158,11 @@ const SelectWord = forwardRef(
         : 'cursor-not-allowed pointer-events-none !justify-center'
       return `
         <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}" data-component-id="${componentId.current}">
-          <span class="truncate">${selectedAnswer?.label || 'Choose'}</span>
-            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown ${corrects?.length ? 'hidden' : ''}" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z" fill="#1C274C"/>
+            <span class="truncate" data-full-text="${selectedAnswer?.label || ''}">
+              ${selectedAnswer?.label || 'Choose'}
+            </span>
+            <svg class="${DROPDOWN_STYLES.icon} icon-dropdown" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z" fill="#1C274C"/>
             </svg>
         </div>
         <div class="dropdown-options ${DROPDOWN_STYLES.options}" style="display: none;" data-component-id="${componentId.current}">
@@ -166,14 +172,14 @@ const SelectWord = forwardRef(
                   ?.map((e: any) => {
                     if (e?.label?.length > 100) {
                       return `
-                <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
+                <div class="option ${DROPDOWN_STYLES.option}" 
                      data-value="${e?.value}" data-component-id="${componentId.current}">
                   ${e.label}
                 </div>
               `
                     }
                     return `
-              <div class="option ${DROPDOWN_STYLES.option} ${e?.value === defaultAnswerValue ? 'bg-[#e5e5e5]' : ''}" 
+              <div class="option ${DROPDOWN_STYLES.option}" 
                    data-value="${e?.value}" data-component-id="${componentId.current}">
                 ${e?.label}
               </div>
@@ -283,41 +289,7 @@ const SelectWord = forwardRef(
               correct?.is_correct,
           ),
         )
-
-        // Xử lý hiện tooltip sẽ thêm vào mỗi select
-        const tooltip = document.createElement('div')
-        tooltip.classList.add('tooltip-container')
-        tooltip.setAttribute('data-component-id', componentId.current)
-        const answer =
-          data.answers?.find(
-            (answer: { id: string; value: string }) =>
-              !isUndefined(
-                defaultAnswer?.find(
-                  (item) => item.answer_position === index + 1,
-                )?.answer_id,
-              ) &&
-              !isNull(
-                defaultAnswer?.find(
-                  (item) => item.answer_position === index + 1,
-                )?.answer_id,
-              ) &&
-              answer?.id ===
-                defaultAnswer?.find(
-                  (item) => item.answer_position === index + 1,
-                )?.answer_id,
-          )?.answer || ''
-        const selectedAnswer = selectedValues[index]
-          ? data.answers?.find(
-              (answer: { id: string; value: string }) =>
-                answer?.id === selectedValues[index],
-            )?.answer
-          : ''
-        tooltip.innerHTML = `
-  <div class="tooltip-text ${(!!answer && answer.length > 18) || (!!selectedAnswer && selectedAnswer.length > 18) ? 'block' : 'hidden'}" data-component-id="${componentId.current}">${selectedAnswer || answer}</div>
-`
-        tooltip.appendChild(dropdownContainer)
-
-        element.replaceWith(tooltip)
+        element.parentNode?.replaceChild(dropdownContainer, element)
       })
 
       // Process correct answers
@@ -338,81 +310,44 @@ const SelectWord = forwardRef(
       }
       setQuestionContent(doc)
     }, [defaultAnswer, data])
-
     useEffect(() => {
-      const updateTooltips = () => {
-        const dropdowns = document.querySelectorAll(
-          `.sapp-select--question[data-component-id="${componentId.current}"]`,
+      if (!answerContent) return
+
+      const timer = setTimeout(() => {
+        // chọn đúng phần tử sau khi show correct
+        const selects = document.querySelectorAll(
+          '.sapp-select--question.sapp-select-confirmed',
         )
-        dropdowns.forEach((dropdown) => {
-          const dropdownIndex = Array.from(
-            document.querySelectorAll(
-              `.sapp-select--question[data-component-id="${componentId.current}"]`,
-            ),
-          ).indexOf(dropdown)
-          const tooltipContainer = dropdown.closest(
-            `.tooltip-container[data-component-id="${componentId.current}"]`,
-          )
-          if (tooltipContainer) {
-            const tooltipText = tooltipContainer.querySelector(
-              `.tooltip-text[data-component-id="${componentId.current}"]`,
+
+        const handleShowTooltip = (e: Event) => {
+          const el = e.currentTarget as HTMLElement
+          const span = el.querySelector('span.truncate') as HTMLElement | null
+          const text =
+            span?.getAttribute('data-full-text') ||
+            span?.textContent?.trim() ||
+            ''
+          if (text.length > 20 && span) showTooltip(span, text)
+        }
+
+        selects.forEach((el: Element) => {
+          el.addEventListener('mouseenter', handleShowTooltip as EventListener)
+          el.addEventListener('mouseleave', hideTooltip as EventListener)
+        })
+
+        // cleanup
+        return () => {
+          selects.forEach((el: Element) => {
+            el.removeEventListener(
+              'mouseenter',
+              handleShowTooltip as EventListener,
             )
-            if (tooltipText) {
-              const selectedValue = selectedValues[dropdownIndex]
-              if (selectedValue) {
-                const answer =
-                  data.answers?.find(
-                    (answer: { id: string; value: string }) =>
-                      answer?.id === selectedValue,
-                  )?.answer || ''
+            el.removeEventListener('mouseleave', hideTooltip as EventListener)
+          })
+        }
+      }, 100)
 
-                const isOpen = dropdown.getAttribute('data-open') === 'true'
-                if (!isOpen) {
-                  tooltipText.textContent = answer
-                  tooltipText.classList.toggle('block', answer.length > 18)
-                  tooltipText.classList.toggle('hidden', answer.length <= 18)
-                } else {
-                  tooltipText.classList.add('hidden')
-                  tooltipText.classList.remove('block')
-                }
-              }
-            }
-          }
-        })
-      }
-
-      // Tạo MutationObserver để theo dõi sự thay đổi của data-open
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (
-            mutation.type === 'attributes' &&
-            mutation.attributeName === 'data-open'
-          ) {
-            const target = mutation.target as HTMLElement
-            updateTooltips()
-          }
-        })
-      })
-
-      // Theo dõi tất cả các dropdown
-      const dropdowns = document.querySelectorAll(
-        `.sapp-select--question[data-component-id="${componentId.current}"]`,
-      )
-      dropdowns.forEach((dropdown) => {
-        observer.observe(dropdown, {
-          attributes: true,
-          attributeFilter: ['data-open'],
-        })
-      })
-
-      // Initial update
-      updateTooltips()
-
-      // Cleanup
-      return () => {
-        observer.disconnect()
-      }
-    }, [selectedValues, data.answers])
+      return () => clearTimeout(timer)
+    }, [answerContent])
 
     useEffect(() => {
       const setupDropdownListeners = () => {
@@ -421,96 +356,131 @@ const SelectWord = forwardRef(
         )
 
         dropdowns.forEach((dropdown) => {
-          if (!dropdown.getAttribute('data-listener-attached')) {
-            const selectedText = dropdown.querySelector(
-              `.selected-text[data-component-id="${componentId.current}"]`,
+          if (dropdown.getAttribute('data-listener-attached')) return
+
+          const selectedText = dropdown.querySelector(
+            `.selected-text[data-component-id="${componentId.current}"]`,
+          ) as HTMLElement | null
+          const options = dropdown.querySelector(
+            `.dropdown-options[data-component-id="${componentId.current}"]`,
+          ) as HTMLElement | null
+          const iconDropDown = dropdown.querySelector(
+            '.icon-dropdown',
+          ) as HTMLElement | null
+
+          if (!selectedText || !options) {
+            dropdown.setAttribute('data-listener-attached', 'true')
+            return
+          }
+
+          // unique id cho dropdown (nếu chưa có)
+          if (!dropdown.id)
+            dropdown.id = `${componentId.current}-${uniqueId('dd-')}`
+
+          // --- Hàm cleanup cho chính dropdown này (closure-scoped) ---
+          let cleaned = false
+          let localPortal: HTMLDivElement | null = null
+
+          const updatePosition = () => {
+            if (!localPortal) return
+            const rect = dropdown.getBoundingClientRect()
+            // position fixed => dùng rect (viewport coords)
+            localPortal.style.top = `${rect.bottom}px`
+            localPortal.style.left = `${rect.left}px`
+          }
+
+          function doCleanup() {
+            if (cleaned) return
+            cleaned = true
+
+            hideTooltip()
+
+            // Remove portal first
+            localPortal?.remove()
+            localPortal = null
+
+            const maybe = document.querySelector(
+              `.dropdown-options[data-portal-for="${dropdown.id}"]`,
+            ) as HTMLDivElement | null
+            maybe?.remove()
+
+            dropdown.setAttribute('data-open', 'false')
+            dropdown.classList.remove('border-gray-200')
+            iconDropDown?.classList.remove('rotate-180')
+
+            // Remove event listeners
+            window.removeEventListener('scroll', updatePosition, true)
+            window.removeEventListener('resize', updatePosition)
+            document.removeEventListener('click', handleClickOutside)
+          }
+
+          const handleClickOutside = (ev: MouseEvent) => {
+            const target = ev.target as Node
+            if (
+              localPortal &&
+              !localPortal.contains(target) &&
+              !dropdown.contains(target)
+            ) {
+              doCleanup()
+            }
+          }
+
+          // Toggle click
+          const onToggleClick = (e: MouseEvent) => {
+            hideTooltip()
+            e.stopPropagation()
+            if (dropdown.getAttribute('disabled')) return
+
+            const isNowOpen = !(dropdown.getAttribute('data-open') === 'true')
+
+            // Đóng tất cả dropdown khác + remove portal tương ứng
+            const allDropdowns = document.querySelectorAll(
+              `.sapp-select--question[data-component-id="${componentId.current}"]`,
             )
-            const options = dropdown.querySelector(
-              `.dropdown-options[data-component-id="${componentId.current}"]`,
-            ) as HTMLElement
-            const iconDropDown = dropdown.querySelector(
-              '.icon-dropdown',
-            ) as HTMLElement
+            allDropdowns.forEach((other) => {
+              if (other === dropdown) return
+              other.setAttribute('data-open', 'false')
+              other.classList.remove('border-gray-200')
+              const otherIcon = other.querySelector('.icon-dropdown')
+              otherIcon?.classList.remove('rotate-180')
 
-            // Toggle dropdown on click
-            selectedText?.addEventListener('click', () => {
-              if (!dropdown.getAttribute('disabled')) {
-                const isNowOpen = !(
-                  dropdown.getAttribute('data-open') === 'true'
-                )
-                dropdown.setAttribute('data-open', isNowOpen.toString())
-
-                if (options) {
-                  if (isNowOpen) {
-                    // Calculate dropdown position
-                    const dropdownRect = dropdown.getBoundingClientRect()
-                    const windowWidth = window.innerWidth
-                    const windowHeight = window.innerHeight
-                    const scrollTop =
-                      window.pageYOffset || document.documentElement.scrollTop
-                    const scrollLeft =
-                      window.pageXOffset || document.documentElement.scrollLeft
-
-                    // Default position
-                    options.style.top = `${dropdownRect.bottom + scrollTop + 4}px`
-                    options.style.left = `${dropdownRect.left + scrollLeft}px`
-
-                    // Adjust to prevent overflow
-                    if (dropdownRect.left + options.offsetWidth > windowWidth) {
-                      options.style.left = `${windowWidth - options.offsetWidth - 16}px`
-                    }
-                    if (dropdownRect.bottom + 300 + 4 > windowHeight) {
-                      options.style.top = `${dropdownRect.top + scrollTop - 300 - 4}px`
-                    }
-
-                    // Clear highlights
-                    options
-                      .querySelectorAll(
-                        `.option[data-component-id="${componentId.current}"]`,
-                      )
-                      .forEach((option) => {
-                        option.classList.remove('bg-gray-100', 'selected')
-                      })
-
-                    options.style.display = 'block'
-                  } else {
-                    options.style.display = 'none'
-                  }
-
-                  // Toggle UI styles
-                  dropdown.classList.toggle('border-primary', isNowOpen)
-                  iconDropDown?.classList.toggle('rotate-180', isNowOpen)
-                }
-              }
+              // remove portal specifically for that other dropdown
+              const otherPortal = document.querySelector(
+                `.dropdown-options[data-portal-for="${other.id}"]`,
+              ) as HTMLDivElement | null
+              if (otherPortal) otherPortal.remove()
             })
 
-            // Hover effect on options
-            options
-              ?.querySelectorAll(
-                `.option[data-component-id="${componentId.current}"]`,
-              )
-              .forEach((option) => {
-                option.addEventListener('mouseenter', () => {
-                  options
-                    .querySelectorAll(
-                      `.option[data-component-id="${componentId.current}"]`,
-                    )
-                    .forEach((opt) =>
-                      opt.classList.remove('bg-gray-100', 'selected'),
-                    )
-                  option.classList.add('bg-gray-100', 'selected')
-                })
-              })
+            dropdown.setAttribute('data-open', isNowOpen.toString())
 
-            // Option selection
-            options
-              ?.querySelectorAll(
-                `.option[data-component-id="${componentId.current}"]`,
-              )
-              .forEach((option) => {
-                option.addEventListener('click', () => {
-                  const value = option.getAttribute('data-value')
-                  const label = option.textContent?.trim()
+            if (isNowOpen && options) {
+              // mở lại => reset flag
+              cleaned = false
+
+              // Clone và append portal, gắn attribute data-portal-for để phân biệt
+              const rect = dropdown.getBoundingClientRect()
+              const cloned = options.cloneNode(true) as HTMLDivElement
+
+              cloned.style.position = 'fixed' // fixed để ko làm tăng body height
+              cloned.style.width = `${rect.width}px`
+              cloned.style.zIndex = '49'
+              cloned.style.display = 'block'
+              cloned.setAttribute('data-portal', 'true')
+              cloned.setAttribute('data-portal-for', dropdown.id)
+              document.body.appendChild(cloned)
+              localPortal = cloned
+
+              // initial pos + listeners
+              updatePosition()
+              window.addEventListener('scroll', updatePosition, true)
+              window.addEventListener('resize', updatePosition)
+              document.addEventListener('click', handleClickOutside)
+
+              // add option click listeners on the cloned portal only
+              cloned.querySelectorAll('.option').forEach((opt) => {
+                const onOptClick = () => {
+                  const value = opt.getAttribute('data-value')
+                  const label = opt.textContent?.trim()
 
                   if (value && label) {
                     const dropdownIndex = Array.from(
@@ -521,7 +491,6 @@ const SelectWord = forwardRef(
 
                     dropdown.setAttribute('data-value', value)
                     dropdown.setAttribute('data-text', label)
-
                     setSelectedValues((prev) => ({
                       ...prev,
                       [dropdownIndex]: value,
@@ -529,72 +498,103 @@ const SelectWord = forwardRef(
 
                     const span = selectedText?.querySelector('span')
                     if (span) {
+                      // lưu text đầy đủ vào attribute để tooltip luôn lấy được full text
+                      span.setAttribute('data-full-text', label)
+                      // hiển thị rút gọn ở UI nếu quá dài
                       span.textContent =
                         label.length > 50 ? label.slice(0, 50) + '...' : label
                     }
 
-                    // Highlight selected option
-                    options
-                      .querySelectorAll(
-                        `.option[data-component-id="${componentId.current}"]`,
-                      )
-                      .forEach((opt) => {
-                        opt.classList.toggle(
-                          'bg-gray-100',
-                          opt.getAttribute('data-value') === value,
-                        )
-                      })
-
-                    options.style.display = 'none'
-                    dropdown.setAttribute('data-open', 'false')
-                    iconDropDown?.classList.remove('rotate-180')
-                    dropdown.classList.remove('border-primary')
+                    doCleanup()
                   }
-                })
+                }
+                // use named listener so can remove later if needed
+                opt.addEventListener('click', onOptClick)
               })
 
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-              if (!dropdown.contains(e.target as Node)) {
-                dropdown.setAttribute('data-open', 'false')
-                if (options) {
-                  options.style.display = 'none'
+              dropdown.classList.add('border-gray-200')
+              iconDropDown?.classList.add('rotate-180')
+            } else {
+              doCleanup()
+            }
+          }
 
-                  // Restore selected option highlight
-                  const selectedValue = dropdown.getAttribute('data-value')
-                  options
-                    .querySelectorAll(
-                      `.option[data-component-id="${componentId.current}"]`,
-                    )
-                    .forEach((option) => {
-                      option.classList.toggle(
-                        'bg-gray-100',
-                        option.getAttribute('data-value') === selectedValue,
-                      )
-                    })
+          // attach toggle
+          selectedText.addEventListener('click', onToggleClick)
+
+          // Hover effect on inline options (keeps existing behavior)
+          options
+            ?.querySelectorAll(
+              `.option[data-component-id="${componentId.current}"]`,
+            )
+            .forEach((option) => {
+              option.addEventListener('mouseenter', (e) => {
+                // Highlight option
+                options
+                  .querySelectorAll(
+                    `.option[data-component-id="${componentId.current}"]`,
+                  )
+                  .forEach((opt) =>
+                    opt.classList.remove('bg-[#e5e7eb]', 'selected'),
+                  )
+                option.classList.add('bg-[#e5e7eb]', 'selected')
+
+                // Tooltip logic
+                const el = e.target as HTMLElement
+                const label =
+                  el.getAttribute('data-full-text') ||
+                  el.textContent?.trim() ||
+                  ''
+                if (label.length > 20) {
+                  showTooltip(e.target as HTMLElement, label)
                 }
-                iconDropDown?.classList.remove('rotate-180')
-                // dropdown.classList.remove('border-gray-200')
-                dropdown.classList.remove('border-primary')
-              }
+              })
+
+              option.addEventListener('mouseleave', hideTooltip)
             })
 
-            dropdown.setAttribute('data-listener-attached', 'true')
-          }
+          dropdown.setAttribute('data-listener-attached', 'true')
         })
       }
 
-      // Observe new dropdowns being added to the DOM
       const observer = new MutationObserver(setupDropdownListeners)
       observer.observe(document.body, { childList: true, subtree: true })
 
-      // Initial setup
+      // initial
       setupDropdownListeners()
+      setTimeout(() => {
+        const selectedTextList = document.querySelectorAll(
+          `.sapp-select--question .selected-text[data-component-id="${componentId.current}"] span`,
+        )
+
+        selectedTextList.forEach((span) => {
+          const handleShowTooltip = (e: Event) => {
+            const textEl = e.target as HTMLElement
+            const dropdown = textEl.closest('.sapp-select--question')
+            const selectedTextEl = dropdown?.querySelector(
+              '.selected-text',
+            ) as HTMLElement
+
+            const full =
+              (textEl.getAttribute && textEl.getAttribute('data-full-text')) ||
+              textEl.textContent?.trim() ||
+              ''
+            if (full.length > 20 && selectedTextEl) {
+              showTooltip(selectedTextEl, full)
+            }
+          }
+          // cleanup cũ trước khi thêm mới
+          span.removeEventListener('mouseenter', handleShowTooltip)
+          span.removeEventListener('mouseleave', hideTooltip)
+
+          span.addEventListener('mouseenter', handleShowTooltip)
+          span.addEventListener('mouseleave', hideTooltip)
+        })
+      }, 100)
 
       return () => observer.disconnect()
     }, [data, defaultAnswer])
 
-    // handle phần hiển thị tooltip khi lựa chọn câu trả lời
     useEffect(() => {
       const setupSelectListeners = () => {
         const selectList = document.querySelectorAll(

@@ -10371,10 +10371,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.5.5:
-  version "1.5.5"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.5.tgz#ee1a323c3b1c9b83bb6523f90eb0eefd7a4d7805"
-  integrity sha512-ajb8J0QwhhW9B5jrqGlPe/jyBlnv4bHDyMHUnK4yD3Pqb/9irY/5E9egj7MBb2XetGmaigY7nq9KGfUrfl/OrA==
+preview-part@1.5.8:
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.8.tgz#8af3864945a2229da7a85fd32fdfc5f32400a45d"
+  integrity sha512-Od0zeQJcNnWxzBqE2aMPydLzdzvtvg8xQDSTJ0b9IQiw+JlJ6Xm3+iU2JoFS65Buy5En6W28fPsOxuY/gxMurA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -11775,10 +11775,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.9.tgz#103a344762b30931961100f8d8c77a6d0e3e523b"
-  integrity sha512-La59jBAJ0gojOmoOLYpy1A6eGhxHPwPYamvCs/j3BLQ78sYnGTHjmETeEAYfDvBSoS8IudTHmCiAiwEWfoUByg==
+sapp-notification@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.8.tgz#f745d1eb28d8f08be472dc3d7a173c8a9f22dd39"
+  integrity sha512-6vjQC9RaaPVcgpMwd9vIwRAggF4d2eUZi4DuIZnqpA0+CJRxY/bYEUPxfyMMqL17Fsfy5xLJHtgjQiovckOoBw==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
