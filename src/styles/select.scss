@@ -242,33 +242,18 @@
 }
 
 .tooltip-modal {
-  position: fixed;
-  z-index: 99999;
-  background-color: #404041;
-  color: #fff;
-  font-size: 14px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  max-width: 198px;
-  white-space: normal;
-  line-height: 22px;
-  pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  @apply pointer-events-none fixed z-[99999] max-w-[198px] whitespace-normal rounded-md bg-secondary px-2.5 
+    py-1.5 text-sm leading-[22px] text-white shadow-lg;
+
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
-}
 
-.tooltip-modal.show {
-  opacity: 1;
-}
+  &.show {
+    opacity: 1;
+  }
 
-.tooltip-modal::after {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: 20px;
-  transform: translateX(-50%) rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background-color: #404041;
+  &::after {
+    content: '';
+    @apply absolute -top-[5px] left-5 h-[10px] w-[10px] rotate-45 bg-secondary;
+  }
 }
