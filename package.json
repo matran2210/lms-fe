@@ -92,7 +92,7 @@
     "react-use-draggable-scroll": "^0.4.7",
     "recharts": "^3.2.1",
     "sapp-common-package": "^1.4.1",
-    "sapp-notification": "^1.1.0",
+    "sapp-notification": "^1.0.10",
     "sapp-preview-part-test": "1.4.7-test",
     "sass": "^1.53.0",
     "sharp": "^0.30.7",
