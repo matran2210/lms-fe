@@ -1,7 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
-import { Divider } from 'antd'
-import clsx from 'clsx'
 import { isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
@@ -49,15 +47,13 @@ interface IProps {
       answer_position: number
     }>,
   ) => void
-  correctAnswerClass?: string
-  explainClassname?: string
 }
 
 // Constants
-const baseBox = 'border rounded border-gray-300 rounded-lg'
+const baseBox = 'border rounded border-gray-15 rounded-lg'
 const sizeBox = 'w-[200px] min-w-[200px] max-w-[400px]'
 const DROPDOWN_STYLES = {
-  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer bg-white my-1`,
+  container: `sapp-select--question relative inline-block ${sizeBox} ${baseBox} cursor-pointer my-1`,
   selectedText: 'px-3 py-2 flex items-center justify-between',
   options: `-translate-x-px z-[9] ${sizeBox} bg-white ${baseBox} shadow-lg max-h-[300px] overflow-y-auto p-2`,
   option:
@@ -81,8 +77,6 @@ const SelectWord = forwardRef(
       isHideExhibit = true,
       exhibitText,
       onChange,
-      correctAnswerClass,
-      explainClassname,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -155,7 +149,7 @@ const SelectWord = forwardRef(
 
       const disabledClass = !corrects?.length
         ? ''
-        : 'cursor-not-allowed pointer-events-none !justify-center'
+        : 'cursor-not-allowed pointer-events-none'
       return `
         <div class="selected-text ${DROPDOWN_STYLES.selectedText} ${disabledClass}" data-component-id="${componentId.current}">
             <span class="truncate" data-full-text="${selectedAnswer?.label || ''}">
@@ -270,8 +264,6 @@ const SelectWord = forwardRef(
           dropdownContainer?.classList?.add(
             isCorrect || isSelfReflection ? '!border-success' : '!border-error',
             'sapp-select-confirmed',
-            '!w-fit',
-            '!min-w-fit',
           )
           dropdownContainer?.setAttribute('disabled', 'true')
         }
@@ -300,7 +292,7 @@ const SelectWord = forwardRef(
           )
           if (correctAnswer) {
             element.outerHTML = `
-                <span id="${element?.id}" class="text-base font-semibold text-success">
+                <span id="${element?.id}" class="font-semibold text-state-success">
                   ${correctAnswer?.answer}
                 </span>
             `
@@ -640,7 +632,7 @@ const SelectWord = forwardRef(
                   {data?.question_topic?.exhibits?.length || 0})
                 </div>
                 <div className="ml-4">
-                  <span className="text-error">* </span>
+                  <span className="text-state-error">* </span>
                   <span className="text-gray-1">Click to view</span>
                 </div>
               </div>
@@ -711,28 +703,25 @@ const SelectWord = forwardRef(
         {/* Correct Answer Section */}
         {answerContent && (
           <>
-            <Divider className="my-8" />
-            <div className={clsx('pt-7.625', correctAnswerClass)}>
-              <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
-              <EditorReader
-                className="questions mt-2"
-                text_editor_content={
-                  answerContent?.documentElement?.querySelector('body')
-                    ?.innerHTML || ''
-                }
-              />
+            <div className="pt-[18px] text-base font-semibold">
+              Correct Answer
             </div>
+            <EditorReader
+              className="questions mt-2"
+              text_editor_content={
+                answerContent?.documentElement?.querySelector('body')
+                  ?.innerHTML || ''
+              }
+            />
           </>
         )}
 
+        {/* Solution Section */}
         {solution && (
-          <>
-            <Divider className="my-8" />
-            <div className={clsx(explainClassname)}>
-              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
-              <EditorReader className="mt-4" text_editor_content={solution} />
-            </div>
-          </>
+          <div className="mt-6 bg-gray-100 p-6">
+            <SappTitleSolution title={MY_COURSES.explanations} />
+            <EditorReader className="mt-4" text_editor_content={solution} />
+          </div>
         )}
       </div>
     )
