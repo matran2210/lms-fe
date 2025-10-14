@@ -11,6 +11,7 @@ import {
   loadMoreNotification,
   markAllNotifications,
   updateStatusAll,
+  clearNotifications,
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 export const useNotification = () => {
@@ -39,6 +40,8 @@ export const useNotification = () => {
   const refreshNotification = (isRefresh = false) => {
     const getNotifications = async (params: Object) => {
       try {
+        // Clear notifications trước khi load mới
+        dispatch(clearNotifications())
         isRefresh && (await dispatch(getCountUnRead()))
         await dispatch(getNotification(params))
       } catch (error) {}
