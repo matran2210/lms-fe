@@ -205,8 +205,8 @@ export default function MenuItem({
   const isActivity = router?.query?.activityId
   const isInCourse =
     router?.query?.courseId ||
-    router?.query?.activityId ||
-    router?.query?.course_section_id
+    (router?.query?.activityId && name !== TitleSidebar.EXAM) ||
+    (router?.query?.course_section_id && name !== TitleSidebar.EXAM)
   const isInMyProfile = router.asPath === PageLink.MYPROFILE
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info
