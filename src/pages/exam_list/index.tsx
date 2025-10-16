@@ -150,9 +150,7 @@ const ExamInformation = () => {
       align: 'center',
       render: (record) => (
         <NameNoActionCell
-          dataColumn={
-            record?.class?.course?.examination_subject?.examination?.name
-          }
+          dataColumn={record?.examination_subject?.examination?.name}
           isCenter
         />
       ),
