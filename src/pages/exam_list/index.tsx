@@ -266,7 +266,7 @@ const ExamInformation = () => {
           )}
         </div>
       </div>
-      {/* {currentRow && isDrawerOpen && currentRow?.class?.id && ( */}
+
       <ExaminationInfo
         open={isDrawerOpen}
         setOpen={setIsDrawerOpen}
@@ -276,7 +276,6 @@ const ExamInformation = () => {
         isEditProps
         isExamList
       />
-      {/* )} */}
     </Layout>
   )
 }
