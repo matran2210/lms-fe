@@ -145,7 +145,7 @@ const ModalResizeable: React.FC<ModalResizeableProps> = ({
 
   const renderContent = () => {
     return (
-      <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden">
+      <div className="pointer-events-none fixed inset-0 z-[999] overflow-hidden">
         <Rnd
           size={{ width: size.width, height: size.height }}
           position={modalPosition}
