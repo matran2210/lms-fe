@@ -1,7 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
-import { Divider } from 'antd'
-import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -263,7 +262,7 @@ const AddWordPreview = forwardRef(
         />
         {answerContent && (
           <div className={correctAnswerClass}>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
               className="questions mt-4"
@@ -276,7 +275,7 @@ const AddWordPreview = forwardRef(
         )}
         {solution && (
           <div className={explainClassname}>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

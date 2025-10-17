@@ -1,4 +1,5 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -464,7 +465,7 @@ const MatchingQuestion = forwardRef(
               })}
             </div>
             <div className={correctAnswerClass}>
-              <Divider className="my-8 bg-gray-300" />
+              <SappDivider />
               <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
               <div className="mt-4 flex flex-col gap-y-5">
                 {data?.question_matchings?.map((e: any, index: number) => {
@@ -496,7 +497,7 @@ const MatchingQuestion = forwardRef(
         )}
         {solution && (
           <div className={explainClassname}>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4 " text_editor_content={solution} />
           </div>

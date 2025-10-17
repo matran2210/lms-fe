@@ -22,10 +22,10 @@ import { IExhibitData } from 'src/type/exhibit'
 import CustomEdge from './CustomEdge'
 import { CustomNode } from './CustomNode'
 import CustomFlow from './CustomFlow'
-import { Divider } from 'antd'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { Grid } from 'antd'
+import SappDivider from '@components/common/Divider/Divider'
 
 interface IProps {
   data: any
@@ -625,7 +625,7 @@ const MatchQuiz = forwardRef(
           </div>
           {!!corrects && !!correctNodes?.length && (
             <>
-              <Divider className="my-8 bg-gray-300" />
+              <SappDivider />
               <div className={clsx(correctAnswerClass)}>
                 <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
                 <div
@@ -654,7 +654,7 @@ const MatchQuiz = forwardRef(
 
         {solution && (
           <>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />

@@ -1,5 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormTextField from '@components/base/textfield/HookFormTextField'
+import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'
 import clsx from 'clsx'
@@ -236,7 +237,7 @@ const NewFilltext = forwardRef(
 
         {answerContent && (
           <>
-            <Divider className="my-8" />
+            <SappDivider />
             <div className="mt-[38px] text-base font-semibold">
               Correct Answer:
             </div>
@@ -252,7 +253,7 @@ const NewFilltext = forwardRef(
 
         {solution && (
           <>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />

@@ -13,7 +13,7 @@ import React, {
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
-import { Divider } from 'antd'
+import SappDivider from '@components/common/Divider/Divider'
 interface IProps {
   data: any
   action?: any
@@ -370,7 +370,7 @@ const SelectWord = forwardRef(
         />
         {answerContent && (
           <div className={correctAnswerClass}>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
             <EditorReader
               className="questions mt-2"
@@ -383,7 +383,7 @@ const SelectWord = forwardRef(
         )}
         {solution && (
           <div className={explainClassname}>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

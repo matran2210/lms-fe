@@ -9,6 +9,7 @@ import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import WarningSection from './WarningSection'
 import clsx from 'clsx'
+import SappDivider from '@components/common/Divider/Divider'
 export type IPreviewProp = {
   data: any
   control: any
@@ -166,7 +167,7 @@ const OneChoiceQuestion = ({
                 )
               })}
             </div>
-            <div className="my-6 border border-b-[#D1D5DB]" />
+            <div className="my-6 border border-gray-2" />
           </>
         )}
       <div
@@ -187,7 +188,7 @@ const OneChoiceQuestion = ({
       </div>
       {solution && (
         <>
-          <Divider className="my-8 bg-gray-300" />
+          <SappDivider />
           <div className={clsx('mt-6', explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.solution}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />

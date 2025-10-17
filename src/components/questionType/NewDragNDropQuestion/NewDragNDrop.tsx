@@ -9,7 +9,7 @@ import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import clsx from 'clsx'
 import CorrectAnswer from './CorrectAnswer'
-import { Divider } from 'antd'
+import SappDivider from '@components/common/Divider/Divider'
 
 interface Answer {
   id: string
@@ -361,7 +361,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         {!isDisabled && <BankArea items={items} />}
         {corrects && (
           <>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <CorrectAnswer
               questionContent={data.question_content}
               corrects={corrects}
@@ -370,7 +370,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         )}
         {solution && (
           <>
-            <Divider className="my-8 bg-gray-300" />
+            <SappDivider />
             <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
