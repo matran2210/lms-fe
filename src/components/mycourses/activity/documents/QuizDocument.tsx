@@ -817,6 +817,7 @@ const QuizDocument = ({
     setOpenGradedReport(false)
     setIsFinishQuiz(false)
   }
+
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -964,11 +965,17 @@ const QuizDocument = ({
               flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
             })}
           >
-            {[
-              QUESTION_TYPES.TRUE_FALSE,
-              QUESTION_TYPES.ONE_CHOICE,
-              QUESTION_TYPES.MULTIPLE_CHOICE,
-            ].includes(activeQuestion?.qType) &&
+            {gradeStatus &&
+              ![
+                GRADE_STATUS.AWAITING_GRADING,
+                GRADE_STATUS.FINISHED_GRADING,
+              ].includes(gradeStatus) &&
+              activeQuestion?.qType &&
+              [
+                QUESTION_TYPES.TRUE_FALSE,
+                QUESTION_TYPES.ONE_CHOICE,
+                QUESTION_TYPES.MULTIPLE_CHOICE,
+              ].includes(activeQuestion.qType) &&
               !isQuestionConfirmed && (
                 <ButtonSecondary
                   className="!px-4 !py-2 !text-sm"
