@@ -75,7 +75,9 @@ const SappBreadCrumbs = ({
                       >
                         <span
                           className={clsx(
-                            'cursor-pointer transition-all duration-300 hover:text-primary',
+                            'transition-all duration-300',
+                            !breadcrumb?.disable &&
+                              'cursor-pointer hover:text-primary',
                           )}
                         >
                           {titleDisplay}
