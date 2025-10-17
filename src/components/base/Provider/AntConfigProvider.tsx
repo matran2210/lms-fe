@@ -42,6 +42,12 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
         },
       }}
     >
+      <style>
+        {`
+          .ant-modal-root .ant-modal-mask { z-index: 99999 !important; }
+          .ant-modal-root .ant-modal { z-index: 99999 !important; }
+        `}
+      </style>
       {children}
     </ConfigProvider>
   )
