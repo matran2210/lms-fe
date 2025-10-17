@@ -105,6 +105,8 @@ const WeeklyReport = () => {
   const hasCurrentActivities =
     report?.activities && report?.activities?.current > 0
   const hasDiffLearningTimes = report?.times && report?.times?.diff > 0
+  const actualTime =
+    (report?.times?.current ?? 0) - (report?.times?.diff ?? 0) > 0
 
   return (
     <>
@@ -169,9 +171,9 @@ const WeeklyReport = () => {
             </div>
             <div className="flex justify-between">
               <div
-                className={`text-sm md:text-base ${hasCurrentActivities ? 'text-error' : 'text-gray-400'}`}
+                className={`text-sm md:text-base ${actualTime ? 'text-success' : 'text-error'}`}
               >
-                {hasCurrentActivities
+                {actualTime
                   ? 'More minutes to outperform last week!'
                   : 'You haven’t have any activity yet! '}
               </div>
