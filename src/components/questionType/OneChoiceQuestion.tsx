@@ -166,7 +166,7 @@ const OneChoiceQuestion = ({
                 )
               })}
             </div>
-            <div className="my-6 border border-b-[#DCDDDD]" />
+            <div className="my-6 border border-b-[#D1D5DB]" />
           </>
         )}
       <div
@@ -187,8 +187,8 @@ const OneChoiceQuestion = ({
       </div>
       {solution && (
         <>
-          <Divider className="my-8" />
-          <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
+          <Divider className="my-8 bg-gray-300" />
+          <div className={clsx('mt-6', explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.solution}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>

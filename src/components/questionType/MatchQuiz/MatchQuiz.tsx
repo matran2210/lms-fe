@@ -625,7 +625,7 @@ const MatchQuiz = forwardRef(
           </div>
           {!!corrects && !!correctNodes?.length && (
             <>
-              <Divider className="my-8" />
+              <Divider className="my-8 bg-gray-300" />
               <div className={clsx(correctAnswerClass)}>
                 <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
                 <div
@@ -654,8 +654,8 @@ const MatchQuiz = forwardRef(
 
         {solution && (
           <>
-            <Divider className="my-8" />
-            <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <Divider className="my-8 bg-gray-300" />
+            <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>

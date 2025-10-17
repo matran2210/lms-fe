@@ -361,7 +361,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         {!isDisabled && <BankArea items={items} />}
         {corrects && (
           <>
-            <Divider className="my-8" />
+            <Divider className="my-8 bg-gray-300" />
             <CorrectAnswer
               questionContent={data.question_content}
               corrects={corrects}
@@ -370,8 +370,8 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
         )}
         {solution && (
           <>
-            <Divider className="my-8" />
-            <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <Divider className="my-8 bg-gray-300" />
+            <div className={explainClassname}>
               <SappTitleSolution title={`${MY_COURSES.solution}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>

@@ -172,8 +172,8 @@ const MultiChoiceQuestion = ({
       </div>
 
       {solution && (
-        <div className={clsx('mt-6 bg-gray-4 p-6', explainClassname)}>
-          <Divider className="my-8" />
+        <div className={explainClassname}>
+          <Divider className="my-8 bg-gray-300" />
           <SappTitleSolution title={`${MY_COURSES.solution}:`} />
           <EditorReader className="mt-4" text_editor_content={solution} />
         </div>

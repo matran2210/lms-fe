@@ -13,6 +13,7 @@ import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import { useTooltipModal } from 'src/hooks/useTooltipModal'
+import { Divider } from 'antd'
 
 // Types
 interface IProps {
@@ -703,9 +704,8 @@ const SelectWord = forwardRef(
         {/* Correct Answer Section */}
         {answerContent && (
           <>
-            <div className="pt-[18px] text-base font-semibold">
-              Correct Answer
-            </div>
+            <Divider className="my-8 bg-gray-300" />
+            <div className="text-base font-semibold">Correct Answer</div>
             <EditorReader
               className="questions mt-2"
               text_editor_content={
@@ -718,10 +718,13 @@ const SelectWord = forwardRef(
 
         {/* Solution Section */}
         {solution && (
-          <div className="mt-6 bg-gray-100 p-6">
-            <SappTitleSolution title={MY_COURSES.explanations} />
-            <EditorReader className="mt-4" text_editor_content={solution} />
-          </div>
+          <>
+            <Divider className="my-8 bg-gray-300" />
+            <div className="mt-6">
+              <SappTitleSolution title={MY_COURSES.explanations} />
+              <EditorReader className="mt-4" text_editor_content={solution} />
+            </div>
+          </>
         )}
       </div>
     )
