@@ -80,7 +80,10 @@ const TableListQuizInActivity = ({
       align: 'center',
       render: (record) => (
         <div>
-          {getTimeFromInput(record?.attempts?.[0]?.total_attempt_time) ?? '-'}
+          {getTimeFromInput(
+            record?.attempts?.[0]?.total_attempt_time,
+            'seconds',
+          ) ?? '-'}
         </div>
       ),
     },
