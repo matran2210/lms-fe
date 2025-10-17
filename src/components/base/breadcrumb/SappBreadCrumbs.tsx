@@ -8,12 +8,10 @@ const SappBreadCrumbs = ({
   breadcrumbs = [],
   isTeacher = true,
   className,
-  isActive = true,
 }: {
   breadcrumbs?: ITabs[]
   isTeacher?: boolean
   className?: string
-  isActive?: boolean
 }) => {
   const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
   const lastIndex = breadcrumbs.length - 1
