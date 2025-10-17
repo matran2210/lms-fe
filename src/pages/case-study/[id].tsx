@@ -1462,26 +1462,22 @@ const CaseStudyDetail = ({ questions }: any) => {
                     handleCloseScratchPad={() => handleCloseScratchPad(e)}
                     position="center left"
                     header={
-                      <div className="relative my-3 px-6">
-                        <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
-                          <div className="truncate">
-                            <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
-                              (i ?? 0) + 1
-                            }: ${exhibitsDes?.name}`}</span>
-                          </div>
+                      <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                        <div className="text-sm font-semibold text-gray-800">
+                          {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
                         </div>
                         <button
-                          className="absolute right-6 top-0"
+                          className="text-icon"
                           onClick={() => handleCloseScratchPad(e)}
                         >
-                          <CircleCloseIcon />
+                          <CloseModalIcon />
                         </button>
                       </div>
                     }
                     modalIndex={i}
                     draggableFull
                   >
-                    <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                    <div className="h-full bg-white px-4 py-3">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
                         className="w-full"
