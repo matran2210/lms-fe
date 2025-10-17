@@ -8,10 +8,12 @@ const SappBreadCrumbs = ({
   breadcrumbs = [],
   isTeacher = true,
   className,
+  isActive = true,
 }: {
   breadcrumbs?: ITabs[]
   isTeacher?: boolean
   className?: string
+  isActive?: boolean
 }) => {
   const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
   const lastIndex = breadcrumbs.length - 1
@@ -75,7 +77,9 @@ const SappBreadCrumbs = ({
                       >
                         <span
                           className={clsx(
-                            'cursor-pointer transition-all duration-300 hover:text-primary',
+                            'transition-all duration-300',
+                            !breadcrumb?.disable &&
+                              'cursor-pointer hover:text-primary',
                           )}
                         >
                           {titleDisplay}
