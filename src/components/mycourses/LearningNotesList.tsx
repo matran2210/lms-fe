@@ -1,10 +1,4 @@
-import {
-  DeleteIcon,
-  EditIcon,
-  EllipsisIconV2,
-  PencilV2Icon,
-  ViewIcon,
-} from '@assets/icons'
+import { DeleteIcon, EllipsisIconV2, PencilV2Icon } from '@assets/icons'
 import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNotLink'
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
@@ -34,7 +28,6 @@ import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 import {
   ICourseSectionNoteItem,
   INotesListResponse,
-  ICourseSectionPathItem,
 } from 'src/type/course/activity'
 import NoDataV2 from 'src/common/NodataV2'
 import SortBy from '@components/common/SortBy'
@@ -42,9 +35,9 @@ import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
-import NoData from 'src/common/NoData'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
+import { PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -83,12 +76,16 @@ const LearningNotesList = () => {
     INotesListResponse | undefined
   >()
   const router = useRouter()
+  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
+  const isCoursePartDetail = router.pathname.includes('/section')
+  const isActivityDetail = router.pathname.includes('/activity')
   const courseId = router.query.courseId
   const queryId = router.query.id
   const activityId = router.query.activityId
+  const chapterId = router.query?.chapter
+  const unitId = router.query?.unit
   const courseSectionId = router.query.course_section_id
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
-  const [firstLoadActity, setFirstLoadActity] = useState<boolean>(false)
   const [expandedNotes, setExpandedNotes] = useState<string[]>([])
   const [noteHeights, setNoteHeights] = useState<{
     [key: string]: { full: number; collapsed: number }
@@ -181,70 +178,55 @@ const LearningNotesList = () => {
   useEffect(() => {
     const objectParams = cleanParamsAPI({
       class_id: courseId || queryId,
-      course_section_id: activityId || courseSectionId || '',
+      course_section_id:
+        paramsCourseSectionId ||
+        activityId ||
+        chapterId ||
+        courseSectionId ||
+        '',
     })
+
     if (
-      router?.query?.activityId ||
-      (router?.query?.course_section_id && notesListStatus)
-    ) {
-      setLoading(true)
-      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
-        .then((res) => {
-          setNotesListData(res?.data)
-          const course_section_path = res?.data?.notes?.[0]?.course_section_path
+      !(objectParams.course_section_id || objectParams.class_id) ||
+      !notesListStatus
+    )
+      return
 
-          if (res && course_section_path?.length > 0) {
-            methods.setValue(
-              'section',
-              defaultValueActivity(course_section_path, 'PART')?.value,
-            )
-            methods.setValue(
-              'subsection',
-              defaultValueActivity(course_section_path, 'CHAPTER')?.value,
-            )
-            // Hiệu ứng fill data vào ô select
-            setTimeout(() => {
-              methods.setValue(
-                'unit',
-                defaultValueActivity(course_section_path, 'UNIT')?.value,
-              )
-            }, 500)
-            setTimeout(() => {
-              methods.setValue(
-                'activity',
-                defaultValueActivity(course_section_path, 'ACTIVITY')?.value,
-              )
-              setFirstLoadActity(true)
-            }, 1000)
-          }
-        })
-        .catch((err) => {})
-        .finally(() => {
-          setTimeout(() => {
-            setLoading(false)
-          }, 500)
-        })
-    } else if (notesListStatus) {
-      setFirstLoadActity(true)
-    }
-  }, [notesListStatus])
+    setLoading(true)
 
-  // Lấy danh sách notes khi có sự thay đổi trong notesListStatus, selectedSection, selectedSubsection, selectedUnit, selectedActivity
-  useEffect(() => {
-    if (notesListStatus && (courseId || queryId) && firstLoadActity) {
-      setLoading(true)
-      CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
-        .then((res) => {
-          setNotesListData(res?.data)
+    CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
+      .then((res) => {
+        setNotesListData(res?.data)
+        if (isCourseDetail || paramsCourseSectionId) return
+
+        // gom logic setValue vào 1 chỗ
+        const fieldMap: Record<string, any> = {
+          section: courseSectionId,
+          subsection: chapterId,
+          unit: unitId,
+          activity: activityId,
+        }
+
+        // tùy màn hình mà chọn field cần set
+        const fieldsToSet = isActivityDetail
+          ? ['section', 'subsection', 'unit', 'activity']
+          : isCoursePartDetail
+            ? ['section', 'subsection']
+            : []
+
+        fieldsToSet.forEach((field) => {
+          const value = fieldMap[field]
+          methods.setValue(
+            field as 'section' | 'subsection' | 'unit' | 'activity',
+            Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
+          )
         })
-        .catch((err) => {})
-        .finally(() => {
-          setTimeout(() => {
-            setLoading(false)
-          }, 500)
-        })
-    }
-  }, [notesListStatus, paramsCourseSectionId, firstLoadActity])
+      })
+      .catch(() => {})
+      .finally(() => {
+        setTimeout(() => setLoading(false), 500)
+      })
+  }, [notesListStatus, router, paramsCourseSectionId])
 
   // Attach a scroll event listener to fetch more data when scrolling to the bottom
   useEffect(() => {
@@ -273,17 +255,6 @@ const LearningNotesList = () => {
     dispatch(resetNotesList())
     resetFormFields(['section', 'subsection', 'unit', 'activity'])
     setIsPageStateVariables(true)
-    setFirstLoadActity(false)
-  }
-
-  const defaultValueActivity = (
-    course_section_path: ICourseSectionPathItem[],
-    type: string,
-  ) => {
-    const value = course_section_path.find((item) => item?.type === type)
-    if (!value) return { value: '', label: '' }
-    const responce = { value: value.id, label: value.name }
-    return responce
   }
 
   const fetchData = async (params?: Object) => {

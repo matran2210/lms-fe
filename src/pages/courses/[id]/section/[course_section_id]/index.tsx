@@ -220,6 +220,11 @@ const CoursePartDetail = () => {
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
+        query: {
+          chapter: router.query?.chapter,
+          unit: chapter?.parent_id,
+          course_section_id: router.query?.course_section_id,
+        },
       })
     }
   }
@@ -519,7 +524,7 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
+        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
