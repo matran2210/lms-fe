@@ -162,6 +162,11 @@ body *::-webkit-scrollbar-thumb:hover {
   }
 }
 
+img.Wirisformula {
+  display: inline-block;
+  margin: 0 2px;
+}
+
 .sapp-questions {
   p {
     @apply m-0 break-words text-gray-800;
