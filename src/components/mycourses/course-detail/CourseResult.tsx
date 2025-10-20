@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
 import { IQuizResultList } from 'src/type'
 import { Select } from 'antd'
-import clsx from 'clsx'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
 
 interface IQuizAttempt {
@@ -65,6 +64,7 @@ interface IProps {
     >
   >
   isTeacher: boolean
+  setLabelResult: Dispatch<SetStateAction<string>>
 }
 
 const ResultCourse = ({
@@ -74,6 +74,7 @@ const ResultCourse = ({
   setSelectedResult,
   setOpenReport,
   isTeacher,
+  setLabelResult,
 }: IProps) => {
   const [resultList, setResultList] = useState<IQuizResultList>({
     metadata: {
@@ -129,6 +130,7 @@ const ResultCourse = ({
             index === self.findIndex((t) => t.id === item.id),
         ),
       }))
+      setLabelResult(resultList?.data?.[0]?.name)
     }
   }
 

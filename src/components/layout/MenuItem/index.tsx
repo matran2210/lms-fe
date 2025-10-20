@@ -15,10 +15,6 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 import { LANG_SIGNIN } from 'src/constants/lang'
 import { isEmpty } from 'lodash'
-import {
-  getCountUnRead,
-  loadMoreNotification,
-} from 'src/redux/slice/Notification/Notification'
 import SappNotificationComponent from 'sapp-notification'
 import { useNotification } from 'src/hooks/useNotification'
 import { Divider } from 'antd'
@@ -70,6 +66,7 @@ export default function MenuItem({
     notificationUnread,
   } = useNotification()
 
+  const isLoading = useAppSelector((state) => state.notificationReducer.loading)
   const tabs = [
     {
       id: 1,
@@ -87,8 +84,6 @@ export default function MenuItem({
   const router = useRouter()
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
-  const isFetching = useRef(false)
-  const pagination = useAppSelector((state) => state.notificationReducer.meta)
 
   const onClick = () => {
     toggleExpanded((prev) => !prev)
@@ -210,58 +205,12 @@ export default function MenuItem({
   const isActivity = router?.query?.activityId
   const isInCourse =
     router?.query?.courseId ||
-    router?.query?.activityId ||
-    router?.query?.course_section_id
+    (router?.query?.activityId && name !== TitleSidebar.EXAM) ||
+    (router?.query?.course_section_id && name !== TitleSidebar.EXAM)
   const isInMyProfile = router.asPath === PageLink.MYPROFILE
   const checkIsHiddenDashboard = (info: any) => {
     return name == TitleSidebar.DASHBOARD && !info
   }
-  const countNotificationsUnRead = async () => {
-    try {
-      await dispatch(getCountUnRead())
-    } catch (error) {}
-  }
-
-  useEffect(() => {
-    if (openNotification) refreshNotification(false)
-  }, [selectedTab])
-
-  useEffect(() => {
-    const handleScroll = async () => {
-      const scrollEl = scrollRef.current
-      if (scrollEl) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollEl
-        if (scrollTop + clientHeight + 200 >= scrollHeight) {
-          const { page_index, page_size, total_pages } = pagination
-          // Kiểm tra đã load hết chưa
-          if (page_index >= total_pages || isFetching.current) return
-          try {
-            isFetching.current = true
-            await dispatch(
-              loadMoreNotification({
-                page_index: page_index + 1,
-                page_size,
-                ...(selectedTab === 2 && {
-                  is_read: false,
-                }),
-              }),
-            )
-            await countNotificationsUnRead()
-          } catch (err) {
-          } finally {
-            isFetching.current = false
-          }
-        }
-      }
-    }
-
-    const scrollEl = scrollRef.current
-    scrollEl?.addEventListener('scroll', handleScroll)
-
-    return () => {
-      scrollEl?.removeEventListener('scroll', handleScroll)
-    }
-  }, [pagination])
 
   const animationClass = clsx(
     `before-icon w-6 h-6 hidden group-hover/menuItem:block`,
@@ -686,6 +635,7 @@ export default function MenuItem({
         scrollRef={scrollRef}
         handleViewNotification={(link) => handleViewNotification(link)}
         isDesktopView={isDesktopView}
+        isLoading={isLoading}
       />
     </>
   )

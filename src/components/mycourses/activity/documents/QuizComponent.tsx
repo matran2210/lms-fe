@@ -743,8 +743,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
-              explainClassname="!mt-8 !p-0 !bg-transparent"
-              correctAnswerClass="!mt-8 !pt-0"
             />
           )
 

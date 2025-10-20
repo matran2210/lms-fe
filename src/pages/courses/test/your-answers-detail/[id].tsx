@@ -7,6 +7,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
 import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
+import { GRADE_STATUS } from 'src/constants'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -42,9 +43,14 @@ const TestResultDetail = () => {
       disable: false,
     },
     {
-      link: linkTest,
+      link:
+        questions?.quizAttempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
+          ? '#'
+          : linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
-      disable: true,
+      disable:
+        questions?.quizAttempt?.grading_status ===
+        GRADE_STATUS.AWAITING_GRADING,
     },
     {
       link: '/',

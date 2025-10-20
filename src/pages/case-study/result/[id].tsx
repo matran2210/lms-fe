@@ -1,6 +1,5 @@
 import {
   CalculatorIconV2,
-  CircleCloseIcon,
   DownloadIcon,
   FileTextIcon,
   ResizeIcon,
@@ -88,6 +87,9 @@ const CaseStudyResult = () => {
   })
   const [exhibitText, setExhibitText] = useState<string>('')
   const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false)
+  const [isFilesOpen, setIsFilesOpen] = useState(false)
+  const [isScratchPadOpen, setIsScratchPadOpen] = useState(false)
+  const [isCalculatorOpen, setIsCalculatorOpen] = useState(false)
   const [showWarning, setShowWarning] = useState(true)
 
   /**
@@ -512,6 +514,10 @@ const CaseStudyResult = () => {
           'exhibits',
           getValuesExhibits('exhibits').filter((e: string) => e !== pad.id),
         )
+      } else if (pad.type === 'scratch_pad') {
+        setIsScratchPadOpen(false)
+      } else if (pad.type === 'calculator') {
+        setIsCalculatorOpen(false)
       }
       return newArr
     })
@@ -525,6 +531,7 @@ const CaseStudyResult = () => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
         arr.push({ id: uniqueId('scratchPad'), type: type })
+        setIsScratchPadOpen(true)
       } else if (type === 'calculator') {
         for (let e of arr) {
           if (e.type === 'calculator') {
@@ -532,6 +539,7 @@ const CaseStudyResult = () => {
           }
         }
         arr.push({ id: 'calculator', type: 'calculator' })
+        setIsCalculatorOpen(true)
       } else if (type === 'file') {
         arr.push({
           type: type,
@@ -884,26 +892,22 @@ const CaseStudyResult = () => {
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center left"
                   header={
-                    <div className="relative my-3 px-6">
-                      <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
-                        <div className="truncate">
-                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
-                            (i ?? 0) + 1
-                          }: ${exhibitsDes?.name}`}</span>
-                        </div>
+                    <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-semibold text-gray-800">
+                        {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
                       </div>
                       <button
-                        className="absolute right-6 top-0"
+                        className="text-icon"
                         onClick={() => handleCloseScratchPad(e)}
                       >
-                        <CircleCloseIcon />
+                        <CloseModalIcon />
                       </button>
                     </div>
                   }
                   modalIndex={i}
                   draggableFull
                 >
-                  <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+                  <div className="h-full bg-white px-4 py-3">
                     <EditorReader
                       text_editor_content={exhibitsDes?.description}
                       className="w-full"
@@ -985,8 +989,7 @@ const CaseStudyResult = () => {
                 >
                   <Popover
                     content={
-                      <div className="flex items-center gap-2 px-2 ">
-                        <NotesOutline className="h-4 w-4 text-white" />
+                      <div className="px-2">
                         <div className="text-sm">
                           {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}
                         </div>
@@ -1018,6 +1021,8 @@ const CaseStudyResult = () => {
                   className=""
                   placement="leftTop"
                   trigger="click"
+                  open={isFilesOpen}
+                  onOpenChange={(open) => setIsFilesOpen(open)}
                   getPopupContainer={() => document.body}
                   content={
                     <div className="flex flex-col gap-2">
@@ -1032,7 +1037,7 @@ const CaseStudyResult = () => {
                             <div
                               key={e?.value}
                               className={clsx(
-                                'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline',
+                                'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline',
                               )}
                               onClick={() =>
                                 handleOpenScratchPad(
@@ -1062,13 +1067,26 @@ const CaseStudyResult = () => {
                   }
                   zIndex={1050}
                 >
-                  <div
-                    className={clsx(
-                      'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-                    )}
+                  <Popover
+                    content={
+                      <div className="px-2">
+                        <div className="text-sm">
+                          {`Files (${topics?.files?.length > 9 ? topics?.files?.length : `0${topics?.files?.length}`})`}
+                        </div>
+                      </div>
+                    }
+                    trigger="hover"
+                    open={!isFilesOpen ? undefined : false}
+                    placement="left"
                   >
-                    <FileTextIcon />
-                  </div>
+                    <div
+                      className={clsx(
+                        'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                      )}
+                    >
+                      <FileTextIcon />
+                    </div>
+                  </Popover>
                 </Popover>
               )}
             </div>
@@ -1077,27 +1095,49 @@ const CaseStudyResult = () => {
               <Divider className="my-6" />
             )}
             <div className="flex flex-col gap-3">
-              <div
-                className={clsx(
-                  'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-                )}
-                onClick={() => {
-                  handleOpenScratchPad('scratch_pad')
-                }}
+              <Popover
+                content={
+                  <div className="px-2">
+                    <div className="text-sm">Scratch Pad</div>
+                  </div>
+                }
+                trigger="hover"
+                open={!isScratchPadOpen ? undefined : false}
+                placement="left"
               >
-                <ScratchPadIconV2 isActive className="h-6 w-6" />
-              </div>
-              <button
-                className={clsx(
-                  'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-                )}
-                onClick={() => {
-                  handleOpenScratchPad('calculator')
-                }}
-                disabled={checkCalExist > -1}
+                <div
+                  className={clsx(
+                    'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                  )}
+                  onClick={() => {
+                    handleOpenScratchPad('scratch_pad')
+                  }}
+                >
+                  <ScratchPadIconV2 isActive className="h-6 w-6" />
+                </div>
+              </Popover>
+              <Popover
+                content={
+                  <div className="px-2">
+                    <div className="text-sm">Calculator</div>
+                  </div>
+                }
+                trigger="hover"
+                open={!isCalculatorOpen ? undefined : false}
+                placement="left"
               >
-                <CalculatorIconV2 isActive className="h-6 w-6" />
-              </button>
+                <button
+                  className={clsx(
+                    'grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                  )}
+                  onClick={() => {
+                    handleOpenScratchPad('calculator')
+                  }}
+                  disabled={checkCalExist > -1}
+                >
+                  <CalculatorIconV2 isActive className="h-6 w-6" />
+                </button>
+              </Popover>
             </div>
           </div>
         </div>

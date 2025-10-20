@@ -99,10 +99,7 @@ const ExaminationInfo = ({
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
-    queryFn: () =>
-      classId && !isExamList
-        ? ClassAPI.getExamInfo(classId)
-        : Promise.reject('courseId is undefined'),
+    queryFn: () => ClassAPI.getExamInfo(classId),
     refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,

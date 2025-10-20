@@ -97,6 +97,7 @@ const PartFailed = ({
   const { setOpenPopupCTA } = useCourseContext()
 
   const isShowButtonAction = () => {
+    if (Number(labelResult) > Number(selectedResult?.label)) return false
     // Case:  Unlimited time attempt
     if (!coursePart?.quiz?.is_limited) return true
 
@@ -201,6 +202,7 @@ const PartFailed = ({
   //   trackGAEvent(`Click Title ${showTitleFinalTest}`)
   // }
 
+  const [labelResult, setLabelResult] = useState<string>('')
   return (
     <>
       <CardCourse
@@ -266,6 +268,7 @@ const PartFailed = ({
                   selectedResult={selectedResult}
                   setSelectedResult={setSelectedResult}
                   isTeacher={isTeacher}
+                  setLabelResult={setLabelResult}
                 />
               </p>
               {

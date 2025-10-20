@@ -31,7 +31,7 @@ const MultipleChoiceScore = ({
         <LoadingMultipleChoice />
       ) : (
         <div className="-order-1 xl:order-1">
-          <div className="max-h-full w-full xl:sticky xl:top-[104px]">
+          <div className="max-h-full w-full xl:sticky xl:top-[80px]">
             <div
               className={`w-full justify-between rounded-xl bg-white p-4 shadow-small md:p-6 lg:rounded-2xl xl:mb-8`}
             >
@@ -67,7 +67,7 @@ const MultipleChoiceScore = ({
 const LoadingMultipleChoice = () => {
   return (
     <div className="-order-1 animate-pulse xl:order-1">
-      <div className="max-h-full w-full xl:sticky xl:top-[104px]">
+      <div className="max-h-full w-full xl:sticky xl:top-[80px]">
         {/* Card Overall Score */}
         <div className="w-full justify-between rounded-xl bg-white p-4 md:p-6 lg:rounded-2xl xl:mb-8">
           <div className="mb-4 h-6 w-11/12 rounded-md bg-skeleton" />

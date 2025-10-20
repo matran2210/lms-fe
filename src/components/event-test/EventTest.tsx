@@ -211,7 +211,14 @@ const EventTest = ({
         />
       )
     } else if (data?.attempt_status === EAttemptStatus['SUBMITTED']) {
-      return <></>
+      return (
+        <ButtonSecondary
+          title="Begin"
+          className="invisible ml-auto"
+          size="small"
+          onClick={handleClickBegin}
+        />
+      )
     } else {
       return (
         <ButtonSecondary

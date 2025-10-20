@@ -169,9 +169,6 @@ body *::-webkit-scrollbar-thumb:hover {
   span {
     @apply bg-transparent text-gray-800;
   }
-  table {
-    @apply max-w-fit;
-  }
   &.sapp-editor-reader {
     p,
     span {

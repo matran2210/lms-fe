@@ -178,9 +178,9 @@ const CourseDashboard = ({
                         data.total !== 0 && (
                           <div className="mt-2 h-1.5 w-full rounded-full bg-gray-200 xl:mt-1">
                             <div
-                              className="bg-yellow-400 h-full rounded-full"
+                              className="h-full rounded-full bg-primary"
                               style={{
-                                width: `${Math.floor((data.completed / data.total) * 100)}%`,
+                                width: `${Math.floor((data?.completed / data?.total) * 100)}%`,
                               }}
                             ></div>
                           </div>

@@ -240,3 +240,20 @@
     @apply flex-1 pr-2 text-2xl font-bold;
   }
 }
+
+.tooltip-modal {
+  @apply pointer-events-none fixed z-[99999] max-w-[198px] whitespace-normal rounded-md bg-secondary px-2.5 
+    py-1.5 text-sm leading-[22px] text-white shadow-lg;
+
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  &.show {
+    opacity: 1;
+  }
+
+  &::after {
+    content: '';
+    @apply absolute -top-[5px] left-5 h-[10px] w-[10px] rotate-45 bg-secondary;
+  }
+}

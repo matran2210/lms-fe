@@ -150,9 +150,7 @@ const ExamInformation = () => {
       align: 'center',
       render: (record) => (
         <NameNoActionCell
-          dataColumn={
-            record?.class?.course?.examination_subject?.examination?.name
-          }
+          dataColumn={record?.examination_subject?.examination?.name}
           isCenter
         />
       ),
@@ -268,7 +266,7 @@ const ExamInformation = () => {
           )}
         </div>
       </div>
-      {/* {currentRow && isDrawerOpen && currentRow?.class?.id && ( */}
+
       <ExaminationInfo
         open={isDrawerOpen}
         setOpen={setIsDrawerOpen}
@@ -278,7 +276,6 @@ const ExamInformation = () => {
         isEditProps
         isExamList
       />
-      {/* )} */}
     </Layout>
   )
 }

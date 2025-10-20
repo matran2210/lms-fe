@@ -6567,10 +6567,10 @@ entities@^6.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-6.0.1.tgz#c28c34a43379ca7f61d074130b2f5f7020a30694"
   integrity sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==
 
-entrance-test-result-package@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.3.2.tgz#ff0696d8e7a3994fda16b479de81380fa4e7e8d8"
-  integrity sha512-uCOf6SZT+2Ex401avx8aeaah6x3ErUvhKV7VEaD0t7wteR7DDkEf+/o50MhviZW8zAXgTNS3leogHef3pAumHw==
+entrance-test-result-package@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/entrance-test-result-package/-/entrance-test-result-package-1.3.3.tgz#20ac592b164707e95c038dd0a7463167c1246343"
+  integrity sha512-VmNwzXJ1q37uQiXp2qWwX6d6iFOFl/wPJgJMlmRYyWKn7NS6woIHCcdLZaOFI05sAJjg2O+YetvhUSb+L+9sAA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@types/dompurify" "^3.0.5"
@@ -10371,7 +10371,7 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.5.10:
+preview-part@1.5.10:
   version "1.5.10"
   resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.10.tgz#870519e79484f73d53a9188adefc96eb5407fd7b"
   integrity sha512-mFXug6STirIAwW4KDAL/WnX90hF95dEfMEgBXcRHrUhBB5MQH6h+WArirrzb6ssnY9eJZEdC2XRhXgYWuCgsdA==
@@ -10655,10 +10655,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.3.2.tgz#bb377e3a394ed81d591066149781f66e5f1f1f4e"
-  integrity sha512-Yl7dW9461qm5s5gH5sqsEFQVcArXDC4AFrG/vi6/8X7KsOYTppQmHRu1m4T03yJVEHQawaJiimeWcXYiQd3AMQ==
+quiz-result-package@^1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.3.3.tgz#001185bb2262d7179f6e995dad65a5100e5b633a"
+  integrity sha512-EGBGZp6T3w58ibFLu/NB3nxEQwox9ZC70WQKIeTX2j36aKE0agSum+q1KsBxniNE43mmgMT8UmcF4iOv6s5wrw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"
@@ -11775,10 +11775,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.9.tgz#103a344762b30931961100f8d8c77a6d0e3e523b"
-  integrity sha512-La59jBAJ0gojOmoOLYpy1A6eGhxHPwPYamvCs/j3BLQ78sYnGTHjmETeEAYfDvBSoS8IudTHmCiAiwEWfoUByg==
+sapp-notification@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.11.tgz#5c881ee852f637e53864f131f48ccb68c07429c0"
+  integrity sha512-Wgn7GC7BUia5j2zZJkQBUVp/lxe6f/bbQltqdmNJn2EpzwRI8qISiQcj43ap9KLn1c/XzdiPGXH9kEgX9Pp/RA==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"

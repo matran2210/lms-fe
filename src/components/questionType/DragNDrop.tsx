@@ -1,6 +1,6 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import SappDivider from '@components/common/Divider/Divider'
 import { runHighlight } from '@utils/index'
-import clsx from 'clsx'
 import { uniqueId } from 'lodash'
 import {
   ForwardedRef,
@@ -666,7 +666,8 @@ const DragNDropPreview = forwardRef(
             </>
           )}
           {answerContent && (
-            <div className={clsx('pt-7.625', correctAnswerClass)}>
+            <div className={correctAnswerClass}>
+              <SappDivider />
               <SappTitleSolution title={`${MY_COURSES.correctAnswer}:`} />
               <EditorReader
                 className="questions mt-2"
@@ -678,7 +679,8 @@ const DragNDropPreview = forwardRef(
             </div>
           )}
           {solution && (
-            <div className={clsx('mt-6 bg-[#F9F9F9] p-6', explainClassname)}>
+            <div className={explainClassname}>
+              <SappDivider />
               <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
