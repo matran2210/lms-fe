@@ -26,6 +26,7 @@ import SearchWithMenuToggle from '@components/layout/Header/SearchWithMenuToggle
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import clsx from 'clsx'
 import SelectExamPopup from '@components/mycourses/course-detail/SelectExamPopup'
+import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 
 const DEFAULT_PAGESIZE = 18
 
@@ -33,7 +34,7 @@ const CourseDetail = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const { isAlwaysShowSidebar, isMobileView } = useTailwindBreakpoint()
-  const { setOpenSidebar } = useCourseContext()
+  const { setOpenSidebar, setOpenPopupCTA, openPopupCTA } = useCourseContext()
   const [showSidebar, setshowSidebar] = useState(false)
   const [showSelectExamPopup, setShowSelectExamPopup] = useState(false)
   const [pinnedCompletedCourse, setPinnedCompletedCourse] = useState({
@@ -316,6 +317,7 @@ const CourseDetail = () => {
           )}
         </div>
       </div>
+      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
     </Layout>
   )
 }

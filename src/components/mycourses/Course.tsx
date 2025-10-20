@@ -456,7 +456,7 @@ const Course = ({
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[380px] min-h-[280px]"
+          classNameCard="lg:min-h-[396px] min-h-[280px]"
           onClick={() => {
             if (isActiveStudent) {
               courseAction()

@@ -4,7 +4,6 @@ import React, { useLayoutEffect } from 'react'
 import { PageLink } from 'src/constants'
 import { useCourseContext } from '@contexts/index'
 import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
-import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 import PinnedNotificationsV2 from 'src/components/layout/PinnedNotifications/PinnedNotificationsV2'
 
 const ENABLED_PINNED_PAGES = [
@@ -25,7 +24,7 @@ const ENABLED_PINNED_NOTI_PAGES = [
 
 function CtaTrial() {
   const router = useRouter()
-  const { setShowPinnedTrial, showPinnedTrial, openPopupCTA, setOpenPopupCTA } =
+  const { setShowPinnedTrial, showPinnedTrial, setOpenPopupCTA } =
     useCourseContext()
   const { openPinned } = usePinnedNotifyContext()
 
@@ -58,7 +57,6 @@ function CtaTrial() {
 
   return (
     <>
-      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
       {isEnablePinnedNotiPages && openPinned && (
         <PinnedNotificationsV2
           bgColor="bg-info-100"

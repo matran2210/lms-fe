@@ -32,6 +32,8 @@ import { Divider } from 'antd'
 import LearningResource from '@components/mycourses/LearningResource'
 import { useAppDispatch } from 'src/redux/hook'
 import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 
 interface IProps {
   course_section_type: string
@@ -85,7 +87,7 @@ const CoursePartDetail = () => {
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
   const [openResource, setOpenResource] = useState<boolean>(false)
-  const { setOpenPopupCTA } = useCourseContext()
+  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
@@ -517,7 +519,7 @@ const CoursePartDetail = () => {
   return (
     <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
+        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -552,7 +554,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4" data-aos={ANIMATION.DATA_AOS}>
+      <div className="mt-4 h-full" data-aos={ANIMATION.DATA_AOS}>
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -701,6 +703,12 @@ const CoursePartDetail = () => {
           />
         )}
       </div>
+      <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
+        <div className="w-full">
+          <CtaTrial />
+        </div>
+      </div>
+      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
     </Layout>
   )
 }
