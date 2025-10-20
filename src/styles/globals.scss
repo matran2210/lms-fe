@@ -112,6 +112,14 @@ a {
   &::-webkit-scrollbar-thumb {
     @apply border bg-primary;
   }
+
+  .ant-modal-root .ant-modal-mask {
+    @apply z-[999998] !important;
+  }
+
+  .ant-modal-root .ant-modal-wrap {
+    @apply z-[999999] !important;
+  }
 }
 
 /* Mac */
