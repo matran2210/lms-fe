@@ -203,13 +203,23 @@ const PartFailed = ({
   // }
 
   const [labelResult, setLabelResult] = useState<string>('')
+  const getAttemptStatus = () => {
+    if (coursePart?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
+      if (coursePart?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
+        return coursePart?.quiz?.attempt?.grading_status
+      }
+      return coursePart?.quiz?.attempt?.status
+    }
+
+    if (coursePart?.quiz?.grading_method === GRADING_METHOD.AUTO) {
+      return coursePart?.quiz?.attempt?.status
+    }
+  }
+
   return (
     <>
       <CardCourse
-        attemptStatus={
-          (coursePart?.quiz?.attempt?.status ||
-            'UN_SUBMITTED') as EAttemptStatus
-        }
+        attemptStatus={(getAttemptStatus() || 'UN_SUBMITTED') as EAttemptStatus}
         title={coursePart?.name}
         key={coursePart?.id}
         ref={lastElementRef}

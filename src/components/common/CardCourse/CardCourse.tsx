@@ -26,6 +26,26 @@ const mappingBadgeFromStatus: Partial<
     badge: 'Submitted',
     className: 'bg-success-50 text-success',
   },
+  [EAttemptStatus.AWAITING_GRADING]: {
+    badge: 'Awaiting Grading',
+    className: 'bg-warning-50 text-warning',
+  },
+  [EAttemptStatus.REGRADING]: {
+    badge: 'Regrading',
+    className: 'bg-warning-50 text-warning',
+  },
+  [EAttemptStatus.IN_REVIEW]: {
+    badge: 'In Review',
+    className: 'bg-warning-50 text-warning',
+  },
+  [EAttemptStatus.FINISHED]: {
+    badge: 'Finished',
+    className: 'bg-success-50 text-success',
+  },
+  [EAttemptStatus.FINISHED_GRADING]: {
+    badge: 'Finished Grading',
+    className: 'bg-success-50 text-success',
+  },
 }
 
 const CardCourse = forwardRef<
