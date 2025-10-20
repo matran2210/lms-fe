@@ -200,11 +200,11 @@ const MultipleQuestion = ({
 
   const annotationsConstructedQuestions = [
     {
-      text: 'Completed',
+      text: 'Graded',
       color: 'bg-info',
     },
     {
-      text: 'Not Completed',
+      text: 'Not Graded',
       color: 'bg-warning',
     },
   ]

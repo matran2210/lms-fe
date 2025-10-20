@@ -39,6 +39,9 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
             controlOutlineWidth: 0,
             colorBorder: 'transparent',
           },
+          Modal: {
+            zIndexPopupBase: 999999,
+          },
         },
       }}
     >

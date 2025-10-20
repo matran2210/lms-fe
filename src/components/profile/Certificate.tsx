@@ -85,7 +85,7 @@ const Certificate = () => {
       ),
     },
     {
-      title: 'Grade Archive',
+      title: 'Grade Achieved',
       align: 'center',
       render: (record) => (
         <div className="text-base text-secondary">{record?.pass_point}%</div>
@@ -232,7 +232,7 @@ const CertificateItem = ({
           {record?.course?.name}
         </span>
       </div>
-      <InfoWrapper title="Grade Archive:" value={`${record?.pass_point}%`} />
+      <InfoWrapper title="Grade Achieved:" value={`${record?.pass_point}%`} />
 
       <InfoWrapper
         title="Certificate Received:"
