@@ -373,18 +373,29 @@ const EssayQuestionPreview = ({
     return null
   }, [data?.id])
 
+  const lastValueRef = useRef<string | undefined>(undefined)
+
   const renderSheetEditor = useCallback(
     ({ onChange, value }: any) => {
+      // cập nhật ref giá trị hiện tại nếu khác
+      if (lastValueRef.current !== value) {
+        lastValueRef.current = value
+      }
+
+      const handleLocalChange = (val: string) => {
+        // tránh gọi liên tục nếu giá trị không đổi
+        if (val === lastValueRef.current) return
+        lastValueRef.current = val
+        onChange(val)
+        handleChange?.(data?.id)
+      }
+
       return (
         <HookFormExcel
           key={`${requirementKey}-${key}`}
           question_data={question_data}
           defaultValue={defaultValue}
-          index={index}
-          onChange={(val: string) => {
-            onChange(val)
-            handleChange && handleChange(data?.id)
-          }}
+          onChange={handleLocalChange}
           fullData={fullData}
           ignoreStructOpsRef={ignoreStructOpsRef}
           refSheet={refSheet}
@@ -395,6 +406,7 @@ const EssayQuestionPreview = ({
     },
     [key, stableDataId, requirementKey],
   )
+
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
 
