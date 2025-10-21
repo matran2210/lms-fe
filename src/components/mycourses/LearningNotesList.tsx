@@ -37,7 +37,7 @@ import ListFilterMobile from '@components/common/ListFilterMobile'
 import ActionCellV2 from '@components/base/action/ActionCellV2'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
-import { PageLink } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER, PageLink } from 'src/constants'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -88,7 +88,7 @@ const LearningNotesList = () => {
   const unitId = router.query?.unit
   const courseSectionId = router.query.course_section_id
 
-  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
+  const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_NUMBER)
   const [isFirstCallApi, setIsFirstCallApi] = useState(false)
   const [expandedNotes, setExpandedNotes] = useState<string[]>([])
   const [noteHeights, setNoteHeights] = useState<{
@@ -195,7 +195,7 @@ const LearningNotesList = () => {
     isFetchingRef.current = true
     setLoading(true)
 
-    CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
+    CoursesAPI.getCourseNotesList(DEFAULT_PAGE_NUMBER, DEFAULT_PAGESIZE, params)
       .then((res) => {
         setNotesListData(res?.data)
         // Các điều kiện không auto fill filter
@@ -232,27 +232,29 @@ const LearningNotesList = () => {
       })
   }, [notesListStatus, router, paramsCourseSectionId])
 
-  // Attach a scroll event listener to fetch more data when scrolling to the bottom
-  useEffect(() => {
-    const containerDiv: any = document.getElementById('sapp-drawer-notes-list') // Replace 'your-container-id' with the actual ID of your container div
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-    const handleScroll = () => {
-      if (
-        containerDiv &&
-        containerDiv.clientHeight + containerDiv.scrollTop ===
-          containerDiv.scrollHeight &&
-        (courseId || queryId) &&
-        notesListStatus
-      ) {
-        ;(notesListData?.meta?.total_records ?? 0) > pageIndex &&
-          fetchData(params)
+  useEffect(() => {
+    if (isEmpty(notesListData) || isFetchingRef.current) return
+    const handleScroll = async () => {
+      const scrollEl = scrollRef.current
+      if (scrollEl) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollEl
+        if (scrollTop + clientHeight + 200 >= scrollHeight) {
+          if ((notesListData?.meta?.total_pages ?? 0) > pageIndex) {
+            isFetchingRef.current = true
+            fetchData(pageIndex + 1, params)
+          }
+        }
       }
     }
+    const scrollEl = scrollRef.current
+    scrollEl?.addEventListener('scroll', handleScroll)
 
-    containerDiv?.addEventListener('scroll', handleScroll)
-
-    return () => containerDiv?.removeEventListener('scroll', handleScroll)
-  }, [pageIndex])
+    return () => {
+      scrollEl?.removeEventListener('scroll', handleScroll)
+    }
+  }, [scrollRef.current, notesListData, isFetchingRef.current, pageIndex])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
@@ -261,17 +263,26 @@ const LearningNotesList = () => {
     setIsPageStateVariables(true)
   }
 
-  const fetchData = async (params?: Object) => {
+  const fetchData = async (pageIndexNext: number, params?: Object) => {
     setLoading(true)
     try {
-      const res = await CoursesAPI.getCourseNotesList(pageIndex, params)
-      setNotesListData(res?.data)
-      setPageIndex((prevPageIndex) => prevPageIndex + DEFAULT_PAGESIZE)
+      const res = await CoursesAPI.getCourseNotesList(
+        pageIndexNext,
+        DEFAULT_PAGESIZE,
+        params,
+      )
+      setNotesListData((prevResources) => ({
+        ...prevResources,
+        notes: [...(prevResources?.notes ?? []), ...(res?.data?.notes ?? [])],
+        meta: res?.data?.meta ?? prevResources?.meta,
+      }))
+      setPageIndex(pageIndexNext)
     } catch (error) {
       // Handle error if needed
     } finally {
       setTimeout(() => {
         setLoading(false)
+        isFetchingRef.current = false
       }, 500)
     }
   }
@@ -279,7 +290,7 @@ const LearningNotesList = () => {
   const handleDelete = async (id: string) => {
     try {
       const res = await CoursesAPI.deleteCourseNoteList(id)
-      fetchData(params)
+      fetchData(pageIndex, params)
       refetchNotesList()
       toast.success('Xóa thành công!')
     } catch (error) {}
@@ -375,7 +386,10 @@ const LearningNotesList = () => {
               />
             )}
 
-            <div className="result-scroll mt-6 flex h-[250px] flex-col gap-6 overflow-y-auto md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]">
+            <div
+              ref={scrollRef}
+              className="result-scroll mt-6 flex h-[250px] flex-col gap-6 overflow-y-auto md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]"
+            >
               {!isEmpty(notesListData?.notes) ? (
                 <>
                   {notesListData?.notes?.map(

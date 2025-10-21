@@ -432,10 +432,17 @@ export class CoursesAPI {
     })
   }
 
-  static getCourseNotesList(page_size: number, params?: Object): Promise<any> {
-    return fetcher(`course-section-notes?page_index=1&page_size=${page_size}`, {
-      params: params,
-    })
+  static getCourseNotesList(
+    page_index: number,
+    page_size: number,
+    params?: Object,
+  ): Promise<any> {
+    return fetcher(
+      `course-section-notes?page_index=${page_index}&page_size=${page_size}`,
+      {
+        params: params,
+      },
+    )
   }
 
   static updateCourseNotesList(
