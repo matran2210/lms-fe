@@ -442,6 +442,7 @@ const EssayQuestionPreview = ({
       {question_content && isShowContent && (
         <div
           id="hightlight_area"
+          className="mb-2"
           onMouseUp={(e: any) => {
             if (
               e?.target?.tagName?.charAt(0) !== 'm' &&
@@ -477,6 +478,7 @@ const EssayQuestionPreview = ({
         <>
           <div
             id="hightlight_area_require"
+            className="mb-2"
             onMouseUp={(e: any) => {
               if (
                 e.target.tagName.charAt(0) !== 'm' &&

@@ -198,16 +198,24 @@ const MultipleQuestion = ({
     },
   ]
 
-  const annotationsConstructedQuestions = [
-    {
-      text: 'Graded',
-      color: 'bg-info',
-    },
-    {
-      text: 'Not Graded',
-      color: 'bg-warning',
-    },
-  ]
+  const annotationsConstructedQuestions =
+    questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
+      ? [
+          {
+            text: 'Graded',
+            color: 'bg-info',
+          },
+        ]
+      : [
+          {
+            text: 'Completed',
+            color: 'bg-info',
+          },
+          {
+            text: 'Not Completed',
+            color: 'bg-warning',
+          },
+        ]
 
   const renderAnnotations = (
     annotationsList: {
