@@ -114,52 +114,58 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
 
   useEffect(() => {
     const initFetchData = async () => {
-      if (!params.sub_id || !open || isFetchingRef.current) return
-      if (open && (courseId || queryId)) {
-        isFetchingRef.current = true
-        setLoading(true)
-        try {
-          const resources = await CoursesAPI.getCourseResource(
-            courseId || queryId,
-            params,
-          )
-          setPageIndex(DEFAULT_PAGE_INDEX)
-          setResources(resources.data)
-          // Các điều kiện không auto fill filter
-          if (isFirstCallApi && !paramsSubId) return
-          if (isCourseDetail || paramsSubId) return
+      // Kiểm tra điều kiện gọi API
+      const hasValidId = params.sub_id || courseId || queryId
+      if (!hasValidId || !open || isFetchingRef.current) return
 
-          // Logic auto fill filter
-          const fieldMap: Record<string, any> = {
-            section: courseSectionId,
-            subsection: chapterId,
-            unit: unitId,
-            activity: activityId,
-          }
+      isFetchingRef.current = true
+      setLoading(true)
 
-          const fieldsToSet = isActivityDetail // Đối với màn activity fill all
-            ? ['section', 'subsection', 'unit', 'activity']
-            : isCoursePartDetail // Đối với màn course part detail fill section và subsection
-              ? ['section', 'subsection']
-              : [] // Đối với màn course detail không fill
+      try {
+        const resources = await CoursesAPI.getCourseResource(
+          courseId || queryId,
+          params,
+        )
 
-          fieldsToSet.forEach((field) => {
-            const value = fieldMap[field]
-            methods.setValue(
-              field as 'section' | 'subsection' | 'unit' | 'activity',
-              Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
-            )
-          })
-        } catch (err) {
-        } finally {
-          setTimeout(() => {
-            setLoading(false)
-            setIsFirstCallApi(true)
-            isFetchingRef.current = false
-          }, 500)
+        setPageIndex(DEFAULT_PAGE_INDEX)
+        setResources(resources.data)
+
+        // Các điều kiện không auto fill filter
+        if (isFirstCallApi && !paramsSubId) return
+        if (isCourseDetail || paramsSubId) return
+
+        // Logic auto fill filter
+        const fieldMap: Record<string, any> = {
+          section: courseSectionId,
+          subsection: chapterId,
+          unit: unitId,
+          activity: activityId,
         }
+
+        const fieldsToSet = isActivityDetail // Đối với màn activity fill all
+          ? ['section', 'subsection', 'unit', 'activity']
+          : isCoursePartDetail // Đối với màn course part detail fill section và subsection
+            ? ['section', 'subsection']
+            : [] // Đối với màn course detail không fill
+
+        fieldsToSet.forEach((field) => {
+          const value = fieldMap[field]
+          methods.setValue(
+            field as 'section' | 'subsection' | 'unit' | 'activity',
+            Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
+          )
+        })
+      } catch (err) {
+      } finally {
+        // Đảm bảo reset trạng thái sau khi API hoàn tất
+        setTimeout(() => {
+          setLoading(false)
+          setIsFirstCallApi(true)
+          isFetchingRef.current = false
+        }, 500)
       }
     }
+
     initFetchData()
   }, [open, paramsSubId, router])
 
