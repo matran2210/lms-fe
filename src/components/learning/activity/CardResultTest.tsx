@@ -33,17 +33,17 @@ const CardResultTest = ({
     </div>
   )
   const handleViewResult = () => {
-    resultData?.quiz?.attempts.length
-      ? resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
-        ? router.push(
-            `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-          )
-        : router.push(
-            `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-          )
-      : router.push(
-          `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-        )
+    if (
+      resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
+    ) {
+      router.push(
+        `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+      )
+    } else {
+      router.push(
+        `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+      )
+    }
   }
   return (
     <div
