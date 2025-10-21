@@ -58,7 +58,11 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
 
     // Case 2 & 3: Quiz chấm điểm và chấm bằng tay (MANUAL)
     if (quiz.is_graded && quiz.grading_method === GRADING_METHOD.MANUAL) {
-      if (attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING) {
+      if (
+        attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING ||
+        attempt?.grading_status === GRADE_STATUS.IN_REVIEW ||
+        attempt?.grading_status === GRADE_STATUS.REGRADING
+      ) {
         // Case 2: Chưa chấm xong - điều hướng đến your-answers-detail
         router.push(`/courses/quiz/your-answers-detail/${attempt.id}`)
         return

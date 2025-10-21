@@ -517,6 +517,7 @@ const QuizDocument = ({
           }
           // getTable({ id: e.quizAttemptId, page_index: 1, page_size: 10 })
           if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
+            setResultId(e.quizAttemptId)
             setOpenGradedReport(true)
             return
           } else {
@@ -1132,6 +1133,7 @@ const QuizDocument = ({
               router.replace(
                 `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/your-answers-detail/${resultId}`,
               )
+              handleCalcelModalResult()
             } else {
               handleCalcelModalResult()
             }
