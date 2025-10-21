@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import router from 'next/router'
 import Tooltip from 'src/common/Tooltip'
 import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import { EAttemptStatus } from 'src/constants/attempt'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { EDateTime } from 'src/type'
 import { ITestQuizProps } from 'src/type/results'
@@ -33,7 +34,7 @@ const CardResultTest = ({
   )
   const handleViewResult = () => {
     resultData?.quiz?.attempts.length
-      ? resultData?.quiz?.attempts?.[0]?.status === 'IN_PROGRESS'
+      ? resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ? router.push(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
