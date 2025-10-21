@@ -33,6 +33,7 @@ import SortBy from '@components/common/SortBy'
 import ListFilterMobile from '@components/common/ListFilterMobile'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import Tooltip from 'src/common/Tooltip'
+import { PageLink } from 'src/constants'
 interface IProps {
   open: boolean
   setOpenResource: Dispatch<SetStateAction<boolean>>
@@ -46,7 +47,19 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [resources, setResources] = useState<IResourceDetail>()
   const router = useRouter()
+  //Tạo các biến để lấy id trên thanh url
+  const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
+  const isCoursePartDetail = router.pathname.includes('/section')
+  const isActivityDetail = router.pathname.includes('/activity')
+  const courseId = router.query?.courseId
+  const queryId = router.query?.id
+  const activityId = router.query?.activityId
+  const chapterId = router.query?.chapter
+  const unitId = router.query?.unit
+  const courseSectionId = router.query.course_section_id
+
   const [loading, setLoading] = useState<boolean>(false)
+  const [isFirstCallApi, setIsFirstCallApi] = useState(false)
   const [isOpenFilter, setIsOpenFilter] = useState<boolean>(false)
   const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
     isOpen: false,
@@ -89,32 +102,72 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGE_INDEX)
 
   const params = cleanParamsAPI({
-    sub_id: paramsSubId,
+    sub_id: isFirstCallApi
+      ? paramsSubId
+      : activityId || chapterId || courseSectionId || '',
     page_index: DEFAULT_PAGE_INDEX,
     page_size: DEFAULT_PAGESIZE,
   })
 
+  // Thêm cờ để tránh call duplicate api
+  const isFetchingRef = useRef(false)
+
   useEffect(() => {
     const initFetchData = async () => {
-      if (open && (router.query.courseId || router.query.id)) {
-        setLoading(true)
-        try {
-          const resources = await CoursesAPI.getCourseResource(
-            router.query.courseId || router.query.id,
-            params,
-          )
-          setPageIndex(DEFAULT_PAGE_INDEX)
-          setResources(resources.data)
-        } catch (err) {
-        } finally {
-          setTimeout(() => {
-            setLoading(false)
-          }, 500)
+      // Kiểm tra điều kiện gọi API
+      const hasValidId = params.sub_id || courseId || queryId
+      if (!hasValidId || !open || isFetchingRef.current) return
+
+      isFetchingRef.current = true
+      setLoading(true)
+
+      try {
+        const resources = await CoursesAPI.getCourseResource(
+          courseId || queryId,
+          params,
+        )
+
+        setPageIndex(DEFAULT_PAGE_INDEX)
+        setResources(resources.data)
+
+        // Các điều kiện không auto fill filter
+        if (isFirstCallApi && !paramsSubId) return
+        if (isCourseDetail || paramsSubId) return
+
+        // Logic auto fill filter
+        const fieldMap: Record<string, any> = {
+          section: courseSectionId,
+          subsection: chapterId,
+          unit: unitId,
+          activity: activityId,
         }
+
+        const fieldsToSet = isActivityDetail // Đối với màn activity fill all
+          ? ['section', 'subsection', 'unit', 'activity']
+          : isCoursePartDetail // Đối với màn course part detail fill section và subsection
+            ? ['section', 'subsection']
+            : [] // Đối với màn course detail không fill
+
+        fieldsToSet.forEach((field) => {
+          const value = fieldMap[field]
+          methods.setValue(
+            field as 'section' | 'subsection' | 'unit' | 'activity',
+            Array.isArray(value) ? (value?.[0] ?? null) : (value ?? null),
+          )
+        })
+      } catch (err) {
+      } finally {
+        // Đảm bảo reset trạng thái sau khi API hoàn tất
+        setTimeout(() => {
+          setLoading(false)
+          setIsFirstCallApi(true)
+          isFetchingRef.current = false
+        }, 500)
       }
     }
+
     initFetchData()
-  }, [open, paramsSubId])
+  }, [open, paramsSubId, router])
 
   const requestOngoingRef = useRef(false)
   const fetchData = async (nextPageIndex: number) => {
@@ -124,7 +177,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       requestOngoingRef.current = true
       params.page_index = nextPageIndex
       const res = await CoursesAPI.getCourseResource(
-        router.query.courseId || router.query.id,
+        courseId || queryId,
         params,
       )
 
@@ -150,7 +203,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       if (!scrollEl) return
       const { scrollTop, scrollHeight, clientHeight } = scrollEl
       if (scrollTop + clientHeight + 200 >= scrollHeight) {
-        if ((router.query.courseId || router.query.id) && open) {
+        if ((courseId || queryId) && open) {
           const nextPageIndex = pageIndex + 1
           if (Number(resources?.meta?.total_pages) >= nextPageIndex) {
             fetchData(nextPageIndex)
