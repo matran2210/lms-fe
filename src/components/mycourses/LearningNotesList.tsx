@@ -3,7 +3,7 @@ import SappBreadcrumbNotLink from '@components/base/breadcrumb/SappBreadcrumbNot
 import { cleanParamsAPI } from '@utils/index'
 import getConfig from 'next/config'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { CoursesAPI } from 'src/pages/api/courses'
 import {
   backTypeMap,
@@ -75,17 +75,21 @@ const LearningNotesList = () => {
   const [notesListData, setNotesListData] = useState<
     INotesListResponse | undefined
   >()
+
   const router = useRouter()
+  //Tạo các biến để lấy id trên thanh url
   const isCourseDetail = PageLink.COURSE_DETAIL === router.pathname
   const isCoursePartDetail = router.pathname.includes('/section')
   const isActivityDetail = router.pathname.includes('/activity')
-  const courseId = router.query.courseId
-  const queryId = router.query.id
-  const activityId = router.query.activityId
+  const courseId = router.query?.courseId
+  const queryId = router.query?.id
+  const activityId = router.query?.activityId
   const chapterId = router.query?.chapter
   const unitId = router.query?.unit
   const courseSectionId = router.query.course_section_id
+
   const [pageIndex, setPageIndex] = useState(DEFAULT_PAGESIZE)
+  const [isFirstCallApi, setIsFirstCallApi] = useState(false)
   const [expandedNotes, setExpandedNotes] = useState<string[]>([])
   const [noteHeights, setNoteHeights] = useState<{
     [key: string]: { full: number; collapsed: number }
@@ -172,48 +176,44 @@ const LearningNotesList = () => {
 
   const params = cleanParamsAPI({
     class_id: courseId || queryId,
-    course_section_id: paramsCourseSectionId,
+    course_section_id: isFirstCallApi
+      ? paramsCourseSectionId
+      : activityId || chapterId || courseSectionId || '',
   })
-  // Lấy danh sách notes và fill tự động activity khi lần đầu mở trong activity
-  useEffect(() => {
-    const objectParams = cleanParamsAPI({
-      class_id: courseId || queryId,
-      course_section_id:
-        paramsCourseSectionId ||
-        activityId ||
-        chapterId ||
-        courseSectionId ||
-        '',
-    })
 
+  // Thêm cờ để tránh call duplicate api
+  const isFetchingRef = useRef(false)
+
+  useEffect(() => {
     if (
-      !(objectParams.course_section_id || objectParams.class_id) ||
-      !notesListStatus
+      !(params.course_section_id || params.class_id) ||
+      !notesListStatus ||
+      isFetchingRef.current
     )
       return
 
+    isFetchingRef.current = true
     setLoading(true)
 
-    CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, objectParams)
+    CoursesAPI.getCourseNotesList(DEFAULT_PAGESIZE, params)
       .then((res) => {
         setNotesListData(res?.data)
+        // Các điều kiện không auto fill filter
+        if (isFirstCallApi && !paramsCourseSectionId) return
         if (isCourseDetail || paramsCourseSectionId) return
 
-        // gom logic setValue vào 1 chỗ
+        // Logic auto fill filter
         const fieldMap: Record<string, any> = {
           section: courseSectionId,
           subsection: chapterId,
           unit: unitId,
           activity: activityId,
         }
-
-        // tùy màn hình mà chọn field cần set
-        const fieldsToSet = isActivityDetail
+        const fieldsToSet = isActivityDetail // Đối với màn activity fill all
           ? ['section', 'subsection', 'unit', 'activity']
-          : isCoursePartDetail
+          : isCoursePartDetail // Đối với màn course part detail fill section và subsection
             ? ['section', 'subsection']
-            : []
-
+            : [] // Đối với màn course detail không fill
         fieldsToSet.forEach((field) => {
           const value = fieldMap[field]
           methods.setValue(
@@ -224,7 +224,11 @@ const LearningNotesList = () => {
       })
       .catch(() => {})
       .finally(() => {
-        setTimeout(() => setLoading(false), 500)
+        setTimeout(() => {
+          setLoading(false)
+          setIsFirstCallApi(true)
+          isFetchingRef.current = false
+        }, 500)
       })
   }, [notesListStatus, router, paramsCourseSectionId])
 
@@ -337,6 +341,11 @@ const LearningNotesList = () => {
       isOpen: false,
     })
   }
+
+  useEffect(() => {
+    if (!notesListStatus) setIsFirstCallApi(false)
+  }, [notesListStatus])
+
   return (
     <SappDrawerV3
       open={notesListStatus}
