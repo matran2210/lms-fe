@@ -224,10 +224,10 @@ const LearningNotesList = () => {
       })
       .catch(() => {})
       .finally(() => {
+        setIsFirstCallApi(true)
+        isFetchingRef.current = false
         setTimeout(() => {
           setLoading(false)
-          setIsFirstCallApi(true)
-          isFetchingRef.current = false
         }, 500)
       })
   }, [notesListStatus, router, paramsCourseSectionId])
@@ -235,26 +235,26 @@ const LearningNotesList = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (isEmpty(notesListData) || isFetchingRef.current) return
+    if (isEmpty(notesListData)) return
+
+    const scrollEl = scrollRef.current
+    if (!scrollEl || !notesListStatus) return
+
     const handleScroll = async () => {
-      const scrollEl = scrollRef.current
-      if (scrollEl) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollEl
-        if (scrollTop + clientHeight + 200 >= scrollHeight) {
-          if ((notesListData?.meta?.total_pages ?? 0) > pageIndex) {
-            isFetchingRef.current = true
-            fetchData(pageIndex + 1, params)
-          }
-        }
+      const { scrollTop, scrollHeight, clientHeight } = scrollEl
+      if (
+        scrollTop + clientHeight + 200 >= scrollHeight &&
+        !isFetchingRef.current &&
+        (notesListData?.meta?.total_pages ?? 0) > pageIndex
+      ) {
+        isFetchingRef.current = true
+        await fetchData(pageIndex + 1, params)
       }
     }
-    const scrollEl = scrollRef.current
-    scrollEl?.addEventListener('scroll', handleScroll)
 
-    return () => {
-      scrollEl?.removeEventListener('scroll', handleScroll)
-    }
-  }, [scrollRef.current, notesListData, isFetchingRef.current, pageIndex])
+    scrollEl.addEventListener('scroll', handleScroll)
+    return () => scrollEl.removeEventListener('scroll', handleScroll)
+  }, [notesListData, pageIndex, notesListStatus])
 
   const onClose = () => {
     document.body.style.overflow = 'auto'
@@ -262,7 +262,6 @@ const LearningNotesList = () => {
     resetFormFields(['section', 'subsection', 'unit', 'activity'])
     setIsPageStateVariables(true)
   }
-
   const fetchData = async (pageIndexNext: number, params?: Object) => {
     setLoading(true)
     try {
@@ -278,12 +277,9 @@ const LearningNotesList = () => {
       }))
       setPageIndex(pageIndexNext)
     } catch (error) {
-      // Handle error if needed
     } finally {
-      setTimeout(() => {
-        setLoading(false)
-        isFetchingRef.current = false
-      }, 500)
+      isFetchingRef.current = false
+      setLoading(false)
     }
   }
 
@@ -354,7 +350,10 @@ const LearningNotesList = () => {
   }
 
   useEffect(() => {
-    if (!notesListStatus) setIsFirstCallApi(false)
+    if (!notesListStatus) {
+      setIsFirstCallApi(false)
+      setNotesListData(undefined)
+    }
   }, [notesListStatus])
 
   return (

@@ -158,10 +158,10 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       } catch (err) {
       } finally {
         // Đảm bảo reset trạng thái sau khi API hoàn tất
+        setIsFirstCallApi(true)
+        isFetchingRef.current = false
         setTimeout(() => {
           setLoading(false)
-          setIsFirstCallApi(true)
-          isFetchingRef.current = false
         }, 500)
       }
     }
@@ -269,6 +269,14 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
       : '136px'
 
   const getSize = (size: number) => formatBytes(size)
+
+  useEffect(() => {
+    if (!open) {
+      setIsFirstCallApi(false)
+      setResources(undefined)
+    }
+  }, [open])
+
   return (
     <>
       <SappDrawerV3
