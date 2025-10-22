@@ -236,6 +236,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/result/${getCaseStudy?.attempt?.id}`,
           query: {
@@ -257,6 +261,10 @@ const CoursePartDetail = () => {
           thankYouLater: false,
         })
       } else {
+        localStorage.setItem(
+          'course_chapter_id',
+          router.query?.chapter as string,
+        )
         router.push({
           pathname: `/case-study/${topicId}`,
           query: {
