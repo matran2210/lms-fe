@@ -767,7 +767,7 @@ const QuizDocument = ({
         return 'Result'
       }
     }
-    return 'Save and View Answers'
+    return 'Submit & View Answer'
   }
 
   const handleSubmit = () => {

@@ -7163,10 +7163,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.2.tgz#27e188fed3199ab984f25c1dc08fe52ac4f1d71e"
-  integrity sha512-dO0MLUwj8PkWV6BbQCdZy0It3y3MWw66j13hO/yLWNDuxKZUmpIhyHeUH93hEqv4KGvqA85rK7GYFg0KAlsCig==
+explanation-package@1.3.3:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.3.tgz#e8a33e26dae69d29283abd61928f41c8813bd46e"
+  integrity sha512-4XwXR1MUXwkWtWDsoLfs/4AlrNstm5JCwyLNYaf5TdT9so7Vg/hSubzxyTgS5Z7IyBpQIABU0ez/g/xpZfMR7A==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -11775,10 +11775,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.11.tgz#5c881ee852f637e53864f131f48ccb68c07429c0"
-  integrity sha512-Wgn7GC7BUia5j2zZJkQBUVp/lxe6f/bbQltqdmNJn2EpzwRI8qISiQcj43ap9KLn1c/XzdiPGXH9kEgX9Pp/RA==
+sapp-notification@^1.0.12:
+  version "1.0.12"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.12.tgz#a3ba058846d7dcdf5af23a1c4a6282801b5c3599"
+  integrity sha512-Uw3cbZmwvUN5ou1ovjuSDsu0EbQ1Vkpgh2srgULxzyUBL8tB7hThR9qm8OnTIVThegsrIt+zh0kF18q49/3VHg==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"

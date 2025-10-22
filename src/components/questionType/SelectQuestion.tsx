@@ -14,6 +14,7 @@ import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import { useTooltipModal } from 'src/hooks/useTooltipModal'
 import SappDivider from '@components/common/Divider/Divider'
+import WarningSection from './WarningSection'
 
 // Types
 interface IProps {
@@ -48,6 +49,7 @@ interface IProps {
       answer_position: number
     }>,
   ) => void
+  isShowWarning?: boolean
 }
 
 // Constants
@@ -77,6 +79,7 @@ const SelectWord = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText,
+      isShowWarning = true,
       onChange,
     }: IProps,
     ref: ForwardedRef<any>,
@@ -664,7 +667,7 @@ const SelectWord = forwardRef(
               <div className="my-6 border border-b-gray-2"></div>
             </>
           )}
-
+        <WarningSection isShowWarning={isShowWarning} />
         {/* Question Content */}
         <EditorReader
           key={key}
@@ -700,7 +703,6 @@ const SelectWord = forwardRef(
           }}
           highlighted={highlighted}
         />
-
         {/* Correct Answer Section */}
         {answerContent && (
           <>

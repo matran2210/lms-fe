@@ -743,6 +743,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
+              isShowWarning={isAFTEREACHQUESTION}
             />
           )
 
