@@ -234,9 +234,9 @@ const MatchQuiz = forwardRef(
         })) || []
 
       const answers: RawItem[] =
-        data?.question_matchings?.map((item: any) => ({
-          id: item?.answer?.id,
-          label: item?.answer?.answer,
+        data?.answers?.map((item: any) => ({
+          id: item.id,
+          label: item.answer,
           role: 'answer' as Role,
           color: Color.TextDefault,
         })) || []
