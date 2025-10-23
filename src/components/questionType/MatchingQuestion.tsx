@@ -262,12 +262,19 @@ const MatchingQuestion = forwardRef(
 
       if (defaultAnswer) {
         for (let e of defaultAnswer) {
-          const foundAns = data?.answers?.find((a) => a.id === e.answer_id)
+          const foundAns = data?.answers?.find(
+            (a: { id: string; answer: string; answer_position: string }) =>
+              a.id === e.answer_id,
+          )
           if (foundAns)
             obj[e.question_id] = { id: e.question_id, answer: foundAns }
         }
         arr = arr.filter(
-          (el) => !defaultAnswer.find((e) => e.answer_id === el.id),
+          (el) =>
+            !defaultAnswer.find(
+              (e: { answer_id: string; question_id: string; id: string }) =>
+                e.answer_id === el.id,
+            ),
         )
       }
 
