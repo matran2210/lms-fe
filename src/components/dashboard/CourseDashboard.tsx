@@ -7,6 +7,8 @@ import { Dispatch, SetStateAction, memo, useState } from 'react'
 import { ANIMATION, COURSE_TYPE } from 'src/constants'
 import { ICourseInfo } from 'src/type/dashboard'
 import StatsSkeleton from '@components/skeleton/StatsSkeleton'
+import Icon from '@components/icons'
+import { useRouter } from 'next/router'
 export interface IActivityProgress {
   completed: number
   total: number
@@ -16,6 +18,7 @@ export interface IActivities {
   time?: IActivityProgress
   test?: IActivityProgress
   activity?: IActivityProgress
+  certificate_id?: string
 }
 
 const CourseDashboard = ({
@@ -23,12 +26,17 @@ const CourseDashboard = ({
 }: {
   setInfoCourse: Dispatch<SetStateAction<ICourseInfo>>
 }) => {
+  const router = useRouter()
   const [activities, setActivities] = useState<IActivities | undefined>(
     undefined,
   )
   const [loading, setLoading] = useState<boolean>(false)
   const handleLoading = (loading: boolean) => {
     setLoading(loading)
+  }
+
+  const onSeeCertificate = (id: string) => {
+    router.push(`/certificates/${id}`)
   }
 
   const dashboardStats = [
@@ -101,6 +109,7 @@ const CourseDashboard = ({
     {
       id: 4,
       name: 'Certificate Earned',
+      certificate_id: activities?.certificate_id,
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -169,9 +178,21 @@ const CourseDashboard = ({
                       <div
                         className={`${data.id === 4 ? 'mt-2' : 'mt-4 xl:mt-[22px]'} text-base font-normal text-gray-400`}
                       >
-                        {!isUndefined(data?.completed)
-                          ? `${data.completed}/${data.total}`
-                          : 'Complete course to get certificate'}
+                        {!isUndefined(data?.completed) ? (
+                          `${data.completed}/${data.total}`
+                        ) : data?.certificate_id ? (
+                          <div
+                            className="flex items-center text-base font-semibold text-primary underline"
+                            onClick={() =>
+                              onSeeCertificate(data?.certificate_id || '')
+                            }
+                          >
+                            See Certificate&nbsp;
+                            <Icon type="arrow-right" />
+                          </div>
+                        ) : (
+                          'Complete course to get certificate'
+                        )}
                       </div>
                       {!isUndefined(data?.completed) &&
                         !isUndefined(data?.total) &&
