@@ -41,7 +41,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </div>
       </div>
 
-      <div className="short:h-10 short:leading-5 mb-4 text-xs font-normal text-gray-800">
+      <div className="mb-4 text-xs font-normal text-gray-800 short:h-10 short:leading-5">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
@@ -49,7 +49,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
       {/* Các kênh liên hệ */}
       <div className="short:grid short:grid-cols-2 short:gap-3">
         <InfomationItem
-          icon={<IconFAQ className="text-icon shrink-0" />}
+          icon={<IconFAQ className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <SearchIcon className="shrink-0" /> <span>Tra cứu tại đây</span>
@@ -67,7 +67,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconRequestForm className="text-icon shrink-0" />}
+          icon={<IconRequestForm className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <IconSend className="h-6 w-6 shrink-0" />{' '}
@@ -86,7 +86,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconChat className="text-icon shrink-0" />}
+          icon={<IconChat className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <MessageDialogIcon className="shrink-0" />{' '}
@@ -100,7 +100,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconAccess className="text-icon shrink-0" />}
+          icon={<IconAccess className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <ArrowActionIcon className="shrink-0" />{' '}
@@ -117,7 +117,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconContact className="text-icon shrink-0" />}
+          icon={<IconContact className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <OutgoingCallIcon className="shrink-0" />{' '}
@@ -132,7 +132,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconEmergency className="text-icon shrink-0" />}
+          icon={<IconEmergency className="shrink-0 text-icon" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <MessageLetterIcon className="shrink-0" />{' '}
@@ -160,8 +160,8 @@ const InfomationItem = ({
   children,
 }: PropsWithChildren<IInfomation>) => {
   return (
-    <div onClick={onClick} className="short:mt-0 relative mt-3 cursor-pointer">
-      <div className="short:h-[72px] flex rounded-xl border border-gray-300 px-4 py-3">
+    <div onClick={onClick} className="relative mt-3 cursor-pointer short:mt-0">
+      <div className="flex rounded-xl border border-gray-300 px-4 py-3 short:h-[72px]">
         <div className="z-[2] flex h-full w-full items-center transition-all duration-200 ease-in-out hover:hidden">
           <div className="flex items-center">{icon}</div>
           <div className="ms-3 text-[10px] text-gray-800">{children}</div>
