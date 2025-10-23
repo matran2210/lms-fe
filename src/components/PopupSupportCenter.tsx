@@ -41,15 +41,15 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </div>
       </div>
 
-      <div className="mb-4 text-xs text-gray-800">
+      <div className="short:h-10 short:leading-5 mb-4 text-xs font-normal text-gray-800">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
 
       {/* Các kênh liên hệ */}
-      <div>
+      <div className="short:grid short:grid-cols-2 short:gap-3">
         <InfomationItem
-          icon={<IconFAQ className="shrink-0 text-icon" />}
+          icon={<IconFAQ className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <SearchIcon className="shrink-0" /> <span>Tra cứu tại đây</span>
@@ -67,7 +67,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconRequestForm className="shrink-0 text-icon" />}
+          icon={<IconRequestForm className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <IconSend className="h-6 w-6 shrink-0" />{' '}
@@ -86,7 +86,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconChat className="shrink-0 text-icon" />}
+          icon={<IconChat className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <MessageDialogIcon className="shrink-0" />{' '}
@@ -100,7 +100,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconAccess className="shrink-0 text-icon" />}
+          icon={<IconAccess className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <ArrowActionIcon className="shrink-0" />{' '}
@@ -117,7 +117,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconContact className="shrink-0 text-icon" />}
+          icon={<IconContact className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <OutgoingCallIcon className="shrink-0" />{' '}
@@ -128,11 +128,11 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           <span className="font-bold">
             Liên hệ Hotline: 19002225 (nhấn phím 2)
           </span>{' '}
-          <span>Tvới tình huống cần hỗ trợ khẩn cấp.</span>
+          <span>với tình huống cần hỗ trợ khẩn cấp.</span>
         </InfomationItem>
 
         <InfomationItem
-          icon={<IconEmergency className="shrink-0 text-icon" />}
+          icon={<IconEmergency className="text-icon shrink-0" />}
           hoverText={
             <div className="flex items-center justify-center gap-3">
               <MessageLetterIcon className="shrink-0" />{' '}
@@ -145,7 +145,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
       </div>
 
-      <div className="mt-4 text-center text-xs italic text-gray-800">
+      <div className="mt-4 text-center text-xs italic leading-5 text-gray-800">
         Chúng tôi cam kết phản hồi trong 4 giờ làm việc (trừ Thứ 7, Chủ nhật và
         các ngày lễ)
       </div>
@@ -160,9 +160,9 @@ const InfomationItem = ({
   children,
 }: PropsWithChildren<IInfomation>) => {
   return (
-    <div onClick={onClick} className="relative mt-3 cursor-pointer">
-      <div className="flex rounded-xl border border-gray-300 px-4 py-3">
-        <div className="z-[2] flex h-full w-full transition-all duration-200 ease-in-out hover:hidden">
+    <div onClick={onClick} className="short:mt-0 relative mt-3 cursor-pointer">
+      <div className="short:h-[72px] flex rounded-xl border border-gray-300 px-4 py-3">
+        <div className="z-[2] flex h-full w-full items-center transition-all duration-200 ease-in-out hover:hidden">
           <div className="flex items-center">{icon}</div>
           <div className="ms-3 text-[10px] text-gray-800">{children}</div>
         </div>
