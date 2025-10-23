@@ -41,13 +41,13 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </div>
       </div>
 
-      <div className="mb-4 text-xs text-gray-800">
+      <div className="mb-4 text-xs font-normal text-gray-800 short:h-10 short:leading-5">
         Trong quá trình học tập, nếu có các vấn đề cần hỗ trợ, bạn hãy kết nối
         với bộ phận Hỗ trợ học viên qua các kênh liên hệ sau:
       </div>
 
       {/* Các kênh liên hệ */}
-      <div>
+      <div className="short:grid short:grid-cols-2 short:gap-3">
         <InfomationItem
           icon={<IconFAQ className="shrink-0 text-icon" />}
           hoverText={
@@ -128,7 +128,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
           <span className="font-bold">
             Liên hệ Hotline: 19002225 (nhấn phím 2)
           </span>{' '}
-          <span>Tvới tình huống cần hỗ trợ khẩn cấp.</span>
+          <span>với tình huống cần hỗ trợ khẩn cấp.</span>
         </InfomationItem>
 
         <InfomationItem
@@ -145,7 +145,7 @@ const PopupSupportCenter = ({ setVisible, visible }: IProps) => {
         </InfomationItem>
       </div>
 
-      <div className="mt-4 text-center text-xs italic text-gray-800">
+      <div className="mt-4 text-center text-xs italic leading-5 text-gray-800">
         Chúng tôi cam kết phản hồi trong 4 giờ làm việc (trừ Thứ 7, Chủ nhật và
         các ngày lễ)
       </div>
@@ -160,9 +160,9 @@ const InfomationItem = ({
   children,
 }: PropsWithChildren<IInfomation>) => {
   return (
-    <div onClick={onClick} className="relative mt-3 cursor-pointer">
-      <div className="flex rounded-xl border border-gray-300 px-4 py-3">
-        <div className="z-[2] flex h-full w-full transition-all duration-200 ease-in-out hover:hidden">
+    <div onClick={onClick} className="relative mt-3 cursor-pointer short:mt-0">
+      <div className="flex rounded-xl border border-gray-300 px-4 py-3 short:h-[72px]">
+        <div className="z-[2] flex h-full w-full items-center transition-all duration-200 ease-in-out hover:hidden">
           <div className="flex items-center">{icon}</div>
           <div className="ms-3 text-[10px] text-gray-800">{children}</div>
         </div>

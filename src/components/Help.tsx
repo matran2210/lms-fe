@@ -142,7 +142,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             placement="topLeft"
             arrow={false}
             classNames={{
-              body: 'max-w-[312px] md:max-w-[360px] !rounded-2xl bg-white shadow-card',
+              body: 'max-w-[312px] md:max-w-[360px] !rounded-2xl bg-white shadow-card short:h-[400px] short:max-w-[554px] short:p-4',
             }}
           >
             {visible ? (

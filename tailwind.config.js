@@ -291,6 +291,7 @@ module.exports = {
       '3xl': '1728px',
       '3.5xl': '1660px',
       '4xl': '1920px',
+      short: { raw: '(max-height: 700px)' },
     },
     fontSize: {
       tiny: ['0.5rem', { lineHeight: '0.75rem' }] /* 8px, 12px */,

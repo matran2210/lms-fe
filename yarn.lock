@@ -10371,10 +10371,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.10.tgz#870519e79484f73d53a9188adefc96eb5407fd7b"
-  integrity sha512-mFXug6STirIAwW4KDAL/WnX90hF95dEfMEgBXcRHrUhBB5MQH6h+WArirrzb6ssnY9eJZEdC2XRhXgYWuCgsdA==
+preview-part@1.5.11:
+  version "1.5.11"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.11.tgz#2a2dfca022aeaaeefdb8972db6f79b736579ed79"
+  integrity sha512-nGptQGnRhecPnpRh4Fp1G4VMeNJdUMw820C9ZPenEwsBoOmkDl3s5UWUNorRYKo8iXna9S4l3R3h3nn44QVvAQ==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -11743,6 +11743,42 @@ sapp-common-package@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.1.tgz#9bf58967e12b69f82984e854f4fbaac3fc24f85a"
   integrity sha512-ulmdAOwPOX92Ql5jm67czKfNPb2xENtPxPyxgAYdpLcs8dnx68aQExeQOYeLchNs5t4gtxw5c28qiQSWpWHV2w==
+  dependencies:
+    "@_ueberdosis/prosemirror-tables" "^1.1.3"
+    "@floating-ui/react" "^0.27.8"
+    "@tippyjs/react" "^4.2.6"
+    "@tiptap/extension-color" "^2.12.0"
+    "@tiptap/extension-font-family" "^2.12.0"
+    "@tiptap/extension-highlight" "^2.12.0"
+    "@tiptap/extension-image" "^2.12.0"
+    "@tiptap/extension-link" "^2.12.0"
+    "@tiptap/extension-placeholder" "^2.12.0"
+    "@tiptap/extension-subscript" "^2.12.0"
+    "@tiptap/extension-superscript" "^2.12.0"
+    "@tiptap/extension-table" "^2.12.0"
+    "@tiptap/extension-table-cell" "^2.12.0"
+    "@tiptap/extension-table-header" "^2.12.0"
+    "@tiptap/extension-table-row" "^2.12.0"
+    "@tiptap/extension-task-item" "^2.12.0"
+    "@tiptap/extension-task-list" "^2.12.0"
+    "@tiptap/extension-text-align" "^2.12.0"
+    "@tiptap/extension-text-style" "^2.12.0"
+    "@tiptap/extension-typography" "^2.12.0"
+    "@tiptap/extension-underline" "^2.12.0"
+    "@tiptap/pm" "^2.12.0"
+    "@tiptap/react" "^2.12.0"
+    "@tiptap/starter-kit" "^2.12.0"
+    antd "^5.25.0"
+    clsx "^1.2.1"
+    dayjs "^1.11.7"
+    sass "^1.89.0"
+    sass-loader "^13"
+    tailwindcss "3.4.17"
+
+sapp-common-package@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.2.tgz#9ed46d1d85f5d2fe6012374183ec1aa0db329fef"
+  integrity sha512-hnnjQCLYJFw1Ij5mslXqhqU2wB/Tza1ZRJtTd5OCudwGlxqMbGUzfNad3AQrC5ubuEzE2/kbYpy9ViDZbz1XqQ==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
