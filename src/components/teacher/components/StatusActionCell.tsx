@@ -54,9 +54,9 @@ export const StatusQuizTag = ({
   status: keyof typeof statusQuizMap
 }) => {
   const { label, color, bg } = statusQuizMap[status] || {
-    label: '',
-    color: '',
-    bg: '',
+    label: 'Not started',
+    color: 'text-info',
+    bg: 'bg-info-50',
   }
 
   if (!label || !color || !bg) return '_ _'

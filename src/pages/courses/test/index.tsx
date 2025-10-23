@@ -24,6 +24,7 @@ import StatusTestQuizBadge, {
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import ModalNotMobileFriendly from '@components/base/modal/ModalNotMobileFriendly'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
+import { EAttemptStatus } from 'src/constants/attempt'
 
 enum StatusQuizAttempt {
   Passed = 'PASSED',
@@ -265,7 +266,6 @@ const TestModal = ({
           : StatusQuizAttempt.Passed
       return status
     }
-    return StatusQuizAttempt.Unsubmitted
   }
 
   const can_retake = useMemo(() => {
@@ -646,6 +646,19 @@ const TestModal = ({
     }
   }
 
+  const getAttemptStatus = () => {
+    if (data?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
+      if (data?.quiz?.attempt?.status === EAttemptStatus.SUBMITTED) {
+        return data?.quiz?.attempt?.grading_status
+      }
+      return data?.quiz?.attempt?.status
+    }
+
+    if (data?.quiz?.grading_method === GRADING_METHOD.AUTO) {
+      return data?.quiz?.attempt?.status
+    }
+  }
+
   return (
     <>
       {isMobileView ? (
@@ -787,18 +800,8 @@ const TestModal = ({
                   )}
                   <div className="flex justify-between gap-8 text-base">
                     <div className="text-gray">Status:</div>
-                    {data?.quiz?.is_graded &&
-                    data?.quiz?.grading_method === GRADING_METHOD.MANUAL ? (
-                      <StatusTestQuizBadge
-                        status={data?.quiz?.attempt?.grading_status}
-                      />
-                    ) : (
-                      <StatusTestQuizBadge
-                        status={
-                          status?.toUpperCase() as keyof typeof STATUS_QUIZ_TEST
-                        }
-                      />
-                    )}
+
+                    <StatusTestQuizBadge status={getAttemptStatus()} />
                   </div>
                 </div>
                 <PopupCanNotRetakeTest

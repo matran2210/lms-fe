@@ -4,11 +4,14 @@ import { getTimeFromInput } from '@utils/index'
 import dayjs from 'dayjs'
 import router from 'next/router'
 import Tooltip from 'src/common/Tooltip'
-import { QUIZ_ATTEMPT_GRADING_STATUS, QUIZ_ATTEMPT_STATUS } from 'src/constants'
+import {
+  GRADING_METHOD,
+  QUIZ_ATTEMPT_GRADING_STATUS,
+  QUIZ_ATTEMPT_STATUS,
+} from 'src/constants'
 import { EAttemptStatus } from 'src/constants/attempt'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { EDateTime } from 'src/type'
-import { ITestQuizProps } from 'src/type/results'
 
 const CardResultTest = ({
   resultData,
@@ -41,6 +44,21 @@ const CardResultTest = ({
           `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
         )
   }
+
+  const getAttemptStatus = () => {
+    if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
+      if (
+        resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
+      ) {
+        return resultData?.quiz?.attempts?.[0]?.grading_status
+      }
+      return resultData?.quiz?.attempts?.[0]?.status
+    }
+
+    if (resultData?.quiz?.grading_method === GRADING_METHOD.AUTO) {
+      return resultData?.quiz?.attempts?.[0]?.status
+    }
+  }
   return (
     <div
       className="flex cursor-pointer items-center justify-between rounded-xl bg-white p-4 shadow-small hover:bg-primary-50 md:p-6"
@@ -58,13 +76,7 @@ const CardResultTest = ({
               {resultData?.name}
             </div>
           </Tooltip>
-          <StatusQuizTag
-            status={
-              (resultData?.quiz?.attempts?.[0]?.status || 'UN_SUBMITTED') as
-                | QUIZ_ATTEMPT_GRADING_STATUS
-                | QUIZ_ATTEMPT_STATUS
-            }
-          />
+          <StatusQuizTag status={getAttemptStatus()} />
         </div>
         {dateSubmitted && (timeSpent || timeSpent === 0) ? (
           <div className="flex">
