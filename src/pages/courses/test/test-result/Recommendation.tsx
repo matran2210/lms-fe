@@ -8,6 +8,7 @@ import { COMMENTS } from 'src/constants/grade'
 import { ClassAPI } from '@pages/api/class'
 import toast from 'react-hot-toast'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
+import router from 'next/router'
 interface IProps {
   classId: string
   quizAttemptId: string
@@ -60,6 +61,9 @@ const Recommendation = ({
                   classId,
                   quizAttemptId,
                   reason,
+                )
+                router.push(
+                  `/courses/test/your-answers-detail/${quizAttemptId}`,
                 )
                 toast.success('Request sent successfully')
                 setOpenRecomendation(false)

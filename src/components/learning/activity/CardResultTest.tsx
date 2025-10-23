@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import router from 'next/router'
 import Tooltip from 'src/common/Tooltip'
 import {
+  GRADE_STATUS,
   GRADING_METHOD,
   QUIZ_ATTEMPT_GRADING_STATUS,
   QUIZ_ATTEMPT_STATUS,
@@ -36,13 +37,47 @@ const CardResultTest = ({
     </div>
   )
   const handleViewResult = () => {
-    resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
-      ? router.push(
+    if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
+      if (resultData?.quiz?.attempts) {
+        if (
+          resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
+        ) {
+          if (
+            resultData?.quiz?.attempts?.[0]?.grading_status ===
+            GRADE_STATUS.FINISHED_GRADING
+          ) {
+            router.push(
+              `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+            )
+          } else {
+            router.push(
+              `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
+            )
+          }
+        } else if (
+          resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
+        ) {
+          router.push(
+            `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+          )
+        } else if (
+          resultData?.quiz?.attempts?.[0]?.status ===
+          EAttemptStatus.UN_SUBMITTED
+        ) {
+          router.push(
+            `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+          )
+        }
+      } else {
+        router.push(
           `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
         )
-      : router.push(
-          `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
-        )
+      }
+    } else {
+      router.push(
+        `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+      )
+    }
   }
 
   const getAttemptStatus = () => {
@@ -50,6 +85,9 @@ const CardResultTest = ({
       if (
         resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
       ) {
+        // if(resultData?.quiz?.attempts?.[0]?.grading_status === GRADE_STATUS.IN_REVIEW) {
+        //   return 'AWAITING_GRADING'
+        // }
         return resultData?.quiz?.attempts?.[0]?.grading_status
       }
       return resultData?.quiz?.attempts?.[0]?.status
