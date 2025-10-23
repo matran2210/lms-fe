@@ -85,9 +85,6 @@ const CardResultTest = ({
       if (
         resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
       ) {
-        // if(resultData?.quiz?.attempts?.[0]?.grading_status === GRADE_STATUS.IN_REVIEW) {
-        //   return 'AWAITING_GRADING'
-        // }
         return resultData?.quiz?.attempts?.[0]?.grading_status
       }
       return resultData?.quiz?.attempts?.[0]?.status
