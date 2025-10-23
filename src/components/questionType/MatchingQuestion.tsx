@@ -53,17 +53,14 @@ const MatchingQuestion = forwardRef(
   (
     {
       data,
-      action,
       handleSaveHighLight,
       highlighted,
-      removeHighlight,
       allowHighLight,
+      allowUnHighLight,
       defaultAnswer,
-      done,
       extenalRef,
       corrects,
       solution,
-      allowUnHighLight,
       uuid,
       setOpenFile,
       isHideExhibit = true,
@@ -265,9 +262,15 @@ const MatchingQuestion = forwardRef(
 
       if (defaultAnswer) {
         for (let e of defaultAnswer) {
-          arr = arr?.filter((el) => el?.id !== e?.answer_id)
+          const foundAns = data?.answers?.find((a) => a.id === e.answer_id)
+          if (foundAns)
+            obj[e.question_id] = { id: e.question_id, answer: foundAns }
         }
+        arr = arr.filter(
+          (el) => !defaultAnswer.find((e) => e.answer_id === el.id),
+        )
       }
+
       setAnswers(arr)
       setDefaultValue(obj)
     }, [defaultAnswer, data?.question_matchings])
@@ -283,11 +286,7 @@ const MatchingQuestion = forwardRef(
             ) {
               // if(e){
               if (allowHighLight) {
-                runHighlight(
-                  handleSaveHighLight,
-                  allowHighLight || false,
-                  'hightlight_area',
-                )
+                runHighlight(handleSaveHighLight, true, 'hightlight_area')
               } else if (allowUnHighLight) {
                 runHighlight(
                   handleSaveHighLight,
