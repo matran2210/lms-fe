@@ -1,7 +1,7 @@
 import { AuthenticationManager } from '@/utils/helpers/keycloak'
 import { deleteCookie, getCookie, setCookie } from '@/utils/index'
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, Method } from 'axios'
-import Router from 'next/router'
+import { notFound } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { COOKIE_INFO } from 'src/constants'
 import exceptions from './en.exceptions.json'
@@ -161,7 +161,7 @@ request.interceptors.response.use(
     if (
       errorCode?.startsWith('403') // Forbidden các loại
     ) {
-      Router.replace('/')
+      notFound()
     }
 
     return Promise.reject(error)
