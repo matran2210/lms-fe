@@ -497,7 +497,7 @@ const Discussion = ({ class_id }: Props) => {
                                 </SappButtonIcon>
                                 <div
                                   className={clsx(
-                                    'relative select-none hover:text-primary',
+                                    'relative h-5 select-none hover:text-primary',
                                     selectedFiles?.length > 0 && 'hidden',
                                   )}
                                 >
@@ -633,9 +633,11 @@ const Discussion = ({ class_id }: Props) => {
                     <SendComment />
                   </SappButtonIcon>
                   <div
-                    className={`relative select-none hover:text-primary ${clsx({
-                      hidden: rootSelectedFiles?.length > 0,
-                    })}`}
+                    className={`relative select-none hover:text-primary h-5 ${clsx(
+                      {
+                        hidden: rootSelectedFiles?.length > 0,
+                      },
+                    )}`}
                   >
                     <button
                       type="button"
