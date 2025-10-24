@@ -8,6 +8,7 @@ import React from 'react'
 import { useAppSelector } from 'src/redux/hook'
 import { ICourse } from 'src/type/courses'
 import Course from './Course'
+import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 
 interface CoursesProps {
   courses: ICourse[]
@@ -59,6 +60,8 @@ const CoursesList: React.FC<CoursesProps> = ({
       </div>
     )
   }
+  
+  if (isEmpty(courses) && !guideIsActive) return <NoCoursesAvailable />
 
   return (
     <>
@@ -94,15 +97,15 @@ const CoursesList: React.FC<CoursesProps> = ({
                   <div>
                     <GraduationCapIcon className={'h-5 w-5 md:h-6 md:w-6'} />
                   </div>
-                  <div className="text-xs font-semibold text-icon md:text-sm">
+                  <div className="text-icon text-xs font-semibold md:text-sm">
                     CMA342023
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className={`mr-1 text-icon`}>
+                  <div className={`text-icon mr-1`}>
                     <CourseTimeIcon className={'h-5 w-5 md:h-6 md:w-6'} />
                   </div>
-                  <div className={`text-xs font-semibold text-icon md:text-sm`}>
+                  <div className={`text-icon text-xs font-semibold md:text-sm`}>
                     30
                   </div>
                   <div
