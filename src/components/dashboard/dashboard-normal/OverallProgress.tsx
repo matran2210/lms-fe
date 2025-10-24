@@ -21,6 +21,7 @@ interface IPieChartOption {
   time?: IActivityProgress
   test?: IActivityProgress
   activity?: IActivityProgress
+  certificate_id?: string
 }
 
 const OverallProgress = ({
@@ -39,6 +40,7 @@ const OverallProgress = ({
       time: data.time,
       test: data.test,
       activity: data.activity,
+      ...(data?.certificate_id && { certificate_id: data.certificate_id }),
     }
     setActivities(activities)
     setActivitiesState(activities)
