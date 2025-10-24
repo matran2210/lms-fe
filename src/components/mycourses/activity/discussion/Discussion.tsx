@@ -496,13 +496,25 @@ const Discussion = ({ class_id }: Props) => {
                                   <SendComment />
                                 </SappButtonIcon>
                                 <div
-                                  className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: selectedFiles?.length > 0 })}`}
+                                  className={clsx(
+                                    'relative select-none hover:text-primary',
+                                    selectedFiles?.length > 0 && 'hidden',
+                                  )}
                                 >
-                                  <CameraIcon />
+                                  <button
+                                    type="button"
+                                    className="cursor-pointer"
+                                    onClick={() =>
+                                      fileInputRef.current?.click()
+                                    }
+                                  >
+                                    <CameraIcon />
+                                  </button>
+
                                   <input
                                     type="file"
-                                    className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0 "
-                                    accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
+                                    className="hidden"
+                                    accept="image/jpeg,image/png,image/gif"
                                     onChange={handleFileChange}
                                     ref={fileInputRef}
                                   />
@@ -621,17 +633,21 @@ const Discussion = ({ class_id }: Props) => {
                     <SendComment />
                   </SappButtonIcon>
                   <div
-                    className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: rootSelectedFiles?.length > 0 })}`}
+                    className={`relative select-none hover:text-primary ${clsx({
+                      hidden: rootSelectedFiles?.length > 0,
+                    })}`}
                   >
-                    <span
+                    <button
+                      type="button"
                       className="cursor-pointer"
                       onClick={() => rootFileInputRef?.current?.click()}
                     >
                       <CameraIcon />
-                    </span>
+                    </button>
+
                     <input
                       type="file"
-                      className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0"
+                      className="hidden"
                       accept="image/jpeg, image/png, image/gif"
                       multiple
                       onChange={(e) => handleFileChange(e, true)}
