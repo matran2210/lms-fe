@@ -182,7 +182,7 @@ const CourseDashboard = ({
                           `${data.completed}/${data.total}`
                         ) : data?.certificate_id ? (
                           <div
-                            className="flex items-center text-base font-semibold text-primary underline"
+                            className="flex cursor-pointer items-center text-base font-semibold text-primary underline"
                             onClick={() =>
                               onSeeCertificate(data?.certificate_id || '')
                             }
