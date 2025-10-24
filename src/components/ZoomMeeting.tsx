@@ -1,12 +1,11 @@
 'use client'
 
 import { ZoomApi } from '@/api/zoom'
-import { HOME_LMS_URL } from '@/constants'
 import { useZoomElementAdjustment } from '@/hooks/useZoomElementAdjustment'
 import { useZoomSDK } from '@/hooks/useZoomSDK'
 import { ZoomMeetingConfig } from '@/types/zoom'
 import { getToken, toggleMeetingContainer } from '@/utils'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { notFound, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import FloatingUser from './FloatingUser'
 import SAPPLoading from './loading/SAPPLoading'
@@ -46,8 +45,7 @@ export const ZoomMeeting = () => {
 
     const processMeetingToken = async () => {
       if (!token) {
-        router.replace(HOME_LMS_URL)
-        return
+        notFound()
       }
 
       try {
@@ -57,9 +55,7 @@ export const ZoomMeeting = () => {
         const meetingData = await getZoomMeeting(decodedToken)
 
         if (!meetingData.userInfo || !meetingData.signature) {
-          router.replace(HOME_LMS_URL)
-          setIsLoadingMeetingData(false)
-          return
+          notFound()
         }
 
         const config: ZoomMeetingConfig = {
