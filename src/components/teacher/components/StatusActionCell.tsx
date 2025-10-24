@@ -36,6 +36,11 @@ export const statusQuizMap = {
     color: 'text-[#F89707]',
     bg: 'bg-[#F897070D]',
   },
+  IN_REVIEW: {
+    label: 'In Review',
+    color: 'text-[#F89707]',
+    bg: 'bg-[#F897070D]',
+  },
   FINISHED_GRADING: {
     label: 'Finished Grading',
     color: 'text-[#176CDD]',
