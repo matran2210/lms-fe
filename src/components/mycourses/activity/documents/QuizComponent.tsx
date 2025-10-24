@@ -50,7 +50,7 @@ import {
 } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { ANIMATION, QUESTION_TYPES, RESPONSE_OPTION } from 'src/constants'
-import { defaultSheetData } from 'src/constants/attempt'
+import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { useAppDispatch } from 'src/redux/hook'
 import {
@@ -489,10 +489,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             active = 'SUBMITED'
           }
           if (activeQuestion?.requirements?.length) {
-            const answers = activeQuestion?.requirements?.map((req) => {
-              const answer = getValues?.(
-                `${activeQuestion?.id}_${req.id}_essay`,
+            const answers = activeQuestion?.requirements?.map((req, i) => {
+              const fieldName = `${activeQuestion?.id}_${req.id}_essay`
+              const savedData = activeQuestion?.myAnswers?.find(
+                (ans: IEssayAnswer) => ans?.requirement_id === req?.id,
               )
+              let answer = getValues?.(fieldName) || savedData?.short_answer
               return {
                 question_id: activeQuestion?.id,
                 answer_file: req?.answer_file,
@@ -750,10 +752,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
         case QUESTION_TYPES.ESSAY:
           const items =
             activeQuestion?.requirements?.map((e, i: number) => {
-              const hasAnswer = !!watch?.(
-                `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[i]?.id : document_id}_essay`,
-              )
-              const getDefaultValue = () => {
+              // const hasAnswer = !!watch?.(
+              //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length && activeQuestion?.requirements?.length > 0 ? activeQuestion?.requirements?.[i]?.id : document_id}_essay`,
+              // )
+              const getDefaultValue = (isGetToVerify?: boolean) => {
                 switch (activeQuestion?.response_option) {
                   case RESPONSE_OPTION.WORD:
                     return (
@@ -767,6 +769,16 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                     )
                     break
                   case RESPONSE_OPTION.SHEET:
+                    if (isGetToVerify) {
+                      return activeQuestion?.myAnswers?.find(
+                        (ans: IEssayAnswer) => {
+                          if (ans.requirement_id === e?.id) {
+                            return ans
+                          }
+                        },
+                      )?.short_answer
+                    }
+
                     return (
                       // getValues(
                       //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
@@ -782,12 +794,37 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 }
               }
 
+              const isMeaningData = (() => {
+                if (activeQuestion?.response_option === RESPONSE_OPTION.WORD) {
+                  const currentValue = getDefaultValue(true)
+                  return (
+                    currentValue &&
+                    currentValue !== DEFAULT_EDITOR_VALUE &&
+                    currentValue.trim() !== '' &&
+                    !isEmptyParagraph(currentValue)
+                  )
+                } else if (
+                  activeQuestion?.response_option === RESPONSE_OPTION.SHEET
+                ) {
+                  const currentValue = getDefaultValue(true)
+
+                  if (currentValue && currentValue !== defaultSheetData) {
+                    try {
+                      return currentValue
+                    } catch {
+                      return false
+                    }
+                  }
+                }
+                return false
+              })()
+
               return {
                 key: e?.id,
                 label: (
                   <div className="learning-act-tab-label flex items-center gap-1 text-base font-normal capitalize">
                     {`Requirement ${i + 1}`}{' '}
-                    {hasAnswer && (
+                    {isMeaningData && (
                       <div className="text-primary">
                         <CircleCheckIcon />
                       </div>
