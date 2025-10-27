@@ -16,8 +16,8 @@ import axios from 'axios'
 //         grant_type: 'authorization_code',
 //         code: code as string,
 //         redirect_uri: redirectUri,
-//         client_id: process.env.LINKEDIN_CLIENT_ID!,
-//         client_secret: process.env.LINKEDIN_CLIENT_SECRET!,
+//         client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!,
+//         client_secret: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET!,
 //       }),
 //       {
 //         headers: {
@@ -112,8 +112,8 @@ export default async function handler(
         grant_type: 'authorization_code',
         code: code as string,
         redirect_uri: redirectUri,
-        client_id: process.env.LINKEDIN_CLIENT_ID!,
-        client_secret: process.env.LINKEDIN_CLIENT_SECRET!,
+        client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID!,
+        client_secret: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET!,
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
     )
