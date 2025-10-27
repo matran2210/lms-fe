@@ -514,7 +514,7 @@ const Discussion = ({ class_id }: Props) => {
                                   <input
                                     type="file"
                                     className="hidden"
-                                    accept="image/jpeg,image/png,image/gif"
+                                    accept="image/png, image/gif, image/jpeg, image/png, image/svg+xml"
                                     onChange={handleFileChange}
                                     ref={fileInputRef}
                                   />
