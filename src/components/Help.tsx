@@ -16,7 +16,6 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
     '/teachers',
     '/test',
     '/case-study',
-    '/activity',
   ].map((p) => asPath.includes(p))
   const hiddenChatbot =
     excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
