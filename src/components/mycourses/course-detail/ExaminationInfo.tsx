@@ -208,14 +208,17 @@ const ExaminationInfo = ({
         <div className="flex w-full flex-col gap-4 text-sm md:text-base">
           <InfoItem label="Program:" value={data?.program?.name} />
           <InfoItem label="Subject:" value={data?.subject?.name} />
-          <InfoItem label="Class Code:" value={data?.exam?.code_exam} />
-          <InfoItem
-            label="Duration:"
-            value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
-          />
           <InfoItem
             label="Scheduled Exam Date:"
             value={<ExamDate data={data} setIsEdit={setIsEdit} />}
+          />
+          <InfoItem
+            label="Revision Class Code:"
+            value={data?.exam?.code_exam}
+          />
+          <InfoItem
+            label="Revision Class Duration"
+            value={getDuration(data?.exam?.start_date, data?.exam?.end_date)}
           />
         </div>
       )
