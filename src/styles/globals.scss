@@ -1104,7 +1104,9 @@ p a {
 // }
 
 .ant-popover-inner {
-  @apply !mb-4 !p-6 short:!mb-0 short:!p-4;
+  @apply short:!mb-0 short:!p-4;
+  margin-bottom: 1rem !important;
+  padding: 1.5rem !important;
 }
 
 .ant-popover {
