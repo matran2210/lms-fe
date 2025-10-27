@@ -1,0 +1,19 @@
+import React from 'react'
+import { ANIMATION } from 'src/constants'
+import { NoCoursesAvailableIcon } from '@components/icons'
+
+const NoCoursesAvailable = () => {
+  return (
+    <div
+      data-aos={ANIMATION.DATA_AOS}
+      className="short:mt-[86px] mt-[176px] flex flex-col items-center justify-center"
+    >
+      <NoCoursesAvailableIcon />
+      <div className="text-center text-base font-normal leading-6 text-gray-1">
+        No Data Found :(
+      </div>
+    </div>
+  )
+}
+
+export default NoCoursesAvailable

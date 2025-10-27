@@ -122,14 +122,14 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
     <SappModalV3
       open={isOpen}
       handleCancel={handleClose}
-      onOk={handleUpgrade}
+      onOk={handleOk}
       handleClose={showFooter ? handleClose : undefined}
       icon={icon}
       header={header}
       content={content}
       showFooter={showFooter}
-      okButtonCaption="Upgrade Now"
-      cancelButtonCaption={'Skip'}
+      okButtonCaption={okButtonCaption}
+      cancelButtonCaption={cancelButtonCaption}
       showCancelButton={showFooter}
       fullWidthBtn={true}
       buttonSize="extra"

@@ -1561,7 +1561,113 @@ export const NoDataIconV2 = () => (
     </defs>
   </svg>
 )
-
+export const NoCoursesAvailableIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="157"
+    height="138"
+    viewBox="0 0 157 138"
+    fill="none"
+  >
+    <g filter="url(#filter0_d_12619_123960)">
+      <rect
+        x="12.2539"
+        y="9.19043"
+        width="131.723"
+        height="112.731"
+        rx="12.0098"
+        fill="white"
+      />
+      <circle cx="25.7319" cy="20.8306" r="2.45067" fill="#E5E7EB" />
+      <circle cx="33.6968" cy="20.8306" r="2.45067" fill="#E5E7EB" />
+      <circle cx="41.6616" cy="20.8306" r="2.45067" fill="#E5E7EB" />
+      <rect
+        x="15.9297"
+        y="28.7959"
+        width="124.984"
+        height="6.12667"
+        rx="3.06334"
+        fill="#F2F3F5"
+      />
+      <rect
+        x="66.168"
+        y="47.7881"
+        width="28.5233"
+        height="27.0221"
+        rx="4.50368"
+        fill="#F7F7F7"
+      />
+      <rect
+        x="23.2812"
+        y="79.0342"
+        width="34.3094"
+        height="30.6334"
+        rx="4.50368"
+        fill="#F7F7F7"
+      />
+      <rect
+        x="23.2812"
+        y="47.7881"
+        width="34.3094"
+        height="13.4787"
+        rx="4.50368"
+        fill="#F7F7F7"
+      />
+      <rect
+        x="66.168"
+        y="96.1895"
+        width="20.2666"
+        height="13.511"
+        rx="4.50368"
+        fill="#F7F7F7"
+      />
+      <rect
+        x="99.1016"
+        y="81.4854"
+        width="32.4714"
+        height="28.1827"
+        rx="4.50368"
+        fill="#F7F7F7"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_12619_123960"
+        x="0.000559807"
+        y="0.000419855"
+        width="156.229"
+        height="137.237"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="3.06334" />
+        <feGaussianBlur stdDeviation="6.12667" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_12619_123960"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_12619_123960"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+)
 export const StarCircleIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

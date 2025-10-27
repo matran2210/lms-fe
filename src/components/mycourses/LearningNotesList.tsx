@@ -38,6 +38,7 @@ import ActionCellV2 from '@components/base/action/ActionCellV2'
 import { userReducer } from 'src/redux/slice/User/User'
 import { UserType } from 'src/redux/types/User/urser'
 import { DEFAULT_PAGE_NUMBER, PageLink } from 'src/constants'
+import clsx from 'clsx'
 
 const DEFAULT_PAGESIZE = 20
 
@@ -387,7 +388,12 @@ const LearningNotesList = () => {
 
             <div
               ref={scrollRef}
-              className="result-scroll mt-6 flex h-[250px] flex-col gap-6 overflow-y-auto md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]"
+              className={clsx(
+                'result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
+                {
+                  'overflow-y-auto': !isEmpty(notesListData?.notes),
+                },
+              )}
             >
               {!isEmpty(notesListData?.notes) ? (
                 <>
