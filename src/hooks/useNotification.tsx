@@ -36,24 +36,43 @@ export const useNotification = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const isFetching = useRef(false)
-
   const refreshNotification = (isRefresh = false) => {
-    const getNotifications = async (params: Object) => {
-      try {
-        // Clear notifications trước khi load mới
-        dispatch(clearNotifications())
-        isRefresh && (await dispatch(getCountUnRead()))
-        await dispatch(getNotification(params))
-      } catch (error) {}
+    const loadMultiplePages = async () => {
+      const screenHeight = window.innerHeight
+
+      dispatch(clearNotifications())
+      isRefresh && (await dispatch(getCountUnRead()))
+
+      const firstPageAction = await dispatch(
+        getNotification({
+          page_index: 1,
+          page_size: 10,
+          ...(selectedTab === 2 && {
+            is_read: false,
+          }),
+        }),
+      )
+
+      const totalPages = firstPageAction.payload?.meta?.total_pages || 1
+      const baseHeight = 911
+      const heightRatio = screenHeight / baseHeight
+      const calculatedPages = Math.ceil(heightRatio)
+      const pagesToLoad = Math.min(calculatedPages, totalPages)
+
+      for (let page = 2; page <= pagesToLoad; page++) {
+        await dispatch(
+          loadMoreNotification({
+            page_index: page,
+            page_size: 10,
+            ...(selectedTab === 2 && {
+              is_read: false,
+            }),
+          }),
+        )
+      }
     }
 
-    getNotifications({
-      page_index: 1,
-      page_size: 10,
-      ...(selectedTab === 2 && {
-        is_read: false,
-      }),
-    })
+    loadMultiplePages()
   }
 
   const countNotificationsUnRead = async () => {
