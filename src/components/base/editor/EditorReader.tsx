@@ -60,13 +60,13 @@ const EditorReader = ({
   }, [text_editor_content])
 
   const convertMathToImage = async (element: any) => {
-    if (typeof window === 'undefined') return
+    const viewer = com?.wiris?.js?.JsPluginViewer
 
-    const viewer = (window as any)?.com?.wiris?.js?.JsPluginViewer
-    if (!viewer || !element) return
-    try {
-      await viewer.parseElement(element, true, () => {})
-    } catch (error) {}
+    if (element && viewer) {
+      try {
+        await viewer.parseElement(element, true, function () {})
+      } catch (error) {}
+    }
   }
 
   useEffect(() => {
