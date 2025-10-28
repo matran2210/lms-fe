@@ -665,7 +665,7 @@ const QuizDocument = ({
           </div>
           <div className="body-modal-white -mt-2">
             <div id="hightlight_area">
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
@@ -690,7 +690,7 @@ const QuizDocument = ({
                   {exhibitText} 5: csv short
                 </div>
               </div>
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>

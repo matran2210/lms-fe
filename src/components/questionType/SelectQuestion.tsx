@@ -626,7 +626,7 @@ const SelectWord = forwardRef(
           data?.question_topic?.exhibits?.length > 0 && (
             <>
               {data?.question_topic?.description && (
-                <div className="my-6 border border-b-gray-2">
+                <div className="my-6 border border-b-gray-300">
                   {data?.question_topic?.id}
                 </div>
               )}
@@ -664,7 +664,7 @@ const SelectWord = forwardRef(
                   </div>
                 ))}
               </div>
-              <div className="my-6 border border-b-gray-2"></div>
+              <div className="my-6 border border-b-gray-300"></div>
             </>
           )}
         <WarningSection isShowWarning={isShowWarning} />
