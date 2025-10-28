@@ -13,7 +13,7 @@ import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
-import { SetStateAction, useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -91,6 +91,7 @@ function DiscussionElement({
   const [isOpenUserInfo, setIsOpenUserInfo] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
   const canEdit = profile?.username === discussion?.username
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { control, handleSubmit } = useForm<IEventData>({})
 
@@ -151,7 +152,7 @@ function DiscussionElement({
         setIsDelete(false)
         setLoading(false)
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -182,6 +183,13 @@ function DiscussionElement({
         return
       }
     }
+
+    // Xóa giá trị của input để làm sạch
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = ''
+    }
+
+    e.target.value = ''
   }
 
   const handleDeleteFile = (id: string | number, isFile: boolean) => {
@@ -269,7 +277,7 @@ function DiscussionElement({
         phone: data?.student_info?.user_contacts?.[0]?.phone,
         avatar: data?.student_info?.detail.avatar?.['50x50'] || blankAvatar,
       })
-    } catch (error: any) {}
+    } catch (error: any) { }
   }
 
   const handleMouseEnter = () => {
@@ -322,11 +330,11 @@ function DiscussionElement({
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
-                        discussion?.avatar?.['ORIGIN'] ||
-                        sappAvatar
+                      discussion?.avatar?.['ORIGIN'] ||
+                      sappAvatar
                       : discussion?.avatar?.['50x50'] ||
-                        discussion?.avatar?.['ORIGIN'] ||
-                        blankAvatar
+                      discussion?.avatar?.['ORIGIN'] ||
+                      blankAvatar
                   }
                   loading="eager"
                   blurDataURL={blankAvatar.src}
@@ -440,14 +448,22 @@ function DiscussionElement({
                           <SendComment />
                         </SappButtonIcon>
                         <div
-                          className={`relative cursor-pointer select-none hover:text-primary ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
+                          className={`relative select-none h-5 hover:text-primary ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
                         >
-                          <CameraIcon />
+                          <button
+                            type="button"
+                            className="cursor-pointer"
+                            onClick={() => fileInputRef?.current?.click()}
+                          >
+                            <CameraIcon />
+                          </button>
+
                           <input
                             type="file"
-                            className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 block h-full w-full opacity-0"
+                            className="hidden"
                             accept="image/jpeg, image/png, image/gif"
                             onChange={(e) => handleFileChange(e)}
+                            ref={fileInputRef}
                             disabled={isLoading}
                           />
                         </div>
@@ -472,9 +488,8 @@ function DiscussionElement({
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
-                  className={`${
-                    discussion?.id === idReply ? 'text-primary' : ''
-                  } flex select-none items-center gap-2 font-medium hover:underline`}
+                  className={`${discussion?.id === idReply ? 'text-primary' : ''
+                    } flex select-none items-center gap-2 font-medium hover:underline`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
                     trackGAEvent('Click Reply Comment Activity')
