@@ -1234,7 +1234,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
     const exhibitButton = (
       <>
         <NotesOutline className="h-8 w-8 text-white" />
-        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover/exhibit:opacity-20" />
         {showWarning && (
           <PulsingExclamation
             className="absolute -right-3 -top-4"
@@ -1298,29 +1298,26 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
           <div className="relative">
             {renderQuestion()}
             <div className="absolute -right-4 bottom-[10px] z-[1050] flex w-12 flex-col gap-2">
+              {/* --- Exhibit Button --- */}
               {exhibitData && exhibitData?.length > 0 && (
-                <>
+                <div className="isolate">
                   <Popover
                     placement="leftTop"
                     trigger="click"
                     getPopupContainer={() => document.body}
                     content={
                       <div className="flex flex-col gap-2">
-                        {exhibitData?.map((e: any, index: number) => {
-                          return (
-                            <div
-                              key={e?.value}
-                              className={clsx(
-                                'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800',
-                              )}
-                              onClick={(event) =>
-                                handleOpenExhibit(event, e, index)
-                              }
-                            >
-                              {exhibitText} {index + 1}
-                            </div>
-                          )
-                        })}
+                        {exhibitData?.map((e: any, index: number) => (
+                          <div
+                            key={e?.value}
+                            className="min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800"
+                            onClick={(event) =>
+                              handleOpenExhibit(event, e, index)
+                            }
+                          >
+                            {exhibitText} {index + 1}
+                          </div>
+                        ))}
                       </div>
                     }
                     zIndex={1050}
@@ -1328,7 +1325,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   >
                     <div
                       className={clsx(
-                        'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
+                        'group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay',
                         {
                           'top-[12px]':
                             (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
@@ -1344,83 +1341,80 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       {exhibitButton}
                     </div>
                   </Popover>
+
                   <div
                     className={clsx(
-                      'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay md:hidden',
+                      'group/exhibit grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary shadow-icon hover:bg-blend-overlay md:hidden',
                     )}
                     onClick={onOpenExhibitModal}
                   >
                     {exhibitButton}
                   </div>
-                </>
+                </div>
               )}
 
+              {/* --- File Button --- */}
               {activeQuestion?.question_topic?.files?.length > 0 && (
-                <Popover
-                  className=""
-                  placement="leftTop"
-                  trigger="click"
-                  getPopupContainer={() => document.body}
-                  content={
-                    <div className="flex flex-col gap-2">
-                      {activeQuestion?.question_topic?.files?.map(
-                        (e: any, index: number) => {
-                          return (
+                <div className="isolate">
+                  <Popover
+                    placement="leftTop"
+                    trigger="click"
+                    getPopupContainer={() => document.body}
+                    content={
+                      <div className="flex flex-col gap-2">
+                        {activeQuestion?.question_topic?.files?.map(
+                          (e: any) => (
                             <div
-                              className={clsx(
-                                `flex items-start justify-between gap-8 p-2`,
-                              )}
+                              className="flex items-start justify-between gap-8 p-2"
                               key={e?.value}
                             >
                               <div
-                                key={e?.value}
-                                className={clsx(
-                                  'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
-                                )}
+                                className="min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary"
                                 onClick={() => handleOpenFile(e)}
                               >
                                 {e?.resource?.name}
                               </div>
                               <div
                                 className="cursor-pointer text-white"
-                                onClick={() => {
+                                onClick={() =>
                                   download(
                                     e?.resource?.name,
                                     e?.resource?.file_key,
                                   )
-                                }}
+                                }
                               >
                                 <DownloadIcon color="currentColor" />
                               </div>
                             </div>
-                          )
+                          ),
+                        )}
+                      </div>
+                    }
+                    zIndex={1050}
+                  >
+                    <div
+                      className={clsx(
+                        'group/file relative grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                        {
+                          'top-[74px]':
+                            (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                              !activeQuestion?.requirements?.length) ||
+                            !isShowIconButtonInBottom,
+                          'top-[214px]':
+                            activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                            !!activeQuestion?.requirements?.length,
+                          'bottom-0': isShowIconButtonInBottom,
                         },
                       )}
+                    >
+                      <FileTextIcon />
+                      <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover/file:opacity-20" />
                     </div>
-                  }
-                  zIndex={1050}
-                >
-                  <div
-                    className={clsx(
-                      'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-                      {
-                        'top-[74px]':
-                          (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                            !activeQuestion?.requirements?.length) ||
-                          !isShowIconButtonInBottom,
-                        'top-[214px]':
-                          activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-                          !!activeQuestion?.requirements?.length,
-                        'bottom-0': isShowIconButtonInBottom,
-                      },
-                    )}
-                  >
-                    <FileTextIcon />
-                    <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-                  </div>
-                </Popover>
+                  </Popover>
+                </div>
               )}
             </div>
+
             {activeQuestion &&
               activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
               isShowTemplate && (

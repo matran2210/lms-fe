@@ -248,7 +248,7 @@ const CoursePartDetail = () => {
     const totalCourseSectionsCompleted =
       getCaseStudy?.learning_progress?.total_course_sections_completed
     if (
-      totalCourseSections === totalCourseSectionsCompleted &&
+      getCaseStudy?.attempt?.id &&
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {

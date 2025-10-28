@@ -490,14 +490,18 @@ const CaseStudyDetail = ({ questions }: any) => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
+    if (
+      router.query?.quiz_id &&
+      router.query?.id &&
+      router.query?.class_user_id
+    ) {
       createAttempts(
         router.query.quiz_id as string,
         router.query.id as string,
         router.query.class_user_id as string,
       )
     }
-  }, [router.query.id])
+  }, [router])
 
   /**
    * Declare form to handle exhibit

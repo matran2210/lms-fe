@@ -656,7 +656,7 @@ const MatchQuiz = forwardRef(
           <>
             <SappDivider />
             <div className={explainClassname}>
-              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
           </>
