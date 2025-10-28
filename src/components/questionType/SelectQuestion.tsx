@@ -79,7 +79,7 @@ const SelectWord = forwardRef(
       setOpenFile,
       isHideExhibit = true,
       exhibitText,
-      isShowWarning = true,
+      isShowWarning = false,
       onChange,
     }: IProps,
     ref: ForwardedRef<any>,
