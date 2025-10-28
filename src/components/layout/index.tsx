@@ -112,8 +112,8 @@ export default function Layout(props: LayoutProps): ReactElement {
             '!max-w-full p-0': fullWidth,
           })}
         >
-          <div className={clsx(`${paddingTop} h-full bg-[#F9F9F9]`, className)}>
-            <div className={clsx('ml-0 h-full')}>{children}</div>
+          <div className={clsx(`${paddingTop} bg-[#F9F9F9]`, className)}>
+            <div className={clsx('ml-0')}>{children}</div>
           </div>
         </div>
       </div>

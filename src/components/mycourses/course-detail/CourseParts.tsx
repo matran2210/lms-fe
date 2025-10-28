@@ -9,6 +9,7 @@ import { TEST_TYPE } from 'src/constants'
 import { IMyCourseDetail } from 'src/type/courses'
 import Part from './Part'
 import PartMiddleTest from './PartFailed'
+import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 
 const CourseParts = ({
   courses,
@@ -54,8 +55,8 @@ const CourseParts = ({
     const isOverdue = dayjs(deadline).isBefore(new Date())
     if (isEmpty(courses)) {
       return (
-        <div className="flex min-h-[calc(100vh-15rem)] items-center justify-center">
-          <NoData />
+        <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
+          <NoCoursesAvailable />
         </div>
       )
     }
