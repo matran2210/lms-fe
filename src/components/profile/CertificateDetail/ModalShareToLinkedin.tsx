@@ -158,7 +158,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
             <HookFormCheckBox
               control={form.control}
               name="shareToFeed"
-              title="Share to your Feed"
+              title="Linkedin Post"
               classNameTitle="text-gray-800 font-semibold"
             />
             {isShareToFeed && (
@@ -188,7 +188,7 @@ const ModalShareToLinkedin = ({ open, onClose, certificate }: IProps) => {
             <HookFormCheckBox
               control={form.control}
               name="addToProfile"
-              title="Add to your Profile"
+              title="Linkedin Licenses & certifications"
               classNameTitle="text-gray-800 font-semibold"
             />
           </div>
