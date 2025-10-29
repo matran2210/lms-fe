@@ -103,7 +103,7 @@ const ShowAnswerTemplate = ({
           width={800}
           header={
             <div className="relative mb-4">
-              <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
+              <div className="modal-header modal-dragger flex w-full items-center justify-between rounded-xl bg-white">
                 <div className="truncate">
                   <span className="text-sm font-semibold text-gray-800">
                     Show Answer Template
