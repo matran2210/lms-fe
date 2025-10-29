@@ -128,7 +128,7 @@ const OneChoiceQuestion = ({
         data?.question_topic?.exhibits?.length > 0 && (
           <>
             {!!data?.question_topic?.description && (
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
             )}
             <div className="mb-4 flex items-center">
               <div className="font-semibold">
@@ -167,7 +167,7 @@ const OneChoiceQuestion = ({
                 )
               })}
             </div>
-            <div className="my-6 border border-gray-2" />
+            <div className="my-6 border border-gray-300" />
           </>
         )}
       <div

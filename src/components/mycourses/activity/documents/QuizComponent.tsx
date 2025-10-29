@@ -113,6 +113,13 @@ export type QuizComponentRef = {
     response_option: RESPONSE_OPTION,
     defaultValue?: string | undefined,
   ) => Promise<void>
+  onResetAnswerEssayToTemplate: () => void
+  getEssayData: () =>
+    | {
+        req?: IRequirement
+        index?: number
+      }
+    | undefined
 }
 
 type Props = {
@@ -213,14 +220,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const [openExhibitModal, setOpenExhibitModal] = useState(false)
     const refEditor = useRef(null) as any
-    const [openResetToTemplateModal, setOpenResetToTemplateModal] =
-      useState(false)
-    const onOpenResetToTemplateModal = () => {
-      setOpenResetToTemplateModal(true)
-    }
-    const onCloseResetToTemplateModal = () => {
-      setOpenResetToTemplateModal(false)
-    }
+    const essayDataRef = useRef(essayData)
 
     const handleResetEssay = async (
       name: string,
@@ -328,6 +328,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       const defaultValue = getDefaultValue(data.id)
       setValue?.(name, defaultValue)
       handleResetEssay(name, defaultValue)
+      essayDataRef.current = {
+        req: data,
+        index: data.index - 1,
+      }
       setEssayData({
         req: data,
         index: data.index - 1,
@@ -434,6 +438,8 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
       getValues: getValues!,
       onResetFormatEssay: onResetFormatEssay,
       onResetWordOnly: onResetWordOnly,
+      onResetAnswerEssayToTemplate,
+      getEssayData: () => essayDataRef.current,
     }))
 
     const handleGetAnswer = (activeQuestion: IActivityStateQuestion) => {
@@ -1102,6 +1108,10 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
     const handleGetExhibit = () => {
       if (activeQuestion?.requirements) {
+        essayDataRef.current = {
+          req: activeQuestion?.requirements?.[0],
+          index: 0,
+        }
         setEssayData({
           req: activeQuestion?.requirements?.[0],
           index: 0,
@@ -1122,12 +1132,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
       setExhibitData(exhibitOption)
     }
-
-    const isShowTemplate =
-      activeQuestion?.answer_template ||
-      activeQuestion?.requirements?.some(
-        (req: IRequirment) => req?.answer_template,
-      )
     const onResetFormatEssay = (key: string, value: string) => {
       resetField?.(key, {
         defaultValue: value,
@@ -1293,7 +1297,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
-              <Divider className="my-4 md:my-8" />
+              <Divider className="my-4 bg-gray-300 md:my-8" />
             )}
           <div className="relative">
             {renderQuestion()}
@@ -1369,7 +1373,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               key={e?.value}
                             >
                               <div
-                                className="min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary"
+                                className="min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary"
                                 onClick={() => handleOpenFile(e)}
                               >
                                 {e?.resource?.name}
@@ -1414,18 +1418,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 </div>
               )}
             </div>
-
-            {activeQuestion &&
-              activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-              isShowTemplate && (
-                <div className="mt-8 flex justify-end">
-                  <ButtonPrimaryV2
-                    title="Reset to Answer Template"
-                    onClick={onOpenResetToTemplateModal}
-                    disabled={activeQuestion?.confirmed}
-                  />
-                </div>
-              )}
           </div>
         </div>
 
@@ -1490,11 +1482,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             </div>
           </Modal>
         )}
-        <ResetToAnswerTemplateModal
-          open={openResetToTemplateModal}
-          handleReset={onResetAnswerEssayToTemplate}
-          handleClose={onCloseResetToTemplateModal}
-        />
       </div>
     )
   },

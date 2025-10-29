@@ -27,6 +27,7 @@ import {
   SheetData,
 } from 'src/constants/attempt'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
+import SappDivider from '@components/common/Divider/Divider'
 
 export type IPreviewProp = {
   data: any
@@ -520,7 +521,7 @@ const EssayQuestionPreview = ({
                   }
                   highlighArea="hightlight_area_require"
                 />
-                <Divider />
+                <SappDivider className="!my-6" />
               </>
             )}
 
@@ -626,7 +627,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              <Divider />
+              <SappDivider className="!my-6" />
             </React.Fragment>
           )
         ) : (
@@ -700,12 +701,8 @@ const EssayQuestionPreview = ({
             fullData?.done ||
             fullData?.data?.confirmed) &&
             (fullData?.solution || data?.explanation?.trim()) && (
-              <div
-                className={clsx(
-                  'mb-11 mt-8 bg-[#F9F9F9] p-4',
-                  explainClassname,
-                )}
-              >
+              <div className={explainClassname}>
+                <SappDivider />
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />
                 <EditorReader
                   text_editor_content={

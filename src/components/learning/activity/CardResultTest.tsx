@@ -37,45 +37,60 @@ const CardResultTest = ({
     </div>
   )
   const handleViewResult = () => {
-    if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
-      if (resultData?.quiz?.attempts) {
-        if (
-          resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
-        ) {
+    if (resultData?.quiz?.attempts?.length > 0) {
+      if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
+        if (resultData?.quiz?.attempts) {
           if (
-            resultData?.quiz?.attempts?.[0]?.grading_status ===
-            GRADE_STATUS.FINISHED_GRADING
+            resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.SUBMITTED
+          ) {
+            if (
+              resultData?.quiz?.attempts?.[0]?.grading_status ===
+              GRADE_STATUS.FINISHED_GRADING
+            ) {
+              router.push(
+                `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+              )
+            } else {
+              router.push(
+                `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
+              )
+            }
+          } else if (
+            resultData?.quiz?.attempts?.[0]?.status ===
+            EAttemptStatus.IN_PROGRESS
+          ) {
+            router.push(
+              `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+            )
+          } else if (
+            resultData?.quiz?.attempts?.[0]?.status ===
+            EAttemptStatus.UN_SUBMITTED
           ) {
             router.push(
               `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
             )
-          } else {
-            router.push(
-              `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
-            )
           }
-        } else if (
+        } else {
+          router.push(
+            `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
+          )
+        }
+      } else {
+        if (
           resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
           router.push(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
-        } else if (
-          resultData?.quiz?.attempts?.[0]?.status ===
-          EAttemptStatus.UN_SUBMITTED
-        ) {
+        } else {
           router.push(
             `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
           )
         }
-      } else {
-        router.push(
-          `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
-        )
       }
     } else {
       router.push(
-        `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
+        `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
       )
     }
   }

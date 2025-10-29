@@ -111,7 +111,7 @@ const MultiChoiceQuestion = ({
           !isHideExhibit &&
           data?.question_topic?.exhibits?.length > 0 && (
             <>
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">
                   {exhibitText ? exhibitText + 's' : 'Exhibits'} (
@@ -149,7 +149,7 @@ const MultiChoiceQuestion = ({
                   )
                 })}
               </div>
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
             </>
           )}
       </div>

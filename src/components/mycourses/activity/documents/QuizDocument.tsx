@@ -48,13 +48,16 @@ import {
   IQuestionResult,
   IQuestionResultResponse,
 } from 'src/type/course/my-course/Activity'
-import { IQuestion } from 'src/type/course/Question'
+import { IQuestion, IRequirment } from 'src/type/course/Question'
 import { CoursesAPI } from '../../../../pages/api/courses/index'
 import ModalExplanationPackage from '../ModalExplanationPackage'
 import ModalResults from '../ModalResults'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import LoadingQuizDocument from './LoadingQuizDocument'
 import { GradingPreference } from '@utils/constants'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 
 type Props = {
   questions: IQuestion[]
@@ -318,7 +321,7 @@ const QuizDocument = ({
       questionRef.current?.getValues(name) ||
       activeQuestion?.myAnswers?.[0]?.short_answer
     if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
+      // await questionRef.current?.onResetSheet(activeQuestion?.response_option)
     } else {
       await questionRef.current?.onResetWord(
         name,
@@ -665,7 +668,7 @@ const QuizDocument = ({
           </div>
           <div className="body-modal-white -mt-2">
             <div id="hightlight_area">
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
               <div className="mb-4 flex items-center">
                 <div className="font-semibold">{exhibitText}s (6)</div>
                 <div className="ml-4">
@@ -690,7 +693,7 @@ const QuizDocument = ({
                   {exhibitText} 5: csv short
                 </div>
               </div>
-              <div className="my-6 border border-b-[#DCDDDD]"></div>
+              <div className="my-6 border border-b-gray-300"></div>
               <div className="questions editor-wrap mce-content-body" id="">
                 <div className="">
                   <p>
@@ -818,6 +821,19 @@ const QuizDocument = ({
     setOpenGradedReport(false)
     setIsFinishQuiz(false)
   }
+  const [openResetToTemplateModal, setOpenResetToTemplateModal] =
+    useState(false)
+  const onOpenResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(true)
+  }
+  const onCloseResetToTemplateModal = () => {
+    setOpenResetToTemplateModal(false)
+  }
+  const isShowTemplate =
+    activeQuestion?.answer_template ||
+    activeQuestion?.requirements?.some(
+      (req: IRequirment) => req?.answer_template,
+    )
 
   return (
     <div
@@ -959,13 +975,36 @@ const QuizDocument = ({
                 />
               )}
           </div>
+
           {/* Confirm Button */}
           <div
-            className={clsx('justify-end gap-2', {
+            className={clsx('justify-end', {
               'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
               flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
+              'gap-3': isShowTemplate,
+              'gap-2': !isShowTemplate,
             })}
           >
+            {activeQuestion &&
+              activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+              isShowTemplate &&
+              !activeQuestion?.confirmed && (
+                <div className="flex items-center justify-end gap-3">
+                  <ButtonTextV2
+                    title="Reset to Answer Template"
+                    onClick={onOpenResetToTemplateModal}
+                    disabled={activeQuestion?.confirmed}
+                    className="bg-transparent hover:!bg-transparent"
+                  />
+                  <ShowAnswerTemplate
+                    {...{
+                      currentTabContent: activeQuestion,
+                      essayData: questionRef.current?.getEssayData() as any,
+                    }}
+                    isQuiz
+                  />
+                </div>
+              )}
             {gradeStatus &&
               ![
                 GRADE_STATUS.AWAITING_GRADING,
@@ -1093,28 +1132,6 @@ const QuizDocument = ({
         </div>
       )}
 
-      {/* {modalResult?.status && (
-        <ModalResults
-          getTable={getTable}
-          handleShowQuestionResultDetail={handleShowQuestionResultDetail}
-          modalResult={modalResult}
-          open={modalResult?.status}
-          handleCancel={() => {
-            refreshTab()
-            setModalResult(undefined)
-          }}
-          loading={loading}
-          handleOk={() => setModalResult(undefined)}
-        />
-      )} */}
-
-      {/* {showQuestionResultDetail?.isOpen && (
-        <ModalExplanationPackage
-          quizAttemptsAnswerId={showQuestionResultDetail?.id || ''}
-          open={showQuestionResultDetail?.isOpen || false}
-          setOpen={() => setShowQuestionResultDetail(undefined)}
-        />
-      )} */}
       {openGradedReport && (
         <SappModalV3
           open={openGradedReport}
@@ -1144,6 +1161,15 @@ const QuizDocument = ({
           icon={<ConfirmIcon />}
           header={FINISHED_TEST_TITLE}
           content={`Congratulations on completing ${quizName}. The result will be sent to you via email after the grading is finished.`}
+        />
+      )}
+      {openResetToTemplateModal && (
+        <ResetToAnswerTemplateModal
+          open={openResetToTemplateModal}
+          handleReset={() =>
+            questionRef?.current?.onResetAnswerEssayToTemplate()
+          }
+          handleClose={onCloseResetToTemplateModal}
         />
       )}
     </div>

@@ -213,18 +213,13 @@ const ResultsTable = ({
       {!isLoading && !isEmpty(flatData) && (
         <div className="mt-6 flex flex-col gap-6 md:mt-0">
           <div className="flex flex-col gap-6">
-            {flatData
-              ?.filter((item: any) => item.quiz === null)
-              ?.map((item: any) => (
+            {flatData?.map((item: any) =>
+              item?.quiz === null ? (
                 <CollapseActivity key={item?.id} resultData={item} />
-              ))}
-          </div>
-          <div className="flex flex-col gap-6">
-            {flatData
-              ?.filter((item: any) => item.quiz !== null)
-              ?.map((item: any) => (
-                <CardResultTest key={item.id} resultData={item} />
-              ))}
+              ) : (
+                <CardResultTest key={item?.id} resultData={item} />
+              ),
+            )}
           </div>
 
           <div ref={lastElementRef} />

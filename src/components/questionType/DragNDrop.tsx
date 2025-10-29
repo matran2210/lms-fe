@@ -574,7 +574,7 @@ const DragNDropPreview = forwardRef(
                   data?.question_topic?.exhibits?.length > 0 && (
                     <>
                       {data?.question_topic?.description && (
-                        <div className="my-6 border border-b-[#DCDDDD]" />
+                        <div className="my-6 border border-b-gray-300" />
                       )}
                       <div className="mb-4 flex items-center">
                         <div className="font-semibold">
@@ -612,7 +612,7 @@ const DragNDropPreview = forwardRef(
                           ),
                         )}
                       </div>
-                      <div className="my-6 border border-b-[#DCDDDD]" />
+                      <div className="my-6 border border-b-gray-300" />
                     </>
                   )}
                 <EditorReader
