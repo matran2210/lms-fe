@@ -720,7 +720,7 @@ const TestModal = ({
                         >
                           Result:
                         </div>
-                        {resultList?.data?.length > 1 && (
+                        {resultList?.data?.length >= 1 && (
                           <Select
                             classNames={{
                               root: 'select-result-attempt',
