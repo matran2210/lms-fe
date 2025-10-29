@@ -521,7 +521,7 @@ const EssayQuestionPreview = ({
                   }
                   highlighArea="hightlight_area_require"
                 />
-                <Divider />
+                <SappDivider className="!my-6" />
               </>
             )}
 
@@ -627,7 +627,7 @@ const EssayQuestionPreview = ({
                   </div>
                 </div>
               </div>
-              <Divider />
+              <SappDivider className="!my-6" />
             </React.Fragment>
           )
         ) : (

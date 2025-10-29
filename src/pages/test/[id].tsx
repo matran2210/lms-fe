@@ -3921,7 +3921,7 @@ const TestDetail = () => {
                         <div
                           key={e?.value}
                           className={clsx(
-                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
+                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary',
                           )}
                           onClick={() =>
                             handleOpenScratchPad(
