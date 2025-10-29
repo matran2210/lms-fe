@@ -67,6 +67,7 @@ import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { Triangle } from '@components/icons/Triangle'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -1349,8 +1350,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                           {question &&
                             question.qType === QUESTION_TYPES.ESSAY &&
                             isShowTemplate && (
-                              <div className="mt-8 flex justify-end">
-                                <ButtonPrimaryV2
+                              <div className="mt-8 flex items-center justify-end gap-3">
+                                <ButtonTextV2
                                   title="Reset to Answer Template"
                                   onClick={() =>
                                     onOpenResetToTemplateModal({
@@ -1358,23 +1359,19 @@ const CaseStudyDetail = ({ questions }: any) => {
                                       index,
                                     })
                                   }
+                                  className="bg-transparent hover:!bg-transparent"
+                                />
+                                <ShowAnswerTemplate
+                                  {...{
+                                    currentTabContent: question,
+                                    essayData: {
+                                      index: 0,
+                                      req: question?.requirements?.[0],
+                                    },
+                                  }}
+                                  isQuiz
                                 />
                               </div>
-                            )}
-                          {question &&
-                            question.qType === QUESTION_TYPES.ESSAY &&
-                            isShowTemplate && (
-                              <ShowAnswerTemplate
-                                {...{
-                                  currentTabContent: question,
-                                  essayData: {
-                                    index: 0,
-                                    req: question?.requirements?.[0],
-                                  },
-                                }}
-                                isQuiz
-                                className="!-right-6 z-[1]"
-                              />
                             )}
                         </div>
                       )
