@@ -1369,7 +1369,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                               key={e?.value}
                             >
                               <div
-                                className="min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary"
+                                className="min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary"
                                 onClick={() => handleOpenFile(e)}
                               >
                                 {e?.resource?.name}
