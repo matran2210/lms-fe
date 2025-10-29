@@ -321,7 +321,7 @@ const QuizDocument = ({
       questionRef.current?.getValues(name) ||
       activeQuestion?.myAnswers?.[0]?.short_answer
     if (activeQuestion?.response_option === RESPONSE_OPTION.SHEET) {
-      await questionRef.current?.onResetSheet(activeQuestion?.response_option)
+      // await questionRef.current?.onResetSheet(activeQuestion?.response_option)
     } else {
       await questionRef.current?.onResetWord(
         name,
@@ -987,26 +987,23 @@ const QuizDocument = ({
           >
             {activeQuestion &&
               activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-              isShowTemplate && (
-                <div className="flex items-center justify-end">
+              isShowTemplate &&
+              !activeQuestion?.confirmed && (
+                <div className="flex items-center justify-end gap-3">
                   <ButtonTextV2
                     title="Reset to Answer Template"
                     onClick={onOpenResetToTemplateModal}
                     disabled={activeQuestion?.confirmed}
                     className="bg-transparent hover:!bg-transparent"
                   />
+                  <ShowAnswerTemplate
+                    {...{
+                      currentTabContent: activeQuestion,
+                      essayData: questionRef.current?.getEssayData() as any,
+                    }}
+                    isQuiz
+                  />
                 </div>
-              )}
-            {activeQuestion &&
-              activeQuestion.qType === QUESTION_TYPES.ESSAY &&
-              isShowTemplate && (
-                <ShowAnswerTemplate
-                  {...{
-                    currentTabContent: activeQuestion,
-                    essayData: questionRef.current?.getEssayData() as any,
-                  }}
-                  isQuiz
-                />
               )}
             {gradeStatus &&
               ![
