@@ -1293,7 +1293,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
 
           {!!activeQuestion?.question_topic?.description &&
             !isEmptyParagraph(activeQuestion?.question_topic?.description) && (
-              <Divider className="my-4 md:my-8" />
+              <Divider className="my-4 bg-gray-300 md:my-8" />
             )}
           <div className="relative">
             {renderQuestion()}
