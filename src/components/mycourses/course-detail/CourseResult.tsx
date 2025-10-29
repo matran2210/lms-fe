@@ -122,7 +122,7 @@ const ResultCourse = ({
     })
 
     // Nếu nhiều hơn 1 kết quả thì gộp vào result list
-    if (totalRecords > 1) {
+    if (totalRecords >= 1) {
       setResultList((prev: IQuizResultList) => ({
         metadata: response.data.metadata,
         data: [...prev.data, ...results].filter(
@@ -138,67 +138,82 @@ const ResultCourse = ({
     fetchResult(1, 10)
   }, [])
 
-  const isAttempt = resultList?.data?.length <= 1
+  const isAttempt = resultList?.data?.length >= 1
 
   return (
-    <div className="flex h-8 items-center gap-2">
-      <div
-        className={`forcus-group:text-primary ${isAttempt ? 'text-gray' : 'text-gray-800'}`}
+    <div className="time-allow flex items-center justify-between">
+      <p className="text-sm text-gray-800 md:text-base">
+        <div className="flex h-8 items-center gap-2">
+          <div
+            className={`forcus-group:text-primary ${resultList?.data?.length <= 1 ? 'text-gray' : 'text-gray-800'}`}
+          >
+            Result of Attempts:
+          </div>
+          <div>
+            {isAttempt ? (
+              <>
+                {resultList?.data?.length === 1 ? (
+                  <div className="text-gray">1</div>
+                ) : (
+                  <Select
+                    options={resultList?.data?.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                    // open={true}
+                    // classNames={{
+                    //   root: 'select-result-attempt',
+                    //   popup: { root: 'select-result-attempt-option' },
+                    // }}
+                    className="custom-select-v2 h-8 pr-2"
+                    popupClassName="select-card-course"
+                    onPopupScroll={(e) => {
+                      const target = e.target as HTMLDivElement
+                      if (
+                        target.scrollTop + target.offsetHeight >=
+                        target.scrollHeight
+                      ) {
+                        handleNextPage()
+                      }
+                    }}
+                    variant="borderless"
+                    value={selectedResult?.value}
+                    onChange={(selectedOption) => {
+                      const selectedResultFind = resultList?.data?.find(
+                        (item) => item?.id === selectedOption,
+                      )
+                      const selectedResult = {
+                        label: selectedResultFind?.name,
+                        value: selectedResultFind?.id,
+                        ratio_score: selectedResultFind?.ratio_score,
+                        status: selectedResultFind?.status,
+                        score: selectedResultFind?.score,
+                      }
+                      setSelectedResult(
+                        selectedResult as {
+                          label: string
+                          value: string
+                          ratio_score?: string
+                          status: string
+                          score: number
+                        },
+                      )
+                    }}
+                    suffixIcon={<ArrowDownIcon />}
+                  />
+                )}
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+      </p>
+      <p
+        className={`text-sm font-medium md:text-base ${isAttempt ? 'text-info' : 'text-gray-800'}`}
       >
-        Result of Attempts:
-      </div>
-      <div>
-        {isAttempt ? (
-          <div className="text-gray">1</div>
-        ) : (
-          <Select
-            options={resultList?.data?.map((item) => ({
-              value: item.id,
-              label: item.name,
-            }))}
-            // open={true}
-            // classNames={{
-            //   root: 'select-result-attempt',
-            //   popup: { root: 'select-result-attempt-option' },
-            // }}
-            className="custom-select-v2 h-8 pr-2"
-            popupClassName="select-card-course"
-            onPopupScroll={(e) => {
-              const target = e.target as HTMLDivElement
-              if (
-                target.scrollTop + target.offsetHeight >=
-                target.scrollHeight
-              ) {
-                handleNextPage()
-              }
-            }}
-            variant="borderless"
-            value={selectedResult?.value}
-            onChange={(selectedOption) => {
-              const selectedResultFind = resultList?.data?.find(
-                (item) => item?.id === selectedOption,
-              )
-              const selectedResult = {
-                label: selectedResultFind?.name,
-                value: selectedResultFind?.id,
-                ratio_score: selectedResultFind?.ratio_score,
-                status: selectedResultFind?.status,
-                score: selectedResultFind?.score,
-              }
-              setSelectedResult(
-                selectedResult as {
-                  label: string
-                  value: string
-                  ratio_score?: string
-                  status: string
-                  score: number
-                },
-              )
-            }}
-            suffixIcon={<ArrowDownIcon />}
-          />
-        )}
-      </div>
+        {isAttempt ? `${selectedResult?.score || 0}%` : '--'}
+      </p>
     </div>
   )
 }

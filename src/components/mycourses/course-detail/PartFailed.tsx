@@ -269,24 +269,16 @@ const PartFailed = ({
             <PartInfoItem label="Time Allowed:" value={formattedTime} />
             <PartInfoItem label="No of Attempts:" value={noOfAttempts} />
 
-            <div className="time-allow flex items-center justify-between">
-              <p className="text-sm text-gray-800 md:text-base">
-                <ResultCourse
-                  class_user_id={class_user_id}
-                  coursePart={coursePart}
-                  setOpenReport={setOpenReport}
-                  selectedResult={selectedResult}
-                  setSelectedResult={setSelectedResult}
-                  isTeacher={isTeacher}
-                  setLabelResult={setLabelResult}
-                />
-              </p>
-              {
-                <p className="text-sm font-medium text-gray-800 md:text-base">
-                  {selectedResult?.score || 0}%
-                </p>
-              }
-            </div>
+            {/* Result of attempts */}
+            <ResultCourse
+              class_user_id={class_user_id}
+              coursePart={coursePart}
+              setOpenReport={setOpenReport}
+              selectedResult={selectedResult}
+              setSelectedResult={setSelectedResult}
+              isTeacher={isTeacher}
+              setLabelResult={setLabelResult}
+            />
           </div>
 
           <div className="action flex items-center justify-end">
