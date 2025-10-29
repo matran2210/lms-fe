@@ -49,6 +49,7 @@ interface IProps {
         ratio_score?: string
         status: string
         score: number
+        total_attempt_time: number
       }
     | undefined
   setSelectedResult: Dispatch<
@@ -59,6 +60,7 @@ interface IProps {
           ratio_score?: string
           status: string
           score: number
+          total_attempt_time: number
         }
       | undefined
     >
@@ -119,6 +121,7 @@ const ResultCourse = ({
       ratio_score: firstResult.ratio_score,
       status: firstResult.status,
       score: firstResult.score,
+      total_attempt_time: firstResult.total_attempt_time,
     })
 
     // Nếu nhiều hơn 1 kết quả thì gộp vào result list
@@ -182,12 +185,15 @@ const ResultCourse = ({
                       const selectedResultFind = resultList?.data?.find(
                         (item) => item?.id === selectedOption,
                       )
+
                       const selectedResult = {
                         label: selectedResultFind?.name,
                         value: selectedResultFind?.id,
                         ratio_score: selectedResultFind?.ratio_score,
                         status: selectedResultFind?.status,
                         score: selectedResultFind?.score,
+                        total_attempt_time:
+                          selectedResultFind?.total_attempt_time,
                       }
                       setSelectedResult(
                         selectedResult as {
@@ -196,6 +202,7 @@ const ResultCourse = ({
                           ratio_score?: string
                           status: string
                           score: number
+                          total_attempt_time: number
                         },
                       )
                     }}
