@@ -904,7 +904,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       <div
         id={storageKey}
         ref={containerRef}
-        className={className}
+        className={`${className} editor-wrap`}
         onCopy={(e) => e.preventDefault()}
         onContextMenu={(e) => e.preventDefault()}
         onClick={handleOnclick}

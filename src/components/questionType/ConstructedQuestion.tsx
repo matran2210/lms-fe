@@ -514,7 +514,7 @@ const EssayQuestionPreview = ({
             {data?.description && (
               <>
                 <EditorReader
-                  className="editor-wrap mb-6"
+                  className="mb-6"
                   text_editor_content={data?.description}
                   highlighted={
                     question_data?.requirements?.[index || 0]?.highlighted

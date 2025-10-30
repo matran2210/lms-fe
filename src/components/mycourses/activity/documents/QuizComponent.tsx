@@ -968,7 +968,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 <div className="mb-6">
                   <div>
                     <EditorReader
-                      className="editor-wrap text-lg font-semibold"
+                      className="text-lg font-semibold"
                       text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
