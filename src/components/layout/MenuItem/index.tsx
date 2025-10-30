@@ -33,6 +33,7 @@ import examInfoAnimationIcon from 'public/animations/ExamInfo.json'
 import noteListAnimationIcon from 'public/animations/NoteList.json'
 import testQuizListAnimationIcon from 'public/animations/TestQuizList.json'
 import Lottie from 'lottie-react'
+import { clearNotifications } from 'src/redux/slice/Notification/Notification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -77,6 +78,12 @@ export default function MenuItem({
       title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
     },
   ]
+
+  useEffect(() => {
+    if (selectedTab) {
+      dispatch(clearNotifications())
+    }
+  }, [selectedTab])
 
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()

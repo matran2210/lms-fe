@@ -11,7 +11,6 @@ import {
   loadMoreNotification,
   markAllNotifications,
   updateStatusAll,
-  clearNotifications,
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 export const useNotification = () => {
@@ -40,7 +39,6 @@ export const useNotification = () => {
     const loadMultiplePages = async () => {
       const screenHeight = window.innerHeight
 
-      dispatch(clearNotifications())
       isRefresh && (await dispatch(getCountUnRead()))
 
       const firstPageAction = await dispatch(
