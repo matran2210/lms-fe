@@ -11387,7 +11387,7 @@ sapp-common-package@^1.4.1, sapp-common-package@^1.4.2:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.14:
+sapp-notification@^1.0.15:
   version "1.0.15"
   resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.15.tgz#c557f5ef5645d084506b98d8c412b6d73dfbbefe"
   integrity sha512-qlh/Q4FDP2xcbTYbdCSpRR9BCJSDKk8hufs0bn9tDaOMxpjTi6qJhyjyuzKM4gW8eFXeLueqxagdCKL+UKqXeg==
