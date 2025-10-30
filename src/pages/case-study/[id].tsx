@@ -375,7 +375,7 @@ const CaseStudyDetail = ({ questions }: any) => {
         let hasAnswer = false
         const data = JSON.parse(item?.answer)
         for (let el of data) {
-          if (el.celldata && el.celldata.length > 0) {
+          if ((el.celldata && el.celldata.length > 0) || el?.data?.length > 0) {
             hasAnswer = true
             break
           }
@@ -771,7 +771,10 @@ const CaseStudyDetail = ({ questions }: any) => {
                   const data = JSON.parse(e?.answer)
                   //** check qua từng cell của excel để xem có đáp án không  */
                   for (let el of data) {
-                    if (el.celldata && el.celldata.length > 0) {
+                    if (
+                      (el.celldata && el.celldata.length > 0) ||
+                      el?.data?.length > 0
+                    ) {
                       answers.push({
                         question_id: e?.id,
                         requirement_id: e?.requirement_id,
