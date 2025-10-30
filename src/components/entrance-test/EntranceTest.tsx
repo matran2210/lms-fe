@@ -259,6 +259,7 @@ const EntranceTest = ({
       {renderButton()}
     </div>
   )
+  const hasOpened = localStorage.getItem('openModalMarketingInApp')
 
   return (
     <>
@@ -317,7 +318,7 @@ const EntranceTest = ({
                         onChange={(value) => {
                           setCurrentAttempt(
                             data?.attempts?.find((item) => item.id === value) ||
-                              ({} as IEntranceTestAttempt),
+                            ({} as IEntranceTestAttempt),
                           )
                         }}
                         suffixIcon={<ArrowDownIcon />}
@@ -350,7 +351,7 @@ const EntranceTest = ({
           </div>
         </div>
       </CardCourse>
-      {isShowEntranceTestPopup && (
+      {isShowEntranceTestPopup && hasOpened && (
         <PopUpRemindEntrance
           setOpenFillForm={setOpenFillForm}
           setOpenTest={

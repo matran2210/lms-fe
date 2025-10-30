@@ -166,7 +166,9 @@ const ExaminationInfo = ({
   }
   const handleCancel = () => {
     setOpen(false)
-    handleBack()
+    setTimeout(() => {
+      handleBack()
+    }, 500)
   }
   const { exams } = useSelectExams(classId)
   const handleChangeExamDate = () => {
