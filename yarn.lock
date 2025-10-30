@@ -11811,10 +11811,10 @@ sapp-common-package@^1.4.2:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.14.tgz#90c17eeaf2f06adbd26ffa37d5dc956198976c9d"
-  integrity sha512-EGgqXiuwqJbVhC09nWIizLOw2KnK/zyaIGYlghUswnM+fvrOdsyV9Lc4RtAyrzgdU1BNq4QHOfYOzSlJMOtjFg==
+sapp-notification@^1.0.15:
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.15.tgz#c557f5ef5645d084506b98d8c412b6d73dfbbefe"
+  integrity sha512-qlh/Q4FDP2xcbTYbdCSpRR9BCJSDKk8hufs0bn9tDaOMxpjTi6qJhyjyuzKM4gW8eFXeLueqxagdCKL+UKqXeg==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
