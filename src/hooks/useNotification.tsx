@@ -88,7 +88,6 @@ export const useNotification = () => {
   }
 
   const handleMarkAll = () => {
-    setOpenNotification(false)
     markAllRead()
   }
 
