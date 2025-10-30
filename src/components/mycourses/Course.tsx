@@ -429,14 +429,7 @@ const Course = ({
       handleCourseDetail()
     }
   }
-  // const handleClickTitle = () => {
-  //   if (isActiveStudent && enableCourse) {
-  //     courseAction()
-  //   }
-  //   trackGAEvent('Click Title Course Item')
-  // }
-  const isDesktop = screens.lg
-  const maxLengthTitle = isDesktop ? 25 : 15
+  const maxLengthTitle = 25
   const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
   const classNameDes = `text-sm font-normal md:text-base ${enableCourse ? 'text-gray-800' : 'text-gray-300'
     }`
@@ -449,13 +442,13 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`h-12 mb-4 md:h-16`}
+          classNameTitle={`h-12 mb-4 md:h-[56px]`}
           hideBadge={true}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[396px] min-h-[280px]"
+          classNameCard="lg:min-h-[434px] min-h-[280px]"
           onClick={() => {
             if (isActiveStudent) {
               courseAction()
@@ -487,15 +480,13 @@ const Course = ({
             {determineButtonToShow !== 'Active' && (
               <div className="flex gap-1">
                 <div
-                  className={`mr-1 ${
-                    enableCourse ? 'text-icon' : 'text-gray-300'
+                  className={`mr-1 ${enableCourse ? 'text-icon' : 'text-gray-300'
                     }`}
                 >
                   <CourseTimeIcon className={sizeIcon} />
                 </div>
                 <div
-                  className={`text-xs font-medium md:text-sm ${
-                    enableCourse ? 'text-icon' : 'text-gray-300'
+                  className={`text-xs font-medium md:text-sm ${enableCourse ? 'text-icon' : 'text-gray-300'
                     }`}
                 >
                   {daysDifference > 0
@@ -513,7 +504,7 @@ const Course = ({
               </div>
             )}
           </div>
-          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-6 md:mt-8 md:h-[72px]">
+          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
             {(course?.description as string)?.length > 250 ? (
               <Tooltip
                 title={
@@ -542,7 +533,7 @@ const Course = ({
             )}
           </div>
           {enableCourse && (
-            <div className="progress mb-[30px] h-8">
+            <div className="progress mb-6 h-8">
               <div className="info mb-2 flex items-center justify-between">
                 <div className="text flex items-center">
                   <Icon
