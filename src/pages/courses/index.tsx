@@ -241,6 +241,7 @@ const MyCourse = () => {
               greeting="Welcome to"
               title={'General Course'}
               showShadow={false}
+              showWavingHand
               des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
             {guideStatus && guideStep === 4 && (
@@ -302,10 +303,11 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 ${isEmpty(courses)
-            ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
-            : ''
-            } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
+          className={`relative mx-auto my-0 ${
+            isEmpty(courses)
+              ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
+              : ''
+          } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
         >
           <CoursesList
             courses={courses}
