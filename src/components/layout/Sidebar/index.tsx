@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { UserGuide } from 'src/constants'
+import { PageLink, UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,
@@ -17,6 +17,7 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
 import { Divider } from 'antd'
+import { useRouter } from 'next/router'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -36,6 +37,7 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
+  const router = useRouter()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   /**
@@ -48,7 +50,7 @@ export default function Sidebar({
       document.body.classList.remove('no-hover')
     }, 1000)
   }
-
+  const isLevel1 = router.pathname === PageLink.COURSES || router.pathname === PageLink.CALENDAR || router.pathname === PageLink.ENTRANCE_TEST || router.pathname === PageLink.EXAM_LIST
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
   return (
     <div className="group">
@@ -61,11 +63,10 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
-            guideStatus && guideStep == 2
-              ? 'z-50 bg-white'
-              : 'overflow-y-auto overflow-x-hidden'
-          }`}
+          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${guideStatus && guideStep == 2
+            ? 'z-50 bg-white'
+            : 'overflow-y-auto overflow-x-hidden'
+            }`}
         >
           <div
             className="group-logos mx-auto px-5"
@@ -113,9 +114,11 @@ export default function Sidebar({
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-            <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
-          </div>
+          {isLevel1 && (
+            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
+              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            </div>
+          )}
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
@@ -140,10 +143,9 @@ export default function Sidebar({
       <div
         onClick={toggleDrawer}
         className={clsx(
-          `sidebar-overlay ${
-            isOpened
-              ? 'pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0'
-              : 'pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100'
+          `sidebar-overlay ${isOpened
+            ? 'pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0'
+            : 'pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100'
           } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080] transition-opacity duration-300 ease-in-out`,
           {
             '!pointer-events-none !opacity-0':

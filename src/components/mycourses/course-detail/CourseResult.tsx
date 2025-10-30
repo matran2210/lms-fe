@@ -43,7 +43,18 @@ interface IProps {
   coursePart: CoursePart
   setOpenReport: Dispatch<SetStateAction<boolean>>
   selectedResult:
-    | {
+  | {
+    label: string
+    value: string
+    ratio_score?: string
+    status: string
+    score: number
+    total_attempt_time: number
+  }
+  | undefined
+  setSelectedResult: Dispatch<
+    SetStateAction<
+      | {
         label: string
         value: string
         ratio_score?: string
@@ -51,17 +62,6 @@ interface IProps {
         score: number
         total_attempt_time: number
       }
-    | undefined
-  setSelectedResult: Dispatch<
-    SetStateAction<
-      | {
-          label: string
-          value: string
-          ratio_score?: string
-          status: string
-          score: number
-          total_attempt_time: number
-        }
       | undefined
     >
   >
@@ -163,11 +163,6 @@ const ResultCourse = ({
                       value: item.id,
                       label: item.name,
                     }))}
-                    // open={true}
-                    // classNames={{
-                    //   root: 'select-result-attempt',
-                    //   popup: { root: 'select-result-attempt-option' },
-                    // }}
                     className="custom-select-v2 h-8 pr-2"
                     popupClassName="select-card-course"
                     onPopupScroll={(e) => {

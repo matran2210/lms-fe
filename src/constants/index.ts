@@ -42,6 +42,7 @@ export const PageLink = {
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
   COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
+  EXAM_LIST: '/exam_list',
 }
 
 export const TitleSidebar = {
