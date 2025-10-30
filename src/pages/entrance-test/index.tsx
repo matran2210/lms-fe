@@ -17,6 +17,7 @@ import { useAppDispatch } from 'src/redux/hook'
 import { getEntranceCount } from 'src/redux/slice/EntranceTest/EntranceTest'
 import { UserType } from 'src/redux/types/User/urser'
 import { EntranceTestAPI } from '../api/entrance-test'
+import ModalMarketingInApp from '@components/marketing-in-app/ModalMarketingInApp'
 
 const EntranceTest = () => {
   const router = useRouter()
@@ -24,6 +25,7 @@ const EntranceTest = () => {
   const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const { setOpenSidebar } = useCourseContext()
   const [showSidebar, setShowSidebar] = useState(false)
+  const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const {
     data: entranceTestLists,
     isLoading,
@@ -58,6 +60,13 @@ const EntranceTest = () => {
   useEffect(() => {
     refetch()
   }, [refetch, router.query.attempt_status])
+
+  useEffect(() => {
+    const hasOpened = localStorage.getItem('openModalMarketingInApp')
+    if (!hasOpened) {
+      setOpenModalMarketingInApp(true)
+    }
+  }, [])
 
   return (
     <SappLoadingGlobal loading={isLoading}>
@@ -108,6 +117,10 @@ const EntranceTest = () => {
           )}
         </div>
         <Footer />
+        <ModalMarketingInApp
+          open={openModalMarketingInApp}
+          setOpen={setOpenModalMarketingInApp}
+        />
       </Layout>
     </SappLoadingGlobal>
   )

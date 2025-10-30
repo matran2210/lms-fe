@@ -360,7 +360,7 @@ const MatchQuiz = forwardRef(
       }
       // Khi có corrects, đổi màu node theo đúng/sai như logic cũ
       const correctMap = new Map(
-        corrects.map((item: any) => [item.id, item.answer.id]),
+        corrects.map((item: any) => [item.id, item.answer?.id]),
       )
 
       const connectedIds = new Set<string>()
@@ -378,7 +378,7 @@ const MatchQuiz = forwardRef(
       // Đánh dấu đỏ các node đúng nhưng chưa nối
       for (const item of corrects) {
         const question_id = item.id
-        const answer_id = item.answer.id
+        const answer_id = item?.answer?.id
 
         if (!connectedIds.has(question_id)) {
           nodeColors.set(question_id, Color.Error)
@@ -414,7 +414,7 @@ const MatchQuiz = forwardRef(
 
       for (const item of corrects) {
         const sourceId = item.id
-        const targetId = item.answer.id
+        const targetId = item.answer?.id
 
         const sourceNode = nodeMap.get(sourceId)
         const targetNode = nodeMap.get(targetId)
@@ -476,7 +476,7 @@ const MatchQuiz = forwardRef(
         corrects.some(
           (c: any) =>
             String(c.id) === String(pair.question_id) &&
-            String(c.answer.id) === String(pair.answer_id),
+            String(c?.answer?.id) === String(pair.answer_id),
         ),
       )
 
@@ -555,7 +555,7 @@ const MatchQuiz = forwardRef(
             data?.question_topic?.exhibits?.length > 0 && (
               <>
                 {!!data?.question_topic?.description && (
-                  <div className="my-6 border border-b-[#DCDDDD]"></div>
+                  <div className="my-6 border border-b-gray-300"></div>
                 )}
                 <div className="mb-4 flex items-center">
                   <div className="font-semibold">
@@ -594,7 +594,7 @@ const MatchQuiz = forwardRef(
                     )
                   })}
                 </div>
-                <div className="my-6 border border-b-[#DCDDDD]"></div>
+                <div className="my-6 border border-b-gray-300"></div>
               </>
             )}
           <EditorReader
@@ -656,7 +656,7 @@ const MatchQuiz = forwardRef(
           <>
             <SappDivider />
             <div className={explainClassname}>
-              <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+              <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
               <EditorReader className="mt-4" text_editor_content={solution} />
             </div>
           </>

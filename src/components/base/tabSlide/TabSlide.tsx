@@ -242,7 +242,7 @@ const TabSlide = ({
         {/* Phần render các số */}
         <div
           className={clsx(
-            'flex w-fit select-none justify-start gap-2 pt-1 duration-300 ease-in-out will-change-auto',
+            'relative flex w-fit select-none justify-start gap-2 pt-1 duration-300 ease-in-out will-change-auto',
             {
               '!w-fit': activeShowAll,
               'h-[44px] overflow-hidden': !activeShowAll,

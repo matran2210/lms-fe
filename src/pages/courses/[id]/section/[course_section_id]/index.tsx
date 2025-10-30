@@ -248,7 +248,7 @@ const CoursePartDetail = () => {
     const totalCourseSectionsCompleted =
       getCaseStudy?.learning_progress?.total_course_sections_completed
     if (
-      totalCourseSections === totalCourseSectionsCompleted &&
+      getCaseStudy?.attempt?.id &&
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {
@@ -559,7 +559,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4 h-full" data-aos={ANIMATION.DATA_AOS}>
+      <div className="mt-4 min-h-[calc(100vh-5rem)]" data-aos={ANIMATION.DATA_AOS}>
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (

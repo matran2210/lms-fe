@@ -592,7 +592,7 @@ const ActivityTeacherPage = () => {
                       return (
                         <li className="ml-4" key={e?.id}>
                           <EditorReader
-                            className="editor-wrap mt-1.5"
+                            className="mt-1.5"
                             text_editor_content={e.description}
                           />
                         </li>

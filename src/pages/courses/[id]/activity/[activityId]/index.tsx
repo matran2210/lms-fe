@@ -3,6 +3,7 @@ import {
   CalculatorIconV2,
   CircleCloseIcon,
   CloseIcon,
+  CloseIconNote,
   DocumentTextIcon,
   HourglassIcon,
   ResourceIcon,
@@ -592,7 +593,7 @@ const ActivityPage = () => {
               isHidden={focusOnlyQuiz.open}
               extraActions={
                 focusOnlyDiscussion ? null : (
-                  <div className="bg-warning-100 flex items-center gap-1 whitespace-nowrap rounded-md px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
+                  <div className="flex items-center gap-1 whitespace-nowrap rounded-md bg-warning-100 px-3 py-1 text-xs text-orange-5 md:py-[6px] md:text-sm">
                     <HourglassIcon className="shrink-0" />
                     <div>{`${convertMinutesToHourFormat(activity?.duration || 0)} estimated`}</div>
                   </div>
@@ -802,26 +803,22 @@ const ActivityPage = () => {
                   handleCloseScratchPad={() => handleCloseScratchPad(e)}
                   position="center left"
                   header={
-                    <div className="relative mb-3 px-6">
-                      <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
-                        <div className="truncate">
-                          <span className="text-base font-semibold text-gray-800">{`${exhibitText} ${
-                            e?.index + 1
-                          }: ${e?.name}`}</span>
-                        </div>
+                    <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+                      <div className="text-sm font-semibold text-gray-800">
+                        {`${exhibitText} ${(e?.index ?? 0) + 1}: ${e?.name}`}
                       </div>
                       <button
-                        className="absolute right-6 top-0"
+                        className="text-icon"
                         onClick={() => handleCloseScratchPad(e)}
                       >
-                        <CircleCloseIcon />
+                        <CloseIconNote />
                       </button>
                     </div>
                   }
                   draggableFull
                   modalIndex={e.index}
                 >
-                  <div className="h-full bg-white">
+                  <div className="h-full bg-white px-4 py-3">
                     <EditorReader
                       text_editor_content={e?.description}
                       className="w-full"

@@ -193,6 +193,9 @@ img.Wirisformula {
     color: #1f2937 !important;
   }
 }
+.editor-wrap:has(table) {
+  @apply overflow-x-auto;
+}
 
 .editor-wrap {
   @apply font-sans;

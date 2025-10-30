@@ -67,6 +67,7 @@ import { Divider } from 'antd'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import { Triangle } from '@components/icons/Triangle'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 const CaseStudyDetail = ({ questions }: any) => {
   const editorRefs = useRef<any[]>([])
 
@@ -490,14 +491,18 @@ const CaseStudyDetail = ({ questions }: any) => {
     } catch (err) {}
   }
   useEffect(() => {
-    if (router.query.quiz_id && router.query.id && router.query.class_user_id) {
+    if (
+      router.query?.quiz_id &&
+      router.query?.id &&
+      router.query?.class_user_id
+    ) {
       createAttempts(
         router.query.quiz_id as string,
         router.query.id as string,
         router.query.class_user_id as string,
       )
     }
-  }, [router.query.id])
+  }, [router])
 
   /**
    * Declare form to handle exhibit
@@ -1171,10 +1176,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     // className="min-h-[calc(100vh-104px)]"
                     className="mb-4"
                   >
-                    <EditorReader
-                      className="editor-wrap"
-                      text_editor_content={topics?.description}
-                    />
+                    <EditorReader text_editor_content={topics?.description} />
                   </div>
                   <>
                     {topics?.files?.length > 0 &&
@@ -1345,8 +1347,8 @@ const CaseStudyDetail = ({ questions }: any) => {
                           {question &&
                             question.qType === QUESTION_TYPES.ESSAY &&
                             isShowTemplate && (
-                              <div className="mt-8 flex justify-end">
-                                <ButtonPrimaryV2
+                              <div className="mt-8 flex items-center justify-end gap-3">
+                                <ButtonTextV2
                                   title="Reset to Answer Template"
                                   onClick={() =>
                                     onOpenResetToTemplateModal({
@@ -1354,23 +1356,19 @@ const CaseStudyDetail = ({ questions }: any) => {
                                       index,
                                     })
                                   }
+                                  className="bg-transparent hover:!bg-transparent"
+                                />
+                                <ShowAnswerTemplate
+                                  {...{
+                                    currentTabContent: question,
+                                    essayData: {
+                                      index: 0,
+                                      req: question?.requirements?.[0],
+                                    },
+                                  }}
+                                  isQuiz
                                 />
                               </div>
-                            )}
-                          {question &&
-                            question.qType === QUESTION_TYPES.ESSAY &&
-                            isShowTemplate && (
-                              <ShowAnswerTemplate
-                                {...{
-                                  currentTabContent: question,
-                                  essayData: {
-                                    index: 0,
-                                    req: question?.requirements?.[0],
-                                  },
-                                }}
-                                isQuiz
-                                className="!-right-6 z-[1]"
-                              />
                             )}
                         </div>
                       )

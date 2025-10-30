@@ -54,6 +54,7 @@ const PartFailed = ({
     ratio_score?: string
     status: string
     score: number
+    total_attempt_time: number
   }>()
 
   const isManualGradingAndAwaitGrading =
@@ -95,9 +96,14 @@ const PartFailed = ({
   }, [runOutAttemp])
 
   const { setOpenPopupCTA } = useCourseContext()
+  const currentAttemptNumber = coursePart?.quiz?.attempt
+    ?.number_of_attempts as number
+  const selectedAttemptNumber = selectedResult?.label?.split('/')[0]
 
   const isShowButtonAction = () => {
-    if (Number(labelResult) > Number(selectedResult?.label)) return false
+    if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
+      return false
+    // if (Number(labelResult) > Number(selectedResult?.label)) return false
     // Case:  Unlimited time attempt
     if (!coursePart?.quiz?.is_limited) return true
 
@@ -245,11 +251,16 @@ const PartFailed = ({
               <>
                 <PartInfoItem
                   label="Time Spent:"
+                  // value={
+                  //   !!coursePart?.quiz?.attempt?.total_attempt_time
+                  //     ? formatTime(
+                  //       coursePart?.quiz?.attempt?.total_attempt_time,
+                  //     )
+                  //     : '--'
+                  // }
                   value={
-                    !!coursePart?.quiz?.attempt?.total_attempt_time
-                      ? formatTime(
-                          coursePart?.quiz?.attempt?.total_attempt_time,
-                        )
+                    !!selectedResult?.total_attempt_time
+                      ? formatTime(selectedResult?.total_attempt_time)
                       : '--'
                   }
                 />
@@ -258,10 +269,13 @@ const PartFailed = ({
                   value={
                     isManualGradingAndAwaitGrading
                       ? '--'
-                      : coursePart?.quiz?.attempt?.score !== undefined &&
-                          coursePart?.quiz?.attempt?.score !== null
-                        ? `${coursePart?.quiz?.attempt?.score}%`
-                        : '--'
+                      : selectedResult?.score !== undefined &&
+                          selectedResult?.score !== null
+                        ? //  || (coursePart?.quiz?.attempt?.score !== undefined &&
+                          //   coursePart?.quiz?.attempt?.score !== null)
+                          `${selectedResult?.score}%`
+                        : // ? `${coursePart?.quiz?.attempt?.score}%`
+                          '--'
                   }
                 />
               </>
@@ -269,24 +283,16 @@ const PartFailed = ({
             <PartInfoItem label="Time Allowed:" value={formattedTime} />
             <PartInfoItem label="No of Attempts:" value={noOfAttempts} />
 
-            <div className="time-allow flex items-center justify-between">
-              <p className="text-sm text-gray-800 md:text-base">
-                <ResultCourse
-                  class_user_id={class_user_id}
-                  coursePart={coursePart}
-                  setOpenReport={setOpenReport}
-                  selectedResult={selectedResult}
-                  setSelectedResult={setSelectedResult}
-                  isTeacher={isTeacher}
-                  setLabelResult={setLabelResult}
-                />
-              </p>
-              {
-                <p className="text-sm font-medium text-gray-800 md:text-base">
-                  {selectedResult?.score || 0}%
-                </p>
-              }
-            </div>
+            {/* Result of attempts */}
+            <ResultCourse
+              class_user_id={class_user_id}
+              coursePart={coursePart}
+              setOpenReport={setOpenReport}
+              selectedResult={selectedResult}
+              setSelectedResult={setSelectedResult}
+              isTeacher={isTeacher}
+              setLabelResult={setLabelResult}
+            />
           </div>
 
           <div className="action flex items-center justify-end">
@@ -331,13 +337,16 @@ const PartFailed = ({
               )
             ) : (
               <div className="flex flex-1 items-center justify-end gap-4">
-                {quizAttempt.id && (
-                  <ButtonText
-                    size="small"
-                    title={titleButtonViewResult()}
-                    onClick={handleRedirectResult}
-                  />
-                )}
+                {quizAttempt.id &&
+                  (Number(currentAttemptNumber) >
+                    Number(selectedAttemptNumber) ||
+                    getAttemptStatus() !== EAttemptStatus.IN_PROGRESS) && (
+                    <ButtonText
+                      size="small"
+                      title={titleButtonViewResult()}
+                      onClick={handleRedirectResult}
+                    />
+                  )}
 
                 {isShowButtonAction() && (
                   <div className="w-[84px]">

@@ -115,6 +115,7 @@ import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateMo
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { download } from '@components/learning/activity/ActivityResource'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 
 declare global {
   interface Window {
@@ -2709,14 +2710,26 @@ const TestDetail = () => {
     const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
     return (
       <div>
-        <div className="flex items-center justify-end gap-2">
+        <div
+          className={clsx('flex items-center justify-end gap-2', {
+            'gap-3': isShowTemplate,
+            'gap-2': !isShowTemplate,
+          })}
+        >
           {currentTabContent &&
             currentTabContent.qType === QUESTION_TYPES.ESSAY &&
             isShowTemplate && (
-              <div className="flex justify-end">
-                <ButtonPrimary
+              <div className="flex items-center justify-end gap-3">
+                <ButtonTextV2
                   title="Reset to Answer Template"
                   onClick={onOpenResetToTemplateModal}
+                  className="bg-transparent hover:!bg-transparent"
+                />
+                <ShowAnswerTemplate
+                  {...{
+                    currentTabContent,
+                    essayData,
+                  }}
                 />
               </div>
             )}
@@ -3825,16 +3838,7 @@ const TestDetail = () => {
               />
             )}
           </div>
-          {currentTabContent &&
-            currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-            isShowTemplate && (
-              <ShowAnswerTemplate
-                {...{
-                  currentTabContent,
-                  essayData,
-                }}
-              />
-            )}
+
           {openResetToTemplateModal && (
             <ResetToAnswerTemplateModal
               open={openResetToTemplateModal}
@@ -3921,7 +3925,7 @@ const TestDetail = () => {
                         <div
                           key={e?.value}
                           className={clsx(
-                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-blue-7 underline hover:text-primary',
+                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary',
                           )}
                           onClick={() =>
                             handleOpenScratchPad(

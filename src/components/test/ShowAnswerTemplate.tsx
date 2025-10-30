@@ -14,6 +14,9 @@ import {
   UseFormSetValue,
 } from 'react-hook-form'
 import { defaultSheetData } from 'src/constants/attempt'
+import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import ButtonSecondaryV2 from '@components/base/button/ButtonSecondaryV2'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
 
 interface IProps {
   currentTabContent: any
@@ -80,42 +83,10 @@ const ShowAnswerTemplate = ({
 
   return (
     <>
-      <div
-        className={clsx(
-          'absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2',
-          className,
-        )}
-      >
-        {true && (
-          <Tooltip
-            placement="left"
-            visible={showTooltip && !showModalTemplate}
-            title={
-              <div className="flex items-center gap-2 text-white">
-                <EyeIcon className="h-4 w-4" />{' '}
-                <div className="text-sm">Show Answer Template</div>
-              </div>
-            }
-          >
-            <div
-              className={clsx(
-                'group bottom-0 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
-              )}
-              onClick={handleToggleModal}
-              onMouseEnter={() => {
-                if (!showModalTemplate) {
-                  setShowTooltip(true)
-                }
-              }}
-              onMouseLeave={() => {
-                setShowTooltip(false)
-              }}
-            >
-              <EyeIcon />
-              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-            </div>
-          </Tooltip>
-        )}
+      <div className={clsx('flex', className)}>
+        <ButtonSecondary className="bg-white" onClick={handleToggleModal}>
+          Show Answer Template
+        </ButtonSecondary>
       </div>
       {showModalTemplate && (
         <ModalResizeable
@@ -132,7 +103,7 @@ const ShowAnswerTemplate = ({
           width={800}
           header={
             <div className="relative mb-4">
-              <div className="modal-header flex w-full items-center justify-between rounded-xl bg-white">
+              <div className="modal-header modal-dragger flex w-full items-center justify-between rounded-xl bg-white">
                 <div className="truncate">
                   <span className="text-sm font-semibold text-gray-800">
                     Show Answer Template

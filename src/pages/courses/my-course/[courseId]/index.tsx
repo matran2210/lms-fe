@@ -283,7 +283,7 @@ const CourseDetail = () => {
               }
             />
           </div>
-          <div data-aos={ANIMATION.DATA_AOS} className='h-full'>
+          <div data-aos={ANIMATION.DATA_AOS} className="min-h-[calc(100vh-12rem)]">
             <CourseParts
               isTrial={isTrial}
               courses={courses}

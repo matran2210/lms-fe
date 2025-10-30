@@ -132,7 +132,7 @@ const PopupLockContent: React.FC<PopupLockContentProps> = ({
       cancelButtonCaption={cancelButtonCaption}
       showCancelButton={showFooter}
       fullWidthBtn={true}
-      buttonSize="extra"
+      buttonSize="medium"
       isClosable={showFooter}
     />
   )
