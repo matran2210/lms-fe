@@ -1010,6 +1010,16 @@ p a {
   justify-content: center;
 }
 
+#floating-button-mkt-in-app {
+  @apply fixed h-[48px] w-[48px] cursor-pointer rounded-xl bg-gray-800 p-2;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 1px 4px,
+    rgba(0, 0, 0, 0.2) 0px 2px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .sapp-pinned-noti-header {
   padding: 12px 24px 12px 233px;
   background: #18355d;
@@ -1137,6 +1147,7 @@ p a {
 }
 
 #floating-button:hover,
+#floating-button-mkt-in-app:hover,
 #close_icon:hover,
 #back-to-top:hover {
   transition: transform 100ms ease-in-out 0s;

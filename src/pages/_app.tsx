@@ -57,6 +57,7 @@ import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
 import { CourseNoteProvider } from '@contexts/CourseNoteContext'
 import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
+import MKTInApp from '@components/MKTInApp'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -135,8 +136,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => {})
-      socket.on('disconnect', () => {})
+      socket.on('connect', () => { })
+      socket.on('disconnect', () => { })
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -171,6 +172,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
     !isTeacherPage // Add condition to hide help on teacher pages
+  const showMKTInApp = showHelp
   const hiddenChatbot =
     excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
     isTeacherPage
@@ -282,7 +284,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     ) {
       try {
         dispatch(getCountUnRead())
-      } catch (error) {}
+      } catch (error) { }
     }
   }, [])
 
@@ -334,6 +336,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
                           </div>
                           {showBackToTop && <BackToTop />}
                           <Help showHelp={showHelp} />
+                          <MKTInApp showMKTInApp={showMKTInApp} />
                           <LearningNotesList />
                           <PopupCompletedCourse />
                         </>
