@@ -57,7 +57,7 @@ interface IProps {
 }
 
 type Role = 'question' | 'answer'
-type MatchNode = Node<{ label: string; role: Role }>
+type MatchNode = Node<{ label: string; role: Role; answer_position?: number }>
 
 interface RawItem {
   id: string
@@ -65,6 +65,7 @@ interface RawItem {
   role: Role
   color: string
   width: string
+  answer_position: number
 }
 
 interface TransformDataInput {
@@ -211,15 +212,16 @@ const MatchQuiz = forwardRef(
       })
 
       // Create answer nodes (right side, x: containerWidth - nodeWidth)
-      answers.forEach((a, index) => {
-        nodes.push({
-          id: a.id,
-          type: 'custom',
-          position: { x: containerWidth - nodeWidth, y: index * 100 },
-          data: { label: a.label, role: 'answer' },
+      answers
+        .sort((a, b) => (a.answer_position ?? 0) - (b.answer_position ?? 0))
+        .forEach((a, index) => {
+          nodes.push({
+            id: a.id,
+            type: 'custom',
+            position: { x: containerWidth - nodeWidth, y: index * 100 },
+            data: { label: a.label, role: 'answer' },
+          })
         })
-      })
-
       return nodes
     }
 
@@ -239,6 +241,7 @@ const MatchQuiz = forwardRef(
           label: item.answer,
           role: 'answer' as Role,
           color: Color.TextDefault,
+          answer_position: item?.answer_position,
         })) || []
 
       const transformed = transformDataToNodes({
