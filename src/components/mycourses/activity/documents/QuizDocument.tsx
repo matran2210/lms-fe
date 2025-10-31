@@ -19,6 +19,7 @@ import {
   ConfirmIcon,
   MaximumContentIcon,
   MinimumContentIcon,
+  RestartQuizIcon,
 } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import ButtonTextV2 from '@components/base/button/ButtonTextV2'
@@ -30,6 +31,8 @@ import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import { Tooltip } from 'antd'
+import TooltipSapp from 'src/common/Tooltip'
+
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { every, isEmpty, isNull, isUndefined } from 'lodash'
@@ -1095,167 +1098,177 @@ const QuizDocument = ({
 
           {/* Confirm Button */}
           <div
-            className={clsx('justify-end', {
+            className={clsx('justify-between', {
               'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
               flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
               'gap-4': isShowTemplate,
               'gap-2': !isShowTemplate,
             })}
           >
-            {activeQuestion &&
-              activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-              isShowTemplate &&
-              !activeQuestion?.confirmed && (
-                <div className="flex items-center justify-end gap-3">
-                  <ButtonTextV2
-                    title="Reset to Answer Template"
-                    onClick={onOpenResetToTemplateModal}
-                    disabled={activeQuestion?.confirmed}
-                    className="bg-transparent hover:!bg-transparent"
-                  />
-                  <ShowAnswerTemplate
-                    {...{
-                      currentTabContent: activeQuestion,
-                      essayData: questionRef.current?.getEssayData() as any,
-                    }}
-                    isQuiz
-                  />
-                </div>
-              )}
             <div className="flex self-center text-base font-medium text-gray">
-              <CircleInfoIcon />
+              <div className="mr-1 flex size-6 items-center justify-center">
+                <CircleInfoIcon />
+              </div>
               Your Attemp: {number_of_attempts ?? 0}
               {typeof limit_count === 'number' && limit_count > 0
                 ? `/${limit_count}`
                 : ''}
             </div>
-            {gradeStatus &&
-              ![
-                GRADE_STATUS.AWAITING_GRADING,
-                GRADE_STATUS.FINISHED_GRADING,
-              ].includes(gradeStatus) &&
-              activeQuestion?.qType &&
-              [
-                QUESTION_TYPES.TRUE_FALSE,
-                QUESTION_TYPES.ONE_CHOICE,
-                QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(activeQuestion.qType) &&
-              !isQuestionConfirmed && (
-                <ButtonSecondary
-                  className="!px-4 !py-2 !text-sm"
-                  size={'small'}
-                  disabled={
-                    ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                      activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                      !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-                    (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                      !watch(`${activeQuestion?.id}_${document_id}_answer`)
-                        ?.length)
-                  }
-                  onClick={() => {
-                    handleClearSelection(activeQuestion)
-                    trackGAEvent('Click Button Clear Selection Test')
-                  }}
-                  title="Clear Selection"
-                />
-              )}
-            <Tooltip
-              title={
-                isQuestionConfirmed ||
-                isAFTERAllQUESTION ||
-                (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+            <div className="flex gap-3">
+              {activeQuestion &&
+                activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                isShowTemplate &&
+                !activeQuestion?.confirmed && (
+                  <div className="flex items-center justify-end gap-3">
+                    <TooltipSapp title="Reset to Answer Template">
+                      <button
+                        disabled={activeQuestion?.confirmed}
+                        onClick={onOpenResetToTemplateModal}
+                        className="flex size-10 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white transition-all duration-300 hover:bg-gray-100"
+                      >
+                        <RestartQuizIcon />
+                      </button>
+                    </TooltipSapp>
+                    <ShowAnswerTemplate
+                      {...{
+                        currentTabContent: activeQuestion,
+                        essayData: questionRef.current?.getEssayData() as any,
+                      }}
+                      isQuiz
+                    />
+                  </div>
+                )}
+              {gradeStatus &&
                 ![
+                  GRADE_STATUS.AWAITING_GRADING,
+                  GRADE_STATUS.FINISHED_GRADING,
+                ].includes(gradeStatus) &&
+                activeQuestion?.qType &&
+                [
                   QUESTION_TYPES.TRUE_FALSE,
                   QUESTION_TYPES.ONE_CHOICE,
                   QUESTION_TYPES.MULTIPLE_CHOICE,
-                ].includes(activeQuestion?.qType) ||
-                ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                  activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-                (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
-                    0)
-                  ? null
-                  : 'You should select an answer before click'
-              }
-              classNames={{ root: 'max-w-72' }}
-              trigger={'hover'}
-            >
-              <>
-                {(isQuestionConfirmed ||
-                  // isAFTERAllQUESTION ||
-                  (isQuestionConfirmed && isLastQuestion)) &&
-                  !isFinishQuiz && (
-                    <SappButton
-                      className="!rounded-lg !px-4 py-2 text-sm"
-                      classNameLoading="!rounded-lg !px-4 py-2 text-sm"
-                      childClass="text-sm"
-                      title={
-                        isLastQuestion
-                          ? 'Finish'
-                          : isAFTERAllQUESTION
-                            ? 'Next Question'
-                            : 'Next'
-                      }
-                      full={false}
-                      size={'small'}
-                      onClick={() => {
-                        if (loading) {
-                          return
-                        }
-                        if (isLastQuestion) {
-                          setIsFinishQuiz(false)
-                          handleQuizFinish()
-                          // setRunHandleFinishQuiz((e) => e + 1)
-                          trackGAEvent('Click Button Finish Quiz Activity')
-                        } else {
-                          handleNextQuestion()
-                          trackGAEvent('Click Button Next Quiz Activity')
-                        }
-                      }}
-                      color="light-dark"
-                      loading={loading}
-                    />
-                  )}
-                {(!isQuestionConfirmed ||
-                  (isQuestionConfirmed && grading_method === 'MANUAL')) && (
-                  <SappButton
-                    className="!rounded-lg !px-4 py-2"
-                    childClass="text-sm"
-                    title={getButttonTitle()}
-                    full={false}
+                ].includes(activeQuestion.qType) &&
+                !isQuestionConfirmed && (
+                  <ButtonSecondary
+                    className="!px-4 !py-2 !text-sm"
                     size={'small'}
-                    disabled={loading}
+                    disabled={
+                      ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                        !watch(
+                          `${activeQuestion?.id}_${document_id}_answer`,
+                        )) ||
+                      (activeQuestion?.qType ===
+                        QUESTION_TYPES.MULTIPLE_CHOICE &&
+                        !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                          ?.length)
+                    }
                     onClick={() => {
-                      handleSubmit()
+                      handleClearSelection(activeQuestion)
+                      trackGAEvent('Click Button Clear Selection Test')
                     }}
-                    color="light-dark"
-                    classNameLoading="!rounded-lg !px-4 py-2"
-                    loading={loadingButton || loading}
+                    title="Clear Selection"
                   />
                 )}
-                {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-                {isQuestionConfirmed &&
-                  grading_method !== 'MANUAL' &&
-                  isFinishQuiz &&
-                  hasAttemptsLeft &&
-                  number_of_attempts &&
-                  number_of_attempts > 0 && (
+              <Tooltip
+                title={
+                  isQuestionConfirmed ||
+                  isAFTERAllQUESTION ||
+                  (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+                  ![
+                    QUESTION_TYPES.TRUE_FALSE,
+                    QUESTION_TYPES.ONE_CHOICE,
+                    QUESTION_TYPES.MULTIPLE_CHOICE,
+                  ].includes(activeQuestion?.qType) ||
+                  ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                    activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                  (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`)
+                      .length > 0)
+                    ? null
+                    : 'You should select an answer before click'
+                }
+                classNames={{ root: 'max-w-72' }}
+                trigger={'hover'}
+              >
+                <>
+                  {(isQuestionConfirmed ||
+                    // isAFTERAllQUESTION ||
+                    (isQuestionConfirmed && isLastQuestion)) &&
+                    !isFinishQuiz &&
+                    number_of_attempts &&
+                    number_of_attempts > 0 && (
+                      <SappButton
+                        className="!rounded-lg !px-4 py-2 text-sm"
+                        classNameLoading="!rounded-lg !px-4 py-2 text-sm"
+                        childClass="text-sm"
+                        title={
+                          isLastQuestion
+                            ? 'Finish'
+                            : isAFTERAllQUESTION
+                              ? 'Next Question'
+                              : 'Next'
+                        }
+                        full={false}
+                        size={'small'}
+                        onClick={() => {
+                          if (loading) {
+                            return
+                          }
+                          if (isLastQuestion) {
+                            setIsFinishQuiz(false)
+                            handleQuizFinish()
+                            // setRunHandleFinishQuiz((e) => e + 1)
+                            trackGAEvent('Click Button Finish Quiz Activity')
+                          } else {
+                            handleNextQuestion()
+                            trackGAEvent('Click Button Next Quiz Activity')
+                          }
+                        }}
+                        color="light-dark"
+                        loading={loading}
+                      />
+                    )}
+                  {(!isQuestionConfirmed ||
+                    (isQuestionConfirmed && grading_method === 'MANUAL')) && (
                     <SappButton
-                      className="!rounded-lg !px-4 !py-2"
+                      className="!rounded-lg !px-4 py-2"
                       childClass="text-sm"
-                      title={'Retake'}
+                      title={getButttonTitle()}
                       full={false}
                       size={'small'}
                       disabled={loading}
                       onClick={() => {
-                        handleRetakeQuestion()
+                        handleSubmit()
                       }}
+                      color="light-dark"
+                      classNameLoading="!rounded-lg !px-4 py-2"
+                      loading={loadingButton || loading}
                     />
                   )}
-              </>
-            </Tooltip>
+                  {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+                  {isQuestionConfirmed &&
+                    grading_method !== 'MANUAL' &&
+                    isFinishQuiz &&
+                    hasAttemptsLeft && (
+                      <SappButton
+                        className="!rounded-lg !px-4 !py-2"
+                        childClass="text-sm"
+                        title={'Retake'}
+                        full={false}
+                        size={'small'}
+                        disabled={loading}
+                        onClick={() => {
+                          handleRetakeQuestion()
+                        }}
+                      />
+                    )}
+                </>
+              </Tooltip>
+            </div>
           </div>
         </div>
       )}
