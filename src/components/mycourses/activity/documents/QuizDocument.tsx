@@ -162,10 +162,14 @@ const QuizDocument = ({
         setStartWorkTime(Date.now())
 
         // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
-        // if (grading_preference) {
-        //   // If finished, we'll restore answers and fetch corrects lazily per question on navigation
-        //   setIsFinishQuiz(isFinishQuiz)
-        // }
+        if (grading_preference) {
+          // If finished, we'll restore answers and fetch corrects lazily per question on navigation
+          setIsFinishQuiz(isFinishQuiz)
+        }
+
+        if (number_of_attempts && number_of_attempts > 0) {
+          setIsFinishQuiz(true)
+        }
 
         // Load the first question when the component mounts
         try {
@@ -184,7 +188,15 @@ const QuizDocument = ({
         } catch (error) {}
       }
     })()
-  }, [questions, grading_preference, activityId, tabId, quizId, dispatch, questions?.[0]?.id])
+  }, [
+    questions,
+    grading_preference,
+    activityId,
+    tabId,
+    quizId,
+    dispatch,
+    number_of_attempts,
+  ])
 
   // useEffect(() => {
   //   if (runHandleFinishQuiz > 1) {
@@ -226,7 +238,6 @@ const QuizDocument = ({
     tabId,
     quizId,
     dispatch,
-    
   ])
 
   const calculateWorkTime = () => {
@@ -518,7 +529,7 @@ const QuizDocument = ({
 
     if (grading_preference) {
       // Mark finished to preserve state across popup
-      setIsFinishQuiz(isQuizFinished)
+      setIsFinishQuiz(isFinishQuiz)
     }
 
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
@@ -902,7 +913,7 @@ const QuizDocument = ({
     activeQuestion?.requirements?.some(
       (req: IRequirment) => req?.answer_template,
     )
-console.log({isQuestionConfirmed, isFinishQuiz,    hasAttemptsLeft})
+  console.log({ isQuestionConfirmed, isFinishQuiz, hasAttemptsLeft })
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -1228,7 +1239,9 @@ console.log({isQuestionConfirmed, isFinishQuiz,    hasAttemptsLeft})
                 {isQuestionConfirmed &&
                   grading_method !== 'MANUAL' &&
                   isFinishQuiz &&
-                  hasAttemptsLeft && (
+                  hasAttemptsLeft &&
+                  number_of_attempts &&
+                  number_of_attempts > 0 && (
                     <SappButton
                       className="!rounded-lg !px-4 !py-2"
                       childClass="text-sm"
