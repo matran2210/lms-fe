@@ -185,7 +185,9 @@
   .ant-select-arrow {
     @apply text-gray-800;
   }
-
+  :where(.ant-select-selector) {
+    @apply flex !px-2;
+  }
   .ant-select-selection-placeholder {
     @apply text-left text-gray-800;
   }

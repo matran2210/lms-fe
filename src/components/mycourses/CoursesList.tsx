@@ -60,7 +60,7 @@ const CoursesList: React.FC<CoursesProps> = ({
       </div>
     )
   }
-  
+
   if (isEmpty(courses) && !guideIsActive) return <NoCoursesAvailable />
 
   return (
@@ -88,7 +88,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 badge: 'ACCA',
                 className: 'bg-badge-200 text-badge-500 font-medium',
               }}
-              classNameCard={clsx('lg:min-h-[396px] min-h-[280px]', {
+              classNameCard={clsx('lg:min-h-[434px] min-h-[280px]', {
                 'z-50': guideStatus && guideStep === 6,
               })}
             >
@@ -115,7 +115,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-6 md:mt-8 md:h-[72px]">
+              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
                 <p
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(
