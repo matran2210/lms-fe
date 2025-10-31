@@ -2067,6 +2067,18 @@
     numeral "^2.0.6"
     uuid "^8.3.2"
 
+"@fortune-sheet/core@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@fortune-sheet/core/-/core-1.0.2.tgz#17c55316849fef2b3d6ee32e091adbcccb33ec60"
+  integrity sha512-eIZCOFXlFNhxHlaLJImLsC0aRoKQv0oA0DWgC5RyLA6031gHAA1sBltUggsdf71lcvJW4/xeZFKGeFpxxkc81A==
+  dependencies:
+    "@fortune-sheet/formula-parser" "^0.2.13"
+    dayjs "^1.11.0"
+    immer "^9.0.12"
+    lodash "^4.17.21"
+    numeral "^2.0.6"
+    uuid "^8.3.2"
+
 "@fortune-sheet/formula-parser@^0.2.13":
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/@fortune-sheet/formula-parser/-/formula-parser-0.2.13.tgz#6c3521063a3331b92cb0232cba280110ad8fd2c1"
@@ -2081,6 +2093,17 @@
   integrity sha512-6a4VpHEUqbWJYvRprEoQkITiRpXH49vEoscViLGY5+o6Ks3uENhZFEDWnHMSjMsaUL/htJ5jtDFg9pD5zOJJUw==
   dependencies:
     "@fortune-sheet/core" "^0.19.18"
+    "@types/regenerator-runtime" "^0.13.6"
+    immer "^9.0.12"
+    lodash "^4.17.21"
+    regenerator-runtime "^0.14.1"
+
+"@fortune-sheet/react@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@fortune-sheet/react/-/react-1.0.2.tgz#efafec1a74328eef3e5cfbfe59dfde7b81051168"
+  integrity sha512-6lOH9DuNPZa+P2pPRDWC3OOk++OOSsIuT4RFY8S+NC+LTpNBg2S4eCrg6uCH9YFeBmauR8Ua1ZRYCvMDjMTyZA==
+  dependencies:
+    "@fortune-sheet/core" "^1.0.2"
     "@types/regenerator-runtime" "^0.13.6"
     immer "^9.0.12"
     lodash "^4.17.21"
@@ -11928,6 +11951,7 @@ string_decoder@~1.1.1:
     safe-buffer "~5.1.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -12942,6 +12966,7 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

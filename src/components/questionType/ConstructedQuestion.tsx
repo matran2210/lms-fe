@@ -72,7 +72,7 @@ const EssayQuestionPreview = ({
   index,
   question_data,
   control,
-  handleSaveHighLight = () => {},
+  handleSaveHighLight = () => { },
   highlighted,
   allowHighLight,
   forCaseStudy = false,
@@ -85,7 +85,7 @@ const EssayQuestionPreview = ({
   handleClearFile,
   setOpenPdf,
   allowUnHighLight,
-  handleSaveHighLightRequirement = () => {},
+  handleSaveHighLightRequirement = () => { },
   setUnsavedChanges,
   handleChange,
   isShowContent = true,
@@ -215,11 +215,13 @@ const EssayQuestionPreview = ({
     name:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_name ||
       fullData?.answer_file?.file_name ||
-      fullData?.data?.answer_file?.file_name,
+      fullData?.data?.answer_file?.file_name
+      || fullData?.data?.defaultValue?.[0]?.answer_file?.file_name,
     key:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
       fullData?.answer_file?.file_key ||
-      fullData?.data?.answer_file?.file_key,
+      fullData?.data?.answer_file?.file_key
+      || fullData?.data?.defaultValue?.[0]?.answer_file?.file_key,
   }
   if (externalRef) {
     externalRef.current = {
@@ -314,14 +316,14 @@ const EssayQuestionPreview = ({
           defaultValue && String(defaultValue).trim() !== ''
             ? JSON.parse(defaultValue)
             : [
-                {
-                  name: 'Sheet1',
-                  id: generateSheetId(),
-                  status: 1,
-                  data: [[]],
-                  celldata: [],
-                },
-              ]
+              {
+                name: 'Sheet1',
+                id: generateSheetId(),
+                status: 1,
+                data: [[]],
+                celldata: [],
+              },
+            ]
 
         // Convert sheetData to constructor with id of refSheet.current
         const currentSheets = refSheet.current.getAllSheets()
@@ -407,7 +409,7 @@ const EssayQuestionPreview = ({
     },
     [key, stableDataId, requirementKey],
   )
-
+  console.log('fileData', fileData)
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
 
@@ -637,7 +639,7 @@ const EssayQuestionPreview = ({
         <div
           style={
             question_data?.display_type === DISPLAY_TYPE.VERTICAL ||
-            forCaseStudy
+              forCaseStudy
               ? { width: '100%' }
               : { width: '100%', marginTop: '10px' }
           }
