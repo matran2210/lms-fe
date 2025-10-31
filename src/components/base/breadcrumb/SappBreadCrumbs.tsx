@@ -3,10 +3,11 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { ITabs } from 'src/type'
 import Tooltip from 'src/common/Tooltip'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const SappBreadCrumbs = ({
   breadcrumbs = [],
-  isTeacher = true,
+  isTeacher = false,
   className,
 }: {
   breadcrumbs?: ITabs[]
@@ -14,7 +15,9 @@ const SappBreadCrumbs = ({
   className?: string
 }) => {
   const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
+  const [isDisplayFull, setIsDisplayFull] = useState(false)
   const lastIndex = breadcrumbs.length - 1
+  const isHideItemBreadcrumb = breadcrumbs.length > 3
   const handleTitleDisplay = (title: string, length: number) => {
     const isLong = title?.length > length
     return isLong ? title.slice(0, length) + '...' : title
@@ -37,6 +40,12 @@ const SappBreadCrumbs = ({
       <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
         {breadcrumbs.map((breadcrumb, index) => {
           const isLast = index === lastIndex
+          if (isHideItemBreadcrumb && index > 1 && !isDisplayFull) {
+            if (index === lastIndex - 1)
+              return <div key={index} className='text-[1.125rem] text-gray-800 cursor-pointer'
+                onClick={() => setIsDisplayFull(true)}>...&nbsp;&nbsp;/</div>
+            if (!isLast) return null
+          }
           const titleDisplay = handleTitleDisplay(
             breadcrumb.title,
             isLast ? 20 : 30,
@@ -77,7 +86,7 @@ const SappBreadCrumbs = ({
                           className={clsx(
                             'transition-all duration-300',
                             !breadcrumb?.disable &&
-                              'cursor-pointer hover:text-primary',
+                            'cursor-pointer hover:text-primary',
                           )}
                         >
                           {titleDisplay}
@@ -93,13 +102,13 @@ const SappBreadCrumbs = ({
                   <span
                     className={clsx(
                       'text-[1.125rem]',
-                      // isTeacher && 'text-tiny',
+                      isTeacher && 'text-tiny',
                       index === lastIndex - 1
                         ? 'text-gray-800'
                         : 'text-gray-400',
                     )}
                   >
-                    {/* {isTeacher ? '▶' : '/'} */}/
+                    {isTeacher ? '▶' : '/'}
                   </span>
                 </li>
               )}

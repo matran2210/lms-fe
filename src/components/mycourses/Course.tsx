@@ -496,7 +496,10 @@ const Course = ({
                       : 0}{' '}
                 </div>
                 <div
-                  className="text-gray text-xs font-normal md:text-sm leading-5"
+                  className={clsx(
+                    "text-xs font-normal md:text-sm leading-5",
+                    enableCourse ? 'text-gray' : 'text-gray-300',
+                  )}
 
                 >
                   {daysDifference > 1 ? 'days left' : 'day left'}
