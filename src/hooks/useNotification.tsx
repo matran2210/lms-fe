@@ -13,6 +13,7 @@ import {
   updateStatusAll,
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+
 export const useNotification = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -97,7 +98,7 @@ export const useNotification = () => {
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      dispatch(getCountUnRead())
     } catch (error) {}
   }
 
@@ -107,7 +108,7 @@ export const useNotification = () => {
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      dispatch(getCountUnRead())
     } catch (error) {}
   }
 
