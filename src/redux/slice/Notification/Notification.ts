@@ -181,6 +181,33 @@ export const notificationSlice = createSlice({
         page_size: 10,
       }
     },
+    toggleStatusById: (state, action: PayloadAction<string>) => {
+      const targetId = action.payload
+      const newList = state.list_notifications.map((notification) => {
+        if (notification.id === targetId) {
+          const currentIsRead =
+            !!notification.notification_user_instances?.is_read
+          return {
+            ...notification,
+            notification_user_instances: {
+              ...notification.notification_user_instances,
+              is_read: !currentIsRead,
+            },
+          }
+        }
+        return { ...notification }
+      })
+      state.list_notifications = newList
+    },
+    deleteNotificationById: (state, action: PayloadAction<string>) => {
+      const targetId = action.payload
+      state.list_notifications = state.list_notifications.filter(
+        (notification) => notification.id !== targetId,
+      )
+    },
+    deleteAllNotifications: (state) => {
+      state.list_notifications = []
+    },
     updateStatus: (state, action: PayloadAction<any>) => {
       let new_list_notifications = []
       new_list_notifications = state.list_notifications.map((e) => {
@@ -298,6 +325,9 @@ export const {
   showNotification,
   hideNotification,
   clearNotifications,
+  toggleStatusById,
+  deleteNotificationById,
+  deleteAllNotifications,
 } = notificationSlice.actions
 export const notificationReducer = (state: RootState) =>
   state.notificationReducer
