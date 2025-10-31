@@ -11387,10 +11387,10 @@ sapp-common-package@^1.4.1, sapp-common-package@^1.4.2:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-notification@^1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.15.tgz#c557f5ef5645d084506b98d8c412b6d73dfbbefe"
-  integrity sha512-qlh/Q4FDP2xcbTYbdCSpRR9BCJSDKk8hufs0bn9tDaOMxpjTi6qJhyjyuzKM4gW8eFXeLueqxagdCKL+UKqXeg==
+sapp-notification@^1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/sapp-notification/-/sapp-notification-1.0.17.tgz#c4c5c4db3c050732f6cdfc241c68b0f0ff69a458"
+  integrity sha512-5q8DXc706DXRAIp3e8f591oM/UQG74SSVrSVEhP89GwganDBxgv9aag/pAivt01160DRxD88aLLBiaGP4Kvo3A==
   dependencies:
     "@tailwindcss/line-clamp" "^0.4.4"
     antd "^5.21.1"
@@ -11928,6 +11928,7 @@ string_decoder@~1.1.1:
     safe-buffer "~5.1.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -12942,6 +12943,7 @@ word-wrap@^1.2.5:
   integrity sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

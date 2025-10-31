@@ -129,8 +129,6 @@ const ProfilePage = () => {
           removeLocalStorageItem('pinnedId')
         }
       })
-      const authenticationManager = new AuthenticationManager()
-      await authenticationManager.logout()
     } catch (error) {}
   }
   const getListDevices = async () => {
