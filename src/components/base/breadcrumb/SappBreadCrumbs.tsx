@@ -94,12 +94,12 @@ const SappBreadCrumbs = ({
                       showTooltip={isLong}
                       placement="bottomLeft"
                     >
-                      <span className="breadcrumb-last cursor-pointer" onClick={() => setIsDisplayFull(false)}>
+                      <span className="breadcrumb-last cursor-pointer">
                         {titleDisplay}
                       </span>
                     </Tooltip>
                   ) : (
-                    <span className="breadcrumb-last" onClick={() => setIsDisplayFull(false)}>{breadcrumb.title}</span>
+                    <span className="breadcrumb-last">{breadcrumb.title}</span>
                   )
                 ) : (
                   <Link href={breadcrumb.link}>
