@@ -136,8 +136,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   useEffect(() => {
     if (socket) {
-      socket.on('connect', () => { })
-      socket.on('disconnect', () => { })
+      socket.on('connect', () => {})
+      socket.on('disconnect', () => {})
       socket?.on(SOCKET_EVENTS.NOTIFICATION_UNREAD, (data: any) => {
         localStorage.setItem(
           LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
@@ -284,7 +284,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     ) {
       try {
         dispatch(getCountUnRead())
-      } catch (error) { }
+      } catch (error) {}
     }
   }, [])
 

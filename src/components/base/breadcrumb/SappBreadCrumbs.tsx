@@ -40,7 +40,7 @@ const SappBreadCrumbs = ({
 
   return (
     <nav aria-label="breadcrumb" className={clsx('hidden lg:block', className)}>
-      <ul className="flex items-center text-sm font-normal text-[#a1a1aa] overflow-hidden">
+      <ul className="flex items-center overflow-hidden text-sm font-normal text-[#a1a1aa]">
         <AnimatePresence initial={false}>
           {breadcrumbs.map((breadcrumb, index) => {
             const isLast = index === lastIndex
@@ -54,7 +54,7 @@ const SappBreadCrumbs = ({
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0 }}
-                    className="text-[1.125rem] text-gray-800 cursor-pointer mr-2"
+                    className="mr-2 cursor-pointer text-[1.125rem] text-gray-800"
                     onClick={() => setIsDisplayFull(true)}
                   >
                     ...&nbsp;&nbsp;/
@@ -82,7 +82,7 @@ const SappBreadCrumbs = ({
                   duration: 0.3,
                 }}
                 className={clsx(
-                  'text-base flex items-center',
+                  'flex items-center text-base',
                   isLast ? 'font-medium text-gray-400' : 'text-gray-800',
                 )}
               >
@@ -113,7 +113,7 @@ const SappBreadCrumbs = ({
                           className={clsx(
                             'transition-all duration-300',
                             !breadcrumb?.disable &&
-                            'cursor-pointer hover:text-primary',
+                              'cursor-pointer hover:text-primary',
                           )}
                         >
                           {titleDisplay}
