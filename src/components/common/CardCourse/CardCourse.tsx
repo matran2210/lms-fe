@@ -99,15 +99,15 @@ const CardCourse = forwardRef<
                 : badgeCode
                   ? badgeCode
                   : {
-                    badge: 'Not started',
-                    className: 'bg-info-50 text-info',
-                  })}
+                      badge: 'Not started',
+                      className: 'bg-info-50 text-info',
+                    })}
             />
           )}
           <div className={clsx('flex justify-between', classNameTitle)}>
             <h2
               className={clsx(
-                'line-clamp-2 cursor-pointer text-base md:text-xl font-semibold',
+                'line-clamp-2 cursor-pointer text-base font-semibold md:text-xl',
                 {
                   'text-gray-300': disabledTitle,
                   'text-gray-800': !disabledTitle,

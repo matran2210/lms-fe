@@ -371,7 +371,7 @@ export default function MenuItem({
             })}
           >
             {user?.detail?.avatar?.['40x40'] ||
-              user.detail.avatar?.['ORIGIN'] ? (
+            user.detail.avatar?.['ORIGIN'] ? (
               <Image
                 src={
                   user.detail.avatar?.['40x40'] ||
@@ -416,7 +416,8 @@ export default function MenuItem({
                 <ExpandIcon
                   type={Icon}
                   className={clsx(
-                    `before-icon min-h-6 min-w-6 shrink-0 ${selected ? 'bg-primary text-white' : 'text-gray-800'
+                    `before-icon min-h-6 min-w-6 shrink-0 ${
+                      selected ? 'bg-primary text-white' : 'text-gray-800'
                     }`,
                     {
                       'group-hover:text-gray-800': !selected,
@@ -443,7 +444,8 @@ export default function MenuItem({
         {Icon === 'avatar' ? (
           <div
             className={clsx(
-              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${selected ? 'bg-primary text-white' : 'text-gray-800'
+              `label avatar invisible pl-4 text-base font-normal opacity-0 transition-all duration-150 ${
+                selected ? 'bg-primary text-white' : 'text-gray-800'
               }`,
               {
                 'group-hover:text-gray-800': !selected,
@@ -476,7 +478,8 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                    selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -488,7 +491,8 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${selected ? 'bg-primary text-white' : 'text-gray-800'
+                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                    selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
                     'group-hover:text-gray-800': !selected,
@@ -514,46 +518,53 @@ export default function MenuItem({
       )}
       <div
         className={clsx(
-          `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${selected &&
+          `group/menuItem transform cursor-pointer rounded transition-all duration-200 ease-in-out ${
+            selected &&
             ((type === 'level-1' &&
               Icon !== 'avatar' &&
               Icon !== 'profile-detail') ||
               (type === 'level-2' &&
                 (Icon === 'result' || Icon === 'bookmark')))
-            ? 'bg-primary text-white'
-            : ''
-          } sidebar-list-items relative px-4 py-2 last:mb-0 ${!isActivity &&
+              ? 'bg-primary text-white'
+              : ''
+          } sidebar-list-items relative px-4 py-2 last:mb-0 ${
+            !isActivity &&
             (name === TitleSidebar.NEW_NOTE || name === TitleSidebar.CALCULATOR)
+              ? 'hidden'
+              : ''
+          }
+        ${
+          !isInCourse &&
+          (name === TitleSidebar.COURSE_CONTENT ||
+            name === TitleSidebar.NOTES_LIST ||
+            name === TitleSidebar.RESOURCES ||
+            name === TitleSidebar.RESULTS ||
+            name === TitleSidebar.EXAM ||
+            name === TitleSidebar.DASHBOARD ||
+            Icon === 'stats-chart-sharp' ||
+            Icon === 'profile-detail')
             ? 'hidden'
             : ''
-          }
-        ${!isInCourse &&
-            (name === TitleSidebar.COURSE_CONTENT ||
-              name === TitleSidebar.NOTES_LIST ||
-              name === TitleSidebar.RESOURCES ||
-              name === TitleSidebar.RESULTS ||
-              name === TitleSidebar.EXAM ||
-              name === TitleSidebar.DASHBOARD ||
-              Icon === 'stats-chart-sharp' ||
-              Icon === 'profile-detail')
+        }
+        ${
+          isInCourse &&
+          (name === TitleSidebar.COURSES ||
+            name === TitleSidebar.EXAM_LIST ||
+            name === TitleSidebar.ENTRANCE_TEST ||
+            // hidden when in course
+            name === TitleSidebar.CALENDAR ||
+            // hidden when in course
+            name === LANG_SIGNIN.eventTest ||
+            name === TitleSidebar.NOTIFICATION ||
+            Icon === 'avatar' ||
+            Icon === 'profile-detail' ||
+            checkIsHiddenDashboard(
+              JSON.parse(localStorage.getItem('courseInfo') as any),
+            ) ||
+            Icon === 'avatar')
             ? 'hidden'
             : ''
-          }
-        ${isInCourse &&
-            (name === TitleSidebar.COURSES ||
-              name === TitleSidebar.EXAM_LIST ||
-              name === TitleSidebar.ENTRANCE_TEST ||
-              // hidden when in course
-              name === TitleSidebar.CALENDAR ||
-              // hidden when in course
-              name === LANG_SIGNIN.eventTest || name === TitleSidebar.NOTIFICATION || Icon === 'avatar' || Icon === 'profile-detail' ||
-              checkIsHiddenDashboard(
-                JSON.parse(localStorage.getItem('courseInfo') as any),
-              ) ||
-              Icon === 'avatar')
-            ? 'hidden'
-            : ''
-          }
+        }
         `,
           {
             'hover:bg-gray-100': !selected,
@@ -562,8 +573,9 @@ export default function MenuItem({
         onClick={() => onClickMenuItem()}
       >
         <div
-          className={`sidebar-item flex items-center ${Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
-            }`}
+          className={`sidebar-item flex items-center ${
+            Icon === 'avatar' || Icon === 'profile-detail' ? '-ml-2' : ''
+          }`}
         >
           {url !== '#' && !isEmpty(url) ? (
             <Link
@@ -576,7 +588,7 @@ export default function MenuItem({
                       ? `/courses/my-course/${router?.query?.courseId || router?.query?.id}`
                       : url
               }
-            // passHref
+              // passHref
             >
               {renderMenuContent()}
             </Link>
@@ -599,8 +611,9 @@ export default function MenuItem({
         </div>
         {isNested ? (
           <div
-            className={`sidebar-child ${type} ${isExpanded && type === 'level-2' ? 'active' : ''
-              }`}
+            className={`sidebar-child ${type} ${
+              isExpanded && type === 'level-2' ? 'active' : ''
+            }`}
           >
             <MenuItemsList
               options={subItems || []}
