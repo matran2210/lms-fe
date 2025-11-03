@@ -443,7 +443,7 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`h-12 mb-4 md:h-[56px]`}
+          classNameTitle={`mb-4 md:h-[56px]`}
           hideBadge={true}
           badgeCode={{
             badge: category,
@@ -457,7 +457,7 @@ const Course = ({
           }}
         >
           <div className="flex justify-between">
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <div>
                 <GraduationCapIcon
                   className={sizeIcon}
@@ -479,7 +479,7 @@ const Course = ({
             </div>
 
             {determineButtonToShow !== 'Active' && (
-              <div className="flex gap-1">
+              <div className="flex gap-1 items-center">
                 <div
                   className={`mr-1 ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
@@ -500,7 +500,7 @@ const Course = ({
                 </div>
                 <div
                   className={clsx(
-                    'text-xs font-normal leading-5 md:text-sm',
+                    'text-xs font-normal md:text-sm',
                     enableCourse ? 'text-gray' : 'text-gray-300',
                   )}
                 >
@@ -583,24 +583,22 @@ const Course = ({
             )}
           >
             {determineButtonToShow !== 'Disabled' && (
-              <div className="w-[84px]">
-                <ButtonSecondary
-                  full
-                  size="small"
-                  title={
-                    determineButtonToShow === 'Active'
-                      ? 'Activate'
-                      : determineButtonToShow
+              <ButtonSecondary
+                full
+                size="small"
+                title={
+                  determineButtonToShow === 'Active'
+                    ? 'Activate'
+                    : determineButtonToShow
+                }
+                className="w-full"
+                onClick={() => {
+                  if (isActiveStudent) {
+                    courseAction()
                   }
-                  className="w-full"
-                  onClick={() => {
-                    if (isActiveStudent) {
-                      courseAction()
-                    }
-                    trackGAEvent('CLick Button Course Item')
-                  }}
-                />
-              </div>
+                  trackGAEvent('CLick Button Course Item')
+                }}
+              />
             )}
           </div>
 

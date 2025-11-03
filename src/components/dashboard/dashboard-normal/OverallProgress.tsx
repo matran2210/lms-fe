@@ -156,7 +156,7 @@ const OverallProgress = ({
       {loading ? (
         <OverallProgressSkeleton />
       ) : (
-        <div className="rounded-2xl bg-white p-6 shadow-small">
+        <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
           <div className="flex-col">
             <div className="flex">
               <div className="mb-6 min-w-fit text-lg font-semibold md:text-xl xl:mb-0">

@@ -10,7 +10,7 @@ const DashboardSkeleton = forwardRef<
     <div ref={ref} {...props} className={clsx(props.className)}>
       <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
         <div className="grid xl:grid-cols-2 xl:gap-8">
-          <div className="rounded-2xl bg-white p-6 shadow-small">
+          <div className="rounded-2xl bg-white p-4 md:p-6 shadow-small">
             <div className="mb-6 flex items-center">
               <Skeleton.Input style={{ width: 180 }} active size="small" />
               <div className="ms-2">
@@ -37,7 +37,7 @@ const DashboardSkeleton = forwardRef<
               </div>
             </div>
           </div>
-          <div className="mt-6 rounded-2xl bg-white p-6 shadow-small xl:mt-0">
+          <div className="mt-6 rounded-2xl bg-white p-4 md:p-6 shadow-small xl:mt-0">
             <div className="mb-4">
               <Skeleton.Input style={{ width: 300 }} active size="small" />
             </div>
@@ -100,7 +100,7 @@ const DashboardSkeleton = forwardRef<
 
         <div className="grid lg:flex xl:gap-8 2xl:mb-8">
           <div className="order-2 xl:order-1 xl:w-[60%]">
-            <div className="rounded-2xl bg-white p-6 shadow-small">
+            <div className="rounded-2xl bg-white p-4 md:p-6 shadow-small">
               <div className="mb-4 flex items-center justify-between">
                 <Skeleton.Input style={{ width: 200 }} active size="small" />
                 <Skeleton.Input style={{ width: 100 }} active size="small" />
@@ -125,7 +125,7 @@ const DashboardSkeleton = forwardRef<
               </div>
             </div>
           </div>
-          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white p-6 shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
+          <div className="order-1 mb-6 flex h-auto rounded-2xl bg-white p-4 md:p-6 shadow-small xl:order-2 xl:my-0 xl:w-[40%]">
             <div className="w-full">
               <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center">
