@@ -855,7 +855,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     />
                     <EssayQuestionPreview
-                      className="hidden !bg-transparent !p-0 md:block"
+                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
@@ -1024,7 +1024,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     />
                     <EssayQuestionPreview
-                      className="hidden !bg-transparent !p-0 md:block"
+                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
