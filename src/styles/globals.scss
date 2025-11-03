@@ -1010,6 +1010,12 @@ p a {
   justify-content: center;
 }
 
+#floating-button-mkt-in-app {
+  @apply fixed flex h-12 w-12 cursor-pointer items-center justify-center 
+    rounded-xl bg-gray-800 p-2 
+    shadow-strong;
+}
+
 .sapp-pinned-noti-header {
   padding: 12px 24px 12px 233px;
   background: #18355d;
@@ -1137,6 +1143,7 @@ p a {
 }
 
 #floating-button:hover,
+#floating-button-mkt-in-app:hover,
 #close_icon:hover,
 #back-to-top:hover {
   transition: transform 100ms ease-in-out 0s;
