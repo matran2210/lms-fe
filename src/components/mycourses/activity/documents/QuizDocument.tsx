@@ -191,15 +191,7 @@ const QuizDocument = ({
         } catch (error) {}
       }
     })()
-  }, [
-    questions,
-    grading_preference,
-    activityId,
-    tabId,
-    quizId,
-    dispatch,
-    number_of_attempts,
-  ])
+  }, [questions, grading_preference, activityId, tabId, quizId, dispatch])
 
   // useEffect(() => {
   //   if (runHandleFinishQuiz > 1) {
@@ -329,6 +321,7 @@ const QuizDocument = ({
   }
 
   const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([])
+
   const handleQuizFinish = async () => {
     const quizQuestion = selectQuestions(
       selector,
@@ -338,43 +331,43 @@ const QuizDocument = ({
     )
 
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
-    const availableQuestions = quizQuestion?.map((item: any) => ({
-      ...item,
-      isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
-    }))
+    const availableQuestions = quizQuestion?.map((item: any) => {
+      return {
+        ...item,
+        isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
+      }
+    })
 
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
     const extractAnswerValue = (ans: any) => {
-      const a = ans?.[0]
-      const answerObj = a?.answer?.[0]
-
+      const answerQustion = ans?.[0]
+      const answerObj = answerQustion?.answer?.[0]
       return (
         answerObj?.answer_id ||
         answerObj?.answer_text ||
-        a?.question_answer_id ||
-        (a?.short_answer !== DEFAULT_EDITOR_VALUE && a?.short_answer) ||
-        answerObj?.answer_text ||
-        null
+        answerQustion?.question_answer_id ||
+        (answerQustion?.short_answer !== DEFAULT_EDITOR_VALUE &&
+          answerQustion?.short_answer) ||
+        !isNull(answerQustion?.answer_file) ||
+        isEmpty(answerQustion)
       )
     }
 
     // Map qua toàn bộ câu hỏi để check hợp lệ
-    const validityList = availableQuestions?.map((item: any) =>
+    const validityList = availableQuestions?.map((item) =>
       isValid(extractAnswerValue(item?.myAnswers)),
     )
 
     const allValid = every(validityList)
-
     if (allValid) {
       setOpenFinishQuiz(true)
       setUnsubittedQuestions([])
     } else {
+      setOpenUnsubmitWarning(true)
       const unsubmitted = validityList
         ?.map((v, i) => (!v ? i + 1 : null)) // +1 để đếm từ 1
         .filter(Boolean) as number[]
-
       setUnsubittedQuestions(unsubmitted)
-      setOpenUnsubmitWarning(true)
     }
 
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
@@ -393,7 +386,7 @@ const QuizDocument = ({
 
     // Lần cuối thì không cần tăng nữa
     // setActiveQuestionIndex(activeQuestionIndex + 1)
-    setIsFinishQuiz(true)
+    // setIsFinishQuiz(true)
     handleSaveAnswer()
     // Load the next question if it hasn't been loaded yet
     const nextQuestionId = questions[activeQuestionIndex + 1]?.id
@@ -542,6 +535,7 @@ const QuizDocument = ({
       }
       return { ...item, myAnswers: null }
     })
+
     const {
       answers,
       quiz_position_mapping,
@@ -831,13 +825,44 @@ const QuizDocument = ({
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
         return 'Result'
       }
+      if (isLastQuestion) {
+        return 'Finish'
+      }
+      if (!isLastQuestion && isAFTEREACHQUESTION) {
+        if (activeQuestion?.qType === 'ESSAY') {
+          return 'Submit & Next'
+        } else {
+          return 'Submit & View Answer'
+        }
+      }
+      if (!isLastQuestion && isAFTERAllQUESTION) {
+        return 'Next Question'
+      }
     }
 
     if (grading_method === 'AUTO') {
-      if (activeQuestion?.qType !== 'ESSAY') {
+      if (isAFTERAllQUESTION && !isLastQuestion) {
+        return 'Next question'
+      }
+      if (isAFTERAllQUESTION && isLastQuestion) {
+        return 'Finish'
+      }
+
+      if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
+        return 'Finish'
+      }
+      if (
+        activeQuestion?.qType !== 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
         return 'Submit & View Answer'
       }
-      if (activeQuestion?.qType === 'ESSAY') {
+      if (
+        activeQuestion?.qType === 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
         return 'Submit & View Solution'
       }
     }
@@ -865,13 +890,56 @@ const QuizDocument = ({
         )
         return
       }
+      if (isLastQuestion) {
+        setIsFinishQuiz(false)
+        handleQuizFinish()
+      }
+
+      if (!isLastQuestion && isAFTEREACHQUESTION) {
+        if (activeQuestion?.qType !== 'ESSAY') {
+          handleConfirmQuestion()
+        } else {
+          handleNextQuestion()
+        }
+      }
+
+      if (!isLastQuestion && isAFTERAllQUESTION) {
+        handleNextQuestion()
+      }
     }
 
-    if (grading_method === 'MANUAL') {
-      handleNextQuestion()
+    if (grading_method === 'AUTO') {
+      if (isAFTERAllQUESTION && !isLastQuestion) {
+        handleNextQuestion()
+      }
+      if (isAFTERAllQUESTION && isLastQuestion) {
+        handleQuizFinish()
+      }
+
+      if (isAFTEREACHQUESTION && !isLastQuestion) {
+        handleConfirmQuestion()
+      }
+
+      if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
+        handleQuizFinish()
+      }
+      if (
+        activeQuestion?.qType !== 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        handleConfirmQuestion()
+      }
+      if (
+        activeQuestion?.qType === 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        handleConfirmQuestion()
+      }
     }
 
-    if (!loading) handleConfirmQuestion()
+    // if (!loading) handleConfirmQuestion()
     trackGAEvent('Click Button Confirm Quiz Activity')
   }
 
@@ -916,7 +984,7 @@ const QuizDocument = ({
     activeQuestion?.requirements?.some(
       (req: IRequirment) => req?.answer_template,
     )
-  console.log({ isQuestionConfirmed, isFinishQuiz, hasAttemptsLeft })
+
   return (
     <div
       className={clsx('rounded-xl bg-gray-100 p-4 md:p-8 lg:rounded-2xl', {
@@ -1198,9 +1266,7 @@ const QuizDocument = ({
                   {(isQuestionConfirmed ||
                     // isAFTERAllQUESTION ||
                     (isQuestionConfirmed && isLastQuestion)) &&
-                    !isFinishQuiz &&
-                    number_of_attempts &&
-                    number_of_attempts > 0 && (
+                    !isFinishQuiz && (
                       <SappButton
                         className="!rounded-lg !px-4 py-2 text-sm"
                         classNameLoading="!rounded-lg !px-4 py-2 text-sm"
@@ -1233,7 +1299,8 @@ const QuizDocument = ({
                       />
                     )}
                   {(!isQuestionConfirmed ||
-                    (isQuestionConfirmed && grading_method === 'MANUAL')) && (
+                    ((number_of_attempts ?? 0) > 1 &&
+                      grading_method === 'MANUAL')) && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2"
                       childClass="text-sm"
