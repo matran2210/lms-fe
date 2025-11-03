@@ -1299,7 +1299,8 @@ const QuizDocument = ({
                       />
                     )}
                   {(!isQuestionConfirmed ||
-                    ((number_of_attempts ?? 0) > 1 &&
+                    (number_of_attempts &&
+                      number_of_attempts > 0 &&
                       grading_method === 'MANUAL')) && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2"
