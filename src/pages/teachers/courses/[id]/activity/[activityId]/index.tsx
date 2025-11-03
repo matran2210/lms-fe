@@ -53,6 +53,7 @@ import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import { ITabs } from 'src/type'
+import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
@@ -535,7 +536,12 @@ const ActivityTeacherPage = () => {
                   fixed
                 >
                   <div className="absolute left-0 top-0  h-full w-full">
-                    <div className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5">
+                    <div
+                      className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5"
+                      style={{
+                        boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+                      }}
+                    >
                       <div className="text-sm font-normal">Calculator</div>
                       <button
                         onClick={() => {
@@ -586,7 +592,7 @@ const ActivityTeacherPage = () => {
                       return (
                         <li className="ml-4" key={e?.id}>
                           <EditorReader
-                            className="editor-wrap mt-1.5"
+                            className="mt-1.5"
                             text_editor_content={e.description}
                           />
                         </li>
@@ -663,6 +669,8 @@ const ActivityTeacherPage = () => {
                               refreshTab={() => handleRefreshCurrentTab()}
                               exhibitText={exhibitText}
                               attemptId={e?.quiz?.attempt?.id}
+                              focusOnlyQuiz={{ id: '', open: false }}
+                              setFocusOnlyQuiz={() => {}}
                               isTeacher
                             />
                           </div>
@@ -864,7 +872,7 @@ const ActivityTeacherPage = () => {
 
           {/* Next/Prev Activities */}
           <div data-aos={ANIMATION.DATA_AOS} className="bg-red">
-            <div className="relative mb-6 border-b-2 border-b-primary-2 bg-white px-6 py-3 shadow-activity">
+            <div className="border-b-primary-2 relative mb-6 border-b-2 bg-white px-6 py-3 shadow-activity">
               <div
                 ref={endActivityRef}
                 className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity ? 'between' : 'end'}`}

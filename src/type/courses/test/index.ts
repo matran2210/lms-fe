@@ -12,6 +12,7 @@ export interface ChartDatum {
   section_score: number
   max_section_score: number
   short_name: string
+  id: string
 }
 
 export interface Quiz {

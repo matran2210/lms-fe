@@ -1,6 +1,5 @@
-import { AlertIcon } from '@assets/icons'
-import SappModal from '@components/base/modal/SappModal'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { UnstartedIcon } from '@assets/icons'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { formatDate } from '@utils/helpers'
 import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
@@ -14,35 +13,36 @@ const PopupLesson = ({ open, setOpen, started_at }: IProps) => {
   const onOk = () => {
     setOpen(false)
   }
+  const ContentUnstartedCourse = () => {
+    return (
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          This Course will start on{' '}
+          {formatDate(new Date(started_at).toString(), true)}. Please come back
+          later or contact{' '}
+          <span className="font-semibold">
+            our Support at {MY_COURSES.hotline}
+          </span>
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
-      okButtonCaption="Back to my course"
+      handleCancel={onOk}
       onOk={onOk}
-      handleCancel={() => setOpen(false)}
-      showHeader={false}
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      parentChildClass=""
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
+      icon={<UnstartedIcon />}
+      header="Unstarted Course"
+      content={<ContentUnstartedCourse />}
+      showFooter
+      okButtonCaption="Back to My Course"
+      fullWidthBtn
       buttonSize="medium"
-      confirmOnclose={false}
-      title={undefined}
       showCancelButton={false}
-    >
-      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
-        <AlertIcon />
-      </div>
-      <div className="flex justify-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        Unstarted Course
-      </div>
-      <div className="mb-1 mt-4 px-1 text-center text-medium-sm text-gray-1 xl:mb-7">
-        This Course will start on{' '}
-        {formatDate(new Date(started_at).toString(), true)}. Please come back
-        later or contact our Support at {MY_COURSES.hotline}.
-      </div>
-    </SappModalV2>
+      isUnderLine
+    />
   )
 }
 

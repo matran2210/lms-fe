@@ -43,24 +43,36 @@ const CourseTree = ({ data }: { data: CourseItem[] }) => {
     return roots
   }, [data])
 
-  return <TreeNodeList nodes={treeData} />
+  return <TreeNodeList nodes={treeData} isRoot={true} />
 }
 
-const TreeNodeList = ({ nodes }: { nodes: TreeNode[] }) => {
+const TreeNodeList = ({
+  nodes,
+  isRoot = false,
+}: {
+  nodes: TreeNode[]
+  isRoot?: boolean
+}) => {
   return (
     <ul className="space-y-2">
       {nodes.map((node) => (
-        <TreeNodeItem key={node.id} node={node} />
+        <TreeNodeItem key={node.id} node={node} isRoot={isRoot} />
       ))}
     </ul>
   )
 }
 
-const TreeNodeItem = ({ node }: { node: TreeNode }) => {
+const TreeNodeItem = ({
+  node,
+  isRoot,
+}: {
+  node: TreeNode
+  isRoot: boolean
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <li className="pl-4">
+    <li className={isRoot ? '' : 'pl-4'}>
       <div
         className="flex cursor-pointer items-center gap-2 rounded px-2 py-1"
         onClick={() => setIsOpen(!isOpen)}
@@ -73,8 +85,8 @@ const TreeNodeItem = ({ node }: { node: TreeNode }) => {
         <span
           className={
             node.children.length > 0
-              ? 'font-normal text-gray-14'
-              : "relative pl-5 text-gray-14 before:absolute before:left-0 before:top-0 before:text-xl before:text-gray-14 before:content-['•']"
+              ? 'font-normal text-secondary'
+              : "relative pl-5 text-secondary before:absolute before:left-0 before:top-0 before:text-xl before:text-secondary before:content-['•']"
           }
         >
           {node.course_section.name}
@@ -86,5 +98,4 @@ const TreeNodeItem = ({ node }: { node: TreeNode }) => {
     </li>
   )
 }
-
 export default CourseTree

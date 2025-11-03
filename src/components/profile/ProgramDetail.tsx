@@ -1,16 +1,18 @@
-import HookFormTextField from '@components/base/textfield/HookFormTextField'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import MyProfileAPI from 'src/pages/api/profile'
 import { useAppSelector } from 'src/redux/hook'
 import { userReducer } from 'src/redux/slice/User/User'
+import Icon from '@components/icons'
+import { Divider } from 'antd'
+import SappCollapse from '@components/collapse/SappCollapse'
+import AttempItem from './SubjectInformation/AttempItem'
 import { ISubjectItem, IUser } from 'src/redux/types/User/urser'
-import TabLayout from './TabLayout'
 import { UserApi } from '@pages/api/user'
-import SappButton from '@components/base/button/SappButton'
+import { PROGRAM } from 'src/constants'
 
 interface IProps {
-  typeProgram: 'CMA' | 'ACCA' | 'CFA'
+  typeProgram: PROGRAM
   onOpenTab?: () => void
 }
 
@@ -103,35 +105,27 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
   }, [subjects?.course_category_id])
 
   return (
-    <TabLayout
-      title={
-        typeProgram === 'ACCA' ? 'ACCA' : typeProgram === 'CFA' ? 'CFA' : 'CMA'
-      }
-      headerButtons={
-        <div className=" flex gap-x-2">
-          <SappButton
-            onClick={onOpenTab}
-            size="medium"
-            title={'Back'}
-            color="textUnderline"
-            className="block min-w-120 pr-0 text-base lg:hidden"
-          ></SappButton>
-        </div>
-      }
-    >
-      <div className="m-6">
-        <div className="grid grid-cols-2">
-          <div className="col-span-1 flex w-[17.43rem] max-w-[200px] flex-none items-center text-gray-700 lg:max-w-[50%]">
-            ACCOUNT ID:
-          </div>
-          <div className="col-span-1 max-w-[300px] flex-auto font-medium text-bw-1">
-            {programData?.hubspot_account_info}
+    <div>
+      <div>
+        <div>
+          <div className="w-fit">
+            <div className="flex items-center gap-2 text-base">
+              <Icon type="contact" />
+              <span>Account ID Number:</span>
+              <span className="font-bold">
+                {' '}
+                <div className="col-span-1 max-w-[300px] flex-auto font-medium text-[#050505]">
+                  {programData?.hubspot_account_info}
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>
-      <div className="m-6">
+      <Divider className="my-4 md:my-6" />
+      <div>
         {subjects?.subjects?.map((subject: ISubjectItem, index: number) => {
-          const courseTabData = userProgram?.course_tab_groups?.[
+          const courseTabData = user.course_tab_groups?.[
             typeProgram
           ]?.user_hubspot_examination_subjects?.find(
             (item) => item.examination_subject.subject.id === subject.id,
@@ -148,40 +142,35 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
 
           return (
             <div key={`${subject.id}-${index}`}>
-              <div className="font-ligth mb-3 flex flex-none items-center text-gray-700 lg:max-w-[50%]">
-                {subject?.name}:
-              </div>
-              <div className="mb-5 grid grid-cols-2 rounded border p-3">
-                <div className="col-span-1 mb-3 flex flex-none items-center text-gray-1 lg:max-w-[50%]">
-                  Exam:
-                </div>
-                <div className="col-span-1 mb-3 flex-auto font-medium text-bw-1">
-                  <HookFormTextField
-                    control={control}
-                    disabled
-                    name={`user_hubspot_examination_subjects.[${index}].examination_subject_id`}
-                    defaultValue={
-                      courseTabData?.examination_subject?.examination?.name
-                    }
-                  />
-                </div>
-                <div className="col-span-1 flex flex-none items-center text-gray-1 lg:max-w-[50%]">
-                  Result:
-                </div>
-                <div className="col-span-1 flex-auto font-medium text-bw-1">
-                  <HookFormTextField
-                    control={control}
-                    disabled
-                    name={`user_hubspot_examination_subjects.[${index}].result`}
-                    defaultValue={courseTabData?.result ?? ''}
-                  />
-                </div>
-              </div>
+              <SappCollapse
+                ghost
+                className="profile-program-collapse"
+                items={[
+                  {
+                    key: '1',
+                    label: (
+                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-xl ">
+                        {subject?.name}
+                      </div>
+                    ),
+                    children: (
+                      <AttempItem
+                        index={0}
+                        courseTabData={courseTabData}
+                        control={control}
+                      />
+                    ),
+                  },
+                ]}
+              />
+              {index + 1 < subjects?.subjects?.length && (
+                <Divider className="my-6" />
+              )}
             </div>
           )
         })}
       </div>
-    </TabLayout>
+    </div>
   )
 }
 

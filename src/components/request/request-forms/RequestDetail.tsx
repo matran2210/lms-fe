@@ -239,11 +239,11 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
           handleSubmit={() => handleSubmit()}
         >
           <div className="mb-7">
-            <div className="mb-4 text-xl font-medium text-gray-800">
+            <div className="mb-4 text-xl font-medium text-[#27272a]">
               {requestDetail?.name}
             </div>
             <div className="mb-4 flex gap-x-3 text-sm">
-              <span className="font-medium text-bw-9 ">
+              <span className="font-medium text-[#c3c3c3] ">
                 Approval Deadline:{' '}
               </span>
               <span className="">
@@ -252,7 +252,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               </span>
             </div>
             <div className="mb-4 flex items-center gap-x-3 text-sm">
-              <span className="font-medium text-bw-9">Status:</span>
+              <span className="font-medium text-[#c3c3c3]">Status:</span>
 
               {displayStatus(
                 REQUEST_STATUS[`${requestDetail?.status as REQUEST_STATUS}`],
@@ -339,7 +339,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   return (
                     <div
                       key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-[#7E8299]'}`}
                     >
                       <CollapseItem
                         title={`Start Date - End Date`}
@@ -380,7 +380,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   return (
                     <div
                       key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-[#7E8299]'}`}
                     >
                       <CollapseItem
                         title={`Start Date - End Date`}
@@ -408,7 +408,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
                   return (
                     <div
                       key={index}
-                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-gray-5'}`}
+                      className={`grid gap-y-4 pb-5 ${index > 0 && index < requestDetail?.teacher_schedules.length - 1 && 'border-b-dashed border-b border-b-[#7E8299]'}`}
                     >
                       <CollapseItem
                         title={`Start Date - End Date`}

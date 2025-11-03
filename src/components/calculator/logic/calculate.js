@@ -9,6 +9,21 @@ function calculate(obj, buttonName) {
     return {}
   }
 
+  if (buttonName === 'delete') {
+    if (obj.next) {
+      const newNext = obj.next.slice(0, -1)
+      return { next: newNext.length > 0 ? newNext : null }
+    } else if (!obj.next && obj.operation && obj.total) {
+      // Nếu đang nhập phép tính nhưng người dùng chưa nhập số tiếp theo, có thể xoá operation
+      return { operation: null }
+    } else if (obj.total && !obj.operation) {
+      // Trường hợp vừa bấm "=" xong và muốn xoá lại total
+      const newTotal = obj.total.slice(0, -1)
+      return { total: newTotal.length > 0 ? newTotal : null }
+    }
+    return {}
+  }
+
   if (buttonName === 'AC') {
     return {
       total: null,

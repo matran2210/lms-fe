@@ -43,7 +43,7 @@ export const userGuideSlice = createSlice({
   },
 })
 
-export const { increment, decrement, active, reset, clearGuideState } =
+export const { increment, active, reset, clearGuideState, decrement } =
   userGuideSlice.actions
 export const userGuideReducer = (state: RootState) => state.userGuideReducer
 export default userGuideSlice.reducer

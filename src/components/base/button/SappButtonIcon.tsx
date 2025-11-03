@@ -44,13 +44,13 @@ const SappButtonIcon = ({
         className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
           isBgPrimary
             ? 'primary'
-            : 'button-icon border border-solid border-[#404041]'
+            : 'button-icon border border-solid border-secondary'
         } flex h-8 min-w-[120px] items-center justify-center`}
       >
         {children}
         <div
           className={`${classTitle} ms-2 text-sm font-medium ${
-            isTextPrimary ? 'text-white' : 'text-bw-1'
+            isTextPrimary ? 'text-white' : 'text-[#050505]'
           }`}
         >
           {title}
@@ -62,7 +62,7 @@ const SappButtonIcon = ({
   return (
     <button
       className={`${className} bg-${isBgPrimary ? 'primary' : 'white'} ${
-        isBgPrimary ? 'primary' : 'border border-solid border-[#404041]'
+        isBgPrimary ? 'primary' : 'border border-solid border-secondary'
       } ${clsx({ 'button-icon': ishover })} flex h-8 min-w-[120px] items-center justify-center`}
       onClick={onClick}
       disabled={loading || disabled}
@@ -71,7 +71,7 @@ const SappButtonIcon = ({
       {children}
       <div
         className={`${classTitle} ms-2 text-sm font-medium ${
-          isTextPrimary ? 'text-white' : 'text-bw-1'
+          isTextPrimary ? 'text-white' : 'text-[#050505]'
         }`}
       >
         {title}

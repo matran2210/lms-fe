@@ -13,7 +13,7 @@ interface IProps {
   okButtonCaption?: any
   okButtonClass?: string | undefined
   cancelButtonClass?: string | undefined
-  buttonSize?: 'small' | 'medium' | 'lager' | 'extra'
+  buttonSize?: 'small' | 'medium' | 'large' | 'extra'
   customTitle?: ReactNode
   showHeader?: boolean
   customHeader?: ReactNode
@@ -75,7 +75,7 @@ const SappModalV2 = ({
   cancelButtonCaption,
   cancelButtonClass,
   classNameModal,
-  width = 630,
+  width = 560,
   handleClose,
 }: IProps) => {
   return (
@@ -91,12 +91,10 @@ const SappModalV2 = ({
     >
       {children}
       {showFooter && (
-        <div className={`relative pt-5 md:pt-9`}>
+        <div className={`relative pt-6 md:pt-10`}>
           <ButtonCancelSubmit
             revertFunction={revertFunction}
             className={footerButtonClassName}
-            color={color}
-            colorCancel={colorCancel}
             showOkButton={showOkButton}
             showCancelButton={showCancelButton}
             submit={{

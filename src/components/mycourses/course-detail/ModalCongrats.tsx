@@ -101,23 +101,23 @@ const ModalCongrats = ({ name, course_type, quiz }: IProps) => {
           <IconCongrats />
         </div>
       </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
+      <div className="mt-6 flex justify-center text-4xl font-semibold text-[#050505]">
         Congratulations
       </div>
       <div className="mb-3 mt-4 text-center">
-        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
+        <span className="mb-3 mt-4 text-center text-sm font-normal text-[#A1A1A1]">
           Congratulations on completing the Final Test of
         </span>
-        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-sm font-semibold text-[#050505]">
           {name}
         </span>
-        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-normal text-gray-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-sm font-normal text-[#A1A1A1]">
           with a score of
         </span>
-        <span className="mb-3 ms-1 mt-4 text-center text-medium-sm font-semibold text-bw-1">
+        <span className="mb-3 ms-1 mt-4 text-center text-sm font-semibold text-[#050505]">
           {scoreQuestion}
         </span>
-        <span className="mb-3 mt-4 text-center text-medium-sm font-normal text-gray-1">
+        <span className="mb-3 mt-4 text-center text-sm font-normal text-[#A1A1A1]">
           . The system will calculate your overall grade for this course and
           return it to you via Email shortly.
         </span>

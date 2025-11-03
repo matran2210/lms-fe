@@ -40,8 +40,9 @@ export const PageLink = {
   REQUEST: '/request',
   MY_REQUEST: '/teachers/my-request',
   DASHBOARD: '/courses/my-course/[courseId]/dashboard',
-  COURSE_CONTENT: '/courses/my-course',
+  COURSE_CONTENT: '/courses/my-course/[courseId]',
   CALENDAR: '/calendar',
+  EXAM_LIST: '/exam_list',
 }
 
 export const TitleSidebar = {
@@ -55,8 +56,9 @@ export const TitleSidebar = {
   TOPICS_LIST: 'Topics list',
   TEACHER: 'Teacher',
   NOTIFICATION: 'Notifications',
-  RESULTS: 'Results',
+  RESULTS: 'Test / Quiz List',
   EXAM_INFORMATION: 'Exam Information',
+  EXAM_LIST: 'Exam List',
   COURSE_CONTENT: 'Course Content',
   NOTES_LIST: 'Notes List',
   NEW_NOTE: 'New Note',
@@ -66,7 +68,24 @@ export const TitleSidebar = {
   MY_CALENDAR: 'My Calendar',
   MY_REQUEST: 'My Request',
   CALENDAR: 'Calendar',
+  EXAM: 'Exam',
   COURSE_RESOURCES: 'Course Resource',
+  STUDENT_CALENDAR: 'Student Calendar',
+  LEARNING_ACTIVITY: 'Learning Activity',
+  TEST: 'Test',
+  DASHBOARD_TEST: 'Dashboard Test',
+  HOME: 'Home',
+}
+
+export const ValueSidebar = {
+  HOME: 'home',
+  DASHBOARD: 'dashboard',
+  COURSES: 'my-course',
+  STUDENT_CALENDAR: 'student-calendar',
+  LEARNING_ACTIVITY: 'learning-activity',
+  TEST: 'test',
+  DASHBOARD_TEST: 'dashboard-test',
+  EXAM_LIST: 'exam-list',
 }
 
 export const TitleTeacherSidebar = {
@@ -141,9 +160,11 @@ export const UserGuide = {
   CONTENT_STEP_4:
     'This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.',
   CONTENT_STEP_5:
-    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+    'Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.',
   CONTENT_STEP_6:
-    'The filter section allows you to filter courses by curriculum and course status.',
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
+  CONTENT_STEP_7:
+    'This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.',
 }
 
 export const defaultStatusCourse = [
@@ -198,8 +219,12 @@ export const defaultStatusEnstraceTest = [
     value: 'SUBMITTED',
   },
   {
-    label: 'Unsubmitted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -209,12 +234,16 @@ export const defaultStatusEventTest = [
     value: '',
   },
   {
-    label: 'Completed',
+    label: 'Submitted',
     value: 'SUBMITTED',
   },
   {
-    label: 'Uncompleted',
-    value: 'UN_SUBMITTED',
+    label: 'Not started',
+    value: 'NOT_STARTED',
+  },
+  {
+    label: 'In Progress',
+    value: 'IN_PROGRESS',
   },
 ]
 
@@ -293,8 +322,10 @@ export const ESSAY_TYPE = {
 }
 
 export const GRADE_STATUS = {
+  IN_REVIEW: 'IN_REVIEW',
   AWAITING_GRADING: 'AWAITING_GRADING',
   FINISHED_GRADING: 'FINISHED_GRADING',
+  REGRADING: 'REGRADING',
 }
 
 export const GRADING_METHOD = {
@@ -357,6 +388,7 @@ export const EVENT_TYPES_RESPONSE = {
   HOLIDAY: 'HOLIDAY',
   OTHER: 'OTHER',
   LIVE_ONLINE: 'LIVE_ONLINE',
+  INACTIVE: 'INACTIVE',
 } as const
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES)
@@ -367,7 +399,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.HOLIDAY]: 'Holiday schedule',
   [EVENT_TYPES.OTHER]: 'Other calendar',
   [EVENT_TYPES.LIVE_ONLINE]: '',
-  [EVENT_TYPES.INACTIVE]: '',
+  [EVENT_TYPES.INACTIVE]: 'Inactive',
 }
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
@@ -581,6 +613,10 @@ export const COOKIE_INFO = {
 export const LABEL_MAX_LENGTH = 12
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000 // 2s
+export const CLASS_TYPE = {
+  TRIAL: 'TRIAL',
+}
+export const TEST_AND_QUIZ_TITLE = 'Test & Quiz'
 
 export * from './socketEvents'
 export * from './localStorageKeys'

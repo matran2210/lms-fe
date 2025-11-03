@@ -8,7 +8,7 @@ const NotifyDetail = ({ notifyDetail }: IProps) => {
   return (
     <div key={notifyDetail?.id} className="w-full">
       <div
-        className="sapp-notifcation text-base text-bw-1"
+        className="sapp-notifcation text-base text-[#050505]"
         dangerouslySetInnerHTML={{ __html: notifyDetail?.content }}
       ></div>
     </div>

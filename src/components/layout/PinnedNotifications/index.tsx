@@ -35,12 +35,12 @@ function PinnedNotifications() {
         pinnedNotifications?.data?.content && (
           <React.Fragment>
             <div
-              className={`fixed top-0 z-50 h-12 w-full bg-support-1 text-white`}
+              className={`sticky top-0 z-50 h-[60px] w-full bg-secondary-600 text-xs font-medium text-white md:text-base`}
             >
-              <Row className="flex h-12 flex-row">
+              <Row className="flex h-[60px] flex-row">
                 <Col span={1}></Col>
                 <Col span={22}>
-                  <div className="flex h-12 flex-row justify-items-center">
+                  <div className="flex h-[60px] flex-row justify-items-center">
                     <div className="mx-auto flex flex-row">
                       <div className="flex content-center items-center text-center">
                         <IconLoudSpeaker />
@@ -70,7 +70,7 @@ function PinnedNotifications() {
                     onClick={handleClosePinned}
                     className="float-right flex h-full cursor-pointer content-center items-center pr-6"
                   >
-                    <CloseIconNote />
+                    <CloseIconNote color="#FFFFFF" />
                   </div>
                 </Col>
               </Row>

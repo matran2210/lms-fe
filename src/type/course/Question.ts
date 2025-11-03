@@ -1,7 +1,7 @@
 export interface Thumbnail {
-  '640x360': string
-  '770x435': string
-  '950x535': string
+  '311x175': string
+  '656x369': string
+  '1270x716': string
   [key: string]: string
 }
 
@@ -89,6 +89,12 @@ export interface IRequirment {
   explanation?: string
   answer_template?: string
 }
+export interface IRequirmentAnswer {
+  requirement_id: string
+  short_answer: string
+  answer_file: any
+  active: string
+}
 
 export interface IQuestionFilter {
   course_id: string
@@ -130,6 +136,7 @@ export interface IQuestion {
   question_category_id?: string
   question_topic_id?: string
   requirements?: IRequirment[]
+  requirement_answers?: IRequirmentAnswer[]
   exhibits?: IExhibit[]
   files?: IFile[]
   setting_grade?: string

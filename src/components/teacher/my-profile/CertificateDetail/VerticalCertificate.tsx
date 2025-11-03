@@ -72,9 +72,11 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
+                iconPosition="end"
                 onClick={onDownload}
-                title="Download"
-              />
+              >
+                Download
+              </ButtonPrimary>
               <ClickToCopyButton
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >

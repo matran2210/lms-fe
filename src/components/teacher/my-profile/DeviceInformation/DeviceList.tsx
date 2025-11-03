@@ -25,7 +25,7 @@ const DeviceList = () => {
   }, [selectedDrawer?.data?.created_at])
 
   const getListDevices = async () => {
-    const res = await UserApi.getListDevicesV2()
+    const res = await UserApi.getListDevices()
     setListDevices(res)
   }
   useEffect(() => {
@@ -93,7 +93,7 @@ const DeviceList = () => {
           <div className="flex flex-col gap-3 md:gap-4">
             {selectedDrawer?.data?.user_agent.browserName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary-500 md:w-[250px]">
+                <span className="inline-block text-secondary md:w-[250px]">
                   Device Name:
                 </span>
                 <span className="font-semibold">
@@ -103,7 +103,7 @@ const DeviceList = () => {
             )}
             {selectedDrawer?.data.user_agent.browserName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary-500 md:w-[250px]">
+                <span className="inline-block text-secondary md:w-[250px]">
                   Browser:
                 </span>
                 <span className="font-semibold">
@@ -113,7 +113,7 @@ const DeviceList = () => {
             )}
             {selectedDrawer?.data.user_agent.osName && (
               <div className="flex items-center justify-between text-gray-800">
-                <span className="inline-block text-secondary-500 md:w-[250px]">
+                <span className="inline-block text-secondary md:w-[250px]">
                   OS:
                 </span>
                 <span className="font-semibold">

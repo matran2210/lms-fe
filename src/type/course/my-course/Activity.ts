@@ -44,15 +44,17 @@ export interface IActivity {
   tabs?: ITab[]
   class_id?: string
   class_user_id?: string
-  next_activity?: {
+  next_activity: {
     id: string
     display_icon: string
     name: string
+    is_preview_locked: boolean
   }
-  previous_activity?: {
+  previous_activity: {
     id: string
     display_icon: string
     name: string
+    is_preview_locked: boolean
   }
   breadcumb?: IBreadcrumb[]
   user_course_section_progress: {
@@ -60,7 +62,7 @@ export interface IActivity {
     total_course_sections: number
     total_course_sections_completed: number
   }[]
-  is_preview_locked?: boolean
+  is_preview_locked: boolean
 }
 
 export interface ITab {
@@ -96,7 +98,10 @@ export interface ITab {
         status: string
         id: string
         grading_status: string
+        number_of_attempts?: number
       }
+      is_limited?: boolean
+      limit_count?: number
       id?: string
       name?: string
       constructed_questions: IQuestion[]

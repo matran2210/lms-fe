@@ -1,8 +1,9 @@
+import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
 
-const LogoDefault = () => {
+const LogoDefault = ({ className }: { className?: string }) => {
   const router = useRouter()
   const pathname = router.pathname
 
@@ -15,7 +16,7 @@ const LogoDefault = () => {
         height="50"
         fill="none"
         viewBox="0 0 42 50"
-        className="logo-default shrink-0 cursor-pointer"
+        className={clsx('logo-default shrink-0 cursor-pointer', className)}
       >
         <path fill="url(#pattern0)" d="M0 0H42V50H0z"></path>
         <defs>

@@ -125,27 +125,24 @@ const Progress = ({ classDetail }: { classDetail: IClassDetail }) => {
           <div className="flex gap-3">
             <ButtonSecondary
               title="Reset"
-              color="secondary"
               onClick={handleResetFilter}
               disabled={isLoading}
-              size="small"
-              className="h-10 rounded-md"
+              className="h-10"
             />
             <ButtonPrimary
               title="Search"
               onClick={handleFilter}
               disabled={isLoading}
-              size="small"
-              className="h-10 rounded-md"
+              className="h-10"
             />
           </div>
           {allowCreateProgress && (
             <ButtonPrimary
               title="Add Progress"
-              icon={<Plus />}
+              startIcon={<Plus />}
               onClick={handleOpenAddModal}
               size="small"
-              className="flex h-10 items-center rounded-md"
+              className="h-10"
             />
           )}
         </div>

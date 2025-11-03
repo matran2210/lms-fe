@@ -150,7 +150,7 @@ const CourseDetailTeacher = () => {
       breadcrumbs={breadcrumbs}
       isCourseDetail
     >
-      <div className="header border-b border-default bg-white">
+      <div className="header border-default border-b bg-white">
         <div className={`relative my-0 flex`}>
           <SearchForm
             placeholder={MY_COURSES.placeholderSearch}

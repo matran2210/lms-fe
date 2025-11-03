@@ -1,8 +1,9 @@
+import Recommendation from '@components/test/Recommendation'
 import { F_LOW_CODES } from '@utils/constants'
 import { roundNumber } from '@utils/helpers'
-import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import SappLoading from 'src/common/SappLoading'
+import { GRADE_STATUS } from 'src/constants'
 import {
   IQuizAttempt,
   IQuizAttemptChartType,
@@ -10,14 +11,10 @@ import {
   QuizAttemptChartType,
 } from 'src/type'
 import ChartACCAScore from './acca/chartACCAScore'
-import Annotation from './Annotation'
-import MultipleChoiceScore from './cfa/MultipleChoiceScore'
+import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'
-import MultipleQuestion from './multipleQuestion'
+import MultipleChoiceScore from './MultipleChoiceScore'
 import ScoreDetail from './ScoreDetail'
-import { GRADE_STATUS } from 'src/constants'
-import Recommendation from '@components/test/Recommendation'
-import { isUndefined, isNull } from 'lodash'
 
 interface IProps {
   questions: {
@@ -32,6 +29,8 @@ interface IProps {
   subjectCode: string
   score: number
   isTeacher?: boolean
+  loadingChart?: boolean
+  loadingAttempt?: boolean
 }
 
 const TestResultPage = ({
@@ -41,124 +40,98 @@ const TestResultPage = ({
   subjectCode,
   score,
   isTeacher,
+  loadingChart,
 }: IProps) => {
   const multipleQuestionRef = useRef<HTMLDivElement>(null)
   const yourScoreDetailRef = useRef<HTMLDivElement>(null)
 
-  const [openAnnotaion, setOpenAnnotaion] = useState(false)
+  // const handleResize = () => {
+  //   const multipleQuestionElem = multipleQuestionRef?.current
+  //   const yourScoreDetailElem = yourScoreDetailRef?.current
+  //   if (multipleQuestionElem && yourScoreDetailElem) {
+  //     const maxHeight = Math.max(
+  //       multipleQuestionElem.offsetHeight,
+  //       yourScoreDetailElem.offsetHeight,
+  //     )
+  //     multipleQuestionElem.style.height =
+  //       window.innerWidth > 1777
+  //         ? `calc(100vh - ${maxHeight}px)`
+  //         : 'fit-content'
+  //     yourScoreDetailElem.style.marginBottom =
+  //       window.innerWidth > 1777
+  //         ? '24px'
+  //         : `${multipleQuestionElem.offsetHeight}px`
+  //     yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
+  //   }
+  // }
+  // useEffect(() => {
+  //   type !== undefined && handleResize()
+  // }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
 
-  const handleResize = () => {
-    const multipleQuestionElem = multipleQuestionRef?.current
-    const yourScoreDetailElem = yourScoreDetailRef?.current
-    if (multipleQuestionElem && yourScoreDetailElem) {
-      const maxHeight = Math.max(
-        multipleQuestionElem.offsetHeight,
-        yourScoreDetailElem.offsetHeight,
-      )
-      multipleQuestionElem.style.height =
-        window.innerWidth > 1777
-          ? `calc(100vh - ${maxHeight}px)`
-          : 'fit-content'
-      yourScoreDetailElem.style.marginBottom =
-        window.innerWidth > 1777
-          ? '24px'
-          : `${multipleQuestionElem.offsetHeight}px`
-      yourScoreDetailElem.style.height = `calc(100vh - ${maxHeight}px)`
-    }
-  }
-  useEffect(() => {
-    type !== undefined && handleResize()
-  }, [type, multipleQuestionRef?.current, yourScoreDetailRef?.current])
+  // useEffect(() => {
+  //   window.addEventListener('resize', handleResize)
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize)
+  //   }
+  // }, [])
 
-  useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  const GlobalAverage = roundNumber(chartData?.quiz_report?.ratio ?? 0)
+  const globalAverageNumber = roundNumber(chartData?.quiz_report?.ratio ?? 0)
 
   const commonMultipleScoreStyle =
-    'grid grid-cols-1 xl:grid-cols-test-result gap-x-6 w-full'
+    'grid grid-cols-1 xl:grid-cols-[minmax(0,7fr)_minmax(0,3fr)] gap-6 w-full pb-6'
 
   const renderDashboard = useMemo(() => {
     switch (type) {
       case QuizAttemptChartType.ACCA: {
-        if (!F_LOW_CODES.includes(subjectCode)) {
+        if (F_LOW_CODES.includes(subjectCode)) {
           return (
             <div className={commonMultipleScoreStyle}>
-              <div className="flex max-h-full flex-col overflow-y-auto">
+              <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
                 <ChartACCAScore
                   data={chartData?.chart_data}
-                  recommendation={questions?.quizAttempt?.attempt_gradings}
+                  loading={loadingChart}
                 />
+                {questions?.quizAttempt?.attempt_gradings?.map(
+                  (item, index) => (
+                    <Recommendation data={item} key={index} />
+                  ),
+                )}
                 <ScoreDetail
                   className={'relative'}
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
                   gradingStatus={questions?.quizAttempt?.grading_status}
+                  quizAttempt={questions?.quizAttempt}
                 />
               </div>
-              <div className="-order-1 mb-4 xl:order-1">
-                <div className="max-h-full w-full xl:sticky xl:top-6 ">
-                  <div
-                    className={`$ flex h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
-                  >
-                    <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
-                      {questions?.quizAttempt?.grading_status ===
-                      GRADE_STATUS.FINISHED_GRADING
-                        ? 'Overall Score'
-                        : 'Multiple Choice Score'}
-                    </div>
-                    <div className="flex w-full items-end justify-between">
-                      <div
-                        className={`font-inter text-6xl font-bold text-primary xl:text-6xl`}
-                      >
-                        {isNull(score) || isUndefined(score)
-                          ? '--'
-                          : Math.round(score)}
-                        %
-                      </div>
-                      <div className={`mb-3 flex items-center gap-1`}>
-                        <Image
-                          src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"
-                          width={16}
-                          height={16}
-                          alt="Globe"
-                        />
-                        <div className={`text-sm leading-4.9 text-gray-1`}>
-                          Global Average {GlobalAverage}%
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <MultipleQuestion
-                    questions={questions}
-                    className={'xl:w-full'}
-                    multipleQuestionRef={multipleQuestionRef}
-                    setOpenAnnotaion={setOpenAnnotaion}
-                    isTeacher={isTeacher}
-                  />
-                </div>
-              </div>
+              <MultipleChoiceScore
+                questions={questions}
+                score={score}
+                globalAverage={globalAverageNumber}
+                multipleQuestionRef={multipleQuestionRef}
+              />
             </div>
           )
         } else {
           return (
             <div className={commonMultipleScoreStyle}>
-              <div className="xl:3/4 flex h-auto w-full flex-col">
+              <div className="flex h-auto w-full flex-col gap-6">
                 <ChartCMAScore
                   data={chartData?.chart_data}
-                  GlobalAverage={GlobalAverage}
+                  globalAverage={globalAverageNumber}
                   score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
                     GRADE_STATUS.FINISHED_GRADING
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
-                  recommendation={questions?.quizAttempt?.attempt_gradings}
+                  loadingChart={loadingChart}
                 />
+                {questions?.quizAttempt?.attempt_gradings?.map(
+                  (item, index) => (
+                    <Recommendation data={item} key={index} />
+                  ),
+                )}
                 <ScoreDetail
                   className={''}
                   yourScoreDetailRef={yourScoreDetailRef}
@@ -166,13 +139,14 @@ const TestResultPage = ({
                   gradingStatus={questions?.quizAttempt?.grading_status}
                 />
               </div>
-              <MultipleQuestion
-                questions={questions}
-                className={'h-full'}
-                multipleQuestionRef={multipleQuestionRef}
-                setOpenAnnotaion={setOpenAnnotaion}
-                isTeacher={isTeacher}
-              />
+              <div>
+                <MultipleChoiceScore
+                  questions={questions}
+                  score={score}
+                  globalAverage={globalAverageNumber}
+                  multipleQuestionRef={multipleQuestionRef}
+                />
+              </div>
             </div>
           )
         }
@@ -180,30 +154,24 @@ const TestResultPage = ({
       case 'CFA':
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="flex max-h-full flex-col">
-              <MultipleChoiceScore
-                chartData={chartData}
-                recommendation={questions?.quizAttempt?.attempt_gradings}
-                isGraded={
-                  questions?.quizAttempt?.grading_status ===
-                  GRADE_STATUS.FINISHED_GRADING
-                }
-                score={score}
-              />
+            <div className="max-h-ful flex flex-col gap-6">
+              <div className="items-start rounded-xl bg-white p-4 shadow-small md:p-6">
+                <ChartCFAScore data={chartData?.chart_data} />
+              </div>
+              {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
+                <Recommendation data={item} key={index} />
+              ))}
               <ScoreDetail
-                isTeacher={isTeacher}
-                className={''}
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <MultipleQuestion
+            <MultipleChoiceScore
               questions={questions}
-              className={'xl:!h-[calc(100vh-241px)] xl:w-full'}
+              score={score}
+              globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
-              setOpenAnnotaion={setOpenAnnotaion}
-              isTeacher={isTeacher}
             />
           </div>
         )
@@ -211,18 +179,21 @@ const TestResultPage = ({
       case QuizAttemptChartType.CMA:
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="xl:3/4 flex h-auto w-full flex-col">
+            <div className="xl:3/4 flex h-auto w-full flex-col gap-6">
               <ChartCMAScore
                 data={chartData?.chart_data}
-                GlobalAverage={GlobalAverage}
+                globalAverage={globalAverageNumber}
                 score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
                   GRADE_STATUS.FINISHED_GRADING
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
-                recommendation={questions?.quizAttempt?.attempt_gradings}
+                loadingChart={loadingChart}
               />
+              {questions?.quizAttempt?.attempt_gradings?.map((item, index) => (
+                <Recommendation data={item} key={index} />
+              ))}
               <ScoreDetail
                 isTeacher={isTeacher}
                 className={''}
@@ -231,12 +202,11 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <MultipleQuestion
+            <MultipleChoiceScore
               questions={questions}
-              className={'h-full'}
+              score={score}
+              globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
-              setOpenAnnotaion={setOpenAnnotaion}
-              isTeacher={isTeacher}
             />
           </div>
         )
@@ -252,71 +222,18 @@ const TestResultPage = ({
                 gradingStatus={questions?.quizAttempt?.grading_status}
               />
             </div>
-            <div className="-order-1 mb-4 xl:order-1">
-              <div className="max-h-full w-full xl:sticky xl:top-6 ">
-                <div
-                  className={`flex min-h-[152px] w-full flex-wrap justify-between bg-white p-6 shadow-sidebar xl:mb-6`}
-                >
-                  <div className="mb-5 text-xl font-semibold text-bw-1 xl:font-medium">
-                    {questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING
-                      ? 'Overall Score'
-                      : 'Multiple Choice Score'}
-                  </div>
-                  <div className="flex w-full flex-wrap items-end justify-between">
-                    <div
-                      className={`mb-[13px] font-inter text-6xl font-bold text-primary xl:text-6xl`}
-                    >
-                      {isNull(score) || isUndefined(score)
-                        ? '--'
-                        : Math.round(score)}
-                      %
-                    </div>
-                    <div className={`mb-5 flex items-center gap-1`}>
-                      <Image
-                        src="https://file.rendit.io/n/XnLyBdd8onI3Zbp3i20X.svg"
-                        width={16}
-                        height={16}
-                        alt="Globe"
-                      />
-                      <div className={`text-sm leading-4.9 text-gray-1`}>
-                        Global Average {GlobalAverage}%
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full">
-                    {questions?.quizAttempt?.attempt_gradings.length > 0 &&
-                      questions?.quizAttempt?.attempt_gradings?.map(
-                        (item, index) => (
-                          <Recommendation data={item} key={index} />
-                        ),
-                      )}
-                  </div>
-                </div>
-                <MultipleQuestion
-                  questions={questions}
-                  className={'xl:w-full'}
-                  multipleQuestionRef={multipleQuestionRef}
-                  setOpenAnnotaion={setOpenAnnotaion}
-                  isTeacher={isTeacher}
-                />
-              </div>
-            </div>
+            <MultipleChoiceScore
+              questions={questions}
+              score={score}
+              globalAverage={globalAverageNumber}
+              multipleQuestionRef={multipleQuestionRef}
+            />
           </div>
         )
     }
-  }, [type, score, chartData, questions])
+  }, [type, chartData, questions, score, globalAverageNumber, subjectCode])
 
-  return (
-    <>
-      {!!type ? renderDashboard : <SappLoading />}
-      <Annotation
-        gradingStatus={questions?.quizAttempt?.grading_status}
-        openAnnotaion={openAnnotaion}
-        setOpenAnnotaion={setOpenAnnotaion}
-      />
-    </>
-  )
+  return renderDashboard
 }
 
 export default TestResultPage

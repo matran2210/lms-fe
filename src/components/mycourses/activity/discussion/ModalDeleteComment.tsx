@@ -1,5 +1,5 @@
-import { AlertIcon } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import { DeleteCommentIcon } from '@assets/icons'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import React, { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
@@ -13,39 +13,33 @@ const ModalDeleteComment = ({
   onDeleteComment,
   setIsDelete,
 }: IProps) => {
+  const ContentModalDeleteComment = () => {
+    return (
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          Are you sure you want to delete this comment?
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <SappModalV2
-      title={undefined}
+    <SappModalV3
       open={isDelete}
+      handleClose={() => setIsDelete(false)}
       handleCancel={() => setIsDelete(false)}
-      showOkButton={true}
       onOk={onDeleteComment}
-      okButtonCaption={'Delete'}
-      cancelButtonCaption={'Cancel'}
-      buttonSize="lager"
-      cancelButtonClass={'no-underline'}
-      showHeader={false}
-      refClass="p-6 md:py-[70px] md:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all overflow-y-auto"
-      size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      childClass="flex flex-col justify-center items-center"
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
-      scrollbale={false}
-    >
-      <div className="flex justify-center">
-        <div className="w-fit rounded-full bg-secondary p-8">
-          <AlertIcon />
-        </div>
-      </div>
-      <div className="mt-6 flex justify-center text-4xl font-semibold text-bw-1">
-        Delete Comment?
-      </div>
-      <div className="mb-11 mt-4 text-center text-medium-sm text-gray-1">
-        Are you sure you want to delete this comment?
-      </div>
-    </SappModalV2>
+      icon={<DeleteCommentIcon />}
+      header="Delete Comment?"
+      content={<ContentModalDeleteComment />}
+      showFooter
+      okButtonCaption="Delete"
+      fullWidthBtn
+      buttonSize="medium"
+      cancelButtonCaption="Cancel"
+      headerClassName="text-center"
+      isUnderLine
+    />
   )
 }
 

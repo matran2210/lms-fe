@@ -1,23 +1,28 @@
 import { CloseIcon } from '@assets/icons'
+import Layout from '@components/layout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
 import { QuizResultComponent } from 'quiz-result-package'
 import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
-import { CoursesAPI } from '../../api/courses/index'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
-import { PageLink } from 'src/constants'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
+import { CoursesAPI } from '../../api/courses/index'
+import FullScreenLayout from '@components/layout/FullScreenLayout'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const TableEntranceResult = () => {
   const router = useRouter()
-  const { id } = router.query
+  const { id, attempt } = router.query
   const [loading, setLoading] = useState<boolean>(false)
   const [modalResult, setModalResult] = useState<{
     status?: boolean
     questions?: any
     id?: string
+    result_answer?: {
+      total_correct_answers: number
+      total_question: number
+    }
   }>()
   const getTable = async ({
     id,
@@ -57,6 +62,7 @@ const TableEntranceResult = () => {
         id: id || e?.id,
         status: true,
         questions: newQuestionResponse,
+        result_answer: response.data.result_answer,
       }))
     } catch (error) {
     } finally {
@@ -68,31 +74,42 @@ const TableEntranceResult = () => {
       getTable({ id: id as string, page_index: 1, page_size: 10 })
     }
   }, [id])
+
+  const searchParams =
+    attempt && attempt !== 'undefined' ? `attempt=${attempt}` : ''
+
   return (
-    <FullScreenLayout title="Entrance Test Result">
-      <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6">
+    <FullScreenLayout title="Entrance test result" className="!bg-gray-4">
+      <div>
         <div
-          className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
+          className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
-            router.push(`/entrance-test/test-result/${id}`)
+            router.push(`/entrance-test/test-result/${id}?${searchParams}`)
           }}
         >
-          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseModalIcon />
         </div>
-        {modalResult?.questions?.data?.length > 0 && (
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={(e) =>
-              router
-                .push(`/explanation/${e.id}?title=Entrance Test`)
-                .then(() => window.location.reload())
-            }
-            loading={loading}
-            showTotal={false}
-          />
-        )}
       </div>
+      <Layout fullWidth title="Entrance Test Result" showSidebar={false}>
+        <div className="">
+          {modalResult?.questions?.data?.length > 0 && (
+            <QuizResultComponent
+              questionResponse={modalResult?.questions || []}
+              getTable={getTable}
+              onShowDetail={(e) => {
+                router
+                  .push(
+                    `/explanation/${e.id}?title=Entrance Test&${searchParams}`,
+                  )
+                  .then(() => window.location.reload())
+              }}
+              loading={loading}
+              showTotal={false}
+              is_lms_v2
+            />
+          )}
+        </div>
+      </Layout>
     </FullScreenLayout>
   )
 }

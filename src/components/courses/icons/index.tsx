@@ -1,5 +1,5 @@
 // export { Alarm } from './Alarm'
-// export { ArrowDownIcon } from './ArrowDownIcon'
+export { ArrowDownIcon } from './ArrowDownIcon'
 // export { Arrows } from './Arrows'
 // export { ArrowUpIcon } from './ArrowUpIcon'
 // export { Bachelor } from './Bachelor'

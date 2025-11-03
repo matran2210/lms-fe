@@ -1,372 +1,286 @@
-import PaginationSAPP from '@components/base/pagination/PaginationSAPP'
-import SappTable from '@components/base/SappTable'
-import { GradingMethod, TEST_TYPE as testTypeTitle } from '@utils/constants'
-import {
-  capitalizeFirstLetter,
-  getTimeFromInput,
-  truncateString,
-} from '@utils/index'
-import { Modal } from 'antd'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
+import PaginationSappV2 from '@components/base/pagination/PaginationSappV2'
+import { GradingMethod } from '@utils/constants'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
+import { useInfiniteQuery } from 'react-query'
 import { GRADE_STATUS, PageLink } from 'src/constants'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, QuizActivity, Results } from 'src/type/results'
-import ResultQuizModal from './ResultQuizModal'
-import ResultsTableFilter from './ResultsTableFilter'
+import { IResultsList, Results } from 'src/type/results'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from 'src/constants'
-import Tooltip from 'src/common/Tooltip'
+import FilterCourseSection from '@components/mycourses/FilterCourseSection'
+import CollapseActivity from '@components/learning/activity/CollapseActivity'
+import { isEmpty } from 'lodash'
+import CardResultTest from '@components/learning/activity/CardResultTest'
+import { Avatar, List, Skeleton } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import {
+  IOpenChooseItem,
+  ISection,
+  SectionDropdownFormValues,
+  backTypeMap,
+  getTypeName,
+} from 'src/type/courses'
+import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { FormProvider, useForm } from 'react-hook-form'
+import ListFilterMobile from '@components/common/ListFilterMobile'
+import NoDataV2 from 'src/common/NodataV2'
 
-const commonDataCellStyle = 'col py-5 pr-4 whitespace-nowrap'
-
-// Là essay nên không có điểm
-const commonHeaderCellStyle =
-  'text-left text-medium-sm text-gray-1 font-semibold pb-3 min-w-28'
-
-export const headers = [
-  ...['Name', 'Type'].map((label) => ({
-    label,
-    className: commonHeaderCellStyle,
-  })),
-  {
-    label: 'Graded Activity',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Status',
-    className: clsx(commonHeaderCellStyle, 'capitalize'),
-  },
-  {
-    label: 'Score',
-    className: clsx(commonHeaderCellStyle, 'text-center'),
-  },
-  {
-    label: 'Quizzes/Tests',
-    className: commonHeaderCellStyle,
-  },
-  {
-    label: 'Time Spent',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-  {
-    label: 'Last submission',
-    className: clsx(commonHeaderCellStyle, 'min-w-40 text-center'),
-  },
-] as {
-  label: string
-  className: string
-}[]
-
-const ResultsTable = ({ isTeacher = false }: { isTeacher?: boolean }) => {
+const ResultsTable = ({
+  openFilter,
+  setOpenFilter,
+}: {
+  openFilter: boolean
+  setOpenFilter: Dispatch<SetStateAction<boolean>>
+}) => {
   const router = useRouter()
-  const [quizActivities, setQuizActivities] = useState<
-    QuizActivity[] | undefined
-  >(undefined)
-  const [openModal, setOpenModal] = useState(false)
+  const { isMobileView } = useTailwindBreakpoint()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [openReport, setOpenReport] = useState<boolean>(false)
-
-  /**
-   * Filter
-   */
-  const selectFilterProp = useSelectFilter(router?.query?.courseId)
-  const { selected } = selectFilterProp
-  /**
-   * @description config params khi filter
-   */
-  const params = {
-    parent_id: selected?.value || undefined,
-  }
-
-  /**
-   * @description sử dụng react-query để lấy data
-   */
-  const {
-    data: resultData,
-    isLoading,
-    refetch,
-    isFetching,
-  } = useQuery<IResultsList>({
-    // Fetch lại data khi filter thay đổi
-    queryKey: [CourseKey.ResultsList, currentPage, pageSize, selected],
-    queryFn: () => {
-      return CoursesAPI.getCourseResults(
-        router.query.courseId as string,
-        currentPage || 1,
-        pageSize,
-        params,
-      )
+  const [params, setParams] = useState<string>('')
+  const observer = useRef<IntersectionObserver>()
+  const [openChooseItem, setOpenChooseItem] = useState<IOpenChooseItem>({
+    isOpen: false,
+    type: 'section',
+    name: '',
+    params: '',
+  })
+  const [listSection, setListSection] = useState<ISection[]>([])
+  const [listSubsection, setListSubsection] = useState<ISection[]>([])
+  const [listUnit, setListUnit] = useState<ISection[]>([])
+  const [listActivity, setListActivity] = useState<ISection[]>([])
+  const queryParams = [params, pageSize, currentPage, router.query.courseId]
+  const methods = useForm<SectionDropdownFormValues>({
+    defaultValues: {
+      section: null,
+      subsection: null,
+      unit: null,
+      activity: null,
     },
-    enabled: router.query.courseId !== undefined,
-    select: (data: { data: any }) => {
-      return data.data
-    },
-    retry: false,
   })
 
-  const getScore = (
-    rowData: Results,
-    grading_method: GradingMethod,
-  ): string => {
-    const attempt = rowData?.quiz?.attempts[0]
-    if (!attempt) return '-'
-    if (grading_method === GradingMethod.AUTO)
-      return `${attempt?.multiple_choice_score}%`
-    if (
-      grading_method === GradingMethod.MANUAL &&
-      attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
-    ) {
-      return `${attempt?.score}%`
-    }
-    return '-'
-  }
+  /**
+   * @description sử dụng react-query và infinite query để lấy data
+   */
 
-  const getStatus = (row: Results) => {
-    if (row?.course_section_type === TEST_TYPE.ACTIVITY) {
-      for (const quiz of row?.quiz_activity) {
-        if (
-          quiz?.attempts?.length === 0 ||
-          (!quiz?.attempts?.[0].grading_status &&
-            quiz?.grading_method === GradingMethod.MANUAL) ||
-          (quiz?.grading_method === GradingMethod.AUTO &&
-            quiz?.attempts?.[0].status !== 'SUBMITTED')
-        )
-          return '-'
+  const {
+    data: infiniteData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    refetch,
+  } = useInfiniteQuery({
+    queryKey: [
+      CourseKey.ResultsList,
+      router.query.courseId,
+      params || 'all',
+      pageSize,
+    ],
+    queryFn: ({ pageParam = 1 }) => {
+      const queryParams: any = {
+        page_index: pageParam,
+        page_size: pageSize,
       }
-      return 'Submitted'
-    } else {
-      if (row?.quiz?.grading_method === GradingMethod.MANUAL) {
-        switch (row?.quiz?.attempts?.[0]?.grading_status) {
-          case GRADE_STATUS.AWAITING_GRADING:
-            return 'Awaiting Grading'
-          case GRADE_STATUS.FINISHED_GRADING:
-            return 'Finish Grading'
-          default:
-            return 'Manual Grading'
-        }
+      if (params && params.trim() !== '') {
+        queryParams.section_id = params
       }
-      return capitalizeFirstLetter(
-        row?.quiz?.attempts?.[0]?.status?.toLocaleLowerCase(),
+      return CoursesAPI.getCourseSectionTest(
+        router.query.courseId as string,
+        queryParams,
       )
-    }
-  }
+    },
+    getNextPageParam: (lastPage, allPages) => {
+      const totalPages = lastPage?.data?.metadata?.total_pages
+      const current = allPages?.length || 1
+      if (!totalPages) return undefined
+      return current < totalPages ? current + 1 : undefined
+    },
+    enabled: router.query.courseId !== undefined,
+    refetchOnWindowFocus: false,
+  })
 
-  const getNameTooltipContent = (row: Results, link: string) => {
-    return (
-      <div>
-        {true ? (
-          <div
-            onClick={() => {
-              router.push(link)
-            }}
-          >
-            <strong className="cursor-pointer text-base text-bw-1 hover:underline">
-              {row?.name}
-            </strong>
-          </div>
-        ) : (
-          <strong className="text-base text-bw-1">{row?.name}</strong>
-        )}
-        <p className="text-ssm text-gray-1">{row?.path}</p>
-      </div>
-    )
-  }
+  const flatData = useMemo(() => {
+    if (!infiniteData?.pages?.length) return []
+    return infiniteData.pages.reduce((acc: any[], page: any) => {
+      const items = page?.data?.data || []
+      const class_user_id = page?.data?.class_user_id || ''
+      const mappedItems = items.map((item: any) => ({
+        ...item,
+        class_user_id,
+      }))
+      return acc.concat(mappedItems)
+    }, [])
+  }, [infiniteData])
 
-  const isDoneQuiz = (data: Results) => {
-    switch (data?.course_section_type) {
-      case TEST_TYPE.ACTIVITY: {
-        if (!data?.quiz_activity?.length) {
-          return
+  const totalRecords = useMemo(
+    () => infiniteData?.pages?.[0]?.data?.metadata?.total_records || 0,
+    [infiniteData],
+  )
+
+  const lastElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isLoading) return
+      if (observer.current) observer.current.disconnect()
+      observer.current = new IntersectionObserver((entries) => {
+        if (
+          entries?.[0]?.isIntersecting &&
+          hasNextPage &&
+          !isFetchingNextPage
+        ) {
+          fetchNextPage()
         }
-        for (const item of data?.quiz_activity) {
-          if (item?.attempts?.length === 0) {
-            return false
-          }
-        }
-        return true
-      }
-      case TEST_TYPE.TOPIC_TEST:
-      case TEST_TYPE.CHAPTER_TEST:
-      case TEST_TYPE.MID_TERM_TEST:
-      case TEST_TYPE.PART_TEST:
-      case TEST_TYPE.FINAL_TEST:
-        return !data?.quiz
-          ? false
-          : data?.quiz?.attempts?.length > 0
-            ? true
-            : false
-      default:
-        return true
-    }
-  }
+      })
+      if (node) observer.current.observe(node)
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage, isLoading],
+  )
 
-  useEffect(() => {
+  const handleSubmit = () => {
+    setOpenFilter(false)
+    setParams(openChooseItem.params || '')
+    setOpenChooseItem({
+      ...openChooseItem,
+      isOpen: false,
+    })
+    setCurrentPage(1)
     refetch()
-  }, [selected])
+  }
+
+  const handleBack = () => {
+    if (openChooseItem.isOpen && openChooseItem.type !== 'section') {
+      const type = backTypeMap[openChooseItem.type]
+      setOpenChooseItem({
+        ...openChooseItem,
+        type: type,
+        name: getTypeName[type],
+      })
+    } else {
+      setOpenChooseItem({
+        ...openChooseItem,
+        isOpen: false,
+      })
+    }
+  }
+
+  const title =
+    !openChooseItem.isOpen && openFilter ? 'Sort' : openChooseItem.name
 
   return (
-    <>
-      <div className="mb-8 flex flex-wrap gap-6 md:flex-nowrap">
-        <ResultsTableFilter {...selectFilterProp} />
+    <FormProvider {...methods}>
+      <div className="my-4 flex items-center justify-end gap-4">
+        <div className="text-sm leading-[22px] tracking-[0%] text-gray-800">
+          {totalRecords} Results
+        </div>
+        <div className="w-[369px]">
+          <FilterCourseSection
+            setParams={setParams}
+            showOnlySection={true}
+            allowClear={true}
+          />
+        </div>
       </div>
-      <SappTable
-        headers={headers}
-        hasCheck={false}
-        isCheckedAll={false}
-        classTable="w-full"
-        loading={isFetching}
-      >
-        {resultData?.data?.map((row) => {
-          let link: string = '#'
-          if (row.course_section_type === TEST_TYPE.ACTIVITY) {
-            link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/${router?.query?.courseId}/activity/${row?.id}`
-          } else {
-            if (row?.quiz?.attempts?.length) {
-              link = `${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/test/test-result/${row?.quiz?.attempts?.[0]?.id}`
-            } else {
-              link = `${isTeacher ? PageLink.TEACHER_TEST : '/test'}/${row?.quiz?.id}?class_user_id=${resultData?.class_user_id}`
-            }
-          }
-          return (
-            <tr
-              className={clsx({
-                'row h-auto border-b border-dashed border-gray-2': true,
-                'text-gray-2': !isDoneQuiz(row),
-              })}
-              key={row?.id}
-            >
-              {/* Name */}
-              <td className={clsx(commonDataCellStyle)}>
-                <Tooltip
-                  title={getNameTooltipContent(row, link)}
-                  arrow={false}
-                  placement="topLeft"
-                >
-                  <div
-                    onClick={() => {
-                      if (
-                        row?.course_section_type !== TEST_TYPE.ACTIVITY &&
-                        row?.quiz?.grading_method === 'MANUAL' &&
-                        row?.quiz?.attempts?.[0]?.grading_status ===
-                          GRADE_STATUS.AWAITING_GRADING
-                      ) {
-                        setOpenReport(true)
-                        return
-                      }
-                      router.push(link)
-                    }}
-                    className="cursor-pointer"
-                  >
-                    {truncateString(row?.name, 30)}
-                  </div>
-                </Tooltip>
-              </td>
 
-              {/* Type */}
-              <td className={clsx(commonDataCellStyle)}>
-                {testTypeTitle[row?.course_section_type]}
-              </td>
+      {/* Loading state */}
+      {isLoading &&
+        [...Array(6)].map((_, index) => (
+          <Skeleton key={index} active avatar>
+            <List.Item.Meta avatar={<Avatar />} />
+          </Skeleton>
+        ))}
 
-              {/* Graded Activity */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {row?.quiz?.is_graded ? 'Yes' : 'No'}
-              </td>
-
-              {/* Status */}
-              <td className={clsx(commonDataCellStyle)}>{getStatus(row)}</td>
-
-              {/* Score */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getScore(row, row?.quiz?.grading_method)}
-              </td>
-              {/* Quizzes/Tests */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz_activity && row?.quiz_activity.length >= 0 ? (
-                  <span
-                    onClick={() => {
-                      if (row?.quiz_activity.length > 0) {
-                        setOpenModal(true)
-                        setQuizActivities(row.quiz_activity)
-                      }
-                    }}
-                    className={clsx(
-                      row?.quiz_activity.length > 0 &&
-                        `cursor-pointer text-state-info underline`,
-                    )}
-                  >
-                    {row.quiz_activity.length}
-                  </span>
-                ) : (
-                  <span>-</span>
-                )}
-              </td>
-
-              {/* Time Spent */}
-              <td className={clsx(commonDataCellStyle, 'text-center')}>
-                {getTimeFromInput(row?.quiz?.attempts[0]?.total_attempt_time)}
-              </td>
-
-              {/* Last Submission */}
-              <td className={clsx('!pr-0', commonDataCellStyle)}>
-                {row.quiz?.attempts?.length > 0
-                  ? dayjs(row?.quiz?.attempts[0]?.updated_at).format(
-                      'DD/MM/YYYY HH:mm',
-                    )
-                  : '-'}
-              </td>
-            </tr>
-          )
-        })}
-      </SappTable>
-      {resultData && (
-        <PaginationSAPP
-          currentPage={resultData.metadata?.page_index}
-          pageSize={resultData.metadata?.page_size}
-          totalItems={resultData.metadata?.total_records}
-          setCurrentPage={setCurrentPage}
-          setPageSize={setPageSize}
-          type={'table'}
-          classname="mt-3"
-        />
+      {/* Empty state */}
+      {!isLoading && isEmpty(flatData) && !openFilter && (
+        <div className="flex h-full flex-col items-center justify-center">
+          <NoDataV2 />
+        </div>
       )}
+
+      {/* Main content */}
+      {!isLoading && !isEmpty(flatData) && (
+        <div className="mt-6 flex flex-col gap-6 md:mt-0">
+          <div className="flex flex-col gap-6">
+            {flatData?.map((item: any) =>
+              item?.quiz === null ? (
+                <CollapseActivity key={item?.id} resultData={item} />
+              ) : (
+                <CardResultTest key={item?.id} resultData={item} />
+              ),
+            )}
+          </div>
+
+          <div ref={lastElementRef} />
+          {isFetchingNextPage && (
+            <div className="flex flex-col gap-2">
+              {[...Array(2)].map((_, index) => (
+                <Skeleton key={index} active avatar>
+                  <List.Item.Meta avatar={<Avatar />} />
+                </Skeleton>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Grading modal */}
       <SappModalV3
         open={openReport}
         okButtonCaption="Back"
         handleCancel={() => {}}
         onOk={() => setOpenReport(false)}
-        fullWidthBtn={true}
+        fullWidthBtn
         buttonSize="extra"
         icon={<ConfirmIcon />}
-        header="Awating Grading"
-        content={`Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete.`}
+        header="Awaiting Grading"
+        content="Your test is currently being graded. The result will be sent to you via email as soon as the grading is complete."
       />
-      <Modal
-        open={openModal}
-        centered
-        onOk={() => {
-          setOpenModal(false)
-        }}
-        title="List Quiz of Activity"
-        onCancel={() => setOpenModal(false)}
-        footer={null}
-        width={800}
-        styles={{
-          content: {
-            padding: 32,
-          },
-        }}
+
+      {/* Mobile filter drawer */}
+      <SappDrawerV3
+        open={openFilter}
+        handleCancel={() => setOpenFilter(false)}
+        isShowBtnClose
+        title={title}
+        isShowFooter={openFilter}
+        isShowBtnBack={openChooseItem.isOpen}
+        handleBack={handleBack}
+        handleSubmit={handleSubmit}
+        classNameHeader="pb-4 border-b border-gray-200"
+        rootClassName="responsive-drawer-center"
+        submitButtonClassName="w-full h-10"
+        btnSubmitTile="Confirm"
       >
-        {quizActivities && <ResultQuizModal quizActivities={quizActivities} />}
-      </Modal>
-    </>
+        {openFilter && !openChooseItem.isOpen ? (
+          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+        ) : (
+          <ListItemFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            openChooseItem={openChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
+        )}
+      </SappDrawerV3>
+    </FormProvider>
   )
 }
 

@@ -1,21 +1,6 @@
-import { IButtonProps } from 'src/type'
-import { memo } from 'react'
-import Link from 'next/link'
-import {
-  ButtonSize,
-  getPaddingHorizontalClass,
-  getPaddingVerticalClass,
-  getTextSizeClass,
-} from '@utils/helpers/button'
-
-const LoadingSpinner = () => (
-  <div className="w-100 h-100 absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center space-x-2 bg-none dark:invert">
-    <span className="sr-only">Loading...</span>
-    <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.3s]" />
-    <div className="h-2 w-2 animate-bounce rounded-full bg-white [animation-delay:-0.15s]" />
-    <div className="h-2 w-2 animate-bounce rounded-full bg-white" />
-  </div>
-)
+import clsx from 'clsx'
+import BaseButton from './BaseButton'
+import { IButtonBaseProps } from 'src/type'
 
 const ButtonPrimary = ({
   title,
@@ -23,53 +8,57 @@ const ButtonPrimary = ({
   className = '',
   link,
   size = 'small',
-  full = false,
   disabled = false,
-  loading = false,
-  type,
-  icon,
-}: IButtonProps) => {
-  const textSizeClass = getTextSizeClass(size as ButtonSize)
-  const paddingVerticalClass = getPaddingVerticalClass(size as ButtonSize)
-  const paddingHorizontalClass = getPaddingHorizontalClass(size as ButtonSize)
-  const fullWidthClass = full ? 'block w-full' : 'inline-block'
-  const disabledClass =
-    disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-primary-2'
-      : 'cursor-pointer'
-
-  const componentClass = [
+  startIcon,
+  endIcon,
+  full = false,
+  children,
+  ...props
+}: IButtonBaseProps) => {
+  let textSizeClass =
+    size === 'small'
+      ? 'text-sm'
+      : size === 'medium'
+        ? 'text-sm md:text-base'
+        : 'text-sm md:text-lg'
+  let padding =
+    size === 'small'
+      ? 'py-2 px-4'
+      : size === 'medium'
+        ? 'py-2 px-4 md:py-3 md:px-6'
+        : 'py-2 px-4 md:py-4 md:px-8'
+  // let fullWidthClass = full ? 'block w-full' : 'inline-block'
+  // let disabledClass = disabled
+  //   ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
+  //   : 'cursor-pointer'
+  let componentClass = clsx(
+    `text-center font-medium border-none ${padding} ${textSizeClass}`,
     className,
-    'relative text-center text-white',
-    fullWidthClass,
-    paddingVerticalClass,
-    paddingHorizontalClass,
-    disabledClass,
-    textSizeClass,
-    'font-medium bg-primary hover:bg-primary-2',
-  ].join(' ')
-
-  if (link) {
-    return (
-      <Link href={link} className={componentClass} aria-disabled={disabled}>
-        {icon && <div className="mr-2">{icon}</div>}
-        <span>{title}</span>
-      </Link>
-    )
-  }
+    {
+      'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100':
+        disabled,
+      'cursor-pointer text-white bg-secondary-600 hover:!text-white hover:!bg-secondary':
+        !disabled,
+      'block w-full': full,
+      'inline-block': !full,
+    },
+  )
 
   return (
-    <button
+    <BaseButton
       className={componentClass}
-      type={type ?? 'button'}
       onClick={onClick}
-      disabled={disabled || loading}
+      disabled={disabled}
+      link={link}
+      {...props}
     >
-      {icon && <div className="mr-2">{icon}</div>}
-      <span className={loading ? 'invisible' : ''}>{title}</span>
-      {loading && <LoadingSpinner />}
-    </button>
+      <div className="flex items-center gap-2.5">
+        {startIcon && <div className="w-full">{startIcon}</div>}
+        <div className="w-full">{title || children}</div>
+        {endIcon && <div className="w-full">{endIcon}</div>}
+      </div>
+    </BaseButton>
   )
 }
 
-export default memo(ButtonPrimary)
+export default ButtonPrimary

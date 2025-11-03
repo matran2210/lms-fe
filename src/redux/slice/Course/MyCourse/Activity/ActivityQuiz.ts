@@ -5,8 +5,12 @@ import { QuestionAPI } from 'src/pages/api/question'
 import { RootState } from 'src/redux/store'
 import { IRequirement } from 'src/type/case-study'
 import { IQuestion } from 'src/type/course/Question'
-import { submitQuizTest } from '../../../../../pages/api/courses/index'
+import {
+  CoursesAPI,
+  submitQuizTest,
+} from '../../../../../pages/api/courses/index'
 import { IEssayAnswer } from 'src/type/answer'
+import { m } from 'framer-motion'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -62,11 +66,13 @@ const fetchQuestionById = createAsyncThunk(
       tabId,
       quizId,
       questionId,
+      attemptId,
     }: {
       activityId: string
       tabId: string
       quizId: string
       questionId: string
+      attemptId?: string
     },
     { rejectWithValue, getState },
   ) => {
@@ -101,22 +107,70 @@ const fetchQuestionById = createAsyncThunk(
     }
 
     try {
-      const response = await QuestionAPI.getQuestionDetail(questionId)
+      if (!!attemptId) {
+        const res = await CoursesAPI.getQuizAttemptsAnswer({
+          attempt_id: attemptId || '',
+          question_id: questionId,
+        })
+        const responseData = res?.data?.answer
+        const userAnswer = responseData?.answer
+          ? responseData?.answer?.map((answer) => {
+              if (
+                answer?.answer_id &&
+                !answer?.answer_text &&
+                !answer?.answer_position &&
+                !answer?.question_id
+              ) {
+                return answer?.answer_id
+              } else if (
+                answer?.answer_text &&
+                answer?.answer_position &&
+                !answer?.answer_id &&
+                !answer?.question_id
+              ) {
+                return answer?.answer_text
+              } else {
+                return answer
+              }
+            })
+          : responseData?.question_answer_id
+        if (res.success) {
+          // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
+          return {
+            ...result,
+            question: {
+              ...responseData.question,
+              time_spent: 0,
+              ...(responseData.question?.qType ===
+                QUESTION_TYPES.MULTIPLE_CHOICE && { defaultValue: userAnswer }),
+              myAnswers: [],
+              quiz_position_mapping: [
+                {
+                  question_id: questionId,
+                },
+              ],
+            },
+          }
+        }
+      } else {
+        const response = await QuestionAPI.getQuestionDetail(questionId)
 
-      if (response.success) {
-        // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
-        return {
-          ...result,
-          question: {
-            ...response.data,
-            time_spent: 0,
-            myAnswers: [],
-            quiz_position_mapping: [
-              {
-                question_id: questionId,
-              },
-            ],
-          },
+        if (response.success) {
+          // Đảm bảo đối tượng trả về khớp với kiểu hành động đã được fulfill dự kiến
+
+          return {
+            ...result,
+            question: {
+              ...response.data,
+              time_spent: 0,
+              myAnswers: [],
+              quiz_position_mapping: [
+                {
+                  question_id: questionId,
+                },
+              ],
+            },
+          }
         }
       }
     } catch (error) {
@@ -137,6 +191,7 @@ const confirmQuestion = createAsyncThunk(
       tabId,
       quizId,
       questionId,
+      attemptId,
       myAnswers,
       time_spent,
     }: {
@@ -144,26 +199,93 @@ const confirmQuestion = createAsyncThunk(
       tabId: string
       quizId: string
       questionId: string
+      attemptId?: string
       myAnswers: FieldValues
       time_spent?: number
     },
     { rejectWithValue },
   ) => {
     try {
-      const result = {
-        activityId,
-        tabId,
-        quizId,
-        myAnswers,
-        time_spent,
-      }
-      const question = await QuestionAPI.getQuestionDetail(questionId, {
-        after_test: true,
-      })
+      if (!!attemptId) {
+        const res = await CoursesAPI.getQuizAttemptsAnswer({
+          attempt_id: attemptId || '',
+          question_id: questionId,
+        })
+        const responseData = res?.data?.answer
 
-      if (question?.data) {
-        return { ...result, question: question.data }
+        if (responseData.question.qType !== QUESTION_TYPES.ESSAY) {
+          const userAnswer = responseData?.answer
+            ? responseData?.answer?.map((answer) => {
+                if (
+                  answer?.answer_id &&
+                  !answer?.answer_text &&
+                  !answer?.answer_position &&
+                  !answer?.question_id
+                ) {
+                  return answer?.answer_id
+                } else if (
+                  answer?.answer_text &&
+                  answer?.answer_position &&
+                  !answer?.answer_id &&
+                  !answer?.question_id
+                ) {
+                  return answer?.answer_text
+                } else {
+                  return answer
+                }
+              })
+            : responseData?.question_answer_id
+          const result = {
+            activityId,
+            tabId,
+            quizId,
+            myAnswers: userAnswer,
+            time_spent,
+          }
+          return {
+            ...result,
+            question: { ...responseData?.question, myAnswers: userAnswer },
+          }
+        } else {
+          const userAnswer = responseData?.question?.requirement_answers?.length
+            ? responseData?.question?.requirement_answers
+            : [
+                {
+                  question_id: questionId,
+                  short_answer: responseData?.short_answer || '',
+                  answer_file: responseData?.answer_file || null,
+                },
+              ]
+
+          const result = {
+            activityId,
+            tabId,
+            quizId,
+            myAnswers: userAnswer,
+            time_spent,
+          }
+          return {
+            ...result,
+            question: { ...responseData?.question, myAnswers: userAnswer },
+          }
+        }
+      } else {
+        const result = {
+          activityId,
+          tabId,
+          quizId,
+          myAnswers,
+          time_spent,
+        }
+        const question = await QuestionAPI.getQuestionDetail(questionId, {
+          after_test: true,
+        })
+
+        if (question?.data) {
+          return { ...result, question: question.data }
+        }
       }
+
       // Thêm logic để xác nhận câu hỏi
     } catch (error) {
       return rejectWithValue(error)
@@ -477,7 +599,7 @@ const quizSlice: Slice = createSlice({
                   answer: (payload.myAnswers || [])?.map(
                     (e: any, i: number) => ({
                       answer_id: e.idAnswer,
-                      answer_position: i + 1,
+                      answer_position: e.postion,
                     }),
                   ),
                   time_spent: payload.time_spent,
@@ -709,7 +831,7 @@ const quizSlice: Slice = createSlice({
                       answer: (payload.myAnswers || [])?.map(
                         (e: any, i: number) => ({
                           answer_id: e.idAnswer,
-                          answer_position: i + 1,
+                          answer_position: e.postion,
                         }),
                       ),
                       time_spent: payload.time_spent,
@@ -728,7 +850,7 @@ const quizSlice: Slice = createSlice({
                       (q: { question_id: string | undefined }) =>
                         q.question_id !== payload.question.id,
                     ) || []),
-                    ...(payload.myAnswers || {}).map((item: IEssayAnswer) => ({
+                    ...(payload.myAnswers || []).map((item: IEssayAnswer) => ({
                       ...item,
                       time_spent: payload.time_spent,
                     })),

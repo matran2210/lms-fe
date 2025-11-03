@@ -1,12 +1,12 @@
-import React, { useRef } from 'react'
-import { IconSend, IconSendHover } from '@assets/icons'
-import { useHover } from 'usehooks-ts'
+import React from 'react'
+import { IconSend } from '@assets/icons'
 
 const SendComment = () => {
-  const ref = useRef(null)
-  const isHoverIcon = useHover(ref)
-
-  return <div ref={ref}>{!isHoverIcon ? <IconSend /> : <IconSendHover />}</div>
+  return (
+    <div className="cursor-pointer hover:text-primary">
+      <IconSend />
+    </div>
+  )
 }
 
 export default SendComment

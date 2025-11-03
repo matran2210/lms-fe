@@ -35,13 +35,13 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
         <TeacherMenu isCourseDetail={isCourseDetail} isActivity={isActivity} />
         <div
           className={clsx(
-            'min-h-screen w-full bg-gray-10',
+            'bg-gray-10 min-h-screen w-full',
             showPinnedTrial && 'mt-[54px]',
           )}
         >
           <div className="px-56 py-6">
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />
-            <Title level={3} className="mt-1 pb-2 text-gray-700">
+            <Title level={3} className="mt-1 pb-2 text-[#374151]">
               {title}
             </Title>
             <div

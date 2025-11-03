@@ -1,30 +1,40 @@
-import SappDrawer from '@components/base/SappDrawer'
-import TextSkeleton from '@components/base/skeleton/TextSkeleton'
-import ResponsiveTextTruncate from '@components/common/ResponsiveTextTruncate'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
+import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import { StarCircleIcon } from '@components/icons'
+import {
+  AlertInfoIcon,
+  CloseIconPreview,
+  DocumentTextIcon,
+  ResourceIcon,
+  ChapterIcon,
+} from '@assets/icons'
 import Layout from '@components/layout'
+import { useCourseContext } from '@contexts/index'
+import { buildQueryString, formatDate } from '@utils/index'
 import { Alert, Skeleton } from 'antd'
+import clsx from 'clsx'
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import PreviewPartDetail from 'preview-part'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
-import { TEST_TYPE } from 'src/constants'
+import { ANIMATION, PageLink, TEST_TYPE } from 'src/constants'
 import { TreeHelper } from 'src/helper/tree'
+import withAuthorization from 'src/HOC/withAuthorization'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import TestModal from 'src/pages/courses/test'
+import { UserType } from 'src/redux/types/User/urser'
 import { ILearningOutcome } from 'src/type/courses'
 import { CoursesAPI } from '../../../../api/courses/index'
-import { buildQueryString, formatDate, truncateBySpace } from '@utils/index'
-import Tooltip from 'src/common/Tooltip'
-import { useCourseContext } from '@contexts/index'
-import withAuthorization from 'src/HOC/withAuthorization'
-import { UserType } from 'src/redux/types/User/urser'
-import dayjs from 'dayjs'
-import {
-  AlertInfoIcon,
-  CloseIcon,
-  CloseIconNote,
-  CloseIconPreview,
-} from '@assets/icons'
-import clsx from 'clsx'
+import BottomMenu from '@components/layout/BottomMenu'
+import CardMenuItem from '@components/learning/activity/CardMenuItem'
+import { Divider } from 'antd'
+import LearningResource from '@components/mycourses/LearningResource'
+import { useAppDispatch } from 'src/redux/hook'
+import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
+import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
+
 interface IProps {
   course_section_type: string
   description: string
@@ -58,6 +68,9 @@ interface IProps {
 }
 
 const CoursePartDetail = () => {
+  const dispatch = useAppDispatch()
+  const { isAlwaysShowSidebar, isMobileView, isTabletView } =
+    useTailwindBreakpoint()
   const [chapterDetail, setChapterDetail] = useState<any>(null)
   const [loadingChapter, setLoadingChapter] = useState(true)
   const [openLearningOutcome, setOpenLearningOutcome] = useState(false)
@@ -70,10 +83,11 @@ const CoursePartDetail = () => {
   const [defaultActive, setDefaultActive] = useState<string>()
   const courseChapterId = localStorage.getItem('course_chapter_id')
   const [isPassedCourse, setIsPassedCourse] = useState<boolean>(false)
+  const [isOpenChapter, setIsOpenChapter] = useState<boolean>(false)
   const [loadingLearningOutcome, setLoadingLearningOutcome] =
     useState<boolean>(false)
-
-  const { setOpenPopupCTA } = useCourseContext()
+  const [openResource, setOpenResource] = useState<boolean>(false)
+  const { setOpenPopupCTA, openPopupCTA } = useCourseContext()
 
   const useGetData = (queryKey: string, params: Object) => {
     const fetchData = async () => {
@@ -184,6 +198,11 @@ const CoursePartDetail = () => {
     }
   }
 
+  const handleOpenNotesList = () => {
+    dispatch(activeNotesList())
+    document.body.style.overflow = 'hidden'
+  }
+
   useEffect(() => {
     if (openLearningOutcome) {
       getLearningOutcome()
@@ -201,6 +220,11 @@ const CoursePartDetail = () => {
     } else {
       router.push({
         pathname: `/courses/${router.query.id}/activity/${id}`,
+        query: {
+          chapter: router.query?.chapter,
+          unit: chapter?.parent_id,
+          course_section_id: router.query?.course_section_id,
+        },
       })
     }
   }
@@ -224,7 +248,7 @@ const CoursePartDetail = () => {
     const totalCourseSectionsCompleted =
       getCaseStudy?.learning_progress?.total_course_sections_completed
     if (
-      totalCourseSections === totalCourseSectionsCompleted &&
+      getCaseStudy?.attempt?.id &&
       totalCourseSections !== undefined &&
       totalCourseSectionsCompleted !== undefined
     ) {
@@ -458,6 +482,14 @@ const CoursePartDetail = () => {
         item?.course_section_link_parents?.[0]?.is_preview_locked,
     }
   })
+  const handleGoBack = () => {
+    router.push({
+      pathname: PageLink.COURSE_DETAIL.replace(
+        '[courseId]',
+        router.query.id as string,
+      ),
+    })
+  }
 
   useEffect(() => {
     courseChapterId && setDefaultActive(courseChapterId as string)
@@ -483,10 +515,16 @@ const CoursePartDetail = () => {
     return []
   }, [partDetail, chapterDetail])
 
+  const heightContent = isMobileView
+    ? '102px'
+    : isTabletView
+      ? '128px'
+      : '144px'
+
   return (
-    <Layout title="Course Part Detail">
+    <Layout title="Course Part Detail" showSidebar={isAlwaysShowSidebar}>
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
+        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -521,86 +559,138 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="main default-content-editor mx-auto my-0 max-w-xxl">
+      <div className="mt-4 min-h-[calc(100vh-5rem)]" data-aos={ANIMATION.DATA_AOS}>
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
-          <BreadCrumbPartDetail
-            previewPart={previewPart}
-            partDetail={partDetail}
+          <SappBreadCrumbs
+            className="mb-2"
+            isTeacher={false}
+            breadcrumbs={[
+              {
+                title: 'My Course',
+                link: PageLink.COURSES,
+              },
+              {
+                title: previewPart?.name,
+                link: PageLink.COURSE_DETAIL.replace(
+                  '[courseId]',
+                  router.query.id as string,
+                ),
+              },
+              {
+                title: partDetail?.name,
+                link: '',
+              },
+            ]}
           />
         )}
-        <PreviewPartDetail
-          chapterMenu={partDetail}
-          fetchChapterDetail={fetchChapterDetail}
-          chapterDetail={chapterDetail}
-          loading={isLoading}
-          loadingChapter={loadingChapter}
-          setLoadingChapter={setLoadingChapter}
-          setOpenLearningOutcome={setOpenLearningOutcome}
-          course_id={router.query.id as any}
-          course_section_id={router.query.course_section_id as any}
-          handleRouterActivity={handleRouterActivity}
-          handleRouterCaseStudy={handleRouterCaseStudy}
-          handleLearningOutCome={handleLearningOutCome}
-          handleRouterChapter={handleRouterChapter}
-          readMore={readMore}
-          setReadMore={setReadMore}
-          defaultActive={router.query.chapter ?? defaultActive}
-          focus_id={router?.query?.focus_id as string}
-          handleGetItem={handleActive}
-          listFocusSubSectionIds={listFocusSubSectionIds}
-          listFocusUnitIds={listFocusUnitIds}
-          deadline={deadline}
-          // handleShowToast={handleShowToast}
-        />
-        <SappDrawer
-          isOpen={openLearningOutcome}
+        <div data-aos={ANIMATION.DATA_AOS}>
+          <PreviewPartDetail
+            chapterMenu={partDetail}
+            fetchChapterDetail={fetchChapterDetail}
+            chapterDetail={chapterDetail}
+            loading={isLoading}
+            loadingChapter={loadingChapter}
+            setLoadingChapter={setLoadingChapter}
+            setOpenLearningOutcome={setOpenLearningOutcome}
+            course_id={router.query.id as any}
+            course_section_id={router.query.course_section_id as any}
+            handleRouterActivity={handleRouterActivity}
+            handleRouterCaseStudy={handleRouterCaseStudy}
+            handleLearningOutCome={handleLearningOutCome}
+            handleRouterChapter={handleRouterChapter}
+            readMore={readMore}
+            setReadMore={setReadMore}
+            defaultActive={router.query.chapter ?? defaultActive}
+            focus_id={router?.query?.focus_id as string}
+            handleGetItem={handleActive}
+            handleGoBack={handleGoBack}
+            listFocusSubSectionIds={listFocusSubSectionIds}
+            listFocusUnitIds={listFocusUnitIds}
+            deadline={deadline}
+            // handleShowToast={handleShowToast}
+            setIsOpenChapter={setIsOpenChapter}
+            isOpenChapter={isOpenChapter}
+            isLMSV2
+            isMobileView={isMobileView}
+            isTabletView={isTabletView}
+          />
+        </div>
+        <BottomMenu>
+          <div className="flex items-center justify-center gap-5">
+            <CardMenuItem
+              title="Note List"
+              icon={<DocumentTextIcon className="h-6 w-6" />}
+              onClick={handleOpenNotesList}
+            />
+            <CardMenuItem
+              title="Resource"
+              icon={<ResourceIcon className="h-6 w-6" />}
+              onClick={() => setOpenResource(true)}
+            />
+            <Divider
+              type="vertical"
+              className="my-auto h-6 border-white text-white"
+              orientation="center"
+            />
+            <CardMenuItem
+              title="Chapter"
+              icon={<ChapterIcon />}
+              onClick={() => setIsOpenChapter(true)}
+              className="md:flex"
+            />
+          </div>
+        </BottomMenu>
+        <SappDrawerV3
+          open={openLearningOutcome}
           onClose={handleCancel}
-          title={learningOutcome?.name}
-          message="Bạn có chắc chắn muốn hủy không?"
-          widthDrawer="w-6/12"
+          title={learningOutcome?.name ?? 'Learning Outcome'}
+          handleCancel={handleCancel}
+          btnSubmitTile="Next Lesson"
           handleSubmit={handleNextLesson}
-          confirmOnClose={false}
-          heightBody="h-[calc(100vh-186px)] pb-6"
-          sizeTextBtn="medium"
+          isShowFooter
+          closable
+          isShowBtnClose
+          submitButtonClassName={isMobileView ? 'w-full' : ''}
+          rootClassName={'responsive-drawer-center'}
         >
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            widths={['70', '100', '100', '50', '100']}
-            className="mb-4"
-            classChild="rounded"
+          <div
+            className="overflow-y-auto"
+            style={{
+              maxHeight: `calc(100% - ${heightContent})`,
+            }}
           >
             <div
               style={{ borderBottom: '1px solid #DCDDDD' }}
-              className="learningOutcome-description pb-6 text-bw-1"
+              className={clsx(
+                'learningOutcome-description text-sm font-normal leading-normal text-secondary md:text-base',
+                {
+                  'pb-8': learningOutcome?.description,
+                },
+              )}
               dangerouslySetInnerHTML={{
                 __html: learningOutcome?.description ?? '',
               }}
             />
-          </TextSkeleton>
-          {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
-          )}
-          <TextSkeleton
-            loading={loadingLearningOutcome}
-            className="mt-4 last:mb-4"
-            classChild="rounded"
-            widths={['70', '100', '100', '50', '100']}
-          >
-            {learningOutcome?.course_outcomes?.map((outcome, index) => (
-              <div className="mr-3 mt-6 flex" key={outcome.id}>
-                <div className="me-1 text-base font-medium leading-5 text-bw-1">
-                  LO{index + 1}:
+            <div className="mt-8 flex flex-col gap-6">
+              {learningOutcome?.course_outcomes?.map((outcome, index) => (
+                <div key={outcome.id} className="flex items-start gap-2">
+                  <div>
+                    <StarCircleIcon />
+                  </div>
+                  <div className="flex items-start text-sm font-normal leading-normal text-gray-800 md:text-base">
+                    <div className="me-1">LO{index + 1}:</div>
+                    <div
+                      className="learningOutcome-description"
+                      dangerouslySetInnerHTML={{ __html: outcome?.description }}
+                    />
+                  </div>
                 </div>
-                <div
-                  className="learningOutcome-description text-bw-1"
-                  dangerouslySetInnerHTML={{ __html: outcome?.description }}
-                />
-              </div>
-            ))}
-          </TextSkeleton>
-        </SappDrawer>
+              ))}
+            </div>
+          </div>
+        </SappDrawerV3>
         {open && (
           <TestModal
             open={open}
@@ -611,47 +701,20 @@ const CoursePartDetail = () => {
             is_passed_course={isPassedCourse}
           />
         )}
-      </div>
-    </Layout>
-  )
-}
-
-const BreadCrumbPartDetail = ({
-  previewPart,
-  partDetail,
-}: {
-  previewPart: { name: string }
-  partDetail: { name: string }
-}) => {
-  const router = useRouter()
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center gap-2 px-5 pt-6 xl:px-0">
-        <div
-          className="ml-1 cursor-pointer text-ellipsis whitespace-nowrap text-medium-sm font-medium text-gray-1 hover:text-primary"
-          onClick={() => router.push(`/courses/my-course/${router.query.id}`)}
-        >
-          <div className="mx-0.5 inline-block w-full">
-            <Tooltip
-              title={previewPart?.name}
-              showTooltip={previewPart?.name?.length > 4}
-              placement={'bottomLeft'}
-            >
-              {truncateBySpace(previewPart?.name, 2, true)}
-            </Tooltip>
-          </div>
-        </div>
-        <div className="responsive-truncate-container w-full max-w-full cursor-pointer text-medium-sm font-medium text-bw-1">
-          <ResponsiveTextTruncate
-            placementTooltip="bottomLeft"
-            textTooltip={partDetail?.name}
-            text={partDetail?.name}
-            isShowTooltip
+        {openResource && (
+          <LearningResource
+            open={openResource}
+            setOpenResource={setOpenResource}
           />
+        )}
+      </div>
+      <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
+        <div className="w-full">
+          <CtaTrial />
         </div>
       </div>
-    </div>
+      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+    </Layout>
   )
 }
 

@@ -45,6 +45,22 @@ deploy_staging:
     - shell-docker
   resource_group: lms-fe
 
+deploy_staging_lms_v2:
+  stage: deploy
+  image: node:20
+  only:
+    - staging-lms-v2
+  script:
+    - yarn global add vercel
+    - export VERCEL_TOKEN=$VERCEL_TOKEN
+    - export VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_V2
+    - export VERCEL_ORG_ID=$VERCEL_ORG_ID
+    - vercel deploy --prod --token=$VERCEL_TOKEN
+  environment: staging
+  tags:
+    - shell-docker
+  resource_group: lms-fe
+
 deploy_master:
   stage: deploy
   only:
@@ -71,6 +87,7 @@ deploy_master:
   tags:
     - shell
   resource_group: lms-fe
+
 # Old CI-CD
 # stages:
 #   - deploy
@@ -97,4 +114,6 @@ deploy_master:
 #     - yarn install
 #     - VERCEL_TOKEN=$VERCEL_TOKEN_PROD && VERCEL_ORG_ID=$VERCEL_ORG_ID_PROD && VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD && vercel deploy --prod --token=$VERCEL_TOKEN
 #   environment: production
+
+
 

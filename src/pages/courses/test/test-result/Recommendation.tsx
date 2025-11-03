@@ -62,6 +62,9 @@ const Recommendation = ({
                   quizAttemptId,
                   reason,
                 )
+                router.push(
+                  `/courses/test/your-answers-detail/${quizAttemptId}`,
+                )
                 toast.success('Request sent successfully')
                 setOpenRecomendation(false)
                 router.push(
@@ -90,7 +93,7 @@ const Recommendation = ({
               </div>
 
               {/* Footer */}
-              <div className="flex flex-shrink-0 items-center justify-between border-t bg-gray-50 px-6 py-4">
+              <div className="bg-gray-50 flex flex-shrink-0 items-center justify-between border-t px-6 py-4">
                 <button
                   type="button"
                   className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium transition-colors  duration-200 focus:outline-none"
@@ -102,7 +105,7 @@ const Recommendation = ({
                   {COMMENTS?.CANCEL}
                 </button>
                 <ButtonPrimary
-                  type="submit"
+                  htmlType="submit"
                   title={COMMENTS?.SAVE}
                   className="focus:ring-2focus:ring-offset-2 inline-flex items-center px-4 py-2 text-sm font-medium text-white transition-colors  duration-200 focus:outline-none"
                 />

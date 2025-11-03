@@ -6,6 +6,7 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
       theme={{
         token: {
           fontFamily: 'Roboto, sans-serif',
+          colorPrimary: '#FFB700',
         },
         components: {
           Input: {
@@ -37,6 +38,9 @@ const AntConfigProvider = ({ children }: React.PropsWithChildren<{}>) => {
           Button: {
             controlOutlineWidth: 0,
             colorBorder: 'transparent',
+          },
+          Modal: {
+            zIndexPopupBase: 1050,
           },
         },
       }}

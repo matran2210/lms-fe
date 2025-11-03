@@ -1,43 +1,40 @@
-import React from 'react'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import CardCourse from '@components/common/CardCourse/CardCourse'
 import Icon from '@components/icons'
+import { useCourseContext } from '@contexts/index'
+import { trackGAEvent } from '@utils/google-analytics'
+import { getUserPrefix } from '@utils/helpers'
+import { buildQueryString, formatTime, handleReplaceText } from '@utils/index'
 import { round } from 'lodash'
 import { useRouter } from 'next/router'
-import {
-  buildQueryString,
-  formatTime,
-  truncateBySpace,
-  truncateHTML,
-} from '@utils/index'
-import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
-import { ANIMATION } from 'src/constants'
 import Tooltip from 'src/common/Tooltip'
-import { trackGAEvent } from '@utils/google-analytics'
-import { useCourseContext } from '@contexts/index'
-import { LockClosedIcon } from '@assets/icons'
-import { getUserPrefix } from '@utils/helpers'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
 
 const Part = ({
   course,
   focusSubSectionIds,
   focusUnitIds,
   deadline,
+  isLock,
+  lastElementRef,
   isTeacher = false,
 }: {
   course: IMyCourseDetail
   focusSubSectionIds?: string
   focusUnitIds?: string
   deadline?: string
+  isLock?: boolean
+  lastElementRef: (node: HTMLDivElement) => void
   isTeacher?: boolean
 }) => {
   const router = useRouter()
+  const { isMobileView } = useTailwindBreakpoint()
+  const total = course?.learning_progress?.total_course_sections ?? 0
+  const completed =
+    course?.learning_progress?.total_course_sections_completed ?? 0
 
-  const percentProgress = round(
-    (course?.learning_progress?.total_course_sections_completed /
-      course?.learning_progress?.total_course_sections) *
-      100,
-    2,
-  )
+  const percentProgress = total > 0 ? round((completed / total) * 100, 2) : 0
 
   const onClickPart = (id: string) => {
     const searchParams = buildQueryString({
@@ -119,109 +116,101 @@ const Part = ({
     }
   }
 
+  const transformAllFontSize = (html: string = '') => {
+    if (!html) return ''
+    return html.replace(
+      /font-size\s*:\s*[^;"]+/gi,
+      isMobileView ? 'font-size: 14px' : 'font-size: 16px',
+    )
+  }
+
+  const description = handleReplaceText(course?.description)
+
   return (
-    <div data-aos={ANIMATION.DATA_AOS} className="inner flex h-full flex-col">
-      <div
-        className="name-course text-2xl font-medium text-bw-1 xl:h-[60px]"
-        onClick={handleRouterPartDetail}
-      >
-        {course?.course_section_link_parents?.[0]?.is_preview_locked ||
-        course?.course_section_link_parents?.[0]?.is_showing_locked ? (
-          <div className="flex justify-between">
-            <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-              <Tooltip
-                title={course?.name}
-                showTooltip={(course?.name as string)?.length > 40}
-              >
-                {truncateBySpace(course?.name, 40) ?? ''}
-              </Tooltip>
-            </div>
-            <div>
-              <LockClosedIcon />
-            </div>
-          </div>
-        ) : (
-          <div className="line-clamp-2 cursor-pointer text-ellipsis xl:h-[60px]">
-            <Tooltip
-              title={course?.name}
-              showTooltip={(course?.name as string)?.length > 40}
-            >
-              {truncateBySpace(course?.name, 40) ?? ''}
-            </Tooltip>
-          </div>
-        )}
-      </div>
-      <div className="des mb-15 mt-6">
-        <div className="h-[120px]">
+    <CardCourse
+      hideBadge
+      title={course?.name}
+      key={course?.id}
+      ref={lastElementRef}
+      classNameTitle={`h-12 md:h-16 font-medium`}
+      classNameCard="lg:h-[456px] md:h-[428px] h-[328px]"
+      isLock={isLock}
+      onClick={() => {
+        handleRouterPartDetail()
+        trackGAEventBasedOnProgress(percentProgress)
+      }}
+    >
+      <div className="flex h-full flex-1 flex-col">
+        <div className="des my-4 h-[62px] text-ellipsis leading-snug md:my-6 md:h-[140px]">
           <Tooltip
             title={
-              <p
+              <div
                 dangerouslySetInnerHTML={{
-                  __html: course?.description,
+                  __html: description,
                 }}
               />
             }
-            showTooltip={(course?.description as string)?.length > 200}
+            showTooltip={(description as string)?.length > 150}
           >
-            <p
+            <div
               dangerouslySetInnerHTML={{
-                __html: truncateHTML(25, course?.description) ?? '',
+                __html: description ?? '',
               }}
-              className="h-[120px] text-base text-bw-1"
+              className="line-clamp-6 text-sm font-normal text-gray-800 md:text-base"
             />
           </Tooltip>
         </div>
-      </div>
-      <div className="mt-auto">
-        <div className="progress mb-7">
-          <div className="info mb-2 flex justify-between">
-            <div className="text flex items-end">
-              <Icon type={`${iconType}`} />
-              <p className="ml-px pl-1 text-medium-sm font-medium leading-[14px] text-bw-1">
-                {showStatus}
-              </p>
-              <span className="ml-px pl-1 text-medium-sm font-medium text-gray-1">
-                {formattedTime > 0 ? `${formattedTime} left` : ''}
-              </span>
+
+        <div className="mt-auto">
+          <div className="progress mb-6">
+            <div className="info mb-2 flex justify-between">
+              <div className="text flex items-center">
+                <Icon type={`${iconType}`} />
+                <p className="ml-px pl-1 text-sm font-normal text-gray-800">
+                  {showStatus}
+                </p>
+                <span className="ml-px pl-1 text-sm font-medium text-gray-400">
+                  {formattedTime > 0 ? `${formattedTime} left` : ''}
+                </span>
+              </div>
+              <div className="number">
+                <p className="text-sm font-normal text-gray-800">
+                  {progressPart}%
+                </p>
+              </div>
             </div>
-            <div className="number">
-              <p className="text-medium-sm font-medium text-bw-1">
-                {progressPart || 0}%
-              </p>
+            <div className="progressbar h-[6px] rounded-[100px] bg-[#F1F1F1]">
+              <div
+                className="progress-percentage h-[6px] rounded-[100px] bg-primary"
+                style={{ width: `${progressPart}%` }}
+              ></div>
             </div>
           </div>
-          <div className="progressbar h-1.5 bg-gray-3">
-            <div
-              className="progress-percentage h-1.5 bg-primary"
-              style={{ width: `${progressPart || 0}%` }}
-            ></div>
+          <div className="action flex items-center justify-end">
+            <div className="w-[84px]">
+              <ButtonSecondary
+                size="small"
+                full
+                title={
+                  course?.cta_status === 'PREVIEW'
+                    ? 'Preview'
+                    : percentProgress === 0
+                      ? 'Begin'
+                      : percentProgress === 100
+                        ? 'Review'
+                        : 'Resume'
+                }
+                className="w-full"
+                onClick={() => {
+                  handleRouterPartDetail()
+                  trackGAEventBasedOnProgress(percentProgress)
+                }}
+              />
+            </div>
           </div>
         </div>
-        <div className="action jusity-end relative flex items-center">
-          <ButtonSecondary
-            title={
-              course?.cta_status === 'PREVIEW'
-                ? 'Preview'
-                : percentProgress === 0
-                  ? 'Begin'
-                  : percentProgress === 100
-                    ? 'Review'
-                    : 'Resume'
-            }
-            full={false}
-            size={'small'}
-            className="ml-auto"
-            onClick={() => {
-              handleRouterPartDetail()
-              trackGAEventBasedOnProgress(percentProgress)
-            }}
-          />
-        </div>
       </div>
-      {/* Solution test modal */}
-      {/* <SolutionModal open={open} setOpen={setOpen} /> */}
-      {/* <TestModal open={open} setOpen={setOpen} title={''} /> */}
-    </div>
+    </CardCourse>
   )
 }
 

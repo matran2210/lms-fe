@@ -1,17 +1,28 @@
 import DetailCalendar from '@components/calendar/DetailCalendar'
+import DetailCalendarMobile from '@components/calendar/DetailCalendarMobile'
+import DetailCalendarTablet from '@components/calendar/DetailCalendarTablet'
 import Layout from '@components/layout'
+import HeaderMobile from '@components/layout/Header/HeaderMobile'
 import CalendarApi from '@pages/api/calendar'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import { SAPPCalendar } from 'sapp-common-package'
+import { SAPPCalendarV2 } from 'sapp-common-package'
 import { IEvent, IFilter } from 'sapp-common-package/dist/types'
 import {
+  ANIMATION,
   CALENDAR_COLOR_TYPES,
   CALENDAR_FILTER_TYPE,
   CALENDAR_TYPE,
+  PageLink,
+  TitleSidebar,
 } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ICalendar, ICalendarList } from 'src/type/calendar'
+import clsx from 'clsx'
 const Page = () => {
+  const { isAlwaysShowSidebar, isTabletView, isMobileView } =
+    useTailwindBreakpoint()
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<ICalendarList>()
   const [filter, setFilter] = useState<IFilter>()
@@ -101,65 +112,105 @@ const Page = () => {
     )
     return results
   }, [filter, data])
+  const router = useRouter()
+
+  const handleBack = () => {
+    router.push(PageLink.HOME)
+  }
 
   return (
-    <Layout title="Calendar">
-      <div className="mx-auto my-0 max-w-[1570px] pt-6 xl-max:mx-6">
-        <div className="relative">
-          <div className="flex w-full flex-col justify-between gap-3 pb-4 sm:flex-row sm:items-center">
-            <div className="font-normal text-[#050505]">Calendar</div>
-          </div>
-          <div className="pb-5">
-            <SAPPCalendar
-              showWeeklyNorm={false}
-              events={
-                events?.map((item) => {
-                  const isOverDue =
-                    dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
-                      dayjs(),
-                    ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
-                  return {
-                    id: item.id,
-                    title: item.name,
-                    startDate: new Date(
-                      `${item.start_date}T${item.start_time}Z`,
-                    ),
-                    endDate: new Date(`${item.end_date}T${item.end_time}Z`),
-                    type: getType(item),
-                    description: item.description,
-                    isRepeat: false,
-                    courseId: item?.course_id,
-                    source: CALENDAR_TYPE.LMS,
-                    isHoliday: item?.is_holiday,
-                    isCaseStudy: item?.is_case_study,
-                    isTest: item?.is_test,
-                    isKeyContentBefore: item?.is_key_before_content,
-                    isKeyContentAfter: item?.is_key_after_content,
-                    isOverDue: isOverDue,
-                  }
-                }) ?? []
-              }
-              onEventDetail={(event) => {
-                setOpen({ isOpen: true, data: event })
-              }}
-              type={CALENDAR_TYPE.LMS}
-              hasFilter
-              onRefetchAPI={async (startDate: Date, endDate: Date) => {
-                setCurrentTime({ startDate, endDate })
-                await fetchCalendar({
-                  start_date: startDate.toISOString(),
-                  end_date: endDate.toISOString(),
-                })
-              }}
-              onfilter={handleFilter}
-              courses={data?.courses}
-              loading={loading}
-              headerType={CALENDAR_TYPE.LMS}
+    <Layout title="Calendar" size="2xl" showSidebar={isAlwaysShowSidebar}>
+      <div
+        className="mx-auto my-0 h-full max-w-[1644px]"
+        id="calendar-root"
+        data-aos={ANIMATION.DATA_AOS}
+      >
+        <div className="relative flex h-full flex-col">
+          <div className="py-2 md:pb-8 md:pt-8 lg:pb-8 lg:pt-10 xl:pb-6 xl:pt-4">
+            <HeaderMobile
+              title={TitleSidebar.CALENDAR}
+              showIcon={isTabletView || isMobileView}
+              onBack={handleBack}
             />
+          </div>
+          <div
+            className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between"
+            data-aos={ANIMATION.DATA_AOS}
+          >
+            <div
+              className="flex w-full min-w-0 justify-center lg:flex-1"
+              data-aos={ANIMATION.DATA_AOS}
+            >
+              <SAPPCalendarV2
+                showWeeklyNorm={false}
+                events={
+                  events?.map((item) => {
+                    const isOverDue =
+                      dayjs(`${item.end_date}T${item.end_time}Z`).isBefore(
+                        dayjs(),
+                      ) && item.mode === CALENDAR_FILTER_TYPE.ONLINE
+                    return {
+                      id: item.id,
+                      title: item.name,
+                      startDate: new Date(
+                        `${item.start_date}T${item.start_time}Z`,
+                      ),
+                      endDate: new Date(`${item.end_date}T${item.end_time}Z`),
+                      type: getType(item),
+                      description: item.description,
+                      isRepeat: false,
+                      courseId: item?.course_id,
+                      source: CALENDAR_TYPE.LMS,
+                      isHoliday: item?.is_holiday,
+                      isCaseStudy: item?.is_case_study,
+                      isTest: item?.is_test,
+                      isKeyContentBefore: item?.is_key_before_content,
+                      isKeyContentAfter: item?.is_key_after_content,
+                      isOverDue: isOverDue,
+                    }
+                  }) ?? []
+                }
+                onEventDetail={(event) => {
+                  setOpen({ isOpen: true, data: event })
+                }}
+                type={CALENDAR_TYPE.LMS}
+                hasFilter
+                onRefetchAPI={async (startDate: Date, endDate: Date) => {
+                  setCurrentTime({ startDate, endDate })
+                  await fetchCalendar({
+                    start_date: startDate.toISOString(),
+                    end_date: endDate.toISOString(),
+                  })
+                }}
+                onfilter={handleFilter}
+                courses={data?.courses}
+                loading={loading}
+                headerType={CALENDAR_TYPE.LMS}
+              />
+            </div>
+            <div
+              className={clsx(
+                'transition-all duration-300 ease-in-out',
+                open.isOpen && isAlwaysShowSidebar ? 'w-[425px]' : 'w-0',
+              )}
+            >
+              {open.isOpen && (
+                <>
+                  {isMobileView && (
+                    <DetailCalendarMobile open={open} setOpen={setOpen} />
+                  )}
+                  {isTabletView && (
+                    <DetailCalendarTablet open={open} setOpen={setOpen} />
+                  )}
+                  {isAlwaysShowSidebar && (
+                    <DetailCalendar open={open} setOpen={setOpen} />
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <DetailCalendar open={open} setOpen={setOpen} />
     </Layout>
   )
 }

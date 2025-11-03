@@ -468,7 +468,7 @@ const CoursePartDetailTeacher = () => {
       isCourseDetail
     >
       {listFocusSubSectionIds?.length || listFocusUnitIds?.length ? (
-        <div className="relative flex h-16 w-full items-center justify-center border-b-[0.57px] border-zinc-100 bg-white">
+        <div className="border-zinc-100 relative flex h-16 w-full items-center justify-center border-b-[0.57px] bg-white">
           <Alert
             message={
               <div className="flex items-center gap-2">
@@ -554,7 +554,7 @@ const CoursePartDetailTeacher = () => {
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
+            <div className="bg-gray-2 mb-2 mt-4 h-px w-full"></div>
           )}
           <TextSkeleton
             loading={loadingLearningOutcome}

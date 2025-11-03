@@ -13,17 +13,17 @@ const ErrorRedirectPage = () => {
         height={142}
         priority
       />
-      <h1 className="text-center font-inter text-3xl font-semibold text-bw-11">
+      <h1 className="text-bw-11 text-center font-inter text-3xl font-semibold">
         Oops!
       </h1>
-      <p className="text-center font-inter text-lg font-normal text-gray-9">
+      <p className="text-gray-9 text-center font-inter text-lg font-normal">
         Something went wrong. Please try again.
       </p>
       <SappButton
         title="Back to Home Page"
         full={false}
         className="rounded-2.5 !px-6 py-4 font-inter text-sm !leading-4"
-        size="lager"
+        size="large"
         onClick={() => {
           if (typeof window !== 'undefined') {
             window.location.href = '/'
