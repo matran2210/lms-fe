@@ -341,7 +341,14 @@ const MatchQuiz = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultAnswer, corrects])
 
+    const [isNodeReady, setNodeReady] = useState(false)
+
     useEffect(() => {
+      if (nodes.length > 0) setNodeReady(true)
+    }, [nodes])
+
+    useEffect(() => {
+      if (!isNodeReady) return
       const hasCorrects = corrects && corrects.length > 0
       if (!hasCorrects) {
         // Khi chưa có corrects: tất cả node về màu đen, isDisabled false
@@ -360,7 +367,7 @@ const MatchQuiz = forwardRef(
       }
       // Khi có corrects, đổi màu node theo đúng/sai như logic cũ
       const correctMap = new Map(
-        corrects.map((item: any) => [item.id, item.answer?.id]),
+        corrects.map((item: any) => [item.id, item?.answer?.id]),
       )
 
       const connectedIds = new Set<string>()
@@ -404,7 +411,7 @@ const MatchQuiz = forwardRef(
           return node
         }),
       )
-    }, [corrects, edges])
+    }, [corrects, edges, isNodeReady])
 
     // Tạo flow cho các câu trả lời đúng
     const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
@@ -414,7 +421,7 @@ const MatchQuiz = forwardRef(
 
       for (const item of corrects) {
         const sourceId = item.id
-        const targetId = item.answer?.id
+        const targetId = item?.answer?.id
 
         const sourceNode = nodeMap.get(sourceId)
         const targetNode = nodeMap.get(targetId)
