@@ -672,6 +672,7 @@ const ActivityTeacherPage = () => {
                               focusOnlyQuiz={{ id: '', open: false }}
                               setFocusOnlyQuiz={() => {}}
                               isTeacher
+                              number_of_attempts={0}
                             />
                           </div>
                         )
