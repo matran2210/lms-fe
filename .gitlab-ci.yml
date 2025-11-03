@@ -38,6 +38,7 @@ deploy_staging:
   only:
     - staging
   script:
+    - yarn global add vercel
     - vercel deploy --prod --token=$VERCEL_TOKEN
   environment: staging
   tags:
