@@ -81,7 +81,7 @@ type Props = {
   // Optional attempt limitation info
   is_limited?: boolean
   limit_count?: number
-  number_of_attempts?: number
+  number_of_attempts: number
   isQuizFinished?: boolean
 }
 
@@ -1299,8 +1299,7 @@ const QuizDocument = ({
                       />
                     )}
                   {(!isQuestionConfirmed ||
-                    (number_of_attempts &&
-                      number_of_attempts > 0 &&
+                    (number_of_attempts > 0 &&
                       grading_method === 'MANUAL')) && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2"
