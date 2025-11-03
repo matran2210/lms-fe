@@ -50,7 +50,11 @@ export default function Sidebar({
       document.body.classList.remove('no-hover')
     }, 1000)
   }
-  const isLevel1 = router.pathname === PageLink.COURSES || router.pathname === PageLink.CALENDAR || router.pathname === PageLink.ENTRANCE_TEST || router.pathname === PageLink.EXAM_LIST
+  const isLevel1 =
+    router.pathname === PageLink.COURSES ||
+    router.pathname === PageLink.CALENDAR ||
+    router.pathname === PageLink.ENTRANCE_TEST ||
+    router.pathname === PageLink.EXAM_LIST
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
   return (
     <div className="group">
@@ -63,10 +67,11 @@ export default function Sidebar({
         )}
       >
         <div
-          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${guideStatus && guideStep == 2
-            ? 'z-50 bg-white'
-            : 'overflow-y-auto overflow-x-hidden'
-            }`}
+          className={`max-h-[calc(100vh-145px) relative rounded-xl pb-6 pt-[25PX] ${
+            guideStatus && guideStep == 2
+              ? 'z-50 bg-white'
+              : 'overflow-y-auto overflow-x-hidden'
+          }`}
         >
           <div
             className="group-logos mx-auto px-5"
@@ -143,9 +148,10 @@ export default function Sidebar({
       <div
         onClick={toggleDrawer}
         className={clsx(
-          `sidebar-overlay ${isOpened
-            ? 'pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0'
-            : 'pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100'
+          `sidebar-overlay ${
+            isOpened
+              ? 'pointer-events-auto opacity-100 peer-hover:pointer-events-auto peer-hover:opacity-100 lg:pointer-events-none lg:opacity-0'
+              : 'pointer-events-none opacity-0 peer-hover:pointer-events-auto peer-hover:opacity-100'
           } fixed bottom-0 left-0 right-0 top-0 z-20 h-full w-full cursor-pointer bg-[#00000080] transition-opacity duration-300 ease-in-out`,
           {
             '!pointer-events-none !opacity-0':
