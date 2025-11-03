@@ -10,7 +10,6 @@ import {
   submitQuizTest,
 } from '../../../../../pages/api/courses/index'
 import { IEssayAnswer } from 'src/type/answer'
-import { m } from 'framer-motion'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.
@@ -599,7 +598,7 @@ const quizSlice: Slice = createSlice({
                   answer: (payload.myAnswers || [])?.map(
                     (e: any, i: number) => ({
                       answer_id: e.idAnswer,
-                      answer_position: e.postion,
+                      answer_position: e.position,
                     }),
                   ),
                   time_spent: payload.time_spent,
