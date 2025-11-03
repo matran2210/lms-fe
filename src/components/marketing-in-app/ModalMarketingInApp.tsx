@@ -79,7 +79,9 @@ const ModalMarketingInApp = ({
         </div>
 
         <div className="mt-4 self-stretch text-center text-sm font-normal leading-normal text-gray-800 md:text-base lg:mt-6">
-          We’ve been listening. This update brings you a cleaner look, improved performance, and smarter learning tools, all designed with you in mind to create a seamless and engaging learning experience.
+          We’ve been listening. This update brings you a cleaner look, improved
+          performance, and smarter learning tools, all designed with you in mind
+          to create a seamless and engaging learning experience.
         </div>
 
         <div className="mt-6 flex w-full flex-col items-center justify-center gap-3  md:mt-8 md:px-10 lg:mt-10 lg:px-[100px]">

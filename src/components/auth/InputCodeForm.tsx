@@ -154,7 +154,7 @@ const InputCodeForm = ({ error = '', email, token }: IInputCodeFormProps) => {
         <span className="text-sm text-error">{errorMessage}</span>
         <span
           className={`min-w-fit text-right text-sm ${
-            timeCountDown === '00:00' ? 'text-error' : 'text-[#050505]'
+            timeCountDown === '00:00' ? 'text-error' : 'text-bw-1'
           }`}
         >
           {timeCountDown}

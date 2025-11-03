@@ -318,7 +318,7 @@ const EntranceTest = ({
                         onChange={(value) => {
                           setCurrentAttempt(
                             data?.attempts?.find((item) => item.id === value) ||
-                            ({} as IEntranceTestAttempt),
+                              ({} as IEntranceTestAttempt),
                           )
                         }}
                         suffixIcon={<ArrowDownIcon />}

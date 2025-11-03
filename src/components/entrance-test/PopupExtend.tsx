@@ -36,10 +36,10 @@ const PopupExtend = ({ open, setOpen }: IProps) => {
       <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
         <AlertIcon />
       </div>
-      <div className="text-bw-1 text-center text-2xl font-semibold md:text-4xl">
+      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
         Test Expired
       </div>
-      <div className="text-medium-sm mb-1 mt-4 px-1 text-center xl:mb-7">
+      <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
         <span className="text-gray-1">
           You can only take the entrance test twice. For further support, please
           contact SAPP Academy via

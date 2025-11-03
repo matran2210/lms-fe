@@ -491,7 +491,7 @@ const TestModalTeacher = ({
             renderOkButtonCaption() === 'Continue' &&
             data?.quiz?.attempt?.number_of_attempts ===
               data?.quiz?.limit_count && (
-              <div className="text-gray-1 mt-8 text-center text-base !font-normal">
+              <div className="mt-8 text-center text-base !font-normal text-gray-1">
                 <div>Your last attempt was unexpectedly ended.</div>
                 <div>{"Please click 'Continue' to proceed with the test."}</div>
               </div>

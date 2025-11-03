@@ -187,7 +187,7 @@ const HookFormCheckBoxGroup = ({
                       </span>
                       <YourAnswer
                         show={checked && !!corrects}
-                        className="bg-purple-2 text-state-info max-h-6 !rounded !text-sm"
+                        className="bg-purple-2 max-h-6 !rounded !text-sm text-state-info"
                       ></YourAnswer>
                     </span>
                   </label>

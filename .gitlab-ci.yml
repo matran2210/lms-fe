@@ -36,19 +36,6 @@ deploy_staging:
   stage: deploy
   image: node:20
   only:
-    - staging
-  script:
-    - yarn global add vercel
-    - vercel deploy --prod --token=$VERCEL_TOKEN
-  environment: staging
-  tags:
-    - shell-docker
-  resource_group: lms-fe
-
-deploy_staging_lms_v2:
-  stage: deploy
-  image: node:20
-  only:
     - staging-lms-v2
   script:
     - yarn global add vercel

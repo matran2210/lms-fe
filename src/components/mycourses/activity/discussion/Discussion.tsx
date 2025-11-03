@@ -633,7 +633,7 @@ const Discussion = ({ class_id }: Props) => {
                     <SendComment />
                   </SappButtonIcon>
                   <div
-                    className={`relative select-none hover:text-primary h-5 ${clsx(
+                    className={`relative h-5 select-none hover:text-primary ${clsx(
                       {
                         hidden: rootSelectedFiles?.length > 0,
                       },

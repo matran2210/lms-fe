@@ -191,7 +191,7 @@ const LearningResults = () => {
   }, [router?.query?.courseId])
 
   return (
-    <div className="3.5xl:px-8 flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity">
+    <div className="flex h-[55vh] w-full grow flex-col bg-white px-3 pb-7 pt-4 shadow-activity 3.5xl:px-8">
       <div className="mb-5 flex items-center justify-between border-b pb-3">
         {isNormal ? (
           <Tooltip
@@ -204,17 +204,17 @@ const LearningResults = () => {
             }
             className="dashboard_tooltip"
           >
-            <div className="text-lg-xl flex min-w-fit items-center gap-1 font-bold 4xl:text-xl">
+            <div className="flex min-w-fit items-center gap-1 text-lg-xl font-bold 4xl:text-xl">
               Your Learning Results
               <Image src={infoIcon} alt="" width={16} height={16} />
             </div>
           </Tooltip>
         ) : (
-          <div className="text-lg-xl min-w-fit font-bold 4xl:text-xl">
+          <div className="min-w-fit text-lg-xl font-bold 4xl:text-xl">
             Your Learning Results
           </div>
         )}
-        <div className="text-xsm text-gray-11 4xl:text-sm">
+        <div className="text-gray-11 text-xsm 4xl:text-sm">
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>
@@ -230,7 +230,7 @@ const LearningResults = () => {
           >
             {!isNormal && (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="bg-green-4 min-h-3 min-w-3 rounded-full"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-green-4"></span>
                 <a
                   href={
                     mockTestId
@@ -247,7 +247,7 @@ const LearningResults = () => {
             )}
             {isNormal || hasLearning ? (
               <div className="flex items-center justify-center gap-2.5">
-                <span className="bg-blue-5 min-h-3 min-w-3 rounded-full"></span>
+                <span className="min-h-3 min-w-3 rounded-full bg-blue-5"></span>
                 <span className="min-w-fit font-medium">Learning results</span>
               </div>
             ) : null}
