@@ -1398,7 +1398,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   >
                     <div
                       className={clsx(
-                        'group/file relative grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                        'group/file grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                         {
                           'top-[74px]':
                             (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
