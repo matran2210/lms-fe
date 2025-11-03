@@ -1011,13 +1011,9 @@ p a {
 }
 
 #floating-button-mkt-in-app {
-  @apply fixed h-[48px] w-[48px] cursor-pointer rounded-xl bg-gray-800 p-2;
-  box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 1px 4px,
-    rgba(0, 0, 0, 0.2) 0px 2px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @apply fixed flex h-12 w-12 cursor-pointer items-center justify-center 
+    rounded-xl bg-gray-800 p-2 
+    shadow-strong;
 }
 
 .sapp-pinned-noti-header {
