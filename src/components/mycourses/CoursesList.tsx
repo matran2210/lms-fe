@@ -60,7 +60,7 @@ const CoursesList: React.FC<CoursesProps> = ({
       </div>
     )
   }
-  
+
   if (isEmpty(courses) && !guideIsActive) return <NoCoursesAvailable />
 
   return (
@@ -88,7 +88,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 badge: 'ACCA',
                 className: 'bg-badge-200 text-badge-500 font-medium',
               }}
-              classNameCard={clsx('lg:min-h-[396px] min-h-[280px]', {
+              classNameCard={clsx('lg:min-h-[434px] min-h-[280px]', {
                 'z-50': guideStatus && guideStep === 6,
               })}
             >
@@ -97,15 +97,15 @@ const CoursesList: React.FC<CoursesProps> = ({
                   <div>
                     <GraduationCapIcon className={'h-5 w-5 md:h-6 md:w-6'} />
                   </div>
-                  <div className="text-icon text-xs font-semibold md:text-sm">
+                  <div className="text-xs font-semibold text-icon md:text-sm">
                     CMA342023
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <div className={`text-icon mr-1`}>
+                  <div className={`mr-1 text-icon`}>
                     <CourseTimeIcon className={'h-5 w-5 md:h-6 md:w-6'} />
                   </div>
-                  <div className={`text-icon text-xs font-semibold md:text-sm`}>
+                  <div className={`text-xs font-semibold text-icon md:text-sm`}>
                     30
                   </div>
                   <div
@@ -115,7 +115,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-6 md:mt-8 md:h-[72px]">
+              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
                 <p
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(

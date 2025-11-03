@@ -555,6 +555,9 @@ export default function MenuItem({
             name === TitleSidebar.CALENDAR ||
             // hidden when in course
             name === LANG_SIGNIN.eventTest ||
+            name === TitleSidebar.NOTIFICATION ||
+            Icon === 'avatar' ||
+            Icon === 'profile-detail' ||
             checkIsHiddenDashboard(
               JSON.parse(localStorage.getItem('courseInfo') as any),
             ) ||
@@ -629,9 +632,9 @@ export default function MenuItem({
         tabs={tabs}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
-        handleMarkAll={handleMarkAll}
-        handleMarkById={handleMarkById}
-        handleUnMarkById={handleUnMarkById}
+        handleMarkAll={() => handleMarkAll(selectedTab)}
+        handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
+        handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
         handleBack={handleBack}
         isViewDetail={isViewDetail}
         setOpenNotification={setOpenNotification}

@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction } from 'react'
 import TourGuideNoti from 'src/assets/lotties/tour-guide-noti.json'
 import TourGuideSidebar from 'src/assets/lotties/tour-guide-sidebar.json'
-import { UserGuide } from 'src/constants'
+import { PageLink, UserGuide } from 'src/constants'
 import { useAppSelector } from 'src/redux/hook'
 import {
   MENU_BOTTOM,
@@ -17,6 +17,7 @@ import ExpandIcon from '../ExpandIcon'
 import MenuItemsList from '../MenuItemsList'
 
 import { Divider } from 'antd'
+import { useRouter } from 'next/router'
 type SidebarProps = {
   isOpened: boolean
   className: string
@@ -36,6 +37,7 @@ export default function Sidebar({
   openExaminationInfo,
   setOpenExaminationInfo,
 }: SidebarProps) {
+  const router = useRouter()
   const guideStatus = useAppSelector((state) => state.userGuideReducer?.status)
   const guideStep = useAppSelector((state) => state.userGuideReducer?.step)
   /**
@@ -48,7 +50,11 @@ export default function Sidebar({
       document.body.classList.remove('no-hover')
     }, 1000)
   }
-
+  const isLevel1 =
+    router.pathname === PageLink.COURSES ||
+    router.pathname === PageLink.CALENDAR ||
+    router.pathname === PageLink.ENTRANCE_TEST ||
+    router.pathname === PageLink.EXAM_LIST
   const isGuideActive = guideStatus && (guideStep === 2 || guideStep === 3)
   return (
     <div className="group">
@@ -113,9 +119,11 @@ export default function Sidebar({
           className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
           ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
-          <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
-            <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
-          </div>
+          {isLevel1 && (
+            <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">
+              <Divider className="mb-8 mt-0 bg-[#DCDDDD]" />
+            </div>
+          )}
           <MenuItemsList
             options={MENU_BOTTOM}
             setOpenResource={setOpenResource}
