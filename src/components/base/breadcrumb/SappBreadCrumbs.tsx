@@ -3,10 +3,11 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { ITabs } from 'src/type'
 import Tooltip from 'src/common/Tooltip'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const SappBreadCrumbs = ({
   breadcrumbs = [],
-  isTeacher = true,
+  isTeacher = false,
   className,
 }: {
   breadcrumbs?: ITabs[]
@@ -14,7 +15,10 @@ const SappBreadCrumbs = ({
   className?: string
 }) => {
   const [isLastTakesFullWidth, setIsLastTakesFullWidth] = useState(false)
+  const [isDisplayFull, setIsDisplayFull] = useState(false)
   const lastIndex = breadcrumbs.length - 1
+  const isHideItemBreadcrumb = breadcrumbs.length > 3
+
   const handleTitleDisplay = (title: string, length: number) => {
     const isLong = title?.length > length
     return isLong ? title.slice(0, length) + '...' : title
@@ -29,28 +33,60 @@ const SappBreadCrumbs = ({
     const numberOfLines = Math.round(elementHeight / lineHeight)
     return numberOfLines >= 2
   }
+
   useEffect(() => {
     setIsLastTakesFullWidth(checkIsLastTakesFullWidth())
   }, [])
+
   return (
     <nav aria-label="breadcrumb" className={clsx('hidden lg:block', className)}>
-      <ul className="flex items-center space-x-2 text-sm font-normal text-[#a1a1aa]">
-        {breadcrumbs.map((breadcrumb, index) => {
-          const isLast = index === lastIndex
-          const titleDisplay = handleTitleDisplay(
-            breadcrumb.title,
-            isLast ? 20 : 30,
-          )
-          const isLong = breadcrumb.title?.length > 30
+      <ul className="flex items-center overflow-hidden text-sm font-normal text-[#a1a1aa]">
+        <AnimatePresence initial={false}>
+          {breadcrumbs.map((breadcrumb, index) => {
+            const isLast = index === lastIndex
 
-          return (
-            <React.Fragment key={breadcrumb.title}>
-              <li
+            if (isHideItemBreadcrumb && index > 1 && !isDisplayFull) {
+              if (index === lastIndex - 1) {
+                return (
+                  <motion.div
+                    key="dots"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0 }}
+                    className="mr-2 cursor-pointer text-[1.125rem] text-gray-800"
+                    onClick={() => setIsDisplayFull(true)}
+                  >
+                    ...&nbsp;&nbsp;/
+                  </motion.div>
+                )
+              }
+              if (!isLast) return null
+            }
+
+            const titleDisplay = handleTitleDisplay(
+              breadcrumb.title,
+              isLast ? 20 : 30,
+            )
+            const isLong = breadcrumb.title?.length > 30
+
+            return (
+              <motion.li
+                layout
+                key={breadcrumb.title}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  layout: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+                  duration: 0.3,
+                }}
                 className={clsx(
-                  'text-base',
+                  'flex items-center text-base',
                   isLast ? 'font-medium text-gray-400' : 'text-gray-800',
                 )}
               >
+                {/* Nội dung breadcrumb */}
                 {isLast ? (
                   isLastTakesFullWidth ? (
                     <Tooltip
@@ -86,26 +122,25 @@ const SappBreadCrumbs = ({
                     </div>
                   </Link>
                 )}
-              </li>
 
-              {!isLast && (
-                <li className="flex items-center">
+                {/* Dấu phân cách — gộp chung trong cùng motion */}
+                {!isLast && (
                   <span
                     className={clsx(
-                      'text-[1.125rem]',
-                      // isTeacher && 'text-tiny',
+                      'mx-2 text-[1.125rem]',
+                      isTeacher && 'text-tiny',
                       index === lastIndex - 1
                         ? 'text-gray-800'
                         : 'text-gray-400',
                     )}
                   >
-                    {/* {isTeacher ? '▶' : '/'} */}/
+                    {isTeacher ? '▶' : '/'}
                   </span>
-                </li>
-              )}
-            </React.Fragment>
-          )
-        })}
+                )}
+              </motion.li>
+            )
+          })}
+        </AnimatePresence>
       </ul>
     </nav>
   )

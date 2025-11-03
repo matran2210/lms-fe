@@ -12,22 +12,30 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
 
 import {
+  AlertTriagle,
   CircleArrowLeftIcon,
   CircleArrowRightIcon,
+  CircleInfoIcon,
   ConfirmIcon,
   MaximumContentIcon,
   MinimumContentIcon,
+  RestartQuizIcon,
 } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV3 from '@components/base/modal/SappModalV3'
+import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import { IFocusQuiz } from '@pages/courses/[id]/activity/[activityId]'
 import { isValidatedAnswer } from '@utils/answer'
 import { trackGAEvent } from '@utils/google-analytics'
 import { Tooltip } from 'antd'
+import TooltipSapp from 'src/common/Tooltip'
+
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { isNull, isUndefined } from 'lodash'
+import { every, isEmpty, isNull, isUndefined } from 'lodash'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -41,23 +49,13 @@ import {
   RESPONSE_OPTION,
   SOCIAL_LINK,
 } from 'src/constants'
+import { DEFAULT_EDITOR_VALUE } from 'src/constants/attempt'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { IQuizSetting } from 'src/type'
-import {
-  IQuestionResult,
-  IQuestionResultResponse,
-} from 'src/type/course/my-course/Activity'
 import { IQuestion, IRequirment } from 'src/type/course/Question'
-import { CoursesAPI } from '../../../../pages/api/courses/index'
-import ModalExplanationPackage from '../ModalExplanationPackage'
-import ModalResults from '../ModalResults'
-import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import LoadingQuizDocument from './LoadingQuizDocument'
-import { GradingPreference } from '@utils/constants'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
-import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
+import QuizComponent, { QuizComponentRef } from './QuizComponent'
 
 type Props = {
   questions: IQuestion[]
@@ -83,7 +81,7 @@ type Props = {
   // Optional attempt limitation info
   is_limited?: boolean
   limit_count?: number
-  number_of_attempts?: number
+  number_of_attempts: number
   isQuizFinished?: boolean
 }
 
@@ -115,18 +113,15 @@ const QuizDocument = ({
   const dispatch = useAppDispatch()
   const selector = useAppSelector(courseActivityQuizReducer)
   const router = useRouter()
-
   const isAFTERAllQUESTION = grading_preference !== 'AFTER_EACH_QUESTION'
   const isAFTEREACHQUESTION = grading_preference === 'AFTER_EACH_QUESTION'
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
   const questionRef = useRef<QuizComponentRef>(null)
-
   const questionsList = selector[activityId]?.[tabId]?.[quizId]?.questions || []
 
   const activeQuestion = questionsList[activeQuestionIndex]
   const isLastQuestion = activeQuestionIndex === questions.length - 1
   const isQuestionConfirmed = activeQuestion?.confirmed
-
   const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
@@ -170,9 +165,13 @@ const QuizDocument = ({
         setStartWorkTime(Date.now())
 
         // Load corrects from sessionStorage if available (only for AFTER_ALL_QUESTIONS)
-        if (grading_preference === 'AFTER_ALL_QUESTIONS') {
+        if (grading_preference) {
           // If finished, we'll restore answers and fetch corrects lazily per question on navigation
-          setIsFinishQuiz(isQuizFinished)
+          setIsFinishQuiz(isFinishQuiz)
+        }
+
+        if (number_of_attempts && number_of_attempts > 0) {
+          setIsFinishQuiz(true)
         }
 
         // Load the first question when the component mounts
@@ -183,7 +182,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: questions?.[0]?.id || '',
-              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
+              ...(isFinishQuiz && { attemptId }),
             }),
           )
 
@@ -194,18 +193,18 @@ const QuizDocument = ({
     })()
   }, [questions, grading_preference, activityId, tabId, quizId, dispatch])
 
-  useEffect(() => {
-    if (runHandleFinishQuiz > 1) {
-      setOpenFinishQuiz(true)
-    }
-  }, [runHandleFinishQuiz])
+  // useEffect(() => {
+  //   if (runHandleFinishQuiz > 1) {
+  //     setOpenFinishQuiz(true)
+  //   }
+  // }, [runHandleFinishQuiz])
 
   // Corrects are not persisted; they are fetched lazily per question when finished
 
   // Lazy fetch corrects per question after finished
   useEffect(() => {
     const fetchAndConfirmQuestion = async () => {
-      if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
+      // if (grading_preference !== 'AFTER_ALL_QUESTIONS') return
       if (!activeQuestion?.id) return
 
       if (!isFinishQuiz) return
@@ -218,7 +217,7 @@ const QuizDocument = ({
             tabId,
             quizId,
             questionId: activeQuestion.id,
-            ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
+            ...(isFinishQuiz && { attemptId }),
             myAnswers: [],
             time_spent: 0,
           }) as any,
@@ -271,7 +270,7 @@ const QuizDocument = ({
               tabId: tabId,
               quizId: quizId,
               questionId: nextQuestionId || '',
-              ...(isAFTERAllQUESTION && isFinishQuiz && { attemptId }),
+              ...(isFinishQuiz && { attemptId }),
             }),
           ).unwrap()
           setStartWorkTime(Date.now())
@@ -314,8 +313,63 @@ const QuizDocument = ({
    */
 
   const [isFinishQuiz, setIsFinishQuiz] = useState<boolean>(isQuizFinished)
+  const [openUnsubmitWarning, setOpenUnsubmitWarning] = useState<boolean>(false)
+
+  function isValid(value: any) {
+    if (isEmpty(value)) return false
+    return true
+  }
+
+  const [unsubittedQuestions, setUnsubittedQuestions] = useState<number[]>([])
 
   const handleQuizFinish = async () => {
+    const quizQuestion = selectQuestions(
+      selector,
+      activityId,
+      tabId,
+      quizId || '',
+    )
+
+    // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
+    const availableQuestions = quizQuestion?.map((item: any) => {
+      return {
+        ...item,
+        isValidAnswer: isValidatedAnswer(item.myAnswers, item.qType),
+      }
+    })
+
+    // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
+    const extractAnswerValue = (ans: any) => {
+      const answerQustion = ans?.[0]
+      const answerObj = answerQustion?.answer?.[0]
+      return (
+        answerObj?.answer_id ||
+        answerObj?.answer_text ||
+        answerQustion?.question_answer_id ||
+        (answerQustion?.short_answer !== DEFAULT_EDITOR_VALUE &&
+          answerQustion?.short_answer) ||
+        !isNull(answerQustion?.answer_file) ||
+        isEmpty(answerQustion)
+      )
+    }
+
+    // Map qua toàn bộ câu hỏi để check hợp lệ
+    const validityList = availableQuestions?.map((item) =>
+      isValid(extractAnswerValue(item?.myAnswers)),
+    )
+
+    const allValid = every(validityList)
+    if (allValid) {
+      setOpenFinishQuiz(true)
+      setUnsubittedQuestions([])
+    } else {
+      setOpenUnsubmitWarning(true)
+      const unsubmitted = validityList
+        ?.map((v, i) => (!v ? i + 1 : null)) // +1 để đếm từ 1
+        .filter(Boolean) as number[]
+      setUnsubittedQuestions(unsubmitted)
+    }
+
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
     const defaultValue =
       questionRef.current?.getValues(name) ||
@@ -332,7 +386,7 @@ const QuizDocument = ({
 
     // Lần cuối thì không cần tăng nữa
     // setActiveQuestionIndex(activeQuestionIndex + 1)
-    setIsFinishQuiz(true)
+    // setIsFinishQuiz(true)
     handleSaveAnswer()
     // Load the next question if it hasn't been loaded yet
     const nextQuestionId = questions[activeQuestionIndex + 1]?.id
@@ -465,12 +519,13 @@ const QuizDocument = ({
 
   const handleFinishQuiz = async () => {
     setOpenFinishQuiz(false)
+    setOpenUnsubmitWarning(false)
     setLoading(true)
     const questions = selectQuestions(selector, activityId, tabId, quizId || '')
 
-    if (grading_preference === 'AFTER_ALL_QUESTIONS') {
+    if (grading_preference) {
       // Mark finished to preserve state across popup
-      setIsFinishQuiz(true)
+      setIsFinishQuiz(isFinishQuiz)
     }
 
     // Handle: handle việc check xem đáp án đó đãn làm và có đáp án chưa chưa có thì sẽ return null
@@ -480,6 +535,7 @@ const QuizDocument = ({
       }
       return { ...item, myAnswers: null }
     })
+
     const {
       answers,
       quiz_position_mapping,
@@ -769,7 +825,54 @@ const QuizDocument = ({
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
         return 'Result'
       }
+      if (isLastQuestion) {
+        return 'Finish'
+      }
+      if (!isLastQuestion && isAFTEREACHQUESTION) {
+        if (activeQuestion?.qType === 'ESSAY') {
+          return 'Submit & Next'
+        } else {
+          return 'Submit & View Answer'
+        }
+      }
+      if (!isLastQuestion && isAFTERAllQUESTION) {
+        return 'Next Question'
+      }
     }
+
+    if (grading_method === 'AUTO') {
+      if (isAFTERAllQUESTION && !isLastQuestion) {
+        return 'Next question'
+      }
+      if (isAFTERAllQUESTION && isLastQuestion) {
+        return 'Finish'
+      }
+
+      if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
+        return 'Finish'
+      }
+      if (
+        activeQuestion?.qType !== 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        return 'Submit & View Answer'
+      }
+      if (
+        activeQuestion?.qType === 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        return 'Submit & View Solution'
+      }
+    }
+
+    if (grading_method === 'MANUAL' && !isLastQuestion) {
+      if (activeQuestion?.qType === 'ESSAY') {
+        return 'Submit & Next'
+      }
+    }
+
     return 'Submit & View Answer'
   }
 
@@ -787,9 +890,56 @@ const QuizDocument = ({
         )
         return
       }
+      if (isLastQuestion) {
+        setIsFinishQuiz(false)
+        handleQuizFinish()
+      }
+
+      if (!isLastQuestion && isAFTEREACHQUESTION) {
+        if (activeQuestion?.qType !== 'ESSAY') {
+          handleConfirmQuestion()
+        } else {
+          handleNextQuestion()
+        }
+      }
+
+      if (!isLastQuestion && isAFTERAllQUESTION) {
+        handleNextQuestion()
+      }
     }
 
-    if (!loading) handleConfirmQuestion()
+    if (grading_method === 'AUTO') {
+      if (isAFTERAllQUESTION && !isLastQuestion) {
+        handleNextQuestion()
+      }
+      if (isAFTERAllQUESTION && isLastQuestion) {
+        handleQuizFinish()
+      }
+
+      if (isAFTEREACHQUESTION && !isLastQuestion) {
+        handleConfirmQuestion()
+      }
+
+      if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
+        handleQuizFinish()
+      }
+      if (
+        activeQuestion?.qType !== 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        handleConfirmQuestion()
+      }
+      if (
+        activeQuestion?.qType === 'ESSAY' &&
+        isAFTEREACHQUESTION &&
+        !isQuestionConfirmed
+      ) {
+        handleConfirmQuestion()
+      }
+    }
+
+    // if (!loading) handleConfirmQuestion()
     trackGAEvent('Click Button Confirm Quiz Activity')
   }
 
@@ -816,7 +966,7 @@ const QuizDocument = ({
     reset({})
     setQuizComponentKey((e) => e + 1)
     setActiveQuestionIndex(0)
-    setRunHandleFinishQuiz(1)
+    // setRunHandleFinishQuiz(1)
     setOpenFinishQuiz(false)
     setOpenGradedReport(false)
     setIsFinishQuiz(false)
@@ -841,17 +991,68 @@ const QuizDocument = ({
         'w-fit lg:w-full': activeQuestion?.qType === QUESTION_TYPES.MATCHING,
       })}
     >
+      <SappModalV3
+        open={openUnsubmitWarning}
+        setOpen={setOpenUnsubmitWarning}
+        onOk={handleFinishQuiz}
+        handleCancel={() => {
+          setIsFinishQuiz(false)
+          setOpenUnsubmitWarning(false)
+        }}
+        okButtonCaption="Confirm Finish"
+        cancelButtonCaption="Keep doing"
+        fullWidthBtn
+        buttonSize="medium"
+      >
+        <div className="mx-auto mb-6 flex items-center justify-center md:mb-10">
+          <AlertTriagle />
+        </div>
+        <div className="mb-4 text-center text-2xl font-bold text-gray-800 md:mb-8 md:text-[32px]">
+          Are you sure?
+        </div>
+        <div className="text-center text-sm md:text-base">
+          <span className="text-center font-normal text-gray-800">
+            Oops look like you&apos;ve got a few unfinished questions:&nbsp;
+          </span>
+          <span className="text-center font-semibold text-primary">
+            {unsubittedQuestions?.length > 10
+              ? unsubittedQuestions?.slice(0, 10)?.join(', ')
+              : unsubittedQuestions.join(', ')}{' '}
+            {unsubittedQuestions?.length > 10 ? '...' : ''}
+          </span>
+          <span className="text-center font-normal text-gray-800">
+            After you submit, you can&apos;t edit this assignment.
+          </span>
+        </div>
+      </SappModalV3>
       <ConFirmSubmit
         open={openFinishQuiz}
         setOpen={setOpenFinishQuiz}
         handleSubmit={handleFinishQuiz}
         handleCancel={handleCancelConfirmSubmit}
+        isTest={false}
+        okButtonCaption="Finish"
+        message="Are you sure you are done here and ready to view the report?"
       />
       <div className={clsx({ 'mb-[10px]': is_graded })}>
         <div className="mb-8 flex items-center gap-3 rounded-md bg-white px-6 py-2">
           {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
             isNull(quizSetting)) && (
-            <>
+            <div className="grid w-full grid-cols-3">
+              {is_graded ? (
+                <div className="hidden flex-wrap items-center gap-3 md:flex">
+                  <div
+                    className={` ${is_graded || 'invisible'} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
+                  >
+                    Graded Activity
+                  </div>
+                  {is_graded &&
+                    grading_method === GRADING_METHOD.MANUAL &&
+                    getGradedLabel(gradeStatus)}
+                </div>
+              ) : (
+                <div className="invisible">Graded</div>
+              )}
               <div className="mx-auto flex w-fit items-center gap-3">
                 {questions?.length > 1 && (
                   <button
@@ -913,22 +1114,9 @@ const QuizDocument = ({
                   <MaximumContentIcon />
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
-
-        {is_graded && (
-          <div className="hidden flex-wrap items-center gap-3 md:flex">
-            <div
-              className={` ${is_graded || 'invisible'} whitespace-nowrap rounded bg-info-50 px-2 py-[2px] text-center text-sm font-normal text-info`}
-            >
-              Graded Activity
-            </div>
-            {is_graded &&
-              grading_method === GRADING_METHOD.MANUAL &&
-              getGradedLabel(gradeStatus)}
-          </div>
-        )}
       </div>
 
       {isUndefined(activeQuestion) || loading ? (
@@ -953,7 +1141,7 @@ const QuizDocument = ({
                   activityId={activityId}
                   tabId={tabId}
                   quizId={quizId}
-                  showCorrect={isAFTEREACHQUESTION || isAFTERAllQUESTION}
+                  showCorrect
                   activeQuestion={activeQuestion}
                   ref={questionRef}
                   key={quizComponentKey}
@@ -978,156 +1166,176 @@ const QuizDocument = ({
 
           {/* Confirm Button */}
           <div
-            className={clsx('justify-end', {
+            className={clsx('justify-between', {
               'hidden md:flex': activeQuestion?.qType === QUESTION_TYPES.ESSAY,
               flex: activeQuestion?.qType !== QUESTION_TYPES.ESSAY,
-              'gap-3': isShowTemplate,
+              'gap-4': isShowTemplate,
               'gap-2': !isShowTemplate,
             })}
           >
-            {activeQuestion &&
-              activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
-              isShowTemplate &&
-              !activeQuestion?.confirmed && (
-                <div className="flex items-center justify-end gap-3">
-                  <ButtonTextV2
-                    title="Reset to Answer Template"
-                    onClick={onOpenResetToTemplateModal}
-                    disabled={activeQuestion?.confirmed}
-                    className="bg-transparent hover:!bg-transparent"
-                  />
-                  <ShowAnswerTemplate
-                    {...{
-                      currentTabContent: activeQuestion,
-                      essayData: questionRef.current?.getEssayData() as any,
-                    }}
-                    isQuiz
-                  />
-                </div>
-              )}
-            {gradeStatus &&
-              ![
-                GRADE_STATUS.AWAITING_GRADING,
-                GRADE_STATUS.FINISHED_GRADING,
-              ].includes(gradeStatus) &&
-              activeQuestion?.qType &&
-              [
-                QUESTION_TYPES.TRUE_FALSE,
-                QUESTION_TYPES.ONE_CHOICE,
-                QUESTION_TYPES.MULTIPLE_CHOICE,
-              ].includes(activeQuestion.qType) &&
-              !isQuestionConfirmed && (
-                <ButtonSecondary
-                  className="!px-4 !py-2 !text-sm"
-                  size={'small'}
-                  disabled={
-                    ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                      activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                      !watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-                    (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                      !watch(`${activeQuestion?.id}_${document_id}_answer`)
-                        ?.length)
-                  }
-                  onClick={() => {
-                    handleClearSelection(activeQuestion)
-                    trackGAEvent('Click Button Clear Selection Test')
-                  }}
-                  title="Clear Selection"
-                />
-              )}
-            <Tooltip
-              title={
-                isQuestionConfirmed ||
-                isAFTERAllQUESTION ||
-                (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+            <div className="flex self-center text-base font-medium text-gray">
+              <div className="mr-1 flex size-6 items-center justify-center">
+                <CircleInfoIcon />
+              </div>
+              Your Attemp: {number_of_attempts ?? 0}
+              {typeof limit_count === 'number' && limit_count > 0
+                ? `/${limit_count}`
+                : ''}
+            </div>
+            <div className="flex gap-3">
+              {activeQuestion &&
+                activeQuestion?.qType === QUESTION_TYPES.ESSAY &&
+                isShowTemplate &&
+                !activeQuestion?.confirmed && (
+                  <div className="flex items-center justify-end gap-3">
+                    <TooltipSapp title="Reset to Answer Template">
+                      <button
+                        disabled={activeQuestion?.confirmed}
+                        onClick={onOpenResetToTemplateModal}
+                        className="flex size-10 cursor-pointer items-center justify-center rounded-xl border border-gray-300 bg-white transition-all duration-300 hover:bg-gray-100"
+                      >
+                        <RestartQuizIcon />
+                      </button>
+                    </TooltipSapp>
+                    <ShowAnswerTemplate
+                      {...{
+                        currentTabContent: activeQuestion,
+                        essayData: questionRef.current?.getEssayData() as any,
+                      }}
+                      isQuiz
+                    />
+                  </div>
+                )}
+              {gradeStatus &&
                 ![
+                  GRADE_STATUS.AWAITING_GRADING,
+                  GRADE_STATUS.FINISHED_GRADING,
+                ].includes(gradeStatus) &&
+                activeQuestion?.qType &&
+                [
                   QUESTION_TYPES.TRUE_FALSE,
                   QUESTION_TYPES.ONE_CHOICE,
                   QUESTION_TYPES.MULTIPLE_CHOICE,
-                ].includes(activeQuestion?.qType) ||
-                ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
-                  activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
-                (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`) &&
-                  watch(`${activeQuestion?.id}_${document_id}_answer`).length >
-                    0)
-                  ? null
-                  : 'You should select an answer before click'
-              }
-              classNames={{ root: 'max-w-72' }}
-              trigger={'hover'}
-            >
-              <>
-                {(isQuestionConfirmed ||
-                  isAFTERAllQUESTION ||
-                  (isQuestionConfirmed && isLastQuestion)) &&
-                  !isFinishQuiz && (
-                    <SappButton
-                      className="!rounded-lg !px-4 py-2 text-sm"
-                      classNameLoading="!rounded-lg !px-4 py-2 text-sm"
-                      childClass="text-sm"
-                      title={
-                        isLastQuestion
-                          ? 'Finish'
-                          : isAFTERAllQUESTION
-                            ? 'Next Question'
-                            : 'Next'
-                      }
-                      full={false}
-                      size={'small'}
-                      onClick={() => {
-                        if (loading) {
-                          return
-                        }
-                        if (isLastQuestion) {
-                          handleQuizFinish()
-                          setRunHandleFinishQuiz((e) => e + 1)
-                          trackGAEvent('Click Button Finish Quiz Activity')
-                        } else {
-                          handleNextQuestion()
-                          trackGAEvent('Click Button Next Quiz Activity')
-                        }
-                      }}
-                      color="light-dark"
-                      loading={loading}
-                    />
-                  )}
-                {!isQuestionConfirmed && isAFTEREACHQUESTION && (
-                  <SappButton
-                    className="!rounded-lg !px-4 py-2"
-                    childClass="text-sm"
-                    title={getButttonTitle()}
-                    full={false}
+                ].includes(activeQuestion.qType) &&
+                !isQuestionConfirmed && (
+                  <ButtonSecondary
+                    className="!px-4 !py-2 !text-sm"
                     size={'small'}
-                    disabled={loading}
+                    disabled={
+                      ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                        activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                        !watch(
+                          `${activeQuestion?.id}_${document_id}_answer`,
+                        )) ||
+                      (activeQuestion?.qType ===
+                        QUESTION_TYPES.MULTIPLE_CHOICE &&
+                        !watch(`${activeQuestion?.id}_${document_id}_answer`)
+                          ?.length)
+                    }
                     onClick={() => {
-                      handleSubmit()
+                      handleClearSelection(activeQuestion)
+                      trackGAEvent('Click Button Clear Selection Test')
                     }}
-                    color="light-dark"
-                    classNameLoading="!rounded-lg !px-4 py-2"
-                    loading={loadingButton || loading}
+                    title="Clear Selection"
                   />
                 )}
-                {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
-                {isQuestionConfirmed &&
-                  isAFTERAllQUESTION &&
-                  isFinishQuiz &&
-                  hasAttemptsLeft && (
+              <Tooltip
+                title={
+                  isQuestionConfirmed ||
+                  isAFTERAllQUESTION ||
+                  (is_graded && grading_method === GRADING_METHOD.MANUAL) ||
+                  ![
+                    QUESTION_TYPES.TRUE_FALSE,
+                    QUESTION_TYPES.ONE_CHOICE,
+                    QUESTION_TYPES.MULTIPLE_CHOICE,
+                  ].includes(activeQuestion?.qType) ||
+                  ((activeQuestion?.qType === QUESTION_TYPES.TRUE_FALSE ||
+                    activeQuestion?.qType === QUESTION_TYPES.ONE_CHOICE) &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`)) ||
+                  (activeQuestion?.qType === QUESTION_TYPES.MULTIPLE_CHOICE &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`) &&
+                    watch(`${activeQuestion?.id}_${document_id}_answer`)
+                      .length > 0)
+                    ? null
+                    : 'You should select an answer before click'
+                }
+                classNames={{ root: 'max-w-72' }}
+                trigger={'hover'}
+              >
+                <>
+                  {(isQuestionConfirmed ||
+                    // isAFTERAllQUESTION ||
+                    (isQuestionConfirmed && isLastQuestion)) &&
+                    !isFinishQuiz && (
+                      <SappButton
+                        className="!rounded-lg !px-4 py-2 text-sm"
+                        classNameLoading="!rounded-lg !px-4 py-2 text-sm"
+                        childClass="text-sm"
+                        title={
+                          isLastQuestion
+                            ? 'Finish'
+                            : isAFTERAllQUESTION
+                              ? 'Next Question'
+                              : 'Next'
+                        }
+                        full={false}
+                        size={'small'}
+                        onClick={() => {
+                          if (loading) {
+                            return
+                          }
+                          if (isLastQuestion) {
+                            setIsFinishQuiz(false)
+                            handleQuizFinish()
+                            // setRunHandleFinishQuiz((e) => e + 1)
+                            trackGAEvent('Click Button Finish Quiz Activity')
+                          } else {
+                            handleNextQuestion()
+                            trackGAEvent('Click Button Next Quiz Activity')
+                          }
+                        }}
+                        color="light-dark"
+                        loading={loading}
+                      />
+                    )}
+                  {(!isQuestionConfirmed ||
+                    (number_of_attempts > 0 &&
+                      grading_method === 'MANUAL')) && (
                     <SappButton
-                      className="!rounded-lg !px-4 !py-2"
+                      className="!rounded-lg !px-4 py-2"
                       childClass="text-sm"
-                      title={'Retake'}
+                      title={getButttonTitle()}
                       full={false}
                       size={'small'}
                       disabled={loading}
                       onClick={() => {
-                        handleRetakeQuestion()
+                        handleSubmit()
                       }}
+                      color="light-dark"
+                      classNameLoading="!rounded-lg !px-4 py-2"
+                      loading={loadingButton || loading}
                     />
                   )}
-              </>
-            </Tooltip>
+                  {/* AFTER_ALL_QUESTIONS: show Retake only when all questions have corrects */}
+                  {isQuestionConfirmed &&
+                    grading_method !== 'MANUAL' &&
+                    isFinishQuiz &&
+                    hasAttemptsLeft && (
+                      <SappButton
+                        className="!rounded-lg !px-4 !py-2"
+                        childClass="text-sm"
+                        title={'Retake'}
+                        full={false}
+                        size={'small'}
+                        disabled={loading}
+                        onClick={() => {
+                          handleRetakeQuestion()
+                        }}
+                      />
+                    )}
+                </>
+              </Tooltip>
+            </div>
           </div>
         </div>
       )}

@@ -375,6 +375,8 @@ module.exports = {
           '0px 0px 6px 0px rgba(255, 62, 62, 0.40), 0px 2px 4px 0px rgba(255, 62, 62, 0.20), 0px 4px 6px 0px rgba(255, 62, 62, 0.25)',
         card: '0px 4px 16px 0px #00000014',
         header: '0px 4px 16px 0px rgba(44, 48, 0, 0.05)',
+        strong:
+          'rgba(0, 0, 0, 0.1) 0px 1px 4px, rgba(0, 0, 0, 0.2) 0px 2px 12px',
       },
       minWidth: {
         4: '16px',

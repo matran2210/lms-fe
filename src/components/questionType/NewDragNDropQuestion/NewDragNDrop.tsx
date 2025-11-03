@@ -123,6 +123,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
       const defaultSlot = (defaultValue || []).find(
         (d) => d.position === idx + 1,
       )
+
       return {
         id: el.id,
         value: defaultSlot?.value || '',
