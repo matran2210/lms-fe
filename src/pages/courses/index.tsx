@@ -230,7 +230,7 @@ const MyCourse = () => {
 
         <div
           className={
-            'mt-2 flex justify-center rounded-md bg-white shadow-medium md:justify-between lg:rounded-xl'
+            'mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl'
           }
         >
           <div
@@ -302,10 +302,11 @@ const MyCourse = () => {
           </div>
         </div>
         <div
-          className={`relative mx-auto my-0 ${isEmpty(courses)
-            ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
-            : ''
-            } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
+          className={`relative mx-auto my-0 ${
+            isEmpty(courses)
+              ? 'flex min-h-[calc(100vh-21rem)] items-center justify-center'
+              : ''
+          } ${guideStatus && guideStep === 6 && 'tour-guide-course-active'}`}
         >
           <CoursesList
             courses={courses}
