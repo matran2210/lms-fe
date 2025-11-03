@@ -831,7 +831,7 @@ const quizSlice: Slice = createSlice({
                       answer: (payload.myAnswers || [])?.map(
                         (e: any, i: number) => ({
                           answer_id: e.idAnswer,
-                          answer_position: e.postion,
+                          answer_position: e.position,
                         }),
                       ),
                       time_spent: payload.time_spent,
