@@ -52,7 +52,7 @@ const ContinueLearning = () => {
 
           {/* Link bên phải */}
           <div
-            className="mt-2 flex cursor-pointer items-center justify-start gap-2 md:mt-0 md:justify-end"
+            className="mt-2 hidden cursor-pointer items-center justify-start gap-2 md:mt-0 md:flex md:justify-end"
             onClick={() => goToCourseContent()}
           >
             <span className="text-red-800 text-sm font-semibold underline md:text-base">

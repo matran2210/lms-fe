@@ -230,7 +230,7 @@ const MyCourse = () => {
 
         <div
           className={
-            'mt-4 flex justify-center rounded-md bg-white shadow-medium md:justify-between lg:rounded-xl'
+            'mt-2 flex justify-center rounded-md bg-white shadow-medium md:mt-4 md:justify-between lg:rounded-xl'
           }
         >
           <div

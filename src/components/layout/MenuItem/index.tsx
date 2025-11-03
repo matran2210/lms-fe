@@ -478,7 +478,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 md:pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -491,7 +491,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 md:pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -512,7 +512,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="mx-auto w-[calc(100%-48px)] text-center">
+        <div className="mx-auto w-[calc(100%-70px)] text-center">
           <Divider className="my-2 bg-[#DCDDDD]" />
         </div>
       )}

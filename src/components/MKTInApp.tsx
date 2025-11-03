@@ -3,11 +3,12 @@ import { Tooltip } from 'antd'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ModalMarketingInApp from './marketing-in-app/ModalMarketingInApp'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const [iconPulse, setIconPulse] = useState(false)
-
+  const { isMobileView } = useTailwindBreakpoint()
   // Khi modal đóng → trigger hiệu ứng icon "hover"
   useEffect(() => {
     if (!openModalMarketingInApp) {
@@ -21,7 +22,10 @@ const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
     <>
       {showMKTInApp && (
         <>
-          <Tooltip title={'Marketing In App'} placement="left">
+          <Tooltip
+            title={isMobileView ? '' : 'Marketing In App'}
+            placement="left"
+          >
             <motion.div
               id="floating-button-mkt-in-app"
               onClick={() => setOpenModalMarketingInApp(true)}
