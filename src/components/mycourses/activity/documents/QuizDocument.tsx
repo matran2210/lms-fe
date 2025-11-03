@@ -81,7 +81,7 @@ type Props = {
   // Optional attempt limitation info
   is_limited?: boolean
   limit_count?: number
-  number_of_attempts?: number
+  number_of_attempts: number
   isQuizFinished?: boolean
 }
 
@@ -1014,7 +1014,7 @@ const QuizDocument = ({
           <span className="text-center font-normal text-gray-800">
             Oops look like you&apos;ve got a few unfinished questions:&nbsp;
           </span>
-          <span className="me-2 text-center font-semibold text-primary">
+          <span className="text-center font-semibold text-primary">
             {unsubittedQuestions?.length > 10
               ? unsubittedQuestions?.slice(0, 10)?.join(', ')
               : unsubittedQuestions.join(', ')}{' '}
@@ -1299,7 +1299,7 @@ const QuizDocument = ({
                       />
                     )}
                   {(!isQuestionConfirmed ||
-                    ((number_of_attempts ?? 0) > 1 &&
+                    (number_of_attempts > 0 &&
                       grading_method === 'MANUAL')) && (
                     <SappButton
                       className="!rounded-lg !px-4 py-2"
