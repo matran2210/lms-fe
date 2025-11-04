@@ -290,13 +290,13 @@ const Course = ({
       (determineButtonToShow == BUTTON_STATUS.Review ||
         determineButtonToShow == BUTTON_STATUS.Resume)
     ) {
-      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+      router.push(`${userPrefix}/courses/my-course/${classInstance?.id}/dashboard`)
       return
     } else {
-      router.push(`/courses/my-course/${classInstance?.id}`)
+      router.push(`${userPrefix}/courses/my-course/${classInstance?.id}`)
     }
 
-    router.push(`/courses/my-course/${classInstance?.id}`)
+    router.push(`${userPrefix}/courses/my-course/${classInstance?.id}`)
 
     localStorage.setItem('courseDetail', basePath)
     if (course?.course_type === 'TRIAL_COURSE') {

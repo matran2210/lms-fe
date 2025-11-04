@@ -1,7 +1,7 @@
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import { formatTime } from '@components/common/timer'
 import { trackGAEvent } from '@utils/google-analytics'
-import { roundNumber } from '@utils/helpers'
+import { getUserPrefix, roundNumber } from '@utils/helpers'
 import { useEffect, useMemo, useState } from 'react'
 import router from 'next/router'
 import { GRADE_STATUS, GRADING_METHOD, TEST_TYPE } from 'src/constants'
@@ -56,7 +56,7 @@ const PartFailed = ({
     score: number
     total_attempt_time: number
   }>()
-
+  const userPrefix = getUserPrefix(isTeacher)
   const isManualGradingAndAwaitGrading =
     quizAttempt?.grading_method === GRADING_METHOD.MANUAL &&
     quizAttempt?.attempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
@@ -168,7 +168,7 @@ const PartFailed = ({
         GRADE_STATUS.AWAITING_GRADING
     ) {
       router.push(
-        `/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
+        `${userPrefix}/courses/test/your-answers-detail/${quizAttempt?.attempt?.id}`,
       )
     } else if (
       isManualGradingAndNotFinishedGrading &&
@@ -176,11 +176,13 @@ const PartFailed = ({
         GRADE_STATUS.AWAITING_GRADING
     ) {
       if (quizAttempt?.attempt && quizAttempt?.attempt?.id) {
-        router.push(`/courses/test/test-result/${quizAttempt?.attempt?.id}`)
+        router.push(
+          `${userPrefix}/courses/test/test-result/${quizAttempt?.attempt?.id}`,
+        )
       }
     } else {
       router.push({
-        pathname: `/courses/test/test-result/${selectedResult?.value}`,
+        pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
         query: { attempt: selectedResult?.label },
       })
     }

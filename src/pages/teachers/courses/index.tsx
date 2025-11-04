@@ -15,6 +15,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
 import { FormProvider, useForm } from 'react-hook-form'
+import { buildQueryString } from '@utils/index'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -25,7 +26,10 @@ const MyCourseTeacher = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
   const methods = useForm()
-
+  const queryString = buildQueryString({
+    status: router.query?.status || '',
+    type: router.query?.type ?? '',
+  })
   /**
    * @description Gọi API My Course
    * @param {pageParam, params} pageParam: number, params: Object
@@ -94,7 +98,16 @@ const MyCourseTeacher = () => {
     },
     [fetchNextPage, hasNextPage, isFetching, isLoading],
   )
-
+  const handleSubmit = () => {
+    // Redirect to the search results page with the query as a query parameter
+    router.push(
+      `${PageLink.TEACHER_MY_COURSE}${
+        methods.watch('name')?.trim()?.length
+          ? `?name=${methods.watch('name')}`
+          : ''
+      }${queryString}`,
+    )
+  }
   /**
    * @description lấy data của course khi call API get course
    */
@@ -134,6 +147,7 @@ const MyCourseTeacher = () => {
               <SearchForm
                 placeholder={MY_COURSES.placeholderSearch}
                 formStyle="w-full flex items-center"
+                handleSubmit={handleSubmit}
                 isTeacher
               />
             </div>
