@@ -262,7 +262,7 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="mb-6 md:mb-10 mt-4 flex items-start justify-between gap-6"
+            className="mb-6 mt-4 flex items-start justify-between gap-6 md:mb-10"
             data-aos={ANIMATION.DATA_AOS}
           >
             <HeaderMobile

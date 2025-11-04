@@ -30,6 +30,8 @@ export const useNotification = () => {
   const [isViewDetail, setIsViewDetail] = useState(false)
   const [openNotification, setOpenNotification] = useState(false)
   const [selectedTab, setSelectedTab] = useState<number>(1)
+  const [hasNewNotification, setHasNewNotification] = useState<boolean>(false)
+
   const storedCount = localStorage.getItem(
     LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
   )
@@ -223,12 +225,25 @@ export const useNotification = () => {
   }, [isAlwaysShowSidebar])
 
   useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-      setNotificationUnread(parseInt(count ?? '0', 10))
-    })
+    const handleStorage = () => {
+      const count = parseInt(
+        localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT) ?? '0',
+        10,
+      )
+      setNotificationUnread(count)
+      // Nếu có thông báo mới (tăng số lượng)
+      setHasNewNotification((prev) => {
+        const storedPrev = notificationUnread
+        if (count > storedPrev) {
+          return true
+        }
+        return prev
+      })
+      setTimeout(() => setHasNewNotification(false), 3000)
+    }
 
-    return () => window.removeEventListener('storage', () => {})
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
   }, [])
 
   return {
@@ -248,5 +263,6 @@ export const useNotification = () => {
     handleBack,
     refreshNotification,
     isDesktopView,
+    hasNewNotification,
   }
 }

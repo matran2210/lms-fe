@@ -241,6 +241,7 @@ const MyCourse = () => {
               greeting="Welcome to"
               title={'General Course'}
               showShadow={false}
+              showWavingHand
               des="From here, you can access every topic, reading, and video lesson, as well as assignment questions."
             />
             {guideStatus && guideStep === 4 && (

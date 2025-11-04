@@ -147,7 +147,7 @@ const WeeklyReport = () => {
             </div>
           </div>
 
-          <div className="mt-4 md:mt-6 flex flex-col rounded-lg bg-gray-100 p-4">
+          <div className="mt-4 flex flex-col rounded-lg bg-gray-100 p-4 md:mt-6">
             <div className="mb-2 flex flex-row items-center justify-between gap-4">
               <div className="flex">
                 <div

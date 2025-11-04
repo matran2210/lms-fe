@@ -91,7 +91,7 @@ export default function Sidebar({
             </div>
           </div>
           {/* Divider */}
-          <div className="mx-auto min-w-[50px] w-[calc(100%-70px)] text-center">
+          <div className="mx-auto w-[calc(100%-70px)] min-w-[50px] text-center">
             <Divider className="my-6 bg-[#DCDDDD]" />
           </div>
           <MenuItemsList
