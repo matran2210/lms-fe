@@ -93,7 +93,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-base font-semibold leading-loose text-secondary md:text-2xl">
+              <span className="text-xl font-semibold leading-loose text-gray-800 md:text-2xl">
                 {title}
               </span>
             </div>
