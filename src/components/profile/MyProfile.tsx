@@ -240,6 +240,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="hidden xl:block"
               />
               <TextWrapper
                 title="D.O.B"
@@ -250,6 +251,7 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
                 type="date"
+                className="hide-date-icon"
               />
               <TextWrapper
                 title="Email"
@@ -379,13 +381,13 @@ const MyProfile = ({
                     control={control}
                     isEdit
                   />
-                  <TextWrapper
+                  {/* <TextWrapper
                     title="Role"
                     value={USER_TYPE[user?.type]?.label}
                     loading={loading}
                     control={control}
                     isEdit
-                  />
+                  /> */}
                   <TextWrapper
                     title="D.O.B"
                     value={
@@ -397,6 +399,7 @@ const MyProfile = ({
                     control={control}
                     isEdit
                     type="date"
+                    className="hide-date-icon"
                   />
                   <TextWrapper
                     title="Email"
@@ -479,6 +482,7 @@ const TextWrapper = ({
   isInForm = false,
   type,
   hiddenOnEdit = false,
+  className,
 }: {
   title: string
   children?: React.ReactNode
@@ -496,11 +500,12 @@ const TextWrapper = ({
   isInForm?: boolean
   type?: 'number' | 'email' | 'password' | 'text' | 'date'
   hiddenOnEdit?: boolean
+  className?: string
 }) => {
   return (
     <li
       className={clsx(
-        'group mb-6 flex gap-[1.4rem] text-sm md:mb-4 md:text-base',
+        'group mb-6 flex gap-4 text-sm sm:gap-[1.4rem] md:mb-4 md:text-base',
         {
           'transition-[margin]': isEdit,
           '!block': isInForm && isEdit,
@@ -520,7 +525,10 @@ const TextWrapper = ({
           control={control}
           name={convertHumanReadableToSnakeCase(title)}
           skeleton={loading}
-          className="h-full w-full flex-1 rounded-lg px-4 py-3"
+          className={clsx(
+            'h-full w-full flex-1 rounded-lg px-4 py-3',
+            className,
+          )}
           textSize="sm"
           defaultValue={value}
           type={type}

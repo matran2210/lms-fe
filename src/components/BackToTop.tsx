@@ -36,7 +36,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   return (
     <div
       className={clsx(
-        `fixed bottom-[300px] right-[16px] z-50 cursor-pointer`,
+        `fixed bottom-[210px] right-[16px] z-50 cursor-pointer`,
         className,
         {
           hidden: !isVisible,

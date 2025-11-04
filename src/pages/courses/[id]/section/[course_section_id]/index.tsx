@@ -559,7 +559,10 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div className="mt-4 min-h-[calc(100vh-5rem)]" data-aos={ANIMATION.DATA_AOS}>
+      <div
+        className="mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]"
+        data-aos={ANIMATION.DATA_AOS}
+      >
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
