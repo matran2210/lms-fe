@@ -1,6 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
+import SappDivider from '@components/common/Divider/Divider'
 import { replaceWhiteSpacePreWrapToNormal, runHighlight } from '@utils/index'
-import { isNull, isUndefined, uniqueId } from 'lodash'
+import { uniqueId } from 'lodash'
 import React, {
   ForwardedRef,
   forwardRef,
@@ -11,9 +12,8 @@ import React, {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
-import { IExhibitData } from 'src/type/exhibit'
 import { useTooltipModal } from 'src/hooks/useTooltipModal'
-import SappDivider from '@components/common/Divider/Divider'
+import { IExhibitData } from 'src/type/exhibit'
 import WarningSection from './WarningSection'
 
 // Types
@@ -50,6 +50,7 @@ interface IProps {
     }>,
   ) => void
   isShowWarning?: boolean
+  isShowSolution?: boolean
 }
 
 // Constants
@@ -81,6 +82,7 @@ const SelectWord = forwardRef(
       exhibitText,
       isShowWarning = false,
       onChange,
+      isShowSolution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -719,7 +721,7 @@ const SelectWord = forwardRef(
         )}
 
         {/* Solution Section */}
-        {solution && (
+        {solution && isShowSolution && (
           <>
             <SappDivider />
             <SappTitleSolution title={MY_COURSES.explanations} />

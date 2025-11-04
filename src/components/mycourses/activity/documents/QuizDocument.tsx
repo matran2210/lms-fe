@@ -22,7 +22,6 @@ import {
   RestartQuizIcon,
 } from '@assets/icons'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
-import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 import SappButton from '@components/base/button/SappButton'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
@@ -122,7 +121,7 @@ const QuizDocument = ({
   const activeQuestion = questionsList[activeQuestionIndex]
   const isLastQuestion = activeQuestionIndex === questions.length - 1
   const isQuestionConfirmed = activeQuestion?.confirmed
-  const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
+  // const [runHandleFinishQuiz, setRunHandleFinishQuiz] = useState<number>(1)
 
   const [loading, setLoading] = useState<boolean>(false)
   const [loadingButton, setLoadingButton] = useState<boolean>(false)
@@ -329,6 +328,7 @@ const QuizDocument = ({
       tabId,
       quizId || '',
     )
+    console.log('quizSoltiuon', quizQuestion)
 
     // Lọc hoặc giữ nguyên câu hỏi (ở đây hàm bạn gọi `isValidatedAnswer` đang return cùng item)
     const availableQuestions = quizQuestion?.map((item: any) => {
@@ -340,16 +340,15 @@ const QuizDocument = ({
 
     // Hàm helper: lấy giá trị trả lời hợp lệ từ câu trả lời
     const extractAnswerValue = (ans: any) => {
-      const answerQustion = ans?.[0]
-      const answerObj = answerQustion?.answer?.[0]
+      const answerQuestion = ans?.[0]
+      const answerObj = answerQuestion?.answer?.[0]
       return (
         answerObj?.answer_id ||
         answerObj?.answer_text ||
-        answerQustion?.question_answer_id ||
-        (answerQustion?.short_answer !== DEFAULT_EDITOR_VALUE &&
-          answerQustion?.short_answer) ||
-        !isNull(answerQustion?.answer_file) ||
-        isEmpty(answerQustion)
+        answerQuestion?.question_answer_id ||
+        (answerQuestion?.short_answer !== DEFAULT_EDITOR_VALUE &&
+          answerQuestion?.short_answer) ||
+        !isNull(answerQuestion?.answer_file)
       )
     }
 
@@ -363,11 +362,11 @@ const QuizDocument = ({
       setOpenFinishQuiz(true)
       setUnsubittedQuestions([])
     } else {
-      setOpenUnsubmitWarning(true)
       const unsubmitted = validityList
         ?.map((v, i) => (!v ? i + 1 : null)) // +1 để đếm từ 1
         .filter(Boolean) as number[]
       setUnsubittedQuestions(unsubmitted)
+      setOpenUnsubmitWarning(true)
     }
 
     const name = `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[0]?.id : document_id}_essay`
@@ -876,6 +875,14 @@ const QuizDocument = ({
     return 'Submit & View Answer'
   }
 
+  useEffect(() => {
+    if (!isQuestionConfirmed) return
+
+    if (isQuestionConfirmed && isLastQuestion && isAFTERAllQUESTION) {
+      handleQuizFinish()
+    }
+  }, [isQuestionConfirmed])
+
   const handleSubmit = () => {
     if (is_graded && grading_method === GRADING_METHOD.MANUAL) {
       if (gradeStatus === GRADE_STATUS.AWAITING_GRADING) {
@@ -912,8 +919,9 @@ const QuizDocument = ({
       if (isAFTERAllQUESTION && !isLastQuestion) {
         handleNextQuestion()
       }
-      if (isAFTERAllQUESTION && isLastQuestion) {
-        handleQuizFinish()
+
+      if (isAFTERAllQUESTION && isLastQuestion && !isQuestionConfirmed) {
+        handleConfirmQuestion()
       }
 
       if (isAFTEREACHQUESTION && !isLastQuestion) {
@@ -923,6 +931,7 @@ const QuizDocument = ({
       if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
         handleQuizFinish()
       }
+
       if (
         activeQuestion?.qType !== 'ESSAY' &&
         isAFTEREACHQUESTION &&
