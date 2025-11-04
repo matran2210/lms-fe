@@ -57,7 +57,7 @@ interface IProps {
 }
 
 type Role = 'question' | 'answer'
-type MatchNode = Node<{ label: string; role: Role }>
+type MatchNode = Node<{ label: string; role: Role; answer_position?: number }>
 
 interface RawItem {
   id: string
@@ -65,6 +65,7 @@ interface RawItem {
   role: Role
   color: string
   width: string
+  answer_position: number
 }
 
 interface TransformDataInput {
@@ -211,15 +212,16 @@ const MatchQuiz = forwardRef(
       })
 
       // Create answer nodes (right side, x: containerWidth - nodeWidth)
-      answers.forEach((a, index) => {
-        nodes.push({
-          id: a.id,
-          type: 'custom',
-          position: { x: containerWidth - nodeWidth, y: index * 100 },
-          data: { label: a.label, role: 'answer' },
+      answers
+        .sort((a, b) => (a.answer_position ?? 0) - (b.answer_position ?? 0))
+        .forEach((a, index) => {
+          nodes.push({
+            id: a.id,
+            type: 'custom',
+            position: { x: containerWidth - nodeWidth, y: index * 100 },
+            data: { label: a.label, role: 'answer' },
+          })
         })
-      })
-
       return nodes
     }
 
@@ -239,6 +241,7 @@ const MatchQuiz = forwardRef(
           label: item.answer,
           role: 'answer' as Role,
           color: Color.TextDefault,
+          answer_position: item?.answer_position,
         })) || []
 
       const transformed = transformDataToNodes({
@@ -341,7 +344,14 @@ const MatchQuiz = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultAnswer, corrects])
 
+    const [isNodeReady, setNodeReady] = useState(false)
+
     useEffect(() => {
+      if (nodes.length > 0) setNodeReady(true)
+    }, [nodes])
+
+    useEffect(() => {
+      if (!isNodeReady) return
       const hasCorrects = corrects && corrects.length > 0
       if (!hasCorrects) {
         // Khi chưa có corrects: tất cả node về màu đen, isDisabled false
@@ -360,7 +370,7 @@ const MatchQuiz = forwardRef(
       }
       // Khi có corrects, đổi màu node theo đúng/sai như logic cũ
       const correctMap = new Map(
-        corrects.map((item: any) => [item.id, item.answer.id]),
+        corrects.map((item: any) => [item.id, item?.answer?.id]),
       )
 
       const connectedIds = new Set<string>()
@@ -378,7 +388,7 @@ const MatchQuiz = forwardRef(
       // Đánh dấu đỏ các node đúng nhưng chưa nối
       for (const item of corrects) {
         const question_id = item.id
-        const answer_id = item.answer.id
+        const answer_id = item?.answer?.id
 
         if (!connectedIds.has(question_id)) {
           nodeColors.set(question_id, Color.Error)
@@ -404,7 +414,7 @@ const MatchQuiz = forwardRef(
           return node
         }),
       )
-    }, [corrects, edges])
+    }, [corrects, edges, isNodeReady])
 
     // Tạo flow cho các câu trả lời đúng
     const generateCorrectFlow = (corrects: any[], allNodes: Node[]) => {
@@ -414,7 +424,7 @@ const MatchQuiz = forwardRef(
 
       for (const item of corrects) {
         const sourceId = item.id
-        const targetId = item.answer.id
+        const targetId = item?.answer?.id
 
         const sourceNode = nodeMap.get(sourceId)
         const targetNode = nodeMap.get(targetId)
@@ -476,7 +486,7 @@ const MatchQuiz = forwardRef(
         corrects.some(
           (c: any) =>
             String(c.id) === String(pair.question_id) &&
-            String(c.answer.id) === String(pair.answer_id),
+            String(c?.answer?.id) === String(pair.answer_id),
         ),
       )
 

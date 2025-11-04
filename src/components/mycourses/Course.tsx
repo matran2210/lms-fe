@@ -87,7 +87,7 @@ const Course = ({
         student?.learning_progress?.total_course_sections_completed ?? 0,
       ) /
         Number(student?.learning_progress?.total_course_sections ?? 0)) *
-      100,
+        100,
       2,
     ) || 0
 
@@ -219,7 +219,7 @@ const Course = ({
           toast.success('Active thành công!')
         }
       }
-    } catch (error) { }
+    } catch (error) {}
   }
   async function extendCourse() {
     try {
@@ -228,7 +228,7 @@ const Course = ({
         refetch()
         toast.success('Gia hạn hành công!')
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   const { courseType } = useCourseContext()
@@ -254,9 +254,9 @@ const Course = ({
     const basePath = `${userPrefix}/courses/my-course/${classInstance?.id}`
     const path =
       isRedirectDashboard &&
-        !isTeacher &&
-        (determineButtonToShow === BUTTON_STATUS.Review ||
-          determineButtonToShow === BUTTON_STATUS.Resume)
+      !isTeacher &&
+      (determineButtonToShow === BUTTON_STATUS.Review ||
+        determineButtonToShow === BUTTON_STATUS.Resume)
         ? `${basePath}/dashboard`
         : basePath
 
@@ -429,17 +429,11 @@ const Course = ({
       handleCourseDetail()
     }
   }
-  // const handleClickTitle = () => {
-  //   if (isActiveStudent && enableCourse) {
-  //     courseAction()
-  //   }
-  //   trackGAEvent('Click Title Course Item')
-  // }
-  const isDesktop = screens.lg
-  const maxLengthTitle = isDesktop ? 25 : 15
+  const maxLengthTitle = 25
   const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
-  const classNameDes = `text-sm font-normal md:text-base ${enableCourse ? 'text-gray-800' : 'text-gray-300'
-    }`
+  const classNameDes = `text-sm font-normal md:text-base ${
+    enableCourse ? 'text-gray-800' : 'text-gray-300'
+  }`
 
   return (
     <>
@@ -449,13 +443,13 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`h-12 mb-4 md:h-16`}
+          classNameTitle={`mb-4 md:h-[56px]`}
           hideBadge={true}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[396px] min-h-[280px]"
+          classNameCard="lg:min-h-[434px] min-h-[280px]"
           onClick={() => {
             if (isActiveStudent) {
               courseAction()
@@ -463,7 +457,7 @@ const Course = ({
           }}
         >
           <div className="flex justify-between">
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
               <div>
                 <GraduationCapIcon
                   className={sizeIcon}
@@ -485,18 +479,18 @@ const Course = ({
             </div>
 
             {determineButtonToShow !== 'Active' && (
-              <div className="flex gap-1">
+              <div className="flex items-center gap-1">
                 <div
                   className={`mr-1 ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
-                    }`}
+                  }`}
                 >
                   <CourseTimeIcon className={sizeIcon} />
                 </div>
                 <div
                   className={`text-xs font-medium md:text-sm ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
-                    }`}
+                  }`}
                 >
                   {daysDifference > 0
                     ? daysDifference
@@ -505,15 +499,17 @@ const Course = ({
                       : 0}{' '}
                 </div>
                 <div
-                  className="text-gray text-xs font-normal md:text-sm leading-5"
-
+                  className={clsx(
+                    'text-xs font-normal md:text-sm',
+                    enableCourse ? 'text-gray' : 'text-gray-300',
+                  )}
                 >
                   {daysDifference > 1 ? 'days left' : 'day left'}
                 </div>
               </div>
             )}
           </div>
-          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-6 md:mt-8 md:h-[72px]">
+          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
             {(course?.description as string)?.length > 250 ? (
               <Tooltip
                 title={
@@ -542,25 +538,28 @@ const Course = ({
             )}
           </div>
           {enableCourse && (
-            <div className="progress mb-[30px] h-8">
+            <div className="progress mb-6 h-8">
               <div className="info mb-2 flex items-center justify-between">
                 <div className="text flex items-center">
                   <Icon
                     type={enableCourse ? iconType : 'expired'}
-                    className={`relative ${enableCourse ? 'text-[#050505]' : 'text-gray-300'
-                      }`}
+                    className={`relative ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
                   />
                   <p
-                    className={`text-sm font-normal ${enableCourse ? 'text-gray-800' : 'text-gray-300'
-                      } ml-px pl-2`}
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-gray-800' : 'text-gray-300'
+                    } ml-px pl-2`}
                   >
                     {enableCourse ? showStatus : 'Expired'}
                   </p>
                 </div>
                 <div className="number">
                   <p
-                    className={`text-sm font-normal ${enableCourse ? 'text-[#050505]' : 'text-gray-300'
-                      }`}
+                    className={`text-sm font-normal ${
+                      enableCourse ? 'text-[#050505]' : 'text-gray-300'
+                    }`}
                   >
                     {progressPart}%
                   </p>
@@ -568,8 +567,9 @@ const Course = ({
               </div>
               <div className="progressbar h-[6px] rounded-[100px] bg-gray-200">
                 <div
-                  className={`progress-percentage rounded-[100px] ${enableCourse ? 'bg-primary' : 'bg-gray-200'
-                    } h-[6px]`}
+                  className={`progress-percentage rounded-[100px] ${
+                    enableCourse ? 'bg-primary' : 'bg-gray-200'
+                  } h-[6px]`}
                   style={{ width: `${progressPart}%` }}
                 ></div>
               </div>
@@ -583,24 +583,22 @@ const Course = ({
             )}
           >
             {determineButtonToShow !== 'Disabled' && (
-              <div className="w-[84px]">
-                <ButtonSecondary
-                  full
-                  size="small"
-                  title={
-                    determineButtonToShow === 'Active'
-                      ? 'Activate'
-                      : determineButtonToShow
+              <ButtonSecondary
+                full
+                size="small"
+                title={
+                  determineButtonToShow === 'Active'
+                    ? 'Activate'
+                    : determineButtonToShow
+                }
+                className="w-full md:w-[84px]"
+                onClick={() => {
+                  if (isActiveStudent) {
+                    courseAction()
                   }
-                  className="w-full"
-                  onClick={() => {
-                    if (isActiveStudent) {
-                      courseAction()
-                    }
-                    trackGAEvent('CLick Button Course Item')
-                  }}
-                />
-              </div>
+                  trackGAEvent('CLick Button Course Item')
+                }}
+              />
             )}
           </div>
 
@@ -632,10 +630,10 @@ const Course = ({
         handleContinueFoundation={
           classInstance?.duration_type === 'FLEXIBLE'
             ? () =>
-              activeCourse(
-                classInstance?.normal_class_connections?.[0]
-                  ?.foundation_class_id,
-              )
+                activeCourse(
+                  classInstance?.normal_class_connections?.[0]
+                    ?.foundation_class_id,
+                )
             : handleContinueFoundation
         }
       />

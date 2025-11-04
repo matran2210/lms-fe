@@ -11,9 +11,12 @@ import {
   loadMoreNotification,
   markAllNotifications,
   updateStatusAll,
-  clearNotifications,
+  toggleStatusById,
+  deleteNotificationById,
+  deleteAllNotifications,
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+
 export const useNotification = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -40,7 +43,6 @@ export const useNotification = () => {
     const loadMultiplePages = async () => {
       const screenHeight = window.innerHeight
 
-      dispatch(clearNotifications())
       isRefresh && (await dispatch(getCountUnRead()))
 
       const firstPageAction = await dispatch(
@@ -81,36 +83,49 @@ export const useNotification = () => {
     } catch (error) {}
   }
 
-  const markAllRead = async () => {
+  const markAllRead = async (selectedTab: number) => {
     try {
       await dispatch(markAllNotifications())
-      dispatch(updateStatusAll())
+      if (selectedTab === 2) {
+        dispatch(deleteAllNotifications())
+      } else {
+        dispatch(updateStatusAll())
+      }
       await countNotificationsUnRead()
     } catch (error) {}
   }
 
-  const handleMarkAll = () => {
-    setOpenNotification(false)
-    markAllRead()
+  const handleMarkAll = (tab: number) => {
+    markAllRead(tab)
   }
 
-  const handleMarkById = async (ids: string[]) => {
+  const handleMarkById = async (ids: string[], selectedTab: number) => {
     try {
       const res = await NotificationAPI.markById(ids, true)
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      dispatch(getCountUnRead())
+      ids.forEach((id) => {
+        if (selectedTab === 2) {
+          dispatch(deleteNotificationById(id))
+        } else {
+          dispatch(toggleStatusById(id))
+        }
+      })
     } catch (error) {}
   }
 
-  const handleUnMarkById = async (ids: string[]) => {
+  const handleUnMarkById = async (ids: string[], selectedTab: number) => {
     try {
       const res = await NotificationAPI.markById(ids, false)
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      ids.forEach((id) => {
+        dispatch(toggleStatusById(id))
+      })
+      dispatch(getCountUnRead())
     } catch (error) {}
   }
 

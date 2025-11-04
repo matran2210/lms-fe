@@ -115,7 +115,7 @@ const WeeklyReport = () => {
           <WeeklyReportSkeleton />
         </div>
       ) : (
-        <div className="rounded-2xl p-6 lg:col-span-5">
+        <div className="rounded-2xl p-4 md:p-6 lg:col-span-5">
           <div className="mb-6 flex flex-col md:mb-5 md:pb-3">
             <div className="mb-1 text-gray-800 md:mb-0">
               <span className="text-lg font-semibold md:text-xl">
@@ -147,7 +147,7 @@ const WeeklyReport = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex flex-col rounded-lg bg-gray-100 p-4">
+          <div className="mt-4 flex flex-col rounded-lg bg-gray-100 p-4 md:mt-6">
             <div className="mb-2 flex flex-row items-center justify-between gap-4">
               <div className="flex">
                 <div

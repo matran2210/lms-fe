@@ -215,11 +215,13 @@ const EssayQuestionPreview = ({
     name:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_name ||
       fullData?.answer_file?.file_name ||
-      fullData?.data?.answer_file?.file_name,
+      fullData?.data?.answer_file?.file_name ||
+      fullData?.data?.defaultValue?.[0]?.answer_file?.file_name,
     key:
       fullData?.data?.requirements?.[index ?? 0]?.answer_file?.file_key ||
       fullData?.answer_file?.file_key ||
-      fullData?.data?.answer_file?.file_key,
+      fullData?.data?.answer_file?.file_key ||
+      fullData?.data?.defaultValue?.[0]?.answer_file?.file_key,
   }
   if (externalRef) {
     externalRef.current = {
@@ -407,7 +409,6 @@ const EssayQuestionPreview = ({
     },
     [key, stableDataId, requirementKey],
   )
-
   const renderWordEditor = useMemo(() => {
     editorRef.current?.resetContentSafe(defaultValue)
 
@@ -514,7 +515,7 @@ const EssayQuestionPreview = ({
             {data?.description && (
               <>
                 <EditorReader
-                  className="editor-wrap mb-6"
+                  className="mb-6"
                   text_editor_content={data?.description}
                   highlighted={
                     question_data?.requirements?.[index || 0]?.highlighted

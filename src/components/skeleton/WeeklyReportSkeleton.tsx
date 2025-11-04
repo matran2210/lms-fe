@@ -9,7 +9,7 @@ const WeeklyReportSkeleton = forwardRef<
   return (
     <div ref={ref} {...props} className={clsx(props.className)}>
       <div className="flex w-full flex-col gap-4 bg-[#F9F9F9] md:gap-6 xl:gap-8">
-        <div className="mt-6 rounded-2xl bg-white p-6 shadow-small xl:mt-0">
+        <div className="mt-6 rounded-2xl bg-white p-4 shadow-small md:p-6 xl:mt-0">
           <div className="mb-4">
             <Skeleton.Input style={{ width: 300 }} active size="small" />
           </div>

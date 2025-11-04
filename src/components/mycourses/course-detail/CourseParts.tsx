@@ -63,7 +63,9 @@ const CourseParts = ({
 
     if (isEmpty(listFocusSectionIds) || isOverdue)
       return (
-        <div className={'mb-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3'}>
+        <div
+          className={'mb-10 grid gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3'}
+        >
           {courses?.map((coursePart, index: number) => {
             const content = (
               <div

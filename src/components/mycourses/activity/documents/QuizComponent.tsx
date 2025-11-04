@@ -855,7 +855,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     />
                     <EssayQuestionPreview
-                      className="hidden !bg-transparent !p-0 md:block"
+                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
@@ -968,7 +968,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 <div className="mb-6">
                   <div>
                     <EditorReader
-                      className="editor-wrap text-lg font-semibold"
+                      className="text-lg font-semibold"
                       text_editor_content={activeQuestion?.question_content}
                     />
                   </div>
@@ -1024,7 +1024,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }
                     />
                     <EssayQuestionPreview
-                      className="hidden !bg-transparent !p-0 md:block"
+                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
@@ -1398,7 +1398,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   >
                     <div
                       className={clsx(
-                        'group/file relative grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                        'group/file grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                         {
                           'top-[74px]':
                             (activeQuestion?.qType === QUESTION_TYPES.ESSAY &&

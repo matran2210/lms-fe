@@ -107,7 +107,7 @@ const CardCourse = forwardRef<
           <div className={clsx('flex justify-between', classNameTitle)}>
             <h2
               className={clsx(
-                'line-clamp-2 cursor-pointer text-base font-medium md:text-2xl',
+                'line-clamp-2 cursor-pointer text-base font-semibold md:text-xl',
                 {
                   'text-gray-300': disabledTitle,
                   'text-gray-800': !disabledTitle,

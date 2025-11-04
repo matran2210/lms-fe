@@ -34,6 +34,7 @@ import noteListAnimationIcon from 'public/animations/NoteList.json'
 import testQuizListAnimationIcon from 'public/animations/TestQuizList.json'
 import notificationAnimationIcon from 'public/animations/Notification.json'
 import Lottie from 'lottie-react'
+import { clearNotifications } from 'src/redux/slice/Notification/Notification'
 
 type MenuItemProps = {
   menuItem: MenuItemType
@@ -78,6 +79,12 @@ export default function MenuItem({
       title: `Unread ${notificationUnread ? `(${notificationUnread})` : ''}`,
     },
   ]
+
+  useEffect(() => {
+    if (selectedTab) {
+      dispatch(clearNotifications())
+    }
+  }, [selectedTab])
 
   const [isExpanded, toggleExpanded] = useState(false)
   const dispatch = useAppDispatch()
@@ -507,7 +514,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -520,7 +527,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -541,7 +548,7 @@ export default function MenuItem({
   return (
     <>
       {isActivity && name === TitleSidebar.NEW_NOTE && (
-        <div className="mx-auto w-[calc(100%-48px)] text-center">
+        <div className="mx-auto w-[calc(100%-70px)] text-center">
           <Divider className="my-2 bg-[#DCDDDD]" />
         </div>
       )}
@@ -584,6 +591,9 @@ export default function MenuItem({
             name === TitleSidebar.CALENDAR ||
             // hidden when in course
             name === LANG_SIGNIN.eventTest ||
+            name === TitleSidebar.NOTIFICATION ||
+            Icon === 'avatar' ||
+            Icon === 'profile-detail' ||
             checkIsHiddenDashboard(
               JSON.parse(localStorage.getItem('courseInfo') as any),
             ) ||
@@ -658,9 +668,9 @@ export default function MenuItem({
         tabs={tabs}
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
-        handleMarkAll={handleMarkAll}
-        handleMarkById={handleMarkById}
-        handleUnMarkById={handleUnMarkById}
+        handleMarkAll={() => handleMarkAll(selectedTab)}
+        handleMarkById={(ids: string[]) => handleMarkById(ids, selectedTab)}
+        handleUnMarkById={(ids: string[]) => handleUnMarkById(ids, selectedTab)}
         handleBack={handleBack}
         isViewDetail={isViewDetail}
         setOpenNotification={setOpenNotification}

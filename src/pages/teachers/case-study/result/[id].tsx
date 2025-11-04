@@ -638,10 +638,7 @@ const CaseStudyResultTeacher = () => {
                   }}
                 >
                   <div key={topics?.id} data-key={topics?.id} className="mb-4">
-                    <EditorReader
-                      className="editor-wrap"
-                      text_editor_content={topics?.description}
-                    />
+                    <EditorReader text_editor_content={topics?.description} />
                   </div>
                   {topics?.files &&
                     topics?.files?.length > 0 &&

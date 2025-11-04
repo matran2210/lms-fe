@@ -146,7 +146,7 @@ const ResultCourse = ({
   return (
     <div className="time-allow flex items-center justify-between">
       <p className="text-sm text-gray-800 md:text-base">
-        <div className="flex h-8 items-center gap-2">
+        <div className="flex h-8 items-center">
           <div
             className={`forcus-group:text-primary ${resultList?.data?.length <= 1 ? 'text-gray' : 'text-gray-800'}`}
           >
@@ -163,11 +163,6 @@ const ResultCourse = ({
                       value: item.id,
                       label: item.name,
                     }))}
-                    // open={true}
-                    // classNames={{
-                    //   root: 'select-result-attempt',
-                    //   popup: { root: 'select-result-attempt-option' },
-                    // }}
                     className="custom-select-v2 h-8 pr-2"
                     popupClassName="select-card-course"
                     onPopupScroll={(e) => {

@@ -262,7 +262,7 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="mb-8 mt-2 flex items-start justify-between gap-6"
+            className="mb-6 mt-4 flex items-start justify-between gap-6 md:mb-10"
             data-aos={ANIMATION.DATA_AOS}
           >
             <HeaderMobile
@@ -283,7 +283,10 @@ const CourseDetail = () => {
               }
             />
           </div>
-          <div data-aos={ANIMATION.DATA_AOS} className="min-h-[calc(100vh-12rem)]">
+          <div
+            data-aos={ANIMATION.DATA_AOS}
+            className="min-h-[calc(100vh-12rem)]"
+          >
             <CourseParts
               isTrial={isTrial}
               courses={courses}

@@ -1176,10 +1176,7 @@ const CaseStudyDetail = ({ questions }: any) => {
                     // className="min-h-[calc(100vh-104px)]"
                     className="mb-4"
                   >
-                    <EditorReader
-                      className="editor-wrap"
-                      text_editor_content={topics?.description}
-                    />
+                    <EditorReader text_editor_content={topics?.description} />
                   </div>
                   <>
                     {topics?.files?.length > 0 &&

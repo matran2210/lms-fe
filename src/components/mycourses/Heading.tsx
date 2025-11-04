@@ -32,7 +32,7 @@ const Heading = ({
           <h1 className="text-center text-gray-800 md:text-left">
             {greeting}
             <span className="ml-1.5 text-primary">
-              <Tooltip title={title}>{truncateString(title, 80)}</Tooltip>
+              {truncateString(title, 80)}
             </span>
           </h1>
           {showWavingHand && (

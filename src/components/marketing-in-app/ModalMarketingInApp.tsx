@@ -1,4 +1,3 @@
-import { Modal } from 'antd'
 import type { ComponentType } from 'react'
 import type { Settings } from 'react-slick'
 // Use require to avoid type conflicts between react-slick types and React types
@@ -11,6 +10,7 @@ import ButtonText from '@components/base/button/ButtonText'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { linkCdnMktInApp } from '@pages/marketing-in-app'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const ModalMarketingInApp = ({
   open,
@@ -50,58 +50,114 @@ const ModalMarketingInApp = ({
   ]
 
   return (
-    <Modal
-      width={widthModal}
-      footer={false}
-      open={open}
-      centered
-      closeIcon={false}
-      rootClassName="modal-marketing-in-app"
-    >
-      <SlickSlider {...settings}>
-        {listSlides.map((src, index) => (
-          <div key={index}>
-            <Image
-              className="rounded-lg md:rounded-2xl"
-              src={src}
-              width={widthImg}
-              height={heightImg}
-              alt={`slide-${index}`}
-              priority
-            />
-          </div>
-        ))}
-      </SlickSlider>
-
-      <div className="flex flex-col items-center justify-center pt-6 lg:px-[120px] lg:pt-8">
-        <div className="self-stretch text-center text-2xl font-bold text-gray-800 md:leading-[34px] lg:text-[32px] lg:leading-[46px]">
-          SAPP LMS has updated to a new version.
-        </div>
-
-        <div className="mt-4 self-stretch text-center text-sm font-normal leading-normal text-gray-800 md:text-base lg:mt-6">
-          We’ve been listening. This update brings you a cleaner look, improved performance, and smarter learning tools, all designed with you in mind to create a seamless and engaging learning experience.
-        </div>
-
-        <div className="mt-6 flex w-full flex-col items-center justify-center gap-3  md:mt-8 md:px-10 lg:mt-10 lg:px-[100px]">
-          <ButtonPrimary
-            title="Explore now"
-            className="w-full"
-            size={isMobileView || isTabletView ? 'small' : 'medium'}
-            onClick={() => {
-              handleClose()
-              if (!isMobileView) window.open('/marketing-in-app', '_blank')
-            }}
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* overlay */}
+          <motion.div
+            className="fixed inset-0 z-[1050] bg-overlay-control"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setOpen(false)}
           />
-          {!isMobileView && (
-            <ButtonText
-              size={isTabletView ? 'small' : 'medium'}
-              onClick={handleClose}
-              title="Skip"
-            />
-          )}
-        </div>
-      </div>
-    </Modal>
+
+          {/* hiệu ứng grow */}
+          <motion.div
+            className="modal-marketing-in-app"
+            initial={{
+              scale: 0,
+              opacity: 0,
+              bottom: 160, // start ở bottom-40
+              right: 16, // start ở right-16
+              transformOrigin: 'bottom right',
+              x: 0,
+              y: 0,
+            }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+              top: '50%', // animate tới top 50%
+              left: '50%', // animate tới left 50%
+              // dịch để căn giữa chính xác theo kích thước element
+              x: '-50%',
+              y: '-50%',
+            }}
+            exit={{
+              scale: 0,
+              opacity: 0,
+              top: 'auto',
+              left: 'auto',
+              bottom: 160,
+              right: 16,
+              x: 0,
+              y: 0,
+              transition: {
+                duration: 0.5,
+                ease: [0.25, 0.1, 0.25, 1],
+              },
+            }}
+            transition={{
+              duration: 0.3,
+            }}
+            style={{
+              width: widthModal,
+              transformOrigin: 'bottom right',
+            }}
+          >
+            {/* Giữ nguyên phần nội dung modal */}
+
+            <SlickSlider {...settings}>
+              {listSlides.map((src, index) => (
+                <div key={index}>
+                  <Image
+                    className="rounded-lg md:rounded-2xl"
+                    src={src}
+                    width={widthImg}
+                    height={heightImg}
+                    alt={`slide-${index}`}
+                    priority
+                  />
+                </div>
+              ))}
+            </SlickSlider>
+            <div className="flex flex-col items-center justify-center pt-6 lg:px-[120px] lg:pt-8">
+              <div className="self-stretch text-center text-2xl font-bold text-gray-800 md:leading-[34px] lg:text-[32px] lg:leading-[46px]">
+                SAPP LMS has updated to a new version.
+              </div>
+
+              <div className="mt-4 self-stretch text-center text-sm font-normal leading-normal text-gray-800 md:text-base lg:mt-6">
+                We’ve been listening. This update brings you a cleaner look,
+                improved performance, and smarter learning tools, all designed
+                with you in mind to create a seamless and engaging learning
+                experience.
+              </div>
+
+              <div className="mt-6 flex w-full flex-col items-center justify-center gap-3  md:mt-8 md:px-10 lg:mt-10 lg:px-[100px]">
+                <ButtonPrimary
+                  title="Explore now"
+                  className="w-full"
+                  size={isMobileView || isTabletView ? 'small' : 'medium'}
+                  onClick={() => {
+                    handleClose()
+                    if (!isMobileView)
+                      window.open('/marketing-in-app', '_blank')
+                  }}
+                />
+                {!isMobileView && (
+                  <ButtonText
+                    size={isTabletView ? 'small' : 'medium'}
+                    onClick={handleClose}
+                    title="Skip"
+                  />
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }
 

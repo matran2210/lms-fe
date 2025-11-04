@@ -84,7 +84,10 @@ const ShowAnswerTemplate = ({
   return (
     <>
       <div className={clsx('flex', className)}>
-        <ButtonSecondary className="bg-white" onClick={handleToggleModal}>
+        <ButtonSecondary
+          className="bg-white font-semibold"
+          onClick={handleToggleModal}
+        >
           Show Answer Template
         </ButtonSecondary>
       </div>
