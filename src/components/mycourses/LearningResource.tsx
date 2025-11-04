@@ -293,6 +293,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         rootClassName={'responsive-drawer-center'}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
+        placement={isMobileView ? 'bottom' : 'right'}
       >
         <FormProvider {...methods}>
           {!isOpenFilter ? (
@@ -307,7 +308,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
                 />
               )}
               {isEmpty(resources?.resources) && !loading ? (
-                <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
+                <div className="flex min-h-[calc(100vh-42rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
                   <NoDataV2 />
                 </div>
               ) : (
