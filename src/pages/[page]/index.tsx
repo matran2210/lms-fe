@@ -428,7 +428,7 @@ const ProfilePage = () => {
       </div>
       {isMobileView && openFullScreenMobile.open && (
         <FullScreenMobile
-          className="bg-gray-canvas px-4 pb-4"
+          className="bg-gray-canvas px-4 pb-4 h-full"
           title={openFullScreenMobile.title}
           open={openFullScreenMobile.open}
           onClose={onCloseFullScreenMobile}
