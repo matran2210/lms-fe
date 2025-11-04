@@ -29,7 +29,7 @@ const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
             <motion.div
               id="floating-button-mkt-in-app"
               onClick={() => setOpenModalMarketingInApp(true)}
-              className="bottom-40 right-[16px]"
+              className="bottom-[150px] right-[16px]"
               animate={{
                 scale: iconPulse ? 1.1 : 1,
               }}
