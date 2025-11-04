@@ -151,10 +151,10 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
                 onClick={handleButtonClick}
                 className={`${visible ? 'clicked' : ''} bottom-[90px] right-[16px]`}
               >
-                <div className="plus flex size-12 items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
+                <div className="plus flex size-[52px] items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                   <svg
-                    width="48"
-                    height="48"
+                    width="52"
+                    height="52"
                     viewBox="0 0 34 34"
                     fill="#33475B"
                     xmlns="http://www.w3.org/2000/svg"
