@@ -65,6 +65,7 @@ export const excludedPathsHelp = [
   '/certificates/[id]',
   '/case-study/result/[id]',
   '/teachers',
+  '/courses/[id]/activity/[activityId]',
 ]
 
 const activityPath = ['/courses/[id]/activity/[activityId]']

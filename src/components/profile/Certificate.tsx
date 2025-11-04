@@ -198,7 +198,7 @@ const CertificateItem = ({
   return (
     <div
       className={clsx(
-        'flex flex-col gap-4 rounded-xl bg-white p-4 shadow-small md:gap-6 md:rounded-none md:bg-transparent md:p-0 md:shadow-none',
+        'flex flex-col gap-3 rounded-xl bg-white p-4 shadow-small md:gap-6 md:rounded-none md:bg-transparent md:p-0 md:shadow-none',
         {
           'md:border-b md:border-b-gray-300 md:pb-6': !isLastItem,
         },
@@ -240,7 +240,7 @@ const CertificateItem = ({
       />
       <InfoWrapper
         value={
-          <div className="flex items-center justify-center gap-1">
+          <div className="flex items-center justify-center gap-[11px]">
             <div
               onClick={() =>
                 record?.certificate_url && downloadImage(record.certificate_url)
@@ -248,11 +248,11 @@ const CertificateItem = ({
             >
               <Icon
                 type="download"
-                className="cursor-pointer text-secondary hover:text-primary"
+                className="cursor-pointer !text-icon hover:text-primary"
               />
             </div>
 
-            <Divider type="vertical" className="border-black" />
+            <Divider type="vertical" className="!mx-0 bg-icon" />
             <div
               onClick={() =>
                 window.open(
@@ -263,7 +263,7 @@ const CertificateItem = ({
             >
               <Icon
                 type="eye-view"
-                className="cursor-pointer text-secondary hover:text-primary"
+                className="cursor-pointer !text-icon hover:text-primary"
               />
             </div>
           </div>

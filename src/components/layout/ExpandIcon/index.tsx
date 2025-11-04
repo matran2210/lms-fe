@@ -17,6 +17,7 @@ type ExpandIconPros = {
   handleClick?: () => void | undefined
   type: string
   className?: string
+  extraClassName?: string
 }
 
 export default function ExpandIcon({
@@ -24,6 +25,7 @@ export default function ExpandIcon({
   handleClick,
   type,
   className,
+  extraClassName,
 }: ExpandIconPros) {
   return (
     <>
@@ -248,7 +250,12 @@ export default function ExpandIcon({
         </svg>
       )}
 
-      {type === 'notification' && <NotificationIcon className={className} />}
+      {type === 'notification' && (
+        <NotificationIcon
+          className={className}
+          extraClassName={extraClassName}
+        />
+      )}
       {type === 'setting' && (
         <svg
           xmlns="http://www.w3.org/2000/svg"

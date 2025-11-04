@@ -181,7 +181,7 @@ const ResultsTable = ({
 
   return (
     <FormProvider {...methods}>
-      <div className="my-4 flex items-center justify-end gap-4">
+      <div className="my-4 hidden items-center justify-end gap-4 md:flex">
         <div className="text-sm leading-[22px] tracking-[0%] text-gray-800">
           {totalRecords} Results
         </div>
@@ -212,7 +212,7 @@ const ResultsTable = ({
       {/* Main content */}
       {!isLoading && !isEmpty(flatData) && (
         <div className="mt-6 flex flex-col gap-6 md:mt-0">
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             {flatData?.map((item: any) =>
               item?.quiz === null ? (
                 <CollapseActivity key={item?.id} resultData={item} />
