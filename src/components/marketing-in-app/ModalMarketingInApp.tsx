@@ -41,7 +41,7 @@ const ModalMarketingInApp = ({
       : isTabletView
         ? 182
         : 310
- console.log('isShortScreen', isShortScreen)
+
   const handleClose = () => {
     setOpen(false)
     localStorage.setItem('openModalMarketingInApp', 'true')
@@ -152,7 +152,7 @@ const ModalMarketingInApp = ({
                 experience.
               </div>
 
-              <div className="mt-6 flex w-full flex-col items-center justify-center gap-3 md:mt-8 short:lg:px-[145px] md:px-10 lg:mt-10 lg:px-[100px] short:mt-6">
+              <div className="mt-6 flex w-full flex-col items-center justify-center gap-3 md:mt-8 md:px-10 lg:mt-10 lg:px-[100px] short:mt-6 short:lg:px-[145px]">
                 <ButtonPrimary
                   title="Explore now"
                   className="w-full"
