@@ -457,7 +457,7 @@ const Course = ({
           }}
         >
           <div className="flex justify-between">
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               <div>
                 <GraduationCapIcon
                   className={sizeIcon}
@@ -479,7 +479,7 @@ const Course = ({
             </div>
 
             {determineButtonToShow !== 'Active' && (
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center gap-1">
                 <div
                   className={`mr-1 ${
                     enableCourse ? 'text-icon' : 'text-gray-300'
@@ -591,7 +591,7 @@ const Course = ({
                     ? 'Activate'
                     : determineButtonToShow
                 }
-                className="w-full"
+                className="w-full md:w-[84px]"
                 onClick={() => {
                   if (isActiveStudent) {
                     courseAction()
