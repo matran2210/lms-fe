@@ -12,22 +12,14 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   const router = useRouter()
   const scriptRef = useRef<HTMLScriptElement | null>(null)
   const { asPath } = router
-  const [isTeacherPage, isTestPage, isCaseStudyPage] = [
+  const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     '/teachers',
     '/test',
     '/case-study',
   ].map((p) => asPath.includes(p))
-
-  // Activity ID cần ẩn help
-  const excludedActivityId = 'b9e2800f-d78e-45ef-9ff7-37ee231060eb'
-  const isExcludedActivity =
-    router.pathname === '/courses/[id]/activity/[activityId]' &&
-    router.query?.activityId === excludedActivityId
-
   const hiddenChatbot =
     excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
-    isTeacherPage ||
-    isExcludedActivity
+    isTeacherPage
 
   // Handle visibility changes
   const handleVisibleChange = (newVisible: boolean) => {
@@ -131,7 +123,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
   }, [visible])
 
   // Early return after all hooks are declared
-  if (isTeacherPage || isTestPage || isCaseStudyPage || isExcludedActivity) {
+  if (isTeacherPage || isTestPage || isCaseStudyPage || isActivityPage) {
     return null
   }
 
