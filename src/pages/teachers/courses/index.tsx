@@ -14,6 +14,7 @@ import { MY_COURSES } from 'src/constants/lang'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { ITabs } from 'src/type'
+import { FormProvider, useForm } from 'react-hook-form'
 
 const DEFAULT_PAGESIZE = 9
 const breadcrumbs: ITabs[] = [
@@ -23,6 +24,7 @@ const breadcrumbs: ITabs[] = [
 const MyCourseTeacher = () => {
   const router = useRouter()
   const observer = useRef<IntersectionObserver>()
+  const methods = useForm()
 
   /**
    * @description Gọi API My Course
@@ -126,39 +128,41 @@ const MyCourseTeacher = () => {
   return (
     <SappLoadingGlobal loading={isLoading}>
       <LayoutTeacher title="My Course" breadcrumbs={breadcrumbs}>
-        <div className="header border-default border-b bg-white">
-          <div className={`relative my-0 flex`}>
-            <SearchForm
-              placeholder={MY_COURSES.placeholderSearch}
-              formStyle="w-full flex items-center"
+        <FormProvider {...methods}>
+          <div className="header border-default border-b bg-white">
+            <div className={`relative my-0 flex`}>
+              <SearchForm
+                placeholder={MY_COURSES.placeholderSearch}
+                formStyle="w-full flex items-center"
+                isTeacher
+              />
+            </div>
+          </div>
+          <div className="main my-0">
+            <div className="flex justify-end">
+              <div className={`relative pb-4 pt-6`}>
+                <Filter courses={data?.pages?.[0]?.category} isTeacher />
+              </div>
+            </div>
+          </div>
+          <div
+            // data-aos={ANIMATION.DATA_AOS}
+            className={`relative my-0 pt-6 ${
+              isEmpty(courses)
+                ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
+                : ''
+            }`}
+          >
+            <CoursesList
+              courses={courses}
+              lastElementRef={lastElementRef}
+              refetch={refetch}
+              isFetching={isFetching}
+              isFetchingNextPage={isFetchingNextPage}
               isTeacher
             />
           </div>
-        </div>
-        <div className="main my-0">
-          <div className="flex justify-end">
-            <div className={`relative pb-4 pt-6`}>
-              <Filter courses={data?.pages?.[0]?.category} isTeacher />
-            </div>
-          </div>
-        </div>
-        <div
-          // data-aos={ANIMATION.DATA_AOS}
-          className={`relative my-0 pt-6 ${
-            isEmpty(courses)
-              ? 'flex min-h-[calc(100vh-13rem)] items-center justify-center'
-              : ''
-          }`}
-        >
-          <CoursesList
-            courses={courses}
-            lastElementRef={lastElementRef}
-            refetch={refetch}
-            isFetching={isFetching}
-            isFetchingNextPage={isFetchingNextPage}
-            isTeacher
-          />
-        </div>
+        </FormProvider>
       </LayoutTeacher>
     </SappLoadingGlobal>
   )

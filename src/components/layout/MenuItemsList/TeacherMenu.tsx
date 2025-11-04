@@ -165,13 +165,6 @@ export default function TeacherMenu({
         active: isCurrent(PageLink.TEACHER_MY_COURSE),
       },
       {
-        key: 'MyCourse',
-        icon: <MyCourseTeacherIcon selected={selectedKey === 'MyCourse'} />,
-        link: PageLink.COURSES,
-        active: router.pathname === PageLink.COURSES,
-        title: TitleSidebar.COURSES,
-      },
-      {
         key: 'Book',
         title: TitleTeacherSidebar.MYCLASS,
         icon: <BookMenuIcon selected={selectedKey === 'Book'} />,
