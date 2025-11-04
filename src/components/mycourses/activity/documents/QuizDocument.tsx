@@ -358,7 +358,6 @@ const QuizDocument = ({
     )
 
     const allValid = every(validityList)
-    console.log('availableQuestions', validityList)
     if (allValid) {
       setOpenFinishQuiz(true)
       setUnsubittedQuestions([])
@@ -849,7 +848,7 @@ const QuizDocument = ({
       }
 
       if (isLastQuestion && isQuestionConfirmed && isAFTEREACHQUESTION) {
-        return 'Finish2222'
+        return 'Finish'
       }
       if (
         activeQuestion?.qType !== 'ESSAY' &&
