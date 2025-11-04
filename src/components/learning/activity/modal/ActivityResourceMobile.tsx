@@ -1,6 +1,6 @@
 import React from 'react'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import NoData from 'src/common/NoData'
+import NoDataV2 from 'src/common/NodataV2'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
@@ -78,7 +78,7 @@ const ActivityResourceMobile = ({
           )
         ) : (
           <div className="text-center">
-            <NoData />
+            <NoDataV2 />
           </div>
         )}
       </div>
