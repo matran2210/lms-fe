@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import React, { useState } from 'react'
 import { ControllerRenderProps } from 'react-hook-form'
 import SAPPLabel from '../Label/SAPPLabel'
+import { EyeV2Icon, CloseEyeIcon } from '@assets/icons'
 
 interface IProps {
   inputRef?: React.LegacyRef<HTMLInputElement>
@@ -63,17 +64,18 @@ const SAPPTextFiled = ({
       {label && (
         <SAPPLabel title={label} className={labelClass} required={required} />
       )}
-      <div className={`${className ?? ''} relative flex w-full items-center`}>
+      <div className={clsx('relative flex w-full items-center', className)}>
         {placeholderIcon && (
           <span className="absolute left-4 text-[#6b7280]">
             {placeholderIcon}
           </span>
         )}
+
         <input
           {...field}
           ref={inputRef}
           type={
-            type == 'password' ? (showPassword ? 'text' : 'password') : type
+            type === 'password' ? (showPassword ? 'text' : 'password') : type
           }
           value={value ?? ''}
           defaultValue={value ? defaultValue : undefined}
@@ -87,6 +89,7 @@ const SAPPTextFiled = ({
               'bg-[#F9F9F9]': disabled,
               'bg-transparent': !disabled,
               'pl-12': placeholderIcon,
+              'pr-12': type === 'password', // thêm padding phải để tránh icon đè chữ
             },
           )}
           placeholder={placeholder}
@@ -97,13 +100,16 @@ const SAPPTextFiled = ({
           onFocus={onFocus}
           onBlur={onBlur}
         />
-        {type == 'password' && (
-          <div
-            className={`${
-              showPassword ? 'bg-show-password' : 'bg-hide-password'
-            } absolute right-4 top-2/4 h-4 max-h-4 min-h-4 w-4 min-w-4 max-w-4 -translate-y-2/4 cursor-pointer`}
+
+        {/* 👁 Icon hiện/ẩn mật khẩu */}
+        {type === 'password' && (
+          <button
+            type="button"
             onClick={() => setShowPassword(!showPassword)}
-          ></div>
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A1A1A1] hover:text-[#050505] focus:outline-none"
+          >
+            {showPassword ? <CloseEyeIcon /> : <EyeV2Icon />}
+          </button>
         )}
       </div>
     </>

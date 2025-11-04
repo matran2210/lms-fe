@@ -212,7 +212,7 @@ const ResultsTable = ({
       {/* Main content */}
       {!isLoading && !isEmpty(flatData) && (
         <div className="mt-6 flex flex-col gap-6 md:mt-0">
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             {flatData?.map((item: any) =>
               item?.quiz === null ? (
                 <CollapseActivity key={item?.id} resultData={item} />
