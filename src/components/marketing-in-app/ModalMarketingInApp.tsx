@@ -9,7 +9,7 @@ import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'
 import { Dispatch, SetStateAction } from 'react'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { linkCdnMktInApp } from '@pages/marketing-in-app'
+import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const ModalMarketingInApp = ({
@@ -142,7 +142,7 @@ const ModalMarketingInApp = ({
                   onClick={() => {
                     handleClose()
                     if (!isMobileView)
-                      window.open('/marketing-in-app', '_blank')
+                      window.open('/lms-pro-new-version', '_blank')
                   }}
                 />
                 {!isMobileView && (

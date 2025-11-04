@@ -10008,7 +10008,7 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.5.14:
+preview-part@1.5.14:
   version "1.5.14"
   resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.14.tgz#3ccc03ef77fdf97de2a3fc130930bfe7ee771ec6"
   integrity sha512-A/eof89MHMg2kYP6dUAFy/IcEInesEOj0FfoRIt7Agk0L0kEHFAnJ4H2k70nWBTEEjY7gpnHqTVK6bi+f+COTw==

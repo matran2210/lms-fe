@@ -1,4 +1,4 @@
-import { listTab } from '@pages/marketing-in-app'
+import { listTab } from '@pages/lms-pro-new-version'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 

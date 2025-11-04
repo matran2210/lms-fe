@@ -1,6 +1,6 @@
 import type { ComponentType } from 'react'
 import type { Settings } from 'react-slick'
-import { linkCdnMktInApp } from '@pages/marketing-in-app'
+import { linkCdnMktInApp } from '@pages/lms-pro-new-version'
 import Image from 'next/image'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 // Use require to avoid type conflicts between react-slick types and React types
