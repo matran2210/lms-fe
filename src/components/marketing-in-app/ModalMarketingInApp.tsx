@@ -55,7 +55,7 @@ const ModalMarketingInApp = ({
         <>
           {/* overlay */}
           <motion.div
-            className="fixed inset-0 z-[1050] bg-overlay-control"
+            className="fixed inset-0 bg-overlay-control"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
