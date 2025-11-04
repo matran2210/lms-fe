@@ -32,6 +32,7 @@ import eventTestAminationIcon from 'public/animations/EventTest.json'
 import examInfoAnimationIcon from 'public/animations/ExamInfo.json'
 import noteListAnimationIcon from 'public/animations/NoteList.json'
 import testQuizListAnimationIcon from 'public/animations/TestQuizList.json'
+import notificationAnimationIcon from 'public/animations/Notification.json'
 import Lottie from 'lottie-react'
 import { clearNotifications } from 'src/redux/slice/Notification/Notification'
 
@@ -91,7 +92,15 @@ export default function MenuItem({
   const router = useRouter()
   const isNested = subItems && subItems?.length > 0
   const selected = router.pathname === url
+  const [badgeClass, setBadgeClass] = useState('w-4 h-4 -top-[5px] -right-1.5') // Default width
 
+  useEffect(() => {
+    if (notificationUnread > 9) {
+      setBadgeClass('w-6 h-6 -top-3.5 -right-3.5')
+    } else {
+      setBadgeClass('w-4 h-4 -top-[5px] -right-1.5') // Default width for single digits
+    }
+  }, [notificationUnread])
   const onClick = () => {
     toggleExpanded((prev) => !prev)
   }
@@ -343,6 +352,28 @@ export default function MenuItem({
             className={animationClass}
           />
         )
+      case 'notification':
+        return (
+          <div className="relative">
+            <Lottie
+              animationData={notificationAnimationIcon}
+              loop
+              autoplay
+              className={animationClass}
+            />
+            {notificationUnread > 0 && (
+              <span
+                className={clsx(
+                  'absolute aspect-1 items-center justify-center rounded-full bg-[#D35563] text-xs text-white',
+                  'hidden group-hover/menuItem:flex',
+                  badgeClass,
+                )}
+              >
+                {notificationUnread > 99 ? '99+' : notificationUnread}
+              </span>
+            )}
+          </div>
+        )
 
       default:
         return (
@@ -358,7 +389,8 @@ export default function MenuItem({
   }
 
   const isShowHoverIcon = () => {
-    return !['notification'].includes(Icon)
+    return true
+    // return !['notification'].includes(Icon)
   }
 
   const renderMenuContent = () => {
@@ -425,6 +457,10 @@ export default function MenuItem({
                         !selected && isShowHoverIcon(),
                     },
                   )}
+                  extraClassName={clsx({
+                    'group-hover/menuItem:hidden':
+                      !selected && isShowHoverIcon(),
+                  })}
                 />
               </>
               // <ExpandIcon
@@ -478,7 +514,7 @@ export default function MenuItem({
             {Icon === 'profile-detail' ? (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 md:pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {
@@ -491,7 +527,7 @@ export default function MenuItem({
             ) : (
               <span
                 className={clsx(
-                  `label invisible line-clamp-1 pl-3 md:pl-4 text-base font-normal opacity-0 transition-all duration-200 ease-in-out ${
+                  `label invisible line-clamp-1 pl-3 text-base font-normal opacity-0 transition-all duration-200 ease-in-out md:pl-4 ${
                     selected ? 'bg-primary text-white' : 'text-gray-800'
                   }`,
                   {

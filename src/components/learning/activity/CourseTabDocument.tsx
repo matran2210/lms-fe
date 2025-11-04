@@ -159,7 +159,7 @@ const CourseTabDocument = ({
       return {
         key: tab?.id,
         label: (
-          <div className="learning-act-tab-label text-base font-normal capitalize">
+          <div className="learning-act-tab-label text-sm font-normal capitalize md:text-base">
             <Tooltip
               rootClassName="max-w-md"
               classNames={{ body: '!py-1 !shadow-medium' }}
