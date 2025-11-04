@@ -119,7 +119,13 @@ const Page = () => {
   }
 
   return (
-    <Layout title="Calendar" size="2xl" showSidebar={isAlwaysShowSidebar}>
+    <Layout
+      title="Calendar"
+      size="2xl"
+      showSidebar={isAlwaysShowSidebar}
+      className="h-full"
+      childClassName="h-full"
+    >
       <div
         className="mx-auto my-0 h-full max-w-[1644px]"
         id="calendar-root"
@@ -134,7 +140,12 @@ const Page = () => {
             />
           </div>
           <div
-            className="flex h-fit flex-1 items-stretch justify-center gap-6 pb-5 lg:justify-between"
+            className={clsx(
+              'flex h-fit flex-1 items-stretch justify-center pb-5 lg:justify-between lg:gap-6',
+              {
+                'gap-6': open.isOpen && isAlwaysShowSidebar,
+              },
+            )}
             data-aos={ANIMATION.DATA_AOS}
           >
             <div

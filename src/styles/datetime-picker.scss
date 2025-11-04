@@ -101,3 +101,24 @@
 .ant-picker-dropdown {
   @apply z-[1000000];
 }
+
+@layer components {
+  // @media (max-width: 768px) {
+  .hide-date-icon {
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+      -webkit-appearance: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &::-webkit-clear-button {
+      display: none;
+    }
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  // }
+}
