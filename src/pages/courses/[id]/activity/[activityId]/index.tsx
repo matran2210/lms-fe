@@ -602,7 +602,7 @@ const ActivityPage = () => {
               onBack={
                 focusOnlyDiscussion ? onUnFocusDiscussion : onBackToSection
               }
-              className={clsx('mb-0 md:mb-2 lg:mb-0', {
+              className={clsx('mb-0 mt-4 md:mb-2 md:mt-0 lg:mb-0', {
                 'px-4': focusOnlyDiscussion,
               })}
             />
@@ -848,9 +848,7 @@ const ActivityPage = () => {
         </div>
         <BackToTop
           scrollContainerRef={scrollRef}
-          className={clsx(
-            '!bottom-24 !right-4 md:!bottom-[80px] md:!right-8 lg:!bottom-[160px]',
-          )}
+          className={clsx('!bottom-[230px] !right-4')}
         />
         <PopupLockContent
           showForm={openPopupCTA}
