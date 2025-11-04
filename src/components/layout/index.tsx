@@ -17,6 +17,7 @@ interface LayoutProps {
   fullWidth?: boolean
   handleToggleSidebar?: () => void
   className?: string
+  childClassName?: string
 }
 
 // eslint-disable-next-line import/no-unused-modules
@@ -29,6 +30,7 @@ export default function Layout(props: LayoutProps): ReactElement {
     fullWidth = false,
     handleToggleSidebar,
     className,
+    childClassName,
   } = props
   const router = useRouter()
   const { isShowMenuContent } = useTailwindBreakpoint()
@@ -113,7 +115,7 @@ export default function Layout(props: LayoutProps): ReactElement {
           })}
         >
           <div className={clsx(`${paddingTop} bg-[#F9F9F9]`, className)}>
-            <div className={clsx('ml-0')}>{children}</div>
+            <div className={clsx('ml-0', childClassName)}>{children}</div>
           </div>
         </div>
       </div>
