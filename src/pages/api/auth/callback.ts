@@ -7,7 +7,7 @@ import axios from 'axios'
 // ) {
 //   const { code, state: shareUrl } = req.query
 //   try {
-//     const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`
+//     const redirectUri = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/api/auth/callback`
 
 //     // 1. Exchange code lấy access_token
 //     const tokenRes = await axios.post(
@@ -84,14 +84,14 @@ import axios from 'axios'
 //       <html>
 //         <head>
 //           <script>
-//             window.location.href = '${process.env.NEXT_PUBLIC_BASE_URL}/share-linkedin?accessToken=${accessToken}&urn=${urn}&asset=${encodeURIComponent(asset)}&shareUrl=${encodeURIComponent(shareUrl as string)}';
+//             window.location.href = '${process.env.NEXT_PUBLIC_WEB_LMS_URL}/share-linkedin?accessToken=${accessToken}&urn=${urn}&asset=${encodeURIComponent(asset)}&shareUrl=${encodeURIComponent(shareUrl as string)}';
 //           </script>
 //         </head>
 //       </html>
 //     `)
 //   } catch (err) {
 //     return res.send(`<script>
-//       window.opener.postMessage({ status: 'error' }, "${process.env.NEXT_PUBLIC_BASE_URL}");
+//       window.opener.postMessage({ status: 'error' }, "${process.env.NEXT_PUBLIC_WEB_LMS_URL}");
 //       window.close();
 //     </script>`)
 //   }
@@ -103,7 +103,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { code } = req.query
-  const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`
+  const redirectUri = `${process.env.NEXT_PUBLIC_WEB_LMS_URL}/api/auth/callback`
 
   try {
     const tokenRes = await axios.post(
