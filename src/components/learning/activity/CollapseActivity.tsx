@@ -144,7 +144,7 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
   ]
   return (
     <Collapse
-      className="bg-white p-2 shadow-small"
+      className="rounded-xl bg-white p-0 py-1 shadow-small md:p-2 md:py-3"
       bordered={false}
       expandIconPosition="end"
       activeKey={activeKey}
