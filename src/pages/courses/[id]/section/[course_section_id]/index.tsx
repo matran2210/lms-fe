@@ -560,7 +560,7 @@ const CoursePartDetail = () => {
       ) : null}
 
       <div
-        className="mt-4 min-h-[calc(100vh-5rem)]"
+        className="mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]"
         data-aos={ANIMATION.DATA_AOS}
       >
         {isLoading ? (

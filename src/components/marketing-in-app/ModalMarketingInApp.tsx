@@ -19,10 +19,28 @@ const ModalMarketingInApp = ({
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) => {
-  const { isMobileView, isTabletView } = useTailwindBreakpoint()
-  const widthModal = isMobileView ? 335 : isTabletView ? 600 : 900
-  const widthImg = isMobileView ? 265 : isTabletView ? 505 : 776
-  const heightImg = isMobileView ? 97 : isTabletView ? 182 : 310
+  const { isMobileView, isTabletView, isShortScreen } = useTailwindBreakpoint()
+  const widthModal = isShortScreen
+    ? 679
+    : isMobileView
+      ? 335
+      : isTabletView
+        ? 600
+        : 900
+  const widthImg = isShortScreen
+    ? 574
+    : isMobileView
+      ? 265
+      : isTabletView
+        ? 505
+        : 776
+  const heightImg = isShortScreen
+    ? 202
+    : isMobileView
+      ? 97
+      : isTabletView
+        ? 182
+        : 310
 
   const handleClose = () => {
     setOpen(false)
@@ -122,8 +140,8 @@ const ModalMarketingInApp = ({
                 </div>
               ))}
             </SlickSlider>
-            <div className="flex flex-col items-center justify-center pt-6 lg:px-[120px] lg:pt-8">
-              <div className="self-stretch text-center text-2xl font-bold text-gray-800 md:leading-[34px] lg:text-[32px] lg:leading-[46px]">
+            <div className="flex flex-col items-center justify-center pt-6 lg:px-[120px] lg:pt-8 short:px-[20px] short:pt-4">
+              <div className="self-stretch text-center text-2xl font-bold text-gray-800 md:leading-[34px] lg:text-[32px] lg:leading-[46px] short:text-2xl">
                 SAPP LMS has updated to a new version.
               </div>
 
@@ -134,11 +152,15 @@ const ModalMarketingInApp = ({
                 experience.
               </div>
 
-              <div className="mt-6 flex w-full flex-col items-center justify-center gap-3  md:mt-8 md:px-10 lg:mt-10 lg:px-[100px]">
+              <div className="mt-6 flex w-full flex-col items-center justify-center gap-3 md:mt-8 md:px-10 lg:mt-10 lg:px-[100px] short:mt-6 short:lg:px-[145px]">
                 <ButtonPrimary
                   title="Explore now"
                   className="w-full"
-                  size={isMobileView || isTabletView ? 'small' : 'medium'}
+                  size={
+                    isMobileView || isTabletView || isShortScreen
+                      ? 'small'
+                      : 'medium'
+                  }
                   onClick={() => {
                     handleClose()
                     if (!isMobileView)
@@ -147,7 +169,7 @@ const ModalMarketingInApp = ({
                 />
                 {!isMobileView && (
                   <ButtonText
-                    size={isTabletView ? 'small' : 'medium'}
+                    size={isTabletView || isShortScreen ? 'small' : 'medium'}
                     onClick={handleClose}
                     title="Skip"
                   />

@@ -119,10 +119,11 @@ const FilterCourse = ({
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}
           title={<span className="text-xl">Filter</span>}
-          rootClassName={'responsive-drawer-center'}
+          rootClassName={'responsive-drawer-center drawer-bottom-0'}
           isShowBtnClose
           closable
           classNameHeader="mb-4"
+          placement="bottom"
         >
           <div className="relative flex h-full flex-col justify-between">
             <div>

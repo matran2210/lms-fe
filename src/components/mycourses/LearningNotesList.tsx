@@ -372,6 +372,7 @@ const LearningNotesList = () => {
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
       closable={isAlwaysShowSidebar}
+      placement={isMobileView ? 'bottom' : 'right'}
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
@@ -389,7 +390,7 @@ const LearningNotesList = () => {
             <div
               ref={scrollRef}
               className={clsx(
-                'result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
+                'result-scroll flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
                 {
                   'overflow-y-auto': !isEmpty(notesListData?.notes),
                 },
@@ -530,7 +531,7 @@ const LearningNotesList = () => {
                   )}
                 </>
               ) : (
-                <div className="flex min-h-[calc(100vh-40rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
+                <div className="flex min-h-[calc(100vh-42rem)] items-center justify-center lg:min-h-[calc(100vh-12rem)]">
                   <NoDataV2 />
                 </div>
               )}

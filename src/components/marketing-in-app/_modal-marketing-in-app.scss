@@ -11,5 +11,5 @@
   @apply overflow-hidden;
 }
 .modal-marketing-in-app {
-  @apply fixed z-[1050] h-[415px] overflow-hidden !rounded-3xl bg-white p-5 md:h-[484px] md:p-6 lg:h-[672px] lg:p-8;
+  @apply fixed z-[1050] h-[415px] overflow-hidden !rounded-3xl bg-white p-5 md:h-[484px] md:p-6 lg:h-[672px] lg:p-8 short:h-[494px] short:p-6;
 }

@@ -68,12 +68,13 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 issued by {issuedBy}!
               </div>
             </div>
-            <div className="flex items-stretch justify-center gap-4">
+            <div className="flex w-full items-stretch justify-center gap-4">
               <ButtonPrimary
                 size="medium"
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}
+                className="px-[37.5px] py-2 sm:!px-[29px]"
               >
                 Download
               </ButtonPrimary>
@@ -84,7 +85,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
                 <Button
                   icon={<Icon type="share" />}
                   type="text"
-                  className="h-full underline"
+                  className="h-full px-0 underline"
                 >
                   Share Certificate
                 </Button>

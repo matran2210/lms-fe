@@ -77,6 +77,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 icon={<Icon type="download" />}
                 iconPosition="end"
                 onClick={onDownload}
+                className="!px-[29px]"
               >
                 Download
               </ButtonPrimary>
@@ -88,7 +89,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
                 className="h-auto"
                 link={`${process.env.NEXT_PUBLIC_WEB_LMS_URL}/certificates/${certificate?.id}`}
               >
-                <div className="cursor-pointer rounded-full p-2 hover:bg-gray-200">
+                <div className="cursor-pointer rounded-full hover:bg-gray-200">
                   <CopyIcon />
                 </div>
               </ClickToCopyButton>

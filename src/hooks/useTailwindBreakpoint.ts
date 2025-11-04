@@ -37,7 +37,7 @@ export const useTailwindBreakpoint = ({
     typeof window !== 'undefined'
       ? getBreakpointFromWidth(window.innerWidth)
       : 'base'
-
+  const [isShortScreen, setIsShortScreen] = useState(false)
   const [breakpoint, setBreakpoint] = useState<
     | 'sm'
     | 'md'
@@ -54,6 +54,8 @@ export const useTailwindBreakpoint = ({
   useLayoutEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
+      const height = window.innerHeight
+      setIsShortScreen(height < 700)
       setBreakpoint(getBreakpointFromWidth(width))
     }
 
@@ -89,5 +91,6 @@ export const useTailwindBreakpoint = ({
     isXLMiddleView,
     isMDMiddleView,
     isDesktopView,
+    isShortScreen,
   }
 }
