@@ -6862,10 +6862,10 @@ expand-template@^2.0.3:
   resolved "https://registry.yarnpkg.com/expand-template/-/expand-template-2.0.3.tgz#6e14b3fcee0f3a6340ecb57d2e8918692052a47c"
   integrity sha512-XYfuKMvj4O35f/pOXLObndIRvyQ+/+6AhODh+OKWj9S9498pHHn/IMszH+gt0fBCRWMNfk1ZSp5x3AifmnI2vg==
 
-explanation-package@^1.3.5:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.5.tgz#5ce9648c254fe2df150d61da032cbb6425e541db"
-  integrity sha512-eUUn2fm82L8IKX0inxL26l4hiZaVf9U/enYmnVqROeyC2qH0KjNU0m2388WRcqaUGzS/ATXwNJX7dh0z/fI2fA==
+explanation-package@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.3.6.tgz#29cc6699504226856cb94816f2700ad2e3284aab"
+  integrity sha512-uXXYCeqqOFron5pZdSqqoBwuXyiaaIG+jLB74bUMxnePdRXVQ9hep6t4htdeZPkSDc7Rg5L+RosssYovc15vxA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -10008,10 +10008,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@1.5.13:
-  version "1.5.13"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.13.tgz#340d584d0da8262068a8893665020836c1b8358c"
-  integrity sha512-jigw6JIL5cFRM/2XSUoOFBwef036mxOMpQmho3uoKMb2YPkiW8N/rPfcuQmM5PXZnWORX3TMe9ELo1eRq+7dMA==
+preview-part@^1.5.14:
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.14.tgz#3ccc03ef77fdf97de2a3fc130930bfe7ee771ec6"
+  integrity sha512-A/eof89MHMg2kYP6dUAFy/IcEInesEOj0FfoRIt7Agk0L0kEHFAnJ4H2k70nWBTEEjY7gpnHqTVK6bi+f+COTw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
