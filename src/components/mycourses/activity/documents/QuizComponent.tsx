@@ -27,6 +27,7 @@ import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
+import { checkSheetAnswered } from '@utils/helpers/quiz-test/helper'
 import { isEmptyParagraph } from '@utils/index'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
 import clsx from 'clsx'
@@ -298,17 +299,12 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             return (
               getValues?.(name) ||
               answer?.short_answer ||
-              requirement?.answer_template ||
-              activeQuestion?.myAnswers?.[0]?.short_answer ||
-              activeQuestion?.answer_template
+              requirement?.answer_template
             )
           case RESPONSE_OPTION.SHEET:
             const answerSheet = activeQuestion?.myAnswers?.find(
               (ans: IEssayAnswer) => {
-                if (
-                  ans.requirement_id ===
-                  activeQuestion?.requirements?.[data.index - 1]?.id
-                ) {
+                if (ans.requirement_id === id) {
                   return ans
                 }
               },
@@ -319,14 +315,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
             return (
               getValues?.(name) ||
               answerSheet?.short_answer ||
-              requirementSheet?.answer_template ||
-              activeQuestion?.myAnswers?.[0]?.short_answer ||
-              activeQuestion?.answer_template
+              requirementSheet?.answer_template
             )
         }
       }
       const defaultValue = getDefaultValue(data.id)
-      setValue?.(name, defaultValue)
+
+      // setValue?.(name, defaultValue)
       handleResetEssay(name, defaultValue)
       essayDataRef.current = {
         req: data,
@@ -765,36 +760,30 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 switch (activeQuestion?.response_option) {
                   case RESPONSE_OPTION.WORD:
                     return (
-                      watch?.(`${activeQuestion?.id}_e?.id_essay`) ??
+                      getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
                       activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
                           return ans
                         }
-                      })?.short_answer ??
-                      activeQuestion?.myAnswers?.[0]?.short_answer
+                      })?.short_answer ||
+                      e?.answer_template
                     )
                     break
                   case RESPONSE_OPTION.SHEET:
-                    if (isGetToVerify) {
-                      return activeQuestion?.myAnswers?.find(
-                        (ans: IEssayAnswer) => {
-                          if (ans.requirement_id === e?.id) {
-                            return ans
-                          }
-                        },
-                      )?.short_answer
-                    }
-
-                    return (
-                      // getValues(
-                      //   `${activeQuestion?.id}_${activeQuestion?.requirements?.length ? activeQuestion?.requirements?.[essayData?.index ?? 0]?.id : document_id}_essay`,
-                      // ) ??
-                      activeQuestion?.myAnswers?.find((ans: IEssayAnswer) => {
+                    const answerSheet = activeQuestion?.myAnswers?.find(
+                      (ans: IEssayAnswer) => {
                         if (ans.requirement_id === e?.id) {
                           return ans
                         }
-                      })?.short_answer ??
-                      activeQuestion?.myAnswers?.[0]?.short_answer
+                      },
+                    )
+                    if (isGetToVerify) {
+                      return answerSheet?.short_answer || e?.answer_template
+                    }
+
+                    return (
+                      // getValues?.(`${activeQuestion?.id}_${e?.id}_essay`) ||
+                      answerSheet?.short_answer || e.answer_template
                     )
                     break
                 }
@@ -814,9 +803,13 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) {
                   const currentValue = getDefaultValue(true)
 
-                  if (currentValue && currentValue !== defaultSheetData) {
+                  if (
+                    currentValue &&
+                    currentValue !== defaultSheetData &&
+                    checkSheetAnswered(currentValue)
+                  ) {
                     try {
-                      return currentValue
+                      return true
                     } catch {
                       return false
                     }
