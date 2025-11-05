@@ -1,15 +1,13 @@
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormRadioGroup from '@components/base/radiobutton/HookFormRadioGroup'
+import SappDivider from '@components/common/Divider/Divider'
 import { getUppercaseByNumber, runHighlight } from '@utils/index'
-import { Divider } from 'antd'
+import clsx from 'clsx'
 import { useEffect, useMemo } from 'react'
-import { FieldValues, UseFormGetValues } from 'react-hook-form'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
 import { IExhibitData } from 'src/type/exhibit'
 import WarningSection from './WarningSection'
-import clsx from 'clsx'
-import SappDivider from '@components/common/Divider/Divider'
 export type IPreviewProp = {
   data: any
   control: any

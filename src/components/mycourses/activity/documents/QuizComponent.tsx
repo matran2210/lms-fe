@@ -6,7 +6,6 @@ import {
   DownloadIcon,
   FileTextIcon,
 } from '@assets/icons'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
@@ -25,7 +24,6 @@ import DragDropQuestion, {
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
-import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
 import { isEmptyParagraph } from '@utils/index'
 import { Alert, Collapse, CollapseProps, Divider, Modal, Tabs } from 'antd'
@@ -62,7 +60,7 @@ import {
 import { pushNotes } from 'src/redux/slice/Course/NotesList'
 
 import { IEssayAnswer } from 'src/type/answer'
-import { IFile, IRequirment } from 'src/type/course'
+import { IFile } from 'src/type/course'
 import { IExhibit, IExhibitData } from 'src/type/exhibit'
 import { v4 as uuidv4 } from 'uuid'
 

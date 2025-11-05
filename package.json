@@ -1,8 +1,8 @@
 {
-  "name": "next-core-project",
-  "version": "1.0.0",
+  "name": "lms-frontend",
+  "version": "3.3.0",
   "private": false,
-  "author": "catfish",
+  "author": "sapp",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",

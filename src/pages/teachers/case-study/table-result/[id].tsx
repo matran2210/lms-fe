@@ -162,7 +162,7 @@ const TableCaseStudyResultTeacher = () => {
                 {topicAttemptDetail?.question_topic?.name}
               </div>
               <div className="pt-2.5 text-base">
-                <span className="text-gray-1 pt-1.5 font-normal">
+                <span className="pt-1.5 font-normal text-gray-1">
                   Your Score:
                 </span>{' '}
                 <span className="font-bold text-state-error">
@@ -285,7 +285,7 @@ const TableCaseStudyResultTeacher = () => {
                           </>
                         )}
                       </td>
-                      <td className="text-gray-1 m-6 pr-4 text-start">
+                      <td className="m-6 pr-4 text-start text-gray-1">
                         {e?.question?.qType !== 'ESSAY' && (
                           <div className="ml-1 flex items-center">
                             <img

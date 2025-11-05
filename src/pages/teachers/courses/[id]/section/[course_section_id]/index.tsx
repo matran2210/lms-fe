@@ -554,7 +554,7 @@ const CoursePartDetailTeacher = () => {
             />
           </TextSkeleton>
           {loadingLearningOutcome && (
-            <div className="bg-gray-2 mb-2 mt-4 h-px w-full"></div>
+            <div className="mb-2 mt-4 h-px w-full bg-gray-2"></div>
           )}
           <TextSkeleton
             loading={loadingLearningOutcome}

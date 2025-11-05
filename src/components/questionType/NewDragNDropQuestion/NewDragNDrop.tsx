@@ -1,15 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import EditorReader from '@components/base/editor/EditorReader'
+import SappDivider from '@components/common/Divider/Divider'
 import { DndContext, DragEndEvent, useDroppable } from '@dnd-kit/core'
 import parse, { Element } from 'html-react-parser'
-import DroppableSlot from './DroppableSlot'
-import DraggableItem from './DraggableItem'
-import EditorReader from '@components/base/editor/EditorReader'
-import { QuestionTopic } from 'src/type'
+import React, { useEffect, useMemo, useState } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from 'src/constants/lang'
-import clsx from 'clsx'
+import { QuestionTopic } from 'src/type'
 import CorrectAnswer from './CorrectAnswer'
-import SappDivider from '@components/common/Divider/Divider'
+import DraggableItem from './DraggableItem'
+import DroppableSlot from './DroppableSlot'
 
 interface Answer {
   id: string

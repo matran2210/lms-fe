@@ -198,7 +198,7 @@ const CourseDetail = () => {
       canShowExam(data?.pages?.[0]?.courseDetail?.remind_choosing_exam)
     ) {
       timeout = setTimeout(() => {
-        setShowSelectExam(true)
+        setShowSelectExamPopup(true)
       }, DELAY_TIME_DISPLAY_POPUP)
     }
 
@@ -298,9 +298,9 @@ const CourseDetail = () => {
         </>
       )}
 
-      {isSuccess &&
-        data.pages[0].courseDetail.remind_choosing_exam &&
-        showSelectExamPopup && <SelectExamPopup courseData={data} />}
+      {isSuccess && showSelectExamPopup && (
+        <SelectExamPopup courseData={data} />
+      )}
 
       {data?.pages?.[0]?.courseDetail?.data?.program && (
         <PopupModalTest

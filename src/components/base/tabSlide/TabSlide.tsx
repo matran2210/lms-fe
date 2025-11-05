@@ -120,7 +120,7 @@ const TabSlide = ({
     if (elementRef?.current && sortedData.length > 0) {
       const el = elementRef.current
       el &&
-        setHasScrollBar(
+        setHasScrollBar?.(
           el.scrollWidth > el.getBoundingClientRect().width &&
             sortedData?.length > 0,
         )

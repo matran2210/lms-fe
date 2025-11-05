@@ -205,6 +205,16 @@ const Course = ({
   const isActiveStudent = renderStatusUser(student?.type ?? '')
 
   async function activeCourse(foundation_class_id?: string) {
+    if (course?.course_type === 'TRIAL_COURSE') {
+      localStorage.setItem(
+        'daysDifference',
+        course?.classes?.[0]?.flexible_days as any,
+      )
+      localStorage.setItem('showPinTrial', 'true')
+    } else {
+      localStorage.removeItem('daysDifference')
+      localStorage.removeItem('showPinTrial')
+    }
     try {
       const params = {
         classId: foundation_class_id ? foundation_class_id : classInstance?.id,
@@ -214,6 +224,7 @@ const Course = ({
         router.push(
           `${userPrefix}/courses/my-course/${foundation_class_id || classInstance?.id}`,
         )
+
         refetch()
         if (course?.course_categories?.[0]?.name !== 'ACCA') {
           toast.success('Active thành công!')
@@ -279,13 +290,15 @@ const Course = ({
       (determineButtonToShow == BUTTON_STATUS.Review ||
         determineButtonToShow == BUTTON_STATUS.Resume)
     ) {
-      router.push(`/courses/my-course/${classInstance?.id}/dashboard`)
+      router.push(
+        `${userPrefix}/courses/my-course/${classInstance?.id}/dashboard`,
+      )
       return
     } else {
-      router.push(`/courses/my-course/${classInstance?.id}`)
+      router.push(`${userPrefix}/courses/my-course/${classInstance?.id}`)
     }
 
-    router.push(`/courses/my-course/${classInstance?.id}`)
+    router.push(`${userPrefix}/courses/my-course/${classInstance?.id}`)
 
     localStorage.setItem('courseDetail', basePath)
     if (course?.course_type === 'TRIAL_COURSE') {

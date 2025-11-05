@@ -67,6 +67,9 @@ const Recommendation = ({
                 )
                 toast.success('Request sent successfully')
                 setOpenRecomendation(false)
+                router.push(
+                  `/courses/test/your-answers-detail/${quizAttemptId}`,
+                )
               })}
             >
               {/* Header */}

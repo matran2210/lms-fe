@@ -57,7 +57,7 @@ const PopupSelectRetakeOrContinueAttempt = ({
       cancelButtonClass={'!px-0'}
     >
       <div>
-        <div className="text-gray-1 mt-10 text-center text-base">
+        <div className="mt-10 text-center text-base text-gray-1">
           <div>Your last attempt was unexpectedly ended. </div>
           <div>
             Do you want to continue from where you left off in the previous one?

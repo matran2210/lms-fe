@@ -1,4 +1,11 @@
+import { CloseIcon, UploadIcon } from '@assets/icons'
+import EditorReader from '@components/base/editor/EditorReader'
 import HookFormEditor from '@components/base/editor/HookFormEditorV2'
+import HookFormExcel from '@components/base/textfield/HookFormExcel'
+import SappDivider from '@components/common/Divider/Divider'
+import { runHighlight } from '@utils/index'
+import clsx from 'clsx'
+import { cloneDeep, isNull, isUndefined, uniqueId } from 'lodash'
 import React, {
   memo,
   useCallback,
@@ -7,27 +14,19 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
-import EditorReader from '@components/base/editor/EditorReader'
-import { runHighlight } from '@utils/index'
 import { Controller } from 'react-hook-form'
-import { cloneDeep, isEmpty, isNull, isUndefined, uniqueId } from 'lodash'
-import { UploadAPI } from 'src/pages/api/upload'
-import { CloseIcon, UploadIcon } from '@assets/icons'
-import { Divider } from 'antd'
-import clsx from 'clsx'
 import toast from 'react-hot-toast'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
-import { MY_COURSES } from 'src/constants/lang'
-import { useAppDispatch } from 'src/redux/hook'
-import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
+import { DISPLAY_TYPE, RESPONSE_OPTION } from 'src/constants'
 import {
   DEFAULT_EDITOR_VALUE,
   generateSheetId,
   SheetData,
 } from 'src/constants/attempt'
-import HookFormExcel from '@components/base/textfield/HookFormExcel'
-import SappDivider from '@components/common/Divider/Divider'
+import { MY_COURSES } from 'src/constants/lang'
+import { UploadAPI } from 'src/pages/api/upload'
+import { useAppDispatch } from 'src/redux/hook'
+import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 
 export type IPreviewProp = {
   data: any

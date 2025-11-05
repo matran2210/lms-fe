@@ -3,7 +3,6 @@ import { ANIMATION } from 'src/constants'
 import { NoCoursesAvailableIcon } from '@components/icons'
 
 const NoCoursesAvailable = () => {
-
   return (
     <div
       data-aos={ANIMATION.DATA_AOS}
