@@ -1,7 +1,7 @@
 import EditorReader from '@components/base/editor/EditorReader'
-import SappModalV3 from '@components/base/modal/SappModalV3'
-import React from 'react'
-import SappIcon from 'src/common/SappIcon'
+import { CloseIconV2 } from '@components/icons'
+import { Modal } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProps {
   isOpen: boolean
@@ -12,33 +12,40 @@ interface IProps {
 
 const ModalRecomment = ({
   currentContent,
-  handleCloseRecomment,
   isOpen,
   isComment,
+  handleCloseRecomment,
 }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   return (
-    <SappModalV3
+    <Modal
       width={1250}
       open={isOpen}
-      handleCancel={handleCloseRecomment}
-      onOk={() => {}}
-      icon={undefined}
-      header={''}
-      showFooter={false}
-      classNameModal="sapp-modal--comment"
+      className="sapp-modal max-w-[874px]"
+      centered
+      footer={false}
+      onCancel={handleCloseRecomment}
+      closable={!isMobileView}
+      closeIcon={<CloseIconV2 />}
     >
-      <div className="flex items-center justify-between bg-gray-3 px-8 py-[13px]">
-        <div className="flex items-center text-base font-medium text-bw-1">
+      <div className="mb-6 flex items-center justify-between md:mb-10">
+        <h1 className="text-center text-xl font-bold text-gray-800 md:text-3xl">
           {isComment ? 'Examiner’s Comment' : 'Recommendation'}
-        </div>
-        <div className="cursor-pointer" onClick={handleCloseRecomment}>
-          <SappIcon icon="closeicon" />
+        </h1>
+        <div className="block md:hidden" onClick={handleCloseRecomment}>
+          <CloseIconV2 />
         </div>
       </div>
-      <div className="max-h-[570px] overflow-y-auto p-8">
-        <EditorReader text_editor_content={currentContent ?? ''} />
+
+      <div className="flex flex-col gap-4">
+        <div className="max-h-[570px] overflow-y-auto">
+          <EditorReader
+            text_editor_content={currentContent ?? ''}
+            className="text-sm text-gray-800 md:text-base"
+          />
+        </div>
       </div>
-    </SappModalV3>
+    </Modal>
   )
 }
 

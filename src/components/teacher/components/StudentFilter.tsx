@@ -13,7 +13,7 @@ const StudentFilter: React.FC<StudentFilterProps> = ({ control }) => {
         name="text"
         placeholder={'Search student'}
         placeholderIcon={<SearchIcon />}
-        inputClassName="placeholder:text-sm placeholder:text-gray-11 placeholder:font-medium"
+        inputClassName="placeholder:text-sm placeholder:text-[#99A1B7] placeholder:font-medium"
         style={{
           borderRadius: '6px',
           height: 40,

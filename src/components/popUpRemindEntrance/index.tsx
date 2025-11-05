@@ -1,4 +1,5 @@
 import { LoginIcon } from '@assets/icons'
+import { AccessIcon } from '@assets/icons/entranceTest'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { Dispatch, SetStateAction } from 'react'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -36,16 +37,23 @@ const PopUpRemindEntrance = ({
       onOk={onOk}
       //   showCancelButton={true}
       fullWidthBtn={true}
-      buttonSize="extra"
-      icon={<LoginIcon />}
+      icon={
+        <AccessIcon className="h-12 w-12 md:h-auto md:w-auto" fill="#FFB700" />
+      }
       header="Take Your Test"
+      buttonSize="medium"
     >
-      <div className="mb-7 mt-4 text-center text-sm font-normal text-gray-1">
+      <div className="text-center text-sm font-normal text-gray-800 md:text-base">
         <span>
           You have
-          <span className="font-semibold text-bw-1"> {count}</span>
+          <span className="font-semibold text-primary"> {count}</span>
         </span>
-        <span> entrance tests that haven’t been taken, complete them now</span>
+        <span>
+          {' '}
+          entrance tests that haven&rsquo;t been taken,{' '}
+          <br className="hidden md:block" />
+          complete them now.
+        </span>
       </div>
     </SappModalV3>
   )

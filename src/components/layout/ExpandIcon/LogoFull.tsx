@@ -1,8 +1,9 @@
+import clsx from 'clsx'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { PageLink } from 'src/constants'
 
-const LogoFull = () => {
+const LogoFull = ({ className }: { className?: string }) => {
   const router = useRouter()
   const pathname = router.pathname
 
@@ -14,7 +15,10 @@ const LogoFull = () => {
         height="37"
         fill="none"
         viewBox="0 0 57 37"
-        className="logo-full invisible shrink-0 cursor-pointer opacity-0 transition-all duration-150"
+        className={clsx(
+          'logo-full pointer-events-none shrink-0 cursor-pointer opacity-0 transition-opacity duration-200 ease-in-out',
+          className,
+        )}
       >
         <path
           fill="#404041"

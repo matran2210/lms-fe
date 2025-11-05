@@ -1,11 +1,12 @@
 import BackToTop from '@components/BackToTop'
 import Help from '@components/Help'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import AntConfigProvider from '@components/base/Provider/AntConfigProvider'
 import SappConfirmDialogContainer from '@components/base/confirm-dialog/SappConfirmDialogContainer'
 import Metadata from '@components/common/Metadata'
 import PinnedNotifications from '@components/layout/PinnedNotifications'
-import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import LearningNotesList from '@components/mycourses/LearningNotesList'
 import PopupCompletedCourse from '@components/mycourses/PopupCompletedCourse'
 import { PinnedNotifyProvider } from '@contexts/PinnedNotifyContext'
@@ -16,14 +17,18 @@ import '@styles/globals.scss'
 import { CERTIFICATE_DETAIL } from '@utils/constants'
 import initializeGA from '@utils/google-analytics'
 import { pageview } from '@utils/index'
+import '@xyflow/react/dist/style.css'
 import Aos from 'aos'
 import 'aos/dist/aos.css'
+import 'entrance-test-result-package/dist/index.css'
+import 'quiz-result-package/dist/index.css'
 import type { AppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TagManager, { TagManagerArgs } from 'react-gtm-module'
 import { Toaster } from 'react-hot-toast'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import 'sapp-common-package/dist/index.css'
 import { io } from 'socket.io-client'
 import {
   ANIMATION,
@@ -43,12 +48,16 @@ import 'src/utils/helpers/keycloak'
 import { AuthenticationManager } from 'src/utils/helpers/keycloak'
 import { URL } from 'url'
 import { store, wrapper } from '../redux/store'
+import 'sapp-notification/dist/index.css'
+import '@xyflow/react/dist/style.css'
 import 'sapp-common-package/dist/sapp-editor.css'
 import 'sapp-common-package/dist/index.css'
 import 'preview-part/dist/index.css'
-import 'sapp-notification/dist/index.css'
 import { ErrorBoundary } from '@sentry/nextjs'
 import ErrorRedirectPage from './error-redirect'
+import { CourseNoteProvider } from '@contexts/CourseNoteContext'
+import { PreviousSectionRouteProvider } from '@contexts/PreviousSectionRouteContext'
+import MKTInApp from '@components/MKTInApp'
 
 export const excludedPathsHelp = [
   '/test/[id]',
@@ -56,7 +65,10 @@ export const excludedPathsHelp = [
   '/certificates/[id]',
   '/case-study/result/[id]',
   '/teachers',
+  '/courses/[id]/activity/[activityId]',
 ]
+
+const activityPath = ['/courses/[id]/activity/[activityId]']
 type MyAppProps = AppProps & {
   Component: {
     layout?: String
@@ -154,9 +166,14 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     }
   }, [])
 
+  const showBackToTop = !activityPath.some((path) =>
+    router.pathname.includes(path),
+  )
+
   const showHelp =
     !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
     !isTeacherPage // Add condition to hide help on teacher pages
+  const showMKTInApp = showHelp
   const hiddenChatbot =
     excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
     isTeacherPage
@@ -300,35 +317,35 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         <AntConfigProvider>
           <PinnedNotifyProvider>
             <CourseProvider>
-              <QueryClientProvider client={queryClient}>
-                <SocketContext.Provider value={socket}>
-                  <Toaster
-                    toastOptions={{
-                      style: {
-                        maxWidth: '400px', // Tăng chiều rộng của toast
-                      },
-                    }}
-                  />
-                  <SappConfirmDialogContainer />
-                  <RouteGuard>
-                    <>
-                      <div className="relative">
-                        <PinnedNotifications />
-                        <CtaTrial />
-                        <Component {...pageProps} />
-                      </div>
-                      {showHelp && (
+              <CourseNoteProvider>
+                <QueryClientProvider client={queryClient}>
+                  <SocketContext.Provider value={socket}>
+                    <PreviousSectionRouteProvider>
+                      <Toaster
+                        toastOptions={{
+                          style: {
+                            maxWidth: '400px', // Tăng chiều rộng của toast
+                          },
+                        }}
+                      />
+                      <SappConfirmDialogContainer />
+                      <RouteGuard>
                         <>
-                          <BackToTop />
+                          <div className="relative">
+                            <PinnedNotifications />
+                            <Component {...pageProps} />
+                          </div>
+                          {showBackToTop && <BackToTop />}
                           <Help showHelp={showHelp} />
+                          <MKTInApp showMKTInApp={showMKTInApp} />
+                          <LearningNotesList />
+                          <PopupCompletedCourse />
                         </>
-                      )}
-                      <LearningNotesList />
-                      <PopupCompletedCourse />
-                    </>
-                  </RouteGuard>
-                </SocketContext.Provider>
-              </QueryClientProvider>
+                      </RouteGuard>
+                    </PreviousSectionRouteProvider>
+                  </SocketContext.Provider>
+                </QueryClientProvider>
+              </CourseNoteProvider>
             </CourseProvider>
           </PinnedNotifyProvider>
         </AntConfigProvider>

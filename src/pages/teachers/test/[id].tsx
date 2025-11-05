@@ -87,6 +87,7 @@ import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 
 declare global {
   interface Window {
@@ -2584,7 +2585,7 @@ const TestDetail = () => {
                   data={filteredTabs}
                   currentTab={currentPage}
                   setCurrentTab={setCurrentPage}
-                  optionShowAll={<OptionShowAll />}
+                  // optionShowAll={<OptionShowAll />}
                   handleChangeTab={async (id?: string) => {
                     if (id) {
                       setScratchPads('')
@@ -2594,9 +2595,8 @@ const TestDetail = () => {
                     }
                   }}
                   activeShowAll={activeShowAll}
-                  setActiveShowAll={setActiveShowAll}
-                  setValueFilter={setValueFilter}
                   isScrollCenter={false}
+                  setHasScrollBar={undefined}
                 />
               </div>
             )}
@@ -2700,11 +2700,18 @@ const TestDetail = () => {
                       {currentTabContent &&
                         currentTabContent.qType === QUESTION_TYPES.ESSAY &&
                         isShowTemplate && (
-                          <div className="mt-8 flex justify-end">
-                            <ButtonPrimaryV2
+                          <div className="mt-8 flex items-center justify-end gap-3">
+                            <ButtonTextV2
                               disabled={currentTabContent.is_viewed_answer}
                               title="Reset to Answer Template"
                               onClick={onOpenResetToTemplateModal}
+                              className="bg-transparent hover:!bg-transparent"
+                            />
+                            <ShowAnswerTemplate
+                              {...{
+                                currentTabContent,
+                                essayData,
+                              }}
                             />
                           </div>
                         )}
@@ -3275,16 +3282,6 @@ const TestDetail = () => {
             />
           )}
         </div>
-        {currentTabContent &&
-          currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-          isShowTemplate && (
-            <ShowAnswerTemplate
-              {...{
-                currentTabContent,
-                essayData,
-              }}
-            />
-          )}
         {openResetToTemplateModal && (
           <ResetToAnswerTemplateModal
             open={openResetToTemplateModal}

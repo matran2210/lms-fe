@@ -23,7 +23,7 @@ const ErrorRedirectPage = () => {
         title="Back to Home Page"
         full={false}
         className="rounded-2.5 !px-6 py-4 font-inter text-sm !leading-4"
-        size="lager"
+        size="large"
         onClick={() => {
           if (typeof window !== 'undefined') {
             window.location.href = '/'

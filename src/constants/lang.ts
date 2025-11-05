@@ -22,9 +22,11 @@ export const LANG_SIGNIN = {
 
 export const MY_COURSES = {
   explanations: 'Explanations',
+  correctAnswer: 'Correct Answer',
+  solution: 'Solution',
   hotline: '19002225',
   placeholderSearch: 'Search for your course here',
-  placeholderSearch3Level: 'Enter name of course...',
+  placeholderSearchV2: 'Enter name of course...',
 }
 
 export const DESCRIPTION_POPUPCONFIRM = 'Bạn có chắc chắn muốn hủy không?'

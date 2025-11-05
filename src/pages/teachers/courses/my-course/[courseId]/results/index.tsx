@@ -83,7 +83,7 @@ const ResultsTeacher = () => {
           ) : (
             <>
               <div className="bg-white xl-max:container">
-                {isSuccess && <ResultsTable isTeacher />}
+                {/* {isSuccess && <ResultsTable isTeacher />} */}
               </div>
             </>
           )}

@@ -214,7 +214,7 @@ const LearningResults = () => {
             Your Learning Results
           </div>
         )}
-        <div className="text-xsm text-gray-11 4xl:text-sm">
+        <div className="text-gray-11 text-xsm 4xl:text-sm">
           {`Last Update: ${dayjs().format(DATE_FORMAT.DATE_TIME_DASH)}`}
         </div>
       </div>

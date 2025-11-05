@@ -1,12 +1,13 @@
-import Breadcrumb from '@components/base/breadcrumb/SappBreadcrumb'
+import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { TEST_TYPE } from '@utils/constants'
 import { useGetDataQuery } from '@utils/index'
 import { useRouter } from 'next/router'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ITabs } from 'src/type'
-import TableQuestions from 'src/pages/courses/test/your-answers-detail/TableQuestions'
+import TableQuestions from 'src/pages/courses/quiz/your-answers-detail/TableQuestions'
 import SappLoading from 'src/common/SappLoading'
+import { GRADE_STATUS } from 'src/constants'
 
 const TestResultDetail = () => {
   const router = useRouter()
@@ -21,20 +22,8 @@ const TestResultDetail = () => {
     )
   }
 
-  const useGetQuizAttemptsChart = (queryKey: string, params: Object) => {
-    return useGetDataQuery(
-      queryKey,
-      params,
-      () => CoursesAPI.getQuizAttemptsChartData(router.query.id),
-      router.query.id !== undefined,
-    )
-  }
-
   // Sử dụng hook useGetQuizDetail trong component
   const { data: questions } = useGetQuizAttempts('quiz-attempts', {})
-
-  // Sử dụng hook useGetQuestionTabs trong component
-  const { data: chartData } = useGetQuizAttemptsChart('quiz-attempts-chart', {})
 
   let linkTest = `/test/${questions?.quizAttempt?.quiz?.id}?class_user_id=${questions?.quizAttempt?.class_user_id}`
   const quiz = questions?.quizAttempt?.quiz
@@ -54,9 +43,14 @@ const TestResultDetail = () => {
       disable: false,
     },
     {
-      link: linkTest,
+      link:
+        questions?.quizAttempt?.grading_status === GRADE_STATUS.AWAITING_GRADING
+          ? '#'
+          : linkTest,
       title: `${TEST_TYPE[questions?.quizAttempt?.quiz?.quiz_type]}`,
-      disable: true,
+      disable:
+        questions?.quizAttempt?.grading_status ===
+        GRADE_STATUS.AWAITING_GRADING,
     },
     {
       link: '/',
@@ -66,14 +60,10 @@ const TestResultDetail = () => {
   ]
 
   return (
-    <FullScreenLayout title="Your Answer Details">
+    <FullScreenLayout title="Your Answer Details" className="!bg-gray-4">
       <div className="mx-auto max-w-[1570px]">
-        <div className="px-5 xl:container md:px-10">
-          <Breadcrumb
-            tabs={breadcrumbs}
-            currentPage={'Your Answer Details'}
-            className="2xl-max:py-4"
-          />
+        <div className="px-5 pt-5 xl:container md:px-10">
+          <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>
         <div className="px-5 xl:container md:px-10">
           <>

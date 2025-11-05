@@ -101,12 +101,14 @@ export function CourseProvider(props: PropsWithChildren<{}>) {
     thankYou: false,
     thankYouLater: false,
   })
+  /**
+   * @description state này bằng true khi hiển thị sidebar
+   */
+  const [isOpenSidebar, setOpenSidebar] = useState(false)
 
   /**
    * @description state này bằng true khi hiển thị form hubspot
    */
-  const [isOpenSidebar, setOpenSidebar] = useState(false)
-
   const router = useRouter()
 
   async function fetchEventTest() {

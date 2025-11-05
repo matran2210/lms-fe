@@ -7,10 +7,12 @@ import { EAttemptStatus } from 'src/constants/attempt'
 
 interface EntranceTestListProps {
   entranceTestLists: IEntranceTest[]
+  onRefetch: () => void
 }
 
 const EntranceTestList: React.FC<EntranceTestListProps> = ({
   entranceTestLists,
+  onRefetch,
 }) => {
   const firstIndexToShowEntrancePopup = entranceTestLists.findIndex(
     (entrance) =>
@@ -23,28 +25,25 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
     <div
       className={`${
         !isEmpty(entranceTestLists)
-          ? 'grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3'
+          ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3'
           : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
       {!isEmpty(entranceTestLists) ? (
-        entranceTestLists?.map((e, index) => {
+        entranceTestLists?.map((e: IEntranceTest, index) => {
           const isShowEntranceTestPopup =
             firstIndexToShowEntrancePopup === index
           return (
-            <div
+            <EntranceTest
               key={index}
-              className={`item flex flex-col bg-white p-7.5 shadow-sidebar`}
-            >
-              <EntranceTest
-                data={e}
-                test_id_default={entranceTestLists.find(
-                  (entrance) => entrance.is_attempt === false,
-                )}
-                isShowEntranceTestPopup={isShowEntranceTestPopup}
-              />
-            </div>
+              data={e}
+              test_id_default={entranceTestLists.find(
+                (entrance) => entrance.is_attempt === false,
+              )}
+              onRefetch={onRefetch}
+              isShowEntranceTestPopup={isShowEntranceTestPopup}
+            />
           )
         })
       ) : (

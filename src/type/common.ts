@@ -1,7 +1,7 @@
+import { ButtonProps } from 'antd'
 import { FixedType } from 'rc-table/lib/interface'
 import { Control, FieldValues } from 'react-hook-form'
 import { IMetaData } from '.'
-import { ButtonProps } from 'antd'
 
 export interface ITabs {
   link: string

@@ -1,11 +1,19 @@
-import { CloseIconPreview, IconSend } from '@assets/icons'
+import {
+  CameraIcon,
+  CloseIconPreview,
+  DeleteIcon,
+  DeleteMessageIcon,
+  EditMessageIcon,
+  IconSend,
+  ReplyMessageIcon,
+} from '@assets/icons'
 import blankAvatar from '@assets/images/blank_avatar.webp'
 import sappAvatar from '@assets/images/blank_avatar_notification.png'
 import { VerifiedIcon } from '@components/icons'
 import { trackGAEvent } from '@utils/google-analytics'
 import { calculateTimeAgo } from '@utils/helpers'
 import Image from 'next/image'
-import { SetStateAction, useEffect, useState } from 'react'
+import { SetStateAction, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import SappIcon from 'src/common/SappIcon'
@@ -30,6 +38,7 @@ import SendComment from './SendComment'
 import { Popover } from 'antd'
 import { CoursesAPI } from '@pages/api/courses'
 import { isEmpty } from 'lodash'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   rank?: number
@@ -42,6 +51,7 @@ type Props = {
   profile?: IUser
   setLoading: (isLoading: boolean) => void
   isSappSupporterUserCurrent?: boolean
+  handleEditDiscussionElement: (isEdit: boolean) => void
 }
 type UserInfo = {
   name: string
@@ -63,7 +73,9 @@ function DiscussionElement({
   profile,
   setLoading,
   isSappSupporterUserCurrent = false,
+  handleEditDiscussionElement,
 }: Props) {
+  const { isMobileView } = useTailwindBreakpoint()
   const [isLike, setIsLike] = useState<boolean>(discussion.is_like)
   const [timeAgo, setTimeAgo] = useState<string>('')
   const [isEdit, setIsEdit] = useState<boolean>(false)
@@ -79,6 +91,7 @@ function DiscussionElement({
   const [isOpenUserInfo, setIsOpenUserInfo] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo)
   const canEdit = profile?.username === discussion?.username
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { control, handleSubmit } = useForm<IEventData>({})
 
@@ -112,6 +125,7 @@ function DiscussionElement({
       if (res?.success) {
         setDiscussionContent(res?.data?.content)
         setIsEdit(false)
+        handleEditDiscussionElement(false)
         setSelectFile([])
       }
     } catch (error) {
@@ -169,6 +183,13 @@ function DiscussionElement({
         return
       }
     }
+
+    // Xóa giá trị của input để làm sạch
+    if (fileInputRef?.current) {
+      fileInputRef.current.value = ''
+    }
+
+    e.target.value = ''
   }
 
   const handleDeleteFile = (id: string | number, isFile: boolean) => {
@@ -186,11 +207,13 @@ function DiscussionElement({
   const handleEdit = () => {
     setEditValue(discussionContent)
     setIsEdit(true)
+    handleEditDiscussionElement(true)
     trackGAEvent('Click Edit Comment Activity')
   }
 
   const handleCancelEdit = () => {
     setIsEdit(false)
+    handleEditDiscussionElement(false)
     handleRefresh()
     setSelectFile([])
     trackGAEvent('Click Cancel Edit Comment Activity')
@@ -230,12 +253,12 @@ function DiscussionElement({
         />
       </div>
       <div className="w-4" />
-      <div className="w-45">
-        <div className="mb-1 text-base font-semibold text-bw-1">
+      <div className="w-[180px]">
+        <div className="mb-1 text-base font-semibold text-[#050505]">
           {userInfo?.name}
         </div>
-        <div className="text-xs text-gray-1">{userInfo?.email}</div>
-        <div className="text-xs text-gray-1">{userInfo?.phone}</div>
+        <div className="text-xs text-[#A1A1A1]">{userInfo?.email}</div>
+        <div className="text-xs text-[#A1A1A1]">{userInfo?.phone}</div>
       </div>
     </div>
   )
@@ -278,7 +301,7 @@ function DiscussionElement({
   }, [userInfo])
 
   return (
-    <div className="flex gap-3 text-bw-1">
+    <div className="flex gap-3 text-gray-800">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col">
           <div
@@ -292,7 +315,7 @@ function DiscussionElement({
               trigger="hover"
               open={isOpenUserInfo}
               overlayInnerStyle={{ maxWidth: 280 }}
-              className="flex flex-row gap-3"
+              className="flex gap-3"
             >
               <div
                 className={clsx(
@@ -301,9 +324,9 @@ function DiscussionElement({
                 )}
               >
                 <Image
-                  width={40}
-                  height={40}
-                  className="rounded-full"
+                  width={isMobileView ? 32 : 40}
+                  height={isMobileView ? 32 : 40}
+                  className="h-8 w-8 rounded-full md:h-10 md:w-10"
                   src={
                     discussion.is_sapp_supporter
                       ? discussion?.avatar?.['50x50'] ||
@@ -320,21 +343,24 @@ function DiscussionElement({
                 />
               </div>
               <div
-                className={clsx('flex', !isEmpty(userInfo) && 'cursor-pointer')}
+                className={clsx(
+                  'flex h-fit items-center gap-2',
+                  !isEmpty(userInfo) && 'cursor-pointer',
+                )}
               >
-                <div className="mb-1 text-base font-semibold">
+                <div className="text-base font-medium">
                   {discussion?.is_sapp_supporter
                     ? discussion?.supporter_display_name
                     : discussion?.full_name}
                 </div>
                 {discussion?.is_sapp_supporter && (
-                  <div className="ml-2 h-6 w-fit content-center bg-secondary pl-2 font-semibold text-primary">
-                    <div className="flex flex-row">
+                  <div className="rounded bg-primary-50 px-3 py-1 font-medium text-primary">
+                    <div className="flex items-center gap-1">
                       <div className="content-center">
-                        <VerifiedIcon />
+                        <VerifiedIcon className="h-3 w-3" />
                       </div>
-                      <div className="w-fit content-center px-2 text-ssm">
-                        SAPP
+                      <div className="w-fit content-center px-2 text-xs">
+                        SAPP Supporter
                       </div>
                     </div>
                   </div>
@@ -342,7 +368,7 @@ function DiscussionElement({
               </div>
             </Popover>
           </div>
-          <div className="-mt-3 ml-14 w-[calc(100%-56px)]">
+          <div className="mt-3 w-auto md:-mt-3 md:ml-[52px]">
             {discussionFile?.map((e) => (
               <div key={e.id} className={`relative bg-cover bg-no-repeat`}>
                 <Image
@@ -396,7 +422,9 @@ function DiscussionElement({
             ))}
 
             {!isEdit && discussionContent && (
-              <SappDisplayText text={discussionContent} />
+              <div className="mb-2">
+                <SappDisplayText text={discussionContent} />
+              </div>
             )}
 
             {isEdit && (
@@ -407,28 +435,41 @@ function DiscussionElement({
                     name="editData"
                     defaultValue={editValue}
                     handleKeyDown={handleKeyDown}
+                    className="w-fill--available comment-scrollbar h-[40px] min-h-14 rounded-lg px-4 py-2 md:h-12 md:py-3"
+                    actions={
+                      <div className="flex items-center gap-x-3">
+                        <SappButtonIcon
+                          type="submit"
+                          ishover={false}
+                          disabled={isLoading}
+                          className="sapp-custom-hover h-fit !min-w-1 cursor-pointer border-none bg-transparent"
+                          classTitle={'!m-0'}
+                        >
+                          <SendComment />
+                        </SappButtonIcon>
+                        <div
+                          className={`relative h-5 select-none hover:text-primary ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
+                        >
+                          <button
+                            type="button"
+                            className="cursor-pointer"
+                            onClick={() => fileInputRef?.current?.click()}
+                          >
+                            <CameraIcon />
+                          </button>
+
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept="image/jpeg, image/png, image/gif"
+                            onChange={(e) => handleFileChange(e)}
+                            ref={fileInputRef}
+                            disabled={isLoading}
+                          />
+                        </div>
+                      </div>
+                    }
                   />
-                  {/* <div className="flex items-center gap-x-2 pr-1"> */}
-                  <div
-                    className={`absolute bottom-5 right-12 cursor-pointer select-none ${clsx({ hidden: discussionFile?.length > 0 || selectFile?.length > 0 })}`}
-                  >
-                    <SappIcon icon="camera"></SappIcon>
-                    <input
-                      type="file"
-                      className="absolute bottom-0 left-0 right-0 top-0 block h-full w-full cursor-pointer opacity-0"
-                      accept="image/jpeg, image/png, image/gif"
-                      onChange={(e) => handleFileChange(e)}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <SappButtonIcon
-                    type="submit"
-                    ishover={false}
-                    disabled={isLoading}
-                    className="sapp-custom-hover absolute bottom-5 right-3 h-fit !min-w-1 cursor-pointer select-none border-none bg-transparent"
-                  >
-                    <SendComment />
-                  </SappButtonIcon>
                 </div>
                 {/* </div> */}
                 <SappButton
@@ -443,19 +484,19 @@ function DiscussionElement({
               </div>
             )}
 
-            <div className="flex gap-x-6 gap-y-1 text-medium-sm">
+            <div className="flex gap-x-8 gap-y-1 text-sm">
               {!isEdit && rank < 1 && (
                 <div
                   role="button"
                   className={`${
                     discussion?.id === idReply ? 'text-primary' : ''
-                  } select-none font-medium hover:underline`}
+                  } flex select-none items-center gap-2 font-medium hover:underline`}
                   onClick={() => {
                     handleChangeIdReply && handleChangeIdReply(discussion?.id)
                     trackGAEvent('Click Reply Comment Activity')
                   }}
                 >
-                  Reply
+                  <ReplyMessageIcon /> Reply
                 </div>
               )}
 
@@ -465,16 +506,16 @@ function DiscussionElement({
                     {!isEdit ? (
                       <>
                         <div
-                          className="cursor-pointer pr-6 text-medium-sm font-medium text-bw-1 hover:underline"
+                          className="flex cursor-pointer items-center gap-2 pr-8 font-medium text-bw-1 hover:underline"
                           onClick={handleEdit}
                         >
-                          Edit
+                          <EditMessageIcon /> Edit
                         </div>
                         <div
-                          className="cursor-pointer text-medium-sm font-medium hover:underline"
+                          className="flex cursor-pointer items-center gap-2 font-medium hover:underline"
                           onClick={handleDeleteComment}
                         >
-                          Delete
+                          <DeleteMessageIcon /> Delete
                         </div>
                       </>
                     ) : (
@@ -486,7 +527,7 @@ function DiscussionElement({
                   </div>
                 </div>
               )}
-              <div className="cursor-default font-normal text-gray-1">
+              <div className="text-gray-500 cursor-default font-normal">
                 {timeAgo}
               </div>
             </div>

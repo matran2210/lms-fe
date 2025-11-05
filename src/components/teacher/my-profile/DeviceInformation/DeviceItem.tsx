@@ -65,7 +65,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
                   Logged in
                 </span>
               </div>
-              <div className="text-xs text-gray-400 md:text-sm">
+              <div className="text-xs font-bold text-gray-800 md:text-sm">
                 {formattedDate}
               </div>
             </div>

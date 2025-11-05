@@ -85,7 +85,7 @@ function SappModelSidebar({
               aria-modal="true"
             >
               {showHeader && (
-                <div className="relative bg-bw-1 px-8 py-6">
+                <div className="relative bg-[#050505] px-8 py-6">
                   <div className="pr-10 text-2xl font-medium text-white">
                     {title}
                   </div>
@@ -102,7 +102,7 @@ function SappModelSidebar({
             <div
               ref={confirmDialogOverLayRef}
               onClick={handleClose}
-              className={`sapp-overlay fixed inset-0 z-40 animate-fade-in-overlay-sidebar cursor-pointer bg-overlay-dark-sidebar ${overlayClass}`}
+              className={`sapp-overlay fixed inset-0 z-40 animate-fade-in-overlay-sidebar cursor-pointer bg-[#000000CC] ${overlayClass}`}
             ></div>
           </>
         )}

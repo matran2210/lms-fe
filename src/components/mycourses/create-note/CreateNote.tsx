@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import MovableWindow from '@components/base/window'
-import { SaveIcon, PlusIcon, CloseIconNote } from '@assets/icons'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { CloseIconNote, SaveIcon } from '@assets/icons'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import ModalResizeable from '@components/base/modal/ModalResizeable'
+import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { VALIDATE_REQUIRED } from '@utils/helpers/ValidateMessage'
-import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
-import { CoursesAPI } from 'src/pages/api/courses'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { pushNotes, closeNote } from 'src/redux/slice/Course/NotesList'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
-import { v4 as uuidv4 } from 'uuid'
+import { closeNote } from 'src/redux/slice/Course/NotesList'
+import { z } from 'zod'
 
 interface IProps {
   id: string | undefined
@@ -26,7 +28,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
-
+  const { isMobileView } = useTailwindBreakpoint()
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
       .string()
@@ -34,20 +36,17 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       .min(1, VALIDATE_REQUIRED),
   })
 
-  const { control, handleSubmit } = useForm<any>({
+  const { control, handleSubmit, watch, reset } = useForm<any>({
     resolver: zodResolver(validationSchema),
     mode: 'onSubmit',
+    defaultValues: {
+      [`description_${id ? id : uuid}`]: content,
+    },
   })
 
-  const handleAddNote = () => {
-    const note = {
-      uuid: uuidv4(),
-      id: '',
-      name: 'Note',
-      description: '',
-    }
-    dispatch(pushNotes(note))
-  }
+  const [baselineContent, setBaselineContent] = useState<string>(content)
+  const watchDescription = watch(`description_${id ? id : uuid}`)
+  const isChanged = watchDescription !== baselineContent
 
   const createNewNote = async (data: any) => {
     try {
@@ -59,6 +58,13 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
       }
       const res = await CoursesAPI.createNote(params)
       setActiveSectionId(res?.data?.id)
+      // Cập nhật baseline để lần gõ tiếp theo hiển thị nút Save chính xác
+      const savedValue = data?.[`description_${id ? id : uuid}`] || ''
+      setBaselineContent(savedValue)
+      reset(
+        { [`description_${id ? id : uuid}`]: savedValue },
+        { keepDirty: false },
+      )
       toast.success('Tạo thành công!')
     } catch (error) {
       toast.error('Tạo không thành công!')
@@ -75,6 +81,13 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
         description: data?.[`description_${id ? id : uuid}`],
       }
       await CoursesAPI.updateCourseNotesList(id || activeSectionId, params)
+      // Cập nhật baseline sau khi lưu để theo dõi thay đổi mới
+      const savedValue = data?.[`description_${id ? id : uuid}`] || ''
+      setBaselineContent(savedValue)
+      reset(
+        { [`description_${id ? id : uuid}`]: savedValue },
+        { keepDirty: false },
+      )
       toast.success('Cập nhật thành công!')
     } catch (error) {
       toast.error('Cập nhật không thành công!')
@@ -93,63 +106,66 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
 
   return (
     <>
-      <MovableWindow
-        position={{
-          width: '412px',
-          height: '350px',
-          top: 'calc(50% - 150px)',
-          left: `calc(${22 + count}% - 200px)`,
-        }}
-        key={'testtesttest'}
-        onClick={() => {}}
-        zIndex={40}
-        fixed
-      >
-        <div className="absolute left-0 top-0  h-full w-full border bg-white">
-          <div className="flex h-10 w-6-percent w-full items-center justify-between bg-gray-3 px-2.5">
+      <ModalResizeable
+        bodyClassName="h-[calc(100%-6px)]"
+        modalIndex={count}
+        header={
+          <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+            <div className="text-sm font-semibold text-gray-800">
+              {id || activeSectionId ? 'Edit Note' : 'New Note'}
+            </div>
             <button
-              className="text-gray-1"
-              onClick={() => {
-                handleAddNote()
+              className="text-icon"
+              onClick={(e) => {
+                e.stopPropagation()
+                removeNote()
               }}
+              onTouchStart={(e) => {
+                e.stopPropagation()
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation()
+                removeNote()
+              }}
+              disabled={loading}
             >
-              <PlusIcon />
+              <CloseIconNote />
             </button>
-            <div className="flex items-center">
-              <button
-                className="text-gray-1"
+          </div>
+        }
+        handleCloseScratchPad={() => {
+          removeNote()
+        }}
+        position="center"
+        width={isMobileView ? 340 : 412}
+        height={350}
+      >
+        <div className="flex h-full flex-col p-4">
+          <HookFormTextArea
+            placeholder="Take a note..."
+            control={control}
+            name={`description_${id ? id : uuid}`}
+            defaultValue={content}
+            className="not-resizer sapp-text-area h-[calc(100%-8px)] w-full flex-1 whitespace-pre-wrap placeholder:text-sm placeholder:font-normal placeholder:text-[#A1A1A1]"
+          />
+          {isChanged && (
+            <div className="flex justify-end">
+              <ButtonSecondary
+                data-aos="fade-in"
                 onClick={() => {
                   handleSubmit((data: any) => {
                     onSubmit(data)
                   })()
                 }}
                 disabled={loading}
+                startIcon={<SaveIcon />}
               >
-                <SaveIcon />
-              </button>
-              <span className="mx-4 h-4 w-px bg-gray-1"></span>
-              <button
-                className="text-gray-1"
-                onClick={() => {
-                  removeNote()
-                }}
-                disabled={loading}
-              >
-                <CloseIconNote />
-              </button>
+                Save
+              </ButtonSecondary>
             </div>
-          </div>
-          <div className="h-[calc(100%-30px)]">
-            <HookFormTextArea
-              placeholder="Take a note..."
-              control={control}
-              name={`description_${id ? id : uuid}`}
-              className="not-resizer sapp-text-area h-[calc(100%-40px)] w-full whitespace-pre-wrap px-4 py-4 placeholder:text-medium-sm placeholder:font-normal placeholder:text-gray-1"
-              defaultValue={content}
-            />
-          </div>
+          )}
         </div>
-      </MovableWindow>
+      </ModalResizeable>
     </>
   )
 }

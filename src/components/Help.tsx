@@ -6,17 +6,21 @@ import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
 import { excludedPathsHelp } from '@pages/_app'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false)
   const router = useRouter()
   const scriptRef = useRef<HTMLScriptElement | null>(null)
+  const { openPinned } = usePinnedNotifyContext()
+  const { isMobileView } = useTailwindBreakpoint()
+  const isChangePosition = openPinned && isMobileView
   const { asPath } = router
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     '/teachers',
     '/test',
     '/case-study',
-    '/activity',
   ].map((p) => asPath.includes(p))
   const hiddenChatbot =
     excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
@@ -141,17 +145,21 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
             onOpenChange={handleVisibleChange}
             placement="topLeft"
             arrow={false}
+            overlayClassName="support-center-popover"
+            classNames={{
+              body: 'max-w-[312px] md:max-w-[360px] !rounded-2xl bg-white shadow-card short:h-[400px] short:max-w-[554px] short:p-4',
+            }}
           >
             {visible ? (
               <div
                 id="floating-button"
                 onClick={handleButtonClick}
-                className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[16px]`}
+                className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[24px]`}
               >
-                <div className="plus flex items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
+                <div className="plus flex size-[48px] items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                   <svg
-                    width="60"
-                    height="60"
+                    width="48"
+                    height="48"
                     viewBox="0 0 34 34"
                     fill="#33475B"
                     xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +178,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
                 <div
                   id="floating-button"
                   onClick={handleButtonClick}
-                  className={`${visible ? 'clicked bottom-5' : 'bottom-[90px]'} right-[16px]`}
+                  className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[24px]`}
                 >
                   <div className="plus flex items-center justify-center delay-300 hover:rounded-full hover:opacity-100">
                     <IconClose />

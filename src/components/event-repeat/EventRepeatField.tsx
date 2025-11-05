@@ -360,7 +360,7 @@ const EventRepeatField = ({
                     'year',
                   )}
                   value={field?.value ? dayjs(field.value) : undefined}
-                  className="h-11.25 w-full"
+                  className="h-[45px] w-full"
                   color="secondary"
                   suffixIcon={<SappIcon icon="input_calendar" />}
                   allowClear={false}

@@ -1,6 +1,6 @@
 .select-single {
   .select__control {
-    @apply h-12.5 rounded-none border-default shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
+    @apply h-[50px] rounded-none border-[#DCDDDD] shadow-0 hover:border-primary focus:border-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
@@ -9,11 +9,11 @@
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-base font-medium leading-4.5;
+    @apply m-0 p-0 text-base font-medium leading-[17px];
   }
 
   .select__placeholder {
-    @apply text-bw-1;
+    @apply text-[#050505];
   }
 
   .select__menu {
@@ -21,7 +21,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-4.5 text-bw-1;
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-medium leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -37,14 +37,14 @@
   }
 
   .select__indicator {
-    @apply text-gray-1;
+    @apply text-[#A1A1A1];
   }
 
   .select__indicator-separator {
     @apply hidden;
 
     svg {
-      @apply h-7 w-7-percent;
+      @apply h-7 w-[7%];
     }
   }
 
@@ -64,22 +64,22 @@
 }
 
 .select-single .select__single-value {
-  @apply text-gray-11;
+  @apply text-base text-[#99A1B7];
 }
 
 // style css for result popup
 .select-result {
   .select__control {
-    @apply h-12.5 border-none hover:border-transparent focus:text-primary  focus:shadow-0 focus:outline-none;
+    @apply h-[50px] border-none focus:text-primary focus:shadow-0 focus:outline-none;
   }
 
   .select__value-container {
-    @apply px-4 pl-0;
+    @apply p-0;
   }
 
   .select__single-value,
   .select__placeholder {
-    @apply m-0 p-0 text-[15px] font-medium leading-4.5;
+    @apply m-0 p-0 text-[15px] font-medium leading-[17px];
   }
 
   .select__control {
@@ -87,7 +87,7 @@
   }
 
   .select__placeholder {
-    @apply p-0 text-base text-gray-400 focus:text-primary;
+    @apply p-0 text-base text-[#a1a1aa] focus:text-primary;
   }
 
   .select__menu {
@@ -95,7 +95,7 @@
   }
 
   .select__option {
-    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-4.5 text-bw-1;
+    @apply line-clamp-2 max-h-11 cursor-pointer bg-transparent text-sm font-normal leading-[17px] text-[#050505];
 
     &.select__option--is-focused {
       @apply bg-transparent;
@@ -111,14 +111,14 @@
   }
 
   .select__indicator {
-    @apply w-[30px] text-gray-1;
+    @apply w-[30px] text-[#A1A1A1];
   }
 
   .select__indicator-separator {
     @apply hidden;
 
     svg {
-      @apply h-7 w-7-percent;
+      @apply h-7 w-[7%];
     }
   }
 
@@ -146,7 +146,7 @@
 .select-options.repeat-unit {
   .select-single {
     .select__control {
-      @apply h-11.25 rounded-[4px];
+      @apply h-[45px] rounded-[4px];
     }
   }
 }
@@ -156,7 +156,7 @@
     @apply h-10 rounded-md;
   }
   .select__placeholder {
-    @apply text-sm font-medium text-gray-11;
+    @apply text-sm font-medium text-[#99A1B7];
   }
 }
 
@@ -173,5 +173,89 @@
   }
   .ant-select-selection-item {
     @apply flex-1 pr-2 text-2xl font-bold;
+  }
+}
+
+.rc-virtual-list-scrollbar-thumb {
+  @apply w-[6px] bg-primary !important;
+}
+
+.custom-select-v2 {
+  /* Text mặc định */
+  .ant-select-arrow {
+    @apply text-gray-800;
+  }
+  :where(.ant-select-selector) {
+    @apply flex !px-2;
+  }
+  .ant-select-selection-placeholder {
+    @apply text-left text-gray-800;
+  }
+
+  /* Khi bị disabled */
+  &.ant-select-outlined.ant-select-disabled:not(.ant-select-customize-input) {
+    .ant-select-selector {
+      @apply cursor-not-allowed bg-gray-100;
+
+      .ant-select-selection-placeholder {
+        @apply text-gray-400;
+      }
+    }
+    .ant-select-arrow {
+      @apply text-gray-400;
+    }
+  }
+}
+.select-card-course {
+  .ant-select-item-option-content {
+    @apply text-center !important;
+  }
+  .ant-select-selector {
+    @apply px-2 !important;
+  }
+  .ant-select-dropdown {
+    @apply px-1 !important;
+  }
+  .rc-virtual-list-holder-inner {
+    @apply gap-2 !important;
+  }
+}
+
+.custom-ant-select {
+  .ant-select-selector {
+    @apply flex h-auto w-12 border-none bg-gray-canvas p-0 text-base font-normal leading-normal text-gray-600 shadow-none !important;
+  }
+}
+
+.profile-subject-select {
+  .ant-select-selector {
+    @apply flex items-center justify-between gap-2 !pl-0;
+    .ant-select-selection-item {
+      @apply text-lg md:text-2xl;
+    }
+  }
+
+  .ant-select-arrow {
+    @apply ml-2;
+  }
+  .ant-select-selection-item {
+    @apply flex-1 pr-2 text-2xl font-bold;
+  }
+}
+
+.tooltip-modal {
+  @apply pointer-events-none fixed z-[99999] max-w-[198px] whitespace-normal rounded-md bg-secondary px-2.5 
+    py-1.5 text-sm leading-[22px] text-white shadow-lg;
+
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  &.show {
+    opacity: 1;
+  }
+
+  &::after {
+    content: '';
+    @apply absolute -top-[5px] left-5 h-[10px] w-[10px] rotate-45 bg-secondary;
   }
 }

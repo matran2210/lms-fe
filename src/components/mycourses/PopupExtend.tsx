@@ -1,5 +1,5 @@
 import { AlertIcon, LockIcon } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { onLinkSocial } from '@utils/index'
 import { Dispatch, SetStateAction } from 'react'
 import { MY_COURSES } from 'src/constants/lang'
@@ -10,6 +10,7 @@ interface IProps {
   extendCourse: () => void
   extend_count: number
 }
+
 const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
   /**
    * @description function này sẽ extend khóa học lần đầu tiên và đóng popup lại
@@ -24,64 +25,60 @@ const PopupExtend = ({ open, setOpen, extendCourse, extend_count }: IProps) => {
    */
   const noExtensions = extend_count === 0
 
+  // CSS classes to avoid duplication
+  const textBaseClasses = 'text-base font-normal leading-normal text-gray-800'
+  const linkClasses =
+    'text-primary cursor-pointer text-base font-bold leading-normal'
+
+  const modalIcon = noExtensions ? <AlertIcon /> : <LockIcon />
+  const okButtonCaption = noExtensions ? 'Confirm' : 'Back to my course'
+  const cancelButtonCaption = noExtensions ? 'Cancel' : ''
+  const handleOk = noExtensions ? onExtendCourse : () => setOpen(false)
+
+  const ContentExtendTrialCourse = () =>
+    noExtensions ? (
+      <div className={textBaseClasses}>
+        This is your final course extension. Would you like to extend it now?
+      </div>
+    ) : (
+      <div className="justify-center self-stretch text-center">
+        <span className={textBaseClasses}>
+          You can only extend a trial course once. For further support, please
+          contact SAPP Academy via{' '}
+        </span>
+        <span
+          onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
+          className={linkClasses}
+        >
+          Facebook,
+        </span>
+        <span
+          onClick={() => onLinkSocial('https://zalo.me/3938733079901781176')}
+          className={linkClasses}
+        >
+          {' '}
+          Zalo
+        </span>
+        <span className={textBaseClasses}> or hotline </span>
+        <span className={linkClasses}>{MY_COURSES.hotline}</span>
+      </div>
+    )
+
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
-      okButtonCaption={noExtensions ? 'Confirm' : 'Back to My Course'}
-      onOk={noExtensions ? () => onExtendCourse() : () => setOpen(false)}
       handleCancel={() => setOpen(false)}
-      showCancelButton={noExtensions}
-      showHeader={false}
-      refClass="p-6 md:p-8 3xl:py-[70px] 3xl:px-19 flex flex-col animate-jump-in relative transform bg-white text-left shadow-xl transition-all"
-      size="max-w-[646px]"
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      parentChildClass=""
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
-      buttonSize="extra"
-      scrollbale={false}
-      confirmOnclose={false}
-      title={undefined}
-      cancelButtonCaption="Cancel"
-    >
-      <div className="mx-auto mb-6 flex w-max items-center justify-center rounded-full bg-secondary p-8">
-        {noExtensions ? <AlertIcon /> : <LockIcon />}
-      </div>
-      <div className="text-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        Extend Trial Course
-      </div>
-      {noExtensions ? (
-        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
-          <span className="text-gray-1">
-            This is your final course extension. Would you like to extend it
-            now?
-          </span>
-        </div>
-      ) : (
-        <div className="mb-1 mt-4 px-1 text-center text-medium-sm xl:mb-7">
-          <span className="text-gray-1">
-            You can only extend a trial course once. For further support, please
-            contact SAPP Academy via
-          </span>{' '}
-          <span
-            className="cursor-pointer text-primary underline"
-            onClick={() => onLinkSocial('https://www.facebook.com/sapp.edu.vn')}
-          >
-            Facebook
-          </span>
-          <span className="text-gray-1">,</span>{' '}
-          <span
-            className="cursor-pointer text-primary underline"
-            onClick={() => onLinkSocial('https://zalo.me/3938733079901781176')}
-          >
-            Zalo
-          </span>{' '}
-          <span className="text-gray-1">or hotline</span>{' '}
-          <span className="text-primary">{MY_COURSES.hotline}</span>
-        </div>
-      )}
-    </SappModalV2>
+      onOk={handleOk}
+      icon={modalIcon}
+      header="Extend Trial Course"
+      content={<ContentExtendTrialCourse />}
+      showFooter
+      okButtonCaption={okButtonCaption}
+      fullWidthBtn
+      buttonSize="medium"
+      cancelButtonCaption={cancelButtonCaption}
+      isUnderLine
+    />
   )
 }
 

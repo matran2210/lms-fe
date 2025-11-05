@@ -71,6 +71,7 @@ deploy_master:
   tags:
     - shell
   resource_group: lms-fe
+
 # Old CI-CD
 # stages:
 #   - deploy
@@ -97,4 +98,6 @@ deploy_master:
 #     - yarn install
 #     - VERCEL_TOKEN=$VERCEL_TOKEN_PROD && VERCEL_ORG_ID=$VERCEL_ORG_ID_PROD && VERCEL_PROJECT_ID=$VERCEL_PROJECT_ID_PROD && vercel deploy --prod --token=$VERCEL_TOKEN
 #   environment: production
+
+
 

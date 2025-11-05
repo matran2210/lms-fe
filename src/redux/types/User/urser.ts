@@ -1,8 +1,10 @@
 import { IMetaData } from 'src/type'
+
 export interface ITemplateConfig {
   template_full: number
   template_short_course: number
 }
+
 export interface IUser {
   id: string
   created_at: string
@@ -63,6 +65,12 @@ export interface IUserContact {
   province: string
   district: string
   ward: string
+}
+
+export interface IFacility {
+  code: string
+  id: string
+  name: string
 }
 
 export enum UserType {
@@ -196,24 +204,7 @@ export interface UserHubspotExaminationSubjectItem {
 }
 export interface ICourseTabGroup {
   id: string
-  user_hubspot_examination_subjects: [
-    {
-      id: string
-      examination_subject_id: string
-      result: string
-      examination_subject: {
-        id: string
-        subject_id: string
-        examination_id: string
-        subject: ISubjectItem
-        examination: {
-          id: string
-          name: string
-        }
-      }
-      is_final_examination_subject: boolean
-    },
-  ]
+  user_hubspot_examination_subjects: UserHubspotExaminationSubjectItem[]
 }
 
 export interface IExamination {

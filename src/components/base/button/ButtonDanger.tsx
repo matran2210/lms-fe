@@ -35,7 +35,7 @@ const ButtonDanger = ({
 
   const disabledClass =
     disabled || loading
-      ? 'cursor-not-allowed opacity-60 bg-danger'
+      ? 'cursor-not-allowed opacity-60 bg-[#D35563]'
       : 'cursor-pointer'
 
   const componentClass = [

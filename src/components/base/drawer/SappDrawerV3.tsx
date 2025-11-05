@@ -1,6 +1,6 @@
 import { CloseIconV2 } from '@components/icons'
 import { Drawer, DrawerProps } from 'antd'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import clsx from 'clsx'
 import ButtonText from '@components/base/button/ButtonText'
@@ -19,7 +19,7 @@ interface IProps extends DrawerProps {
   loading?: boolean
   btnSubmitTile?: string
   handleSubmit?: () => void
-  sizeTextBtn?: 'small' | 'medium' | 'lager' | 'extra'
+  sizeTextBtn?: 'small' | 'medium' | 'large' | 'extra'
   submitButtonClassName?: string
   classNameBody?: string
   classNameHeader?: string
@@ -45,13 +45,21 @@ const SappDrawerV3: React.FC<IProps> = ({
   sizeTextBtn = 'medium',
   submitButtonClassName,
   classNameBody,
-  classNameHeader = 'mb-4',
+  classNameHeader = 'mb-4 md:mb-6',
   cancelButtonCaption,
   cancelButtonClassName,
   closable,
   isShowBtnBack = false,
   ...props
 }) => {
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add('overflow-y-hidden')
+    } else {
+      document.body.classList.remove('overflow-y-hidden')
+    }
+  }, [open])
+
   return (
     <Drawer
       open={open}
@@ -85,7 +93,7 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-base font-semibold leading-loose text-gray-800 md:text-2xl">
+              <span className="text-xl font-semibold leading-loose text-gray-800 md:text-2xl">
                 {title}
               </span>
             </div>
@@ -106,7 +114,7 @@ const SappDrawerV3: React.FC<IProps> = ({
 
         {/* Footer */}
         {isShowFooter && (
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-6 pb-6 lg:px-8 lg:pb-8">
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-end gap-4 px-4 pb-4 md:px-6 md:pb-6 lg:px-8 lg:pb-8">
             {cancelButtonCaption && (
               <ButtonText
                 title={cancelButtonCaption}

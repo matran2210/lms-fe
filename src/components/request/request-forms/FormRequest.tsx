@@ -613,7 +613,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
         closeIcon={false}
       >
         <div className="flex h-full w-full flex-col">
-          <div className="flex items-center justify-between border-b border-b-gray-5 px-8 py-5">
+          <div className="flex items-center justify-between border-b border-b-[#7E8299] px-8 py-5">
             <span className="text-xl font-semibold text-primary">
               {router.query.id ? 'Edit' : 'Create'} Request
             </span>
@@ -971,7 +971,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="font-medium text-yellow-500 ">
+                  <span className="font-medium text-[#f59e0b] ">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(
@@ -1005,7 +1005,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 >
                   <IconPlusSquared />
 
-                  <span className="font-medium text-yellow-500">
+                  <span className="font-medium text-[#f59e0b]">
                     {capitalizeFirstLetter(
                       Object.values(REQUEST_TYPE)
                         .find(
@@ -1019,7 +1019,7 @@ function FormRequest({ open, setOpen, reloadPage }: IProps) {
                 </div>
               ) : null)}
           </div>
-          <div className="flex justify-end border-t border-t-gray-5 px-8 py-5">
+          <div className="flex justify-end border-t border-t-[#7E8299] px-8 py-5">
             <SAPPButtonV2
               title={'Cancel'}
               onClick={handleCancel}

@@ -1,5 +1,7 @@
-import { CloseIcon } from '@assets/icons'
+import { CircleCloseIcon, CloseIconNote } from '@assets/icons'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 import EditorReader from '@components/base/editor/EditorReader'
+import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
 import Calculator from '@components/calculator'
@@ -8,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { ScratchPadValue } from 'src/type'
 import { IExhibit } from 'src/type/exhibit'
 import ScratchPatch from './scratchPatch'
-import FileViewer from '@components/base/fileViewer/FileViewer'
+import { Triangle } from '@components/icons/Triangle'
 interface IProps {
   openScratchPad: any[]
   onFocusingPad: string
@@ -68,7 +70,7 @@ const TestScratchPads = ({
       return (
         <MovableWindow
           position={{
-            width: '400px',
+            width: '344px',
             height: 'fit-content',
             top: 'calc(25% - 150px)',
             left: 'calc(25% - 200px)',
@@ -79,11 +81,16 @@ const TestScratchPads = ({
             onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
           }
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="text-sm font-normal">Calculator</div>
+          <div className="absolute left-0 top-0 h-full w-fit rounded-xl">
+            <div
+              className="flex h-fit w-full items-center justify-between rounded-t-xl border border-b-0 border-gray-300 bg-gray-100 px-4 py-3"
+              style={{
+                boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+              }}
+            >
+              <div className="text-sm font-bold">Calculator</div>
               <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
+                <CloseModalIcon />
               </button>
             </div>
             <Calculator />
@@ -92,44 +99,45 @@ const TestScratchPads = ({
       )
     } else if (e.type === 'scratch_pad') {
       return (
-        <MovableWindow
-          position={{
-            width: '400px',
-            height: '300px',
-            top: 'calc(50% - 150px)',
-            left: 'calc(50% - 200px)',
-          }}
+        <ModalResizeable
+          position="center left"
           key={currentPage}
+          header={
+            <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+              <div className="text-sm font-semibold text-gray-800">
+                Scratch Pad
+              </div>
+              <button
+                className="text-icon"
+                onClick={() => handleCloseScratchPad(e)}
+              >
+                <CloseIconNote />
+              </button>
+            </div>
+          }
+          handleCloseScratchPad={() => {
+            handleCloseScratchPad(e)
+          }}
           onClick={() => {
             setOnFocusingPad(e?.id)
           }}
-          zIndex={
-            onFocusingPad === e?.id ? openScratchPad?.length + 500 : index + 500
-          }
+          width={412}
+          height={350}
+          modalIndex={index}
         >
-          <div className="absolute left-0 top-0 h-full w-full border">
-            <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
-              <div className="text-sm font-normal">Scratch Pad</div>
-              {/* <CloseIcon */}
-              <button onClick={() => handleCloseScratchPad(e)}>
-                <CloseIcon />
-              </button>
-            </div>
-            <ScratchPatch
-              scratchPadValues={scratchPadValues.find(
-                (el) => el.id === currentPage,
-              )}
-              control={controlScratch}
-              scratchPads={scratchPads}
-              handleChangeScratchPad={(
-                event: ChangeEvent<HTMLInputElement>,
-              ) => {
-                setScratchPads(event.target.value)
-                handleChangeScratchPad(event, currentPage)
-              }}
-            />
-          </div>
-        </MovableWindow>
+          <ScratchPatch
+            scratchPadValues={scratchPadValues.find(
+              (el) => el.id === currentPage,
+            )}
+            control={controlScratch}
+            scratchPads={scratchPads}
+            handleChangeScratchPad={(event: ChangeEvent<HTMLInputElement>) => {
+              setScratchPads(event.target.value)
+              handleChangeScratchPad(event, currentPage)
+            }}
+            className="!h-fit"
+          />
+        </ModalResizeable>
       )
     } else if (e.type === 'exhibits') {
       const i = exhibitData?.findIndex((el: any) => el?.id === e?.id)
@@ -138,27 +146,24 @@ const TestScratchPads = ({
         <ModalResizeable
           key={e.id}
           handleCloseScratchPad={() => handleCloseScratchPad(e)}
-          position="bottom left"
+          position="center left"
           header={
-            <div className="relative">
-              <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
-                <div className="truncate">
-                  <span className="text-base font-semibold">{`${exhibitText} ${
-                    (i ?? 0) + 1
-                  }: `}</span>
-                  {exhibitsDes?.name}
-                </div>
+            <div className="modal-header modal-dragger flex w-full cursor-move items-center justify-between rounded-t-xl bg-gray-100 px-4 py-3">
+              <div className="text-sm font-semibold text-gray-800">
+                {`${exhibitText} ${(i ?? 0) + 1}: ${exhibitsDes?.name}`}
               </div>
               <button
-                className="absolute right-3 top-2"
+                className="text-icon"
                 onClick={() => handleCloseScratchPad(e)}
               >
-                <CloseIcon />
+                <CloseIconNote />
               </button>
             </div>
           }
+          draggableFull
+          modalIndex={i}
         >
-          <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
+          <div className="h-full bg-white px-4 py-3">
             <EditorReader
               text_editor_content={exhibitsDes?.description}
               className="w-full"
@@ -167,7 +172,10 @@ const TestScratchPads = ({
               exhibitsDes?.files?.length > 0 &&
               exhibitsDes?.files?.map((e: any, index: number) => {
                 return (
-                  <div key={index} className="h-full overflow-auto bg-white">
+                  <div
+                    key={index}
+                    className="h-full cursor-pointer overflow-auto bg-white"
+                  >
                     <FileViewer
                       fileName={e?.resource?.name}
                       fileUrl={e?.resource?.url}
@@ -176,6 +184,7 @@ const TestScratchPads = ({
                 )
               })}
           </div>
+          <Triangle className="absolute bottom-2 right-2" />
         </ModalResizeable>
       )
     } else if (e.type === 'file') {

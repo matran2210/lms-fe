@@ -1,5 +1,5 @@
 import { ActiveIcon } from '@assets/icons'
-import SappModalV2 from '@components/base/modal/SappModalV2'
+import SappModalV3 from '@components/base/modal/SappModalV3'
 import { Dispatch, SetStateAction } from 'react'
 
 interface IProps {
@@ -17,35 +17,38 @@ const PopupActive = ({ open, setOpen, activeCourse, time = 60 }: IProps) => {
     activeCourse()
   }
 
+  const ContentActiveCourse = () => {
+    return (
+      <div className="justify-center self-stretch text-center">
+        <span className="text-base font-normal leading-normal text-gray-800">
+          You will have{' '}
+        </span>
+        <span className="text-base font-bold leading-normal text-primary">
+          {time} {time > 1 ? 'days' : 'day'}
+        </span>
+        <span className="text-base font-normal leading-normal text-gray-800">
+          {' '}
+          from the activation date to study this course
+        </span>
+      </div>
+    )
+  }
+
   return (
-    <SappModalV2
+    <SappModalV3
       open={open}
-      okButtonCaption="Confirm"
-      cancelButtonCaption="Cancel"
-      onOk={onOk}
       handleCancel={handleCancel}
-      cancelButtonClass={'no-underline'}
-      showHeader={false}
-      footerButtonClassName="flex flex-col-reverse gap-8"
-      parentChildClass=""
-      position="center"
-      fullWidthBtn={true}
-      closeAfterSubmit={true}
+      onOk={onOk}
+      icon={<ActiveIcon />}
+      header="Active Course?"
+      content={<ContentActiveCourse />}
+      showFooter
+      okButtonCaption="Confirm"
+      fullWidthBtn
       buttonSize="medium"
-      confirmOnclose={false}
-      title={undefined}
-    >
-      <div className="mb-6 flex justify-center">
-        <ActiveIcon />
-      </div>
-      <div className="flex justify-center text-2xl font-semibold text-bw-1 md:text-4xl">
-        Active Course?
-      </div>
-      <div className="mb-1 mt-4 text-center text-medium-sm text-gray-1 2xl:mb-11">
-        You will have {time} {time > 1 ? 'days' : 'day'} from the activation
-        date to study this course
-      </div>
-    </SappModalV2>
+      cancelButtonCaption="I will begin later"
+      isUnderLine
+    />
   )
 }
 

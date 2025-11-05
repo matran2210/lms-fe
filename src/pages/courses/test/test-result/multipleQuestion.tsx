@@ -1,20 +1,18 @@
-import { IconAnnotationGuide } from '@assets/icons'
-import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import 'aos/dist/aos.css'
 import clsx from 'clsx'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useRef, useState } from 'react'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { ANIMATION, GRADE_STATUS, PageLink } from 'src/constants'
 import { IAnswer } from 'src/type'
 import Recommendation from './Recommendation'
 import { COMMENTS } from 'src/constants/grade'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
 
 interface MultipleQuestionProps {
   questions: any
   className?: string
   multipleQuestionRef?: React.RefObject<HTMLDivElement>
-  setOpenAnnotaion: (open: boolean) => void
   isTeacher?: boolean
 }
 
@@ -22,9 +20,9 @@ const MultipleQuestion = ({
   questions,
   className,
   multipleQuestionRef,
-  setOpenAnnotaion,
   isTeacher,
 }: MultipleQuestionProps) => {
+  const { isLargeDesktopView } = useTailwindBreakpoint()
   const router = useRouter()
   const [showMore, setShowMore] = useState<boolean>(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -61,18 +59,24 @@ const MultipleQuestion = ({
     if (type === 'Constructed Questions') {
       return questions?.quizAttempt?.grading_status ===
         GRADE_STATUS.FINISHED_GRADING
-        ? ' text-graded-finish border-graded-finish'
+        ? 'text-info border-info hover:bg-info-50'
         : data?.question?.qType === 'ESSAY' && data?.active === 'SUBMITED'
-          ? ' text-pinned-1 border-pinned-1'
-          : ' text-gray-1 border-gray-1'
+          ? ' text-info border-info hover:bg-info-50'
+          : ' text-warning border-warning hover:bg-warning-50'
     }
     return data?.is_correct
-      ? ' text-state-success border-success'
-      : ' text-state-error border-error'
+      ? 'text-success border-success hover:bg-success-50'
+      : ' text-error border-error hover:bg-error-50'
   }
 
-  const renderBoxes = (type: string, data: any, totalBefore: number) => {
-    const renderBoxItems = data?.map((item: IAnswer, index: number) => {
+  const renderBoxes = (
+    type: string,
+    data: any,
+    totalBefore: number,
+    extra?: React.ReactNode,
+    showMore?: boolean,
+  ) => {
+    const renderBoxItems = (data || [])?.map((item: IAnswer, index: number) => {
       return (
         <button
           key={item?.id}
@@ -84,7 +88,7 @@ const MultipleQuestion = ({
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
           }
-          className={`flex aspect-1 cursor-pointer flex-row items-center justify-center border border-solid text-sm font-medium leading-8.5 xl:h-auto xl:w-auto
+          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -94,23 +98,43 @@ const MultipleQuestion = ({
     })
 
     return (
-      <div className="w-full">
-        {data?.length > 0 && (
-          <>
-            <div className="mb-4 text-lg-xl font-semibold text-bw-1 xl:text-xl xl:font-medium">
+      data?.length > 0 && (
+        <div className="w-full">
+          <div className="flex items-center justify-between">
+            <div className="mb-6 text-base font-semibold text-gray-800 md:text-xl">
               {type}
             </div>
+            <div className="mb-6">{extra}</div>
+          </div>
+          <div className="w-full overflow-x-auto">
             <div
-              className={clsx(
-                'grid grid-cols-7 gap-2 md:grid-cols-15 xl:grid-cols-6 xl:gap-3',
-                type === 'Multiple Choice Questions' ? 'mb-10' : '',
-              )}
+              className={clsx('', {
+                'grid grid-cols-7 gap-3': isLargeDesktopView,
+                'flex flex-wrap gap-4':
+                  (showMore && !isLargeDesktopView) ||
+                  (!showMore && !isLargeDesktopView && data.length <= 10),
+                'grid min-w-max grid-flow-col grid-rows-2 gap-3 sm:min-w-0 sm:grid-flow-row sm:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] sm:grid-rows-none md:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] md:gap-4':
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 10 &&
+                  data.length <= 20,
+                // 'grid min-w-max grid-flow-col gap-5':
+                //   !showMore && !isLargeDesktopView,
+
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 lg:min-w-0 lg:grid-flow-row lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))] lg:grid-rows-none':
+                  !showMore &&
+                  !isLargeDesktopView &&
+                  data.length > 20 &&
+                  data.length <= 35,
+                'mb-2 grid min-w-max grid-flow-col grid-rows-2 gap-3 md:gap-5 md:gap-y-4 lg:grid-cols-[repeat(auto-fit,_minmax(38px,_1fr))]':
+                  !showMore && !isLargeDesktopView && data.length > 35,
+              })}
             >
               {renderBoxItems}
             </div>
-          </>
-        )}
-      </div>
+          </div>
+        </div>
+      )
     )
   }
 
@@ -134,8 +158,8 @@ const MultipleQuestion = ({
               )
             }
           }}
-          className={`flex h-8 w-8 flex-none flex-row items-center justify-center border border-solid text-sm font-medium
-            leading-8.5 xl:h-12 xl:w-12
+          className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium
+            leading-[33px] xl:h-[38px] xl:w-[38px]
             ${renderBoxesAndLineClass(type, item)}
           `}
         >
@@ -151,7 +175,7 @@ const MultipleQuestion = ({
             <div
               className={`flex w-auto flex-row items-start gap-3 overflow-x-auto overflow-y-hidden ${
                 type === 'Constructed Questions' && totalBefore > 0
-                  ? 'border-l border-default pl-3'
+                  ? 'border-l border-[#DCDDDD] pl-3'
                   : ''
               }`}
             >
@@ -163,34 +187,119 @@ const MultipleQuestion = ({
     )
   }
 
+  const annotationsMultipleChoiceQuestions = [
+    {
+      text: 'Correct',
+      color: 'bg-success',
+    },
+    {
+      text: 'Incorrect',
+      color: 'bg-error',
+    },
+  ]
+
+  const annotationsConstructedQuestions =
+    questions?.quizAttempt?.grading_status === GRADE_STATUS.FINISHED_GRADING
+      ? [
+          {
+            text: 'Graded',
+            color: 'bg-info',
+          },
+        ]
+      : [
+          {
+            text: 'Completed',
+            color: 'bg-info',
+          },
+          {
+            text: 'Not Completed',
+            color: 'bg-warning',
+          },
+        ]
+
+  const renderAnnotations = (
+    annotationsList: {
+      text: string
+      color: string
+    }[],
+  ) => {
+    return (
+      <div
+        className={clsx('text-xs md:text-base', {
+          'grid w-full grid-cols-2 gap-y-3': isLargeDesktopView,
+          'mx-auto flex items-center justify-center gap-8 md:gap-12':
+            showMore && !isLargeDesktopView,
+          'grid grid-cols-4 gap-x-12 gap-y-3': !showMore && !isLargeDesktopView,
+        })}
+      >
+        {annotationsList?.map((annotation) => (
+          <div key={annotation.text} className="flex items-center gap-2">
+            <div
+              className={`aspect-square h-4 w-4 rounded-full ${annotation.color}`}
+            />
+            <p>{annotation.text}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex w-full flex-col items-start gap-y-5 overflow-auto bg-white p-6 shadow-sidebar-tablet 
-        xl:sticky xl:top-6 xl:!h-fit xl:max-h-[calc(100vh-65px)] xl:pb-0 xl:pl-7 xl:shadow-sidebar`}
-        data-aos={ANIMATION.DATA_AOS}
+        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
+        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
-        {/* <div className=""> */}
         <div
           className={`${
             showMore
-              ? 'visible mb-4 h-96 overflow-y-auto opacity-100 xl:mb-0'
+              ? 'visible overflow-y-auto opacity-100 xl:mb-0'
               : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
           }
-        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible xl:pb-5`}
+        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
         >
-          <div className="flex w-full flex-col items-start">
+          <div className="flex w-full flex-col items-start gap-8">
             {renderBoxes(
               'Multiple Choice Questions',
               questions?.selectedResponseAnswers ?? [],
               0,
+              <>
+                {Number(questions?.constructedResponseAnswers?.length || 0) >
+                  0 && (
+                  <div
+                    className=" cursor-pointer text-sm font-medium underline xl:hidden"
+                    onClick={() => {
+                      setShowMore(!showMore)
+                      if (multipleQuestionRef?.current) {
+                        multipleQuestionRef.current.style.height = 'fit-content'
+                      }
+                    }}
+                  >
+                    {showMore ? 'Show less' : 'Show more'}
+                  </div>
+                )}
+              </>,
+              showMore,
             )}
+
+            {questions?.selectedResponseAnswers?.length > 0 &&
+              renderAnnotations(annotationsMultipleChoiceQuestions)}
+
+            {questions?.constructedResponseAnswers?.length > 0 && (
+              <div className="h-[1px] w-full bg-gray-300" />
+            )}
+
             {renderBoxes(
               'Constructed Questions',
               questions?.constructedResponseAnswers ?? [],
               questions?.selectedResponseAnswers?.length ?? 0,
+              null,
+              showMore,
             )}
+
+            {questions?.constructedResponseAnswers?.length > 0 &&
+              renderAnnotations(annotationsConstructedQuestions)}
           </div>
 
           {isGradeFinish && (
@@ -202,24 +311,13 @@ const MultipleQuestion = ({
             />
           )}
         </div>
-        <div className="bottom-0 mt-auto w-full bg-white xl:sticky">
+        <div className="bottom-0 mt-auto w-full bg-white xl:hidden">
           <div
-            className={`flex max-w-full ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 border-default md:flex-row xl:items-center xl:py-6 ${
-              showMore ? 'items-center border-t pt-4' : 'pt-0 xl:border-t'
+            className={`flex ${showMore ? 'flex-row' : 'flex-col'} items-end justify-between gap-2 md:flex-row xl:items-center ${
+              showMore ? 'items-center' : 'pt-0'
             }`}
           >
-            <div className="flex w-full flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
-              <div
-                className="flex cursor-pointer flex-row pr-2 text-center text-gray-1  hover:text-primary"
-                onClick={() => setOpenAnnotaion(true)}
-              >
-                <div className="my-auto">
-                  <IconAnnotationGuide />
-                </div>
-                <div className="my-auto ml-1 text-xs font-normal">
-                  Annotation Guide
-                </div>
-              </div>
+            <div className="flex w-full flex-grow flex-col gap-3 md:w-9/12 lg:w-11/12 xl:flex-row">
               <div
                 ref={elementRef as React.LegacyRef<HTMLDivElement>}
                 onMouseDown={handleMouseDown}
@@ -228,59 +326,53 @@ const MultipleQuestion = ({
                 onMouseLeave={() => setIsDragging(false)}
                 className={`${
                   !showMore ? 'block' : 'hidden'
-                } grid !max-h-[1040px] w-full grid-cols-2 gap-3 duration-300 xl:hidden`}
+                } !max-h-[1040px] w-full duration-300 xl:hidden`}
               >
-                {renderLines(
+                {renderBoxes(
                   'Multiple Choice Questions',
                   questions?.selectedResponseAnswers ?? [],
                   0,
+                  <div className="flex max-h-[40px] grow items-center justify-end">
+                    {Number(
+                      questions?.constructedResponseAnswers?.length || 0,
+                    ) > 0 && (
+                      <div
+                        className="block cursor-pointer text-sm font-medium underline xl:hidden"
+                        onClick={() => {
+                          setShowMore(!showMore)
+                          if (multipleQuestionRef?.current) {
+                            multipleQuestionRef.current.style.height =
+                              'fit-content'
+                          }
+                        }}
+                      >
+                        Show more
+                      </div>
+                    )}
+                  </div>,
+                  showMore,
                 )}
-                {renderLines(
-                  'Constructed Questions',
-                  questions?.constructedResponseAnswers ?? [],
-                  questions?.selectedResponseAnswers?.length ?? 0,
-                )}
-                {isGradeFinish && (
-                  <ButtonPrimary
-                    size={'medium'}
-                    className={'mb-0 px-11 text-medium-sm !font-medium'}
-                    title={COMMENTS.REQUEST_REGRADING}
-                    onClick={() => setOpenRecommendation(true)}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="flex max-h-[40px] grow items-center justify-end md:w-1/5">
-              {Number(questions?.selectedResponseAnswers?.length || 0) +
-                Number(questions?.constructedResponseAnswers?.length || 0) >=
-                8 && (
                 <div
-                  className="mr-6 block cursor-pointer text-medium-sm font-medium underline xl:hidden"
-                  onClick={() => {
-                    setShowMore(!showMore)
-                    if (multipleQuestionRef?.current) {
-                      multipleQuestionRef.current.style.height = 'fit-content'
-                    }
-                  }}
-                >
-                  {showMore ? 'View Less' : 'View All'}
-                </div>
-              )}
-              <Link
-                href={`${isTeacher ? PageLink.TEACHER_MY_COURSE : PageLink.COURSES}/my-course/${questions?.class_id ?? ''}`}
-              >
-                <ButtonPrimary
-                  title={'Quit'}
-                  size={'medium'}
                   className={
-                    'mb-0 max-w-[120px] px-11 text-medium-sm !font-medium'
+                    'mt-3 flex items-center justify-center gap-8 text-xs md:gap-12 md:text-base'
                   }
-                />
-              </Link>
+                >
+                  {annotationsMultipleChoiceQuestions.map((annotation) => (
+                    <div
+                      key={annotation.text}
+                      className="flex items-center gap-1 lg:gap-2"
+                    >
+                      <div
+                        className={`aspect-square h-4 w-4 rounded-full md:h-5 md:w-5 ${annotation.color}`}
+                      />
+                      <p>{annotation.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        {/* </div> */}
       </div>
       <Recommendation
         classId={questions?.class_id ?? ''}

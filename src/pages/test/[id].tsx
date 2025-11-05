@@ -7,23 +7,21 @@ import {
   CalculatorIcon,
   ExcelIcon,
   ExhibitsIcon,
+  CalculatorIconV2,
+  DownloadIcon,
+  FileTextIcon,
   FlagIcon,
-  HighlightIcon,
-  ScratchPadIcon,
-  TextSquareIcon,
-  UnHighLightIcon,
-  WordIcon,
+  ResizeIcon,
+  ScratchPadIconV2,
+  ShowLessIcon,
+  ShowMoreIcon,
 } from '@assets/icons'
-import HookFormCheckBoxGroup from '@components/base/checkbox/HookFormCheckBoxGroup'
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import EditorReader from '@components/base/editor/EditorReader'
 import TabSlide from '@components/base/tabSlide/TabSlide'
-import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
-import DragNDropPreivew from '@components/questionType/DragNDrop'
-import MatchingQuestion from '@components/questionType/MatchingQuestion'
 import MultiChoiceQuestion from '@components/questionType/MultipleChoiceQuestion'
-import NewFiltext from '@components/questionType/NewFillText'
+import NewFilltext from '@components/questionType/NewFillText'
 import OneChoiceQuestion from '@components/questionType/OneChoiceQuestion'
 import SelectWord from '@components/questionType/SelectQuestion'
 import ModalUploadFile from '@components/uploadFile/ModalUploadFile/ModalUploadFile'
@@ -53,7 +51,6 @@ import {
   TEST_TYPE,
 } from 'src/constants'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
-import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
 import { IExhibit } from 'src/type/exhibit'
 import { CoursesAPI } from '../api/courses'
@@ -61,10 +58,28 @@ import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
+import styles from './test.module.scss'
 
+import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
+import BackToTop from '@components/BackToTop'
+import Popover from '@components/Popover'
+import ButtonSecondary from '@components/base/button/ButtonSecondary'
+import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import Icon from '@components/icons'
+import { NotesOutline } from '@components/icons/Notes'
+import PulsingExclamation from '@components/icons/PulsingExclamation'
+import Layout from '@components/layout'
 import ButtonContent from '@components/mycourses/test/ButtonContent'
-import HeaderTest from '@components/test/HeaderTest'
+import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'
+import RequirementsTab from '@components/test/RequirementsTab'
+import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
+import TestWrapper from '@components/test/layout/TestWrapper'
+import { TestAPI } from '@pages/api/test'
+import { GradingPreference } from '@utils/constants'
 import { trackGAEvent } from '@utils/google-analytics'
+import { TabsProps, Tooltip } from 'antd'
+import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import {
@@ -75,12 +90,14 @@ import {
   IDataQuestion,
   Requirement,
   RequirementItem,
+  ScratchPad,
   ScratchPadValue,
 } from 'src/type'
 import { IRequirement } from 'src/type/case-study'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
+  hasEditorValueFromHtml,
   isValuesEqual,
   isWorkbookEmpty,
 } from '../../utils/helpers/quiz-test/helper'
@@ -89,356 +106,40 @@ import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal
 import TestScratchPads from './TestScratchPads'
 import useGetQuestionTabs from './custom-hook/useGetQuestionTabs'
 import useGetQuizDetail from './custom-hook/useGetQuizDetail'
-import { TestAPI } from '@pages/api/test'
-import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
-import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
+import DragDropQuestion, {
+  SlotValue,
+} from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from 'src/constants/attempt'
 import { IQuestion } from 'src/type/course'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
+import ButtonPrimary from '@components/base/button/ButtonPrimary'
+import ButtonText from '@components/base/button/ButtonText'
+import { download } from '@components/learning/activity/ActivityResource'
+import ButtonTextV2 from '@components/base/button/ButtonTextV2'
 
 declare global {
   interface Window {
     userAgreed: any
   }
 }
-
+interface Tab {
+  id: string
+  flag?: boolean
+  is_viewed_answer?: boolean
+  [key: string]: any
+}
 const warningText = 'Are you sure you want to leave this page?'
 const TestDetail = () => {
-  const checkType = (
-    data: any,
-    type: string,
-    currentTabID: string,
-    defaultValue: any,
-    corrects?: any,
-    highlighted?: any,
-    solution?: any,
-    done?: boolean,
-  ) => {
-    switch (type) {
-      case QUESTION_TYPES.TRUE_FALSE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.ONE_CHOICE:
-        return (
-          <OneChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            corrects={corrects}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.MULTIPLE_CHOICE:
-        return (
-          <MultiChoiceQuestion
-            data={data}
-            control={control}
-            name={`${currentTabID}_answer`}
-            defaultValues={defaultValue}
-            setValue={setValue}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            corrects={corrects}
-            solution={solution}
-            getValue={getValues}
-            tabs={tabs}
-            currentPage={currentPage}
-          />
-        )
-      case QUESTION_TYPES.MATCHING:
-        return (
-          <MatchingQuestion
-            data={data}
-            action={getAnswerMatching}
-            ref={ref}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            done={done}
-            corrects={corrects?.corrects}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.FILL_WORD:
-        return (
-          <NewFiltext
-            control={control}
-            name={`${currentTabID}_fillword`}
-            data={data}
-            setValue={setValue}
-            action={getValueFillText}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.DRAG_DROP:
-        return (
-          <DragNDropPreivew
-            data={data}
-            action={getAnswerDragNDrop}
-            ref={ref}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            solution={solution}
-            handleGetData={(data: DragDropAnswerItem) => {
-              setValue(`${currentTabID}_drag_drop_answer`, data)
-            }}
-          />
-        )
-      case QUESTION_TYPES.SELECT_WORD:
-        return (
-          <SelectWord
-            onChange={(
-              value: Array<{
-                answer_id: string
-                answer_position: number
-              }>,
-            ) => setValue(`${currentTabID}_answer`, value)}
-            data={data}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            defaultAnswer={defaultValue}
-            corrects={corrects?.corrects}
-            ref={ref}
-            solution={solution}
-          />
-        )
-      case QUESTION_TYPES.ESSAY:
-        const handleEssayChange = (id: string) => {
-          setAnswerListValue(id as unknown as number)
-        }
-        // Tạo data từng bước
-        const part1 =
-          currentTabContent?.data?.requirements?.[essayData?.index] || {}
-        const part2 = essayData?.req || {}
-        const dataEssay = { ...part2, ...part1 }
-        const key = `${currentTabID}_${essayData?.index}_answer`
-        const defaultValueEssay = () => {
-          const valueFromForm = getValues(key)
-          const response_option = currentTabContent?.data?.response_option
-
-          switch (response_option) {
-            case RESPONSE_OPTION.WORD:
-              if (valueFromForm !== undefined && valueFromForm !== null) {
-                return valueFromForm
-              }
-              const requirement =
-                currentTabContent?.data?.requirements?.[essayData?.index]
-
-              if (requirement?.short_answer) {
-                return requirement.short_answer
-              }
-              if (requirement?.answer_text) {
-                return requirement.answer_text
-              }
-              if (requirement?.answer_template) {
-                return requirement.answer_template
-              }
-              if (currentTabContent.answer) {
-                return currentTabContent.answer
-              }
-
-              return currentTabContent?.data?.answer_template
-
-            case RESPONSE_OPTION.SHEET:
-              const valueFromSheetForm = getValues(key)
-              if (valueFromSheetForm) {
-                const isEmptyWorkbook = isWorkbookEmpty(
-                  JSON.parse(valueFromSheetForm),
-                )
-
-                if (isEmptyWorkbook) {
-                  const requirement =
-                    currentTabContent?.data?.requirements?.[essayData?.index]
-                  if (requirement?.short_answer) {
-                    return requirement.short_answer
-                  }
-                  if (requirement?.answer_text) {
-                    return requirement.answer_text
-                  }
-                  if (requirement?.answer_template) {
-                    return requirement.answer_template || defaultSheetData
-                  }
-                  if (currentTabContent.answer) return currentTabContent.answer
-                  return (
-                    currentTabContent?.data?.answer_template || defaultSheetData
-                  )
-                }
-                return valueFromSheetForm
-              }
-              const requirementSheet =
-                currentTabContent?.data?.requirements?.[essayData?.index]
-              if (requirementSheet?.short_answer) {
-                return requirementSheet.short_answer
-              }
-              if (requirementSheet?.answer_text) {
-                return requirementSheet.answer_text
-              }
-              if (requirementSheet?.answer_template) {
-                return requirementSheet.answer_template || defaultSheetData
-              }
-              if (currentTabContent.answer) return currentTabContent.answer
-              return (
-                currentTabContent?.data?.answer_template || defaultSheetData
-              )
-          }
-        }
-        return (
-          <EssayQuestionPreview
-            data={dataEssay}
-            question_content={currentTabContent?.data?.question_content}
-            index={essayData?.index}
-            question_data={currentTabContent?.data}
-            control={control}
-            handleSaveHighLight={handleSaveHighLight}
-            highlighted={highlighted}
-            removeHighlight={removeHighlight}
-            allowHighLight={allowHighLight}
-            allowUnHighLight={allowUnHighLight}
-            solution={solution}
-            name={key}
-            setValue={setValue}
-            defaultValue={defaultValueEssay()}
-            response_option_custom={currentTabContent.response_type}
-            externalRef={refEditor}
-            fullData={currentTabContent}
-            openChooseFile={(e: any) =>
-              setOpenUpload({
-                status: true,
-                question_id: currentPage,
-                requirementIndex: essayData?.index,
-              })
-            }
-            handleClearFile={handleClearFile}
-            setOpenPdf={handleOpenScratchPad}
-            handleSaveHighLightRequirement={handleSaveHighLightRequirement}
-            showRequiment={showListRequirement}
-            handleChange={handleEssayChange}
-            isInTest
-          />
-          // <Luckysheet/>
-        )
-      default:
-        return <div></div>
-    }
-  }
-
-  /**
-   * DES: confirm unfinished questions before submitting
-   */
-  const checkUnSubmitAnswer = (): number[] => {
-    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
-    let result: number[] = []
-    answers?.map((item: Answer, index: number) => {
-      if (!item.attempted) {
-        result.push(index + 1)
-      } else {
-        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
-          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
-            result.push(index + 1)
-          }
-        } else {
-          if (
-            !item.done &&
-            !validateAnswer({
-              answer: item.answer,
-              answer_file: item?.answer_file,
-            })
-          ) {
-            result.push(index + 1)
-          }
-        }
-      }
-    })
-    setUnSubmitAnswerData(result)
-    return result
-  }
-
-  // Validate các câu hỏi xem đã trả lời chưa
-  const validateAnswer = (item: {
-    answer: string | Object[] | string[]
-    answer_file?: { file_key?: string; file_name?: string }
-  }) => {
-    if (item?.answer_file?.file_key) return true
-    if (typeof item?.answer === 'string' && !item?.answer) {
-      return false
-    }
-    if (!item?.answer?.length) return false
-    if (Array.isArray(item?.answer)) {
-      const emptyAnswer = item?.answer?.filter(
-        (el: { idAnswer?: string; answer_id?: string }) => {
-          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
-            return el
-          }
-          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
-            return el
-          }
-        },
-      )
-      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
-      if (emptyAnswer?.length || emptyEl.length) {
-        return false
-      }
-    }
-    return true
-  }
-  // validate essay question with requirement
-  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
-    if (data?.requirements?.length > 0) {
-      return data?.requirements?.some(
-        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
-      )
-    } else {
-      return false
-    }
-  }
-
+  const [hasScrollBar, setHasScrollBar] = useState(undefined) as any
+  const [editorReady, setEditorReady] = useState(true)
+  const [tooltipOpen, setTooltipOpen] = useState(false)
+  const answerListRef = useRef<AnswerList>({})
+  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
+    useCourseContext()
+  const scrollRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-
   const { quizDetail } = useGetQuizDetail(router.query.id as string)
   const { questions } = useGetQuestionTabs(router.query.id as string)
-
   const type = router.query.type
   const [currentPage, setCurrentPage] = useState<any>(questions?.[0]?.id)
   const { control, watch, getValues, setValue, reset, resetField } = useForm()
@@ -452,25 +153,24 @@ const TestDetail = () => {
     setValue: setValueExhibits,
     watch: watchExhibits,
   } = useForm()
+  const timeRef = useRef(null) as any
+  const ref = useRef(null) as any
+  const refEditor = useRef(null) as any
+  const currentTabIdRef = useRef(null)
+  const dispatch = useAppDispatch()
   const [essayData, setEssayData] = useState<any>()
   const [openScratchPad, setOpenScratchPad] = useState<Array<any>>([])
   const [onFocusingPad, setOnFocusingPad] = useState('')
   const [tabs, setTabs] = useState<any>([])
-  const [showListExhibits, setShowListExhibits] = useState(false)
   const [showListRequirement, setShowLisRequirement] = useState(false)
   const [allowHighLight, setAllowHighLight] = useState(false)
   const [allowUnHighLight, setAllowUnHighLight] = useState(false)
   const [exhibitData, setExhibitData] = useState<IExhibit[]>()
   const [routeBack, setRouteBack] = useState(false)
   const [isQuizAttemptCreated, setIsQuizAttemptCreated] = useState(false)
-  const dropUpRef = useRef(null)
   const dropUpRequire = useRef(null)
   const [startTime, setStartTime] = useState(Date.now())
   const [activeShowAll, setActiveShowAll] = useState<boolean>(false)
-  const timeRef = useRef(null) as any
-  const currentTabIdRef = useRef(null)
-  const dispatch = useAppDispatch()
-
   const [submited, setSubmited] = useState(false)
   const [openTimeOut, setOpenTimeOut] = useState(false)
   const [QuizResultId, setQuizResultId] = useState('')
@@ -485,12 +185,17 @@ const TestDetail = () => {
   const [currentLeftWidth, setCurrentLeftWidth] = useState(0)
   const { unsavedChange } = useAppSelector((state) => state.loginReducer)
   const rightSideRef = useRef<any>(null)
-  const [mousePosition, setMousePosition] = useState({ x: null, y: null })
+  const [mousePosition, setMousePosition] = useState<{
+    x: number | null
+    y: number | null
+  }>({ x: null, y: null })
   const [openUnSubmitAnswer, setUnSubmitAnswer] = useState(false)
   const [unSubmitAnswerData, setUnSubmitAnswerData] = useState<Array<number>>(
     [],
   )
   const [exhibitText, setExhibitText] = useState<string>('')
+  const [isClickExhibitOpen, setIsClickExhibitOpen] = useState(false)
+
   const [openReportModal, setOpenReportModal] = useState({
     open: false,
     resultId: '',
@@ -506,7 +211,7 @@ const TestDetail = () => {
     Array<{
       question_id: string
       total_attempt_time: number
-      scratch_pad: string
+      scratch_pads: ScratchPad[]
       [key: string]: any
     }>
   >([])
@@ -514,17 +219,51 @@ const TestDetail = () => {
   const [openResetToTemplateModal, setOpenResetToTemplateModal] =
     useState(false)
   const quizAttempt = JSON.parse(localStorage.getItem('quizAttempt') || '{}')
-
   const onOpenResetToTemplateModal = () => {
     setOpenResetToTemplateModal(true)
   }
   const onCloseResetToTemplateModal = () => {
     setOpenResetToTemplateModal(false)
   }
-  useClickOutside({
-    ref: dropUpRef,
-    callback: () => setShowListExhibits(false),
-  })
+  const [showWarning, setShowWarning] = useState(true)
+  const [filteredTabs, setFilterTabs] = useState<any[]>([])
+  const [trigger, setTrigger] = useState(false)
+
+  // Tính toán số câu trên mỗi dòng dựa trên chiều rộng màn hình (responsive)
+  const [windowWidth, setWindowWidth] = useState(0)
+  const MAX_ITEMS_PER_ROW = 25
+  const MIN_ITEMS_PER_ROW = 14
+  const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
+  const GAP_WIDTH = 8 // Gap giữa các item
+
+  const numberDisplayData = useMemo(() => {
+    if (windowWidth === 0) return MAX_ITEMS_PER_ROW
+
+    // Tính toán số câu có thể hiển thị trên 1 dòng
+    const extraWidth = 430 // Chiều rộng của các btn 2 bên
+    const availableWidth = windowWidth - 200 - extraWidth
+    const itemsPerRow = Math.floor(availableWidth / (ITEM_WIDTH + GAP_WIDTH))
+
+    // Giới hạn trong khoảng MIN_ITEMS_PER_ROW đến MAX_ITEMS_PER_ROW
+    return Math.max(MIN_ITEMS_PER_ROW, Math.min(MAX_ITEMS_PER_ROW, itemsPerRow))
+  }, [windowWidth])
+
+  // Theo dõi chiều rộng màn hình
+  useEffect(() => {
+    const updateWindowWidth = () => {
+      setWindowWidth(window.innerWidth)
+    }
+
+    // Cập nhật ngay lập tức
+    updateWindowWidth()
+
+    // Thêm window resize listener
+    window.addEventListener('resize', updateWindowWidth)
+
+    return () => {
+      window.removeEventListener('resize', updateWindowWidth)
+    }
+  }, [])
 
   useClickOutside({
     ref: dropUpRequire,
@@ -557,13 +296,11 @@ const TestDetail = () => {
         const getCorrectAndSolution = (
           currentTabContent: any,
           answerSubmitted: any,
-          scratchPad: string,
         ): {
           corrects: any
           solution: any
           isSelfReflection: boolean
           requirements: any[]
-          scratch_pad: string
         } => {
           if (!answerSubmitted?.[0]) {
             return {
@@ -571,7 +308,6 @@ const TestDetail = () => {
               solution: '',
               isSelfReflection: false,
               requirements: [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -603,7 +339,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -617,7 +352,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -627,7 +361,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -641,7 +374,6 @@ const TestDetail = () => {
               solution,
               isSelfReflection: is_self_reflection || false,
               requirements: requirements || [],
-              scratch_pad: scratchPad,
             }
           }
 
@@ -650,18 +382,16 @@ const TestDetail = () => {
             solution: solution,
             isSelfReflection: is_self_reflection,
             requirements: requirements,
-            scratch_pad: scratchPad,
           }
         }
 
         const dataCorrectAndSolution = getCorrectAndSolution(
           objTab,
           answerSubmitted?.results,
-          answerSubmitted?.scratch_pad,
         )
         const updatedObjTab = answerSubmitted?.results
           ? { ...objTab, ...dataCorrectAndSolution }
-          : { ...objTab, scratch_pad: answerSubmitted?.scratch_pad }
+          : { ...objTab }
 
         if (objTab?.data?.qType === QUESTION_TYPES.ESSAY) {
           // Case: if objTab has data
@@ -885,7 +615,7 @@ const TestDetail = () => {
                     id: answer?.id ?? '',
                     idAnswer: undefined,
                     value: '',
-                    position: index + 1,
+                    position: savedData?.answer_position,
                   }
                 }
               }
@@ -896,12 +626,10 @@ const TestDetail = () => {
                 const currentAnswer = (objTab?.data?.answers ?? []).find(
                   (el: any) => el.id === savedData?.answer_id,
                 )
-
                 objAnswer = {
-                  id: currentAnswer?.dropId,
                   idAnswer: savedData?.answer_id,
                   value: currentAnswer?.answer,
-                  position: index + 1,
+                  position: savedData?.answer_position,
                 }
               }
 
@@ -916,7 +644,7 @@ const TestDetail = () => {
                   id: currentAnswer?.dropId,
                   idAnswer: undefined,
                   value: '',
-                  position: index + 1,
+                  position: 0,
                 }
               }
               return objAnswer
@@ -967,6 +695,13 @@ const TestDetail = () => {
     }
   }, [openTimeOut, remainingTimeinSeconds])
 
+  const isShowIconButtonInBottom = [
+    QUESTION_TYPES.FILL_WORD,
+    QUESTION_TYPES.TRUE_FALSE,
+    QUESTION_TYPES.ONE_CHOICE,
+    QUESTION_TYPES.SELECT_WORD,
+  ].includes(currentTabContent?.topicDescription?.qType as QUESTION_TYPES)
+
   useEffect(() => {
     if (currentTabContent?.id) {
       const oldCurrentTabData = cloneDeep(currentTabContent)
@@ -990,6 +725,508 @@ const TestDetail = () => {
     return -1
   }, [openScratchPad])
 
+  const isScatchPadEnabled = useMemo(() => {
+    return openScratchPad.some((item) => item.type === 'scratch_pad') || false
+  }, [openScratchPad])
+
+  const checkType = (
+    data: any,
+    type: string,
+    currentTabID: string,
+    defaultValue: any,
+    corrects?: any,
+    highlighted?: any,
+    solution?: any,
+    done?: boolean,
+  ) => {
+    const handleEssayChange = (id: string) => {
+      setAnswerListValue(id as unknown as number)
+    }
+
+    const essayRequirementsItem = (): TabsProps['items'] => {
+      return (
+        currentTabContent?.data?.requirements?.map(
+          (requirement: any, index: number) => {
+            const hasAnswer =
+              currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
+                ? checkSheetAnswered(
+                    getValues(`${currentTabID}_${index}_answer`),
+                  )
+                : hasEditorValueFromHtml(
+                    getValues(`${currentTabID}_${index}_answer`),
+                  )
+            const key = `${currentTabID}_${index}_answer`
+            const getDefaultValueEssay = () => {
+              const valueFromForm = getValues(key)
+              const response_option = currentTabContent?.data?.response_option
+              switch (response_option) {
+                case RESPONSE_OPTION.WORD:
+                  if (valueFromForm !== undefined && valueFromForm !== null) {
+                    return valueFromForm
+                  }
+
+                  if (requirement?.short_answer) {
+                    return requirement.short_answer
+                  }
+                  if (requirement?.answer_text) {
+                    return requirement.answer_text
+                  }
+                  if (requirement?.answer_template) {
+                    return requirement.answer_template
+                  }
+                  if (currentTabContent.answer) {
+                    return currentTabContent.answer
+                  }
+
+                  return currentTabContent?.data?.answer_template
+
+                case RESPONSE_OPTION.SHEET:
+                  const valueFromSheetForm = getValues(key)
+                  if (valueFromSheetForm) {
+                    const isEmptyWorkbook = isWorkbookEmpty(
+                      JSON.parse(valueFromSheetForm),
+                    )
+
+                    if (isEmptyWorkbook) {
+                      if (requirement?.short_answer) {
+                        return requirement.short_answer
+                      }
+                      if (requirement?.answer_text) {
+                        return requirement.answer_text
+                      }
+                      if (requirement?.answer_template) {
+                        return requirement.answer_template || defaultSheetData
+                      }
+                      if (currentTabContent.answer)
+                        return currentTabContent.answer
+                      return (
+                        currentTabContent?.data?.answer_template ||
+                        defaultSheetData
+                      )
+                    }
+                    return valueFromSheetForm
+                  }
+                  const requirementSheet =
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                  if (requirementSheet?.short_answer) {
+                    return requirementSheet.short_answer
+                  }
+                  if (requirementSheet?.answer_text) {
+                    return requirementSheet.answer_text
+                  }
+                  if (requirementSheet?.answer_template) {
+                    return requirementSheet.answer_template || defaultSheetData
+                  }
+                  if (currentTabContent.answer) return currentTabContent.answer
+                  return (
+                    currentTabContent?.data?.answer_template || defaultSheetData
+                  )
+                // return getCurrentDefaultSheetValue
+              }
+            }
+            return {
+              label: (
+                <span className="flex items-center gap-1 text-base font-normal">
+                  Requirement {index + 1}
+                  {hasAnswer && (
+                    <CheckCircleOutlineYellow className="text-primary" />
+                  )}
+                </span>
+              ),
+              key: index,
+              children: (
+                <>
+                  {editorReady && (
+                    <EssayQuestionPreview
+                      data={{
+                        ...currentTabContent?.data?.requirements?.[index],
+                        ...essayData?.req,
+                      }}
+                      question_content={
+                        currentTabContent?.data?.question_content
+                      }
+                      index={index}
+                      question_data={currentTabContent?.data}
+                      control={control}
+                      handleSaveHighLight={handleSaveHighLight}
+                      highlighted={highlighted}
+                      removeHighlight={removeHighlight}
+                      allowHighLight={allowHighLight}
+                      allowUnHighLight={allowUnHighLight}
+                      solution={solution}
+                      name={`${currentTabID}_${index}_answer`}
+                      setValue={setValue}
+                      defaultValue={getDefaultValueEssay()}
+                      response_option_custom={currentTabContent.response_type}
+                      externalRef={refEditor}
+                      fullData={currentTabContent}
+                      isShowContent={false}
+                      openChooseFile={() =>
+                        setOpenUpload({
+                          status: true,
+                          question_id: currentPage,
+                          requirementIndex: index,
+                        })
+                      }
+                      handleClearFile={handleClearFile}
+                      setOpenPdf={handleOpenScratchPad}
+                      handleSaveHighLightRequirement={
+                        handleSaveHighLightRequirement
+                      }
+                      showRequiment={showListRequirement}
+                      handleChange={handleEssayChange}
+                      explainClassname="!mt-8 !p-0 !bg-transparent"
+                    />
+                  )}
+                </>
+              ),
+            }
+          },
+        ) ?? []
+      )
+    }
+
+    switch (type) {
+      case QUESTION_TYPES.TRUE_FALSE:
+        return (
+          <OneChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.ONE_CHOICE:
+        return (
+          <OneChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            corrects={corrects}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.MULTIPLE_CHOICE:
+        return (
+          <MultiChoiceQuestion
+            data={data}
+            control={control}
+            name={`${currentTabID}_answer`}
+            defaultValues={defaultValue}
+            setValue={setValue}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            corrects={corrects}
+            solution={solution}
+            getValue={getValues}
+            tabs={tabs}
+            currentPage={currentPage}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.MATCHING:
+        return (
+          <MatchQuizComponent
+            onChangeMatchedPairs={(pairs) =>
+              setValue(`${currentTabID}_answer`, pairs)
+            }
+            data={data}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            done={done}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.FILL_WORD:
+        return (
+          <NewFilltext
+            control={control}
+            name={`${currentTabID}_fillword`}
+            data={data}
+            setValue={setValue}
+            action={getValueFillText}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            removeHighlight={removeHighlight}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
+            solution={solution}
+            watch={watch}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.DRAG_DROP:
+        return (
+          <DragDropQuestion
+            data={data}
+            defaultValue={defaultValue}
+            onChange={(data: SlotValue[]) => {
+              setValue(`${currentTabID}_drag_drop_answer`, data)
+            }}
+            corrects={corrects?.corrects}
+            solution={solution}
+            explainClassname="!mt-8 !p-0 !bg-transparent"
+          />
+        )
+      case QUESTION_TYPES.SELECT_WORD:
+        return (
+          <SelectWord
+            onChange={(
+              value: Array<{
+                answer_id: string
+                answer_position: number
+              }>,
+            ) => setValue(`${currentTabID}_answer`, value)}
+            data={data}
+            handleSaveHighLight={handleSaveHighLight}
+            highlighted={highlighted}
+            allowHighLight={allowHighLight}
+            allowUnHighLight={allowUnHighLight}
+            defaultAnswer={defaultValue}
+            corrects={corrects?.corrects}
+            ref={ref}
+            solution={solution}
+          />
+        )
+      case QUESTION_TYPES.ESSAY:
+        const key = `${currentTabID}_${essayData?.index}_answer`
+        const handleEssayChange = (id: string) => {
+          setAnswerListValue(id as unknown as number)
+        }
+        // Tạo data từng bước
+        const part1 =
+          currentTabContent?.data?.requirements?.[essayData?.index] || {}
+        const part2 = essayData?.req || {}
+        const dataEssay = { ...part1, ...part2 }
+        const defaultValueEssay = () => {
+          const valueFromForm = getValues(key)
+          const response_option = currentTabContent?.data?.response_option
+
+          switch (response_option) {
+            case RESPONSE_OPTION.WORD:
+              if (valueFromForm !== undefined && valueFromForm !== null) {
+                return valueFromForm
+              }
+              const requirement =
+                currentTabContent?.data?.requirements?.[essayData?.index]
+
+              if (requirement?.short_answer) {
+                return requirement.short_answer
+              }
+              if (requirement?.answer_text) {
+                return requirement.answer_text
+              }
+              if (requirement?.answer_template) {
+                return requirement.answer_template
+              }
+              if (currentTabContent.answer) {
+                return currentTabContent.answer
+              }
+
+              return currentTabContent?.data?.answer_template
+
+            case RESPONSE_OPTION.SHEET:
+              const valueFromSheetForm = getValues(key)
+              if (valueFromSheetForm) {
+                const isEmptyWorkbook = isWorkbookEmpty(
+                  JSON.parse(valueFromSheetForm),
+                )
+
+                if (isEmptyWorkbook) {
+                  const requirement =
+                    currentTabContent?.data?.requirements?.[essayData?.index]
+                  if (requirement?.short_answer) {
+                    return requirement.short_answer
+                  }
+                  if (requirement?.answer_text) {
+                    return requirement.answer_text
+                  }
+                  if (requirement?.answer_template) {
+                    return requirement.answer_template || defaultSheetData
+                  }
+                  if (currentTabContent.answer) return currentTabContent.answer
+                  return (
+                    currentTabContent?.data?.answer_template || defaultSheetData
+                  )
+                }
+                return valueFromSheetForm
+              }
+              const requirementSheet =
+                currentTabContent?.data?.requirements?.[essayData?.index]
+              if (requirementSheet?.short_answer) {
+                return requirementSheet.short_answer
+              }
+              if (requirementSheet?.answer_text) {
+                return requirementSheet.answer_text
+              }
+              if (requirementSheet?.answer_template) {
+                return requirementSheet.answer_template || defaultSheetData
+              }
+              if (currentTabContent.answer) return currentTabContent.answer
+              return (
+                currentTabContent?.data?.answer_template || defaultSheetData
+              )
+          }
+        }
+        return (
+          <>
+            <EditorReader
+              className="sapp-questions sapp-editor-reader"
+              text_editor_content={currentTabContent?.data?.question_content}
+              highlighted={highlighted}
+            />
+            {currentTabContent?.data?.requirements?.length > 0 ? (
+              <RequirementsTab
+                destroyInactiveTabPane={true}
+                items={essayRequirementsItem()}
+                activeKey={essayData?.index ?? '0'}
+                defaultActiveKey="1"
+                onChange={(key) => {
+                  setEssayData({
+                    req: getValues(`${currentTabID}_${key}_answer`),
+                    index: key,
+                  })
+                  refEditor.current.reset()
+                }}
+              />
+            ) : (
+              <EssayQuestionPreview
+                isShowContent={false}
+                data={dataEssay}
+                question_content={currentTabContent?.data?.question_content}
+                index={essayData?.index}
+                question_data={currentTabContent?.data}
+                control={control}
+                handleSaveHighLight={handleSaveHighLight}
+                highlighted={highlighted}
+                removeHighlight={removeHighlight}
+                allowHighLight={allowHighLight}
+                allowUnHighLight={allowUnHighLight}
+                solution={solution}
+                name={key}
+                setValue={setValue}
+                defaultValue={defaultValueEssay()}
+                response_option_custom={currentTabContent.response_type}
+                externalRef={refEditor}
+                fullData={currentTabContent}
+                openChooseFile={() =>
+                  setOpenUpload({
+                    status: true,
+                    question_id: currentPage,
+                    requirementIndex: essayData?.index,
+                  })
+                }
+                handleClearFile={handleClearFile}
+                setOpenPdf={handleOpenScratchPad}
+                handleSaveHighLightRequirement={handleSaveHighLightRequirement}
+                showRequiment={showListRequirement}
+                handleChange={handleEssayChange}
+              />
+            )}
+          </>
+        )
+      default:
+        return <div></div>
+    }
+  }
+
+  /**
+   * DES: confirm unfinished questions before submitting
+   */
+  const checkUnSubmitAnswer = (): number[] => {
+    const answers = handleSaveCurrentAnswer(tabs, currentTabContent)
+    let result: number[] = []
+    answers?.map((item: Answer, index: number) => {
+      if (!item.attempted) {
+        result.push(index + 1)
+      } else {
+        if (item.data && (item?.data?.requirements ?? [])?.length > 0) {
+          if (!item.done && !validateEssayAnswerWithRequirement(item.data)) {
+            result.push(index + 1)
+          }
+        } else {
+          if (
+            !item.done &&
+            !validateAnswer({
+              answer: item.answer,
+              answer_file: item?.answer_file,
+            })
+          ) {
+            result.push(index + 1)
+          }
+        }
+      }
+    })
+    setUnSubmitAnswerData(result)
+    return result
+  }
+  // Validate các câu hỏi xem đã trả lời chưa
+  const validateAnswer = (item: {
+    answer: string | Object[] | string[]
+    answer_file?: { file_key?: string; file_name?: string }
+  }) => {
+    if (item?.answer_file?.file_key) return true
+    if (typeof item?.answer === 'string' && !item?.answer) {
+      return false
+    }
+    if (!item?.answer?.length) return false
+    if (Array.isArray(item?.answer)) {
+      const emptyAnswer = item?.answer?.filter(
+        (el: { idAnswer?: string; answer_id?: string }) => {
+          if (el.hasOwnProperty('idAnswer') && !el?.idAnswer) {
+            return el
+          }
+          if (el.hasOwnProperty('answer_id') && !el?.answer_id) {
+            return el
+          }
+        },
+      )
+      const emptyEl = item.answer.filter((el) => typeof el === 'string' && !el)
+      if (emptyAnswer?.length || emptyEl.length) {
+        return false
+      }
+    }
+    return true
+  }
+  // validate essay question with requirement
+  const validateEssayAnswerWithRequirement = (data: IDataQuestion) => {
+    if (data?.requirements?.length > 0) {
+      return data?.requirements?.some(
+        (el: Requirement) => !!el?.answer_text || !!el?.answer_file?.file_key,
+      )
+    } else {
+      return false
+    }
+  }
   const handleOpenScratchPad = (
     type: string,
     file?: string,
@@ -1019,14 +1256,6 @@ const TestDetail = () => {
       return arr
     })
   }
-
-  interface Tab {
-    id: string
-    flag?: boolean
-    is_viewed_answer?: boolean
-    [key: string]: any
-  }
-
   const handleCloseScratchPad = (pad: any) => {
     setOpenScratchPad((prev) => {
       let arr = [...prev]
@@ -1040,18 +1269,15 @@ const TestDetail = () => {
       return newArr
     })
   }
-
   function removeHighlight() {
     const domEle = document.getElementById('hightlight_area')
     removeHighlights(domEle as any)
     handleSaveHighLight(serializeHighlights(domEle))
   }
-
   const OptionShowAll = () => {
     return (
       <div className="w-max">
-        <HookFormCheckBoxGroup
-          toggle
+        <FilterRadioGroup
           control={controlFilter}
           name={'filter'}
           options={[
@@ -1063,12 +1289,11 @@ const TestDetail = () => {
       </div>
     )
   }
-
   const checkAnswered = (currentContent: any, isSubmit = false) => {
-    //check đã có câu trả lời
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
-      currentContent.qType === QUESTION_TYPES.TRUE_FALSE
+      currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       if (
         !isEmpty(getValues(`${currentContent?.id}_answer`)) &&
@@ -1085,20 +1310,15 @@ const TestDetail = () => {
         return true
       }
       return false
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      for (let e of getAnswerMatching()) {
-        if (e.answer_id && e.answer_id !== '') {
-          return true
-        }
-      }
-      return false
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
-      for (let e of getValues(`${currentPage}_drag_drop_answer`) ??
-        getAnswerDragNDrop()) {
-        if (e.idAnswer && e.idAnswer !== '') {
-          return true
+      if (getValues(`${currentContent?.id}_drag_drop_answer`)) {
+        for (let e of getValues(`${currentContent?.id}_drag_drop_answer`)) {
+          if (e?.idAnswer && e?.value !== '') {
+            return true
+          }
         }
       }
+
       return false
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       for (let e of getValueSelectText()) {
@@ -1193,54 +1413,12 @@ const TestDetail = () => {
       }
     }
   }
-  const [filteredTabs, setFilterTabs] = useState<any[]>([])
-  const [trigger, setTrigger] = useState(false)
-  const isEssayWord = useMemo(() => {
-    return (
-      currentTabContent?.qType === QUESTION_TYPES.ESSAY &&
-      currentTabContent?.data?.response_option === RESPONSE_OPTION.WORD
-    )
-  }, [currentTabContent?.data?.response_option, currentTabContent?.qType])
-
-  const isEssaySheet = useMemo(() => {
-    return (
-      currentTabContent?.qType === QUESTION_TYPES.ESSAY &&
-      currentTabContent?.data?.response_option === RESPONSE_OPTION.SHEET
-    )
-  }, [currentTabContent?.data?.response_option, currentTabContent?.qType])
-
-  const ref = useRef(null) as any
-  const refEditor = useRef(null) as any
-
   // TODO: Implement this
   const getValueFillText = () => {}
-
   const getValueSelectText = () => {
     const value = getValues(`${currentPage}_answer`) || []
     return value
   }
-
-  const getAnswerMatching = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-match-result') as any
-    for (let e of inputs) {
-      const childId = e.querySelector('.sapp-notched-container')
-      value.push({ question_id: e.id, answer_id: childId?.id || undefined })
-    }
-
-    return value
-  }
-
-  const getAnswerDragNDrop = () => {
-    let value = [] as any
-    const inputs = document.querySelectorAll('.sapp-input-dragNDrop') as any
-    for (let e of inputs) {
-      const idAnswer = e.querySelector('.answer-box')
-      value.push({ id: e?.id, value: e?.innerText, idAnswer: idAnswer?.id })
-    }
-    return value
-  }
-
   const getResult = async (currentTabContent: any) => {
     const res = await TestAPI.getQuestionAnswer(currentTabContent.id)
     let corrects = {} as any
@@ -1281,7 +1459,6 @@ const TestDetail = () => {
       requirements: res?.data?.[0]?.requirements,
     }
   }
-
   const confirmAnswer = async (
     corrects: any,
     solution: any,
@@ -1324,12 +1501,12 @@ const TestDetail = () => {
     setTabs(newTabs)
     setLoading(false)
   }
-
   const handleSaveCurrentAnswer = (tabs: any, currentContent: any) => {
     if (
       currentContent.qType === QUESTION_TYPES.ONE_CHOICE ||
       currentContent.qType === QUESTION_TYPES.TRUE_FALSE ||
-      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE
+      currentContent.qType === QUESTION_TYPES.MULTIPLE_CHOICE ||
+      currentContent.qType === QUESTION_TYPES.MATCHING
     ) {
       const answers = handleSaveAnswer(
         getValues(`${currentPage}_answer`),
@@ -1337,19 +1514,13 @@ const TestDetail = () => {
         tabs,
       )
       return answers
-    } else if (currentContent.qType === QUESTION_TYPES.MATCHING) {
-      const answers = handleSaveAnswer(
-        getAnswerMatching(),
-        currentContent,
-        tabs,
-      )
-      return answers
     } else if (currentContent.qType === QUESTION_TYPES.DRAG_DROP) {
       const answers = handleSaveAnswer(
-        getValues(`${currentPage}_drag_drop_answer`) ?? getAnswerDragNDrop(),
+        getValues(`${currentPage}_drag_drop_answer`),
         currentContent,
         tabs,
       )
+
       return answers
     } else if (currentContent.qType === QUESTION_TYPES.SELECT_WORD) {
       const answers = handleSaveAnswer(
@@ -1391,9 +1562,9 @@ const TestDetail = () => {
       }
     }
   }
-
   const handleChangeTab = async (currentTab: any) => {
     setLoading(true)
+    // setEssayData(undefined)
     const currentContent = tabs?.find((e: any) => e.id === currentTab)
     setStartTime(Date.now())
     const resetCurrentQuestionAndNextQuestion = async (
@@ -1446,6 +1617,23 @@ const TestDetail = () => {
         refEditor?.current?.resetSheet()
       }
     }
+    const doAfterSetState = () => {
+      setEditorReady(false) // Ẩn trước
+      setTimeout(() => {
+        try {
+          if (refEditor?.current?.editor?.layout) {
+            refEditor.current.editor.layout()
+          } else if (refEditor?.current?.getEditor) {
+            refEditor.current.getEditor().root?.focus()
+          }
+          window.dispatchEvent(new Event('resize'))
+        } catch (e) {
+        } finally {
+          setEditorReady(true)
+        }
+      }, 100)
+    }
+
     if (!currentContent?.viewed) {
       const { question, topicDescription } = await getDetail(currentTab)
       await resetCurrentQuestionAndNextQuestion(question)
@@ -1477,6 +1665,7 @@ const TestDetail = () => {
         setAllowHighLight(false)
         setAllowUnHighLight(false)
         setTabs(savedAnswer)
+        doAfterSetState()
       } else {
         setLoading(false)
       }
@@ -1494,11 +1683,13 @@ const TestDetail = () => {
       setAllowHighLight(false)
       setAllowUnHighLight(false)
       setTabs(savedAnswer)
+      doAfterSetState() // <== gọi ở đây nếu không load lại dữ liệu
     }
+
     setLoading(false)
     // handleResetRequirementIndex()
+    setScratchPadValues([])
   }
-
   const handleSaveAnswer = (data: any, tabContent: any, tabs: any) => {
     const newData = (tabs ?? []).map((item: any) => {
       if (tabContent.id === item?.id) {
@@ -1506,24 +1697,22 @@ const TestDetail = () => {
           ...item,
           data: {
             ...item?.data,
-            answers: (item?.data?.answers ?? []).map(
-              (answer: Answer, index: number) => {
-                if (typeof data === 'string') {
-                  return {
-                    ...answer,
-                    dropId: data,
-                  }
-                } else {
-                  const existAnswer = (data ?? []).find(
-                    (e: any) => e.idAnswer === answer.id,
-                  )
-                  return {
-                    ...answer,
-                    dropId: existAnswer?.id,
-                  }
+            answers: (item?.data?.answers ?? []).map((answer: Answer) => {
+              if (typeof data === 'string') {
+                return {
+                  ...answer,
+                  dropId: data,
                 }
-              },
-            ),
+              } else {
+                const existAnswer = (data ?? []).find(
+                  (e: any) => e.idAnswer === answer.id,
+                )
+                return {
+                  ...answer,
+                  dropId: existAnswer?.id,
+                }
+              }
+            }),
           },
           answer: data,
           attempted: item?.attempted || checkAnswered(item),
@@ -1540,15 +1729,6 @@ const TestDetail = () => {
     })
     return newData
   }
-
-  const handleCheckAllRequirementHasAnswer = (tabContent: any) => {
-    if (Array.isArray(tabContent.data?.requirements)) {
-      const hasAnswer = (req: any) =>
-        req?.answer_file?.file_key || answerListRef?.current?.[req?.id || '']
-      return tabContent.data.requirements.every(hasAnswer)
-    }
-  }
-
   const handleSaveAnswerEssay = (tabContent: any, tabs: any) => {
     const newData = tabs.map((item: any) => {
       if (tabContent?.id === item?.id) {
@@ -1569,16 +1749,6 @@ const TestDetail = () => {
                   `${currentPage}_${reqIndex}_answer`,
                 )
 
-                //nếu bài làm là sheet và không có giá trị thì lưu lên BE là null
-                if (tabContent?.data?.response_option === 'SHEET') {
-                  if (!checkSheetAnswered(editorContent)) {
-                    return {
-                      ...requirement,
-                      answer_text: null,
-                    }
-                  }
-                }
-
                 return {
                   ...requirement,
                   answer_text: editorContent ?? requirement?.answer_text,
@@ -1586,9 +1756,7 @@ const TestDetail = () => {
               }),
             },
 
-            attempted:
-              item?.attempted ||
-              (checkAnswered(item) && handleCheckAllRequirementHasAnswer(item)),
+            attempted: item?.attempted || checkAnswered(item),
             timeSpent: !item?.done
               ? item?.timeSpent
                 ? Date.now() - startTime + item?.timeSpent
@@ -1620,7 +1788,6 @@ const TestDetail = () => {
     })
     return newData
   }
-
   const handleSaveFileEssay = (file: any, requirementIndex: number | null) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -1684,8 +1851,6 @@ const TestDetail = () => {
     setTabs(newTabs)
   }
 
-  const answerListRef = useRef<AnswerList>({})
-
   // Initialize answerListRef values once when component mounts
   useEffect(() => {
     if (
@@ -1704,8 +1869,7 @@ const TestDetail = () => {
                 ? req.answer_text
                 : ''
             } else {
-              answerListRef.current[req.id] =
-                req.answer_text !== DEFAULT_EDITOR_VALUE ? req.answer_text : ''
+              answerListRef.current[req.id] = req.answer_text
             }
           }
         }
@@ -1714,26 +1878,9 @@ const TestDetail = () => {
   }, [currentTabContent])
 
   const setAnswerListValue = debounce((requirementId: number) => {
-    let answer = ''
-    if (getValues(`${currentPage}_${essayData?.index}_answer`)) {
-      if (currentTabContent?.data?.response_option === 'SHEET') {
-        if (
-          checkSheetAnswered(
-            getValues(`${currentPage}_${essayData?.index}_answer`),
-          )
-        ) {
-          answer = getValues(`${currentPage}_${essayData?.index}_answer`)
-        }
-      } else {
-        answer = getValues(`${currentPage}_${essayData?.index}_answer`)
-      }
-    }
-    answerListRef.current[requirementId] = answer
+    answerListRef.current[requirementId] =
+      getValues(`${currentPage}_${essayData?.index}_answer`) || ''
   }, 200)
-
-  const { setScoreQuestion, setSubmitTest, courseType, setSubmitEventTest } =
-    useCourseContext()
-
   const handleSubmitAnswer = async (action?: string) => {
     if (!currentTabContent) return
     if (currentTabContent?.is_viewed_answer) return
@@ -1769,7 +1916,7 @@ const TestDetail = () => {
       total_attempt_time:
         quizDetail?.quiz_timed * 60 -
         (quizDetail?.quiz_timed ? timeRef?.current?.handleGetTime() || 0 : 0),
-      scratch_pad: scratchPads || '',
+      scratch_pads: scratchPads || [],
       flag: currentTabContent?.flag,
       is_viewed_answer:
         action === 'view-answer' ? true : currentTabContent?.is_viewed_answer,
@@ -1800,19 +1947,11 @@ const TestDetail = () => {
       return false
     }
   }
-
   const handleFlagQuestion = async (question_id: string) => {
     try {
-      const hasRequiment = currentTabContent?.data?.requirements?.length > 0
       const payload = {
         question_id,
         flag: !currentTabContent?.flag,
-        ...(hasRequiment && {
-          answer: currentTabContent?.data?.requirements.map((e: any) => ({
-            requirement_id: e.id,
-            question_id: question_id,
-          })),
-        }),
       }
       await CoursesAPI.updateFlagInQuestion(quizAttempt?.id as string, payload)
       setTabs((prevTabs: Tab[]) =>
@@ -1822,7 +1961,6 @@ const TestDetail = () => {
       )
     } catch (error) {}
   }
-
   // Helper function to format answer based on question type
   const formatAnswerItem = (question: any) => {
     const baseAnswer = {
@@ -1866,7 +2004,7 @@ const TestDetail = () => {
             (quizDetail?.quiz_timed
               ? timeRef?.current?.handleGetTime() || 0
               : 0),
-          scratch_pad: scratchPads || '',
+          scratch_pads: scratchPads || [],
           answer: requirementAnswers,
         }
       }
@@ -1925,9 +2063,9 @@ const TestDetail = () => {
         ...baseAnswer,
         answer: (question.answer ?? [])
           .filter((item: any) => item?.idAnswer)
-          .map((item: any, index: number) => ({
+          .map((item: any) => ({
             answer_id: item.idAnswer,
-            answer_position: index + 1,
+            answer_position: item.position,
           })),
       }
     }
@@ -1955,7 +2093,6 @@ const TestDetail = () => {
 
     return null
   }
-
   // Helper function to handle submission errors
   const handleSubmissionError = (payload: any) => {
     setListSubmitError((prev) => {
@@ -1990,7 +2127,7 @@ const TestDetail = () => {
         quizAttempt?.id as string,
         {
           quiz_position_mapping: quiz_position_mapping,
-          scratch_pad: scratchPads || '',
+          scratch_pads: scratchPads || [],
           total_attempt_time:
             quizDetail.quiz_timed * 60 -
             (quizDetail.quiz_timed
@@ -2027,10 +2164,16 @@ const TestDetail = () => {
             return
           }
           if (type === 'entrance') {
-            router.replace(`/entrance-test/test-result/${res?.data?.id}`)
+            const searchParams =
+              quizAttempt?.number_of_attempts && quizDetail?.limit_count
+                ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                : ``
+            router.replace(
+              `/entrance-test/test-result/${res?.data?.id}?${searchParams}`,
+            )
           } else if (type === 'event-test') {
-            setSubmitEventTest(true)
             router.replace(`/event-test`)
+            setSubmitEventTest(true)
             localStorage.setItem(
               'category',
               JSON.stringify(res?.data?.course_category?.name),
@@ -2125,7 +2268,6 @@ const TestDetail = () => {
       }
     }
   }
-
   const handleClearFile = (requirementIndex: number) => {
     const newTabs = tabs.map((tab: any) => {
       if (tab.id === currentPage) {
@@ -2181,7 +2323,6 @@ const TestDetail = () => {
       return newData
     })
   }
-
   const handleSaveHighLightTopic = (e: any) => {
     setTabs((prev: any) => {
       const newData = prev?.map((item: any) => {
@@ -2289,25 +2430,49 @@ const TestDetail = () => {
   }, [watchFilter('filter')])
 
   useEffect(() => {
-    const updateMousePosition = (ev: any) => {
-      setMousePosition({ x: ev.clientX, y: ev.clientY })
+    const updateMousePosition = (ev: MouseEvent | TouchEvent) => {
+      const clientX =
+        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
+      const clientY =
+        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
+
+      setMousePosition({ x: clientX as number, y: clientY as number })
     }
-    const clickPosition = (ev: any) => {
+
+    const clickPosition = (ev: MouseEvent | TouchEvent) => {
+      const clientX =
+        ev instanceof TouchEvent ? ev.touches[0].clientX : ev.clientX
+      const clientY =
+        ev instanceof TouchEvent ? ev.touches[0].clientY : ev.clientY
+
       setMousePosition(() => {
-        setCurrentMousePos(ev.clientX)
-        return { x: ev.clientX, y: ev.clientY }
+        setCurrentMousePos(clientX)
+        return { x: clientX, y: clientY }
       })
     }
+
     if (startResize) {
       window.addEventListener('mousemove', updateMousePosition)
       window.addEventListener('mousedown', clickPosition)
+
+      window.addEventListener('touchmove', updateMousePosition, {
+        passive: false,
+      })
+      window.addEventListener('touchstart', clickPosition, { passive: false })
     } else {
       window.removeEventListener('mousemove', updateMousePosition)
       window.removeEventListener('mousedown', clickPosition)
+
+      window.removeEventListener('touchmove', updateMousePosition)
+      window.removeEventListener('touchstart', clickPosition)
     }
+
     return () => {
       window.removeEventListener('mousemove', updateMousePosition)
       window.removeEventListener('mousedown', clickPosition)
+
+      window.removeEventListener('touchmove', updateMousePosition)
+      window.removeEventListener('touchstart', clickPosition)
     }
   }, [startResize])
 
@@ -2344,6 +2509,7 @@ const TestDetail = () => {
         try {
           setLoading(true)
           const response = await CoursesAPI.getAnswersSubmitted(quizAttempt.id)
+          setExhibitText(EXHIBIT_TEXT_REPLACE.EXHIBIT)
           setIsQuizAttemptCreated(true) // Mark the attempt as created
           setAnswersSubmitted(response.data)
         } catch (err) {
@@ -2422,17 +2588,11 @@ const TestDetail = () => {
 
   useEffect(() => {
     if (startResize) {
-      document.body.style.webkitUserSelect = 'none'
-
       document.body.style.userSelect = 'none'
     } else {
-      document.body.style.webkitUserSelect = 'unset'
-
       document.body.style.userSelect = 'unset'
     }
     return () => {
-      document.body.style.webkitUserSelect = 'unset'
-
       document.body.style.userSelect = 'unset'
     }
   }, [startResize])
@@ -2520,7 +2680,6 @@ const TestDetail = () => {
             return baseData
           }),
         )
-
         setTabs(arr)
       } else {
         router.push(PageLink.PAGE_NOT_FOUND)
@@ -2544,6 +2703,201 @@ const TestDetail = () => {
         ),
       )
     }
+  }
+  const isGradingAfterEachQuestion =
+    quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
+  const groupAction = () => {
+    const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
+    return (
+      <div>
+        <div
+          className={clsx('flex items-center justify-end gap-2', {
+            'gap-3': isShowTemplate,
+            'gap-2': !isShowTemplate,
+          })}
+        >
+          {currentTabContent &&
+            currentTabContent.qType === QUESTION_TYPES.ESSAY &&
+            isShowTemplate && (
+              <div className="flex items-center justify-end gap-3">
+                <ButtonTextV2
+                  title="Reset to Answer Template"
+                  onClick={onOpenResetToTemplateModal}
+                  className="bg-transparent hover:!bg-transparent"
+                />
+                <ShowAnswerTemplate
+                  {...{
+                    currentTabContent,
+                    essayData,
+                  }}
+                />
+              </div>
+            )}
+          {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
+            !currentTabContent?.is_viewed_answer && (
+              <ButtonSecondary
+                className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
+                disabled={!watch(`${currentPage}_answer`)}
+                onClick={() => {
+                  handleClearSelection(currentTabContent)
+                  trackGAEvent('Click Button Clear Selection Test')
+                }}
+                title="Clear Selection"
+              />
+            )}
+          <Tooltip
+            title={
+              currentTabContent?.is_viewed_answer ||
+              ![
+                QUESTION_TYPES.TRUE_FALSE,
+                QUESTION_TYPES.ONE_CHOICE,
+                QUESTION_TYPES.MULTIPLE_CHOICE,
+              ].includes(currentTabContent?.qType) ||
+              !!watch(`${currentPage}_answer`)
+                ? null
+                : 'You should select an answer before click'
+            }
+            classNames={{
+              root: 'max-w-72 rounded-md',
+              body: 'text-sm !py-1 !px-2 flex items-center',
+            }}
+            getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+            placement="top"
+            color={'#404041'}
+          >
+            {/* <ButtonPrimaryV2
+              className='bg-gray-100 hover:!bg-gray-100'
+              onClick={async () => {
+                if (isGradingAfterEachQuestion) {
+                  if (currentTabContent?.is_viewed_answer) {
+                    if (indexTab < filteredTabs.length - 1) {
+                      handleChangeTab(filteredTabs[indexTab + 1].id)
+                    } else if (indexTab === filteredTabs.length - 1) {
+                      handleSubmitAnswer('finish')
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    }
+                  } else {
+                    const data = await getResult(currentTabContent)
+                    handleSubmitAnswer('view-answer')
+                    confirmAnswer(
+                      data?.corrects,
+                      data?.solution,
+                      currentTabContent,
+                      data?.isSelfReflection,
+                      data?.requirements,
+                    )
+                  }
+                } else {
+                  if (indexTab < filteredTabs.length - 1) {
+                    handleChangeTab(filteredTabs[indexTab + 1].id)
+                    handleSubmitAnswer('change-tab')
+                  } else if (indexTab === filteredTabs.length - 1) {
+                    handleSubmitAnswer('finish')
+                    if (checkUnSubmitAnswer()?.length > 0) {
+                      setUnSubmitAnswer(true)
+                    } else {
+                      setOpenSubmit(true)
+                    }
+                    dispatch(disableUnsavedChange())
+                  }
+                }
+                trackGAEvent('Click Button Confirm Answer')
+              }}
+              title={
+                (isGradingAfterEachQuestion ? (
+                  currentTabContent?.is_viewed_answer ? (
+                    indexTab < filteredTabs.length - 1 ? (
+                      <div className="flex items-center gap-2">
+                        Next Question <Icon type="arrow-right" />
+                      </div>
+                    ) : (
+                      'Finish'
+                    )
+                  ) : (
+                    'Confirm'
+                  )
+                ) : indexTab < filteredTabs.length - 1 ? (
+                  'Confirm & Next'
+                ) : (
+                  'Confirm'
+                )) as string
+              }
+            /> */}
+            {isGradingAfterEachQuestion &&
+            currentTabContent?.is_viewed_answer &&
+            indexTab < filteredTabs.length - 1 ? (
+              <ButtonText
+                onClick={() => {
+                  handleChangeTab(filteredTabs[indexTab + 1].id)
+                  trackGAEvent('Click Button Next Question')
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  Next Question <Icon type="arrow-right" />
+                </div>
+              </ButtonText>
+            ) : (
+              <ButtonPrimary
+                className="bg-gray-100 hover:!bg-gray-100"
+                onClick={async () => {
+                  if (isGradingAfterEachQuestion) {
+                    if (currentTabContent?.is_viewed_answer) {
+                      if (indexTab === filteredTabs.length - 1) {
+                        handleSubmitAnswer('finish')
+                        if (checkUnSubmitAnswer()?.length > 0) {
+                          setUnSubmitAnswer(true)
+                        } else {
+                          setOpenSubmit(true)
+                        }
+                        dispatch(disableUnsavedChange())
+                      }
+                    } else {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                      confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                    }
+                  } else {
+                    if (indexTab < filteredTabs.length - 1) {
+                      handleChangeTab(filteredTabs[indexTab + 1].id)
+                      handleSubmitAnswer('change-tab')
+                    } else if (indexTab === filteredTabs.length - 1) {
+                      handleSubmitAnswer('finish')
+                      if (checkUnSubmitAnswer()?.length > 0) {
+                        setUnSubmitAnswer(true)
+                      } else {
+                        setOpenSubmit(true)
+                      }
+                      dispatch(disableUnsavedChange())
+                    }
+                  }
+                  trackGAEvent('Click Button Confirm Answer')
+                }}
+                title={
+                  isGradingAfterEachQuestion
+                    ? currentTabContent?.is_viewed_answer
+                      ? 'Finish'
+                      : 'Confirm'
+                    : indexTab < filteredTabs.length - 1
+                      ? 'Confirm & Next'
+                      : 'Confirm'
+                }
+              />
+            )}
+          </Tooltip>
+        </div>
+      </div>
+    )
   }
   const isShowTemplate =
     currentTabContent?.data?.answer_template ||
@@ -2683,123 +3037,567 @@ const TestDetail = () => {
       await new Promise((resolve) => setTimeout(resolve, 10))
     }
   }
-
   return (
-    <FullScreenLayout title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}>
+    <Layout
+      title={checkTypeAndRenderTitle(quizDetail?.quiz_type)}
+      showSidebar={false}
+      fullWidth
+    >
       <CourseProvider>
         <SappLoading
           className={loading || !currentTabContent?.id ? 'block' : 'hidden'}
         />
-        <div
-          className="relative flex h-screen flex-col overflow-hidden bg-white"
-          onMouseUp={() => {
-            setStartResize(false)
-            setCurrentLeftWidth(leftWidth)
+        <TestWrapper
+          quizDetail={quizDetail}
+          quizAttempt={quizAttempt}
+          setOpenSubmit={setOpenSubmit}
+          timeRef={timeRef}
+          setUnSubmitAnswer={setUnSubmitAnswer}
+          checkUnSubmitAnswer={checkUnSubmitAnswer}
+          setOpenQuit={setOpenQuit}
+          setSubmitEventTest={setSubmitEventTest}
+          type={type}
+          onSubmitAnswer={async (mode) => {
+            const savedAnswer = await handleSaveCurrentAnswer(
+              tabs,
+              currentTabContent,
+            )
+            setTabs(savedAnswer)
+            setTimeout(() => {
+              handleSubmitAnswer(mode)
+            }, 100)
           }}
-        >
-          {/** Header */}
-          <div>
-            {currentTabContent && quizAttempt && (
-              <HeaderTest
-                quizDetail={quizDetail}
-                handleSubmitQuestions={handleSubmitQuestions}
-                timeRef={timeRef}
-                quizAttempt={quizAttempt}
-                setUnSubmitAnswer={setUnSubmitAnswer}
-                checkUnSubmitAnswer={checkUnSubmitAnswer}
-                setOpenQuit={setOpenQuit}
-                type={type}
-                submited={submited}
-                setOpenSubmit={setOpenSubmit}
-                onSubmitAnswer={async (mode) => {
-                  const savedAnswer = await handleSaveCurrentAnswer(
-                    tabs,
-                    currentTabContent,
-                  )
-                  setTabs(savedAnswer)
-                  setTimeout(() => {
-                    handleSubmitAnswer(mode)
-                  }, 100)
-                }}
-                handleTimeoutSubmit={async () => {
-                  if (!openLimit) {
-                    await resetWordBeforeAction()
-                    if (!submited && !quizAttempt?.is_submitted) {
-                      const remainingTimeinSeconds = quizDetail?.quiz_timed
-                        ? dayjs(
-                            dayjs(new Date(quizAttempt.created_at ?? '')).add(
-                              quizDetail?.quiz_timed,
-                              'minutes',
-                            ),
-                          ).diff(dayjs(), 'seconds')
-                        : null
+          handleTimeoutSubmit={async () => {
+            if (!openLimit) {
+              await resetWordBeforeAction()
+              if (!submited && !quizAttempt?.is_submitted) {
+                const remainingTimeinSeconds = quizDetail?.quiz_timed
+                  ? dayjs(
+                      dayjs(new Date(quizAttempt.created_at ?? '')).add(
+                        quizDetail?.quiz_timed,
+                        'minutes',
+                      ),
+                    ).diff(dayjs(), 'seconds')
+                  : null
 
-                      // No call when time out > 60s
-                      if ((remainingTimeinSeconds ?? 0) > -60) {
-                        if (listSubmitError.length > 0) {
-                          for (const el of listSubmitError) {
-                            await handleSubmitAnswerError(el)
-                          }
-                        }
-                        await handleSubmitAnswer('timeout')
-                      }
-                      handleSubmitQuestions('timeout')
-                      dispatch(disableUnsavedChange())
-                        .unwrap()
-                        .then(() => {
-                          trackGAEvent('Click Button Submit Time Out Test')
-                        })
-                    } else {
-                      setQuizResultId(quizAttempt?.id)
+                // No call when time out > 60s
+                if ((remainingTimeinSeconds ?? 0) > -60) {
+                  if (listSubmitError.length > 0) {
+                    for (const el of listSubmitError) {
+                      await handleSubmitAnswerError(el)
                     }
                   }
-                }}
-                resetWordBeforeAction={resetWordBeforeAction}
-              />
-            )}
+                  await handleSubmitAnswer('timeout')
+                }
+                handleSubmitQuestions('timeout')
+                dispatch(disableUnsavedChange())
+                  .unwrap()
+                  .then(() => {
+                    trackGAEvent('Click Button Submit Time Out Test')
+                  })
+              } else {
+                setOpenTimeOut(true)
+                setQuizResultId(quizAttempt?.id)
+              }
+            }
+          }}
+          resetWordBeforeAction={resetWordBeforeAction}
+          footer={
+            <div
+              className={clsx(
+                'flex items-center justify-center overflow-hidden px-8 py-4 transition-[height] duration-300 ease-in-out will-change-contents lg:h-[var(--footer-h)] lg:justify-between',
+              )}
+              style={{
+                ['--footer-h' as any]: activeShowAll
+                  ? `${80 + Math.max(1, Math.ceil((filteredTabs?.length || 0) / numberDisplayData) - 1) * 44}px`
+                  : '80px',
+              }}
+            >
+              <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
+                {/* <button
+                 className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
+                  onClick={() => {
+                    setAllowHighLight(!allowHighLight)
+                    setAllowUnHighLight(false)
+                    trackGAEvent('Click Button Highlight Test')
+                  }}
+                >
+                  <ButtonContent icon={<HighlightIcon />} content="" />
+                </button>
+                <button
+                  className={`h-full ${allowUnHighLight && 'bg-yellow-[5rem]0'}`}
+                  onClick={() => {
+                    setAllowUnHighLight(!allowUnHighLight),
+                      setAllowHighLight(false)
+                    trackGAEvent('Click Button Unhighlight Test')
+                  }}
+                >
+                  <ButtonContent icon={<UnHighLightIcon />} content="" />
+                </button> */}
+                <Popover
+                  content={
+                    <div className="flex items-center gap-2 px-2 ">
+                      Scratch Pad
+                    </div>
+                  }
+                  trigger="hover"
+                  placement="top"
+                >
+                  <button
+                    className={`h-fit rounded-lg ${
+                      isScatchPadEnabled && 'bg-primary'
+                    }`}
+                    onClick={() => {
+                      handleOpenScratchPad('scratch_pad')
+                      trackGAEvent('Click Button ScratchPad Test')
+                    }}
+                  >
+                    <ButtonContent
+                      icon={<ScratchPadIconV2 isActive={isScatchPadEnabled} />}
+                      content=""
+                    />
+                  </button>
+                </Popover>
+                <Popover
+                  content={
+                    <div className="flex items-center gap-2 px-2 ">
+                      Calculator
+                    </div>
+                  }
+                  trigger="hover"
+                  placement="top"
+                >
+                  <button
+                    className={`h-fit rounded-lg ${
+                      checkCalExist > -1 && 'bg-primary'
+                    }`}
+                    onClick={() => {
+                      handleOpenScratchPad('calculator')
+                      trackGAEvent('Click Button Calculator Test')
+                    }}
+                    disabled={checkCalExist > -1}
+                  >
+                    <ButtonContent
+                      icon={<CalculatorIconV2 isActive={checkCalExist > -1} />}
+                      content=""
+                    />
+                  </button>
+                </Popover>
+                {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
+                  <button className="relative h-full" ref={dropUpRequire}>
+                    <div
+                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
+                      onClick={() => {
+                        setShowLisRequirement(!showListRequirement)
+                      }}
+                    >
+                      <TextSquareIcon />
+                      <div className="flex items-center gap-3 text-sm font-normal">
+                        <div>
+                          <span className="hidden lg:inline-block 3xl:me-1"></span>
+                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
+                        </div>
+                        <ArrowUpIcon />
+                      </div>
+                    </div>
+                    {showListRequirement && (
+                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
+                        {currentTabContent?.data?.requirements?.map(
+                          (e: any, index: number) => {
+                            return (
+                              <button
+                                key={e.id}
+                                className={`p-3 ${
+                                  essayData.index !== index && 'text-[#A1A1A1]'
+                                }`}
+                                onClick={() => {
+                                  setEssayData({ req: e, index: index })
+                                    if (refEditor?.current && isEssayWord) {
+            const name = `${currentTabContent?.id}_${indexReq}_answer`
+            const valueFromFormReq = watch(name)
 
-            {/** Tabs */}
-            {tabs?.length > 0 && (
-              <div className="relative z-10 w-full bg-gray-4 px-6 py-2 shadow-pagination">
-                <TabSlide
-                  data={filteredTabs}
-                  currentTab={currentPage}
-                  setCurrentTab={setCurrentPage}
-                  optionShowAll={<OptionShowAll />}
-                  handleChangeTab={async (id?: string) => {
-                    if (id) {
+            const getDefaultWordValue = () => {
+              if (!isEssayWord) return
+              if (valueFromFormReq !== undefined) {
+                return valueFromFormReq
+              }
+              const requirement =
+                currentTabContent?.data?.requirements?.[
+                  indexReq
+                ]
+
+              if (
+                requirement?.short_answer !== undefined
+              ) {
+                return (
+                  requirement.short_answer ||
+                  DEFAULT_EDITOR_VALUE
+                )
+              }
+              if (
+                requirement?.answer_text !== undefined
+              ) {
+                return (
+                  requirement.answer_text ||
+                  DEFAULT_EDITOR_VALUE
+                )
+              }
+              // if (requirement?.answer_template !== undefined) {
+              //   return requirement.answer_template || DEFAULT_EDITOR_VALUE
+              // }
+              // if (
+              //   currentTabContent?.answer !== undefined
+              // )
+              return currentTabContent.answer
+              // return currentTabContent?.data?.answer_template || DEFAULT_EDITOR_VALUE
+              // return DEFAULT_EDITOR_VALUE
+            }
+            // resetField(name, getCurrentDefaultWordValue)
+
+            onResetFormatEssay(
+              name,
+              getDefaultWordValue(),
+            )
+            refEditor.current.reset(
+              getDefaultWordValue(),
+            )
+          } else if (
+            refEditor?.current?.resetSheet &&
+            isEssaySheet
+          ) {
+            refEditor.current.resetSheet()
+          }
+                                  rightSideRef?.current &&
+                                    rightSideRef.current.scrollTo({
+                                      top: 0,
+                                      behavior: 'smooth',
+                                    })
+                                }}
+                              >{`Requirement (${index + 1})`}</button>
+                            )
+                          },
+                        )}
+                      </div>
+                    )}
+                  </button>
+                )} */}
+              </div>
+              {/** Tabs */}
+              {tabs?.length > 0 && (
+                <div
+                  className={`flex w-fit min-w-0 max-w-[100%] flex-1 flex-col justify-center gap-3 lg:max-w-[68%] lg:flex-row`}
+                >
+                  <TabSlide
+                    data={filteredTabs}
+                    currentTab={currentPage}
+                    setCurrentTab={setCurrentPage}
+                    handleChangeTab={async (id?: string) => {
                       setScratchPads('')
                       handleSubmitAnswer('change-tab')
                       setEssayData(undefined)
                       handleChangeTab(id)
-                    }
-                  }}
-                  activeShowAll={activeShowAll}
-                  setActiveShowAll={setActiveShowAll}
-                  setValueFilter={setValueFilter}
-                  isScrollCenter={false}
-                />
-              </div>
-            )}
-            {/** End Tabs */}
-          </div>
-          {/** End Header */}
-
-          {/** Question Content */}
-          {!isUndefined(currentTabContent) && (
-            <>
-              {currentTabContent?.data?.display_type ===
-              DISPLAY_TYPE.VERTICAL ? (
-                <div
-                  className={`flex flex-1 overflow-auto bg-gray-3`}
-                  id={'preview-question'}
-                >
+                    }}
+                    setHasScrollBar={setHasScrollBar}
+                    activeShowAll={activeShowAll}
+                    isScrollCenter={false}
+                  />
                   <div
-                    className="h-full overflow-auto bg-white p-6"
-                    style={{ width: `calc(50% - ${leftWidth}px)` }}
+                    className={clsx(
+                      `flex items-center justify-center lg:justify-start`,
+                      activeShowAll ? 'lg:ml-8' : 'lg:ml-0',
+                    )}
+                  >
+                    {activeShowAll && <OptionShowAll />}
+                    <Tooltip
+                      className="tooltip-show-all"
+                      open={tooltipOpen}
+                      onOpenChange={(visible) => setTooltipOpen(visible)}
+                      title={
+                        <div className="flex items-center gap-2">
+                          {activeShowAll ? (
+                            <div className="rounded-full bg-white">
+                              <ShowMoreIcon size={16} color="#404041" />
+                            </div>
+                          ) : (
+                            <div className="rounded-full bg-white">
+                              <ShowLessIcon size={16} color="#404041" />
+                            </div>
+                          )}
+                          <span>
+                            {activeShowAll ? 'Show Less' : 'Show All'}
+                          </span>
+                        </div>
+                      }
+                    >
+                      <div
+                        className="absolute -top-3 left-[50%] z-[99] w-max translate-x-[-50%] cursor-pointer text-sm font-semibold leading-4.5 text-white underline"
+                        onClick={() => {
+                          setActiveShowAll(!activeShowAll)
+                          setTooltipOpen(false)
+                        }}
+                        // onMouseUp={() => setTooltipOpen(true)}
+                      >
+                        {!activeShowAll ? (
+                          <ShowLessIcon size={24} />
+                        ) : (
+                          <ShowMoreIcon size={24} />
+                        )}
+                      </div>
+                    </Tooltip>
+                  </div>
+                </div>
+              )}
+
+              {/** End Tabs */}
+              {/* {currentTabContent?.data?.response_option === null &&
+                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
+                  !currentTabContent.done && (
+                    <div className="flex gap-1">
+                      <div className="hidden 3xl:block ">
+                        Choose response option:
+                      </div>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(0)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent?.response_type === 0 && 'active'
+                        }`}
+                      >
+                        <WordIcon />
+                      </button>
+                      <button
+                        onClick={() => {
+                          dispatch(
+                            confirmDialog.open({
+                              // Nội dung của hộp thoại xác nhận
+                              message:
+                                'Change Type will delete your input, do you want to continue?',
+                              // Hàm thực thi khi người dùng xác nhận hành động
+                              onConfirm: () => {
+                                handleChangeTypeEssay(1)
+                                handleClearSelection(currentTabContent)
+                              },
+                            }),
+                          )
+                        }}
+                        className={`${
+                          currentTabContent.response_type === 1 && 'active'
+                        }`}
+                      >
+                        <ExcelIcon />
+                      </button>
+                    </div>
+                  )} */}
+              <div
+                className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
+                onClick={() => {
+                  handleFlagQuestion(currentPage)
+                  trackGAEvent('Click Button Flag To Review Test')
+                }}
+              >
+                <FlagIcon />
+                {currentTabContent?.flag ? (
+                  <div>Unflag to Review</div>
+                ) : (
+                  <div>Flag to Review</div>
+                )}
+              </div>
+              {/* <button
+                  disabled={currentTabContent?.is_viewed_answer}
+                  className={`flex items-center gap-3 border border-solid ${
+                    !currentTabContent?.is_viewed_answer
+                      ? 'border-[#A1A1A1] text-[#050505]'
+                      : '[#DCDDDD] text-[#DCDDDD]'
+                  } w-[150px] justify-center p-1 py-2`}
+                  onClick={() => {
+                    handleClearSelection(currentTabContent)
+                    trackGAEvent('Click Button Clear Selection Test')
+                  }}
+                >
+                  <div className="text-medium-sm font-medium">
+                    Clear Selection
+                  </div>
+                </button> */}
+              {/* {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
+                !currentTabContent?.is_viewed_answer &&
+                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
+                  <button
+                    className="flex w-[180px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
+                    onClick={async () => {
+                      const data = await getResult(currentTabContent)
+                      handleSubmitAnswer('view-answer')
+                    confirmAnswer(
+                        data?.corrects,
+                        data?.solution,
+                        currentTabContent,
+                        data?.isSelfReflection,
+                        data?.requirements,
+                      )
+                      trackGAEvent('Click Button Submit & View Answer Test')
+                    }}
+                  >
+                    <div className="text-medium-sm font-medium">
+                      Submit & View Answer
+                    </div>
+                  </button>
+                ) : (
+                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
+                    filteredTabs.length - 1 && (
+                    <button
+                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
+                      onClick={async () => {
+                        const index = filteredTabs.findIndex(
+                          (e: any) => e.id === currentPage,
+                        )
+                      if (filteredTabs[index + 1].id) {
+                          handleChangeTab(filteredTabs[index + 1].id)
+                        handleSubmitAnswer('change-tab')
+                      }
+                      }}
+                    >
+                      <div className="text-medium-sm font-medium">
+                        Next Question
+                      </div>
+                    </button>
+                  )
+                )} */}
+            </div>
+          }
+        >
+          <div
+            className="relative flex h-full flex-col overflow-hidden bg-white"
+            onMouseUp={() => {
+              setStartResize(false)
+              setCurrentLeftWidth(leftWidth)
+            }}
+          >
+            {/** Question Content */}
+            {!isUndefined(currentTabContent) && (
+              <>
+                {currentTabContent?.data?.display_type ===
+                DISPLAY_TYPE.VERTICAL ? (
+                  <div
+                    className={`flex flex-1 overflow-auto bg-[#F1F1F1]`}
+                    id={'preview-question'}
                   >
                     <div
-                      className="min-w-[700px]"
+                      className={clsx(
+                        'h-full min-w-[20%] overflow-auto bg-white p-8',
+                        styles.scrollYOnly,
+                      )}
+                      style={{
+                        width: `calc(50% - ${leftWidth}px)`,
+                      }}
+                    >
+                      <div
+                        id="hightlight_area_topic"
+                        onMouseUp={(e: any) => {
+                          if (
+                            e.target.tagName.charAt(0) !== 'm' &&
+                            e.target.firstChild?.tagName !== 'math'
+                          ) {
+                            if (e) {
+                              if (allowHighLight) {
+                                runHighlight(
+                                  handleSaveHighLightTopic,
+                                  allowHighLight || false,
+                                  'hightlight_area_topic',
+                                )
+                              } else if (allowUnHighLight) {
+                                runHighlight(
+                                  handleSaveHighLightTopic,
+                                  allowUnHighLight || false,
+                                  'hightlight_area_topic',
+                                  { color: 'white' },
+                                )
+                              }
+                            }
+                          }
+                        }}
+                      >
+                        {currentTabContent?.topicDescription?.description && (
+                          <HighlightableHTML
+                            initialHTML={
+                              currentTabContent?.topicDescription
+                                ?.description || ''
+                            }
+                            storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                            className="sapp-questions mb-6"
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className="z-10 flex h-full w-[2px] cursor-ew-resize items-center justify-center bg-[#99A1B7]"
+                      onMouseDown={() => setStartResize(true)}
+                      onTouchStart={(e) => {
+                        e.preventDefault()
+                        setStartResize(true)
+                      }}
+                      onTouchMove={() => setStartResize(true)}
+                      onMouseUp={() => setStartResize(false)}
+                      onTouchEnd={() => setStartResize(false)}
+                    >
+                      <div className="h-8 w-8 rounded-full bg-white">
+                        <ResizeIcon />
+                      </div>
+                    </div>
+                    <div
+                      className={clsx(
+                        'h-full overflow-auto bg-white p-8',
+                        styles.scrollYOnly,
+                        'has-horizontal',
+                      )}
+                      style={{ width: `calc(50% + ${leftWidth}px)` }}
+                      ref={rightSideRef}
+                    >
+                      <div
+                        className={clsx(
+                          'flex w-full flex-col gap-8 rounded-xl bg-gray-100 p-8',
+                          {
+                            'min-w-[350px] bg-white px-0 py-8':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.ESSAY,
+                            '!w-fit':
+                              currentTabContent?.data?.qType ===
+                              QUESTION_TYPES.MATCHING,
+                          },
+                        )}
+                      >
+                        {checkType(
+                          currentTabContent?.data,
+                          currentTabContent?.data?.qType,
+                          currentTabContent?.id,
+                          currentTabContent?.answer,
+                          currentTabContent?.corrects,
+                          currentTabContent?.hightlight,
+                          currentTabContent?.solution,
+                          currentTabContent?.done,
+                        )}
+
+                        {groupAction()}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    className={`flex-1 overflow-auto p-8`}
+                    id={'preview-question'}
+                    ref={scrollRef}
+                  >
+                    <div
                       id="hightlight_area_topic"
                       onMouseUp={(e: any) => {
                         if (
@@ -2824,50 +3622,33 @@ const TestDetail = () => {
                           }
                         }
                       }}
+                      className="m-auto mb-3 w-full max-w-[950px]"
                     >
-                      <EditorReader
-                        className="mb-4"
-                        text_editor_content={
-                          currentTabContent?.topicDescription?.description
-                        }
-                        highlighted={currentTabContent?.hightlightTopic}
-                        highlighArea="hightlight_area_topic"
-                      />
-                      {currentTabContent?.topicDescription?.files?.length > 0 &&
-                        currentTabContent?.topicDescription?.files?.map(
-                          (e: any, indexReq: number) => {
-                            return (
-                              <div
-                                className="cursor-pointer text-state-info hover:underline"
-                                onClick={() =>
-                                  handleOpenScratchPad(
-                                    'file',
-                                    e?.resource?.url,
-                                    e?.resource?.name,
-                                  )
-                                }
-                                key={indexReq}
-                              >
-                                {e?.resource?.name}
-                              </div>
-                            )
-                          },
-                        )}
+                      {currentTabContent?.topicDescription?.description && (
+                        <HighlightableHTML
+                          initialHTML={
+                            currentTabContent?.topicDescription?.description ||
+                            ''
+                          }
+                          storageKey={`${router.query.id}-${currentTabContent?.data?.qType}-question-topic-${currentTabContent?.id}`}
+                          className="mb-4"
+                        />
+                      )}
                     </div>
-                  </div>
-                  <div
-                    className="h-full w-[20px] cursor-ew-resize bg-gray-3"
-                    onMouseDown={() => {
-                      setStartResize(true)
-                    }}
-                    onMouseUp={() => setStartResize(false)}
-                  ></div>
-                  <div
-                    className="h-full overflow-auto bg-white py-6"
-                    style={{ width: `calc(50% + ${leftWidth}px)` }}
-                    ref={rightSideRef}
-                  >
-                    <div className="min-w-[700px] px-6">
+
+                    <div
+                      className={clsx(
+                        'mx-auto mt-8 flex w-full max-w-[950px] flex-col gap-8 rounded-xl bg-gray-100 p-8',
+                        {
+                          'min-w-[350px] bg-white px-0 py-8':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.ESSAY,
+                          '!w-fit':
+                            currentTabContent?.data?.qType ===
+                            QUESTION_TYPES.MATCHING,
+                        },
+                      )}
+                    >
                       {checkType(
                         currentTabContent?.data,
                         currentTabContent?.data?.qType,
@@ -2878,590 +3659,365 @@ const TestDetail = () => {
                         currentTabContent?.solution,
                         currentTabContent?.done,
                       )}
-                      {currentTabContent &&
-                        currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-                        isShowTemplate && (
-                          <div className="mt-8 flex justify-end">
-                            <ButtonPrimaryV2
-                              disabled={currentTabContent.is_viewed_answer}
-                              title="Reset to Answer Template"
-                              onClick={onOpenResetToTemplateModal}
-                            />
-                          </div>
-                        )}
+                      {groupAction()}
                     </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className={`flex-1 overflow-auto px-6 py-6`}
-                  id={'preview-question'}
-                >
-                  <div
-                    id="hightlight_area_topic"
-                    onMouseUp={(e: any) => {
-                      if (
-                        e.target.tagName.charAt(0) !== 'm' &&
-                        e.target.firstChild?.tagName !== 'math'
-                      ) {
-                        if (e) {
-                          if (allowHighLight) {
-                            runHighlight(
-                              handleSaveHighLightTopic,
-                              allowHighLight || false,
-                              'hightlight_area_topic',
-                            )
-                          } else if (allowUnHighLight) {
-                            runHighlight(
-                              handleSaveHighLightTopic,
-                              allowUnHighLight || false,
-                              'hightlight_area_topic',
-                              { color: 'white' },
-                            )
-                          }
-                        }
-                      }
-                    }}
-                    className="editor-wrap m-auto mb-3 w-full max-w-[950px]"
-                  >
-                    <EditorReader
-                      className="mb-4"
-                      text_editor_content={
-                        currentTabContent?.topicDescription?.description
-                      }
-                      highlighted={currentTabContent?.hightlightTopic}
-                      highlighArea="hightlight_area_topic"
-                    />
-                    {currentTabContent?.topicDescription?.files?.length > 0 &&
-                      currentTabContent?.topicDescription?.files?.map(
-                        (e: any, index: number) => {
-                          return (
-                            <div
-                              className="cursor-pointer text-state-info hover:underline"
-                              onClick={() =>
-                                handleOpenScratchPad(
-                                  'file',
-                                  e?.resource?.url,
-                                  e?.resource?.name,
-                                )
-                              }
-                              key={index}
-                            >
-                              {e?.resource?.name}
-                            </div>
-                          )
-                        },
-                      )}
-                  </div>
-
-                  <div className="m-auto w-full max-w-[950px]">
-                    {checkType(
-                      currentTabContent?.data,
-                      currentTabContent?.data?.qType,
-                      currentTabContent?.id,
-                      currentTabContent?.answer,
-                      currentTabContent?.corrects,
-                      currentTabContent?.hightlight,
-                      currentTabContent?.solution,
-                      currentTabContent?.done,
-                    )}
-                    {currentTabContent &&
-                      currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-                      isShowTemplate && (
-                        <div className="mt-8 flex justify-end">
-                          <ButtonPrimaryV2
-                            disabled={currentTabContent.is_viewed_answer}
-                            title="Reset to Answer Template"
-                            onClick={onOpenResetToTemplateModal}
-                          />
-                        </div>
-                      )}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-          {/** End Question Content */}
-
-          {/** Scratchpads */}
-          <div className="z-10 flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
-            <div className="flex h-full items-center">
-              <button
-                className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
-                onClick={() => {
-                  setAllowHighLight(!allowHighLight)
-                  setAllowUnHighLight(false)
-                  trackGAEvent('Click Button Highlight Test')
-                }}
-              >
-                <ButtonContent icon={<HighlightIcon />} content="Highlight" />
-              </button>
-              <button
-                className={`h-full ${allowUnHighLight && 'bg-yellow-300'}`}
-                onClick={() => {
-                  ;(setAllowUnHighLight(!allowUnHighLight),
-                    setAllowHighLight(false))
-                  trackGAEvent('Click Button Unhighlight Test')
-                }}
-              >
-                <ButtonContent
-                  icon={<UnHighLightIcon />}
-                  content="Unhighlight"
-                />
-              </button>
-              <button
-                className="h-full"
-                onClick={() => {
-                  handleOpenScratchPad('scratch_pad')
-                  trackGAEvent('Click Button ScratchPad Test')
-                }}
-              >
-                <ButtonContent icon={<ScratchPadIcon />} content="ScratchPad" />
-              </button>
-              <button
-                className={`h-full ${
-                  checkCalExist > -1 && 'sapp-disable-button'
-                }`}
-                onClick={() => {
-                  handleOpenScratchPad('calculator')
-                  trackGAEvent('Click Button Calculator Test')
-                }}
-                disabled={checkCalExist > -1}
-              >
-                <ButtonContent icon={<CalculatorIcon />} content="Calculator" />
-              </button>
-              {exhibitData && exhibitData?.length > 0 && (
-                <button className="relative h-full" ref={dropUpRef}>
-                  <div
-                    className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                    onClick={() => {
-                      setShowListExhibits(!showListExhibits)
-                    }}
-                  >
-                    <ExhibitsIcon />
-                    <div className="flex items-center gap-3 text-sm font-normal">
-                      <div>
-                        <span className="hidden xl:inline-block 3xl:me-1">
-                          {`${exhibitText}s (${exhibitData?.length || 0})`}
-                        </span>
-                      </div>
-                      <ArrowUpIcon />
-                    </div>
-                  </div>
-                  {showListExhibits && (
-                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
-                      {exhibits?.map(
-                        (
-                          e: { label: string; value: string },
-                          index: number,
-                        ) => {
-                          return (
-                            <button
-                              key={e?.value}
-                              className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
-                                !watchExhibits('exhibits')?.includes(
-                                  e?.value,
-                                ) && 'text-gray-1'
-                              }`}
-                              onClick={() => handleOpenExhibit(e?.value)}
-                            >{`${exhibitText} ${index + 1}`}</button>
-                          )
-                        },
-                      )}
-                    </div>
-                  )}
-                </button>
-              )}
-              {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-                <button className="relative h-full" ref={dropUpRequire}>
-                  <div
-                    className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                    onClick={() => {
-                      setShowLisRequirement(!showListRequirement)
-                    }}
-                  >
-                    <TextSquareIcon />
-                    <div className="flex items-center gap-3 text-sm font-normal">
-                      <div>
-                        <span className="hidden lg:inline-block 3xl:me-1">
-                          Requirement
-                        </span>
-                        <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
-                      </div>
-                      <ArrowUpIcon />
-                    </div>
-                  </div>
-                  {showListRequirement && (
-                    <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-gray-3 shadow-questions-exhibits 3xl:w-full">
-                      {currentTabContent?.data?.requirements?.map(
-                        (e: any, indexReq: number) => {
-                          return (
-                            <button
-                              key={e.id}
-                              className={`p-3 ${
-                                essayData?.index !== indexReq && 'text-gray-1'
-                              }`}
-                              onClick={() => {
-                                if (e?.id !== essayData?.req?.id) {
-                                  //chọn requirement khác thì mới set lại state
-                                  setEssayData({ req: e, index: indexReq })
-
-                                  if (refEditor?.current && isEssayWord) {
-                                    const name = `${currentTabContent?.id}_${indexReq}_answer`
-                                    const valueFromFormReq = getValues(name)
-
-                                    const getDefaultWordValue = () => {
-                                      if (!isEssayWord) return
-                                      if (valueFromFormReq !== undefined) {
-                                        return valueFromFormReq
-                                      }
-                                      const requirement =
-                                        currentTabContent?.data?.requirements?.[
-                                          indexReq
-                                        ]
-
-                                      if (requirement?.short_answer) {
-                                        return requirement.short_answer
-                                      }
-                                      if (requirement?.answer_text) {
-                                        return requirement.answer_text
-                                      }
-                                      if (requirement?.answer_template) {
-                                        return requirement.answer_template
-                                      }
-                                      if (currentTabContent.answer) {
-                                        return currentTabContent.answer
-                                      }
-
-                                      return currentTabContent?.data
-                                        ?.answer_template
-                                    }
-                                    onResetFormatEssay(
-                                      name,
-                                      getDefaultWordValue(),
-                                    )
-                                    refEditor.current.reset(
-                                      getDefaultWordValue(),
-                                    )
-                                  } else if (
-                                    refEditor?.current?.resetSheet &&
-                                    isEssaySheet
-                                  ) {
-                                    refEditor.current.resetSheet()
-                                  }
-                                }
-                                rightSideRef?.current &&
-                                  rightSideRef.current.scrollTo({
-                                    top: 0,
-                                    behavior: 'smooth',
-                                  })
-                                setShowLisRequirement(false)
-                              }}
-                            >{`Requirement (${indexReq + 1})`}</button>
-                          )
-                        },
-                      )}
-                    </div>
-                  )}
-                </button>
-              )}
-            </div>
-
-            <div className="flex h-full items-center gap-3 pe-6">
-              {currentTabContent?.data?.response_option === null &&
-                currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
-                !currentTabContent.done && (
-                  <div className="flex gap-1">
-                    <div className="hidden 3.5xl:block">
-                      Choose response option:
-                    </div>
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          confirmDialog.open({
-                            // Nội dung của hộp thoại xác nhận
-                            message:
-                              'Change Type will delete your input, do you want to continue?',
-                            // Hàm thực thi khi người dùng xác nhận hành động
-                            onConfirm: () => {
-                              handleChangeTypeEssay(0)
-                              handleClearSelection(currentTabContent)
-                            },
-                          }),
-                        )
-                      }}
-                      className={`${
-                        currentTabContent?.response_type === 0 && 'active'
-                      }`}
-                    >
-                      <WordIcon />
-                    </button>
-                    <button
-                      onClick={() => {
-                        dispatch(
-                          confirmDialog.open({
-                            // Nội dung của hộp thoại xác nhận
-                            message:
-                              'Change Type will delete your input, do you want to continue?',
-                            // Hàm thực thi khi người dùng xác nhận hành động
-                            onConfirm: () => {
-                              handleChangeTypeEssay(1)
-                              handleClearSelection(currentTabContent)
-                            },
-                          }),
-                        )
-                      }}
-                      className={`${
-                        currentTabContent.response_type === 1 && 'active'
-                      }`}
-                    >
-                      <ExcelIcon />
-                    </button>
                   </div>
                 )}
-              <button
-                className="flex items-center justify-center gap-3 border border-gray-1 px-3 py-2 3xl:w-[150px]"
-                onClick={() => {
-                  handleFlagQuestion(currentPage)
-                  trackGAEvent('Click Button Flag To Review Test')
-                }}
-              >
-                <FlagIcon />
-                <div className="hidden text-medium-sm font-medium lg:block">
-                  Flag to Review
-                </div>
-              </button>
-              <button
-                disabled={currentTabContent?.is_viewed_answer}
-                className={`flex items-center gap-3 border border-solid ${
-                  !currentTabContent?.is_viewed_answer
-                    ? 'border-gray-1 text-bw-1'
-                    : 'border-default text-gray-2'
-                } w-[150px] justify-center p-1 py-2`}
-                onClick={async () => {
-                  handleClearSelection(currentTabContent)
-                  trackGAEvent('Click Button Clear Selection Test')
-                }}
-              >
-                <div className="text-medium-sm font-medium">
-                  Clear Selection
-                </div>
-              </button>
-              {/* )} */}
-              {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-              !currentTabContent?.is_viewed_answer &&
-              quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                <button
-                  className="flex w-45 items-center justify-center gap-3 border border-gray-1 px-3 py-2"
-                  onClick={async () => {
-                    await resetWordBeforeAction()
-                    const data = await getResult(currentTabContent)
-                    handleSubmitAnswer('view-answer')
-                    confirmAnswer(
-                      data?.corrects,
-                      data?.solution,
-                      currentTabContent,
-                      data?.isSelfReflection,
-                      data?.requirements,
-                    )
-                    trackGAEvent('Click Button Submit & View Answer Test')
-                  }}
-                >
-                  <div className="text-medium-sm font-medium">
-                    Submit & View Answer
-                  </div>
-                </button>
-              ) : (
-                filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                  filteredTabs.length - 1 && (
-                  <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
-                    onClick={async () => {
-                      const index = filteredTabs.findIndex(
-                        (e: any) => e.id === currentPage,
+              </>
+            )}
+            {/** End Question Content */}
+
+            <TestScratchPads
+              currentPage={currentPage}
+              exhibitData={exhibitData}
+              scratchPadValues={scratchPadValues}
+              setScratchPadValues={setScratchPadValues}
+              scratchPads={scratchPads}
+              setScratchPads={setScratchPads}
+              onFocusingPad={onFocusingPad}
+              setOnFocusingPad={setOnFocusingPad}
+              handleCloseScratchPad={handleCloseScratchPad}
+              openScratchPad={openScratchPad}
+              exhibitText={exhibitText}
+            />
+            {/** End Scratchpads */}
+
+            <TestTimeOutModal
+              type={type}
+              okButtonCaption={
+                quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                  ? 'Review Answers'
+                  : 'View Results'
+              }
+              open={openTimeOut}
+              setOpen={setOpenTimeOut}
+              handleSubmit={() => {
+                dispatch(disableUnsavedChange())
+                  .unwrap()
+                  .then(() => {
+                    if (type === 'entrance') {
+                      const searchParams =
+                        quizAttempt?.number_of_attempts &&
+                        quizDetail?.limit_count
+                          ? `attempt=${quizAttempt?.number_of_attempts}/${quizDetail?.limit_count}`
+                          : ``
+                      router.replace(
+                        `/entrance-test/test-result/${QuizResultId}?${searchParams}`,
                       )
-                      if (filteredTabs[index + 1].id) {
-                        setScratchPads('')
-                        handleSubmitAnswer('change-tab')
-                        // setEssayData(undefined)
-                        handleChangeTab(filteredTabs[index + 1].id)
+                    } else if (type === 'event-test') {
+                      router.replace(`/event-test`)
+                      // setSubmitEventTest(true)
+                    } else {
+                      // if (type !== 'entrance') {
+                      if (
+                        quizDetail?.grading_method === GRADING_METHOD.MANUAL
+                      ) {
+                        router.replace(
+                          `/courses/test/your-answers-detail/${QuizResultId}`,
+                        )
+                      } else {
+                        router.replace(
+                          `/courses/test/test-result/${QuizResultId}`,
+                        )
                       }
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Next Question
-                    </div>
-                  </button>
-                )
-              )}
-            </div>
+                      // } else {
+                      //   console.log('back backs')
+                      //   router.back()
+                      //   setScoreQuestion(scoreFinalTest)
+                      //   setSubmitTest(true)
+                      // }
+                    }
+                    trackGAEvent('Click Button Submit Time Out Test')
+                  })
+              }}
+              handleQuit={() => {
+                trackGAEvent('Click Button Quit Time Out Test')
+                router.back()
+              }}
+            />
+
+            <QuitTestModal
+              open={openQuit}
+              setOpen={setOpenQuit}
+              handleQuit={() => {
+                switch (type) {
+                  case 'event-test':
+                    router.replace(`/event-test`)
+                    break
+                  case 'entrance':
+                    router.replace(`/entrance-test`)
+                    break
+                  default:
+                    const class_id = router.query.class_id
+                    if (class_id) {
+                      router.push(`/courses/my-course/${class_id}`)
+                    } else {
+                      router.back()
+                    }
+                    break
+                }
+                // if (type === 'event-test') {
+                //
+                //   // setSubmitEventTest(true)
+                // } else {
+                //   router.back()
+                // }
+              }}
+              handleCancel={() =>
+                dispatch(loginSlice.actions.enableUnsavedChange())
+              }
+              content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
+            />
+
+            <LimitQuizModal
+              open={openLimit}
+              setOpen={setOpenLimit}
+              handleQuit={() => router.back()}
+            />
+
+            <ConFirmSubmit
+              open={openSubmit}
+              setOpen={setOpenSubmit}
+              handleSubmit={() => {
+                handleSubmitQuestions('submit')
+                if (type !== 'event-test') {
+                  setOpenSubmit(false)
+                }
+              }}
+              handleCancel={() =>
+                dispatch(loginSlice.actions.enableUnsavedChange())
+              }
+            />
+
+            <UnSubmitAnswerModal
+              open={openUnSubmitAnswer}
+              setOpen={setUnSubmitAnswer}
+              data={unSubmitAnswerData}
+              handleSubmit={() => {
+                if (type !== 'event-test') {
+                  setUnSubmitAnswer(false)
+                }
+                handleSubmitQuestions('submit')
+              }}
+              handleCancel={() => setUnSubmitAnswer(false)}
+            />
+
+            <ModalUploadFile
+              open={openUpload?.status}
+              isMultiple={false}
+              handleClose={() => {
+                setOpenUpload({
+                  status: false,
+                  question_id: undefined,
+                  requirementIndex: undefined,
+                })
+              }}
+              fileType={'ESSAY'}
+              location={`question-answer/${openUpload?.question_id}`}
+              setSelectedFile={(e: any) =>
+                handleSaveFileEssay(e[0], openUpload?.requirementIndex)
+              }
+            />
+            {openReportModal && openReportModal.open && (
+              <SuccessSubmittedConstructorModal
+                open={openReportModal.open}
+                setOpen={setOpenReportModal}
+                quizName={quizDetail?.name}
+                handleCancel={() => {
+                  setOpenReportModal({
+                    open: false,
+                    resultId: '',
+                  })
+                  router.back()
+                }}
+                handleOk={() => {
+                  router.replace(
+                    `/courses/test/your-answers-detail/${openReportModal.resultId}`,
+                  )
+                }}
+              />
+            )}
           </div>
 
-          <TestScratchPads
-            currentPage={currentPage}
-            exhibitData={exhibitData}
-            scratchPads={scratchPads}
-            setScratchPads={setScratchPads}
-            onFocusingPad={onFocusingPad}
-            setOnFocusingPad={setOnFocusingPad}
-            handleCloseScratchPad={handleCloseScratchPad}
-            openScratchPad={openScratchPad}
-            exhibitText={exhibitText}
-            scratchPadValues={scratchPadValues}
-            setScratchPadValues={setScratchPadValues}
-          />
-          {/** End Scratchpads */}
-
-          <TestTimeOutModal
-            type={type}
-            okButtonCaption={
-              quizDetail?.grading_method === GRADING_METHOD.MANUAL
-                ? 'Review Answers'
-                : 'View Results'
-            }
-            open={openTimeOut}
-            setOpen={setOpenTimeOut}
-            handleSubmit={() => {
-              dispatch(disableUnsavedChange())
-                .unwrap()
-                .then(() => {
-                  if (type === 'entrance') {
-                    router.replace(`/entrance-test/test-result/${QuizResultId}`)
-                  } else if (type === 'event-test') {
-                    router.replace(`/event-test`)
-                    // setSubmitEventTest(true)
-                  } else {
-                    // if (type !== 'entrance') {
-                    if (quizDetail?.grading_method === GRADING_METHOD.MANUAL) {
-                      router.replace(
-                        `/courses/test/your-answers-detail/${QuizResultId}`,
-                      )
-                    } else {
-                      router.replace(
-                        `/courses/test/test-result/${QuizResultId}`,
-                      )
-                    }
-                    // } else {
-                    //   console.log('back backs')
-                    //   router.back()
-                    //   setScoreQuestion(scoreFinalTest)
-                    //   setSubmitTest(true)
-                    // }
-                  }
-                  trackGAEvent('Click Button Submit Time Out Test')
-                })
-            }}
-            handleQuit={() => {
-              trackGAEvent('Click Button Quit Time Out Test')
-              router.back()
-            }}
-          />
-
-          <QuitTestModal
-            open={openQuit}
-            setOpen={setOpenQuit}
-            handleQuit={() => {
-              if (type === 'event-test') {
-                router.replace(`/event-test`)
-                // setSubmitEventTest(true)
-              } else {
-                router.back()
-              }
-            }}
-            handleCancel={() =>
-              dispatch(loginSlice.actions.enableUnsavedChange())
-            }
-            content="If you quit now, your answers will be saved and the timer will continue running. You can come back later to resume the test."
-          />
-
-          <LimitQuizModal
-            open={openLimit}
-            setOpen={setOpenLimit}
-            handleQuit={() => router.back()}
-          />
-
-          <ConFirmSubmit
-            open={openSubmit}
-            setOpen={setOpenSubmit}
-            handleSubmit={() => {
-              handleSubmitQuestions('submit')
-              if (type !== 'event-test') {
-                setOpenSubmit(false)
-              }
-            }}
-            handleCancel={() =>
-              dispatch(loginSlice.actions.enableUnsavedChange())
-            }
-          />
-
-          <UnSubmitAnswerModal
-            open={openUnSubmitAnswer}
-            setOpen={setUnSubmitAnswer}
-            data={unSubmitAnswerData}
-            handleSubmit={() => {
-              if (type !== 'event-test') {
-                setUnSubmitAnswer(false)
-              }
-              handleSubmitQuestions('submit')
-            }}
-            handleCancel={() => setUnSubmitAnswer(false)}
-          />
-
-          <ModalUploadFile
-            open={openUpload?.status}
-            isMultiple={false}
-            handleClose={() => {
-              setOpenUpload({
-                status: false,
-                question_id: undefined,
-                requirementIndex: undefined,
-              })
-            }}
-            fileType={'ESSAY'}
-            location={`question-answer/${openUpload?.question_id}`}
-            setSelectedFile={(e: any) =>
-              handleSaveFileEssay(e[0], openUpload?.requirementIndex)
-            }
-          />
-          {openReportModal && openReportModal.open && (
-            <SuccessSubmittedConstructorModal
-              open={openReportModal.open}
-              setOpen={setOpenReportModal}
-              quizName={quizDetail?.name}
-              handleCancel={() => {
-                setOpenReportModal({
-                  open: false,
-                  resultId: '',
-                })
-                router.back()
-              }}
-              handleOk={() => {
-                router.replace(
-                  `/courses/test/your-answers-detail/${openReportModal.resultId}`,
-                )
-              }}
+          {openResetToTemplateModal && (
+            <ResetToAnswerTemplateModal
+              open={openResetToTemplateModal}
+              handleReset={onResetAnswerEssayToTemplate}
+              handleClose={onCloseResetToTemplateModal}
             />
           )}
-        </div>
-        {currentTabContent &&
-          currentTabContent.qType === QUESTION_TYPES.ESSAY &&
-          isShowTemplate && (
-            <ShowAnswerTemplate
-              {...{
-                currentTabContent,
-                essayData,
-              }}
-            />
-          )}
-        {openResetToTemplateModal && (
-          <ResetToAnswerTemplateModal
-            open={openResetToTemplateModal}
-            handleReset={onResetAnswerEssayToTemplate}
-            handleClose={onCloseResetToTemplateModal}
-          />
-        )}
+        </TestWrapper>
       </CourseProvider>
-    </FullScreenLayout>
+      {exhibitData && exhibitData?.length > 0 && (
+        <Popover
+          placement="leftTop"
+          trigger="click"
+          open={isClickExhibitOpen}
+          onOpenChange={(open) => setIsClickExhibitOpen(open)}
+          content={
+            <div className="flex flex-col gap-2">
+              {exhibits?.map(
+                (e: { label: string; value: string }, index: number) => {
+                  return (
+                    <div
+                      key={e?.value}
+                      className={
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800'
+                      }
+                      onClick={() => {
+                        handleOpenExhibit(e?.value)
+                        setShowWarning(false)
+                      }}
+                    >{`${exhibitText} ${index + 1}`}</div>
+                  )
+                },
+              )}
+            </div>
+          }
+        >
+          <Popover
+            content={
+              <div className="flex items-center gap-2 px-2 ">
+                <NotesOutline className="h-4 w-4 text-white" />
+                <div className="text-sm">
+                  {`${exhibitText} (${exhibitData?.length > 9 ? exhibitData?.length : `0${exhibitData?.length}`})`}
+                </div>
+              </div>
+            }
+            trigger="hover"
+            open={!isClickExhibitOpen ? undefined : false}
+            placement="left"
+          >
+            <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
+              <NotesOutline className="h-8 w-8 text-white" />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+              {showWarning && (
+                <PulsingExclamation
+                  className="absolute -right-3 -top-4"
+                  style={{
+                    animation: 'pulseAnim 1.2s infinite ease-in-out',
+                    transformOrigin: 'center',
+                  }}
+                />
+              )}
+            </div>
+          </Popover>
+        </Popover>
+      )}
+      <div className="absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2">
+        {currentTabContent?.topicDescription?.files?.length > 0 && (
+          <Popover
+            className=""
+            placement="leftTop"
+            trigger="click"
+            getPopupContainer={() => document.body}
+            content={
+              <div className="flex flex-col gap-2">
+                {currentTabContent?.topicDescription?.files?.map(
+                  (e: any, index: number) => {
+                    return (
+                      <div
+                        className={clsx(
+                          `flex items-start justify-between gap-8 p-2`,
+                        )}
+                        key={e?.value}
+                      >
+                        <div
+                          key={e?.value}
+                          className={clsx(
+                            'min-w-36 max-w-96 cursor-pointer overflow-hidden text-ellipsis text-nowrap text-white underline hover:text-primary',
+                          )}
+                          onClick={() =>
+                            handleOpenScratchPad(
+                              'file',
+                              e?.resource?.url,
+                              e?.resource?.name,
+                            )
+                          }
+                        >
+                          {e?.resource?.name}
+                        </div>
+                        <div
+                          className="cursor-pointer text-white"
+                          onClick={() => {
+                            download(e?.resource?.name, e?.resource?.file_key)
+                          }}
+                        >
+                          <DownloadIcon color="currentColor" />
+                        </div>
+                      </div>
+                    )
+                  },
+                )}
+              </div>
+            }
+            zIndex={1050}
+          >
+            <div
+              className={clsx(
+                'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                {
+                  'top-[74px]':
+                    (currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                      !currentTabContent?.topicDescription?.requirements
+                        ?.length) ||
+                    !isShowIconButtonInBottom,
+                  'top-[214px]':
+                    currentTabContent?.topicDescription?.qType ===
+                      QUESTION_TYPES.ESSAY &&
+                    !!currentTabContent?.topicDescription?.requirements?.length,
+                  'bottom-0': isShowIconButtonInBottom,
+                },
+              )}
+            >
+              <FileTextIcon />
+              <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+            </div>
+          </Popover>
+        )}
+      </div>
+      <div
+        onClick={() => {
+          handleOpenScratchPad('scratch_pad')
+          trackGAEvent('Click Button ScratchPad Test')
+        }}
+        className={clsx(
+          'group fixed bottom-[302px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          { '!bg-primary': isScatchPadEnabled },
+        )}
+      >
+        <ScratchPadIconV2 isActive={isScatchPadEnabled} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleOpenScratchPad('calculator')
+          trackGAEvent('Click Button Calculator Test')
+        }}
+        className={clsx(
+          'group fixed bottom-[362px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          { '!bg-primary': checkCalExist > -1 },
+        )}
+      >
+        <CalculatorIconV2 isActive={checkCalExist > -1} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <div
+        onClick={() => {
+          handleFlagQuestion(currentPage)
+          trackGAEvent('Click Button Flag To Review Test')
+        }}
+        className="group fixed bottom-[422px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
+      >
+        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
+      </div>
+      <BackToTop
+        scrollContainerRef={scrollRef}
+        className="!right-8 bottom-[482px] lg:bottom-[302px]"
+      />
+    </Layout>
   )
 }
 

@@ -41,7 +41,7 @@ const LayoutTeacher: React.FC<LayoutTeacherProps> = ({
         >
           <div className="px-56 py-6">
             <SappBreadCrumbs breadcrumbs={breadcrumbs} />
-            <Title level={3} className="mt-1 pb-2 text-gray-700">
+            <Title level={3} className="mt-1 pb-2 text-[#374151]">
               {title}
             </Title>
             <div

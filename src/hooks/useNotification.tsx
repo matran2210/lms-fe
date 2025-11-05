@@ -11,8 +11,12 @@ import {
   loadMoreNotification,
   markAllNotifications,
   updateStatusAll,
+  toggleStatusById,
+  deleteNotificationById,
+  deleteAllNotifications,
 } from 'src/redux/slice/Notification/Notification'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+
 export const useNotification = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -26,6 +30,8 @@ export const useNotification = () => {
   const [isViewDetail, setIsViewDetail] = useState(false)
   const [openNotification, setOpenNotification] = useState(false)
   const [selectedTab, setSelectedTab] = useState<number>(1)
+  const [hasNewNotification, setHasNewNotification] = useState<boolean>(false)
+
   const storedCount = localStorage.getItem(
     LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT,
   )
@@ -35,22 +41,42 @@ export const useNotification = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null)
   const isFetching = useRef(false)
-
   const refreshNotification = (isRefresh = false) => {
-    const getNotifications = async (params: Object) => {
-      try {
-        isRefresh && (await dispatch(getCountUnRead()))
-        await dispatch(getNotification(params))
-      } catch (error) {}
+    const loadMultiplePages = async () => {
+      const screenHeight = window.innerHeight
+
+      isRefresh && (await dispatch(getCountUnRead()))
+
+      const firstPageAction = await dispatch(
+        getNotification({
+          page_index: 1,
+          page_size: 10,
+          ...(selectedTab === 2 && {
+            is_read: false,
+          }),
+        }),
+      )
+
+      const totalPages = firstPageAction.payload?.meta?.total_pages || 1
+      const baseHeight = 911
+      const heightRatio = screenHeight / baseHeight
+      const calculatedPages = Math.ceil(heightRatio)
+      const pagesToLoad = Math.min(calculatedPages, totalPages)
+
+      for (let page = 2; page <= pagesToLoad; page++) {
+        await dispatch(
+          loadMoreNotification({
+            page_index: page,
+            page_size: 10,
+            ...(selectedTab === 2 && {
+              is_read: false,
+            }),
+          }),
+        )
+      }
     }
 
-    getNotifications({
-      page_index: 1,
-      page_size: 10,
-      ...(selectedTab === 2 && {
-        is_read: false,
-      }),
-    })
+    loadMultiplePages()
   }
 
   const countNotificationsUnRead = async () => {
@@ -59,36 +85,49 @@ export const useNotification = () => {
     } catch (error) {}
   }
 
-  const markAllRead = async () => {
+  const markAllRead = async (selectedTab: number) => {
     try {
       await dispatch(markAllNotifications())
-      dispatch(updateStatusAll())
+      if (selectedTab === 2) {
+        dispatch(deleteAllNotifications())
+      } else {
+        dispatch(updateStatusAll())
+      }
       await countNotificationsUnRead()
     } catch (error) {}
   }
 
-  const handleMarkAll = () => {
-    setOpenNotification(false)
-    markAllRead()
+  const handleMarkAll = (tab: number) => {
+    markAllRead(tab)
   }
 
-  const handleMarkById = async (ids: string[]) => {
+  const handleMarkById = async (ids: string[], selectedTab: number) => {
     try {
       const res = await NotificationAPI.markById(ids, true)
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      dispatch(getCountUnRead())
+      ids.forEach((id) => {
+        if (selectedTab === 2) {
+          dispatch(deleteNotificationById(id))
+        } else {
+          dispatch(toggleStatusById(id))
+        }
+      })
     } catch (error) {}
   }
 
-  const handleUnMarkById = async (ids: string[]) => {
+  const handleUnMarkById = async (ids: string[], selectedTab: number) => {
     try {
       const res = await NotificationAPI.markById(ids, false)
       if (!res?.data) {
         return
       }
-      refreshNotification(true)
+      ids.forEach((id) => {
+        dispatch(toggleStatusById(id))
+      })
+      dispatch(getCountUnRead())
     } catch (error) {}
   }
 
@@ -186,12 +225,25 @@ export const useNotification = () => {
   }, [isAlwaysShowSidebar])
 
   useEffect(() => {
-    window.addEventListener('storage', (e) => {
-      const count = localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT)
-      setNotificationUnread(parseInt(count ?? '0', 10))
-    })
+    const handleStorage = () => {
+      const count = parseInt(
+        localStorage.getItem(LOCAL_STORAGE_KEYS.NOTIFICATION_COUNT) ?? '0',
+        10,
+      )
+      setNotificationUnread(count)
+      // Nếu có thông báo mới (tăng số lượng)
+      setHasNewNotification((prev) => {
+        const storedPrev = notificationUnread
+        if (count > storedPrev) {
+          return true
+        }
+        return prev
+      })
+      setTimeout(() => setHasNewNotification(false), 3000)
+    }
 
-    return () => window.removeEventListener('storage', () => {})
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
   }, [])
 
   return {
@@ -211,5 +263,6 @@ export const useNotification = () => {
     handleBack,
     refreshNotification,
     isDesktopView,
+    hasNewNotification,
   }
 }

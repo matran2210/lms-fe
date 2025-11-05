@@ -226,7 +226,7 @@ export default function TeacherMenu({
         width={80}
         collapsed
         className={clsx(
-          'fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center bg-blue-2',
+          'bg-blue-2 fixed bottom-0 left-0 top-0 flex h-screen flex-col items-center',
           showPinnedTrial && 'pt-[54px]',
         )}
       >

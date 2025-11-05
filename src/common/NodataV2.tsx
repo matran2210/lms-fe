@@ -6,7 +6,7 @@ const NoDataV2 = ({ title = 'No data founded...' }: { title?: string }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col items-center">
       <NoDataIconV2 />
-      <div className="text-gray justify-start text-sm font-medium md:text-lg">
+      <div className="justify-start text-sm font-medium text-gray md:text-lg">
         {title}
       </div>
     </div>

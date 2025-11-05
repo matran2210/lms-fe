@@ -83,7 +83,7 @@ const NotifyList = ({
                       notifyItem?.avatar['50x50'] || notifyItem?.avatar?.ORIGIN
                     }
                     alt="avatar"
-                    className="h-14 w-14 rounded-full bg-gray-3 object-cover"
+                    className="h-14 w-14 rounded-full bg-[#F1F1F1] object-cover"
                     width={56}
                     height={56}
                   />
@@ -102,7 +102,7 @@ const NotifyList = ({
               </div>
               <div className="block">
                 <h4
-                  className="mb-1 line-clamp-2 text-base text-bw-1"
+                  className="mb-1 line-clamp-2 text-base text-[#050505]"
                   dangerouslySetInnerHTML={{
                     __html: notifyItem?.created_by
                       ? notifyItem?.title
@@ -111,7 +111,7 @@ const NotifyList = ({
                         : (notifyItem?.content ?? ''),
                   }}
                 ></h4>
-                <p className="text-left text-medium-sm text-gray-1">
+                <p className="text-left text-sm text-[#A1A1A1]">
                   {calculateTimeAgo(notifyItem?.updated_at)}
                 </p>
               </div>

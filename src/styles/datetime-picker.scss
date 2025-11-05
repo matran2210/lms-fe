@@ -3,7 +3,7 @@
 }
 
 .ant-picker-outlined {
-  @apply border-default outline-none;
+  @apply border-[#DCDDDD] outline-none;
 }
 
 .ant-picker:hover {
@@ -27,7 +27,7 @@
 }
 
 .ant-picker-input > input::placeholder {
-  @apply text-base font-medium text-gray-1;
+  @apply text-base font-medium text-[#A1A1A1];
 }
 
 .ant-picker .ant-picker-range .ant-picker-input > input {
@@ -35,7 +35,7 @@
 }
 
 .ant-picker .ant-picker-input > input {
-  @apply text-sm font-medium leading-[21px] text-[var(--bs-gray-700)];
+  @apply text-sm font-medium leading-[21px] text-[var(--bs-[#374151])];
 }
 
 .ant-picker div.ant-picker-input > input::placeholder {
@@ -100,4 +100,25 @@
 
 .ant-picker-dropdown {
   @apply z-[1000000];
+}
+
+@layer components {
+  // @media (max-width: 768px) {
+  .hide-date-icon {
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+      -webkit-appearance: none;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    &::-webkit-clear-button {
+      display: none;
+    }
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  // }
 }

@@ -1,5 +1,4 @@
 import FilterCourseDetail from '@components/mycourses/FilterCourseDetail'
-import SearchForm from '@components/mycourses/Search'
 import CourseParts from '@components/mycourses/course-detail/CourseParts'
 import CourseSkeleton from '@components/skeleton/CourseSkeleton'
 import PopupModalTest from '@components/survey/PopupModalTest'
@@ -10,7 +9,6 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { ANIMATION, PageLink } from 'src/constants'
-import { MY_COURSES } from 'src/constants/lang'
 import { UserType } from 'src/redux/types/User/urser'
 import LayoutTeacher from '@components/layout/Teacher'
 import { ITabs } from 'src/type'
@@ -150,17 +148,7 @@ const CourseDetailTeacher = () => {
       breadcrumbs={breadcrumbs}
       isCourseDetail
     >
-      <div className="header border-b border-default bg-white">
-        <div className={`relative my-0 flex`}>
-          <SearchForm
-            placeholder={MY_COURSES.placeholderSearch}
-            formStyle="w-full flex items-center"
-            isTeacher
-          />
-        </div>
-      </div>
-
-      <div className="my-0 pt-6">
+      <div className="my-0">
         {isLoading ? (
           <CourseSkeleton />
         ) : (

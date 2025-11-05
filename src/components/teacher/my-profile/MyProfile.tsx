@@ -67,7 +67,7 @@ const MyProfile = ({
   }>({
     resolver: zodResolver(schema),
   })
-
+  const facilities = user?.facilities || []
   /**
    * Hàm để chuyển sang chế độ chỉnh sửa form
    */
@@ -147,19 +147,22 @@ const MyProfile = ({
       }
     }
   }
-
-  const renderFacility = (
-    <div className="flex items-center gap-[10px]">
-      {user?.facilities?.map((facility, index) => (
-        <div
-          key={index}
-          className="rounded bg-gray-v2-100 px-[20px] py-1 text-v2-xs font-medium"
-        >
-          {facility.name}
-        </div>
-      ))}
-    </div>
-  )
+  const renderFacilities = () => {
+    if (!facilities?.length) return
+    return (
+      <div className="flex flex-wrap items-center gap-[10px]">
+        {facilities?.map((facility) => (
+          <Tag
+            key={facility.id}
+            bordered={false}
+            className="!m-0 rounded px-[20px] py-2 text-xs font-medium text-gray-800"
+          >
+            {facility.name}
+          </Tag>
+        ))}
+      </div>
+    )
+  }
   return (
     <div className="relative">
       <form onSubmit={handleSubmit(onSubmit)} className="block">
@@ -228,7 +231,7 @@ const MyProfile = ({
                         size: 'medium',
                         className:
                           'min-w-fit text-sm w-20 rounded-lg py-2 px-4 !no-underline',
-                        type: 'submit',
+                        htmlType: 'submit',
                         loading: loading || loadingEditName,
                       }}
                     ></ButtonCancelSubmit>
@@ -265,11 +268,12 @@ const MyProfile = ({
 
               <TextWrapper
                 title="Facility"
-                value={renderFacility}
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-              />
+              >
+                {renderFacilities()}
+              </TextWrapper>
             </ul>
             <div className="cursor-pointer rounded-lg bg-warning-50 p-4 text-warning md:hidden">
               <div
@@ -293,7 +297,7 @@ const MyProfile = ({
                   className="w-full"
                   size="medium"
                   title="Confirm"
-                  type="submit"
+                  htmlType="submit"
                   disabled={loading || loadingEditName}
                 />
               </div>
@@ -404,7 +408,7 @@ const MyProfile = ({
                     className="w-full px-4 py-2"
                     size="medium"
                     title="Confirm"
-                    type="submit"
+                    htmlType="submit"
                     disabled={loading || loadingEditName}
                   />
                 </div>

@@ -1,4 +1,3 @@
-import { CloseIcon } from '@assets/icons'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { LAYOUT } from '@utils/constants'
 import { useRouter } from 'next/router'
@@ -8,6 +7,8 @@ import { useEffect, useState } from 'react'
 import { PageLink } from 'src/constants'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { ActivityInfo } from 'src/type'
+import Layout from '@components/layout'
+import CloseModalIcon from '@assets/icons/CloseModalIcon'
 
 const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   const router = useRouter()
@@ -72,10 +73,10 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
   }, [id])
 
   return (
-    <FullScreenLayout title="Quiz result">
-      <div className="m-auto max-w-1570 overflow-x-auto overflow-y-hidden px-6">
+    <FullScreenLayout title="Quiz result" className="!bg-gray-4">
+      <div>
         <div
-          className="absolute right-6 top-[18px]  z-10 ml-auto cursor-pointer"
+          className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
             activityInfo !== null &&
               router.push(
@@ -83,20 +84,31 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
               )
           }}
         >
-          <CloseIcon className="transform stroke-bw-1 transition-all duration-300 ease-in-out group-hover:stroke-primary" />
+          <CloseModalIcon />
         </div>
-        {modalResult?.questions?.data?.length > 0 && (
-          <QuizResultComponent
-            questionResponse={modalResult?.questions || []}
-            getTable={getTable}
-            onShowDetail={(e) => {
-              router.push(
-                `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Entrance Test`,
-              )
-            }}
-            loading={loading}
-          />
-        )}
+        <Layout
+          // size="md"
+          fullWidth
+          title="Quiz Result"
+          showSidebar={false}
+          className="bg-gray-4"
+        >
+          <div className="m-auto">
+            {modalResult?.questions?.data?.length > 0 && (
+              <QuizResultComponent
+                questionResponse={modalResult?.questions || []}
+                getTable={getTable}
+                onShowDetail={(e) => {
+                  router.push(
+                    `${isTeacher ? PageLink.TEACHER_EXPLANATION : '/explanation'}/${e.id}?title=Quiz Result`,
+                  )
+                }}
+                loading={loading}
+                is_lms_v2
+              />
+            )}
+          </div>
+        </Layout>
       </div>
     </FullScreenLayout>
   )

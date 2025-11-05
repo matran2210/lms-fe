@@ -143,7 +143,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
           </div>
           <div className="hidden justify-end lg:flex">
             <ButtonCancelSubmit
-              className="flex flex-row-reverse gap-2"
+              className="flex flex-row-reverse items-center gap-2"
               cancel={{
                 title: 'Cancel',
                 onClick: handleCancel,
@@ -156,7 +156,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
                 size: 'medium',
                 className:
                   'min-w-fit text-sm w-[5rem] rounded-lg py-2 px-4 !no-underline',
-                type: 'submit',
+                htmlType: 'submit',
                 disabled:
                   loading ||
                   isEmpty(watch('confirmPassword')) ||
@@ -177,7 +177,7 @@ const ChangePassword = ({ handleCancel }: IProp) => {
               className="w-full py-2"
               size="medium"
               title="Confirm"
-              type="submit"
+              htmlType="submit"
               disabled={
                 loading ||
                 isEmpty(watch('confirmPassword')) ||
