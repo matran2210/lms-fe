@@ -159,7 +159,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
                 <div className="plus flex size-[48px] items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                   <svg
                     width="48"
-                    height="48px"
+                    height="48"
                     viewBox="0 0 34 34"
                     fill="#33475B"
                     xmlns="http://www.w3.org/2000/svg"
