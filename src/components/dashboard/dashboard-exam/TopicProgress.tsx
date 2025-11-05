@@ -26,6 +26,7 @@ const TopicProgress = ({
           containLabel: true,
         },
         tooltip: {
+          show: !isMobile,
           trigger: 'item',
           borderWidth: 0,
           extraCssText: `
@@ -154,7 +155,7 @@ const TopicProgress = ({
   useEffect(() => {
     if (router?.query?.courseId)
       getTopicProgress(router.query.courseId as string)
-  }, [router?.query?.courseId])
+  }, [router?.query?.courseId, isMobile])
 
   return (
     <div className="flex flex-col rounded-2xl bg-white p-4 shadow-small md:p-6 lg:h-full">
