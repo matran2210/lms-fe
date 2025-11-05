@@ -262,7 +262,7 @@ const CourseDetail = () => {
             ]}
           />
           <div
-            className="mb-6 md:mb-10 mt-4 flex items-start justify-between gap-6"
+            className="mb-6 mt-4 flex items-start justify-between gap-6 md:mb-10"
             data-aos={ANIMATION.DATA_AOS}
           >
             <HeaderMobile
@@ -299,8 +299,9 @@ const CourseDetail = () => {
       )}
 
       {isSuccess &&
-        data.pages[0].courseDetail.remind_choosing_exam &&
-        showSelectExamPopup && <SelectExamPopup courseData={data} />}
+        data.pages[0].courseDetail.remind_choosing_exam?.remind_by_progress && (
+          <SelectExamPopup courseData={data} />
+        )}
 
       {data?.pages?.[0]?.courseDetail?.data?.program && (
         <PopupModalTest
