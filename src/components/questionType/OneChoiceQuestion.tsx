@@ -34,7 +34,6 @@ export type IPreviewProp = {
   exhibitText?: string
   isShowWarning?: boolean
   explainClassname?: string
-  isShowSolution?: boolean
 }
 
 type IAnswers = {
@@ -58,7 +57,6 @@ const OneChoiceQuestion = ({
   exhibitText = 'Exhibit',
   isShowWarning = false,
   explainClassname,
-  isShowSolution = true,
 }: IPreviewProp) => {
   useEffect(() => {
     if (defaultValues) {
@@ -191,9 +189,7 @@ const OneChoiceQuestion = ({
           <SappDivider />
           <div className={clsx('mt-6', explainClassname)}>
             <SappTitleSolution title={`${MY_COURSES.solution}:`} />
-            {isShowSolution && (
-              <EditorReader className="mt-4" text_editor_content={solution} />
-            )}
+            <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         </>
       )}

@@ -41,7 +41,6 @@ interface IProps {
   exhibitText?: string
   correctAnswerClass?: string
   explainClassname?: string
-  isShowSolution?: boolean
 }
 const AddWordPreview = forwardRef(
   (
@@ -62,7 +61,6 @@ const AddWordPreview = forwardRef(
       exhibitText = 'Exhibit',
       correctAnswerClass,
       explainClassname,
-      isShowSolution = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -275,7 +273,7 @@ const AddWordPreview = forwardRef(
             />
           </div>
         )}
-        {solution && isShowSolution && (
+        {solution && (
           <div className={explainClassname}>
             <SappDivider />
             <SappTitleSolution title={`${MY_COURSES.explanations}:`} />

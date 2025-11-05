@@ -299,8 +299,9 @@ const CourseDetail = () => {
       )}
 
       {isSuccess &&
-        data.pages[0].courseDetail.remind_choosing_exam &&
-        showSelectExamPopup && <SelectExamPopup courseData={data} />}
+        data.pages[0].courseDetail.remind_choosing_exam?.remind_by_progress && (
+          <SelectExamPopup courseData={data} />
+        )}
 
       {data?.pages?.[0]?.courseDetail?.data?.program && (
         <PopupModalTest

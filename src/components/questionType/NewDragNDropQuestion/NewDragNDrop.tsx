@@ -41,7 +41,6 @@ interface DragDropQuestionProps {
   corrects?: Correct[]
   solution?: string
   explainClassname?: string
-  isShowSolution?: boolean
 }
 
 // Component cho bank area
@@ -107,7 +106,6 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
   corrects,
   solution,
   explainClassname,
-  isShowSolution,
 }) => {
   const [slots, setSlots] = useState<SlotValue[]>([])
   const [items, setItems] = useState<Answer[]>([])
@@ -370,7 +368,7 @@ const DragDropQuestion: React.FC<DragDropQuestionProps> = ({
             />
           </>
         )}
-        {solution && isShowSolution && (
+        {solution && (
           <>
             <SappDivider />
             <div className={explainClassname}>

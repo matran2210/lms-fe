@@ -54,7 +54,6 @@ interface IProps {
   correctAnswerClass?: string
   explainClassname?: string
   onChangeMatchedPairs?: (matchedPairs: any[]) => void
-  isShowSolution?: boolean
 }
 
 type Role = 'question' | 'answer'
@@ -101,7 +100,6 @@ const MatchQuiz = forwardRef(
       correctAnswerClass,
       explainClassname,
       onChangeMatchedPairs,
-      isShowSolution = true,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -664,7 +662,7 @@ const MatchQuiz = forwardRef(
           )}
         </div>
 
-        {solution && isShowSolution && (
+        {solution && (
           <>
             <SappDivider />
             <div className={explainClassname}>
