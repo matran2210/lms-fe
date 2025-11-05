@@ -4,10 +4,13 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ModalMarketingInApp from './marketing-in-app/ModalMarketingInApp'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import clsx from 'clsx'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 
 const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const [iconPulse, setIconPulse] = useState(false)
+  const { openPinned } = usePinnedNotifyContext()
   const { isMobileView } = useTailwindBreakpoint()
   // Khi modal đóng → trigger hiệu ứng icon "hover"
   useEffect(() => {
@@ -29,7 +32,10 @@ const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
             <motion.div
               id="floating-button-mkt-in-app"
               onClick={() => setOpenModalMarketingInApp(true)}
-              className="bottom-[150px] right-[16px]"
+              className={clsx(
+                'right-[16px]',
+                openPinned && isMobileView ? 'bottom-[185px]' : 'bottom-[150px]',
+              )}
               animate={{
                 scale: iconPulse ? 1.1 : 1,
               }}

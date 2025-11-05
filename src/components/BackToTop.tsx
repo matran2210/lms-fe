@@ -1,5 +1,7 @@
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface Props {
   scrollContainerRef?: React.RefObject<HTMLElement>
@@ -8,7 +10,8 @@ interface Props {
 
 const BackToTop = ({ scrollContainerRef, className }: Props) => {
   const [isVisible, setIsVisible] = useState(false)
-
+  const { openPinned } = usePinnedNotifyContext()
+  const { isMobileView } = useTailwindBreakpoint()
   useEffect(() => {
     const container = scrollContainerRef?.current || window
 
@@ -36,7 +39,8 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   return (
     <div
       className={clsx(
-        `fixed bottom-[210px] right-[16px] z-50 cursor-pointer`,
+        `fixed right-[16px] z-50 cursor-pointer`,
+        openPinned && isMobileView ? 'bottom-[245px]' : 'bottom-[210px]',
         className,
         {
           hidden: !isVisible,
