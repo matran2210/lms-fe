@@ -12,6 +12,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   const [isVisible, setIsVisible] = useState(false)
   const { openPinned } = usePinnedNotifyContext()
   const { isMobileView } = useTailwindBreakpoint()
+  const isChangePosition = openPinned && isMobileView
   useEffect(() => {
     const container = scrollContainerRef?.current || window
 
@@ -39,8 +40,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   return (
     <div
       className={clsx(
-        `fixed right-[16px] z-50 cursor-pointer`,
-        openPinned && isMobileView ? 'bottom-[245px]' : 'bottom-[210px]',
+        `fixed ${isChangePosition ? 'bottom-[250px]' : 'bottom-[210px]'} right-[16px] z-50 cursor-pointer`,
         className,
         {
           hidden: !isVisible,
