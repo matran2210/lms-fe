@@ -6,11 +6,16 @@ import Tooltip from 'src/common/Tooltip'
 import PopupSupportCenter from './PopupSupportCenter'
 import { useRouter } from 'next/router'
 import { excludedPathsHelp } from '@pages/_app'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const Help = ({ showHelp }: { showHelp: boolean }) => {
   // All hooks need to be at the top level, before any conditional returns
   const [visible, setVisible] = useState(false)
   const router = useRouter()
   const scriptRef = useRef<HTMLScriptElement | null>(null)
+  const { openPinned } = usePinnedNotifyContext()
+  const { isMobileView } = useTailwindBreakpoint()
+  const isChangePosition = openPinned && isMobileView
   const { asPath } = router
   const [isTeacherPage, isTestPage, isCaseStudyPage, isActivityPage] = [
     '/teachers',
@@ -173,7 +178,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
                 <div
                   id="floating-button"
                   onClick={handleButtonClick}
-                  className={`${visible ? 'clicked' : ''} bottom-[90px] right-[16px]`}
+                  className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[16px]`}
                 >
                   <div className="plus flex items-center justify-center delay-300 hover:rounded-full hover:opacity-100">
                     <IconClose />

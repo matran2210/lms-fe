@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { useAppDispatch } from 'src/redux/hook'
 import { closeNote } from 'src/redux/slice/Course/NotesList'
@@ -27,7 +28,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
   const [activeSectionId, setActiveSectionId] = useState<string>()
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState<boolean>(false)
-
+  const { isMobileView } = useTailwindBreakpoint()
   const validationSchema = z.object({
     [`description_${id ? id : uuid}`]: z
       .string()
@@ -115,7 +116,15 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
             </div>
             <button
               className="text-icon"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation()
+                removeNote()
+              }}
+              onTouchStart={(e) => {
+                e.stopPropagation()
+              }}
+              onTouchEnd={(e) => {
+                e.stopPropagation()
                 removeNote()
               }}
               disabled={loading}
@@ -128,7 +137,7 @@ const CreateNote = ({ id, content, uuid, count }: IProps) => {
           removeNote()
         }}
         position="center"
-        width={412}
+        width={isMobileView ? 340 : 412}
         height={350}
       >
         <div className="flex h-full flex-col p-4">
