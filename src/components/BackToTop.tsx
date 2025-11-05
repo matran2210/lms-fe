@@ -1,6 +1,6 @@
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
+import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface Props {
