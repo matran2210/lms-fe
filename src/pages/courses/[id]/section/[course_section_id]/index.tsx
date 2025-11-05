@@ -559,10 +559,7 @@ const CoursePartDetail = () => {
         </div>
       ) : null}
 
-      <div
-        className="mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]"
-        data-aos={ANIMATION.DATA_AOS}
-      >
+      <div className="mt-4 min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]">
         {isLoading ? (
           <Skeleton.Input size="default" className="w-1/2 pt-6" block />
         ) : (
@@ -716,7 +713,7 @@ const CoursePartDetail = () => {
           <CtaTrial />
         </div>
       </div>
-      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
+      <PopupLockContent showForm={true} setShowForm={setOpenPopupCTA} />
     </Layout>
   )
 }
