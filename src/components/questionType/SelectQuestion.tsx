@@ -50,7 +50,6 @@ interface IProps {
     }>,
   ) => void
   isShowWarning?: boolean
-  isShowSolution?: boolean
 }
 
 // Constants
@@ -82,7 +81,6 @@ const SelectWord = forwardRef(
       exhibitText,
       isShowWarning = false,
       onChange,
-      isShowSolution,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
@@ -721,7 +719,7 @@ const SelectWord = forwardRef(
         )}
 
         {/* Solution Section */}
-        {solution && isShowSolution && (
+        {solution && (
           <>
             <SappDivider />
             <SappTitleSolution title={MY_COURSES.explanations} />

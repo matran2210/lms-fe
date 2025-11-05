@@ -60,7 +60,6 @@ export type IPreviewProp = {
   explainClassname?: string
   uniqueKey?: string
   isInTest?: boolean
-  isShowSolution?: boolean
 }
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void
@@ -96,7 +95,6 @@ const EssayQuestionPreview = ({
   setValue,
   uniqueKey,
   isInTest = false,
-  isShowSolution,
 }: IPreviewProp) => {
   const dispatch = useAppDispatch()
   const refSheet = useRef(null) as any
@@ -702,8 +700,7 @@ const EssayQuestionPreview = ({
           {(fullData?.confirmed ||
             fullData?.done ||
             fullData?.data?.confirmed) &&
-            (fullData?.solution || data?.explanation?.trim()) &&
-            isShowSolution && (
+            (fullData?.solution || data?.explanation?.trim()) && (
               <div className={explainClassname}>
                 <SappDivider />
                 <SappTitleSolution title={`${MY_COURSES.solution}:`} />

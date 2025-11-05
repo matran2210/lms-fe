@@ -646,7 +646,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 isAFTEREACHQUESTION
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -670,7 +669,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) && isAFTEREACHQUESTION
               }
               explainClassname="!mt-8 !p-0 !bg-transparent"
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -688,7 +686,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               ref={MatchQuizRef}
               explainClassname="!mt-0 !p-0 !bg-transparent"
               correctAnswerClass="!mt-0 !pt-0"
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -704,7 +701,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               exhibitText={exhibitText}
               explainClassname="!mt-8 !p-0 !bg-transparent"
               correctAnswerClass="!mt-8 !pt-0"
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -733,7 +729,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               corrects={showCorrect ? activeQuestion.corrects : undefined}
               solution={activeQuestion?.solution}
               explainClassname="!mt-8 !p-0 !bg-transparent"
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -755,7 +750,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
               solution={activeQuestion?.solution}
               exhibitText={exhibitText}
               isShowWarning={isAFTEREACHQUESTION}
-              isShowSolution={!isAFTEREACHQUESTION}
             />
           )
 
@@ -909,7 +903,6 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                       }}
                       isShowContent={showQuestionContent}
                       externalRef={refEditor}
-                      isShowSolution={!isAFTEREACHQUESTION}
                     />
                   </div>
                 ),
