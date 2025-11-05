@@ -154,7 +154,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
               <div
                 id="floating-button"
                 onClick={handleButtonClick}
-                className={`${visible ? 'clicked' : ''} bottom-[90px] right-[16px]`}
+                className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[16px]`}
               >
                 <div className="plus flex size-[52px] items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                   <svg
