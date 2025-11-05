@@ -40,7 +40,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
   return (
     <div
       className={clsx(
-        `fixed ${isChangePosition ? 'bottom-[250px]' : 'bottom-[210px]'} right-[16px] z-50 cursor-pointer`,
+        `fixed ${isChangePosition ? 'bottom-[250px]' : 'bottom-[210px]'} right-[24px] z-50 cursor-pointer`,
         className,
         {
           hidden: !isVisible,
