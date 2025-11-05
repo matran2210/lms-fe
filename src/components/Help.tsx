@@ -154,7 +154,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
               <div
                 id="floating-button"
                 onClick={handleButtonClick}
-                className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[16px]`}
+                className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[24px]`}
               >
                 <div className="plus flex size-[48px] items-center justify-center rounded-full bg-white transition delay-300 hover:opacity-100">
                   <svg
@@ -178,7 +178,7 @@ const Help = ({ showHelp }: { showHelp: boolean }) => {
                 <div
                   id="floating-button"
                   onClick={handleButtonClick}
-                  className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[16px]`}
+                  className={`${visible ? 'clicked' : ''} ${isChangePosition ? 'bottom-[130px]' : 'bottom-[90px]'} right-[24px]`}
                 >
                   <div className="plus flex items-center justify-center delay-300 hover:rounded-full hover:opacity-100">
                     <IconClose />
