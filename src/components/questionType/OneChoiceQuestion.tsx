@@ -188,7 +188,7 @@ const OneChoiceQuestion = ({
         <>
           <SappDivider />
           <div className={clsx('mt-6', explainClassname)}>
-            <SappTitleSolution title={`${MY_COURSES.solution}:`} />
+            <SappTitleSolution title={`${MY_COURSES.explanations}:`} />
             <EditorReader className="mt-4" text_editor_content={solution} />
           </div>
         </>
