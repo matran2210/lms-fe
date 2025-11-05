@@ -713,7 +713,7 @@ const CoursePartDetail = () => {
           <CtaTrial />
         </div>
       </div>
-      <PopupLockContent showForm={true} setShowForm={setOpenPopupCTA} />
+      <PopupLockContent showForm={openPopupCTA} setShowForm={setOpenPopupCTA} />
     </Layout>
   )
 }
