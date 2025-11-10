@@ -92,8 +92,8 @@ const FilterCourse = ({
           </div>
         </>
       ) : (
-        <div className="flex items-center md:gap-2 lg:gap-4">
-          <div className="text-sm font-normal text-gray-800">
+        <div className="flex shrink-0 items-center md:gap-2 lg:gap-4">
+          <div className="shrink-0 text-sm font-normal text-gray-800">
             {totalResult} Results
           </div>
           <div className="flex md:gap-2 lg:gap-4">
