@@ -1232,6 +1232,7 @@ const TestDetail = () => {
     file?: string,
     fileName?: string,
   ) => {
+    if (isScatchPadEnabled) return
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
