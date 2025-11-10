@@ -1232,12 +1232,15 @@ const TestDetail = () => {
     file?: string,
     fileName?: string,
   ) => {
-    if (isScatchPadEnabled) return
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
       if (type === 'scratch_pad') {
-        arr.push({ id: currentPage, type: type })
+        if (isScatchPadEnabled) {
+          return arr
+        } else {
+          arr.push({ id: currentPage, type: type })
+        }
       } else if (type === 'calculator') {
         if (checkCalExist > -1) {
           const cal = { ...arr[checkCalExist] }
