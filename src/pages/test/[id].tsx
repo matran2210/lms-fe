@@ -742,6 +742,7 @@ const TestDetail = () => {
     const handleEssayChange = (id: string) => {
       setAnswerListValue(id as unknown as number)
     }
+    const storageKey = `${router.query.id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`
 
     const essayRequirementsItem = (): TabsProps['items'] => {
       return (
@@ -876,6 +877,7 @@ const TestDetail = () => {
                       showRequiment={showListRequirement}
                       handleChange={handleEssayChange}
                       explainClassname="!mt-8 !p-0 !bg-transparent"
+                      storageKey={storageKey}
                     />
                   )}
                 </>
@@ -903,6 +905,7 @@ const TestDetail = () => {
             allowUnHighLight={allowUnHighLight}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            storageKey={storageKey}
           />
         )
       case QUESTION_TYPES.ONE_CHOICE:
@@ -921,6 +924,7 @@ const TestDetail = () => {
             allowUnHighLight={allowUnHighLight}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            storageKey={storageKey}
           />
         )
       case QUESTION_TYPES.MULTIPLE_CHOICE:
@@ -942,6 +946,7 @@ const TestDetail = () => {
             tabs={tabs}
             currentPage={currentPage}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            storageKey={storageKey}
           />
         )
       case QUESTION_TYPES.MATCHING:
@@ -961,6 +966,7 @@ const TestDetail = () => {
             corrects={corrects?.corrects}
             solution={solution}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            storageKey={storageKey}
           />
         )
       case QUESTION_TYPES.FILL_WORD:
@@ -982,6 +988,7 @@ const TestDetail = () => {
             solution={solution}
             watch={watch}
             explainClassname="!mt-8 !p-0 !bg-transparent"
+            storageKey={storageKey}
           />
         )
       case QUESTION_TYPES.DRAG_DROP:
@@ -1099,11 +1106,19 @@ const TestDetail = () => {
         }
         return (
           <>
-            <EditorReader
+            <HighlightableHTML
+              initialHTML={currentTabContent?.data?.question_content || ''}
+              storageKey={
+                storageKey ||
+                `${router.query.id}-${currentTabContent?.data?.qType}-question-${currentTabContent?.id}`
+              }
+              className="sapp-questions sapp-editor-reader"
+            />
+            {/* <EditorReader
               className="sapp-questions sapp-editor-reader"
               text_editor_content={currentTabContent?.data?.question_content}
               highlighted={highlighted}
-            />
+            /> */}
             {currentTabContent?.data?.requirements?.length > 0 ? (
               <RequirementsTab
                 destroyInactiveTabPane={true}
@@ -1150,6 +1165,7 @@ const TestDetail = () => {
                 handleSaveHighLightRequirement={handleSaveHighLightRequirement}
                 showRequiment={showListRequirement}
                 handleChange={handleEssayChange}
+                storageKey={storageKey}
               />
             )}
           </>
@@ -2708,6 +2724,8 @@ const TestDetail = () => {
     quizDetail?.grading_preference === GradingPreference.AFTER_EACH_QUESTION
   const groupAction = () => {
     const indexTab = filteredTabs.findIndex((e: any) => e.id === currentPage)
+
+    const currentAnswer = watch(`${currentPage}_answer`)
     return (
       <div>
         <div
@@ -2736,8 +2754,8 @@ const TestDetail = () => {
           {[, QUESTION_TYPES.ONE_CHOICE].includes(currentTabContent?.qType) &&
             !currentTabContent?.is_viewed_answer && (
               <ButtonSecondary
-                className="border !border-secondary !bg-white !font-semibold !text-secondary hover:!bg-gray-100"
-                disabled={!watch(`${currentPage}_answer`)}
+                className={clsx({ '!bg-white !font-semibold': currentAnswer })}
+                disabled={!currentAnswer}
                 onClick={() => {
                   handleClearSelection(currentTabContent)
                   trackGAEvent('Click Button Clear Selection Test')
@@ -2753,7 +2771,7 @@ const TestDetail = () => {
                 QUESTION_TYPES.ONE_CHOICE,
                 QUESTION_TYPES.MULTIPLE_CHOICE,
               ].includes(currentTabContent?.qType) ||
-              !!watch(`${currentPage}_answer`)
+              !!currentAnswer
                 ? null
                 : 'You should select an answer before click'
             }
@@ -2765,69 +2783,6 @@ const TestDetail = () => {
             placement="top"
             color={'#404041'}
           >
-            {/* <ButtonPrimaryV2
-              className='bg-gray-100 hover:!bg-gray-100'
-              onClick={async () => {
-                if (isGradingAfterEachQuestion) {
-                  if (currentTabContent?.is_viewed_answer) {
-                    if (indexTab < filteredTabs.length - 1) {
-                      handleChangeTab(filteredTabs[indexTab + 1].id)
-                    } else if (indexTab === filteredTabs.length - 1) {
-                      handleSubmitAnswer('finish')
-                      if (checkUnSubmitAnswer()?.length > 0) {
-                        setUnSubmitAnswer(true)
-                      } else {
-                        setOpenSubmit(true)
-                      }
-                      dispatch(disableUnsavedChange())
-                    }
-                  } else {
-                    const data = await getResult(currentTabContent)
-                    handleSubmitAnswer('view-answer')
-                    confirmAnswer(
-                      data?.corrects,
-                      data?.solution,
-                      currentTabContent,
-                      data?.isSelfReflection,
-                      data?.requirements,
-                    )
-                  }
-                } else {
-                  if (indexTab < filteredTabs.length - 1) {
-                    handleChangeTab(filteredTabs[indexTab + 1].id)
-                    handleSubmitAnswer('change-tab')
-                  } else if (indexTab === filteredTabs.length - 1) {
-                    handleSubmitAnswer('finish')
-                    if (checkUnSubmitAnswer()?.length > 0) {
-                      setUnSubmitAnswer(true)
-                    } else {
-                      setOpenSubmit(true)
-                    }
-                    dispatch(disableUnsavedChange())
-                  }
-                }
-                trackGAEvent('Click Button Confirm Answer')
-              }}
-              title={
-                (isGradingAfterEachQuestion ? (
-                  currentTabContent?.is_viewed_answer ? (
-                    indexTab < filteredTabs.length - 1 ? (
-                      <div className="flex items-center gap-2">
-                        Next Question <Icon type="arrow-right" />
-                      </div>
-                    ) : (
-                      'Finish'
-                    )
-                  ) : (
-                    'Confirm'
-                  )
-                ) : indexTab < filteredTabs.length - 1 ? (
-                  'Confirm & Next'
-                ) : (
-                  'Confirm'
-                )) as string
-              }
-            /> */}
             {isGradingAfterEachQuestion &&
             currentTabContent?.is_viewed_answer &&
             indexTab < filteredTabs.length - 1 ? (
@@ -3114,26 +3069,6 @@ const TestDetail = () => {
               }}
             >
               <div className="hidden h-full w-[150px] items-center gap-1 lg:flex">
-                {/* <button
-                 className={`h-full ${allowHighLight && 'bg-yellow-[5rem]0'}`}
-                  onClick={() => {
-                    setAllowHighLight(!allowHighLight)
-                    setAllowUnHighLight(false)
-                    trackGAEvent('Click Button Highlight Test')
-                  }}
-                >
-                  <ButtonContent icon={<HighlightIcon />} content="" />
-                </button>
-                <button
-                  className={`h-full ${allowUnHighLight && 'bg-yellow-[5rem]0'}`}
-                  onClick={() => {
-                    setAllowUnHighLight(!allowUnHighLight),
-                      setAllowHighLight(false)
-                    trackGAEvent('Click Button Unhighlight Test')
-                  }}
-                >
-                  <ButtonContent icon={<UnHighLightIcon />} content="" />
-                </button> */}
                 <Popover
                   content={
                     <div className="flex items-center gap-2 px-2 ">
@@ -3183,104 +3118,6 @@ const TestDetail = () => {
                     />
                   </button>
                 </Popover>
-                {/* {currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY && (
-                  <button className="relative h-full" ref={dropUpRequire}>
-                    <div
-                      className="flex items-center gap-3 border-l px-4 3xl:px-6"
-                      onClick={() => {
-                        setShowLisRequirement(!showListRequirement)
-                      }}
-                    >
-                      <TextSquareIcon />
-                      <div className="flex items-center gap-3 text-sm font-normal">
-                        <div>
-                          <span className="hidden lg:inline-block 3xl:me-1"></span>
-                          <span>{`(${currentTabContent?.data?.requirements?.length})`}</span>
-                        </div>
-                        <ArrowUpIcon />
-                      </div>
-                    </div>
-                    {showListRequirement && (
-                      <div className="sapp-separateLine absolute bottom-full h-fit justify-center bg-[#F1F1F1] shadow-questions-exhibits 3xl:w-full">
-                        {currentTabContent?.data?.requirements?.map(
-                          (e: any, index: number) => {
-                            return (
-                              <button
-                                key={e.id}
-                                className={`p-3 ${
-                                  essayData.index !== index && 'text-[#A1A1A1]'
-                                }`}
-                                onClick={() => {
-                                  setEssayData({ req: e, index: index })
-                                    if (refEditor?.current && isEssayWord) {
-            const name = `${currentTabContent?.id}_${indexReq}_answer`
-            const valueFromFormReq = watch(name)
-
-            const getDefaultWordValue = () => {
-              if (!isEssayWord) return
-              if (valueFromFormReq !== undefined) {
-                return valueFromFormReq
-              }
-              const requirement =
-                currentTabContent?.data?.requirements?.[
-                  indexReq
-                ]
-
-              if (
-                requirement?.short_answer !== undefined
-              ) {
-                return (
-                  requirement.short_answer ||
-                  DEFAULT_EDITOR_VALUE
-                )
-              }
-              if (
-                requirement?.answer_text !== undefined
-              ) {
-                return (
-                  requirement.answer_text ||
-                  DEFAULT_EDITOR_VALUE
-                )
-              }
-              // if (requirement?.answer_template !== undefined) {
-              //   return requirement.answer_template || DEFAULT_EDITOR_VALUE
-              // }
-              // if (
-              //   currentTabContent?.answer !== undefined
-              // )
-              return currentTabContent.answer
-              // return currentTabContent?.data?.answer_template || DEFAULT_EDITOR_VALUE
-              // return DEFAULT_EDITOR_VALUE
-            }
-            // resetField(name, getCurrentDefaultWordValue)
-
-            onResetFormatEssay(
-              name,
-              getDefaultWordValue(),
-            )
-            refEditor.current.reset(
-              getDefaultWordValue(),
-            )
-          } else if (
-            refEditor?.current?.resetSheet &&
-            isEssaySheet
-          ) {
-            refEditor.current.resetSheet()
-          }
-                                  rightSideRef?.current &&
-                                    rightSideRef.current.scrollTo({
-                                      top: 0,
-                                      behavior: 'smooth',
-                                    })
-                                }}
-                              >{`Requirement (${index + 1})`}</button>
-                            )
-                          },
-                        )}
-                      </div>
-                    )}
-                  </button>
-                )} */}
               </div>
               {/** Tabs */}
               {tabs?.length > 0 && (
@@ -3349,57 +3186,6 @@ const TestDetail = () => {
               )}
 
               {/** End Tabs */}
-              {/* {currentTabContent?.data?.response_option === null &&
-                  currentTabContent?.data?.qType === QUESTION_TYPES.ESSAY &&
-                  !currentTabContent.done && (
-                    <div className="flex gap-1">
-                      <div className="hidden 3xl:block ">
-                        Choose response option:
-                      </div>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(0)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                        }}
-                        className={`${
-                          currentTabContent?.response_type === 0 && 'active'
-                        }`}
-                      >
-                        <WordIcon />
-                      </button>
-                      <button
-                        onClick={() => {
-                          dispatch(
-                            confirmDialog.open({
-                              // Nội dung của hộp thoại xác nhận
-                              message:
-                                'Change Type will delete your input, do you want to continue?',
-                              // Hàm thực thi khi người dùng xác nhận hành động
-                              onConfirm: () => {
-                                handleChangeTypeEssay(1)
-                                handleClearSelection(currentTabContent)
-                              },
-                            }),
-                          )
-                        }}
-                        className={`${
-                          currentTabContent.response_type === 1 && 'active'
-                        }`}
-                      >
-                        <ExcelIcon />
-                      </button>
-                    </div>
-                  )} */}
               <div
                 className="hidden w-[150px] min-w-[150px] cursor-pointer items-center gap-2 whitespace-nowrap text-base font-semibold text-gray-800 underline hover:text-primary lg:flex"
                 onClick={() => {
@@ -3414,65 +3200,6 @@ const TestDetail = () => {
                   <div>Flag to Review</div>
                 )}
               </div>
-              {/* <button
-                  disabled={currentTabContent?.is_viewed_answer}
-                  className={`flex items-center gap-3 border border-solid ${
-                    !currentTabContent?.is_viewed_answer
-                      ? 'border-[#A1A1A1] text-[#050505]'
-                      : '[#DCDDDD] text-[#DCDDDD]'
-                  } w-[150px] justify-center p-1 py-2`}
-                  onClick={() => {
-                    handleClearSelection(currentTabContent)
-                    trackGAEvent('Click Button Clear Selection Test')
-                  }}
-                >
-                  <div className="text-medium-sm font-medium">
-                    Clear Selection
-                  </div>
-                </button> */}
-              {/* {quizDetail?.grading_preference === 'AFTER_EACH_QUESTION' &&
-                !currentTabContent?.is_viewed_answer &&
-                quizDetail?.quiz_type !== 'ENTRANCE_TEST' ? (
-                  <button
-                    className="flex w-[180px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
-                    onClick={async () => {
-                      const data = await getResult(currentTabContent)
-                      handleSubmitAnswer('view-answer')
-                    confirmAnswer(
-                        data?.corrects,
-                        data?.solution,
-                        currentTabContent,
-                        data?.isSelfReflection,
-                        data?.requirements,
-                      )
-                      trackGAEvent('Click Button Submit & View Answer Test')
-                    }}
-                  >
-                    <div className="text-medium-sm font-medium">
-                      Submit & View Answer
-                    </div>
-                  </button>
-                ) : (
-                  filteredTabs.findIndex((e: any) => e.id === currentPage) <
-                    filteredTabs.length - 1 && (
-                    <button
-                      className="flex w-[150px] items-center justify-center gap-3 border border-[#A1A1A1] px-3 py-2 "
-                      onClick={async () => {
-                        const index = filteredTabs.findIndex(
-                          (e: any) => e.id === currentPage,
-                        )
-                      if (filteredTabs[index + 1].id) {
-                          handleChangeTab(filteredTabs[index + 1].id)
-                        handleSubmitAnswer('change-tab')
-                      }
-                      }}
-                    >
-                      <div className="text-medium-sm font-medium">
-                        Next Question
-                      </div>
-                    </button>
-                  )
-                )} */}
             </div>
           }
         >
@@ -3888,8 +3615,8 @@ const TestDetail = () => {
             open={!isClickExhibitOpen ? undefined : false}
             placement="left"
           >
-            <div className="group fixed bottom-[242px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
-              <NotesOutline className="h-8 w-8 text-white" />
+            <div className="group fixed bottom-[242px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
+              <NotesOutline className="h-7 w-7 text-white" />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
               {showWarning && (
                 <PulsingExclamation
@@ -3904,8 +3631,8 @@ const TestDetail = () => {
           </Popover>
         </Popover>
       )}
-      <div className="absolute bottom-[170px] right-8 z-[1050] flex w-12 flex-col gap-2">
-        {currentTabContent?.topicDescription?.files?.length > 0 && (
+      {currentTabContent?.topicDescription?.files?.length > 0 && (
+        <div className="absolute bottom-[182px] right-8 z-[1050] flex flex-col gap-2">
           <Popover
             className=""
             placement="leftTop"
@@ -3955,7 +3682,7 @@ const TestDetail = () => {
           >
             <div
               className={clsx(
-                'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                'group grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
                 {
                   'top-[74px]':
                     (currentTabContent?.topicDescription?.qType ===
@@ -3971,23 +3698,23 @@ const TestDetail = () => {
                 },
               )}
             >
-              <FileTextIcon />
+              <FileTextIcon className="h-7 w-7" />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
             </div>
           </Popover>
-        )}
-      </div>
+        </div>
+      )}
       <div
         onClick={() => {
           handleOpenScratchPad('scratch_pad')
           trackGAEvent('Click Button ScratchPad Test')
         }}
         className={clsx(
-          'group fixed bottom-[302px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          'group fixed bottom-[302px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
-        <ScratchPadIconV2 isActive={isScatchPadEnabled} />
+        <ScratchPadIconV2 isActive={isScatchPadEnabled} className="h-7 w-7" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -3996,11 +3723,11 @@ const TestDetail = () => {
           trackGAEvent('Click Button Calculator Test')
         }}
         className={clsx(
-          'group fixed bottom-[362px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
+          'group fixed bottom-[362px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
-        <CalculatorIconV2 isActive={checkCalExist > -1} />
+        <CalculatorIconV2 isActive={checkCalExist > -1} className="h-7 w-7" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <div
@@ -4008,14 +3735,16 @@ const TestDetail = () => {
           handleFlagQuestion(currentPage)
           trackGAEvent('Click Button Flag To Review Test')
         }}
-        className="group fixed bottom-[422px] right-8 grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
+        className="group fixed bottom-[422px] right-8 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden"
       >
-        <FlagIconV2 isActive={currentTabContent?.flag} />
+        <FlagIconV2 isActive={currentTabContent?.flag} className="h-7 w-7" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
       </div>
       <BackToTop
         scrollContainerRef={scrollRef}
         className="!right-8 bottom-[482px] lg:bottom-[302px]"
+        iconWrapperClassName={'w-10 h-10'}
+        iconClassName={'w-7 h-7'}
       />
     </Layout>
   )

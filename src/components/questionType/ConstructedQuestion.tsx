@@ -3,9 +3,11 @@ import EditorReader from '@components/base/editor/EditorReader'
 import HookFormEditor from '@components/base/editor/HookFormEditorV2'
 import HookFormExcel from '@components/base/textfield/HookFormExcel'
 import SappDivider from '@components/common/Divider/Divider'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
 import { runHighlight } from '@utils/index'
 import clsx from 'clsx'
 import { cloneDeep, isNull, isUndefined, uniqueId } from 'lodash'
+import { useRouter } from 'next/router'
 import React, {
   memo,
   useCallback,
@@ -60,6 +62,7 @@ export type IPreviewProp = {
   explainClassname?: string
   uniqueKey?: string
   isInTest?: boolean
+  storageKey: string
 }
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void
@@ -95,7 +98,9 @@ const EssayQuestionPreview = ({
   setValue,
   uniqueKey,
   isInTest = false,
+  storageKey,
 }: IPreviewProp) => {
+  const router = useRouter()
   const dispatch = useAppDispatch()
   const refSheet = useRef(null) as any
   const [key, setKey] = useState('1')
@@ -468,11 +473,19 @@ const EssayQuestionPreview = ({
             }
           }}
         >
-          <EditorReader
+          <HighlightableHTML
+            initialHTML={question_content || ''}
+            storageKey={
+              storageKey ||
+              `${router.query.id}-${fullData?.data?.qType}-question-${fullData?.id}`
+            }
+            className="sapp-questions sapp-editor-reader"
+          />
+          {/* <EditorReader
             className="sapp-questions sapp-editor-reader"
             text_editor_content={question_content}
             highlighted={highlighted}
-          />
+          /> */}
         </div>
       )}
       {data && (
@@ -513,14 +526,19 @@ const EssayQuestionPreview = ({
             )}
             {data?.description && (
               <>
-                <EditorReader
+                <HighlightableHTML
+                  initialHTML={data?.description || ''}
+                  storageKey={`${router.query.id}-${fullData?.data?.qType}-requirement-description-${question_data?.requirements?.[index || 0]?.id}`}
+                  className="sapp-questions mb-6"
+                />
+                {/* <EditorReader
                   className="mb-6"
                   text_editor_content={data?.description}
                   highlighted={
                     question_data?.requirements?.[index || 0]?.highlighted
                   }
                   highlighArea="hightlight_area_require"
-                />
+                /> */}
                 <SappDivider className="!my-6" />
               </>
             )}
