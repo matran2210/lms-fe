@@ -24,7 +24,7 @@
   }
 }
 
-.responsive-drawer-center {
+.responsive-drawer-base {
   .ant-drawer-content-wrapper {
     @apply bottom-[100px] left-0 right-0 top-auto h-[400px] !w-auto rounded-xl;
 
@@ -41,6 +41,22 @@
     .ant-drawer-content-wrapper {
       @apply bottom-0;
     }
+  }
+}
+
+.responsive-drawer-center-mobile-lo {
+  @apply responsive-drawer-base;
+
+  .ant-drawer-content-wrapper {
+    @apply fixed inset-0 mx-4 my-auto;
+  }
+}
+
+.responsive-drawer-bottom {
+  @apply responsive-drawer-base;
+
+  .ant-drawer-content-wrapper {
+    @apply bottom-[100px] left-0 right-0 top-auto;
   }
 }
 

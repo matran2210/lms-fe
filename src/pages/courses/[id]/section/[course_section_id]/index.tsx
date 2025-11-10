@@ -652,8 +652,9 @@ const CoursePartDetail = () => {
           isShowFooter
           closable
           isShowBtnClose
+          placement={isMobileView ? 'bottom' : 'right'}
           submitButtonClassName={isMobileView ? 'w-full' : ''}
-          rootClassName={'responsive-drawer-center'}
+          rootClassName={'responsive-drawer-center-mobile-lo'}
         >
           <div
             className="overflow-y-auto"

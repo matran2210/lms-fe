@@ -368,7 +368,7 @@ const LearningNotesList = () => {
       isShowFooter={isOpenFilter}
       handleSubmit={handleSubmit}
       classNameHeader={classNameHeader}
-      rootClassName={'responsive-drawer-center'}
+      rootClassName={'responsive-drawer-bottom'}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
       closable={isAlwaysShowSidebar}

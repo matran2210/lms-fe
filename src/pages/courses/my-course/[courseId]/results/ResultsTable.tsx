@@ -259,7 +259,7 @@ const ResultsTable = ({
         handleBack={handleBack}
         handleSubmit={handleSubmit}
         classNameHeader="pb-4 border-b border-gray-200"
-        rootClassName="responsive-drawer-center"
+        rootClassName="responsive-drawer-bottom"
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
       >
