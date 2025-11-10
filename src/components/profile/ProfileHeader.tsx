@@ -203,7 +203,7 @@ const ProfileHeader = ({
                     <div className="flex flex-col items-center justify-center gap-1">
                       <PencilFillV2Icon className="h-6 w-6 text-white" />
                       <span className="text-xs font-medium text-white">
-                        Edit Avatar
+                        Edit
                       </span>
                     </div>
                   ) : (
