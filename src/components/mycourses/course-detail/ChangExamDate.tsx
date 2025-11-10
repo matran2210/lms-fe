@@ -70,7 +70,7 @@ const ChangExamDate = ({
         placeholder="Choose one option"
         onMenuScrollToBottom={hasNextPage && fetchNextPage}
       />
-      <div className="flex justify-between">
+      <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
           You can only change the exam date up to two times.
         </div>
