@@ -45,18 +45,8 @@
 }
 
 .responsive-drawer-center-mobile-lo {
-  @apply responsive-drawer-base;
-
   .ant-drawer-content-wrapper {
-    @apply fixed inset-0 mx-4 my-auto;
-  }
-}
-
-.responsive-drawer-bottom {
-  @apply responsive-drawer-base;
-
-  .ant-drawer-content-wrapper {
-    @apply bottom-[100px] left-0 right-0 top-auto;
+    @apply fixed inset-0 mx-4 my-auto !h-[521px] rounded-xl;
   }
 }
 

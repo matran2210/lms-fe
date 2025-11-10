@@ -259,7 +259,7 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
-        rootClassName={clsx('responsive-drawer-bottom', {
+        rootClassName={clsx('responsive-drawer-base', {
           'drawer-bottom-0': isMobileView,
         })}
       >
