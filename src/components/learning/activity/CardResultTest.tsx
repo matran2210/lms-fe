@@ -25,11 +25,43 @@ const CardResultTest = ({
 
   const dateSubmitted = resultData?.quiz?.attempts?.[0]?.updated_at
   const timeSpent = resultData?.quiz?.attempts?.[0]?.total_attempt_time
+  const textButtonViewResult = () => {
+    // Chưa có attempts -> Start
+    if (
+      !resultData?.quiz?.attempts ||
+      resultData?.quiz?.attempts?.length === 0
+    ) {
+      return 'Start'
+    }
+
+    const attempt = resultData?.quiz?.attempts?.[0]
+    const attemptStatus = attempt?.status
+    const gradingMethod = resultData?.quiz?.grading_method
+
+    // Đang làm bài (IN_PROGRESS) -> Continue
+    if (attemptStatus === EAttemptStatus.IN_PROGRESS) {
+      return 'Continue'
+    }
+
+    // Manual grading
+    if (gradingMethod === GRADING_METHOD.MANUAL) {
+      // Đã submit nhưng chưa grade xong -> Your Answers Detail
+      if (
+        attemptStatus === EAttemptStatus.SUBMITTED &&
+        attempt?.grading_status !== GRADE_STATUS.FINISHED_GRADING
+      ) {
+        return 'Your Answers Detail'
+      }
+    }
+
+    // Các trường hợp còn lại -> View Result
+    return 'View Result'
+  }
 
   const btnViewResult = () => (
     <div className="flex items-center">
       <div className="mr-2 block text-sm font-medium text-gray-800 underline md:hidden">
-        View Result
+        {textButtonViewResult()}
       </div>
       <div>
         <ArrowRight />
