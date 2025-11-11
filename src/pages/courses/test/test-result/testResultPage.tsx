@@ -102,6 +102,9 @@ const TestResultPage = ({
                   type={type}
                   gradingStatus={questions?.quizAttempt?.grading_status}
                   quizAttempt={questions?.quizAttempt}
+                  numberSelectedResponse={
+                    (questions?.selectedResponseAnswers ?? []).length
+                  }
                 />
               </div>
               <MultipleChoiceScore
@@ -122,7 +125,8 @@ const TestResultPage = ({
                   score={score}
                   isGraded={
                     questions?.quizAttempt?.grading_status ===
-                    GRADE_STATUS.FINISHED_GRADING
+                      GRADE_STATUS.FINISHED_GRADING ||
+                    !!questions?.quizAttempt?.is_graded
                   }
                   passingScore={chartData?.quiz?.required_percent_score}
                   loadingChart={loadingChart}
@@ -137,16 +141,17 @@ const TestResultPage = ({
                   yourScoreDetailRef={yourScoreDetailRef}
                   type={type}
                   gradingStatus={questions?.quizAttempt?.grading_status}
+                  numberSelectedResponse={
+                    (questions?.selectedResponseAnswers ?? []).length
+                  }
                 />
               </div>
-              <div>
-                <MultipleChoiceScore
-                  questions={questions}
-                  score={score}
-                  globalAverage={globalAverageNumber}
-                  multipleQuestionRef={multipleQuestionRef}
-                />
-              </div>
+              <MultipleChoiceScore
+                questions={questions}
+                score={score}
+                globalAverage={globalAverageNumber}
+                multipleQuestionRef={multipleQuestionRef}
+              />
             </div>
           )
         }
@@ -165,6 +170,9 @@ const TestResultPage = ({
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
+                numberSelectedResponse={
+                  (questions?.selectedResponseAnswers ?? []).length
+                }
               />
             </div>
             <MultipleChoiceScore
@@ -186,7 +194,8 @@ const TestResultPage = ({
                 score={score}
                 isGraded={
                   questions?.quizAttempt?.grading_status ===
-                  GRADE_STATUS.FINISHED_GRADING
+                    GRADE_STATUS.FINISHED_GRADING ||
+                  !!questions?.quizAttempt?.is_graded
                 }
                 passingScore={chartData?.quiz?.required_percent_score}
                 loadingChart={loadingChart}
@@ -200,6 +209,9 @@ const TestResultPage = ({
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
+                numberSelectedResponse={
+                  (questions?.selectedResponseAnswers ?? []).length
+                }
               />
             </div>
             <MultipleChoiceScore
@@ -220,6 +232,9 @@ const TestResultPage = ({
                 yourScoreDetailRef={yourScoreDetailRef}
                 type={type}
                 gradingStatus={questions?.quizAttempt?.grading_status}
+                numberSelectedResponse={
+                  (questions?.selectedResponseAnswers ?? []).length
+                }
               />
             </div>
             <MultipleChoiceScore
