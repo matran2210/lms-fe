@@ -25,6 +25,7 @@ import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnyw
 import { TitleSidebar } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import clsx from 'clsx'
+import SelectExamDate from '@components/mycourses/course-detail/SelectExamDate'
 
 type Props = {
   open: boolean
@@ -96,6 +97,7 @@ const ExaminationInfo = ({
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
+  const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
@@ -105,7 +107,7 @@ const ExaminationInfo = ({
     retry: false,
     enabled: !!classId,
   })
-
+  const [itemSelected, setItemSelected] = useState('')
   const queryClient = useQueryClient()
   const [isEdit, setIsEdit] = useState(isEditProps)
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
@@ -122,7 +124,6 @@ const ExaminationInfo = ({
   const methods = useForm<ExaminationForm>({
     resolver: zodResolver(validationSchema),
   })
-
   const handleSuccess = () => {
     queryClient.invalidateQueries({
       queryKey: [ClassKey.ExamInfo],
@@ -161,17 +162,27 @@ const ExaminationInfo = ({
     })
   }
   const handleBack = () => {
-    setIsEdit(false)
-    methods.reset()
+    if (isOpenSelectExam) {
+      setIsOpenSelectExam(false)
+    } else {
+      setIsEdit(false)
+      methods.reset()
+    }
   }
   const handleCancel = () => {
     setOpen(false)
+    setIsOpenSelectExam(false)
     setTimeout(() => {
       handleBack()
     }, 500)
   }
   const { exams } = useSelectExams(classId)
   const handleChangeExamDate = () => {
+    if (isOpenSelectExam) {
+      if (itemSelected) methods.setValue('examination_subject_id', itemSelected)
+      setIsOpenSelectExam(false)
+      return
+    }
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
@@ -259,22 +270,30 @@ const ExaminationInfo = ({
         placement={placement}
         height={height}
         submitButtonClassName="w-full md:w-auto"
-        rootClassName={clsx('responsive-drawer-center', {
+        rootClassName={clsx('responsive-drawer-base', {
           'drawer-bottom-0': isMobileView,
         })}
       >
-        {isEdit ? (
-          <FormProvider {...methods}>
+        <FormProvider {...methods}>
+          {isMobileView && isOpenSelectExam ? (
+            <SelectExamDate
+              classId={classId}
+              currentValue={data?.exam?.id || currentValue}
+              itemSelected={itemSelected}
+              setItemSelected={setItemSelected}
+            />
+          ) : isEdit ? (
             <ChangExamDate
               isOpen={isEdit}
               classId={classId}
               remainingChanges={data?.remaining_changes}
               currentValue={data?.exam?.id || currentValue}
+              setIsOpenSelectExam={setIsOpenSelectExam}
             />
-          </FormProvider>
-        ) : (
-          renderContent()
-        )}
+          ) : (
+            renderContent()
+          )}
+        </FormProvider>
       </SappDrawerV3>
       <ChangeAnywayModal
         openConfirmModal={openConfirmModal}

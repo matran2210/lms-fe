@@ -321,7 +321,7 @@ const LearningNotesList = () => {
       : 'Note List'
     : openChooseItem.name
   const classNameHeader = openChooseItem.isOpen
-    ? 'pb-4 border-b border-gray-200 '
+    ? 'pb-4 border-b border-gray-200'
     : 'mb-6'
 
   const handleBack = () => {
@@ -368,11 +368,12 @@ const LearningNotesList = () => {
       isShowFooter={isOpenFilter}
       handleSubmit={handleSubmit}
       classNameHeader={classNameHeader}
-      rootClassName={'responsive-drawer-center'}
+      rootClassName={'responsive-drawer-base'}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
-      closable={isAlwaysShowSidebar}
+      closable={!isOpenFilter}
       placement={isMobileView ? 'bottom' : 'right'}
+      titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
@@ -390,7 +391,7 @@ const LearningNotesList = () => {
             <div
               ref={scrollRef}
               className={clsx(
-                'result-scroll flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
+                'result-scroll mt-6 flex h-[250px] flex-col gap-6 md:mt-4 md:h-[510px] md:gap-0 lg:h-[700px]',
                 {
                   'overflow-y-auto': !isEmpty(notesListData?.notes),
                 },
