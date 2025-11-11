@@ -75,6 +75,7 @@ export const TitleSidebar = {
   TEST: 'Test',
   DASHBOARD_TEST: 'Dashboard Test',
   HOME: 'Home',
+  STUDENT_PROFILE: 'Student Profile',
 }
 
 export const ValueSidebar = {
@@ -86,6 +87,7 @@ export const ValueSidebar = {
   TEST: 'test',
   DASHBOARD_TEST: 'dashboard-test',
   EXAM_LIST: 'exam-list',
+  STUDENT_PROFILE: 'student-profile',
 }
 
 export const TitleTeacherSidebar = {

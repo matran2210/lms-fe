@@ -32,6 +32,12 @@ export const listTab = [
     height: 5225,
   },
   {
+    title: TitleSidebar.STUDENT_PROFILE,
+    value: ValueSidebar.STUDENT_PROFILE,
+    src: `${linkCdnMktInApp}/bg_student_profile_mkt-min.png`,
+    height: 5225,
+  },
+  {
     title: TitleSidebar.LEARNING_ACTIVITY,
     value: ValueSidebar.LEARNING_ACTIVITY,
     src: `${linkCdnMktInApp}/bg_learning_activity_mkt-min.png`,
