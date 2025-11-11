@@ -7,7 +7,7 @@ const SortBy = ({ action }: { action: () => void }) => {
       onClick={action}
     >
       <div className="flex items-center gap-2">
-        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
+        <div className="flex h-6 w-6 items-center justify-center rounded-full">
           <EssentialIcon />
         </div>
         <div className="text-sm text-gray-400">Sort by...</div>
