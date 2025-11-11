@@ -158,10 +158,8 @@ const OverallProgress = ({
       ) : (
         <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
           <div className="flex-col">
-            <div className="flex">
-              <div className="mb-6 min-w-fit text-lg font-semibold md:text-xl xl:mb-0">
-                Overall Progress
-              </div>
+            <div className="mb-6 flex items-center text-lg font-semibold md:text-xl xl:mb-0">
+              <span>Overall Progress</span>
               <Tooltip
                 title={
                   <div className="text-center">
@@ -170,9 +168,9 @@ const OverallProgress = ({
                 }
                 placement="bottom"
               >
-                <div className="ms-2">
-                  <IconEssentional />
-                </div>
+                <span className="ms-2 flex items-center">
+                  <IconEssentional className="cursor-pointer align-middle" />
+                </span>
               </Tooltip>
             </div>
           </div>
