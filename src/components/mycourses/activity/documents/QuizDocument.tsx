@@ -1047,7 +1047,7 @@ const QuizDocument = ({
         <div className="mb-8 flex items-center gap-3 rounded-md bg-white px-6 py-2">
           {((quizSetting?.allow_attempt && !isNull(quizSetting)) ||
             isNull(quizSetting)) && (
-            <div className="grid w-full grid-cols-3">
+            <div className="grid w-full grid-cols-1 md:grid-cols-3">
               {is_graded ? (
                 <div className="hidden flex-wrap items-center gap-3 md:flex">
                   <div
@@ -1060,9 +1060,9 @@ const QuizDocument = ({
                     getGradedLabel(gradeStatus)}
                 </div>
               ) : (
-                <div className="invisible">Graded</div>
+                <div className="invisible hidden md:block">Graded</div>
               )}
-              <div className="mx-auto flex w-fit items-center gap-3">
+              <div className="mx-auto flex w-full items-center justify-center gap-3 md:w-fit">
                 {questions?.length > 1 && (
                   <button
                     disabled={activeQuestionIndex === 0 || loading}

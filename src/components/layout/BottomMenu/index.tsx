@@ -8,7 +8,7 @@ const BottomMenu = ({ children, className }: PropsWithChildren<IProps>) => {
   return (
     <div
       className={clsx(
-        'fixed bottom-8 left-1/2 mx-auto w-max max-w-sm -translate-x-1/2 transform lg:hidden',
+        'fixed bottom-8 left-1/2 z-[1101] mx-auto w-max max-w-sm -translate-x-1/2 transform lg:hidden',
         className,
       )}
     >
