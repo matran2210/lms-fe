@@ -71,7 +71,7 @@ const ScoreDetail = ({
           },
           {
             label: 'Result',
-            className: clsx(commonHeaderClass, 'text-center'),
+            className: clsx(commonHeaderClass, 'min-w-[200px] text-center'),
           },
           {
             label: 'Time Spent',
