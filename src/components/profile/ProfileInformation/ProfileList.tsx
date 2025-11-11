@@ -184,22 +184,19 @@ const ProfileList = ({ isEdit }: IProps) => {
           )}
         </div>
         <Divider />
-
-        {profileOptions?.length > 1 && (
-          <div>
-            <div className="flex items-center justify-between gap-4 md:justify-start">
-              <span className="text-sm font-semibold text-gray-800 md:text-base">
-                Set as default:
-              </span>
-              <Switch
-                className="sapp-profile-switch"
-                checked={!!makeDefaultDrawer?.is_default}
-                onChange={handleSetDefault}
-                disabled={!!makeDefaultDrawer?.is_default}
-              />
-            </div>
+        <div>
+          <div className="flex items-center justify-between gap-4 md:justify-start">
+            <span className="text-sm font-semibold text-gray-800 md:text-base">
+              Set as default:
+            </span>
+            <Switch
+              className="sapp-profile-switch"
+              checked={!!makeDefaultDrawer?.is_default}
+              onChange={handleSetDefault}
+              disabled={!!makeDefaultDrawer?.is_default}
+            />
           </div>
-        )}
+        </div>
       </SappDrawerV2>
     </ProfileCard>
   )
