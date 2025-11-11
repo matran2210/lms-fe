@@ -114,7 +114,7 @@ const FilterCourse = ({
         </div>
       )}
 
-      {isMobileView && openMobileFilter && (
+      {isMobileView && (
         <SappDrawerV3
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}

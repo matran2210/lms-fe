@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 import React from 'react'
-import NoData from 'src/common/NoData'
+import NoDataV2 from 'src/common/NodataV2'
 import { IEntranceTest } from 'src/type/entrance-test'
 import EntranceTest from './EntranceTest'
 import { EAttemptStatus } from 'src/constants/attempt'
@@ -26,7 +26,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
       className={`${
         !isEmpty(entranceTestLists)
           ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3'
-          : 'flex min-h-[calc(100vh-15rem)] items-center justify-center'
+          : 'flex min-h-[calc(100vh-25rem)] items-center justify-center'
       }`}
       // data-aos={ANIMATION.DATA_AOS}
     >
@@ -47,7 +47,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
           )
         })
       ) : (
-        <NoData />
+        <NoDataV2 />
       )}
     </div>
   )
