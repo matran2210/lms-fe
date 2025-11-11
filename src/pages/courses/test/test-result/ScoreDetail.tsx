@@ -273,16 +273,19 @@ const ScoreDetail = ({
                                             }
                                           }}
                                         >
-                                          {answer?.question?.question_content &&
-                                            truncateString(
+                                          {
+                                            answer?.question
+                                              ?.question_content &&
+                                              // truncateString(
                                               DOMPurify.sanitize(
                                                 htmlToRaw(
                                                   answer?.question
                                                     ?.question_content,
                                                 ) ?? '--',
-                                              ),
-                                              40,
-                                            )}
+                                              )
+                                            //   isMobileView ? 60 : 40,
+                                            // )
+                                          }
                                         </div>
                                       </Tooltip>
                                       <Tooltip
