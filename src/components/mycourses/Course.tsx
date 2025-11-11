@@ -35,6 +35,7 @@ import dayjs from 'dayjs'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import clsx from 'clsx'
 import { Grid } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const { useBreakpoint } = Grid
 
 const Course = ({
@@ -80,6 +81,8 @@ const Course = ({
       setDaysDifference(dayLefts)
     }
   }, [course, student?.finished_at])
+
+  const { isMobileView, isDesktopView, isTabletView } = useTailwindBreakpoint()
 
   const percentProgress =
     round(
@@ -442,7 +445,23 @@ const Course = ({
       handleCourseDetail()
     }
   }
-  const maxLengthTitle = 25
+
+  let maxLengthTitle = 25
+
+  switch (true) {
+    case isDesktopView:
+      maxLengthTitle = 25
+      break
+    case isTabletView:
+      maxLengthTitle = 15
+      break
+    case isMobileView:
+      maxLengthTitle = 20
+      break
+    default:
+      maxLengthTitle = 25
+  }
+
   const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
   const classNameDes = `text-sm font-normal md:text-base ${
     enableCourse ? 'text-gray-800' : 'text-gray-300'
