@@ -217,7 +217,7 @@ const DetailCalendar = ({ open, setOpen }: IProps) => {
           <CloseDetailIcon />
         </button>
         {open?.data?.current_date
-          ? renderFormattedDate(open?.data?.current_date)
+          ? renderFormattedDate(open?.data?.current_date as Dayjs)
           : null}
       </div>
       {data?.schedule && !loading ? (

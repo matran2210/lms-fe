@@ -157,7 +157,7 @@ const MyProfile = ({
           extra={
             <>
               {!isEdit && (
-                <div className="cursor-pointer text-primary hover:underline lg:hidden">
+                <div className="flex h-full cursor-pointer items-start text-primary hover:underline lg:hidden">
                   <div
                     className="flex items-center justify-end gap-2"
                     onClick={handleChangeToEditForm}
@@ -178,8 +178,10 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
+                className="!p-4"
                 title="Full Name"
                 showEditIcon
                 isEdit={isEdit}
@@ -195,7 +197,7 @@ const MyProfile = ({
                       control={control}
                       name="full_name"
                       skeleton={loadingEditName}
-                      className="h-full w-full flex-1"
+                      className="h-full w-full flex-1 !p-4"
                       inputClassName="rounded-lg h-full px-4 py-3"
                       textSize="sm"
                     ></HookFormTextField>
@@ -233,6 +235,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Role"
@@ -240,7 +243,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="hidden xl:block"
+                className="hidden !p-4 xl:block"
               />
               <TextWrapper
                 title="D.O.B"
@@ -251,7 +254,7 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
                 type="date"
-                className="hide-date-icon"
+                className="hide-date-icon !p-4"
               />
               <TextWrapper
                 title="Email"
@@ -262,6 +265,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Phone"
@@ -269,6 +273,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="University"
@@ -276,6 +281,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Major"
@@ -283,6 +289,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Field of work"
@@ -290,6 +297,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Position"
@@ -297,6 +305,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Main Class"
@@ -304,6 +313,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
+                className="!p-4"
               />
               <TextWrapper
                 title="Deferred/Retake class"
@@ -311,6 +321,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
+                className="!p-4"
               />
 
               {!isEdit && (
@@ -320,6 +331,7 @@ const MyProfile = ({
                   isEdit={isEdit}
                   loading={loading}
                   control={control}
+                  className="!p-4"
                 />
               )}
             </ul>

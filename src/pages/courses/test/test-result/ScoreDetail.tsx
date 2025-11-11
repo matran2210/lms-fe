@@ -37,6 +37,7 @@ interface ScoreDetailProps {
   gradingStatus?: string
   quizAttempt?: IQuizAttempt
   isTeacher?: boolean
+  numberSelectedResponse?: number
 }
 
 const ScoreDetail = ({
@@ -46,6 +47,7 @@ const ScoreDetail = ({
   yourScoreDetailRef,
   quizAttempt,
   isTeacher,
+  numberSelectedResponse,
 }: ScoreDetailProps) => {
   const router = useRouter()
 
@@ -58,24 +60,24 @@ const ScoreDetail = ({
     },
     {
       label: 'Question Name',
-      className: clsx(commonHeaderClass, 'min-w-[120px] text-start'),
+      className: clsx(commonHeaderClass, 'min-w-[200px] text-start'),
     },
     ...(isMobileView
       ? []
       : [
           {
             label: 'Type',
-            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
+            className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
           },
           {
             label: 'Result',
-            className: clsx(commonHeaderClass, 'text-center'),
+            className: clsx(commonHeaderClass, 'min-w-[200px] text-center'),
           },
           {
             label: 'Time Spent',
             className: clsx(
               commonHeaderClass,
-              ' min-w-[80px] !pr-0 text-center',
+              ' min-w-[100px] !pr-0 text-center',
             ),
           },
         ]),
@@ -167,12 +169,19 @@ const ScoreDetail = ({
   const allData = scoreDetails?.pages.flatMap((page) => page?.answers) || []
   // Group data by program
   const groupedData = groupBy(allData, (item) => item?.belong_to?.id)
+  // const isACCAHighCodes =
+  //   !F_LOW_CODES.includes(subjectCode as string) &&
+  //   QuizAttemptChartType.ACCA === type
+
   return (
     <div
       id="sapp-drawer-test-result-list"
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
-      className={`mb-[180px] lg:mb-[200px] xl:mb-0 ${className}`}
+      className={clsx(` md:mb-[75px] lg:mb-[80px] xl:mb-0 ${className}`, {
+        'mb-[100px] sm:mb-[50px]': (numberSelectedResponse || 0) >= 10,
+        'mb-[50px]': (numberSelectedResponse || 0) < 10,
+      })}
     >
       <div className="mb-4 flex items-center gap-x-3">
         <div className="text-xl font-semibold">
@@ -264,16 +273,19 @@ const ScoreDetail = ({
                                             }
                                           }}
                                         >
-                                          {answer?.question?.question_content &&
-                                            truncateString(
+                                          {
+                                            answer?.question
+                                              ?.question_content &&
+                                              // truncateString(
                                               DOMPurify.sanitize(
                                                 htmlToRaw(
                                                   answer?.question
                                                     ?.question_content,
                                                 ) ?? '--',
-                                              ),
-                                              40,
-                                            )}
+                                              )
+                                            //   isMobileView ? 60 : 40,
+                                            // )
+                                          }
                                         </div>
                                       </Tooltip>
                                       <Tooltip
@@ -313,7 +325,7 @@ const ScoreDetail = ({
                                             ),
                                             answer,
                                           ),
-                                          'flex-1 rounded px-3',
+                                          'inline-block rounded px-3',
                                         )}
                                       >
                                         {answer?.question?.qType !== 'ESSAY' ? (
