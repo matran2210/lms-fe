@@ -6,11 +6,13 @@ import { useEffect } from 'react'
 import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
+import { ArrowDownIcon } from '@components/icons'
 interface IProps {
   classId: string
   remainingChanges?: number
   currentValue?: string
   isOpen: boolean
+  setIsOpenSelectExam: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -20,9 +22,10 @@ const ChangExamDate = ({
   currentValue,
   remainingChanges,
   isOpen,
+  setIsOpenSelectExam,
 }: IProps) => {
   const { control, reset, setValue } = useFormContext()
-  const { exams, hasNextPage, fetchNextPage, refetch } = useSelectExams(classId)
+  const { exams, refetch } = useSelectExams(classId)
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -68,7 +71,8 @@ const ChangExamDate = ({
         options={options ?? []}
         required
         placeholder="Choose one option"
-        onMenuScrollToBottom={hasNextPage && fetchNextPage}
+        suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
+        onDropdownVisibleChange={() => setIsOpenSelectExam(true)}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
