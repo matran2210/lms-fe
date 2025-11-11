@@ -61,7 +61,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         />
         <NavigationBarMKTInApp />
         {isHome ? (
-          <div className="absolute bottom-32 left-1/2 w-full -translate-x-1/2 px-25">
+          <div className="absolute bottom-32 left-1/2 w-full -translate-x-1/2 px-25 short:bottom-8">
             <SliderHome />
           </div>
         ) : (
