@@ -9,6 +9,8 @@ import clsx from 'clsx'
 import { IPreviewProp } from './OneChoiceQuestion'
 import { MY_COURSES } from 'src/constants/lang'
 import SappDivider from '@components/common/Divider/Divider'
+import { HighlightableHTML } from '@components/highlights/HighlightHTML'
+import { useRouter } from 'next/router'
 
 interface IDataAnswer {
   data: {
@@ -36,7 +38,9 @@ const MultiChoiceQuestion = ({
   exhibitText = 'Exhibit',
   isShowWarning = false,
   explainClassname,
+  storageKey,
 }: IPreviewProp) => {
+  const router = useRouter()
   const convertAnswer = useMemo(() => {
     let answers = []
     let number = 0
@@ -101,11 +105,19 @@ const MultiChoiceQuestion = ({
           }
         }}
       >
-        <EditorReader
+        <HighlightableHTML
+          initialHTML={data?.question_content || ''}
+          storageKey={
+            storageKey ||
+            `${router.query.id}-${data?.qType}-question-${data?.id}`
+          }
+          className="sapp-questions sapp-editor-reader mb-6"
+        />
+        {/* <EditorReader
           text_editor_content={data?.question_content}
           className="sapp-questions sapp-editor-reader mb-6"
           highlighted={highlighted}
-        />
+        /> */}
         <WarningSection isShowWarning={isShowWarning} className="mb-4" />
         {data?.question_topic?.exhibits &&
           !isHideExhibit &&

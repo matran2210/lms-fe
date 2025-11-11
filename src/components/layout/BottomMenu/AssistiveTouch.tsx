@@ -93,7 +93,7 @@ export default function AssistiveTouch({
     >
       <div
         ref={wrapperRef}
-        className="fixed bottom-[50%] right-5 z-50"
+        className="fixed bottom-[20%] right-5 z-[1101]"
         style={{ touchAction: 'none' }}
       >
         {/* Main Button */}

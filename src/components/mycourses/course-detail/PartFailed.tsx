@@ -101,8 +101,8 @@ const PartFailed = ({
   const selectedAttemptNumber = selectedResult?.label?.split('/')[0]
 
   const isShowButtonAction = () => {
-    if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
-      return false
+    // if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
+    //   return false
     // if (Number(labelResult) > Number(selectedResult?.label)) return false
     // Case:  Unlimited time attempt
     if (!coursePart?.quiz?.is_limited) return true
