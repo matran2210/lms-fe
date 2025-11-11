@@ -11,13 +11,13 @@ export const listTab = [
     title: TitleSidebar.HOME,
     value: ValueSidebar.HOME,
     src: `${linkCdnMktInApp}/bg_home_mkt-min.png`,
-    height: 6170,
+    height: 1080,
   },
   {
     title: TitleSidebar.DASHBOARD,
     value: ValueSidebar.DASHBOARD,
     src: `${linkCdnMktInApp}/bg_dashboard_mkt-min.png`,
-    height: 6170,
+    height: 5114,
   },
   {
     title: TitleSidebar.COURSES,
@@ -35,7 +35,7 @@ export const listTab = [
     title: TitleSidebar.STUDENT_PROFILE,
     value: ValueSidebar.STUDENT_PROFILE,
     src: `${linkCdnMktInApp}/bg_student_profile_mkt-min.png`,
-    height: 5225,
+    height: 7268,
   },
   {
     title: TitleSidebar.LEARNING_ACTIVITY,
@@ -47,7 +47,7 @@ export const listTab = [
     title: TitleSidebar.TEST,
     value: ValueSidebar.TEST,
     src: `${linkCdnMktInApp}/bg_test_mkt-min.png`,
-    height: 11019,
+    height: 10470,
   },
   {
     title: TitleSidebar.DASHBOARD_TEST,
