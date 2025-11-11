@@ -62,7 +62,7 @@ export type IPreviewProp = {
   explainClassname?: string
   uniqueKey?: string
   isInTest?: boolean
-  storageKey: string
+  storageKey?: string
 }
 type SAPPEditorHandle = {
   moveSelectionOutOfTable: () => void
