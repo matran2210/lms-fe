@@ -823,17 +823,11 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ) {
                   const currentValue = getDefaultValue(true)
 
-                  if (
+                  return !!(
                     currentValue &&
                     currentValue !== defaultSheetData &&
                     checkSheetAnswered(currentValue)
-                  ) {
-                    try {
-                      return true
-                    } catch {
-                      return false
-                    }
-                  }
+                  )
                 }
                 return false
               })()
