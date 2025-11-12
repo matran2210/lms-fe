@@ -30,7 +30,7 @@
 
     @apply md:left-6 md:right-6 md:!h-[669px] md:rounded-2xl;
 
-    @apply lg:bottom-0 lg:left-auto lg:right-0 lg:top-0 lg:h-auto lg:max-h-full lg:!w-[641px];
+    @apply lg:bottom-0 lg:left-auto lg:right-0 lg:top-0 lg:!h-auto lg:!max-h-full lg:!w-[641px];
 
     .ant-drawer-content {
       @apply rounded-xl md:rounded-2xl;
