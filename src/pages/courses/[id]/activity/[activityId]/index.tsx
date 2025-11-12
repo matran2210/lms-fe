@@ -318,6 +318,16 @@ const ActivityPage = () => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
+      if (data.type === 'calculator') {
+        const hasCalculator = arr.some(
+          (e) =>
+            e?.type === 'calculator' ||
+            (typeof e?.id === 'string' && e.id.startsWith('calculator')),
+        )
+        if (hasCalculator) {
+          return arr
+        }
+      }
       switch (data.type) {
         case 'calculator':
           arr?.push({
