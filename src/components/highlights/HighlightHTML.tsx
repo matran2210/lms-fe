@@ -176,8 +176,134 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     }
   }, [highlights, storageKey, isDOMReady])
-
   */
+  // Helper function to restore highlights from positions
+  const restoreHighlightsToDOM = (
+    container: HTMLElement,
+    highlightItems: HighlightItem[],
+  ) => {
+    if (!container || highlightItems.length === 0) return
+
+    // Sort highlights by startOffset to apply from end to start (avoid offset shift)
+    const sortedHighlights = [...highlightItems].sort(
+      (a, b) => b.startOffset - a.startOffset,
+    )
+
+    sortedHighlights.forEach((highlight) => {
+      try {
+        const { startOffset, endOffset, id } = highlight
+
+        // Create tree walker to find text nodes
+        const walker = document.createTreeWalker(
+          container,
+          NodeFilter.SHOW_TEXT,
+          null,
+        )
+
+        let currentOffset = 0
+        let startNode: Node | null = null
+        let startNodeOffset = 0
+        let endNode: Node | null = null
+        let endNodeOffset = 0
+
+        // Find start and end nodes
+        let node: Node | null
+        while ((node = walker.nextNode())) {
+          const nodeLength = node.textContent?.length || 0
+
+          if (!startNode && currentOffset + nodeLength >= startOffset) {
+            startNode = node
+            startNodeOffset = startOffset - currentOffset
+          }
+
+          if (currentOffset + nodeLength >= endOffset) {
+            endNode = node
+            endNodeOffset = endOffset - currentOffset
+            break
+          }
+
+          currentOffset += nodeLength
+        }
+
+        if (startNode && endNode) {
+          const range = document.createRange()
+          range.setStart(startNode, startNodeOffset)
+          range.setEnd(endNode, endNodeOffset)
+
+          // Create highlight span
+          const span = document.createElement('span')
+          span.className = 'highlighted'
+          span.style.backgroundColor = 'yellow'
+          span.setAttribute('data-id', id)
+          span.setAttribute('data-tracked', 'true')
+
+          // Wrap the range content
+          try {
+            range.surroundContents(span)
+          } catch (e) {
+            // If surroundContents fails (e.g., partial element selection),
+            // extract contents and append
+            const fragment = range.extractContents()
+            span.appendChild(fragment)
+            range.insertNode(span)
+          }
+        }
+      } catch (error) {
+        // console.error('Error restoring highlight:', error)
+      }
+    })
+  }
+
+  // Load highlights from sessionStorage - chỉ lưu positions
+  useEffect(() => {
+    const raw = sessionStorage.getItem(storageKey)
+
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw)
+        setHighlights(parsed.highlights || [])
+      } catch (err) {
+        setHighlights([])
+      }
+    } else {
+      setHighlights([])
+    }
+
+    // Reset các state khi chuyển câu hỏi
+    setSelection(null)
+    setSelectionRect(null)
+    setSelectedHighlightId(null)
+    setHighlightRect(null)
+    setOpenNote(false)
+    setNoteInput('')
+
+    prevStorageKeyRef.current = storageKey
+  }, [storageKey])
+
+  // Restore highlights khi DOM ready
+  useEffect(() => {
+    if (containerRef.current && highlights.length > 0) {
+      // Đợi một chút để đảm bảo DOM đã render xong
+      const timer = setTimeout(() => {
+        restoreHighlightsToDOM(containerRef.current!, highlights)
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [highlights.length]) // Chỉ chạy khi số lượng highlights thay đổi
+
+  // Save highlights to sessionStorage - CHỈ LƯU POSITIONS
+  useEffect(() => {
+    if (highlights.length >= 0) {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          highlights, // Chỉ lưu mảng highlights với positions
+        }),
+      )
+    }
+  }, [highlights, storageKey])
+
   const handleMouseUp = () => {
     const selectionObj = window.getSelection()
     if (!selectionObj || selectionObj.isCollapsed) {
@@ -719,7 +845,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     }, 100)
   })
-  /*
+
   const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e?.target as HTMLElement
     if (target.className === 'sapp_overlay_video') {
@@ -749,7 +875,6 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     }
   }
-
   return (
     <div
       className="text-base"
@@ -912,365 +1037,6 @@ export const HighlightableHTML: React.FC<Props> = ({
         {parseHTML(
           replaceTextAlignCenterToWebKitCenter(
             replaceWhiteSpacePreWrapToNormal(html || ''),
-          ),
-          {
-            replace: (domNode) => {
-              if (domNode.type === 'tag' && domNode.name === 'video') {
-                const sourceChild = (domNode.children as Element[]).find(
-                  (child) => child.name === 'source',
-                )
-                const videoToken = sourceChild?.attribs?.token
-                if (videoToken) {
-                  if (!videoRefs.current[videoToken]) {
-                    videoRefs.current[videoToken] =
-                      React.createRef<HTMLVideoElement>()
-                  }
-                  return (
-                    <SAPPVideo
-                      key={videoToken}
-                      options={{
-                        onTimeUpdate: () => {},
-                        src: videoToken,
-                      }}
-                      streamRef={videoRefs.current[videoToken]}
-                      pauseOnSeek={true}
-                      thumbnail={{
-                        '311x175': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=175`,
-                        '656x369': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=369`,
-                        '1270x716': `${video_url}${videoToken}/thumbnails/thumbnail.jpg?time=1s&height=716`,
-                      }}
-                    />
-                  )
-                }
-              }
-            },
-          },
-        )}
-      </div>
-      {type === 'IMG' && (
-        <SappModalImage src={src} setSrc={setSrc}></SappModalImage>
-      )}
-    </div>
-  )
-    // Comment den đây
-    */
-
-  // Helper function to restore highlights from positions
-  const restoreHighlightsToDOM = (
-    container: HTMLElement,
-    highlightItems: HighlightItem[],
-  ) => {
-    if (!container || highlightItems.length === 0) return
-
-    // Sort highlights by startOffset to apply from end to start (avoid offset shift)
-    const sortedHighlights = [...highlightItems].sort(
-      (a, b) => b.startOffset - a.startOffset,
-    )
-
-    sortedHighlights.forEach((highlight) => {
-      try {
-        const { startOffset, endOffset, id } = highlight
-
-        // Create tree walker to find text nodes
-        const walker = document.createTreeWalker(
-          container,
-          NodeFilter.SHOW_TEXT,
-          null,
-        )
-
-        let currentOffset = 0
-        let startNode: Node | null = null
-        let startNodeOffset = 0
-        let endNode: Node | null = null
-        let endNodeOffset = 0
-
-        // Find start and end nodes
-        let node: Node | null
-        while ((node = walker.nextNode())) {
-          const nodeLength = node.textContent?.length || 0
-
-          if (!startNode && currentOffset + nodeLength >= startOffset) {
-            startNode = node
-            startNodeOffset = startOffset - currentOffset
-          }
-
-          if (currentOffset + nodeLength >= endOffset) {
-            endNode = node
-            endNodeOffset = endOffset - currentOffset
-            break
-          }
-
-          currentOffset += nodeLength
-        }
-
-        if (startNode && endNode) {
-          const range = document.createRange()
-          range.setStart(startNode, startNodeOffset)
-          range.setEnd(endNode, endNodeOffset)
-
-          // Create highlight span
-          const span = document.createElement('span')
-          span.className = 'highlighted'
-          span.style.backgroundColor = 'yellow'
-          span.setAttribute('data-id', id)
-          span.setAttribute('data-tracked', 'true')
-
-          // Wrap the range content
-          try {
-            range.surroundContents(span)
-          } catch (e) {
-            // If surroundContents fails (e.g., partial element selection),
-            // extract contents and append
-            const fragment = range.extractContents()
-            span.appendChild(fragment)
-            range.insertNode(span)
-          }
-        }
-      } catch (error) {
-        // console.error('Error restoring highlight:', error)
-      }
-    })
-  }
-
-  // Load highlights from sessionStorage - chỉ lưu positions
-  useEffect(() => {
-    const raw = sessionStorage.getItem(storageKey)
-
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw)
-        setHighlights(parsed.highlights || [])
-      } catch (err) {
-        setHighlights([])
-      }
-    } else {
-      setHighlights([])
-    }
-
-    // Reset các state khi chuyển câu hỏi
-    setSelection(null)
-    setSelectionRect(null)
-    setSelectedHighlightId(null)
-    setHighlightRect(null)
-    setOpenNote(false)
-    setNoteInput('')
-
-    prevStorageKeyRef.current = storageKey
-  }, [storageKey])
-
-  // Restore highlights khi DOM ready
-  useEffect(() => {
-    if (containerRef.current && highlights.length > 0) {
-      // Đợi một chút để đảm bảo DOM đã render xong
-      const timer = setTimeout(() => {
-        restoreHighlightsToDOM(containerRef.current!, highlights)
-      }, 100)
-
-      return () => clearTimeout(timer)
-    }
-  }, [highlights.length]) // Chỉ chạy khi số lượng highlights thay đổi
-
-  // Save highlights to sessionStorage - CHỈ LƯU POSITIONS
-  useEffect(() => {
-    if (highlights.length >= 0) {
-      sessionStorage.setItem(
-        storageKey,
-        JSON.stringify({
-          highlights, // Chỉ lưu mảng highlights với positions
-        }),
-      )
-    }
-  }, [highlights, storageKey])
-
-  const handleOnclick = async (e: React.MouseEvent<HTMLDivElement>) => {
-    const target = e?.target as HTMLElement
-    if (target.className === 'sapp_overlay_video') {
-      const video = target?.previousSibling as any
-      const src = video?.querySelector('source')?.getAttribute('token')
-      if (src && src !== 'null' && video.tagName === 'VIDEO') {
-        var iframe = document.createElement('iframe')
-        iframe.src = `${video_url}${src}/iframe?autoplay=true`
-        iframe.id = video?.id
-        iframe.className = video?.className
-        iframe.style.cssText = video?.style.cssText
-        iframe.allow =
-          'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;'
-        iframe.allowFullscreen = true
-        video?.parentNode?.replaceChild(iframe, video)
-        target?.classList.add('hidden')
-      }
-    } else if (target?.tagName === 'IMG') {
-      const imageSrc = target?.getAttribute('src')
-      if (imageSrc) {
-        setSrc(() => {
-          setType('IMG')
-          return imageSrc
-        })
-      }
-    }
-  }
-
-  return (
-    <div
-      className="text-base"
-      onMouseUp={handleMouseUp}
-      style={{ position: 'relative' }}
-      onClick={handleHighlightClick}
-    >
-      {!selectedHighlightId && selection && selectionRect && (
-        <Popover
-          classNames={{
-            root: 'highlight-popover',
-          }}
-          content={
-            <Button
-              onClick={handleConfirmHighlight}
-              type="text"
-              className="!px-2 py-1 text-white hover:!text-white"
-              icon={<PointerIcon />}
-            >
-              Highlight this
-            </Button>
-          }
-          open={true}
-          trigger={[]}
-          placement="bottom"
-          overlayStyle={{
-            position: 'absolute',
-            top: popoverPosition?.top,
-            left: popoverPosition?.left,
-            zIndex: 9999,
-          }}
-        >
-          <span />
-        </Popover>
-      )}
-
-      {selectedHighlightId && highlightRect && (
-        <Popover
-          classNames={{
-            root: 'highlight-popover',
-          }}
-          content={
-            <>
-              {isShowNote ? (
-                <div
-                  className="flex items-center justify-end gap-2"
-                  onMouseDown={(e) => e.stopPropagation()}
-                >
-                  <Button
-                    className=" !px-2 py-1 text-white hover:!text-white"
-                    onClick={openNoteEditor}
-                    onMouseDown={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    type="text"
-                  >
-                    <ShowCommentIcon /> Comment
-                  </Button>
-                  <div>
-                    <Divider type="vertical" className="bg-white" />
-                  </div>
-                  <Button
-                    onClick={handleRemoveHighlight}
-                    type="text"
-                    className=" !px-2 py-1 text-white hover:!text-white"
-                    icon={<PointerIcon />}
-                  >
-                    Unhighlight this
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  onClick={handleRemoveHighlight}
-                  type="text"
-                  className="!px-2 py-1 text-white hover:!text-white"
-                  icon={<PointerIcon />}
-                >
-                  Unhighlight this
-                </Button>
-              )}
-            </>
-          }
-          overlayStyle={{
-            position: 'absolute',
-            top: highlightRect.top + window.scrollY + 28,
-            left: calcPopoverLeft(highlightRect, isShowNote ? 283 : 130),
-            zIndex: 9999,
-          }}
-          open={true}
-          trigger={[]}
-          placement="bottom"
-        >
-          <span />
-        </Popover>
-      )}
-
-      {openNote && isShowNote && modalPosition && (
-        <Modal
-          open={openNote && isShowNote}
-          onCancel={onCancelAddNote}
-          footer={null}
-          maskClosable={false}
-          keyboard={false}
-          mask={false}
-          style={{
-            position: 'fixed',
-            top: modalPosition?.top || 'auto',
-            right: 50,
-            margin: 0,
-            transform: 'none',
-          }}
-          width={300}
-        >
-          <div
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <AvatarCard className="mb-3" />
-            <TextArea
-              disabled={loading || isViewOnly}
-              value={noteInput}
-              onChange={(e) => setNoteInput(e.target.value)}
-              onMouseDown={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
-              rows={4}
-              placeholder="Enter note"
-            />
-            <div className="mt-3 flex justify-end space-x-2">
-              <ButtonSecondary
-                onClick={onCancelAddNote}
-                onMouseDown={(e) => e.stopPropagation()}
-              >
-                Cancel
-              </ButtonSecondary>
-              <ButtonPrimary
-                loading={loading}
-                disabled={!noteInput || isViewOnly}
-                onClick={saveNote}
-                onMouseDown={(e) => e.stopPropagation()}
-                type="primary"
-              >
-                Save
-              </ButtonPrimary>
-            </div>
-          </div>
-        </Modal>
-      )}
-
-      <div
-        id={storageKey}
-        ref={containerRef}
-        className={`${className} editor-wrap`}
-        onCopy={(e) => e.preventDefault()}
-        onContextMenu={(e) => e.preventDefault()}
-        onClick={handleOnclick}
-        translate="no"
-      >
-        {parseHTML(
-          replaceTextAlignCenterToWebKitCenter(
-            replaceWhiteSpacePreWrapToNormal(initialHTML || ''),
           ),
           {
             replace: (domNode) => {
