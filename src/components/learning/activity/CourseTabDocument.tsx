@@ -311,7 +311,7 @@ const CourseTabDocument = ({
     <div
       className={clsx('rounded-xl bg-white', {
         'my-6': focusOnlyQuiz.open,
-        'px-4': focusOnlyDiscussion,
+        'flex-1 px-4': focusOnlyDiscussion,
         'p-4 shadow-small md:p-6': !focusOnlyDiscussion,
       })}
     >
@@ -329,7 +329,7 @@ const CourseTabDocument = ({
       />
       <div
         className={clsx('mt-4', {
-          'block md:hidden': focusOnlyDiscussion,
+          'block h-full md:hidden': focusOnlyDiscussion,
           hidden: !focusOnlyDiscussion,
         })}
       >

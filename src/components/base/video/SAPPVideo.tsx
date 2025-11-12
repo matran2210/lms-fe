@@ -899,18 +899,20 @@ const SAPPVideo = ({
                     streamRef.current.pause()
                   }
                 }}
+                playsInline
+                webkit-playsinline="true"
                 autoPlay={false}
                 // disablePictureInPicture
                 controlsList="nodownload"
               />
               <div
-                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-14 w-full px-4 py-3"
+                className="video-controls flex-center absolute bottom-0 left-0 right-0 hidden h-auto w-full px-4 py-1 sm:h-14 sm:py-3"
                 ref={videoControlsRef}
               >
                 <div className="flex-center flex w-full items-center gap-6">
                   <div className="left-controls flex items-center gap-4 text-white">
                     <button
-                      className="btn-video mr-4 flex h-8 w-8 items-center justify-center rounded bg-[#E5E7EB] before:-right-4"
+                      className="btn-video flex size-6 items-center justify-center rounded bg-[#E5E7EB] before:-right-4 sm:mr-4 sm:size-8"
                       data-title="Play"
                       ref={playButtonRef}
                       onClick={() => {
@@ -918,7 +920,7 @@ const SAPPVideo = ({
                         animatePlayback()
                       }}
                     >
-                      <svg className="icon-svgplay playback-icons h-6 w-6">
+                      <svg className="icon-svgplay playback-icons size-6">
                         <path
                           className="play"
                           d="M8.016 5.016l10.969 6.984-10.969 6.984v-13.969z"
@@ -930,7 +932,7 @@ const SAPPVideo = ({
                       </svg>
                     </button>
 
-                    <div className="time flex-center mr-4 gap-1 text-xsm font-normal leading-normal text-[#E3E3E3]">
+                    <div className="time flex-center hidden gap-1 text-xsm font-normal leading-normal text-[#E3E3E3] sm:mr-4 sm:flex">
                       <time ref={timeElapsedRef}>00:00</time>
                       <span> / </span>
                       <time ref={durationRef}>00:00</time>
@@ -1097,7 +1099,7 @@ const SAPPVideo = ({
                         />
                       </div>
                     </div>
-                    <div className="volume-controls relative flex h-8 items-center">
+                    <div className="volume-controls relative hidden h-8 items-center sm:flex">
                       <button
                         data-title="pip"
                         className="btn-video volume-button text-white"

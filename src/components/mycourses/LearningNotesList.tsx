@@ -377,7 +377,6 @@ const LearningNotesList = () => {
       })}
       submitButtonClassName="w-full h-10"
       btnSubmitTile="Confirm"
-      closable={isAlwaysShowSidebar}
       placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
     >
