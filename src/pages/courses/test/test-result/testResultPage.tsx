@@ -86,7 +86,7 @@ const TestResultPage = ({
         if (F_LOW_CODES.includes(subjectCode)) {
           return (
             <div className={commonMultipleScoreStyle}>
-              <div className="flex max-h-full flex-col gap-6 overflow-y-auto">
+              <div className="flex max-h-full flex-col gap-6">
                 <ChartACCAScore
                   data={chartData?.chart_data}
                   loading={loadingChart}
@@ -225,7 +225,7 @@ const TestResultPage = ({
       default:
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="flex max-h-full flex-col overflow-y-auto">
+            <div className="flex max-h-full flex-col ">
               <ScoreDetail
                 isTeacher={isTeacher}
                 className={'relative'}
@@ -242,6 +242,7 @@ const TestResultPage = ({
               score={score}
               globalAverage={globalAverageNumber}
               multipleQuestionRef={multipleQuestionRef}
+              className="xl:!top-[124px]"
             />
           </div>
         )
