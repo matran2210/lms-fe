@@ -37,7 +37,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         className={clsx(
           'relative w-screen',
           isHome && 'h-screen overflow-hidden',
-          !isHome && 'min-h-screen overflow-y-auto',
+          !isHome && 'min-h-screen overflow-visible',
         )}
       >
         {!loaded && <SappLoading />}
@@ -56,7 +56,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
           onLoad={() =>
             setTimeout(() => {
               setLoaded(true)
-            }, 1000)
+            }, 500)
           }
         />
         <NavigationBarMKTInApp />
