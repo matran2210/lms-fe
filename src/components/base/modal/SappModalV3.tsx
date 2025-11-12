@@ -34,6 +34,7 @@ interface IProps {
   customFooter?: ReactNode
   className?: string
   gapContent?: string
+  loadingBtnSubmit?: boolean
   // Các props còn lại sẽ được gom vào otherProps
   [key: string]: any
 }
@@ -68,6 +69,7 @@ const SappModalV3 = ({
   className,
   customFooter,
   gapContent = 'gap-4 md:gap-8',
+  loadingBtnSubmit,
   ...otherProps
 }: IProps) => {
   const onCancel = isClosable && handleClose ? handleClose : handleCancel
@@ -119,7 +121,7 @@ const SappModalV3 = ({
             submit={{
               title: okButtonCaption,
               size: buttonSize,
-              loading: externalLoading ?? loading,
+              loading: loadingBtnSubmit ?? externalLoading ?? loading,
               disabled,
               onClick: onOk,
               full: fullWidthBtn,
@@ -132,6 +134,7 @@ const SappModalV3 = ({
               loading: externalLoading ?? loading,
               full: fullWidthBtn,
               className: cancelButtonClass,
+              disabled: loadingBtnSubmit,
             }}
           />
         </div>
