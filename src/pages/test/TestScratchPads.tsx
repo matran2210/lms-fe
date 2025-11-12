@@ -110,6 +110,7 @@ const TestScratchPads = ({
               <button
                 className="text-icon"
                 onClick={() => handleCloseScratchPad(e)}
+                onTouchEnd={() => handleCloseScratchPad(e)}
               >
                 <CloseIconNote />
               </button>
