@@ -56,7 +56,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
           onLoad={() =>
             setTimeout(() => {
               setLoaded(true)
-            }, 1000)
+            }, 500)
           }
         />
         <NavigationBarMKTInApp />
