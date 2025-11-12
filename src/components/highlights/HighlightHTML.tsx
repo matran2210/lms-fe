@@ -54,7 +54,6 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
   const [loading, setLoading] = useState<boolean>(false)
-  const [html, setHtml] = useState<string>(initialHTML)
   const [highlights, setHighlights] = useState<HighlightItem[]>([])
   const [selection, setSelection] = useState<{
     text: string
@@ -79,7 +78,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     setIsViewOnly,
   } = useCourseNoteContext()
   // Thêm state để track khi nào DOM đã được cập nhật
-  const [isDOMReady, setIsDOMReady] = useState(false)
   const prevStorageKeyRef = useRef<string>(storageKey)
 
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
@@ -160,23 +158,71 @@ export const HighlightableHTML: React.FC<Props> = ({
   }, [html])
 
   // Save highlights to sessionStorage - chỉ save khi DOM đã sẵn sàng
+  // useEffect(() => {
+  //   if (containerRef.current && isDOMReady && highlights.length >= 0) {
+  //     // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
+  //     const currentHTML = containerRef.current.innerHTML
+  //     // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
+  //     if (currentHTML.trim() || highlights.length > 0) {
+  //       sessionStorage.setItem(
+  //         storageKey,
+  //         JSON.stringify({
+  //           htmlContent: currentHTML,
+  //           highlights,
+  //         }),
+  //       )
+  //     }
+  //   }
+  // }, [highlights, storageKey, isDOMReady])
   useEffect(() => {
-    if (containerRef.current && isDOMReady && highlights.length >= 0) {
-      // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
-      const currentHTML = containerRef.current.innerHTML
-      // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
-      if (currentHTML.trim() || highlights.length > 0) {
-        sessionStorage.setItem(
-          storageKey,
-          JSON.stringify({
-            htmlContent: currentHTML,
-            highlights,
-          }),
-        )
+    if (!isDOMReady || !containerRef.current) return
+    if (highlights.length === 0) return // ❗ không lưu khi chưa có highlight
+
+    const currentHTML = containerRef.current.innerHTML
+
+    try {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          htmlContent: currentHTML,
+          highlights,
+        }),
+      )
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+        // console.warn('⚠️ Session storage quota exceeded, clearing old data...')
+        sessionStorage.removeItem(storageKey)
+      } else {
+        // console.error(err)
       }
     }
   }, [highlights, storageKey, isDOMReady])
   */
+  // Helper function to check if a node is a block element
+  const isBlockElement = (node: Node): boolean => {
+    if (node.nodeType !== Node.ELEMENT_NODE) return false
+    const element = node as HTMLElement
+    const blockTags = [
+      'P',
+      'DIV',
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+      'LI',
+      'UL',
+      'OL',
+      'BLOCKQUOTE',
+      'PRE',
+      'TABLE',
+      'TR',
+      'TD',
+      'TH',
+    ]
+    return blockTags.includes(element.tagName)
+  }
   // Helper function to restore highlights from positions
   const restoreHighlightsToDOM = (
     container: HTMLElement,
@@ -184,7 +230,7 @@ export const HighlightableHTML: React.FC<Props> = ({
   ) => {
     if (!container || highlightItems.length === 0) return
 
-    // Sort highlights by startOffset to apply from end to start (avoid offset shift)
+    // Sort highlights by startOffset DESC to apply from end to start (avoid offset shift)
     const sortedHighlights = [...highlightItems].sort(
       (a, b) => b.startOffset - a.startOffset,
     )
@@ -211,7 +257,7 @@ export const HighlightableHTML: React.FC<Props> = ({
         while ((node = walker.nextNode())) {
           const nodeLength = node.textContent?.length || 0
 
-          if (!startNode && currentOffset + nodeLength >= startOffset) {
+          if (!startNode && currentOffset + nodeLength > startOffset) {
             startNode = node
             startNodeOffset = startOffset - currentOffset
           }
@@ -225,33 +271,103 @@ export const HighlightableHTML: React.FC<Props> = ({
           currentOffset += nodeLength
         }
 
-        if (startNode && endNode) {
+        if (!startNode || !endNode) return
+
+        // Check if start and end are in the same text node
+        if (startNode === endNode) {
+          // Simple case: same text node
           const range = document.createRange()
           range.setStart(startNode, startNodeOffset)
           range.setEnd(endNode, endNodeOffset)
 
-          // Create highlight span
           const span = document.createElement('span')
           span.className = 'highlighted'
           span.style.backgroundColor = 'yellow'
           span.setAttribute('data-id', id)
           span.setAttribute('data-tracked', 'true')
 
-          // Wrap the range content
           try {
             range.surroundContents(span)
-          } catch (e) {
-            // If surroundContents fails (e.g., partial element selection),
-            // extract contents and append
-            const fragment = range.extractContents()
-            span.appendChild(fragment)
-            range.insertNode(span)
+          } catch (e) {}
+        } else {
+          // Complex case: spans multiple text nodes
+          // We need to wrap each text node segment separately to avoid wrapping block elements
+
+          const range = document.createRange()
+          range.setStart(startNode, startNodeOffset)
+          range.setEnd(endNode, endNodeOffset)
+
+          // Get all text nodes in the range
+          const textNodesInRange: Array<{
+            node: Node
+            start: number
+            end: number
+          }> = []
+          const rangeWalker = document.createTreeWalker(
+            range.commonAncestorContainer,
+            NodeFilter.SHOW_TEXT,
+            {
+              acceptNode: (node) => {
+                return range.intersectsNode(node)
+                  ? NodeFilter.FILTER_ACCEPT
+                  : NodeFilter.FILTER_REJECT
+              },
+            },
+          )
+
+          let textNode: Node | null
+          while ((textNode = rangeWalker.nextNode())) {
+            const nodeLength = textNode.textContent?.length || 0
+
+            if (textNode === startNode && textNode === endNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: startNodeOffset,
+                end: endNodeOffset,
+              })
+            } else if (textNode === startNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: startNodeOffset,
+                end: nodeLength,
+              })
+            } else if (textNode === endNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: 0,
+                end: endNodeOffset,
+              })
+            } else {
+              textNodesInRange.push({
+                node: textNode,
+                start: 0,
+                end: nodeLength,
+              })
+            }
           }
+
+          // Apply highlight to each text node segment (in reverse to maintain positions)
+          textNodesInRange.reverse().forEach((item) => {
+            try {
+              const nodeRange = document.createRange()
+              nodeRange.setStart(item.node, item.start)
+              nodeRange.setEnd(item.node, item.end)
+
+              const span = document.createElement('span')
+              span.className = 'highlighted'
+              span.style.backgroundColor = 'yellow'
+              span.setAttribute('data-id', id)
+              span.setAttribute('data-tracked', 'true')
+
+              nodeRange.surroundContents(span)
+            } catch (e) {}
+          })
         }
-      } catch (error) {
-        // console.error('Error restoring highlight:', error)
-      }
+      } catch (error) {}
     })
+
+    // Final cleanup: normalize all text nodes in container
+    container.normalize()
   }
 
   // Load highlights from sessionStorage - chỉ lưu positions
@@ -510,16 +626,13 @@ export const HighlightableHTML: React.FC<Props> = ({
     const container = containerRef.current
     if (!container) return
 
-    // Look for span with matching data-id or data-timestamp
-    let highlightElement =
-      container.querySelector(
-        `span.highlighted[data-id="${selectedHighlightId}"]`,
-      ) ||
-      container.querySelector(
-        `span.highlighted[data-timestamp="${selectedHighlightId}"]`,
-      )
+    // Tìm TẤT CẢ các span có cùng ID (vì có thể có nhiều span khi highlight span qua nhiều text nodes)
+    const highlightElements = container.querySelectorAll(
+      `span.highlighted[data-id="${selectedHighlightId}"], span.highlighted[data-timestamp="${selectedHighlightId}"]`,
+    )
 
-    if (highlightElement) {
+    // Xóa tất cả các span highlights
+    highlightElements.forEach((highlightElement) => {
       const parent = highlightElement.parentNode
       if (parent) {
         const textContent = highlightElement.textContent || ''
@@ -527,10 +640,9 @@ export const HighlightableHTML: React.FC<Props> = ({
           document.createTextNode(textContent),
           highlightElement,
         )
-        // Normalize text nodes
         parent.normalize()
       }
-    }
+    })
 
     // Remove from state (match by ID or timestamp)
     const updatedHighlights = highlights.filter(
@@ -605,8 +717,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     span.highlighted {
       cursor: pointer !important;
       pointer-events: auto !important;
-            // background-color: yellow !important;
-
+      background-color: yellow !important;
     }
     span.highlighted:hover {
       opacity: 0.8;
@@ -1036,7 +1147,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       >
         {parseHTML(
           replaceTextAlignCenterToWebKitCenter(
-            replaceWhiteSpacePreWrapToNormal(html || ''),
+            replaceWhiteSpacePreWrapToNormal(initialHTML || ''),
           ),
           {
             replace: (domNode) => {
