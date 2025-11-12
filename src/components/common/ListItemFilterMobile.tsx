@@ -180,7 +180,7 @@ const ListItemFilterMobile = ({
   if (isAnyLoading) return null
 
   return (
-    <div className="flex min-h-1 flex-1 flex-col">
+    <div className="flex min-h-1 flex-1 flex-col overflow-y-auto max-h-[230px]">
       {list?.map((item) => {
         const isSelectedValue =
           selected.section === item.id ||

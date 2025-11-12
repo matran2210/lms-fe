@@ -205,7 +205,7 @@ const Course = ({
         return true
     }
   }
-  const isActiveStudent = renderStatusUser(student?.type ?? '')
+  const isActiveStudent = renderStatusUser(student?.status ?? '')
 
   async function activeCourse(foundation_class_id?: string) {
     if (course?.course_type === 'TRIAL_COURSE') {

@@ -55,7 +55,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div
-        className="text-ink-700 mx-auto flex min-h-[calc(100vh-5rem)] font-sans"
+        className="text-ink-700 mx-auto mb-8 flex min-h-[calc(100vh-5rem)] font-sans"
         data-aos={ANIMATION.DATA_AOS}
       >
         {infoCourse?.course_type == COURSE_TYPE.NORMAL_COURSE

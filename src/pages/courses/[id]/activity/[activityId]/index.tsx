@@ -529,10 +529,13 @@ const ActivityPage = () => {
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
         <div
-          className={clsx('h-full', {
-            'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
-            'py-2': focusOnlyDiscussion,
-          })}
+          className={clsx(
+            'min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]',
+            {
+              'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
+              'py-2': focusOnlyDiscussion,
+            },
+          )}
         >
           {/* Breadcrumbs */}
           <div
