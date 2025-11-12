@@ -6866,6 +6866,10 @@ explanation-package@^1.3.7:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.4.0.tgz#0d7a52a19f210406b72f5a987d05cc223faec62b"
   integrity sha512-lnDAOZI0cTrPw2s4o/Lc8tAqqxz7vK3siW5Mq8nBGKyHmDjpgi+WSdw6UA6c13iDNFs+epXvODLMlNIwSYsVTw==
+explanation-package@^1.3.7:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.4.0.tgz#0d7a52a19f210406b72f5a987d05cc223faec62b"
+  integrity sha512-lnDAOZI0cTrPw2s4o/Lc8tAqqxz7vK3siW5Mq8nBGKyHmDjpgi+WSdw6UA6c13iDNFs+epXvODLMlNIwSYsVTw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -10008,10 +10012,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@1.5.14:
-  version "1.5.14"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.5.14.tgz#3ccc03ef77fdf97de2a3fc130930bfe7ee771ec6"
-  integrity sha512-A/eof89MHMg2kYP6dUAFy/IcEInesEOj0FfoRIt7Agk0L0kEHFAnJ4H2k70nWBTEEjY7gpnHqTVK6bi+f+COTw==
+preview-part@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.6.1.tgz#c482c8b6802907d9f660462ff34e77228e1313a7"
+  integrity sha512-rL9GSwOKsOibMDkaG+2zeYnqQAqHmpkO9dayYPr/Y9aRgHjCzrqY0YDBfgXVjVAlY4t8bE79/Id4qyk1gIS7AA==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -11352,6 +11356,7 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
 sapp-common-package@^1.4.1:
+sapp-common-package@^1.4.1:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.3.tgz#851923b902446f4f23c6739420a6a1ad40f8285a"
   integrity sha512-CSHUdhITT9Rxc9d7m1KCNdb9CJKMBeComU55P/hq1AzmK1pxCrD1TThLd+/Hh2B4/xZ7s+7h48DWtgFx39KyjA==
@@ -11387,10 +11392,10 @@ sapp-common-package@^1.4.1:
     sass-loader "^13"
     tailwindcss "3.4.17"
 
-sapp-common-package@^1.4.4:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.5.0.tgz#c41498b92fcb43e48d9dd6c9fa271c40c5e2375d"
-  integrity sha512-1PBbFbayxYZaOFu5qq+/NlTHI6IxWOY8tztsQeHFOBHtxs5+PthYkU/+jjNQP2b8SUcTFMYn/C2RzO2aptP50Q==
+sapp-common-package@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.5.1.tgz#e41227539d1149eda19e9460ca4e444e0d9c25ab"
+  integrity sha512-MnekC36aZNDmGLwQ2TpjAsfVw2tmSgrjUU4NNxxbptogub5K+JO4j7DlmfN4YecNurC8W0Pr2P5wvBeGk4dhcw==
   dependencies:
     "@_ueberdosis/prosemirror-tables" "^1.1.3"
     "@floating-ui/react" "^0.27.8"
