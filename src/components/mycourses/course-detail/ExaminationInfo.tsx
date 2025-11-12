@@ -10,7 +10,7 @@ import { COURSE_TYPE } from 'src/constants'
 import { CheckCircleTwoTone } from '@ant-design/icons'
 import { getDuration } from '@utils/index'
 import { Avatar, GetProp, List, Skeleton, UploadProps, UploadFile } from 'antd'
-import NoDataV2 from 'src/common/NodataV2'
+import NoData from 'src/common/NoData'
 import { Data } from 'src/type/course'
 import ChangExamDate from '@components/mycourses/course-detail/ChangExamDate'
 import { zodMsg } from 'src/constants/form'
@@ -212,7 +212,7 @@ const ExaminationInfo = ({
     if (isError) {
       return (
         <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center">
-          <NoDataV2 />
+          <NoData />
         </div>
       )
     }
