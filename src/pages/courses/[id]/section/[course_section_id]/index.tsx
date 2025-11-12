@@ -725,12 +725,10 @@ const CoursePartDetail = () => {
             is_passed_course={isPassedCourse}
           />
         )}
-        {openResource && (
-          <LearningResource
-            open={openResource}
-            setOpenResource={setOpenResource}
-          />
-        )}
+        <LearningResource
+          open={openResource}
+          setOpenResource={setOpenResource}
+        />
       </div>
       <div className="sticky inset-x-0 bottom-4 z-50 hidden md:block">
         <div className="w-full">

@@ -857,12 +857,7 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
 
       {openVideoTimeline && (
         <VideoTimelineMobile
@@ -871,14 +866,12 @@ const ActivityPage = () => {
           currentVideo={currentVideo}
         />
       )}
-      {openActivityResource && (
-        <ActivityResourceMobile
-          open={openActivityResource}
-          onClose={onCloseActivityResource}
-          activity={activity}
-          handleOpenScratchPad={handleOpenScratchPad}
-        />
-      )}
+      <ActivityResourceMobile
+        open={openActivityResource}
+        onClose={onCloseActivityResource}
+        activity={activity}
+        handleOpenScratchPad={handleOpenScratchPad}
+      />
     </SappLoadingGlobal>
   )
 }

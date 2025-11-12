@@ -5,7 +5,7 @@ import { NoDataIconV2 } from '@components/icons'
 const NoDataV2 = ({ title = 'No data founded...' }: { title?: string }) => {
   return (
     <div data-aos={ANIMATION.DATA_AOS} className="flex flex-col items-center">
-      <NoDataIconV2 />
+      <NoDataIconV2 className="size-[150px] md:size-[203px]" />
       <div className="justify-start text-sm font-medium text-gray md:text-lg">
         {title}
       </div>
