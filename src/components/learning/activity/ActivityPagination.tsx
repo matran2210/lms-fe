@@ -71,7 +71,9 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
     }
 
     // Trả về biểu tượng tương ứng nếu tìm thấy, nếu không trả về null
-    return iconMap[type] ? <SappIcon icon={iconMap[type]} /> : null
+    return iconMap[type] ? (
+      <SappIcon icon={iconMap[type]} colorIcon="#6b7280" />
+    ) : null
   }
   return (
     <div>
