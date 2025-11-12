@@ -37,7 +37,7 @@ const LayoutMarketingInApp: React.FC<LayoutTeacherProps> = ({
         className={clsx(
           'relative w-screen',
           isHome && 'h-screen overflow-hidden',
-          !isHome && 'min-h-screen overflow-visible',
+          !isHome && 'min-h-screen overflow-y-auto',
         )}
       >
         {!loaded && <SappLoading />}
