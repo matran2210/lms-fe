@@ -54,7 +54,6 @@ export const HighlightableHTML: React.FC<Props> = ({
   const [type, setType] = useState<'VIDEO' | 'IMG'>('VIDEO')
   const highlightTimers = useRef<Map<string, NodeJS.Timeout>>(new Map())
   const [loading, setLoading] = useState<boolean>(false)
-  const [html, setHtml] = useState<string>(initialHTML)
   const [highlights, setHighlights] = useState<HighlightItem[]>([])
   const [selection, setSelection] = useState<{
     text: string
@@ -79,7 +78,6 @@ export const HighlightableHTML: React.FC<Props> = ({
     setIsViewOnly,
   } = useCourseNoteContext()
   // Thêm state để track khi nào DOM đã được cập nhật
-  const [isDOMReady, setIsDOMReady] = useState(false)
   const prevStorageKeyRef = useRef<string>(storageKey)
 
   const [selectionRect, setSelectionRect] = useState<DOMRect | null>(null)
@@ -104,6 +102,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     )
   }
 
+  /* Comment từ đây
   // Load highlights from sessionStorage - chỉ chạy khi storageKey thay đổi
   useEffect(() => {
     const raw = sessionStorage.getItem(storageKey)
@@ -159,22 +158,267 @@ export const HighlightableHTML: React.FC<Props> = ({
   }, [html])
 
   // Save highlights to sessionStorage - chỉ save khi DOM đã sẵn sàng
+  // useEffect(() => {
+  //   if (containerRef.current && isDOMReady && highlights.length >= 0) {
+  //     // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
+  //     const currentHTML = containerRef.current.innerHTML
+  //     // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
+  //     if (currentHTML.trim() || highlights.length > 0) {
+  //       sessionStorage.setItem(
+  //         storageKey,
+  //         JSON.stringify({
+  //           htmlContent: currentHTML,
+  //           highlights,
+  //         }),
+  //       )
+  //     }
+  //   }
+  // }, [highlights, storageKey, isDOMReady])
   useEffect(() => {
-    if (containerRef.current && isDOMReady && highlights.length >= 0) {
-      // Thêm một check để đảm bảo containerRef.current chứa nội dung đúng
-      const currentHTML = containerRef.current.innerHTML
-      // Chỉ lưu nếu HTML hiện tại không rỗng hoặc có highlights
-      if (currentHTML.trim() || highlights.length > 0) {
-        sessionStorage.setItem(
-          storageKey,
-          JSON.stringify({
-            htmlContent: currentHTML,
-            highlights,
-          }),
-        )
+    if (!isDOMReady || !containerRef.current) return
+    if (highlights.length === 0) return // ❗ không lưu khi chưa có highlight
+
+    const currentHTML = containerRef.current.innerHTML
+
+    try {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          htmlContent: currentHTML,
+          highlights,
+        }),
+      )
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+        // console.warn('⚠️ Session storage quota exceeded, clearing old data...')
+        sessionStorage.removeItem(storageKey)
+      } else {
+        // console.error(err)
       }
     }
   }, [highlights, storageKey, isDOMReady])
+  */
+  // Helper function to check if a node is a block element
+  const isBlockElement = (node: Node): boolean => {
+    if (node.nodeType !== Node.ELEMENT_NODE) return false
+    const element = node as HTMLElement
+    const blockTags = [
+      'P',
+      'DIV',
+      'H1',
+      'H2',
+      'H3',
+      'H4',
+      'H5',
+      'H6',
+      'LI',
+      'UL',
+      'OL',
+      'BLOCKQUOTE',
+      'PRE',
+      'TABLE',
+      'TR',
+      'TD',
+      'TH',
+    ]
+    return blockTags.includes(element.tagName)
+  }
+  // Helper function to restore highlights from positions
+  const restoreHighlightsToDOM = (
+    container: HTMLElement,
+    highlightItems: HighlightItem[],
+  ) => {
+    if (!container || highlightItems.length === 0) return
+
+    // Sort highlights by startOffset DESC to apply from end to start (avoid offset shift)
+    const sortedHighlights = [...highlightItems].sort(
+      (a, b) => b.startOffset - a.startOffset,
+    )
+
+    sortedHighlights.forEach((highlight) => {
+      try {
+        const { startOffset, endOffset, id } = highlight
+
+        // Create tree walker to find text nodes
+        const walker = document.createTreeWalker(
+          container,
+          NodeFilter.SHOW_TEXT,
+          null,
+        )
+
+        let currentOffset = 0
+        let startNode: Node | null = null
+        let startNodeOffset = 0
+        let endNode: Node | null = null
+        let endNodeOffset = 0
+
+        // Find start and end nodes
+        let node: Node | null
+        while ((node = walker.nextNode())) {
+          const nodeLength = node.textContent?.length || 0
+
+          if (!startNode && currentOffset + nodeLength > startOffset) {
+            startNode = node
+            startNodeOffset = startOffset - currentOffset
+          }
+
+          if (currentOffset + nodeLength >= endOffset) {
+            endNode = node
+            endNodeOffset = endOffset - currentOffset
+            break
+          }
+
+          currentOffset += nodeLength
+        }
+
+        if (!startNode || !endNode) return
+
+        // Check if start and end are in the same text node
+        if (startNode === endNode) {
+          // Simple case: same text node
+          const range = document.createRange()
+          range.setStart(startNode, startNodeOffset)
+          range.setEnd(endNode, endNodeOffset)
+
+          const span = document.createElement('span')
+          span.className = 'highlighted'
+          span.style.backgroundColor = 'yellow'
+          span.setAttribute('data-id', id)
+          span.setAttribute('data-tracked', 'true')
+
+          try {
+            range.surroundContents(span)
+          } catch (e) {}
+        } else {
+          // Complex case: spans multiple text nodes
+          // We need to wrap each text node segment separately to avoid wrapping block elements
+
+          const range = document.createRange()
+          range.setStart(startNode, startNodeOffset)
+          range.setEnd(endNode, endNodeOffset)
+
+          // Get all text nodes in the range
+          const textNodesInRange: Array<{
+            node: Node
+            start: number
+            end: number
+          }> = []
+          const rangeWalker = document.createTreeWalker(
+            range.commonAncestorContainer,
+            NodeFilter.SHOW_TEXT,
+            {
+              acceptNode: (node) => {
+                return range.intersectsNode(node)
+                  ? NodeFilter.FILTER_ACCEPT
+                  : NodeFilter.FILTER_REJECT
+              },
+            },
+          )
+
+          let textNode: Node | null
+          while ((textNode = rangeWalker.nextNode())) {
+            const nodeLength = textNode.textContent?.length || 0
+
+            if (textNode === startNode && textNode === endNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: startNodeOffset,
+                end: endNodeOffset,
+              })
+            } else if (textNode === startNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: startNodeOffset,
+                end: nodeLength,
+              })
+            } else if (textNode === endNode) {
+              textNodesInRange.push({
+                node: textNode,
+                start: 0,
+                end: endNodeOffset,
+              })
+            } else {
+              textNodesInRange.push({
+                node: textNode,
+                start: 0,
+                end: nodeLength,
+              })
+            }
+          }
+
+          // Apply highlight to each text node segment (in reverse to maintain positions)
+          textNodesInRange.reverse().forEach((item) => {
+            try {
+              const nodeRange = document.createRange()
+              nodeRange.setStart(item.node, item.start)
+              nodeRange.setEnd(item.node, item.end)
+
+              const span = document.createElement('span')
+              span.className = 'highlighted'
+              span.style.backgroundColor = 'yellow'
+              span.setAttribute('data-id', id)
+              span.setAttribute('data-tracked', 'true')
+
+              nodeRange.surroundContents(span)
+            } catch (e) {}
+          })
+        }
+      } catch (error) {}
+    })
+
+    // Final cleanup: normalize all text nodes in container
+    container.normalize()
+  }
+
+  // Load highlights from sessionStorage - chỉ lưu positions
+  useEffect(() => {
+    const raw = sessionStorage.getItem(storageKey)
+
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw)
+        setHighlights(parsed.highlights || [])
+      } catch (err) {
+        setHighlights([])
+      }
+    } else {
+      setHighlights([])
+    }
+
+    // Reset các state khi chuyển câu hỏi
+    setSelection(null)
+    setSelectionRect(null)
+    setSelectedHighlightId(null)
+    setHighlightRect(null)
+    setOpenNote(false)
+    setNoteInput('')
+
+    prevStorageKeyRef.current = storageKey
+  }, [storageKey])
+
+  // Restore highlights khi DOM ready
+  useEffect(() => {
+    if (containerRef.current && highlights.length > 0) {
+      // Đợi một chút để đảm bảo DOM đã render xong
+      const timer = setTimeout(() => {
+        restoreHighlightsToDOM(containerRef.current!, highlights)
+      }, 100)
+
+      return () => clearTimeout(timer)
+    }
+  }, [highlights.length]) // Chỉ chạy khi số lượng highlights thay đổi
+
+  // Save highlights to sessionStorage - CHỈ LƯU POSITIONS
+  useEffect(() => {
+    if (highlights.length >= 0) {
+      sessionStorage.setItem(
+        storageKey,
+        JSON.stringify({
+          highlights, // Chỉ lưu mảng highlights với positions
+        }),
+      )
+    }
+  }, [highlights, storageKey])
 
   const handleMouseUp = () => {
     const selectionObj = window.getSelection()
@@ -382,16 +626,13 @@ export const HighlightableHTML: React.FC<Props> = ({
     const container = containerRef.current
     if (!container) return
 
-    // Look for span with matching data-id or data-timestamp
-    let highlightElement =
-      container.querySelector(
-        `span.highlighted[data-id="${selectedHighlightId}"]`,
-      ) ||
-      container.querySelector(
-        `span.highlighted[data-timestamp="${selectedHighlightId}"]`,
-      )
+    // Tìm TẤT CẢ các span có cùng ID (vì có thể có nhiều span khi highlight span qua nhiều text nodes)
+    const highlightElements = container.querySelectorAll(
+      `span.highlighted[data-id="${selectedHighlightId}"], span.highlighted[data-timestamp="${selectedHighlightId}"]`,
+    )
 
-    if (highlightElement) {
+    // Xóa tất cả các span highlights
+    highlightElements.forEach((highlightElement) => {
       const parent = highlightElement.parentNode
       if (parent) {
         const textContent = highlightElement.textContent || ''
@@ -399,10 +640,9 @@ export const HighlightableHTML: React.FC<Props> = ({
           document.createTextNode(textContent),
           highlightElement,
         )
-        // Normalize text nodes
         parent.normalize()
       }
-    }
+    })
 
     // Remove from state (match by ID or timestamp)
     const updatedHighlights = highlights.filter(
@@ -477,6 +717,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     span.highlighted {
       cursor: pointer !important;
       pointer-events: auto !important;
+      background-color: yellow !important;
     }
     span.highlighted:hover {
       opacity: 0.8;
@@ -509,6 +750,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setNoteData(undefined)
     setEditingHighlightId(null)
   }
+
   const createNewNote = async (data: string, highlightId: string) => {
     try {
       setLoading(true)
@@ -632,6 +874,7 @@ export const HighlightableHTML: React.FC<Props> = ({
     setOpenNote(true)
     setHighlightRect(null)
   }
+
   const onCancelAddNote = () => {
     setOpenNote(false)
     setNoteInput('')
@@ -674,6 +917,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       } catch (error) {}
     }
   }
+
   useEffect(() => {
     setTimeout(() => {
       const editor = containerRef?.current
@@ -742,7 +986,6 @@ export const HighlightableHTML: React.FC<Props> = ({
       }
     }
   }
-
   return (
     <div
       className="text-base"
@@ -893,14 +1136,6 @@ export const HighlightableHTML: React.FC<Props> = ({
         </Modal>
       )}
 
-      {/* <div
-        id={storageKey}
-        ref={containerRef}
-        className={className}
-        dangerouslySetInnerHTML={{ __html: html }}
-        onCopy={(e) => e.preventDefault()}
-        onContextMenu={(e) => e.preventDefault()}
-      /> */}
       <div
         id={storageKey}
         ref={containerRef}
@@ -912,7 +1147,7 @@ export const HighlightableHTML: React.FC<Props> = ({
       >
         {parseHTML(
           replaceTextAlignCenterToWebKitCenter(
-            replaceWhiteSpacePreWrapToNormal(html || ''),
+            replaceWhiteSpacePreWrapToNormal(initialHTML || ''),
           ),
           {
             replace: (domNode) => {

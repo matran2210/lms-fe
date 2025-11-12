@@ -31,7 +31,10 @@ import CardMenuItem from '@components/learning/activity/CardMenuItem'
 import { Divider } from 'antd'
 import LearningResource from '@components/mycourses/LearningResource'
 import { useAppDispatch } from 'src/redux/hook'
-import { activeNotesList } from 'src/redux/slice/Course/NotesList'
+import {
+  activeNotesList,
+  resetNotesList,
+} from 'src/redux/slice/Course/NotesList'
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import PopupLockContent from '@components/mycourses/hubspot/PopupLockContent'
 
@@ -200,7 +203,23 @@ const CoursePartDetail = () => {
 
   const handleOpenNotesList = () => {
     dispatch(activeNotesList())
+    setOpenResource(false)
+    setIsOpenChapter(false)
     document.body.style.overflow = 'hidden'
+  }
+
+  const handleOpenResource = () => {
+    setOpenResource(true)
+    setIsOpenChapter(false)
+    dispatch(resetNotesList())
+    document.body.style.overflow = 'auto'
+  }
+
+  const handleOpenChapter = () => {
+    setIsOpenChapter(true)
+    setOpenResource(false)
+    dispatch(resetNotesList())
+    document.body.style.overflow = 'auto'
   }
 
   useEffect(() => {
@@ -627,7 +646,7 @@ const CoursePartDetail = () => {
             <CardMenuItem
               title="Resource"
               icon={<ResourceIcon className="h-6 w-6" />}
-              onClick={() => setOpenResource(true)}
+              onClick={handleOpenResource}
             />
             <Divider
               type="vertical"
@@ -637,7 +656,7 @@ const CoursePartDetail = () => {
             <CardMenuItem
               title="Chapter"
               icon={<ChapterIcon />}
-              onClick={() => setIsOpenChapter(true)}
+              onClick={handleOpenChapter}
               className="md:flex"
             />
           </div>
@@ -652,8 +671,13 @@ const CoursePartDetail = () => {
           isShowFooter
           closable
           isShowBtnClose
+          placement={isMobileView ? 'bottom' : 'right'}
           submitButtonClassName={isMobileView ? 'w-full' : ''}
-          rootClassName={'responsive-drawer-center'}
+          rootClassName={
+            isMobileView
+              ? 'responsive-drawer-center-mobile-lo'
+              : 'responsive-drawer-base'
+          }
         >
           <div
             className="overflow-y-auto"

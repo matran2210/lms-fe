@@ -290,7 +290,7 @@ const LearningResource = ({ open, setOpenResource }: IProps) => {
         isShowFooter={isOpenFilter}
         handleSubmit={handleSubmit}
         classNameHeader={classNameHeader}
-        rootClassName={'responsive-drawer-center'}
+        rootClassName={'responsive-drawer-base'}
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
         placement={isMobileView ? 'bottom' : 'right'}

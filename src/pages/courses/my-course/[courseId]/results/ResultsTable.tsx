@@ -204,7 +204,7 @@ const ResultsTable = ({
 
       {/* Empty state */}
       {!isLoading && isEmpty(flatData) && !openFilter && (
-        <div className="flex h-full flex-col items-center justify-center">
+        <div className="flex h-[calc(100vh-12rem)] flex-col items-center justify-center md:h-[calc(100vh-18rem)]">
           <NoDataV2 />
         </div>
       )}
@@ -259,7 +259,7 @@ const ResultsTable = ({
         handleBack={handleBack}
         handleSubmit={handleSubmit}
         classNameHeader="pb-4 border-b border-gray-200"
-        rootClassName="responsive-drawer-center"
+        rootClassName="responsive-drawer-base"
         submitButtonClassName="w-full h-10"
         btnSubmitTile="Confirm"
       >

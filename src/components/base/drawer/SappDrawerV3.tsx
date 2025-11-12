@@ -26,6 +26,7 @@ interface IProps extends DrawerProps {
   cancelButtonCaption?: string
   cancelButtonClassName?: string
   isShowBtnBack?: boolean
+  titleClassName?: string
 }
 
 const SappDrawerV3: React.FC<IProps> = ({
@@ -50,6 +51,7 @@ const SappDrawerV3: React.FC<IProps> = ({
   cancelButtonClassName,
   closable,
   isShowBtnBack = false,
+  titleClassName,
   ...props
 }) => {
   useEffect(() => {
@@ -83,7 +85,7 @@ const SappDrawerV3: React.FC<IProps> = ({
               classNameHeader,
             )}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex w-full items-center">
               {(!isShowBtnClose || isShowBtnBack) && (
                 <div
                   onClick={handleBack}
@@ -93,7 +95,12 @@ const SappDrawerV3: React.FC<IProps> = ({
                   <CollapseArrowIcon className="rotate-90" />
                 </div>
               )}
-              <span className="text-xl font-semibold leading-loose text-gray-800 md:text-2xl">
+              <span
+                className={clsx(
+                  'ml-2 text-xl font-semibold leading-loose text-gray-800 md:text-2xl',
+                  titleClassName,
+                )}
+              >
                 {title}
               </span>
             </div>

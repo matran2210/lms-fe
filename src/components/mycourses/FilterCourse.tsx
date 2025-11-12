@@ -114,12 +114,12 @@ const FilterCourse = ({
         </div>
       )}
 
-      {isMobileView && openMobileFilter && (
+      {isMobileView && (
         <SappDrawerV3
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}
           title={<span className="text-xl">Filter</span>}
-          rootClassName={'responsive-drawer-center drawer-bottom-0'}
+          rootClassName={'responsive-drawer-base drawer-bottom-0'}
           isShowBtnClose
           closable
           classNameHeader="mb-4"

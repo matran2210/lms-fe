@@ -66,7 +66,7 @@ const DeviceItem = ({ data, setSelectedDrawer }: IProps) => {
               </div>
             </div>
           </div>
-          <div className="group ml-auto hidden w-fit flex-1 cursor-pointer select-none items-center justify-end md:flex">
+          <div className="group ml-auto hidden w-[142px] cursor-pointer select-none items-center justify-end md:flex lg:w-fit lg:flex-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width={24}

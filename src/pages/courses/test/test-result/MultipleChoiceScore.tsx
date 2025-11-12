@@ -4,6 +4,7 @@ import { GRADE_STATUS } from 'src/constants'
 import { IQuizAttempt } from 'src/type'
 import GlobalAverage from './GlobalAverage'
 import MultipleQuestion from './multipleQuestion'
+import clsx from 'clsx'
 
 interface IMultipleChoiceScore {
   questions: {
@@ -17,6 +18,7 @@ interface IMultipleChoiceScore {
   globalAverage: number
   multipleQuestionRef: RefObject<HTMLDivElement>
   loadingAttempt?: boolean
+  className?: string
 }
 const MultipleChoiceScore = ({
   questions,
@@ -24,14 +26,20 @@ const MultipleChoiceScore = ({
   globalAverage,
   multipleQuestionRef,
   loadingAttempt,
+  className,
 }: IMultipleChoiceScore) => {
   return (
     <>
       {loadingAttempt ? (
-        <LoadingMultipleChoice />
+        <LoadingMultipleChoice className={className} />
       ) : (
         <div className="-order-1 xl:order-1">
-          <div className="max-h-full w-full xl:sticky xl:top-[80px]">
+          <div
+            className={clsx(
+              'max-h-full w-full xl:sticky xl:top-[80px]',
+              className,
+            )}
+          >
             <div
               className={`w-full justify-between rounded-xl bg-white p-4 shadow-small md:p-6 lg:rounded-2xl xl:mb-8`}
             >
@@ -64,10 +72,12 @@ const MultipleChoiceScore = ({
   )
 }
 
-const LoadingMultipleChoice = () => {
+const LoadingMultipleChoice = ({ className }: { className?: string }) => {
   return (
     <div className="-order-1 animate-pulse xl:order-1">
-      <div className="max-h-full w-full xl:sticky xl:top-[80px]">
+      <div
+        className={clsx('max-h-full w-full xl:sticky xl:top-[80px]', className)}
+      >
         {/* Card Overall Score */}
         <div className="w-full justify-between rounded-xl bg-white p-4 md:p-6 lg:rounded-2xl xl:mb-8">
           <div className="mb-4 h-6 w-11/12 rounded-md bg-skeleton" />
