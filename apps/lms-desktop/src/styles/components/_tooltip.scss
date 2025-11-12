@@ -1,8 +1,0 @@
-/* Tùy chỉnh toàn bộ tooltip */
-.tooltip-action .ant-tooltip-inner {
-  @apply bg-white text-black;
-}
-/* Tùy chỉnh màu mũi tên */
-.tooltip-action .ant-tooltip-arrow::before {
-  @apply bg-white;
-}
