@@ -157,9 +157,9 @@ const MyProfile = ({
           extra={
             <>
               {!isEdit && (
-                <div className="cursor-pointer text-primary hover:underline lg:hidden">
+                <div className="flex h-full cursor-pointer items-start text-primary hover:underline lg:hidden">
                   <div
-                    className="flex items-center justify-end gap-2"
+                    className="flex h-7 items-center justify-end gap-2"
                     onClick={handleChangeToEditForm}
                   >
                     <div>Edit Profile</div>
@@ -195,7 +195,7 @@ const MyProfile = ({
                       control={control}
                       name="full_name"
                       skeleton={loadingEditName}
-                      className="h-full w-full flex-1"
+                      className="h-full w-full flex-1 !p-4"
                       inputClassName="rounded-lg h-full px-4 py-3"
                       textSize="sm"
                     ></HookFormTextField>
@@ -251,7 +251,7 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
                 type="date"
-                className="hide-date-icon"
+                className="hide-date-icon !p-[9.5px]"
               />
               <TextWrapper
                 title="Email"
@@ -399,7 +399,7 @@ const MyProfile = ({
                     control={control}
                     isEdit
                     type="date"
-                    className="hide-date-icon"
+                    className="hide-date-icon !p-[9.5px]"
                   />
                   <TextWrapper
                     title="Email"
@@ -505,7 +505,7 @@ const TextWrapper = ({
   return (
     <li
       className={clsx(
-        'group mb-6 flex gap-4 text-sm sm:gap-[1.4rem] md:mb-4 md:text-base',
+        'group mb-6 flex gap-4 text-sm sm:gap-[1.4rem] md:text-base',
         {
           'transition-[margin]': isEdit,
           '!block': isInForm && isEdit,

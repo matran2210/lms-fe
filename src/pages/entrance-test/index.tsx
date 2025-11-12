@@ -101,7 +101,7 @@ const EntranceTest = () => {
                   className="mx-auto mb-6 mt-8 flex items-center justify-between md:mb-7 md:mt-9"
                   data-aos={ANIMATION.DATA_AOS}
                 >
-                  <h2 className="text-lg font-semibold text-gray-800 lg:text-2xl">
+                  <h2 className="text-lg font-semibold text-gray-800 md:text-xl lg:text-2xl">
                     Entrance Test List
                   </h2>
                   <EntranceTestFilter count={entranceTestLists?.length || 0} />

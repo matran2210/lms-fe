@@ -27,7 +27,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
     router.query.courseId as string,
   )
 
-  const { mutate: updateExamDate } = useMutation({
+  const { mutate: updateExamDate, isLoading } = useMutation({
     mutationFn: (formData: FormData) =>
       ClassAPI.changeExamDate(router.query.courseId as string, formData),
     onSuccess: (res) => {
@@ -139,6 +139,7 @@ const SelectExamPopup = ({ courseData }: ISelectExamPopup) => {
       cancelButtonCaption="Skip"
       showCancelButton={remainingChanges > 0}
       isUnderLine
+      loadingBtnSubmit={isLoading}
     />
   )
 }
