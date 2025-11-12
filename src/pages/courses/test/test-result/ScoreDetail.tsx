@@ -67,7 +67,7 @@ const ScoreDetail = ({
       : [
           {
             label: 'Type',
-            className: clsx(commonHeaderClass, 'min-w-[150px] text-center'),
+            className: clsx(commonHeaderClass, 'min-w-[120px] text-center'),
           },
           {
             label: 'Result',

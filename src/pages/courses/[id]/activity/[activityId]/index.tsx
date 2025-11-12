@@ -515,7 +515,8 @@ const ActivityPage = () => {
         title="Activity"
         showSidebar={isAlwaysShowSidebar}
         fullWidth={focusOnlyDiscussion}
-        className={focusOnlyDiscussion ? '!bg-white' : ''}
+        className={focusOnlyDiscussion ? 'h-full !bg-white' : ''}
+        childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
         <div
           className={clsx('h-full', {
@@ -584,7 +585,7 @@ const ActivityPage = () => {
             className={clsx(
               'flex flex-col gap-4 md:mb-[120px] md:gap-8 lg:mb-4',
               {
-                'mb-0': focusOnlyDiscussion,
+                'mb-0 h-full': focusOnlyDiscussion,
               },
             )}
           >

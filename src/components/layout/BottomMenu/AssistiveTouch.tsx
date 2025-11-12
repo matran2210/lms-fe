@@ -102,13 +102,13 @@ export default function AssistiveTouch({
             type="button"
             onClick={handleButtonClick}
             onTouchEnd={handleButtonClick}
-            className="flex items-center justify-center rounded-full bg-icon p-2 text-white shadow-lg backdrop-blur-sm transition-transform active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-icon text-white shadow-lg backdrop-blur-sm transition-transform active:scale-95"
             style={{
               cursor: isDragging ? 'grabbing' : 'pointer',
               pointerEvents: 'auto',
             }}
           >
-            <AssistiveIcon />
+            <AssistiveIcon className="h-7 w-7" />
           </button>
         )}
 
