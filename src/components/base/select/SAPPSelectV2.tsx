@@ -4,7 +4,9 @@ import { ButtonSize } from 'antd/es/button'
 import { DefaultOptionType } from 'antd/es/select'
 import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ErrorMessage from 'src/common/ErrorMessage'
+import Tooltip from 'src/common/Tooltip'
 
 interface SAPPSelectProps {
   control: Control<any>
@@ -52,6 +54,62 @@ const SAPPSelectV2 = ({
   heightCustom = 'h-12',
   allowClear = false,
 }: SAPPSelectProps) => {
+  const EllipsisTooltip = ({ text }: { text: string }) => {
+    const ref = useRef<HTMLDivElement>(null)
+    const [isOverflow, setIsOverflow] = useState(false)
+
+    useEffect(() => {
+      const el = ref.current
+      if (!el) return
+
+      const checkOverflow = () => {
+        const scrollWidth = el.scrollWidth
+        const clientWidth = el.clientWidth
+
+        const hasOverflow = scrollWidth > clientWidth
+        setIsOverflow(hasOverflow)
+      }
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(checkOverflow)
+      })
+    }, [text])
+
+    const content = (
+      <div className="w-full truncate" ref={ref}>
+        {text}
+      </div>
+    )
+
+    return isOverflow ? (
+      <Tooltip title={text} placement="right">
+        {content}
+      </Tooltip>
+    ) : (
+      content
+    )
+  }
+  const fakeOptions = [
+    {
+      label: 'Option 1',
+      value: 'option1',
+    },
+    {
+      label:
+        'Option 2 lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
+      value: 'option2',
+    },
+  ]
+
+  const customizedOptions = useMemo(
+    () =>
+      fakeOptions.map((option) => ({
+        ...option,
+        label: <EllipsisTooltip text={option.label} />,
+      })),
+    [fakeOptions],
+  )
+
   return (
     <>
       <div className="float-label">
@@ -64,6 +122,7 @@ const SAPPSelectV2 = ({
             return (
               <>
                 <Select
+                  // open={true}
                   {...field}
                   className={clsx(
                     'custom-select-v2 w-full',
@@ -72,7 +131,7 @@ const SAPPSelectV2 = ({
                   )}
                   placeholder={placeholder || ''}
                   value={field?.value}
-                  options={options}
+                  options={customizedOptions}
                   size={size}
                   suffixIcon={suffixIcon}
                   onChange={(selectedOption) => {
