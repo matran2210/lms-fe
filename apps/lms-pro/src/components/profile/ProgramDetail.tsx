@@ -149,7 +149,7 @@ const ProgramDetail = ({ typeProgram, onOpenTab }: IProps) => {
                   {
                     key: '1',
                     label: (
-                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-base lg:text-xl ">
+                      <div className="flex flex-none items-center text-base font-semibold text-[#374151] md:text-base lg:text-xl">
                         {subject?.name}
                       </div>
                     ),

@@ -32,7 +32,7 @@ function SappModalImage({ src, setSrc }: Props) {
             src={src}
             width="1000"
             height="1000"
-            className="h-full max-h-[550px] w-full object-contain md:min-h-[500px] "
+            className="h-full max-h-[550px] w-full object-contain md:min-h-[500px]"
             alt={'image'}
             loading={'eager'}
             priority={true}

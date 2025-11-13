@@ -70,7 +70,7 @@ const CaseStudyWrapper = ({
             </div>
           </div>
 
-          <div className="absolute left-1/2 max-w-[448px] -translate-x-1/2  text-gray-800">
+          <div className="absolute left-1/2 max-w-[448px] -translate-x-1/2 text-gray-800">
             <div className="flex flex-col justify-center">
               <div className="truncate text-center text-base">{title}</div>
               <div className="flex justify-center gap-3">

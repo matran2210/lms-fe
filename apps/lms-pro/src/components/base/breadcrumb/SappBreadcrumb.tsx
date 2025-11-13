@@ -29,8 +29,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                         currentPage === tab.title
                           ? 'text-[#050505]'
                           : 'text-[#A1A1A1]'
-                      }
-                      `}
+                      } `}
                     >
                       {tab.title}
                     </a>

@@ -1035,7 +1035,7 @@ export const HighlightableHTML: React.FC<Props> = ({
                   onMouseDown={(e) => e.stopPropagation()}
                 >
                   <Button
-                    className=" !px-2 py-1 text-white hover:!text-white"
+                    className="!px-2 py-1 text-white hover:!text-white"
                     onClick={openNoteEditor}
                     onMouseDown={(e) => {
                       e.preventDefault()
@@ -1051,7 +1051,7 @@ export const HighlightableHTML: React.FC<Props> = ({
                   <Button
                     onClick={handleRemoveHighlight}
                     type="text"
-                    className=" !px-2 py-1 text-white hover:!text-white"
+                    className="!px-2 py-1 text-white hover:!text-white"
                     icon={<PointerIcon />}
                   >
                     Unhighlight this

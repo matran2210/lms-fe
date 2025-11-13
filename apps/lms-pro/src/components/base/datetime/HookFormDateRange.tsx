@@ -70,7 +70,7 @@ const HookFormDateRange = ({
                 showTime={showTime}
                 showNow={showNow}
                 picker={picker}
-                className={`w-full rounded border p-2  ${className} min-h-[50px]`}
+                className={`w-full rounded border p-2 ${className} min-h-[50px]`}
                 suffixIcon={<IconCalendar />}
                 allowClear
                 placeholder={placeholder ? ['From Date', 'To Date'] : ['', '']}

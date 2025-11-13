@@ -269,18 +269,16 @@ const SappModalCerti: React.FC<IProps> = ({
               }}
               className={`${
                 isInner ? 'absolute' : 'fixed'
-              } inset-0  animate-fade-in-overlay bg-black opacity-80 transition-opacity ${overlayClass}`}
+              } inset-0 animate-fade-in-overlay bg-black opacity-80 transition-opacity ${overlayClass}`}
             ></div>
             <div
               className={`${
                 isFullScreen || `${size} p-4 xl:py-10`
-              }  inset-0 flex h-full w-full justify-center text-center items-${position}`}
+              } inset-0 flex h-full w-full justify-center text-center items-${position}`}
             >
               <div
                 ref={confirmDialogRef}
-                className={`max-h-full max-w-full 
-                  ${isContentFull ? 'w-full' : 'w-fit'}
-                  ${refClass}`}
+                className={`max-h-full max-w-full ${isContentFull ? 'w-full' : 'w-fit'} ${refClass}`}
               >
                 {showHeader &&
                   (customHeader || (

@@ -225,7 +225,7 @@ const TestResultPage = ({
       default:
         return (
           <div className={commonMultipleScoreStyle}>
-            <div className="flex max-h-full flex-col ">
+            <div className="flex max-h-full flex-col">
               <ScoreDetail
                 isTeacher={isTeacher}
                 className={'relative'}

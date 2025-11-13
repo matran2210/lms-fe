@@ -124,7 +124,7 @@ const ShowAnswerTemplate = ({
           isInBody
         >
           <div
-            className={clsx('h-[100%-40px] bg-white ', {
+            className={clsx('h-[100%-40px] bg-white', {
               'answer-template-preview':
                 response_option === RESPONSE_OPTION.WORD,
             })}

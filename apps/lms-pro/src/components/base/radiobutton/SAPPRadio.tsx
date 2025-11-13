@@ -44,7 +44,7 @@ const SAPPRadio = ({
       >
         <div
           className={clsx(
-            'mx-auto mt-[5px] h-2  w-2 rounded-full transition-opacity',
+            'mx-auto mt-[5px] h-2 w-2 rounded-full transition-opacity',
             {
               'opacity-100': checked,
               'opacity-0': !checked,

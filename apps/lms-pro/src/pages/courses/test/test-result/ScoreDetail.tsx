@@ -178,7 +178,7 @@ const ScoreDetail = ({
       id="sapp-drawer-test-result-list"
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
-      className={clsx(` md:mb-[75px] lg:mb-[80px] xl:mb-0 ${className}`, {
+      className={clsx(`md:mb-[75px] lg:mb-[80px] xl:mb-0 ${className}`, {
         'mb-[100px] sm:mb-[50px]': (numberSelectedResponse || 0) >= 10,
         'mb-[50px]': (numberSelectedResponse || 0) < 10,
       })}

@@ -116,8 +116,7 @@ export default function Sidebar({
           )}
         </div>
         <div
-          className={`absolute bottom-0 w-full rounded-xl bg-white pb-6
-          ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
+          className={`absolute bottom-0 w-full rounded-xl bg-white pb-6 ${guideStatus && guideStep == 3 ? 'z-50' : ''}`}
         >
           {isLevel1 && (
             <div className="mx-auto w-[calc(100%-48px)] bg-[#DCDDDD] text-center">

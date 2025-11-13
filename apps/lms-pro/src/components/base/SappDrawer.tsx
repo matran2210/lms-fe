@@ -106,8 +106,7 @@ const SappDrawer = ({
           widthDrawer ?? 'w-screen lg:w-1/2'
         } ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
-        } h-screen transition-transform duration-300
-        ease-in-out`}
+        } h-screen transition-transform duration-300 ease-in-out`}
       >
         <div className="flex flex-col justify-between">
           <div

@@ -13,7 +13,7 @@ const ArrowIcon = ({ className = '', iconType, right }: Props) => {
     <>
       {iconType === 'chervon' && (
         <svg
-          className={`${className} ${right ? 'rotate-180 ' : ''}`}
+          className={`${className} ${right ? 'rotate-180' : ''}`}
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -31,7 +31,7 @@ const ArrowIcon = ({ className = '', iconType, right }: Props) => {
       )}
       {iconType === 'teeny' && (
         <svg
-          className={`${className} ${right ? 'rotate-180 ' : ''}`}
+          className={`${className} ${right ? 'rotate-180' : ''}`}
           width="6"
           height="20"
           viewBox="0 0 8 24"

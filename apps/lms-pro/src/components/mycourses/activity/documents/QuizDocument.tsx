@@ -798,7 +798,7 @@ const QuizDocument = ({
         )
       case GRADE_STATUS.AWAITING_GRADING:
         return (
-          <div className="text-amber-400  rounded bg-[#FFB8001A] px-2 font-medium">
+          <div className="text-amber-400 rounded bg-[#FFB8001A] px-2 font-medium">
             Awaiting Grading
           </div>
         )
@@ -1066,7 +1066,7 @@ const QuizDocument = ({
                 {questions?.length > 1 && (
                   <button
                     disabled={activeQuestionIndex === 0 || loading}
-                    className={`cursor-pointer select-none  ${
+                    className={`cursor-pointer select-none ${
                       activeQuestionIndex === 0 || loading ? 'opacity-50' : ''
                     }`}
                     onClick={() => {

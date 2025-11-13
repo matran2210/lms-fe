@@ -395,7 +395,7 @@ function DiscussionElement({
             {selectFile.map((file: File, index: number) => (
               <div
                 key={`comemnt-${index}`}
-                className={`relative bg-cover bg-no-repeat `}
+                className={`relative bg-cover bg-no-repeat`}
               >
                 <Image
                   width={100}

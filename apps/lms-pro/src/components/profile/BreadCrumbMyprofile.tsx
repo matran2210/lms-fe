@@ -36,7 +36,7 @@ const BreadcrumbProfile: React.FC<BreadcrumbProps> = ({
                 <span
                   className={`${
                     currentPage === tab.link
-                      ? 'text-sm text-[#050505] '
+                      ? 'text-sm text-[#050505]'
                       : 'text-sm text-[#A1A1A1]'
                   } pr-1`}
                 >

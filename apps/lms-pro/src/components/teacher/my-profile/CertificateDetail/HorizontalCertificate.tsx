@@ -53,7 +53,7 @@ const HorizontalCertificate: React.FC<HorizontalCertificateProps> = ({
           ) : (
             <CertificateImg
               size={400}
-              className=" max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
+              className="max-w-full border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>

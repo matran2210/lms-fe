@@ -1333,7 +1333,7 @@ const SAPPVideo = ({
                       <Icon
                         type={'fullscreen-exit'}
                         className={
-                          ' fullscreen-exit hidden h-5.5 w-5 text-white'
+                          'fullscreen-exit hidden h-5.5 w-5 text-white'
                         }
                       />
                     </button>

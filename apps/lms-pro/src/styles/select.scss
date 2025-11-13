@@ -244,8 +244,7 @@
 }
 
 .tooltip-modal {
-  @apply pointer-events-none fixed z-[99999] max-w-[198px] whitespace-normal rounded-md bg-secondary px-2.5 
-    py-1.5 text-sm leading-[22px] text-white shadow-lg;
+  @apply pointer-events-none fixed z-[99999] max-w-[198px] whitespace-normal rounded-md bg-secondary px-2.5 py-1.5 text-sm leading-[22px] text-white shadow-lg;
 
   opacity: 0;
   transition: opacity 0.2s ease-in-out;

@@ -497,7 +497,7 @@ const Course = ({
                 />
               </div>
               <div
-                className={`text-xs font-semibold ${enableCourse ? 'text-icon' : 'text-gray-300'}  md:text-sm`}
+                className={`text-xs font-semibold ${enableCourse ? 'text-icon' : 'text-gray-300'} md:text-sm`}
               >
                 <Tooltip
                   title={course?.classes?.[0]?.code}

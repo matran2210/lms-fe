@@ -452,7 +452,7 @@ const Discussion = ({ class_id }: Props) => {
                                       viewBox="0 0 24 24"
                                       strokeWidth="1.5"
                                       stroke="currentColor"
-                                      className="h-4 w-4 "
+                                      className="h-4 w-4"
                                     >
                                       <path
                                         strokeLinecap="round"
@@ -589,7 +589,7 @@ const Discussion = ({ class_id }: Props) => {
                         viewBox="0 0 24 24"
                         strokeWidth="1.5"
                         stroke="currentColor"
-                        className="h-4 w-4 "
+                        className="h-4 w-4"
                       >
                         <path
                           strokeLinecap="round"

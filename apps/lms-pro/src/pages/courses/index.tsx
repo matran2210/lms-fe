@@ -265,7 +265,7 @@ const MyCourse = () => {
             )}
           </div>
           <div
-            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? ' z-50 h-auto' : ''}`}
+            className={`hidden items-center rounded-md bg-white p-3 md:flex md:p-6 lg:px-8 lg:py-6 ${guideStatus && guideStep === 5 ? 'z-50 h-auto' : ''}`}
             data-aos={ANIMATION.DATA_AOS}
           >
             {guideStatus && guideStep === 5 && (

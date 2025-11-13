@@ -82,7 +82,7 @@ const ChangExamDate = ({
           {remainingChanges} change remaining
         </div>
       </div>
-      <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
+      <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
         <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
           Registration Evidence:
         </div>

@@ -70,9 +70,7 @@ const PageLink = ({
         type === 'table'
           ? 'min-h-8 min-w-8 rounded-md text-xsm font-semibold leading-[18px]'
           : 'min-h-9.5 max-h-10 min-w-[38px] text-sm font-normal leading-[22px]'
-      } relative flex cursor-pointer items-center justify-center rounded p-2
-      ${isViewedProp && type !== 'row' ? 'bg-gray-400 text-white' : ''} 
-      ${
+      } relative flex cursor-pointer items-center justify-center rounded p-2 ${isViewedProp && type !== 'row' ? 'bg-gray-400 text-white' : ''} ${
         active
           ? 'border-[#FFB800] bg-primary text-white'
           : !isViewedProp

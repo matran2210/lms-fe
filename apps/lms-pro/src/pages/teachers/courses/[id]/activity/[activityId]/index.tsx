@@ -535,7 +535,7 @@ const ActivityTeacherPage = () => {
                   zIndex={500}
                   fixed
                 >
-                  <div className="absolute left-0 top-0  h-full w-full">
+                  <div className="absolute left-0 top-0 h-full w-full">
                     <div
                       className="flex h-10 w-full items-center justify-between rounded-t-md bg-gray-2 px-5"
                       style={{
@@ -560,7 +560,7 @@ const ActivityTeacherPage = () => {
           {/* Main Activity */}
           <div className="shadow-activity" data-aos={ANIMATION.DATA_AOS}>
             {/* Header */}
-            <div className="bg-gray-3 px-6 ">
+            <div className="bg-gray-3 px-6">
               <div
                 className={`flex w-full select-none items-center justify-between gap-4 py-6 ${
                   activity?.course_outcomes?.length > 0
@@ -568,7 +568,7 @@ const ActivityTeacherPage = () => {
                     : ''
                 }`}
               >
-                <div className="text-2xl font-medium ">
+                <div className="text-2xl font-medium">
                   <Tooltip
                     title={activity?.name?.length > 95 && activity?.name}
                   >
@@ -1007,7 +1007,7 @@ const ActivityTeacherPage = () => {
                   <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                     <EditorReader
                       text_editor_content={e?.description}
-                      className=" w-full "
+                      className="w-full"
                     />
                     {e?.files?.length > 0 &&
                       e?.files.map((e: any, index: number) => {

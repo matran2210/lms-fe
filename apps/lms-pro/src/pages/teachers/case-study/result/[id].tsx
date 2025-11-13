@@ -591,7 +591,7 @@ const CaseStudyResultTeacher = () => {
           }}
         >
           <div className="h-full" ref={containerRef}>
-            <div className="flex items-center justify-between bg-gray-3 px-6 py-2 ">
+            <div className="flex items-center justify-between bg-gray-3 px-6 py-2">
               <div className="w-1/3 truncate text-lg-xl font-medium">
                 {topics?.case_study_name} - {topics?.name}
               </div>
@@ -670,7 +670,7 @@ const CaseStudyResultTeacher = () => {
                 onMouseUp={() => setStartResize(false)}
               ></div>
               <div
-                className={` h-full overflow-auto bg-white py-6 `}
+                className={`h-full overflow-auto bg-white py-6`}
                 style={{ width: `calc(50% + ${leftWidth}px)` }}
                 onScroll={(e) => {
                   const { target } = e
@@ -738,7 +738,7 @@ const CaseStudyResultTeacher = () => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div
                         className="flex h-10 w-full items-center justify-between bg-gray-2 px-5"
                         style={{
@@ -771,7 +771,7 @@ const CaseStudyResultTeacher = () => {
                         : index + 500
                     }
                   >
-                    <div className="absolute left-0 top-0  h-full w-full border">
+                    <div className="absolute left-0 top-0 h-full w-full border">
                       <div className="flex h-10 w-full items-center justify-between bg-gray-2 px-5">
                         <div>Scratch Pad</div>
                         <button onClick={() => handleCloseScratchPad(e)}>
@@ -810,7 +810,7 @@ const CaseStudyResultTeacher = () => {
                       <div className="relative">
                         <div className="modal-header flex h-10 w-full cursor-move items-center justify-between bg-white px-5">
                           <div className="truncate">
-                            <span className="text-base font-semibold ">{`${exhibitText} ${
+                            <span className="text-base font-semibold">{`${exhibitText} ${
                               (i ?? 0) + 1
                             }: `}</span>
                             {exhibitsDes?.name}
@@ -828,7 +828,7 @@ const CaseStudyResultTeacher = () => {
                     <div className="h-[calc(100%-40px)] overflow-auto bg-white p-5">
                       <EditorReader
                         text_editor_content={exhibitsDes?.description}
-                        className=" w-full"
+                        className="w-full"
                       />
                       {exhibitsDes &&
                         exhibitsDes?.files?.length > 0 &&
@@ -871,7 +871,7 @@ const CaseStudyResultTeacher = () => {
                 )
               }
             })}
-            <div className=" relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
+            <div className="relative flex h-[48px] items-center justify-between bg-gray-3 shadow-question-footer">
               <div className="flex h-full items-center">
                 <button
                   className={`h-full ${allowHighLight && 'bg-yellow-300'}`}
@@ -880,7 +880,7 @@ const CaseStudyResultTeacher = () => {
                     setAllowUnHighLight(false)
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <HighlightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Highlight
@@ -894,7 +894,7 @@ const CaseStudyResultTeacher = () => {
                       setAllowHighLight(false))
                   }}
                 >
-                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6 ">
+                  <div className="flex items-center gap-3 border-l px-4 3xl:pe-6 3xl:ps-6">
                     <UnHighLightIcon />
                     <div className="hidden text-sm font-normal 3xl:inline-block">
                       Unhighlight
@@ -937,7 +937,7 @@ const CaseStudyResultTeacher = () => {
                       <ExhibitsIcon />
                       <div className="flex items-center gap-3 text-sm font-normal">
                         <div>
-                          <span className="hidden  lg:inline-block 3xl:me-1">
+                          <span className="hidden lg:inline-block 3xl:me-1">
                             {`${exhibitText}s (${exhibits?.length})`}
                           </span>
                         </div>
@@ -953,9 +953,9 @@ const CaseStudyResultTeacher = () => {
                             return (
                               <button
                                 key={e?.value}
-                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px] ' : 'min-w-[100px] '} ${
+                                className={`whitespace-nowrap p-3 ${exhibitText === EXHIBIT_TEXT_REPLACE.EXHIBIT_REPLACE ? 'min-w-[200px]' : 'min-w-[100px]'} ${
                                   !watch('exhibits')?.includes(e?.value) &&
-                                  'text-gray-1 '
+                                  'text-gray-1'
                                 }`}
                                 onClick={() => handleOpenExhibit(e?.value)}
                               >{`${exhibitText} ${index + 1}`}</button>
@@ -967,17 +967,17 @@ const CaseStudyResultTeacher = () => {
                   </button>
                 )}
               </div>
-              <div className="flex items-center gap-x-2 px-3  ">
+              <div className="flex items-center gap-x-2 px-3">
                 {result?.previous_topic && (
                   <button
-                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                    className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                     onClick={handlePeriousTopic}
                   >
                     <div className="text-medium-sm font-medium">Previous</div>
                   </button>
                 )}
                 <button
-                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2 "
+                  className="flex w-[150px] items-center justify-center gap-3 border border-gray-1 px-3 py-2"
                   onClick={handleNextTopic}
                 >
                   <div className="text-medium-sm font-medium">

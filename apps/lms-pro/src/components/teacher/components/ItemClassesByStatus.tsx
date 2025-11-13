@@ -240,7 +240,7 @@ const ItemClassesByStatus = ({
               />
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                 } ml-px pl-2`}
               >
                 {enableCourse ? showStatus : 'Expired'}
@@ -249,7 +249,7 @@ const ItemClassesByStatus = ({
             <div className="number">
               <p
                 className={`text-sm font-medium ${
-                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD] '
+                  enableCourse ? 'text-[#050505]' : 'text-[#DCDDDD]'
                 }`}
               >
                 {classes?.progress?.toFixed(2)}%

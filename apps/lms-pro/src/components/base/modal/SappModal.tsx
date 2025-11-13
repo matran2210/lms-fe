@@ -306,13 +306,11 @@ const SappModal: React.FC<IProps> = ({
             <div
               className={`${
                 isFullScreen || `${size} p-4 xl:py-8`
-              }  inset-0 flex h-full w-full justify-center text-center items-${position}`}
+              } inset-0 flex h-full w-full justify-center text-center items-${position}`}
             >
               <div
                 ref={confirmDialogRef}
-                className={`max-h-full w-fit max-w-full rounded-lg
-                ${isContentFull ? 'w-full' : 'w-fit'}
-                ${refClass} ${className}`}
+                className={`max-h-full w-fit max-w-full rounded-lg ${isContentFull ? 'w-full' : 'w-fit'} ${refClass} ${className}`}
               >
                 {showHeader &&
                   (customHeader || (
