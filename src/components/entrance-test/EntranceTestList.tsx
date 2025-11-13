@@ -1,9 +1,9 @@
 import { isEmpty } from 'lodash'
 import React from 'react'
-import NoDataV2 from 'src/common/NodataV2'
 import { IEntranceTest } from 'src/type/entrance-test'
 import EntranceTest from './EntranceTest'
 import { EAttemptStatus } from 'src/constants/attempt'
+import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 
 interface EntranceTestListProps {
   entranceTestLists: IEntranceTest[]
@@ -47,7 +47,7 @@ const EntranceTestList: React.FC<EntranceTestListProps> = ({
           )
         })
       ) : (
-        <NoDataV2 />
+        <NoCoursesAvailable />
       )}
     </div>
   )

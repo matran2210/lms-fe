@@ -1390,13 +1390,14 @@ export const CloseIconV2 = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export const NoDataIconV2 = () => (
+export const NoDataIconV2 = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="203"
     height="203"
     viewBox="0 0 203 203"
     fill="none"
+    className={className}
   >
     <path
       d="M107.681 165.699C143.206 165.699 172.007 136.898 172.007 101.246C172.007 65.5946 143.206 36.7939 107.681 36.7939C72.1561 36.7939 43.3555 65.5946 43.3555 101.246C43.3555 136.898 72.1561 165.699 107.681 165.699Z"

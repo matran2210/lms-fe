@@ -2,7 +2,7 @@ import { Skeleton } from 'antd'
 import clsx from 'clsx'
 import { forwardRef, HTMLAttributes } from 'react'
 
-const OverallProgressSkeleton = forwardRef<
+export const OverallProgressSkeleton = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement>
 >((props, ref) => {
@@ -42,6 +42,25 @@ const OverallProgressSkeleton = forwardRef<
     </div>
   )
 })
+
+export const OvervallProgressSkeletonMobile = () => {
+  return (
+    <div className="animate-pulse">
+      <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
+        <div className="flex flex-col gap-6">
+          <div className="h-6 w-3/4 rounded bg-skeleton"></div>
+          <div className="flex flex-col items-center justify-around gap-7 md:flex-row">
+            <div className="h-[200px] w-[200px] rounded-full bg-skeleton"></div>
+            <div className="flex w-full flex-col gap-3 md:w-[180px]">
+              <div className="h-5 w-full rounded bg-skeleton"></div>
+              <div className="h-5 w-full rounded bg-skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 OverallProgressSkeleton.displayName = 'OverallProgressSkeleton'
 

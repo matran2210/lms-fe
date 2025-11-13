@@ -888,7 +888,7 @@ const ActivityTeacherPage = () => {
                           'Click Button Previous Activity',
                         )
                       }
-                      className="mb-2 cursor-pointer select-none whitespace-nowrap text-base font-semibold text-bw-1 hover:text-primary"
+                      className="mb-2 cursor-pointer select-none whitespace-nowrap text-xs font-semibold text-bw-1 hover:text-primary sm:text-base"
                     >
                       Previous Activity
                     </div>
@@ -924,7 +924,7 @@ const ActivityTeacherPage = () => {
                           'Click Button Next Activity',
                         )
                       }
-                      className="mb-2 cursor-pointer select-none text-right text-base font-semibold text-bw-1 hover:text-primary"
+                      className="mb-2 cursor-pointer select-none text-right text-xs font-semibold text-bw-1 hover:text-primary sm:text-base"
                     >
                       Next Activity
                     </div>

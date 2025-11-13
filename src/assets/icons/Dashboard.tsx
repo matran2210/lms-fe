@@ -1,4 +1,4 @@
-export const IconEssentional = () => {
+export const IconEssentional = ({ className }: { className?: string }) => {
   return (
     <svg
       width="24"
@@ -6,6 +6,7 @@ export const IconEssentional = () => {
       viewBox="0 0 24 25"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"

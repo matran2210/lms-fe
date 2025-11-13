@@ -318,6 +318,16 @@ const ActivityPage = () => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
+      if (data.type === 'calculator') {
+        const hasCalculator = arr.some(
+          (e) =>
+            e?.type === 'calculator' ||
+            (typeof e?.id === 'string' && e.id.startsWith('calculator')),
+        )
+        if (hasCalculator) {
+          return arr
+        }
+      }
       switch (data.type) {
         case 'calculator':
           arr?.push({
@@ -519,10 +529,13 @@ const ActivityPage = () => {
         childClassName={focusOnlyDiscussion ? 'h-full' : ''}
       >
         <div
-          className={clsx('h-full', {
-            'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
-            'py-2': focusOnlyDiscussion,
-          })}
+          className={clsx(
+            'min-h-[calc(100vh-3rem)] md:min-h-[calc(100vh-5rem)]',
+            {
+              'my-0 md:mt-6 lg:mt-0': !focusOnlyDiscussion,
+              'py-2': focusOnlyDiscussion,
+            },
+          )}
         >
           {/* Breadcrumbs */}
           <div
@@ -858,12 +871,7 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
 
       {openVideoTimeline && (
         <VideoTimelineMobile
@@ -872,14 +880,12 @@ const ActivityPage = () => {
           currentVideo={currentVideo}
         />
       )}
-      {openActivityResource && (
-        <ActivityResourceMobile
-          open={openActivityResource}
-          onClose={onCloseActivityResource}
-          activity={activity}
-          handleOpenScratchPad={handleOpenScratchPad}
-        />
-      )}
+      <ActivityResourceMobile
+        open={openActivityResource}
+        onClose={onCloseActivityResource}
+        activity={activity}
+        handleOpenScratchPad={handleOpenScratchPad}
+      />
     </SappLoadingGlobal>
   )
 }
