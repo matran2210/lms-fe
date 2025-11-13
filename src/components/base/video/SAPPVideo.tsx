@@ -775,7 +775,8 @@ const SAPPVideo = ({
     }
   }, [router.events])
 
-  const { isDesktopView, isXLMiddleView } = useTailwindBreakpoint()
+  const { isDesktopView, isXLMiddleView, isMobileView } =
+    useTailwindBreakpoint()
 
   const getThumbnail = () => {
     if (isDesktopView) {
@@ -791,14 +792,16 @@ const SAPPVideo = ({
       return {
         src:
           thumbnail?.['656x369'] ??
-          '/assets/images/default_thumbnail_video.png',
+          '/assets/images/default_thumbnail_video_tablet.png',
         width: 656,
         height: 369,
       }
     }
+
     return {
       src:
-        thumbnail?.['311x175'] ?? '/assets/images/default_thumbnail_video.png',
+        thumbnail?.['311x175'] ??
+        '/assets/images/default_thumbnail_video_mobile.png',
       width: 311,
       height: 175,
     }
@@ -816,7 +819,7 @@ const SAPPVideo = ({
             <Image
               src={src}
               alt="Thumbnail image"
-              className="h-full w-full object-contain"
+              className={`h-[${height}px] w-[${width}px] object-contain`}
               width={width}
               height={height}
               priority
@@ -890,10 +893,7 @@ const SAPPVideo = ({
                 ref={streamRef}
                 controls={false}
                 className={`${styles.content}`}
-                poster={
-                  thumbnail?.['1270x716'] ??
-                  '/assets/images/default_thumbnail_video.png'
-                }
+                poster={src}
                 onSeeking={() => {
                   if (streamRef?.current && pauseOnSeek && openQuestion) {
                     streamRef.current.pause()
