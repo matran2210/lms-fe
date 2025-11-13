@@ -96,10 +96,7 @@ const TestResultDetail = () => {
             <Tooltip
               placement="left"
               title={
-                <span
-                  className="cursor-pointer text-sm"
-                  onClick={() => setOpen(true)}
-                >
+                <span className="cursor-pointer text-sm" onClick={handleRetake}>
                   Retake
                 </span>
               }
@@ -128,12 +125,12 @@ const TestResultDetail = () => {
               loadingAttempt={loadingAttempt}
             />
           </div>
-          {isMobileView && (
+          {/* {isMobileView && (
             <ModalNotMobileFriendly
               open={open}
               onClose={() => setOpen(false)}
             />
-          )}
+          )} */}
         </div>
       )}
     </>
