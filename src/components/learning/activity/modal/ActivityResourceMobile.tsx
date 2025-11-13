@@ -1,6 +1,6 @@
 import React from 'react'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
-import NoDataV2 from 'src/common/NodataV2'
+import NoData from 'src/common/NoData'
 import { IActivity } from 'src/type/course/my-course/Activity'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
@@ -30,10 +30,11 @@ const ActivityResourceMobile = ({
       handleCancel={onClose}
       title="Activity Resources"
       classNameBody="!p-4"
-      rootClassName={'responsive-drawer-v3'}
+      rootClassName={'responsive-drawer-base drawer-bottom-0'}
       isShowBtnClose
       closable
       classNameHeader="!mb-4"
+      placement={'bottom'}
     >
       <div>
         {activity && activity?.files?.length > 0 ? (
@@ -77,8 +78,8 @@ const ActivityResourceMobile = ({
             </div>
           )
         ) : (
-          <div className="text-center">
-            <NoDataV2 />
+          <div className="flex min-h-[200px] items-center justify-center lg:min-h-[calc(100vh-20rem)]">
+            <NoData />
           </div>
         )}
       </div>

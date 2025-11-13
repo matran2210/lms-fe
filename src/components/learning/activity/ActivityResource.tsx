@@ -51,7 +51,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                 return (
                   <div
                     className={clsx(
-                      'group flex cursor-pointer items-center gap-3',
+                      'group flex w-min cursor-pointer items-center gap-3',
                       { 'mb-3': index < activity?.files?.length - 1 },
                     )}
                     key={index}
@@ -76,7 +76,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
 
                     {/* Icon */}
                     <div
-                      className="hidden cursor-pointer text-icon group-hover:block group-hover:text-primary"
+                      className="block cursor-pointer text-icon group-hover:block group-hover:text-primary lg:hidden"
                       onClick={() => {
                         download(e?.resource?.name, e?.resource?.file_key)
                         trackGAEvent('Click Button Download Resource Activity')

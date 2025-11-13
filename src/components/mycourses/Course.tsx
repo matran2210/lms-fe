@@ -35,6 +35,7 @@ import dayjs from 'dayjs'
 import CardCourse from '@components/common/CardCourse/CardCourse'
 import clsx from 'clsx'
 import { Grid } from 'antd'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 const { useBreakpoint } = Grid
 
 const Course = ({
@@ -80,6 +81,8 @@ const Course = ({
       setDaysDifference(dayLefts)
     }
   }, [course, student?.finished_at])
+
+  const { isMobileView, isDesktopView, isTabletView } = useTailwindBreakpoint()
 
   const percentProgress =
     round(
@@ -202,7 +205,7 @@ const Course = ({
         return true
     }
   }
-  const isActiveStudent = renderStatusUser(student?.type ?? '')
+  const isActiveStudent = renderStatusUser(student?.status ?? '')
 
   async function activeCourse(foundation_class_id?: string) {
     if (course?.course_type === 'TRIAL_COURSE') {
@@ -442,7 +445,23 @@ const Course = ({
       handleCourseDetail()
     }
   }
-  const maxLengthTitle = 25
+
+  let maxLengthTitle = 25
+
+  switch (true) {
+    case isDesktopView:
+      maxLengthTitle = 25
+      break
+    case isTabletView:
+      maxLengthTitle = 15
+      break
+    case isMobileView:
+      maxLengthTitle = 20
+      break
+    default:
+      maxLengthTitle = 25
+  }
+
   const sizeIcon = 'h-5 w-5 md:h-[1.25rem] md:w-[1.25rem]'
   const classNameDes = `text-sm font-normal md:text-base ${
     enableCourse ? 'text-gray-800' : 'text-gray-300'
@@ -456,13 +475,13 @@ const Course = ({
           key={index}
           ref={lastElementRef}
           disabledTitle={!enableCourse}
-          classNameTitle={`mb-4 md:h-[56px]`}
+          classNameTitle={`mb-4 h-12 md:h-[56px]`}
           hideBadge={true}
           badgeCode={{
             badge: category,
             className: 'bg-badge-200 text-badge-500 font-medium',
           }}
-          classNameCard="lg:min-h-[434px] min-h-[280px]"
+          classNameCard="lg:min-h-[434px] min-h-[312px]"
           onClick={() => {
             if (isActiveStudent) {
               courseAction()
@@ -478,7 +497,7 @@ const Course = ({
                 />
               </div>
               <div
-                className={`text-xs font-medium ${enableCourse ? 'text-icon' : 'text-gray-300'}  md:text-sm`}
+                className={`text-xs font-semibold ${enableCourse ? 'text-icon' : 'text-gray-300'}  md:text-sm`}
               >
                 <Tooltip
                   title={course?.classes?.[0]?.code}
@@ -522,7 +541,7 @@ const Course = ({
               </div>
             )}
           </div>
-          <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
+          <div className="des my-4 line-clamp-3 h-[66px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
             {(course?.description as string)?.length > 250 ? (
               <Tooltip
                 title={

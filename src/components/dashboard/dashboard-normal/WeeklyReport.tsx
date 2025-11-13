@@ -8,7 +8,11 @@ import dayjs from 'dayjs'
 import isoWeek from 'dayjs/plugin/isoWeek'
 import { DATE_FORMAT } from 'src/constants'
 import { BooksIcon, CheckMatchIcon, ClockIcon } from '@assets/icons/Dashboard'
-import WeeklyReportSkeleton from '@components/skeleton/WeeklyReportSkeleton'
+import {
+  WeeklyReportSkeleton,
+  WeeklyReportSkeletonMobile,
+} from '@components/skeleton/WeeklyReportSkeleton'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 dayjs.extend(isoWeek)
 
@@ -108,11 +112,17 @@ const WeeklyReport = () => {
   const actualTime =
     (report?.times?.current ?? 0) - (report?.times?.diff ?? 0) > 0
 
+  const { isMobileView } = useTailwindBreakpoint()
+
   return (
     <>
       {isLoading ? (
         <div className="w-full">
-          <WeeklyReportSkeleton />
+          {isMobileView ? (
+            <WeeklyReportSkeletonMobile />
+          ) : (
+            <WeeklyReportSkeleton />
+          )}
         </div>
       ) : (
         <div className="rounded-2xl p-4 md:p-6 lg:col-span-5">

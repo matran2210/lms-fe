@@ -16,6 +16,7 @@ import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
+import { ANIMATION } from 'src/constants'
 import { EAttemptStatus } from 'src/constants/attempt'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -249,6 +250,7 @@ const CourseTabDocument = ({
                               hidden: focusOnlyQuiz.open,
                             })}
                             key={i + '_' + selector?.currentTabId}
+                            data-aos={ANIMATION.DATA_AOS}
                           >
                             {e?.text_editor_content && (
                               <HighlightableHTML
@@ -311,7 +313,7 @@ const CourseTabDocument = ({
     <div
       className={clsx('rounded-xl bg-white', {
         'my-6': focusOnlyQuiz.open,
-        'px-4': focusOnlyDiscussion,
+        'flex-1 px-4': focusOnlyDiscussion,
         'p-4 shadow-small md:p-6': !focusOnlyDiscussion,
       })}
     >
@@ -329,7 +331,7 @@ const CourseTabDocument = ({
       />
       <div
         className={clsx('mt-4', {
-          'block md:hidden': focusOnlyDiscussion,
+          'block h-full md:hidden': focusOnlyDiscussion,
           hidden: !focusOnlyDiscussion,
         })}
       >

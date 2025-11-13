@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from 'react-query'
-import { DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE } from 'src/constants'
+import { DEFAULT_PAGE_NUMBER } from 'src/constants'
 import { ClassAPI } from 'src/pages/api/class'
 import { ClassKey } from 'src/pages/api/queryKey'
 
@@ -8,7 +8,7 @@ const useSelectExams = (courseId: string | undefined) => {
     if (!courseId) return undefined // Không gọi nếu chưa có courseId
     const res = await ClassAPI.getExams(courseId, {
       page_index: pageParam,
-      page_size: DEFAULT_PAGE_SIZE,
+      page_size: 20,
     })
     return res
   }

@@ -232,6 +232,9 @@ const CourseDetail = () => {
     }
   }, [data])
 
+  const hasCertificate =
+    !!data?.pages?.[0]?.courseDetail?.user_certificate_id ||
+    !!data?.pages?.[0]?.courseDetail?.user_certificate_url
   return (
     <Layout
       title="Course Detail"
@@ -293,6 +296,7 @@ const CourseDetail = () => {
               is_passed_course={is_passed_course || false}
               class_user_id={class_user_id}
               lastElementRef={lastElementRef}
+              hasCertificate={hasCertificate}
             />
           </div>
         </>

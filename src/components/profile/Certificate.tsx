@@ -138,7 +138,7 @@ const Certificate = () => {
   return (
     <div className="mb-6 mt-0 md:mb-0 md:mt-8 lg:mt-10">
       {certificateData && !certificateData?.length ? (
-        <div className="flex min-h-352 flex-col items-center justify-center gap-2">
+        <div className="flex min-h-[calc(100vh-120px)] flex-col items-center justify-center gap-2 md:min-h-352">
           <NoCertificationIcon />
           <div className="text-small text-gray-400">
             You don&rsquo;t have any certificate!
@@ -155,9 +155,11 @@ const Certificate = () => {
       ) : null}
 
       <div className="flex flex-col gap-4 md:gap-6 lg:hidden">
-        <div className="hidden text-xl font-semibold text-secondary md:block">
-          Certificate
-        </div>
+        {certificateData?.length ? (
+          <div className="hidden text-xl font-semibold text-secondary md:block">
+            Certificate
+          </div>
+        ) : null}
         {certificateData?.length
           ? certificateData.map((item: ICertificate, index: number) => (
               <CertificateItem

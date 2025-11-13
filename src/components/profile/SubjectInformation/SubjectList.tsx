@@ -8,6 +8,7 @@ import Icon from '@components/icons'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
 import { PROGRAM } from 'src/constants'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 export interface SubjectOptionItem {
   course_category_name: 'CMA' | 'CFA' | 'ACCA'
@@ -20,6 +21,7 @@ interface IProps {
   isEdit: boolean
 }
 const SubjectList = ({ isEdit }: IProps) => {
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
     course_category_name: 'CMA' | 'CFA' | 'ACCA'
@@ -89,7 +91,8 @@ const SubjectList = ({ isEdit }: IProps) => {
         handleCancel={closeMakeDefault}
         classNameHeader={'bg-white !text-black md:!p-0 lg:!px-8 lg:!py-6'}
         classNameBody="pt-0 lg:pt-2 md:!px-0 lg:!px-8"
-        rootClassName={'profile-subject-drawer'}
+        rootClassName={'profile-subject-drawer profile-subject-list-drawer'}
+        placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
         classNames={{
           content: 'rounded-2xl',
         }}
