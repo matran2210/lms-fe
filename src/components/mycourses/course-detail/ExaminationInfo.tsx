@@ -26,6 +26,7 @@ import { TitleSidebar } from 'src/constants'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import clsx from 'clsx'
 import SelectExamDate from '@components/mycourses/course-detail/SelectExamDate'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type Props = {
   open: boolean
@@ -97,6 +98,7 @@ const ExaminationInfo = ({
 }: Props) => {
   const { isTabletView, isMobileView } = useTailwindBreakpoint()
   const router = useRouter()
+  const [direction, setDirection] = useState<1 | -1>(1)
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
   const [classId, setClassId] = useState(router.query.courseId as string)
   const { data, isLoading, isError, isSuccess } = useQuery({
@@ -162,6 +164,7 @@ const ExaminationInfo = ({
     })
   }
   const handleBack = () => {
+    setDirection(-1)
     if (isOpenSelectExam) {
       setIsOpenSelectExam(false)
     } else {
@@ -251,6 +254,20 @@ const ExaminationInfo = ({
       : isTabletView || isMobileView
         ? 'auto'
         : '100%'
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? '-100%' : '100%',
+      opacity: 0,
+    }),
+  }
 
   return (
     <>
@@ -275,24 +292,42 @@ const ExaminationInfo = ({
         })}
       >
         <FormProvider {...methods}>
-          {isMobileView && isOpenSelectExam ? (
-            <SelectExamDate
-              classId={classId}
-              currentValue={data?.exam?.id || currentValue}
-              itemSelected={itemSelected}
-              setItemSelected={setItemSelected}
-            />
-          ) : isEdit ? (
-            <ChangExamDate
-              isOpen={isEdit}
-              classId={classId}
-              remainingChanges={data?.remaining_changes}
-              currentValue={data?.exam?.id || currentValue}
-              setIsOpenSelectExam={setIsOpenSelectExam}
-            />
-          ) : (
-            renderContent()
-          )}
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={
+                isMobileView && isOpenSelectExam
+                  ? 'selectExam'
+                  : isEdit
+                    ? 'changeExam'
+                    : 'viewExam'
+              }
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.35, ease: 'easeInOut' }}
+            >
+              {isMobileView && isOpenSelectExam ? (
+                <SelectExamDate
+                  classId={classId}
+                  currentValue={data?.exam?.id || currentValue}
+                  itemSelected={itemSelected}
+                  setItemSelected={setItemSelected}
+                />
+              ) : isEdit ? (
+                <ChangExamDate
+                  isOpen={isEdit}
+                  classId={classId}
+                  remainingChanges={data?.remaining_changes}
+                  currentValue={data?.exam?.id || currentValue}
+                  setIsOpenSelectExam={setIsOpenSelectExam}
+                />
+              ) : (
+                renderContent()
+              )}
+            </motion.div>
+          </AnimatePresence>
         </FormProvider>
       </SappDrawerV3>
       <ChangeAnywayModal

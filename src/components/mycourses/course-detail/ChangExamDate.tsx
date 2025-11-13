@@ -73,6 +73,7 @@ const ChangExamDate = ({
         placeholder="Choose one option"
         suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
         onDropdownVisibleChange={() => setIsOpenSelectExam(true)}
+        isOpen={false}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
