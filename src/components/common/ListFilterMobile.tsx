@@ -1,12 +1,9 @@
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
-import { isEmpty, set } from 'lodash'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { DEFAULT_PAGE_SIZE } from 'src/constants'
-import { useInitialSections } from 'src/hooks/useInitialSections'
-import { useSectionData } from 'src/hooks/useSectionData'
-import { IOpenChooseItem, ISection, SectionField } from 'src/type'
+import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
+import { ISection, SectionField } from 'src/type'
 
 interface IList {
   id: number
@@ -36,29 +33,29 @@ const ListFilterMobile = ({
   setListUnit?: Dispatch<SetStateAction<ISection[]>>
   setListActivity: Dispatch<SetStateAction<ISection[]>>
 }) => {
-  const { sections, fetchInitialSections, isLoading } = useInitialSections()
   const { watch } = useFormContext()
   const [list, setList] = useState<IList[]>([])
-  const selected = {
-    section: watch('section'),
-    subsection: watch('subsection'),
-    unit: watch('unit'),
-    activity: watch('activity'),
-  }
-  const subsectionData = useSectionData(selected.section, 'CHAPTER')
-  const unitData = useSectionData(selected.subsection, 'UNIT')
-  const activityData = useSectionData(selected.subsection, 'ACTIVITY')
+  const { selected } = useCourseSectionsData({
+    listSection,
+    listSubsection,
+    listUnit,
+    listActivity,
+    setListSection,
+    setListSubsection,
+    setListUnit,
+    setListActivity,
+  })
   const sectionNameSection = listSection?.find(
-    (item) => item.id === selected.section,
+    (item) => item?.id === selected.section,
   )?.name
   const sectionNameSubsection = listSubsection?.find(
-    (item) => item.id === selected.subsection,
+    (item) => item?.id === selected.subsection,
   )?.name
   const sectionNameUnit = listUnit?.find(
-    (item) => item.id === selected.unit,
+    (item) => item?.id === selected.unit,
   )?.name
   const sectionNameActivity = listActivity?.find(
-    (item) => item.id === selected.activity,
+    (item) => item?.id === selected.activity,
   )?.name
 
   const handleClick = (item: IList) => {
@@ -103,52 +100,6 @@ const ListFilterMobile = ({
     sectionNameUnit,
     sectionNameActivity,
   ])
-
-  // FETCH section on mount
-  useEffect(() => {
-    if (isEmpty(listSection)) {
-      fetchInitialSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [])
-
-  // FETCH dynamic based on selection
-  useEffect(() => {
-    if (selected.section && isEmpty(listSubsection)) {
-      subsectionData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.section])
-
-  useEffect(() => {
-    if (selected.subsection && isEmpty(listUnit)) {
-      unitData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.subsection])
-
-  useEffect(() => {
-    if (selected.subsection && isEmpty(listActivity)) {
-      //Đạt check
-      activityData.fetchSections(DEFAULT_PAGE_SIZE)
-    }
-  }, [selected.subsection])
-
-  // SET list after fetch
-  useEffect(() => {
-    if (!isEmpty(sections)) setListSection(sections)
-  }, [sections])
-
-  useEffect(() => {
-    if (!isEmpty(subsectionData.sections))
-      setListSubsection(subsectionData.sections)
-  }, [subsectionData.sections])
-
-  useEffect(() => {
-    if (!isEmpty(unitData.sections))
-      setListUnit && setListUnit(unitData.sections)
-  }, [unitData.sections])
-
-  useEffect(() => {
-    if (!isEmpty(activityData.sections)) setListActivity(activityData.sections)
-  }, [activityData.sections])
 
   return (
     <div className="flex flex-1 flex-col">
