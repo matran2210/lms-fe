@@ -1,0 +1,36 @@
+.sapp-collapse.ant-collapse {
+  border-color: #f1f1f4;
+
+  .ant-collapse-content {
+    border-top: none;
+  }
+}
+.profile-program-collapse {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      @apply p-0;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}
+.mobile-collapse {
+  .profile-collapse-item {
+    &.ant-collapse-item-active {
+      .ant-collapse-header {
+        @apply pb-3 pt-4;
+      }
+    }
+    .ant-collapse-header {
+      @apply p-4;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}
