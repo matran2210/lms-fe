@@ -52,6 +52,295 @@ importers:
         specifier: 5.8.2
         version: 5.8.2
 
+  apps/finhub:
+    dependencies:
+      '@cloudflare/stream-react':
+        specifier: ^1.8.0
+        version: 1.9.3(react@18.3.1)
+      '@cyntler/react-doc-viewer':
+        specifier: 1.17.0
+        version: 1.17.0(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/core':
+        specifier: ^6.3.1
+        version: 6.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@fortune-sheet/react':
+        specifier: ^0.19.1
+        version: 0.19.18(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@funktechno/texthighlighter':
+        specifier: ^2.1.2
+        version: 2.1.2
+      '@hookform/resolvers':
+        specifier: ^3.3.2
+        version: 3.10.0(react-hook-form@7.48.2(react@18.3.1))
+      '@lottiefiles/react-lottie-player':
+        specifier: ^3.5.3
+        version: 3.6.0(react@18.3.1)
+      '@next/third-parties':
+        specifier: ^14.2.5
+        version: 14.2.33(next@12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0))(react@18.3.1)
+      '@react-native-async-storage/async-storage':
+        specifier: ^1.19.5
+        version: 1.24.0(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))
+      '@reduxjs/toolkit':
+        specifier: ^1.9.7
+        version: 1.9.7(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)
+      '@sentry/nextjs':
+        specifier: '8'
+        version: 8.55.0(@opentelemetry/context-async-hooks@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.57.2(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0))(react@18.3.1)(webpack@5.102.1)
+      '@tinymce/tinymce-react':
+        specifier: ^4.3.0
+        version: 4.3.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/core':
+        specifier: ^2.12.0
+        version: 2.27.1(@tiptap/pm@2.27.1)
+      '@tiptap/react':
+        specifier: ^2.12.0
+        version: 2.27.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@tiptap/pm@2.27.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tiptap/starter-kit':
+        specifier: ^2.12.0
+        version: 2.27.1
+      '@types/aos':
+        specifier: ^3.0.7
+        version: 3.0.7
+      '@types/dompurify':
+        specifier: ^3.0.5
+        version: 3.2.0
+      '@types/lodash':
+        specifier: ^4.14.202
+        version: 4.17.20
+      '@types/react-gtm-module':
+        specifier: ^2.0.3
+        version: 2.0.4
+      '@xyflow/react':
+        specifier: ^12.8.6
+        version: 12.9.2(@types/react@18.3.26)(immer@10.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      antd:
+        specifier: ^5.21.1
+        version: 5.28.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      aos:
+        specifier: ^2.3.4
+        version: 2.3.4
+      axios:
+        specifier: ^1.6.2
+        version: 1.13.2
+      babel-loader:
+        specifier: ^9.1.3
+        version: 9.2.1(@babel/core@7.28.5)(webpack@5.102.1)
+      babel-plugin-transform-remove-imports:
+        specifier: ^1.7.1
+        version: 1.8.1(@babel/core@7.28.5)
+      big.js:
+        specifier: ^6.2.2
+        version: 6.2.2
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      dashjs:
+        specifier: ^4.7.4
+        version: 4.7.4
+      date-fns:
+        specifier: ^3.0.6
+        version: 3.6.0
+      dayjs:
+        specifier: ^1.11.12
+        version: 1.11.19
+      dompurify:
+        specifier: ^3.1.6
+        version: 3.3.0
+      echarts:
+        specifier: ^5.6.0
+        version: 5.6.0
+      entrance-test-result-package:
+        specifier: ^1.3.4
+        version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      explanation-package:
+        specifier: ^1.3.5
+        version: 1.4.0(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.3.26)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1)
+      file-saver:
+        specifier: ^2.0.5
+        version: 2.0.5
+      firebase:
+        specifier: ^10.7.1
+        version: 10.14.1(@react-native-async-storage/async-storage@1.24.0(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1)))
+      html-docx-js-typescript-papersize-thenn:
+        specifier: ^0.1.5
+        version: 0.1.5
+      html-react-parser:
+        specifier: ^5.0.11
+        version: 5.2.8(@types/react@18.3.26)(react@18.3.1)
+      keycloak-js:
+        specifier: ^25.0.1
+        version: 25.0.6
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+      lottie-react:
+        specifier: ^2.4.1
+        version: 2.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next:
+        specifier: ^12.1.6
+        version: 12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0)
+      next-compose-plugins:
+        specifier: ^2.2.1
+        version: 2.2.1
+      next-i18next:
+        specifier: ^13.2.2
+        version: 13.3.0(@types/react@18.3.26)(i18next@22.5.1)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0))(react-i18next@12.3.1(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      next-redux-wrapper:
+        specifier: ^8.1.0
+        version: 8.1.0(next@12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0))(react-redux@8.1.3(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)(redux@4.2.1))(react@18.3.1)
+      next-remove-imports:
+        specifier: ^1.0.12
+        version: 1.0.12(webpack@5.102.1)
+      next-with-less:
+        specifier: ^3.0.1
+        version: 3.0.1(less-loader@12.3.0(less@4.4.2)(webpack@5.102.1))(less@4.4.2)(next@12.3.7(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass@1.94.0))
+      postcss-flexbugs-fixes:
+        specifier: ^5.0.2
+        version: 5.0.2(postcss@8.5.6)
+      postcss-preset-env:
+        specifier: ^9.3.0
+        version: 9.6.0(postcss@8.5.6)
+      preview-activity:
+        specifier: ^1.1.39
+        version: 1.1.43(@babel/core@7.28.5)(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(webpack@5.102.1)
+      preview-part:
+        specifier: ^1.5.13
+        version: 1.6.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      quiz-result-package:
+        specifier: ^1.3.3
+        version: 1.4.1(@babel/core@7.28.5)(antd@5.28.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      react-countdown:
+        specifier: ^2.3.5
+        version: 2.3.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.3.1(react@18.3.1)
+      react-fast-marquee:
+        specifier: ^1.6.5
+        version: 1.6.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-ga4:
+        specifier: ^2.1.0
+        version: 2.1.0
+      react-gtm-module:
+        specifier: ^2.0.11
+        version: 2.0.11
+      react-hook-form:
+        specifier: 7.48.2
+        version: 7.48.2(react@18.3.1)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.6.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-intersection-observer:
+        specifier: ^9.13.1
+        version: 9.16.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-query:
+        specifier: ^3.39.3
+        version: 3.39.3(react-dom@18.3.1(react@18.3.1))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)
+      react-redux:
+        specifier: ^8.1.3
+        version: 8.1.3(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
+      react-rnd:
+        specifier: ^10.5.2
+        version: 10.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-router-dom:
+        specifier: ^6.20.0
+        version: 6.30.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-select:
+        specifier: ^5.8.0
+        version: 5.10.2(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      sapp-common-package:
+        specifier: ^1.3.3
+        version: 1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1)
+      sapp-notification:
+        specifier: ^1.0.15
+        version: 1.1.1(antd@5.28.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2)))
+      sass:
+        specifier: ^1.53.0
+        version: 1.94.0
+      sharp:
+        specifier: ^0.30.7
+        version: 0.30.7
+      socket.io-client:
+        specifier: ^4.7.5
+        version: 4.8.1
+      usehooks-ts:
+        specifier: ^3.1.0
+        version: 3.1.1(react@18.3.1)
+      zod:
+        specifier: ^3.22.4
+        version: 3.25.76
+    devDependencies:
+      '@commitlint/cli':
+        specifier: ^17.0.3
+        version: 17.8.1
+      '@commitlint/config-conventional':
+        specifier: ^17.0.3
+        version: 17.8.1
+      '@next/bundle-analyzer':
+        specifier: 13.4.3
+        version: 13.4.3
+      '@tailwindcss/aspect-ratio':
+        specifier: ^0.4.2
+        version: 0.4.2(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2)))
+      '@tailwindcss/forms':
+        specifier: ^0.5.6
+        version: 0.5.10(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2)))
+      '@types/node':
+        specifier: ^18.0.0
+        version: 18.19.130
+      '@types/react':
+        specifier: ^18.0.14
+        version: 18.3.26
+      '@types/react-dom':
+        specifier: ^18.2.17
+        version: 18.3.7(@types/react@18.3.26)
+      '@types/uuid':
+        specifier: ^9.0.7
+        version: 9.0.8
+      autoprefixer:
+        specifier: ^10.4.16
+        version: 10.4.22(postcss@8.5.6)
+      critters:
+        specifier: ^0.0.19
+        version: 0.0.19
+      eslint:
+        specifier: 7.32.0
+        version: 7.32.0
+      eslint-config-next:
+        specifier: ^12.2.0
+        version: 12.3.7(eslint@7.32.0)(typescript@5.8.2)
+      eslint-config-prettier:
+        specifier: ^8.5.0
+        version: 8.10.2(eslint@7.32.0)
+      husky:
+        specifier: ^8.0.1
+        version: 8.0.3
+      lint-staged:
+        specifier: 13.0.3
+        version: 13.0.3(enquirer@2.4.1)
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.6
+      postcss-nesting:
+        specifier: ^12.0.1
+        version: 12.1.5(postcss@8.5.6)
+      prettier:
+        specifier: ^3.0.3
+        version: 3.6.2
+      prettier-plugin-tailwindcss:
+        specifier: ^0.5.6
+        version: 0.5.14(prettier@3.6.2)
+      tailwindcss:
+        specifier: ^3.3.5
+        version: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))
+      typescript:
+        specifier: ^5.5.4
+        version: 5.8.2
+
   apps/lms-pro:
     dependencies:
       '@cloudflare/stream-react':
@@ -155,7 +444,7 @@ importers:
         version: 1.4.0(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       explanation-package:
         specifier: ^1.3.7
-        version: 1.4.0(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.3.26)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(webpack@5.102.1)
+        version: 1.4.0(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.3.26)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1)
       file-saver:
         specifier: ^2.0.5
         version: 2.0.5
@@ -211,10 +500,10 @@ importers:
         specifier: ^1.1.39
         version: 1.1.43(@babel/core@7.28.5)(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(webpack@5.102.1)
       preview-part:
-        specifier: 1.5.14
-        version: 1.5.14(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.6.2
+        version: 1.6.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       quiz-result-package:
-        specifier: ^1.3.3
+        specifier: ^1.4.1
         version: 1.4.1(@babel/core@7.28.5)(antd@5.28.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.2.0
@@ -271,10 +560,10 @@ importers:
         specifier: ^3.2.1
         version: 3.4.1(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@18.3.26)(react@18.3.1))(react@18.3.1)(redux@4.2.1)
       sapp-common-package:
-        specifier: ^1.4.4
-        version: 1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(webpack@5.102.1)
+        specifier: ^1.5.1
+        version: 1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1)
       sapp-notification:
-        specifier: ^1.0.18
+        specifier: ^1.1.1
         version: 1.1.1(antd@5.28.1(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2)))
       sapp-preview-part-test:
         specifier: 1.4.7-test
@@ -373,6 +662,24 @@ importers:
       typescript:
         specifier: ^5.5.4
         version: 5.8.2
+
+  features/calculator:
+    dependencies:
+      react:
+        specifier: '*'
+        version: 18.3.1
+      react-dom:
+        specifier: '*'
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: '*'
+        version: 18.3.26
+      '@types/react-dom':
+        specifier: '*'
+        version: 18.3.7(@types/react@18.3.26)
+
+  libs/assets: {}
 
 packages:
 
@@ -7209,8 +7516,8 @@ packages:
     peerDependencies:
       react: ^16.0.0
 
-  preview-part@1.5.14:
-    resolution: {integrity: sha512-A/eof89MHMg2kYP6dUAFy/IcEInesEOj0FfoRIt7Agk0L0kEHFAnJ4H2k70nWBTEEjY7gpnHqTVK6bi+f+COTw==}
+  preview-part@1.6.2:
+    resolution: {integrity: sha512-9b8+Q0J8jn7lG0I3gBwqWU/E2AG/gxcLOFJSqgWdTOQoRo26ZRX4yH3sWRxbOVw5R03+H4188ZX4nV2le8sTrg==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.0.0
@@ -14672,7 +14979,7 @@ snapshots:
       eslint: 7.32.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint@7.32.0))(eslint@7.32.0)
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1)(eslint@7.32.0)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint@7.32.0))(eslint@7.32.0))(eslint@7.32.0)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@7.32.0)
       eslint-plugin-react: 7.37.5(eslint@7.32.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@7.32.0)
@@ -14698,7 +15005,7 @@ snapshots:
     dependencies:
       debug: 4.4.3(supports-color@5.5.0)
       eslint: 7.32.0
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1)(eslint@7.32.0)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint@7.32.0))(eslint@7.32.0))(eslint@7.32.0)
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.11
@@ -14717,7 +15024,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1)(eslint@7.32.0):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.2))(eslint@7.32.0))(eslint@7.32.0))(eslint@7.32.0):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -14989,7 +15296,7 @@ snapshots:
 
   expand-template@2.0.3: {}
 
-  explanation-package@1.4.0(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.3.26)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(webpack@5.102.1):
+  explanation-package@1.4.0(@babel/core@7.28.5)(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(@types/react@18.3.26)(date-fns@3.6.0)(immer@10.2.0)(postcss@8.5.6)(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1):
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@cloudflare/stream-react': 1.9.3(react@18.3.1)
@@ -15011,7 +15318,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       react-hook-form: 7.46.0(react@18.3.1)
       react-shadow: 20.6.0(prop-types@15.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      sapp-common-package: 1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(webpack@5.102.1)
+      sapp-common-package: 1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1)
       sass: 1.94.0
       styled-components: 5.3.11(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1)
       tailwindcss: 3.4.17(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))
@@ -17389,7 +17696,7 @@ snapshots:
       - webpack
       - worker-loader
 
-  preview-part@1.5.14(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  preview-part@1.6.2(@babel/core@7.28.5)(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/plugin-proposal-unicode-property-regex': 7.18.6(@babel/core@7.28.5)
       '@react-hook/resize-observer': 2.0.2(react@18.3.1)
@@ -18521,7 +18828,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sapp-common-package@1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@20.5.1)(typescript@5.8.2))(webpack@5.102.1):
+  sapp-common-package@1.5.1(@tiptap/core@2.27.1(@tiptap/pm@2.27.1))(date-fns@3.6.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(ts-node@10.9.2(@types/node@18.19.130)(typescript@5.8.2))(webpack@5.102.1):
     dependencies:
       '@_ueberdosis/prosemirror-tables': 1.1.3
       '@floating-ui/react': 0.27.16(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
