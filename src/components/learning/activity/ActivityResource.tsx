@@ -51,7 +51,7 @@ const ActivityResource = ({ activity, handleOpenScratchPad }: IProps) => {
                 return (
                   <div
                     className={clsx(
-                      'group flex cursor-pointer items-center gap-3',
+                      'group flex w-min cursor-pointer items-center gap-3',
                       { 'mb-3': index < activity?.files?.length - 1 },
                     )}
                     key={index}
