@@ -58,9 +58,11 @@ const InfoItem = ({ label, value }: InfoItemProps) => {
 const ExamDate = ({
   data,
   setIsEdit,
+  setDirection,
 }: {
   data: Data
   setIsEdit: (isEdit: boolean) => void
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
 }) => (
   <>
     <div>{data?.exam?.examination?.name ?? '-'}</div>
@@ -77,7 +79,10 @@ const ExamDate = ({
         <Tooltip showTooltip={true} title={'Change Exam Date'}>
           <div
             className="cursor-pointer text-primary"
-            onClick={() => setIsEdit(true)}
+            onClick={() => {
+              setIsEdit(true)
+              setDirection(1)
+            }}
           >
             <PencilV2Icon />
           </div>
@@ -183,6 +188,7 @@ const ExaminationInfo = ({
   const handleChangeExamDate = () => {
     if (isOpenSelectExam) {
       if (itemSelected) methods.setValue('examination_subject_id', itemSelected)
+      setDirection(-1)
       setIsOpenSelectExam(false)
       return
     }
@@ -226,7 +232,13 @@ const ExaminationInfo = ({
           <InfoItem label="Subject:" value={data?.subject?.name} />
           <InfoItem
             label="Scheduled Exam Date:"
-            value={<ExamDate data={data} setIsEdit={setIsEdit} />}
+            value={
+              <ExamDate
+                data={data}
+                setIsEdit={setIsEdit}
+                setDirection={setDirection}
+              />
+            }
           />
           <InfoItem
             label="Revision Class Code:"
@@ -322,6 +334,7 @@ const ExaminationInfo = ({
                   remainingChanges={data?.remaining_changes}
                   currentValue={data?.exam?.id || currentValue}
                   setIsOpenSelectExam={setIsOpenSelectExam}
+                  setDirection={setDirection}
                 />
               ) : (
                 renderContent()
