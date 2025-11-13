@@ -75,21 +75,21 @@ export const useCourseSectionsData = ({
 
   // Cập nhật dữ liệu khi fetch xong
   useEffect(() => {
-    if (!isEmpty(sections)) setListSection(sections)
+    if (!isEmpty(sections)) setListSection?.(sections)
   }, [sections])
 
   useEffect(() => {
     if (!isEmpty(subsectionData.sections))
-      setListSubsection(subsectionData.sections)
+      setListSubsection?.(subsectionData.sections)
   }, [subsectionData.sections])
 
   useEffect(() => {
-    if (!isEmpty(unitData.sections))
-      setListUnit && setListUnit(unitData.sections)
+    if (!isEmpty(unitData.sections)) setListUnit?.(unitData.sections)
   }, [unitData.sections])
 
   useEffect(() => {
-    if (!isEmpty(activityData.sections)) setListActivity(activityData.sections)
+    if (!isEmpty(activityData.sections))
+      setListActivity?.(activityData.sections)
   }, [activityData.sections])
 
   return {
