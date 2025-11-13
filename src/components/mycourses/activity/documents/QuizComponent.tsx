@@ -837,7 +837,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                 ),
                 children: (
                   <div className="mt-6">
-                    <Alert
+                    {/* <Alert
                       message={
                         <div className="text-xs text-gray-800">
                           This feature is only available on desktop or tablet.
@@ -851,9 +851,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           <AlertInfoIcon />
                         </div>
                       }
-                    />
+                    /> */}
                     <EssayQuestionPreview
-                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
+                      className="!rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
@@ -1006,7 +1006,7 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                   />
                 ) : (
                   <div className="mt-6">
-                    <Alert
+                    {/* <Alert
                       message={
                         <div className="text-xs text-gray-800">
                           This feature is only available on desktop or tablet.
@@ -1020,9 +1020,9 @@ const QuizComponent = forwardRef<QuizComponentRef, Props>(
                           <AlertInfoIcon />
                         </div>
                       }
-                    />
+                    /> */}
                     <EssayQuestionPreview
-                      className="hidden !rounded-none !bg-transparent !p-0 md:block"
+                      className="!rounded-none !bg-transparent !p-0 md:block"
                       editorClassName="learning-act-editor"
                       explainClassname="!mt-8 !mb-0 !p-0 !bg-transparent"
                       defaultValue={getDefaultValue()}
