@@ -1,0 +1,70 @@
+.sapp-upload-file {
+  &-progress {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px dashed #d9d9d9;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    .ant-progress {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    &_icon {
+      margin-right: 15px;
+    }
+
+    .ant-progress-outer {
+      order: 2;
+    }
+
+    .ant-progress-text {
+      margin-right: calc(2em + 8px);
+      margin-left: auto;
+      order: 1;
+    }
+  }
+}
+
+.sapp-upload-file-content {
+  position: relative;
+
+  .sapp-upload-file-name {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    max-width: 70%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+.sapp-modal_upload-file {
+  .modal-header {
+    padding-bottom: 0;
+    align-items: start;
+  }
+}
+.sapp-modal_upload-file_tab_title {
+  cursor: pointer;
+  &._checked {
+    color: #141414;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      height: 1px;
+      background-color: var(--bs-primary);
+      width: 100%;
+      bottom: -1px;
+      left: 0;
+    }
+  }
+}

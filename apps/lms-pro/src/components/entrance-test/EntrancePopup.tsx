@@ -1,0 +1,105 @@
+import SappModalV2 from '@components/base/modal/SappModalV2'
+import { useRouter } from 'next/router'
+import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react'
+import { useAppSelector } from 'src/redux/hook'
+import { entranceTestReducer } from 'src/redux/slice/EntranceTest/EntranceTest'
+import EntrancePopupContent from './EntrancePopupContent'
+import dayjs from 'dayjs'
+import SappModalV3 from '@components/base/modal/SappModalV3'
+
+const calculateEndTime = (createdAt: Date, quizTimed: number): Date => {
+  return dayjs(createdAt).add(quizTimed, 'minutes').toDate()
+}
+
+export const isQuizExpired = (createdAt: Date, quizTimed: number): boolean => {
+  const endTime = calculateEndTime(createdAt, quizTimed)
+  return dayjs().isAfter(endTime)
+}
+
+// define the props for the confirm dialog component
+export type EntrancePopupProps = {
+  open: boolean
+  setOpen?: Dispatch<SetStateAction<boolean>>
+  data?: any
+  setOpenFillForm: Dispatch<SetStateAction<boolean>>
+  openFillForn: boolean
+  entranceTest?: Record<any, any> | undefined
+}
+
+// create the confirm dialog component
+const EntrancePopup: FC<EntrancePopupProps> = ({
+  open,
+  setOpen,
+  data,
+  // openFillForn,
+  // setOpenFillForm,
+  entranceTest,
+}) => {
+  const handleOnClick = () => {
+    setOpen && setOpen(false)
+  }
+
+  const { count } = useAppSelector(entranceTestReducer)
+  const router = useRouter()
+
+  const checkLimit = useMemo(() => {
+    if (data?.is_limited) {
+      if (data?.attempt_times === data?.limit_count) {
+        return true
+      }
+    }
+    return false
+  }, [data])
+
+  return (
+    <>
+      <SappModalV3
+        open={open}
+        cancelButtonCaption="Back"
+        okButtonCaption="Start"
+        handleCancel={handleOnClick}
+        onOk={() => {
+          router.push({
+            pathname: `/test/${data?.id}`,
+            query: {
+              type: 'entrance',
+            },
+          })
+        }}
+        showOkButton={!checkLimit || count >= 1}
+        showHeader={false}
+        buttonSize="medium"
+        title={undefined}
+        fullWidthBtn={true}
+      >
+        <h2 className="mb-4 max-w-screen-sm text-2xl font-bold text-gray-800 md:text-4xl">
+          Test Information
+        </h2>
+        <div className="text-sm text-gray-800">
+          Cảm ơn bạn đã hoàn thiện đầy đủ thông tin! Đây là bước quan trọng để
+          xác định lộ trình học tập cá nhân hóa dành riêng cho bạn. Hãy tin vào
+          bản thân và bắt đầu ngay nhé!
+        </div>
+        <EntrancePopupContent
+          name={count === 1 ? entranceTest?.name : data?.name || ''}
+          timeAllow={count === 1 ? entranceTest?.quiz_timed : data?.quiz_timed}
+          attemps={`${count === 1 ? entranceTest?.attempt_times || 0 : data?.attempt_times || '0'}`}
+          limit_count={
+            count === 1 ? entranceTest?.limit_count : data?.limit_count
+          }
+          total_question={
+            count === 1 ? entranceTest?.total_question : data?.total_question
+          }
+        />
+      </SappModalV3>
+      {/* <EntranceTestFillForm
+        open={openFillForn}
+        setOpen={setOpenFillForm}
+        entrancePopupContent={data}
+        setOpenTestInfo={setOpen}
+      /> */}
+    </>
+  )
+}
+
+export default EntrancePopup

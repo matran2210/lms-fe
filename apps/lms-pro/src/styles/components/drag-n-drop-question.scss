@@ -1,0 +1,34 @@
+.dragNdrop-question {
+  font-size: 16px;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #ccc !important;
+    padding: 8px;
+  }
+
+  col {
+    background-color: #f9f9f9 !important;
+  }
+
+  .dragNdrop-question__slot::after {
+    content: attr(data-slot-index);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    pointer-events: none;
+    background-color: #f6f6f6;
+    color: #a1a1a1;
+  }
+}
