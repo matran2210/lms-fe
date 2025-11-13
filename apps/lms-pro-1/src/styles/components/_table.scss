@@ -1,0 +1,140 @@
+.sapp-table {
+  // Áp dụng font-sans cho các phần tử bảng, phân trang và selector của Ant Design
+  .ant-table,
+  .ant-pagination,
+  .ant-select-selector {
+    @apply font-sans;
+  }
+
+  // Định dạng cho dòng bảng khi được chọn
+  .ant-table-wrapper {
+    .ant-table-tbody {
+      .ant-table-row.ant-table-row-selected {
+        > .ant-table-cell {
+          @apply bg-[#fff7ed]; // Màu nền cam nhạt cho các ô được chọn
+        }
+      }
+    }
+  }
+
+  // Định dạng màu sắc của vòng quay (spin) trong Ant Design
+  .ant-spin {
+    .ant-spin-dot-holder {
+      @apply text-primary; // Áp dụng màu chính cho dot spin
+    }
+  }
+
+  // Định dạng cho phần tử trang hiện tại trong phân trang
+  .ant-pagination {
+    .ant-pagination-item-active {
+      @apply border-primary bg-primary text-white; // Màu nền và đường viền của trang hiện tại
+
+      a {
+        @apply font-sans text-white; // Màu chữ trắng cho liên kết trang hiện tại
+      }
+    }
+  }
+
+  // Định dạng cho dropdown và item trong Ant Select
+  .ant-select {
+    .ant-select-dropdown {
+      @apply p-0; // Loại bỏ padding cho dropdown
+    }
+
+    .ant-select-selector {
+      @apply w-36 !important; // Đặt chiều rộng selector cho Ant Select
+    }
+
+    .ant-select-item-option-active {
+      @apply bg-[#fefce8] text-primary; // Màu nền vàng nhạt và màu chữ chính khi chọn item
+    }
+
+    .ant-select-item-option-selected {
+      @apply bg-white text-primary !important; // Màu nền trắng và màu chữ chính khi item được chọn
+
+      &:hover {
+        @apply bg-[#fefce8]; // Màu nền vàng nhạt khi hover lên item đã chọn
+      }
+    }
+
+    // Định dạng cho hover và focus của selector trong Ant Select
+    .ant-select-selector:hover,
+    .ant-select-focused .ant-select-selector,
+    .ant-select-selection-search-input:focus {
+      @apply border-primary !important; // Viền màu chính khi hover hoặc focus
+    }
+  }
+  .ant-select-focused .ant-select-selector,
+  .ant-select-selection-search-input:focus {
+    border-color: #ffb800 !important; // Màu viền vàng khi focus
+    box-shadow: none !important; // Loại bỏ shadow khi focus
+  }
+  // Định dạng cho phần options trong phân trang
+  .ant-pagination-options {
+    @apply outline-none !important; // Loại bỏ outline cho các options trong phân trang
+  }
+}
+.profile-certificate-table {
+  .ant-table-thead > tr > th {
+    @apply border-b-0 bg-white p-0 text-lg text-secondary;
+
+    &::before {
+      display: none !important;
+    }
+  }
+
+  .ant-table-tbody > tr > td {
+    @apply px-0 pb-8 pt-6;
+  }
+}
+
+.style-table-v2 {
+  .ant-table {
+    @apply overflow-hidden rounded-2xl shadow-small;
+  }
+  .ant-table-wrapper {
+    @apply overflow-hidden rounded-2xl;
+  }
+  .ant-table-thead > tr > th {
+    @apply bg-white px-0 pb-6 pt-0 text-base font-medium text-gray;
+
+    &::before {
+      @apply hidden;
+    }
+  }
+
+  .ant-table-tbody > tr > td {
+    @apply px-0 pb-6 pt-8;
+
+    &.custom-column-table {
+      @apply pr-0;
+    }
+  }
+
+  .ant-table-content {
+    @apply p-6 lg:p-8;
+  }
+}
+
+.style-table-quiz {
+  .ant-table-thead > tr > th {
+    @apply bg-white text-ssm font-medium text-gray-400 sm:text-base;
+
+    &::before {
+      @apply hidden;
+    }
+  }
+
+  // Loại bỏ border-bottom của row cuối cùng
+  .last-row-no-border {
+    .ant-table-cell {
+      border-bottom: none !important;
+    }
+  }
+  .ant-table-tbody > tr > td {
+    @apply text-ssm sm:text-base;
+  }
+}
+.column-center {
+  @apply flex justify-center;
+}

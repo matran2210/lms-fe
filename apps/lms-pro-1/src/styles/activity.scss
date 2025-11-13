@@ -1,0 +1,194 @@
+.activity {
+  &__body {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+.learning-activity-collapse {
+  .ant-collapse-header {
+    @apply p-0;
+    padding: 0 !important;
+  }
+  .ant-collapse-content-box {
+    @apply p-0;
+    padding: 0 !important;
+  }
+  .learning-outcome-content {
+    p {
+      @apply mb-0;
+    }
+  }
+}
+
+.learning-activity-tabs {
+  &.tabs-list-hidden {
+    .ant-tabs-nav {
+      @apply hidden;
+    }
+  }
+  .ant-tabs-tab {
+    @apply pt-0;
+    .ant-tabs-tab-btn {
+      &:focus {
+        @apply text-primary;
+      }
+    }
+    &:hover {
+      @apply text-primary;
+    }
+  }
+  &.course-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 4rem !important;
+    }
+  }
+  &.requirement-tab {
+    .ant-tabs-tab + .ant-tabs-tab {
+      margin-left: 2.5rem !important;
+    }
+
+    .learning-act-editor {
+      @apply overflow-hidden rounded-lg border-2 border-[#e5e7eb];
+      .tox-tinymce {
+        @apply border-none;
+      }
+    }
+  }
+
+  .ant-tabs-nav {
+    @apply m-0 p-0;
+  }
+  .ant-tabs-tab-active {
+    .learning-act-tab-label {
+      @apply text-primary;
+    }
+  }
+  .ant-tabs-ink-bar {
+    @apply bg-primary;
+  }
+
+  .course-tab-text {
+    p {
+      @apply mb-0;
+    }
+  }
+  .comment-scrollbar {
+    scrollbar-width: thin;
+    // scrollbar-color: $scrollbar-thumb $scrollbar-track;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: red;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: blue;
+      border-radius: 4px;
+      border: 2px solid green;
+    }
+  }
+}
+.ant-tabs-dropdown {
+  @apply rounded-lg bg-white shadow-lg;
+
+  .ant-tabs-dropdown-menu {
+    @apply p-2;
+  }
+
+  .ant-tabs-dropdown-menu-item {
+    @apply p-2 text-sm text-gray-800 hover:bg-gray-100;
+    font-weight: 500;
+    &:not(:last-child) {
+      @apply mb-2;
+    }
+
+    &.ant-tabs-dropdown-menu-item-selected {
+      @apply bg-primary-100 text-primary-600;
+    }
+  }
+}
+.learning-act-tab-pagination {
+  @apply mt-6;
+  .tab-pagination {
+    @apply rounded-full p-2 text-[#1C274C] shadow-card;
+    &:hover {
+      @apply bg-primary text-white;
+    }
+    &:focus {
+      @apply bg-primary text-white;
+    }
+    &.disabled {
+      @apply cursor-not-allowed bg-[#DCDDDD] text-[#1C274C] opacity-50;
+      &:hover {
+        @apply text-[#1C274C];
+      }
+    }
+  }
+
+  .tab-pagination-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-primary;
+  }
+}
+
+.exhibit-modal-wrapper {
+  .ant-modal {
+    @apply max-w-[calc(100%-32px)];
+    .exhibit-modal-content {
+      .ant-modal-header {
+        .ant-modal-title {
+          @apply text-lg;
+        }
+      }
+      .ant-modal-body {
+        @apply max-h-[419px] overflow-y-auto;
+
+        &::-webkit-scrollbar {
+          @apply w-2;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          @apply rounded bg-primary;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: #ffb800; // giữ nguyên khi hover
+        }
+
+        &::-webkit-scrollbar-track {
+          @apply bg-white;
+        }
+
+        /* Firefox hỗ trợ */
+        scrollbar-color: #ffb800 white;
+        scrollbar-width: thin;
+        &::-webkit-scrollbar-button:single-button {
+          display: none;
+          background-color: transparent;
+          height: 0;
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.custom-scroll {
+  &::-webkit-scrollbar-thumb {
+    @apply rounded bg-primary;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #ffb800; // giữ nguyên khi hover
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  /* Firefox hỗ trợ */
+  scrollbar-color: #ffb800 transparent;
+  scrollbar-width: thin;
+}

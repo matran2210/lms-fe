@@ -1,0 +1,14 @@
+.scrollYOnly {
+  overflow-y: scroll;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+
+  /* Ẩn dọc */
+  &::-webkit-scrollbar:vertical {
+    width: 0px;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical {
+    background: transparent;
+  }
+}

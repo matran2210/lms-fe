@@ -1,0 +1,63 @@
+.sapp-modal .ant-modal-content {
+  @apply rounded-2xl p-6;
+}
+
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
+}
+
+.sapp-modal--math .ant-modal-content {
+  width: fit-content;
+  padding: 20px !important;
+  margin: auto;
+}
+
+.sapp-modal--math.ant-modal {
+  width: fit-content !important;
+}
+
+.sapp-modal .ant-modal-content .ant-modal-header {
+  @apply mb-0;
+}
+
+.sapp-modal .ant-modal-content .ant-modal-header .ant-modal-title {
+  @apply text-4xl font-semibold text-[#050505];
+}
+
+.ant-modal-root .ant-modal-mask {
+  @apply bg-[#000000cc];
+}
+
+.sapp-modal__opt-continue-test {
+  .ant-modal-content {
+    @apply p-10 !important;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        border-color: #ffb800;
+      }
+    }
+  }
+}
+
+.ant-modal-footer {
+  margin: 0 !important;
+}
+
+.ant-modal-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.sapp-modal--comment .ant-modal-content {
+  @apply max-h-[640px] min-h-[400px] p-0;
+}
+
+@media (min-width: 768px) {
+  .sapp-modal .ant-modal-content {
+    padding: 2.5rem;
+  }
+}
