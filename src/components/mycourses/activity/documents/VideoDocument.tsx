@@ -15,6 +15,7 @@ import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import clsx from 'clsx'
 import SappIcon from 'src/common/SappIcon'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 type Props = {
   videos?: IVideo[]
@@ -81,6 +82,7 @@ const VideoDocument = ({
   const internalRef = useRef<any>()
   const streamRef = streamRefProp?.current ? streamRefProp : internalRef
   const dispatch = useAppDispatch()
+  const { isMobileView } = useTailwindBreakpoint()
 
   useEffect(() => {
     if (videos?.[0]) {
@@ -452,7 +454,7 @@ const VideoDocument = ({
             buttonSize="small"
             size="max-w-full"
             position="center"
-            isInner={true}
+            isInner={isMobileView ? false : true}
             isBordered={true}
             okButtonClass="!w-20 h-8.5 !px-0"
             cancelButtonClass="!w-20 h-8.5 !px-0 !w-fit"

@@ -48,6 +48,8 @@ const TestResultDetail = () => {
     {},
   )
 
+  const { hasCertificate } = router?.query
+
   const quiz = questions?.quizAttempt?.quiz
   const isShowRetakeButton =
     !quiz?.limit_count ||
@@ -66,6 +68,7 @@ const TestResultDetail = () => {
     localStorage.removeItem('quizAttempt')
     router.push(linkTest)
   }
+
   return (
     <>
       {loadingChart ? (
@@ -88,10 +91,9 @@ const TestResultDetail = () => {
               title="Retake"
               size="small"
               onClick={handleRetake}
-              className={clsx(
-                'hidden md:block',
-                !isShowRetakeButton && '!hidden',
-              )}
+              className={clsx('hidden md:block', {
+                '!hidden': !isShowRetakeButton || hasCertificate,
+              })}
             />
             <Tooltip
               placement="left"
@@ -104,7 +106,7 @@ const TestResultDetail = () => {
                 </span>
               }
               className={clsx('block md:hidden', {
-                hidden: !isShowRetakeButton,
+                hidden: !isShowRetakeButton || hasCertificate,
               })}
             >
               <button className="text-icon">

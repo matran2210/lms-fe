@@ -159,7 +159,7 @@ const MyProfile = ({
               {!isEdit && (
                 <div className="flex h-full cursor-pointer items-start text-primary hover:underline lg:hidden">
                   <div
-                    className="flex items-center justify-end gap-2"
+                    className="flex h-7 items-center justify-end gap-2"
                     onClick={handleChangeToEditForm}
                   >
                     <div>Edit Profile</div>
@@ -178,10 +178,8 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
-                className="!p-4"
                 title="Full Name"
                 showEditIcon
                 isEdit={isEdit}
@@ -235,7 +233,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Role"
@@ -243,7 +240,7 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="hidden !p-4 xl:block"
+                className="hidden xl:block"
               />
               <TextWrapper
                 title="D.O.B"
@@ -254,7 +251,7 @@ const MyProfile = ({
                 control={control}
                 isEdit={isEdit}
                 type="date"
-                className="hide-date-icon !p-4"
+                className="hide-date-icon !p-[9.5px]"
               />
               <TextWrapper
                 title="Email"
@@ -265,7 +262,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Phone"
@@ -273,7 +269,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="University"
@@ -281,7 +276,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Major"
@@ -289,7 +283,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Field of work"
@@ -297,7 +290,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Position"
@@ -305,7 +297,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 isEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Main Class"
@@ -313,7 +304,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
-                className="!p-4"
               />
               <TextWrapper
                 title="Deferred/Retake class"
@@ -321,7 +311,6 @@ const MyProfile = ({
                 loading={loading}
                 control={control}
                 hiddenOnEdit={isEdit}
-                className="!p-4"
               />
 
               {!isEdit && (
@@ -331,7 +320,6 @@ const MyProfile = ({
                   isEdit={isEdit}
                   loading={loading}
                   control={control}
-                  className="!p-4"
                 />
               )}
             </ul>
@@ -411,7 +399,7 @@ const MyProfile = ({
                     control={control}
                     isEdit
                     type="date"
-                    className="hide-date-icon"
+                    className="hide-date-icon !p-[9.5px]"
                   />
                   <TextWrapper
                     title="Email"
@@ -517,7 +505,7 @@ const TextWrapper = ({
   return (
     <li
       className={clsx(
-        'group mb-6 flex gap-4 text-sm sm:gap-[1.4rem] md:mb-4 md:text-base',
+        'group mb-6 flex gap-4 text-sm sm:gap-[1.4rem] md:text-base',
         {
           'transition-[margin]': isEdit,
           '!block': isInForm && isEdit,

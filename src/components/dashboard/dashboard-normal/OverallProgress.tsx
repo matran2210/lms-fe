@@ -1,14 +1,17 @@
 import { AwardIcon, IconEssentional } from '@assets/icons/Dashboard'
 import EChart from '@components/base/chart/Chart'
+import {
+  OverallProgressSkeleton,
+  OvervallProgressSkeletonMobile,
+} from '@components/skeleton/OverallProgressSkeleton'
 import { DashboardAPI } from '@pages/api/dashboard'
 import { EChartsOption } from 'echarts'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import Tooltip from 'src/common/Tooltip'
-import { IActivities, IActivityProgress } from '../CourseDashboard'
 import useReponsive from 'src/hooks/useReponsive'
-import { ANIMATION } from 'src/constants'
-import OverallProgressSkeleton from '@components/skeleton/OverallProgressSkeleton'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { IActivities, IActivityProgress } from '../CourseDashboard'
 
 interface OverallProgressProps {
   setActivities: React.Dispatch<React.SetStateAction<IActivities | undefined>>
@@ -151,17 +154,21 @@ const OverallProgress = ({
       getOverProgress(router.query.courseId as string)
   }, [router?.query?.courseId])
 
+  const { isMobileView } = useTailwindBreakpoint()
+
   return (
     <>
       {loading ? (
-        <OverallProgressSkeleton />
+        isMobileView ? (
+          <OvervallProgressSkeletonMobile />
+        ) : (
+          <OverallProgressSkeleton />
+        )
       ) : (
         <div className="rounded-2xl bg-white p-4 shadow-small md:p-6">
           <div className="flex-col">
-            <div className="flex">
-              <div className="mb-6 min-w-fit text-lg font-semibold md:text-xl xl:mb-0">
-                Overall Progress
-              </div>
+            <div className="mb-6 flex items-center text-lg font-semibold md:text-xl xl:mb-0">
+              <span>Overall Progress</span>
               <Tooltip
                 title={
                   <div className="text-center">
@@ -170,9 +177,9 @@ const OverallProgress = ({
                 }
                 placement="bottom"
               >
-                <div className="ms-2">
-                  <IconEssentional />
-                </div>
+                <span className="ms-2 flex items-center">
+                  <IconEssentional className="cursor-pointer align-middle" />
+                </span>
               </Tooltip>
             </div>
           </div>

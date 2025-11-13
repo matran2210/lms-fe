@@ -24,6 +24,7 @@ const PartFailed = ({
   isLock = false,
   lastElementRef,
   isTeacher,
+  hasCertificate = false,
 }: {
   coursePart: IMyCourseDetail
   class_user_id?: string
@@ -31,6 +32,7 @@ const PartFailed = ({
   isLock?: boolean
   lastElementRef: (node: HTMLDivElement) => void
   isTeacher: boolean
+  hasCertificate?: boolean
 }) => {
   const noOfAttempts = `${coursePart?.quiz?.attempt?.number_of_attempts || 0}/${
     coursePart?.quiz?.is_limited ? coursePart?.quiz?.limit_count : 'Unlimited'
@@ -102,6 +104,7 @@ const PartFailed = ({
   const selectedAttemptNumber = selectedResult?.label?.split('/')[0]
 
   const isShowButtonAction = () => {
+    if (hasCertificate) return false
     // if (Number(currentAttemptNumber) > Number(selectedAttemptNumber))
     //   return false
     // if (Number(labelResult) > Number(selectedResult?.label)) return false
@@ -184,7 +187,10 @@ const PartFailed = ({
     } else {
       router.push({
         pathname: `${userPrefix}/courses/test/test-result/${selectedResult?.value}`,
-        query: { attempt: selectedResult?.label },
+        query: {
+          attempt: selectedResult?.label,
+          ...(hasCertificate && { hasCertificate }),
+        },
       })
     }
     trackGAEvent(`Click Button Result ${showTitleFinalTest}`)

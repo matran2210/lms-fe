@@ -11,6 +11,7 @@ import { Divider, Select, Switch } from 'antd'
 import { IUserContact } from 'src/redux/types/User/urser'
 import { CollapseArrowIcon } from '@assets/icons'
 import clsx from 'clsx'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface ProfileOptionItem {
   label: string
   value: string
@@ -27,7 +28,7 @@ interface IProps {
 const ProfileList = ({ isEdit }: IProps) => {
   const { user } = useAppSelector(userReducer)
   const dispatch = useAppDispatch()
-
+  const { isAlwaysShowSidebar } = useTailwindBreakpoint()
   const [makeDefaultDrawer, setMakeDefaultDrawer] = useState<{
     status: boolean
     email: string
@@ -137,13 +138,14 @@ const ProfileList = ({ isEdit }: IProps) => {
             variant="borderless"
             className="profile-subject-select"
             options={profileOptions}
-            open={profileOptions?.length > 1}
           />
         }
+        placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
         handleCancel={closeMakeDefault}
         classNameHeader={'bg-white !text-gray-800 md:!p-0 lg:!px-8 lg:!py-6'}
         classNameBody="pt-0 md:pt-4 md:!px-0 lg:!px-8"
         rootClassName={'profile-subject-drawer'}
+        height="auto"
         classNames={{
           content: 'rounded-2xl',
         }}

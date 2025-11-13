@@ -86,6 +86,7 @@ const EventTest = () => {
                 <Heading
                   showShadow={false}
                   greeting="Welcome to"
+                  showWavingHand
                   title={LANG_SIGNIN.eventTest}
                   des="The course is your starting point to learning. From here, you can access every topic, reading, and video lesson, as well as assignment questions."
                 />

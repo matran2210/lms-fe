@@ -318,6 +318,16 @@ const ActivityPage = () => {
     setOnFocusingPad('')
     setOpenScratchPad((prev) => {
       let arr = [...prev]
+      if (data.type === 'calculator') {
+        const hasCalculator = arr.some(
+          (e) =>
+            e?.type === 'calculator' ||
+            (typeof e?.id === 'string' && e.id.startsWith('calculator')),
+        )
+        if (hasCalculator) {
+          return arr
+        }
+      }
       switch (data.type) {
         case 'calculator':
           arr?.push({
@@ -861,12 +871,7 @@ const ActivityPage = () => {
         />
       </Layout>
 
-      {openResource && (
-        <LearningResource
-          open={openResource}
-          setOpenResource={setOpenResource}
-        />
-      )}
+      <LearningResource open={openResource} setOpenResource={setOpenResource} />
 
       {openVideoTimeline && (
         <VideoTimelineMobile
@@ -875,14 +880,12 @@ const ActivityPage = () => {
           currentVideo={currentVideo}
         />
       )}
-      {openActivityResource && (
-        <ActivityResourceMobile
-          open={openActivityResource}
-          onClose={onCloseActivityResource}
-          activity={activity}
-          handleOpenScratchPad={handleOpenScratchPad}
-        />
-      )}
+      <ActivityResourceMobile
+        open={openActivityResource}
+        onClose={onCloseActivityResource}
+        activity={activity}
+        handleOpenScratchPad={handleOpenScratchPad}
+      />
     </SappLoadingGlobal>
   )
 }

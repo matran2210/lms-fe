@@ -18,6 +18,7 @@ const CourseParts = ({
   lastElementRef,
   isTrial = false,
   isTeacher = false,
+  hasCertificate = false,
 }: {
   courses: IMyCourseDetail[] | undefined
   class_user_id?: string
@@ -25,6 +26,7 @@ const CourseParts = ({
   lastElementRef: (node: HTMLDivElement) => void
   isTrial?: boolean
   isTeacher?: boolean
+  hasCertificate?: boolean
 }) => {
   const router = useRouter()
   const cardRefs = useRef<any>([]) // Để lưu ref của các thẻ card
@@ -88,6 +90,7 @@ const CourseParts = ({
                         isLock={handleLock(coursePart)}
                         lastElementRef={lastElementRef}
                         isTeacher={isTeacher}
+                        hasCertificate={hasCertificate}
                       />
                     ) : (
                       <Part
@@ -115,6 +118,7 @@ const CourseParts = ({
                         isLock={handleLock(coursePart)}
                         lastElementRef={lastElementRef}
                         isTeacher={isTeacher}
+                        hasCertificate={hasCertificate}
                       />
                     ) : (
                       <Part
@@ -196,6 +200,7 @@ const CourseParts = ({
                       isLock={handleLock(coursePart)}
                       lastElementRef={lastElementRef}
                       isTeacher={isTeacher}
+                      hasCertificate={hasCertificate}
                     />
                   ) : (
                     <Part
@@ -247,6 +252,7 @@ const CourseParts = ({
                     isLock={handleLock(coursePart)}
                     lastElementRef={lastElementRef}
                     isTeacher={isTeacher}
+                    hasCertificate={hasCertificate}
                   />
                 ) : (
                   <Part
