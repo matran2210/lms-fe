@@ -684,7 +684,10 @@ const ActivityPage = () => {
               <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
-          <AssistiveTouch className="md:hidden" menuItems={listAssistive} />
+          <AssistiveTouch
+            className={clsx('md:hidden', { hidden: focusOnlyDiscussion })}
+            menuItems={listAssistive}
+          />
           <BottomMenu
             className={focusOnlyDiscussion ? 'hidden' : 'hidden md:flex'}
           >
