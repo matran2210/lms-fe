@@ -8,7 +8,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "dev:lms": "npm --workspace apps/lms-fe run dev",
+    "dev:lms": "pnpm --filter lms-fe dev",
     "prepare": "husky install",
     "lint-staged": "lint-staged"
   },
@@ -25,11 +25,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "yarn@1.22.22",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "packageManager": "pnpm@10.22.0",
   "lint-staged": {
     "**/*.ts": "eslint --fix",
     "**/*.tsx": "eslint --fix",
@@ -39,6 +35,7 @@
   },
   "dependencies": {
     "@eslint/js": "^8.0.0",
+    "@funktechno/texthighlighter": "^2.1.2",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
