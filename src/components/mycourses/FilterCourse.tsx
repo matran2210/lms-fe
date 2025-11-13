@@ -92,11 +92,11 @@ const FilterCourse = ({
           </div>
         </>
       ) : (
-        <div className="flex items-center md:gap-2 lg:gap-4">
+        <div className="flex items-center gap-4">
           <div className="text-sm font-normal text-gray-800">
             {totalResult} Results
           </div>
-          <div className="flex md:gap-2 lg:gap-4">
+          <div className="flex gap-2">
             {listFilter?.map((item, index) => (
               <SAPPSelectV2
                 key={index}
