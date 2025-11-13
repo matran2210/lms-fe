@@ -6866,10 +6866,6 @@ explanation-package@^1.3.7:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.4.0.tgz#0d7a52a19f210406b72f5a987d05cc223faec62b"
   integrity sha512-lnDAOZI0cTrPw2s4o/Lc8tAqqxz7vK3siW5Mq8nBGKyHmDjpgi+WSdw6UA6c13iDNFs+epXvODLMlNIwSYsVTw==
-explanation-package@^1.3.7:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/explanation-package/-/explanation-package-1.4.0.tgz#0d7a52a19f210406b72f5a987d05cc223faec62b"
-  integrity sha512-lnDAOZI0cTrPw2s4o/Lc8tAqqxz7vK3siW5Mq8nBGKyHmDjpgi+WSdw6UA6c13iDNFs+epXvODLMlNIwSYsVTw==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@cloudflare/stream-react" "^1.9.1"
@@ -10012,10 +10008,10 @@ preview-activity@^1.1.39:
     video.js "^8.6.1"
     videojs-markers "^1.0.1"
 
-preview-part@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.6.1.tgz#c482c8b6802907d9f660462ff34e77228e1313a7"
-  integrity sha512-rL9GSwOKsOibMDkaG+2zeYnqQAqHmpkO9dayYPr/Y9aRgHjCzrqY0YDBfgXVjVAlY4t8bE79/Id4qyk1gIS7AA==
+preview-part@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/preview-part/-/preview-part-1.6.2.tgz#0b3d27d883f213d4c8243e4c0e09147412e03c8a"
+  integrity sha512-9b8+Q0J8jn7lG0I3gBwqWU/E2AG/gxcLOFJSqgWdTOQoRo26ZRX4yH3sWRxbOVw5R03+H4188ZX4nV2le8sTrg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     "@react-hook/resize-observer" "^2.0.2"
@@ -10296,10 +10292,10 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-quiz-result-package@^1.3.3:
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.3.3.tgz#001185bb2262d7179f6e995dad65a5100e5b633a"
-  integrity sha512-EGBGZp6T3w58ibFLu/NB3nxEQwox9ZC70WQKIeTX2j36aKE0agSum+q1KsBxniNE43mmgMT8UmcF4iOv6s5wrw==
+quiz-result-package@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/quiz-result-package/-/quiz-result-package-1.4.1.tgz#408e1636182e56456122aebcde64dc4b63362b27"
+  integrity sha512-8G52MDPQu/J+IToubTPHW7OhTnZr/AJ4Z5Ln/q0/c+zYh/zJI7noGA3JUI0Ackv0S6JPIBtlXq33OxYpN3qHkg==
   dependencies:
     "@babel/plugin-proposal-unicode-property-regex" "^7.18.6"
     lodash "^4.17.21"
@@ -11355,7 +11351,6 @@ safe-regex-test@^1.0.3, safe-regex-test@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sapp-common-package@^1.4.1:
 sapp-common-package@^1.4.1:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/sapp-common-package/-/sapp-common-package-1.4.3.tgz#851923b902446f4f23c6739420a6a1ad40f8285a"

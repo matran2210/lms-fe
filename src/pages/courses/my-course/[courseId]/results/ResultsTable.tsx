@@ -265,7 +265,17 @@ const ResultsTable = ({
         placement="bottom"
       >
         {openFilter && !openChooseItem.isOpen ? (
-          <ListFilterMobile setOpenChooseItem={setOpenChooseItem} />
+          <ListFilterMobile
+            setOpenChooseItem={setOpenChooseItem}
+            listSection={listSection}
+            listSubsection={listSubsection}
+            listUnit={listUnit}
+            listActivity={listActivity}
+            setListSection={setListSection}
+            setListSubsection={setListSubsection}
+            setListUnit={setListUnit}
+            setListActivity={setListActivity}
+          />
         ) : (
           <ListItemFilterMobile
             setOpenChooseItem={setOpenChooseItem}
