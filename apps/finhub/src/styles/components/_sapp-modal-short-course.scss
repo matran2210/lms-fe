@@ -1,0 +1,56 @@
+.sapp-modal-short-course .ant-modal-content {
+  @apply flex !rounded-2xl p-6 md:!rounded-3xl md:p-8;
+  .ant-modal-body {
+    @apply w-full;
+  }
+}
+
+.sapp-custom-modal.success-modal {
+  .ant-modal-content {
+    @apply p-8;
+    @apply rounded-lg;
+  }
+}
+
+.sapp-modal-short-course--math .ant-modal-content {
+  @apply m-auto w-fit p-5;
+}
+
+.sapp-modal-short-course--math.ant-modal {
+  @apply w-fit;
+}
+
+.sapp-modal-short-course .ant-modal-content .ant-modal-header {
+  @apply mb-0;
+}
+
+.sapp-modal-short-course .ant-modal-content .ant-modal-header .ant-modal-title {
+  @apply text-4xl font-semibold text-bw-1;
+}
+
+.sapp-modal-short-course__opt-continue-test {
+  .ant-modal-content {
+    @apply p-10;
+  }
+  .ant-radio-wrapper {
+    &:hover {
+      .ant-radio-inner {
+        @apply border-primary;
+      }
+    }
+  }
+}
+
+.ant-modal-footer {
+  @apply m-0;
+}
+
+.sapp-modal-short-course--comment .ant-modal-content {
+  @apply max-h-[640px] min-h-[400px] p-0;
+}
+
+@media (min-width: 768px) {
+  .sapp-modal-short-course .ant-modal-content {
+    @apply p-10;
+  }
+}

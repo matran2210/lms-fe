@@ -1,0 +1,103 @@
+.ant-picker-today-btn {
+  @apply text-primary;
+}
+
+.ant-picker-outlined {
+  @apply border-[#DCDDDD] outline-none;
+}
+
+.ant-picker:hover {
+  @apply border border-primary;
+}
+
+.ant-picker-dropdown .ant-picker-header-view button:hover {
+  @apply text-primary;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-today
+  .ant-picker-cell-inner::before {
+  @apply border border-primary;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-selected
+  .ant-picker-cell-inner {
+  @apply bg-primary;
+}
+
+.ant-picker-input > input::placeholder {
+  @apply text-base font-medium text-[#A1A1A1];
+}
+
+.ant-picker .ant-picker-range .ant-picker-input > input {
+  @apply font-bold;
+}
+
+.ant-picker .ant-picker-input > input {
+  @apply text-sm font-medium leading-[21px] text-[var(--bs-[#374151])];
+}
+
+.ant-picker div.ant-picker-input > input::placeholder {
+  @apply text-sm;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start
+  .ant-picker-cell-inner {
+  @apply bg-primary;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-in-range::before {
+  @apply bg-secondary;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-start:not(
+    .ant-picker-cell-range-start-single
+  )::before {
+  @apply bg-secondary;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end:not(
+    .ant-picker-cell-range-end-single
+  )::before {
+  @apply bg-secondary;
+}
+
+.ant-picker-dropdown
+  .ant-picker-cell-in-view.ant-picker-cell-range-end
+  .ant-picker-cell-inner {
+  @apply bg-primary;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-in-range {
+  .ant-picker-cell-inner {
+    @apply text-primary;
+  }
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-hover,
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-hover-start,
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-range-hover-end {
+  &::after {
+    @apply border-primary;
+  }
+}
+
+.ant-picker-range .ant-picker-active-bar {
+  @apply bg-primary;
+}
+
+.create-date-range-picker.ant-picker-focused {
+  @apply border-primary;
+}
+
+.ant-picker-clear {
+  @apply text-base;
+}
+
+.ant-picker-dropdown {
+  @apply z-[1000000];
+}

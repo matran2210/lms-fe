@@ -1,0 +1,56 @@
+.calc {
+  @apply relative mx-auto w-[344px] max-w-[50rem] rounded-b-xl border border-gray-300;
+  color: $color-btns-container;
+}
+
+.calc__display {
+  @apply flex flex-col gap-4 border-x border-gray-300 bg-[#1C274C] px-6 py-8 text-right text-4xl;
+}
+
+.display_expression {
+  opacity: 0.4;
+  @apply min-h-[25px] text-xl font-normal;
+}
+
+.display__next {
+  grid-area: 2/2;
+}
+
+.calc__btns-container {
+  @apply grid gap-x-2 gap-y-3 rounded-b-xl bg-gray-100 p-6;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.calc__btn {
+  @apply flex h-[68px] w-[68px] cursor-pointer items-center justify-center rounded-xl border-none bg-[#D1D5DB] text-2xl text-gray-800;
+}
+
+.btn--span-2 {
+  grid-column: span 2;
+}
+
+.btn--colored {
+  @apply bg-primary text-white;
+}
+
+.warning {
+  @apply absolute left-0 top-0 z-[-1] flex h-full w-full flex-col items-center rounded-[0.5rem] p-[10rem] text-center opacity-0;
+  background: $color-warning;
+  transition:
+    z-index 0ms,
+    opacity 150ms ease-in-out;
+}
+
+.warning--active {
+  @apply z-[1] opacity-[1];
+}
+
+.warning .fas {
+  font-size: 7.5rem;
+  margin-bottom: 2rem;
+}
+
+.warning p {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
