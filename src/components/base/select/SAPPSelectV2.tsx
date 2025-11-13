@@ -89,25 +89,14 @@ const SAPPSelectV2 = ({
       content
     )
   }
-  const fakeOptions = [
-    {
-      label: 'Option 1',
-      value: 'option1',
-    },
-    {
-      label:
-        'Option 2 lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      value: 'option2',
-    },
-  ]
 
   const customizedOptions = useMemo(
     () =>
-      fakeOptions.map((option) => ({
+      options.map((option) => ({
         ...option,
-        label: <EllipsisTooltip text={option.label} />,
+        label: <EllipsisTooltip text={option.label as string} />,
       })),
-    [fakeOptions],
+    [options],
   )
 
   return (
@@ -122,7 +111,6 @@ const SAPPSelectV2 = ({
             return (
               <>
                 <Select
-                  // open={true}
                   {...field}
                   className={clsx(
                     'custom-select-v2 w-full',
