@@ -1,0 +1,58 @@
+.highlight-drawer-header {
+  .ant-drawer-header-title {
+    @apply flex-row-reverse;
+  }
+}
+.profile-subject-drawer {
+  .ant-drawer-content-wrapper {
+    @apply bottom-8 left-4 right-4 top-auto m-0 !w-auto rounded-2xl md:left-8 md:right-8 lg:bottom-4 lg:left-auto lg:right-4 lg:top-4 lg:!w-[45%] lg:max-w-lg;
+    .ant-drawer-body {
+      @apply h-full max-h-[600px] min-h-[200px] md:m-6 lg:m-0 lg:max-h-full;
+    }
+  }
+}
+.responsive-drawer-v3 {
+  .ant-drawer-content-wrapper {
+    @apply bottom-[132px] left-4 right-4 top-auto m-0 !w-auto rounded-xl md:left-6 md:right-6 md:m-4 md:rounded-2xl lg:bottom-0 lg:left-auto lg:right-0 lg:top-0 lg:!w-[45%];
+
+    .ant-drawer-content {
+      @apply rounded-xl md:rounded-2xl;
+      .ant-drawer-body {
+        @apply h-full max-h-[300px] md:m-6 md:max-h-[600px] md:min-h-[200px] lg:m-0 lg:max-h-full;
+      }
+    }
+  }
+}
+
+.responsive-drawer-center {
+  .ant-drawer-content-wrapper {
+    @apply bottom-[100px] left-0 right-0 top-auto h-[400px] !w-auto rounded-xl;
+
+    @apply md:left-6 md:right-6 md:h-[669px] md:rounded-2xl;
+
+    @apply lg:bottom-0 lg:left-auto lg:right-0 lg:top-0 lg:h-auto lg:max-h-full lg:!w-[641px];
+
+    .ant-drawer-content {
+      @apply rounded-xl md:rounded-2xl;
+    }
+  }
+  // Thêm class mới để override bottom
+  &.drawer-bottom-0 {
+    .ant-drawer-content-wrapper {
+      @apply bottom-0;
+    }
+  }
+}
+
+.full-screen-mobile {
+  .ant-drawer-content-wrapper {
+    @apply m-0 rounded-none;
+
+    .ant-drawer-content {
+      @apply rounded-none;
+      .ant-drawer-body {
+        @apply h-full;
+      }
+    }
+  }
+}

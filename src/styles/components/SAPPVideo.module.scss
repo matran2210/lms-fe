@@ -1,0 +1,18 @@
+.wrapper {
+  @apply relative w-full;
+  padding-top: calc((9 / 16) * 100%);
+  iframe {
+    @apply h-full w-full;
+  }
+}
+.hideWrapper {
+  @apply relative w-full;
+  padding-top: calc((9 / 16) * 100%);
+  iframe {
+    @apply hidden h-full w-full;
+  }
+}
+
+.content {
+  @apply absolute bottom-0 left-0 right-0 top-0 h-full w-full rounded-lg;
+}

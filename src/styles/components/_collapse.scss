@@ -1,0 +1,91 @@
+.sapp-collapse.ant-collapse {
+  border-color: #f1f1f4;
+
+  .ant-collapse-content {
+    border-top: none;
+  }
+}
+.profile-program-collapse {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      @apply p-0;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}
+.learning-outcome-collapse {
+  .ant-collapse-item {
+    @apply mb-4 overflow-x-hidden lg:mb-6;
+    .ant-collapse-header-text {
+      @apply mb-4 lg:mb-6;
+    }
+    /* Bỏ margin ở item cuối cùng */
+    &:last-child {
+      @apply mb-0;
+    }
+    .ant-collapse-header {
+      @apply p-0;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply px-0 pb-4 pt-0 lg:pb-6;
+      }
+    }
+  }
+}
+.mobile-collapse {
+  .profile-collapse-item {
+    &.ant-collapse-item-active {
+      .ant-collapse-header {
+        @apply pb-3 pt-4;
+      }
+    }
+    .ant-collapse-header {
+      @apply p-4;
+    }
+    .ant-collapse-content {
+      .ant-collapse-content-box {
+        @apply p-0;
+      }
+    }
+  }
+}
+
+.test-collapse {
+  // Target only closed items
+  .ant-collapse-item:not(.ant-collapse-item-active):hover {
+    @apply rounded-xl bg-primary-50 lg:rounded-2xl;
+  }
+
+  .ant-collapse-item {
+    .ant-collapse-header {
+      @apply p-4 md:p-6;
+    }
+
+    .ant-collapse-content-box {
+      @apply px-4 !pt-0 md:px-6;
+    }
+
+    &.ant-collapse-item-active {
+      .ant-collapse-header {
+        @apply p-4 pb-3 md:p-6;
+      }
+    }
+  }
+
+  tr {
+    td {
+      @apply border-t border-gray-300 py-6;
+    }
+
+    &:last-child {
+      td {
+        @apply pb-5;
+      }
+    }
+  }
+}

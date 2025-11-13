@@ -1,0 +1,10 @@
+.answer-template-preview {
+  .sapp-editor-container {
+    resize: none;
+    max-height: 100%;
+    border: none;
+    .simple-editor-content {
+      max-height: 100%;
+    }
+  }
+}
