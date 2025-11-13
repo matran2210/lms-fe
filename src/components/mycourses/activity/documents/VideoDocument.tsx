@@ -16,6 +16,7 @@ import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import clsx from 'clsx'
 import SappIcon from 'src/common/SappIcon'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import { ANIMATION } from 'src/constants'
 
 type Props = {
   videos?: IVideo[]
@@ -347,7 +348,7 @@ const VideoDocument = ({
   }, [atLastQuestion, isConfirmQuestion])
 
   return (
-    <div>
+    <div data-aos={ANIMATION.DATA_AOS}>
       {(videos as IVideo[])?.length > 1 && (
         <div
           className={clsx(

@@ -16,6 +16,7 @@ import { Tabs, Tooltip } from 'antd'
 import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import React, { useMemo, useRef } from 'react'
+import { ANIMATION } from 'src/constants'
 import { EAttemptStatus } from 'src/constants/attempt'
 import useQueryAction from 'src/hooks/useQueryAction'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
@@ -249,6 +250,7 @@ const CourseTabDocument = ({
                               hidden: focusOnlyQuiz.open,
                             })}
                             key={i + '_' + selector?.currentTabId}
+                            data-aos={ANIMATION.DATA_AOS}
                           >
                             {e?.text_editor_content && (
                               <HighlightableHTML
