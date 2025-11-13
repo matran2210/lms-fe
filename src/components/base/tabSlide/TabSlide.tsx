@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { QUESTION_TYPES } from 'src/constants'
 import { ArrowIconV2 } from '../pagination/ArrowIconV2'
 import PageLink from '../pagination/PageLink'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 
 interface IProps {
   data: Array<any>
@@ -23,6 +24,7 @@ const TabSlide = ({
   isScrollCenter = true,
   setHasScrollBar,
 }: IProps) => {
+  const { isMobileView } = useTailwindBreakpoint()
   const MAX_ITEMS_PER_ROW = 25
   const MIN_ITEMS_PER_ROW = 14
   const ITEM_WIDTH = 38 // Ước tính chiều rộng mỗi item (bao gồm gap)
@@ -247,6 +249,7 @@ const TabSlide = ({
               '!w-fit': activeShowAll,
               'h-[44px] overflow-hidden': !activeShowAll,
               'overflow-visible': activeShowAll,
+              'overflow-x-auto': activeShowAll && isMobileView,
             },
           )}
           ref={elementRef}

@@ -1,6 +1,7 @@
 import React from 'react'
 import BaseButton from './BaseButton'
 import { IButtonBaseProps } from 'src/type'
+import clsx from 'clsx'
 
 const ButtonSecondary = ({
   title,
@@ -29,27 +30,27 @@ const ButtonSecondary = ({
         : 'py-[7px] px-[15px] md:py-[15px] md:px-[31px]'
 
   let fullWidthClass = full ? 'block w-full' : 'inline-block'
-  let disabledClass = disabled
-    ? 'cursor-not-allowed !bg-gray-100 !text-gray-400 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-100'
-    : 'cursor-pointer'
 
-  let componentClass = `
+  let componentClass = clsx(
+    `
     text-center
-    text-secondary
-    hover:!text-secondary
     bg-transparent
     rounded-lg
     border border-secondary
-    hover:!border-secondary
-    hover:!bg-gray-100
     box-border
     font-medium
     ${padding}
     ${textSizeClass}
     ${fullWidthClass}
-    ${disabledClass} 
-    ${className}
-  `
+     `,
+    className,
+    {
+      ' text-secondary hover:!text-secondary hover:!border-secondary hover:!bg-gray-100 cursor-pointer':
+        !disabled,
+      'cursor-not-allowed !bg-gray-100 !text-gray-400 !border !border-gray-17 hover:!bg-gray-100 hover:!text-gray-400 hover:!border-gray-17':
+        disabled,
+    },
+  )
 
   return (
     <BaseButton

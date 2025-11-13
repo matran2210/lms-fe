@@ -55,7 +55,7 @@ export const useTailwindBreakpoint = ({
     const handleResize = () => {
       const width = window.innerWidth
       const height = window.innerHeight
-      setIsShortScreen(height < 700)
+      setIsShortScreen(height < 700 && width > 700)
       setBreakpoint(getBreakpointFromWidth(width))
     }
 

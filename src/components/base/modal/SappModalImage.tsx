@@ -24,7 +24,7 @@ function SappModalImage({ src, setSrc }: Props) {
       title=""
       onOk={() => {}}
       classNameModal="sapp-preview--image"
-      width="65%"
+      width="95%"
     >
       <div className="mx-auto w-fit min-w-[100%] max-w-full md:min-h-[350px]">
         {src && (

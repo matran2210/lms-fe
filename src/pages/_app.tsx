@@ -68,6 +68,14 @@ export const excludedPathsHelp = [
   '/courses/[id]/activity/[activityId]',
 ]
 
+const showSupportWidget = [
+  '/courses',
+  '/entrance-test',
+  '/calendar',
+  '/exam_list',
+  '/overview',
+]
+
 const activityPath = ['/courses/[id]/activity/[activityId]']
 type MyAppProps = AppProps & {
   Component: {
@@ -170,13 +178,9 @@ function MyApp({ Component, pageProps }: MyAppProps) {
     router.pathname.includes(path),
   )
 
-  const showHelp =
-    !excludedPathsHelp.some((path) => router.pathname.includes(path)) &&
-    !isTeacherPage // Add condition to hide help on teacher pages
+  const showHelp = showSupportWidget.includes(router.pathname) && !isTeacherPage // Add condition to hide help on teacher pages
   const showMKTInApp = showHelp
-  const hiddenChatbot =
-    excludedPathsHelp.some((path) => router.pathname.includes(path)) ||
-    isTeacherPage
+  const hiddenChatbot = !showHelp
   // Handle HubSpot widget visibility based on URL
   useEffect(() => {
     const hideHubspotWidget = () => {

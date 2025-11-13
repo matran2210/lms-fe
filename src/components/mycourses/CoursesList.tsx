@@ -88,7 +88,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                 badge: 'ACCA',
                 className: 'bg-badge-200 text-badge-500 font-medium',
               }}
-              classNameCard={clsx('lg:min-h-[434px] min-h-[280px]', {
+              classNameCard={clsx('lg:min-h-[434px] h-[312px]', {
                 'z-50': guideStatus && guideStep === 6,
               })}
             >
@@ -115,7 +115,7 @@ const CoursesList: React.FC<CoursesProps> = ({
                   </div>
                 </div>
               </div>
-              <div className="des my-4 line-clamp-3 h-[62px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
+              <div className="des my-4 line-clamp-3 h-[66px] text-ellipsis leading-snug md:mb-8 md:mt-6 md:line-clamp-5 md:h-[124px]">
                 <p
                   dangerouslySetInnerHTML={{
                     __html: clearStylesHtml(
@@ -147,14 +147,12 @@ const CoursesList: React.FC<CoursesProps> = ({
                 </div>
               </div>
               <div className={clsx('action flex items-center justify-end')}>
-                <div className="w-[84px]">
-                  <ButtonSecondary
-                    full
-                    size="small"
-                    title={'Resume'}
-                    className="ml-auto w-full"
-                  />
-                </div>
+                <ButtonSecondary
+                  full
+                  size="small"
+                  title={'Resume'}
+                  className="ml-auto w-full md:w-[84px]"
+                />
               </div>
             </CardCourse>
           )}

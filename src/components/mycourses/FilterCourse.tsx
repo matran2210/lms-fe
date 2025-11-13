@@ -92,11 +92,11 @@ const FilterCourse = ({
           </div>
         </>
       ) : (
-        <div className="flex items-center md:gap-2 lg:gap-4">
-          <div className="text-sm font-normal text-gray-800">
+        <div className="flex shrink-0 items-center gap-4">
+          <div className="shrink-0 text-sm font-normal text-gray-800">
             {totalResult} Results
           </div>
-          <div className="flex md:gap-2 lg:gap-4">
+          <div className="flex gap-2">
             {listFilter?.map((item, index) => (
               <SAPPSelectV2
                 key={index}
@@ -114,12 +114,12 @@ const FilterCourse = ({
         </div>
       )}
 
-      {isMobileView && openMobileFilter && (
+      {isMobileView && (
         <SappDrawerV3
           open={openMobileFilter}
           handleCancel={onCloseMobileFilter}
           title={<span className="text-xl">Filter</span>}
-          rootClassName={'responsive-drawer-center drawer-bottom-0'}
+          rootClassName={'responsive-drawer-base drawer-bottom-0'}
           isShowBtnClose
           closable
           classNameHeader="mb-4"

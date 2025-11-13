@@ -5,6 +5,7 @@ import { runHighlight } from '@utils/index'
 import { Divider } from 'antd'
 import clsx from 'clsx'
 import { Element, HTMLReactParserOptions } from 'html-react-parser'
+import { useRouter } from 'next/router'
 import {
   ForwardedRef,
   forwardRef,
@@ -39,6 +40,7 @@ interface IProps {
   setValue?: any
   watch?: UseFormWatch<FieldValues>
   explainClassname?: string
+  storageKey?: string
 }
 
 const NewFilltext = forwardRef(
@@ -60,9 +62,11 @@ const NewFilltext = forwardRef(
       setValue,
       watch,
       explainClassname,
+      storageKey,
     }: IProps,
     ref: ForwardedRef<any>,
   ) => {
+    const router = useRouter()
     const refEditor = useRef(null) as any
     const [questionContent, setQuestionContent] = useState<any>()
     const [answerContent, setAnswerContent] = useState<any>()
