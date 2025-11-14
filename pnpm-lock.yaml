@@ -75,6 +75,12 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.2
         version: 3.10.0(react-hook-form@7.48.2(react@18.3.1))
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
       '@lms/utils':
         specifier: workspace:*
         version: link:../../libs/utils
@@ -687,6 +693,9 @@ importers:
       '@lms/assets':
         specifier: workspace:*
         version: link:../assets
+      '@lms/ui':
+        specifier: workspace:*
+        version: 'link:'
       '@lms/utils':
         specifier: workspace:*
         version: link:../utils

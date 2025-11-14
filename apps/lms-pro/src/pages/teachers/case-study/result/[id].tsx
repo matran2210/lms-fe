@@ -9,7 +9,7 @@ import {
 import EditorReader from '@components/base/editor/EditorReader'
 import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import MovableWindow from '@components/base/window'
-import Calculator from '@components/calculator'
+import Calculator from '@lms/ui/components/calculator/index'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import EssayQuestionPreview from '@components/questionType/ConstructedQuestion'
 import DragNDropPreivew from '@components/questionType/DragNDrop'

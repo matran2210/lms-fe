@@ -61,7 +61,7 @@ import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { CheckCircleOutlineYellow, FlagIconV2 } from '@assets/icons/test'
-import BackToTop from '@components/BackToTop'
+import BackToTop from '@lms/ui/components/BackToTop'
 import Popover from '@components/Popover'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
 import FilterRadioGroup from '@components/filter-radio/FilterRadioGroup'
