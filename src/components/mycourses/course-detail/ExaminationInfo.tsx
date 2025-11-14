@@ -318,7 +318,7 @@ const ExaminationInfo = ({
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.2, ease: 'linear' }}
+              transition={{ duration: 0.2 }}
             >
               {isMobileView && isOpenSelectExam ? (
                 <SelectExamDate
