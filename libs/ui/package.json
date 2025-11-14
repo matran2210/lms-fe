@@ -10,7 +10,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@lms/assets": "workspace:*"
+    "@lms/assets": "workspace:*",
+    "@lms/ui": "workspace:*"
   },
   "peerDependencies": {
     "react": "*",
