@@ -22,7 +22,9 @@
 
     "paths": {
       "@lms/assets": ["libs/assets/index.ts"],
-      "@lms/ui": ["libs/ui/index.ts"]
+      "@lms/ui": ["libs/ui/index.ts"],
+      "@lms/utils": ["libs/utils/index.ts"],
+      "@lms/core": ["libs/core/index.ts"],
     }
   },
   "exclude": ["node_modules", "dist", ".next"]

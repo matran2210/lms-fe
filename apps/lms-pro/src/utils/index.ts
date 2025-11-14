@@ -464,8 +464,6 @@ export const convertQuizType = (quizType: string) => {
     .join(' ')
 }
 
-export * from './formatNumber'
-
 export const containsKeyword = (input: unknown, keyword?: string): boolean => {
   if (typeof input !== 'string') return false
   return input.includes(keyword ?? 'data-time=')

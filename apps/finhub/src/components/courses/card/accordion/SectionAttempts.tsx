@@ -5,7 +5,7 @@ import { SelectArrow } from '@components/courses/icons'
 import { roundNumber } from '@utils/helpers'
 import { ClassAPI } from '@pages/api/class'
 import { formatTime } from '@components/common/timer'
-import { formatNumber } from '@utils/formatNumber'
+import { formatNumber } from '@lms/utils'
 
 export default function SectionAttempts({
   class_user_id,

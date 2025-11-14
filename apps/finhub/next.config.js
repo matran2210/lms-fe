@@ -114,3 +114,7 @@ module.exports = withSentryConfig(module.exports, {
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
 })
+
+module.exports = {
+  reactStrictMode: true,
+};
