@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
-import { ISection, SectionField } from 'src/type'
+import { getTypeName, ISection, SectionField } from 'src/type'
 
 interface IList {
   id: number
@@ -60,10 +60,11 @@ const ListFilterMobile = ({
 
   const handleClick = (item: IList) => {
     if (item.isDisabled) return
+    const name = getTypeName[item.type]
     setOpenChooseItem({
       isOpen: true,
       type: item.type as SectionField,
-      name: item.name,
+      name,
     })
   }
 
