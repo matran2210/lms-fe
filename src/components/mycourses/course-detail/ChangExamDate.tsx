@@ -7,6 +7,7 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
 import { ArrowDownIcon } from '@components/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface IProps {
   classId: string
   remainingChanges?: number
@@ -28,6 +29,7 @@ const ChangExamDate = ({
 }: IProps) => {
   const { control, reset, setValue } = useFormContext()
   const { exams, refetch } = useSelectExams(classId)
+  const { isMobileView } = useTailwindBreakpoint()
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -78,7 +80,7 @@ const ChangExamDate = ({
           setIsOpenSelectExam(true)
           setDirection(1)
         }}
-        isOpen={false}
+        isOpen={isMobileView ? false : undefined}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
