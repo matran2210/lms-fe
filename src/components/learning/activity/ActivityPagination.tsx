@@ -91,19 +91,7 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             className={`flex flex-nowrap gap-5 justify-${activity?.previous_activity?.id ? 'between' : 'end'}`}
           >
             {activity?.previous_activity?.id && (
-              <div className={clsx('flex w-1/2 flex-col items-start')}>
-                {/* <div
-                  onClick={() =>
-                    handleActivityNavigation(
-                      activity?.previous_activity?.is_preview_locked || false,
-                      activity?.previous_activity?.id || '',
-                      'Click Button Previous Activity',
-                    )
-                  }
-                  className="mb-3 flex cursor-pointer select-none items-center gap-2 rounded-lg py-2 text-xs font-semibold text-bw-1 underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline sm:text-sm md:p-0 md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
-                >
-                  <ArrowLeft /> Previous Activity
-                </div> */}
+              <div className="flex w-1/2 flex-col items-start">
                 <ButtonText
                   title="Previous Activity"
                   className="mb-3"
@@ -149,18 +137,6 @@ const ActivityPagination = ({ activity, focusOnly }: IProps) => {
             {!activity?.previous_activity?.id && <></>}
             {activity?.next_activity?.id && (
               <div className="flex w-1/2 flex-col items-end">
-                {/* <div
-                  onClick={() =>
-                    handleActivityNavigation(
-                      activity?.next_activity?.is_preview_locked,
-                      activity?.next_activity?.id,
-                      'Click Button Next Activity',
-                    )
-                  }
-                  className="mb-3 flex cursor-pointer select-none items-center justify-end gap-2 rounded-lg py-2 text-xs font-semibold text-bw-1 underline transition-all duration-200 ease-in-out hover:bg-secondary-600 hover:px-4 hover:text-white hover:no-underline sm:text-sm md:p-0 md:hover:bg-transparent md:hover:p-0 md:hover:text-primary md:hover:underline"
-                >
-                  Next Activity <ArrowRight />
-                </div> */}
                 <ButtonText
                   title="Next Activity"
                   className="mb-3"
