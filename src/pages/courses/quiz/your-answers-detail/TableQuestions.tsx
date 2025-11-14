@@ -215,7 +215,7 @@ const TableQuestions = ({
   return (
     <div
       id="sapp-drawer-test-result-list"
-      className={`!h-fit md:min-h-[237px] md:px-11 md:py-6 md:shadow-sidebar 2xl:px-24 ${className}`}
+      className={`!h-fit md:min-h-[237px] md:py-6 xl:px-11 2xl:px-24 ${className}`}
       data-aos={ANIMATION.DATA_AOS}
       ref={yourScoreDetailRef}
     >
@@ -243,7 +243,7 @@ const TableQuestions = ({
       >
         <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />
       </div>
-      <div className="hidden rounded-xl bg-white p-8 md:block">
+      <div className="hidden rounded-xl bg-white p-8 md:block md:shadow-medium">
         <SappTable
           headers={headers}
           loading={isLoading}
