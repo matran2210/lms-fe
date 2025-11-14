@@ -82,7 +82,7 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
               // router.push(
               //   `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
               // )
-              router.push(localStorage.getItem('previousUrl') || '')
+              router.push(localStorage.getItem('previousUrl') || '/')
           }}
         >
           <CloseModalIcon />
