@@ -193,12 +193,26 @@ img.Wirisformula {
     color: #1f2937 !important;
   }
 }
+
 .editor-wrap:has(table) {
   @apply overflow-x-auto;
 }
 
+.editor-wrap:has(table)::-webkit-scrollbar {
+  @apply hidden;
+}
+
 .editor-wrap {
   @apply font-sans;
+
+  &.editor-wrap--draggable table {
+    cursor: move;
+  }
+
+  &.editor-wrap--dragging {
+    user-select: none;
+  }
+
   hr {
     @apply hidden;
   }
