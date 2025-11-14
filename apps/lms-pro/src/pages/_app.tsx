@@ -1,4 +1,4 @@
-import BackToTop from '@components/BackToTop'
+import BackToTop from '@lms/ui/components/BackToTop'
 import Help from '@components/Help'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'

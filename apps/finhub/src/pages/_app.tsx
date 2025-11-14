@@ -1,4 +1,4 @@
-import BackToTop from '@components/BackToTop'
+import BackToTop from '@lms/ui/components/BackToTop'
 import Help from '@components/Help'
 import { RouteGuard } from '@components/auth/RouteGuard'
 import AntConfigProvider from '@components/base/Provider/AntConfigProvider'

@@ -45,7 +45,7 @@ import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
 
 import { NotesOutline, PulsingExclamation } from '@assets/icons'
-import BackToTop from '@components/BackToTop'
+import BackToTop from '@lms/ui/components/BackToTop'
 import Popover from '@components/Popover'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonSecondary from '@components/base/button/ButtonSecondary'
@@ -2427,7 +2427,7 @@ const TestDetail = () => {
                     <div
                       key={e?.value}
                       className={
-                        'hover:bg-secondary-800 min-w-36 cursor-pointer rounded-md p-2 text-center'
+                        'min-w-36 cursor-pointer rounded-md p-2 text-center hover:bg-secondary-800'
                       }
                       onClick={() => {
                         handleOpenExhibit(e?.value)
@@ -2520,7 +2520,7 @@ const TestDetail = () => {
           >
             <div
               className={clsx(
-                'group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                'shadow-icon group grid h-12 w-12 cursor-pointer place-items-center rounded-full bg-primary text-white hover:bg-blend-overlay',
                 {
                   'bottom-0': isShowIconButtonInBottom,
                 },

@@ -63,7 +63,7 @@ import ActivityResourceMobile from '@components/learning/activity/modal/Activity
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { ITabs } from 'src/type'
-import BackToTop from '@components/BackToTop'
+import BackToTop from '@lms/ui/components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import { CourseSectionType } from '@utils/constants'
