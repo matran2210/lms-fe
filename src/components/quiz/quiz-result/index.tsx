@@ -78,11 +78,13 @@ const QuizResults = ({ isTeacher = false }: { isTeacher?: boolean }) => {
         <div
           className="fixed right-8 top-5 z-20 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-gray-200 transition-colors hover:bg-gray-300"
           onClick={() => {
-            activityInfo !== null &&
-              // router.push(
-              //   `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}`,
-              // )
-              router.push(localStorage.getItem('previousUrl') || '/')
+            activityInfo !== null && router.query?.tabId
+              ? router.push(
+                  `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/${activityInfo?.class_id}/activity/${activityInfo?.activity_id}?tabId=${router.query?.tabId}`,
+                )
+              : router.push(
+                  `/courses/my-course/${router.query?.courseId}/results`,
+                )
           }}
         >
           <CloseModalIcon />

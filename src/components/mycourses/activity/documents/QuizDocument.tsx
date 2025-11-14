@@ -579,12 +579,20 @@ const QuizDocument = ({
             setOpenGradedReport(true)
             return
           } else {
-            const searchParams =
-              is_limited && limit_count && number_of_attempts
-                ? `attempt=${number_of_attempts + 1}/${limit_count}`
-                : ''
+            const searchParams: string[] = []
+            if (is_limited && limit_count && number_of_attempts) {
+              searchParams.push(
+                `attempt=${number_of_attempts + 1}/${limit_count}`,
+              )
+            }
+            if (tabId) {
+              searchParams.push(`tabId=${tabId}`)
+            }
+            const queryString = searchParams.join('&')
             router.replace(
-              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}?${searchParams}`,
+              `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${e.quizAttemptId}${
+                queryString ? `?${queryString}` : ''
+              }`,
             )
           }
           // dispatch(
@@ -892,8 +900,15 @@ const QuizDocument = ({
         return
       }
       if (gradeStatus === GRADE_STATUS.FINISHED_GRADING) {
+        const searchParams: string[] = []
+        if (tabId) {
+          searchParams.push(`tabId=${tabId}`)
+        }
+        const queryString = searchParams.join('&')
         router.replace(
-          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}`,
+          `${isTeacher ? PageLink.TEACHER_MY_COURSE : '/courses'}/quiz/quiz-result/${resultId}${
+            queryString ? `?${queryString}` : ''
+          }`,
         )
         return
       }
