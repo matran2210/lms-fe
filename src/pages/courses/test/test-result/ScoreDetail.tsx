@@ -215,7 +215,7 @@ const ScoreDetail = ({
                   {
                     key: 0,
                     label: (
-                      <span className="text-lg font-medium text-gray-800">
+                      <span className="text-base font-medium text-gray-800 md:text-lg">
                         {rows[0]?.belong_to?.name
                           ?.split(' ')
                           .map(

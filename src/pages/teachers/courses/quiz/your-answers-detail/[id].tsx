@@ -68,11 +68,11 @@ const TestResultDetail = () => {
         <div className="mt-5 px-5 xl:container md:px-10">
           <SappBreadCrumbs breadcrumbs={breadcrumbs} />
         </div>
-        <div className="px-5 xl:container md:px-10">
+        <div className="px-4 xl:container md:px-8">
           <>
             {!!questions?.course?.course_categories?.[0]?.name ? (
               <div>
-                <div className="flex max-h-full flex-col overflow-y-auto">
+                <div className="flex max-h-full flex-col">
                   <TableQuestions
                     className={'relative'}
                     type={questions?.course?.course_categories?.[0]?.name}
