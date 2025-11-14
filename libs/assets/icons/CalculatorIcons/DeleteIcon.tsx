@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const DeleteIcon = () => {
   return (
     <svg
@@ -14,7 +12,5 @@ export const DeleteIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
-
-export default DeleteIcon
+  );
+};

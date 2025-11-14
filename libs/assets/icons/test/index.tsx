@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
 
 export const CheckCircleOutlineYellow = ({
   className,
 }: {
-  className?: string
+  className?: string;
 }) => {
   return (
     <svg
@@ -21,17 +21,17 @@ export const CheckCircleOutlineYellow = ({
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const FlagIconV2 = ({
   width = 32,
   height = 32,
   isActive = false,
 }: {
-  width?: number
-  height?: number
-  isActive?: boolean
+  width?: number;
+  height?: number;
+  isActive?: boolean;
 }) => {
   return (
     <svg
@@ -55,8 +55,8 @@ export const FlagIconV2 = ({
         />
       )}
     </svg>
-  )
-}
+  );
+};
 
 export const DragNDropIcon = () => {
   return (
@@ -92,5 +92,5 @@ export const DragNDropIcon = () => {
         fill="#9CA3AF"
       />
     </svg>
-  )
-}
+  );
+};

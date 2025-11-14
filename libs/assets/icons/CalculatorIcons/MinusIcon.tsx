@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const MinusIcon = () => {
   return (
@@ -14,7 +14,5 @@ export const MinusIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
-
-export default MinusIcon
+  );
+};

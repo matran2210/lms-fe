@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export const DivideIcon = () => {
   return (
@@ -14,7 +14,5 @@ export const DivideIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
-
-export default DivideIcon
+  );
+};

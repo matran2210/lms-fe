@@ -1,11 +1,11 @@
 interface IProps {
-  color?: string
-  size?: number
-  className?: string
+  color?: string;
+  size?: number;
+  className?: string;
 }
 interface IIconProps {
-  className?: string
-  color?: string
+  className?: string;
+  color?: string;
 }
 export const DownloadIcon = ({ className }: IIconProps) => {
   return (
@@ -26,8 +26,8 @@ export const DownloadIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const EditIcon = ({ width, height }: ISVG) => {
   return (
@@ -58,8 +58,8 @@ export const EditIcon = ({ width, height }: ISVG) => {
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ViewIcon = () => {
   return (
@@ -83,8 +83,8 @@ export const ViewIcon = () => {
         d="M20.184 15H15v5.184"
       ></path>
     </svg>
-  )
-}
+  );
+};
 export const EyeIcon = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -108,8 +108,8 @@ export const EyeIcon = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CloseIconPreview = ({ width, height }: ISVG) => {
   return (
@@ -125,8 +125,8 @@ export const CloseIconPreview = ({ width, height }: ISVG) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const DeleteIcon = ({ className }: IIconProps) => {
   return (
@@ -157,8 +157,8 @@ export const DeleteIcon = ({ className }: IIconProps) => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 export const HighlightIcon = () => {
   return (
     <svg
@@ -188,8 +188,8 @@ export const HighlightIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const UnHighLightIcon = () => {
   return (
     <svg
@@ -211,14 +211,14 @@ export const UnHighLightIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const ScratchPadIcon = ({
   isActive = false,
   className,
 }: {
-  isActive?: boolean
-  className?: string
+  isActive?: boolean;
+  className?: string;
 }) => {
   return (
     <svg
@@ -233,21 +233,21 @@ export const ScratchPadIcon = ({
         fillRule="evenodd"
         clipRule="evenodd"
         d="M14.5914 1.66699H17.4086C19.8589 1.66697 21.7997 1.66695 23.3187 1.87117C24.8819 2.08134 26.1472 2.52417 27.145 3.52198C27.5355 3.91251 27.5355 4.54567 27.145 4.9362C26.7545 5.32672 26.1213 5.32672 25.7308 4.9362C25.1665 4.37192 24.3937 4.03369 23.0522 3.85334C21.682 3.66912 19.8758 3.66699 17.3333 3.66699H14.6667C12.1242 3.66699 10.318 3.66912 8.9478 3.85334C7.60635 4.03369 6.83348 4.37192 6.2692 4.9362C5.70493 5.50048 5.3667 6.27334 5.18635 7.61479C5.00212 8.98501 5 10.7912 5 13.3337V18.667C5 21.2094 5.00212 23.0156 5.18635 24.3859C5.3667 25.7273 5.70493 26.5002 6.26921 27.0645C6.83348 27.6287 7.60635 27.967 8.9478 28.1473C10.318 28.3315 12.1242 28.3337 14.6667 28.3337H17.3333C19.8758 28.3337 21.682 28.3315 23.0522 28.1473C24.3937 27.967 25.1665 27.6287 25.7308 27.0645C26.6587 26.1365 26.9397 24.6947 26.9885 21.3192C26.9965 20.767 27.4506 20.3258 28.0029 20.3338C28.5551 20.3418 28.9963 20.7959 28.9883 21.3481C28.9415 24.5848 28.732 26.8917 27.145 28.4787C26.1472 29.4765 24.8819 29.9193 23.3187 30.1295C21.7997 30.3337 19.8589 30.3337 17.4085 30.3337H14.5915C12.1411 30.3337 10.2003 30.3337 8.6813 30.1295C7.11807 29.9193 5.85281 29.4765 4.85499 28.4787C3.85717 27.4809 3.41435 26.2156 3.20418 24.6524C2.99996 23.1334 2.99998 21.1926 3 18.7422V13.2584C2.99998 10.8081 2.99996 8.86725 3.20418 7.3483C3.41435 5.78507 3.85717 4.5198 4.85499 3.52198C5.85281 2.52417 7.11807 2.08134 8.6813 1.87117C10.2003 1.66695 12.1411 1.66697 14.5914 1.66699ZM24.1509 9.3944C25.5652 7.98008 27.8583 7.98008 29.2726 9.3944C30.6869 10.8087 30.6869 13.1018 29.2726 14.5161L22.9322 20.8566C22.5872 21.2016 22.3539 21.435 22.0925 21.6389C21.785 21.8787 21.4522 22.0844 21.1002 22.2522C20.801 22.3948 20.4878 22.4991 20.025 22.6533L17.2468 23.5794C16.6334 23.7838 15.9572 23.6242 15.5 23.167C15.0428 22.7098 14.8832 22.0336 15.0876 21.4202L15.995 18.698C16.0013 18.6791 16.0075 18.6605 16.0137 18.6421C16.1679 18.1792 16.2722 17.866 16.4148 17.5668C16.5826 17.2147 16.7882 16.882 17.0281 16.5745C17.232 16.3132 17.4654 16.0798 17.8104 15.7349C17.8241 15.7212 17.838 15.7072 17.8521 15.6932L24.1509 9.3944ZM27.8584 10.8086C27.2251 10.1753 26.1983 10.1753 25.5651 10.8086L25.3227 11.051C25.3358 11.0956 25.3509 11.1431 25.3682 11.193C25.4937 11.5545 25.7317 12.0327 26.183 12.484C26.6343 12.9353 27.1125 13.1733 27.474 13.2987C27.5239 13.3161 27.5714 13.3312 27.616 13.3443L27.8584 13.1019C28.4917 12.4686 28.4917 11.4419 27.8584 10.8086ZM26.0886 14.8717C25.6647 14.6491 25.2071 14.3365 24.7688 13.8982C24.3305 13.4599 24.0179 13.0023 23.7953 12.5784L19.2663 17.1074C18.8649 17.5088 18.724 17.6521 18.6051 17.8046C18.4546 17.9975 18.3256 18.2063 18.2203 18.4272C18.1371 18.6018 18.0719 18.7918 17.8924 19.3304L17.3587 20.9316L17.7354 21.3083L19.3366 20.7746C19.8752 20.5951 20.0652 20.5299 20.2398 20.4467C20.4607 20.3414 20.6695 20.2124 20.8624 20.0619C21.0149 19.943 21.1582 19.8021 21.5596 19.4007L26.0886 14.8717ZM9.66667 12.0003C9.66667 11.448 10.1144 11.0003 10.6667 11.0003H19.3333C19.8856 11.0003 20.3333 11.448 20.3333 12.0003C20.3333 12.5526 19.8856 13.0003 19.3333 13.0003H10.6667C10.1144 13.0003 9.66667 12.5526 9.66667 12.0003ZM9.66667 17.3337C9.66667 16.7814 10.1144 16.3337 10.6667 16.3337H14C14.5523 16.3337 15 16.7814 15 17.3337C15 17.8859 14.5523 18.3337 14 18.3337H10.6667C10.1144 18.3337 9.66667 17.8859 9.66667 17.3337ZM9.66667 22.667C9.66667 22.1147 10.1144 21.667 10.6667 21.667H12.6667C13.219 21.667 13.6667 22.1147 13.6667 22.667C13.6667 23.2193 13.219 23.667 12.6667 23.667H10.6667C10.1144 23.667 9.66667 23.2193 9.66667 22.667Z"
-        fill={isActive ? '#FFF' : '#FFB800'}
+        fill={isActive ? "#FFF" : "#FFB800"}
       />
     </svg>
-  )
-}
+  );
+};
 
-import clsx from 'clsx'
-import { ISVG } from 'src/type'
+import clsx from "clsx";
+import { ISVG } from "src/type";
 // Import Tailwind CSS classes
-import 'tailwindcss/tailwind.css'
+import "tailwindcss/tailwind.css";
 
 export const CloseIcon = ({
-  className = 'stroke-bw-1 ',
+  className = "stroke-bw-1 ",
 }: {
-  className?: string
+  className?: string;
 }) => {
   return (
     <svg
@@ -271,15 +271,15 @@ export const CloseIcon = ({
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const FlagIcon = ({
-  width = '24',
-  height = '24',
+  width = "24",
+  height = "24",
 }: {
-  width?: string
-  height?: string
+  width?: string;
+  height?: string;
 }) => {
   return (
     <svg
@@ -294,15 +294,15 @@ export const FlagIcon = ({
         fill="#F80903"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CalculatorIcon = ({
   isActive = false,
   className,
 }: {
-  isActive?: boolean
-  className?: string
+  isActive?: boolean;
+  className?: string;
 }) => {
   return (
     <svg
@@ -317,17 +317,17 @@ export const CalculatorIcon = ({
         fillRule="evenodd"
         clipRule="evenodd"
         d="M15.9209 1.66699H16.0739C19.1518 1.66698 21.5638 1.66696 23.4458 1.91999C25.3721 2.17897 26.8921 2.71943 28.0852 3.91251C29.2783 5.10559 29.8187 6.62562 30.0777 8.55193C30.3308 10.4339 30.3307 12.846 30.3307 15.9238V16.0768C30.3307 19.1547 30.3308 21.5667 30.0777 23.4487C29.8187 25.375 29.2783 26.8951 28.0852 28.0881C26.8921 29.2812 25.3721 29.8217 23.4458 30.0807C21.5638 30.3337 19.1518 30.3337 16.0739 30.3337H15.9209C12.843 30.3337 10.431 30.3337 8.549 30.0807C6.62269 29.8217 5.10266 29.2812 3.90958 28.0881C2.7165 26.8951 2.17604 25.375 1.91706 23.4487C1.66403 21.5667 1.66405 19.1547 1.66406 16.0768V15.9238C1.66405 12.846 1.66403 10.4339 1.91706 8.55193C2.17604 6.62562 2.7165 5.10559 3.90958 3.91251C5.10266 2.71943 6.62269 2.17897 8.549 1.91999C10.431 1.66696 12.843 1.66698 15.9209 1.66699ZM8.8155 3.90215C7.11096 4.13132 6.08333 4.56718 5.32379 5.32672C4.56425 6.08626 4.12839 7.11389 3.89922 8.81843C3.66619 10.5517 3.66406 12.8294 3.66406 16.0003C3.66406 19.1713 3.66619 21.4489 3.89922 23.1822C4.12839 24.8868 4.56425 25.9144 5.32379 26.6739C6.08333 27.4335 7.11096 27.8693 8.8155 28.0985C10.5488 28.3315 12.8264 28.3337 15.9974 28.3337C19.1684 28.3337 21.446 28.3315 23.1793 28.0985C24.8838 27.8693 25.9115 27.4335 26.671 26.6739C27.4305 25.9144 27.8664 24.8868 28.0956 23.1822C28.3286 21.4489 28.3307 19.1713 28.3307 16.0003C28.3307 12.8294 28.3286 10.5517 28.0956 8.81843C27.8664 7.11389 27.4305 6.08626 26.671 5.32672C25.9115 4.56718 24.8838 4.13132 23.1793 3.90215C21.446 3.66912 19.1684 3.66699 15.9974 3.66699C12.8264 3.66699 10.5488 3.66912 8.8155 3.90215Z"
-        fill={isActive ? '#FFF' : '#FFB800'}
+        fill={isActive ? "#FFF" : "#FFB800"}
       />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
         d="M10.6641 7.66696C11.2163 7.66696 11.6641 8.11468 11.6641 8.66696L11.6641 10.3336H13.3307C13.883 10.3336 14.3307 10.7814 14.3307 11.3336C14.3307 11.8859 13.883 12.3336 13.3307 12.3336H11.6641V14.0003C11.6641 14.5526 11.2163 15.0003 10.6641 15.0003C10.1118 15.0003 9.66406 14.5526 9.66406 14.0003V12.3336H7.9974C7.44511 12.3336 6.9974 11.8859 6.9974 11.3336C6.9974 10.7814 7.44511 10.3336 7.9974 10.3336H9.66406L9.66406 8.66696C9.66406 8.11468 10.1118 7.66696 10.6641 7.66696ZM17.6641 11.3336C17.6641 10.7813 18.1118 10.3336 18.6641 10.3336H23.9974C24.5497 10.3336 24.9974 10.7813 24.9974 11.3336C24.9974 11.8859 24.5497 12.3336 23.9974 12.3336H18.6641C18.1118 12.3336 17.6641 11.8859 17.6641 11.3336ZM17.6641 19.3336C17.6641 18.7813 18.1118 18.3336 18.6641 18.3336H23.9974C24.5497 18.3336 24.9974 18.7813 24.9974 19.3336C24.9974 19.8859 24.5497 20.3336 23.9974 20.3336H18.6641C18.1118 20.3336 17.6641 19.8859 17.6641 19.3336ZM7.95696 18.6266C8.34748 18.236 8.98065 18.236 9.37117 18.6266L10.6641 19.9195L11.957 18.6266C12.3475 18.236 12.9806 18.236 13.3712 18.6266C13.7617 19.0171 13.7617 19.6503 13.3712 20.0408L12.0783 21.3337L13.3712 22.6265C13.7617 23.0171 13.7617 23.6502 13.3712 24.0408C12.9806 24.4313 12.3475 24.4313 11.9569 24.0407L10.6641 22.7479L9.37119 24.0408C8.98066 24.4313 8.3475 24.4313 7.95697 24.0408C7.56645 23.6502 7.56645 23.0171 7.95697 22.6266L9.24986 21.3337L7.95696 20.0408C7.56643 19.6502 7.56643 19.0171 7.95696 18.6266ZM17.6641 23.3336C17.6641 22.7813 18.1118 22.3336 18.6641 22.3336H23.9974C24.5497 22.3336 24.9974 22.7813 24.9974 23.3336C24.9974 23.8859 24.5497 24.3336 23.9974 24.3336H18.6641C18.1118 24.3336 17.6641 23.8859 17.6641 23.3336Z"
-        fill={isActive ? '#FFF' : '#FFB800'}
+        fill={isActive ? "#FFF" : "#FFB800"}
       />
     </svg>
-  )
-}
+  );
+};
 export const ArrowUpIcon = () => {
   return (
     <svg
@@ -343,8 +343,8 @@ export const ArrowUpIcon = () => {
         strokeLinecap="square"
       />
     </svg>
-  )
-}
+  );
+};
 export const ExhibitsIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
@@ -353,8 +353,8 @@ export const ExhibitsIcon = () => {
         <path d="M15.429 4v10.286a1.143 1.143 0 0 1-1.143 1.143H4" />
       </g>
     </svg>
-  )
-}
+  );
+};
 export const TextSquareIcon = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
@@ -362,8 +362,8 @@ export const TextSquareIcon = () => {
         <path d="M5.144 14.286.572 15.429 1.715 12V1.714A1.143 1.143 0 0 1 2.858.572h11.429a1.143 1.143 0 0 1 1.142 1.142v11.429a1.143 1.143 0 0 1-1.142 1.143H5.144ZM5.145 5.714h6.857M5.145 9.143h4.571" />
       </g>
     </svg>
-  )
-}
+  );
+};
 export const WinDowLogo = () => {
   return (
     <svg
@@ -386,8 +386,8 @@ export const WinDowLogo = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const AppleLogo = () => {
   return (
     <svg
@@ -410,8 +410,8 @@ export const AppleLogo = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const PhoneLogo = () => {
   return (
     <svg
@@ -427,8 +427,8 @@ export const PhoneLogo = () => {
         className="logo"
       />
     </svg>
-  )
-}
+  );
+};
 export const AlertIcon = () => {
   return (
     <svg
@@ -443,8 +443,8 @@ export const AlertIcon = () => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 export const AlertTriagle = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -470,8 +470,8 @@ export const AlertTriagle = ({ className }: { className?: string }) => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 export const LoginIcon = () => {
   return (
     <svg
@@ -487,8 +487,8 @@ export const LoginIcon = () => {
       />
       <path d="M34.375 46.875H12.5V53.125H34.375V46.875Z" fill="#FFB800" />
     </svg>
-  )
-}
+  );
+};
 
 export const ActiveIcon = () => {
   return (
@@ -506,8 +506,8 @@ export const ActiveIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 export const ConfirmIcon = () => {
   return (
     <svg
@@ -524,8 +524,8 @@ export const ConfirmIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CloseIconNote = () => {
   return (
@@ -543,8 +543,8 @@ export const CloseIconNote = () => {
         d="M15 5L5 15M5 5l10 10"
       ></path>
     </svg>
-  )
-}
+  );
+};
 
 export const SaveIcon = () => {
   return (
@@ -562,8 +562,8 @@ export const SaveIcon = () => {
         d="M3 5c0-.943 0-1.414.293-1.707C3.586 3 4.057 3 5 3h8.06c.41 0 .614 0 .797.076.184.076.329.22.618.51l1.94 1.94c.288.288.433.433.509.617.076.183.076.388.076.797V15c0 .943 0 1.414-.293 1.707C16.414 17 15.943 17 15 17H5c-.943 0-1.414 0-1.707-.293C3 16.414 3 15.943 3 15V5z"
       ></path>
     </svg>
-  )
-}
+  );
+};
 
 export const PlusIcon = () => {
   return (
@@ -581,8 +581,8 @@ export const PlusIcon = () => {
         d="M17.071 10H2.93M10 2.929V17.07"
       ></path>
     </svg>
-  )
-}
+  );
+};
 export const WordIcon = () => {
   return (
     <svg
@@ -605,8 +605,8 @@ export const WordIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const ExcelIcon = () => {
   return (
     <svg
@@ -645,8 +645,8 @@ export const ExcelIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const DocIcon = () => {
   return (
     <svg
@@ -720,8 +720,8 @@ export const DocIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const ImageIcon = () => {
   return (
     <svg
@@ -773,8 +773,8 @@ export const ImageIcon = () => {
       />
       <path d="M26.918 43.0225V51.7497H24.8086V43.0225H26.918Z" fill="white" />
     </svg>
-  )
-}
+  );
+};
 export const VideoIcon = () => {
   return (
     <svg
@@ -832,8 +832,8 @@ export const VideoIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const UploadIcon = () => {
   return (
     <svg
@@ -863,8 +863,8 @@ export const UploadIcon = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const LinkIcon = () => {
   return (
@@ -881,8 +881,8 @@ export const LinkIcon = () => {
         className="group-hover:fill-primary"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ShareLinkIcon = () => {
   return (
@@ -924,8 +924,8 @@ export const ShareLinkIcon = () => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconDownload = () => {
   return (
@@ -955,8 +955,8 @@ export const IconDownload = () => {
         fill="#404041"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconCongrats = () => {
   return (
@@ -984,8 +984,8 @@ export const IconCongrats = () => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconLoudSpeaker = () => {
   return (
@@ -1008,8 +1008,8 @@ export const IconLoudSpeaker = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const LockIcon = () => {
   return (
@@ -1031,8 +1031,8 @@ export const LockIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IRibbon = () => {
   return (
@@ -1050,8 +1050,8 @@ export const IRibbon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconSupportCenter = ({ onClick }: { onClick?: () => void }) => {
   return (
@@ -1071,8 +1071,8 @@ export const IconSupportCenter = ({ onClick }: { onClick?: () => void }) => {
         fill="#404041"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconRequestForm = ({ className }: { className?: string }) => {
   return (
@@ -1091,8 +1091,8 @@ export const IconRequestForm = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconChat = ({ className }: { className?: string }) => {
   return (
@@ -1109,8 +1109,8 @@ export const IconChat = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconAccess = ({ className }: { className?: string }) => {
   return (
@@ -1147,8 +1147,8 @@ export const IconAccess = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconContact = ({ className }: { className?: string }) => {
   return (
@@ -1165,8 +1165,8 @@ export const IconContact = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconEmergency = ({ className }: { className?: string }) => {
   return (
@@ -1189,8 +1189,8 @@ export const IconEmergency = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconClose = () => {
   return (
@@ -1213,8 +1213,8 @@ export const IconClose = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const IconFAQ = ({ className }: { className?: string }) => {
   return (
@@ -1235,17 +1235,17 @@ export const IconFAQ = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const LoadingIcon = ({
   loading,
   loadingPercentage,
   stroke,
 }: {
-  loading?: boolean
-  loadingPercentage?: number
-  stroke?: '#ffffff' | '#404041'
+  loading?: boolean;
+  loadingPercentage?: number;
+  stroke?: "#ffffff" | "#404041";
 }) => {
   return (
     <svg
@@ -1287,8 +1287,8 @@ export const LoadingIcon = ({
         </text>
       )}
     </svg>
-  )
-}
+  );
+};
 
 export const IconAnnotationGuide = () => {
   return (
@@ -1304,8 +1304,8 @@ export const IconAnnotationGuide = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconSend = ({ className }: ISVG) => {
   return (
@@ -1324,8 +1324,8 @@ export const IconSend = ({ className }: ISVG) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const IconSendHover = ({ width, height, className }: ISVG) => {
   return (
@@ -1342,8 +1342,8 @@ export const IconSendHover = ({ width, height, className }: ISVG) => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CursorIcon = () => {
   return (
@@ -1375,8 +1375,8 @@ export const CursorIcon = () => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const Plus = () => (
   <svg
@@ -1395,7 +1395,7 @@ export const Plus = () => (
       fill="white"
     />
   </svg>
-)
+);
 export const PepIconsPencil = () => (
   <svg
     width="25"
@@ -1409,7 +1409,7 @@ export const PepIconsPencil = () => (
       fill="#99A1B7"
     />
   </svg>
-)
+);
 export const LockSectionIcon = () => {
   return (
     <svg
@@ -1426,8 +1426,8 @@ export const LockSectionIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const UnlockIcon = () => {
   return (
@@ -1445,8 +1445,8 @@ export const UnlockIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ThankYouIcon = () => {
   return (
@@ -1464,8 +1464,8 @@ export const ThankYouIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 export const IconBuildingModify = () => {
   return (
     <svg
@@ -1492,8 +1492,8 @@ export const IconBuildingModify = () => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const SearchIcon = ({ className }: { className?: string }) => {
   return (
@@ -1512,8 +1512,8 @@ export const SearchIcon = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowIcon = ({ color }: { color?: string }) => {
   return (
@@ -1541,8 +1541,8 @@ export const ArrowIcon = ({ color }: { color?: string }) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const LogoSappIcon = () => {
   return (
     <svg
@@ -1627,14 +1627,14 @@ export const LogoSappIcon = () => {
         </linearGradient>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const CollapseArrowIcon = ({
   selected,
   className,
 }: {
-  selected?: boolean
-  className?: string
+  selected?: boolean;
+  className?: string;
 }) => {
   return (
     <svg
@@ -1644,7 +1644,7 @@ export const CollapseArrowIcon = ({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={clsx(className, {
-        '-rotate-180': selected,
+        "-rotate-180": selected,
       })}
     >
       <path
@@ -1652,10 +1652,10 @@ export const CollapseArrowIcon = ({
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
-export const LockClosedIcon = ({ className = 'shrink-0' }: IIconProps) => {
+export const LockClosedIcon = ({ className = "shrink-0" }: IIconProps) => {
   return (
     <svg
       width="24"
@@ -1672,19 +1672,19 @@ export const LockClosedIcon = ({ className = 'shrink-0' }: IIconProps) => {
         fill="#F80903"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const InfoIcon = ({
-  bgColor = '#000',
-  color = '#000',
-  width = '16',
-  height = '16',
+  bgColor = "#000",
+  color = "#000",
+  width = "16",
+  height = "16",
 }: {
-  bgColor?: string
-  color?: string
-  width?: string
-  height?: string
+  bgColor?: string;
+  color?: string;
+  width?: string;
+  height?: string;
 }) => {
   return (
     <svg
@@ -1708,16 +1708,16 @@ export const InfoIcon = ({
         fill={color}
       />
     </svg>
-  )
-}
+  );
+};
 export const CheckIcon = ({
-  width = '68',
-  height = '68',
-  color = '#07AF17',
+  width = "68",
+  height = "68",
+  color = "#07AF17",
 }: {
-  width?: string
-  height?: string
-  color?: string
+  width?: string;
+  height?: string;
+  color?: string;
 }) => {
   return (
     <svg
@@ -1732,8 +1732,8 @@ export const CheckIcon = ({
         fill={color}
       />
     </svg>
-  )
-}
+  );
+};
 export const ActionIcon = () => {
   return (
     <svg
@@ -1748,8 +1748,8 @@ export const ActionIcon = () => {
         fill="#99A1B7"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const SwitcherExpanded = () => {
   return (
@@ -1767,8 +1767,8 @@ export const SwitcherExpanded = () => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const SwitcherClosed = () => {
   return (
@@ -1786,8 +1786,8 @@ export const SwitcherClosed = () => {
         fill="#9CA3AF"
       />
     </svg>
-  )
-}
+  );
+};
 export const CircleCloseIcon = () => {
   return (
     <svg
@@ -1808,12 +1808,12 @@ export const CircleCloseIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
-export const ClockIcon = ({ color = 'black', size = 24 }: IProps) => {
+  );
+};
+export const ClockIcon = ({ color = "black", size = 24 }: IProps) => {
   return (
     <svg
-      fill={'currentColor'}
+      fill={"currentColor"}
       width={size}
       height={size}
       viewBox="0 0 256 256"
@@ -1827,12 +1827,12 @@ export const ClockIcon = ({ color = 'black', size = 24 }: IProps) => {
         stroke-linejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        {' '}
-        <path d="M136,80v43.38116l37.56934,21.69062a8,8,0,1,1-8,13.85644l-41.56934-24c-.064-.03692-.12109-.0805-.18359-.11889-.13575-.08362-.271-.16779-.40088-.2591-.10352-.07232-.20215-.14892-.30127-.22534-.10205-.0788-.20362-.15765-.30127-.24115-.11182-.09479-.21778-.19342-.32276-.29333-.0791-.07532-.15771-.15064-.23388-.22913-.10694-.11017-.2085-.22351-.30811-.339-.06933-.08026-.13769-.16083-.2041-.24377-.0918-.1156-.1792-.23352-.26416-.35352-.06738-.09473-.1333-.19019-.19629-.2879-.07226-.11194-.14062-.22547-.207-.34058-.06592-.11438-.12988-.22986-.19043-.34778-.05322-.10418-.10352-.20941-.15186-.31561-.061-.13287-.11914-.26685-.17333-.4035-.03907-.09986-.0752-.20063-.11036-.30194-.0498-.14252-.09668-.28589-.13818-.432-.03027-.10687-.05664-.21454-.083-.32257-.0332-.13928-.06543-.27881-.09131-.42084-.02392-.12842-.0415-.25757-.05908-.38714-.0166-.12226-.0332-.244-.04394-.368-.01416-.16015-.01954-.3208-.02442-.48187C120.00879,128.14313,120,128.07269,120,128V80a8,8,0,0,1,16,0Zm91.228-27.67529a7.99962,7.99962,0,0,0-8.71826,1.73437L204.1665,68.40222l-8.28466-8.28454a95.9551,95.9551,0,1,0,0,135.76464,7.99983,7.99983,0,1,0-11.31348-11.31347,80.00009,80.00009,0,1,1,0-113.1377l8.28467,8.28467L178.50977,94.05908a7.99981,7.99981,0,0,0,5.65673,13.65674h40a7.99977,7.99977,0,0,0,8-8v-40A8.00014,8.00014,0,0,0,227.228,52.32471Z"></path>{' '}
+        {" "}
+        <path d="M136,80v43.38116l37.56934,21.69062a8,8,0,1,1-8,13.85644l-41.56934-24c-.064-.03692-.12109-.0805-.18359-.11889-.13575-.08362-.271-.16779-.40088-.2591-.10352-.07232-.20215-.14892-.30127-.22534-.10205-.0788-.20362-.15765-.30127-.24115-.11182-.09479-.21778-.19342-.32276-.29333-.0791-.07532-.15771-.15064-.23388-.22913-.10694-.11017-.2085-.22351-.30811-.339-.06933-.08026-.13769-.16083-.2041-.24377-.0918-.1156-.1792-.23352-.26416-.35352-.06738-.09473-.1333-.19019-.19629-.2879-.07226-.11194-.14062-.22547-.207-.34058-.06592-.11438-.12988-.22986-.19043-.34778-.05322-.10418-.10352-.20941-.15186-.31561-.061-.13287-.11914-.26685-.17333-.4035-.03907-.09986-.0752-.20063-.11036-.30194-.0498-.14252-.09668-.28589-.13818-.432-.03027-.10687-.05664-.21454-.083-.32257-.0332-.13928-.06543-.27881-.09131-.42084-.02392-.12842-.0415-.25757-.05908-.38714-.0166-.12226-.0332-.244-.04394-.368-.01416-.16015-.01954-.3208-.02442-.48187C120.00879,128.14313,120,128.07269,120,128V80a8,8,0,0,1,16,0Zm91.228-27.67529a7.99962,7.99962,0,0,0-8.71826,1.73437L204.1665,68.40222l-8.28466-8.28454a95.9551,95.9551,0,1,0,0,135.76464,7.99983,7.99983,0,1,0-11.31348-11.31347,80.00009,80.00009,0,1,1,0-113.1377l8.28467,8.28467L178.50977,94.05908a7.99981,7.99981,0,0,0,5.65673,13.65674h40a7.99977,7.99977,0,0,0,8-8v-40A8.00014,8.00014,0,0,0,227.228,52.32471Z"></path>{" "}
       </g>
     </svg>
-  )
-}
+  );
+};
 
 export const AlertCircleSharp = () => (
   <svg
@@ -1847,7 +1847,7 @@ export const AlertCircleSharp = () => (
       fill="#FFB800"
     />
   </svg>
-)
+);
 export const AlertInfoIcon = ({ className }: { className?: string }) => {
   return (
     <svg
@@ -1872,8 +1872,8 @@ export const AlertInfoIcon = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CloseNone = () => (
   <svg
@@ -1898,7 +1898,7 @@ export const CloseNone = () => (
       stroke-linejoin="round"
     />
   </svg>
-)
+);
 
 export const OutlineVideo = () => (
   <svg
@@ -1915,7 +1915,7 @@ export const OutlineVideo = () => (
       fill="#1C274C"
     />
   </svg>
-)
+);
 
 export const OutlineText = () => (
   <svg
@@ -1936,7 +1936,7 @@ export const OutlineText = () => (
       fill="#1C274C"
     />
   </svg>
-)
+);
 
 export const OutlineArchive = ({ className }: ISVG) => (
   <svg
@@ -1954,7 +1954,7 @@ export const OutlineArchive = ({ className }: ISVG) => (
       fill="currentColor"
     />
   </svg>
-)
+);
 
 export const DownloadMinimalistic = () => (
   <svg
@@ -1973,7 +1973,7 @@ export const DownloadMinimalistic = () => (
       fill="currentColor"
     />
   </svg>
-)
+);
 
 export const EllipsisIconV2 = () => {
   return (
@@ -1997,8 +1997,8 @@ export const EllipsisIconV2 = () => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const PencilV2Icon = ({ className }: IProps) => {
   return (
@@ -2017,8 +2017,8 @@ export const PencilV2Icon = ({ className }: IProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 export const PencilFillV2Icon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2044,8 +2044,8 @@ export const PencilFillV2Icon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const EssentialIcon = () => {
   return (
@@ -2075,8 +2075,8 @@ export const EssentialIcon = () => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CheckIconV2 = () => {
   return (
@@ -2094,8 +2094,8 @@ export const CheckIconV2 = () => {
         fill="#FFB800"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowActionSearchIcon = () => {
   return (
@@ -2111,8 +2111,8 @@ export const ArrowActionSearchIcon = () => {
         fill="#4B5563"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const HamburgerMenuLargeIcon = () => {
   return (
@@ -2131,32 +2131,8 @@ export const HamburgerMenuLargeIcon = () => {
         strokeLinejoin="round"
       />
     </svg>
-  )
-}
-
-export const CheckCircleOutlineYellow = ({
-  className,
-}: {
-  className?: string
-}) => {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M14.6693 8.00065C14.6693 11.6825 11.6845 14.6673 8.0026 14.6673C4.32071 14.6673 1.33594 11.6825 1.33594 8.00065C1.33594 4.31875 4.32071 1.33398 8.0026 1.33398C11.6845 1.33398 14.6693 4.31875 14.6693 8.00065ZM10.6895 5.98043C10.8848 6.17569 10.8848 6.49228 10.6895 6.68754L7.35616 10.0209C7.1609 10.2161 6.84431 10.2161 6.64905 10.0209L5.31572 8.68754C5.12046 8.49228 5.12046 8.17569 5.31572 7.98043C5.51098 7.78517 5.82756 7.78517 6.02282 7.98043L7.0026 8.96021L8.49249 7.47032L9.98238 5.98043C10.1776 5.78517 10.4942 5.78517 10.6895 5.98043Z"
-        fill="currentColor"
-      />
-    </svg>
-  )
-}
+  );
+};
 
 export const CourseSearchIcon = () => (
   <svg
@@ -2173,7 +2149,7 @@ export const CourseSearchIcon = () => (
       fill="#404041"
     />
   </svg>
-)
+);
 
 export const CloseModalIcon = () => {
   return (
@@ -2186,8 +2162,8 @@ export const CloseModalIcon = () => {
         d="M18 18 6 6M6 18 18 6"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const HandShake = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="88" height="88" fill="none">
@@ -2198,7 +2174,7 @@ export const HandShake = () => (
       clipRule="evenodd"
     />
   </svg>
-)
+);
 
 export const MenuDotsIcon = ({ className }: { className?: string }) => {
   return (
@@ -2223,13 +2199,13 @@ export const MenuDotsIcon = ({ className }: { className?: string }) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const MobileNotFriendlyIcon = ({
   className,
 }: {
-  className?: string
+  className?: string;
 }) => {
   return (
     <svg
@@ -2257,8 +2233,8 @@ export const MobileNotFriendlyIcon = ({
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 export const ArrowPanelIcon = () => (
   <svg
     width="12"
@@ -2272,7 +2248,7 @@ export const ArrowPanelIcon = () => (
       fill="#1C274C"
     />
   </svg>
-)
+);
 export const ShowCommentIcon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2290,15 +2266,15 @@ export const ShowCommentIcon = ({ className }: IIconProps) => {
         strokeLinejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        {' '}
+        {" "}
         <path
           d="M9.0001 8.517C8.58589 8.517 8.2501 8.85279 8.2501 9.267C8.2501 9.68121 8.58589 10.017 9.0001 10.017V8.517ZM16.0001 10.017C16.4143 10.017 16.7501 9.68121 16.7501 9.267C16.7501 8.85279 16.4143 8.517 16.0001 8.517V10.017ZM9.8751 11.076C9.46089 11.076 9.1251 11.4118 9.1251 11.826C9.1251 12.2402 9.46089 12.576 9.8751 12.576V11.076ZM15.1251 12.576C15.5393 12.576 15.8751 12.2402 15.8751 11.826C15.8751 11.4118 15.5393 11.076 15.1251 11.076V12.576ZM9.1631 5V4.24998L9.15763 4.25002L9.1631 5ZM15.8381 5L15.8438 4.25H15.8381V5ZM19.5001 8.717L18.7501 8.71149V8.717H19.5001ZM19.5001 13.23H18.7501L18.7501 13.2355L19.5001 13.23ZM18.4384 15.8472L17.9042 15.3207L17.9042 15.3207L18.4384 15.8472ZM15.8371 16.947V17.697L15.8426 17.697L15.8371 16.947ZM9.1631 16.947V16.197C9.03469 16.197 8.90843 16.23 8.79641 16.2928L9.1631 16.947ZM5.5001 19H4.7501C4.7501 19.2662 4.89125 19.5125 5.12097 19.6471C5.35068 19.7817 5.63454 19.7844 5.86679 19.6542L5.5001 19ZM5.5001 8.717H6.25012L6.25008 8.71149L5.5001 8.717ZM6.56175 6.09984L6.02756 5.5734H6.02756L6.56175 6.09984ZM9.0001 10.017H16.0001V8.517H9.0001V10.017ZM9.8751 12.576H15.1251V11.076H9.8751V12.576ZM9.1631 5.75H15.8381V4.25H9.1631V5.75ZM15.8324 5.74998C17.4559 5.76225 18.762 7.08806 18.7501 8.71149L20.2501 8.72251C20.2681 6.2708 18.2955 4.26856 15.8438 4.25002L15.8324 5.74998ZM18.7501 8.717V13.23H20.2501V8.717H18.7501ZM18.7501 13.2355C18.7558 14.0153 18.4516 14.7653 17.9042 15.3207L18.9726 16.3736C19.7992 15.5348 20.2587 14.4021 20.2501 13.2245L18.7501 13.2355ZM17.9042 15.3207C17.3569 15.8761 16.6114 16.1913 15.8316 16.197L15.8426 17.697C17.0201 17.6884 18.1461 17.2124 18.9726 16.3736L17.9042 15.3207ZM15.8371 16.197H9.1631V17.697H15.8371V16.197ZM8.79641 16.2928L5.13341 18.3458L5.86679 19.6542L9.52979 17.6012L8.79641 16.2928ZM6.2501 19V8.717H4.7501V19H6.2501ZM6.25008 8.71149C6.24435 7.93175 6.54862 7.18167 7.09595 6.62627L6.02756 5.5734C5.20098 6.41216 4.74147 7.54494 4.75012 8.72251L6.25008 8.71149ZM7.09595 6.62627C7.64328 6.07088 8.38882 5.75566 9.16857 5.74998L9.15763 4.25002C7.98006 4.2586 6.85413 4.73464 6.02756 5.5734L7.09595 6.62627Z"
           fill="currentColor"
-        ></path>{' '}
+        ></path>{" "}
       </g>
     </svg>
-  )
-}
+  );
+};
 
 export const PointerIcon = () => {
   return (
@@ -2316,8 +2292,8 @@ export const PointerIcon = () => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 export const UpPanelIcon = () => (
   <svg
     width="12"
@@ -2331,7 +2307,7 @@ export const UpPanelIcon = () => (
       fill="#1C274C"
     />
   </svg>
-)
+);
 
 export const ResizeIcon = () => {
   return (
@@ -2349,15 +2325,15 @@ export const ResizeIcon = () => {
         strokeLinejoin="round"
       ></g>
       <g id="SVGRepo_iconCarrier">
-        {' '}
+        {" "}
         <path
           d="M10.5303 9.53033C10.8232 9.23744 10.8232 8.76256 10.5303 8.46967C10.2374 8.17678 9.76256 8.17678 9.46967 8.46967L10.5303 9.53033ZM7 12L6.46967 11.4697C6.17678 11.7626 6.17678 12.2374 6.46967 12.5303L7 12ZM9.46967 15.5303C9.76256 15.8232 10.2374 15.8232 10.5303 15.5303C10.8232 15.2374 10.8232 14.7626 10.5303 14.4697L9.46967 15.5303ZM13.4697 14.4697C13.1768 14.7626 13.1768 15.2374 13.4697 15.5303C13.7626 15.8232 14.2374 15.8232 14.5303 15.5303L13.4697 14.4697ZM17 12L17.5303 12.5303C17.8232 12.2374 17.8232 11.7626 17.5303 11.4697L17 12ZM14.5303 8.46967C14.2374 8.17678 13.7626 8.17678 13.4697 8.46967C13.1768 8.76256 13.1768 9.23744 13.4697 9.53033L14.5303 8.46967ZM9.46967 8.46967L6.46967 11.4697L7.53033 12.5303L10.5303 9.53033L9.46967 8.46967ZM6.46967 12.5303L9.46967 15.5303L10.5303 14.4697L7.53033 11.4697L6.46967 12.5303ZM14.5303 15.5303L17.5303 12.5303L16.4697 11.4697L13.4697 14.4697L14.5303 15.5303ZM17.5303 11.4697L14.5303 8.46967L13.4697 9.53033L16.4697 12.5303L17.5303 11.4697ZM20.25 12C20.25 16.5563 16.5563 20.25 12 20.25V21.75C17.3848 21.75 21.75 17.3848 21.75 12H20.25ZM12 20.25C7.44365 20.25 3.75 16.5563 3.75 12H2.25C2.25 17.3848 6.61522 21.75 12 21.75V20.25ZM3.75 12C3.75 7.44365 7.44365 3.75 12 3.75V2.25C6.61522 2.25 2.25 6.61522 2.25 12H3.75ZM12 3.75C16.5563 3.75 20.25 7.44365 20.25 12H21.75C21.75 6.61522 17.3848 2.25 12 2.25V3.75Z"
           fill="#9ca3af"
-        ></path>{' '}
+        ></path>{" "}
       </g>
     </svg>
-  )
-}
+  );
+};
 
 export const PreviousIcon = () => {
   return (
@@ -2375,8 +2351,8 @@ export const PreviousIcon = () => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const NextIcon = () => {
   return (
@@ -2394,8 +2370,8 @@ export const NextIcon = () => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const NotesOutline = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -2411,7 +2387,7 @@ export const NotesOutline = (props: React.SVGProps<SVGSVGElement>) => (
       clipRule="evenodd"
     />
   </svg>
-)
+);
 
 export const PulsingExclamation = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -2441,8 +2417,8 @@ export const PulsingExclamation = (props: React.SVGProps<SVGSVGElement>) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -2473,8 +2449,8 @@ export const FileTextIcon = (props: React.SVGProps<SVGSVGElement>) => {
         fill="#fff"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowActionIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -2495,8 +2471,8 @@ export const ArrowActionIcon = (props: React.SVGProps<SVGSVGElement>) => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowActionIconSC = ({ className }: IIconProps) => {
   return (
@@ -2517,10 +2493,10 @@ export const ArrowActionIconSC = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
-export const CloseCircleIcon = ({ color = 'black', size = 16 }: IProps) => {
+export const CloseCircleIcon = ({ color = "black", size = 16 }: IProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -2536,15 +2512,15 @@ export const CloseCircleIcon = ({ color = 'black', size = 16 }: IProps) => {
         fill={color}
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ShowLessIcon = ({
   size = 20,
-  color = '#1C274C',
+  color = "#1C274C",
 }: {
-  size?: number
-  color?: string
+  size?: number;
+  color?: string;
 }) => {
   return (
     <svg
@@ -2561,15 +2537,15 @@ export const ShowLessIcon = ({
         fill={color}
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ShowMoreIcon = ({
   size = 20,
-  color = '#1C274C',
+  color = "#1C274C",
 }: {
-  size?: number
-  color?: string
+  size?: number;
+  color?: string;
 }) => {
   return (
     <svg
@@ -2586,8 +2562,8 @@ export const ShowMoreIcon = ({
         fill={color}
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ArrowLeftIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -2606,8 +2582,8 @@ export const ArrowLeftIcon = (props: React.SVGProps<SVGSVGElement>) => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const PiPIcon = () => {
   return (
@@ -2625,8 +2601,8 @@ export const PiPIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const ChapterIcon = () => {
   return (
@@ -2652,8 +2628,8 @@ export const ChapterIcon = () => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 export const ResourceIcon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2671,8 +2647,8 @@ export const ResourceIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 export const DocumentTextIcon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2690,8 +2666,8 @@ export const DocumentTextIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 export const StarCircleIcon = () => {
   return (
     <svg
@@ -2708,8 +2684,8 @@ export const StarCircleIcon = () => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 export const LinkedinIcon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -2731,8 +2707,8 @@ export const LinkedinIcon = ({ className }: IIconProps) => {
         fill="white"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CopyIcon = ({ className }: IIconProps) => {
   return (
@@ -2751,8 +2727,8 @@ export const CopyIcon = ({ className }: IIconProps) => {
         fill="#1C274C"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const NoCertificationIcon = ({ className }: IIconProps) => {
   return (
@@ -2904,8 +2880,8 @@ export const NoCertificationIcon = ({ className }: IIconProps) => {
         </filter>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const ComingSoonIcon = ({ className }: IIconProps) => {
   return (
     <svg
@@ -3078,8 +3054,8 @@ export const ComingSoonIcon = ({ className }: IIconProps) => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 
 export const CompletedIcon = ({ className }: IIconProps) => {
   return (
@@ -3098,8 +3074,8 @@ export const CompletedIcon = ({ className }: IIconProps) => {
         fill="#10B367"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const UnstartedIcon = () => {
   return (
@@ -3123,8 +3099,8 @@ export const UnstartedIcon = () => {
         fill="#FFB700"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const CircleInfoIcon = ({ className }: IIconProps) => {
   return (
@@ -3143,8 +3119,8 @@ export const CircleInfoIcon = ({ className }: IIconProps) => {
         fill="#E68200"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const MessageDialogIcon = ({ className }: IIconProps) => {
   return (
@@ -3175,8 +3151,8 @@ export const MessageDialogIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const MessageLetterIcon = ({ className }: IIconProps) => {
   return (
@@ -3195,8 +3171,8 @@ export const MessageLetterIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
 export const OutgoingCallIcon = ({ className }: IIconProps) => {
   return (
@@ -3219,8 +3195,8 @@ export const OutgoingCallIcon = ({ className }: IIconProps) => {
         fill="currentColor"
       />
     </svg>
-  )
-}
+  );
+};
 
-export { default as NotificationIcon } from './NotificationIcon'
-export { SadIcon } from './SadIcon'
+export { default as NotificationIcon } from "./NotificationIcon";
+export { SadIcon } from "./SadIcon";

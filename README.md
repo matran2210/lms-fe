@@ -1,136 +1,217 @@
-# Turborepo starter
+Hướng dẫn làm việc với Monorepo (Git Subtree)
 
-This Turborepo starter is maintained by the Turborepo core team.
+File này ghi lại các lệnh git subtree chuẩn để thêm và đồng bộ code cho các dự án con (apps) trong monorepo này.
 
-## Using this example
+Cấu trúc thư mục
 
-Run the following command:
+/apps: Chứa các ứng dụng con (ví dụ: lms-pro, finhub). Mỗi ứng dụng này được quản lý như một subtree.
 
-```sh
-npx create-turbo@latest
-```
+/libs: Chứa các thư viện dùng chung (UI, utils, assets...).
 
-## What's inside?
+/features: Chứa các "feature" nghiệp vụ dùng chung.
 
-This Turborepo includes the following packages/apps:
+1. Thêm một App/Dự án mới (git subtree add)
 
-### Apps and Packages
+Đây là quy trình để "nhúng" code từ một repo Git bên ngoài (ví dụ: một app React/Next.js) vào thư mục /apps của monorepo.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Lệnh quan trọng: git subtree add
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Cú pháp
 
-### Utilities
+git subtree add --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
 
-This Turborepo has some additional tools already setup for you:
+Các bước thực hiện
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Đứng ở thư mục gốc (root) của monorepo (lms-fe).
 
-### Build
+Chạy lệnh add, thay thế các giá trị cho đúng:
 
-To build all apps and packages, run the following command:
+git subtree add --prefix=apps/ten-app-moi [https://github.com/user/ten-app-moi.git](https://github.com/user/ten-app-moi.git) main --squash
 
-```
-cd my-turborepo
-pnpm build
-```
+Giải thích tham số:
 
-### Develop
+--prefix=apps/ten-app-moi:
 
-To develop all apps and packages, run the following command:
+Đây là đường dẫn bên trong monorepo mà bạn muốn đặt code của app con vào.
 
-```
-cd my-turborepo
-pnpm dev
-```
+Ví dụ: apps/lms-pro, apps/finhub.
 
-### Remote Caching
+https://github.com/user/ten-app-moi.git:
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Đây là URL của repo Git (repo con) mà bạn muốn thêm vào.
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+main:
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+Tên nhánh (branch) của repo con mà bạn muốn kéo code về (ví dụ: main, master, staging, develop).
 
-```
-cd my-turborepo
-npx turbo login
-```
+--squash:
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Rất quan trọng! Tham số này sẽ "nén" toàn bộ lịch sử commit của repo con thành một commit duy nhất khi thêm vào monorepo. Điều này giúp giữ lịch sử của monorepo sạch sẽ, không bị lẫn hàng ngàn commit rác từ app con.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+2. Đồng bộ Code từ App con (git subtree pull)
 
-```
-npx turbo link
-```
+Đây là quy trình để cập nhật code mới nhất từ repo con (ví dụ: lms-pro) vào monorepo của bạn.
 
-## Useful Links
+Lệnh quan trọng: git subtree pull
 
-Learn more about the power of Turborepo:
+Cú pháp
 
-- [Tasks](https://turborepo.com/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turborepo.com/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+git subtree pull --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh> --squash
 
-# PROJECT
+Các bước thực hiện
 
-- **_Luôn viết mã sạch_**
-- **_Nghĩ trước khi code_**
-- **_Code có tâm_**
-- **_Sẵn sàng dạy nhau_**
-- **_Trách nhiệm với công việc_**
-- **_Chủ động thảo luận_**
+Đứng ở thư mục gốc (root) của monorepo.
 
-## Run Locally
+Chạy lệnh pull cho app mà bạn muốn đồng bộ:
 
-Clone the project
+Ví dụ (đồng bộ app lms-pro từ nhánh staging):
 
-```bash
-  git clone https://link-to-project
-```
+git subtree pull --prefix=apps/lms-pro [https://github.com/user/lms-pro.git](https://github.com/user/lms-pro.git) staging --squash
 
-Go to the project directory
+Giải thích:
 
-```bash
-  cd my-project
-```
+Lệnh pull dùng các tham số y hệt như lệnh add.
 
-Install dependencies
+Nó sẽ tìm nạp (fetch) code mới nhất từ nhánh staging của repo con và "merge" (trộn) vào thư mục apps/lms-pro của bạn.
 
-```bash
-  npm install
-```
+Dùng --squash cũng rất quan trọng để giữ lịch sử sạch.
 
-Start the server
+3. (Nâng cao) Đẩy Code từ Monorepo lên App con (git subtree push)
 
-```bash
-  npm run dev
-```
+Nếu bạn sửa code của lms-pro ngay bên trong monorepo và muốn "đẩy" (push) những thay đổi đó LÊN LẠI repo lms-pro gốc.
 
-# Hướng dẫn lấy API Key cho TinyMCE
+Lệnh quan trọng: git subtree push
 
-## Bước 1: Truy cập và đăng nhập
+Cú pháp
 
-- Truy cập: **[https://www.tiny.cloud/auth/login/](https://www.tiny.cloud/auth/login/)**
-- Đăng nhập bằng Gmail: **[Hướng dẫn](https://prnt.sc/PYH0yHygVR7k)**
+git subtree push --prefix=<đường_dẫn_trong_monorepo> <url_repo_con> <tên_nhánh>
 
-## Bước 2: Lấy API Key
+Ví dụ
 
-- Sau khi đăng nhập, API Key sẽ hiển thị tại trang **Dashboard**: **[Xem ví dụ](https://prnt.sc/7a5XNvjac9y0)**
+git subtree push --prefix=apps/lms-pro [https://github.com/user/lms-pro.git](https://github.com/user/lms-pro.git) main
 
-## Bước 3: Sử dụng API Key
+Lệnh này sẽ lấy toàn bộ commit liên quan đến apps/lms-pro và đẩy chúng lên nhánh main của repo con.
 
-1. Sao chép API Key.
-2. Dán vào file **.env** của dự án:
-   NEXT_PUBLIC_TINY_EDITDER_API_KEY=YOUR_API_KEY **(key ở ảnh https://prnt.sc/7a5XNvjac9y0)**
+Hướng dẫn "Tạo Link Export" cho Package (libs/ features/)
+
+Đây là quy trình 5 bước bắt buộc để tạo một package mới (ví dụ: @lms/utils) và làm cho nó có thể được import từ một package khác (ví dụ: @lms/feature-calculator).
+
+Nếu bạn làm thiếu 1 trong 5 bước này, bạn sẽ gặp lỗi Cannot find module.
+
+Tóm tắt 5 file cần kiểm tra:
+
+pnpm-workspace.yaml (Ở gốc): pnpm có "thấy" thư mục (libs, features) không?
+
+package.json của Gói Mới (ví dụ: libs/utils/package.json): Package mới tên là gì? "Cổng vào" (main) ở đâu?
+
+index.ts (Cổng vào) (ví dụ: libs/utils/index.ts): Gói này export (cho phép) những code gì ra ngoài?
+
+tsconfig.base.json (Ở tools/): TypeScript có "lối tắt" (paths) để tìm package này không?
+
+package.json của Gói Dùng (ví dụ: features/calculator/package.json): Package calculator đã "xin phép" (khai báo dependencies) để dùng utils chưa?
+
+VÍ DỤ: Tạo package @lms/utils
+
+Giả sử chúng ta muốn tạo một package libs/utils (tên @lms/utils) chứa hàm formatDate và dùng nó trong features/calculator (file features/calculator/package.json).
+
+Bước 1: Kiểm tra pnpm-workspace.yaml (Làm 1 lần)
+
+Đảm bảo file pnpm-workspace.yaml ở thư mục gốc (D:\lms-fe-1\lms-fe\) đã "thấy" thư mục libs/.
+
+packages:
+
+- 'apps/\*'
+- 'libs/\*' # <-- Phải có dòng này
+- 'features/\*' # <-- Phải có dòng này
+
+(File của bạn (file pnpm-workspace.yaml) đã có dòng này, nên bước này OK)
+
+Bước 2: Tạo Package Mới (Tạo 3 file)
+
+Đi đến thư mục libs/. Tạo thư mục utils. Bên trong libs/utils, tạo 3 file:
+
+A. File code thật (libs/utils/formatDate.ts):
+
+export const formatDate = (date: Date): string => {
+// ... (code định dạng ngày)
+return date.toISOString().split('T')[0];
+};
+
+B. File package.json (File định danh):
+Tạo file libs/utils/package.json để khai báo tên và "cổng vào".
+
+{
+"name": "@lms/utils",
+"version": "1.0.0",
+"private": true,
+"main": "./index.ts", // <-- Cổng vào
+"types": "./index.ts", // <-- Cổng vào cho Types
+"scripts": {
+"lint": "eslint ."
+},
+"peerDependencies": {
+// (Gói này không cần React)
+}
+}
+
+C. File tsconfig.json (File kế thừa):
+Tạo file libs/utils/tsconfig.json để "kế thừa" cấu hình chung.
+
+{
+"extends": "../../tools/typescript-config/tsconfig.base.json"
+}
+
+Bước 3: Cập nhật "Cổng vào" (index.ts)
+
+Bây giờ, bạn phải tạo file libs/utils/index.ts (file mà package.json đã khai báo là main). File này có nhiệm vụ export hàm formatDate ra ngoài.
+
+// File: libs/utils/index.ts
+export _ from './formatDate';
+// (Nếu có file khác thì export _ from './anotherUtil';)
+
+Bước 4: Dạy TypeScript "Lối tắt" (Sửa tsconfig.base.json)
+
+pnpm đã biết utils ở đâu, nhưng TypeScript (VSCode) chưa biết. Bạn cần cập nhật file tools/typescript-config/base.json (file tools/typescript-config/base.json) để thêm "lối tắt" (path alias).
+
+{
+"compilerOptions": {
+"baseUrl": ".",
+"paths": {
+"@lms/assets": ["libs/assets/index.ts"],
+"@lms/ui": ["libs/ui/index.ts"],
+// THÊM DÒNG NÀY:
+"@lms/utils": ["libs/utils/index.ts"]
+}
+}
+}
+
+Bước 5: Khai báo Phụ thuộc và Cài đặt
+
+Package utils đã sẵn sàng. Giờ bạn phải "xin phép" cho calculator được dùng nó.
+
+A. Sửa features/calculator/package.json (file features/calculator/package.json):
+Thêm @lms/utils vào dependencies:
+
+{
+"name": "@lms/feature-calculator",
+"dependencies": {
+"@lms/assets": "workspace:_",
+"@lms/ui": "workspace:_",
+"@lms/utils": "workspace:\*" // <-- THÊM DÒNG NÀY
+}
+// ... (peerDependencies, devDependencies...)
+}
+
+B. Chạy pnpm install:
+Quay lại thư mục gốc (lms-fe-1/lms-fe/) và chạy:
+
+pnpm install
+
+Lệnh này sẽ đọc tất cả package.json, "liên kết" @lms/utils vào node_modules của calculator.
+
+C. Sử dụng:
+Bây giờ, trong file features/calculator/src/logic/calculate.ts (hoặc calcButton.tsx (file calcButton.tsx)), bạn đã có thể import thành công:
+
+import { formatDate } from '@lms/utils';
+
+// ...

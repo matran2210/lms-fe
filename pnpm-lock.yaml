@@ -361,6 +361,12 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.3.2
         version: 3.10.0(react-hook-form@7.48.2(react@18.3.1))
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../../libs/assets
+      '@lms/ui':
+        specifier: workspace:*
+        version: link:../../libs/ui
       '@lottiefiles/react-lottie-player':
         specifier: ^3.5.3
         version: 3.6.0(react@18.3.1)
@@ -663,8 +669,13 @@ importers:
         specifier: ^5.5.4
         version: 5.8.2
 
-  features/calculator:
+  libs/assets: {}
+
+  libs/ui:
     dependencies:
+      '@lms/assets':
+        specifier: workspace:*
+        version: link:../assets
       react:
         specifier: '*'
         version: 18.3.1
@@ -678,8 +689,6 @@ importers:
       '@types/react-dom':
         specifier: '*'
         version: 18.3.7(@types/react@18.3.26)
-
-  libs/assets: {}
 
 packages:
 

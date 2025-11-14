@@ -3,8 +3,8 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "module": "NodeNext", 
-    "moduleResolution": "NodeNext", 
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -16,15 +16,14 @@
     "incremental": false,
     "moduleDetection": "force",
 
-    "baseUrl": ".", 
+    "baseUrl": ".",
     "jsx": "preserve",
-    "noEmit": true, 
+    "noEmit": true,
 
     "paths": {
       "@lms/assets": ["libs/assets/index.ts"],
-      "@lms/ui": ["libs/ui/src/index.ts"],
-      "@lms/utils": ["libs/utils/src/index.ts"],
+      "@lms/ui": ["libs/ui/index.ts"]
     }
   },
-  "exclude": ["node_modules", "dist", ".next"] 
+  "exclude": ["node_modules", "dist", ".next"]
 }
