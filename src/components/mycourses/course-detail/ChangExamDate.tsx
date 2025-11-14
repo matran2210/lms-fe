@@ -80,7 +80,7 @@ const ChangExamDate = ({
           setIsOpenSelectExam(true)
           setDirection(1)
         }}
-        isOpen={!isMobileView}
+        isOpen={isMobileView ? false : undefined}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
