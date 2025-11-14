@@ -4,14 +4,12 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ModalMarketingInApp from './marketing-in-app/ModalMarketingInApp'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { usePinnedNotifyContext } from '@contexts/PinnedNotifyContext'
 
 const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
   const [openModalMarketingInApp, setOpenModalMarketingInApp] = useState(false)
   const [iconPulse, setIconPulse] = useState(false)
   const { isMobileView } = useTailwindBreakpoint()
-  const { openPinned } = usePinnedNotifyContext()
-  const isChangePosition = openPinned && isMobileView
+
   // Khi modal đóng → trigger hiệu ứng icon "hover"
   useEffect(() => {
     if (!openModalMarketingInApp) {
@@ -32,7 +30,7 @@ const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
             <motion.div
               id="floating-button-mkt-in-app"
               onClick={() => setOpenModalMarketingInApp(true)}
-              className={`${isChangePosition ? 'bottom-[190px]' : 'bottom-[150px]'} right-[24px]`}
+              className={`bottom-[170px] right-4`}
               animate={{
                 scale: iconPulse ? 1.1 : 1,
               }}
@@ -44,7 +42,7 @@ const MKTInApp = ({ showMKTInApp }: { showMKTInApp: boolean }) => {
               }}
               whileHover={{ scale: 1.1 }}
             >
-              <MKTInAppIcon />
+              <MKTInAppIcon className="h-[60px] w-[60px]" />
             </motion.div>
           </Tooltip>
 
