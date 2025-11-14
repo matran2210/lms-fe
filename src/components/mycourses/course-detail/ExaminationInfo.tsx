@@ -76,7 +76,7 @@ const ExamDate = ({
     ) : (
       data?.remaining_changes > 0 &&
       data?.course.course_type === COURSE_TYPE.NORMAL_COURSE && (
-        <Tooltip showTooltip={true} title={'Change Exam Date'}>
+        <Tooltip showTooltip={false} title={'Change Exam Date'}>
           <div
             className="cursor-pointer text-primary"
             onClick={() => {
@@ -318,7 +318,7 @@ const ExaminationInfo = ({
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.35, ease: 'easeInOut' }}
+              transition={{ duration: 0.2, ease: 'linear' }}
             >
               {isMobileView && isOpenSelectExam ? (
                 <SelectExamDate
