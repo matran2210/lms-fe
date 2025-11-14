@@ -247,6 +247,9 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
+        dispatch(
+          courseActivityAction.setCurrentTabId(router.query?.tabId as string),
+        )
         dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
