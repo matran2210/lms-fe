@@ -344,7 +344,7 @@ const Discussion = ({ class_id }: Props) => {
     <div className="relative flex h-full flex-col justify-between bg-white">
       <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
       {!!selector?.discussion?.length ? (
-        <div className="mb-6">
+        <div className="mb-6 min-h-[calc(100vh-12rem)] md:min-h-full">
           <Skeleton loading={loading}>
             {selector?.discussion?.map((e, i) => {
               return (
