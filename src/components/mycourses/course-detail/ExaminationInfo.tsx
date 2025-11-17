@@ -1,32 +1,31 @@
+import { CheckCircleTwoTone } from '@ant-design/icons'
+import { PencilV2Icon } from '@assets/icons'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
+import ChangExamDate from '@components/mycourses/course-detail/ChangExamDate'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ClassAPI } from '@pages/api/class'
 import { ClassKey } from '@pages/api/queryKey'
+import { getDuration } from '@utils/index'
+import { Avatar, GetProp, List, Skeleton, UploadFile, UploadProps } from 'antd'
+import clsx from 'clsx'
+import { AnimatePresence, motion } from 'framer-motion'
+import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react'
-import { useQuery, useQueryClient, useMutation } from 'react-query'
-import { PencilV2Icon } from '@assets/icons'
-import Tooltip from 'src/common/Tooltip'
-import { COURSE_TYPE } from 'src/constants'
-import { CheckCircleTwoTone } from '@ant-design/icons'
-import { getDuration } from '@utils/index'
-import { Avatar, GetProp, List, Skeleton, UploadProps, UploadFile } from 'antd'
-import NoData from 'src/common/NoData'
-import { Data } from 'src/type/course'
-import ChangExamDate from '@components/mycourses/course-detail/ChangExamDate'
-import { zodMsg } from 'src/constants/form'
-import { z } from 'zod'
-import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import useSelectExams from 'src/hooks/useSelectExams'
-import { isEmpty } from 'lodash'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
+import NoData from 'src/common/NoData'
+import Tooltip from 'src/common/Tooltip'
 import ChangeAnywayModal from 'src/components/mycourses/course-detail/ChangeAnywayModal'
-import { TitleSidebar } from 'src/constants'
+import { COURSE_TYPE, TitleSidebar } from 'src/constants'
+import { zodMsg } from 'src/constants/form'
+import useSelectExams from 'src/hooks/useSelectExams'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import clsx from 'clsx'
-import SelectExamDate from '@components/mycourses/course-detail/SelectExamDate'
-import { motion, AnimatePresence } from 'framer-motion'
+import { ExaminationForm } from 'src/redux/types/Course/MyCourse/ExamInformation'
+import { Data } from 'src/type/course'
+import { z } from 'zod'
+import SelectExamDate from './SelectExamDate'
 
 type Props = {
   open: boolean
@@ -106,15 +105,22 @@ const ExaminationInfo = ({
   const [direction, setDirection] = useState<1 | -1>(1)
   const [isOpenSelectExam, setIsOpenSelectExam] = useState<boolean>(false)
   const [classId, setClassId] = useState(router.query.courseId as string)
-  const { data, isLoading, isError, isSuccess } = useQuery({
+  const { data, isLoading, isError, isSuccess, refetch } = useQuery({
     queryKey: [ClassKey.ExamInfo, classId],
     queryFn: () => ClassAPI.getExamInfo(classId),
     refetchOnWindowFocus: false,
     select: (data) => data.data,
     retry: false,
-    enabled: !!classId,
+    enabled: !!classId && open,
   })
   const [itemSelected, setItemSelected] = useState('')
+
+  useEffect(() => {
+    if (!open) return
+
+    refetch()
+  }, [open])
+
   const queryClient = useQueryClient()
   const [isEdit, setIsEdit] = useState(isEditProps)
   const [openConfirmModal, setOpenConfirmModal] = useState(false)
@@ -185,17 +191,16 @@ const ExaminationInfo = ({
     }, 500)
   }
   const { exams } = useSelectExams(classId)
-  const handleChangeExamDate = () => {
-    if (isOpenSelectExam) {
-      if (itemSelected) methods.setValue('examination_subject_id', itemSelected)
-      setDirection(-1)
-      setIsOpenSelectExam(false)
-      return
-    }
+
+  const handleChangeExamDate = async () => {
     if (isEmpty(exams?.current_exam_name)) {
       methods.handleSubmit(onSubmit)()
     } else {
+      const valid = await methods.trigger()
+
+      if (!valid) return
       setOpenConfirmModal(true)
+      setOpen(false)
     }
   }
 
