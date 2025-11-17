@@ -3,7 +3,7 @@ import { DatePicker, Skeleton } from 'antd'
 const { RangePicker } = DatePicker
 import { Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import { IHookFormDateRangePicker } from 'src/type'
+import { IHookFormDateRangePicker } from '@lms/core'
 
 const HookFormDateRangePicker = ({
   name,

@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPLabel from '../Label/SAPPLabel'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 interface SAPPSelectProps extends IBaseFormFieldProps {
   placeholder?: string

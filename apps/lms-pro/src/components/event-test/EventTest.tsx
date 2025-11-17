@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { EAttemptStatus } from '@lms/core'
 import { MY_COURSES } from '@lms/core'
-import { IEventTest } from 'src/type/event-test'
+import { IEventTest } from '@lms/core'
 import ContentTestCongratution from './ContentTestCongratution'
 
 const EventTest = ({

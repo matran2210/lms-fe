@@ -20,7 +20,7 @@ import {
   ITeacherSchedule,
   ITeacherWeeklyNorm,
   TableColumn,
-} from 'src/type'
+} from '@lms/core'
 import RequestActionCell from '../RequestActionCell'
 import clsx from 'clsx'
 import Link from 'next/link'

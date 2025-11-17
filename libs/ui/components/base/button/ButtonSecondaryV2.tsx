@@ -1,6 +1,6 @@
 import React from 'react'
 import BaseButton from './BaseButton'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 
 const ButtonSecondaryV2 = ({
   title,

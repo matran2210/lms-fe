@@ -52,7 +52,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit } from '@lms/core'
 import { CoursesAPI } from '../api/courses'
 import QuitTestModal from '../courses/test/quit-test'
 import TestTimeOutModal from '../courses/test/test-timeout'
@@ -92,8 +92,8 @@ import {
   RequirementItem,
   ScratchPad,
   ScratchPadValue,
-} from 'src/type'
-import { IRequirement } from 'src/type/case-study'
+} from '@lms/core'
+import { IRequirement } from '@lms/core'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,
@@ -110,7 +110,7 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import { DEFAULT_EDITOR_VALUE, defaultSheetData } from '@lms/core'
-import { IQuestion } from 'src/type/course'
+import { IQuestion } from '@lms/core'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'
 import ButtonPrimary from '@components/base/button/ButtonPrimary'
 import ButtonText from '@components/base/button/ButtonText'

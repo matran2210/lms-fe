@@ -1,6 +1,6 @@
-import { ISelectOption } from "src/type";
 
 import { CALENDAR_FILTER_TYPE, FREQUENCY_UNITS, FREQUENCY_UNITS_LABEL, FREQUENCY_UNITS_LABEL_PLURAL } from "../enums";
+import { ISelectOption } from "../types/courses";
 
 export const PageLink = {
   HOME: "/",

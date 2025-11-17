@@ -1,7 +1,7 @@
 import { calculatePercentage, roundNumber } from '@utils/helpers'
 import { useRef } from 'react'
 import { useDraggable } from 'react-use-draggable-scroll'
-import { ChartDatum } from 'src/type'
+import { ChartDatum } from '@lms/core'
 
 interface IProps {
   data: ChartDatum[]

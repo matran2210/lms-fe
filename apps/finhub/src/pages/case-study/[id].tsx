@@ -54,8 +54,7 @@ import {
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import { IRequirement } from 'src/type/case-study'
-import { IExhibit } from 'src/type/exhibit'
+import { IRequirement, IExhibit} from '@lms/core'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import ConFirmSubmit from '../short-course/test/conFirmSubmit'

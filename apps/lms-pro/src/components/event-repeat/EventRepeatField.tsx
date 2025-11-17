@@ -14,13 +14,13 @@ import {
   REPEAT_ON,
   REPEAT_ON_MAPPED_PAYLOAD,
 } from '@lms/core'
-import { ISelect } from 'src/type/course'
+import { ISelect } from '@lms/core'
 import {
   IEventRepeatFieldValues,
   IRecurringSchedule,
   IRepeatFrequency,
   RecurringScheduleType,
-} from 'src/type/my-calendar'
+} from '@lms/core'
 import RepeatFrequency from './RepeatFrequency'
 import RepeatOn from './RepeatOn'
 import { REPEAT_TYPE } from '@lms/core'

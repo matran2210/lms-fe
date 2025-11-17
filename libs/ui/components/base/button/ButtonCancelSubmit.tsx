@@ -1,4 +1,4 @@
-import { IButtonCancelSubmitProps } from 'src/type'
+import { IButtonCancelSubmitProps } from '@lms/core'
 import ButtonPrimary from './ButtonPrimary'
 import ButtonText from './ButtonText'
 

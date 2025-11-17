@@ -7,7 +7,7 @@ import {
   ITopicProgress,
   IExamPrediction,
   IMockTestResult,
-} from 'src/type/dashboard'
+} from '@lms/core'
 
 export class DashboardAPI {
   static getOverProgress(id: string): Promise<IResponse<IOverProgress>> {

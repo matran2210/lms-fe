@@ -1,26 +1,15 @@
-import { ISubjectItem } from 'src/redux/types/User/urser'
 import { IButtonBaseProps } from '../common'
 
+export interface ISubjectItem {
+  id: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at?: Date;
+  course_category_id?: string;
+  name: string;
+  code: string;
+}
 export type IButtonSize = 'small' | 'medium' | 'large' | 'extra'
-
-export interface UserAgent {
-  browserName: string
-  browserVersion: string
-  osName: string
-  osVersion: string
-  deviceType: any
-}
-
-export interface IDeviceItem {
-  id: string
-  created_at: string
-  updated_at: string
-  ip: string
-  location: string
-  user_agent: UserAgent
-  user_id: string
-  is_current: boolean
-}
 
 export type IButtonCancelSubmitProps = {
   submit: IButtonBaseProps

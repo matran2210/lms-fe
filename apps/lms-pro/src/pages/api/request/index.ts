@@ -1,5 +1,5 @@
 import { fetcher } from '@services/requestV2'
-import { IQueryParams, IRequestList, IResponse } from 'src/type'
+import { IQueryParams, IRequestList, IResponse } from '@lms/core'
 
 export class RequestAPI {
   static getRequests({

@@ -1,3 +1,5 @@
+import { QUESTION_LEVELS, QUESTION_TYPES } from "../../enums"
+
 export interface Thumbnail {
   '311x175': string
   '656x369': string
@@ -36,31 +38,6 @@ export interface IVideo {
     multiple_choice_questions: IQuestion[]
   }
 }
-export enum QUESTION_LEVELS {
-  FUNDAMENTAL = 'FUNDAMENTAL',
-  ADVANCED = 'ADVANCED',
-}
-export enum QUESTION_ASSIGNMENT_TYPE {
-  FILE = 'FILE',
-  TEXT = 'TEXT',
-  ALL = 'ALL',
-}
-export enum QUESTION_RESPONSE_OPTION {
-  WORD = 'WORD',
-  SHEET = 'SHEET',
-  NONE = 'NONE',
-}
-export enum QUESTION_TYPES {
-  TRUE_FALSE = 'TRUE_FALSE',
-  ONE_CHOICE = 'ONE_CHOICE',
-  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
-  MATCHING = 'MATCHING',
-  SELECT_WORD = 'SELECT_WORD',
-  FILL_WORD = 'FILL_WORD',
-  DRAG_DROP = 'DRAG_DROP',
-  ESSAY = 'ESSAY',
-}
-
 export interface IQuestionAnswer {
   id: any
   is_correct: boolean
@@ -68,7 +45,7 @@ export interface IQuestionAnswer {
   answer_position: number
 }
 
-export interface IExhibit {
+export interface IExhibitQuestion {
   id: string
   name: string
   description: string
@@ -112,7 +89,7 @@ export interface IQuestionTopic {
   number_of_multiple_choice_questions: number
   number_of_essay_questions: number
   files: IFile[]
-  exhibits: IExhibit[]
+  exhibits: IExhibitQuestion[]
   case_study_name: string
 }
 
@@ -137,7 +114,7 @@ export interface IQuestion {
   question_topic_id?: string
   requirements?: IRequirment[]
   requirement_answers?: IRequirmentAnswer[]
-  exhibits?: IExhibit[]
+  exhibits?: IExhibitQuestion[]
   files?: IFile[]
   setting_grade?: string
   time?: string

@@ -5,7 +5,7 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import SappIcon from 'src/common/SappIcon'
 import SAPPLabel from '../Label/SAPPLabel'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>
 

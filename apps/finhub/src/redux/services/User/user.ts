@@ -3,9 +3,9 @@ import { apiURL } from '../httpService'
 import url from './url'
 import { IResponse } from 'src/redux/types'
 import { AuthAPI } from 'src/pages/api/profile'
-import { PinnedNotifications } from 'src/type'
+import { PinnedNotifications } from '@lms/core'
 import { fetchFormData } from '@services/requestV2'
-import { IDeviceItem } from 'src/type/v2'
+import { IDeviceItem } from ''@lms/core''
 
 const UserApi = {
   /**

@@ -12,7 +12,7 @@ import React, {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
-import { IExhibitData } from 'src/type/exhibit'
+import { IExhibitData } from '@lms/core'
 import SappDivider from '@components/common/Divider/Divider'
 interface IProps {
   data: any

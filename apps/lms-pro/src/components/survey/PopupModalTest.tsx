@@ -4,7 +4,7 @@ import { CoursesAPI } from '@pages/api/courses'
 import { onLinkSocial } from '@utils/index'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
-import { ECourseProgram } from 'src/type/course'
+import { ECourseProgram } from '@lms/core'
 
 interface SurveyModalProps {
   class_code?: string

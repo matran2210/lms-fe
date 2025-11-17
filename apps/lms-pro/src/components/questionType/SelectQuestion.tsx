@@ -13,7 +13,7 @@ import React, {
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
 import { useTooltipModal } from 'src/hooks/useTooltipModal'
-import { IExhibitData } from 'src/type/exhibit'
+import { IExhibitData } from '@lms/core'
 import WarningSection from './WarningSection'
 
 // Types

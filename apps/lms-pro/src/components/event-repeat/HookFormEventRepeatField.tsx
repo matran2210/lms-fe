@@ -1,10 +1,10 @@
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import { ISelect } from 'src/type/course'
-import { IEventRepeatFieldValues } from 'src/type/my-calendar'
+import { ISelect } from '@lms/core'
+import { IEventRepeatFieldValues } from '@lms/core'
 import EventRepeatField from './EventRepeatField'
 import { Skeleton } from 'antd'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 interface IProps extends IBaseFormFieldProps {
   defaultDate?: Date

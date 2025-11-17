@@ -2,7 +2,7 @@ import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { formatTime, htmlToRaw } from '@components/common/timer'
 import React, { useRef, useState } from 'react'
 import NoData from 'src/common/NoData'
-import { IVideo } from 'src/type/course'
+import { IVideo } from '@lms/core'
 
 interface IProps {
   open: boolean

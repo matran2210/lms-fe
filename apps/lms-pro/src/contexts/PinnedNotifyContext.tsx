@@ -11,7 +11,7 @@ import {
 } from 'react'
 import { ENTRANCE_TEST_RESULT, ENTRANCE_TEST_TABLE_RESULT } from '@lms/core'
 import UserApi from 'src/redux/services/User/user'
-import { PinnedNotifications } from 'src/type'
+import { PinnedNotifications } from '@lms/core'
 
 // type for context
 type Context = {

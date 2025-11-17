@@ -3,7 +3,7 @@ import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
 import DynamicBundledEditor from '../../form/editor'
 import { DEFAULT_EDITOR_VALUE } from '@lms/core'
-import { SAPPEditorHandle } from 'src/type'
+import { SAPPEditorHandle } from '@lms/core'
 
 interface Props {
   name: string

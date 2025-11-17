@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 import BaseButton from './BaseButton'
 
 interface IButtonIconProps extends IButtonBaseProps {

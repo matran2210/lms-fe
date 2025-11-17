@@ -15,7 +15,7 @@ export interface ChartDatum {
   id: string
 }
 
-export interface Quiz {
+export interface IQuiz {
   id: string
   quiz_type: string
   is_graded: boolean
@@ -33,7 +33,7 @@ export interface QuizAttemptChart {
   correct_answer: number
   chart_type: string
   chart_data: ChartDatum[]
-  quiz: Quiz
+  quiz: IQuiz
   multiple_choice_score: number
 }
 

@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import React from 'react'
 import Tooltip from 'src/common/Tooltip'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity } from '@lms/core'
 
 export const download = async (name: string, file_key: string) => {
   await UploadAPI.downloadFile({

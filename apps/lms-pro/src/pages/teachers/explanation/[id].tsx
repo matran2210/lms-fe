@@ -1,7 +1,7 @@
 import { ExplanationPackage } from 'explanation-package'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { QUESTION_TYPES } from 'src/type/course/Question'
+import { QUESTION_TYPES } from '@lms/core'
 import { LAYOUT } from '@lms/core'
 import { CloseIcon } from '@assets/icons'
 import { UploadAPI } from 'src/pages/api/upload'
@@ -9,10 +9,10 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import SappLoadingGlobal from 'src/common/SappLoadingGlobal'
 import FullScreenLayout from '@components/layout/FullScreenLayout'
 import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from '@lms/core'
-import { IAtempt } from 'src/type/results'
+import { IAtempt } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { IRequirement } from 'src/type/case-study'
+import { IRequirement } from '@lms/core'
 
 const Explanation = () => {
   const router = useRouter()

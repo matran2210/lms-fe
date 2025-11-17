@@ -1,6 +1,5 @@
-import { IAnswer, IScoreDetails } from 'src/type/quiz'
+import {IFile, IAnswer, IScoreDetails } from '@lms/core'
 import { InfiniteData } from 'react-query'
-import { IFile } from '../../course'
 
 export interface ChartDatum {
   part_id: string

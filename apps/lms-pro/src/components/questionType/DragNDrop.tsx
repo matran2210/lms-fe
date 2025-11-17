@@ -13,8 +13,8 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
-import { DragDropAnswerItem } from 'src/type'
-import { IExhibitData } from 'src/type/exhibit'
+import { DragDropAnswerItem } from '@lms/core'
+import { IExhibitData } from '@lms/core'
 
 interface IProps {
   data?: any

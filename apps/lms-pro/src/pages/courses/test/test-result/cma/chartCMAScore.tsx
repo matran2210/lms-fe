@@ -3,7 +3,7 @@ import { MutableRefObject, useRef } from 'react'
 import { useDraggable } from 'react-use-draggable-scroll'
 
 import Tooltip from 'src/common/Tooltip'
-import { ChartDatum } from 'src/type'
+import { ChartDatum } from '@lms/core'
 
 interface IProps {
   data: ChartDatum[]

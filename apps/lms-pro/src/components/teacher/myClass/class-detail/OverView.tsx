@@ -1,6 +1,6 @@
 import HeaderTeacher from '@components/layout/Header/HeaderTeacher'
 import { Typography } from 'antd'
-import { ICertificateData } from 'src/type/classes'
+import { ICertificateData } from '@lms/core'
 
 const { Text } = Typography
 export const statusMap = {

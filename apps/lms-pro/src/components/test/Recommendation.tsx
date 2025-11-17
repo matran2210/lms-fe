@@ -2,7 +2,7 @@ import { AltArrowIcon } from '@assets/icons'
 import ButtonText from '@components/base/button/ButtonText'
 import EditorReader from '@components/base/editor/EditorReader'
 import React, { useState } from 'react'
-import { IQuizAttempComment } from 'src/type'
+import { IQuizAttempComment } from '@lms/core'
 import ModalRecomment from './ModalRecomment'
 
 interface IProps {

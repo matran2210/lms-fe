@@ -1,5 +1,5 @@
-import { IFile } from '../../../../apps/lms-pro/src/type/course'
 import { IMetaData } from '../api-response'
+import { IFile } from '../course'
 export interface ICaseStudyResult {
   meta: IMetaData
   answers: IAnswerResult[]
@@ -24,7 +24,7 @@ export interface ICaseStudyResultPage {
   }
 }
 
-export interface IExhibit {
+export interface IExhibitResult {
   id: string
   name: string
   description: string
@@ -89,7 +89,7 @@ export interface IQuestionResult {
       short_name: string
     }
   }
-  exhibits: IExhibit[]
+  exhibits: IExhibitResult[]
   requirements: IRequirement[]
   response_option: string
   question_report: {
@@ -105,7 +105,7 @@ export interface ITopic {
   description: string
   display_type: string
   files: IFile[] | []
-  exhibits: IExhibit[] | []
+  exhibits: IExhibitResult[] | []
   case_study_name?: string
   qType: string
   requirements: IRequirement[]

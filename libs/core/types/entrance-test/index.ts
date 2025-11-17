@@ -1,4 +1,4 @@
-import { EAttemptStatus } from '@lms/core'
+import { EAttemptStatus } from "../../enums"
 
 export interface IEntranceTest {
   id: string
@@ -39,7 +39,7 @@ export interface QuizPositionMapping {
   question_id: string
 }
 
-export interface Answer {
+export interface IAnswerData {
   id: string
   created_at: string
   updated_at: string

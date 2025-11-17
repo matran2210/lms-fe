@@ -240,7 +240,7 @@ export const ScratchPadIcon = ({
 }
 
 import clsx from 'clsx'
-import { ISVG } from 'src/type'
+import { ISVG } from '@lms/core'
 // Import Tailwind CSS classes
 import 'tailwindcss/tailwind.css'
 

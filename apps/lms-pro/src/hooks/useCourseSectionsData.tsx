@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { DEFAULT_PAGE_SIZE } from '@lms/core'
-import { ISection } from 'src/type'
+import { ISection } from '@lms/core'
 import { useInitialSections } from 'src/hooks/useInitialSections'
 import { useSectionData } from 'src/hooks/useSectionData'
 import { useFormContext } from 'react-hook-form'

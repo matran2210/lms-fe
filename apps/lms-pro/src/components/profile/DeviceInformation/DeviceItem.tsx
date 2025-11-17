@@ -1,7 +1,7 @@
 import { calculateTimeAgo } from '@utils/helpers'
 import clsx from 'clsx'
 import React, { Dispatch, SetStateAction, useMemo } from 'react'
-import { IDeviceItem } from 'src/type/Profile'
+import { IDeviceItem } from '@lms/core'
 
 interface IProps {
   data: IDeviceItem

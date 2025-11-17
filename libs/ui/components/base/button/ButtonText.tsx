@@ -1,8 +1,8 @@
 import React from 'react'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 import BaseButton from './BaseButton'
 import Link from 'next/link'
-import { IButtonProps } from 'src/type'
+import { IButtonProps } from '@lms/core'
 import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const ButtonText = ({

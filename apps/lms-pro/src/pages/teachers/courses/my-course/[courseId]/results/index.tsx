@@ -7,7 +7,7 @@ import ResultsTable from 'src/pages/courses/my-course/[courseId]/results/Results
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import LayoutTeacher from '@components/layout/Teacher'
-import { ITabs } from 'src/type/common'
+import { ITabs } from '@lms/core'
 import { PageLink, TitleSidebar } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 10

@@ -11,7 +11,7 @@ import {
   FREQUENCY_UNITS_LIMIT,
   FREQUENCY_UNITS_OBJECT,
 } from '@lms/core'
-import { IRepeatFrequency, IRepeatUnitOption } from 'src/type/my-calendar'
+import { IRepeatFrequency, IRepeatUnitOption } from '@lms/core'
 
 interface IProps {
   className?: string | undefined

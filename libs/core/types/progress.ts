@@ -135,7 +135,7 @@ export interface IRequestCreateProgress {
 export interface IClassDetail {
   capacity: number
   code: string
-  course: ICourse
+  course: ISimpleCourse
   description: string
   examination_subject?: string
   facility?: string
@@ -150,8 +150,8 @@ export interface IClassDetail {
   type: string
 }
 
-export interface ICourse {
-  id: string
-  name: string
-  course_categories: { id: string; name: string }[]
+export interface ISimpleCourse {
+  id: string;
+  name: string;
+  course_categories: { id: string; name: string }[];
 }

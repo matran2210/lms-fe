@@ -1,10 +1,10 @@
 import ClassProgress from '@components/progress/ClassProgress'
 import SappTabs from 'src/components/tabs/SappTabs'
-import { ITabsTeacher } from 'src/type'
+import { ITabsTeacher } from '@lms/core'
 import { Typography } from 'antd'
 import { GeoLocationIcon, CalendarIcon } from '@assets/icons'
 import { formatDateFromUTC } from '@utils/index'
-import { IClassCard } from 'src/type/classes'
+import { IClassCard } from '@lms/core'
 import {
   StatusTag,
   statusMap,

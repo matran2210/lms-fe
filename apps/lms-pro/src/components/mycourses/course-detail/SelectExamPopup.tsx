@@ -8,7 +8,7 @@ import SappModalV3 from '@components/base/modal/SappModalV3'
 import SAPPSelectV2 from '@components/base/select/SAPPSelectV2'
 import { ClassAPI } from '@pages/api/class'
 import useSelectExams from 'src/hooks/useSelectExams'
-import { RemindChoosingExam } from 'src/type/course'
+import { RemindChoosingExam } from '@lms/core'
 
 interface ISelectExamPopup {
   courseData: any

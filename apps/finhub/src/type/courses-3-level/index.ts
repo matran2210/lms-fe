@@ -1,11 +1,8 @@
 import { TooltipPlacement } from 'antd/es/tooltip'
 import { Dispatch, ForwardedRef, ReactNode, SetStateAction } from 'react'
-import { IButtonProps, ICourseAll, ITabs } from '..'
-import { IQuestion, Thumbnail } from '../course/Question'
-import { IExhibit } from '../exhibit'
 import { FieldValues, UseFormSetValue } from 'react-hook-form'
-import { ILearningOutcome, IQuizSetting } from 'src/type/courses'
-import { Metadata } from 'src/type/results'
+import { ILearningOutcome, IQuizSetting } from '@lms/core'
+import { IQuestion, Thumbnail , IMetaData, IExhibit, IButtonProps, ICourseAll, ITabs } from '@lms/core'
 import {
   CourseSectionLinkParent,
   RemindChoosingExam,
@@ -263,7 +260,7 @@ interface Data {
   course_type: string
 }
 export interface ShortCourseDetail {
-  metadata: Metadata
+  metadata: IMetaData
   class_user_id: string
   code: string
   is_passed: boolean

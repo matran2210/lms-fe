@@ -9,7 +9,7 @@ import {
   IQuizAttemptChartType,
   QuizAttemptChart,
   QuizAttemptChartType,
-} from 'src/type'
+} from '@lms/core'
 import ChartACCAScore from './acca/chartACCAScore'
 import ChartCFAScore from './cfa/chartCFAScore'
 import ChartCMAScore from './cma/chartCMAScore'

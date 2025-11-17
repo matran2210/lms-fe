@@ -1,24 +1,18 @@
-import { GradingMethod } from '@lms/core'
-import { GRADE_STATUS } from '@lms/core'
+import { GRADE_STATUS } from "../../constants"
+import { GradingMethod } from "../../enums"
+import { IMetaData } from "../api-response"
+
 
 export interface IResultsList {
-  metadata: Metadata
+  metadata: IMetaData
   data: Results[]
   class_user_id: string
 }
-
-export interface Metadata {
-  total_pages: number
-  total_records: number
-  page_index: number
-  page_size: number
-}
-
 export interface Results {
   id: string
   name: string
   course_section_type: string
-  quiz: Quiz
+  quiz: QuizResult
   quiz_activity: QuizActivity[]
   path: any
   class_user_id: string
@@ -37,16 +31,16 @@ export interface QuizActivity {
   activity_id?: string
 }
 
-export interface Quiz {
-  id: string
-  name: string
-  is_graded: boolean
-  grading_method: GradingMethod
-  required_percent_score: number
-  quiz_timed: any
-  quiz_question_type: string
-  quiz_type: string
-  attempts: Attempt[]
+export interface QuizResult {
+  id: string;
+  name: string;
+  is_graded: boolean;
+  grading_method: GradingMethod;
+  required_percent_score: number;
+  quiz_timed: any;
+  quiz_question_type: string;
+  quiz_type: string;
+  attempts: Attempt[];
 }
 
 export interface Attempt {

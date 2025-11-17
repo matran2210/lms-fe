@@ -1,7 +1,7 @@
 import { isNull, isUndefined } from 'lodash'
 import { RefObject } from 'react'
 import { GRADE_STATUS } from '@lms/core'
-import { IQuizAttempt } from 'src/type'
+import { IQuizAttempt } from '@lms/core'
 import GlobalAverage from './GlobalAverage'
 import MultipleQuestion from './multipleQuestion'
 import clsx from 'clsx'

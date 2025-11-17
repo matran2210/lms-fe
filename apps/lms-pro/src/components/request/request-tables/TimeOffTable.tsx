@@ -12,7 +12,7 @@ import {
   requestTypeToTitle,
 } from '@lms/core'
 import { IUser } from 'src/redux/types/User/urser'
-import { IRequest, ITeacherSchedule, TableColumn } from 'src/type'
+import { IRequest, ITeacherSchedule, TableColumn } from '@lms/core'
 import RequestActionCell from '../RequestActionCell'
 
 interface TimeOffTableProps {

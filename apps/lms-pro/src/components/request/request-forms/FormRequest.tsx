@@ -28,8 +28,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { getUserInformation, userReducer } from 'src/redux/slice/User/User'
 import { IResponse } from 'src/redux/types'
-import { ISelect } from 'src/type/course'
-import { IRecurringSchedule, IRequest, IWeeklyNorm } from 'src/type/my-request'
+import { ISelect } from '@lms/core'
+import { IRecurringSchedule, IRequest, IWeeklyNorm } from '@lms/core'
 
 export interface IProps {
   open: boolean

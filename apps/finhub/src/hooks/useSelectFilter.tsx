@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { ISection } from 'src/type'
 import {
   IGetCourseActivityList,
   IGetCourseSectionList,
   IGetCourseSubSectionList,
   IGetCourseUnitList,
   ISelect,
-} from 'src/type/course'
+  ISection
+} from '@lms/core'
 
 const DEFAULT_PAGESIZE = 10
 

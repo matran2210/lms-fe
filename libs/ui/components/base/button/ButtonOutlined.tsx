@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import Link from 'next/link'
-import { IButtonProps } from 'src/type'
+import { IButtonProps } from '@lms/core'
 import {
   ButtonSize,
   getPaddingHorizontalClass,

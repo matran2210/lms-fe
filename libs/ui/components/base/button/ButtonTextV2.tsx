@@ -1,5 +1,5 @@
 import React from 'react'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 import BaseButton from './BaseButton'
 
 const ButtonTextV2 = ({

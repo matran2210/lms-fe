@@ -13,7 +13,7 @@ import {
   nextTypeMap,
   allTypes,
   ISection,
-} from 'src/type'
+} from '@lms/core'
 import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
 
 interface IProps {

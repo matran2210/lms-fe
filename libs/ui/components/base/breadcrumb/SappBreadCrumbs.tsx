@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 import Tooltip from 'src/common/Tooltip'
 import { motion, AnimatePresence } from 'framer-motion'
 

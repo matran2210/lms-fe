@@ -8,7 +8,7 @@ import {
   IDiscussion,
   IUserInDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
+import { IActivity, IBreadcrumb } from '@lms/core'
 import { CoursesAPI } from '../../../../../pages/api/courses/index'
 import { ActivityAPI } from 'src/pages/api/activity'
 

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Tooltip from 'src/common/Tooltip'
-import { IButtonProps } from 'src/type'
+import { IButtonProps } from '@lms/core'
 import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const SIZES = {

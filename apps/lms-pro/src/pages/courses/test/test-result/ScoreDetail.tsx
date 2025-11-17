@@ -21,7 +21,7 @@ import {
   PageLink,
   QUESTION_TYPES,
 } from '@lms/core'
-import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from 'src/type'
+import { IAnswer, IQuizAttempt, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CollapseArrowIcon } from '@assets/icons'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'

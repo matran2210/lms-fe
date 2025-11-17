@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useNotification } from 'src/hooks/useNotification'
-import { IIcon } from 'src/type'
+import { IIcon } from '@lms/core'
 import notificationAnimationIcon from 'public/animations/Notification.json'
 import Lottie from 'lottie-react'
 const NotificationIcon = ({ className, extraClassName }: IIcon) => {

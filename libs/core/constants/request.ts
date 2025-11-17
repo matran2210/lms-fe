@@ -1,4 +1,4 @@
-import { ISelect } from 'src/type/course'
+import { ISelect } from '@lms/core'
 import { E_REQUEST_STATUS, E_REQUEST_TYPE } from '../enums'
 
 export const requestStatusToTitle = {

@@ -13,7 +13,7 @@ import { CoursesAPI } from 'src/pages/api/courses'
 import { MY_COURSES } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 import { FormProvider, useForm } from 'react-hook-form'
 import { buildQueryString } from '@utils/index'
 

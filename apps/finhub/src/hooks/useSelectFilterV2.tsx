@@ -1,14 +1,13 @@
 import { DefaultOptionType } from 'antd/es/select'
 import { debounce, get } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
-import { IMetaData, IResponse } from 'src/type'
 import {
   IQueryParams,
   IResponseData,
   IResponseDataWithMetadata,
   QueryKey,
-  SearchField,
-} from 'src/type/common'
+  SearchField, IMetaData, IResponse
+} from '@lms/core'
 
 const DEBOUNCED_NUMBER = 300
 

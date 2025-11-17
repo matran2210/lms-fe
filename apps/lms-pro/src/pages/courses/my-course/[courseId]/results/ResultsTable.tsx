@@ -15,7 +15,7 @@ import { GRADE_STATUS, PageLink } from '@lms/core'
 import useSelectFilter from 'src/hooks/useSelectFilter'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { CourseKey } from 'src/pages/api/queryKey'
-import { IResultsList, Results } from 'src/type/results'
+import { IResultsList, Results } from '@lms/core'
 import SappModalV3 from '@components/base/modal/SappModalV3'
 import { ConfirmIcon } from '@assets/icons'
 import { TEST_TYPE } from '@lms/core'
@@ -31,7 +31,7 @@ import {
   SectionDropdownFormValues,
   backTypeMap,
   getTypeName,
-} from 'src/type/courses'
+} from '@lms/core'
 import ListItemFilterMobile from '@components/common/ListItemFilterMobile'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import { FormProvider, useForm } from 'react-hook-form'

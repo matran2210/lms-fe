@@ -3,10 +3,10 @@ import { FieldValues } from 'react-hook-form'
 import { QUESTION_TYPES } from '@lms/core'
 import { QuestionAPI } from 'src/pages/api/question'
 import { RootState } from 'src/redux/store'
-import { IRequirement } from 'src/type/case-study'
-import { IQuestion } from 'src/type/course/Question'
+import { IRequirement } from '@lms/core'
+import { IQuestion } from '@lms/core'
 import { submitQuizTest } from '../../../../../pages/api/courses/index'
-import { IEssayAnswer } from 'src/type/answer'
+import { IEssayAnswer } from '@lms/core'
 
 /**
  * Interface mô tả thông tin về câu hỏi trong trạng thái Redux.

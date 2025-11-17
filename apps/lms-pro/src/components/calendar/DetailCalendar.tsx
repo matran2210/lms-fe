@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { IEvent } from 'sapp-common-package/dist/types'
-import { ICalendarDetail } from 'src/type/calendar'
+import { ICalendarDetail } from '@lms/core'
 import CourseTree from './CourseTree'
 import SappIcon from 'src/common/SappIcon'
 import dayjs, { Dayjs } from 'dayjs'
@@ -11,7 +11,7 @@ import {
 } from '@lms/core'
 import { useRouter } from 'next/router'
 import { CourseSectionType, TEST_TYPE_ENUM } from '@lms/core'
-import { LearningMode } from 'src/type/progress'
+import { LearningMode } from '@lms/core'
 import { buildQueryString } from '@utils/index'
 import getConfig from 'next/config'
 import {

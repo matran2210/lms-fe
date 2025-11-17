@@ -2,7 +2,7 @@ import EChart from '@components/base/chart/Chart'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { DashboardAPI } from '@pages/api/dashboard'
-import { ICourseInfo, ITopicProgress } from 'src/type/dashboard'
+import { ICourseInfo, ITopicProgress } from '@lms/core'
 import { EChartsOption } from 'echarts'
 import useReponsive from 'src/hooks/useReponsive'
 

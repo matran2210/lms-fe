@@ -13,7 +13,7 @@ import { DEFAULT_PAGE_SIZE } from '@lms/core'
 import clsx from 'clsx'
 import { FilterCourseIcon } from 'src/assets/icons'
 import { useState } from 'react'
-import { IOpenChooseItem } from 'src/type/courses'
+import { IOpenChooseItem } from '@lms/core'
 
 const Results = () => {
   const router = useRouter()

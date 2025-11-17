@@ -1,4 +1,5 @@
-import { ISection } from 'src/type/courses'
+import { IMetaData } from "../../api-response"
+import { ISection } from "../../courses"
 
 export interface IGetCourseSectionList {
   success: boolean
@@ -15,13 +16,6 @@ export interface ISelect {
 }
 
 interface Data {
-  meta: Meta
+  meta: IMetaData
   sections: ISection[]
-}
-
-interface Meta {
-  total_pages: number
-  total_records: number
-  page_index: number
-  page_size: number
 }

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import BaseButton from './BaseButton'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 
 const ButtonPrimaryV2 = ({
   title,

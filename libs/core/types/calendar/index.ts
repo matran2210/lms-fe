@@ -1,17 +1,17 @@
 export interface ICalendarList {
   calendars?: ICalendar[]
-  courses?: ICourse[]
+  courses?: ICalendarCourse[]
 }
 
-export interface ICourse {
-  id: string
-  name?: string
-  description?: string
+export interface ICalendarCourse {
+  id: string;
+  name?: string;
+  description?: string;
   subject?: {
-    id: string
-    name: string
-    code: string
-  }
+    id: string;
+    name: string;
+    code: string;
+  };
 }
 
 export interface ICalendar {

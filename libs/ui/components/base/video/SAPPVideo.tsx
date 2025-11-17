@@ -10,7 +10,7 @@ import {
 import useClickOutside from '@components/base/clickoutside/HookClick'
 import ArrowIcon from '@components/base/pagination/ArrowIcon'
 import Image from 'next/image'
-import { Thumbnail } from 'src/type/course/Question'
+import { Thumbnail } from '@lms/core'
 import { Stream } from '@cloudflare/stream-react'
 import { fetcher } from '@services/requestV2'
 import { LoadingIcon, PiPIcon } from '@assets/icons'

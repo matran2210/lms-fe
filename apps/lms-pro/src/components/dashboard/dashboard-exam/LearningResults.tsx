@@ -4,7 +4,7 @@ import { DashboardAPI } from '@pages/api/dashboard'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import NoData from 'src/common/NoData'
-import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
+import { ILearningResult, IMockTestResult } from '@lms/core'
 import { ANIMATION, COURSE_TYPE, DATE_FORMAT } from '@lms/core'
 import {
   IconEssentional,

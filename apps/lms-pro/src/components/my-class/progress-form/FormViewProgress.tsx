@@ -22,7 +22,7 @@ import {
   IProgress,
   IRequestCreateProgress,
   LearningMode,
-} from 'src/type/progress'
+} from '@lms/core'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 import { round } from 'lodash'

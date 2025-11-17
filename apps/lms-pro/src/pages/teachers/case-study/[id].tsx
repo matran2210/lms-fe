@@ -44,8 +44,8 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IRequirement } from 'src/type/case-study'
-import { IExhibit } from 'src/type/exhibit'
+import { IRequirement } from '@lms/core'
+import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import { TestAPI } from 'src/pages/api/test'
 import QuitTestModal from 'src/pages/courses/test/quit-test'

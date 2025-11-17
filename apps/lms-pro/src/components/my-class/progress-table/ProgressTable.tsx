@@ -8,9 +8,9 @@ import {
   IProgressList,
   IProgressUser,
   LearningMode,
-} from 'src/type/progress'
+} from '@lms/core'
 import SAPPDropdown from '@components/base/Dropdown/SAPPDropdown'
-import { TableColumn } from 'src/type'
+import { TableColumn } from '@lms/core'
 import { round } from 'lodash'
 import { useSelector } from 'react-redux'
 import { userReducer } from 'src/redux/slice/User/User'

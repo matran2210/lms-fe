@@ -9,7 +9,7 @@ import { round } from 'lodash'
 import { useRouter } from 'next/router'
 import Tooltip from 'src/common/Tooltip'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { CLASS_USER_STATUS, IMyCourseDetail } from 'src/type/courses'
+import { CLASS_USER_STATUS, IMyCourseDetail } from '@lms/core'
 
 const Part = ({
   course,

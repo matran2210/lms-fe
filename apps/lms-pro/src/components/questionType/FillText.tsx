@@ -12,7 +12,7 @@ import {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
-import { IExhibitData } from 'src/type/exhibit'
+import { IExhibitData } from '@lms/core'
 
 interface IProps {
   data: any

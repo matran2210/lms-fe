@@ -20,7 +20,7 @@ import {
   backTypeMap,
   getTypeName,
   ISection,
-} from 'src/type/courses'
+} from '@lms/core'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { isEmpty } from 'lodash'

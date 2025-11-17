@@ -4,7 +4,7 @@ import { Calendar, DatePicker } from 'antd'
 import { Controller, Control } from 'react-hook-form'
 import dayjs, { Dayjs } from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 dayjs.extend(utc)
 import ErrorMessage from 'src/common/ErrorMessage'

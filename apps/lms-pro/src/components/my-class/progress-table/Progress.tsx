@@ -18,7 +18,7 @@ import {
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { IClassDetail, IProgressFilterForm } from 'src/type/progress'
+import { IClassDetail, IProgressFilterForm } from '@lms/core'
 import useSappPaging from '../../../hooks/useSappPaging'
 import SAPPInput from '@components/base/Input/SAPPInput'
 

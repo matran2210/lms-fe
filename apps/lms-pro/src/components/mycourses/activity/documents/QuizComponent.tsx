@@ -60,9 +60,9 @@ import {
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz'
 import { pushNotes } from 'src/redux/slice/Course/NotesList'
 
-import { IEssayAnswer } from 'src/type/answer'
-import { IFile } from 'src/type/course'
-import { IExhibit, IExhibitData } from 'src/type/exhibit'
+import { IEssayAnswer } from '@lms/core'
+import { IFile } from '@lms/core'
+import { IExhibit, IExhibitData } from '@lms/core'
 import { v4 as uuidv4 } from 'uuid'
 
 interface IRequirement {

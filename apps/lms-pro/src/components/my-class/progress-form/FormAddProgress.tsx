@@ -19,7 +19,7 @@ import {
   IDefaultFormAddProgress,
   ILesson,
   IRequestCreateProgress,
-} from 'src/type/progress'
+} from '@lms/core'
 import { z } from 'zod'
 import TreeProgress from './TreeProgress'
 import { sortSectionsByPosition } from '@utils/teacher-progress'

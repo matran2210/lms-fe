@@ -18,7 +18,7 @@ import React, {
 } from 'react'
 import { SappTitleSolution } from 'src/common/SappTitleSolution'
 import { MY_COURSES } from '@lms/core'
-import { IExhibitData } from 'src/type/exhibit'
+import { IExhibitData } from '@lms/core'
 import CustomEdge from './CustomEdge'
 import { CustomNode } from './CustomNode'
 import CustomFlow from './CustomFlow'

@@ -24,8 +24,8 @@ import {
   courseActivityReducer,
   getCourseActivityTapById,
 } from 'src/redux/slice/Course/MyCourse/Activity/Activity'
-import { IVideo } from 'src/type/course'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IVideo } from '@lms/core'
+import { IActivity } from '@lms/core'
 
 interface IProps {
   activity: IActivity

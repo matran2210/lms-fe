@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useCourseSectionsData } from 'src/hooks/useCourseSectionsData'
-import { getTypeName, ISection, SectionField } from 'src/type'
+import { getTypeName, ISection, SectionField } from '@lms/core'
 
 interface IList {
   id: number

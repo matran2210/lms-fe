@@ -11,8 +11,8 @@ import {
   ISection,
   SectionDropdownFormValues,
   SectionField,
-} from 'src/type/courses'
-import { getTypeName } from 'src/type'
+} from '@lms/core'
+import { getTypeName } from '@lms/core'
 const { publicRuntimeConfig } = getConfig()
 export const { apiURL } = publicRuntimeConfig
 import { useAppSelector, useAppDispatch } from 'src/redux/hook'
@@ -28,7 +28,7 @@ import { useCourseNoteContext } from '@contexts/CourseNoteContext'
 import {
   ICourseSectionNoteItem,
   INotesListResponse,
-} from 'src/type/course/activity'
+} from '@lms/core'
 import NoData from 'src/common/NoData'
 import SortBy from '@components/common/SortBy'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'

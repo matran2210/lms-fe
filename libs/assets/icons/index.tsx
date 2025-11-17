@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ISVG } from "src/type";
+import { ISVG } from '@lms/core';
 interface IProps {
   color?: string;
   size?: number;

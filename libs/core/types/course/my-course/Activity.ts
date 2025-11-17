@@ -1,68 +1,68 @@
-import { IQuizSetting } from 'src/type/courses'
+import { IQuizSetting } from '../../courses'
 import { IFile, IQuestion, IVideo } from '../Question'
 
 export interface IActivity {
-  id: string[] | undefined | string
-  created_at: string
-  updated_at: string
-  deleted_at: null
-  course_id: string
-  name: string
-  code: string
-  description: string
-  status: string
-  is_public: boolean
-  duration: number
-  is_peer_review: boolean
-  is_graded: boolean
+  id: string[] | undefined | string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: null;
+  course_id: string;
+  name: string;
+  code: string;
+  description: string;
+  status: string;
+  is_public: boolean;
+  duration: number;
+  is_peer_review: boolean;
+  is_graded: boolean;
   course_section_notes: {
-    name: string
-    description: string
-  }[]
-  course_section_type: string
-  activity_type: string
-  position: string
-  parent_id: string
-  display_icon: string
-  total_activity: number
+    name: string;
+    description: string;
+  }[];
+  course_section_type: string;
+  activity_type: string;
+  position: string;
+  parent_id: string;
+  display_icon: string;
+  total_activity: number;
   course_outcomes: {
-    id: string
-    created_at: string
-    updated_at: string
-    deleted_at: string
-    description: string
-  }[]
+    id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    description: string;
+  }[];
   course_learning_outcome: {
-    id: string
-    created_at: string
-    updated_at: string
-    deleted_at: string
-    name: string
-    description: string
-  }
-  files: File[]
-  tabs?: ITab[]
-  class_id?: string
-  class_user_id?: string
+    id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+    name: string;
+    description: string;
+  };
+  files: File[];
+  tabs?: ITab[];
+  class_id?: string;
+  class_user_id?: string;
   next_activity: {
-    id: string
-    display_icon: string
-    name: string
-    is_preview_locked: boolean
-  }
+    id: string;
+    display_icon: string;
+    name: string;
+    is_preview_locked: boolean;
+  };
   previous_activity: {
-    id: string
-    display_icon: string
-    name: string
-    is_preview_locked: boolean
-  }
-  breadcumb?: IBreadcrumb[]
+    id: string;
+    display_icon: string;
+    name: string;
+    is_preview_locked: boolean;
+  };
+  breadcumb?: IActivityBreadcrumb[];
   user_course_section_progress: {
-    id: string
-    total_course_sections: number
-    total_course_sections_completed: number
-  }[]
-  is_preview_locked: boolean
+    id: string;
+    total_course_sections: number;
+    total_course_sections_completed: number;
+  }[];
+  is_preview_locked: boolean;
 }
 
 export interface ITab {
@@ -115,7 +115,7 @@ export interface ITab {
 }
 
 type CourseSectionType = 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
-export interface IBreadcrumb {
+export interface IActivityBreadcrumb {
   id: string
   name: string
   course_section_type: CourseSectionType
@@ -124,7 +124,7 @@ export interface IBreadcrumb {
 }
 
 export interface IQuestionResultResponse {
-  data: IQuestionResult[]
+  data: IActivityQuestionResult[]
   meta: {
     total_pages: number
     total_records: number
@@ -137,33 +137,33 @@ export interface IQuestionResultResponse {
   }
 }
 
-export interface IQuestionResult {
-  active?: string
+export interface IActivityQuestionResult {
+  active?: string;
   question?: {
     quiz_question_instances?: {
       section: {
-        name: string
-      }
-    }
+        name: string;
+      };
+    };
     question_filter?: {
       part: {
-        name: string
-      }
-    }
-    qType?: string
+        name: string;
+      };
+    };
+    qType?: string;
     question_report: {
-      average_time: number
-      ratio: number
-    }
+      average_time: number;
+      ratio: number;
+    };
     question_topic?: {
-      id: string
-      name: string
-    }
-  }
-  id: string
-  content: string
-  section: string
-  type: string
-  is_correct: boolean
-  time_spent: number
+      id: string;
+      name: string;
+    };
+  };
+  id: string;
+  content: string;
+  section: string;
+  type: string;
+  is_correct: boolean;
+  time_spent: number;
 }

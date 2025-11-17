@@ -9,7 +9,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 import HeaderMobile from '@components/layout/Header/HeaderMobile'
-import { ICourseInfo } from 'src/type/dashboard'
+import { ICourseInfo } from '@lms/core'
 import ContinueLearning from '@components/dashboard/ContinueLearning'
 
 const Dashboard = () => {

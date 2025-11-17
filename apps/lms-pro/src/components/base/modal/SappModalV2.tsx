@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { ReactNode } from 'react'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
-import { IButtonColors } from 'src/type'
+import { IButtonColors } from '@lms/core'
 
 interface IProps {
   children: ReactNode

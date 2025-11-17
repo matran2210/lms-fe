@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { Control, Controller } from 'react-hook-form'
 import ErrorMessage from 'src/common/ErrorMessage'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 export interface SAPPRangePickerProps extends IBaseFormFieldProps {
   allowClear?: boolean

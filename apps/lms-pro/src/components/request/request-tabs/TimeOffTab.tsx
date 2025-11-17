@@ -18,7 +18,7 @@ import {
   OPTIONS_TIME_OFF_REQUEST_TYPE,
   REQUEST_TYPE,
 } from '@lms/core'
-import { IRequest, IRequestFilterForm } from 'src/type'
+import { IRequest, IRequestFilterForm } from '@lms/core'
 import FormRequest from '../request-forms/FormRequest'
 import RequestDetail from '../request-forms/RequestDetail'
 import TimeOffTable from '../request-tables/TimeOffTable'

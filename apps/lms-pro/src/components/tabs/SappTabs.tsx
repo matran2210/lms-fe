@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { ITabsTeacher } from 'src/type'
+import { ITabsTeacher } from '@lms/core'
 import { useRouter } from 'next/router'
 
 interface SappTabsProps {

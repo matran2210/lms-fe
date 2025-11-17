@@ -23,7 +23,7 @@ import {
   PageLink,
   QUESTION_TYPES,
 } from '@lms/core'
-import { IAnswer, IQuizAttemptChartType } from 'src/type'
+import { IAnswer, IQuizAttemptChartType } from '@lms/core'
 import { CoursesAPI } from '../../../api/courses/index'
 import { CloseIcon } from '@assets/icons'
 import Tooltip from 'src/common/Tooltip'

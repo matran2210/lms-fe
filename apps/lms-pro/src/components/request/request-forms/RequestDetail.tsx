@@ -19,8 +19,8 @@ import {
   requestStatusToTitle,
 } from '@lms/core'
 import { REQUEST_TYPE } from '@lms/core'
-import { IBusyRequestDetailResponse, IWeeklyNorms } from 'src/type/my-request'
-import { RequestStatus } from 'src/type/my-request/enum'
+import { IBusyRequestDetailResponse, IWeeklyNorms } from '@lms/core'
+import { RequestStatus } from '@lms/core/enum'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { useAppDispatch } from 'src/redux/hook'
 import SAPPBadge from '@components/base/Badge/SAPPBadge'

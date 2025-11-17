@@ -13,7 +13,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IRequest } from 'src/type'
+import { IRequest } from '@lms/core'
 
 interface Iprops {
   item: IRequest

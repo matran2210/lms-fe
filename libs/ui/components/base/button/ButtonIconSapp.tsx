@@ -1,7 +1,7 @@
 import { ArrowIcon, PlusIcon } from '@assets/icons'
 import Link from 'next/link'
 import { useState } from 'react'
-import { IButtonIconProps, IButtonSize, IButtonVariant } from 'src/type'
+import { IButtonIconProps, IButtonSize, IButtonVariant } from '@lms/core'
 
 const sizeStyles: Record<IButtonSize, string> = {
   small: 'px-4 py-2 text-sm',

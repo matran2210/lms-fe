@@ -2,7 +2,7 @@ import OverProgress from '@components/dashboard/dashboard-exam/OverProgress'
 import TopicProgress from '@components/dashboard/dashboard-exam/TopicProgress'
 import LearningResults from '@components/dashboard/dashboard-exam/LearningResults'
 import { Dispatch, SetStateAction } from 'react'
-import { ICourseInfo } from 'src/type/dashboard'
+import { ICourseInfo } from '@lms/core'
 
 const ExamDashboard = ({
   setInfoCourse,

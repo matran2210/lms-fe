@@ -1,4 +1,4 @@
-import { IContentCompleted, ICourseSections } from 'src/type/progress'
+import { IContentCompleted, ICourseSections } from '@lms/core'
 
 export const sortSectionsByPosition = (data: IContentCompleted[]) => {
   if (!Array.isArray(data) || data.length === 0) return []

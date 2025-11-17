@@ -1,7 +1,7 @@
 import React from 'react'
 import SappDrawerV3 from '@components/base/drawer/SappDrawerV3'
 import NoData from 'src/common/NoData'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity } from '@lms/core'
 import clsx from 'clsx'
 import { download } from '../ActivityResource'
 import { trackGAEvent } from '@utils/google-analytics'

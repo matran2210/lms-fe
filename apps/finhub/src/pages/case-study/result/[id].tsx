@@ -51,9 +51,8 @@ import {
   ICratchPad,
   IQuestionResult,
   IRequirement,
-  ITopic,
-} from 'src/type/case-study'
-import { IExhibit } from 'src/type/exhibit'
+  ITopic,IExhibit
+} from '@lms/core'
 import CaseStudyWrapper from '../../../components/casestudy/layout/CaseStudyWrapper'
 
 const CaseStudyResult = () => {

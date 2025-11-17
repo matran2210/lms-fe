@@ -8,7 +8,7 @@ import { useQuery } from 'react-query'
 import { PageLink, TEST_TYPE } from '@lms/core'
 import { TreeHelper } from 'src/helper/tree'
 import TestModalTeacher from '@components/courses/popup/TestModalTeacher'
-import { ILearningOutcome } from 'src/type/courses'
+import { ILearningOutcome } from '@lms/core'
 import LayoutTeacher from '@components/layout/Teacher'
 import { CoursesAPI } from 'src/pages/api/courses/index'
 import { buildQueryString, formatDate } from '@utils/index'
@@ -18,7 +18,7 @@ import { UserType } from 'src/redux/types/User/urser'
 import dayjs from 'dayjs'
 import { AlertInfoIcon, CloseIconPreview } from '@assets/icons'
 import clsx from 'clsx'
-import { ITabs } from 'src/type/common'
+import { ITabs } from '@lms/core'
 interface IProps {
   course_section_type: string
   description: string

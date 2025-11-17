@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { EChartsOption } from 'echarts'
-import { ILearningResult, IMockTestResult } from 'src/type/dashboard'
+import { ILearningResult, IMockTestResult } from '@lms/core'
 import EChart from '@components/base/chart/Chart'
 
 interface LearningRadarChartProps {

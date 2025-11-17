@@ -9,7 +9,7 @@ import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
 import { UserType } from 'src/redux/types/User/urser'
-import { IQuestion, QUESTION_TYPES } from 'src/type/course/Question'
+import { IQuestion, QUESTION_TYPES } from '@lms/core'
 import { IAtempt, IRequirement } from 'src/type/courses-3-level/test'
 import { CoursesAPI } from '../../../api/courses'
 

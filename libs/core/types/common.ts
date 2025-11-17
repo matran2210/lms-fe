@@ -8,13 +8,6 @@ export interface ITabs {
   title: string;
 }
 
-export interface IResponse<T> {
-  error: any;
-  status: number;
-  success: boolean;
-  data: T;
-}
-
 export interface IBreadcrumb {
   title: string;
   link: string;

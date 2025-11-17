@@ -48,7 +48,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import QuitTestModal from 'src/pages/courses/test/quit-test'
 import TestTimeOutModal from 'src/pages/courses/test/test-timeout'
@@ -69,8 +69,8 @@ import {
   Requirement,
   RequirementItem,
   ScratchPadValue,
-} from 'src/type'
-import { IRequirement } from 'src/type/case-study'
+} from '@lms/core'
+import { IRequirement } from '@lms/core'
 import {
   checkSheetAnswered,
   checkTypeAndRenderTitle,

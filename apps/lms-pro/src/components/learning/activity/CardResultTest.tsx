@@ -12,7 +12,7 @@ import {
 } from '@lms/core'
 import { EAttemptStatus } from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { EDateTime } from 'src/type'
+import { EDateTime } from '@lms/core'
 
 const CardResultTest = ({
   resultData,

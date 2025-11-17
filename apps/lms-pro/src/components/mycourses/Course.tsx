@@ -25,7 +25,7 @@ import {
   PROGRAM,
 } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
+import { CLASS_USER_STATUS, ICourse } from '@lms/core'
 import PopupActive from './PopupActive'
 import PopupExtend from './PopupExtend'
 import PopupLesson from './PopupLesson'

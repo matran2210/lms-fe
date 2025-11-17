@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import TotalResullt from 'src/common/TotalResullt'
 import { defaultStatusCourse } from '@lms/core'
-import { ICourseAll } from 'src/type/courses'
+import { ICourseAll } from '@lms/core'
 
 interface IProps {
   courses: ICourseAll

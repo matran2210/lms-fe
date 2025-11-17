@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import BaseButton from './BaseButton'
-import { IButtonBaseProps } from 'src/type'
+import { IButtonBaseProps } from '@lms/core'
 import LoadingBtnAnimation from '@assets/icons/LoadingBtnAnimation'
 
 const ButtonPrimary = ({

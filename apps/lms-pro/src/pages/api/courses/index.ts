@@ -1,8 +1,8 @@
 import { fetcher } from '@services/requestV2'
 import url from 'src/redux/services/Course/MyCourse/Test/url'
 import { apiURL } from 'src/redux/services/httpService'
-import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from 'src/type'
-import { CourseDetail } from 'src/type/course'
+import { IAnswerQuizLastestAttempt, IResponse, IScoreDetails } from '@lms/core'
+import { CourseDetail } from '@lms/core'
 
 export class CoursesAPI {
   static getNoteDetail(

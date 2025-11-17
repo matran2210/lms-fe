@@ -1,4 +1,4 @@
-import { COURSE_TYPE } from '@lms/core'
+import { COURSE_TYPE } from "../../enums"
 
 interface IReport {
   completed_activities: number

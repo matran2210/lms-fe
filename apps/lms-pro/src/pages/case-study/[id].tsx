@@ -42,8 +42,8 @@ import {
   loadMoreQuestion,
   saveFileEssay,
 } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IRequirement } from 'src/type/case-study'
-import { IExhibit } from 'src/type/exhibit'
+import { IRequirement } from '@lms/core'
+import { IExhibit } from '@lms/core'
 import { CoursesAPI } from '../api/courses/index'
 import { TestAPI } from '../api/test'
 import QuitTestModal from '../courses/test/quit-test'
@@ -54,7 +54,7 @@ import DragDropQuestion, {
   SlotValue,
 } from '@components/questionType/NewDragNDropQuestion/NewDragNDrop'
 import ButtonPrimaryV2 from '@components/base/button/ButtonPrimaryV2'
-import { Requirement } from 'src/type'
+import { Requirement } from '@lms/core'
 import { defaultSheetData } from '@lms/core'
 import ShowAnswerTemplate from '@components/test/ShowAnswerTemplate'
 import ResetToAnswerTemplateModal from '@components/test/ResetToAnswerTemplateModal'

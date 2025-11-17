@@ -18,9 +18,7 @@ import {
 } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs, NOTIFICATION_STATUS } from 'src/type'
-import { IDeviceItem, ProfilePages } from 'src/type/Profile'
-
+import { IDeviceItem, NOTIFICATION_STATUS } from '@lms/core'
 import {
   convertSlugToTitle,
   getLocalStorageItem,

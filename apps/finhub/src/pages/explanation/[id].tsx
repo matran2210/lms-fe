@@ -12,11 +12,9 @@ import { GRADING_METHOD, PageLink, TEST_ATTEMPT_TYPE } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UploadAPI } from 'src/pages/api/upload'
 import { UserType } from 'src/redux/types/User/urser'
-import { IRequirement } from 'src/type/case-study'
-import { QUESTION_TYPES } from 'src/type/course/Question'
+import {IAtempt, IRequirement, QUESTION_TYPES} from '@lms/core'
 import { CoursesAPI } from '../api/courses'
-import { IAtempt } from 'src/type/results'
-import { EYourAnswerType } from 'src/type'
+import { EYourAnswerType } from '@lms/core'
 
 const Explanation = () => {
   const router = useRouter()

@@ -109,7 +109,11 @@ export interface IClass {
   finished_at?: string
   class_user_instances: IClassUserInstance[]
 }
-
+export interface ClassStandardScheduleItem {
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+}
 export interface IMyClass {
   id: string
   name: string

@@ -18,7 +18,7 @@ import {
   TitleSidebar,
 } from '@lms/core'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
-import { ICalendar, ICalendarList } from 'src/type/calendar'
+import { ICalendar, ICalendarList } from '@lms/core'
 import clsx from 'clsx'
 const Page = () => {
   const { isAlwaysShowSidebar, isTabletView, isMobileView } =

@@ -29,7 +29,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import {
@@ -39,7 +39,7 @@ import {
   IQuestionResult,
   IRequirement,
   ITopic,
-} from 'src/type/case-study'
+} from '@lms/core'
 import clsx from 'clsx'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import MatchQuizComponent from '@components/questionType/MatchQuiz/MatchQuiz'

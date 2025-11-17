@@ -39,7 +39,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch, useAppSelector } from 'src/redux/hook'
 import { disableUnsavedChange, loginSlice } from 'src/redux/slice/Login/Login'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit } from '@lms/core'
 import ConFirmSubmit from './conFirmSubmit'
 import LimitQuizModal from './limitQuizModal'
 import styles from './test.module.scss'
@@ -76,8 +76,8 @@ import {
   DragDropAnswerItem,
   ScratchPad,
   ScratchPadValue,
-} from 'src/type'
-import { IRequirement } from 'src/type/case-study'
+} from '@lms/core'
+import { IRequirement } from '@lms/core'
 import { checkTypeAndRenderTitle } from 'src/utils/helpers/quiz-test/helper'
 import SuccessSubmittedConstructorModal from './SuccessSubmittedConstructorModal'
 import TestScratchPads from './TestScratchPads'

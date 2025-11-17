@@ -1,11 +1,11 @@
-import { Metadata } from 'src/type/results'
 import { CourseProgram } from '..'
-import { ExaminationSubject } from '@components/profile/ExamInformation/type'
+import { IMetaData } from '../../api-response'
+import { ExaminationSubject } from '../../exam-infomation'
 
 export * from './Result'
-
+export * from "./Activity"
 export interface CourseDetail {
-  metadata: Metadata
+  metadata: IMetaData
   class_user_id: string
   code: string
   is_passed: boolean

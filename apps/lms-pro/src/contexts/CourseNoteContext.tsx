@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { ICourseSectionNoteItem } from 'src/type/course/activity'
+import { ICourseSectionNoteItem } from '@lms/core'
 
 // type for context
 type Context = {

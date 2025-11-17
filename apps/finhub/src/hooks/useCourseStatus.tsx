@@ -6,7 +6,7 @@ import {
   CLASS_USER_TYPES,
   COURSE_STATUS,
 } from '@lms/core'
-import { CLASS_USER_STATUS, ICourse } from 'src/type/courses'
+import { CLASS_USER_STATUS, ICourse } from '@lms/core'
 
 export const useCourseStatus = (course: ICourse) => {
   const student = course?.classes?.[0]?.class_user_instances?.[0]

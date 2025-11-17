@@ -8,7 +8,7 @@ import {
   IDiscussion,
   IUserInDiscussion,
 } from 'src/redux/types/Course/MyCourse/Activity/activity'
-import { IActivity, IBreadcrumb } from 'src/type/course/my-course/Activity'
+import { IActivity, IActivityBreadcrumb } from '@lms/core'
 import { CoursesAPI } from '../../../../../pages/api/courses/index'
 import { ActivityAPI } from 'src/pages/api/activity'
 
@@ -58,8 +58,21 @@ const initialState: ICourseActivityState = {
   },
   files: [] as any[],
   discussion: undefined,
-  breadcumb: [] as IBreadcrumb[],
+  breadcumb: [] as IActivityBreadcrumb[],
   user_course_section_progress: [],
+  next_activity: {
+    id: '',
+    display_icon: '',
+    name: '',
+    is_preview_locked: false
+  },
+  previous_activity: {
+    id: '',
+    display_icon: '',
+    name: '',
+    is_preview_locked: false
+  },
+  is_preview_locked: false
 }
 
 export const getCourseActivityTapById = createAsyncThunk(

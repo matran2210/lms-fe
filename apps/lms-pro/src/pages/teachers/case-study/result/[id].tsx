@@ -33,7 +33,7 @@ import {
 } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { loadMoreQuestion } from 'src/redux/slice/Course/MyCourse/Case-study/CaseStudy'
-import { IExhibit } from 'src/type/exhibit'
+import { IExhibit } from '@lms/core'
 import SappButton from '@components/base/button/SappButton'
 import { CoursesAPI } from 'src/pages/api/courses'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
@@ -44,7 +44,7 @@ import {
   IQuestionResult,
   IRequirement,
   ITopic,
-} from 'src/type/case-study'
+} from '@lms/core'
 import { IFile } from 'preview-activity/dist/shared/interfaces'
 import clsx from 'clsx'
 import withAuthorization from 'src/HOC/withAuthorization'

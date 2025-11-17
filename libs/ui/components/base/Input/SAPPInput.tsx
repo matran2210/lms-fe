@@ -7,7 +7,7 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import SAPPLabel from '../Label/SAPPLabel'
 import GuidelineField from 'src/common/GuidelineField'
 import { useEffect, useRef } from 'react'
-import { IBaseFormFieldProps } from 'src/type/common'
+import { IBaseFormFieldProps } from '@lms/core'
 
 export interface SAPPInputProps extends IBaseFormFieldProps {
   placeholder?: string

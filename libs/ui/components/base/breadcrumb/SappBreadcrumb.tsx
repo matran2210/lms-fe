@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 
 interface BreadcrumbProps {
   tabs: ITabs[]

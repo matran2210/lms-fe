@@ -8,7 +8,7 @@ import { IEvent } from 'sapp-common-package/dist/types'
 import { DATE_TIME_FORMAT, TitleSidebar } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { IPopupDetails } from 'src/type/my-calendar'
+import { IPopupDetails } from '@lms/core'
 import LayoutTeacher from '@components/layout/Teacher'
 
 const breadcrumbs = [

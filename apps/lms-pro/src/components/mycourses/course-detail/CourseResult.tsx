@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ClassAPI } from 'src/pages/api/class'
-import { IQuizResultList } from 'src/type'
+import { IQuizResultList } from '@lms/core'
 import { Select } from 'antd'
 import { ArrowDownIcon } from '@assets/icons/entranceTest'
 

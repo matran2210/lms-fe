@@ -1,5 +1,5 @@
 import { CoursesAPI } from '@pages/api/courses'
-import { ISection } from 'src/type'
+import { ISection } from '@lms/core'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 

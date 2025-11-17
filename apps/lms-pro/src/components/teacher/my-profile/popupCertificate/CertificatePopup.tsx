@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { useAppDispatch } from 'src/redux/hook'
 import confirmDialog from 'src/redux/slice/ConfirmDialog/ConfirmDialogThunk'
-import { IButtonColors } from 'src/type'
+import { IButtonColors } from '@lms/core'
 
 import { CloseIcon } from '@assets/icons'
 import ButtonCancelSubmit from '@components/base/button/ButtonCancelSubmit'

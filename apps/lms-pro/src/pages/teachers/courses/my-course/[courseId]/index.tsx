@@ -11,7 +11,7 @@ import withAuthorization from 'src/HOC/withAuthorization'
 import { ANIMATION, PageLink } from '@lms/core'
 import { UserType } from 'src/redux/types/User/urser'
 import LayoutTeacher from '@components/layout/Teacher'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 
 const DEFAULT_PAGESIZE = 18
 

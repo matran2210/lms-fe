@@ -1,7 +1,7 @@
 import { PepIconsPencil } from '@assets/icons'
 import { Dropdown } from 'antd'
 import React from 'react'
-import { Placement } from 'src/type'
+import { Placement } from '@lms/core'
 
 interface SAPPDropdownProps {
   children: React.ReactNode | React.ReactNode[]

@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import { ReactNode } from 'react'
-import { IButtonColors } from 'src/type'
+import { IButtonColors } from '@lms/core'
 import ButtonCancelSubmit from '../button/ButtonCancelSubmit'
 import clsx from 'clsx'
 

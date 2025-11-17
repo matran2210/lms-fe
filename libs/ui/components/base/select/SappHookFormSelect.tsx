@@ -3,7 +3,7 @@ import React, { ReactNode, useCallback, memo } from 'react'
 import { Control, Controller, FieldValues, Path } from 'react-hook-form'
 import Select, { SingleValue, MultiValue } from 'react-select'
 import ErrorMessage from 'src/common/ErrorMessage'
-import { OptionType } from 'src/type'
+import { OptionType } from '@lms/core'
 
 interface IProps {
   name: string

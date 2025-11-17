@@ -3,7 +3,7 @@ import { getCookie, getSessionIdFromToken } from '@utils/index'
 import clsx from 'clsx'
 import React, { Dispatch, SetStateAction, useMemo } from 'react'
 import { COOKIE_INFO } from '@lms/core'
-import { IDeviceItem } from 'src/type/Profile'
+import { IDeviceItem } from '@lms/core'
 
 interface IProps {
   data: IDeviceItem

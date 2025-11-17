@@ -1,7 +1,7 @@
 import TeacherMenu from '@components/layout/MenuItemsList/TeacherMenu'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { Typography } from 'antd'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 import { memo } from 'react'
 import clsx from 'clsx'
 import Head from 'next/head'

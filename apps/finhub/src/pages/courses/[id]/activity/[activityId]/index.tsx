@@ -50,7 +50,7 @@ import { resetQuizActivity } from 'src/redux/slice/Course/MyCourse/Activity/Acti
 import { clearNote } from 'src/redux/slice/Course/NotesList'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
 import { UserType } from 'src/redux/types/User/urser'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity } from '@lms/core'
 interface IBreadCrumbs {
   course_section_type: 'PART' | 'CHAPTER' | 'UNIT' | 'ACTIVITY'
   id: string

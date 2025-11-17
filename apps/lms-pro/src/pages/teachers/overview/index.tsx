@@ -17,7 +17,7 @@ import React, { useRef, useState } from 'react'
 import { PageLink } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
-import { ITabs } from 'src/type'
+import { ITabs } from '@lms/core'
 
 const breadcrumbs: ITabs[] = [
   {

@@ -12,7 +12,7 @@ import {
   PageLink,
 } from '@lms/core'
 import { BookInClassIcon, ClockInClassIcon } from 'src/assets/icons/index'
-import { IMyClass } from 'src/type/classes'
+import { IMyClass } from '@lms/core'
 import { CLASS_TEACHER_STATUS, FLEXIBLE } from '@lms/core'
 import Tooltip from 'src/common/Tooltip'
 import { isEmpty } from 'lodash'

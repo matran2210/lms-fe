@@ -1,7 +1,7 @@
 import Icon from '@components/icons'
 import React, { ReactNode } from 'react'
 import Select, { type DropdownIndicatorProps, components } from 'react-select'
-import { ISelect } from 'src/type/course'
+import { ISelect } from '@lms/core'
 
 interface IProps {
   defaultValue?: any

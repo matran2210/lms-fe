@@ -68,6 +68,20 @@ export enum QUESTION_TYPES {
   DRAG_DROP = "DRAG_DROP",
   ESSAY = "ESSAY",
 }
+export enum QUESTION_LEVELS {
+  FUNDAMENTAL = 'FUNDAMENTAL',
+  ADVANCED = 'ADVANCED',
+}
+export enum QUESTION_ASSIGNMENT_TYPE {
+  FILE = 'FILE',
+  TEXT = 'TEXT',
+  ALL = 'ALL',
+}
+export enum QUESTION_RESPONSE_OPTION {
+  WORD = 'WORD',
+  SHEET = 'SHEET',
+  NONE = 'NONE',
+}
 export enum TEST_TYPE {
   QUIZ = "QUIZ",
   MID_TERM_TEST = "MID_TERM_TEST",

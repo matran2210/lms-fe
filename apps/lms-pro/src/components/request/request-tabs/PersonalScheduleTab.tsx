@@ -17,7 +17,7 @@ import {
   OPTIONS_REQUEST_STATUS,
   E_REQUEST_TYPE,
 } from '@lms/core'
-import { IRequest, IRequestFilterForm } from 'src/type'
+import { IRequest, IRequestFilterForm } from '@lms/core'
 import FormRequest from '../request-forms/FormRequest'
 import RequestDetail from '../request-forms/RequestDetail'
 import PersonalScheduleTable from '../request-tables/PersonalScheduleTable'

@@ -2,7 +2,7 @@ import React from 'react'
 import { isEmpty } from 'lodash'
 import NoData from 'src/common/NoData'
 import EventTest from './EventTest'
-import { IEventTest } from 'src/type/event-test'
+import { IEventTest } from '@lms/core'
 // import { ANIMATION } from '@lms/core'
 
 const EventTestList = ({

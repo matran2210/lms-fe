@@ -6,7 +6,7 @@ import { convertSecondsToMinutesSeconds } from '@utils/helpers'
 import { htmlToRaw } from '@components/common/timer'
 import clsx from 'clsx'
 import { ArrowDownIcon } from '@components/courses/icons'
-import { IAnswer } from 'src/type'
+import { IAnswer } from '@lms/core'
 import type { QUESTION_TYPES } from '@lms/core'
 
 const ListScoreCollapse = ({

@@ -1,4 +1,4 @@
-import { IMetaData } from 'src/type'
+import { IMetaData } from '@lms/core'
 
 export interface ITemplateConfig {
   template_full: number

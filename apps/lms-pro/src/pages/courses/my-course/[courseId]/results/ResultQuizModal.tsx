@@ -3,7 +3,7 @@ import { TEST_TYPE } from '@lms/core'
 import { getTimeFromInput } from '@utils/index'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { QuizActivity } from 'src/type/results'
+import { QuizActivity } from '@lms/core'
 
 interface ResultQuizModalProps {
   quizActivities: QuizActivity[]

@@ -10,7 +10,7 @@ import {
   IActivityStateQuestion,
   fetchQuestionById,
 } from 'src/redux/slice/Course/MyCourse/Activity/ActivityQuiz' // Import confirmQuestion from quizSlice
-import { IQuestion, IVideo } from 'src/type/course/Question'
+import { IQuestion, IVideo } from '@lms/core'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 import SAPPRadio from '@components/base/radiobutton/SAPPRadio'
 import clsx from 'clsx'

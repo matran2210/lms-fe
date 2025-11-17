@@ -51,8 +51,8 @@ import {
 import { DEFAULT_EDITOR_VALUE } from '@lms/core'
 import ConFirmSubmit from 'src/pages/test/conFirmSubmit'
 import { showPopupCompletedCourse } from 'src/redux/slice/Popup/Result-test'
-import { IQuizSetting } from 'src/type'
-import { IQuestion, IRequirment } from 'src/type/course/Question'
+import { IQuizSetting } from '@lms/core'
+import { IQuestion, IRequirment } from '@lms/core'
 import LoadingQuizDocument from './LoadingQuizDocument'
 import QuizComponent, { QuizComponentRef } from './QuizComponent'
 

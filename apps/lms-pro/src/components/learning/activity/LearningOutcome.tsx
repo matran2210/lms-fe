@@ -3,7 +3,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import { Collapse } from 'antd'
 import clsx from 'clsx'
 import React from 'react'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity } from '@lms/core'
 
 interface IProps {
   activity: IActivity

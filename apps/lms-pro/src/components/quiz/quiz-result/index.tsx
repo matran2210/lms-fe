@@ -6,7 +6,7 @@ import { IQuestionResultResponse } from 'quiz-result-package/dist/type'
 import { useEffect, useState } from 'react'
 import { PageLink } from '@lms/core'
 import { CoursesAPI } from 'src/pages/api/courses'
-import { ActivityInfo } from 'src/type'
+import { ActivityInfo } from '@lms/core'
 import Layout from '@components/layout'
 import CloseModalIcon from '@assets/icons/CloseModalIcon'
 

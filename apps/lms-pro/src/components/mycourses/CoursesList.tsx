@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import { isEmpty } from 'lodash'
 import React from 'react'
 import { useAppSelector } from 'src/redux/hook'
-import { ICourse } from 'src/type/courses'
+import { ICourse } from '@lms/core'
 import Course from './Course'
 import NoCoursesAvailable from 'src/common/NoCoursesAvailable'
 

@@ -14,7 +14,7 @@ import React, { useRef } from 'react'
 import SappIcon from 'src/common/SappIcon'
 import Tooltip from 'src/common/Tooltip'
 import { ANIMATION } from '@lms/core'
-import { IActivity } from 'src/type/course/my-course/Activity'
+import { IActivity } from '@lms/core'
 interface IProps {
   activity: IActivity
   focusOnly: boolean

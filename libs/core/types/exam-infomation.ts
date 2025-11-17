@@ -1,22 +1,17 @@
+import { IMetaData } from "./api-response"
+
 export interface UserExamInformation {
-  success: boolean
-  data: Data
+  success: boolean;
+  data: UserExamInformationData
 }
 
-export interface Data {
-  data: Data2
+export interface UserExamInformationData {
+  data: Data2;
 }
 
 export interface Data2 {
-  metadata: Metadata
+  metadata: IMetaData
   data: IExamInformation[]
-}
-
-export interface Metadata {
-  total_pages: number
-  total_records: number
-  page_index: number
-  page_size: number
 }
 
 export interface IExamInformation {
@@ -35,22 +30,22 @@ export interface IExamInformation {
 export interface Class {
   id: string
   code: string
-  course: Course
+  course: IClassCourse
 }
 
-export interface Course {
-  id: string
-  name: string
-  course_categories: CourseCategory[]
-  subject: Subject
+export interface IClassCourse {
+  id: string;
+  name: string;
+  course_categories: ISimpleCourseCategory[];
+  subject: ISimpleSubject;
 }
 
-export interface CourseCategory {
-  id: string
-  name: string
+export interface ISimpleCourseCategory {
+  id: string;
+  name: string;
 }
 
-export interface Subject {
+export interface ISimpleSubject {
   id: string
   name: string
   code: string
@@ -61,10 +56,10 @@ export interface ExaminationSubject {
   code_exam: string
   start_date: any
   end_date: string
-  examination: Examination
+  examination: ISimpleExamination
 }
 
-export interface Examination {
-  id: string
-  name: string
+export interface ISimpleExamination {
+  id: string;
+  name: string;
 }

@@ -7,7 +7,7 @@ import { getNoOfAttemptEntranceTest } from '@utils/helpers/quiz-test/helper'
 import dayjs from 'dayjs'
 import router from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
-import { IEntranceTest, IEntranceTestAttempt } from 'src/type/entrance-test'
+import { IEntranceTest, IEntranceTestAttempt } from '@lms/core'
 
 interface EntrancePopupContinueProps {
   currentAttempt: IEntranceTestAttempt

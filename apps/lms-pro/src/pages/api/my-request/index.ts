@@ -9,7 +9,7 @@ import {
   IEditBusyScheduleData,
   IEditTimeoffRequestData,
   IEditWeeklyNormData,
-} from 'src/type/my-request'
+} from '@lms/core'
 
 export class MyRequestAPI {
   static createBusySchedule(

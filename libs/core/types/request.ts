@@ -1,8 +1,7 @@
 import { Dayjs } from 'dayjs'
-import { REQUEST_STATUS, REQUEST_TYPE } from '@lms/core'
-import { IUser } from 'src/redux/types/User/urser'
-import { IMetaData } from '.'
+import { IMetaData, IUser } from '.'
 import { ISelect } from './course'
+import { REQUEST_STATUS, REQUEST_TYPE } from '../constants'
 
 export type RequestType = keyof typeof REQUEST_TYPE
 
@@ -53,12 +52,12 @@ export interface ISchedule {
 
 export interface IClassSchedule {
   id: string
-  class: IClass
+  class: ISimpleClass
 }
 
-export interface IClass {
-  id: string
-  code: string
+export interface ISimpleClass {
+  id: string;
+  code: string;
 }
 
 export interface ITeacherWeeklyNorm {

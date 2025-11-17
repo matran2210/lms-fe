@@ -2,7 +2,7 @@ import { calculatePercentage } from '@utils/helpers'
 import Tooltip from 'src/common/Tooltip'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { useScrollShadows } from 'src/hooks/useScrollShadows'
-import { ChartDatum } from 'src/type'
+import { ChartDatum } from '@lms/core'
 interface IProps {
   data: ChartDatum[]
   loading?: boolean

@@ -1,7 +1,7 @@
 import LayoutTeacher from '@components/layout/Teacher'
 import { useRouter } from 'next/router'
 import ClassCard from '@components/card/ClassCard'
-import { ITabs, NumberToDayOfWeekMap } from 'src/type'
+import { ITabs, NumberToDayOfWeekMap } from '@lms/core'
 import {
   ANIMATION,
   DATE_FORMAT_HM,
@@ -14,11 +14,11 @@ import { useEffect, useState } from 'react'
 import Overview from '@components/teacher/myClass/class-detail/OverView'
 import Students from '@components/teacher/myClass/class-detail/Students'
 import StudentsTestResult from '@components/teacher/myClass/class-detail/StudentsTestResult'
-import { ICertificateData, IMyClass } from 'src/type/classes'
+import { ICertificateData, IMyClass } from '@lms/core'
 import withAuthorization from 'src/HOC/withAuthorization'
 import { UserType } from 'src/redux/types/User/urser'
 import Progress from '@components/my-class/progress-table/Progress'
-import { IProfilePages, ProfilePages } from 'src/type/Profile'
+import { IProfilePages, ProfilePages } from '@lms/core'
 import dayjs from 'dayjs'
 import { Space } from 'antd'
 import { capitalize } from 'lodash'

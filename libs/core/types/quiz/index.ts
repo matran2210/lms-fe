@@ -1,7 +1,7 @@
-import { QUESTION_TYPES } from '@lms/core'
 import { IMeta } from '../courses'
 import { IMetaData } from '..'
 import { IQuestion } from '../course'
+import { QUESTION_TYPES } from '../../enums'
 
 export interface IAnswerQuizLastestAttempt {
   next: Next
@@ -33,12 +33,12 @@ export interface QuizAttempt {
   id: string
   quiz_position_mapping: any[]
   class_user_id: string
-  quiz: IQuiz
+  quiz: ISimpleQuiz
 }
 
-export interface IQuiz {
-  id: string
-  quiz_type: string
+export interface ISimpleQuiz {
+  id: string;
+  quiz_type: string;
 }
 
 export interface AnswerPositionMapping {
@@ -141,6 +141,7 @@ interface Question {
   question_content: string
   level: string
   qType: QUESTION_TYPES
+  solution: string
   question_report: QuestionReport
 }
 

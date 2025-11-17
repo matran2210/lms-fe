@@ -13,8 +13,8 @@ import { useEffect, useState } from 'react'
 import { ANIMATION } from '@lms/core'
 import { useAppDispatch } from 'src/redux/hook'
 import { getLogoutUser } from 'src/redux/slice/Login/Login'
-import { NOTIFICATION_STATUS } from 'src/type'
-import { IProfilePages } from 'src/type/Profile'
+import { NOTIFICATION_STATUS } from '@lms/core'
+import { IProfilePages } from '@lms/core'
 
 interface IProps {
   page: IProfilePages
