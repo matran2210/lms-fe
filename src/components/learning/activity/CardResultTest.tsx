@@ -59,6 +59,12 @@ const CardResultTest = ({
       </div>
     </div>
   )
+
+  const openInNewTab = (url: string) => {
+    if (typeof window === 'undefined') return
+    window.open(url, '_blank')
+  }
+
   const handleViewResult = () => {
     if (resultData?.quiz?.attempts?.length > 0) {
       if (resultData?.quiz?.grading_method === GRADING_METHOD.MANUAL) {
@@ -70,11 +76,11 @@ const CardResultTest = ({
               resultData?.quiz?.attempts?.[0]?.grading_status ===
               GRADE_STATUS.FINISHED_GRADING
             ) {
-              router.push(
+              openInNewTab(
                 `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
               )
             } else {
-              router.push(
+              openInNewTab(
                 `/courses/test/your-answers-detail/${resultData?.quiz?.attempts?.[0]?.id}`,
               )
             }
@@ -82,19 +88,19 @@ const CardResultTest = ({
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.IN_PROGRESS
           ) {
-            router.push(
+            openInNewTab(
               `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
             )
           } else if (
             resultData?.quiz?.attempts?.[0]?.status ===
             EAttemptStatus.UN_SUBMITTED
           ) {
-            router.push(
+            openInNewTab(
               `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
             )
           }
         } else {
-          router.push(
+          openInNewTab(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
         }
@@ -102,17 +108,17 @@ const CardResultTest = ({
         if (
           resultData?.quiz?.attempts?.[0]?.status === EAttemptStatus.IN_PROGRESS
         ) {
-          router.push(
+          openInNewTab(
             `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
           )
         } else {
-          router.push(
+          openInNewTab(
             `/courses/test/test-result/${resultData?.quiz?.attempts?.[0]?.id}`,
           )
         }
       }
     } else {
-      router.push(
+      openInNewTab(
         `/test/${resultData?.quiz?.id}?class_user_id=${resultData?.class_user_id}`,
       )
     }

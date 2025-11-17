@@ -31,6 +31,11 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
       setHasDataLoaded(true)
     }
   }
+  const openInNewTab = (url: string) => {
+    if (typeof window === 'undefined') return
+    window.open(url, '_blank')
+  }
+
   const handleViewActivity = (record: QuizActivity) => {
     if (!record?.id) return
 
@@ -47,9 +52,11 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
     if (!quiz.is_graded || quiz.grading_method === GRADING_METHOD.AUTO) {
       // Điều hướng đến màn Activity detail
       if (record.activity_id) {
-        router.push(`/courses/${courseId}/activity/${record.activity_id}`)
+        openInNewTab(
+          `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`,
+        )
       } else {
-        router.push(
+        openInNewTab(
           `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
         )
       }
@@ -64,13 +71,13 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
         attempt?.grading_status === GRADE_STATUS.REGRADING
       ) {
         // Case 2: Chưa chấm xong - điều hướng đến your-answers-detail
-        router.push(`/courses/quiz/your-answers-detail/${attempt.id}`)
+        openInNewTab(`/courses/quiz/your-answers-detail/${attempt.id}`)
         return
       }
 
       if (attempt?.grading_status === GRADE_STATUS.FINISHED_GRADING) {
         // Case 3: Đã chấm xong - điều hướng đến quiz-result
-        router.push(
+        openInNewTab(
           `/courses/quiz/quiz-result/${attempt.id}?courseId=${courseId}`,
         )
         return
@@ -78,9 +85,11 @@ const CollapseActivity = ({ resultData }: CollapseActivityProps) => {
 
       // Fallback: Nếu chưa có attempt hoặc grading_status không xác định
       if (record.activity_id) {
-        router.push(`/courses/${courseId}/activity/${record.activity_id}`)
+        openInNewTab(
+          `/courses/${courseId}/activity/${record.activity_id}?tabId=${record?.tab_id}`,
+        )
       } else {
-        router.push(
+        openInNewTab(
           `/test/${record?.id}?class_user_id=${resultData?.class_user_id}`,
         )
       }
