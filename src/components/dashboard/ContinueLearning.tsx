@@ -1,6 +1,6 @@
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import React from 'react'
-import course_content from '@assets/images/course_content.svg'
+import continue_learning from '@assets/images/book-continue-learning.svg'
 import Image from 'next/image'
 import { PageLink } from 'src/constants'
 import { useRouter } from 'next/router'
@@ -28,8 +28,8 @@ const ContinueLearning = () => {
           {/* Nội dung chính bên trái */}
           <div className="flex items-center gap-2 md:gap-4">
             {/* Hình ảnh */}
-            <div className="h-6 w-6 md:block md:h-[54px] md:w-[54px]">
-              <Image src={course_content} alt="pinned-completed-course" />
+            <div className="h-6 w-6 md:size-10">
+              <Image src={continue_learning} alt="pinned-completed-course" />
             </div>
 
             {/* Text */}
@@ -39,7 +39,7 @@ const ContinueLearning = () => {
               </div>
 
               {/* Desktop text */}
-              <div className="hidden text-sm text-gray-800 md:block">
+              <div className="hidden text-base text-gray-800 md:block">
                 <InstructionText onClick={() => goToCourseContent()} />
               </div>
             </div>
