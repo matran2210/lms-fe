@@ -110,7 +110,7 @@ export default function Sidebar({
               content={UserGuide.CONTENT_STEP_2}
               className="left-full top-1/2 ml-5"
               index={2}
-              total={7}
+              total={6}
               imgSrc={TourGuideSidebar}
             />
           )}
@@ -137,7 +137,7 @@ export default function Sidebar({
               title="Notification & Profile"
               imgSrc={TourGuideNoti}
               index={3}
-              total={7}
+              total={6}
             />
           )}
         </div>
