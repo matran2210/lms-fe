@@ -3619,7 +3619,7 @@ const TestDetail = () => {
             open={!isClickExhibitOpen ? undefined : false}
             placement="left"
           >
-            <div className="group fixed bottom-[242px] right-8 grid p-2 cursor-pointer place-items-center rounded-full bg-primary hover:bg-blend-overlay">
+            <div className="group fixed bottom-[242px] right-8 grid cursor-pointer place-items-center rounded-full bg-primary p-2 hover:bg-blend-overlay">
               <NotesOutline className="size-8 text-white" />
               <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />
               {showWarning && (
@@ -3686,7 +3686,7 @@ const TestDetail = () => {
           >
             <div
               className={clsx(
-                'group grid p-2 cursor-pointer place-items-center rounded-full bg-primary text-white shadow-icon hover:bg-blend-overlay',
+                'group grid cursor-pointer place-items-center rounded-full bg-primary p-2 text-white shadow-icon hover:bg-blend-overlay',
                 {
                   'top-[74px]':
                     (currentTabContent?.topicDescription?.qType ===
@@ -3714,7 +3714,7 @@ const TestDetail = () => {
           trackGAEvent('Click Button ScratchPad Test')
         }}
         className={clsx(
-          'group fixed bottom-[302px] right-8 grid p-2 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
+          'group fixed bottom-[302px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
           { '!bg-primary': isScatchPadEnabled },
         )}
       >
@@ -3727,7 +3727,7 @@ const TestDetail = () => {
           trackGAEvent('Click Button Calculator Test')
         }}
         className={clsx(
-          'group fixed bottom-[362px] right-8 grid p-2 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden',
+          'group fixed bottom-[362px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden',
           { '!bg-primary': checkCalExist > -1 },
         )}
       >
@@ -3739,7 +3739,7 @@ const TestDetail = () => {
           handleFlagQuestion(currentPage)
           trackGAEvent('Click Button Flag To Review Test')
         }}
-        className="group fixed bottom-[422px] right-8 grid p-2 cursor-pointer place-items-center rounded-full bg-white shadow-card lg:hidden"
+        className="group fixed bottom-[422px] right-8 grid cursor-pointer place-items-center rounded-full bg-white p-2 shadow-card lg:hidden"
       >
         <FlagIconV2 isActive={currentTabContent?.flag} className="size-8" />
         <div className="pointer-events-none absolute inset-0 rounded-full bg-white opacity-0 transition-opacity group-hover:opacity-20" />

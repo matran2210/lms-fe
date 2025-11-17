@@ -54,7 +54,7 @@ const SAPPSelectV2 = ({
   onDropdownVisibleChange,
   heightCustom = 'h-12',
   allowClear = false,
-  isOpen = undefined
+  isOpen = undefined,
 }: SAPPSelectProps) => {
   const EllipsisTooltip = ({ text }: { text: string }) => {
     const ref = useRef<HTMLDivElement>(null)
