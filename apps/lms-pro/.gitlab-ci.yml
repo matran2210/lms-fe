@@ -15,6 +15,7 @@ stages:
 build_master:
   stage: build
   extends: .prepare
+  image: docker:latest
   only:
     # variables:
     #   - $CI_COMMIT_MESSAGE =~ /build/

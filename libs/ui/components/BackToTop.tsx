@@ -1,42 +1,48 @@
-import clsx from 'clsx'
-import React, { useEffect, useState } from 'react'
+import clsx from "clsx";
+import React, { useEffect, useState } from "react";
 
 interface Props {
-  scrollContainerRef?: React.RefObject<HTMLElement>
-  className?: string
+  scrollContainerRef?: React.RefObject<HTMLElement>;
+  className?: string;
+  iconClassName?: string;
+  iconWrapperClassName?: string;
 }
 
-const BackToTop = ({ scrollContainerRef, className }: Props) => {
-  const [isVisible, setIsVisible] = useState(false)
-
+const BackToTop = ({
+  scrollContainerRef,
+  className,
+  iconClassName,
+  iconWrapperClassName,
+}: Props) => {
+  const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
-    const container = scrollContainerRef?.current || window
+    const container = scrollContainerRef?.current || window;
 
     const handleScroll = () => {
-      const scrollY = scrollContainerRef?.current?.scrollTop ?? window.scrollY
-      setIsVisible(scrollY > 50)
-    }
+      const scrollY = scrollContainerRef?.current?.scrollTop ?? window.scrollY;
+      setIsVisible(scrollY > 50);
+    };
 
-    container.addEventListener('scroll', handleScroll)
-    handleScroll() // Gọi khi mount
+    container.addEventListener("scroll", handleScroll);
+    handleScroll(); // Gọi khi mount
 
     return () => {
-      container.removeEventListener('scroll', handleScroll)
-    }
-  }, [scrollContainerRef?.current]) // Re-run khi ref thay đổi
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollContainerRef?.current]); // Re-run khi ref thay đổi
 
   const scrollToTop = () => {
     if (scrollContainerRef?.current) {
-      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }
+  };
 
   return (
     <div
       className={clsx(
-        `fixed bottom-[160px] right-4 z-50 cursor-pointer`,
+        `fixed bottom-[250px] right-4 z-50 cursor-pointer`,
         className,
         {
           hidden: !isVisible,
@@ -44,8 +50,19 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
       )}
       onClick={scrollToTop}
     >
-      <div className="flex size-[48px] items-center justify-center rounded-full bg-white p-2 shadow-card">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <div
+        className={clsx(
+          "flex size-[60px] items-center justify-center rounded-full bg-white p-2 shadow-card",
+          iconWrapperClassName,
+        )}
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          className={iconClassName}
+        >
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -57,7 +74,7 @@ const BackToTop = ({ scrollContainerRef, className }: Props) => {
         </svg>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BackToTop
+export default BackToTop;

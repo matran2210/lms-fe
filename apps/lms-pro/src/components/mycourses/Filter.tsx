@@ -82,7 +82,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
         className={clsx({
           'mr-1 border-x border-[#A1A1A1] py-2 pl-5 pr-6': true,
           'inactive-filter': !activeStatus,
-          'z-50 rounded-lg bg-white': tourGuideActive,
+          'z-50 rounded-lg bg-white ': tourGuideActive,
         })}
       >
         <SappHookFormSelect
@@ -105,7 +105,7 @@ const Filter = ({ courses, setPage, tourGuideActive, isTeacher }: IProps) => {
         className={clsx(
           `ml-1 flex self-center rounded-lg py-2 pl-5 pr-6 filter`,
           {
-            'z-50 bg-white': tourGuideActive,
+            'z-50  bg-white': tourGuideActive,
           },
         )}
       >

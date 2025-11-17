@@ -30,6 +30,7 @@ import HookFormTextArea from '@components/base/textfield/HookFormTextArea'
 import ActionDiscussion from './ActionDiscussion'
 import SendComment from './SendComment'
 import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
+import NoData from 'src/common/NoData'
 
 type Props = {
   class_id: string
@@ -342,8 +343,8 @@ const Discussion = ({ class_id }: Props) => {
   return (
     <div className="relative flex h-full flex-col justify-between bg-white">
       <div className="mb-6 hidden text-lg font-medium md:block">Discussion</div>
-      {!!selector?.discussion?.length && (
-        <div className="mb-6">
+      {!!selector?.discussion?.length ? (
+        <div className="mb-6 min-h-[calc(100vh-12rem)] md:min-h-full">
           <Skeleton loading={loading}>
             {selector?.discussion?.map((e, i) => {
               return (
@@ -452,7 +453,7 @@ const Discussion = ({ class_id }: Props) => {
                                       viewBox="0 0 24 24"
                                       strokeWidth="1.5"
                                       stroke="currentColor"
-                                      className="h-4 w-4"
+                                      className="h-4 w-4 "
                                     >
                                       <path
                                         strokeLinecap="round"
@@ -539,6 +540,10 @@ const Discussion = ({ class_id }: Props) => {
               )
             })}
           </Skeleton>
+        </div>
+      ) : (
+        <div className="flex min-h-[calc(100vh-10.5rem)] items-center justify-center md:hidden">
+          <NoData />
         </div>
       )}
 

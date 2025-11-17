@@ -30,7 +30,7 @@ const SAPPFilterRadio = ({
         className="peer sr-only"
       />
       <div
-        className={clsx('h-full w-full rounded-full border transition-all', {
+        className={clsx('h-full w-full rounded-full border transition-all ', {
           'border-icon': !checked,
           'border-primary': checked,
           'cursor-not-allowed opacity-50': disabled,
@@ -39,7 +39,7 @@ const SAPPFilterRadio = ({
       >
         <div
           className={clsx(
-            'mx-auto mt-[5px] h-2 w-2 rounded-full transition-opacity',
+            'mx-auto mt-[5px] h-2  w-2 rounded-full transition-opacity',
             {
               'opacity-100': checked,
               'opacity-0': !checked,

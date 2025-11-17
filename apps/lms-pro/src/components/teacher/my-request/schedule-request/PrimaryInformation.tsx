@@ -82,7 +82,7 @@ const PrimaryInformation = ({
       },
       children: (
         <div className="">
-          <div className="flex flex-col gap-5 border-t border-[#7E8299] py-4">
+          <div className="flex flex-col gap-5 border-t border-[#7E8299]  py-4">
             {/* Class Code */}
             <PrimaryInfoItem
               title="Class Code"

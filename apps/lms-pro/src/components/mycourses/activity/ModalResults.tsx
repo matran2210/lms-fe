@@ -45,7 +45,7 @@ const ModalResults = ({
     >
       <div className="m-auto max-w-screen-lg overflow-x-auto overflow-y-hidden px-6 xl:px-0">
         <div
-          className="absolute right-6 top-5 ml-auto cursor-pointer"
+          className="absolute right-6 top-5  ml-auto cursor-pointer"
           onClick={handleCancel}
         >
           <CloseIcon className="transform stroke-[#050505] transition-all duration-300 ease-in-out group-hover:stroke-primary" />

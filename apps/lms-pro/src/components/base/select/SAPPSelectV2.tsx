@@ -29,6 +29,7 @@ interface SAPPSelectProps {
   onDropdownVisibleChange?: ((open: boolean) => void) | undefined
   heightCustom?: string
   allowClear?: boolean
+  isOpen?: boolean
 }
 
 const SAPPSelectV2 = ({
@@ -53,6 +54,7 @@ const SAPPSelectV2 = ({
   onDropdownVisibleChange,
   heightCustom = 'h-12',
   allowClear = false,
+  isOpen = undefined,
 }: SAPPSelectProps) => {
   const EllipsisTooltip = ({ text }: { text: string }) => {
     const ref = useRef<HTMLDivElement>(null)
@@ -112,6 +114,7 @@ const SAPPSelectV2 = ({
               <>
                 <Select
                   {...field}
+                  open={isOpen}
                   className={clsx(
                     'custom-select-v2 w-full',
                     heightCustom,

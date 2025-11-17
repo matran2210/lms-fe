@@ -1,3 +1,5 @@
+import { ISelectOption } from "src/type";
+
 export const PageLink = {
   HOME: "/",
   COURSES: "/courses",
@@ -28,7 +30,7 @@ export const PageLink = {
   COURSE_PART_DETAIL: "/courses/[id]/section/[course_section_id]",
   TEACHER_COURSE_PART_DETAIL:
     "/teachers/courses/[id]/section/[course_section_id]",
-  COURSE_ACTIVITY: "/short-course/detail/[courseId]/activity/[id]",
+  COURSE_ACTIVITY: "/courses/[id]/activity/[activityId]",
   TEACHER_COURSE_ACTIVITY: "/teachers/courses/[id]/activity/[activityId]",
   TEST_RESULT: "/courses/test/test-result/[id]",
   USERPAGE: "/[page]",
@@ -38,11 +40,9 @@ export const PageLink = {
   REQUEST: "/request",
   MY_REQUEST: "/teachers/my-request",
   DASHBOARD: "/courses/my-course/[courseId]/dashboard",
-  COURSE_CONTENT: "/short-course/detail/[courseId]",
+  COURSE_CONTENT: "/courses/my-course/[courseId]",
   CALENDAR: "/calendar",
-  SHORT_COURSE: "/short-course",
-  SHORT_COURSE_DETAIL: "/short-course/detail",
-  SHORT_COURSE_PROFILE: "/overview",
+  EXAM_LIST: "/exam_list",
 };
 
 export const TitleSidebar = {
@@ -75,7 +75,19 @@ export const TitleSidebar = {
   TEST: "Test",
   DASHBOARD_TEST: "Dashboard Test",
   HOME: "Home",
-  ACTIVITY: "Activity",
+  STUDENT_PROFILE: "Student Profile",
+};
+
+export const ValueSidebar = {
+  HOME: "home",
+  DASHBOARD: "dashboard",
+  COURSES: "my-course",
+  STUDENT_CALENDAR: "student-calendar",
+  LEARNING_ACTIVITY: "learning-activity",
+  TEST: "test",
+  DASHBOARD_TEST: "dashboard-test",
+  EXAM_LIST: "exam-list",
+  STUDENT_PROFILE: "student-profile",
 };
 
 export const TitleTeacherSidebar = {
@@ -150,9 +162,11 @@ export const UserGuide = {
   CONTENT_STEP_4:
     "This is the welcome section! You will find information about your location here, and take a moment to familiarize yourself with the features and possibilities that await you on this page.",
   CONTENT_STEP_5:
-    "This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.",
+    "Here you can convert your courses to General Course or Master Finance depending on the study credit you have registered with SAPP.",
   CONTENT_STEP_6:
-    "The filter section allows you to filter courses by curriculum and course status.",
+    "This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.",
+  CONTENT_STEP_7:
+    "This is a course you have enrolled in. It provides details about the class it belongs to, the remaining study days, a brief course description, as well as the status and progress you have made so far.",
 };
 
 export const defaultStatusCourse = [
@@ -207,8 +221,12 @@ export const defaultStatusEnstraceTest = [
     value: "SUBMITTED",
   },
   {
-    label: "Unsubmitted",
-    value: "UN_SUBMITTED",
+    label: "Not started",
+    value: "NOT_STARTED",
+  },
+  {
+    label: "In Progress",
+    value: "IN_PROGRESS",
   },
 ];
 
@@ -218,12 +236,16 @@ export const defaultStatusEventTest = [
     value: "",
   },
   {
-    label: "Completed",
+    label: "Submitted",
     value: "SUBMITTED",
   },
   {
-    label: "Uncompleted",
-    value: "UN_SUBMITTED",
+    label: "Not started",
+    value: "NOT_STARTED",
+  },
+  {
+    label: "In Progress",
+    value: "IN_PROGRESS",
   },
 ];
 
@@ -242,13 +264,13 @@ export const DEFAULT_SELECT = [{ label: "All", value: "" }];
 
 export const DEFAULT_SELECT_SECTION_NAME = "All Section";
 
-// export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
-//   {
-//     label: "All Section",
-//     value: "",
-//     name: DEFAULT_SELECT_SECTION_NAME,
-//   },
-// ];
+export const DEFAULT_SELECT_SECTION: ISelectOption[] = [
+  {
+    label: "All Section",
+    value: "",
+    name: DEFAULT_SELECT_SECTION_NAME,
+  },
+];
 
 export const COURSE_STATUS = {
   PUBLISH: "PUBLISH",
@@ -302,8 +324,10 @@ export const ESSAY_TYPE = {
 };
 
 export const GRADE_STATUS = {
+  IN_REVIEW: "IN_REVIEW",
   AWAITING_GRADING: "AWAITING_GRADING",
   FINISHED_GRADING: "FINISHED_GRADING",
+  REGRADING: "REGRADING",
 };
 
 export const GRADING_METHOD = {
@@ -366,6 +390,7 @@ export const EVENT_TYPES_RESPONSE = {
   HOLIDAY: "HOLIDAY",
   OTHER: "OTHER",
   LIVE_ONLINE: "LIVE_ONLINE",
+  INACTIVE: "INACTIVE",
 } as const;
 
 export const EVENT_TYPES_ARRAY = Object.values(EVENT_TYPES);
@@ -376,7 +401,7 @@ export const EVENT_TYPES_LABEL = {
   [EVENT_TYPES.HOLIDAY]: "Holiday schedule",
   [EVENT_TYPES.OTHER]: "Other calendar",
   [EVENT_TYPES.LIVE_ONLINE]: "",
-  [EVENT_TYPES.INACTIVE]: "",
+  [EVENT_TYPES.INACTIVE]: "Inactive",
 };
 
 export const EVENT_TYPE_OPTIONS = Object.entries(EVENT_TYPES_LABEL)
@@ -610,6 +635,10 @@ export const statusMap = {
 export const LABEL_MAX_LENGTH = 12;
 
 export const DELAY_TIME_DISPLAY_POPUP = 2000; // 2s
+export const CLASS_TYPE = {
+  TRIAL: "TRIAL",
+};
+export const TEST_AND_QUIZ_TITLE = "Test & Quiz";
 export const LAYOUT = {
   DEFAULT_LAYOUT: "DEFAULT_LAYOUT",
   ERROR_LAYOUT: "ERROR_LAYOUT",
@@ -657,8 +686,11 @@ export const F_HIGH_CODES = ["F5", "F6"];
 export const video_url = process.env.NEXT_PUBLIC_VIDEO_URL;
 
 export const CERTIFICATE = "certificates";
-
-export * from './repeat/index'
+export * from "./socketEvents";
+export * from "./localStorageKeys";
+export * from "./socketEvents";
+export * from "./upload";
+export * from "./repeat/index";
 export * from "./Course";
 export * from "./Progress";
 export * from "./Test";
@@ -675,6 +707,6 @@ export * from "./lang";
 export * from "./localStorageKeys";
 export * from "./menu-items";
 export * from "./my-request";
-// export * from './request'
-export * from "./socketEvents";
-export * from "./upload";
+// export * from "./request";
+// export * from './courses3level/activity'
+// export * from './courses3level/courses'

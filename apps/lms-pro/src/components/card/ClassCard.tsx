@@ -42,7 +42,7 @@ const ClassCard = ({
         {dataDetail?.started_at && dataDetail?.finished_at && (
           <>
             <CalendarIcon />
-            <span className="ml-1 text-sm font-medium text-[#a1a1aa]">
+            <span className="ml-1  text-sm font-medium text-[#a1a1aa]">
               {formatDateFromUTC(dataDetail?.started_at)}&nbsp;-&nbsp;
               {formatDateFromUTC(dataDetail?.finished_at)}
             </span>

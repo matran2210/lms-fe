@@ -379,6 +379,7 @@ const LearningNotesList = () => {
       btnSubmitTile="Confirm"
       placement={!isAlwaysShowSidebar ? 'bottom' : 'right'}
       titleClassName={isOpenFilter ? 'w-full pr-8 text-center' : ''}
+      closable
     >
       <FormProvider {...methods}>
         {!isOpenFilter ? (
@@ -466,7 +467,7 @@ const LearningNotesList = () => {
                             </div>
                           </div>
                           <div
-                            className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex"
+                            className="mt-1 hidden items-center text-sm font-normal text-gray-400 md:flex "
                             onClick={() => onClose()}
                           >
                             <SappBreadcrumbNotLink

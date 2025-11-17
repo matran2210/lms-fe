@@ -7,12 +7,14 @@ import ErrorMessage from 'src/common/ErrorMessage'
 import { RcFile } from 'antd/es/upload'
 import { message, Upload, UploadProps } from 'antd'
 import { ArrowDownIcon } from '@components/icons'
+import { useTailwindBreakpoint } from 'src/hooks/useTailwindBreakpoint'
 interface IProps {
   classId: string
   remainingChanges?: number
   currentValue?: string
   isOpen: boolean
   setIsOpenSelectExam: React.Dispatch<React.SetStateAction<boolean>>
+  setDirection: React.Dispatch<React.SetStateAction<1 | -1>>
 }
 
 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
@@ -23,9 +25,11 @@ const ChangExamDate = ({
   remainingChanges,
   isOpen,
   setIsOpenSelectExam,
+  setDirection,
 }: IProps) => {
   const { control, reset, setValue } = useFormContext()
   const { exams, refetch } = useSelectExams(classId)
+  const { isMobileView } = useTailwindBreakpoint()
 
   const options = exams?.data
     ?.map((exam) => ({
@@ -72,7 +76,11 @@ const ChangExamDate = ({
         required
         placeholder="Choose one option"
         suffixIcon={<ArrowDownIcon className="rotate-[-90deg]" />}
-        onDropdownVisibleChange={() => setIsOpenSelectExam(true)}
+        onDropdownVisibleChange={() => {
+          setIsOpenSelectExam(true)
+          setDirection(1)
+        }}
+        isOpen={isMobileView ? false : undefined}
       />
       <div className="flex flex-col">
         <div className="mt-2 text-sm font-normal italic leading-snug text-gray-600">
@@ -82,7 +90,7 @@ const ChangExamDate = ({
           {remainingChanges} change remaining
         </div>
       </div>
-      <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6">
+      <div className="mt-6 flex flex-col gap-2 md:flex-row md:items-center md:gap-6 ">
         <div className="text-sm font-semibold leading-normal text-gray-800 md:text-base">
           Registration Evidence:
         </div>

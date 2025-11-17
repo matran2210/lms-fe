@@ -243,7 +243,7 @@ function RequestDetail({ open, setOpen, reloadPage, setOpenEdit }: IProps) {
               {requestDetail?.name}
             </div>
             <div className="mb-4 flex gap-x-3 text-sm">
-              <span className="font-medium text-[#c3c3c3]">
+              <span className="font-medium text-[#c3c3c3] ">
                 Approval Deadline:{' '}
               </span>
               <span className="">

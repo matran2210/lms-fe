@@ -1,4 +1,4 @@
-export * from "./calculator/index";
+export { default as Calculator } from "./calculator/index";
 export * from "./base/index";
 export * from "./icons/index";
 export * from "./calendar/index";

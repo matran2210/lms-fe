@@ -358,7 +358,7 @@ const PartFailed = ({
                 {isShowButtonAction() && (
                   <ButtonSecondary
                     className={clsx(
-                      isRetake ? 'w-[84px]' : 'w-full md:w-[84px]',
+                      isRetake ? 'w-[84px]' : ' w-full md:w-[84px]',
                     )}
                     size="small"
                     title={renderOkButtonCaption()}

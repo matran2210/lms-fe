@@ -9,7 +9,7 @@ export const ArrowIconV2 = ({
 }) => {
   return (
     <svg
-      className={`${className} ${right ? 'rotate-180' : ''}`}
+      className={`${className} ${right ? 'rotate-180 ' : ''}`}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"

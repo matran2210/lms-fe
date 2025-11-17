@@ -1,21 +1,21 @@
-import React from 'react'
-import CalcButton from './calcButton'
-import clsx from 'clsx'
+import React from "react";
+import CalcButton from "./calcButton";
+import clsx from "clsx";
 
 interface IProps {
-  click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-  keyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
-  isMobileCalc?: boolean
+  click: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  keyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  isMobileCalc?: boolean;
 }
 
 const ButtonsContainer = (props: IProps) => {
-  const { click, keyDown, isMobileCalc = false } = props
+  const { click, keyDown, isMobileCalc = false } = props;
 
-  const btnClassName = isMobileCalc ? 'w-[48px] h-[48px]' : ''
+  const btnClassName = isMobileCalc ? "w-[48px] h-[48px]" : "";
   return (
     <div
-      className={clsx('calc__btns-container', {
-        '!p-4': isMobileCalc,
+      className={clsx("calc__btns-container", {
+        "!p-4": isMobileCalc,
       })}
       onClick={click}
       onKeyDown={keyDown}
@@ -46,7 +46,7 @@ const ButtonsContainer = (props: IProps) => {
       <CalcButton value="delete" className={btnClassName} />
       <CalcButton value="=" className={btnClassName} colored />
     </div>
-  )
-}
+  );
+};
 
-export { ButtonsContainer as default }
+export { ButtonsContainer as default };

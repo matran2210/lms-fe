@@ -15,7 +15,7 @@ import EditorReader from '@components/base/editor/EditorReader'
 import FileViewer from '@components/base/fileViewer/FileViewer'
 import ModalResizeable from '@components/base/modal/ModalResizeable'
 import MovableWindow from '@components/base/window'
-import Calculator from '@lms/ui/components/calculator'
+import Calculator from '@components/calculator'
 import Layout from '@components/layout'
 import Discussion from '@components/mycourses/activity/discussion/Discussion'
 import CreateNote from '@components/mycourses/create-note/CreateNote'
@@ -63,7 +63,7 @@ import ActivityResourceMobile from '@components/learning/activity/modal/Activity
 import CtaTrial from '@components/layout/PinnedNotifications/CtaTrial'
 import SappBreadCrumbs from '@components/base/breadcrumb/SappBreadCrumbs'
 import { ITabs } from 'src/type'
-import BackToTop from '@lms/ui/components/BackToTop'
+import BackToTop from '@components/BackToTop'
 import { usePreviousSectionRoute } from '@contexts/PreviousSectionRouteContext'
 import AssistiveTouch from '@components/layout/BottomMenu/AssistiveTouch'
 import { CourseSectionType } from '@utils/constants'
@@ -247,6 +247,9 @@ const ActivityPage = () => {
       CoursesAPI.CACHE_GET_TOPIC_DESCRIPTION = {}
       try {
         dispatch(courseActivityAction.setActivityState(activity))
+        dispatch(
+          courseActivityAction.setCurrentTabId(router.query?.tabId as string),
+        )
         dispatch(getDiscussion({ id: router.query?.id, sectionId: sectionId }))
       } catch (error) {}
     }
@@ -684,7 +687,10 @@ const ActivityPage = () => {
               <Discussion class_id={(router.query?.id as string) || ''} />
             </div>
           </div>
-          <AssistiveTouch className="md:hidden" menuItems={listAssistive} />
+          <AssistiveTouch
+            className={clsx('md:hidden', { hidden: focusOnlyDiscussion })}
+            menuItems={listAssistive}
+          />
           <BottomMenu
             className={focusOnlyDiscussion ? 'hidden' : 'hidden md:flex'}
           >

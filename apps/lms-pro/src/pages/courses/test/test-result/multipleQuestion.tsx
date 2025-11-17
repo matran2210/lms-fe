@@ -88,7 +88,9 @@ const MultipleQuestion = ({
           disabled={
             questions?.quizAttempt?.status === 'UN_SUBMITTED' || !item?.id
           }
-          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium ${renderBoxesAndLineClass(type, item)} `}
+          className={`flex h-[38px] w-[38px] cursor-pointer flex-row items-center justify-center rounded border border-solid text-sm font-medium
+            ${renderBoxesAndLineClass(type, item)}
+          `}
         >
           {index + totalBefore + 1}
         </button>
@@ -156,7 +158,10 @@ const MultipleQuestion = ({
               )
             }
           }}
-          className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium leading-[33px] xl:h-[38px] xl:w-[38px] ${renderBoxesAndLineClass(type, item)} `}
+          className={`flex h-8 w-8 flex-none flex-row items-center justify-center rounded border border-solid text-sm font-medium
+            leading-[33px] xl:h-[38px] xl:w-[38px]
+            ${renderBoxesAndLineClass(type, item)}
+          `}
         >
           {index + totalBefore + 1}
         </button>
@@ -242,7 +247,8 @@ const MultipleQuestion = ({
   return (
     <div className="relative">
       <div
-        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
+        className={`${className} fixed bottom-0 right-0 flex h-fit w-full flex-col items-start gap-y-5 overflow-auto rounded-xl rounded-t-[20px] bg-white p-4 shadow-sidebar-tablet md:px-8 
+        lg:rounded-2xl xl:sticky xl:top-[104px] xl:!h-fit xl:p-6 xl:pl-7 xl:shadow-small`}
         ref={multipleQuestionRef}
       >
         <div
@@ -250,7 +256,8 @@ const MultipleQuestion = ({
             showMore
               ? 'visible overflow-y-auto opacity-100 xl:mb-0'
               : 'invisible hidden h-0 opacity-0 xl:visible xl:block xl:h-auto xl:opacity-100'
-          } xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
+          }
+        xl:max-h-auto flex w-full flex-col items-start gap-10 duration-300 xl:overflow-visible`}
         >
           <div className="flex w-full flex-col items-start gap-8">
             {renderBoxes(
@@ -261,7 +268,7 @@ const MultipleQuestion = ({
                 {Number(questions?.constructedResponseAnswers?.length || 0) >
                   0 && (
                   <div
-                    className="cursor-pointer text-sm font-medium underline xl:hidden"
+                    className=" cursor-pointer text-sm font-medium underline xl:hidden"
                     onClick={() => {
                       setShowMore(!showMore)
                       if (multipleQuestionRef?.current) {

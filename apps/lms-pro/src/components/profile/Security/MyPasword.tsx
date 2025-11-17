@@ -24,7 +24,7 @@ const MyPasword = ({ setIsChangePassword }: IProps) => {
     <ProfileCard title="Password">
       <div className="flex items-center justify-between gap-2">
         <div className="text-secondary">*********************</div>
-        <div className="grow cursor-pointer hover:block hover:text-primary">
+        <div className=" grow cursor-pointer hover:block hover:text-primary">
           <div
             className="flex items-center justify-end gap-2"
             onClick={handleClickEdit}

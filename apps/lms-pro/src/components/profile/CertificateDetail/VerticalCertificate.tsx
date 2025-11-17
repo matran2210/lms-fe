@@ -28,7 +28,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
   return (
     <CertificateCard
       bodyClassName="2xl:px-[373px] py-[138px] px-[70px] justify-center"
-      className="hidden lg:block"
+      className=" hidden lg:block"
     >
       <div className="flex h-full items-center gap-12 xl:gap-20">
         <div className="flex h-full w-[55%] items-center justify-center">
@@ -42,7 +42,7 @@ const CertificateVertical: React.FC<CertificateVerticalProps> = ({
           ) : (
             <CertificateImg
               size={800}
-              className="max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
+              className=" max-w-[500px] border-none text-[#A1A1A1] group-hover:text-primary"
             />
           )}
         </div>
