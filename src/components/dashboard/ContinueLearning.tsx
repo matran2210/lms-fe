@@ -1,6 +1,7 @@
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import React from 'react'
 import course_content from '@assets/images/course_content.svg'
+import continue_learning from '@assets/images/book-continue-learning.svg'
 import Image from 'next/image'
 import { PageLink } from 'src/constants'
 import { useRouter } from 'next/router'
@@ -29,7 +30,7 @@ const ContinueLearning = () => {
           <div className="flex items-center gap-2 md:gap-4">
             {/* Hình ảnh */}
             <div className="h-6 w-6 md:block md:h-[54px] md:w-[54px]">
-              <Image src={course_content} alt="pinned-completed-course" />
+              <Image src={continue_learning} alt="pinned-completed-course" />
             </div>
 
             {/* Text */}
