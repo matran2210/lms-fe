@@ -1,6 +1,5 @@
 import PinnedNotificationsV2 from '@components/layout/PinnedNotifications/PinnedNotificationsV2'
 import React from 'react'
-import course_content from '@assets/images/course_content.svg'
 import continue_learning from '@assets/images/book-continue-learning.svg'
 import Image from 'next/image'
 import { PageLink } from 'src/constants'
